@@ -24,7 +24,7 @@ const CopyToClipboardAccountId = ({ account }) => (
   </CopyToClipboard>
 );
 
-@inject('userDetailsStore', 'bankAccountStore', 'transactionStore', 'portfolioStore')
+@inject('userDetailsStore', 'bankAccountStore', 'transactionStore', 'portfolioStore', 'accountStore')
 @withRouter
 @observer
 export default class Overview extends Component {
@@ -61,15 +61,18 @@ export default class Overview extends Component {
     }).catch(() => this.setState({ loading: false }));
   }
 
+  checkInvestorAccType = (accType, account) => [get(account, 'name'), get(account, 'details.accountType')].map(a => (a && a.toLowerCase())).includes(accType)
+
   render() {
     const { getChartData } = this.props.portfolioStore;
+    const { isClosedAccount } = this.props.userDetailsStore;
     const investor = this.props.userDetailsStore.getDetailsOfUser;
     const account = this.props.userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     const cashMovementData = getChartData('cashMovement');
     return (
       <Form>
         {this.props.isAdmin
-          && <AccountHeader showFreezeCTA pathname={this.props.location.pathname} />
+          && <AccountHeader showFreezeCTA={!isClosedAccount} pathname={this.props.location.pathname} />
         }
         {get(account, 'details.accountStatus') === 'FROZEN'
         && (
@@ -110,21 +113,36 @@ export default class Overview extends Component {
         <div className="bg-offwhite">
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
-              {get(account, 'name') === 'individual'
+              { this.checkInvestorAccType('individual', account)
                 ? (
                   <IndividualSummary
                     investor={investor}
                     account={account}
+                    isClosedAccount={isClosedAccount}
                     getRoutingNumber={this.getRoutingNumber}
                     loading={this.state.loading}
                     routingNumber={this.props.bankAccountStore.routingNum}
                     CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />}
                   />
                 )
-                : get(account, 'name') === 'ira'
-                  ? <IraSummary investor={investor} account={account} CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />} />
-                  : get(account, 'name') === 'entity'
-                    ? <EntitySummary investor={investor} account={account} CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />} /> : null
+                : this.checkInvestorAccType('ira', account)
+                  ? (
+                    <IraSummary
+                      investor={investor}
+                      isClosedAccount={isClosedAccount}
+                      account={account}
+                      CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />}
+                    />
+                  )
+                  : this.checkInvestorAccType('entity', account)
+                    ? (
+                    <EntitySummary
+                      investor={investor}
+                      isClosedAccount={isClosedAccount}
+                      account={account}
+                      CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />}
+                    />
+                    ) : null
               }
             </Table>
           </div>

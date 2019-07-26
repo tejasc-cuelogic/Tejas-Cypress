@@ -43,7 +43,7 @@ export const entityGeneralStep = () => {
   cy.fixture('investor/entityAccount.json').then((data) => {
     const { generalInfoMeta } = data;
     cy.get('input[name="name"]').type(generalInfoMeta.name);
-    cy.get('input[name="taxId"]').type(`${generalInfoMeta.taxId}${Math.floor((Math.random() * 100000000) + 1)}`);
+    cy.get('input[name="taxId"]').type(`${generalInfoMeta.taxId}${Math.floor(((Math.random() + Math.random()) * 1000000) + 1)}`);
     cy.get('div[name="entityType"]')
       .click()
       .get(`div[role="option"]:contains(${generalInfoMeta.entityType})`)
@@ -105,7 +105,7 @@ export const entityAccountCreation = () => {
       cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
       cy.wait('@submitAccount');
       cy.wait('@submitAccount');
-      cy.get('.modal', { timeout: 5000 }).then(($el) => {
+      cy.get('.modal').then(($el) => {
         const element = cy.wrap($el)
         element.get('button.button').contains('Continue').click({ force: true });
       });
@@ -151,7 +151,7 @@ export const iraAccountCreation = () => {
         cy.get('div.content').get('button.button').contains('Submit for review').click({ force: true });
         cy.wait('@submitAccount');
         cy.wait('@submitAccount');
-        cy.get('.modal', { timeout: 10000 }).then(($el) => {
+        cy.get('.modal').then(($el) => {
           const element = cy.wrap($el);
           element.get('button.button').contains('Continue').click({ force: true });
         });
