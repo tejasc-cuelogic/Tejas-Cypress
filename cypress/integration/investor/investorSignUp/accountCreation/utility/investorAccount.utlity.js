@@ -43,7 +43,7 @@ export const entityGeneralStep = () => {
   cy.fixture('investor/entityAccount.json').then((data) => {
     const { generalInfoMeta } = data;
     cy.get('input[name="name"]').type(generalInfoMeta.name);
-    cy.get('input[name="taxId"]').type(`${generalInfoMeta.taxId}${Math.floor((Math.random() * 100000000) + 1)}`);
+    cy.get('input[name="taxId"]').type(`${generalInfoMeta.taxId}${Math.floor(((Math.random() + Math.random()) * 1000000) + 1)}`);
     cy.get('div[name="entityType"]')
       .click()
       .get(`div[role="option"]:contains(${generalInfoMeta.entityType})`)
