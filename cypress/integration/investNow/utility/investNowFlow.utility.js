@@ -1,5 +1,5 @@
-import { OfferingListingFlow } from '../../offerings/offeringListing.utility';
-import { OfferingDetailFlow, Offering506CDetailFlow } from '../../offerings/offeringDetails.utility';
+import { OfferingListingFlow } from '../../offerings/utility/offeringListing.utility';
+import { OfferingDetailFlow, Offering506CDetailFlow } from '../../offerings/utility/offeringDetails.utility';
 import { getJSONDataFromFixtures } from '../../common.utility';
 import {
   enteringInvestmentAmount,
