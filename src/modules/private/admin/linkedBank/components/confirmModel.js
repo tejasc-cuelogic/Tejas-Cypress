@@ -12,6 +12,7 @@ export default class ConfirmModel extends Component {
   }
 
   handleBack = () => {
+    this.props.bankAccountStore.setInitiateSrch('keyword', '');
     this.props.history.push(`${this.props.refLink}`);
   }
 
@@ -30,9 +31,13 @@ export default class ConfirmModel extends Component {
 
   handleConfirm = (form, action, accountId, userId) => {
     const { value } = form.fields.reason;
-    this.props.bankAccountStore.updateAccountChangeAction(accountId, userId, value, action === 'deny').then(() => {
-      this.handleBack();
-    });
+    this.props.bankAccountStore.updateAccountChangeAction(accountId, userId, value, action === 'deny')
+      .then(() => {
+        this.handleBack();
+      })
+      .catch(() => {
+        this.handleBack();
+      });
   }
 
   render() {

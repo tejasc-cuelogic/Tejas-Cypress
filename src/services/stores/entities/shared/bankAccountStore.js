@@ -726,8 +726,8 @@ export class BankAccountStore {
             Helper.toast(error.message, 'error');
             uiStore.setErrors(error.message);
             uiStore.setProgress(false);
+            this.removeLoadingRequestId(userId, false);
             reject();
-            this.removeLoadingRequestId(userId, true);
           }
         });
     });

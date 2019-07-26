@@ -448,11 +448,11 @@ class KeyTermsDetails extends Component {
                   <HtmlEditor readOnly content={revenueShareSummary} />
                   {newLayout && get(KeyTerms, 'revShareSummaryUpload')
                   && (
-                    <section className="center-align mt-30 field-wrap">
-                    <Header as="h3" className="anchor-wrap">How do Revenue Sharing Notes work?</Header>
-                    <span className="mb-10">See our Infographic for a detailed explaination</span>
+                    <section className="custom-segment padded center-align mt-30">
+                    <Header as="h4" className="anchor-wrap">How do Revenue Sharing Notes work?</Header>
+                    <span>See our Infographic for a detailed explaination</span>
                     <div>
-                    <IframeModal isPdf srcUrl={`https://${UPLOADS_CONFIG.bucket}/${get(KeyTerms, 'revShareSummaryUpload').url}`} trigger={<Button className="primary" content="View" />} />
+                    <IframeModal isPdf srcUrl={`https://${UPLOADS_CONFIG.bucket}/${get(KeyTerms, 'revShareSummaryUpload').url}`} trigger={<Button compact className="primary mt-20 relaxed" content="View" />} />
                     </div>
                     </section>
                   )

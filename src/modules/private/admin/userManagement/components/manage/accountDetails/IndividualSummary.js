@@ -7,7 +7,7 @@ import { DataFormatter } from '../../../../../../../helper';
 
 const IndividualSummary = ({
   account, investor, CopyToClipboardAccountId,
-  loading, routingNumber, getRoutingNumber,
+  loading, routingNumber, getRoutingNumber, isClosedAccount,
 }) => (
   <Table.Body>
     <Table.Row>
@@ -43,6 +43,18 @@ const IndividualSummary = ({
       <Table.Cell>Your Initial Deposit</Table.Cell>
       <Table.Cell>{(get(account, 'details.initialDepositAmount') && get(account, 'details.initialDepositAmount') !== '-1.00') ? Helper.MoneyMathDisplayCurrency(get(account, 'details.initialDepositAmount')) : 'N/A'}</Table.Cell>
     </Table.Row>
+    {isClosedAccount && (
+<>
+        <Table.Row>
+          <Table.Cell>Closed Date</Table.Cell>
+          <Table.Cell>{(get(account, 'details.closed.date') ? DataFormatter.getDateInCST(get(account, 'details.closed.date'), true, false, false) : 'N/A')}</Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>Closed Reason</Table.Cell>
+          <Table.Cell>{(get(account, 'details.closed.reason') ? get(account, 'details.closed.reason') : 'N/A')}</Table.Cell>
+        </Table.Row>
+      </>
+    )}
   </Table.Body>
 );
 
