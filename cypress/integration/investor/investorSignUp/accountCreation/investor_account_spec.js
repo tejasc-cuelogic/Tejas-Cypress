@@ -8,7 +8,7 @@ import {
        } from './utility/investorAccount.utlity';
 import { registerApiCall } from '../../../common.utility';
 
-describe.skip('Account Creation', () => {
+describe('Account Creation', () => {
   before(() => {
     investorFlowProcess();
   });

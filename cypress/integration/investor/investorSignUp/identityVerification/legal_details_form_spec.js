@@ -1,7 +1,7 @@
 import { legalDetailsProcess, fillLegalDetailsForm } from './utility/identityVerification.utlity';
 // const NS_SITE_EMAIL_SUPPORT = 'support@nextseed.com';
 
-describe.skip('Legal Details', () => {
+describe('Legal Details', () => {
   beforeEach(() => {
     legalDetailsProcess();
   });
