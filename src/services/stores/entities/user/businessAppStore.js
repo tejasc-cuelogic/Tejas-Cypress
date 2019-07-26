@@ -93,7 +93,7 @@ export class BusinessAppStore {
 
   @observable userExists = false;
 
-  @observable userRoles = false;
+  @observable userRoles = [];
 
   @observable urlParameter = null;
 
@@ -613,6 +613,11 @@ export class BusinessAppStore {
   @action
   businessAppEleChange = (e, res, formName = 'BUSINESS_APP_FRM') => {
     this[formName] = Validator.onChange(this[formName], Validator.pullValues(e, res));
+    if (formName === 'BUSINESS_APP_FRM_BASIC' && res.name === 'email') {
+      this.userExists = false;
+      this.setBasicFormError('');
+      this.BUSINESS_ACCOUNT.fields.password.value = '';
+    }
   };
 
   @action
@@ -1373,6 +1378,11 @@ export class BusinessAppStore {
       });
     }
     return roles;
+  }
+
+  @action
+  setBasicFormError = (error) => {
+    this.BUSINESS_APP_FRM_BASIC.fields.email.error = error;
   }
 }
 

@@ -7,7 +7,7 @@ import {
 
 import { isAbortRemainingTestCases } from '../common.utility';
 
-describe.skip('Invest now flow', () => {
+describe('Invest now flow', () => {
   let isNeedToSkip = false;
   beforeEach(() => {
     cy.restoreLocalStorage();
