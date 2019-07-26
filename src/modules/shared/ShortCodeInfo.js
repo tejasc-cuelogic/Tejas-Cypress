@@ -1,27 +1,28 @@
 /* eslint-disable no-template-curly-in-string */
+/* eslint-disable arrow-body-style */
 import React from 'react';
-import { Modal, Header, Accordion, Icon } from 'semantic-ui-react';
+import { Modal, Header, Tab } from 'semantic-ui-react';
 
 export default class ShortCodeInfo extends React.Component {
-  render() {
-    const { showModal, activeIndex, handleAccClick, toggleModal } = this.props;
-    return (
-<Modal closeIcon onClose={toggleModal} closeOnDimmerClick open={showModal}>
-<Modal.Header className="center-align signup-header">
-    <Header as="h3">Short Codes Information</Header>
-    </Modal.Header>
-    <Modal.Content>
-    <p className="primary-two-text">
+  panes = [
+    { menuItem: 'Overview',
+      render: () => {
+        return (
+      <Tab.Pane>
+              <p className="primary-two-text">
     Note : In HTML editor when switching to code mode after adding short code need to switch back preview mode then save.
     </p>
-    <Accordion>
-    <Accordion.Title active={activeIndex === 0} index={0} onClick={handleAccClick}>
-    <Icon name="dropdown" />
-    <b>
+        </Tab.Pane>
+        );
+      } },
+    {
+      menuItem: 'Expand/Collapse Content',
+      render: () => {
+        return (
+          <Tab.Pane>
+      <b>
     Short code for Expand/Collapse in HTML editor
     </b>
-    </Accordion.Title>
-    <Accordion.Content active={activeIndex === 0}>
     <p>
     <pre className="bg-offwhite">
     {'<div class="html-toggle-content hide-content">'}<br />
@@ -31,9 +32,12 @@ export default class ShortCodeInfo extends React.Component {
     {`
 <p>
   <a class="toggleReadMore">
-    <span class="toggleReadMoreText">Expand&nbsp;</span>`}
+    <strong>
+      <span class="toggleReadMoreText">Expand&nbsp;</span>
+        `}
     <span className="negative-text">{'"${Title}"'}</span>
-    {`
+    {` more&nbsp;
+    </strong> ▼
   </a>
 </p>
     `}
@@ -43,21 +47,25 @@ export default class ShortCodeInfo extends React.Component {
     <p className="primary-two-text">
     Note : Do not change the {'<Span>'} tag in above short code
     </p>
-    <br />
-    </Accordion.Content>
-    <Accordion.Title active={activeIndex === 1} index={1} onClick={handleAccClick}>
-    <Icon name="dropdown" />
-    <b>
-    For rendering image/content dynamically as per devices need to add below classes for respective tag
-    </b>
-    </Accordion.Title>
-    <Accordion.Content active={activeIndex === 1}>
-    <p>
+        </Tab.Pane>
+        );
+      },
+    },
+    {
+      menuItem: 'Device Responsive Image Rendering',
+      render: () => {
+        return (
+          <Tab.Pane>
+            <b>
+          For rendering image/content dynamically as per devices need to add below classes for respective tag
+          </b>
+          <p>
     <ul>
     <li><b>Desktop only</b> = &apos;fr-editor-desktop&apos;</li>
     <li><b>Mobile only</b> = &apos;fr-editor-mobile&apos;</li>
     <li><b>Tablet only</b> = &apos;fr-editor-tablet&apos;</li>
-    <li><b>For both Mobile and Tablet</b> = &apos;fr-editor-mobile fr-editor-tablet&apos;</li>
+    <li><b>Tablet Landscape only</b> = &apos;fr-editor-tablet-landscape&apos;</li>
+    <li><b>For both Mobile and Tablet</b> = &apos;fr-editor-tablet-mobile&apos;</li>
     </ul>
     <p><b>Example:</b></p>
     <p>
@@ -78,8 +86,21 @@ export default class ShortCodeInfo extends React.Component {
     Note : If the class attribute exist in tag then no need to add class attribute just add class name in same attribute.
     </p>
     </p>
-    </Accordion.Content>
-    </Accordion>
+          </Tab.Pane>
+        );
+      },
+    },
+  ];
+
+  render() {
+    const { showModal, toggleModal } = this.props;
+    return (
+<Modal closeIcon onClose={toggleModal} closeOnDimmerClick open={showModal}>
+<Modal.Header className="center-align signup-header">
+    <Header as="h3">Short Codes Information</Header>
+    </Modal.Header>
+    <Modal.Content>
+    <Tab panes={this.panes} />
     </Modal.Content>
 </Modal>
     );

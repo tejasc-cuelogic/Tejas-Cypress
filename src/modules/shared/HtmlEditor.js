@@ -32,7 +32,6 @@ window.jQuery = $;
 export default class HtmlEditor extends React.Component {
   state = {
     showModal: false,
-    activeIndex: 0,
   }
 
   constructor(props) {
@@ -48,15 +47,8 @@ export default class HtmlEditor extends React.Component {
     });
   }
 
-  handleAccClick = (e, titleProps) => {
-    const { index } = titleProps;
-    const { activeIndex } = this.state;
-    const newIndex = activeIndex === index ? -1 : index;
-    this.setState({ activeIndex: newIndex });
-  }
-
   toggleModal = () => {
-    this.setState({ showModal: !this.state.showModal, activeIndex: 0 });
+    this.setState({ showModal: !this.state.showModal });
   }
 
   getConfig = (keyStart, overrides) => {
@@ -144,7 +136,7 @@ export default class HtmlEditor extends React.Component {
           config={this.getConfig(keyStart, this.props.overrides)}
           onModelChange={this.handleModelChange}
         />
-        <ShortCodeInforModal toggleModal={this.toggleModal} handleAccClick={this.handleAccClick} activeIndex={this.state.activeIndex} showModal={this.state.showModal} />
+        <ShortCodeInforModal toggleModal={this.toggleModal} showModal={this.state.showModal} />
       </div>
     );
   }
