@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { includes, startCase, get } from 'lodash';
 import { Header, Icon, Button, Divider, Confirm } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
-
+import { REACT_APP_DEPLOY_ENV } from '../../../../../../../constants/common';
 @inject('userDetailsStore', 'uiStore', 'userStore')
 @withRouter
 @observer
@@ -26,6 +26,7 @@ export default class AccountHeader extends Component {
     const {
       currentActiveAccountDetailsOfSelectedUsers, getDetailsOfUser,
     } = this.props.userDetailsStore;
+    const isProd = ['production', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV);
     const userId = get(getDetailsOfUser, 'id');
     const accountId = get(currentActiveAccountDetailsOfSelectedUsers, 'details.accountId');
     const freeze = get(currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus') === 'FROZEN';
@@ -45,7 +46,7 @@ export default class AccountHeader extends Component {
               <span className="pull-right">
                 <Button.Group compact size="tiny">
                   <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, freeze ? 'unfreeze' : 'freeze')}><Icon className="ns-freeze" />{freeze ? 'Unfreeze' : 'Freeze'} account</Button>
-                  {isFullAccessUser
+                  {(isFullAccessUser && !isProd)
                     && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'close-account')}>Close account</Button>
                   }
                 </Button.Group>
