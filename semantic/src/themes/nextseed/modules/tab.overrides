@@ -112,6 +112,17 @@
         }
     }
 }
+.html-editor-info-tab .ui.tabular.menu .item{
+    padding: @15px;
+    border: 0;
+    &:hover,&:focus{
+        background: @primary-two;
+        color: @white;
+    }
+    &.active{
+        font-weight: @fontMedium;
+    }
+}
 .ui.segment.tab.active {
     box-shadow: none;
     border: 0;

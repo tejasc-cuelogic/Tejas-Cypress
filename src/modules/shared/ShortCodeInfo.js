@@ -100,7 +100,7 @@ export default class ShortCodeInfo extends React.Component {
     <Header as="h3">Short Codes Information</Header>
     </Modal.Header>
     <Modal.Content>
-    <Tab panes={this.panes} />
+    <Tab className="html-editor-info-tab" panes={this.panes} />
     </Modal.Content>
 </Modal>
     );
