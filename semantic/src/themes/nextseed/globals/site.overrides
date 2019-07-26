@@ -353,7 +353,16 @@ i.icon.right {
 			.fr-editor-desktop{
 				display: block;
 			}
-			.fr-editor-mobile, .fr-editor-tablet, .fr-editor-tablet-landscape{
+			.fr-editor-mobile, .fr-editor-tablet, .fr-editor-tablet-landscape,.fr-editor-tablet-mobile{
+				display: none;
+			}
+		}
+		//Tablet and mobile
+		@media only screen and (max-width : @monitorBreakpoint){
+			.fr-editor-tablet-mobile{
+				display: block;
+			}
+			.fr-editor-mobile, .fr-editor-desktop, .fr-editor-tablet,.fr-editor-tablet-landscape{
 				display: none;
 			}
 		}
@@ -372,15 +381,6 @@ i.icon.right {
 				display: block;
 			}
 			.fr-editor-tablet, .fr-editor-desktop, .fr-editor-tablet-landscape{
-				display: none;
-			}
-		}
-		//Tablet and mobilelandscape
-		@media only screen and (max-width : @monitorBreakpoint){
-			.fr-editor-tablet.fr-editor-mobile{
-				display: block;
-			}
-			.fr-editor-desktop{
 				display: none;
 			}
 		}
