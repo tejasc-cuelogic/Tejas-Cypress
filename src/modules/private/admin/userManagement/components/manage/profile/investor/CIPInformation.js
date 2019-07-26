@@ -1,7 +1,7 @@
 import React from 'react';
 import { get } from 'lodash';
 import { Table, Header } from 'semantic-ui-react';
-import moment from 'moment';
+import { DataFormatter } from '../../../../../../../../helper';
 
 const failType = {
   FAIL_WITH_QUESTIONS: 'Fail with questions',
@@ -37,11 +37,11 @@ const CIPInformation = ({ details }) => (
             </Table.Row>
             <Table.Row>
               <Table.Cell>Expiration Date: </Table.Cell>
-              <Table.Cell>{get(details, 'cip.expiration') ? moment(get(details, 'cip.expiration')).format('MM/DD/YYYY') : 'N/A'}</Table.Cell>
+              <Table.Cell>{get(details, 'cip.expiration') ? DataFormatter.getDateInCST(get(details, 'cip.expiration'), true, false, false) : 'N/A'}</Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>Verification Completion Date: </Table.Cell>
-              <Table.Cell>{get(details, 'legalDetails.verificationCompletionDate') ? moment(get(details, 'legalDetails.verificationCompletionDate')).format('MM/DD/YYYY') : 'N/A'}</Table.Cell>
+              <Table.Cell>{get(details, 'legalDetails.verificationCompletionDate') ? DataFormatter.getDateInCST(get(details, 'legalDetails.verificationCompletionDate'), true, false, false) : 'N/A'}</Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>

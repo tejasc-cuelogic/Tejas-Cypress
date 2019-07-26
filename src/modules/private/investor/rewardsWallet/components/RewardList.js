@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link, Route } from 'react-router-dom';
-import moment from 'moment';
 import { Container, Header, Table, Card, Button } from 'semantic-ui-react';
 import { DateTimeFormat } from '../../../../../theme/shared';
 import Redeem from './Redeem';
+import { DataFormatter } from '../../../../../helper';
 
 const RewardList = props => props.rewards.map(offering => (
   <>
@@ -27,11 +27,11 @@ const RewardList = props => props.rewards.map(offering => (
                 <Table.Row key={r.id}>
                   <Table.Cell><b>{r.name}</b></Table.Cell>
                   <Table.Cell>{r.status}</Table.Cell>
-                  <Table.Cell><DateTimeFormat datetime={r.expiry} /></Table.Cell>
+                  <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInCST(r.expiry, true, false, false)} /></Table.Cell>
                   <Table.Cell textAlign="center">
                     {r.redeemDate
-                      ? <DateTimeFormat datetime={r.redeemDate} />
-                      : (moment().diff(r.expiry) < 0
+                      ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInCST(r.redeemDate, true, false, false)} />
+                      : (DataFormatter.getCurrentCSTMoment().diff(DataFormatter.getDateInCST(r.expiry, true, false, false)) < 0
                         ? (
 <Button
   as={Link}

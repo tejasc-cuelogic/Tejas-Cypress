@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { includes, get } from 'lodash';
-import moment from 'moment';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Header, Form, Divider, Table, Card } from 'semantic-ui-react';
 import AccountHeader from './AccountHeader';
@@ -12,6 +11,7 @@ import EntitySummary from './EntitySummary';
 import Helper from '../../../../../../../helper/utility';
 import LockedInformation from '../profile/LockedInformation';
 import CashMovement from '../../../../../investor/summary/components/CashMovement';
+import { DataFormatter } from '../../../../../../../helper';
 
 const CopyToClipboardAccountId = ({ account }) => (
   <CopyToClipboard
@@ -99,7 +99,7 @@ export default class Overview extends Component {
             <Form.Group widths={2}>
               <Form.Input fluid label="Bank Name" placeholder="Bank Name" value={get(account, 'details.linkedBank.changeRequest.bankName') || 'N/A'} readOnly className="display-only" />
               <Form.Input fluid label="Account Number" placeholder="Account Number" value={get(account, 'details.linkedBank.changeRequest.accountNumber') || 'N/A'} readOnly className="display-only" />
-              <Form.Input fluid label="Requested Date" placeholder="Requested Date" value={get(account, 'details.linkedBank.changeRequest.dateRequested') ? moment(get(account, 'details.linkedBank.changeRequest.dateRequested')).format('MM/DD/YYYY') : 'N/A'} readOnly className="display-only" />
+              <Form.Input fluid label="Requested Date" placeholder="Requested Date" value={get(account, 'details.linkedBank.changeRequest.dateRequested') ? DataFormatter.getDateInCST(get(account, 'details.linkedBank.changeRequest.dateRequested'), true, false, false) : 'N/A'} readOnly className="display-only" />
               <Form.Input fluid label="Status" placeholder="Status" value={get(account, 'details.linkedBank.changeRequest.status') || 'N/A'} readOnly className="display-only" />
             </Form.Group>
             <Divider />
