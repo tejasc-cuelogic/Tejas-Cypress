@@ -410,6 +410,10 @@ i.icon.right {
 			display: none;
 		}
 	}
+	a.toggleReadMore{
+		text-decoration: none;
+		cursor: pointer;
+	}
 }
 //	Helper Classes Ends
 
