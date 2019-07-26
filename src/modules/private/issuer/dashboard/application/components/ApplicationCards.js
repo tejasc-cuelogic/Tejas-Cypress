@@ -74,9 +74,9 @@ export default class ApplicationCards extends Component {
                       <dt>Application status</dt>
                       <dd>{BUSINESS_APP_USER_STATUS[application.applicationStatus].status}</dd>
                       <dt>Started on</dt>
-                      <dd>{application.created ? <DateTimeFormat datetime={application.created.date} /> : '--'}</dd>
+                      <dd>{application.created ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInCST(application.created.date, true, false, false)} /> : '--'}</dd>
                       <dt>{BUSINESS_APP_USER_STATUS[application.applicationStatus].dateTitle}</dt>
-                      <dd>{(get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated) ? <DateTimeFormat datetime={(DataFormatter.getDateInCST((get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated.date), true))} /> : '--'}</dd>
+                      <dd>{(get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated) ? <DateTimeFormat isCSTFormat datetime={(DataFormatter.getDateInCST((get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated.date), true, false, false))} /> : '--'}</dd>
                     </dl>
                     {application.applicationStatus
                     === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED

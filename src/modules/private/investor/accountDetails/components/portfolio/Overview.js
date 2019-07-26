@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { includes, get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
 import { Header, Table, Grid, Statistic, Button, Divider, Popup, Icon } from 'semantic-ui-react';
 import { AccTypeTitle } from '../../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
+import { DataFormatter } from '../../../../../../helper';
 
 @inject('portfolioStore', 'campaignStore', 'userDetailsStore')
 @observer
@@ -86,7 +86,7 @@ class Overview extends Component {
                         <Table.Cell>
                           {offering && offering.launch
                             && offering.launch.targetDate
-                            ? moment(offering.launch.targetDate).format('ll')
+                            ? DataFormatter.getDateInCST(offering.launch.targetDate, false, true, false)
                             : 'N/A'
                           }
                         </Table.Cell>
@@ -225,7 +225,7 @@ class Overview extends Component {
                       <Statistic.Label>Business Open Date</Statistic.Label>
                       <Statistic.Value>
                         {get(campaign, 'closureSummary.keyTerms.businessOpenDate')
-                          ? moment(get(campaign, 'closureSummary.keyTerms.businessOpenDate')).format('MMM Do YYYY')
+                          ? DataFormatter.getDateInCST(get(campaign, 'closureSummary.keyTerms.businessOpenDate'), false, false, false, 'MMM Do YYYY')
                           : 'N/A'
                         }
                       </Statistic.Value>
@@ -236,7 +236,7 @@ class Overview extends Component {
                     <Statistic>
                       <Statistic.Label>Payoff Date</Statistic.Label>
                       <Statistic.Value>
-                        {moment(get(offering, 'closureSummary.repayment.completeDate').format('MMM Do YYYY')) || 'N/A'}
+                        {DataFormatter.getDateInCST(get(offering, 'closureSummary.repayment.completeDate'), false, false, false, 'MMM Do YYYY') || 'N/A'}
                       </Statistic.Value>
                     </Statistic>
                   )}

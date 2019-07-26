@@ -6,6 +6,7 @@ import { THeader } from '../../../../../../theme/table/NSTable';
 import { DropdownFilter } from '../../../../../../theme/form/Filters';
 import Helper from '../../../../../../helper/utility';
 import { DateTimeFormat, InlineLoader, IframeModal } from '../../../../../../theme/shared';
+import { DataFormatter } from '../../../../../../helper';
 
 const termNote = {
   columns: [
@@ -108,7 +109,7 @@ export default class Transactions extends Component {
         </Form>
         <div className="table-wrapper">
           {!allPaymentHistoryData.length
-            ? <InlineLoader text="No Payments." />
+            ? <InlineLoader text="No Payments" />
             : (
 <Table unstackable singleLine className="investment-details" textAlign="right">
               <THeader columns={finalResult.columns} />
@@ -117,7 +118,7 @@ export default class Transactions extends Component {
                   allPaymentHistoryData.map(row => (
                     <Table.Row key={Helper.guid()}>
                       <Table.Cell collapsing textAlign="left">
-                        <DateTimeFormat format="MM-DD-YYYY" datetime={row.completeDate} />
+                        <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInCST(row.completeDate, true, false, false)} />
                       </Table.Cell>
                       <Table.Cell className="positive-text">{Helper.CurrencyFormat(row.grossTotalAmount)}</Table.Cell>
                       {
