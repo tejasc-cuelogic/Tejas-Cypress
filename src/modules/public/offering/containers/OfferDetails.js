@@ -184,8 +184,9 @@ class offerDetails extends Component {
     let navItems = [];
     const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
     if (isMobile) {
-      navItems = modifySubNavs(cloneDeep(tempNavItems));
+      navItems = modifySubNavs(cloneDeep(tempNavItems), newLayout);
       navItems = this.addDataRoomSubnavs(navItems, get(campaign, 'legal.dataroom.documents'));
+      navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
       navItems = this.removeSubNavs(navItems);
     } else {
       navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
@@ -226,21 +227,22 @@ class offerDetails extends Component {
                 isBonusReward={isBonusReward}
                 bonusRewards={bonusRewards}
                 useIsActive
+                newLayout={newLayout}
                 className="campaign-mobile-dropdown"
               />
             </Visibility>
           </Responsive>
           <Container>
             <section>
-              <Grid>
+              <Grid centered={newLayout}>
                 {!isMobile
                   && (
-<Grid.Column width={4}>
+<Grid.Column width={4} className={newLayout ? 'left-align' : ''}>
                     <CampaignSideBar newLayout={newLayout} navItems={navItems} />
                   </Grid.Column>
                   )
                 }
-                <Grid.Column computer={12} mobile={16}>
+                <Grid.Column computer={newLayout ? 9 : 12} mobile={16} className={newLayout ? 'left-align' : ''}>
                   <Suspense fallback={<InlineLoader />}>
                     <Switch>
                       <Route exact path={match.url} render={props => <InitialComponent refLink={this.props.match.url} {...props} />} />
