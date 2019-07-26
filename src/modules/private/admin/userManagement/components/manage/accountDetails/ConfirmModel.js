@@ -51,7 +51,7 @@ export default class ConfirmModel extends Component {
       this.props.accountStore.closeInvestorAccount(
         userId,
         accountId,
-        account.name.toUpperCase(),
+        get(account, 'name') ? get(account, 'name').toUpperCase() : '',
         CLOSE_ACCOUNT_FRM.fields.reason.value,
       ).then((res) => {
         if (!get(res, 'data.closeInvestorAccount.errorMessage')) {
