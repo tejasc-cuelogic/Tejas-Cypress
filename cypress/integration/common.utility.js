@@ -1,4 +1,5 @@
 import { forEach } from 'lodash';
+import { devices } from '../fixtures/common/devices';
 
 export const registerApiCall = (operationName, url = '**/**') => {
   cy.server();
@@ -73,4 +74,52 @@ export const btnClickAndWaitByButtonName = (buttonName) => {
   registerApiCall(`${buttonName}`);
   cy.get('button').contains(`${buttonName}`).click();
   cy.wait(`@${buttonName}`);
+}
+
+export const apiRequest = (operationName, requestParams, headers = { "content-type": 'application/json' }) => new Promise((resolve, reject) => {
+  try {
+    headers = {
+      ...headers,
+      "content-type": "application/json"
+    };
+    cy.request(
+      {
+        url: requestParams.url || "https://dev-api-us-east-1.nextseed.qa/dev/graphql",
+        method: requestParams.method || "POST",
+        body: {
+          query: requestParams.query,
+        },
+        failOnStatusCode: false,
+        headers,
+      }
+    )
+      .as(operationName)
+      .then((result) => {
+        resolve(result);
+      });
+  } catch (err) {
+    reject(err);
+  }
+});
+
+export const prepareTestsForDevices = (page, devices, callback) => {
+  devices.forEach(device => {
+    context(`Testing on ${device.model}`, () => {
+      beforeEach(() => {
+        cy.viewport(device.width, device.height);
+        cy.visit(page, { failOnStatusCode: false, timeout: 100000 });
+      });
+      callback(device);
+    });
+  });
+};
+
+export const checkDeviceResolution = (devicesDetails) => {
+  let status = false;
+  devices.forEach(d => {
+    if(d.model === devicesDetails.model){
+      status= d.model;
+    }
+  });
+  return status;
 }
