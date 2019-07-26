@@ -636,8 +636,18 @@ mutation skipAddressValidationCheck($userId: String!, $shouldSkip: Boolean!) {
  }`;
 
 export const deleteProfile = gql`
-mutation adminDeleteInvestorOrIssuerUser($userId: String!) {
+mutation adminDeleteInvestorOrIssuerUser($userId: String) {
   adminDeleteInvestorOrIssuerUser(
+     cognitoUUId: $userId
+  ) {
+    status
+    message
+  }
+ }`;
+
+export const adminHardDeleteUser = gql`
+mutation adminHardDeleteUser($userId: String!) {
+  adminHardDeleteUser(
      cognitoUUId: $userId
   ) {
     status
@@ -664,3 +674,13 @@ mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!,
      reason: $reason
    )
  }`;
+
+export const investorAccountDeleteProcess = gql`
+query investorAccountDeleteProcess {
+  investorAccountDeleteProcess {
+    totalBalance
+    availableBalance
+    validAgreement
+  }
+}
+`;
