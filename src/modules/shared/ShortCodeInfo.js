@@ -12,6 +12,20 @@ export default class ShortCodeInfo extends React.Component {
               <p className="primary-two-text">
     Note : In HTML editor when switching to code mode after adding short code need to switch back preview mode then save.
     </p>
+    <p><b>Example:</b></p>
+    <p>
+    - For showing Image only for mobile :
+    </p>
+    <pre className="bg-offwhite">
+    {`
+<p>
+  <img
+    src="https://prod-cdn-us-east-1.nextseed.qa/image.jpg"
+    style="width: 300px;"
+    class="fr-fic fr-dib`}<span className="negative-text"> fr-editor-mobile</span>{`"
+  >
+</p>`}
+    </pre>
         </Tab.Pane>
         );
       } },
@@ -67,20 +81,6 @@ export default class ShortCodeInfo extends React.Component {
     <li><b>Tablet Landscape only</b> = &apos;fr-editor-tablet-landscape&apos;</li>
     <li><b>For both Mobile and Tablet</b> = &apos;fr-editor-tablet-mobile&apos;</li>
     </ul>
-    <p><b>Example:</b></p>
-    <p>
-    - For showing Image only for mobile :
-    </p>
-    <pre className="bg-offwhite">
-    {`
-<p>
-  <img
-    src="https://prod-cdn-us-east-1.nextseed.qa/image.jpg"
-    style="width: 300px;"
-    class="fr-fic fr-dib`}<span className="negative-text"> fr-editor-mobile</span>{`"
-  >
-</p>`}
-    </pre>
     <br />
     <p className="primary-two-text">
     Note : If the class attribute exist in tag then no need to add class attribute just add class name in same attribute.

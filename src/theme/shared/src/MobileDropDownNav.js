@@ -39,12 +39,14 @@ export default class MobileDropDownNav extends React.Component {
 
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
 
+  setActiveHash = hash => this.props.navStore.setFieldValue('currentActiveHash', hash);
+
   render() {
     const {
       navItems, location, className, navStore, slideUpNot, useIsActive, id, newLayout,
     } = this.props;
     const { navStatus, campaignHeaderStatus } = navStore;
-    const navItemsComponent = <NavItems sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={this.props.navCountData} navItems={navItems} />;
+    const navItemsComponent = <NavItems onToggle={hash => this.setActiveHash(hash)} sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={this.props.navCountData} navItems={navItems} />;
     return (
       <Responsive maxWidth={991} as={React.Fragment}>
         <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous>

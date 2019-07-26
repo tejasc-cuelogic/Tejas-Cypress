@@ -184,8 +184,9 @@ class offerDetails extends Component {
     let navItems = [];
     const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
     if (isMobile) {
-      navItems = modifySubNavs(cloneDeep(tempNavItems));
+      navItems = modifySubNavs(cloneDeep(tempNavItems), newLayout);
       navItems = this.addDataRoomSubnavs(navItems, get(campaign, 'legal.dataroom.documents'));
+      navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
       navItems = this.removeSubNavs(navItems);
     } else {
       navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
