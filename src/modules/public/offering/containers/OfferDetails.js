@@ -226,6 +226,7 @@ class offerDetails extends Component {
                 isBonusReward={isBonusReward}
                 bonusRewards={bonusRewards}
                 useIsActive
+                newLayout
                 className="campaign-mobile-dropdown"
               />
             </Visibility>

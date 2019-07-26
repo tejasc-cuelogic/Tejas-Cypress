@@ -2932,3 +2932,13 @@ table.css-wu4c77-diff-container {
 		}
 	}
 }
+
+//Public comment section
+.custom-segment{
+	border: 1px solid @neutral-darkwhite;
+	border-radius: @4px;
+	padding: @30px;
+	&.padded{
+		padding: @40px;
+	}
+}

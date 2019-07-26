@@ -111,7 +111,7 @@ class Comments extends Component {
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     return (
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
-        <Header as="h3" className={`${newLayout ? 'mt-50 mb-50' : 'mt-20 mb-30'} anchor-wrap`}>
+        <Header as="h3" className={`${newLayout ? 'mt-50' : 'mt-20 mb-30'} anchor-wrap`}>
           Comments
           <span className="anchor" id="comments" />
         </Header>
@@ -137,7 +137,7 @@ class Comments extends Component {
         )}
         {!isRightToPostComment
           ? (
-<section className="center-align mt-30">
+<section className={`${newLayout ? 'custom-segment mb-0' : ''} center-align mt-30`}>
             {loggedInAsInvestor && !accountStatusFull
               ? <p>In order to leave comments, please create any type of account first.</p>
               : <p>In order to leave comments, please sign up and verify your identity.</p>
@@ -172,7 +172,7 @@ class Comments extends Component {
         {comments && commentsMainThreadCount
           ? (
             <>
-              <Segment color="green" className="mt-50 offering-comment">
+              <Segment color="green" className={`${newLayout ? 'mt-30' : 'mt-50'} offering-comment`}>
                 {comments
                 && comments.map(c => (((c.createdUserInfo && c.createdUserInfo.id === issuerId
                   && c.approved)
@@ -323,7 +323,7 @@ class Comments extends Component {
             </>
           )
           : (
-<Segment color="green" className="mt-50 offering-comment">
+<Segment color="green" className={`${newLayout ? 'mt-30' : 'mt-50'} offering-comment`}>
             <section className={`${isMobile ? 'mt-40 mb-40' : 'mt-80 mb-80'} center-align`}>
               <Header as="h3" className="grey-header">No Comments</Header>
             </section>
