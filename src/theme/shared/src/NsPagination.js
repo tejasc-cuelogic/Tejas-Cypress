@@ -67,7 +67,7 @@ export default class NsPagination extends Component {
           }
           <Menu.Item
             onClick={() => this.goToPage(1)}
-            className={currentPageNo === 1 && 'disabled'}
+            className={currentPageNo === 1 || isLazyloading ? 'disabled' : ''}
           >
             <Icon className="ns-arrow-double-left" color="green" />
           </Menu.Item>
@@ -83,6 +83,7 @@ export default class NsPagination extends Component {
               value={currentPageNo || null}
               onKeyPress={this.jumpToPage}
               onChange={this.pageChangeHandler}
+              disabled={isLazyloading}
             />
           </Menu.Item>
           <Menu.Item>of</Menu.Item>

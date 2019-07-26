@@ -35,10 +35,10 @@ export default class AllCrowdPay extends Component {
     const { type } = this.props.match.params;
     if (this.props.match.isExact && type && this.props.crowdpayStore.isApiHit !== type) {
       this.props.crowdpayStore.setData('isApiHit', type);
-      this.props.crowdpayStore.reset();
+      // this.props.crowdpayStore.reset();
       // this.props.crowdpayStore.setAccountTypes(type);
       // this.props.crowdpayStore.reset();
-      this.props.crowdpayStore.initRequest(type);
+      this.props.crowdpayStore.initRequest(type, true);
     }
   }
 
@@ -60,12 +60,11 @@ export default class AllCrowdPay extends Component {
   render() {
     const { crowdpayStore } = this.props;
     const {
-      accounts, count, requestState, crowdPayCtaHandler, loadingCrowdPayIds,
-      allRecordsCount, isLazyLoading,
+      accounts, count, requestState, crowdPayCtaHandler, loadingCrowdPayIds, loading,
     } = crowdpayStore;
     const { type } = this.props.match.params;
-    if (count === 0 && requestState.page === 0) {
-      return <InlineLoader text="No data found." />;
+    if (loading && requestState.page === 1) {
+      return <InlineLoader />;
     }
     const totalRecords = count || 0;
     return (
@@ -240,7 +239,7 @@ export default class AllCrowdPay extends Component {
         <Route exact path={`${this.props.match.url}/:action`} render={props => <MessageModal refLink={this.props.match.url} {...props} />} />
         <Route path={`${this.props.match.url}/:userId/:accountId/:action`} render={props => <ConfirmModel refLink={this.props.match.url} {...props} />} />
         {totalRecords > 0
-          && <NsPagination floated="right" totalCountLazyLoading={allRecordsCount} isLazyloading={isLazyLoading} initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+          && <NsPagination floated="right" isLazyloading initRequest={this.paginate} meta={{ totalRecords, requestState }} />
         }
       </Card>
     );
