@@ -1,4 +1,4 @@
-import { checkDeviceResolution } from '../../../support/common';
+import { checkDeviceResolution } from '../../common.utility';
 
 export const goToLoginScreen = (device) => {
   cy.contains('Sign Up');

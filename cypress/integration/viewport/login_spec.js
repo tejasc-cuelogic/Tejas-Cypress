@@ -1,5 +1,5 @@
 import { goToLoginScreen } from '../auth/utility/login.utility';
-import { prepareTestsForDevices } from '../../support/common';
+import { prepareTestsForDevices } from '../common.utility';
 import { devices } from '../../fixtures/common/devices';
 
 prepareTestsForDevices("/", devices, (deviceDetails) => {
