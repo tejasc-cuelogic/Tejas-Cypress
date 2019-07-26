@@ -13,7 +13,7 @@ class FormValidator {
   prepareFormObject =
     (fields, isDirty = false, isFieldValid = true, isValid = false, metaData) => ({
       fields: { ...fields },
-      refMetadata: metaData ? { ...metaData } : { ...fields },
+      refMetadata: metaData ? { ...metaData } : JSON.parse(JSON.stringify({ ...fields })),
       meta: {
         isValid,
         error: '',

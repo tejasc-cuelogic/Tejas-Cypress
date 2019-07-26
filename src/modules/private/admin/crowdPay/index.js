@@ -19,7 +19,7 @@ export default class CrowdPay extends Component {
     // this.props.crowdpayStore.initRequest();
     // }
     if (this.props.match.isExact) {
-      this.props.history.push(`${this.props.match.url}/review`);
+      this.props.history.push(`${this.props.match.url}/individual`);
     }
   }
 
