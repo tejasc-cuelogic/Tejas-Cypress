@@ -1,6 +1,6 @@
 import { get, forEach } from 'lodash';
 import { seedTestUsers, getMigratedUserAuditInfo, cleanUpTestUsers } from '../../fixtures/userQueries';
-import { apiRequest } from '../../support/common';
+import { apiRequest } from '../common.utility';
 
 let auditInfo = {};
 let migratedUserAuditInfo = {};
