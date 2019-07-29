@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { capitalize, get } from 'lodash';
+import money from 'money-math';
 import { Modal, Button, Header, Form, Divider, Statistic, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../theme/form';
 import { AccTypeTitle, ListErrors } from '../../../../../../theme/shared';
@@ -80,6 +81,7 @@ export default class AddWithdrawFund extends Component {
     const { errors } = this.props.uiStore;
     const headingTitle = match.params.action === 'add' ? 'Add funds' : (!showConfirmPreview && match.params.action === 'withdraw') ? 'Withdraw funds' : 'Confirm withdrawal';
     const labelForWithdrawInput = match.params.action !== 'add' && (!showConfirmPreview) ? 'Amount you want to withdraw' : 'Withdrawal amount';
+    const cashAmount = cash ? money.isNegative(cash) ? '0.00' : cash : '0.00';
     return (
       <>
         {!cashAvailable.loading
@@ -104,7 +106,7 @@ export default class AddWithdrawFund extends Component {
                           name="maountInvested"
                           containerclassname="fund-amount"
                           currency
-                          fielddata={{ value: cash }}
+                          fielddata={{ value: cashAmount }}
                         />
                       </div>
                     )
