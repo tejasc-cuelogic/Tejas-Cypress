@@ -424,7 +424,7 @@ class KeyTermsDetails extends Component {
               ? <PaymentCalculator data={totalPaymentChart} propsDetails={this.props} />
               : <p><InlineLoader text="Insufficient Data To Display Payment Calculator" /></p>
             }
-            <p className="mt-30 note">
+            <div className="mt-30 note">
               * Payment for any given month (including the total payment at the end of the
               final month) indicates the cumulative amount contractually required to be paid
               to an investor after the end of that month, assuming the loan is not prepaid.
@@ -432,7 +432,7 @@ class KeyTermsDetails extends Component {
               performance. It does not take into account NextSeed fees of {Math.trunc(get(campaign, 'keyTerms.nsFeePercentage')) || '2'}% on each payment
               made to investors. Payment is not guaranteed or insured and investors may lose
               some or all of the principal invested if the Issuer cannot make its payments.
-              </p>
+              </div>
             </>
           )
           : offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary
@@ -444,7 +444,7 @@ class KeyTermsDetails extends Component {
               </Header>
               {revenueShareSummary
                 ? (
-<p className="detail-section">
+<div className="detail-section">
                   <HtmlEditor readOnly content={revenueShareSummary} />
                   {newLayout && get(KeyTerms, 'revShareSummaryUpload')
                   && (
@@ -457,7 +457,7 @@ class KeyTermsDetails extends Component {
                     </section>
                   )
                   }
-                </p>
+                </div>
                 )
                 : <InlineLoader text="No data available" className="bg-offwhite" />
               }

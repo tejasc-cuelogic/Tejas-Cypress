@@ -413,6 +413,9 @@ i.icon.right {
 	a.toggleReadMore{
 		text-decoration: none;
 		cursor: pointer;
+		.hide-content{
+			display: none;
+		}
 	}
 }
 //	Helper Classes Ends
