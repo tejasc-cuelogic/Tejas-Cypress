@@ -22,7 +22,7 @@ class LatestUpdates extends Component {
     const update = (updates && updates.length && updates[0]) || null;
     return (
       <>
-        <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} ${newLayout ? 'mt-40 mb-60' : 'mb-30'} anchor-wrap`}>
+        <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} ${newLayout && !isMobile ? 'mt-40 mb-60' : 'mb-30'} anchor-wrap`}>
           Updates
           <Label circular horizontal color="green">{(updates && updates.length) || 0}</Label>
           <span className="anchor" id="updates" />
@@ -43,7 +43,7 @@ class LatestUpdates extends Component {
                   </div> : null
                 } */}
                 <div className="avatar-details">
-                  <Item.Header as={newLayout ? 'h5' : ''} className={newLayout ? 'ui grey-header mb-0' : ''}>
+                  <Item.Header as={(newLayout && isMobile) ? 'h6' : 'h5'} className={newLayout ? 'ui grey-header mb-0' : ''}>
                     <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
                   </Item.Header>
                   {update
@@ -51,12 +51,14 @@ class LatestUpdates extends Component {
                   }
                 </div>
               </div>
-              <Divider hidden />
+              {!newLayout && !isMobile
+                ? <Divider hidden />
+                : null }
               {update
                 ? (
                   <>
-                    <Item.Description className="avatar-description">
-                      <Header as="h4" className="grey-header">{update.title}</Header>
+                    <Item.Description className={newLayout && isMobile ? 'avatar-description-v2' : 'avatar-description'}>
+                      <Header as="h4" className={`${newLayout && isMobile ? 'mb-10' : ''} grey-header`}>{update.title}</Header>
                       <HtmlEditor readOnly content={update.content || ''} />
                     </Item.Description>
                   </>
