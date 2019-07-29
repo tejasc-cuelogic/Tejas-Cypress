@@ -142,7 +142,7 @@ export class CrowdpayStore {
       // eslint-disable-next-line prefer-destructuring
       params.accountType = CROWDPAY_FILTERS[accountType].accountType[0];
     }
-    if (!initialState || isFilter) {
+    if (!initialState) {
       params = { ...this.requestState.search };
     }
     const { requestTriggerPage, limit } = this.requestState;
@@ -157,6 +157,10 @@ export class CrowdpayStore {
           if (isFilter) {
             this.resetPagination();
             this.allCrowdpayData = [];
+          }
+
+          if (!initialState && !this.canTriggerNextPage) {
+            this.isLazyLoading = false;
           }
           // this.requestState.page = 1;
           // this.requestState.skip = 0;
@@ -178,7 +182,7 @@ export class CrowdpayStore {
   initiateSearch = (srchParams) => {
     this.requestState.search = srchParams;
     // this.initiateFilters();
-    this.resetPagination();
+    this.reset();
     this.initRequest(this.requestState.type, false, true);
   }
 
@@ -385,7 +389,12 @@ export class CrowdpayStore {
 
   @computed get tiggerNextPageData() {
     const { requestTriggerPage, limit, displayTillIndex } = this.requestState;
-    return ((((limit * requestTriggerPage) - displayTillIndex) === 80) && (requestTriggerPage < Math.round(this.allRecordsCount / limit)));
+    return ((((limit * requestTriggerPage) - displayTillIndex) === 80) && this.canTriggerNextPage);
+  }
+
+  @computed get canTriggerNextPage() {
+    const { requestTriggerPage, limit } = this.requestState;
+    return requestTriggerPage < Math.ceil(this.allRecordsCount / limit);
   }
 
   @action
@@ -399,20 +408,8 @@ export class CrowdpayStore {
   @action
   reset = () => {
     this.resetPagination();
-    this.requestState = {
-      skip: 0,
-      page: 1,
-      perPage: 5,
-      limit: 100,
-      oldType: null,
-      displayTillIndex: 5,
-      resultCount: 0,
-      requestTriggerPage: 1,
-      lastPage: 0,
-      search: { accountType: null },
-    };
+    this.requestState.requestTriggerPage = 1;
     this.allCrowdpayData = [];
-    this.FILTER_FRM = Validator.prepareFormObject(FILTER_META);
   }
 
   @computed get loading() {
