@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 const common = {
-  offeringBasics: `id
+  offeringBasics: `aliasId: id
   isAvailablePublicly
   keyTerms {
     legalBusinessName
