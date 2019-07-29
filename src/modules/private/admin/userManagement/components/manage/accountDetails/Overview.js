@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { includes, get } from 'lodash';
+import money from 'money-math';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Header, Form, Divider, Table, Card } from 'semantic-ui-react';
 import AccountHeader from './AccountHeader';
@@ -43,9 +44,11 @@ export default class Overview extends Component {
       setFieldValue('currentActiveAccount', accountType);
       this.setState({ availableCashL: true, totalBalanceL: true });
       this.props.transactionStore.getInvestorAvailableCash(false, true).then((data) => {
-        this.setState({ availableCash: get(data, 'getInvestorAvailableCash'), availableCashL: false });
+        const cashAmount = get(data, 'getInvestorAvailableCash') ? money.isNegative(get(data, 'getInvestorAvailableCash')) ? '0.00' : get(data, 'getInvestorAvailableCash') : '0.00';
+        this.setState({ availableCash: cashAmount, availableCashL: false });
         this.props.transactionStore.getInvestorAvailableCash(true, true).then((dataN) => {
-          this.setState({ totalBalance: get(dataN, 'getInvestorAvailableCash'), totalBalanceL: false });
+          const totalAmount = get(dataN, 'getInvestorAvailableCash') ? money.isNegative(get(dataN, 'getInvestorAvailableCash')) ? '0.00' : get(dataN, 'getInvestorAvailableCash') : '0.00';
+          this.setState({ totalBalance: totalAmount, totalBalanceL: false });
         }).catch(() => this.setState({ availableCashL: false, totalBalanceL: false }));
       }).catch(() => this.setState({ availableCashL: false, totalBalanceL: false }));
       this.props.portfolioStore.getSummary(true);
