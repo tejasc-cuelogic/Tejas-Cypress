@@ -46,9 +46,6 @@ export default class CrowdPay extends Component {
       requestState, filters, FILTER_FRM, fChange,
       // summary,
     } = crowdpayStore;
-    // if (loading && requestState.page === 1) {
-    //   return <InlineLoader />;
-    // }
     return (
       <PrivateLayout
         {...this.props}

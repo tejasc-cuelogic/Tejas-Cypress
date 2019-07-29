@@ -35,9 +35,7 @@ export default class AllCrowdPay extends Component {
     const { type } = this.props.match.params;
     if (this.props.match.isExact && type && this.props.crowdpayStore.isApiHit !== type) {
       this.props.crowdpayStore.setData('isApiHit', type);
-      // this.props.crowdpayStore.reset();
-      // this.props.crowdpayStore.setAccountTypes(type);
-      // this.props.crowdpayStore.reset();
+      this.props.crowdpayStore.reset();
       this.props.crowdpayStore.initRequest(type, true, false);
     }
   }
