@@ -39,7 +39,7 @@ class Updates extends Component {
     const issuerId = campaign && campaign.issuerId;
     return (
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
-        <Header as="h3" className={`${newLayout && !isMobile ? 'mt-40 mb-60' : 'mt-20 mb-30'} ${isMobile ? 'mb-20' : ''} anchor-wrap`}>
+        <Header as="h3" className={`${newLayout && !isMobile ? 'mt-50 mb-60' : 'mt-20 mb-30'} ${isMobile ? 'mb-20' : ''} anchor-wrap`}>
           Updates
           <span className="anchor" id={newLayout ? 'updates' : ''} />
         </Header>

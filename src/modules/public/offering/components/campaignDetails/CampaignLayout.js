@@ -143,12 +143,11 @@ class CampaignLayout extends Component {
         <>
           {campaignStatus.isRevenueShare ? (<RevenueSharingSummary {...this.props} />) : (<TotalPaymentCalculator {...this.props} />)
           }
-            <Divider hidden section />
+          <Divider hidden section />
           <Comments newLayout showOnlyOne={!this.state.expandComments} />
           <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandComments')} className="link-button highlight-text mt-40">
             {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Comments
             <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
-            <Divider hidden section />
           </Button>
         </>
         {campaignStatus.issuerStatement ? (

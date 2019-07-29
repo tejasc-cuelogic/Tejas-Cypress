@@ -345,7 +345,6 @@ class KeyTermsDetails extends Component {
           </Table.Body>
         </Table>
         <Divider section={!isMobile} hidden />
-        {newLayout && <Divider section={!isMobile} hidden />}
         {!newLayout && offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
           ? (
             <TotalPaymentCalculator {...this.props} />
