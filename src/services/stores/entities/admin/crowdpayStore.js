@@ -3,7 +3,7 @@ import graphql from 'mobx-apollo';
 import { isArray, get, filter as lodashFilter, findIndex, find } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { FormValidator as Validator, ClientDb } from '../../../../helper';
+import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { getCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountValidate, createIndividualAccount, getDecryptedGoldstarAccountNumber } from '../../queries/CrowdPay';
 import { crowdPayAccountNotifyGs } from '../../queries/account';
 import { FILTER_META, CROWDPAY_FILTERS, CONFIRM_CROWDPAY, CROWDPAY_ACCOUNTS_STATUS } from '../../../constants/crowdpayAccounts';
@@ -137,8 +137,14 @@ export class CrowdpayStore {
       // eslint-disable-next-line prefer-destructuring
       params.accountType = CROWDPAY_FILTERS[accountType].accountType[0];
     }
+
     if (!initialState) {
       params = { ...this.requestState.search };
+    }
+
+    if (this.requestState.search.keyword) {
+      params.search = this.requestState.search.keyword;
+      delete params.keyword;
     }
     const { requestTriggerPage, limit } = this.requestState;
     this.data = graphql({
@@ -221,20 +227,20 @@ export class CrowdpayStore {
   }
 
   @action
-  setInitiateSrch = (value, valueObj) => {
+  setInitiateSrch = (name, value) => {
     const searchparams = { ...this.requestState.search };
-    if (value === 'accountCreateFromDate' || value === 'accountCreateToDate') {
-      if (moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-        searchparams[value] = valueObj ? moment(new Date(valueObj.formattedValue)).add(1, 'day').toISOString() : '';
+    if (name === 'accountCreateFromDate' || name === 'accountCreateToDate') {
+      if (moment(value.formattedValue, 'MM-DD-YYYY', true).isValid()) {
+        searchparams[name] = value ? DataFormatter.getDateForApiFiltering(value.formattedValue, true, name, false) : '';
         this.requestState.search = searchparams;
         this.initiateSearch(searchparams);
       }
     } else {
       const srchParams = { ...this.requestState.search };
-      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
-        srchParams[value] = value;
+      if ((isArray(name) && name.length > 0) || (typeof name === 'string' && name !== '')) {
+        srchParams[name] = value;
       } else {
-        delete srchParams[value];
+        delete srchParams[name];
       }
       this.initiateSearch(srchParams);
     }

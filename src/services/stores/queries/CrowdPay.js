@@ -81,8 +81,8 @@ query listCrowdPayUsers($limit: Int) {
 `;
 
 export const getCrowdPayUsers = gql`
-query getCrowdPayUsers($limit: Int, $page: Int, $accountType: InvestorAccountTypeEnum, $accountStatus: [InvestorAccountStatusEnum], $accountCreateFromDate: String, $accountCreateToDate: String) {
-  getCrowdPayUsers(limit: $limit,page: $page, accountType: $accountType, accountStatus: $accountStatus, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate) {
+query getCrowdPayUsers($limit: Int, $page: Int, $search: String, $accountType: InvestorAccountTypeEnum, $accountStatus: [InvestorAccountStatusEnum], $accountCreateFromDate: String, $accountCreateToDate: String) {
+  getCrowdPayUsers(limit: $limit,page: $page, search: $search, accountType: $accountType, accountStatus: $accountStatus, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate) {
         resultCount
         crowdPayList {
           userId
