@@ -22,6 +22,21 @@ describe('Account Creation', () => {
     cy.saveLocalStorage();
   });
 
+  after(() => {
+    /**
+     * logout
+     * login with admin
+     * manage user
+     * search user
+     * soft delete user 
+     * make a pattern to search deleted user
+     * add search filter for deleted users
+     * hard delete user
+     * */
+    const investorEmail = window.localStorage.getItem('investorEmail');
+    
+  });
+
   it('should successfully link bank with manual process', () => {
     individualManualLinkbankProcess();
     cy.get('input[name="value"]').then(() => {
