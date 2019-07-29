@@ -9,7 +9,7 @@ import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shar
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import CampaignHeader from '../components/campaignDetails/CampaignHeader';
 import InvestNow from '../components/investNow/InvestNow';
-
+import CommunityGuideline from '../components/campaignDetails/CommunityGuideline';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 import SecondaryMenu from '../components/CampaignSecondaryMenu';
 import Agreement from '../components/investNow/agreement/components/Agreement';
@@ -80,6 +80,9 @@ class offerDetails extends Component {
   }
 
   componentDidMount() {
+    if (this.props.location.pathname !== this.props.match.url && this.props.newLayout) {
+      this.props.history.push(this.props.match.url);
+    }
     window.scrollTo(0, 0);
   }
 
@@ -263,6 +266,7 @@ class offerDetails extends Component {
                       <Route path={`${match.url}/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={`${match.url}/agreement`} {...props} />} />
                       <Route exact path={`${match.url}/congratulation`} component={Congratulation} />
                       <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
+                      <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
                       <Route component={NotFound} />
                     </Switch>
                   </Suspense>

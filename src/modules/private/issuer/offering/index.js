@@ -38,7 +38,7 @@ export default class Offering extends Component {
       <PrivateLayout
         {...this.props}
         offeringSlug={offer.offeringSlug}
-        rightLabel={<Menu.Item position="right"><Link target="_blank" to={`/offerings/preview/${offer.offeringSlug}/overview`}><Icon className="ns-view" /><b>View Offering</b></Link></Menu.Item>}
+        rightLabel={<Menu.Item position="right"><Link target="_blank" to={`/offerings/preview/${offer.offeringSlug}`}><Icon className="ns-view" /><b>View Offering</b></Link></Menu.Item>}
       >
         <Switch>
           <Route exact path={match.url} component={OfferingModule('overview')} />
