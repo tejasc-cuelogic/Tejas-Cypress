@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 const common = {
-  offeringBasics: `aliasId: id
+  offeringBasics: `
   isAvailablePublicly
   keyTerms {
     legalBusinessName
@@ -75,6 +75,7 @@ export const allOfferingsCompact = gql`
 export const allOfferings = gql`
   query _getOfferings($stage: [OfferingStageEnumType]){
     getOfferings(filters: { stage: $stage }){
+      id
       ${common.offeringBasics}
     }
   }
@@ -1046,6 +1047,7 @@ export const getOfferingDetails = gql`
 export const updateOffering = gql`
 mutation _updateOffering($id: String!, $issuerId: String, $adminId: String, $offeringDetails: OfferingInputType!) {
   updateOffering(id: $id, issuerId: $issuerId, adminId: $adminId, offeringDetails: $offeringDetails) {
+    aliasId: id
     ${common.offeringBasics}
   }
 }
@@ -1054,6 +1056,7 @@ mutation _updateOffering($id: String!, $issuerId: String, $adminId: String, $off
 export const upsertOffering = gql`
 mutation upsertOffering($id: String, $offeringDetails: OfferingInputType!) {
   upsertOffering(id: $id, offeringDetails: $offeringDetails) {
+    id
     ${common.offeringBasics}
   }
 }
