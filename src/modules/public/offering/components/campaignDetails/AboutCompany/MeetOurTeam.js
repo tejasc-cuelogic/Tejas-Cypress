@@ -5,7 +5,7 @@ import { InlineLoader, Image64 } from '../../../../../../theme/shared';
 import NSImage from '../../../../../shared/NSImage';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 
-const isMobile = document.documentElement.clientWidth < 991;
+const isMobile = document.documentElement.clientWidth < 992;
 
 class MeetOurTeam extends Component {
   render() {
@@ -19,7 +19,7 @@ class MeetOurTeam extends Component {
     ));
     return (
       <>
-        <Header as="h3" className={`${this.props.newLayout ? 'mt-50' : ''} anchor-wrap mb-30`}>
+        <Header as="h3" className={`${(this.props.newLayout && isMobile) ? 'mb-10' : this.props.newLayout ? 'mt-50 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
           Meet the Team
           <span className="anchor" id="team" />
         </Header>
