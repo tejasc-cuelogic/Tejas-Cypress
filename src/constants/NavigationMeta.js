@@ -524,6 +524,9 @@ export const PUBLIC_NAV = [
         title: 'Location Analysis', to: '#location-analysis', useRefLink: true, key: 'localAnalysis',
       },
       {
+        title: 'History', to: '#history', useRefLink: true, key: 'history',
+      },
+      {
         title: 'The Team', to: '#team', useRefLink: true, key: 'team',
       },
       {

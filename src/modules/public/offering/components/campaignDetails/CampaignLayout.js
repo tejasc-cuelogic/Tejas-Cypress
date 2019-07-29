@@ -115,12 +115,12 @@ class CampaignLayout extends Component {
         <InvestmentDetails newLayout />
         <AboutCompany newLayout />
         {campaignStatus.isBonusReward
-        && (
+          ? (
           <>
             <BonusRewards newLayout />
             <Divider hidden section />
           </>
-        )
+          ) : null
         }
         {campaignStatus.gallary !== 0 ? (
           <>
@@ -141,7 +141,7 @@ class CampaignLayout extends Component {
           ) : null
         }
         <>
-          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary {...this.props} />) : (<TotalPaymentCalculator {...this.props} />)
+          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary newLayout {...this.props} />) : (<TotalPaymentCalculator newLayout {...this.props} />)
           }
           <Divider hidden section />
           <Comments newLayout showOnlyOne={!this.state.expandComments} />
