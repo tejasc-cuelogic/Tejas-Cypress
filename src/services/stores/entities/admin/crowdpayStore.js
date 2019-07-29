@@ -83,14 +83,10 @@ export class CrowdpayStore {
         crowdPayAccount.declined = { by: 'ADMIN' };
       }
       crowdpayList[index] = crowdPayAccount;
-      this.data.data.getCrowdPayUsers.crowdPayList = crowdpayList;
-      this.setcrowdPaydData(this.getCrowdPayData);
-      this.initiateFilters(false);
+      this.setcrowdPaydData(crowdpayList);
     } else if (accountStatus === 'APPROVE') {
       const crowdpayList = lodashFilter(get(this.data, 'data.getCrowdPayUsers.crowdPayList'), corwdPayAccount => corwdPayAccount.accountId !== id);
-      this.data.data.getCrowdPayUsers.crowdPayList = crowdpayList;
-      this.setcrowdPaydData(this.getCrowdPayData);
-      this.initiateFilters(false);
+      this.setcrowdPaydData(crowdpayList);
     }
     this.loadingCrowdPayIds = lodashFilter(this.loadingCrowdPayIds, crowdPayId => crowdPayId !== id);
   }
