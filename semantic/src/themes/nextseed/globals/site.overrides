@@ -181,7 +181,7 @@ h6{
 }
 .intro-text{
 	color:@neutral-middark !important;
-	font-size: @13px;
+	font-size: @13px !important;
 }
 .note{
 	color:@neutral-middark !important;
@@ -2940,6 +2940,7 @@ table.css-wu4c77-diff-container {
 	}
 }
 
+// Offering new design - 1972 - Start
 //Public comment section
 .custom-segment{
 	border: 1px solid @neutral-darkwhite;
@@ -2949,3 +2950,16 @@ table.css-wu4c77-diff-container {
 		padding: @40px;
 	}
 }
+.offering-layout-menu{
+	p{
+		@media only screen and (max-width : @largestTabletScreen){
+			margin-top: 0;
+			font-size: 15px;
+			&.intro-text{
+				color: @white !important;
+				margin-top: @14px;
+			}
+		}
+	}
+}
+// Offering new design - 1972 - End

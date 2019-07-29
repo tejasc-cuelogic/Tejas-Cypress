@@ -239,7 +239,7 @@ export class CampaignStore {
       && campaign.offering.overview.highlight);
     campaignStatus.hasTopThingToKnow = elevatorPitch;
     campaignStatus.dataRooms = this.dataRoomDocs.length;
-    campaignStatus.gallary = get(campaign, 'media.gallery') && get(campaign, 'media.gallery').length;
+    campaignStatus.gallary = get(campaign, 'media.gallery') ? get(campaign, 'media.gallery').length : 0;
     campaignStatus.keyTerms = get(campaign, 'keyTerms');
     campaignStatus.issuerStatement = get(campaign, 'keyTerms.offeringDisclaimer');
     campaignStatus.companyDescription = get(campaign, 'offering.about.theCompany');

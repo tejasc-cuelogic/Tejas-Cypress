@@ -3,6 +3,7 @@ import { Header, List, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 992;
 @inject('campaignStore')
 @observer
 class CompanyHistory extends Component {
@@ -11,7 +12,7 @@ class CompanyHistory extends Component {
     const emptyHistoryStatement = 'History not found';
     return (
       <>
-        <Header as="h3" className={`${this.props.newLayout ? 'mt-50' : ''} anchor-wrap mb-30`}>
+        <Header as="h3" className={`${(this.props.newLayout && isMobile) ? 'mb-10' : this.props.newLayout ? 'mt-50 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
           History
           <span className="anchor" id="history" />
         </Header>

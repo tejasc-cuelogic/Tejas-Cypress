@@ -76,13 +76,13 @@ class AboutCompany extends Component {
         {campaignStatus.companyDescription && (
         <>
           <CompanyTopThings newLayout={this.props.newLayout} emptyStatement={emptyStatement} campaign={campaign} />
-          <Divider hidden section />
+          <Divider hidden section={!isMobile} />
         </>
         )}
         {campaignStatus.businessModel && (
         <>
           <BusinessModel newLayout={this.props.newLayout} businessModelUrl={this.props.match.url} campaign={campaign} />
-          <Divider hidden section />
+          <Divider hidden section={!isMobile} />
         </>
         )}
         {campaignStatus.localAnalysis && (
@@ -93,13 +93,13 @@ class AboutCompany extends Component {
           campaign={campaign}
           newLayout={this.props.newLayout}
         />
-        <Divider hidden section />
+        <Divider hidden section={!isMobile} />
         </>
         )}
         {campaignStatus.history && (
         <>
         <CompanyHistory newLayout={this.props.newLayout} campaign={campaign} emptyStatement={emptyStatement} />
-        <Divider hidden section />
+        <Divider hidden section={!isMobile} />
         </>
         )}
         {campaignStatus.team && (
@@ -110,7 +110,7 @@ class AboutCompany extends Component {
           meetOurTeamUrl={this.props.match.url}
           newLayout={this.props.newLayout}
         />
-        <Divider hidden section />
+        <Divider hidden section={!isMobile} />
         </>
         )}
       </div>
