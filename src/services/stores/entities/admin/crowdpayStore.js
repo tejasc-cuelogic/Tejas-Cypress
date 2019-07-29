@@ -83,10 +83,10 @@ export class CrowdpayStore {
         crowdPayAccount.declined = { by: 'ADMIN' };
       }
       crowdpayList[index] = crowdPayAccount;
-      this.setcrowdPaydData(crowdpayList);
+      this.setcrowdPayData(crowdpayList);
     } else if (accountStatus === 'APPROVE') {
       const crowdpayList = lodashFilter(get(this.data, 'data.getCrowdPayUsers.crowdPayList'), corwdPayAccount => corwdPayAccount.accountId !== id);
-      this.setcrowdPaydData(crowdpayList);
+      this.setcrowdPayData(crowdpayList);
     }
     this.loadingCrowdPayIds = lodashFilter(this.loadingCrowdPayIds, crowdPayId => crowdPayId !== id);
   }
@@ -95,7 +95,7 @@ export class CrowdpayStore {
   setAccountTypes = (type, defaultFilter = true) => {
     this.requestState.search.accountType = types[type];
     this.requestState.type = type;
-    this.setcrowdPaydData([].concat(...toJS(this.allCrowdpayData)));
+    this.setcrowdPayData([].concat(...toJS(this.allCrowdpayData)));
     if (!defaultFilter) {
       this.resetPagination();
     }
@@ -121,7 +121,7 @@ export class CrowdpayStore {
   }
 
   @action
-  setcrowdPaydData = (data) => {
+  setcrowdPayData = (data) => {
     this.crowdpayData = data;
   }
 
