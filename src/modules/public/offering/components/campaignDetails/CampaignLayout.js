@@ -102,8 +102,6 @@ class CampaignLayout extends Component {
                 <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
               </Button>
               <Divider hidden section />
-              {!isTablet
-              && <Divider hidden section />}
             </>
           )
         }

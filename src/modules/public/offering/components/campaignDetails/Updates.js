@@ -45,7 +45,7 @@ class Updates extends Component {
         </Header>
         {updates && updates.length
           ? (
-<VerticalTimeline className="campaign-updates" layout="one-column" animate={false}>
+          <VerticalTimeline className="campaign-updates" layout="one-column" animate={false}>
             {updates && updates.length
               && updates.map((dataItem, index) => (
                 <VerticalTimelineElement
@@ -74,7 +74,7 @@ class Updates extends Component {
                           && dataItem.actingUserInfo.info.firstName} ${dataItem.actingUserInfo
                             && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName}`}
                         <br />
-<span>{moment(dataItem.updated.date).format('ll')}</span>
+                        <span>{moment(dataItem.updated.date).format('ll')}</span>
                       </Item.Content>
                     </Item>
                     <Header as="h4">{dataItem.title}</Header>
@@ -88,13 +88,13 @@ class Updates extends Component {
                       />
                       {dataItem.content.length > 805
                         ? (
-<a
-  href
-  onClick={
+                        <a
+                          href
+                          onClick={
                             () => this.props.campaignStore.handleReadMoreReadLess(index)
                           }
-  id={index}
->
+                          id={index}
+                        >
                           Read More
                         </a>
                         ) : ''
