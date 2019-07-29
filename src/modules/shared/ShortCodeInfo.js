@@ -39,19 +39,20 @@ export default class ShortCodeInfo extends React.Component {
     </b>
     <p>
     <pre className="bg-offwhite">
-    {'<div class="html-toggle-content hide-content">'}<br />
+    {'<p class="html-toggle-content hide-content">'}<br />
     <span className="negative-text">{'  "${ExtraContent}"'}</span>
     <br />
-    {'</div>'}
+    {'</p>'}
     {`
 <p>
   <a class="toggleReadMore">
     <strong>
-      <span class="toggleReadMoreText">Expand&nbsp;</span>
-        `}
-    <span className="negative-text">{'"${Title}"'}</span>
-    {` more&nbsp;
-    </strong> ▼
+      <span class="toggleReadMoreText">Expand </span>
+      <span calss="customTitle">`}
+    <span className="negative-text">{'${Title}'}</span>
+    {`</span>
+    </strong>
+    <span class="arrowText">&#9660</span>
   </a>
 </p>
     `}

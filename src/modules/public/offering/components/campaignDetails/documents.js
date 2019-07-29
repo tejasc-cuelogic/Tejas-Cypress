@@ -92,7 +92,7 @@ export default class Documents extends Component {
     const { dataRoomDocs } = this.props.campaignStore;
     return (
       <div>
-        <Header as="h3" className={`${this.props.newLayout ? 'mt-50' : 'mt-20'} anchor-wrap mb-30`}>
+        <Header as="h3" className={`${this.props.newLayout ? 'mt-40' : 'mt-20'} anchor-wrap mb-30`}>
           Documents
           <span className="anchor" id="data-room" />
         </Header>

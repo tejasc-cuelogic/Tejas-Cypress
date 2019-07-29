@@ -265,14 +265,27 @@ export class Utility {
   toggleReadMore = (e) => {
     const htmlContent = e.target.closest('.parsed-data').querySelector('.html-toggle-content');
     const toggleButtonText = e.target.closest('.parsed-data').querySelector('.toggleReadMoreText');
+    const arrowText = e.target.closest('.parsed-data').querySelector('.arrowText');
+    const customTitle = e.target.closest('.parsed-data').querySelector('.customTitle');
     if (htmlContent.classList.contains('hide-content')) {
       htmlContent.classList.add('read-content');
       htmlContent.classList.remove('hide-content');
+      customTitle.classList.add('hide-content');
       toggleButtonText.innerHTML = 'Collapse ';
+      arrowText.innerHTML = '&#9650';
     } else {
       htmlContent.classList.add('hide-content');
       htmlContent.classList.remove('read-content');
+      customTitle.classList.remove('hide-content');
       toggleButtonText.innerHTML = 'Expand ';
+      arrowText.innerHTML = '&#9660';
+      const parent = e.target.closest('.parsed-data').parentElement || e.target.closest('.parsed-data');
+      const currentActiveHash = parent.previousElementSibling.querySelector('span').getAttribute('id');
+      if (currentActiveHash) {
+        document.querySelector(`#${currentActiveHash}`).scrollIntoView({
+          block: 'start',
+        });
+      }
     }
   };
 }

@@ -46,12 +46,12 @@ export default class MobileDropDownNav extends React.Component {
       navItems, location, className, navStore, slideUpNot, useIsActive, id, newLayout,
     } = this.props;
     const { navStatus, campaignHeaderStatus } = navStore;
-    const navItemsComponent = <NavItems onToggle={hash => this.setActiveHash(hash)} sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={this.props.navCountData} navItems={navItems} />;
+    const navItemsComponent = <NavItems newLayout={newLayout} onToggle={hash => this.setActiveHash(hash)} sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={this.props.navCountData} navItems={navItems} />;
     return (
       <Responsive maxWidth={991} as={React.Fragment}>
         <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous>
           {newLayout ? (
-            <Menu text className="campaign-mobile-menu-v2">
+            <Menu text className={`campaign-mobile-menu-v2 ${campaignHeaderStatus ? 'active' : (!useIsActive && navStatus === 'sub' && !slideUpNot ? 'active' : '')}`}>
               {navItemsComponent}
             </Menu>
           )

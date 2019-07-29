@@ -75,10 +75,10 @@ export default class CampaignSideBar extends Component {
                 }
               </Statistic>
               {!isClosed
-                ? <Progress className="mb-0" percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
-                : <Progress percent="100" size="tiny" color="green" />
+                ? <Progress className={`${(newLayout && isMobile) ? 'mt-40' : ''} mb-0`} percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
+                : <Progress className={`${(newLayout && isMobile) ? 'mt-40' : ''} mb-0`} percent="100" size="tiny" color="green" />
               }
-              <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
+              <p className={newLayout ? 'mt-10' : ''}>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
                   content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
@@ -163,7 +163,7 @@ export default class CampaignSideBar extends Component {
                 && (
                 <>
                   <Button
-                    compact
+                    compact={!newLayout && !isMobile}
                     fluid={isMobile}
                     secondary={!isInProcessing}
                     disabled={maxFlagStatus || isInProcessing}
@@ -171,7 +171,7 @@ export default class CampaignSideBar extends Component {
                   >
                     {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
                   </Button>
-                  <p>
+                  <p className={(newLayout && isMobile) ? 'intro-text' : ''}>
                     {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                   </p>
                 </>
