@@ -9,6 +9,8 @@ import AboutCompany from './AboutCompany';
 import LatestUpdates from './Overview/LatestUpdates';
 import Updates from './Updates';
 import VideoModal from './Overview/VideoModal';
+import TotalPaymentCalculator from './investmentDetails/totalPaymentCalculator';
+import RevenueSharingSummary from './investmentDetails/revenueSharingSummary';
 import AboutPhotoGallery from './AboutPhotoGallery';
 import Gallery from './AboutCompany/Gallery';
 import IssuerStatement from './Overview/IssuerStatement';
@@ -21,6 +23,8 @@ const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
 const topsAsPerWindowheight = window.innerHeight > 1000 ? 500 : 150;
 const isTablet = document.documentElement.clientWidth < 992;
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('campaignStore', 'navStore')
 @observer
 class CampaignLayout extends Component {
@@ -59,6 +63,9 @@ class CampaignLayout extends Component {
           && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
           && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
           this.props.navStore.setFieldValue('currentActiveHash', item.to);
+          if (isMobile) {
+            document.getElementsByClassName('campaign-mobile-menu-v2')[0].getElementsByClassName('active')[0].scrollIntoView();
+          }
         }
       });
     }
@@ -115,7 +122,7 @@ class CampaignLayout extends Component {
           </>
         )
         }
-        {campaignStatus.gallary && campaignStatus.gallary !== 0 ? (
+        {campaignStatus.gallary !== 0 ? (
           <>
             <Gallery
               newLayout
@@ -134,6 +141,9 @@ class CampaignLayout extends Component {
           ) : null
         }
         <>
+          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary {...this.props} />) : (<TotalPaymentCalculator {...this.props} />)
+          }
+            <Divider hidden section />
           <Comments newLayout showOnlyOne={!this.state.expandComments} />
           <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandComments')} className="link-button highlight-text mt-40">
             {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Comments
