@@ -2714,7 +2714,7 @@ export const OFFERING_CLOSE_1 = {
     error: undefined,
     objRefOutput: 'closureSummary.keyTerms',
     objRef: 'closureSummary.keyTerms',
-    rule: 'optional',
+    rule: 'optional|date',
     placeHolder: 'MM/DD/YYYY',
   },
   hardCloseDate: {
@@ -2723,7 +2723,7 @@ export const OFFERING_CLOSE_1 = {
     error: undefined,
     objRefOutput: 'closureSummary',
     objRef: 'closureSummary',
-    rule: 'optional',
+    rule: 'optional|date',
     placeHolder: 'MM/DD/YYYY',
   },
   interestRate: {
@@ -2759,7 +2759,7 @@ export const OFFERING_CLOSE_1 = {
     objRefOutput: 'closureSummary.keyTerms',
     objRef: 'closureSummary.keyTerms',
     error: undefined,
-    rule: 'optional',
+    rule: 'optional|date',
     placeHolder: 'MM/DD/YYYY',
   },
   gsFees: {

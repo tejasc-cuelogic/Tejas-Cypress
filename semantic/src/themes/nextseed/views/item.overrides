@@ -104,6 +104,9 @@
                 color:@neutral-middark;
             }
         }
+        >.content>.description.avatar-description-v2{
+            margin: @14px 0 @10px;
+        }
     }
     &.messages{
         .item{
