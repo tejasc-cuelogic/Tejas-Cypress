@@ -31,17 +31,25 @@ export class CrowdpayStore {
   @observable requestState = {
     skip: 0,
     page: 1,
-    perPage: 10,
+    perPage: 5,
+    limit: 100,
     oldType: null,
-    displayTillIndex: 10,
+    displayTillIndex: 5,
+    resultCount: 0,
+    requestTriggerPage: 1,
+    lastPage: 0,
     search: { accountType: null },
   };
+
+  @observable isLazyLoading = true;
+
+  @observable allCrowdpayData = [];
 
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
 
   @observable CONFIRM_CROWDPAY_FRM = Validator.prepareFormObject(CONFIRM_CROWDPAY);
 
-  @observable db;
+  @observable crowdpayData;
 
   @observable loadingCrowdPayIds = [];
 
@@ -75,14 +83,10 @@ export class CrowdpayStore {
         crowdPayAccount.declined = { by: 'ADMIN' };
       }
       crowdpayList[index] = crowdPayAccount;
-      this.data.data.getCrowdPayUsers.crowdPayList = crowdpayList;
-      this.setDb(this.getCrowdPayData);
-      this.initiateFilters(false);
+      this.setcrowdPayData(crowdpayList);
     } else if (accountStatus === 'APPROVE') {
       const crowdpayList = lodashFilter(get(this.data, 'data.getCrowdPayUsers.crowdPayList'), corwdPayAccount => corwdPayAccount.accountId !== id);
-      this.data.data.getCrowdPayUsers.crowdPayList = crowdpayList;
-      this.setDb(this.getCrowdPayData);
-      this.initiateFilters(false);
+      this.setcrowdPayData(crowdpayList);
     }
     this.loadingCrowdPayIds = lodashFilter(this.loadingCrowdPayIds, crowdPayId => crowdPayId !== id);
   }
@@ -91,15 +95,21 @@ export class CrowdpayStore {
   setAccountTypes = (type, defaultFilter = true) => {
     this.requestState.search.accountType = types[type];
     this.requestState.type = type;
-    this.setDb(this.getCrowdPayData);
-    this.initialFilters(defaultFilter);
-    this.resetPagination();
+    this.setcrowdPayData([].concat(...toJS(this.allCrowdpayData)));
+    if (!defaultFilter) {
+      this.resetPagination();
+    }
+  }
+
+  @action
+  appendCrowdPayData = () => {
+    this.allCrowdpayData.push(this.getCrowdPayData);
   }
 
   @action
   initialFilters = (defaultFilter) => {
     if (defaultFilter) {
-      this.requestState.search.accountStatus = CROWDPAY_FILTERS[this.requestState.type].initialFilters;
+      this.requestState.search.accountStatus = CROWDPAY_FILTERS[this.requestState.type.toLowerCase()].initialFilters;
     }
     if (this.requestState.type !== 'review') {
       ClientDb.filterData('accountType', CROWDPAY_FILTERS[this.requestState.type].accountType);
@@ -111,34 +121,51 @@ export class CrowdpayStore {
   }
 
   @action
-  setDb = (data) => {
-    this.db = ClientDb.initiateDb(data);
+  setcrowdPayData = (data) => {
+    this.crowdpayData = data;
   }
 
   @action
-  initRequest = (type) => {
-    const params = {};
-    if (type !== 'review') {
-      params.accountStatus = CROWDPAY_FILTERS[type].initialStatus;
+  initRequest = (type, initialState = false, isFilter = false) => {
+    let params = {};
+    const accountType = type.toLowerCase();
+    if (accountType !== 'review' && initialState) {
+      params.accountStatus = CROWDPAY_FILTERS[accountType].initialStatus;
+      this.requestState.search.accountStatus = CROWDPAY_FILTERS[accountType].initialStatus;
     }
-    if (CROWDPAY_FILTERS[type].accountType.length) {
+    if (CROWDPAY_FILTERS[accountType].accountType.length) {
       // eslint-disable-next-line prefer-destructuring
-      params.accountType = CROWDPAY_FILTERS[type].accountType[0];
+      params.accountType = CROWDPAY_FILTERS[accountType].accountType[0];
     }
-    this.setDb([]);
+
+    if (!initialState) {
+      params = { ...this.requestState.search };
+    }
+
+    if (this.requestState.search.keyword) {
+      params.search = this.requestState.search.keyword;
+      delete params.keyword;
+    }
+    const { requestTriggerPage, limit } = this.requestState;
     this.data = graphql({
       client,
       query: getCrowdPayUsers,
-      variables: { ...params, limit: 1000, page: 1 },
+      variables: { ...params, limit, page: requestTriggerPage },
       fetchPolicy: 'network-only',
       onFetch: () => {
         if (!this.data.loading) {
-          this.reset();
-          this.requestState.page = 1;
-          this.requestState.skip = 0;
-          // this.setData('isApiHit', true);
+          if (isFilter) {
+            this.resetPagination();
+            this.allCrowdpayData = [];
+          }
+          if (!initialState && !this.canTriggerNextPage) {
+            this.isLazyLoading = false;
+          }
+          this.requestState.resultCount = get(this.data, 'data.getCrowdPayUsers.resultCount');
+          this.appendCrowdPayData();
+          this.requestState.search.accountType = accountType;
           this.setCrowdpayAccountsSummary();
-          this.setAccountTypes(type);
+          this.setAccountTypes(type, true);
         }
       },
       onError: () => {
@@ -150,7 +177,9 @@ export class CrowdpayStore {
   @action
   initiateSearch = (srchParams) => {
     this.requestState.search = srchParams;
-    this.initiateFilters();
+    this.resetData();
+    this.setData('isLazyLoading', this.canTriggerNextPage);
+    this.initRequest(this.requestState.type, false, true);
   }
 
   @action
@@ -169,6 +198,7 @@ export class CrowdpayStore {
   initiateFilters = () => {
     this.setAccountTypes(this.requestState.type, false);
     const selected = this.FILTER_FRM.fields[this.requestState.type].value;
+    this.isLazyLoading = Object.keys(this.requestState.search).length > 1;
     if (selected.length) {
       this.initialFilters(!this.requestState.search.accountStatus);
     }
@@ -198,13 +228,16 @@ export class CrowdpayStore {
 
   @action
   setInitiateSrch = (name, value) => {
-    if (name === 'startDate' || name === 'endDate') {
-      this.requestState.search[name] = value && moment(value.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(value.formattedValue, false, name, true) : undefined;
-      const srchParams = { ...this.requestState.search };
-      this.initiateSearch(srchParams);
+    const searchparams = { ...this.requestState.search };
+    if (name === 'accountCreateFromDate' || name === 'accountCreateToDate') {
+      if (moment(value.formattedValue, 'MM-DD-YYYY', true).isValid()) {
+        searchparams[name] = value ? DataFormatter.getDateForApiFiltering(value.formattedValue, true, name, false) : '';
+        this.requestState.search = searchparams;
+        this.initiateSearch(searchparams);
+      }
     } else {
       const srchParams = { ...this.requestState.search };
-      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+      if ((isArray(name) && name.length > 0) || (typeof name === 'string' && name !== '')) {
         srchParams[name] = value;
       } else {
         delete srchParams[name];
@@ -327,34 +360,58 @@ export class CrowdpayStore {
   }
 
   @computed get accounts() {
-    return (this.db && this.db.length
-      && this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    return (this.crowdpayData && this.crowdpayData.length
+      && this.crowdpayData.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
   @computed get count() {
-    return (this.db && this.db.length) || 0;
+    return (this.crowdpayData && this.crowdpayData.length) || 0;
+  }
+
+  @computed get allRecordsCount() {
+    return get(this.requestState, 'resultCount') || 0;
   }
 
   @action
   pageRequest = ({ skip, page }) => {
+    if (this.tiggerNextPageData) {
+      this.requestState.requestTriggerPage += 1;
+      this.initRequest(this.requestState.type);
+    }
     this.requestState.displayTillIndex = this.requestState.perPage * page;
     this.requestState.page = page;
     this.requestState.skip = skip;
+  }
+
+  @computed get tiggerNextPageData() {
+    const { requestTriggerPage, limit, displayTillIndex } = this.requestState;
+    return ((((limit * requestTriggerPage) - displayTillIndex) === 80) && this.canTriggerNextPage);
+  }
+
+  @computed get canTriggerNextPage() {
+    const { requestTriggerPage, limit } = this.requestState;
+    return requestTriggerPage < Math.ceil(this.allRecordsCount / limit);
   }
 
   @action
   resetPagination = () => {
     this.requestState.skip = 0;
     this.requestState.page = 1;
-    this.requestState.perPage = 10;
-    this.requestState.displayTillIndex = 10;
+    this.requestState.perPage = 5;
+    this.requestState.displayTillIndex = 5;
   }
 
   @action
   reset = () => {
-    this.resetPagination();
-    this.requestState.search = { accountType: null };
+    this.resetData();
     this.FILTER_FRM = Validator.prepareFormObject(FILTER_META);
+    this.isLazyLoading = true;
+  }
+
+  resetData = () => {
+    this.resetPagination();
+    this.requestState.requestTriggerPage = 1;
+    this.allCrowdpayData = [];
   }
 
   @computed get loading() {
