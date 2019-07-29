@@ -35,7 +35,7 @@ class BonusRewards extends Component {
       ? campaign.offering.misc.additionalBonusRewardsContent : null;
     return (
       <div className={this.props.newLayout ? '' : 'campaign-content-wrapper'}>
-        <Header as="h3" className={`${this.props.newLayout ? 'mt-50 mb-50' : 'mt-20 mb-30'} anchor-wrap`}>
+        <Header as="h3" className={`${this.props.newLayout ? 'mt-40 mb-50' : 'mt-20 mb-30'} anchor-wrap`}>
           <span className="anchor" id={this.props.newLayout ? 'bonus-rewards' : ''} />
           Bonus Rewards
         </Header>

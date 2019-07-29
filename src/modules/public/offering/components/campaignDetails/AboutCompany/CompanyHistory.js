@@ -12,7 +12,7 @@ class CompanyHistory extends Component {
     const emptyHistoryStatement = 'History not found';
     return (
       <>
-        <Header as="h3" className={`${(this.props.newLayout && isMobile) ? 'mb-10' : this.props.newLayout ? 'mt-50 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
+        <Header as="h3" className={`${(this.props.newLayout && isMobile) ? 'mt-40 mb-10' : this.props.newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
           History
           <span className="anchor" id="history" />
         </Header>
