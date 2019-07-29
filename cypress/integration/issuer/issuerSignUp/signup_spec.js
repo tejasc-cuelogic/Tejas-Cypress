@@ -13,15 +13,15 @@ describe('Issuer Sign Up', () => {
     }
   });
 
-  it ('Pre-qualification should be failed', () => {
+  it.skip ('Pre-qualification should be failed', () => {
     preQualificationFail();
   })
 
-  it ('should be able to fill basic details of issuer', () => {
+  it.skip ('should be able to fill basic details of issuer', () => {
     preQualificationSuccess();
   })
 
-  it ('should able to submit business application and login', () => {
+  it.skip ('should able to submit business application and login', () => {
     completeBusinessApplication();
   })
 });
