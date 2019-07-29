@@ -68,7 +68,7 @@ class InvestmentDetails extends Component {
         {this.props.newLayout
         && (
         <>
-        <Header as="h3" className="mb-40 anchor-wrap">
+        <Header as="h3" className={`${!isMobile ? 'mb-40' : 'mb-20'} anchor-wrap`}>
           Investment Terms
           <span className="anchor" id="key-terms" />
         </Header>

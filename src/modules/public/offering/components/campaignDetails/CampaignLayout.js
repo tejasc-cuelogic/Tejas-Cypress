@@ -97,12 +97,13 @@ class CampaignLayout extends Component {
                   />
                 )
               }
-              <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandUpdate')} className="link-button highlight-text mt-20">
+              <Button onClick={() => this.handleCollapseExpand('expandUpdate')} className={`${!isTablet ? 'mt-20' : ''} link-button highlight-text`}>
                 {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Updates
                 <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
               </Button>
               <Divider hidden section />
-              <Divider hidden section />
+              {!isTablet
+              && <Divider hidden section />}
             </>
           )
         }
