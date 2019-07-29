@@ -90,7 +90,7 @@ export default class RedirectManager extends React.PureComponent {
         } else {
           window.localStorage.setItem('ISSUER_REFERRAL_CODE', data.referralCode);
         }
-        this.props.history.push(`/offerings/${data.offeringSlug}/overview`);
+        this.props.history.push(`/offerings/${data.offeringSlug}`);
       } else {
         this.setState({ found: 3 });
       }
