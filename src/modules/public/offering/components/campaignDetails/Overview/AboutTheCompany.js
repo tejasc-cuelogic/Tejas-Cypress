@@ -43,7 +43,7 @@ class AboutTheCompany extends Component {
                 ? (
 <List bulleted relaxed="very">
                     {campaign.offering.overview.highlight.map(field => (
-                      <List.Item className="mb-half">{field}</List.Item>
+                      <List.Item className={newLayout ? 'mb-14 pt-0 pb-0' : 'mb-half'}>{field}</List.Item>
                     ))
                     }
                   </List>

@@ -42,6 +42,7 @@ export default class Transactions extends Component {
     const {
       getAllTransactions, loading, error, hasError, totalRecords, requestState,
     } = this.props.transactionStore;
+    const { isClosedAccount, isSelectedAccountFull } = this.props.userDetailsStore;
     result.rows = getAllTransactions;
     if (loading) {
       return <InlineLoader />;
@@ -49,7 +50,7 @@ export default class Transactions extends Component {
     return (
       <>
         {this.props.isAdmin
-          && <AccountHeader showAddWithdrawFundCta module="Transactions" refLink={this.props.match.url} pathname={this.props.location.pathname} />
+          && <AccountHeader showAddWithdrawFundCta={!isClosedAccount && isSelectedAccountFull} module="Transactions" refLink={this.props.match.url} pathname={this.props.location.pathname} />
         }
         <div className="more search-filters bg-offwhite">
           <Form>

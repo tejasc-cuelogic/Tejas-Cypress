@@ -102,7 +102,7 @@ Cypress.Commands.add('login', amplifyLogin);
 
 Cypress.Commands.add('applicationUnlock', () => {
   cy.get('input[name="password"]').type(Cypress.env('appPassword'));
-  cy.get('div.content').get('button.button').contains('Log in').click({ force: true });
+    cy.get('div.content').get('button.button').contains('Log in').click({ force: true });
 });
 // Cypress.Commands.add('itterativeWait', (itteration, alias) => {
 //   for (let i = 0; i < itteration; i++) {

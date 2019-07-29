@@ -9,32 +9,6 @@ export const registerApiCall = (operationName, url = '**/**') => {
   cy.route('POST', url).as(operationName);
 }
 
-export const apiRequest = (operationName, requestParams, headers = { "content-type": 'application/json' }) => new Promise((resolve, reject) => {
-  try{
-    headers = {
-      ...headers,
-      "content-type":"application/json"
-    };
-    cy.request(
-      {
-        url: requestParams.url || "https://dev-api-us-east-1.nextseed.qa/dev/graphql",
-        method: requestParams.method || "POST",
-        body: {
-          query: requestParams.query,
-        },
-        failOnStatusCode: false,
-        headers,
-      }
-    )
-    .as(operationName)
-    .then((result) => {
-      resolve(result);
-    });
-  } catch(err) {
-    reject(err);
-  }
-});
-
 export const typeOtpCode = () => {
   cy.get('.react-code-input', { timeout: 100000 }).within(() => {
     // eslint-disable-next-line no-plusplus

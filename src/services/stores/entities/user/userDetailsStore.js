@@ -28,6 +28,8 @@ export class UserDetailsStore {
 
   @observable userFirstLoad = false;
 
+  @observable isClosedAccount = false;
+
   @observable currentActiveAccount = null;
 
   @observable isAddressSkip = false;
@@ -142,6 +144,9 @@ export class UserDetailsStore {
   }
 
   @computed get currentActiveAccountDetailsOfSelectedUsers() {
+    if (this.isClosedAccount) {
+      return accountStore.selectedClosedAccount;
+    }
     const activeAccounts = this.getActiveAccountsOfSelectedUsers;
     return find(activeAccounts, acc => acc.name === this.currentActiveAccount);
   }
@@ -489,6 +494,11 @@ export class UserDetailsStore {
   @computed get isUserVerified() {
     const accDetails = this.signupStatus;
     return this.validAccStatus.includes(accDetails.idVerification);
+  }
+
+  @computed get isSelectedAccountFull() {
+    return get(this.currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus')
+      ? get(this.currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus') === 'FULL' : null;
   }
 
   @computed get userHasOneFullAccount() {
