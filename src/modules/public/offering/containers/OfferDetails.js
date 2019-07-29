@@ -80,6 +80,9 @@ class offerDetails extends Component {
   }
 
   componentDidMount() {
+    if (this.props.location.pathname !== this.props.match.url && this.props.newLayout) {
+      this.props.history.push(this.props.match.url);
+    }
     window.scrollTo(0, 0);
   }
 

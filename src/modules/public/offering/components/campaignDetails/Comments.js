@@ -48,8 +48,8 @@ class Comments extends Component {
     const { isUserLoggedIn } = this.props.authStore;
     const { currentUser } = this.props.userStore;
     if (!isUserLoggedIn) {
-      this.props.uiStore.setAuthRef(`${this.props.refLink}/comments`);
-      this.props.uiStore.setRedirectURL({ pathname: `${this.props.refLink}/comments` });
+      this.props.uiStore.setAuthRef(`${this.props.refLink}${this.props.newLayout ? '' : '/comments'}`);
+      this.props.uiStore.setRedirectURL({ pathname: `${this.props.refLink}${this.props.newLayout ? '' : '/comments'}` });
       this.props.history.push('/login');
     } else if (!(isUserLoggedIn && currentUser.roles.includes('investor'))) {
       this.props.history.push(`${this.props.refLink}/confirm-comment-login`);
