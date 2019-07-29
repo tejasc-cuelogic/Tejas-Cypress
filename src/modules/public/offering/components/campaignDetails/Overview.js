@@ -64,16 +64,16 @@ class Overview extends Component {
     const { campaign, campaignStatus } = this.props.campaignStore;
     return (
       <div className="campaign-content-wrapper">
-        {campaignStatus.hasTopThingToKnow && (
+        {campaignStatus.hasTopThingToKnow ? (
         <>
         <AboutTheCompany refLink={this.props.refLink} campaign={campaign} />
           <Divider hidden section />
         </>
-        )}
+        ) : null}
         <KeyTerms refLink={this.props.refLink} campaign={campaign} />
         <Divider hidden section />
         {campaignStatus.updates !== 0
-          && (
+          ? (
           <>
             <LatestUpdates
               updates={campaign && campaign.updates}
@@ -85,9 +85,9 @@ class Overview extends Component {
             />
             <Divider hidden section />
           </>
-          )
+          ) : null
         }
-        {campaignStatus.gallary && campaignStatus.gallary !== 0 && (
+        {campaignStatus.gallary !== 0 ? (
         <>
           <Gallery
             galleryUrl={this.props.match.url}
@@ -95,10 +95,10 @@ class Overview extends Component {
           />
           <Divider hidden section />
         </>
-        )}
-        {campaignStatus.issuerStatement && (
+        ) : null}
+        {campaignStatus.issuerStatement ? (
           <IssuerStatement campaign={campaign} />
-        )
+        ) : null
         }
         <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
         <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
