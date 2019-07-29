@@ -83,7 +83,7 @@ class InvestmentDetails extends Component {
         && (
           <>
           <Divider section hidden />
-          {this.props.newLayout && <Divider section hidden />}
+          {this.props.newLayout && !isMobile ? <Divider section hidden /> : null}
           <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} ${this.props.newLayout ? '' : 'mt-20'}mt-20 anchor-wrap`}>
           Use of Proceeds
           <span className="anchor" id="use-of-proceeds" />
