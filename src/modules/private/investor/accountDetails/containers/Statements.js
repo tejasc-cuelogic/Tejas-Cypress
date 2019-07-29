@@ -5,7 +5,6 @@ import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import MonthlyStatements from '../components/statements/MonthlyStatements';
 import TaxForms from '../components/statements/TaxForms';
-import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
 const getModule = component => lazy(() => import(`../components/statements/${component}`));
 
@@ -17,16 +16,14 @@ const navItems = [
 export default class Statements extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
-      const isDev = ['localhost', 'develop', 'dev'].includes(REACT_APP_DEPLOY_ENV);
-      const navigationItems = isDev || this.props.isAdmin ? navItems : navItems.filter(item => item.to !== 'monthly-statements');
+      const navigationItems = navItems;
       this.props.history.replace(`${this.props.match.url}/${navigationItems[0].to}`);
     }
   }
 
   render() {
     const { match } = this.props;
-    const isDev = ['localhost', 'develop', 'dev'].includes(REACT_APP_DEPLOY_ENV);
-    const navigationItems = isDev || this.props.isAdmin ? navItems : navItems.filter(item => item.to !== 'monthly-statements');
+    const navigationItems = navItems;
     const DefaultComponent = navigationItems[0].component || getModule(navigationItems[0].component);
     return (
       <div>

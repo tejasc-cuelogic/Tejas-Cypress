@@ -9,6 +9,8 @@ import AboutCompany from './AboutCompany';
 import LatestUpdates from './Overview/LatestUpdates';
 import Updates from './Updates';
 import VideoModal from './Overview/VideoModal';
+import TotalPaymentCalculator from './investmentDetails/totalPaymentCalculator';
+import RevenueSharingSummary from './investmentDetails/revenueSharingSummary';
 import AboutPhotoGallery from './AboutPhotoGallery';
 import Gallery from './AboutCompany/Gallery';
 import IssuerStatement from './Overview/IssuerStatement';
@@ -21,6 +23,7 @@ const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
 const topsAsPerWindowheight = window.innerHeight > 1000 ? 500 : 150;
 const isTablet = document.documentElement.clientWidth < 992;
+
 @inject('campaignStore', 'navStore')
 @observer
 class CampaignLayout extends Component {
@@ -59,6 +62,9 @@ class CampaignLayout extends Component {
           && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
           && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
           this.props.navStore.setFieldValue('currentActiveHash', item.to);
+          // if (isMobile) {
+          //   document.getElementsByClassName('campaign-mobile-menu-v2')[0].getElementsByClassName('active')[0].scrollIntoView();
+          // }
         }
       });
     }
@@ -97,11 +103,10 @@ class CampaignLayout extends Component {
                   />
                 )
               }
-              <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandUpdate')} className="link-button highlight-text mt-20">
+              <Button onClick={() => this.handleCollapseExpand('expandUpdate')} className={`${!isTablet ? 'mt-20' : ''} link-button highlight-text`}>
                 {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Updates
                 <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
               </Button>
-              <Divider hidden section />
               <Divider hidden section />
             </>
           )
@@ -109,14 +114,14 @@ class CampaignLayout extends Component {
         <InvestmentDetails newLayout />
         <AboutCompany newLayout />
         {campaignStatus.isBonusReward
-        && (
+          ? (
           <>
             <BonusRewards newLayout />
             <Divider hidden section />
           </>
-        )
+          ) : null
         }
-        {campaignStatus.gallary && campaignStatus.gallary !== 0 ? (
+        {campaignStatus.gallary !== 0 ? (
           <>
             <Gallery
               newLayout
@@ -135,11 +140,13 @@ class CampaignLayout extends Component {
           ) : null
         }
         <>
+          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary newLayout {...this.props} />) : (<TotalPaymentCalculator newLayout {...this.props} />)
+          }
+          <Divider hidden section />
           <Comments newLayout showOnlyOne={!this.state.expandComments} />
           <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandComments')} className="link-button highlight-text mt-40">
             {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Comments
             <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
-            <Divider hidden section />
           </Button>
         </>
         {campaignStatus.issuerStatement ? (

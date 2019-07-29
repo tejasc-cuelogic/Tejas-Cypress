@@ -21,7 +21,7 @@ class Gallery extends Component {
     const { campaign, newLayout } = this.props;
     return (
       <>
-        <Header as="h3" className={`${newLayout ? 'mt-50 mb-40' : 'mb-30'} anchor-wrap`}>
+        <Header as="h3" className={`${newLayout ? 'mt-40 mb-40' : 'mb-30'} anchor-wrap`}>
           Gallery
           <span className="anchor" id="gallery" />
         </Header>
