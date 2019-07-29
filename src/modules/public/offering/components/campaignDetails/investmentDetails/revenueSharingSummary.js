@@ -21,7 +21,7 @@ class revenueSharingSummary extends Component {
     const revenueShareSummary = keyterms.revShareSummary || null;
     return (
         <>
-        <Header as="h3" className="mb-30 anchor-wrap">
+        <Header as="h3" className="mb-40 mt-40 anchor-wrap">
         Revenue Sharing Summary
         <span className="anchor" id="revenue-sharing-summary" />
       </Header>
