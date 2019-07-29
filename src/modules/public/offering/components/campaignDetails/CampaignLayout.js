@@ -9,6 +9,8 @@ import AboutCompany from './AboutCompany';
 import LatestUpdates from './Overview/LatestUpdates';
 import Updates from './Updates';
 import VideoModal from './Overview/VideoModal';
+import TotalPaymentCalculator from './investmentDetails/totalPaymentCalculator';
+import RevenueSharingSummary from './investmentDetails/revenueSharingSummary';
 import AboutPhotoGallery from './AboutPhotoGallery';
 import Gallery from './AboutCompany/Gallery';
 import IssuerStatement from './Overview/IssuerStatement';
@@ -116,7 +118,7 @@ class CampaignLayout extends Component {
           </>
         )
         }
-        {campaignStatus.gallary && campaignStatus.gallary !== 0 ? (
+        {campaignStatus.gallary !== 0 ? (
           <>
             <Gallery
               newLayout
@@ -135,6 +137,8 @@ class CampaignLayout extends Component {
           ) : null
         }
         <>
+          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary {...this.props} />) : (<TotalPaymentCalculator {...this.props} />)
+          }
           <Comments newLayout showOnlyOne={!this.state.expandComments} />
           <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandComments')} className="link-button highlight-text mt-40">
             {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Comments

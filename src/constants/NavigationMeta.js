@@ -512,12 +512,6 @@ export const PUBLIC_NAV = [
         title: 'Investment Terms', to: '#key-terms', useRefLink: true, key: 'keyTerms',
       },
       {
-        title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true, key: 'isRevenueShare',
-      },
-      {
-        title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true, key: 'isTermNote',
-      },
-      {
         title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true, key: 'useOfProcceds',
       },
       {
@@ -540,6 +534,12 @@ export const PUBLIC_NAV = [
       },
       {
         title: 'Documents', to: '#data-room', useRefLink: true, key: 'dataRooms',
+      },
+      {
+        title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true, key: 'isRevenueShare',
+      },
+      {
+        title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true, key: 'isTermNote',
       },
       {
         title: 'Comments', to: '#comments', useRefLink: true,
