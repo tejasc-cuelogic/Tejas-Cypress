@@ -41,7 +41,7 @@ class Overview extends Component {
           {isPreviewLinkShow
             && (
 <span className="pull-right">
-              <Link target="_blank" to={`/offerings/${campaign.offeringSlug}/overview`} className="pull-right">View offering page</Link>
+              <Link target="_blank" to={`/offerings/${campaign.offeringSlug}`} className="pull-right">View offering page</Link>
             </span>
             )
           }
