@@ -224,16 +224,16 @@ export class NavStore {
   }
 
   @action
-  setNavStatus(calculations, forced) {
+  setNavStatus(calculations, forced, ignoreUpDirection = false) {
     const {
       topVisible, direction, bottomPassed, isMoveTop,
     } = calculations;
     if (typeof topVisible === 'boolean') {
       this.navStatus = forced || (!topVisible ? 'sub' : 'main');
       if ((this.navStatus === 'sub') && (bottomPassed)) {
-        this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
+        this.subNavStatus = (direction === 'down' ? 'animate' : !ignoreUpDirection ? 'animate reverse' : 'animate');
       } else if ((this.navStatus === 'main') && (bottomPassed) && (isMoveTop)) {
-        this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
+        this.subNavStatus = (direction === 'down' ? 'animate' : !ignoreUpDirection ? 'animate reverse' : 'animate');
       }
     }
   }
