@@ -71,7 +71,7 @@ class UserListing extends Component {
                       )
                     }
                   </Table.Cell>
-                  <Table.Cell className="user-status" data-cy={user.id}>
+                  <Table.Cell className="user-status">
                     <span className="user-name">{isManager ? <Link to={`/app/users/${user.id}/profile-data`}><b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b></Link> : <b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b>}</span>
                     {user.email ? user.email.address : ''}
                   </Table.Cell>
