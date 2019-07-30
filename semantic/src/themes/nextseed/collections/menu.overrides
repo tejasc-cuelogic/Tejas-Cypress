@@ -639,7 +639,10 @@ footer .ui.text.menu{
                 bottom: -9px;
                 left: 0;
             }
-            &.active{
+            &:hover{
+                color: @neutral-middark;
+            }
+            &.active, &:focus{
                 color: @primary-one;
                 &:after{
                     background: @primary-one;
