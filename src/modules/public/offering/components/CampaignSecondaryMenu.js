@@ -12,7 +12,7 @@ const isMobile = document.documentElement.clientWidth < 991;
 @observer
 export default class CampaignSecondaryMenu extends Component {
   handleUpdate = (e, { calculations }) => {
-    this.props.navStore.setNavStatus(calculations);
+    this.props.navStore.setNavStatus(calculations, false, true);
   }
 
   handleInvestNowClick = () => {

@@ -150,7 +150,7 @@ class Comments extends Component {
             </Form>
           </section>
           )
-          : (!disablePostComment && !showOnlyOne)
+          : (!disablePostComment)
               && (
               <>
                 { visiblePost
