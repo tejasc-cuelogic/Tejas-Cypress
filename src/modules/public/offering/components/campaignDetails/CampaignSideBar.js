@@ -44,7 +44,7 @@ export default class CampaignSideBar extends Component {
                 {campaign && campaign.media
                   && campaign.media.heroVideo && campaign.media.heroVideo.url
                   ? (
-<Link to={`${this.props.match.url}/overview/herovideo`}>
+<Link to={`${this.props.match.url}${newLayout ? '' : '/overview'}/herovideo`}>
                       <Image64
                         bg
                         srcUrl={get(campaign, 'media.heroImage.url')}
