@@ -13,7 +13,7 @@ describe('Issuer Sign Up', () => {
     }
   });
 
-  it.skip ('Pre-qualification should be failed', () => {
+  it ('Pre-qualification should be failed', () => {
     preQualificationFail();
   })
 
