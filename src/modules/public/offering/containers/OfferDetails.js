@@ -86,7 +86,7 @@ class offerDetails extends Component {
     if (location.pathname !== match.url) {
       const splittedArr = location.pathname.split('/');
       if ((newLayout && splittedArr.includes('data-room')) || (!newLayout && ['overview', 'about', 'investment-details', 'data-room', 'comments', 'bonus-rewards', 'updates'].includes(splittedArr[splittedArr.length - 1]))) {
-        this.props.history.push(location.pathname);
+        // this.props.history.push(location.pathname); do nothing
       } else {
         this.props.history.push(match.url);
       }
@@ -269,7 +269,7 @@ class offerDetails extends Component {
                       }
                       {newLayout
                       && (
-                        <Route path={`${this.props.match.url}/data-room/:docNo`} component={DocumentModal} />
+                        <Route path={`${this.props.match.url}/data-room`} component={DocumentModal} />
                       )
                       }
                       <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />

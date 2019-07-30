@@ -12,12 +12,12 @@ import { IframeModal } from '../../../../../../theme/shared';
 export default class DocumentModal extends Component {
   state = { embedUrl: null, paramsDoc: null, openModal: true };
   componentWillMount() {
-    const { docNo } = this.props.match.params;
+    const docNo = this.props.location.hash;
     if (docNo) {
-      this.setState({ paramsDoc:  this.props.campaignStore.dataRoomDocs[parseFloat(docNo) - 1]});
+      this.setState({ paramsDoc:  this.props.campaignStore.dataRoomDocs[parseFloat(docNo.substr(1)) - 1]});
     }
-    const doc = this.props.doc || this.props.campaignStore.dataRoomDocs[parseFloat(docNo) - 1];
-    if (doc) {
+    const doc = this.props.doc || this.props.campaignStore.dataRoomDocs[parseFloat(docNo.substr(1)) - 1];
+    if (doc && get(doc, 'upload.fileHandle')) {
       const { boxFileId } = get(doc, 'upload.fileHandle');
       const { campaign } = this.props.campaignStore;
       const regulation = get(campaign, 'regulation');
@@ -42,12 +42,12 @@ export default class DocumentModal extends Component {
     const { isInvestorAccreditated } = this.props.userDetailsStore;
     const { stepInRoute } = this.props.navStore;
     const doc = this.props.doc || this.state.paramsDoc;
-    if (!doc) {
+    if (!doc || !get(doc, 'upload.fileHandle')) {
       return (<Modal open={this.state.openModal} closeIcon onClose={this.props.close || this.closeModal}>
         <Modal.Content>
         <section className="no-updates center-align bg-offwhite padded">
           <Header as="h3" className="mb-20 mt-50">
-            Document Not Found. Please try Again
+            Document Not Found.
           </Header>
         </section>
         </Modal.Content>
