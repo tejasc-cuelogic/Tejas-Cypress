@@ -417,7 +417,9 @@ class IraAccountStore {
           this.setFormData('IDENTITY_FRM', account.details);
           bankAccountStore.validateAddFunds();
           if (account.details.linkedBank) {
-            bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
+            if (isEmpty(bankAccountStore.plaidAccDetails)) {
+              bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
+            }
             bankAccountStore.formIraAddFunds.fields.value.value = account.details.initialDepositAmount;
           } else {
             Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
