@@ -173,7 +173,7 @@ export default class Close extends Component {
   jsonModal = json => (
   <Modal closeIcon trigger={<Button className="link-button highlight-text" content={`Show ${this.state.actionLabel} Response`} />}>
       <Modal.Content>
-      <pre className="no-updates bg-offwhite padded">
+      <pre className="no-updates bg-offwhite padded json-text">
         {beautify(json, null, 2, 100)}
       </pre>
       </Modal.Content>
