@@ -23,6 +23,7 @@ const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
 const topsAsPerWindowheight = window.innerHeight > 1000 ? 500 : 150;
 const isTablet = document.documentElement.clientWidth < 992;
+const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore', 'navStore')
 @observer
@@ -56,15 +57,19 @@ class CampaignLayout extends Component {
   handleOnScroll = () => {
     const { campaignNavData } = this.props.campaignStore;
     const navs = toJS(campaignNavData);
+    if (isMobile && (this.props.navStore.currentActiveHash !== this.props.location.hash) && this.props.navStore.campaignHeaderStatus) {
+      document.getElementsByClassName('campaign-mobile-menu-v2')[0].getElementsByClassName('active')[0].scrollIntoView({
+        // inline: 'center',
+        behavior: 'smooth',
+        // block: 'start',
+      });
+    }
     if (navs && Array.isArray(navs)) {
       navs.forEach((item) => {
         if (document.getElementById(item.to.slice(1))
           && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
           && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
           this.props.navStore.setFieldValue('currentActiveHash', item.to);
-          // if (isMobile) {
-          //   document.getElementsByClassName('campaign-mobile-menu-v2')[0].getElementsByClassName('active')[0].scrollIntoView();
-          // }
         }
       });
     }
