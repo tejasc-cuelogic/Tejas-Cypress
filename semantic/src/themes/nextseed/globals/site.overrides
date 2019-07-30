@@ -2963,3 +2963,6 @@ table.css-wu4c77-diff-container {
 	}
 }
 // Offering new design - 1972 - End
+.json-text{
+	overflow-x:scroll; 
+}
