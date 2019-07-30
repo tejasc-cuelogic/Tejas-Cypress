@@ -22,7 +22,7 @@ class LatestUpdates extends Component {
     const update = (updates && updates.length && updates[0]) || null;
     return (
       <>
-        <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} ${newLayout && !isMobile ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
+        <Header as="h3" className={`${newLayout && !isMobile ? 'mt-40 mb-60' : 'mt-20'} ${isMobile ? 'mb-20' : ' mb-30'} anchor-wrap`}>
           Updates
           <Label circular horizontal color="green">{(updates && updates.length) || 0}</Label>
           <span className="anchor" id="updates" />

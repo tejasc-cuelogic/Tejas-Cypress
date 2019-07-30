@@ -144,13 +144,16 @@ class CampaignLayout extends Component {
           }
           <Divider hidden section />
           <Comments refLink={this.props.match.url} newLayout showOnlyOne={!this.state.expandComments} />
-          <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandComments')} className="link-button highlight-text mt-40">
+          <Button onClick={() => this.handleCollapseExpand('expandComments')} className="link-button highlight-text mt-40">
             {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Comments
             <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
           </Button>
         </>
         {campaignStatus.issuerStatement ? (
+          <>
+          <Divider hidden section />
           <IssuerStatement newLayout campaign={campaign} />
+          </>
         ) : null
         }
         <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal newLayout refLink={props.match} {...props} />} />

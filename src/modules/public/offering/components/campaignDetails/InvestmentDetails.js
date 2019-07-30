@@ -82,8 +82,7 @@ class InvestmentDetails extends Component {
         {campaignStatus.useOfProcceds
         && (
           <>
-          <Divider section hidden />
-          <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} ${this.props.newLayout ? '' : 'mt-20'}mt-20 anchor-wrap`}>
+          <Header as="h3" className={`${isMobile ? 'mb-20 mt-20' : 'mb-30 mt-20'} ${this.props.newLayout ? 'mt-40' : 'mt-20'} anchor-wrap`}>
           Use of Proceeds
           <span className="anchor" id="use-of-proceeds" />
         </Header>
