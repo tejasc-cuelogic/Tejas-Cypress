@@ -17,6 +17,7 @@ import Congratulation from '../components/investNow/agreement/components/Congrat
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
 // import Footer from './../../../../theme/layout/Footer';
+import DocumentModal from '../components/campaignDetails/DataRoom/DocumentModal';
 import OfferingMetaTags from '../components/OfferingMetaTags';
 import AboutPhotoGallery from '../components/campaignDetails/AboutPhotoGallery';
 import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit';
@@ -80,8 +81,14 @@ class offerDetails extends Component {
   }
 
   componentDidMount() {
-    if (this.props.location.pathname !== this.props.match.url && this.props.newLayout) {
-      this.props.history.push(this.props.match.url);
+    const { location, match, newLayout } = this.props;
+    if (location.pathname !== match.url) {
+      const splittedArr = location.pathname.split('/');
+      if ((newLayout && splittedArr.includes('data-room')) || (!newLayout && ['overview', 'about', 'investment-details', 'data-room', 'comments', 'bonus-rewards', 'updates'].includes(splittedArr[splittedArr.length - 1]))) {
+        this.props.history.push(location.pathname);
+      } else {
+        this.props.history.push(match.url);
+      }
     }
     window.scrollTo(0, 0);
   }
@@ -257,6 +264,11 @@ class offerDetails extends Component {
                             <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
                           );
                         })
+                      )
+                      }
+                      {newLayout
+                      && (
+                        <Route path={`${this.props.match.url}/data-room/:docNo`} component={DocumentModal} />
                       )
                       }
                       <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
