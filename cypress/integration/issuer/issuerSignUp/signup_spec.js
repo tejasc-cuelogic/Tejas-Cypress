@@ -17,7 +17,7 @@ describe('Issuer Sign Up', () => {
     preQualificationFail();
   })
 
-  it.skip ('should be able to fill basic details of issuer', () => {
+  it ('should be able to fill basic details of issuer', () => {
     preQualificationSuccess();
   })
 
