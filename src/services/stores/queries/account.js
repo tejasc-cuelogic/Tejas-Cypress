@@ -29,6 +29,7 @@ export const upsertInvestorAccount = gql`
         routingNumber
         bankName
         accountType
+        plaidAccountId
       }
       accountType
     }

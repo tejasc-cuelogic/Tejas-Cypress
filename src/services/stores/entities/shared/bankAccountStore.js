@@ -250,12 +250,13 @@ export class BankAccountStore {
         routingNumber,
         accountType,
         account,
+        plaidAccountId,
       } = this.plaidAccDetails;
-      if (account_id && public_token) {
+      if ((account_id && public_token) || plaidAccountId) {
         plaidBankDetails.linkedBank = {
           plaidPublicToken: public_token,
-          plaidAccountId: account_id,
-          accountType: account.subtype.toUpperCase(),
+          plaidAccountId: plaidAccountId || account_id,
+          accountType: (accountType && accountType.toUpperCase()) || account.subtype.toUpperCase(),
         };
       } else {
         plaidBankDetails.linkedBank = {
