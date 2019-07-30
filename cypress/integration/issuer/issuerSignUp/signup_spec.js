@@ -21,7 +21,7 @@ describe('Issuer Sign Up', () => {
     preQualificationSuccess();
   })
 
-  it ('should able to submit business application and login', () => {
+  it.skip ('should able to submit business application and login', () => {
     completeBusinessApplication();
   })
 });
