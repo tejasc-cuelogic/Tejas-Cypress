@@ -1084,7 +1084,11 @@ export class OfferingCreationStore {
         variables,
       })
       .then((result) => {
-        offeringsStore.updateOfferingList(id, result.data.updateOffering, keyName);
+        let upatedOffering = null;
+        if (get(result, 'data.updateOffering')) {
+          upatedOffering = Helper.replaceKeysDeep(toJS(get(result, 'data.updateOffering')), { aliasId: 'id' });
+          offeringsStore.updateOfferingList(id, upatedOffering, keyName);
+        }
         this.removeUploadedFiles(fromS3);
         if (successMsg) {
           Helper.toast(`${successMsg}`, msgType);

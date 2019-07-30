@@ -2,45 +2,27 @@ import React, { Component } from 'react';
 import { get, isNaN, toNumber } from 'lodash';
 import { inject, observer } from 'mobx-react';
 // import money from 'money-math';
-import { Header, Table, Divider, Grid, Popup, Icon, Statistic, Button } from 'semantic-ui-react';
+import { Table, Divider, Grid, Popup, Icon } from 'semantic-ui-react';
 import {
   CAMPAIGN_KEYTERMS_SECURITIES,
   CAMPAIGN_OFFERED_BY,
   CAMPAIGN_REGULATION_DETAILED,
   CAMPAIGN_KEYTERMS_SECURITIES_ENUM,
 } from '../../../../../../constants/offering';
-import { InlineLoader, IframeModal } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
-import PaymentCalculator from './PaymentCalculator';
-import { UPLOADS_CONFIG } from '../../../../../../constants/aws';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
+import TotalPaymentCalculator from './totalPaymentCalculator';
+import RevenueSharingSummaryBlock from './revenueSharingSummary';
 
 const isMobile = document.documentElement.clientWidth < 768;
-const isTablet = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore')
 @observer
 class KeyTermsDetails extends Component {
-  state = {
-    offeringAmt: 0,
-    RangeValue: 0,
-  }
-
-  componentWillMount() {
-    this.props.campaignStore.calculateTotalPaymentData();
-  }
-
-  handleRangeChange = (e) => {
-    const offeringAmt = (e.target.value / e.target.max) * 100;
-    this.setState({ offeringAmt });
-    this.setState({ RangeValue: e.target.value });
-    this.props.campaignStore.calculateTotalPaymentData(e.target.value);
-  }
-
   render() {
     const { KeyTerms, newLayout } = this.props;
     const {
-      totalPayment, principalAmt, totalPaymentChart, campaign, offerStructure, campaignStatus,
+      campaign, offerStructure, campaignStatus,
     } = this.props.campaignStore;
     const investmentMultiple = get(campaign, 'closureSummary.keyTerms.multiple') || 'XXX';
     const totalInvestmentAmount = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
@@ -50,8 +32,6 @@ class KeyTermsDetails extends Component {
     const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
     const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
-    const revenueShareSummary = KeyTerms && KeyTerms.revShareSummary && offerStructure
-        === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? KeyTerms.revShareSummary : null;
     const keytermsMeta = [
       { key: 'minOfferingAmountCF', label: 'Offering Min', popupContent: 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' },
       { key: 'maxOfferingAmountCF', label: 'Offering Max', popupContent: 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.' },
@@ -365,103 +345,13 @@ class KeyTermsDetails extends Component {
           </Table.Body>
         </Table>
         <Divider section={!isMobile} hidden />
-        {newLayout && <Divider section={!isMobile} hidden />}
-        {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
+        {!newLayout && offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
           ? (
-            <>
-              <Header as="h3" className={`${isTablet && 'mt-40'} ${newLayout ? 'mb-40' : 'mb-30'} anchor-wrap`}>
-              Total Payment Calculator
-              <span className="anchor" id="total-payment-calculator" />
-            </Header>
-            <Grid columns={4} divided doubling stackable className="mb-30 mt-30 investment-grid">
-              <Grid.Column>
-                <Statistic className="basic" size="mini">
-                  <Statistic.Label className={isMobile && 'center-align'}>Interest Rate*</Statistic.Label>
-                  <Statistic.Value className={isMobile && 'center-align'}>{parseFloat(get(KeyTerms, 'interestRate')) || ' - '}%</Statistic.Value>
-                </Statistic>
-              </Grid.Column>
-              <Grid.Column>
-                <Statistic className="basic" size="mini">
-                  <Statistic.Label className={isMobile && 'center-align'}>Term</Statistic.Label>
-                  <Statistic.Value className={isMobile && 'center-align'}>{get(KeyTerms, 'maturity') || ' - '} months</Statistic.Value>
-                </Statistic>
-              </Grid.Column>
-              <Grid.Column>
-                <Statistic className="basic" size="mini">
-                  <Statistic.Label className={isMobile && 'center-align'}>Principal</Statistic.Label>
-                  <Statistic.Value className={`${isMobile && 'center-align'} highlight-text mb-10`}>
-                    {Helper.CurrencyFormat(principalAmt)}
-                  </Statistic.Value>
-                  <div className={`${isMobile && 'mb-20'} slider-container`}>
-                    <p style={{ width: `${this.state.offeringAmt}%` }} />
-                    <input
-                      type="range"
-                      min={0}
-                      max={6}
-                      value={this.state.RangeValue}
-                      onChange={this.handleRangeChange}
-                      className="slider mt-10 mb-10"
-                      id="myRange"
-                    />
-                    <span className="one" />
-                    <span className="two" />
-                    <span className="three" />
-                    <span className="four" />
-                    <span className="five" />
-                    <span className="six" />
-                    <span className="seven" />
-                  </div>
-                </Statistic>
-              </Grid.Column>
-              <Grid.Column>
-                <Statistic className="basic" size="mini">
-                  <Statistic.Label className={isMobile && 'center-align'}>Total Payment*</Statistic.Label>
-                  <Statistic.Value className={`highlight-text ${isMobile && 'center-align'}`}>{Helper.CurrencyFormat(totalPayment)}</Statistic.Value>
-                </Statistic>
-              </Grid.Column>
-            </Grid>
-            {totalPaymentChart.length === parseFloat(get(KeyTerms, 'maturity'))
-              ? <PaymentCalculator data={totalPaymentChart} propsDetails={this.props} />
-              : <p><InlineLoader text="Insufficient Data To Display Payment Calculator" /></p>
-            }
-            <p className="mt-30 note">
-              * Payment for any given month (including the total payment at the end of the
-              final month) indicates the cumulative amount contractually required to be paid
-              to an investor after the end of that month, assuming the loan is not prepaid.
-              This calculation is a mathematical illustration only and may not reflect actual
-              performance. It does not take into account NextSeed fees of {Math.trunc(get(campaign, 'keyTerms.nsFeePercentage')) || '2'}% on each payment
-              made to investors. Payment is not guaranteed or insured and investors may lose
-              some or all of the principal invested if the Issuer cannot make its payments.
-              </p>
-            </>
+            <TotalPaymentCalculator {...this.props} />
           )
-          : offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary
+          : !newLayout && offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary
             ? (
-              <>
-                <Header as="h3" className="mb-30 anchor-wrap">
-                Revenue Sharing Summary
-                <span className="anchor" id="revenue-sharing-summary" />
-              </Header>
-              {revenueShareSummary
-                ? (
-<p className="detail-section">
-                  <HtmlEditor readOnly content={revenueShareSummary} />
-                  {newLayout && get(KeyTerms, 'revShareSummaryUpload')
-                  && (
-                    <section className="custom-segment padded center-align mt-30">
-                    <Header as="h4" className="anchor-wrap">How do Revenue Sharing Notes work?</Header>
-                    <span>See our Infographic for a detailed explaination</span>
-                    <div>
-                    <IframeModal isPdf srcUrl={`https://${UPLOADS_CONFIG.bucket}/${get(KeyTerms, 'revShareSummaryUpload').url}`} trigger={<Button compact className="primary mt-20 relaxed" content="View" />} />
-                    </div>
-                    </section>
-                  )
-                  }
-                </p>
-                )
-                : <InlineLoader text="No data available" className="bg-offwhite" />
-              }
-              </>
+              <RevenueSharingSummaryBlock {...this.props} />
             )
             : null
         }

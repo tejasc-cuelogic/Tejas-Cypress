@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 
+const isMobile = document.documentElement.clientWidth < 992;
 @inject('campaignStore')
 @observer
 class LocationAnalysis extends Component {
@@ -11,7 +12,7 @@ class LocationAnalysis extends Component {
     const { campaign } = this.props.campaignStore;
     return (
       <>
-        <Header as="h3" className={`${this.props.newLayout ? 'mt-50' : ''} anchor-wrap mb-30`}>
+        <Header as="h3" className={`${(this.props.newLayout && isMobile) ? 'mt-40 mb-10' : this.props.newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
           Location Analysis
           <span className="anchor" id="location-analysis" />
         </Header>
