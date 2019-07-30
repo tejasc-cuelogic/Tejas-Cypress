@@ -610,9 +610,44 @@ footer .ui.text.menu{
     //offering new layout mobile menu
     &.text.campaign-mobile-menu-v2{
         margin: 0;
+        padding: 0 @13px;
         overflow-x: scroll;
+        border-bottom: 1px solid @neutral-darkwhite;
+        min-height: @45px;
         &::-webkit-scrollbar {
             display: none;
+        }
+        &.active{
+            position: fixed;
+            width: 100%;
+            top: 58px;
+            z-index: 9;
+            background: @white;
+        }
+        .item{
+            font-size: @15px;
+            margin: 0 @13px;
+            padding: @5px 0;
+            position: relative;
+            font-weight: @fontMedium;
+            &:after{
+                content: '';
+                width: 100%;
+                height: 2px;
+                background: transparent;
+                position: absolute;
+                bottom: -9px;
+                left: 0;
+            }
+            &.active,&:hover,&:focus{
+                color: @primary-one;
+                &:after{
+                    background: @primary-one;
+                }
+            }
+            &.hasLabel:after{
+                bottom: -6px;
+            }
         }
     }
 }
