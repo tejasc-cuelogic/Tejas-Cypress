@@ -229,7 +229,7 @@ class offerDetails extends Component {
         <Firework />
         } */}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
-          <SecondaryMenu {...this.props} />
+          <SecondaryMenu newLayout={newLayout} {...this.props} />
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
               <CampaignSideBar newLayout={newLayout} navItems={navItems} />

@@ -45,11 +45,11 @@ class totalPaymentCalculator extends Component {
     //   campaign.keyTerms.shorthandBusinessName : '';
     return (
         <>
-        <Header as="h3" className={`${isTablet && 'mt-40'} ${newLayout ? 'mb-40' : 'mb-30'} anchor-wrap`}>
+        <Header as="h3" className={`${isTablet && 'mt-40'} ${newLayout && isTablet ? 'mb-20' : newLayout ? 'mt-40 mb-40' : 'mb-30'} anchor-wrap`}>
         Total Payment Calculator
         <span className="anchor" id="total-payment-calculator" />
       </Header>
-      <Grid columns={4} divided doubling stackable className="mb-30 mt-30 investment-grid">
+      <Grid columns={4} divided stackable className={`${newLayout && isTablet ? 'mt-0 investment-grid-v2' : 'mt-30'} mb-30 investment-grid`}>
         <Grid.Column>
           <Statistic className="basic" size="mini">
             <Statistic.Label className={isMobile && 'center-align'}>Interest Rate*</Statistic.Label>
