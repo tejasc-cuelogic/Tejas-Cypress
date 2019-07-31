@@ -45,7 +45,7 @@ class totalPaymentCalculator extends Component {
     //   campaign.keyTerms.shorthandBusinessName : '';
     return (
         <>
-        <Header as="h3" className={`${isTablet && 'mt-40'} ${newLayout && isTablet ? 'mb-20' : newLayout ? 'mb-40' : 'mb-30'} anchor-wrap`}>
+        <Header as="h3" className={`${isTablet && 'mt-40'} ${newLayout && isTablet ? 'mb-20' : newLayout ? 'mt-40 mb-40' : 'mb-30'} anchor-wrap`}>
         Total Payment Calculator
         <span className="anchor" id="total-payment-calculator" />
       </Header>
