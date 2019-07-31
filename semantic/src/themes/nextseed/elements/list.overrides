@@ -372,17 +372,22 @@ ul.ui.list li{
 }
 
 //offering secondary header
-.campaign-secondary-header .menu-secondary-fixed .ui.list > .item {
-    @media only screen and (max-width : @largestTabletScreen){
-        padding: 0;
-        &::after {
-            display: none;
+.campaign-secondary-header .menu-secondary-fixed{
+    .ui.list > .item {
+        @media only screen and (max-width : @largestTabletScreen){
+            padding: 0;
+            &::after {
+                display: none;
+            }
+            .header {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
         }
-        .header {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+    }
+    &.campaign-secondary-header-v2{
+        display: none;
     }
 }
 

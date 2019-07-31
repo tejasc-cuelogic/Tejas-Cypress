@@ -630,6 +630,12 @@ footer .ui.text.menu{
             padding: @5px 0;
             position: relative;
             font-weight: @fontMedium;
+            &:last-child{
+                padding-right: @26px;
+                &:after{
+                    width: calc(100% - 26px);
+                }    
+            }
             &:after{
                 content: '';
                 width: 100%;
@@ -639,7 +645,10 @@ footer .ui.text.menu{
                 bottom: -9px;
                 left: 0;
             }
-            &.active{
+            &:hover{
+                color: @neutral-middark;
+            }
+            &.active, &:focus{
                 color: @primary-one;
                 &:after{
                     background: @primary-one;

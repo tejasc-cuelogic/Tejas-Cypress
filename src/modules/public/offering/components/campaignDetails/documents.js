@@ -6,6 +6,7 @@ import { observer, inject } from 'mobx-react';
 import { Header, Grid, Segment, Button, Divider } from 'semantic-ui-react';
 import DocumentModal from './DataRoom/DocumentModal';
 
+const isTablet = document.documentElement.clientWidth < 992;
 @inject('campaignStore', 'uiStore', 'accreditationStore', 'authStore')
 @withRouter
 @observer
@@ -29,11 +30,11 @@ export default class Documents extends Component {
     const { dataRoomDocs } = this.props.campaignStore;
     return (
       <div>
-        <Header as="h3" className={`${this.props.newLayout ? 'mt-40' : 'mt-20'} anchor-wrap mb-30`}>
+        <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
           Documents
           <span className="anchor" id="data-room" />
         </Header>
-        <Divider hidden />
+        {!this.props.newLayout && <Divider hidden />}
         <Grid columns={3} stackable doubling>
           {
             dataRoomDocs.length && dataRoomDocs.map(l => (
