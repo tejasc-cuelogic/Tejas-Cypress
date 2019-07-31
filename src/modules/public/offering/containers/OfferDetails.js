@@ -17,7 +17,9 @@ import Congratulation from '../components/investNow/agreement/components/Congrat
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
 // import Footer from './../../../../theme/layout/Footer';
+import DocumentModal from '../components/campaignDetails/DataRoom/DocumentModal';
 import OfferingMetaTags from '../components/OfferingMetaTags';
+import VideoModal from '../components/campaignDetails/Overview/VideoModal';
 import AboutPhotoGallery from '../components/campaignDetails/AboutPhotoGallery';
 import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit';
 
@@ -80,8 +82,14 @@ class offerDetails extends Component {
   }
 
   componentDidMount() {
-    if (this.props.location.pathname !== this.props.match.url && this.props.newLayout) {
-      this.props.history.push(this.props.match.url);
+    const { location, match, newLayout } = this.props;
+    if (location.pathname !== match.url) {
+      const splittedArr = location.pathname.split('/');
+      if ((newLayout && splittedArr.includes('data-room')) || (!newLayout && ['overview', 'about', 'investment-details', 'data-room', 'comments', 'bonus-rewards', 'updates'].includes(splittedArr[splittedArr.length - 1]))) {
+        // this.props.history.push(location.pathname); do nothing
+      } else {
+        this.props.history.push(match.url);
+      }
     }
     window.scrollTo(0, 0);
   }
@@ -259,12 +267,18 @@ class offerDetails extends Component {
                         })
                       )
                       }
+                      {newLayout
+                      && (
+                        <Route path={`${this.props.match.url}/data-room`} component={DocumentModal} />
+                      )
+                      }
                       <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
                       <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
                       <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}/comments`} {...props} />} />
                       <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
                       <Route path={`${match.url}/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={`${match.url}/agreement`} {...props} />} />
                       <Route exact path={`${match.url}/congratulation`} component={Congratulation} />
+                      <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
                       <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
                       <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
                       <Route component={NotFound} />
