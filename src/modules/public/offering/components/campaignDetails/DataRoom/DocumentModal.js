@@ -36,7 +36,10 @@ export default class DocumentModal extends Component {
       this.props.campaignStore.setFieldValue('docLoading', false);
     });
   }
-  closeModal = () => this.setState({ openModal: false })
+  closeModal = () => {
+    this.setState({ openModal: false });
+    this.props.history.push(`/offerings/${this.props.match.path.split('/')[2]}`);
+  }
   render() {
     const { docLoading } = this.props.campaignStore;
     const { isInvestorAccreditated } = this.props.userDetailsStore;
