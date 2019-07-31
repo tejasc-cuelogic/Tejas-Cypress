@@ -1,6 +1,7 @@
-import { get, forEach } from 'lodash';
+import { get } from 'lodash';
 import { seedTestUsers, getMigratedUserAuditInfo, cleanUpTestUsers } from '../../fixtures/userQueries';
-import { apiRequest } from '../common.utility';
+import { prepRequest } from '../common.utility';
+
 
 let auditInfo = {};
 let migratedUserAuditInfo = {};
@@ -37,54 +38,32 @@ const userInfo = ['dateAccountWasOpened',
 
 
 describe('Audit Investor', () => {
-
-  const cleanUpUser = (userId) => {
-    requestBody.query = cleanUpTestUsers(userId);
-    apiRequest('cleanUpTestUsers', requestBody, requestHeaders)
-      .then((resCleanUpTestUsers) => {
-        console.log('Successfully cleanUp Test Users', resCleanUpTestUsers);
-      });
-  }
-  context('User Login', () => {
+  describe('Data compare', () => {
     before(() => {
-      // const adminCredentials = await getJSONDataFromFixtures('admin/user', 'adminCredentials');
       cy.fixture('admin/user').then((data) => {
         const adminCredentials = data.adminCredentials;
         cy.login(adminCredentials.email, adminCredentials.password).then((user) => {
-          console.log('user', user);
           if (user.signInUserSession) {
             if (user.signInUserSession.idToken && user.signInUserSession.idToken.jwtToken) {
               const authToken = user.signInUserSession.idToken.jwtToken;
               requestHeaders.authorization = `Bearer ${authToken}`;
               requestBody.query = seedTestUsers;
-              cleanUpUser(userId);
-              apiRequest('seedTestUsers', requestBody, requestHeaders)
-                .then((resSeedTestUsers) => {
-                  if(resSeedTestUsers && resSeedTestUsers.body && resSeedTestUsers.body.data && resSeedTestUsers.body.data.seedTestUsers){
-                  userId = resSeedTestUsers.body.data.seedTestUsers.created[0].id;
+              
+              cy.request(
+                prepRequest(cleanUpTestUsers(null), authToken)
+                ).then(res => {
+                cy.request(
+                  prepRequest(seedTestUsers, authToken)
+                  ).then(resSeedTestUsers => {
+                  const seededUser = resSeedTestUsers.body.data.seedTestUsers.created[0].id;
                   auditInfo = resSeedTestUsers.body.data.seedTestUsers.created[0].auditInfo;
-                  console.log('userId', userId);
-                  requestBody.query = getMigratedUserAuditInfo(userId, 'INDIVIDUAL');
-                  apiRequest('getMigratedUserAuditInfo', requestBody, requestHeaders)
-                    .then((resGetMigratedUserAuditInfo) => {
-                      migratedUserAuditInfo = resGetMigratedUserAuditInfo.body.data.getMigratedUserAuditInfo;
-                      cy.log(migratedUserAuditInfo);
-                      console.log('auditInfo', auditInfo);
-                      console.log('migratedUserAuditInfo', migratedUserAuditInfo);
-                      cleanUpUser(userId);
-                    })
-                    .catch((err) => {
-                      console.log('getMigratedUserAuditInfo error : ', err);
-                      cleanUpUser(userId);
-                    });
-                  }else{
-                    cleanUpUser(userId);
-                  }
-                })
-                .catch((err) => {
-                  console.log('seedTestUsers error : ', err)
-                  cleanUpUser(userId);
+                  cy.request(
+                    prepRequest(getMigratedUserAuditInfo(seededUser, 'INDIVIDUAL'), authToken)
+                    ).then(resGetMigratedUserAuditInfo => {
+                    migratedUserAuditInfo = resGetMigratedUserAuditInfo.body.data.getMigratedUserAuditInfo;
+                  })
                 });
+              });
             }
           }
         });
