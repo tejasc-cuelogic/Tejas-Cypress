@@ -111,7 +111,7 @@ class Comments extends Component {
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     return (
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
-        <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40' : 'mt-20 mb-30'} anchor-wrap`}>
+        <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
           Comments
           <span className="anchor" id="comments" />
         </Header>

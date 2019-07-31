@@ -21,7 +21,7 @@ class IssuerStatement extends Component {
     //   campaign.keyTerms.shorthandBusinessName : '';
     return (
       <>
-        <Header as="h3" className={`${newLayout && isTablet ? 'mb-20' : newLayout ? 'mt-40' : ''} anchor-wrap`}>
+        <Header as="h3" className={`${newLayout && isTablet ? 'mb-20 mt-40' : newLayout ? 'mt-40 mb-30' : ''} anchor-wrap`}>
           Issuer Statement
           <span className="anchor" id="issuer-statement" />
         </Header>
