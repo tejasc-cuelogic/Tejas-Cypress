@@ -89,7 +89,7 @@ class offerDetails extends Component {
       if ((newLayout && splittedArr.includes('data-room')) || (!newLayout && ['overview', 'about', 'investment-details', 'data-room', 'comments', 'bonus-rewards', 'updates'].includes(splittedArr[splittedArr.length - 1]))) {
         // this.props.history.push(location.pathname); do nothing
       } else {
-        this.props.history.push(match.url);
+        this.props.history.push(`${match.url}${!newLayout ? '/overview' : ''}`);
       }
     }
     if (isUserLoggedIn) {
