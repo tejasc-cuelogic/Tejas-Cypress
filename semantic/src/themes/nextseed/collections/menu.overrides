@@ -618,7 +618,7 @@ footer .ui.text.menu{
             display: none;
         }
         &.active{
-            position: fixed;
+            position: static;
             width: 100%;
             top: 58px;
             z-index: 9;
