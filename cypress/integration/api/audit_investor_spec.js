@@ -5,7 +5,6 @@ import { prepRequest } from '../common.utility';
 
 let auditInfo = {};
 let migratedUserAuditInfo = {};
-let userId = null;
 let requestBody = {};
 let requestHeaders = {};
 const userInfo = ['dateAccountWasOpened',
@@ -55,8 +54,8 @@ describe('Audit Investor', () => {
                 cy.request(
                   prepRequest(seedTestUsers, authToken)
                   ).then(resSeedTestUsers => {
-                  const seededUser = resSeedTestUsers.body.data.seedTestUsers.created[0].id;
-                  auditInfo = resSeedTestUsers.body.data.seedTestUsers.created[0].auditInfo;
+                  const seededUser = get(resSeedTestUsers.body.data.seedTestUsers.created[0], 'id');
+                  auditInfo = get(resSeedTestUsers.body.data.seedTestUsers.created[0], 'auditInfo');
                   cy.request(
                     prepRequest(getMigratedUserAuditInfo(seededUser, 'INDIVIDUAL'), authToken)
                     ).then(resGetMigratedUserAuditInfo => {
