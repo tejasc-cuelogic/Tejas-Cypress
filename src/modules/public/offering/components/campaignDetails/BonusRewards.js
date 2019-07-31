@@ -49,7 +49,7 @@ class BonusRewards extends Component {
                 {(earlyBird && earlyBird.quantity && isEarlyBirdRewards)
                   ? (
 <Grid.Column>
-                    <Segment padded className="reward-block">
+                    <Segment padded className={`${this.props.newLayout && isMobile ? 'reward-block-v2' : ''} reward-block`}>
                       <>
                         <Header textAlign="left" as="h6" className={`${isMobile ? 'mb-20' : 'mb-40'} text-uppercase`}>Early Bird Reward
                           <Label size="small" color="green" className="text-uppercase pull-right">{get(earlyBird, 'available') || 0} remaining</Label>
@@ -67,7 +67,7 @@ class BonusRewards extends Component {
                 }
                 {rewardsTiers.map(tier => (
                   <Grid.Column>
-                    <Segment padded className="reward-block">
+                    <Segment padded className={`${this.props.newLayout && isMobile ? 'reward-block-v2' : ''} reward-block`}>
                       <>
                         <Header as="h6" className={`${isMobile && 'mb-0'} text-uppercase`}>Invest</Header>
                         <Header as="h3" className="highlight-text">{`${Helper.CurrencyFormat(tier, 0)}+`}</Header>
@@ -83,7 +83,7 @@ class BonusRewards extends Component {
             && (
 <Grid columns="1">
               <Grid.Column>
-                <Segment padded className="reward-block">
+                <Segment padded className={`${this.props.newLayout && isMobile ? 'reward-block-v2' : ''} reward-block`}>
                   <HtmlEditor readOnly content={offeringMISC} />
                 </Segment>
               </Grid.Column>
