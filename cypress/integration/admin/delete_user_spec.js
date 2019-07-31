@@ -1,6 +1,6 @@
 import { registerApiCall } from '../common.utility';
 
-describe('Delete user spec', () => {
+describe.skip('Delete user spec', () => {
   it('login with admin user', () => {
     const userType = 'Investor';
     const investorEmail = 'testing835699@nextseed.com'; //window.localStorage.getItem('investorEmail');
