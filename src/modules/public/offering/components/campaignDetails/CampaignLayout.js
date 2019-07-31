@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import { toJS } from 'mobx';
-import scrollIntoView from 'scroll-into-view';
+// import scrollIntoView from 'scroll-into-view';
 import { Divider, Button, Icon } from 'semantic-ui-react';
 import AboutTheCompany from './Overview/AboutTheCompany';
 import InvestmentDetails from './InvestmentDetails';
@@ -24,8 +24,7 @@ const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
 const topsAsPerWindowheight = window.innerHeight > 1000 ? 500 : 150;
 const isTablet = document.documentElement.clientWidth < 992;
-const isMobile = document.documentElement.clientWidth < 992;
-window.scrollme = scrollIntoView;
+// const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore', 'navStore')
 @observer
@@ -64,14 +63,14 @@ class CampaignLayout extends Component {
         if (document.getElementById(item.to.slice(1))
         && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
         && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
-          if (isMobile && (this.props.navStore.currentActiveHash !== item.to) && this.props.navStore.campaignHeaderStatus) {
-            scrollIntoView(document.getElementById(`${item.to.slice(1)}-mob-nav`), { align: { top: 1, topOffset: -644 } });
-            // document.getElementsByClassName('campaign-mobile-menu-v2')[0].getElementsByClassName('active')[0].scrollIntoView({
-            //   // inline: 'center',
-            //   behavior: 'smooth',
-            //   // block: 'start',
-            // });
-          }
+          // if (isMobile && (this.props.navStore.currentActiveHash !== item.to) && this.props.navStore.campaignHeaderStatus) {
+          //   scrollIntoView(document.getElementById(`${item.to.slice(1)}-mob-nav`), { align: { top: 1, topOffset: -644 } });
+          // document.getElementsByClassName('campaign-mobile-menu-v2')[0].getElementsByClassName('active')[0].scrollIntoView({
+          //   // inline: 'center',
+          //   behavior: 'smooth',
+          //   // block: 'start',
+          // });
+          // }
           this.props.navStore.setFieldValue('currentActiveHash', item.to);
         }
       });

@@ -49,7 +49,7 @@ class totalPaymentCalculator extends Component {
         Total Payment Calculator
         <span className="anchor" id="total-payment-calculator" />
       </Header>
-      <Grid columns={4} divided doubling stackable className={`${newLayout && isTablet ? 'mt-0' : 'mt-30'} mb-30 investment-grid`}>
+      <Grid columns={4} divided stackable className={`${newLayout && isTablet ? 'mt-0 investment-grid-v2' : 'mt-30'} mb-30 investment-grid`}>
         <Grid.Column>
           <Statistic className="basic" size="mini">
             <Statistic.Label className={isMobile && 'center-align'}>Interest Rate*</Statistic.Label>
