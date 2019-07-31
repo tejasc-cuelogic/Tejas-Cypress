@@ -20,7 +20,8 @@ class Updates extends Component {
   }
 
   componentDidMount() {
-    if (!isMobile) {
+    const { newLayout } = this.props;
+    if (!isMobile && !newLayout) {
       const sel = 'anchor';
       document.querySelector(`.${sel}`).scrollIntoView(true);
     }
