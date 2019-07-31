@@ -5,6 +5,7 @@ import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { InlineLoader, IframeModal } from '../../../../../../theme/shared';
 import { UPLOADS_CONFIG } from '../../../../../../constants/aws';
 
+const isTablet = document.documentElement.clientWidth < 992;
 class revenueSharingSummary extends Component {
   handleViewGallary = (e, index) => {
     e.preventDefault();
@@ -21,7 +22,7 @@ class revenueSharingSummary extends Component {
     const revenueShareSummary = keyterms.revShareSummary || null;
     return (
         <>
-        <Header as="h3" className="mb-40 mt-40 anchor-wrap">
+        <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mt-40 mb-40'} anchor-wrap`}>
         Revenue Sharing Summary
         <span className="anchor" id="revenue-sharing-summary" />
       </Header>

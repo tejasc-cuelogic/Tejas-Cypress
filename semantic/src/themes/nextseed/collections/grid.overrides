@@ -95,6 +95,11 @@
                 margin-right: 0 !important;
             }
         }
+        &.investment-grid-v2.divided{
+            >.column:not(.row):last-child{
+                box-shadow: none;
+            }
+        }
     }
     &[class*="three column"].doubling>.column:not(.row){
         @media only screen and (min-width : @computerBreakpoint){

@@ -19,7 +19,7 @@ class MeetOurTeam extends Component {
     ));
     return (
       <>
-        <Header as="h3" className={`${(this.props.newLayout && isMobile) ? 'mt-40 mb-10' : this.props.newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
+        <Header as="h3" className={`${(this.props.newLayout && isMobile) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
           Meet the Team
           <span className="anchor" id="team" />
         </Header>
@@ -32,8 +32,8 @@ class MeetOurTeam extends Component {
                   && (
 <Item>
                     <Item.Content>
-                      <div className={`campaign-avatar ${isMobile && 'mobile-avatar'}`}>
-                        <div className="avatar-image team-avatar">
+                      <div className={`campaign-avatar ${isMobile && !this.props.newLayout ? 'mobile-avatar' : ''}`}>
+                        <div className={`${this.props.newLayout && isMobile ? 'team-avatar-v2' : ''} avatar-image team-avatar`}>
                           {data && data.uploads && data.uploads.headshot
                             && data.uploads.headshot.url ? (
                               <Image64 srcUrl={data.uploads.headshot.url} />
@@ -67,7 +67,7 @@ class MeetOurTeam extends Component {
                       </div>
                       {data.bio
                         && (
-<Item.Description className="avatar-description mt-30">
+<Item.Description className={`${this.props.newLayout && isMobile ? 'mt-20' : 'mt-30'} avatar-description`}>
                           <HtmlEditor readOnly content={data.bio} />
                         </Item.Description>
                         )
