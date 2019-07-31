@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { InlineLoader } from '../../../../../../theme/shared';
 
-const isTablet = document.documentElement.clientWidth < 991;
+const isTablet = document.documentElement.clientWidth < 992;
 
 @withRouter
 class AboutTheCompany extends Component {
@@ -22,7 +22,7 @@ class AboutTheCompany extends Component {
       && campaign.offering.overview.highlight);
     return (
       <>
-        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
+        <Header as="h3" className={`mt-20 anchor-wrap ${newLayout && isTablet ? 'mb-20' : 'mb-30'}`}>
           {newLayout ? 'Highlights' : 'Top Things to Know'}
           <span className="anchor" id="top-things-to-know" />
         </Header>
