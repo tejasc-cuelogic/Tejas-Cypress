@@ -58,11 +58,9 @@ class CampaignLayout extends Component {
 
   onScrollCallBack = (target) => {
     let returnVal = false;
-    console.log('scrollCallBack target', target);
     if (target && target.classList) {
       returnVal = target.classList.contains('campaign-mobile-menu-v2');
     }
-    console.log('returnVal:', returnVal);
     return returnVal;
   }
 
