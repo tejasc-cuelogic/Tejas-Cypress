@@ -6,7 +6,7 @@ import { Header, Icon, Statistic, Button, Menu, Responsive, Progress, Popup, Div
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import Helper from '../../../../../helper/utility';
 import share from './Share';
-import { Image64 } from '../../../../../theme/shared';
+import { Image64, PopUpModal } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 992;
@@ -79,11 +79,16 @@ export default class CampaignSideBar extends Component {
                 : <Progress className={`${(newLayout && isMobile) ? 'mt-40' : ''} mb-0`} percent="100" size="tiny" color="green" />
               }
               <p className={newLayout ? 'mt-10' : ''}>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
-                <Popup
-                  trigger={<Icon name="help circle" color="green" />}
-                  content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                  position="top center"
-                />
+                {isMobile
+                  ? (<PopUpModal label={minFlagStatus ? 'Max target' : 'Min target'} content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account." />)
+                  : (
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                      position="top center"
+                    />
+                  )
+                }
               </p>
               <div className="offer-stats">
                 <Statistic.Group>
@@ -119,12 +124,17 @@ export default class CampaignSideBar extends Component {
               && (
 <p className="raise-type mt-20 mb-0">
                 <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
-                <Popup
-                  hoverable
-                  trigger={<Icon name="help circle" color="green" />}
-                  content={(<span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
-                  position="top center"
-                />
+                {isMobile
+                  ? (<PopUpModal label={CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} content={(<span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)} />)
+                  : (
+                    <Popup
+                      hoverable
+                      trigger={<Icon name="help circle" color="green" />}
+                      content={(<span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
+                      position="top center"
+                    />
+                  )
+                  }
               </p>
               )
               }

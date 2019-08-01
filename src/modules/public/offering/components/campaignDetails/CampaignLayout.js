@@ -120,10 +120,13 @@ class CampaignLayout extends Component {
                   />
                 )
               }
+              {campaign.updates.length > 1 ? (
               <Button onClick={() => this.handleCollapseExpand('expandUpdate', '#updates')} className={`${!isTablet ? 'mt-20' : ''} link-button highlight-text`}>
                 {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Updates
                 <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
               </Button>
+              ) : null
+              }
               <Divider hidden section />
             </>
           )
