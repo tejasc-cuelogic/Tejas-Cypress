@@ -386,9 +386,6 @@ ul.ui.list li{
             }
         }
     }
-    &.campaign-secondary-header-v2{
-        display: none;
-    }
 }
 
 .ui.celled.list.partners-list>.item {
