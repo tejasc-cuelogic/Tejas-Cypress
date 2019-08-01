@@ -56,6 +56,16 @@ class CampaignLayout extends Component {
     Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore', 'remove');
   }
 
+  onScrollCallBack = (target) => {
+    let returnVal = false;
+    console.log('scrollCallBack target', target);
+    if (target && target.classList) {
+      returnVal = target.classList.contains('campaign-mobile-menu-v2');
+    }
+    console.log('returnVal:', returnVal);
+    return returnVal;
+  }
+
   handleOnScroll = () => {
     const { campaignNavData } = this.props.campaignStore;
     const navs = toJS(campaignNavData);
@@ -65,7 +75,7 @@ class CampaignLayout extends Component {
         && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
         && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
           if (isTablet && (this.props.navStore.currentActiveHash !== item.to) && this.props.navStore.campaignHeaderStatus) {
-            scrollIntoView(document.getElementById(`${item.to.slice(1)}-mob-nav`), { align: { top: 1, topOffset: -(window.innerHeight - 92), validTarget: (target) => { if (target && target.classList) { return target.classList.contains('campaign-mobile-menu-v2'); } return false; } } });
+            scrollIntoView(document.getElementById(`${item.to.slice(1)}-mob-nav`), { align: { top: 1, topOffset: -(window.innerHeight - 92) }, isScrollable: this.onScrollCallBack });
           // document.getElementsByClassName('campaign-mobile-menu-v2')[0].getElementsByClassName('active')[0].scrollIntoView({
           //   // inline: 'center',
           //   behavior: 'smooth',
