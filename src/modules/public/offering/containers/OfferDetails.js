@@ -257,7 +257,7 @@ class offerDetails extends Component {
                     </Grid.Column>
                   )
                 }
-                <Grid.Column computer={newLayout ? 9 : 12} mobile={16} className={newLayout ? 'left-align' : ''}>
+                <Grid.Column computer={newLayout ? 9 : 12} mobile={16} className={newLayout ? 'left-align offer-details-v2' : ''}>
                   <Suspense fallback={<InlineLoader />}>
                     <Switch>
                       <Route exact path={match.url} render={props => <InitialComponent refLink={this.props.match.url} {...props} />} />
