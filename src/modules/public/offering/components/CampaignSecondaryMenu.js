@@ -28,7 +28,7 @@ export default class CampaignSecondaryMenu extends Component {
     const { navStatus, subNavStatus } = this.props.navStore;
     return (
       <Visibility offset={[72, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
-        <div className={`menu-secondary-fixed ${navStatus && navStatus === 'sub' && 'active'} ${subNavStatus} ${this.props.newLayout && isMobile ? 'campaign-secondary-header-v2' : ''}`}>
+        <div className={`menu-secondary-fixed ${navStatus && navStatus === 'sub' && 'active'} ${subNavStatus}`}>
           <Container fluid={!isMobile}>
             <List size={isMobile && 'tiny'} bulleted={!isMobile} floated="right" horizontal={!isMobile}>
               {!isMobile
