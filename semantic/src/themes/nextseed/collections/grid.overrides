@@ -212,3 +212,15 @@
         padding: 0;
     }
 }
+.public-pusher-v2{
+    .ui.grid>.column:not(.row).offer-details-v2 {
+        padding-left: @22px;
+        padding-right: @22px; 
+    }
+    footer.offering-footer-v2 .ui.grid>.column:not(.row){
+        &.copyright-info, &.footer-left{
+            padding-left: @7px !important;
+            padding-right: @7px !important; 
+        }
+    }
+}

@@ -52,7 +52,7 @@ export default class ShortCodeInfo extends React.Component {
     <span className="negative-text">{'${Title}'}</span>
     {`</span>
     </strong>
-    <span class="arrowText">&#9660</span>
+    <span class="arrowText">&#9662</span>
   </a>
 </p>
     `}
