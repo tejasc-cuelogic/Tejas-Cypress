@@ -597,7 +597,7 @@ export class BankAccountStore {
     this.resetFormData('formBankSearch');
     this.resetFormData('formAddFunds');
     this.resetFormData('formEntityAddFunds');
-    this.resetFormData('formLinkBankManually');
+    this.formLinkBankManually = Validator.prepareFormObject(IND_LINK_BANK_MANUALLY);
     this.resetRoutingNum();
     this.bankLinkInterface = 'list';
     this.plaidAccDetails = {};
