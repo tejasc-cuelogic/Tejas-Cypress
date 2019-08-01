@@ -35,7 +35,7 @@ export default class CampaignSideBar extends Component {
       <>
         <div className={`${campaignSideBarShow ? '' : 'collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} ${isCampaignLayout ? 'offering-layout-menu' : ''} offering-side-menu `}>
           <Responsive maxWidth={991} as={React.Fragment}>
-            <div className="offering-intro center-align">
+            <div className={`${newLayout && isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`}>
               <Header as="h4" inverted>
                 {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
                 <Header.Subheader>{address}</Header.Subheader>
