@@ -272,7 +272,7 @@ export class Utility {
       htmlContent.classList.remove('hide-content');
       customTitle.classList.add('hide-content');
       toggleButtonText.innerHTML = 'Collapse ';
-      arrowText.innerHTML = '&#9650';
+      arrowText.innerHTML = '&#9652';
     } else {
       htmlContent.classList.add('hide-content');
       htmlContent.classList.remove('read-content');
