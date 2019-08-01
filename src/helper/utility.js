@@ -199,7 +199,7 @@ export class Utility {
 
   downloadCSV = (params) => {
     try {
-      const parser = new Parser({ fields: params.fields, quote: params.quote || '', delimiter: params.delimiter || '\t' });
+      const parser = new Parser({ fields: params.fields, quote: params.quote || '' });
       const csv = parser.parse(params.data);
       const uri = `data:text/csv;charset=utf-8,${escape(csv)}`;
       const link = document.createElement('a');
