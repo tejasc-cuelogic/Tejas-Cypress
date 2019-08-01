@@ -78,8 +78,9 @@ class CampaignLayout extends Component {
     }
   }
 
-  handleCollapseExpand = (name) => {
+  handleCollapseExpand = (name, processAction) => {
     this.setState({ [name]: !this.state[name] });
+    document.querySelector(processAction).scrollIntoView(true);
   }
 
   render() {
@@ -111,7 +112,7 @@ class CampaignLayout extends Component {
                   />
                 )
               }
-              <Button onClick={() => this.handleCollapseExpand('expandUpdate')} className={`${!isTablet ? 'mt-20' : ''} link-button highlight-text`}>
+              <Button onClick={() => this.handleCollapseExpand('expandUpdate', '#updates')} className={`${!isTablet ? 'mt-20' : ''} link-button highlight-text`}>
                 {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Updates
                 <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
               </Button>
@@ -123,10 +124,10 @@ class CampaignLayout extends Component {
         <AboutCompany newLayout />
         {campaignStatus.isBonusReward
           ? (
-          <>
-            <BonusRewards newLayout />
-            <Divider hidden section />
-          </>
+            <>
+              <BonusRewards newLayout />
+              <Divider hidden section />
+            </>
           ) : null
         }
         {campaignStatus.gallary !== 0 ? (
@@ -141,10 +142,10 @@ class CampaignLayout extends Component {
         ) : null}
         {dataRoomDocs.length
           ? (
-          <>
-            <Documents newLayout />
-            <Divider hidden section />
-          </>
+            <>
+              <Documents newLayout />
+              <Divider hidden section />
+            </>
           ) : null
         }
         <>
@@ -152,7 +153,7 @@ class CampaignLayout extends Component {
           }
           <Divider hidden section />
           <Comments refLink={this.props.match.url} newLayout showOnlyOne={!this.state.expandComments} />
-          <Button onClick={() => this.handleCollapseExpand('expandComments')} className="link-button highlight-text mt-40">
+          <Button onClick={() => this.handleCollapseExpand('expandComments', '#comments')} className="link-button highlight-text mt-40">
             {this.state.expandComments ? 'Collapse' : 'Expand'} All Comments
             <Icon className={`ns-caret-${this.state.expandComments ? 'up' : 'down'} right`} />
           </Button>
