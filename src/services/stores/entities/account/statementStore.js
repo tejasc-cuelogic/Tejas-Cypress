@@ -5,6 +5,8 @@ import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { downloadFile, generateMonthlyStatementsPdf } from '../../queries/statement';
 import { uiStore, userDetailsStore, transactionStore } from '../../index';
+import { DataFormatter } from '../../../../helper';
+
 
 export class StatementStore {
   @observable data = [];
@@ -111,14 +113,20 @@ export class StatementStore {
 
   getDateRange = (statementObj) => {
     try {
-      const dateStart = statementObj.date ? moment(new Date(statementObj.date)) : '';
-      const dateEnd = moment();
+      // const dateStart = statementObj.date ? moment(new Date(statementObj.date)) : '';
+      // const dateEnd = moment();
+      // while (dateStart.isBefore(dateEnd) && !dateEnd.isSame(new Date(dateStart.format('MM/DD/YYYY')), 'month')) {
+      //   timeValues.push(dateStart.format('MM/DD/YYYY'));
+      //   dateStart.add(1, statementObj.rangeParam);
+      // }
+      const dateStart = statementObj.date ? DataFormatter.getCSTDateMomentObject(statementObj.date, false) : '';
+      const dateEnd = DataFormatter.getCurrentCSTMoment();
       const timeValues = [];
       while (dateStart.isBefore(dateEnd) && !dateEnd.isSame(new Date(dateStart.format('MM/DD/YYYY')), 'month')) {
-        timeValues.push(dateStart.format('MM/DD/YYYY'));
+        timeValues.push(dateStart);
         dateStart.add(1, statementObj.rangeParam);
       }
-      const fifthDateOfMonth = moment().startOf('month').day(6);
+      const fifthDateOfMonth = DataFormatter.getCurrentCSTMoment().startOf('month').day(6);
       if (fifthDateOfMonth > dateEnd) {
         timeValues.pop();
       }

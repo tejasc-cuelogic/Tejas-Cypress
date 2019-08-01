@@ -203,8 +203,10 @@ export class TransactionStore {
       ClientDb.filterData('type', transactionType);
     }
     if (dateRange && dateRange !== 'all') {
-      const sDate = moment(new Date()).subtract(dateRange, 'days');
-      const eDate = moment(new Date());
+      // const sDate = moment(new Date()).subtract(dateRange, 'days');
+      // const eDate = moment(new Date());
+      const sDate = DataFormatter.getCurrentCSTMoment().subtract(dateRange, 'days');
+      const eDate = DataFormatter.getCurrentCSTMoment();
       ClientDb.filterByDate(sDate, eDate, 'date', null, true);
     }
     this.db = ClientDb.getDatabase();

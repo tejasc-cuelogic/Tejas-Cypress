@@ -98,7 +98,6 @@ class DataFormatter {
     const dataVal = isISOString ? moment(dataParam) : dataParam;
     const utcCutoff = moment.utc(dataVal, 'MM/DD/YYYY HH:mm:ss');
     const displayCutoff = utcCutoff.clone().tz('America/Chicago');
-    // console.log('result time==>', displayCutoff.format('MM/DD/YYYY HH:mm:ss'));
     return isLLFormat ? displayCutoff.format('ll') : isCustomFormat ? displayCutoff.format(isCustomFormat) : showTime ? displayCutoff.format('MM/DD/YYYY HH:mm:ssa') : displayCutoff.format('MM/DD/YYYY');
   }
 
@@ -119,9 +118,16 @@ class DataFormatter {
 
   formatedDate = date => moment(new Date(date)).format('MM/DD/YYYY');
 
-  getCurrentCSTDate = (showTime = false) => (showTime ? momentZone.tz('America/Chicago').format('MM/DD/YYYY HH:mm:ss') : momentZone.tz('America/Chicago').format('MM/DD/YYYY'));
+  getCurrentCSTDateInFormat = (showTime = false) => (showTime ? momentZone.tz('America/Chicago').format('MM/DD/YYYY HH:mm:ss') : momentZone.tz('America/Chicago').format('MM/DD/YYYY'));
 
   getCurrentCSTMoment = () => momentZone.tz('America/Chicago');
+
+  getCSTDateMomentObject = (dataParam, isISOString = false) => {
+    const dataVal = isISOString ? moment(dataParam) : dataParam;
+    const utcCutoff = moment.utc(dataVal, 'MM/DD/YYYY HH:mm:ss');
+    const displayCutoff = utcCutoff.clone().tz('America/Chicago');
+    return displayCutoff;
+  }
 
   mapDatesToType = (data, keys, dateType = 'iso') => data.map((d) => {
     // const convertedDates = keys.map(k => ({ [k]: this.convertDateType(d[k], dateType) }));
