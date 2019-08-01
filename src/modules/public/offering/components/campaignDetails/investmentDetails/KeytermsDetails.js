@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { get, isNaN, toNumber } from 'lodash';
 import { inject, observer } from 'mobx-react';
 // import money from 'money-math';
-import { Table, Divider, Grid, Popup, Icon } from 'semantic-ui-react';
+import { Table, Divider, Grid, Popup, Icon, Modal } from 'semantic-ui-react';
 import {
   CAMPAIGN_KEYTERMS_SECURITIES,
   CAMPAIGN_OFFERED_BY,
@@ -19,6 +19,17 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('campaignStore')
 @observer
 class KeyTermsDetails extends Component {
+  popupModal = (label, content, iconName) => (
+    <Modal size="tiny" trigger={<Icon className={iconName} color="green" />} closeIcon>
+      <Modal.Content>
+      <h5>
+        {label}
+      </h5>
+      <span>{content}</span>
+      </Modal.Content>
+    </Modal>
+  );
+
   render() {
     const { KeyTerms, newLayout } = this.props;
     const {
@@ -50,7 +61,9 @@ class KeyTermsDetails extends Component {
               <b className={newLayout ? 'neutral-text' : ''}>Type of Offering</b>
               {get(campaign, 'regulation')
                 && CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
-                ? (
+                ? isMobile
+                  ? (this.popupModal('Type of Offering', CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation], 'help circle'))
+                  : (
 <Popup
   trigger={<Icon name="help circle" color="green" />}
   content={
@@ -59,7 +72,7 @@ class KeyTermsDetails extends Component {
   hoverable
   position="top center"
 />
-                ) : ''
+                  ) : ''
               }
               <br />
               {get(campaign, 'regulation') ? CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : 'NA'}
@@ -81,7 +94,9 @@ class KeyTermsDetails extends Component {
 <Table.Row verticalAlign="top">
                     <Table.Cell width={7} className="neutral-text"><b>{type.label}{' '}</b>
                       {type.popupContent
-                        && (
+                        && isMobile
+                        ? (this.popupModal(type.label, type.popupContent, 'help circle'))
+                        : (
 <Popup
   trigger={<Icon name="help circle" color="green" />}
   content={type.popupContent}
@@ -148,11 +163,16 @@ class KeyTermsDetails extends Component {
               && (
 <Table.Row verticalAlign="top">
                 <Table.Cell width={7} className="neutral-text"><b>Investment Multiple{' '}</b>
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth}. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
-                    position="top center"
-                  />
+                {isMobile
+                  ? (this.popupModal('Investment Multiple', `For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth}. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`, 'help circle'))
+                  : (
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth}. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
+                      position="top center"
+                    />
+                  )
+                }
                 </Table.Cell>
                 <Table.Cell>
                   <p>
@@ -191,11 +211,16 @@ class KeyTermsDetails extends Component {
               && (
 <Table.Row verticalAlign="top">
                 <Table.Cell width={7} className="neutral-text"><b>Maturity{' '}</b>
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
-                    position="top center"
-                  />
+                  {isMobile
+                    ? (this.popupModal('Maturity', `If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`, 'help circle'))
+                    : (
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
+                      position="top center"
+                    />
+                    )
+                  }
                 </Table.Cell>
                 <Table.Cell>
                   {KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} months` : 'N/A'}
@@ -211,12 +236,16 @@ class KeyTermsDetails extends Component {
               && (
 <Table.Row verticalAlign="top">
                 <Table.Cell width={7} className="neutral-text"><b>Payments{' '}</b>
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content={`The Issuer will make ${KeyTerms && KeyTerms.frequencyOfPayments ? KeyTerms.frequencyOfPayments
-                      : ''} payments based on the relevant revenue sharing percentage.`}
-                    position="top center"
-                  />
+                {isMobile
+                  ? (this.popupModal('Payments', `The Issuer will make ${KeyTerms && KeyTerms.frequencyOfPayments ? KeyTerms.frequencyOfPayments : ''} payments based on the relevant revenue sharing percentage.`, 'help circle'))
+                  : (
+                      <Popup
+                        trigger={<Icon name="help circle" color="green" />}
+                        content={`The Issuer will make ${KeyTerms && KeyTerms.frequencyOfPayments ? KeyTerms.frequencyOfPayments : ''} payments based on the relevant revenue sharing percentage.`}
+                        position="top center"
+                      />
+                  )
+                }
                 </Table.Cell>
                 <Table.Cell>
                   <p>
@@ -231,11 +260,16 @@ class KeyTermsDetails extends Component {
               && (
 <Table.Row verticalAlign="top">
                 <Table.Cell width={7} className="neutral-text"><b>Security Interest{' '}</b>
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content="The Issuer will grant a security interest in all of it's assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement."
-                    position="top center"
-                  />
+                {isMobile
+                  ? (this.popupModal('Security Interest', "The Issuer will grant a security interest in all of it's assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement.", 'help circle'))
+                  : (
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content="The Issuer will grant a security interest in all of it's assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement."
+                      position="top center"
+                    />
+                  )
+                }
                 </Table.Cell>
                 <Table.Cell>
                   {KeyTerms && KeyTerms.securityInterest ? KeyTerms.securityInterest : ' NA'}
@@ -269,11 +303,16 @@ class KeyTermsDetails extends Component {
               && (
 <Table.Row verticalAlign="top">
                 <Table.Cell width={7} className="neutral-text"><b>Interest Rate{' '}</b>
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content={`Interest payment is calculated at a gross annualized interest rate of ${get(KeyTerms, 'interestRate') || ' - '}% each month on the remaining balance of your investment from the prior month.`}
-                    position="top center"
-                  />
+                {isMobile
+                  ? (this.popupModal('Interest Rate', `Interest payment is calculated at a gross annualized interest rate of ${get(KeyTerms, 'interestRate') || ' - '}% each month on the remaining balance of your investment from the prior month.`, 'help circle'))
+                  : (
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content={`Interest payment is calculated at a gross annualized interest rate of ${get(KeyTerms, 'interestRate') || ' - '}% each month on the remaining balance of your investment from the prior month.`}
+                      position="top center"
+                    />
+                  )
+                }
                 </Table.Cell>
                 <Table.Cell>
                   {KeyTerms && KeyTerms.interestRate ? `${KeyTerms.interestRate}%` : 'NA'}
