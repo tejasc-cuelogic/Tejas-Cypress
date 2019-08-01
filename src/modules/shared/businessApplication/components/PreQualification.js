@@ -73,6 +73,7 @@ export default class PreQualification extends Component {
           } else if (this.props.businessAppStore.userExists && this.props.businessAppStore.userRoles.includes('issuer')) {
             this.props.authStore.setUserLoginDetails(BUSINESS_APP_FRM_BASIC.fields.email.value, BUSINESS_ACCOUNT.fields.password.value);
             if (BUSINESS_ACCOUNT.fields.password.value) {
+              this.props.uiStore.setProgress();
               this.proceedLoginIn(currentApplicationType);
             }
           }
@@ -90,8 +91,10 @@ export default class PreQualification extends Component {
         const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
         const redirectUrl = `/app/business-application/${currentApplicationType}/${url}`;
         this.props.history.push(redirectUrl);
+        this.props.uiStore.setProgress(false);
       })
       .catch((error) => {
+        this.props.uiStore.setProgress(false);
         console.log(error);
         Helper.toast(error.message, 'error');
       })

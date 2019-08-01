@@ -84,8 +84,9 @@ export const publicRoutes = [
     component: CaseStudies,
   },
   {
-    path: '/offerings/preview/:id',
+    path: '/offerings-v2/preview/:id',
     component: OfferDetails,
+    props: 'newLayout',
   },
   {
     path: '/offerings-v2/:id',
@@ -93,7 +94,21 @@ export const publicRoutes = [
     props: 'newLayout',
   },
   {
+    path: '/offerings/preview/:id',
+    component: OfferDetails,
+    props: 'newLayout',
+  },
+  {
     path: '/offerings/:id',
+    component: OfferDetails,
+    props: 'newLayout',
+  },
+  {
+    path: '/offerings-v1/preview/:id',
+    component: OfferDetails,
+  },
+  {
+    path: '/offerings-v1/:id',
     component: OfferDetails,
   },
   {

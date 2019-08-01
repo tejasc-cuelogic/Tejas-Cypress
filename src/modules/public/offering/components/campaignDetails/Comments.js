@@ -10,7 +10,7 @@ import HtmlEditor from '../../../../shared/HtmlEditor';
 import { DataFormatter } from '../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 768;
-const isTablet = document.documentElement.clientWidth < 991;
+const isTablet = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'messageStore')
 @withRouter
@@ -47,8 +47,8 @@ class Comments extends Component {
     const { isUserLoggedIn } = this.props.authStore;
     const { currentUser } = this.props.userStore;
     if (!isUserLoggedIn) {
-      this.props.uiStore.setAuthRef(`${this.props.refLink}/comments`);
-      this.props.uiStore.setRedirectURL({ pathname: `${this.props.refLink}/comments` });
+      this.props.uiStore.setAuthRef(`${this.props.refLink}${this.props.newLayout ? '' : '/comments'}`);
+      this.props.uiStore.setRedirectURL({ pathname: `${this.props.refLink}${this.props.newLayout ? '' : '/comments'}` });
       this.props.history.push('/login');
     } else if (!(isUserLoggedIn && currentUser.roles.includes('investor'))) {
       this.props.history.push(`${this.props.refLink}/confirm-comment-login`);
@@ -110,7 +110,7 @@ class Comments extends Component {
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     return (
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
-        <Header as="h3" className={`${newLayout ? 'mt-50' : 'mt-20 mb-30'} anchor-wrap`}>
+        <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
           Comments
           <span className="anchor" id="comments" />
         </Header>
@@ -136,7 +136,7 @@ class Comments extends Component {
         )}
         {!isRightToPostComment
           ? (
-<section className={`${newLayout ? 'custom-segment mb-0' : ''} center-align mt-30`}>
+<section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
             {loggedInAsInvestor && !accountStatusFull
               ? <p>In order to leave comments, please create any type of account first.</p>
               : <p>In order to leave comments, please sign up and verify your identity.</p>
@@ -149,7 +149,7 @@ class Comments extends Component {
             </Form>
           </section>
           )
-          : (!disablePostComment && !showOnlyOne)
+          : (!disablePostComment)
               && (
               <>
                 { visiblePost

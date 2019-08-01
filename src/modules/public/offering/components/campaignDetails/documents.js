@@ -1,74 +1,12 @@
 /* eslint-disable */
 import React, { Component } from 'react';
-import { get, isEmpty } from 'lodash';
-import { withRouter, Link } from 'react-router-dom';
+import { isEmpty } from 'lodash';
+import { withRouter } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
-import { Header, Grid, Segment, Button, Divider, Modal } from 'semantic-ui-react';
-import { IframeModal } from '../../../../../theme/shared';
+import { Header, Grid, Segment, Button, Divider } from 'semantic-ui-react';
+import DocumentModal from './DataRoom/DocumentModal';
 
-
-@inject('campaignStore', 'userStore', 'accreditationStore', 'userDetailsStore', 'navStore')
-@withRouter
-@observer
-class LegalDoc extends Component {
-  state = { embedUrl: null };
-  componentWillMount() {
-    const { boxFileId } = get(this.props.doc, 'upload.fileHandle');
-    const { campaign } = this.props.campaignStore;
-    const regulation = get(campaign, 'regulation');
-    const offeringRegulationArr = (regulation && regulation.split('_')) || '';
-    const regulationType = get(offeringRegulationArr, '[0]');
-    const accountType = regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
-    this.getBoxUrl(boxFileId, accountType);
-  }
-  getBoxUrl = (boxId, accountType) => {
-    this.props.campaignStore.setFieldValue('docLoading', true);
-    this.props.campaignStore.getBoxLink(boxId, accountType).then((res) => {
-      this.setState({
-        embedUrl: res,
-      });
-      this.props.campaignStore.setFieldValue('docLoading', false);
-    });
-  }
-  render() {
-    const { docLoading } = this.props.campaignStore;
-    const { isInvestorAccreditated } = this.props.userDetailsStore;
-    const { stepInRoute } = this.props.navStore;
-    const { doc } = this.props;
-    if (doc.accreditedOnly
-      && (!this.props.userStore.currentUser
-      || (this.props.userStore.currentUser.roles.includes('issuer') && this.props.userStore.currentUser.sub !== campaignCreatedBy)
-      || (this.props.userStore.currentUser && this.props.userStore.currentUser.roles
-      && this.props.userStore.currentUser.roles.includes('investor') && !isInvestorAccreditated
-      && !this.props.accreditationStore.isUserAccreditated))) {
-      return (
-        <Modal open closeIcon onClose={this.props.close}>
-        <Modal.Content>
-        <section className="no-updates center-align bg-offwhite padded">
-          <Header as="h3" className="mb-20 mt-50">
-            This investment is only available to accredited investors.
-          </Header>
-          <p>Please confirm your accredited investor status to access this Document.</p>
-          {
-            !this.props.userStore.currentUser
-              ? <Button as={Link} to={`/${stepInRoute.to}`} primary content={stepInRoute.title} className="mt-20 mb-50" />
-              : <Button as={Link} to="/app/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
-          }
-        </section>
-        </Modal.Content>
-        </Modal>
-      );
-    }
-    return (
-      <IframeModal
-        srcUrl={this.state.embedUrl}
-        loading={docLoading}
-        open
-        close={this.props.close}
-      />
-    );
-  }
-}
+const isTablet = document.documentElement.clientWidth < 992;
 @inject('campaignStore', 'uiStore', 'accreditationStore', 'authStore')
 @withRouter
 @observer
@@ -92,11 +30,11 @@ export default class Documents extends Component {
     const { dataRoomDocs } = this.props.campaignStore;
     return (
       <div>
-        <Header as="h3" className={`${this.props.newLayout ? 'mt-50' : 'mt-20'} anchor-wrap mb-30`}>
+        <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
           Documents
           <span className="anchor" id="data-room" />
         </Header>
-        <Divider hidden />
+        {!this.props.newLayout && <Divider hidden />}
         <Grid columns={3} stackable doubling>
           {
             dataRoomDocs.length && dataRoomDocs.map(l => (
@@ -118,7 +56,7 @@ export default class Documents extends Component {
         </Grid>
         {this.state.doc
         &&
-        <LegalDoc doc={this.state.doc} close={this.close} />
+        <DocumentModal doc={this.state.doc} close={this.close} />
         }
       </div>
     );

@@ -9,7 +9,7 @@ import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shar
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import CampaignHeader from '../components/campaignDetails/CampaignHeader';
 import InvestNow from '../components/investNow/InvestNow';
-
+import CommunityGuideline from '../components/campaignDetails/CommunityGuideline';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 import SecondaryMenu from '../components/CampaignSecondaryMenu';
 import Agreement from '../components/investNow/agreement/components/Agreement';
@@ -17,14 +17,16 @@ import Congratulation from '../components/investNow/agreement/components/Congrat
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
 // import Footer from './../../../../theme/layout/Footer';
+import DocumentModal from '../components/campaignDetails/DataRoom/DocumentModal';
 import OfferingMetaTags from '../components/OfferingMetaTags';
+import VideoModal from '../components/campaignDetails/Overview/VideoModal';
 import AboutPhotoGallery from '../components/campaignDetails/AboutPhotoGallery';
 import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit';
 
 const getModule = component => lazy(() => import(`../components/campaignDetails/${component}`));
 const isMobile = document.documentElement.clientWidth < 992;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
-@inject('campaignStore', 'userStore', 'navStore', 'uiStore', 'userDetailsStore')
+@inject('campaignStore', 'userStore', 'navStore', 'uiStore', 'userDetailsStore', 'authStore')
 @withRouter
 @observer
 class offerDetails extends Component {
@@ -80,6 +82,19 @@ class offerDetails extends Component {
   }
 
   componentDidMount() {
+    const { location, match, newLayout } = this.props;
+    const { isUserLoggedIn } = this.props.authStore;
+    if (location.pathname !== match.url) {
+      const splittedArr = location.pathname.split('/');
+      if ((newLayout && splittedArr.includes('data-room')) || (!newLayout && ['overview', 'about', 'investment-details', 'data-room', 'comments', 'bonus-rewards', 'updates'].includes(splittedArr[splittedArr.length - 1]))) {
+        // this.props.history.push(location.pathname); do nothing
+      } else {
+        this.props.history.push(`${match.url}${!newLayout ? '/overview' : ''}`);
+      }
+    }
+    if (isUserLoggedIn) {
+      this.props.uiStore.clearRedirectURL();
+    }
     window.scrollTo(0, 0);
   }
 
@@ -168,11 +183,11 @@ class offerDetails extends Component {
     } = this.props;
     if (this.state.showPassDialog) {
       return (
-<DevPassProtected
-  previewPassword={campaignStore.campaign && campaignStore.campaign.previewPassword}
-  offerPreview
-  authPreviewOffer={this.authPreviewOffer}
-/>
+        <DevPassProtected
+          previewPassword={campaignStore.campaign && campaignStore.campaign.previewPassword}
+          offerPreview
+          authPreviewOffer={this.authPreviewOffer}
+        />
       );
     }
     if (campaignStore.loading || (this.state.found !== 2 && !campaignStore.campaignStatus.doneComputing) || this.state.preLoading) {
@@ -214,7 +229,7 @@ class offerDetails extends Component {
         <Firework />
         } */}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
-          <SecondaryMenu {...this.props} />
+          <SecondaryMenu newLayout={newLayout} {...this.props} />
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
               <CampaignSideBar newLayout={newLayout} navItems={navItems} />
@@ -237,9 +252,9 @@ class offerDetails extends Component {
               <Grid centered={newLayout}>
                 {!isMobile
                   && (
-<Grid.Column width={4} className={newLayout ? 'left-align' : ''}>
-                    <CampaignSideBar newLayout={newLayout} navItems={navItems} />
-                  </Grid.Column>
+                    <Grid.Column width={4} className={newLayout ? 'left-align' : ''}>
+                      <CampaignSideBar newLayout={newLayout} navItems={navItems} />
+                    </Grid.Column>
                   )
                 }
                 <Grid.Column computer={newLayout ? 9 : 12} mobile={16} className={newLayout ? 'left-align' : ''}>
@@ -247,14 +262,19 @@ class offerDetails extends Component {
                     <Switch>
                       <Route exact path={match.url} render={props => <InitialComponent refLink={this.props.match.url} {...props} />} />
                       {!newLayout
-                      && (
-                        navItems.map((item) => {
-                          const CurrentComponent = getModule(item.component);
-                          return (
-                            <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
-                          );
-                        })
-                      )
+                        && (
+                          navItems.map((item) => {
+                            const CurrentComponent = getModule(item.component);
+                            return (
+                              <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
+                            );
+                          })
+                        )
+                      }
+                      {newLayout
+                        && (
+                          <Route path={`${this.props.match.url}/data-room`} component={DocumentModal} />
+                        )
                       }
                       <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
                       <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
@@ -262,7 +282,9 @@ class offerDetails extends Component {
                       <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
                       <Route path={`${match.url}/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={`${match.url}/agreement`} {...props} />} />
                       <Route exact path={`${match.url}/congratulation`} component={Congratulation} />
+                      <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
                       <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
+                      <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
                       <Route component={NotFound} />
                     </Switch>
                   </Suspense>

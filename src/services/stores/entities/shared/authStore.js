@@ -393,7 +393,7 @@ export class AuthStore {
             if (isBusinessApplication) {
               businessAppStore.setFieldvalue('userRoles', get(data, 'checkEmailExistsPresignup.roles'));
               businessAppStore.setFieldvalue('userExists', true);
-              businessAppStore.setBasicFormError(get(data, 'checkEmailExistsPresignup.roles') && get(data, 'checkEmailExistsPresignup.roles').includes('issuer') ? 'This email is already exists as an issuer. Please Log In' : 'This email address is already exists as investor. Please try with differrent email.');
+              businessAppStore.setBasicFormError(get(data, 'checkEmailExistsPresignup.roles') && get(data, 'checkEmailExistsPresignup.roles').includes('issuer') ? 'This email is already exists as an issuer. Please Log In' : `This email address is already exists as ${get(data, 'checkEmailExistsPresignup.roles').includes('admin') ? 'admin' : 'investor'}. Please try with differrent email.`);
               res();
             } else {
               this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';

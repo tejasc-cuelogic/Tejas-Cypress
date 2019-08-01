@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import { toJS } from 'mobx';
+// import scrollIntoView from 'scroll-into-view';
 import { Divider, Button, Icon } from 'semantic-ui-react';
 import AboutTheCompany from './Overview/AboutTheCompany';
 import InvestmentDetails from './InvestmentDetails';
@@ -9,6 +10,8 @@ import AboutCompany from './AboutCompany';
 import LatestUpdates from './Overview/LatestUpdates';
 import Updates from './Updates';
 import VideoModal from './Overview/VideoModal';
+import TotalPaymentCalculator from './investmentDetails/totalPaymentCalculator';
+import RevenueSharingSummary from './investmentDetails/revenueSharingSummary';
 import AboutPhotoGallery from './AboutPhotoGallery';
 import Gallery from './AboutCompany/Gallery';
 import IssuerStatement from './Overview/IssuerStatement';
@@ -21,6 +24,8 @@ const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
 const topsAsPerWindowheight = window.innerHeight > 1000 ? 500 : 150;
 const isTablet = document.documentElement.clientWidth < 992;
+// const isMobile = document.documentElement.clientWidth < 992;
+
 @inject('campaignStore', 'navStore')
 @observer
 class CampaignLayout extends Component {
@@ -56,16 +61,25 @@ class CampaignLayout extends Component {
     if (navs && Array.isArray(navs)) {
       navs.forEach((item) => {
         if (document.getElementById(item.to.slice(1))
-          && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
-          && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
+        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
+        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
+          // if (isMobile && (this.props.navStore.currentActiveHash !== item.to) && this.props.navStore.campaignHeaderStatus) {
+          //   scrollIntoView(document.getElementById(`${item.to.slice(1)}-mob-nav`), { align: { top: 1, topOffset: -644 } });
+          // document.getElementsByClassName('campaign-mobile-menu-v2')[0].getElementsByClassName('active')[0].scrollIntoView({
+          //   // inline: 'center',
+          //   behavior: 'smooth',
+          //   // block: 'start',
+          // });
+          // }
           this.props.navStore.setFieldValue('currentActiveHash', item.to);
         }
       });
     }
   }
 
-  handleCollapseExpand = (name) => {
+  handleCollapseExpand = (name, processAction) => {
     this.setState({ [name]: !this.state[name] });
+    document.querySelector(processAction).scrollIntoView(true);
   }
 
   render() {
@@ -97,11 +111,10 @@ class CampaignLayout extends Component {
                   />
                 )
               }
-              <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandUpdate')} className="link-button highlight-text mt-20">
+              <Button onClick={() => this.handleCollapseExpand('expandUpdate', '#updates')} className={`${!isTablet ? 'mt-20' : ''} link-button highlight-text`}>
                 {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Updates
                 <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
               </Button>
-              <Divider hidden section />
               <Divider hidden section />
             </>
           )
@@ -109,14 +122,14 @@ class CampaignLayout extends Component {
         <InvestmentDetails newLayout />
         <AboutCompany newLayout />
         {campaignStatus.isBonusReward
-        && (
-          <>
-            <BonusRewards newLayout />
-            <Divider hidden section />
-          </>
-        )
+          ? (
+            <>
+              <BonusRewards newLayout />
+              <Divider hidden section />
+            </>
+          ) : null
         }
-        {campaignStatus.gallary && campaignStatus.gallary !== 0 ? (
+        {campaignStatus.gallary !== 0 ? (
           <>
             <Gallery
               newLayout
@@ -128,22 +141,27 @@ class CampaignLayout extends Component {
         ) : null}
         {dataRoomDocs.length
           ? (
-          <>
-            <Documents newLayout />
-            <Divider hidden section />
-          </>
+            <>
+              <Documents newLayout />
+              <Divider hidden section />
+            </>
           ) : null
         }
         <>
-          <Comments newLayout showOnlyOne={!this.state.expandComments} />
-          <Button fluid={isTablet} onClick={() => this.handleCollapseExpand('expandComments')} className="link-button highlight-text mt-40">
-            {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Comments
-            <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
-            <Divider hidden section />
+          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary newLayout {...this.props} />) : (<TotalPaymentCalculator newLayout {...this.props} />)
+          }
+          <Divider hidden section />
+          <Comments refLink={this.props.match.url} newLayout showOnlyOne={!this.state.expandComments} />
+          <Button onClick={() => this.handleCollapseExpand('expandComments', '#comments')} className="link-button highlight-text mt-40">
+            {this.state.expandComments ? 'Collapse' : 'Expand'} All Comments
+            <Icon className={`ns-caret-${this.state.expandComments ? 'up' : 'down'} right`} />
           </Button>
         </>
         {campaignStatus.issuerStatement ? (
+          <>
+          <Divider hidden section />
           <IssuerStatement newLayout campaign={campaign} />
+          </>
         ) : null
         }
         <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal newLayout refLink={props.match} {...props} />} />

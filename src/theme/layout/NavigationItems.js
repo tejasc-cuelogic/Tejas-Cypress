@@ -92,7 +92,7 @@ export class NavItems extends Component {
   render() {
     const { activeIndex } = this.state;
     const {
-      location, isApp, roles, match, isMobile, onToggle, refLink,
+      location, isApp, roles, match, isMobile, onToggle, refLink, newLayout,
     } = this.props;
     const app = (isApp) ? 'app' : '';
     const myNavItems = this.props.navItems.filter(n => n.headerMobile !== false && n.noNav !== true);
@@ -192,7 +192,8 @@ export class NavItems extends Component {
                 <Menu.Item
                   key={item.to}
                   name={item.to}
-                  className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : `${((item.defaultActive && this.isActiveSubMenu(`${item.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(item.to, location) ? 'active' : ''}`} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''}`}
+                  id={(newLayout && isTablet) ? `${item.to.slice(1)}-mob-nav` : ''}
+                  className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : `${((item.defaultActive && this.isActiveSubMenu(`${item.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(item.to, location) ? 'active' : ''}`} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''} ${(newLayout && ((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) ? 'hasLabel' : '')}`}
                   as={NavLink}
                   onClick={isMobile ? this.mobileMenuClick : this.doNothing}
                   to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}${item.useRefLink ? '' : '/'}${item.to}`}

@@ -6,7 +6,6 @@ import { mapValues } from 'lodash';
 import { Label } from 'semantic-ui-react';
 import PrivateLayout from '../../shared/PrivateLayout';
 import AllCrowdPay from './components/AllCrowdPay';
-import { InlineLoader } from '../../../../theme/shared';
 import { ByKeyword } from '../../../../theme/form/Filters';
 import Filters from './components/Filters';
 
@@ -44,12 +43,9 @@ export default class CrowdPay extends Component {
   render() {
     const { match, crowdpayStore } = this.props;
     const {
-      requestState, filters, FILTER_FRM, fChange, loading,
+      requestState, filters, FILTER_FRM, fChange,
       // summary,
     } = crowdpayStore;
-    if (loading) {
-      return <InlineLoader />;
-    }
     return (
       <PrivateLayout
         {...this.props}

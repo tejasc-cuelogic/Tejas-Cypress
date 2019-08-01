@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { includes, get } from 'lodash';
-import money from 'money-math';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Header, Form, Divider, Table, Card } from 'semantic-ui-react';
 import AccountHeader from './AccountHeader';
@@ -44,11 +43,9 @@ export default class Overview extends Component {
       setFieldValue('currentActiveAccount', accountType);
       this.setState({ availableCashL: true, totalBalanceL: true });
       this.props.transactionStore.getInvestorAvailableCash(false, true).then((data) => {
-        const cashAmount = get(data, 'getInvestorAvailableCash') ? money.isNegative(get(data, 'getInvestorAvailableCash')) ? '0.00' : get(data, 'getInvestorAvailableCash') : '0.00';
-        this.setState({ availableCash: cashAmount, availableCashL: false });
+        this.setState({ availableCash: get(data, 'getInvestorAvailableCash'), availableCashL: false });
         this.props.transactionStore.getInvestorAvailableCash(true, true).then((dataN) => {
-          const totalAmount = get(dataN, 'getInvestorAvailableCash') ? money.isNegative(get(dataN, 'getInvestorAvailableCash')) ? '0.00' : get(dataN, 'getInvestorAvailableCash') : '0.00';
-          this.setState({ totalBalance: totalAmount, totalBalanceL: false });
+          this.setState({ totalBalance: get(dataN, 'getInvestorAvailableCash'), totalBalanceL: false });
         }).catch(() => this.setState({ availableCashL: false, totalBalanceL: false }));
       }).catch(() => this.setState({ availableCashL: false, totalBalanceL: false }));
       this.props.portfolioStore.getSummary(true);
@@ -78,12 +75,12 @@ export default class Overview extends Component {
           && <AccountHeader showFreezeCTA={!isClosedAccount} pathname={this.props.location.pathname} />
         }
         {get(account, 'details.accountStatus') === 'FROZEN'
-        && (
-        <>
-          <LockedInformation account details={account} />
-          <Divider />
-        </>
-        )
+          && (
+            <>
+              <LockedInformation account details={account} />
+              <Divider />
+            </>
+          )
         }
         <Header as="h6">Balances</Header>
         <Form.Group widths={2}>
@@ -100,23 +97,23 @@ export default class Overview extends Component {
         <Divider />
         {get(account, 'linkedBank.changeRequest')
           && (
-          <>
-            <Header as="h6">Change Bank Account Request</Header>
-            <Form.Group widths={2}>
-              <Form.Input fluid label="Bank Name" placeholder="Bank Name" value={get(account, 'details.linkedBank.changeRequest.bankName') || 'N/A'} readOnly className="display-only" />
-              <Form.Input fluid label="Account Number" placeholder="Account Number" value={get(account, 'details.linkedBank.changeRequest.accountNumber') || 'N/A'} readOnly className="display-only" />
-              <Form.Input fluid label="Requested Date" placeholder="Requested Date" value={get(account, 'details.linkedBank.changeRequest.dateRequested') ? DataFormatter.getDateInCST(get(account, 'details.linkedBank.changeRequest.dateRequested'), true, false, false) : 'N/A'} readOnly className="display-only" />
-              <Form.Input fluid label="Status" placeholder="Status" value={get(account, 'details.linkedBank.changeRequest.status') || 'N/A'} readOnly className="display-only" />
-            </Form.Group>
-            <Divider />
-          </>
+            <>
+              <Header as="h6">Change Bank Account Request</Header>
+              <Form.Group widths={2}>
+                <Form.Input fluid label="Bank Name" placeholder="Bank Name" value={get(account, 'details.linkedBank.changeRequest.bankName') || 'N/A'} readOnly className="display-only" />
+                <Form.Input fluid label="Account Number" placeholder="Account Number" value={get(account, 'details.linkedBank.changeRequest.accountNumber') || 'N/A'} readOnly className="display-only" />
+                <Form.Input fluid label="Requested Date" placeholder="Requested Date" value={get(account, 'details.linkedBank.changeRequest.dateRequested') ? DataFormatter.getDateInCST(get(account, 'details.linkedBank.changeRequest.dateRequested'), true, false, false) : 'N/A'} readOnly className="display-only" />
+                <Form.Input fluid label="Status" placeholder="Status" value={get(account, 'details.linkedBank.changeRequest.status') || 'N/A'} readOnly className="display-only" />
+              </Form.Group>
+              <Divider />
+            </>
           )
         }
         <Header as="h6">Opening Summary</Header>
         <div className="bg-offwhite">
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
-              { this.checkInvestorAccType('individual', account)
+              {this.checkInvestorAccType('individual', account)
                 ? (
                   <IndividualSummary
                     investor={investor}
@@ -139,12 +136,12 @@ export default class Overview extends Component {
                   )
                   : this.checkInvestorAccType('entity', account)
                     ? (
-                    <EntitySummary
-                      investor={investor}
-                      isClosedAccount={isClosedAccount}
-                      account={account}
-                      CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />}
-                    />
+                      <EntitySummary
+                        investor={investor}
+                        isClosedAccount={isClosedAccount}
+                        account={account}
+                        CopyToClipboardAccountId={<CopyToClipboardAccountId account={account} />}
+                      />
                     ) : null
               }
             </Table>

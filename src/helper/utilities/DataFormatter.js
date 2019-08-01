@@ -109,6 +109,14 @@ class DataFormatter {
       : isUnix ? moment(new Date(formatedDate)).unix() : formatedDate;
   }
 
+  // TODO this function is created to avoid impacts, need to optimize.
+  getDateForApiFiltering = (date, iso = true, dayType = null, isUnix = false) => {
+    let formatedDate = moment(this.formatedDate(date)).utc();
+    formatedDate = dayType === 'accountCreateFromDate' ? moment(new Date(formatedDate)).add(1, 'day').startOf('day') : dayType === 'accountCreateToDate' ? moment(new Date(formatedDate)).endOf('day') : formatedDate;
+    return iso ? moment(new Date(formatedDate)).toISOString()
+      : isUnix ? moment(new Date(formatedDate)).unix() : formatedDate;
+  }
+
   formatedDate = date => moment(new Date(date)).format('MM/DD/YYYY');
 
   getCurrentCSTDate = (showTime = false) => (showTime ? momentZone.tz('America/Chicago').format('MM/DD/YYYY HH:mm:ss') : momentZone.tz('America/Chicago').format('MM/DD/YYYY'));
