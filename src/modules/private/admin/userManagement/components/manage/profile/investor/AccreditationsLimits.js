@@ -85,14 +85,6 @@ export default class AccreditationsLimits extends Component {
                     )
                   }
                 </Form.Group>
-                {(get(accreditationData[account.name], 'status') === 'REQUESTED')
-                && (
-<Button.Group compact size="tiny" className="mt-10">
-                  <Button as={Link} primary content="Accept" to={`${this.props.match.url}/CONFIRMED/${get(getDetailsOfUser, 'id')}${(account.name === 'entity' ? `/${get(account, 'details.accountId')}/ENTITY` : '')}`} />
-                  <Button as={Link} color="red" content="Deny" to={`${this.props.match.url}/INVALID/${get(getDetailsOfUser, 'id')}${(account.name === 'entity' ? `/${get(account, 'details.accountId')}/ENTITY` : '')}`} />
-                </Button.Group>
-                )
-                }
               </div>
               <Divider />
             </>
