@@ -13,7 +13,7 @@ Validator.register(
 export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement'];
 
 export const STAGES = {
-  CREATION: { ref: 'creation', accessKey: 1, label: 'Creation' },
+  CREATION: { ref: 'creation', publicRef: 'creation', accessKey: 1, label: 'Creation' },
   LIVE: {
     ref: 'live', publicRef: 'active', accessKey: 2, label: 'Live',
   },
