@@ -35,7 +35,7 @@ class Overview extends Component {
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
-    const { aggrementId, loading } = this.props.transactionStore;
+    const { agreementIds, loading } = this.props.transactionStore;
     if (loading) {
       return (
         <InlineLoader />
@@ -211,11 +211,15 @@ class Overview extends Component {
                       </Table.Row>
                       ) : ''
                     }
-                    {aggrementId
+                    {agreementIds
                       ? (
                       <Table.Row verticalAlign="top">
-                        <Table.Cell>Investor Agreement</Table.Cell>
-                        <Table.Cell><Button onClick={() => this.handleViewLoanAgreement(aggrementId)} className="link-button highlight-text">#{aggrementId}</Button></Table.Cell>
+                        <Table.Cell>Investor Agreement{agreementIds.length > 1 && 's'} </Table.Cell>
+                        <Table.Cell>
+                          {agreementIds.map(agreementId => (
+                            <Button onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text">#{agreementId} </Button>
+                          ))}
+                        </Table.Cell>
                       </Table.Row>
                       ) : ''
                     }
