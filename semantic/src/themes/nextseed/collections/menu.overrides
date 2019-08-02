@@ -124,13 +124,32 @@
     }
 }
 .ui.secondary.menu.menu-secondary-fixed {
+    align-items: center;
     @media only screen and (max-width : @largestLargeMonitor){
         background-color: fade(@white, 50%);
     }
     .item{
-        padding:@3px @18px;
+        padding:@3px @7px;
         &:hover {
             background-color: transparent;
+        }
+        &.menu-button > .ui.button{
+            width: 110px;
+        }
+        &.header > .ui.image.logo,&.menu-button{
+            visibility: hidden;
+        }
+    }
+    &.animate{
+        .item{
+            &.header > .ui.image.logo,&.menu-button{
+                visibility: visible;
+            }
+        }
+        &.reverse .item{
+            &.header > .ui.image.logo,&.menu-button{
+                visibility: hidden;
+            }
         }
     }
     .menu.menu-secondary {
