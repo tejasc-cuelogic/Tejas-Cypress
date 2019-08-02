@@ -11,7 +11,7 @@ export default class Referral extends React.Component {
   // 0: not started, 1: loading, 2: found, 3: not found
   componentWillMount() {
     const { referralCode } = this.props.match.params;
-    this.props.campaignStore.initRequest(['active'], referralCode).then((data) => {
+    this.props.campaignStore.initRequest(['active', 'completed'], referralCode).then((data) => {
       if (data) {
         this.setState({ found: 2 });
         if (this.props.authStore.isUserLoggedIn) {

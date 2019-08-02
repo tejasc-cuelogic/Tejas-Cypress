@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { get, startCase } from 'lodash';
-import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
+import { Header, Icon, Form, Divider } from 'semantic-ui-react';
 import Helper from '../../../../../../../../helper/utility';
 import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../../../../../../../services/constants/accreditation';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../../../../services/constants/investmentLimit';
