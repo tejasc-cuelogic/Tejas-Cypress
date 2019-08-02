@@ -41,6 +41,7 @@ export { default as businessAppReviewStore } from './entities/user/admin/busines
 export { default as businessAppLendioStore } from './entities/user/businessAppLendioStore';
 export { default as investmentLimitStore } from './entities/user/settings/investmentLimitStore';
 export { default as campaignStore } from './entities/public/campaignStore';
+export { default as publicStore } from './entities/public/publicStore';
 export { default as investmentStore } from './entities/shared/investmentStore';
 export { default as agreementsStore } from './entities/user/settings/agreementsStore';
 export { default as accreditationStore } from './entities/user/settings/accreditationStore';
