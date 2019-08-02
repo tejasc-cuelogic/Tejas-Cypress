@@ -1,10 +1,39 @@
-import React from 'react';
-import { Header, Container, Grid, Divider, Responsive } from 'semantic-ui-react';
+import React, { Component } from 'react';
+import { Header, Container, Grid, Divider, Responsive, Button } from 'semantic-ui-react';
+import { observer, inject } from 'mobx-react';
 import NSImage from '../../../shared/NSImage';
+import { InlineLoader, IframeModal } from '../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
-const Careers = () => (
-  <>
+
+
+@inject('publicStore', 'campaignStore')
+@observer
+class Careers extends Component {
+  state = {
+    showModal: false,
+    srcUrl: '',
+    docLoading: false,
+  }
+
+  componentWillMount() {
+    this.props.publicStore.getJobListing();
+  }
+
+  openDoc = (boxFileId) => {
+    this.setState({ srcUrl: '', docLoading: true, showModal: true });
+    this.props.campaignStore.getBoxLink(boxFileId).then((res) => {
+      this.setState({ srcUrl: res, docLoading: false });
+    });
+  }
+
+  closeModal = () => {
+    this.setState({ srcUrl: '', docLoading: false, showModal: false });
+  }
+
+  render() {
+    const { jobsList, loading } = this.props.publicStore;
+    return (
     <section>
       <Container>
         <Grid centered>
@@ -52,22 +81,34 @@ const Careers = () => (
               and indicate position in the subject line.
             </p>
             <Divider section hidden />
-            <Header as="h4" className="mb-30">Current Positions</Header>
-            <Grid columns={3} stackable doubling centered>
-              <Grid.Column textAlign="center" className="mb-20">
+            {loading
+              ? (<InlineLoader />)
+              : (
+                <>
+                <Header as="h4" className="mb-30">Current Positions</Header>
+                <Grid columns={3} stackable doubling centered>
+                {jobsList.map(i => (
+                <Grid.Column textAlign="center" className="mb-20">
                 <Header as="h5" className="mb-10">
-                  <a href="/">Investment Banking Director</a>
+                  <Button className="link-button highlight-text" onClick={() => this.openDoc(i.BOX_FILE_ID)}>{i.POSITION}</Button>
                 </Header>
                 <Header.Subheader>
-                  Houston, TX
+                  {`${i.CITY} ${i.STATE}`}
                 </Header.Subheader>
               </Grid.Column>
+                ))
+                }
             </Grid>
+                </>
+              )
+            }
           </Grid.Column>
         </Grid>
       </Container>
+      <IframeModal open={this.state.showModal} srcUrl={this.state.srcUrl} loading={this.state.docLoading} close={this.closeModal} />
     </section>
-  </>
-);
+    );
+  }
+}
 
 export default Careers;
