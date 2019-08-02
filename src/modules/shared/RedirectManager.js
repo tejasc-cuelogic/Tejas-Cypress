@@ -54,7 +54,7 @@ export default class RedirectManager extends React.PureComponent {
       } else {
         return params === d.from && d.live;
       }
-      return redirectMeta || false;
+      return false;
     });
     return redirectMeta;
   }
@@ -81,7 +81,7 @@ export default class RedirectManager extends React.PureComponent {
   }
 
   findIssuerReferralCode = (referralCode) => {
-    this.props.campaignStore.initRequest(['active'], referralCode).then((data) => {
+    this.props.campaignStore.initRequest(['creation', 'active', 'completed'], referralCode).then((data) => {
       if (data) {
         this.setState({ found: 2 });
         if (this.props.authStore.isUserLoggedIn) {
@@ -90,7 +90,11 @@ export default class RedirectManager extends React.PureComponent {
         } else {
           window.localStorage.setItem('ISSUER_REFERRAL_CODE', data.referralCode);
         }
-        this.props.history.push(`/offerings/${data.offeringSlug}`);
+        if (data.stage === 'CREATION') {
+          this.props.history.push(`/offerings/preview/${data.offeringSlug}`);
+        } else {
+          this.props.history.push(`/offerings/${data.offeringSlug}`);
+        }
       } else {
         this.setState({ found: 3 });
       }
