@@ -61,7 +61,7 @@ class Careers extends Component {
             <Divider hidden section />
             <Header as="h4">About NextSeed</Header>
             <p>
-              NextSeed Inc. (<a href="https://www.nextseed.com">www.nextseed.com</a>) is a
+              NextSeed Inc. (<a target="_blank" rel="noreferrer noopener" href="https://www.nextseed.com">www.nextseed.com</a>) is a
               financial technology company designed to empower mainstream entrepreneurs with
               financing needs and connect them to investors (whether individuals or firms)
               looking to invest directly into local businesses and commercial real estate
@@ -77,7 +77,7 @@ class Careers extends Component {
               individuals to join the team.
             </p>
             <p>
-              Contact info: Submit your resume to <a href="mailto:jobs@nextseed.com">jobs@nextseed.com</a>
+              Contact info: Submit your resume to <a target="_blank" rel="noreferrer noopener" href="mailto:jobs@nextseed.com">jobs@nextseed.com</a>
               and indicate position in the subject line.
             </p>
             <Divider section hidden />
