@@ -1054,6 +1054,7 @@ export const LEADERSHIP = {
       label: 'E-mail address',
       error: undefined,
       rule: 'email',
+      customErrors: { email: 'Email is not valid' },
       placeHolder: 'john.doe@contact.com',
     },
     number: {
@@ -1084,6 +1085,7 @@ export const LEADERSHIP = {
       placeHolder: 'XXX-XXX-XXXX',
       error: undefined,
       rule: 'maskedSSN',
+      customErrors: { maskedSSN: 'SSN is not valid' },
     },
     citizenship: {
       value: '',
