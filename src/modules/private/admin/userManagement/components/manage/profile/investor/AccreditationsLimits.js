@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { get, startCase } from 'lodash';
-import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
+import { Header, Icon, Form, Divider } from 'semantic-ui-react';
 import Helper from '../../../../../../../../helper/utility';
 import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../../../../../../../services/constants/accreditation';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../../../../services/constants/investmentLimit';
@@ -85,14 +85,6 @@ export default class AccreditationsLimits extends Component {
                     )
                   }
                 </Form.Group>
-                {(get(accreditationData[account.name], 'status') === 'REQUESTED')
-                && (
-<Button.Group compact size="tiny" className="mt-10">
-                  <Button as={Link} primary content="Accept" to={`${this.props.match.url}/CONFIRMED/${get(getDetailsOfUser, 'id')}${(account.name === 'entity' ? `/${get(account, 'details.accountId')}/ENTITY` : '')}`} />
-                  <Button as={Link} color="red" content="Deny" to={`${this.props.match.url}/INVALID/${get(getDetailsOfUser, 'id')}${(account.name === 'entity' ? `/${get(account, 'details.accountId')}/ENTITY` : '')}`} />
-                </Button.Group>
-                )
-                }
               </div>
               <Divider />
             </>

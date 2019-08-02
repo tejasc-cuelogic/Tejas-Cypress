@@ -66,6 +66,7 @@ export const getOfferingsReferral = gql`
 query getOfferingList($filters: OfferingFilterInputType){
     getOfferingList(filters: $filters) {
       id
+      stage
       offeringSlug
       referralCode
       order

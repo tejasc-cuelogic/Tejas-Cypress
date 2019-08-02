@@ -88,13 +88,13 @@ export class NewMessage {
   }
 
   @action
-  createNewComment = (scope, campaignSlug, currentMessageId) => {
+  createNewComment = (scope, campaignSlug, currentMessageId, campaignId = null) => {
     this.setDataValue('buttonLoader', scope);
     this.currentMessageId = currentMessageId;
     const data = Validator.ExtractValues(this.MESSAGE_FRM.fields);
     const payload = {
       commentInput: {
-        offeringId: offeringCreationStore.currentOfferingId || this.currentOfferingId,
+        offeringId: campaignId || (offeringCreationStore.currentOfferingId || this.currentOfferingId),
         scope,
         comment: data.comment,
       },
