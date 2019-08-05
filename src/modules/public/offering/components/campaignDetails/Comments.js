@@ -55,8 +55,8 @@ class Comments extends Component {
     }
   }
 
-  send = (scope, campaignSlug, currentMessage) => {
-    this.props.messageStore.createNewComment(scope, campaignSlug, currentMessage);
+  send = (scope, campaignSlug, currentMessage, campaignId) => {
+    this.props.messageStore.createNewComment(scope, campaignSlug, currentMessage, campaignId);
   }
 
   toggleVisibility = (comment = null) => {
@@ -161,7 +161,7 @@ class Comments extends Component {
                       changed={msgEleChange}
                       containerclassname="secondary"
                     />
-                    <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
+                    <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
                   </Form>
                   ) : ''
                 }
@@ -220,7 +220,7 @@ class Comments extends Component {
                                 <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(c.id)}>
                                   Cancel Reply
                                 </Button>
-                                <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
+                                <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
                               </Form>
                               <Divider hidden />
                               <p>
@@ -291,7 +291,7 @@ class Comments extends Component {
                                       <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(tc.id)}>
                                         Cancel Reply
                                       </Button>
-                                      <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
+                                      <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
                                     </Form>
                                     <Divider hidden />
                                     <p>

@@ -4,7 +4,7 @@ import graphql from 'mobx-apollo';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
 import money from 'money-math';
-import { get, includes, orderBy, isArray, filter } from 'lodash';
+import { get, includes, orderBy, isArray, filter, forEach } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { ClientDb, FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
@@ -75,6 +75,8 @@ export class TransactionStore {
   @observable db = [];
 
   @observable apiCall = false;
+
+  @observable agreementIds = [];
 
   @action
   setFieldValue = (field, value) => {
@@ -603,6 +605,7 @@ export class TransactionStore {
   getInvestmentsByOfferingId = isAdmin => new Promise((resolve, reject) => {
     const investorDetail = userDetailsStore.getDetailsOfUser;
     const userDetailId = isAdmin ? investorDetail.id : get(userDetailsStore, 'userDetails.id');
+    this.agreementIds = [];
     this.investmentsByOffering = graphql({
       client,
       query: getInvestmentsByUserIdAndOfferingId,
@@ -620,6 +623,7 @@ export class TransactionStore {
           if (get(investmentsByUserIdAndOfferingId, '[0]')) {
             this.setInvestment(get(investmentsByUserIdAndOfferingId, '[0].investmentId'));
           }
+          this.setAgreementIds(data.getInvestmentsByUserIdAndOfferingId);
           resolve();
         }
       },
@@ -672,6 +676,13 @@ export class TransactionStore {
       },
     });
   });
+
+  @action
+  setAgreementIds(investmentsByUser) {
+    forEach(investmentsByUser, (investment) => {
+      this.agreementIds.push(get(investment, 'agreement.agreementId'));
+    });
+  }
 }
 
 export default new TransactionStore();
