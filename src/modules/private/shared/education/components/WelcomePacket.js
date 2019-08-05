@@ -3,7 +3,7 @@ import { Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../../theme/shared';
 
-@inject('agreementsStore')
+@inject('agreementsStore', 'uiStore')
 @observer
 export default class WelcomePacket extends Component {
   componentWillMount() {
@@ -17,21 +17,33 @@ export default class WelcomePacket extends Component {
     }
   }
 
-  render() {
-    const { embedUrl, docLoading } = this.props.agreementsStore;
-    return (
+    onIframeLoad = (e) => {
+      if (!e.nativeEvent.loading) {
+        // this url works
+        const iframe = document.getElementById('agreement-frame');
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        if (!iframeDoc) {
+          this.props.agreementsStore.setField('embedUrl', 'http://1952-ira-acccount-is-displaying-error.s3-website-us-east-1.amazonaws.com/');
+        }
+      }
+      return null;
+    };
+
+    render() {
+      const { embedUrl, docLoading } = this.props.agreementsStore;
+      return (
       <div>
         <Grid>
           <Grid.Row>
             <Grid.Column className="welcome-packet">
               <div className="pdf-viewer">
                 {(docLoading || !embedUrl) ? <InlineLoader />
-                  : <iframe width="100%" height="100%" title="agreement" allowFullScreen="true" src={embedUrl} />}
+                  : <embed width="100%" height="100%" id="agreement-frame" title="agreement" onLoad={this.onIframeLoad} allowFullScreen="true" src={embedUrl} />}
               </div>
             </Grid.Column>
           </Grid.Row>
         </Grid>
       </div>
-    );
-  }
+      );
+    }
 }
