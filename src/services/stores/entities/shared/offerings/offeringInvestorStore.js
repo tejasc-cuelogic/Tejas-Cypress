@@ -102,7 +102,7 @@ export class OfferingInvestorStore {
   @computed get investorListsForCsvExport() {
     const { offer } = offeringsStore;
     const referralCode = get(offer, 'referralCode');
-    const investorList = map(this.investorLists, (i) => {
+    const investorList = map(toJS(this.investorLists), (i) => {
       const investorObj = cloneDeep(toJS({ ...i }));
       // eslint-disable-next-line no-param-reassign
       ['street', 'streetTwo'].forEach((el) => { investorObj[el] = !isEmpty(investorObj[el]) ? investorObj[el].split(',').join(' ') : null; });
