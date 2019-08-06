@@ -112,7 +112,7 @@ export class AgreementsStore {
             if (data.getS3DownloadLinkByFileId.preSignedUrl) {
               resolve(data.getS3DownloadLinkByFileId.preSignedUrl);
             } else {
-              uiStore.setErrors('Unable to Fetch the File');
+              Helper.toast('Unable to Fetch the File', 'error');
               reject();
             }
           }
