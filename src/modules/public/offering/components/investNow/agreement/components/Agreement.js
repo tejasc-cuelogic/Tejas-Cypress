@@ -140,7 +140,7 @@ export default class Agreement extends React.Component {
     // const regualtionTypeStatement =
     // regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck) ?
     // 'Regulation D 506C' : 'Regulation Crowdfunding';
-    const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : regulationCheck === 'BD_506B' ? 'Regulation D 506B' : 'Regulation Crowdfunding';
+    const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : regulationCheck === 'BD_506B' ? 'Rule 506(b) of Regulation D' : 'Regulation Crowdfunding';
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
     return (
