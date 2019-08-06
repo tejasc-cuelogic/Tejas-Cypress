@@ -10,7 +10,7 @@ import OtherInformation from '../OtherInformation';
 import LockedInformation from '../LockedInformation';
 import UserInvestorDetails from '../../../../../../investor/settings/components/UserInvestorDetails';
 
-@inject('userDetailsStore', 'uiStore', 'referralsStore')
+@inject('userDetailsStore', 'uiStore', 'referralsStore', 'identityStore')
 @withRouter
 @observer
 export default class Basic extends Component {
@@ -31,10 +31,19 @@ export default class Basic extends Component {
 
   updateUserData = (e) => {
     e.preventDefault();
-    this.props.userDetailsStore.updateUserProfileForSelectedUser().then(() => {
-      this.setState({ displayMode: true });
-    })
-      .catch(() => this.setState({ displayMode: true }));
+    const ssnValue = this.props.userDetailsStore.USER_BASIC.fields.ssn.value;
+    this.props.identityStore.isSsnExist(ssnValue)
+      .then((isSSNPresent) => {
+        if (isSSNPresent) {
+          this.props.userDetailsStore.USER_BASIC.fields.ssn.error = 'The SSN entered is already in use.';
+        } else {
+          this.props.userDetailsStore.updateUserProfileForSelectedUser().then(() => {
+            this.setState({ displayMode: true });
+          })
+            .catch(() => this.setState({ displayMode: true }));
+        }
+        this.props.uiStore.setProgress(false);
+      });
   }
 
   render() {
