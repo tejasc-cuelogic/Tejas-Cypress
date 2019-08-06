@@ -94,10 +94,10 @@ export class AgreementsStore {
   });
 
   @action
-  readPdfFile = (key) => {
+  readPdfFile = (key, docId) => {
     this.setField('docLoading', true);
     return new Promise((resolve, reject) => {
-      const fileId = toJS(this.agreements).find(ele => ele.key === key).id;
+      const fileId = docId || toJS(this.agreements).find(ele => ele.key === key).id;
       this.pdfLinkData = graphql({
         client,
         query: getS3DownloadLinkByFileId,

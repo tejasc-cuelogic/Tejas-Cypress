@@ -12,33 +12,18 @@ export default class WelcomePacket extends Component {
     } = this.props.agreementsStore;
     if (!legalDocsList.length) {
       getLegalDocsFileIds().then(() => {
-        getBoxEmbedLink('welcomeKit').then((res) => {
-          this.IsallowdUrl(res).catch(() => {
+        getBoxEmbedLink('welcomeKit').then(() => {
+          if (sessionStorage.getItem('isBoxFirewalled') === 'true') {
             getLegalDocsFileIds().then(() => {
               readPdfFile('welcomeKit').then((url) => {
                 this.props.agreementsStore.setField('S3DownloadLink', url);
               });
             });
-          });
+          }
         });
       });
     }
   }
-
-  IsallowdUrl = () => new Promise((resolve, reject) => {
-    const testURL = this.props.agreementsStore.embedUrl;
-
-    const myInit = {
-      method: 'HEAD',
-      mode: 'no-cors',
-    };
-    const myRequest = new Request(testURL, myInit);
-    fetch(myRequest).catch((e) => {
-      console.log('failed', e);
-      reject();
-    });
-  });
-
 
   render() {
     const { embedUrl, docLoading, S3DownloadLink } = this.props.agreementsStore;
