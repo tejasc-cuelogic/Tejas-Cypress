@@ -54,6 +54,8 @@ export class AgreementsStore {
 
   @observable embedUrl = null;
 
+  @observable S3DownloadLink = null;
+
   @observable docLoading = false;
 
   @observable docIdsLoading = false;
@@ -77,7 +79,7 @@ export class AgreementsStore {
   }
 
   @action
-  getBoxEmbedLink = (of, fileId, accountType) => {
+  getBoxEmbedLink = (of, fileId, accountType) => new Promise((resolve) => {
     this.setField('docLoading', true);
     const fId = fileId || toJS(this.agreements).find(ele => ele.key === of).id;
     const accountTypeToPass = accountType && accountType === 'SECURITIES' ? accountType : 'SERVICES';
@@ -87,8 +89,9 @@ export class AgreementsStore {
     }).then((res) => {
       this.setAgreementUrl(of, res.data.getBoxEmbedLink);
       this.setField('docLoading', false);
+      resolve(res.data.getBoxEmbedLink);
     }).catch(() => this.setField('docLoading', false));
-  }
+  });
 
   @action
   readPdfFile = (key) => {
