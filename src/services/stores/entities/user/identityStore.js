@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import graphql from 'mobx-apollo';
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
@@ -241,9 +242,9 @@ export class IdentityStore {
       legalCip.failReason = !get(cip, 'failReason') ? [{ key: response.key, message: response.message }]
         : this.CipFailReasons(cip.failReason, { key: response.key, message: response.message });
     } else {
-      legalCip.expiration = Helper.getDaysfromNow(21);
-      legalCip.requestId = response.hardFailId || 'ERROR_NO_CIP_REQUEST_ID';
-      legalCip.failType = 'FAIL_WITH_UPLOADS';
+      legalCip.expiration = this.userCipStatus === 'OFFLINE' ? moment().subtract(1, 'days') : Helper.getDaysfromNow(21);
+      legalCip.requestId = response.hardFailId || '-1';
+      legalCip.failType = this.userCipStatus === 'OFFLINE' ? 'OFFLINE' : 'FAIL_WITH_UPLOADS';
       if (response.qualifiers && response.qualifiers !== null) {
         legalCip.failReason = !get(cip, 'failReason') ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])]
           : this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
@@ -311,6 +312,8 @@ export class IdentityStore {
           },
         })
         .then((data) => {
+          // eslint-disable-next-line no-unused-expressions
+          sasaddsdsd;
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
           // TODO optimize signUpLoading call
           if (data.data.verifyCIPIdentity.passId
@@ -330,12 +333,12 @@ export class IdentityStore {
           }
         })
         .catch((err) => {
-          if (err || err.response) {
+          if (err.response) {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             reject(err);
           } else {
             // uiStore.setErrors(JSON.stringify('Something went wrong'));
-            this.setCipStatus('HARD_FAIL');
+            this.setCipStatus('OFFLINE');
             this.updateUserInfo().then(() => {
               resolve();
             }).catch(() => {

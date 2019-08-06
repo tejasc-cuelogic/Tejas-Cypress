@@ -72,7 +72,7 @@ export default class IdentityVerification extends Component {
                       route,
                       display,
                     } = this.props.identityStore.userVerficationStatus;
-                    if (key === 'id.success') {
+                    if ((key === 'id.success') || this.props.identityStore.this.userCipStatus === 'OFFLINE') {
                       const { phoneVerification } = this.props.userDetailsStore.signupStatus;
                       const {
                         isCipExpired,
