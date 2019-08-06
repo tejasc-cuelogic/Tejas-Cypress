@@ -3,8 +3,9 @@ import { forEach } from 'lodash';
 import graphql from 'mobx-apollo';
 import { uiStore } from '../../../index';
 import { GqlClient as client } from '../../../../../api/publicApi';
-import { getBoxEmbedLink, getLegalDocsFileIds } from '../../../queries/agreements';
+import { getBoxEmbedLink, getLegalDocsFileIds, getS3DownloadLinkByFileId } from '../../../queries/agreements';
 import Helper from '../../../../../helper/utility';
+import apiService from '../../../../../api/restApi';
 
 export class AgreementsStore {
   @observable legalDocsList = [];
@@ -86,8 +87,38 @@ export class AgreementsStore {
       variables: { fileId: fId, accountType: accountTypeToPass },
     }).then((res) => {
       this.setAgreementUrl(of, res.data.getBoxEmbedLink);
-      this.setField('docLoading', false);
+      apiService.getRemoteFile('https://status.box.com/');
+      this.setField('docLoading', true);
     }).catch(() => this.setField('docLoading', false));
+  }
+
+  @action
+  readPdfFile = () => {
+    this.setField('docLoading', true);
+    return new Promise((resolve, reject) => {
+      // const fileId = toJS(this.agreements).find(ele => ele.key === of).id;
+      this.pdfLinkData = graphql({
+        client,
+        query: getS3DownloadLinkByFileId,
+        variables: {
+          fileId: 350632240634,
+          accountType: 'SERVICES',
+          getS3DownloadLink: false,
+        },
+        onFetch: (data) => {
+          this.setField('docLoading', false);
+          if (data && !this.pdfLinkData.loading) {
+            if (data.getS3DownloadLinkByFileId.preSignedUrl) {
+              resolve(data.getS3DownloadLinkByFileId.preSignedUrl);
+            } else {
+              uiStore.setErrors('Unable to Fetch the File');
+              reject();
+            }
+          }
+        },
+        onError: () => reject(),
+      });
+    });
   }
 
   @action
