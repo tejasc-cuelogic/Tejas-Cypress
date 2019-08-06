@@ -122,10 +122,11 @@ export class CampaignStore {
   @action
   concatOfferingDetails = (newData) => {
     if (newData && this.campaign && get(this.campaign, 'id') === get(newData, 'id')) {
-      this.details.loading = true;
-      this.details.data.getOfferingDetailsBySlug[0].updates = get(newData, 'updates');
-      this.details.data.getOfferingDetailsBySlug[0].comments = get(newData, 'comments');
-      this.details.loading = false;
+      const campaignData = toJS(this.details);
+      campaignData.data.getOfferingDetailsBySlug[0].updates = get(newData, 'updates');
+      campaignData.data.getOfferingDetailsBySlug[0].comments = get(newData, 'comments');
+      campaignData.test = 'sdf';
+      this.details = campaignData;
     }
   }
 
