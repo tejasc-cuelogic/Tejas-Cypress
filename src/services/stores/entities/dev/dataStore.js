@@ -33,6 +33,7 @@ export class DataStore {
     adminProcessCip: false,
     encryptOrDecryptValue: false,
     auditBoxFolder: false,
+    processTransferRequest: false,
   };
 
   @observable partialOrCipAccountData = {};
