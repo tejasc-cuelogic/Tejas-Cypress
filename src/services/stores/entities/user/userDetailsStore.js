@@ -67,6 +67,11 @@ export class UserDetailsStore {
     this[field] = value;
   }
 
+  @action
+  setSSNErrorMessage = (msg) => {
+    this.USER_BASIC.fields.ssn.error = msg;
+  }
+
   @computed get currentUserId() {
     return (this.userDetails && this.userDetails.id) || null;
   }

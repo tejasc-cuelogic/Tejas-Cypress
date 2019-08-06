@@ -32,18 +32,23 @@ export default class Basic extends Component {
   updateUserData = (e) => {
     e.preventDefault();
     const ssnValue = this.props.userDetailsStore.USER_BASIC.fields.ssn.value;
+    this.props.uiStore.setProgress();
     this.props.identityStore.isSsnExist(ssnValue)
       .then((isSSNPresent) => {
         if (isSSNPresent) {
-          this.props.userDetailsStore.USER_BASIC.fields.ssn.error = 'The SSN entered is already in use.';
+          this.props.userDetailsStore.setSSNErrorMessage('The SSN entered is already in use.');
         } else {
+          this.props.uiStore.setProgress();
           this.props.userDetailsStore.updateUserProfileForSelectedUser().then(() => {
             this.setState({ displayMode: true });
           })
-            .catch(() => this.setState({ displayMode: true }));
+            .catch(() => this.setState({ displayMode: true }))
+            .finally(() => {
+              this.props.uiStore.setProgress(false);
+            });
         }
         this.props.uiStore.setProgress(false);
-      });
+      }).catch(() => { });
   }
 
   render() {
