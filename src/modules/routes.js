@@ -20,6 +20,7 @@ import EdgarForm from './private/admin/edgar/containers/EdgarForm';
 import XmlForm from './private/admin/edgar/containers/XmlForm';
 import BusinessDetails from './private/admin/edgar/containers/BusinessDetails';
 import UserManagement from './private/admin/userManagement';
+import DashboardCta from './shared/DashboardCta';
 
 import {
   AdminAuthorization,
@@ -31,6 +32,11 @@ export const publicRoutes = [
   {
     path: '/',
     component: Home,
+    exact: true,
+  },
+  {
+    path: '/dashboard',
+    component: DashboardCta,
     exact: true,
   },
   {
