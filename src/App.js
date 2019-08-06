@@ -137,7 +137,7 @@ class App extends Component {
       this.props.navStore.setNavStatus(calculations, 'main');
     }
 
-    if (Boolean(sessionStorage.getItem('isBoxFirewalled')) && !this.props.authStore.isBoxApiChecked) {
+    if ((sessionStorage.getItem('isBoxFirewalled') !== 'true' && !this.props.authStore.isBoxApiChecked)) {
       sessionStorage.setItem('isBoxFirewalled', false);
       this.isBoxFirewalled().catch(() => {
         sessionStorage.setItem('isBoxFirewalled', true);
