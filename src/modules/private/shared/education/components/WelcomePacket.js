@@ -11,9 +11,6 @@ export default class WelcomePacket extends Component {
       getLegalDocsFileIds, getBoxEmbedLink, legalDocsList,
     } = this.props.agreementsStore;
     if (!legalDocsList.length) {
-      // readPdfFile('welcomeKit').then((url) => {
-      //   this.props.agreementsStore.setField('embedUrl', url);
-      // });
       getLegalDocsFileIds().then(() => {
         getBoxEmbedLink('welcomeKit');
       });
@@ -21,18 +18,14 @@ export default class WelcomePacket extends Component {
   }
 
   onIframeLoad = (e) => {
-    if (!e.nativeEvent.loading) {
-      try {
-        // this url works
-        const iframe = document.getElementById('agreement-frame');
-        console.log('iframeError', iframe.contentWindow.document);
-        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-        if (!iframeDoc) {
-          this.props.agreementsStore.setField('embedUrl', 'http://1952-ira-acccount-is-displaying-error.s3-website-us-east-1.amazonaws.com/');
-        }
-      } catch (ex) {
-        console.log('onIframeLoad::exception:: ', ex);
-      }
+    if (e.timeStamp > 10000) {
+      // this url works
+      const { readPdfFile, getLegalDocsFileIds } = this.props.agreementsStore;
+      getLegalDocsFileIds().then(() => {
+        readPdfFile('welcomeKit').then((url) => {
+          this.props.agreementsStore.setField('embedUrl', url);
+        });
+      });
     }
     return null;
   };

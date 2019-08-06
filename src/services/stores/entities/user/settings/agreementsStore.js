@@ -5,7 +5,6 @@ import { uiStore } from '../../../index';
 import { GqlClient as client } from '../../../../../api/publicApi';
 import { getBoxEmbedLink, getLegalDocsFileIds, getS3DownloadLinkByFileId } from '../../../queries/agreements';
 import Helper from '../../../../../helper/utility';
-import apiService from '../../../../../api/restApi';
 
 export class AgreementsStore {
   @observable legalDocsList = [];
@@ -87,21 +86,20 @@ export class AgreementsStore {
       variables: { fileId: fId, accountType: accountTypeToPass },
     }).then((res) => {
       this.setAgreementUrl(of, res.data.getBoxEmbedLink);
-      apiService.getRemoteFile('https://status.box.com/');
-      this.setField('docLoading', true);
+      this.setField('docLoading', false);
     }).catch(() => this.setField('docLoading', false));
   }
 
   @action
-  readPdfFile = () => {
+  readPdfFile = (key) => {
     this.setField('docLoading', true);
     return new Promise((resolve, reject) => {
-      // const fileId = toJS(this.agreements).find(ele => ele.key === of).id;
+      const fileId = toJS(this.agreements).find(ele => ele.key === key).id;
       this.pdfLinkData = graphql({
         client,
         query: getS3DownloadLinkByFileId,
         variables: {
-          fileId: 350632240634,
+          fileId,
           accountType: 'SERVICES',
           getS3DownloadLink: false,
         },
