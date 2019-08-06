@@ -346,6 +346,83 @@ export const campaignDetailsQuery = gql`
   }
 }
 `;
+
+export const campaignDetailsAdditionalQuery = gql`
+  query getOfferingDetailsBySlug($id: String) {
+    getOfferingDetailsBySlug (offeringSlug: $id) {
+    id
+    comments {
+      id
+      scope
+      comment
+      approved {
+        date
+      }
+      updated {
+        date
+      }
+      created {
+        date
+      }
+      createdUserInfo {
+        id
+        info {
+          firstName
+          lastName
+        }
+        roles {
+          name
+        }
+      }
+      threadComment {
+        id
+        scope
+        comment
+        approved {
+          date
+        }
+        updated {
+          date
+        }
+        created {
+          date
+        }
+        createdUserInfo {
+          id
+          info {
+            firstName
+            lastName
+          }
+          roles {
+            name
+          }
+        }
+      }
+    }
+    updates {
+      id
+      title
+      content
+      scope
+      updated {
+        date
+      }
+      actingUserInfo {
+        id
+        info {
+          firstName
+          lastName
+          avatar{
+            url
+            name
+          }
+        }
+      }
+    }
+    }
+  }
+`;
+
 export const campaignDetailsForInvestmentQuery = gql`
 query getOfferingById($id: ID) {
   getOfferingDetailsById (id: $id) {
