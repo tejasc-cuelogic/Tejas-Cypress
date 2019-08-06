@@ -50,6 +50,12 @@ mutation adminProcessInvestorAccount($userId: String!, $accountId: String!) {
     accountId: $accountId,
   )
 }`;
+export const processTransferRequest = gql`
+mutation processTransferRequest($transferId: Int!) {
+  processTransferRequest(
+    transferId: $transferId,
+  )
+}`;
 export const encryptOrDecryptUtility = gql`
 query _encryptOrDecryptValue($userId: String!, $text: String!, $type: EncryptDecryptEnum!){
   encryptOrDecryptValue(
