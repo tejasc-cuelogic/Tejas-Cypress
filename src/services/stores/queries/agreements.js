@@ -25,3 +25,16 @@ query _getlegalDocsFileIds{
   }
 }
 `;
+
+export const getS3DownloadLinkByFileId = gql`
+query _getS3DownloadLinkByFileId($fileId: String!, $accountType: BoxAccountTypeEnum, $getS3DownloadLink: Boolean){
+  getS3DownloadLinkByFileId(
+    boxFileId: $fileId
+    accountType: $accountType
+    getS3DownloadLink: $getS3DownloadLink
+  )
+  {
+    preSignedUrl
+    boxFileId
+  }
+}`;

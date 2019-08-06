@@ -24,6 +24,8 @@ export class AuthStore {
 
   @observable cognitoUserSession = null;
 
+  @observable isBoxApiChecked = false;
+
   @observable isOfferPreviewUrl = false;
 
   @observable capabilities = [];

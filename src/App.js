@@ -13,7 +13,7 @@ import Public from './modules/public';
 import SecureGateway from './modules/public/shared/SecureGateway';
 import { authActions, activityActions } from './services/actions';
 import MetaTagGenerator from './modules/shared/MetaTagGenerator';
-import { userIdleTime } from './constants/common';
+import { userIdleTime, NEXTSEED_BOX_URL } from './constants/common';
 /**
  * Main App
  */
@@ -103,6 +103,7 @@ class App extends Component {
     if (this.props.location !== prevProps.location) {
       this.onRouteChanged({ oldLocation: prevProps.location, newLocation: this.props.location });
     }
+
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) {
         // console.log('Browser tab is hidden');
@@ -135,10 +136,27 @@ class App extends Component {
       };
       this.props.navStore.setNavStatus(calculations, 'main');
     }
-    // if (window.analytics) {
-    //   window.analytics.page();
-    // }
+
+    if (Boolean(sessionStorage.getItem('isBoxFirewalled')) && !this.props.authStore.isBoxApiChecked) {
+      sessionStorage.setItem('isBoxFirewalled', false);
+      this.isBoxFirewalled().catch(() => {
+        sessionStorage.setItem('isBoxFirewalled', true);
+      });
+      this.props.authStore.setFieldvalue('isBoxApiChecked', true);
+    }
   }
+
+  isBoxFirewalled = () => new Promise((resolve, reject) => {
+    const testURL = NEXTSEED_BOX_URL;
+    const myInit = {
+      method: 'HEAD',
+      mode: 'no-cors',
+    };
+    const myRequest = new Request(testURL, myInit);
+    fetch(myRequest).catch(() => {
+      reject();
+    });
+  });
 
   onIdle = () => {
     if (this.props.authStore.isUserLoggedIn) {
