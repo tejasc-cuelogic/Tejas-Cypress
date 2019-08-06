@@ -106,6 +106,7 @@ export class AgreementsStore {
           accountType: 'SERVICES',
           getS3DownloadLink: false,
         },
+        fetchPolicy: 'network-only',
         onFetch: (data) => {
           this.setField('docLoading', false);
           if (data && !this.pdfLinkData.loading) {

@@ -12,6 +12,11 @@ import HtmlEditor from '../../../../../shared/HtmlEditor';
 @inject('portfolioStore', 'campaignStore', 'userDetailsStore', 'transactionStore')
 @observer
 class Overview extends Component {
+  state = {
+    open: false,
+    embedUrl: '',
+  };
+
   componentWillMount() {
     const { isAdmin } = this.props;
     const accountDetails = this.props.userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
@@ -19,10 +24,22 @@ class Overview extends Component {
     const accountType = isAdmin && get(accountDetails, 'name') ? get(accountDetails, 'name') : includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     this.props.portfolioStore.getPayOffData(accountType, isAdmin);
     this.props.transactionStore.getInvestmentsByOfferingId(isAdmin);
+    window.addEventListener('message', this.docuSignListener);
   }
 
+  docuSignListener = (e) => {
+    if (e.data === 'viewing_complete') {
+      this.setState({ open: false });
+    }
+  };
+
   handleViewLoanAgreement = (aggrementId) => {
-    this.props.transactionStore.getDocuSignViewURL(aggrementId);
+    this.props.transactionStore.getDocuSignViewURL(aggrementId).then((res) => {
+      this.setState({
+        open: true,
+        embedUrl: res,
+      });
+    });
   }
 
   render() {
