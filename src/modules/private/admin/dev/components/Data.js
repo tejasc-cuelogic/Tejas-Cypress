@@ -11,6 +11,7 @@ import RecreateGoldstar from './data/recreateGoldstar';
 import EncryptDecryptUtility from './data/encryptDecryptUtility';
 import PartialOrCipProcessingList from './data/partialOrCipProcessingList';
 import AuditBoxFolder from './data/auditBoxFolder';
+import ProcessTransferRequest from './data/processTransferRequest';
 
 @inject('elasticSearchStore', 'uiStore')
 @withRouter
@@ -96,6 +97,7 @@ export default class Data extends Component {
           <EncryptDecryptUtility />
           <AuditBoxFolder />
           <PartialOrCipProcessingList />
+          <ProcessTransferRequest />
         </Grid.Column>
       </Grid>
     );
