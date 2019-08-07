@@ -97,6 +97,17 @@ export const RECREATEGOLDSTAR_META = {
   accountId: { ...common.accountId },
 };
 
+export const PROCESS_TRANSFER_REQ_META = {
+  transferId: {
+    key: 'transferId',
+    value: '',
+    label: 'transferId',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+  },
+};
+
 export const ENCRYPTDECRYPTUTILITY_META = {
   userId: { ...common.userId },
   text: { ...common.text },
