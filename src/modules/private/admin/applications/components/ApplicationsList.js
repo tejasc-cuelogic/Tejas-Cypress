@@ -92,89 +92,95 @@ export default class ApplicationsList extends Component {
                     (application.applicationStatus || application.prequalStatus)
                     !== BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED
                     && (
-                    <Table.Row verticalAlign="top">
-                      <Table.Cell singleLine>
-                        <Header as="h6">
-                          <Link to={`${match.url}/view/${application.applicationId || application.id}/${application.userId || 'new'}`}>
-                            {application.prequalDetails
-                              ? application.prequalDetails.businessGeneralInfo.businessName
-                              : application.businessGeneralInfo.businessName}
-                          </Link>
-                          <AppStatusLabel application={application} />
-                        </Header>
-                        <div className="table-info-wrap">
-                          <p>
-                            <span>{application.primaryPOC
-                              ? `${application.primaryPOC.firstName} ${application.primaryPOC.lastName}`
-                              : `${application.firstName} ${application.lastName}`
+                      <Table.Row verticalAlign="top">
+                        <Table.Cell singleLine>
+                          <Header as="h6">
+                            <Link to={`${match.url}/view/${application.applicationId || application.id}/${application.userId || 'new'}`}>
+                              {application.prequalDetails
+                                ? application.prequalDetails.businessGeneralInfo.businessName
+                                : application.businessGeneralInfo.businessName}
+                            </Link>
+                            <AppStatusLabel application={application} />
+                          </Header>
+                          <div className="table-info-wrap">
+                            <p>
+                              <span>{application.primaryPOC
+                                ? `${application.primaryPOC.firstName} ${application.primaryPOC.lastName}`
+                                : `${application.firstName} ${application.lastName}`
                               }
-                            </span>
-                            <span>
-                              {application.primaryPOC && application.primaryPOC.email
-                                ? `${application.primaryPOC.email}` : `${application.email}`
-                              }
-                            </span>
-                            <span>
-                              {application.primaryPOC && application.primaryPOC.phone
-                                ? `${application.primaryPOC.phone.number}` : application.businessGeneralInfo.contactDetails && `${application.businessGeneralInfo.contactDetails.phone.number}`
-                              }
-                            </span>
-                          </p>
-                          <p>
-                            {get(application, 'signupCode') && get(application, 'utmSource') && (
-                              <>
-                                <span>Sign-Up Code <b>{get(application, 'signupCode')}</b></span>
-                                <span>Utm Source <b>{get(application, 'utmSource')}</b></span>
-                              </>
-                            )}
-                            <span>
-                              Started{' '}
-                              <b>
-                                {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? DataFormatter.getDateInCST(` ${application.submittedDate}`, true, false, false) : '-') : (` ${application.created.date}` ? DataFormatter.getDateInCST(` ${application.created.date}`, true, false, false) : '-')}
-                              </b>
-                            </span>
-                            <span>Updated <b>{application.updated ? DataFormatter.getDateInCST(` ${application.updated.date}`, true, false, false) : '-'}</b></span>
-                          </p>
-                        </div>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Item>
-                          <Item.Header><Rating size="large" disabled defaultRating={application.rating || 0} maxRating={5} /></Item.Header>
-                          {application.comments && application.comments.length
-                            && (
-                            <Item.Content>
-                              <Item.Description>
-                                {application.comments[application.comments.length - 1].text}
-                              </Item.Description>
-                              <Item.Extra>
-                                <b>{DataFormatter.getDateInCST(application.comments[application.comments.length - 1].commentor.date, true, false, true)}</b>
-                                <b>{' '}
-                                  {
-                                  application.comments[application.comments.length - 1].commentor.by
-                                  }
+                              </span>
+                              <span>
+                                {application.primaryPOC && application.primaryPOC.email
+                                  ? `${application.primaryPOC.email}` : `${application.email}`
+                                }
+                              </span>
+                              <span>
+                                {application.primaryPOC && application.primaryPOC.phone
+                                  ? `${application.primaryPOC.phone.number}` : application.businessGeneralInfo.contactDetails && `${application.businessGeneralInfo.contactDetails.phone.number}`
+                                }
+                              </span>
+                            </p>
+                            <p>
+                              {get(application, 'signupCode') && get(application, 'utmSource') && (
+                                <>
+                                  <span>Sign-Up Code <b>{get(application, 'signupCode')}</b></span>
+                                  <span>Utm Source <b>{get(application, 'utmSource')}</b></span>
+                                </>
+                              )}
+                              <span>
+                                Started{' '}
+                                <b>
+                                  {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? DataFormatter.getDateInCST(` ${application.submittedDate}`, true, false, false) : '-') : (` ${get(application, 'created.date')}` ? DataFormatter.getDateInCST(` ${application.created.date}`, true, false, false) : '-')}
                                 </b>
-                              </Item.Extra>
-                            </Item.Content>
-                            )
-                          }
-                        </Item>
-                      </Table.Cell>
-                      <ApplicationListStepColumn
-                        application={application}
-                      />
-                      <ApplicationListButtons
-                        refLink={match.url}
-                        application={application}
-                      />
-                    </Table.Row>
+                              </span>
+                              <span>Updated <b>{application.updated ? DataFormatter.getDateInCST(` ${application.updated.date}`, true, false, false) : '-'}</b></span>
+                            </p>
+                          </div>
+                        </Table.Cell>
+                        <Table.Cell>
+                          <Item>
+                            <Item.Header><Rating size="large" disabled defaultRating={application.rating || 0} maxRating={5} /></Item.Header>
+                            {application.comments && application.comments.length
+                              && (
+                                <Item.Content>
+                                  <Item.Description>
+                                    {application.comments[application.comments.length - 1].text}
+                                  </Item.Description>
+                                  <Item.Extra>
+                                    {application.comments[application.comments.length - 1].commentor
+                                      && (
+                                        <b>{DataFormatter.getDateInCST(application.comments[application.comments.length - 1].commentor.date, true, false, true)}</b>
+                                      )
+                                    }
+                                    {application.comments[application.comments.length - 1].commentor
+                                      && (
+                                        <b>{' '}
+                                          {application.comments[application.comments.length - 1].commentor.by}
+                                        </b>
+                                      )
+                                    }
+                                  </Item.Extra>
+                                </Item.Content>
+                              )
+                            }
+                          </Item>
+                        </Table.Cell>
+                        <ApplicationListStepColumn
+                          application={application}
+                        />
+                        <ApplicationListButtons
+                          refLink={match.url}
+                          application={application}
+                        />
+                      </Table.Row>
                     )
                   ))
                   : (
-                  <Table.Row>
-                    <Table.Cell colSpan="6">
-                      <InlineLoader text="No data available." />
-                    </Table.Cell>
-                  </Table.Row>
+                    <Table.Row>
+                      <Table.Cell colSpan="6">
+                        <InlineLoader text="No data available." />
+                      </Table.Cell>
+                    </Table.Row>
                   )
                 }
               </Table.Body>

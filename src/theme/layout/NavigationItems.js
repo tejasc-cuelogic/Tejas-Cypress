@@ -226,21 +226,22 @@ export class NavigationItems extends Component {
   }
 
   handleDashboardBtn = () => {
-    const { redirectURL } = this.props.uiStore;
-    const { roles } = this.props.userStore.currentUser;
-    if (this.props.userDetailsStore.currentUser.loading) {
-      return;
-    }
-    const invLogsIn = roles && roles.includes('investor') ? this.props.userDetailsStore.pendingStep
-      : '/app/dashboard';
-    if (invLogsIn === '/app/summary') {
-      const hasExpanded = this.props.navStore.sidebarItems.find(i => i.to.includes('account-details/'));
-      if (hasExpanded) {
-        this.props.uiStore.setNavExpanded(hasExpanded.to);
-      }
-    }
-    this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor')
-      ? `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
+    // const { redirectURL } = this.props.uiStore;
+    // const { roles } = this.props.userStore.currentUser;
+    // if (this.props.userDetailsStore.currentUser.loading) {
+    //   return;
+    // }
+    // const invLogsIn = roles && roles.includes('investor') ? this.props.userDetailsStore.pendingStep
+    //   : '/app/dashboard';
+    // if (invLogsIn === '/app/summary') {
+    //   const hasExpanded = this.props.navStore.sidebarItems.find(i => i.to.includes('account-details/'));
+    //   if (hasExpanded) {
+    //     this.props.uiStore.setNavExpanded(hasExpanded.to);
+    //   }
+    // }
+    // this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor')
+    //   ? `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
+    this.props.history.push('/dashboard');
   }
 
   render() {

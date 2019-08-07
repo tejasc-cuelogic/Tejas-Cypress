@@ -39,10 +39,16 @@ class LegalDoc extends Component {
   state = { embedUrl: null };
   componentWillMount() {
     const { docKey } = this.props.match.params;
-    const { legalDocs } = this.props.agreementsStore;
+    const { legalDocs, readPdfFile } = this.props.agreementsStore;
     const legalDoc = legalDocs.find(d => d.refEnum.toLowerCase() === docKey);
     if (legalDoc) {
-      this.getBoxUrl(legalDoc.boxId);
+      if (sessionStorage.getItem('isBoxFirewalled') === 'true') {
+        readPdfFile('', legalDoc.boxId).then((url) => {
+          this.props.agreementsStore.setField('S3DownloadLink', this.setState({ embedUrl: url }));
+        });
+      } else {
+        this.getBoxUrl(legalDoc.boxId);
+      }
     }
   }
   getBoxUrl = (boxId) => {
