@@ -545,10 +545,11 @@ export class UserDetailsStore {
       }
     } else if (get(this.userDetails, 'cip')
       && !this.isUserVerified
+      && !this.isOfflineCipStatus
       && !this.isCompleteIndividualAccount) {
       routingUrl = '/app/summary/account-creation/individual';
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
-      && this.signupStatus.idVerification !== 'OFFLINE'
+      && !this.isOfflineCipStatus
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
       routingUrl = '/app/summary/identity-verification/0';
@@ -591,6 +592,10 @@ export class UserDetailsStore {
     return this.signupStatus.activeAccounts.includes('individual')
       || this.signupStatus.frozenAccounts.includes('individual')
       || this.signupStatus.processingAccounts.includes('individual');
+  }
+
+  @computed get isOfflineCipStatus() {
+    return this.signupStatus.idVerification === 'OFFLINE';
   }
 
   @action
