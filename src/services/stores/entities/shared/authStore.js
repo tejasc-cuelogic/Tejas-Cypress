@@ -235,7 +235,7 @@ export class AuthStore {
   }
 
   @computed get devPasswdProtection() {
-    return !this.devAuth.required && !this.devAuth.authStatus && !this.isOfferPreviewUrl;
+    return this.devAuth.required && !this.devAuth.authStatus && !this.isOfferPreviewUrl;
   }
 
   @action setUserId(userId) {
