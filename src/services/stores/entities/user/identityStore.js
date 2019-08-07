@@ -342,6 +342,7 @@ export class IdentityStore {
             // uiStore.setErrors(JSON.stringify('Something went wrong'));
             this.setCipStatus('OFFLINE');
             this.updateUserInfo().then(() => {
+              this.setFieldValue('signUpLoading', false);
               resolve();
             }).catch(() => {
               reject();
