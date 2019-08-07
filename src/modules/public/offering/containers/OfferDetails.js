@@ -184,7 +184,6 @@ class offerDetails extends Component {
     if (this.state.showPassDialog) {
       return (
         <DevPassProtected
-          previewPassword={campaignStore.campaign && campaignStore.campaign.previewPassword}
           offerPreview
           authPreviewOffer={this.authPreviewOffer}
           offeringId={campaignStore.campaign && campaignStore.campaign.id}

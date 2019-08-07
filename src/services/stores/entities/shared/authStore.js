@@ -530,7 +530,7 @@ export class AuthStore {
   }
 
   @action
-  validateOfferingPreviewPassword = (offeringId, previewPassword) => new Promise((res) => {
+  validateOfferingPreviewPassword = (offeringId, previewPassword) => new Promise((res, rej) => {
     graphql({
       client: clientPublic,
       query: validateOfferingPreviewPassword,
@@ -548,6 +548,7 @@ export class AuthStore {
         uiStore.setErrors(err);
         uiStore.setProgress(false);
         Helper.toast('Something went wrong, please try again.', 'error');
+        rej();
       },
       fetchPolicy: 'network-only',
     });

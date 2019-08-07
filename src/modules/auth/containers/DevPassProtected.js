@@ -31,21 +31,15 @@ class DevPassProtected extends Component {
   }
 
   authPreviewOffer = () => {
-    this.setState({
-      ...this.state,
-      previewPassLoader: true,
-    });
+    this.setState({ previewPassLoader: true });
     this.props.authStore.validateOfferingPreviewPassword(this.props.offeringId, this.state.password).then((status) => {
       if (status) {
         this.props.authPreviewOffer(true, this.state.password);
       } else {
         this.setState({ error: 'Entered password is invalid, please try again.' });
       }
-      this.setState({
-        ...this.state,
-        previewPassLoader: false,
-      });
-    });
+      this.setState({ previewPassLoader: false });
+    }).catch(() => this.setState({ previewPassLoader: false }));
   }
 
   render() {
