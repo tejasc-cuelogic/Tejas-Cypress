@@ -172,7 +172,7 @@ export class BusinessAppStore {
       },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data && data.businessApplication && !this.businessApplicationsDataById.loading) {
+        if ((data && data.businessApplication && !this.businessApplicationsDataById.loading) || (data && data.getPreQualificationById && !this.businessApplicationsDataById.loading)) {
           this.setBusinessApplicationData(isPartialApp);
           uiStore.setAppLoader(false);
           resolve();

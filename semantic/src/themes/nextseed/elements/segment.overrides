@@ -41,6 +41,17 @@
         @media only screen and (max-width : @largestMobileScreen){
             padding: @20px;
         }
+        &.reward-block-v2{
+            h6.ui.header{
+                font-size: @13px!important;
+            }
+            h3.ui.header{
+                font-size: @28px!important;
+            }
+            .ui.label{
+                font-size: @10px;
+            }
+        }
     }
     .segment-container {
         max-height: 544px;

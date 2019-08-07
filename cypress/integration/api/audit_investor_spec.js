@@ -1,11 +1,10 @@
-import { get, forEach } from 'lodash';
+import { get } from 'lodash';
 import { seedTestUsers, getMigratedUserAuditInfo, cleanUpTestUsers } from '../../fixtures/userQueries';
-import { apiRequest, prepRequest } from '../common.utility';
+import { prepRequest } from '../common.utility';
 
 
 let auditInfo = {};
 let migratedUserAuditInfo = {};
-let userId = null;
 let requestBody = {};
 let requestHeaders = {};
 const userInfo = ['dateAccountWasOpened',
@@ -40,8 +39,6 @@ const userInfo = ['dateAccountWasOpened',
 describe('Audit Investor', () => {
   describe('Data compare', () => {
     before(() => {
-      assert.equal(3, 3, `Successfully matched field: 3`);
-
       cy.fixture('admin/user').then((data) => {
         const adminCredentials = data.adminCredentials;
         cy.login(adminCredentials.email, adminCredentials.password).then((user) => {
@@ -57,8 +54,8 @@ describe('Audit Investor', () => {
                 cy.request(
                   prepRequest(seedTestUsers, authToken)
                   ).then(resSeedTestUsers => {
-                  const seededUser = resSeedTestUsers.body.data.seedTestUsers.created[0].id;
-                  auditInfo = resSeedTestUsers.body.data.seedTestUsers.created[0].auditInfo;
+                  const seededUser = get(resSeedTestUsers.body.data.seedTestUsers.created[0], 'id');
+                  auditInfo = get(resSeedTestUsers.body.data.seedTestUsers.created[0], 'auditInfo');
                   cy.request(
                     prepRequest(getMigratedUserAuditInfo(seededUser, 'INDIVIDUAL'), authToken)
                     ).then(resGetMigratedUserAuditInfo => {

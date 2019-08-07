@@ -20,7 +20,7 @@ import { deleteBonusReward, updateOffering,
   generateBusinessFiling, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore } from '../../../index';
+import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore, offeringInvestorStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
 import { INDUSTRY_TYPES } from '../../../../../constants/offering';
@@ -255,6 +255,8 @@ export class OfferingCreationStore {
 
   @action
   resetAllForms = () => {
+    offeringInvestorStore.setData('db', undefined);
+    offeringInvestorStore.setData('data', []);
     const forms = ['KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'CLOSURE_SUMMARY_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM'];
     forms.forEach((f) => {
       this[f] = Validator.resetFormData(this[f]);
