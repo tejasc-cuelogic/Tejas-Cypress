@@ -153,7 +153,7 @@ mutation _closeInvestorAccount($userId: String!, $accountId: String!, $accountTy
 export const updateToAccountProcessing = gql`
 mutation _updateToAccountProcessing ($accountId: String!, $error: String!){
   updateToAccountProcessing (
-    accoutId: $accountId
+    accountId: $accountId
     error: $error
   )
 }`;
