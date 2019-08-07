@@ -159,7 +159,7 @@ export class TransactionStore {
   @computed get accountTransactions() {
     let transactions = (this.data.data && toJS(this.data.data.getAccountTransactions
       && this.data.data.getAccountTransactions.transactions)) || [];
-    transactions = transactions.map(t => ({ ...t, date: DataFormatter.getDateInCST(t.date, false, false, false) }));
+    transactions = transactions.map(t => ({ ...t, date: DataFormatter.getDateInLocalTimeZone(t.date, false, false, false) }));
     return this.sortBydate(transactions);
   }
 

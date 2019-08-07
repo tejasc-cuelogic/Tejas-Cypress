@@ -101,6 +101,14 @@ class DataFormatter {
     return isLLFormat ? displayCutoff.format('ll') : isCustomFormat ? displayCutoff.format(isCustomFormat) : showTime ? displayCutoff.format('MM/DD/YYYY HH:mm:ssa') : displayCutoff.format('MM/DD/YYYY');
   }
 
+  getDateInLocalTimeZone = (dataParam, isISOString = false, isLLFormat = false, showTime = true, isCustomFormat = undefined) => {
+    const localTimeZone = momentZone.tz.guess(true);
+    const dataVal = isISOString ? moment(dataParam) : dataParam;
+    const utcCutoff = moment.utc(dataVal, 'MM/DD/YYYY HH:mm:ss');
+    const displayCutoff = utcCutoff.clone().tz(localTimeZone);
+    return isLLFormat ? displayCutoff.format('ll') : isCustomFormat ? displayCutoff.format(isCustomFormat) : !showTime ? displayCutoff.format('MM/DD/YYYY HH:mm:ssa') : displayCutoff.format('MM/DD/YYYY');
+  }
+
   getDate = (date, iso = true, dayType = null, isUnix = false) => {
     let formatedDate = moment(this.formatedDate(date)).utc();
     formatedDate = dayType === 'startDate' ? moment(new Date(formatedDate)).add(1, 'day').startOf('day') : dayType === 'endDate' ? moment(new Date(formatedDate)).add(1, 'day').endOf('day') : formatedDate;
