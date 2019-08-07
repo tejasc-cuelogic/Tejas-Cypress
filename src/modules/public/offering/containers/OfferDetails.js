@@ -187,6 +187,7 @@ class offerDetails extends Component {
           previewPassword={campaignStore.campaign && campaignStore.campaign.previewPassword}
           offerPreview
           authPreviewOffer={this.authPreviewOffer}
+          offeringId={campaignStore.campaign && campaignStore.campaign.id}
         />
       );
     }

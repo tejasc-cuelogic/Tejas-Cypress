@@ -13,6 +13,7 @@ import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { uiStore, navStore, identityStore, userDetailsStore, userStore, businessAppStore } from '../../index';
+import { validateOfferingPreviewPassword } from '../../queries/campagin';
 
 
 export class AuthStore {
@@ -527,6 +528,30 @@ export class AuthStore {
       console.log('Error while calling notifyApplicationError', e);
     });
   }
+
+  @action
+  validateOfferingPreviewPassword = (offeringId, previewPassword) => new Promise((res) => {
+    graphql({
+      client: clientPublic,
+      query: validateOfferingPreviewPassword,
+      variables: {
+        offeringId,
+        previewPassword,
+      },
+      onFetch: (data) => {
+        uiStore.clearErrors();
+        if (data) {
+          res(get(data, 'validateOfferingPreviewPassword'));
+        }
+      },
+      onError: (err) => {
+        uiStore.setErrors(err);
+        uiStore.setProgress(false);
+        Helper.toast('Something went wrong, please try again.', 'error');
+      },
+      fetchPolicy: 'network-only',
+    });
+  });
 }
 
 export default new AuthStore();
