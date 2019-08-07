@@ -33,6 +33,10 @@ class Overview extends Component {
     }
   };
 
+  closeModal = () => {
+    this.setState({ open: false });
+  }
+
   handleViewLoanAgreement = (aggrementId) => {
     this.props.transactionStore.getDocuSignViewURL(aggrementId).then((res) => {
       this.setState({
