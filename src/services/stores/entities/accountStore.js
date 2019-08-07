@@ -3,10 +3,11 @@ import { observable, action, computed } from 'mobx';
 import { find, get, capitalize, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { FormValidator } from '../../../helper';
+import { FormValidator, DataFormatter } from '../../../helper';
 import { bankAccountStore, individualAccountStore, iraAccountStore, entityAccountStore, userDetailsStore, uiStore } from '../index';
 import { GqlClient as client } from '../../../api/gqlApi';
-import { getInvestorCloseAccounts, closeInvestorAccount } from '../queries/account';
+// eslint-disable-next-line import/named
+import { getInvestorCloseAccounts, closeInvestorAccount, updateToAccountProcessing } from '../queries/account';
 import Helper from '../../../helper/utility';
 import {
   INVESTMENT_ACCOUNT_TYPES,
@@ -111,6 +112,36 @@ export class AccountStore {
         .catch(() => { reject(); Helper.toast('Error while closing account', 'error'); uiStore.setProgress(false); });
     });
   }
+
+  @action
+  updateToAccountProcessing = (accountId, error, accountType) => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateToAccountProcessing,
+          variables: {
+            accountId,
+            error,
+          },
+        })
+        .then((res) => {
+          this.props[this.ACC_TYPE_MAPPING[accountType].store].setFieldValue('showProcessingModal', true);
+          bankAccountStore.resetStoreData();
+          this.props[this.ACC_TYPE_MAPPING[accountType].store].isFormSubmitted = true;
+          Helper.toast(`${capitalize(this.props[this.ACC_TYPE_MAPPING[accountType]].name)} account submitted successfully.`, 'success');
+          uiStore.setProgress(false);
+          resolve(res);
+        })
+        .catch((err) => {
+          Helper.toast('', 'error');
+          uiStore.setProgress(false);
+          uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
+          reject();
+        });
+    });
+  }
+
 
   @computed
   get sortedAccounts() {

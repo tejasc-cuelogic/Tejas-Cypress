@@ -3,10 +3,10 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Message, Table } from 'semantic-ui-react';
-import { isEmpty, get } from 'lodash';
+import { isEmpty, get, find } from 'lodash';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
-@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'identityStore')
+@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'identityStore', 'accountStore')
 @withRouter
 @observer
 export default class Summary extends React.Component {
@@ -40,8 +40,14 @@ export default class Summary extends React.Component {
           route,
         } = this.props.identityStore.userVerficationStatus;
         if (key === 'id.failure') {
-          this.props.identityStore.setIdentityQuestions();
-          this.props.history.push(route);
+          if (this.props.identityStore.userCipStatus === 'OFFLINE') {
+            const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
+            const accountId = get(accountDetails, 'details.accountId') || this.props.individualAccountStore.individualAccId;
+            this.props.accountStore.updateToAccountProcessing(accountId, this.props.identityStore.cipErrorMessage, 0);
+          } else {
+            this.props.identityStore.setIdentityQuestions();
+            this.props.history.push(route);
+          }
         } else {
           this.props.uiStore.setProgress();
           this.handleLegalDocsBeforeSubmit();

@@ -43,6 +43,8 @@ export class IdentityStore {
 
   @observable signUpLoading = false;
 
+  cipErrorMessage = null;
+
   @action
   setFieldValue = (field, value) => {
     this[field] = value;
@@ -342,6 +344,7 @@ export class IdentityStore {
           } else {
             // uiStore.setErrors(JSON.stringify('Something went wrong'));
             this.setCipStatus('OFFLINE');
+            this.cipErrorMessage = typeof err === 'object' ? JSON.stringify(err) : err;
             this.updateUserInfo().then(() => {
               this.setFieldValue('signUpLoading', false);
               resolve();
