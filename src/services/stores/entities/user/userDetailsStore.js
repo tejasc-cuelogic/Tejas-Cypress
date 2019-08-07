@@ -547,8 +547,8 @@ export class UserDetailsStore {
       && !this.isUserVerified
       && !this.isCompleteIndividualAccount) {
       routingUrl = '/app/summary/account-creation/individual';
-    } else if ((!this.validAccStatus.includes(this.signupStatus.idVerification)
-      || this.signupStatus.idVerification === 'OFFLINE')
+    } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
+      && this.signupStatus.idVerification !== 'OFFLINE'
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
       routingUrl = '/app/summary/identity-verification/0';

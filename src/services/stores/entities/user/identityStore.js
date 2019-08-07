@@ -337,6 +337,7 @@ export class IdentityStore {
         .catch((err) => {
           if (err.response) {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            this.setFieldValue('signUpLoading', false);
             reject(err);
           } else {
             // uiStore.setErrors(JSON.stringify('Something went wrong'));
@@ -349,7 +350,6 @@ export class IdentityStore {
             });
           // reject(err);
           }
-          this.setFieldValue('signUpLoading', false);
         });
       // .finally(() => {
       //   uiStore.setProgress(false);
