@@ -8,7 +8,7 @@ const progressMeta = Helper.Progress();
 const checkStatus = (signupStatus, key, userDetailsStore) => {
   let status = false;
   if (key === 'contact-card') {
-    if ((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING' || userDetailsStore.isOfflineCipStatus)
+    if ((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING' || signupStatus.idVerification === 'OFFLINE')
       && signupStatus.phoneVerification === 'DONE') {
       status = 2;
     } else if (signupStatus.isMigratedFullAccount
@@ -26,7 +26,7 @@ const checkStatus = (signupStatus, key, userDetailsStore) => {
     && signupStatus.isCipDoneForMigratedUser
     && signupStatus.phoneVerification === 'DONE' && signupStatus.isEmailConfirmed && signupStatus.investorProfileCompleted)) {
       status = 2;
-    } else if (((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING' || userDetailsStore.isOfflineCipStatus)
+    } else if (((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING' || signupStatus.idVerification === 'OFFLINE')
     && signupStatus.phoneVerification === 'DONE')
     || (signupStatus.isMigratedFullAccount && userDetailsStore.isBasicVerDoneForMigratedFullUser)
     ) {

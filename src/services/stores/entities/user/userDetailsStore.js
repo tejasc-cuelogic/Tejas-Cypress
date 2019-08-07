@@ -42,7 +42,7 @@ export class UserDetailsStore {
 
   @observable deleting = 0;
 
-  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING', 'OFFLINE'];
 
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
 
@@ -545,11 +545,9 @@ export class UserDetailsStore {
       }
     } else if (get(this.userDetails, 'cip')
       && !this.isUserVerified
-      && !this.isOfflineCipStatus
       && !this.isCompleteIndividualAccount) {
       routingUrl = '/app/summary/account-creation/individual';
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
-      && !this.isOfflineCipStatus
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
       routingUrl = '/app/summary/identity-verification/0';
@@ -592,10 +590,6 @@ export class UserDetailsStore {
     return this.signupStatus.activeAccounts.includes('individual')
       || this.signupStatus.frozenAccounts.includes('individual')
       || this.signupStatus.processingAccounts.includes('individual');
-  }
-
-  @computed get isOfflineCipStatus() {
-    return this.signupStatus.idVerification === 'OFFLINE';
   }
 
   @action
