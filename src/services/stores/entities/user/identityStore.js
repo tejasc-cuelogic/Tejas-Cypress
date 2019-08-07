@@ -242,9 +242,11 @@ export class IdentityStore {
       legalCip.failReason = !get(cip, 'failReason') ? [{ key: response.key, message: response.message }]
         : this.CipFailReasons(cip.failReason, { key: response.key, message: response.message });
     } else {
-      legalCip.expiration = this.userCipStatus === 'OFFLINE' ? moment().subtract(1, 'days') : Helper.getDaysfromNow(21);
+      legalCip.expiration = this.userCipStatus === 'OFFLINE' ? moment().subtract(1, 'days').toISOString() : Helper.getDaysfromNow(21);
       legalCip.requestId = response.hardFailId || '-1';
-      legalCip.failType = this.userCipStatus === 'OFFLINE' ? 'OFFLINE' : 'FAIL_WITH_UPLOADS';
+      if (this.userCipStatus !== 'OFFLINE') {
+        legalCip.failType = 'FAIL_WITH_UPLOADS';
+      }
       if (response.qualifiers && response.qualifiers !== null) {
         legalCip.failReason = !get(cip, 'failReason') ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])]
           : this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
