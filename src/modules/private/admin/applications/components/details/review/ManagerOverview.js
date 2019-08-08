@@ -40,11 +40,11 @@ export default class ManagerOverview extends Component {
             <Button.Group vertical icon size="tiny" className="time-stamp">
               <Button as="span" className="time-stamp">
                 <Icon className="ns-circle" color="green" />{' '}
-                Submitted By {submitted.by} on {DataFormatter.getDateInCST(submitted.date, true, false, false)}
+                Submitted By {submitted.by} on {DataFormatter.getDateInLocalTimeZone(submitted.date, true, false, false)}
               </Button>
               <Button as="span" className="time-stamp">
                 <Icon className="ns-check-circle" color="green" />{' '}
-                Approved By {approved.by} on {DataFormatter.getDateInCST(approved.date, true, false, false)}
+                Approved By {approved.by} on {DataFormatter.getDateInLocalTimeZone(approved.date, true, false, false)}
               </Button>
             </Button.Group>
             {isManager && approved && approved.status && applicationStatus
@@ -67,7 +67,7 @@ export default class ManagerOverview extends Component {
                   && (
 <Button as="span" className="time-stamp">
                     <Icon className="ns-circle" color="green" />{' '}
-                    Submitted By {submitted.by} on {DataFormatter.getDateInCST(submitted.date, true, false, false)}
+                    Submitted By {submitted.by} on {DataFormatter.getDateInLocalTimeZone(submitted.date, true, false, false)}
                   </Button>
                   )
                 }

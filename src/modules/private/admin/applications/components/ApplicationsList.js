@@ -149,7 +149,7 @@ export default class ApplicationsList extends Component {
                                   <Item.Extra>
                                     {application.comments[application.comments.length - 1].commentor
                                       && (
-                                        <b>{DataFormatter.getDateInCST(application.comments[application.comments.length - 1].commentor.date, true, false, true)}</b>
+                                        <b>{DataFormatter.getDateInLocalTimeZone(application.comments[application.comments.length - 1].commentor.date, true, false, true)}</b>
                                       )
                                     }
                                     {application.comments[application.comments.length - 1].commentor
