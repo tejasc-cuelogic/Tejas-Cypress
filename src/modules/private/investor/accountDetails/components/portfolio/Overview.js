@@ -12,10 +12,10 @@ import { DataFormatter } from '../../../../../../helper';
 @inject('portfolioStore', 'campaignStore', 'userDetailsStore', 'transactionStore')
 @observer
 class Overview extends Component {
-  // state = {
-  //   open: false,
-  //   embedUrl: '',
-  // };
+  state = {
+    open: false,
+    embedUrl: '',
+  };
 
   componentWillMount() {
     const { isAdmin } = this.props;
@@ -29,7 +29,7 @@ class Overview extends Component {
 
   docuSignListener = (e) => {
     if (e.data === 'viewing_complete') {
-      // this.setState({ open: false });
+      this.setState({ open: false });
     }
   };
 
@@ -39,11 +39,10 @@ class Overview extends Component {
 
   handleViewLoanAgreement = (aggrementId) => {
     this.props.transactionStore.getDocuSignViewURL(aggrementId).then((res) => {
-      console.log('res==>', res);
-      // this.setState({
-      //   open: true,
-      //   embedUrl: res,
-      // });
+      this.setState({
+        open: true,
+        embedUrl: res,
+      });
     });
   }
 

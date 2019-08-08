@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
 import { InlineLoader } from '../../../../../../../theme/shared';
 import HtmlEditor from '../../../../../../shared/HtmlEditor';
+import { DataFormatter } from '../../../../../../../helper';
+
 
 @inject('updateStore')
 @observer
@@ -13,7 +14,7 @@ class UpdateDetails extends Component {
     const { updates } = this.props.updateStore;
     const update = updates && updates.length ? updates[indexId] : null;
     const calculatedDate = update && update.updated.date
-      ? moment(update.updated.date).format('ll') : null;
+      ? DataFormatter.getDateInLocalTimeZone(update.updated.date, true, true, false) : null;
     return (
       update
         ? (

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
 import UpdatesTimeline from './UpdatesComponents/UpdatesTimeline';
 import UpdateDetails from './UpdatesComponents/UpdateDetails';
 import { InlineLoader } from '../../../../../../theme/shared';
+import { DataFormatter } from '../../../../../../helper';
 
 @inject('updateStore')
 @observer
@@ -23,7 +23,7 @@ class Updates extends Component {
         dateObj.id = index;
         dateObj.title = dataItem.title;
         dateObj.date = updates[index].updated.date
-          ? moment(updates[index].updated.date).format('ll') : null;
+          ? DataFormatter.getDateInLocalTimeZone(updates[index].updated.date, true, true, false) : null;
         return summary.push(dateObj);
       });
     }
