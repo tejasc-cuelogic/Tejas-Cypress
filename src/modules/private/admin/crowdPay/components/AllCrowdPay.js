@@ -134,7 +134,7 @@ export default class AllCrowdPay extends Component {
                     }
                     <Table.Cell>
                       {account.created && account.created.date
-                        ? DataFormatter.getDateInCST(moment.unix(account.created.date), false, false, false)
+                        ? DataFormatter.getDateInLocalTimeZone(moment.unix(account.created.date), false, false, false)
                         : <p className="intro-text">N/A</p>
                       }
                     </Table.Cell>
@@ -160,7 +160,7 @@ export default class AllCrowdPay extends Component {
                     {type === 'individual'
                     && (
 <Table.Cell>
-                      {account.processing && account.processing.gs && account.processing.gs.date ? DataFormatter.getDateInCST(moment.unix(account.processing.gs.date), false, false, false) : <p className="intro-text">N/A</p>}
+                      {account.processing && account.processing.gs && account.processing.gs.date ? DataFormatter.getDateInLocalTimeZone(moment.unix(account.processing.gs.date), false, false, false) : <p className="intro-text">N/A</p>}
                     </Table.Cell>
                     )
                     }
