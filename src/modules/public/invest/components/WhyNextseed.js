@@ -137,24 +137,6 @@ export default class WhyNextseed extends Component {
               process, passed NextSeed&apos;s objective diligence<Responsive minWidth={992} as="br" /> criteria, and launched an offering
               on the platform since NextSeed&apos;s inception.
             </p>
-            {/* <Grid className="business-learn-more mb-30">
-            <Grid.Row>
-              <Grid.Column className="center-align">
-                <List horizontal relaxed className="learn-more-list left-align">
-                  <List.Item>
-                    <List.Header>Learn more</List.Header>
-                    <List.Content>Why invest on <a href="/">NextSeed?</a></List.Content>
-                  </List.Item>
-                  <List.Item>
-                    {!isMobile &&
-                      <List.Header>&nbsp;</List.Header>
-                    }
-                    <List.Content>What are the <a href="/">risk of investing?</a></List.Content>
-                  </List.Item>
-                </List>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid> */}
             <Divider fitted as={Container} />
             <section>
               <Container textAlign={isMobile ? 'left' : 'center'}>
