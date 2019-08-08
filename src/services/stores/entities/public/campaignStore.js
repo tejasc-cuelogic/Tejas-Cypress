@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allOfferings, campaignDetailsQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
@@ -19,6 +19,8 @@ export class CampaignStore {
   @observable data = [];
 
   @observable details = {};
+
+  @observable additionalDetails = {};
 
   @observable option = false;
 
@@ -94,7 +96,37 @@ export class CampaignStore {
       query: queryType ? campaignDetailsForInvestmentQuery : campaignDetailsQuery,
       variables: { id },
       fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data && data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length && !this.details.loading) {
+          this.getCampaignAdditionalDetails(id);
+        }
+      },
     });
+  }
+
+  @action
+  getCampaignAdditionalDetails = (id) => {
+    this.additionalDetails = graphql({
+      client: clientPublic,
+      query: campaignDetailsAdditionalQuery,
+      variables: { id },
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data && data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length && !this.additionalDetails.loading) {
+          this.concatOfferingDetails(get(data, 'getOfferingDetailsBySlug[0]'));
+        }
+      },
+    });
+  }
+
+  @action
+  concatOfferingDetails = (newData) => {
+    if (newData && this.campaign && get(this.campaign, 'id') === get(newData, 'id')) {
+      const campaignData = toJS(this.details);
+      campaignData.data.getOfferingDetailsBySlug[0].updates = get(newData, 'updates');
+      campaignData.data.getOfferingDetailsBySlug[0].comments = get(newData, 'comments');
+      this.details = campaignData;
+    }
   }
 
   @action
