@@ -84,13 +84,13 @@ class UserListing extends Component {
                   <Table.Cell><UserTypeIcon role={user.roles} /></Table.Cell>
                   <Table.Cell>
                     {user.created
-                      ? DataFormatter.getDateInCST(moment.unix(user.created.date), false, false, false)
+                      ? DataFormatter.getDateInLocalTimeZone(moment.unix(user.created.date), false, false, false)
                       : 'N/A'
                     }
                   </Table.Cell>
                   <Table.Cell>
                     {user.lastLoginDate
-                      ? DataFormatter.getDateInCST(moment.unix(user.lastLoginDate), false, false, false)
+                      ? DataFormatter.getDateInLocalTimeZone(moment.unix(user.lastLoginDate), false, false, false)
                       : 'N/A'
                     }
                   </Table.Cell>

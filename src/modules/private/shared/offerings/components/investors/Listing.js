@@ -153,7 +153,7 @@ export default class Listing extends Component {
                     )
                     : null
                   }
-                  <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInCST(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
+                  <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInLocalTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
                   <Table.Cell textAlign="right">{this.showReferralCode(referralCode, data.referralCode)}</Table.Cell>
                 </Table.Row>
               ))

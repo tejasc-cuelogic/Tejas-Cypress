@@ -72,7 +72,7 @@ const InvestmentList = (props) => {
                             <>
                               {Helper.CurrencyFormat(data.investedAmount, 0)}
                               <p className="date-stamp">
-                                <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInCST(data.investmentDate, true, false, false)} />
+                                <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInLocalTimeZone(data.investmentDate, true, false, false)} />
                               </p>
                             </>
                           }
@@ -80,7 +80,7 @@ const InvestmentList = (props) => {
                         <Table.Cell collapsing>
                           {props.listOf === 'pending'
                             ? get(data, 'offering.closureSummary.processingDate') ? DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) < 0 ? '' : DataFormatter.getDateDifferenceInHours(get(data, 'offering.closureSummary.processingDate'), true) < 48 ? `${DataFormatter.getDateDifferenceInHours(get(data, 'offering.closureSummary.processingDate'), true)} Hours` : DataFormatter.diffInDaysHoursMin(get(data, 'offering.closureSummary.processingDate')).diffText : 'N/A'
-                            : get(data, 'offering.closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInCST(get(data, 'offering.closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}
+                            : get(data, 'offering.closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInLocalTimeZone(get(data, 'offering.closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}
                         </Table.Cell>
                         <Table.Cell collapsing>
                           {props.listOf === 'pending' && (

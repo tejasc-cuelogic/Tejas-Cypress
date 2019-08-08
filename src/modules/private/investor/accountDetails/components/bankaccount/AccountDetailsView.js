@@ -107,7 +107,7 @@ export default class AccountDetailsView extends Component {
                   </Item.Extra>
                   <Item.Header>
                     {
-                      DataFormatter.getDateInCST((accountDetails.dateLinked || accountDetails.dateRequested), true, false, false)
+                      DataFormatter.getDateInLocalTimeZone((accountDetails.dateLinked || accountDetails.dateRequested), true, false, false)
                     }
                   </Item.Header>
                 </Item.Content>

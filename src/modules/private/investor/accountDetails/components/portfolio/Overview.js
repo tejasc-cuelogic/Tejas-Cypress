@@ -119,7 +119,7 @@ class Overview extends Component {
                         <Table.Cell>
                           {offering && offering.launch
                             && offering.launch.targetDate
-                            ? DataFormatter.getDateInCST(offering.launch.targetDate, false, true, false)
+                            ? DataFormatter.getDateInLocalTimeZone(offering.launch.targetDate, false, true, false)
                             : 'N/A'
                           }
                         </Table.Cell>
@@ -270,7 +270,7 @@ class Overview extends Component {
                       <Statistic.Label>Business Open Date</Statistic.Label>
                       <Statistic.Value>
                         {get(campaign, 'closureSummary.keyTerms.businessOpenDate')
-                          ? DataFormatter.getDateInCST(get(campaign, 'closureSummary.keyTerms.businessOpenDate'), false, false, false, 'MMM Do YYYY')
+                          ? DataFormatter.getDateInLocalTimeZone(get(campaign, 'closureSummary.keyTerms.businessOpenDate'), false, false, false, 'MMM Do YYYY')
                           : 'N/A'
                         }
                       </Statistic.Value>
@@ -281,7 +281,7 @@ class Overview extends Component {
                     <Statistic>
                       <Statistic.Label>Payoff Date</Statistic.Label>
                       <Statistic.Value>
-                        {DataFormatter.getDateInCST(get(offering, 'closureSummary.repayment.completeDate'), false, false, false, 'MMM Do YYYY') || 'N/A'}
+                        {DataFormatter.getDateInLocalTimeZone(get(offering, 'closureSummary.repayment.completeDate'), false, false, false, 'MMM Do YYYY') || 'N/A'}
                       </Statistic.Value>
                     </Statistic>
                   )}

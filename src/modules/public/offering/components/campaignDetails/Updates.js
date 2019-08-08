@@ -76,7 +76,7 @@ class Updates extends Component {
                           && dataItem.actingUserInfo.info.firstName} ${dataItem.actingUserInfo
                             && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName}`}
                         <br />
-                      <span>{DataFormatter.getDateInCST(dataItem.updated.date, true, true)}</span>
+                      <span>{DataFormatter.getDateInLocalTimeZone(dataItem.updated.date, true, true)}</span>
                       </Item.Content>
                     </Item>
                     <Header as="h4">{dataItem.title}</Header>

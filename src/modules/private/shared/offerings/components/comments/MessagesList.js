@@ -69,7 +69,7 @@ const MessagesList = props => (
             <List.Header as="h5">{props.threadUsersList(msg.threadComments).length ? `${props.threadUsersList(msg.threadComments).length === 1 && (get(msg, 'createdUserInfo.id') !== get(props.threadUsersList(msg.threadComments), '[0].createdUserInfo.id')) ? `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')} ,` : ''} ${(props.threadUsersList(msg.threadComments).map((u, i) => i < 3 && (`${get(u, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`))).join(', ')} ${props.threadUsersList(msg.threadComments).length > 2 ? '...' : ''}` : `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`}</List.Header>
           </List.Content>
           <List.Content>
-            <List.Header><DateTimeFormat format="ll" datetime={DataFormatter.getDateInCST(msg.created.date, true, true, false)} /></List.Header>
+            <List.Header><DateTimeFormat format="ll" datetime={DataFormatter.getDateInLocalTimeZone(msg.created.date, true, true, false)} /></List.Header>
             <List.Description>{Parser(msg.comment.substr(0, 40))}</List.Description>
           </List.Content>
         </List.Item>

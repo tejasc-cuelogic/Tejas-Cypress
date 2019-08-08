@@ -40,7 +40,7 @@ const Body = props => (
       {props.thread && props.thread.length
         ? props.thread.map((msg) => {
           const date = msg.updated ? msg.updated.date : msg.created.date;
-          const msgDate = DataFormatter.getDateInCST(date, true, true);
+          const msgDate = DataFormatter.getDateInLocalTimeZone(date, true, true);
           const userFullName = `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`;
           const userInfo = {
             firstName: get(msg, 'createdUserInfo.info.firstName'),
