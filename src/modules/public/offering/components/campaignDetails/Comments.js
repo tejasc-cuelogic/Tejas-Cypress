@@ -183,7 +183,7 @@ class Comments extends Component {
                             {(c.createdUserInfo && c.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(c, 'createdUserInfo.info.firstName')}
                             {(c.createdUserInfo && c.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                           </Comment.Author>
-                          <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateInCST(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date'), true, true)}</span></Comment.Metadata>
+                          <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateInLocalTimeZone(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date'), true, true)}</span></Comment.Metadata>
                           {isUserLoggedIn && !disablePostComment && !showOnlyOne
                           && (
 <Comment.Actions>
@@ -251,7 +251,7 @@ class Comments extends Component {
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(tc, 'createdUserInfo.info.firstName')}
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                                 </Comment.Author>
-                                <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateInCST(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date'), true, true)}</span></Comment.Metadata>
+                                <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateInLocalTimeZone(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date'), true, true)}</span></Comment.Metadata>
                                 {isUserLoggedIn && !disablePostComment && !showOnlyOne
                                 && (
 <Comment.Actions>

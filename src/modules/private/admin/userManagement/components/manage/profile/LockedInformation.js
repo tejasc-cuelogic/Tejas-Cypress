@@ -23,7 +23,7 @@ const LockedInformation = ({ details, account }) => (
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Frozen Date: </Table.Cell>
-                  <Table.Cell>{get(details, 'details.frozen.date') ? DataFormatter.getDateInCST(get(details, 'locked.date'), true, false, false) : 'N/A'}</Table.Cell>
+                  <Table.Cell>{get(details, 'details.frozen.date') ? DataFormatter.getDateInLocalTimeZone(get(details, 'locked.date'), true, false, false) : 'N/A'}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Frozen Comment: </Table.Cell>
@@ -47,7 +47,7 @@ const LockedInformation = ({ details, account }) => (
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Locked Date: </Table.Cell>
-                  <Table.Cell>{get(details, 'locked.date') ? DataFormatter.getDateInCST(get(details, 'locked.date'), true, false, false) : 'N/A'}</Table.Cell>
+                  <Table.Cell>{get(details, 'locked.date') ? DataFormatter.getDateInLocalTimeZone(get(details, 'locked.date'), true, false, false) : 'N/A'}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Locked Comment: </Table.Cell>

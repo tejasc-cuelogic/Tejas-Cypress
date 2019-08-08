@@ -3,7 +3,7 @@ import { includes, get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Table, Grid, Statistic, Button, Divider, Popup, Icon } from 'semantic-ui-react';
-import { AccTypeTitle, InlineLoader } from '../../../../../../theme/shared';
+import { AccTypeTitle, InlineLoader, IframeModal } from '../../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
@@ -32,6 +32,10 @@ class Overview extends Component {
       // this.setState({ open: false });
     }
   };
+
+  closeModal = () => {
+    this.setState({ open: false });
+  }
 
   handleViewLoanAgreement = (aggrementId) => {
     this.props.transactionStore.getDocuSignViewURL(aggrementId).then((res) => {
@@ -115,7 +119,7 @@ class Overview extends Component {
                         <Table.Cell>
                           {offering && offering.launch
                             && offering.launch.targetDate
-                            ? DataFormatter.getDateInCST(offering.launch.targetDate, false, true, false)
+                            ? DataFormatter.getDateInLocalTimeZone(offering.launch.targetDate, false, true, false)
                             : 'N/A'
                           }
                         </Table.Cell>
@@ -266,7 +270,7 @@ class Overview extends Component {
                       <Statistic.Label>Business Open Date</Statistic.Label>
                       <Statistic.Value>
                         {get(campaign, 'closureSummary.keyTerms.businessOpenDate')
-                          ? DataFormatter.getDateInCST(get(campaign, 'closureSummary.keyTerms.businessOpenDate'), false, false, false, 'MMM Do YYYY')
+                          ? DataFormatter.getDateInLocalTimeZone(get(campaign, 'closureSummary.keyTerms.businessOpenDate'), false, false, false, 'MMM Do YYYY')
                           : 'N/A'
                         }
                       </Statistic.Value>
@@ -277,7 +281,7 @@ class Overview extends Component {
                     <Statistic>
                       <Statistic.Label>Payoff Date</Statistic.Label>
                       <Statistic.Value>
-                        {DataFormatter.getDateInCST(get(offering, 'closureSummary.repayment.completeDate'), false, false, false, 'MMM Do YYYY') || 'N/A'}
+                        {DataFormatter.getDateInLocalTimeZone(get(offering, 'closureSummary.repayment.completeDate'), false, false, false, 'MMM Do YYYY') || 'N/A'}
                       </Statistic.Value>
                     </Statistic>
                   )}
@@ -298,6 +302,12 @@ class Overview extends Component {
           </>
           )
         }
+        <IframeModal
+          open={this.state.open}
+          close={this.closeModal}
+          srcUrl={this.state.embedUrl}
+          loading={false}
+        />
       </>
     );
   }

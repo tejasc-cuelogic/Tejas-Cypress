@@ -101,7 +101,7 @@ export default class Transactions extends Component {
                   allPaymentHistoryData.map(row => (
                     <Table.Row key={Helper.guid()}>
                       <Table.Cell collapsing textAlign="left">
-                        <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInCST(row.completeDate, true, false, false)} />
+                        <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInLocalTimeZone(row.completeDate, true, false, false)} />
                       </Table.Cell>
                       <Table.Cell className="positive-text">{Helper.CurrencyFormat(row.grossTotalAmount)}</Table.Cell>
                       {

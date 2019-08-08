@@ -106,7 +106,7 @@ class DataFormatter {
     const dataVal = isISOString ? moment(dataParam) : dataParam;
     const utcCutoff = moment.utc(dataVal, 'MM/DD/YYYY HH:mm:ss');
     const displayCutoff = utcCutoff.clone().tz(localTimeZone);
-    return isLLFormat ? displayCutoff.format('ll') : isCustomFormat ? displayCutoff.format(isCustomFormat) : !showTime ? displayCutoff.format('MM/DD/YYYY HH:mm:ssa') : displayCutoff.format('MM/DD/YYYY');
+    return isLLFormat ? displayCutoff.format('ll') : isCustomFormat ? displayCutoff.format(isCustomFormat) : showTime ? displayCutoff.format('MM/DD/YYYY HH:mm:ssa') : displayCutoff.format('MM/DD/YYYY');
   }
 
   getDate = (date, iso = true, dayType = null, isUnix = false) => {

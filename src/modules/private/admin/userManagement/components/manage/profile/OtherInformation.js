@@ -16,15 +16,15 @@ const OtherInformation = ({ details }) => (
             </Table.Row>
             <Table.Row>
               <Table.Cell>Last logged in on: </Table.Cell>
-              <Table.Cell>{details.lastLoginDate ? DataFormatter.getDateInCST(details.lastLoginDate, true, false, false) : 'N/A'}</Table.Cell>
+              <Table.Cell>{details.lastLoginDate ? DataFormatter.getDateInLocalTimeZone(details.lastLoginDate, true, false, false) : 'N/A'}</Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>Email Verified: </Table.Cell>
-              <Table.Cell>{get(details, 'email.verified') ? <span title={`Verified on ${DataFormatter.getDateInCST(get(details, 'email.verified'), true, false, false)}`}>Verified</span> : 'Not Verified'}</Table.Cell>
+              <Table.Cell>{get(details, 'email.verified') ? <span title={`Verified on ${DataFormatter.getDateInLocalTimeZone(get(details, 'email.verified'), true, false, false)}`}>Verified</span> : 'Not Verified'}</Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>Phone Verified: </Table.Cell>
-              <Table.Cell>{get(details, 'phone.verified') ? <span title={`Verified on ${DataFormatter.getDateInCST(get(details, 'phone.verified'), true, false, false)}`}>Verified</span> : 'Not Verified'}</Table.Cell>
+              <Table.Cell>{get(details, 'phone.verified') ? <span title={`Verified on ${DataFormatter.getDateInLocalTimeZone(get(details, 'phone.verified'), true, false, false)}`}>Verified</span> : 'Not Verified'}</Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>User Status: </Table.Cell>

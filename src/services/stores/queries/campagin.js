@@ -79,7 +79,6 @@ export const getOfferingById = gql`
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
       id
-      previewPassword
       isAvailablePublicly
       stage
     }
@@ -274,6 +273,15 @@ export const campaignDetailsQuery = gql`
         multiple
       }
     }
+    earlyBirdsCount
+  }
+}
+`;
+
+export const campaignDetailsAdditionalQuery = gql`
+  query getOfferingDetailsBySlug($id: String) {
+    getOfferingDetailsBySlug (offeringSlug: $id) {
+    id
     comments {
       id
       scope
@@ -342,10 +350,10 @@ export const campaignDetailsQuery = gql`
         }
       }
     }
-    earlyBirdsCount
+    }
   }
-}
 `;
+
 export const campaignDetailsForInvestmentQuery = gql`
 query getOfferingById($id: ID) {
   getOfferingDetailsById (id: $id) {
@@ -475,3 +483,8 @@ query getOfferingById($id: ID) {
   }
 }
 `;
+
+export const validateOfferingPreviewPassword = gql`
+query _validateOfferingPreviewPassword($offeringId: String!, $previewPassword: String!) {
+  validateOfferingPreviewPassword (offeringId: $offeringId, previewPassword: $previewPassword)
+}`;
