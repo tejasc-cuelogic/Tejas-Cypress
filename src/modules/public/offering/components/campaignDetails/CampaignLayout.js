@@ -73,7 +73,7 @@ class CampaignLayout extends Component {
 
   isScrolledIntoView = (el) => {
     const rect = el.getBoundingClientRect();
-    const elemTop = rect.top - 150;
+    const elemTop = rect.top - 110;
     const elemBottom = rect.bottom;
     const isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
     return isVisible;
