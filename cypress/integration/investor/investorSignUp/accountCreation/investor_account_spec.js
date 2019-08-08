@@ -22,6 +22,10 @@ describe('Account Creation', () => {
     cy.saveLocalStorage();
   });
 
+  after(() => {
+    cy.deleteUser();
+  });
+
   it('should successfully link bank with manual process', () => {
     individualManualLinkbankProcess();
     cy.get('input[name="value"]').then(() => {

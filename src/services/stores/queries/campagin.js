@@ -79,7 +79,6 @@ export const getOfferingById = gql`
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
       id
-      previewPassword
       isAvailablePublicly
       stage
     }
@@ -475,3 +474,8 @@ query getOfferingById($id: ID) {
   }
 }
 `;
+
+export const validateOfferingPreviewPassword = gql`
+query _validateOfferingPreviewPassword($offeringId: String!, $previewPassword: String!) {
+  validateOfferingPreviewPassword (offeringId: $offeringId, previewPassword: $previewPassword)
+}`;
