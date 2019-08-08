@@ -76,7 +76,7 @@ export default class AllRequests extends Component {
                       <Link to={`/app/users/${req.userId}/profile-data`}><p><b>{req.firstName} {req.lastName}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
-                      {get(req, 'linkedBank.changeRequest.dateRequested') ? DataFormatter.getDateInCST(moment.unix(get(req, 'linkedBank.changeRequest.dateRequested')), false, false, false) : 'N/A'}
+                      {get(req, 'linkedBank.changeRequest.dateRequested') ? DataFormatter.getDateInLocalTimeZone(moment.unix(get(req, 'linkedBank.changeRequest.dateRequested')), false, false, false) : 'N/A'}
                     </Table.Cell>
                     <Table.Cell>
                       {req.accountType
