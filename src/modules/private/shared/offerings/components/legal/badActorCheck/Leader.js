@@ -12,11 +12,11 @@ export default class Leader extends Component {
     const {
       getLeadershipOfferingBac,
       currentOfferingId,
-      initLoad,
+      // initLoad,
     } = this.props.offeringCreationStore;
-    if (!initLoad.includes('LEADER_FRM')) {
-      getLeadershipOfferingBac(currentOfferingId, 'LEADERSHIP');
-    }
+    // if (!initLoad.includes('LEADER_FRM')) {
+    getLeadershipOfferingBac(currentOfferingId, 'LEADERSHIP');
+    // }
   }
 
   handleSubmitIssuer = (leaderId, approved) => {
