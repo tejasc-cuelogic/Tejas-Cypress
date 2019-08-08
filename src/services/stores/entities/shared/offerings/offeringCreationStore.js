@@ -838,8 +838,8 @@ export class OfferingCreationStore {
   }
 
   @action
-  addMore = (form, key) => {
-    this[form] = Validator.addMoreRecordToSubSection(this[form], key, 1, true);
+  addMore = (form, key, count = 1) => {
+    this[form] = Validator.addMoreRecordToSubSection(this[form], key, count, true);
     if (form === 'DATA_ROOM_FRM' && key === 'documents') {
       this[form].fields[key][this[form].fields[key].length - 1].upload.showLoader = false;
     } else if (form === 'LEADER_FRM') {
@@ -1412,6 +1412,7 @@ export class OfferingCreationStore {
 
   @action
   getLeadershipOfferingBac = (offeringId, bacType) => {
+    uiStore.addMoreInProgressArray('getLeadershipOfferingBac');
     this.leaderShipOfferingBac = graphql({
       client,
       fetchPolicy: 'network-only',
@@ -1423,9 +1424,10 @@ export class OfferingCreationStore {
           const leadersCount = this.LEADERSHIP_FRM.fields.leadership.length;
           if (leadersCount
             !== this.LEADER_FRM.fields.getOfferingBac.length && (leadersCount - 1 !== 0)) {
-            this.addMore('LEADER_FRM', 'getOfferingBac', leadersCount - 1);
+            this.addMore('LEADER_FRM', 'getOfferingBac', leadersCount - this.LEADER_FRM.fields.getOfferingBac.length);
           }
         }
+        uiStore.removeOneFromProgressArray('getLeadershipOfferingBac');
       },
     });
   }
@@ -1547,7 +1549,9 @@ export class OfferingCreationStore {
       .then(() => {
         this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
         offeringsStore.getOne(getOfferingById.id);
-
+        if (bacType === 'LEADERSHIP') {
+          this.getLeadershipOfferingBac(this.currentOfferingId, 'LEADERSHIP');
+        }
         // this.getAffiliatedIssuerOfferingBac(this.currentOfferingId, 'AFFILIATED_ISSUER');
         Helper.toast('Offering has been saved successfully.', 'success');
       })

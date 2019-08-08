@@ -5,7 +5,7 @@ import { FormTextarea } from '../../../../../../../theme/form';
 import ButtonGroupType2 from '../../ButtonGroupType2';
 import { InlineLoader } from '../../../../../../../theme/shared';
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'uiStore')
 @observer
 export default class Leader extends Component {
   componentWillMount() {
@@ -50,7 +50,7 @@ export default class Leader extends Component {
       ? leaderShipOfferingBacData[index].approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     let leaderId = '';
-    if (leaderShipOfferingBac.loading) {
+    if (leaderShipOfferingBac.loading || this.props.uiStore.inProgressArray.includes('getLeadershipOfferingBac')) {
       return <InlineLoader />;
     }
     leaderId = LEADER_FRM.fields.getOfferingBac[index].id.value;
