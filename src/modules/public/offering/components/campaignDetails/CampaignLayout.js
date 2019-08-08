@@ -40,6 +40,10 @@ class CampaignLayout extends Component {
   }
 
   componentDidMount() {
+    document.querySelectorAll('.fr-fic').forEach((ele) => {
+      ele.setAttribute('data-src', ele.getAttribute('src'));
+      ele.removeAttribute('src');
+    });
     if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
       document.querySelector(`${this.props.location.hash}`).scrollIntoView({
@@ -48,6 +52,7 @@ class CampaignLayout extends Component {
       });
     }
     Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore');
+    this.processLazyLoadImages();
   }
 
   componentWillUnmount() {
@@ -64,26 +69,48 @@ class CampaignLayout extends Component {
     return returnVal;
   }
 
+  isScrolledIntoView = (el) => {
+    const rect = el.getBoundingClientRect();
+    const elemTop = rect.top;
+    const elemBottom = rect.bottom;
+    const isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+    return isVisible;
+  }
+
+  processLazyLoadImages = () => new Promise((resolve) => {
+    const lazyImages = [...document.querySelectorAll('.fr-fic')];
+    // const inAdvance = 0;
+    lazyImages.forEach((img, i) => {
+      // if (img.offsetTop < window.innerHeight + window.pageYOffset + inAdvance) {
+      if (this.isScrolledIntoView(img)) {
+        img.setAttribute('src', img.getAttribute('data-src'));
+      }
+      if (i === lazyImages.length - 1) { setTimeout(() => { resolve(); }, 5000); }
+    });
+  })
+
   handleOnScroll = () => {
-    const { campaignNavData } = this.props.campaignStore;
-    const navs = toJS(campaignNavData);
-    if (navs && Array.isArray(navs)) {
-      navs.forEach((item) => {
-        if (document.getElementById(item.to.slice(1))
-        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
-        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
-          if (isTablet && (this.props.navStore.currentActiveHash !== item.to) && this.props.navStore.campaignHeaderStatus) {
-            scrollIntoView(document.getElementById(`${item.to.slice(1)}-mob-nav`), { align: { top: 1, topOffset: -(window.innerHeight - 92) }, isScrollable: this.onScrollCallBack });
-          // document.getElementsByClassName('campaign-mobile-menu-v2')[0].getElementsByClassName('active')[0].scrollIntoView({
-          //   // inline: 'center',
-          //   behavior: 'smooth',
-          //   // block: 'start',
-          // });
+    this.processLazyLoadImages().then(() => {
+      const { campaignNavData } = this.props.campaignStore;
+      const navs = toJS(campaignNavData);
+      if (navs && Array.isArray(navs)) {
+        navs.forEach((item) => {
+          if (document.getElementById(item.to.slice(1))
+          && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
+          && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
+            if (isTablet && (this.props.navStore.currentActiveHash !== item.to) && this.props.navStore.campaignHeaderStatus) {
+              scrollIntoView(document.getElementById(`${item.to.slice(1)}-mob-nav`), { align: { top: 1, topOffset: -(window.innerHeight - 92) }, isScrollable: this.onScrollCallBack });
+            // document.getElementsByClassName('campaign-mobile-menu-v2')[0].getElementsByClassName('active')[0].scrollIntoView({
+            //   // inline: 'center',
+            //   behavior: 'smooth',
+            //   // block: 'start',
+            // });
+            }
+            this.props.navStore.setFieldValue('currentActiveHash', item.to);
           }
-          this.props.navStore.setFieldValue('currentActiveHash', item.to);
-        }
-      });
-    }
+        });
+      }
+    });
   }
 
   handleCollapseExpand = (name, processAction) => {

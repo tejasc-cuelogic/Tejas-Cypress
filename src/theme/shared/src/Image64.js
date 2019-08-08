@@ -34,7 +34,7 @@ function Image64(props) {
   return props.bg ? (
     <div {...props} style={{ backgroundImage: `url(${data})` }} />
   )
-    : <LazyLoad once placeholder={<InlineLoader />} debounce={300}><Image {...props} src={data} /></LazyLoad>;
+    : <LazyLoad placeholder={<InlineLoader />} debounce={500}><Image {...props} src={data} /></LazyLoad>;
 }
 
 export default Image64;
