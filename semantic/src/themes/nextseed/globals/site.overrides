@@ -2947,3 +2947,9 @@ table.css-wu4c77-diff-container {
 .json-text{
 	overflow-x:scroll; 
 }
+// HTML editor images placeholder start
+.ui.placeholder{
+    min-height: 200px;
+    margin: auto;
+}
+// HTML editor images placeholder end
