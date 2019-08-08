@@ -125,7 +125,6 @@ export class CampaignStore {
       const campaignData = toJS(this.details);
       campaignData.data.getOfferingDetailsBySlug[0].updates = get(newData, 'updates');
       campaignData.data.getOfferingDetailsBySlug[0].comments = get(newData, 'comments');
-      campaignData.test = 'sdf';
       this.details = campaignData;
     }
   }
