@@ -887,7 +887,7 @@ export class IdentityStore {
       fields.dateOfBirth.value = legalDetails.dateOfBirth;
     }
 
-    this.setCipStatus(legalDetails.status);
+    this.setCipStatus(get(legalDetails.status) || '');
 
     if (legalDetails && legalDetails.ssn) {
       if (!legalDetails.ssn.includes('X') || window.sessionStorage.getItem('individualAccountCipExp')) {
