@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash';
 import { DateTimeFormat, ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore')
+@inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'identityStore')
 @withRouter
 @observer
 export default class Summary extends Component {
@@ -30,6 +30,14 @@ export default class Summary extends Component {
   }
 
   handleCreateAccount = () => {
+    if (this.props.identityStore.userCipStatus === 'OFFLINE') {
+      this.props.handleUserIdentity('ira', this.handleSubmitAccount);
+    } else {
+      this.props.handleLegalDocsBeforeSubmit('ira', this.handleSubmitAccount);
+    }
+  }
+
+  handleSubmitAccount = () => {
     this.props.uiStore.setcreateAccountMessage();
     this.props.entityAccountStore.submitAccount().then(() => {
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);

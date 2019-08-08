@@ -7,7 +7,7 @@ import { inject, observer } from 'mobx-react';
 import Helper from '../../../../../../../helper/utility';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 
-@inject('iraAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore')
+@inject('iraAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'identityStore')
 @withRouter
 @observer
 export default class Summary extends Component {
@@ -32,6 +32,14 @@ export default class Summary extends Component {
   }
 
   handleCreateAccount = () => {
+    if (this.props.identityStore.userCipStatus === 'OFFLINE') {
+      this.props.handleUserIdentity('ira', this.handleSubmitAccount);
+    } else {
+      this.props.handleLegalDocsBeforeSubmit('ira', this.handleSubmitAccount);
+    }
+  }
+
+  handleSubmitAccount = () => {
     this.props.uiStore.setcreateAccountMessage();
     this.props.iraAccountStore.submitAccount().then(() => {
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);

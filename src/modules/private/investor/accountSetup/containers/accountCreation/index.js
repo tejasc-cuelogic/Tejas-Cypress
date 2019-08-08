@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
+import { find, get } from 'lodash';
 import AccountTypes from '../../components/accountCreation/AccountTypes';
 import IraAccCreation from './ira/AccountCreation';
 import IndividualAccCreation from './individual/AccountCreation';
 import EntityAccCreation from './entity/AccountCreation';
 
-@inject('identityStore', 'accountStore', 'bankAccountStore')
+@inject('identityStore', 'accountStore', 'bankAccountStore', 'uiStore', 'userDetailsStore', 'userStore')
 @withRouter
 @observer
 export default class AccountCreation extends Component {
@@ -22,6 +23,42 @@ export default class AccountCreation extends Component {
 
   handleCloseModal = () => {
     this.props.history.push('/app/summary');
+  }
+
+  handleUserIdentity = (accountType, submitAccount) => {
+    this.props.uiStore.setProgress();
+    this.props.identityStore.setCipDetails();
+    this.props.identityStore.verifyUserIdentity()
+      .then(() => {
+        const {
+          key,
+          route,
+        } = this.props.identityStore.userVerficationStatus;
+        if (key === 'id.failure') {
+          this.props.identityStore.setIdentityQuestions();
+          this.props.history.push(route);
+        } else if (this.props.identityStore.userCipStatus === 'OFFLINE') {
+          const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
+          const accountId = get(accountDetails, 'details.accountId') || this.props.individualAccountStore.individualAccId;
+          const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
+          this.props.accountStore.updateToAccountProcessing(accountId, this.props.identityStore.cipErrorMessage, accountvalue).then(() => {
+            this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+          });
+        } else {
+          this.props.uiStore.setProgress();
+          this.handleLegalDocsBeforeSubmit(accountType, submitAccount);
+        }
+      });
+  }
+
+  handleLegalDocsBeforeSubmit = (accountType, submitAccount) => {
+    const { isUserVerified, isLegalDocsPresent } = this.props.userDetailsStore;
+    if (!isUserVerified && !isLegalDocsPresent) {
+      this.props.userDetailsStore.setAccountForWhichCipExpired(accountType);
+      this.handleUserIdentity(accountType, submitAccount);
+    } else {
+      submitAccount();
+    }
   }
 
   renderAccType = () => {
@@ -48,9 +85,9 @@ export default class AccountCreation extends Component {
 />
             )}
           />
-          <Route exact path={`${this.props.match.url}/individual`} component={IndividualAccCreation} />
-          <Route exact path={`${this.props.match.url}/ira`} component={IraAccCreation} />
-          <Route exact path={`${this.props.match.url}/entity`} component={EntityAccCreation} />
+          <Route exact path={`${this.props.match.url}/individual`} render={props => <IndividualAccCreation {...props} handleUserIdentity={this.handleUserIdentity} handleLegalDocsBeforeSubmit={this.handleLegalDocsBeforeSubmit} />} />
+          <Route exact path={`${this.props.match.url}/ira`} render={props => <IraAccCreation {...props} handleUserIdentity={this.handleUserIdentity} handleLegalDocsBeforeSubmit={this.handleLegalDocsBeforeSubmit} />} />
+          <Route exact path={`${this.props.match.url}/entity`} render={props => <EntityAccCreation {...props} handleUserIdentity={this.handleUserIdentity} handleLegalDocsBeforeSubmit={this.handleLegalDocsBeforeSubmit} />} />
         </Switch>
       </div>
     );

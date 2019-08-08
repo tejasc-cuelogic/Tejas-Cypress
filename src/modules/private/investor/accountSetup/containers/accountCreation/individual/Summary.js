@@ -3,7 +3,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Message, Table } from 'semantic-ui-react';
-import { isEmpty, get, find } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
 @inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'identityStore', 'accountStore')
@@ -28,39 +28,6 @@ export default class Summary extends React.Component {
     this.props.bankAccountStore.setLoaderForAccountBlank();
     const { userDetails } = this.props.userDetailsStore;
     this.props.uiStore.setProgress(get(userDetails, 'info.firstName') === null ? false : !get(userDetails, 'info.firstName'));
-  }
-
-  handleuserIdentity = () => {
-    this.props.uiStore.setProgress();
-    this.props.identityStore.setCipDetails();
-    this.props.identityStore.verifyUserIdentity()
-      .then(() => {
-        const {
-          key,
-          route,
-        } = this.props.identityStore.userVerficationStatus;
-        if (key === 'id.failure') {
-          this.props.identityStore.setIdentityQuestions();
-          this.props.history.push(route);
-        } else if (this.props.identityStore.userCipStatus === 'OFFLINE') {
-          const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
-          const accountId = get(accountDetails, 'details.accountId') || this.props.individualAccountStore.individualAccId;
-          this.props.accountStore.updateToAccountProcessing(accountId, this.props.identityStore.cipErrorMessage, 0);
-        } else {
-          this.props.uiStore.setProgress();
-          this.handleLegalDocsBeforeSubmit();
-        }
-      });
-  }
-
-  handleLegalDocsBeforeSubmit = () => {
-    const { isUserVerified, isLegalDocsPresent } = this.props.userDetailsStore;
-    if (!isUserVerified && !isLegalDocsPresent) {
-      this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
-      this.handleuserIdentity();
-    } else {
-      this.handleSubmitAccount();
-    }
   }
 
   handleSubmitAccount = () => {
@@ -92,13 +59,13 @@ export default class Summary extends React.Component {
       signupStatus,
     } = this.props.userDetailsStore;
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
-      this.handleuserIdentity();
+      this.props.handleUserIdentity('individual', this.handleSubmitAccount);
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else if (isCipExpired) {
-      this.handleuserIdentity();
+      this.props.handleUserIdentity('individual', this.handleSubmitAccount);
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else {
-      this.handleLegalDocsBeforeSubmit();
+      this.props.handleLegalDocsBeforeSubmit('individual', this.handleSubmitAccount);
     }
   }
 
