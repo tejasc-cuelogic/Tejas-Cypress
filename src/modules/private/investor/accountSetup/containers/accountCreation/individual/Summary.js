@@ -48,7 +48,7 @@ export default class Summary extends React.Component {
       }
     }).catch((err) => {
       if (Helper.matchRegexWithString(/\brequired uploads(?![-])\b/, err.message)) {
-        this.handleLegalDocsBeforeSubmit();
+        this.props.handleLegalDocsBeforeSubmit('individual', this.handleSubmitAccount);
       }
     });
   }

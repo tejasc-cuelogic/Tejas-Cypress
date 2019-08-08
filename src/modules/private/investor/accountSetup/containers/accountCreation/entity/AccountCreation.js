@@ -151,7 +151,7 @@ export default class AccountCreation extends React.Component {
       },
       {
         name: 'Summary',
-        component: <Summary handleUserIdentity={this.props.handleUserIdentity} handleLegalDocsBeforeSubmit={this.handleLegalDocsBeforeSubmit} />,
+        component: <Summary handleUserIdentity={this.props.handleUserIdentity} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
         isValid: isValidEntityForm ? '' : stepToBeRendered > 6 ? 'error' : '',
         // validForm: isValidEntityForm,
         bankSummary: false,

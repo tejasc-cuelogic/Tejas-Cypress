@@ -361,6 +361,11 @@ export class IdentityStore {
   }
 
   @action
+  setCipStatusWithUserDetails = () => {
+    this.userCipStatus = userDetailsStore.userDetails.legalDetails.status;
+  }
+
+  @action
   setIdentityQuestions = () => {
     const { response } = this.ID_VERIFICATION_FRM;
     const questionsArray = identityHelper.setIdentityQuestions(response);
@@ -614,6 +619,7 @@ export class IdentityStore {
         .then((data) => {
           userDetailsStore.getUser(userStore.currentUser.sub).then((d) => {
             if (d) {
+              this.setCipStatusWithUserDetails();
               resolve(data);
             }
           });
@@ -886,9 +892,6 @@ export class IdentityStore {
     if (legalDetails && legalDetails.dateOfBirth) {
       fields.dateOfBirth.value = legalDetails.dateOfBirth;
     }
-
-    this.setCipStatus(get(legalDetails.status) || '');
-
     if (legalDetails && legalDetails.ssn) {
       if (!legalDetails.ssn.includes('X') || window.sessionStorage.getItem('individualAccountCipExp')) {
         fields.ssn.value = legalDetails.ssn;

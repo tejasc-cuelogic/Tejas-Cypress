@@ -27,6 +27,7 @@ export default class AccountCreation extends Component {
 
   handleUserIdentity = (accountType, submitAccount) => {
     this.props.uiStore.setProgress();
+    this.props.identityStore.setCipStatusWithUserDetails();
     this.props.identityStore.setCipDetails();
     this.props.identityStore.verifyUserIdentity()
       .then(() => {
@@ -47,7 +48,7 @@ export default class AccountCreation extends Component {
           });
         } else {
           this.props.uiStore.setProgress();
-          this.handleLegalDocsBeforeSubmit(accountType, submitAccount);
+          this.props.handleLegalDocsBeforeSubmit(accountType, submitAccount);
         }
       });
   }
