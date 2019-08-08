@@ -89,7 +89,7 @@ export default class HtmlEditor extends React.Component {
                 const imgUrl = `https://${UPLOADS_CONFIG.bucket}/${res}`;
                 editor.edit.off();
                 // editor.image.get().attr('src', imgUrl);
-                editor.image.insert(imgUrl, null, { class: 'froala-images' }, editor.image.get());
+                editor.image.insert(imgUrl, null, null, editor.image.get());
                 this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
                 editor.edit.on();
               } else {
