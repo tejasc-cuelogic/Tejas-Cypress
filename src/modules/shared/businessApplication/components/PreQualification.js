@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Form, Button, Divider } from 'semantic-ui-react';
+import scrollIntoView from 'scroll-into-view';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../helper/utility';
 import { FormInput } from '../../../../theme/form';
@@ -13,6 +14,9 @@ import { DataFormatter } from '../../../../helper';
 import { authActions } from '../../../../services/actions';
 
 const isMobile = document.documentElement.clientWidth < 768;
+
+window.scrollme = scrollIntoView;
+
 @inject('businessAppStore', 'uiStore', 'authStore')
 @withRouter
 @observer
@@ -65,10 +69,7 @@ export default class PreQualification extends Component {
                 this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
                 const sel = params.applicationType === 'commercial-real-estate' ? 'cre-scroll'
                   : 'application-scroll';
-                document.querySelector(`.${sel}`).scrollIntoView({
-                  top: 0,
-                  behavior: 'smooth',
-                });
+                scrollIntoView(document.querySelector(`.${sel}`), { align: { top: 0, topOffset: params.applicationType === 'commercial-real-estate' ? 140 : 110 } });
               });
           } else if (this.props.businessAppStore.userExists && this.props.businessAppStore.userRoles.includes('issuer')) {
             this.props.authStore.setUserLoginDetails(BUSINESS_APP_FRM_BASIC.fields.email.value, BUSINESS_ACCOUNT.fields.password.value);
