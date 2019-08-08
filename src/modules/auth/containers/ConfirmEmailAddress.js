@@ -57,6 +57,7 @@ export default class ConfirmEmailAddress extends Component {
       this.props.authStore.verifyAndUpdateEmail().then(() => {
         this.props.identityStore.setIsOptConfirmed(true);
         Helper.toast('Email has been verified and updated', 'success');
+        this.props.history.push(this.props.refLink);
       })
         .catch(() => { });
     } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === ''

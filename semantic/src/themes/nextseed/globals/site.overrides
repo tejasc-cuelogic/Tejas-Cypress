@@ -758,10 +758,6 @@ footer{
 		margin: 0;
 	}
 }
-.explore-campaign-button {
-	margin-top: 60px;
-	text-align: center;
-}
 .featured-section, .reward-tier{
 	background-color: @neutral-offwhite;
 	.ui.stackable.grid>.column:not(.row) {
@@ -822,12 +818,6 @@ footer{
 			width: 100%;
 			margin-top: @14px;
 		}
-	}
-}
-.business-learn-more {
-	p {
-		text-align: left;
-		margin-left: 56px;
 	}
 }
 .content-spacer {
@@ -1502,30 +1492,6 @@ a.icon-link {
 		padding:@20px @10px;
 	}
 }
-
-div.login-form {
-	height: 100%;
-	.column{
-		max-width:380px;
-	}
-	h1.header{
-		margin-bottom:@20px;
-		>span{
-			font-size:@18px;
-			color:@tertiary-text;
-		}
-	}
-	.note{
-		text-align:center;
-		color:@tertiary-text;
-	}
-	ul.error-messages{
-		list-style-type:none;
-		padding:0;
-		text-align:left;
-	}
-}
-
 //	Admin Page Content Styles
 
 //	Page Header Styles
