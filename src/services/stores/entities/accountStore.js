@@ -126,15 +126,15 @@ export class AccountStore {
           },
         })
         .then((res) => {
-          this.props[this.ACC_TYPE_MAPPING[accountType].store].setFieldValue('showProcessingModal', true);
+          this.ACC_TYPE_MAPPING[accountType].store.setFieldValue('showProcessingModal', true);
           bankAccountStore.resetStoreData();
-          this.props[this.ACC_TYPE_MAPPING[accountType].store].isFormSubmitted = true;
-          Helper.toast(`${capitalize(this.props[this.ACC_TYPE_MAPPING[accountType]].name)} account submitted successfully.`, 'success');
+          this.ACC_TYPE_MAPPING[accountType].store.isFormSubmitted = true;
+          Helper.toast(`${capitalize(this.ACC_TYPE_MAPPING[accountType].name)} account submitted successfully.`, 'success');
           uiStore.setProgress(false);
           resolve(res);
         })
         .catch((err) => {
-          Helper.toast('', 'error');
+          Helper.toast('Unable to submit Account', 'error');
           uiStore.setProgress(false);
           uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
           reject();
