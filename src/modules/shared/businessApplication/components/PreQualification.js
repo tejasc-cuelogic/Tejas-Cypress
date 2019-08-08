@@ -14,9 +14,6 @@ import { DataFormatter } from '../../../../helper';
 import { authActions } from '../../../../services/actions';
 
 const isMobile = document.documentElement.clientWidth < 768;
-
-window.scrollme = scrollIntoView;
-
 @inject('businessAppStore', 'uiStore', 'authStore')
 @withRouter
 @observer
