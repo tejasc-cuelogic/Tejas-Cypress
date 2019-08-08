@@ -38,7 +38,7 @@ export default class AccountCreation extends Component {
           this.props.identityStore.setIdentityQuestions();
           this.props.history.push(route);
         } else if (this.props.identityStore.userCipStatus === 'OFFLINE') {
-          const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
+          const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
           const accountId = get(accountDetails, 'details.accountId') || this.props.individualAccountStore.individualAccId;
           const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
           this.props.accountStore.updateToAccountProcessing(accountId, this.props.identityStore.cipErrorMessage, accountvalue).then(() => {

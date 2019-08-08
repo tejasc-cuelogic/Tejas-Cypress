@@ -31,9 +31,9 @@ export default class Summary extends Component {
 
   handleCreateAccount = () => {
     if (this.props.identityStore.userCipStatus === 'OFFLINE') {
-      this.props.handleUserIdentity('ira', this.handleSubmitAccount);
+      this.props.handleUserIdentity('entity', this.handleSubmitAccount);
     } else {
-      this.props.handleLegalDocsBeforeSubmit('ira', this.handleSubmitAccount);
+      this.props.handleLegalDocsBeforeSubmit('entity', this.handleSubmitAccount);
     }
   }
 
