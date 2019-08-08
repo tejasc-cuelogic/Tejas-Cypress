@@ -43,6 +43,8 @@ class CampaignLayout extends Component {
     document.querySelectorAll('.fr-fic').forEach((ele) => {
       ele.setAttribute('data-src', ele.getAttribute('src'));
       ele.removeAttribute('src');
+      ele.closest('p').classList.add('ui');
+      ele.closest('p').classList.add('placeholder');
     });
     if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
@@ -79,11 +81,13 @@ class CampaignLayout extends Component {
 
   processLazyLoadImages = () => new Promise((resolve) => {
     const lazyImages = [...document.querySelectorAll('.fr-fic')];
-    // const inAdvance = 0;
     lazyImages.forEach((img, i) => {
-      // if (img.offsetTop < window.innerHeight + window.pageYOffset + inAdvance) {
       if (this.isScrolledIntoView(img)) {
-        img.setAttribute('src', img.getAttribute('data-src'));
+        setTimeout(() => {
+          img.setAttribute('src', img.getAttribute('data-src'));
+          img.closest('p').classList.remove('ui');
+          img.closest('p').classList.remove('placeholder');
+        }, 500);
       }
       if (i === lazyImages.length - 1) { setTimeout(() => { resolve(); }, 5000); }
     });
