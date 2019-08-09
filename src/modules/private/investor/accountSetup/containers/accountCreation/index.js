@@ -38,7 +38,7 @@ export default class AccountCreation extends Component {
         if (key === 'id.failure') {
           this.props.identityStore.setIdentityQuestions();
           this.props.history.push(route);
-        } else if (this.props.identityStore.userCipStatus === 'OFFLINE') {
+        } else if (this.props.identityStore.isUserCipOffline) {
           this.props.uiStore.setProgress();
           const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
           const accountId = get(accountDetails, 'details.accountId') || this.props.individualAccountStore.individualAccId;
@@ -49,7 +49,7 @@ export default class AccountCreation extends Component {
           });
         } else {
           this.props.uiStore.setProgress();
-          this.props.handleLegalDocsBeforeSubmit(accountType, submitAccount);
+          this.handleLegalDocsBeforeSubmit(accountType, submitAccount);
         }
       });
   }
