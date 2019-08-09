@@ -30,6 +30,8 @@ export default class Summary extends Component {
   }
 
   handleCreateAccount = () => {
+    this.props.identityStore.setCipStatusWithUserDetails();
+    this.props.uiStore.setFieldvalue('submitAccountLoader', true);
     if (this.props.identityStore.userCipStatus === 'OFFLINE') {
       this.props.handleUserIdentity('entity', this.handleSubmitAccount);
     } else {
