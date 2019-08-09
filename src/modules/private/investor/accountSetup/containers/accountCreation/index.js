@@ -30,7 +30,7 @@ export default class AccountCreation extends Component {
     this.props.identityStore.setCipStatusWithUserDetails();
     this.props.identityStore.setCipDetails();
     this.props.identityStore.verifyUserIdentity()
-      .then(async () => {
+      .then(() => {
         const {
           key,
           route,
@@ -43,8 +43,9 @@ export default class AccountCreation extends Component {
           const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
           const accountId = get(accountDetails, 'details.accountId') || this.props.individualAccountStore.individualAccId;
           const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
-          await this.props.accountStore.updateToAccountProcessing(accountId, this.props.identityStore.cipErrorMessage, accountvalue);
-          this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+          this.props.accountStore.updateToAccountProcessing(accountId, this.props.identityStore.cipErrorMessage, accountvalue).then(() => {
+            this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+          });
         } else {
           this.props.uiStore.setProgress();
           this.props.handleLegalDocsBeforeSubmit(accountType, submitAccount);
