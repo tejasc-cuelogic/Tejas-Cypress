@@ -107,7 +107,7 @@ export default class AccountDetailsView extends Component {
                   </Item.Extra>
                   <Item.Header>
                     {
-                      DataFormatter.getDateInLocalTimeZone((accountDetails.dateLinked || accountDetails.dateRequested), true, false, false)
+                      DataFormatter.getDateAsPerTimeZone((accountDetails.dateLinked || accountDetails.dateRequested), true, false, false)
                     }
                   </Item.Header>
                 </Item.Content>

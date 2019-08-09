@@ -131,7 +131,7 @@ export default class AllAccreditationRequests extends Component {
                       <Link to={`/app/users/${accreditation.userId}/profile-data`}><p><b>{`${accreditation.firstName} ${accreditation.lastName}`}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
-                      {accreditation.requestDate ? DataFormatter.getDateInLocalTimeZone(moment.unix(accreditation.requestDate), false, false, false) : <p className="note">N/A</p>}
+                      {accreditation.requestDate ? DataFormatter.getDateAsPerTimeZone(moment.unix(accreditation.requestDate), false, false, false) : <p className="note">N/A</p>}
                     </Table.Cell>
                     <Table.Cell>
                       {accreditation.accountType && accreditation.accountType.includes('ENTITY') && <Icon size="large" className="ns-entity-line" color="green" />}
@@ -200,14 +200,14 @@ export default class AllAccreditationRequests extends Component {
                       )
                       : (
                       <Table.Cell>
-                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b>{get(accreditation, 'reviewed.date') ? ` on ${DataFormatter.getDateInLocalTimeZone(moment.unix(get(accreditation, 'reviewed.date')), false, false, false)}` : ''}</p>
+                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b>{get(accreditation, 'reviewed.date') ? ` on ${DataFormatter.getDateAsPerTimeZone(moment.unix(get(accreditation, 'reviewed.date')), false, false, false)}` : ''}</p>
                       </Table.Cell>
                       )
                     }
                     {accreditation.accreditationStatus === 'CONFIRMED'
                       && (
                       <>
-                        <Table.Cell>{get(accreditation, 'expiration') ? DataFormatter.getDateInLocalTimeZone(moment.unix(get(accreditation, 'expiration')), false, false, false, false) : '-'}</Table.Cell>
+                        <Table.Cell>{get(accreditation, 'expiration') ? DataFormatter.getDateAsPerTimeZone(moment.unix(get(accreditation, 'expiration')), false, false, false, false) : '-'}</Table.Cell>
                         <Table.Cell>{get(accreditation, 'promotionCredits')}</Table.Cell>
                       </>
                       )

@@ -14,7 +14,7 @@ class UpdateDetails extends Component {
     const { updates } = this.props.updateStore;
     const update = updates && updates.length ? updates[indexId] : null;
     const calculatedDate = update && update.updated.date
-      ? DataFormatter.getDateInLocalTimeZone(update.updated.date, true, true, false) : null;
+      ? DataFormatter.getDateAsPerTimeZone(update.updated.date, true, true, false) : null;
     return (
       update
         ? (

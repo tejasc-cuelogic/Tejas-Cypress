@@ -102,7 +102,7 @@ export default class Overview extends Component {
               <Form.Group widths={2}>
                 <Form.Input fluid label="Bank Name" placeholder="Bank Name" value={get(account, 'details.linkedBank.changeRequest.bankName') || 'N/A'} readOnly className="display-only" />
                 <Form.Input fluid label="Account Number" placeholder="Account Number" value={get(account, 'details.linkedBank.changeRequest.accountNumber') || 'N/A'} readOnly className="display-only" />
-                <Form.Input fluid label="Requested Date" placeholder="Requested Date" value={get(account, 'details.linkedBank.changeRequest.dateRequested') ? DataFormatter.getDateInLocalTimeZone(get(account, 'details.linkedBank.changeRequest.dateRequested'), true, false, false) : 'N/A'} readOnly className="display-only" />
+                <Form.Input fluid label="Requested Date" placeholder="Requested Date" value={get(account, 'details.linkedBank.changeRequest.dateRequested') ? DataFormatter.getDateAsPerTimeZone(get(account, 'details.linkedBank.changeRequest.dateRequested'), true, false, false) : 'N/A'} readOnly className="display-only" />
                 <Form.Input fluid label="Status" placeholder="Status" value={get(account, 'details.linkedBank.changeRequest.status') || 'N/A'} readOnly className="display-only" />
               </Form.Group>
               <Divider />

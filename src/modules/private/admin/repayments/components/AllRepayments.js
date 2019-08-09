@@ -76,9 +76,9 @@ export default class AllRepayments extends Component {
                 {
                   repayments.map(record => (
                     <Table.Row key={record.id}>
-                      <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInLocalTimeZone(record.createdAt, true, false, false)} /></Table.Cell>
+                      <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(record.createdAt, true, false, false)} /></Table.Cell>
                       <Table.Cell className={`status ${kebabCase(record.status)}`}>{record.status}</Table.Cell>
-                      <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInLocalTimeZone(record.createdAt, true, false, false)} /></Table.Cell>
+                      <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(record.createdAt, true, false, false)} /></Table.Cell>
                       <Table.Cell>{record.indexTL}</Table.Cell>
                       <Table.Cell>{record.indexRS}</Table.Cell>
                       <Table.Cell>{Helper.CurrencyFormat(record.amountRepaid)}</Table.Cell>

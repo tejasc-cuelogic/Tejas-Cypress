@@ -44,9 +44,9 @@ const SortableItem = SortableElement(({
       }
     </div>
     <div className="balance width-250">
-      Create: {get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInLocalTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}<br />
-      Launched: {get(offering, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInLocalTimeZone(get(offering, 'closureSummary.launchDate'), true, false, false)} /> : 'N/A'}<br />
-      Closed: {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInLocalTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false)} /> : 'N/A'}
+      Create: {get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}<br />
+      Launched: {get(offering, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), true, false, false)} /> : 'N/A'}<br />
+      Closed: {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false)} /> : 'N/A'}
     </div>
     <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
       <p className="overflow-text">

@@ -34,7 +34,7 @@ const ActivityFeed = ({ loading, activities }) => (
                   ? `${a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.firstName} 
                 ${a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.lastName}`
                   : 'NextSeed Notifications' }
-                <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInLocalTimeZone((a.activityDate), true, false, false, 'MM/DD/YYYY  |  HH:mm:ssA')} />
+                <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone((a.activityDate), true, false, false, 'MM/DD/YYYY  |  HH:mm:ssA')} />
               </Feed.Meta>
               <Feed.Summary>{a.activityTitle}</Feed.Summary>
               <Feed.Extra text>{a.activity}</Feed.Extra>

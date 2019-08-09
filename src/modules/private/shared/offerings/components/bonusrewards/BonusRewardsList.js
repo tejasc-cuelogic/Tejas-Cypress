@@ -26,7 +26,7 @@ export default class BonusRewardsList extends Component {
                 <div className="reward-wrap">
                   <Header as="h5">
                     {reward.title}
-                    {reward.expirationDate && <small className="note">  - Exp Date: {DataFormatter.getDateInLocalTimeZone(reward.expirationDate, true, false, false, 'MMM D, YYYY')}</small>}
+                    {reward.expirationDate && <small className="note">  - Exp Date: {DataFormatter.getDateAsPerTimeZone(reward.expirationDate, true, false, false, 'MMM D, YYYY')}</small>}
                     {!isReadOnly
                       && <Button size="mini" compact floated="right" inverted color="blue" content="Edit" as={Link} to={`${refLink}/edit-bonus-reward/${reward.id}/${tier}`} />
                     }

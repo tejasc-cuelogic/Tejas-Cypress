@@ -102,7 +102,7 @@ export default class AllTransactions extends Component {
                           <Table.Cell key={col.field} textAlign={col.textAlign} collapsing={col.field === 'userName'}>
                             {['amount'].includes(col.field) ? Helper.CurrencyFormat(row[col.field])
                               : ['startDate', 'failDate', 'estDateAvailable'].includes(col.field)
-                                ? row[col.field] !== null ? DataFormatter.getDateInLocalTimeZone(moment.unix(row[col.field]), false, false, false, false) : '' : col.field === 'userName'
+                                ? row[col.field] !== null ? DataFormatter.getDateAsPerTimeZone(moment.unix(row[col.field]), false, false, false, false) : '' : col.field === 'userName'
                                   ? this.getUserName(get(row, col.fieldLocation) || {}, get(row, col.fieldId)) : col.field === 'userId' ? get(row, col.fieldLocation)
                                     : col.field === 'amount' ? Helper.MoneyMathDisplayCurrency(row[col.field])
                                       : col.field === 'direction' ? capitalize(row[col.field]) : col.field === 'accountType'

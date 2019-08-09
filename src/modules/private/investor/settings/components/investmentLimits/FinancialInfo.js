@@ -55,7 +55,7 @@ export default class FinancialInfo extends Component {
 
   getDate = (accName) => {
     let date = '';
-    date = accName && accName.status === 'REQUESTED' && accName.requestDate ? DataFormatter.getDateInLocalTimeZone(accName.requestDate, true, false, false, 'MM/DD/YY') : accName && accName.status === 'CONFIRMED' && accName.expiration ? DataFormatter.getDateInLocalTimeZone(accName.expiration, true, false, false, 'MM/DD/YY') : accName && accName.status === 'INVALID' && accName.reviewed && accName.reviewed.date ? DataFormatter.getDateInLocalTimeZone(accName.reviewed.date, true, false, false, 'MM/DD/YY') : '-';
+    date = accName && accName.status === 'REQUESTED' && accName.requestDate ? DataFormatter.getDateAsPerTimeZone(accName.requestDate, true, false, false, 'MM/DD/YY') : accName && accName.status === 'CONFIRMED' && accName.expiration ? DataFormatter.getDateAsPerTimeZone(accName.expiration, true, false, false, 'MM/DD/YY') : accName && accName.status === 'INVALID' && accName.reviewed && accName.reviewed.date ? DataFormatter.getDateAsPerTimeZone(accName.reviewed.date, true, false, false, 'MM/DD/YY') : '-';
     return date;
   }
 

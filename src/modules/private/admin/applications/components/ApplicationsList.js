@@ -130,10 +130,10 @@ export default class ApplicationsList extends Component {
                               <span>
                                 Started{' '}
                                 <b>
-                                  {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? DataFormatter.getDateInLocalTimeZone(` ${application.submittedDate}`, true, false, false) : '-') : (` ${get(application, 'created.date')}` ? DataFormatter.getDateInLocalTimeZone(` ${application.created.date}`, true, false, false) : '-')}
+                                  {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? DataFormatter.getDateAsPerTimeZone(` ${application.submittedDate}`, true, false, false) : '-') : (` ${get(application, 'created.date')}` ? DataFormatter.getDateAsPerTimeZone(` ${application.created.date}`, true, false, false) : '-')}
                                 </b>
                               </span>
-                              <span>Updated <b>{application.updated ? DataFormatter.getDateInLocalTimeZone(` ${application.updated.date}`, true, false, false) : '-'}</b></span>
+                              <span>Updated <b>{application.updated ? DataFormatter.getDateAsPerTimeZone(` ${application.updated.date}`, true, false, false) : '-'}</b></span>
                             </p>
                           </div>
                         </Table.Cell>
@@ -149,7 +149,7 @@ export default class ApplicationsList extends Component {
                                   <Item.Extra>
                                     {application.comments[application.comments.length - 1].commentor
                                       && (
-                                        <b>{DataFormatter.getDateInLocalTimeZone(application.comments[application.comments.length - 1].commentor.date, true, false, true)}</b>
+                                        <b>{DataFormatter.getDateAsPerTimeZone(application.comments[application.comments.length - 1].commentor.date, true, false, true)}</b>
                                       )
                                     }
                                     {application.comments[application.comments.length - 1].commentor

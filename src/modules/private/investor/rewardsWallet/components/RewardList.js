@@ -27,11 +27,11 @@ const RewardList = props => props.rewards.map(offering => (
                 <Table.Row key={r.id}>
                   <Table.Cell><b>{r.name}</b></Table.Cell>
                   <Table.Cell>{r.status}</Table.Cell>
-                  <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInLocalTimeZone(r.expiry, true, false, false)} /></Table.Cell>
+                  <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(r.expiry, true, false, false)} /></Table.Cell>
                   <Table.Cell textAlign="center">
                     {r.redeemDate
-                      ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateInLocalTimeZone(r.redeemDate, true, false, false)} />
-                      : (DataFormatter.getCurrentCSTMoment().diff(DataFormatter.getDateInLocalTimeZone(r.expiry, true, false, false)) < 0
+                      ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(r.redeemDate, true, false, false)} />
+                      : (DataFormatter.getCurrentCSTMoment().diff(DataFormatter.getDateAsPerTimeZone(r.expiry, true, false, false)) < 0
                         ? (
 <Button
   as={Link}

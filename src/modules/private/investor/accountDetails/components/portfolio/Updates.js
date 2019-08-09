@@ -23,7 +23,7 @@ class Updates extends Component {
         dateObj.id = index;
         dateObj.title = dataItem.title;
         dateObj.date = updates[index].updated.date
-          ? DataFormatter.getDateInLocalTimeZone(updates[index].updated.date, true, true, false) : null;
+          ? DataFormatter.getDateAsPerTimeZone(updates[index].updated.date, true, true, false) : null;
         return summary.push(dateObj);
       });
     }

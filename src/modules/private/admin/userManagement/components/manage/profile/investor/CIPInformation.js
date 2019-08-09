@@ -37,11 +37,11 @@ const CIPInformation = ({ details }) => (
             </Table.Row>
             <Table.Row>
               <Table.Cell>Expiration Date: </Table.Cell>
-              <Table.Cell>{get(details, 'cip.expiration') ? DataFormatter.getDateInLocalTimeZone(get(details, 'cip.expiration'), true, false, false) : 'N/A'}</Table.Cell>
+              <Table.Cell>{get(details, 'cip.expiration') ? DataFormatter.getDateAsPerTimeZone(get(details, 'cip.expiration'), true, false, false) : 'N/A'}</Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>Verification Completion Date: </Table.Cell>
-              <Table.Cell>{get(details, 'legalDetails.verificationCompletionDate') ? DataFormatter.getDateInLocalTimeZone(get(details, 'legalDetails.verificationCompletionDate'), true, false, false) : 'N/A'}</Table.Cell>
+              <Table.Cell>{get(details, 'legalDetails.verificationCompletionDate') ? DataFormatter.getDateAsPerTimeZone(get(details, 'legalDetails.verificationCompletionDate'), true, false, false) : 'N/A'}</Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>

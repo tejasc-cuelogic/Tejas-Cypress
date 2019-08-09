@@ -122,7 +122,7 @@ export default class AllInsights extends Component {
                     </Table.Cell>
                     <Table.Cell><Label color={`${record.articleStatus === 'PUBLISHED' ? 'green' : record.articleStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></Table.Cell>
                     <Table.Cell>
-                      <DateTimeFormat format="MM-DD-YYYY" datetime={DataFormatter.getDateInLocalTimeZone((record.updated && record.updated.date), true, false, false)} />
+                      <DateTimeFormat format="MM-DD-YYYY" datetime={DataFormatter.getDateAsPerTimeZone((record.updated && record.updated.date), true, false, false)} />
                     </Table.Cell>
                     <Table.Cell textAlign="center">
                       <Button.Group>

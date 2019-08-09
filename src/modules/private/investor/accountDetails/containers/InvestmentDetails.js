@@ -59,7 +59,7 @@ class InvestmentDetails extends Component {
           title: 'Total Raised Amount', content: get(getInvestor, 'totalRaisedAmount') || 'N/A', type: 1, fraction: false,
         },
         {
-          title: 'Close Date', content: get(campaign, 'closureSummary.hardCloseDate') ? DataFormatter.getDateInLocalTimeZone(hardCloseDate, true, true, false) : 'NA',
+          title: 'Close Date', content: get(campaign, 'closureSummary.hardCloseDate') ? DataFormatter.getDateAsPerTimeZone(hardCloseDate, true, true, false) : 'NA',
         },
         {
           title: 'My Investment', content: get(getInvestor, 'myInvestment') || 'N/A', type: 1, fraction: false,

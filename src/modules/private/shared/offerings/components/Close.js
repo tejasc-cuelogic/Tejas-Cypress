@@ -208,7 +208,7 @@ export default class Close extends Component {
           <Header as="h4">
             {hoursToClose > 0
               ? (
-<>This campaign is still live, set to close <span className="highlight-text"> {closeDate ? DataFormatter.getDateInLocalTimeZone(closeDate, true, false, false, 'MMM D, YYYY') : 'N/A'} </span>
+<>This campaign is still live, set to close <span className="highlight-text"> {closeDate ? DataFormatter.getDateAsPerTimeZone(closeDate, true, false, false, 'MMM D, YYYY') : 'N/A'} </span>
               </>
               ) : <>This campaign <span className={offerStatus.isFailed ? 'negative-text' : 'highlight-text'}> {offerStatus.isFailed ? 'has failed' : 'has succeed'}</span></>
             }
@@ -477,7 +477,7 @@ out of required
                 <Table.Row>
                   <Table.Cell>{capitalize(k.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</Table.Cell>
                   <Table.Cell>
-                  {['finished', 'started'].includes(k) ? closureProcess[key][k] ? DataFormatter.getDateInLocalTimeZone(closureProcess[key][k], true, false, false) : '-' : closureProcess[key][k] || '-'}
+                  {['finished', 'started'].includes(k) ? closureProcess[key][k] ? DataFormatter.getDateAsPerTimeZone(closureProcess[key][k], true, false, false) : '-' : closureProcess[key][k] || '-'}
                   </Table.Cell>
                 </Table.Row>
                 )) : <p>No Data Found</p>
