@@ -45,7 +45,6 @@ export default class AccountCreation extends Component {
           const accountId = get(accountDetails, 'details.accountId') || this.props.individualAccountStore.individualAccId;
           const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
           this.props.accountStore.updateToAccountProcessing(accountId, this.props.identityStore.cipErrorMessage, accountvalue).then(() => {
-            this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
             resolve();
           });
         } else {
