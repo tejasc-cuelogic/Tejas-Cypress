@@ -115,8 +115,8 @@ export class AccountStore {
 
   @action
   updateToAccountProcessing = (accountId, error, accountType) => {
-    uiStore.setProgress();
     return new Promise((resolve, reject) => {
+      uiStore.setProgress();
       client
         .mutate({
           mutation: updateToAccountProcessing,
