@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { Button, Modal, Header, Message, Form } from 'semantic-ui-react';
 import { InlineLoader, ListErrors } from '../../../../../../theme/shared';
 import { authActions } from '../../../../../../services/actions';
-import { FormInput } from '../../../../../../theme/form';
+// import { FormInput } from '../../../../../../theme/form';
 
 @inject('userStore', 'userDetailsStore', 'uiStore')
 @withRouter
@@ -49,13 +49,11 @@ export default class DeleteUser extends React.Component {
         size="mini"
         closeOnDimmerClick={false}
       >
-          <Modal.Header className="center-align signup-header">
-            <Header as="h4">{get(getDeleteUserMeta, 'header')}</Header>
-          </Modal.Header>
           {deleteUserLoading
             ? (<InlineLoader />)
             : (
           <Modal.Content className="center-align">
+            <Header as="h4" className="mt-30">{get(getDeleteUserMeta, 'header')}</Header>
             {get(getDeleteUserMeta, 'message')}
             {this.state.failMessage
             && (
@@ -66,19 +64,19 @@ export default class DeleteUser extends React.Component {
             }
             {get(getDeleteUserMeta, 'isValidForDelete') && (
               <>
-                <Form.Group widths="equal">
-                  <FormInput
-                    className="left-align"
+                <Form className="left-align mt-50 mb-40">
+                  <Form.Input
                     fluid
+                    label="E-mail"
                     type="text"
                     name="email"
                     fielddata={USR_FRM.fields.email}
                     changed={(e, res) => userEleChange(e, res, 'text', true)}
                   />
-                </Form.Group>
+                </Form>
                 <div className="center-align mt-30">
-                  <Button content="No thanks, I'll stay!" color="green" loading={inProgressArray.includes('deleteProfile')} onClick={this.handleDeleteUser} /><br /><br />
-                  <Button color="green" className="link-button" onClick={this.closeModal} type="button" disabled={!deleteUser}>Yes, please delete my NextSeed account</Button>
+                  <Button content="No thanks, I'll stay!" color="green" loading={inProgressArray.includes('deleteProfile')} onClick={this.handleDeleteUser} />
+                  <Button color="green" className="link-button mt-30" onClick={this.closeModal} type="button" disabled={!deleteUser}>Yes, please delete my NextSeed account</Button>
                 </div>
               </>
             )}
