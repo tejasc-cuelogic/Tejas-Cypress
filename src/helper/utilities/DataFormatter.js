@@ -139,7 +139,7 @@ class DataFormatter {
 
   mapDatesToType = (data, keys, dateType = 'iso') => data.map((d) => {
     // const convertedDates = keys.map(k => ({ [k]: this.convertDateType(d[k], dateType) }));
-    const convertedDates = keys.map(k => ({ [k]: this.convertDateType(this.getDateInCST(d[k], true, false, false), dateType) }));
+    const convertedDates = keys.map(k => ({ [k]: this.convertDateType(this.getDateInLocalTimeZone(d[k], true, false, false), dateType) }));
     const filterInvalidDates = convertedDates
       .filter(obj => moment(Object.values(obj)[0]).isValid());
     const convDatesObj = reduce(filterInvalidDates, (old, current) => assign(old, current), {});

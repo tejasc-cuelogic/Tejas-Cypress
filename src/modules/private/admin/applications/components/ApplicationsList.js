@@ -130,7 +130,7 @@ export default class ApplicationsList extends Component {
                               <span>
                                 Started{' '}
                                 <b>
-                                  {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? DataFormatter.getDateInLocalTimeZone(` ${application.submittedDate}`, true, false, false) : '-') : (` ${get(application, 'created.date')}` ? DataFormatter.getDateInCST(` ${application.created.date}`, true, false, false) : '-')}
+                                  {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? DataFormatter.getDateInLocalTimeZone(` ${application.submittedDate}`, true, false, false) : '-') : (` ${get(application, 'created.date')}` ? DataFormatter.getDateInLocalTimeZone(` ${application.created.date}`, true, false, false) : '-')}
                                 </b>
                               </span>
                               <span>Updated <b>{application.updated ? DataFormatter.getDateInLocalTimeZone(` ${application.updated.date}`, true, false, false) : '-'}</b></span>
