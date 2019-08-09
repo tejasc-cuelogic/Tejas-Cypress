@@ -20,6 +20,7 @@ export default class DeleteUser extends React.Component {
     this.setState({ modalOpen: true });
     this.props.userStore.getUserDeleteMeta();
     this.props.userStore.userReset();
+    this.props.userStore.handleCancelDeleteUser(false);
   }
 
   closeModal = () => {
@@ -35,8 +36,12 @@ export default class DeleteUser extends React.Component {
     }).catch(msg => this.setState({ failMessage: msg }));
   }
 
+  backToOfferings = () => {
+    this.props.history.push('/');
+  }
+
   render() {
-    const { getDeleteUserMeta, deleteUserLoading, USR_FRM, userEleChange, deleteUser } = this.props.userStore;
+    const { getDeleteUserMeta, deleteUserLoading, USR_FRM, userEleChange, deleteUser, handleCancelDeleteUser } = this.props.userStore;
     const { inProgressArray } = this.props.uiStore;
     return (
       <Modal
@@ -77,9 +82,14 @@ export default class DeleteUser extends React.Component {
                   />
                 </Form.Group>
                 <div className="center-align mt-30">
-                  <Button content="No thanks, I'll stay!" color="green" loading={inProgressArray.includes('deleteProfile')} onClick={this.handleDeleteUser} /><br /><br />
-                  <Button color="green" className="link-button" onClick={this.closeModal} type="button" disabled={!deleteUser}>Yes, please delete my NextSeed account</Button>
+                  <Button content="No thanks, I'll stay!" color="green" loading={inProgressArray.includes('deleteProfile')} onClick={() => handleCancelDeleteUser(true)} /><br /><br />
+                  <Button color="green" className="link-button" onClick={this.handleDeleteUser} type="button" disabled={!deleteUser}>Yes, please delete my NextSeed account</Button>
                 </div>
+              </>
+            )}
+            {get(getDeleteUserMeta, 'isCancelDelete') && (
+              <>
+                <Button content="Browse Offerings" color="green" loading={inProgressArray.includes('deleteProfile')} onClick={() => this.backToOfferings()} /><br /><br />
               </>
             )}
           </Modal.Content>

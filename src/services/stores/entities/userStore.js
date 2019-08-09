@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 import { observable, action, computed, toJS } from 'mobx';
 import { get, uniqBy } from 'lodash';
@@ -20,6 +21,8 @@ export class UserStore {
   @observable deleteUserMeta = null;
 
   @observable deleteUser = false;
+
+  @observable cancelDeleteUser = false;
 
   @action
   userEleChange = (e, res, type, isDeleteUser) => {
@@ -151,24 +154,38 @@ export class UserStore {
     const data = {
       header: 'Delete User Account',
       message: commonMsg,
-      isValidForDelete: false,
+      isValidForDelete: true,
+      isCancelDelete: this.cancelDeleteUser,
     };
+
+    if (this.cancelDeleteUser) {
+      data.header = 'Great!';
+      data.message = (<p>We're so glad you've decided to keep your NextSeed account. If you need any further assistance or wish to contact the NextSeed team, please reach out to us at <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
+      data.isValidForDelete = false;
+      data.isCancelDelete = true;
+      return data;
+    }
 
     if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') > 0) {
       data.header = 'You currently have funds remaining in your account';
       data.message = (<p>In order to delete your account, please withdraw all funds and allow 5-7 business days to clear prior to deleting your account. If you have any questions or need assistance, please email us at <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
+      data.isCancelDelete = false;
     } if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') <= 0) {
       data.header = 'Are you sure?';
       data.message = (<p>We hate to see you go, but if you would like to delete your NextSeed account please confirm your intent by entering the email address associated with your account.<br /> Please note that any Credits you may have accumulated in your account will be forfeited.</p>);
       data.isValidForDelete = true;
+      data.isCancelDelete = false;
     } else if (get(deletedUserMeta, 'validAgreement')) {
       data.header = 'You currently have active investments in your account';
       data.message = (<p>Because you have active investments in your account, we are unable to delete your account at this time. If you wish to learn more about the options available to you, please email us at <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
+      data.isCancelDelete = false;
     }
-    data.header = 'Are you sure?';
-    data.message = (<p>We hate to see you go, but if you would like to delete your NextSeed account please confirm your intent by entering the email address associated with your account.<br /> <br /> Please note that any Credits you may have accumulated in your account will be forfeited.</p>);
-    data.isValidForDelete = true;
     return data;
+  }
+
+  @action
+  handleCancelDeleteUser = (isCancelDelete = false) => {
+    this.cancelDeleteUser = isCancelDelete;
   }
 
   @action
