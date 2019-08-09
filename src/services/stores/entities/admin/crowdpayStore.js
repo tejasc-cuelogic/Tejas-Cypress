@@ -184,11 +184,6 @@ export class CrowdpayStore {
   }
 
   @action
-  resetSearch = () => {
-    this.requestState.search.keyword = '';
-  }
-
-  @action
   setCrowdpayAccountsSummary = () => {
     Object.keys(this.summary).map((type) => {
       this.setAccountTypes(type);
@@ -409,11 +404,13 @@ export class CrowdpayStore {
 
   @action
   reset = () => {
+    this.requestState.search.keyword = '';
     this.resetData();
     this.FILTER_FRM = Validator.prepareFormObject(FILTER_META);
     this.isLazyLoading = true;
   }
 
+  @action
   resetData = () => {
     this.resetPagination();
     this.requestState.requestTriggerPage = 1;
