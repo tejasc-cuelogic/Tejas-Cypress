@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Link, withRouter } from 'react-router-dom';
-import { Card, Grid, Header, Divider, Label, Button, Table } from 'semantic-ui-react';
+import { Card, Header, Divider, Label, Button, Table } from 'semantic-ui-react';
 import ChangePassword from '../../../../auth/containers/ChangePassword';
 import NewPhoneNumber from './profileSettings/NewPhoneNumber';
 import NewEmailAddress from './profileSettings/NewEmailAddress';
@@ -11,6 +11,7 @@ import Helper from '../../../../../helper/utility';
 // import DeleteUser from './profileSettings/DeleteUser';
 import { securitySections } from '../../../../../services/constants/user';
 import ManageMultiFactorAuth from './profileSettings/ManageMultiFactorAuth';
+import DeleteUser from './profileSettings/DeleteUser';
 
 @inject('userDetailsStore', 'userStore')
 @withRouter
@@ -39,99 +40,67 @@ export default class Security extends Component {
           It&apos;s important to update your password regularly and utilize the security features
           that apply to you.
         </p>
-        <Grid>
-          {
-            securitySections.map(section => (
-              <Grid.Column
-                key={section.action[0]}
-                widescreen={7}
-                largeScreen={8}
-                computer={8}
-                tablet={16}
-                mobile={16}
-              >
-                <Card fluid>
-                  <Card.Content>
-                    <Header as="h4">{section.title}</Header>
-                    <p>{section.action[0] === 'mfa' ? (getUserMfaMode ? section.description : section.descriptionNotAvailable) : section.description}</p>
-                    <Divider hidden />
-                    <Card.Description>
-                      {(section.action[0] === 'mfa' && getUserMfaMode) ? (
-                        <Table compact="very" basic="very" className="no-border mb-20">
-                          <Table.Body>
-                            <Table.Row>
-                              <Table.Cell collapsing><b>E-mail</b> {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</Table.Cell>
-                              <Table.Cell collapsing>
-                                {userDetails.email && userDetails.email.address}
-                              </Table.Cell>
-                              <Table.Cell><Link className="link" to="/app/account-settings/security/new-email-address">Update Email</Link></Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                              <Table.Cell collapsing><b>Phone</b> {getUserMfaMode && getUserMfaMode !== 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</Table.Cell>
-                              <Table.Cell collapsing>{userDetails.phone && userDetails.phone.number ? Helper.phoneNumberFormatter(userDetails.phone.number) : '--'}</Table.Cell>
-                              <Table.Cell><Link className="link" to="/app/account-settings/security/new-phone-number">Update Phone</Link></Table.Cell>
-                            </Table.Row>
-                          </Table.Body>
-                        </Table>
-                        // <dl className="dl-horizontal">
-                        //   <dt>E-mail {getUserMfaMode && getUserMfaMode === 'EMAIL'
-                        // && <Label color="green" size="mini">Active MFA</Label> }</dt>
-                        //   <dd>{userDetails.email && userDetails.email.address}
-                        // <Link className="link pull-right" to="/app/account-settings/
-                        // security/new-email-address">Update Email</Link></dd>
-                        //   <dt>Phone {getUserMfaMode && getUserMfaMode !== 'EMAIL
-                        // && <Label color="green" size="mini">Active MFA</Label> }</dt>
-                        // <dd>{userDetails.phone && userDetails.phone.number ?
-                        // Helper.phoneNumberFormatter(userDetails.phone.number) : '--'}
-                        // <Link className="link pull-right" to="/app/account-settings/
-                        // security/new-phone-number">Update Phone</Link></dd>
-                        // </dl>
-                      ) : null}
-                      {section.action[0] === 'social-connect' ? (
-                        <Button.Group>
-                          <Button
-                            color="facebook"
-                            icon={{ className: 'ns-facebook' }}
-                            content="Connect with Faceook"
-                          />
-                          <Button
-                            color="google plus"
-                            icon="google plus"
-                            content="Connect with Google"
-                          />
-                        </Button.Group>
-                      ) : (
-                          <Button
-                            disabled={(section.action[0] === 'mfa' && !getUserMfaMode)}
-                            as={Link}
-                            to={section.action[0] === 'mfa' && !userDetails.phone ? '/app/account-settings/security/new-phone-number' : `${match.url}/${section.action[0]}`}
-                            inverted
-                            color="green"
-                            content={section.action[1]}
-                          />
-                      )
-                      }
-                    </Card.Description>
-                  </Card.Content>
-                  </Card>
-                  {/* { section.action[0] === 'change-password' && this.props.userStore.isInvestor
-                  && (
-                  <Card fluid>
-                    <Card.Content>
-                        <Header as="h4">Delete Account</Header>
-                        <p>Delete your Nextseed Account.</p>
-                        <Divider hidden />
-                        <Card.Description>
-                          <DeleteUser />
-                        </Card.Description>
-                    </Card.Content>
-                  </Card>
+          <Card fluid>
+            <Card.Content className="very padded">
+              {securitySections.map(section => (
+              <>
+                <Header as="h4">{section.title}</Header>
+                <p>{section.action[0] === 'mfa' ? (getUserMfaMode ? section.description : section.descriptionNotAvailable) : section.description}</p>
+                <Divider hidden />
+                <Card.Description className="mb-40">
+                  {(section.action[0] === 'mfa' && getUserMfaMode) ? (
+                    <Table compact="very" basic="very" className="no-border mb-20">
+                      <Table.Body>
+                        <Table.Row>
+                          <Table.Cell collapsing><b>E-mail</b> {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Selected</Label> }</Table.Cell>
+                          <Table.Cell collapsing>
+                            {userDetails.email && userDetails.email.address}
+                          </Table.Cell>
+                          <Table.Cell><Link className="link" to="/app/account-settings/security/new-email-address">Update</Link></Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.Cell collapsing><b>Phone</b> {getUserMfaMode && getUserMfaMode !== 'EMAIL' && <Label color="green" size="mini">Selected</Label> }</Table.Cell>
+                          <Table.Cell collapsing>{userDetails.phone && userDetails.phone.number ? Helper.phoneNumberFormatter(userDetails.phone.number) : '--'}</Table.Cell>
+                          <Table.Cell><Link className="link" to="/app/account-settings/security/new-phone-number">Update</Link></Table.Cell>
+                        </Table.Row>
+                      </Table.Body>
+                    </Table>
+                  ) : null}
+                  {section.action[0] === 'social-connect' ? (
+                    <Button.Group>
+                      <Button
+                        color="facebook"
+                        icon={{ className: 'ns-facebook' }}
+                        content="Connect with Faceook"
+                      />
+                      <Button
+                        color="google plus"
+                        icon="google plus"
+                        content="Connect with Google"
+                      />
+                    </Button.Group>
+                  ) : (
+                      <Button
+                        disabled={(section.action[0] === 'mfa' && !getUserMfaMode)}
+                        as={Link}
+                        to={section.action[0] === 'mfa' && !userDetails.phone ? '/app/account-settings/security/new-phone-number' : `${match.url}/${section.action[0]}`}
+                        inverted
+                        color="green"
+                        content={section.action[1]}
+                      />
                   )
-                  } */}
-              </Grid.Column>
-            ))
-          }
-        </Grid>
+                  }
+                </Card.Description>
+                <Divider section />
+              </>
+              ))
+            }
+            {this.props.userStore.isInvestor
+            && (
+              <DeleteUser />
+            )}
+          </Card.Content>
+        </Card>
       </div>
     );
   }

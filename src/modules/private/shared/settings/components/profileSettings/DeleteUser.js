@@ -42,7 +42,7 @@ export default class DeleteUser extends React.Component {
         open={this.state.modalOpen}
         onClose={this.closeModal}
         trigger={(
-            <Button color="green" inverted onClick={() => this.toggleModal(true)} content="Delete" />
+            <Button color="green" className="link-button" onClick={() => this.toggleModal(true)} content="Delete your NextSeed Account" />
           )}
         size="mini"
         closeOnDimmerClick={false}

@@ -42,7 +42,7 @@ Validator.register(
 export const securitySections = [
   {
     title: 'Password',
-    description: 'Change your NextSeed Password.',
+    description: 'We strongly recommend that you update your password regularly.',
     action: ['change-password', 'Change Password'],
   },
   // {
