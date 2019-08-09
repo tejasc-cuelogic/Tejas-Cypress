@@ -76,7 +76,7 @@ export const DropdownFilterWithHeader = props => (
 );
 
 export const ByKeyword = ({
-  w, executeSearch, placeholder, fLabel, requestState, toggleSearch, filters, addon,
+  w, executeSearch, placeholder, fLabel, requestState, toggleSearch, filters, addon, filterCount,
   more, enableSearch, change, addLabel, name, showLabel,
 }) => (
   <>
@@ -93,7 +93,7 @@ export const ByKeyword = ({
     {more !== 'no'
       && (
 <Grid.Column width={3} textAlign="center">
-        <span className="filter-count">{requestState && requestState.search ? Object.keys(requestState.search).length : 0}</span>
+        <span className="filter-count">{requestState && requestState.search ? filterCount !== undefined ? filterCount : Object.keys(requestState.search).length : 0}</span>
         <Button icon color="blue" onClick={toggleSearch} className="link-button">
           {filters ? <>Hide Filters <Icon className="ns-caret-up" /></>
             : <>Show Filters <Icon className="ns-caret-down" /></>
