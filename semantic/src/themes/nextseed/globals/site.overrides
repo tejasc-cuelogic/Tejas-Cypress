@@ -2625,23 +2625,28 @@ input[type='range']::-webkit-slider-thumb {
 		margin-top: 0;
 	}
 }
-.about-carousel .slick-slider .slick-slide{
-	display:flex;
-	>div{
-		position:relative;
-		flex:1;
-		padding-top:56.25%;
-	}
-	.about-gallery-bg{
-		position:absolute;
-		top:0;
-		right:0;
-		bottom:0;
-		left:0;
-		background-repeat:no-repeat;
-		background-size:cover;
-		background-position:center center;
-	}
+// .about-carousel .slick-slider .slick-slide{
+// 	display:flex;
+// 	>div{
+// 		position:relative;
+// 		flex:1;
+// 		padding-top:56.25%;
+// 	}
+// 	.about-gallery-bg{
+// 		position:absolute;
+// 		top:0;
+// 		right:0;
+// 		bottom:0;
+// 		left:0;
+// 		background-repeat:no-repeat;
+// 		background-size:cover;
+// 		background-position:center center;
+// 	}
+// }
+.ui.image.about-gallery-bg{
+	max-height: 350px;
+	width: auto;
+	margin: auto;
 }
 .carousel-counter {
 	position: absolute;
