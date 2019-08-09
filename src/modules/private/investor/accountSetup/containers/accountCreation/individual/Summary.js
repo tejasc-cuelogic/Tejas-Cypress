@@ -38,6 +38,7 @@ export default class Summary extends React.Component {
     this.props.uiStore.setcreateAccountMessage();
     this.props.individualAccountStore.submitAccount().then(() => {
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+      this.props.uiStore.setFieldvalue('submitAccountLoader', false);
       if (partialInvestNowSessionURL) {
         this.props.history.push(partialInvestNowSessionURL);
         setPartialInvestmenSession();
@@ -59,20 +60,15 @@ export default class Summary extends React.Component {
       signupStatus,
     } = this.props.userDetailsStore;
     this.props.identityStore.setCipStatusWithUserDetails();
+    this.props.uiStore.setFieldvalue('submitAccountLoader', true);
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
-      this.props.handleUserIdentity('individual', this.handleSubmitAccount).then(() => {
-        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      });
+      this.props.handleUserIdentity('individual', this.handleSubmitAccount);
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else if (isCipExpired) {
-      this.props.handleUserIdentity('individual', this.handleSubmitAccount).then(() => {
-        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      });
+      this.props.handleUserIdentity('individual', this.handleSubmitAccount);
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else {
-      this.props.handleLegalDocsBeforeSubmit('individual', this.handleSubmitAccount).then(() => {
-        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      });
+      this.props.handleLegalDocsBeforeSubmit('individual', this.handleSubmitAccount);
     }
   }
 
