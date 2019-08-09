@@ -344,7 +344,7 @@ export class IdentityStore {
           } else {
             // uiStore.setErrors(JSON.stringify('Something went wrong'));
             this.setCipStatus('OFFLINE');
-            this.cipErrorMessage = typeof err === 'object' ? JSON.stringify(err) : err;
+            this.cipErrorMessage = JSON.stringify(err);
             this.updateUserInfo().then(() => {
               this.setFieldValue('signUpLoading', false);
               resolve();

@@ -32,10 +32,15 @@ export default class Summary extends Component {
   }
 
   handleCreateAccount = () => {
+    this.props.identityStore.setCipStatusWithUserDetails();
     if (this.props.identityStore.userCipStatus === 'OFFLINE') {
-      this.props.handleUserIdentity('ira', this.handleSubmitAccount);
+      this.props.handleUserIdentity('ira', this.handleSubmitAccount).then(() => {
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+      });
     } else {
-      this.props.handleLegalDocsBeforeSubmit('ira', this.handleSubmitAccount);
+      this.props.handleLegalDocsBeforeSubmit('ira', this.handleSubmitAccount).then(() => {
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+      });
     }
   }
 

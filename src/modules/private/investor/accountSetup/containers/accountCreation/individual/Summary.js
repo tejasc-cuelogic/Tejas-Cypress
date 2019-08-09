@@ -59,13 +59,19 @@ export default class Summary extends React.Component {
       signupStatus,
     } = this.props.userDetailsStore;
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
-      this.props.handleUserIdentity('individual', this.handleSubmitAccount);
+      this.props.handleUserIdentity('individual', this.handleSubmitAccount).then(() => {
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+      });
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else if (isCipExpired) {
-      this.props.handleUserIdentity('individual', this.handleSubmitAccount);
+      this.props.handleUserIdentity('individual', this.handleSubmitAccount).then(() => {
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+      });
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else {
-      this.props.handleLegalDocsBeforeSubmit('individual', this.handleSubmitAccount);
+      this.props.handleLegalDocsBeforeSubmit('individual', this.handleSubmitAccount).then(() => {
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+      });
     }
   }
 

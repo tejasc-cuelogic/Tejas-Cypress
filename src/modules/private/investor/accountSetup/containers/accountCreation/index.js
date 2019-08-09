@@ -25,7 +25,7 @@ export default class AccountCreation extends Component {
     this.props.history.push('/app/summary');
   }
 
-  handleUserIdentity = (accountType, submitAccount) => {
+  handleUserIdentity = (accountType, submitAccount) => new Promise((resolve, reject) => {
     this.props.uiStore.setProgress();
     this.props.identityStore.setCipStatusWithUserDetails();
     this.props.identityStore.setCipDetails();
@@ -38,6 +38,7 @@ export default class AccountCreation extends Component {
         if (key === 'id.failure') {
           this.props.identityStore.setIdentityQuestions();
           this.props.history.push(route);
+          reject();
         } else if (this.props.identityStore.userCipStatus === 'OFFLINE') {
           this.props.uiStore.setProgress();
           const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
@@ -45,25 +46,29 @@ export default class AccountCreation extends Component {
           const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
           this.props.accountStore.updateToAccountProcessing(accountId, this.props.identityStore.cipErrorMessage, accountvalue).then(() => {
             this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+            resolve();
           });
         } else {
           this.props.uiStore.setProgress();
-          this.props.handleLegalDocsBeforeSubmit(accountType, submitAccount);
+          this.props.handleLegalDocsBeforeSubmit(accountType, submitAccount).then(() => {
+            resolve();
+          });
         }
       });
-  }
+  });
 
-  handleLegalDocsBeforeSubmit = (accountType, submitAccount) => {
+  handleLegalDocsBeforeSubmit = (accountType, submitAccount) => new Promise((resolve, reject) => {
     const { isUserVerified, isLegalDocsPresent } = this.props.userDetailsStore;
     if (!isUserVerified && !isLegalDocsPresent) {
       if (accountType === 'individual') {
         this.props.userDetailsStore.setAccountForWhichCipExpired(accountType);
       }
-      this.handleUserIdentity(accountType, submitAccount);
+      this.handleUserIdentity(accountType, submitAccount).then(() => resolve());
     } else {
       submitAccount();
+      reject();
     }
-  }
+  });
 
   renderAccType = () => {
     const { investmentAccType } = this.props.accountStore;
