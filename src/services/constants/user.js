@@ -1,7 +1,7 @@
 import Validator from 'validatorjs';
 import moment from 'moment';
 import React from 'react';
-import { Popup } from 'semantic-ui-react';
+// import { Popup } from 'semantic-ui-react';
 
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
@@ -55,14 +55,14 @@ export const securitySections = [
     title: 'Multi-Factor Authentication',
     description:
       (
-        <>You can choose your{' '}
-          <Popup wide position="top center" trigger={<span className="underline-text">Active MFA</span>}>
+        <>Our MFA security feature gives your account an extra layer of protection.
+          {/* <Popup wide position="top center" trigger={<span className="underline-text">Active MFA</span>}>
             <Popup.Header className="grey-header">Active MFA Factor</Popup.Header>
             <Popup.Content>
               Manage your MFA contact preferences. All major actions in your account will
               require additional confirmation with a code sent to your phone or email address.
             </Popup.Content>
-          </Popup>
+          </Popup> */}
         </>
       ),
     descriptionNotAvailable: '',
