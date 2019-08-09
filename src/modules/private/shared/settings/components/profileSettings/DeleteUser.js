@@ -2,9 +2,10 @@ import React from 'react';
 import { get } from 'lodash';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Button, Modal, Header, Divider, Message } from 'semantic-ui-react';
+import { Button, Modal, Header, Message, Form } from 'semantic-ui-react';
 import { InlineLoader, ListErrors } from '../../../../../../theme/shared';
 import { authActions } from '../../../../../../services/actions';
+import { FormInput } from '../../../../../../theme/form';
 
 @inject('userStore', 'userDetailsStore', 'uiStore')
 @withRouter
@@ -18,6 +19,7 @@ export default class DeleteUser extends React.Component {
   toggleModal = () => {
     this.setState({ modalOpen: true });
     this.props.userStore.getUserDeleteMeta();
+    this.props.userStore.userReset();
   }
 
   closeModal = () => {
@@ -34,7 +36,7 @@ export default class DeleteUser extends React.Component {
   }
 
   render() {
-    const { getDeleteUserMeta, deleteUserLoading } = this.props.userStore;
+    const { getDeleteUserMeta, deleteUserLoading, USR_FRM, userEleChange, deleteUser } = this.props.userStore;
     const { inProgressArray } = this.props.uiStore;
     return (
       <Modal
@@ -48,31 +50,38 @@ export default class DeleteUser extends React.Component {
         closeOnDimmerClick={false}
       >
           <Modal.Header className="center-align signup-header">
-            <Header as="h3">Delete User Account</Header>
-            <Divider />
+            <Header as="h4">{get(getDeleteUserMeta, 'header')}</Header>
           </Modal.Header>
           {deleteUserLoading
             ? (<InlineLoader />)
             : (
-          <Modal.Content>
-            {get(getDeleteUserMeta, 'message')
-            && (
-              <Header as="h5">{get(getDeleteUserMeta, 'message')}</Header>
-            )
-            }
+          <Modal.Content className="center-align">
+            {get(getDeleteUserMeta, 'message')}
             {this.state.failMessage
             && (
               <Message error className="mt-30">
                 <ListErrors errors={[this.state.failMessage]} />
               </Message>
             )
-          }
-              <div className="center-align mt-30">
-                <Button.Group>
-                  <Button onClick={this.closeModal} type="button">Cancel</Button>
-                  <Button content="Delete" color="red" loading={inProgressArray.includes('deleteProfile')} onClick={this.handleDeleteUser} disabled={!get(getDeleteUserMeta, 'isValidForDelete')} />
-                </Button.Group>
-              </div>
+            }
+            {get(getDeleteUserMeta, 'isValidForDelete') && (
+              <>
+                <Form.Group widths="equal">
+                  <FormInput
+                    className="left-align"
+                    fluid
+                    type="text"
+                    name="email"
+                    fielddata={USR_FRM.fields.email}
+                    changed={(e, res) => userEleChange(e, res, 'text', true)}
+                  />
+                </Form.Group>
+                <div className="center-align mt-30">
+                  <Button content="No thanks, I'll stay!" color="green" loading={inProgressArray.includes('deleteProfile')} onClick={this.handleDeleteUser} /><br /><br />
+                  <Button color="green" className="link-button" onClick={this.closeModal} type="button" disabled={!deleteUser}>Yes, please delete my NextSeed account</Button>
+                </div>
+              </>
+            )}
           </Modal.Content>
             )
           }

@@ -8,7 +8,6 @@ import NewEmailAddress from './profileSettings/NewEmailAddress';
 import ConfirmEmailAddress from '../../../../auth/containers/ConfirmEmailAddress';
 import ConfirmPhoneNumber from './profileSettings/ConfirmPhoneNumber';
 import Helper from '../../../../../helper/utility';
-// import DeleteUser from './profileSettings/DeleteUser';
 import { securitySections } from '../../../../../services/constants/user';
 import ManageMultiFactorAuth from './profileSettings/ManageMultiFactorAuth';
 import DeleteUser from './profileSettings/DeleteUser';
@@ -34,12 +33,19 @@ export default class Security extends Component {
           path={`${this.props.match.url}/confirm-email-address`}
           render={props => <ConfirmEmailAddress refLink={this.props.match.url} {...props} />}
         />
-        <Header as="h4">Security</Header>
-        <p>
-          Manage your security settings and contact information.
-          It&apos;s important to update your password regularly and utilize the security features
-          that apply to you.
-        </p>
+
+        {!this.props.userStore.isInvestor
+        && (
+          <>
+            <Header as="h4">Security</Header>
+            <p>
+              Manage your security settings and contact information.
+              It&apos;s important to update your password regularly and utilize the security features
+              that apply to you.
+            </p>
+          </>
+        )
+        }
           <Card fluid>
             <Card.Content className="very padded">
               {securitySections.map(section => (

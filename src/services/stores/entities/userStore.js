@@ -3,7 +3,6 @@ import { observable, action, computed, toJS } from 'mobx';
 import { get, uniqBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import { FormValidator as Validator } from '../../../helper';
-import Helper from '../../../helper/utility';
 import { GqlClient as clientPublic } from '../../../api/publicApi';
 import { GqlClient as client } from '../../../api/gqlApi';
 import { NEW_USER } from '../../../constants/user';
@@ -20,9 +19,14 @@ export class UserStore {
 
   @observable deleteUserMeta = null;
 
+  @observable deleteUser = false;
+
   @action
-  userEleChange = (e, res, type) => {
+  userEleChange = (e, res, type, isDeleteUser) => {
     this.USR_FRM = Validator.onChange(this.USR_FRM, Validator.pullValues(e, res), type);
+    if (isDeleteUser) {
+      this.deleteUser = this.currentUser.email === this.USR_FRM.fields.email.value;
+    }
   };
 
   @action
@@ -145,19 +149,25 @@ export class UserStore {
     const deletedUserMeta = this.getDeleteUserData;
     const commonMsg = (<p>You are unable to delete your account at this time.  Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any additional questions</p>);
     const data = {
+      header: 'Delete User Account',
       message: commonMsg,
       isValidForDelete: false,
     };
-    if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'totalBalance') === 0) {
-      data.message = 'Are you sure you want to delete your user account?';
+
+    if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') > 0) {
+      data.header = 'You currently have funds remaining in your account';
+      data.message = (<p>In order to delete your account, please withdraw all funds and allow 5-7 business days to clear prior to deleting your account. If you have any questions or need assistance, please email us at <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
+    } if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') <= 0) {
+      data.header = 'Are you sure?';
+      data.message = (<p>We hate to see you go, but if you would like to delete your NextSeed account please confirm your intent by entering the email address associated with your account.<br /> Please note that any Credits you may have accumulated in your account will be forfeited.</p>);
       data.isValidForDelete = true;
-    } else if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') === 0 && get(deletedUserMeta, 'totalBalance') > 0) {
-      data.message = 'There are pending transfer requests on your account.  You must wait for the transaction to post before you can delete your account.';
-    } else if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') > 0) {
-      data.message = `You currently have a ${Helper.CurrencyFormat(get(deletedUserMeta, 'availableBalance'))} balance on your account.  You must initiate a withdraw and wait for the cash to post before you can delete your account.`;
     } else if (get(deletedUserMeta, 'validAgreement')) {
-      data.message = commonMsg;
+      data.header = 'You currently have active investments in your account';
+      data.message = (<p>Because you have active investments in your account, we are unable to delete your account at this time. If you wish to learn more about the options available to you, please email us at <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
     }
+    data.header = 'Are you sure?';
+    data.message = (<p>We hate to see you go, but if you would like to delete your NextSeed account please confirm your intent by entering the email address associated with your account.<br /> <br /> Please note that any Credits you may have accumulated in your account will be forfeited.</p>);
+    data.isValidForDelete = true;
     return data;
   }
 
