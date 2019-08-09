@@ -43,7 +43,7 @@ export default class CrowdPay extends Component {
   render() {
     const { match, crowdpayStore } = this.props;
     const {
-      requestState, filters, FILTER_FRM, fChange,
+      requestState, filters, FILTER_FRM, fChange, filterCount,
       // summary,
     } = crowdpayStore;
     return (
@@ -58,6 +58,7 @@ export default class CrowdPay extends Component {
   toggleSearch={this.toggleSearch}
   requestState={requestState}
   filters={filters}
+  filterCount={filterCount}
   change={this.executeSearch}
 />
 )}
