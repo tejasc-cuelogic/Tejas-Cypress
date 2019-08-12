@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import graphql from 'mobx-apollo';
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
@@ -41,6 +42,8 @@ export class IdentityStore {
   @observable sendOtpToMigratedUser = [];
 
   @observable signUpLoading = false;
+
+  cipErrorMessage = null;
 
   @action
   setFieldValue = (field, value) => {
@@ -241,9 +244,11 @@ export class IdentityStore {
       legalCip.failReason = !get(cip, 'failReason') ? [{ key: response.key, message: response.message }]
         : this.CipFailReasons(cip.failReason, { key: response.key, message: response.message });
     } else {
-      legalCip.expiration = Helper.getDaysfromNow(21);
-      legalCip.requestId = response.hardFailId || 'ERROR_NO_CIP_REQUEST_ID';
-      legalCip.failType = 'FAIL_WITH_UPLOADS';
+      legalCip.expiration = this.isUserCipOffline ? moment().subtract(1, 'days').toISOString() : Helper.getDaysfromNow(21);
+      legalCip.requestId = response.hardFailId || '-1';
+      if (this.userCipStatus !== 'OFFLINE') {
+        legalCip.failType = 'FAIL_WITH_UPLOADS';
+      }
       if (response.qualifiers && response.qualifiers !== null) {
         legalCip.failReason = !get(cip, 'failReason') ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])]
           : this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
@@ -330,25 +335,33 @@ export class IdentityStore {
           }
         })
         .catch((err) => {
-          if (err || err.response) {
+          if (err.response) {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            this.setFieldValue('signUpLoading', false);
             reject(err);
           } else {
             // uiStore.setErrors(JSON.stringify('Something went wrong'));
-            this.setCipStatus('HARD_FAIL');
+            this.setCipStatus('OFFLINE');
+            this.cipErrorMessage = JSON.stringify(err);
             this.updateUserInfo().then(() => {
+              this.setFieldValue('signUpLoading', false);
               resolve();
             }).catch(() => {
+              this.setFieldValue('signUpLoading', false);
               reject();
             });
           // reject(err);
           }
-          this.setFieldValue('signUpLoading', false);
         });
       // .finally(() => {
       //   uiStore.setProgress(false);
       // });
     });
+  }
+
+  @action
+  setCipStatusWithUserDetails = () => {
+    this.userCipStatus = userDetailsStore.userDetails.legalDetails.status;
   }
 
   @action
@@ -465,6 +478,11 @@ export class IdentityStore {
           uiStore.setProgress(false);
         });
     });
+  }
+
+  @computed get isUserCipOffline() {
+    return this.userCipStatus === 'OFFLINE'
+    || get(userDetailsStore, 'userDetails.cip.requestId') ? get(userDetailsStore, 'userDetails.cip.requestId') === '-1' : false;
   }
 
   @action
@@ -605,6 +623,7 @@ export class IdentityStore {
         .then((data) => {
           userDetailsStore.getUser(userStore.currentUser.sub).then((d) => {
             if (d) {
+              this.setCipStatusWithUserDetails();
               resolve(data);
             }
           });
@@ -883,7 +902,7 @@ export class IdentityStore {
       }
     }
     if (legalDetails && phone && phone.number) {
-      fields.phoneNumber.value = phone.number;
+      fields.phoneNumber.value = get(fields, 'phoneNumber.value') ? fields.phoneNumber.value : phone.number;
     }
   }
 

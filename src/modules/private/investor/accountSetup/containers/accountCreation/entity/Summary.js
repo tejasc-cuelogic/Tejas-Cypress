@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash';
 import { DateTimeFormat, ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore')
+@inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'identityStore')
 @withRouter
 @observer
 export default class Summary extends Component {
@@ -30,11 +30,21 @@ export default class Summary extends Component {
   }
 
   handleCreateAccount = () => {
+    this.props.identityStore.setCipStatusWithUserDetails();
     this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
+    if (this.props.identityStore.isUserCipOffline) {
+      this.props.handleUserIdentity('entity', this.handleSubmitAccount);
+    } else {
+      this.props.handleLegalDocsBeforeSubmit('entity', this.handleSubmitAccount);
+    }
+  }
+
+  handleSubmitAccount = () => {
     this.props.uiStore.setcreateAccountMessage();
     this.props.entityAccountStore.submitAccount().then(() => {
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
       // this.props.history.push('app/summary');
     });
   }

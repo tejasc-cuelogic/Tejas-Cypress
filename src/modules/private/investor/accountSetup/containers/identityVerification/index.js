@@ -43,6 +43,7 @@ export default class IdentityVerification extends Component {
 
   handleCloseModal = () => {
     this.props.uiStore.setErrors(null);
+    this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
     this.props.history.push('/app/summary');
   }
 
@@ -72,7 +73,7 @@ export default class IdentityVerification extends Component {
                       route,
                       display,
                     } = this.props.identityStore.userVerficationStatus;
-                    if (key === 'id.success') {
+                    if ((key === 'id.success') || this.props.identityStore.isUserCipOffline) {
                       const { phoneVerification } = this.props.userDetailsStore.signupStatus;
                       const {
                         isCipExpired,
@@ -122,6 +123,7 @@ export default class IdentityVerification extends Component {
     this.props.identityStore.uploadAndUpdateCIPInfo().then(() => {
       if (phoneVerification === 'DONE') {
         const { accountForWhichCipExpired } = this.props.userDetailsStore;
+        this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
         const expiredAccountFromLocalStorage = window.sessionStorage.getItem('individualAccountCipExp');
         if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
           this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired || expiredAccountFromLocalStorage}`);
@@ -152,6 +154,7 @@ export default class IdentityVerification extends Component {
         Helper.toast('Identity questions verified.', 'success');
         if (phoneVerification === 'DONE') {
           const { accountForWhichCipExpired } = this.props.userDetailsStore;
+          this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
           const expiredAccountFromLocalStorage = window.sessionStorage.getItem('individualAccountCipExp');
           if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
             this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired || expiredAccountFromLocalStorage}`);
