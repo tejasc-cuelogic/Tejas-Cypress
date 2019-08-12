@@ -18,18 +18,8 @@ settingEnv()
 	REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/aws\/cognito\/identityPool\/id/ { print $3 }')
 	sed -i.bak "s/^\(REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID=\).*/\1${REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID}/" .envTEMPLATE
 
-#    echo "checking REACT_APP_API_URL"
-#	REACT_APP_API_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/url/ { print $3; exit }')
-#	if [ "$environment" = "predev" ] || [ "$ci_commit_ref" = "develop" ]; then
-#        REACT_APP_API_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/url\/distribution/ { print $3 }')
-#    fi
-#    echo $REACT_APP_API_URL
-#    REACT_APP_API_URL_TRIM=`echo "$REACT_APP_API_URL" | xargs`
-#    echo $REACT_APP_API_URL_TRIM
-#	sed -i.bak "s#^\(REACT_APP_API_URL=\).*#\1${REACT_APP_API_URL_TRIM}#" .envTEMPLATE
-
-    REACT_APP_API_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/url\/distribution/ { print $3 }')
-    REACT_APP_API_URL_TRIM=`echo "$REACT_APP_API_URL" | xargs`
+  REACT_APP_API_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/url\/distribution/ { print $3 }')
+  REACT_APP_API_URL_TRIM=`echo "$REACT_APP_API_URL" | xargs`
 	sed -i.bak "s#^\(REACT_APP_API_URL=\).*#\1${REACT_APP_API_URL_TRIM}#" .envTEMPLATE
 
 	REACT_APP_BOX_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/box\/url/ { print $3 }')
@@ -42,14 +32,8 @@ settingEnv()
 	sed -i.bak "s#^\(REACT_APP_PROTECTION_API=\).*#\1${REACT_APP_PROTECTION_API}#" .envTEMPLATE
 
 	#Credentials for Public uploads
-    REACT_APP_UPLOADS_BUCKET=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/uploads\/bucket/ { print $3 }')
+  REACT_APP_UPLOADS_BUCKET=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/uploads\/bucket/ { print $3 }')
 	sed -i.bak "s#^\(REACT_APP_UPLOADS_BUCKET=\).*#\1${REACT_APP_UPLOADS_BUCKET}#" .envTEMPLATE
-
-    REACT_APP_UPLOADS_ACCESS_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/uploads\/akey/ { print $3 }')
-	sed -i.bak "s#^\(REACT_APP_UPLOADS_ACCESS_KEY=\).*#\1${REACT_APP_UPLOADS_ACCESS_KEY}#" .envTEMPLATE
-
-    REACT_APP_UPLOADS_SECRET_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/uploads\/skey/ { print $3 }')
-	sed -i.bak "s#^\(REACT_APP_UPLOADS_SECRET_KEY=\).*#\1${REACT_APP_UPLOADS_SECRET_KEY}#" .envTEMPLATE
 
 	REACT_APP_PLAID_PUBLIC_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/plaid\/publicKey/ { print $3 }')
 	sed -i.bak "s/^\(REACT_APP_PLAID_PUBLIC_KEY=\).*/\1${REACT_APP_PLAID_PUBLIC_KEY}/" .envTEMPLATE
@@ -60,7 +44,7 @@ settingEnv()
 	REACT_APP_SEGMENT_WRITE_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/segment\/writeKey/ { print $3 }')
 	sed -i.bak "s/^\(REACT_APP_SEGMENT_WRITE_KEY=\).*/\1${REACT_APP_SEGMENT_WRITE_KEY}/" .envTEMPLATE
 
-   	#SAASQUATCH
+  #SAASQUATCH
 	REACT_APP_SAASQUATCH_TENANT_ALIAS=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/saasquatch\/tenant\/alias/ { print $3 }')
 	sed -i.bak "s#^\(REACT_APP_SAASQUATCH_TENANT_ALIAS=\).*#\1${REACT_APP_SAASQUATCH_TENANT_ALIAS}#" .envTEMPLATE
 
@@ -78,24 +62,13 @@ settingEnv()
 	#BranchName
 	sed -i.bak "s#^\(REACT_APP_DEPLOY_BRANCH=\).*#\1${CI_COMMIT_REF_NAME}#" .envTEMPLATE
 
-	#Public API endpoint- url
-#	echo "checking REACT_APP_PUBLIC_API"
-#    REACT_APP_PUBLIC_API=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/public\/url/ { print $3; exit }')
-#    if [ "$environment" = "predev" ] || [ "$ci_commit_ref" = "develop" ]; then
-#        REACT_APP_PUBLIC_API=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/public\/url\/distribution/ { print $3 }')
-#    fi
-#    echo $REACT_APP_PUBLIC_API
-#    REACT_APP_PUBLIC_API_TRIM=`echo "$REACT_APP_PUBLIC_API" | xargs`
-#    echo $REACT_APP_PUBLIC_API_TRIM
-#    sed -i.bak "s#^\(REACT_APP_PUBLIC_API=\).*#\1${REACT_APP_PUBLIC_API_TRIM}#" .envTEMPLATE
+  REACT_APP_PUBLIC_API=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/public\/url\/distribution/ { print $3 }')
+  REACT_APP_PUBLIC_API_TRIM=`echo "$REACT_APP_PUBLIC_API" | xargs`
+  sed -i.bak "s#^\(REACT_APP_PUBLIC_API=\).*#\1${REACT_APP_PUBLIC_API_TRIM}#" .envTEMPLATE
 
-    REACT_APP_PUBLIC_API=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/public\/url\/distribution/ { print $3 }')
-    REACT_APP_PUBLIC_API_TRIM=`echo "$REACT_APP_PUBLIC_API" | xargs`
-    sed -i.bak "s#^\(REACT_APP_PUBLIC_API=\).*#\1${REACT_APP_PUBLIC_API_TRIM}#" .envTEMPLATE
-
-    #Public API endpoint- key
-    REACT_APP_PUBLIC_API_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/public\/key/ { print $3 }')
-    sed -i.bak "s#^\(REACT_APP_PUBLIC_API_KEY=\).*#\1${REACT_APP_PUBLIC_API_KEY}#" .envTEMPLATE
+  #Public API endpoint- key
+  REACT_APP_PUBLIC_API_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/public\/key/ { print $3 }')
+  sed -i.bak "s#^\(REACT_APP_PUBLIC_API_KEY=\).*#\1${REACT_APP_PUBLIC_API_KEY}#" .envTEMPLATE
 
 	if [ "$ci_commit_ref" = "predev" ] || [ "$ci_commit_ref" = "dev" ] || [ "$ci_commit_ref" = "qa" ] || [ "$ci_commit_ref" = "demo" ] || [ "$ci_commit_ref" = "master" ]; then
 		REACT_APP_BUG_SNAG_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/bugsnag\/apiKey/ { print $3 }')
@@ -107,7 +80,7 @@ settingEnv()
 		#Environment
 		sed -i.bak "s#^\(REACT_APP_DEPLOY_ENV=\).*#\1${CI_COMMIT_REF_NAME}#" .envTEMPLATE
 	else
-	    #Environment
+	  #Environment
 		sed -i.bak "s#^\(REACT_APP_DEPLOY_ENV=\).*#\1review#" .envTEMPLATE
 	fi
 
@@ -140,7 +113,10 @@ demo)
 prod)
 	settingEnv
 ;;
-prod-temp)
+infosec)
+	settingEnv
+;;
+staging)
 	settingEnv
 ;;
 predev)
