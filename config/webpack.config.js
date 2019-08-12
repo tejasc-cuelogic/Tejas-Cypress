@@ -583,7 +583,7 @@ module.exports = (webpackEnv) => {
         ],
         append: false
       }),
-      !(['production', 'master', 'prod', 'demo'].includes(process.env.REACT_APP_DEPLOY_ENV))
+      !(['production', 'master', 'prod', 'demo', 'infosec'].includes(process.env.REACT_APP_DEPLOY_ENV))
       && new HtmlWebpackTagsPlugin({
         scripts: [
           {
@@ -685,7 +685,7 @@ module.exports = (webpackEnv) => {
           },
         },
       ]),
-      !(['production', 'master', 'prod', 'demo'].includes(process.env.REACT_APP_DEPLOY_ENV))
+      !(['production', 'master', 'prod', 'demo', 'infosec'].includes(process.env.REACT_APP_DEPLOY_ENV))
       && new CopyPlugin([
         {
           from: 'src/assets/js/cypressSri.js',

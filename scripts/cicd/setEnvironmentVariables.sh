@@ -80,7 +80,7 @@ settingEnv()
 		#Environment
 		sed -i.bak "s#^\(REACT_APP_DEPLOY_ENV=\).*#\1${CI_COMMIT_REF_NAME}#" .envTEMPLATE
 	else
-	    #Environment
+	  #Environment
 		sed -i.bak "s#^\(REACT_APP_DEPLOY_ENV=\).*#\1review#" .envTEMPLATE
 	fi
 
@@ -113,7 +113,10 @@ demo)
 prod)
 	settingEnv
 ;;
-prod-temp)
+infosec)
+	settingEnv
+;;
+staging)
 	settingEnv
 ;;
 predev)
