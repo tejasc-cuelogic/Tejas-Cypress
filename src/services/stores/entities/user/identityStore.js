@@ -316,8 +316,6 @@ export class IdentityStore {
           },
         })
         .then((data) => {
-          // eslint-disable-next-line no-unused-expressions
-          dsdsdsds;
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
           // TODO optimize signUpLoading call
           if (data.data.verifyCIPIdentity.passId
