@@ -481,7 +481,8 @@ export class IdentityStore {
   }
 
   @computed get isUserCipOffline() {
-    return this.userCipStatus === 'OFFLINE' || userDetailsStore.userDetails.cip.requestId === '-1';
+    return this.userCipStatus === 'OFFLINE'
+    || get(userDetailsStore, 'userDetails.cip.requestId') ? get(userDetailsStore, 'userDetails.cip.requestId') === '-1' : false;
   }
 
   @action
