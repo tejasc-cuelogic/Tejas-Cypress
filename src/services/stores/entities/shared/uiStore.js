@@ -32,8 +32,6 @@ export class UiStore {
 
   @observable asyncCheckLoader = false;
 
-  @observable submitAccountLoader = false;
-
   @observable devBanner = !['production', 'prod', 'master', 'localhost'].includes(REACT_APP_DEPLOY_ENV);
 
   @observable confirmBox = {

@@ -59,7 +59,7 @@ export default class AccountCreation extends React.Component {
       resetIsEnterPressed,
       setIsEnterPressed,
       createAccountMessage,
-      submitAccountLoader,
+      inProgressArray,
     } = this.props.uiStore;
     const {
       FIN_INFO_FRM, showProcessingModal,
@@ -210,7 +210,7 @@ export default class AccountCreation extends React.Component {
     }
     return (
       <div className="step-progress">
-        <MultiStep isAccountCreation setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || submitAccountLoader} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

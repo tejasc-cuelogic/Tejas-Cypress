@@ -56,7 +56,7 @@ export default class AccountCreation extends React.Component {
       depositMoneyNow,
       isPlaidDirty,
       linkbankSummary,
-      submitAccountLoader,
+      inProgressArray,
       isAccountPresent, setLinkBankSummary,
     } = this.props.bankAccountStore;
     const {
@@ -99,7 +99,7 @@ export default class AccountCreation extends React.Component {
     }
     return (
       <div className="step-progress">
-        <MultiStep isAccountCreation loaderMsg={createAccountMessage} setLinkbankSummary={setLinkBankSummary} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || submitAccountLoader} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation loaderMsg={createAccountMessage} setLinkbankSummary={setLinkBankSummary} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

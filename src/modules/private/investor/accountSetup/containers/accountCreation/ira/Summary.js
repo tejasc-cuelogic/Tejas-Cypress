@@ -33,7 +33,7 @@ export default class Summary extends Component {
 
   handleCreateAccount = () => {
     this.props.identityStore.setCipStatusWithUserDetails();
-    this.props.uiStore.setFieldvalue('submitAccountLoader', true);
+    this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
     if (this.props.identityStore.isUserCipOffline) {
       this.props.handleUserIdentity('ira', this.handleSubmitAccount);
     } else {
@@ -45,7 +45,7 @@ export default class Summary extends Component {
     this.props.uiStore.setcreateAccountMessage();
     this.props.iraAccountStore.submitAccount().then(() => {
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      this.props.uiStore.setFieldvalue('submitAccountLoader', false);
+      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
       // this.props.history.push('app/summary');
     });
   }
