@@ -32,8 +32,10 @@ export default class Summary extends Component {
   }
 
   handleCreateAccount = () => {
+    this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
     this.props.uiStore.setcreateAccountMessage();
     this.props.iraAccountStore.submitAccount().then(() => {
+      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
       // this.props.history.push('app/summary');
     });

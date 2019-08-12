@@ -14,6 +14,7 @@ import GsModal from '../../../components/GsProcessingModal';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
+    this.props.checkIfAccountIsAlreadyPresent('ira');
     if (!this.props.iraAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('ira');
@@ -54,7 +55,7 @@ export default class AccountCreation extends React.Component {
   render() {
     let steps = [];
     const {
-      inProgress,
+      inProgress, inProgressArray,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
@@ -209,7 +210,7 @@ export default class AccountCreation extends React.Component {
     }
     return (
       <div className="step-progress">
-        <MultiStep isAccountCreation setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

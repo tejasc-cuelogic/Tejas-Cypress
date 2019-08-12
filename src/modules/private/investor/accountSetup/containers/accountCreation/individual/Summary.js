@@ -66,6 +66,7 @@ export default class Summary extends React.Component {
     } = this.props.userDetailsStore;
     this.props.uiStore.setcreateAccountMessage();
     this.props.individualAccountStore.submitAccount().then(() => {
+      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
       if (partialInvestNowSessionURL) {
         this.props.history.push(partialInvestNowSessionURL);
@@ -83,6 +84,7 @@ export default class Summary extends React.Component {
   }
 
   handleCreateAccount = () => {
+    this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
     const {
       isCipExpired,
       signupStatus,

@@ -6,7 +6,7 @@ import IraAccCreation from './ira/AccountCreation';
 import IndividualAccCreation from './individual/AccountCreation';
 import EntityAccCreation from './entity/AccountCreation';
 
-@inject('identityStore', 'accountStore', 'bankAccountStore')
+@inject('identityStore', 'accountStore', 'bankAccountStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class AccountCreation extends Component {
@@ -17,6 +17,12 @@ export default class AccountCreation extends Component {
     // eslint-disable-next-line prefer-destructuring
     if (accType) {
       this.props.accountStore.setAccTypeChange(accType.value);
+    }
+  }
+
+  checkIfAccountIsAlreadyPresent = (accountType) => {
+    if (this.props.userDetailsStore.checkIfAccountIsAlreadyPresent(accountType)) {
+      this.props.history.push('/app/summary');
     }
   }
 
@@ -48,9 +54,9 @@ export default class AccountCreation extends Component {
 />
             )}
           />
-          <Route exact path={`${this.props.match.url}/individual`} component={IndividualAccCreation} />
-          <Route exact path={`${this.props.match.url}/ira`} component={IraAccCreation} />
-          <Route exact path={`${this.props.match.url}/entity`} component={EntityAccCreation} />
+          <Route exact path={`${this.props.match.url}/individual`} render={() => <IndividualAccCreation checkIfAccountIsAlreadyPresent={this.checkIfAccountIsAlreadyPresent} />} />
+          <Route exact path={`${this.props.match.url}/ira`} render={() => <IraAccCreation checkIfAccountIsAlreadyPresent={this.checkIfAccountIsAlreadyPresent} />} />
+          <Route exact path={`${this.props.match.url}/entity`} render={() => <EntityAccCreation checkIfAccountIsAlreadyPresent={this.checkIfAccountIsAlreadyPresent} />} />
         </Switch>
       </div>
     );
