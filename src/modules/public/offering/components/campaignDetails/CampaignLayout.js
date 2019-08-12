@@ -40,11 +40,14 @@ class CampaignLayout extends Component {
   }
 
   componentDidMount() {
-    document.querySelectorAll('.fr-fic').forEach((ele) => {
-      ele.setAttribute('data-src', ele.getAttribute('src'));
-      ele.removeAttribute('src');
-      ele.closest('p').classList.add('ui');
-      ele.closest('p').classList.add('placeholder');
+    document.querySelectorAll('.fr-view').forEach((e) => {
+      e.querySelectorAll('img').forEach((ele) => {
+        this.pWrapper(ele);
+        ele.setAttribute('data-src', ele.getAttribute('src'));
+        ele.removeAttribute('src');
+        ele.closest('.closest').classList.add('ui');
+        ele.closest('.closest').classList.add('placeholder');
+      });
     });
     if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
@@ -61,6 +64,28 @@ class CampaignLayout extends Component {
     this.props.navStore.setFieldValue('currentActiveHash', null);
     window.removeEventListener('scroll', this.handleOnScroll);
     Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore', 'remove');
+  }
+
+  pWrapper = (el) => {
+    const p = document.createElement('p');
+    p.classList.add('closest');
+    if (el.classList.contains('fr-editor-desktop')) {
+      p.classList.add('fr-editor-desktop');
+    }
+    if (el.classList.contains('fr-editor-mobile')) {
+      p.classList.add('fr-editor-mobile');
+    }
+    if (el.classList.contains('fr-editor-tablet')) {
+      p.classList.add('fr-editor-tablet');
+    }
+    if (el.classList.contains('fr-editor-tablet-landscape')) {
+      p.classList.add('fr-editor-tablet-landscape');
+    }
+    if (el.classList.contains('fr-editor-tablet-mobile')) {
+      p.classList.add('fr-editor-tablet-mobile');
+    }
+    el.parentNode.insertBefore(p, el);
+    p.appendChild(el);
   }
 
   onScrollCallBack = (target) => {
@@ -80,16 +105,19 @@ class CampaignLayout extends Component {
   }
 
   processLazyLoadImages = () => new Promise((resolve) => {
-    const lazyImages = [...document.querySelectorAll('.fr-fic')];
-    lazyImages.forEach((img, i) => {
-      if (this.isScrolledIntoView(img)) {
-        setTimeout(() => {
-          img.setAttribute('src', img.getAttribute('data-src'));
-          img.closest('p').classList.remove('ui');
-          img.closest('p').classList.remove('placeholder');
-        }, 500);
-      }
-      if (i === lazyImages.length - 1) { setTimeout(() => { resolve(); }, 5000); }
+    const ele = [...document.querySelectorAll('.fr-view')];
+    ele.forEach((e) => {
+      const lazyImages = e.querySelectorAll('img');
+      lazyImages.forEach((img, i) => {
+        if (this.isScrolledIntoView(img)) {
+          setTimeout(() => {
+            img.setAttribute('src', img.getAttribute('data-src'));
+            img.closest('.closest').classList.remove('ui');
+            img.closest('.closest').classList.remove('placeholder');
+          }, 500);
+        }
+        if (i === lazyImages.length - 1) { setTimeout(() => { resolve(); }, 5000); }
+      });
     });
   })
 
