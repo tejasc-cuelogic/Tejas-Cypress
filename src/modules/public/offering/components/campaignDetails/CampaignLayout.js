@@ -69,21 +69,11 @@ class CampaignLayout extends Component {
   pWrapper = (el) => {
     const p = document.createElement('p');
     p.classList.add('closest');
-    if (el.classList.contains('fr-editor-desktop')) {
-      p.classList.add('fr-editor-desktop');
-    }
-    if (el.classList.contains('fr-editor-mobile')) {
-      p.classList.add('fr-editor-mobile');
-    }
-    if (el.classList.contains('fr-editor-tablet')) {
-      p.classList.add('fr-editor-tablet');
-    }
-    if (el.classList.contains('fr-editor-tablet-landscape')) {
-      p.classList.add('fr-editor-tablet-landscape');
-    }
-    if (el.classList.contains('fr-editor-tablet-mobile')) {
-      p.classList.add('fr-editor-tablet-mobile');
-    }
+    ['fr-editor-desktop', 'fr-editor-mobile', 'fr-editor-tablet', 'fr-editor-tablet-landscape', 'fr-editor-tablet-mobile'].forEach((e) => {
+      if (el.classList.contains(e)) {
+        p.classList.add(e);
+      }
+    });
     el.parentNode.insertBefore(p, el);
     p.appendChild(el);
   }
