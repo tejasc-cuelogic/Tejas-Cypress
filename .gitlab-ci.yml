@@ -290,6 +290,33 @@ deploy:qa:
   dependencies:
     - build:qa
 
+#---------------------------------Infosec---------------------------------------
+#Building code
+build:infosec:
+  <<: *build_definition
+  only:
+    refs:
+      - master
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION infosec $CI_COMMIT_REF_NAME && cd ../..
+    - npm install
+    - npm run build
+
+#Deploying code to s3 bucket
+deploy:infosec:
+  <<: *deploy_defination
+  only:
+    refs:
+      - master
+  environment:
+    name: infosec
+    url: http://$INFOSEC_URL
+  script:
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $INFOSEC_URL && cd ../..
+    - aws cloudfront create-invalidation --distribution-id $INFOSEC_DISTRIBUTION_ID --paths "/*"
+  dependencies:
+    - build:infosec
+
 #---------------------------------Production------------------------------------
 
 #Building code
