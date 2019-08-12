@@ -261,6 +261,9 @@
     &.meet-team >.item:not(:last-child) {
         margin-bottom: @60px;
     }
+    &.update-items > .item{
+        display: block;
+    }
 }
 .horizontal-items.ui.items{
     display:flex;
