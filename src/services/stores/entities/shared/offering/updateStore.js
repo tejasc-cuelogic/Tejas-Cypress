@@ -1,9 +1,8 @@
 import { observable, action, computed } from 'mobx';
 import graphql from 'mobx-apollo';
 import { orderBy } from 'lodash';
-import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { FormValidator as Validator, ClientDb } from '../../../../../helper';
+import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { UPDATES, TEMPLATE } from '../../../../constants/offering';
 import { offeringCreationStore, uiStore } from '../../../index';
@@ -276,7 +275,7 @@ export class UpdateStore {
         return null;
       });
       this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];
-      this.PBUILDER_FRM.fields.updatedDate.value = moment(offeringUpdatesById.updated.date).format('MM/DD/YYYY');
+      this.PBUILDER_FRM.fields.updatedDate.value = DataFormatter.getDateAsPerTimeZone(offeringUpdatesById.updated.date, true, false, false);
       Validator.validateForm(this.PBUILDER_FRM);
     }
 
