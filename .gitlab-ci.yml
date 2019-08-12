@@ -42,9 +42,8 @@ before_script:
   except:
     - predev
     - dev
-    - qa
     - demo
-    - secops
+    - qa
     - master
 
 #.before_script_template: &before_script_defination
@@ -231,36 +230,6 @@ test:dev:
     - build:dev
 
 
-#---------------------------------Qa--------------------------------------------
-
-#Building code
-build:qa:
-  <<: *build_definition
-  only:
-    refs:
-      - qa
-  # <<: *before_script_defination
-  script:
-    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION qa $CI_COMMIT_REF_NAME && cd ../..
-    - npm install
-    - npm run build
-
-#Deploying code to s3 bucket
-deploy:qa:
-  <<: *deploy_defination
-  only:
-    refs:
-      - qa
-  environment:
-    name: qa
-    url: http://$QA_URL
-  script:
-    # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - cd ./scripts/cicd/ && sh ./deployApp.sh $QA_URL && cd ../..
-    - aws cloudfront create-invalidation --distribution-id $QA_DISTRIBUTION_ID --paths "/*"
-  dependencies:
-    - build:qa
-
 #---------------------------------Demo--------------------------------------------
 
 #Building code
@@ -290,6 +259,36 @@ deploy:demo:
     - aws cloudfront create-invalidation --distribution-id $DEMO_DISTRIBUTION_ID --paths "/*"
   dependencies:
     - build:demo
+
+#---------------------------------Qa--------------------------------------------
+
+#Building code
+build:qa:
+  <<: *build_definition
+  only:
+    refs:
+      - qa
+  # <<: *before_script_defination
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION qa $CI_COMMIT_REF_NAME && cd ../..
+    - npm install
+    - npm run build
+
+#Deploying code to s3 bucket
+deploy:qa:
+  <<: *deploy_defination
+  only:
+    refs:
+      - qa
+  environment:
+    name: qa
+    url: http://$QA_URL
+  script:
+    # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $QA_URL && cd ../..
+    - aws cloudfront create-invalidation --distribution-id $QA_DISTRIBUTION_ID --paths "/*"
+  dependencies:
+    - build:qa
 
 #---------------------------------Production------------------------------------
 
