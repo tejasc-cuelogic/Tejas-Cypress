@@ -21,6 +21,7 @@ export default class DeleteUser extends React.Component {
     this.props.userStore.getUserDeleteMeta();
     this.props.userStore.userReset();
     this.props.userStore.handleCancelDeleteUser(false);
+    this.props.userStore.setFieldValue('deleteUser', false);
   }
 
   closeModal = () => {
@@ -76,7 +77,7 @@ export default class DeleteUser extends React.Component {
                     type="text"
                     name="email"
                     fielddata={USR_FRM.fields.email}
-                    changed={(e, res) => userEleChange(e, res, 'text', true)}
+                    onChange={(e, res) => userEleChange(e, res, 'text', true)}
                   />
                 </Form>
                 <div className="center-align mt-30">
