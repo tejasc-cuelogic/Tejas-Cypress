@@ -316,7 +316,10 @@ export class IdentityStore {
           },
         })
         .then((data) => {
+          // eslint-disable-next-line no-unused-expressions
+          dsdsdsds;
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
+          // TODO optimize signUpLoading call
           if (data.data.verifyCIPIdentity.passId
             || data.data.verifyCIPIdentity.softFailId
             || data.data.verifyCIPIdentity.hardFailId) {
@@ -346,6 +349,7 @@ export class IdentityStore {
               this.setFieldValue('signUpLoading', false);
               resolve();
             }).catch(() => {
+              this.setFieldValue('signUpLoading', false);
               reject();
             });
           // reject(err);
@@ -479,7 +483,7 @@ export class IdentityStore {
   }
 
   @computed get isUserCipOffline() {
-    return this.userCipStatus === 'OFFLINE';
+    return this.userCipStatus === 'OFFLINE' || userDetailsStore.userDetails.cip.requestId === '-1';
   }
 
   @action
@@ -899,7 +903,7 @@ export class IdentityStore {
       }
     }
     if (legalDetails && phone && phone.number) {
-      fields.phoneNumber.value = phone.number;
+      fields.phoneNumber.value = get(fields, 'phoneNumber.value') ? fields.phoneNumber.value : phone.number;
     }
   }
 
