@@ -112,27 +112,26 @@ class CampaignLayout extends Component {
   })
 
   handleOnScroll = () => {
-    this.processLazyLoadImages().then(() => {
-      const { campaignNavData } = this.props.campaignStore;
-      const navs = toJS(campaignNavData);
-      if (navs && Array.isArray(navs)) {
-        navs.forEach((item) => {
-          if (document.getElementById(item.to.slice(1))
-          && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
-          && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
-            if (isTablet && (this.props.navStore.currentActiveHash !== item.to) && this.props.navStore.campaignHeaderStatus) {
-              scrollIntoView(document.getElementById(`${item.to.slice(1)}-mob-nav`), { align: { top: 1, topOffset: -(window.innerHeight - 92) }, isScrollable: this.onScrollCallBack });
-            // document.getElementsByClassName('campaign-mobile-menu-v2')[0].getElementsByClassName('active')[0].scrollIntoView({
-            //   // inline: 'center',
-            //   behavior: 'smooth',
-            //   // block: 'start',
-            // });
-            }
-            this.props.navStore.setFieldValue('currentActiveHash', item.to);
+    this.processLazyLoadImages();
+    const { campaignNavData } = this.props.campaignStore;
+    const navs = toJS(campaignNavData);
+    if (navs && Array.isArray(navs)) {
+      navs.forEach((item) => {
+        if (document.getElementById(item.to.slice(1))
+        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
+        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
+          if (isTablet && (this.props.navStore.currentActiveHash !== item.to) && this.props.navStore.campaignHeaderStatus) {
+            scrollIntoView(document.getElementById(`${item.to.slice(1)}-mob-nav`), { align: { top: 1, topOffset: -(window.innerHeight - 92) }, isScrollable: this.onScrollCallBack });
+          // document.getElementsByClassName('campaign-mobile-menu-v2')[0].getElementsByClassName('active')[0].scrollIntoView({
+          //   // inline: 'center',
+          //   behavior: 'smooth',
+          //   // block: 'start',
+          // });
           }
-        });
-      }
-    });
+          this.props.navStore.setFieldValue('currentActiveHash', item.to);
+        }
+      });
+    }
   }
 
   handleCollapseExpand = (name, processAction) => {
