@@ -56,7 +56,8 @@ export default class AccountCreation extends Component {
 
   handleLegalDocsBeforeSubmit = (accountType, submitAccount) => {
     const { isUserVerified, isLegalDocsPresent } = this.props.userDetailsStore;
-    if (!isUserVerified && !isLegalDocsPresent) {
+    this.props.identityStore.setCipStatusWithUserDetails();
+    if ((!isUserVerified && !isLegalDocsPresent) || this.props.identityStore.isUserCipOffline) {
       if (accountType === 'individual') {
         this.props.userDetailsStore.setAccountForWhichCipExpired(accountType);
       }
