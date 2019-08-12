@@ -24,6 +24,8 @@ export class UserStore {
 
   @observable cancelDeleteUser = false;
 
+  @observable confirmDelete = false;
+
   @action
   userEleChange = (e, res, type, isDeleteUser) => {
     this.USR_FRM = Validator.onChange(this.USR_FRM, Validator.pullValues(e, res), type);
@@ -163,6 +165,14 @@ export class UserStore {
       data.message = (<p>We're so glad you've decided to keep your NextSeed account. If you need any further assistance or wish to contact the NextSeed team, please reach out to us at <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
       data.isValidForDelete = false;
       data.isCancelDelete = true;
+      return data;
+    }
+
+    if (this.confirmDelete) {
+      data.header = 'Your account has been deleted';
+      data.message = (<p>Thank you for being a part of the NextSeed community. If you change your mind, we'd love to have you back! <br /> Please let us know if we can be of any help by contacting <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
+      data.isValidForDelete = false;
+      data.isCancelDelete = false;
       return data;
     }
 
