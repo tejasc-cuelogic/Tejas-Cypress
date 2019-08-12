@@ -47,6 +47,7 @@ export default class AccountCreation extends React.Component {
       setIsEnterPressed,
       resetIsEnterPressed,
       createAccountMessage,
+      inProgressArray,
     } = this.props.uiStore;
     // Done changes for saving link bank details - Alan's feedback point
     // const { plaidAccDetails, formLinkBankManually, formAddFunds } = this.props.bankAccountStore;
@@ -56,7 +57,6 @@ export default class AccountCreation extends React.Component {
       depositMoneyNow,
       isPlaidDirty,
       linkbankSummary,
-      inProgressArray,
       isAccountPresent, setLinkBankSummary,
     } = this.props.bankAccountStore;
     const {
