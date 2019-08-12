@@ -168,16 +168,16 @@ export class UserStore {
 
     if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') > 0) {
       data.header = 'You currently have funds remaining in your account';
-      data.message = (<p>In order to delete your account, please withdraw all funds and allow 5-7 business days to clear prior to deleting your account. If you have any questions or need assistance, please email us at <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
+      data.message = (<p className="mb-20">In order to delete your account, please withdraw all funds and allow 5-7 business days to clear prior to deleting your account. If you have any questions or need assistance, please email us at <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
       data.isCancelDelete = false;
     } if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') <= 0 && get(deletedUserMeta, 'totalBalance') === 0) {
       data.header = 'Are you sure?';
-      data.message = (<p>We hate to see you go, but if you would like to delete your NextSeed account please confirm your intent by entering the email address associated with your account.<br /> Please note that any Credits you may have accumulated in your account will be forfeited.</p>);
+      data.message = (<p className="mb-20">We hate to see you go, but if you would like to delete your NextSeed account please confirm your intent by entering the email address associated with your account.<br /> Please note that any Credits you may have accumulated in your account will be forfeited.</p>);
       data.isValidForDelete = true;
       data.isCancelDelete = false;
     } else if (get(deletedUserMeta, 'validAgreement')) {
       data.header = 'You currently have active investments in your account';
-      data.message = (<p>Because you have active investments in your account, we are unable to delete your account at this time. If you wish to learn more about the options available to you, please email us at <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
+      data.message = (<p className="mb-20">Because you have active investments in your account, we are unable to delete your account at this time. If you wish to learn more about the options available to you, please email us at <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
       data.isCancelDelete = false;
       data.isValidForDelete = false;
     }
