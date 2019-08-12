@@ -4,7 +4,7 @@ import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
 import { mapValues, map, concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { FormValidator as Validator } from '../../../../helper';
+import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM } from '../../../constants/user';
 import {
   identityStore,
@@ -450,7 +450,7 @@ export class UserDetailsStore {
         && !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
       details.isMigratedUser = (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
       details.isMigratedFullAccount = (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION')
-          && this.userDetails.status === 'MIGRATION_FULL');
+        && this.userDetails.status === 'MIGRATION_FULL');
       details.accStatus = this.userDetails.status;
       details.investorProfileCompleted = this.userDetails.investorProfileData === null
         ? false : this.userDetails.investorProfileData
@@ -508,9 +508,9 @@ export class UserDetailsStore {
 
   @computed get userHasOneFullAccount() {
     return (this.userDetails.status === 'FULL'
-    && (this.signupStatus.activeAccounts.length > 0
-    || this.signupStatus.frozenAccounts.length > 0
-    || this.signupStatus.processingAccounts.length > 0));
+      && (this.signupStatus.activeAccounts.length > 0
+        || this.signupStatus.frozenAccounts.length > 0
+        || this.signupStatus.processingAccounts.length > 0));
   }
 
   @computed get isLegalDocsPresent() {
@@ -661,9 +661,14 @@ export class UserDetailsStore {
   @computed get isCipExpired() {
     if (this.userDetails && this.userDetails.cip) {
       const { expiration } = this.userDetails.cip;
-      const expirationDate = new Date(expiration);
-      const currentDate = new Date();
-      if (expirationDate < currentDate) {
+      // const expirationDate = new Date(expiration);
+      // const currentDate = new Date();
+      // if (expirationDate < currentDate) {
+      //   return true;
+      // }
+      const expirationDate = DataFormatter.getCSTDateMomentObject(expiration, true);
+      const currentDate = DataFormatter.getCurrentCSTMoment();
+      if (expirationDate.isBefore(currentDate)) {
         return true;
       }
     }
@@ -688,7 +693,7 @@ export class UserDetailsStore {
   @computed get isLegaLVerificationDone() {
     return (this.validAccStatus
       .includes(this.signupStatus.idVerification)
-    && this.signupStatus.phoneVerification === 'DONE');
+      && this.signupStatus.phoneVerification === 'DONE');
   }
 
   @action
