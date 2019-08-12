@@ -182,7 +182,7 @@ export class UserStore {
       data.isCancelDelete = false;
     } if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') <= 0 && get(deletedUserMeta, 'totalBalance') === 0) {
       data.header = 'Are you sure?';
-      data.message = (<p>We hate to see you go, but if you would like to delete your NextSeed account please confirm your intent by entering the email address associated with your account.<br /> Please note that any Credits you may have accumulated in your account will be forfeited.</p>);
+      data.message = (<p>We hate to see you go, but if you would like to delete your NextSeed account please confirm your intent by entering the email address associated with your account.<br /> Please note that any promotional credits you may have accumulated in your account will be forfeited.</p>);
       data.isValidForDelete = true;
       data.isCancelDelete = false;
     } else if (get(deletedUserMeta, 'validAgreement')) {
