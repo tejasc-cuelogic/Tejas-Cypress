@@ -41,7 +41,7 @@ export default class DeleteUser extends React.Component {
   }
 
   backToOfferings = () => {
-    this.props.history.push('/');
+    this.props.history.push('/offerings/');
   }
 
   createNewAccount = () => {
