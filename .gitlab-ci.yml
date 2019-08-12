@@ -42,9 +42,8 @@ before_script:
   except:
     - predev
     - dev
-    - qa
     - demo
-    - secops
+    - qa
     - master
 
 #.before_script_template: &before_script_defination
@@ -231,6 +230,36 @@ test:dev:
     - build:dev
 
 
+#---------------------------------Demo--------------------------------------------
+
+#Building code
+build:demo:
+  <<: *build_definition
+  only:
+    refs:
+      - demo
+  # <<: *before_script_defination
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION demo $CI_COMMIT_REF_NAME && cd ../..
+    - npm install
+    - npm run build
+
+#Deploying code to s3 bucket
+deploy:demo:
+  <<: *deploy_defination
+  only:
+    refs:
+      - demo
+  environment:
+    name: demo
+    url: http://$DEMO_URL
+  script:
+    # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $DEMO_URL && cd ../.. #- sh deployApp.sh $DEMO_URL
+    - aws cloudfront create-invalidation --distribution-id $DEMO_DISTRIBUTION_ID --paths "/*"
+  dependencies:
+    - build:demo
+
 #---------------------------------Qa--------------------------------------------
 
 #Building code
@@ -261,35 +290,32 @@ deploy:qa:
   dependencies:
     - build:qa
 
-#---------------------------------Demo--------------------------------------------
-
+#---------------------------------Infosec---------------------------------------
 #Building code
-build:demo:
+build:infosec:
   <<: *build_definition
   only:
     refs:
-      - demo
-  # <<: *before_script_defination
+      - master
   script:
-    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION demo $CI_COMMIT_REF_NAME && cd ../..
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION infosec $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build
 
 #Deploying code to s3 bucket
-deploy:demo:
+deploy:infosec:
   <<: *deploy_defination
   only:
     refs:
-      - demo
+      - master
   environment:
-    name: demo
-    url: http://$DEMO_URL
+    name: infosec
+    url: http://$INFOSEC_URL
   script:
-    # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - cd ./scripts/cicd/ && sh ./deployApp.sh $DEMO_URL && cd ../.. #- sh deployApp.sh $DEMO_URL
-    - aws cloudfront create-invalidation --distribution-id $DEMO_DISTRIBUTION_ID --paths "/*"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $INFOSEC_URL && cd ../..
+    - aws cloudfront create-invalidation --distribution-id $INFOSEC_DISTRIBUTION_ID --paths "/*"
   dependencies:
-    - build:demo
+    - build:infosec
 
 #---------------------------------Production------------------------------------
 
