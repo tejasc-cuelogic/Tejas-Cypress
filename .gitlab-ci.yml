@@ -331,10 +331,10 @@ deploy:infosec:
 #    - npm install
 #    - npm run build
 
-package:prod:
+build:prod:
 #  tags:
 #    - ns-client
-  stage: package
+  stage: build
   only:
     refs:
       - master
