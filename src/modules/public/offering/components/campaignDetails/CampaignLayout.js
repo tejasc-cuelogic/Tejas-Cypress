@@ -40,6 +40,15 @@ class CampaignLayout extends Component {
   }
 
   componentDidMount() {
+    document.querySelectorAll('.fr-view').forEach((e) => {
+      e.querySelectorAll('img').forEach((ele) => {
+        this.pWrapper(ele);
+        ele.setAttribute('data-src', ele.getAttribute('src'));
+        ele.removeAttribute('src');
+        ele.closest('.closest').classList.add('ui');
+        ele.closest('.closest').classList.add('placeholder');
+      });
+    });
     if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
       document.querySelector(`${this.props.location.hash}`).scrollIntoView({
@@ -48,12 +57,25 @@ class CampaignLayout extends Component {
       });
     }
     Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore');
+    this.processLazyLoadImages();
   }
 
   componentWillUnmount() {
     this.props.navStore.setFieldValue('currentActiveHash', null);
     window.removeEventListener('scroll', this.handleOnScroll);
     Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore', 'remove');
+  }
+
+  pWrapper = (el) => {
+    const p = document.createElement('p');
+    p.classList.add('closest');
+    ['fr-editor-desktop', 'fr-editor-mobile', 'fr-editor-tablet', 'fr-editor-tablet-landscape', 'fr-editor-tablet-mobile'].forEach((e) => {
+      if (el.classList.contains(e)) {
+        p.classList.add(e);
+      }
+    });
+    el.parentNode.insertBefore(p, el);
+    p.appendChild(el);
   }
 
   onScrollCallBack = (target) => {
@@ -64,7 +86,33 @@ class CampaignLayout extends Component {
     return returnVal;
   }
 
+  isScrolledIntoView = (el) => {
+    const rect = el.getBoundingClientRect();
+    const elemTop = rect.top - 110;
+    const elemBottom = rect.bottom;
+    const isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+    return isVisible;
+  }
+
+  processLazyLoadImages = () => new Promise((resolve) => {
+    const ele = [...document.querySelectorAll('.fr-view')];
+    ele.forEach((e) => {
+      const lazyImages = e.querySelectorAll('img');
+      lazyImages.forEach((img, i) => {
+        if (this.isScrolledIntoView(img)) {
+          setTimeout(() => {
+            img.setAttribute('src', img.getAttribute('data-src'));
+            img.closest('.closest').classList.remove('ui');
+            img.closest('.closest').classList.remove('placeholder');
+          }, 500);
+        }
+        if (i === lazyImages.length - 1) { setTimeout(() => { resolve(); }, 5000); }
+      });
+    });
+  })
+
   handleOnScroll = () => {
+    this.processLazyLoadImages();
     const { campaignNavData } = this.props.campaignStore;
     const navs = toJS(campaignNavData);
     if (navs && Array.isArray(navs)) {
@@ -120,7 +168,7 @@ class CampaignLayout extends Component {
                   />
                 )
               }
-              {campaign.updates.length > 1 ? (
+              {campaign && campaign.updates && campaign.updates.length > 1 ? (
               <Button onClick={() => this.handleCollapseExpand('expandUpdate', '#updates')} className={`${!isTablet ? 'mt-20' : ''} link-button highlight-text`}>
                 {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Updates
                 <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />

@@ -1,6 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { isArray, get, filter as lodashFilter, findIndex, find } from 'lodash';
+import { isArray, get, filter as lodashFilter, findIndex, find, omit } from 'lodash';
+import cleanDeep from 'clean-deep';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
@@ -403,14 +404,17 @@ export class CrowdpayStore {
 
   @action
   reset = () => {
+    this.requestState.search.keyword = '';
     this.resetData();
     this.FILTER_FRM = Validator.prepareFormObject(FILTER_META);
     this.isLazyLoading = true;
   }
 
+  @action
   resetData = () => {
     this.resetPagination();
     this.requestState.requestTriggerPage = 1;
+    this.requestState.search.accountStatus = undefined;
     this.allCrowdpayData = [];
   }
 
@@ -434,6 +438,10 @@ export class CrowdpayStore {
         reject();
       });
   });
+
+  @computed get filterCount() {
+    return Object.keys(omit(cleanDeep(toJS(this.requestState.search)), 'accountType')).length;
+  }
 }
 
 export default new CrowdpayStore();

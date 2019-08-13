@@ -2,5 +2,9 @@
   "adminCredentials": {
     "email": "admintestuser@nextseed.com",
     "password": "nextseedTest"
+  },
+  "adminCredentialsV2": {
+    "email": "v2+admin@nextseed.com",
+    "password": "nextseedTest"
   }
 }
