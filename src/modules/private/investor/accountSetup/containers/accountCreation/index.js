@@ -39,7 +39,6 @@ export default class AccountCreation extends Component {
           this.props.identityStore.setIdentityQuestions();
           this.props.history.push(route);
         } else if (this.props.identityStore.isUserCipOffline && !isLegalDocsPresent) {
-          this.props.uiStore.setProgress();
           this.props.history.push('/app/summary/identity-verification/1');
         } else {
           this.props.uiStore.setProgress();

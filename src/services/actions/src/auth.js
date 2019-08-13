@@ -421,6 +421,7 @@ export class Auth {
     localStorage.removeItem('lastActiveTime');
     localStorage.removeItem('defaultNavExpanded');
     window.sessionStorage.removeItem('AccountCipExp');
+    window.sessionStorage.removeItem('cipErrorMessage');
     const uKey = get(userStore, 'currentUser.sub') || 'public';
     window.sessionStorage.removeItem(`${uKey}_pInfo`);
     authStore.setUserLoggedIn(false);

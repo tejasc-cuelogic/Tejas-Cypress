@@ -4,7 +4,7 @@ import { find, get, capitalize, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { FormValidator, DataFormatter } from '../../../helper';
-import { bankAccountStore, individualAccountStore, iraAccountStore, entityAccountStore, userDetailsStore, uiStore } from '../index';
+import { bankAccountStore, individualAccountStore, iraAccountStore, entityAccountStore, userDetailsStore, uiStore, identityStore } from '../index';
 import { GqlClient as client } from '../../../api/gqlApi';
 // eslint-disable-next-line import/named
 import { getInvestorCloseAccounts, closeInvestorAccount, updateToAccountProcessing } from '../queries/account';
@@ -114,14 +114,14 @@ export class AccountStore {
   }
 
   @action
-  updateToAccountProcessing = (accountId, error, accountType) => new Promise((resolve, reject) => {
-    uiStore.setProgress();
+  updateToAccountProcessing = (accountId, accountType) => new Promise((resolve, reject) => {
+    identityStore.setFieldValue('signUpLoading', true);
     client
       .mutate({
         mutation: updateToAccountProcessing,
         variables: {
           accountId,
-          error,
+          error: window.sessionStorage.getItem('cipErrorMessage'),
         },
       })
       .then((res) => {
@@ -129,12 +129,12 @@ export class AccountStore {
         bankAccountStore.resetStoreData();
         this.ACC_TYPE_MAPPING[accountType].store.isFormSubmitted = true;
         Helper.toast(`${capitalize(this.ACC_TYPE_MAPPING[accountType].name)} account submitted successfully.`, 'success');
-        uiStore.setProgress(false);
+        identityStore.setFieldValue('signUpLoading', false);
         resolve(res);
       })
       .catch((err) => {
         Helper.toast('Unable to submit Account', 'error');
-        uiStore.setProgress(false);
+        identityStore.setFieldValue('signUpLoading', false);
         uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
         reject();
       });

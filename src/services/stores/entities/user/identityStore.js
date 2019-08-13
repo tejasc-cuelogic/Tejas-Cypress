@@ -43,8 +43,6 @@ export class IdentityStore {
 
   @observable signUpLoading = false;
 
-  cipErrorMessage = null;
-
   @action
   setFieldValue = (field, value) => {
     this[field] = value;
@@ -317,7 +315,6 @@ export class IdentityStore {
         })
         .then((data) => {
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
-          // TODO optimize signUpLoading call
           if (data.data.verifyCIPIdentity.passId
             || data.data.verifyCIPIdentity.softFailId
             || data.data.verifyCIPIdentity.hardFailId) {
@@ -342,7 +339,7 @@ export class IdentityStore {
           } else {
             // uiStore.setErrors(JSON.stringify('Something went wrong'));
             this.setCipStatus('OFFLINE');
-            this.cipErrorMessage = JSON.stringify(err);
+            window.sessionStorage.setItem('cipErrorMessage', JSON.stringify(err));
             this.updateUserInfo().then(() => {
               this.setFieldValue('signUpLoading', false);
               resolve();
