@@ -20,6 +20,13 @@ class LegalDetails extends React.Component {
     }
   }
 
+  handleEncryptedSsn = (fielddata) => {
+    if (fielddata.value && fielddata.value.includes('X')) {
+      return { ...fielddata, value: '' };
+    }
+    return fielddata;
+  }
+
   render() {
     const { form, change, close, autoComplete, name, inProgress, errors, onSubmit, maskChange } = this.props;
     return (
@@ -127,7 +134,7 @@ class LegalDetails extends React.Component {
             />
             <MaskedInput
               name="ssn"
-              fielddata={form.fields.ssn}
+              fielddata={this.handleEncryptedSsn(form.fields.ssn)}
               ssn
               changed={maskChange}
               showerror
