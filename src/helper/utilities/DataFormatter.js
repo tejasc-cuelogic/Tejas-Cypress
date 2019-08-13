@@ -52,7 +52,8 @@ class DataFormatter {
     timeStamp2, inHours = false, returnNegative = false, isCustomDate = false,
     customDateObj = undefined,
   ) => {
-    const d1 = moment().format('MM/DD/YYYY');
+    // const d1 = moment().format('MM/DD/YYYY');
+    const d1 = momentZone.tz('America/Chicago').format('MM/DD/YYYY');
     // const d2 = timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').format('MM/DD/YYYY') : null;
     const d2 = isCustomDate && customDateObj && get(customDateObj, 'number') ? timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').add(customDateObj.number, customDateObj.format.toString()).format('MM/DD/YYYY') : null : timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').format('MM/DD/YYYY') : null;
     const diff = d2 ? moment(d2, 'MM/DD/YYYY').diff(moment(d1, 'MM/DD/YYYY'), 'days') : null;
