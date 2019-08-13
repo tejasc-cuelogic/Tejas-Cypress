@@ -544,7 +544,7 @@ export class UserDetailsStore {
         }
       }
     } else if (get(this.userDetails, 'cip')
-      && !this.isUserVerified
+      && !this.isLegaLVerificationDone
       && !this.isCompleteIndividualAccount) {
       routingUrl = '/app/summary/account-creation/individual';
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
