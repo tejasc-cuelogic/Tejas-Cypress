@@ -481,8 +481,7 @@ export class IdentityStore {
   }
 
   @computed get isUserCipOffline() {
-    return this.userCipStatus === 'OFFLINE'
-    || get(userDetailsStore, 'userDetails.cip.requestId') ? get(userDetailsStore, 'userDetails.cip.requestId') === '-1' : false;
+    return this.userCipStatus === 'OFFLINE';
   }
 
   @action
@@ -897,7 +896,7 @@ export class IdentityStore {
       fields.dateOfBirth.value = legalDetails.dateOfBirth;
     }
     if (legalDetails && legalDetails.ssn) {
-      if (!legalDetails.ssn.includes('X') || window.sessionStorage.getItem('individualAccountCipExp')) {
+      if (!legalDetails.ssn.includes('X') || window.sessionStorage.getItem('AccountCipExp')) {
         fields.ssn.value = legalDetails.ssn;
       }
     }

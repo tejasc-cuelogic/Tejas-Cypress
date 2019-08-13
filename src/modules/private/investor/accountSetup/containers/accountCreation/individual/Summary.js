@@ -44,7 +44,7 @@ export default class Summary extends React.Component {
         setPartialInvestmenSession();
       } else if (!this.props.individualAccountStore.showProcessingModal) {
         this.props.history.push('/app/summary');
-        window.sessionStorage.removeItem('individualAccountCipExp');
+        window.sessionStorage.removeItem('AccountCipExp');
         this.props.uiStore.resetcreateAccountMessage();
       }
     }).catch((err) => {

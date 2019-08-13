@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { find, get } from 'lodash';
 import AccountTypes from '../../components/accountCreation/AccountTypes';
 import IraAccCreation from './ira/AccountCreation';
 import IndividualAccCreation from './individual/AccountCreation';
@@ -29,6 +28,7 @@ export default class AccountCreation extends Component {
     this.props.uiStore.setProgress();
     this.props.identityStore.setCipStatusWithUserDetails();
     this.props.identityStore.setCipDetails();
+    const { isLegalDocsPresent } = this.props.userDetailsStore;
     this.props.identityStore.verifyUserIdentity()
       .then(() => {
         const {
@@ -38,15 +38,9 @@ export default class AccountCreation extends Component {
         if (key === 'id.failure') {
           this.props.identityStore.setIdentityQuestions();
           this.props.history.push(route);
-        } else if (this.props.identityStore.isUserCipOffline) {
+        } else if (this.props.identityStore.isUserCipOffline && !isLegalDocsPresent) {
           this.props.uiStore.setProgress();
-          const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
-          const accountId = get(accountDetails, 'details.accountId') || this.props.individualAccountStore.individualAccId;
-          const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
-          this.props.accountStore.updateToAccountProcessing(accountId, this.props.identityStore.cipErrorMessage, accountvalue).then(() => {
-            this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-            this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-          });
+          this.props.history.push('/app/summary/identity-verification/1');
         } else {
           this.props.uiStore.setProgress();
           this.handleLegalDocsBeforeSubmit(accountType, submitAccount);
@@ -58,9 +52,7 @@ export default class AccountCreation extends Component {
     const { isUserVerified, isLegalDocsPresent } = this.props.userDetailsStore;
     this.props.identityStore.setCipStatusWithUserDetails();
     if ((!isUserVerified && !isLegalDocsPresent) || this.props.identityStore.isUserCipOffline) {
-      if (accountType === 'individual') {
-        this.props.userDetailsStore.setAccountForWhichCipExpired(accountType);
-      }
+      this.props.userDetailsStore.setAccountForWhichCipExpired(accountType);
       this.handleUserIdentity(accountType, submitAccount);
     } else {
       submitAccount();

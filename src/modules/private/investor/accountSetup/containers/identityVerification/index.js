@@ -124,7 +124,7 @@ export default class IdentityVerification extends Component {
       if (phoneVerification === 'DONE') {
         const { accountForWhichCipExpired } = this.props.userDetailsStore;
         this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-        const expiredAccountFromLocalStorage = window.sessionStorage.getItem('individualAccountCipExp');
+        const expiredAccountFromLocalStorage = window.sessionStorage.getItem('AccountCipExp');
         if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
           this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired || expiredAccountFromLocalStorage}`);
         } else {
@@ -155,7 +155,7 @@ export default class IdentityVerification extends Component {
         if (phoneVerification === 'DONE') {
           const { accountForWhichCipExpired } = this.props.userDetailsStore;
           this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-          const expiredAccountFromLocalStorage = window.sessionStorage.getItem('individualAccountCipExp');
+          const expiredAccountFromLocalStorage = window.sessionStorage.getItem('AccountCipExp');
           if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
             this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired || expiredAccountFromLocalStorage}`);
           } else {

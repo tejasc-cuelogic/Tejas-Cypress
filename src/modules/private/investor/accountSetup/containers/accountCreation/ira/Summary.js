@@ -36,6 +36,7 @@ export default class Summary extends Component {
     this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
     if (this.props.identityStore.isUserCipOffline) {
       this.props.handleUserIdentity('ira', this.handleSubmitAccount);
+      this.props.userDetailsStore.setAccountForWhichCipExpired('ira');
     } else {
       this.props.handleLegalDocsBeforeSubmit('ira', this.handleSubmitAccount);
     }
