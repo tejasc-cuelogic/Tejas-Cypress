@@ -26,7 +26,7 @@ export default class AccountHeader extends Component {
     const {
       currentActiveAccountDetailsOfSelectedUsers, getDetailsOfUser,
     } = this.props.userDetailsStore;
-    const isProd = ['production', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV);
+    const isProd = ['production', 'prod', 'master', 'infosec'].includes(REACT_APP_DEPLOY_ENV);
     const userId = get(getDetailsOfUser, 'id');
     const accountId = get(currentActiveAccountDetailsOfSelectedUsers, 'details.accountId');
     const freeze = get(currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus') === 'FROZEN';
