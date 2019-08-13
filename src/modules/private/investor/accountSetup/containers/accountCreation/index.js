@@ -21,12 +21,6 @@ export default class AccountCreation extends Component {
     }
   }
 
-  checkIfAccountIsAlreadyPresent = (accountType) => {
-    if (this.props.userDetailsStore.checkIfAccountIsAlreadyPresent(accountType)) {
-      this.props.history.push('/app/summary');
-    }
-  }
-
   handleCloseModal = () => {
     this.props.history.push('/app/summary');
   }

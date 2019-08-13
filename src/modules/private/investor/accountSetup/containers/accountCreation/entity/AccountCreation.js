@@ -15,13 +15,21 @@ import GsModal from '../../../components/GsProcessingModal';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
-    this.props.checkIfAccountIsAlreadyPresent('entity');
+    if (!this.props.entityAccountStore.showProcessingModal) {
+      this.checkIfAccountIsAlreadyPresent('entity');
+    }
     if (!this.props.entityAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('entity');
       this.props.accountStore.setAccTypeChange(2);
     }
     this.props.investmentLimitStore.getInvestedAmount();
+  }
+
+  checkIfAccountIsAlreadyPresent = (accountType) => {
+    if (this.props.userDetailsStore.checkIfAccountIsAlreadyPresent(accountType)) {
+      this.props.history.push('/app/summary');
+    }
   }
 
   handleMultiStepModalclose = () => {

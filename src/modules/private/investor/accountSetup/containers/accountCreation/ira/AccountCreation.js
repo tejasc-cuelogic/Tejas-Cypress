@@ -14,11 +14,19 @@ import GsModal from '../../../components/GsProcessingModal';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
-    this.props.checkIfAccountIsAlreadyPresent('ira');
+    if (!this.props.iraAccountStore.showProcessingModal) {
+      this.checkIfAccountIsAlreadyPresent('ira');
+    }
     if (!this.props.iraAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('ira');
       this.props.accountStore.setAccTypeChange(1);
+    }
+  }
+
+  checkIfAccountIsAlreadyPresent = (accountType) => {
+    if (this.props.userDetailsStore.checkIfAccountIsAlreadyPresent(accountType)) {
+      this.props.history.push('/app/summary');
     }
   }
 
