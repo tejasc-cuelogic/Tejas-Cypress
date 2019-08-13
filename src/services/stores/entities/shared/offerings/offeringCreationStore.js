@@ -345,7 +345,6 @@ export class OfferingCreationStore {
         this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
       })
       .catch((err) => {
-        // force record deletion from db;
         this.resetFormField('MEDIA_FRM', name, undefined, index);
         this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
         console.log(err);
@@ -364,13 +363,9 @@ export class OfferingCreationStore {
       .then((res) => {
         Helper.toast(`${this.LEADERSHIP_FRM.fields.leadership[index][name].label} removed successfully.`, 'success');
         this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
-        // this.updateOffering
-        // (this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
         this.updateOffering(this.currentOfferingId, this.LEADERSHIP_FRM.fields, 'leadership', null, true, null, null, true, index);
       })
       .catch((err) => {
-        // force record deletion from db;
-        // this.resetFormField('LEADERSHIP_FRM', name, undefined, index);
         this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
         this.updateOffering(this.currentOfferingId, this.LEADERSHIP_FRM.fields, 'leadership', null, true, null, null, true, index);
         console.log(err);
@@ -381,7 +376,6 @@ export class OfferingCreationStore {
   uploadMedia = (name, form = 'MEDIA_FRM') => {
     const fileObj = {
       obj: this[form].fields[name].base64String,
-      // type: this[form].fields[name].meta.type,
       name: Helper.sanitize(this[form].fields[name].fileName),
     };
     fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`)
@@ -1552,7 +1546,6 @@ export class OfferingCreationStore {
         if (bacType === 'LEADERSHIP') {
           this.getLeadershipOfferingBac(this.currentOfferingId, 'LEADERSHIP');
         }
-        // this.getAffiliatedIssuerOfferingBac(this.currentOfferingId, 'AFFILIATED_ISSUER');
         Helper.toast('Offering has been saved successfully.', 'success');
       })
       .catch((err) => {
