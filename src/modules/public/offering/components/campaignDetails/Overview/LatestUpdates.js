@@ -28,7 +28,7 @@ class LatestUpdates extends Component {
           <Label circular horizontal color="green">{(updates && updates.length) || 0}</Label>
           <span className="anchor" id="updates" />
         </Header>
-        <Item.Group>
+        <Item.Group className="update-items">
           <Item>
             <Item.Content>
               <div className={`${newLayout ? 'campaign-avatar-v2' : ''} campaign-avatar`}>

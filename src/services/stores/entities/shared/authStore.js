@@ -34,7 +34,7 @@ export class AuthStore {
   @observable userId = null;
 
   @observable devAuth = {
-    required: !['production', 'localhost', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV),
+    required: !['production', 'localhost', 'prod', 'master', 'infosec'].includes(REACT_APP_DEPLOY_ENV),
     authStatus: cookie.load('DEV_AUTH_TOKEN'),
   };
 
