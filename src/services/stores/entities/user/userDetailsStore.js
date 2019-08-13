@@ -2,9 +2,10 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
+import moment from 'moment';
 import { mapValues, map, concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { FormValidator as Validator, DataFormatter } from '../../../../helper';
+import { FormValidator as Validator } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM } from '../../../constants/user';
 import {
   identityStore,
@@ -666,9 +667,9 @@ export class UserDetailsStore {
       // if (expirationDate < currentDate) {
       //   return true;
       // }
-      const expirationDate = DataFormatter.getCSTDateMomentObject(expiration, true);
-      const currentDate = DataFormatter.getCurrentCSTMoment();
-      if (expirationDate.isBefore(currentDate)) {
+      const expirationDate = moment(new Date(expiration)).format('MM/DD/YYYY');
+      const currentDate = moment().format('MM/DD/YYYY');
+      if (moment(expirationDate).isBefore(moment(currentDate))) {
         return true;
       }
     }
