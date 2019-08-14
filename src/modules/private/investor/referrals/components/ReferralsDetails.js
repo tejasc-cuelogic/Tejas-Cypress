@@ -9,7 +9,7 @@ import { InlineLoader } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 
-@inject('referralsStore', 'userDetailsStore')
+@inject('referralsStore')
 @observer
 export default class ReferralsDetails extends Component {
   state = {
