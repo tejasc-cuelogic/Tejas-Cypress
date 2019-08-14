@@ -8,7 +8,7 @@ import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
-@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'referralsStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
 class Login extends Component {
