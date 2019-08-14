@@ -28,7 +28,7 @@ export default class EsAudit extends Component {
   }
 
   handleSync = (params) => {
-    this.props.elasticSearchStore.syncEsDocuemnt(params);
+    this.props.elasticSearchStore.syncEsDocument(params);
   }
 
   renderTitle = title => capitalize(title.replace('_', ' '));
@@ -57,8 +57,8 @@ export default class EsAudit extends Component {
                 />
                 <Form.Field width={6}>
                   <Button type="button" primary onClick={this.onSubmit} content="Submit" />
-                  <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_a.indexName')} onClick={() => this.handleSync({ docuemntId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_a.indexName') || '' })} content="Sync a" />
-                  <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_b.indexName')} onClick={() => this.handleSync({ docuemntId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_b.indexName') || '' })} content="Sync b" />
+                  <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_a.indexName')} onClick={() => this.handleSync({ documentId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_a.indexName') || '' })} content="Sync a" />
+                  <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_b.indexName')} onClick={() => this.handleSync({ documentId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_b.indexName') || '' })} content="Sync b" />
                 </Form.Field>
               </Form.Group>
               <Grid>
