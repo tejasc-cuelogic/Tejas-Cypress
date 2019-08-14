@@ -160,7 +160,7 @@ export default class Portfolio extends Component {
     };
     if (get(referralData, 'availableCredit') !== '0.00') {
       const availableCredit = {
-        title: 'Availabe Credit', content: money.format('USD', money.floatToAmount(parseFloat(get(referralData, 'availableCredit')))), type: 1, info: 'Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest.',
+        title: 'Availabe Credit', content: get(referralData, 'availableCredit'), type: 1, info: 'Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest.',
       };
       summaryDetails.summary.push(availableCredit);
     }
