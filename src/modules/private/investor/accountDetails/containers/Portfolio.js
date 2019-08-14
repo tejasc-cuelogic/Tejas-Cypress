@@ -19,7 +19,7 @@ import ChangeInvestmentLimit from '../../../../public/offering/components/invest
 import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
-@inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore')
+@inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore', 'referralsStore')
 @observer
 export default class Portfolio extends Component {
   state = {
@@ -110,6 +110,7 @@ export default class Portfolio extends Component {
   render() {
     const { match, portfolioStore, userDetailsStore } = this.props;
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
+    const { referralData } = this.props.referralsStore;
     if (portfolioStore.loading) {
       return (
         <>
@@ -157,6 +158,12 @@ export default class Portfolio extends Component {
         // },
       ],
     };
+    if (get(referralData, 'availableCredit') !== '0.00') {
+      const availableCredit = {
+        title: 'Availabe Credit', content: money.format('USD', money.floatToAmount(parseFloat(get(referralData, 'availableCredit')))), type: 1, info: 'Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest.',
+      };
+      summaryDetails.summary.push(availableCredit);
+    }
     const pendingSorted = getInvestorAccounts && getInvestorAccounts.investments.pending.length ? orderBy(getInvestorAccounts.investments.pending, o => get(o, 'offering.closureSummary.processingDate') && DataFormatter.diffDays(get(o, 'offering.closureSummary.processingDate')), ['asc']) : [];
     const activeSorted = getInvestorAccounts && getInvestorAccounts.investments.active.length ? orderBy(getInvestorAccounts.investments.active, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     let completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];

@@ -10,6 +10,21 @@ import { uiStore, userDetailsStore } from '../../index';
 export class ReferralStore {
   @observable referralCode = null;
 
+  @observable referralData = {
+    availableCredit: 0,
+    spentCredit: 0,
+    totalEarnedCredit: 0,
+    totalReferredUsers: 0,
+    myShareLink: '',
+    emailShareLink: '',
+    twitterShareLink: '',
+    messengerShareLink: '',
+    facebookShareLink: '',
+    smsShareLink: '',
+    messengerMobileShareLink: '',
+    loading: false,
+  }
+
   @action
   getJwtReferralEmbeddedWidget = () => new Promise((resolve, reject) => {
     const { userDetails } = userDetailsStore;
@@ -64,6 +79,7 @@ export class ReferralStore {
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data) {
+          this.setReferralData(data);
           resolve(data);
         }
       },
@@ -75,6 +91,24 @@ export class ReferralStore {
       },
     });
   });
+
+  @action
+  setReferralData = (data) => {
+    this.referralData = {
+      availableCredit: get(data, 'getUserReferralDetails.availableCredit') || 0,
+      spentCredit: get(data, 'getUserReferralDetails.spentCredit') || 0,
+      totalEarnedCredit: get(data, 'getUserReferralDetails.totalEarnedCredit') || 0,
+      totalReferredUsers: get(data, 'getUserReferralDetails.totalReferredUsers') || 0,
+      myShareLink: get(data, 'getUserReferralDetails.myShareLink') || '',
+      emailShareLink: get(data, 'getUserReferralDetails.emailShareLink') || '',
+      twitterShareLink: get(data, 'getUserReferralDetails.twitterShareLink') || '',
+      messengerShareLink: get(data, 'getUserReferralDetails.messengerShareLink') || '',
+      facebookShareLink: get(data, 'getUserReferralDetails.facebookShareLink') || '',
+      smsShareLink: get(data, 'getUserReferralDetails.smsShareLink') || '',
+      messengerMobileShareLink: get(data, 'getUserReferralDetails.messengerMobileShareLink') || '',
+      loading: false,
+    };
+  }
 
   @action
   getReferralCreditsInformation = code => new Promise((resolve) => {

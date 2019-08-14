@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
-import bugsnag from '@bugsnag/js';
-import bugsnagReact from '@bugsnag/plugin-react';
 import money from 'money-math';
 import { Header, Container, Grid, Button } from 'semantic-ui-react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -10,18 +8,6 @@ import { Link } from 'react-router-dom';
 import { InlineLoader } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
-
-
-let bugsnagClient;
-if (process.env.REACT_APP_BUG_SNAG_KEY) {
-  bugsnagClient = bugsnag({
-    apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
-    appType: 'client',
-    appVersion: process.env.CI_PIPELINE_ID,
-    releaseStage: process.env.REACT_APP_BUG_SNAG_STAGE,
-  });
-  bugsnagClient.use(bugsnagReact, React);
-}
 
 @inject('referralsStore', 'userDetailsStore')
 @observer
@@ -49,50 +35,23 @@ export default class ReferralsDetails extends Component {
   //     this.props.referralsStore.upsertUserReferralCredits(saasQuatchUserId);
   //   }
   // }
-  componentDidMount() {
-    const { userDetails } = this.props.userDetailsStore;
-    const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
-    const userId = saasQuatchUserId || get(userDetails, 'id');
-    if (userId) {
-      this.props.referralsStore.upsertUserReferralCredits(get(userDetails, 'id')).then(() => {
-        this.props.referralsStore.getUserReferralDetails()
-          .then((data) => {
-            this.setState({
-              availableCredit: get(data, 'getUserReferralDetails.availableCredit') || 0,
-              spentCredit: get(data, 'getUserReferralDetails.spentCredit') || 0,
-              totalEarnedCredit: get(data, 'getUserReferralDetails.totalEarnedCredit') || 0,
-              totalReferredUsers: get(data, 'getUserReferralDetails.totalReferredUsers') || 0,
-              myShareLink: get(data, 'getUserReferralDetails.myShareLink') || '',
-              emailShareLink: get(data, 'getUserReferralDetails.emailShareLink') || '',
-              twitterShareLink: get(data, 'getUserReferralDetails.twitterShareLink') || '',
-              messengerShareLink: get(data, 'getUserReferralDetails.messengerShareLink') || '',
-              facebookShareLink: get(data, 'getUserReferralDetails.facebookShareLink') || '',
-              smsShareLink: get(data, 'getUserReferralDetails.smsShareLink') || '',
-              messengerMobileShareLink: get(data, 'getUserReferralDetails.messengerMobileShareLink') || '',
-              loading: false,
-            });
-          })
-          .catch((e) => {
-            this.setState({
-              availableCredit: 0,
-              spentCredit: 0,
-              totalEarnedCredit: 0,
-              totalReferredUsers: 0,
-              myShareLink: '',
-              emailShareLink: '',
-              twitterShareLink: '',
-              messengerShareLink: '',
-              facebookShareLink: '',
-              smsShareLink: '',
-              messengerMobileShareLink: '',
-              loading: false,
-            });
-            if (bugsnagClient) {
-              bugsnagClient.notify(e);
-            }
-          });
-      });
-    }
+
+  componentWillMount() {
+    const { referralData } = this.props.referralsStore;
+    this.setState({
+      availableCredit: get(referralData, 'availableCredit') || 0,
+      spentCredit: get(referralData, 'spentCredit') || 0,
+      totalEarnedCredit: get(referralData, 'totalEarnedCredit') || 0,
+      totalReferredUsers: get(referralData, 'totalReferredUsers') || 0,
+      myShareLink: get(referralData, 'myShareLink') || '',
+      emailShareLink: get(referralData, 'emailShareLink') || '',
+      twitterShareLink: get(referralData, 'twitterShareLink') || '',
+      messengerShareLink: get(referralData, 'messengerShareLink') || '',
+      facebookShareLink: get(referralData, 'facebookShareLink') || '',
+      smsShareLink: get(referralData, 'smsShareLink') || '',
+      messengerMobileShareLink: get(referralData, 'messengerMobileShareLink') || '',
+      loading: false,
+    });
   }
 
   render() {

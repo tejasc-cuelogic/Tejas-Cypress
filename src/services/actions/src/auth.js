@@ -23,6 +23,7 @@ import {
   investmentStore,
   accreditationStore,
   transactionStore,
+  referralsStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -95,15 +96,18 @@ export class Auth {
               if (userStore.isAdmin) {
                 this.setAWSAdminAccess(signInUserSession.idToken.jwtToken);
               }
-
-              return res({ attributes, session: signInUserSession });
+              referralsStore.getUserReferralDetails()
+                .finally(() => {
+                  uiStore.setAppLoader(false);
+                  return res({ attributes, session: signInUserSession });
+                });
             }).catch((err) => {
               console.log('error in verifysession', err);
+              uiStore.setAppLoader(false);
               rej(err);
             })
               .finally(() => {
                 commonStore.setAppLoaded();
-                uiStore.setAppLoader(false);
                 uiStore.clearLoaderMessage();
               });
           }
