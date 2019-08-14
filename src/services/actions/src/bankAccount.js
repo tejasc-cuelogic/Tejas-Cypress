@@ -94,14 +94,18 @@ export class BankAccount {
             name: 'Link bank',
             stepToBeRendered: accountStore.ACC_TYPE_MAPPING[accountValue].location,
             validate: validationActions.validateLinkBankForm,
+            linkBankValue: accountStore.ACC_TYPE_MAPPING[accountValue].linkBankValue,
           };
           bankAccountStore.resetAddFundsForm();
-          accountStore.ACC_TYPE_MAPPING[accountValue].store.createAccount(currentStep);
-          accountStore.ACC_TYPE_MAPPING[accountValue].store
-            .setStepToBeRendered(accountStore.ACC_TYPE_MAPPING[accountValue].location);
-          if (accountStore.ACC_TYPE_MAPPING[accountValue].name !== 'individual') {
-            bankAccountStore.setShowAddFunds();
-          }
+          accountStore.ACC_TYPE_MAPPING[accountValue].store.createAccount(currentStep).then(() => {
+            accountStore.ACC_TYPE_MAPPING[accountValue].store
+              .setStepToBeRendered(accountStore.getStepValue(currentStep));
+            if (bankAccountStore.isAccountPresent && accountStore.ACC_TYPE_MAPPING[accountValue].name !== 'individual') {
+              bankAccountStore.setShowAddFunds();
+            }
+            uiStore.setProgress(false);
+            bankAccountStore.setLinkBankSummary(false);
+          });
         }
       },
       onExit: (err) => {
