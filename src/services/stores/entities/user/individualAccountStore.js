@@ -204,7 +204,9 @@ class IndividualAccountStore {
           bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
           if (account.details.linkedBank) {
             const plaidAccDetails = account.details.linkedBank;
-            bankAccountStore.setPlaidAccDetails(plaidAccDetails);
+            if (!bankAccountStore.isAccountPresent) {
+              bankAccountStore.setPlaidAccDetails(plaidAccDetails);
+            }
           } else {
             Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
               const { details } = account;

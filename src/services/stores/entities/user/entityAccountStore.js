@@ -579,7 +579,10 @@ class EntityAccountStore {
           }
           bankAccountStore.validateAddFunds();
           if (account.details.linkedBank) {
-            bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
+            const plaidAccDetails = account.details.linkedBank;
+            if (!bankAccountStore.isAccountPresent) {
+              bankAccountStore.setPlaidAccDetails(plaidAccDetails);
+            }
             bankAccountStore.formEntityAddFunds.fields.value.value = account.details.initialDepositAmount;
           } else {
             Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {

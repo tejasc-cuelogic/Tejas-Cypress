@@ -320,8 +320,8 @@ export class BankAccountStore {
   }
 
   @computed get isAccountPresent() {
-    const { accountNumber, routingNumber, bankname, public_token } = this.plaidAccDetails;
-    return !isEmpty(accountNumber) || !isEmpty(routingNumber) || !isEmpty(bankname) || !isEmpty(public_token);
+    const { accountNumber, routingNumber, bankName } = this.plaidAccDetails;
+    return !isEmpty(accountNumber) && !isEmpty(routingNumber) && !isEmpty(bankName);
   }
 
   @action
