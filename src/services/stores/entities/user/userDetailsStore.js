@@ -523,6 +523,11 @@ export class UserDetailsStore {
     this.deleting = status;
   }
 
+  @computed get isCipExpirationInProgress() {
+    return get(this.userDetails, 'cip.expiration')
+    && this.signupStatus.investorProfileCompleted && !this.isUserVerified && !this.isLegalDocsPresent && this.signupStatus.partialAccounts.length;
+  }
+
   @computed
   get pendingStep() {
     let routingUrl = '/app/summary';
@@ -543,10 +548,8 @@ export class UserDetailsStore {
           routingUrl = '/app/summary/establish-profile';
         }
       }
-    } else if (get(this.userDetails, 'cip')
-      && this.isLegaLVerificationDone
-      && !this.isCompleteIndividualAccount) {
-      routingUrl = '/app/summary/account-creation/individual';
+    } else if (this.isCipExpirationInProgress) {
+      routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
