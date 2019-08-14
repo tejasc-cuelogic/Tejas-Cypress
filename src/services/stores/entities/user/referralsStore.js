@@ -94,20 +94,7 @@ export class ReferralStore {
 
   @action
   setReferralData = (data) => {
-    this.referralData = {
-      availableCredit: get(data, 'getUserReferralDetails.availableCredit') || 0,
-      spentCredit: get(data, 'getUserReferralDetails.spentCredit') || 0,
-      totalEarnedCredit: get(data, 'getUserReferralDetails.totalEarnedCredit') || 0,
-      totalReferredUsers: get(data, 'getUserReferralDetails.totalReferredUsers') || 0,
-      myShareLink: get(data, 'getUserReferralDetails.myShareLink') || '',
-      emailShareLink: get(data, 'getUserReferralDetails.emailShareLink') || '',
-      twitterShareLink: get(data, 'getUserReferralDetails.twitterShareLink') || '',
-      messengerShareLink: get(data, 'getUserReferralDetails.messengerShareLink') || '',
-      facebookShareLink: get(data, 'getUserReferralDetails.facebookShareLink') || '',
-      smsShareLink: get(data, 'getUserReferralDetails.smsShareLink') || '',
-      messengerMobileShareLink: get(data, 'getUserReferralDetails.messengerMobileShareLink') || '',
-      loading: false,
-    };
+    this.referralData = { ...get(data, 'getUserReferralDetails') };
   }
 
   @action

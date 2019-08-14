@@ -3,24 +3,11 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { isEmpty, get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import bugsnag from '@bugsnag/js';
-import bugsnagReact from '@bugsnag/plugin-react';
 import { Modal, Button, Header, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
-
-let bugsnagClient;
-if (process.env.REACT_APP_BUG_SNAG_KEY) {
-  bugsnagClient = bugsnag({
-    apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
-    appType: 'client',
-    appVersion: process.env.CI_PIPELINE_ID,
-    releaseStage: process.env.REACT_APP_BUG_SNAG_STAGE,
-  });
-  bugsnagClient.use(bugsnagReact, React);
-}
 @inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'referralsStore')
 @withRouter
 @observer
@@ -69,28 +56,8 @@ class Login extends Component {
               const redirectUrl = (roles && roles.includes('investor'))
                 && !userHasOneFullAccount
                 ? pendingStep : this.props.uiStore.authRef;
-              if (roles && roles.includes('investor')) {
-                const { userDetails } = this.props.userDetailsStore;
-                const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
-                const userId = saasQuatchUserId || get(userDetails, 'id');
-                if (userId) {
-                  this.props.referralsStore.upsertUserReferralCredits(get(userDetails, 'id')).then(() => {
-                    this.props.referralsStore.getUserReferralDetails()
-                      .catch((error) => {
-                        if (bugsnagClient) {
-                          bugsnagClient.notify(error);
-                        }
-                      })
-                      .finaly(() => {
-                        this.props.uiStore.removeOneFromProgressArray('login');
-                        this.props.history.push(redirectUrl || '/');
-                      });
-                  });
-                }
-              } else {
-                this.props.uiStore.removeOneFromProgressArray('login');
-                this.props.history.push(redirectUrl || '/');
-              }
+              this.props.uiStore.removeOneFromProgressArray('login');
+              this.props.history.push(redirectUrl || '/');
             }
           }).catch((err) => {
             console.log(err);

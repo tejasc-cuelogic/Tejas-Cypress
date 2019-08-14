@@ -96,18 +96,17 @@ export class Auth {
               if (userStore.isAdmin) {
                 this.setAWSAdminAccess(signInUserSession.idToken.jwtToken);
               }
-              referralsStore.getUserReferralDetails()
-                .finally(() => {
-                  uiStore.setAppLoader(false);
-                  return res({ attributes, session: signInUserSession });
-                });
+              if (userStore.isInvestor) {
+                referralsStore.getUserReferralDetails();
+              }
+              return res({ attributes, session: signInUserSession });
             }).catch((err) => {
               console.log('error in verifysession', err);
-              uiStore.setAppLoader(false);
               rej(err);
             })
               .finally(() => {
                 commonStore.setAppLoaded();
+                uiStore.setAppLoader(false);
                 uiStore.clearLoaderMessage();
               });
           }
@@ -164,6 +163,9 @@ export class Auth {
     try {
       const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
       await this.amplifyLogin(user);
+      if (userStore.isInvestor) {
+        referralsStore.getUserReferralDetails();
+      }
     } catch (err) {
       if (Helper.matchRegexWithString(/\bTemporary password has expired(?![-])\b/, err.message)) {
         await this.resetPasswordExpiration(lowerCasedEmail, password);

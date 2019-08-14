@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get } from 'lodash';
 import money from 'money-math';
 import { Header, Container, Grid, Button } from 'semantic-ui-react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -12,50 +11,9 @@ import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHead
 @inject('referralsStore')
 @observer
 export default class ReferralsDetails extends Component {
-  state = {
-    loading: true,
-    availableCredit: 0,
-    spentCredit: 0,
-    totalEarnedCredit: 0,
-    totalReferredUsers: 0,
-    myShareLink: '',
-    emailShareLink: '',
-    twitterShareLink: '',
-    messengerShareLink: '',
-    facebookShareLink: '',
-    smsShareLink: '',
-    messengerMobileShareLink: '',
-  };
-
-
-  // componentWillMount() {
-  //   const { userDetails } = this.props.userDetailsStore;
-  //   const saasQuatchUserId = get(userDetails, 'id');
-  //   if (saasQuatchUserId) {
-  //     this.props.referralsStore.upsertUserReferralCredits(saasQuatchUserId);
-  //   }
-  // }
-
-  componentWillMount() {
-    const { referralData } = this.props.referralsStore;
-    this.setState({
-      availableCredit: get(referralData, 'availableCredit') || 0,
-      spentCredit: get(referralData, 'spentCredit') || 0,
-      totalEarnedCredit: get(referralData, 'totalEarnedCredit') || 0,
-      totalReferredUsers: get(referralData, 'totalReferredUsers') || 0,
-      myShareLink: get(referralData, 'myShareLink') || '',
-      emailShareLink: get(referralData, 'emailShareLink') || '',
-      twitterShareLink: get(referralData, 'twitterShareLink') || '',
-      messengerShareLink: get(referralData, 'messengerShareLink') || '',
-      facebookShareLink: get(referralData, 'facebookShareLink') || '',
-      smsShareLink: get(referralData, 'smsShareLink') || '',
-      messengerMobileShareLink: get(referralData, 'messengerMobileShareLink') || '',
-      loading: false,
-    });
-  }
-
   render() {
-    if (this.state.loading) {
+    const { referralData } = this.props.referralsStore;
+    if (referralData.loading) {
       return <InlineLoader />;
     }
 
@@ -73,16 +31,16 @@ export default class ReferralsDetails extends Component {
       title: false,
       summary: [
         {
-          title: 'Available Credit', content: money.format('USD', money.floatToAmount(parseFloat(this.state.availableCredit))) || '', type: 1, info: 'Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest.',
+          title: 'Available Credit', content: money.format('USD', money.floatToAmount(parseFloat(referralData.availableCredit))) || '', type: 1, info: 'Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest.',
         },
         {
-          title: 'Spent Credit', content: money.format('USD', money.floatToAmount(parseFloat(this.state.spentCredit))) || '', type: 1, info: 'The total amount of credit applied toward investments.',
+          title: 'Spent Credit', content: money.format('USD', money.floatToAmount(parseFloat(referralData.spentCredit))) || '', type: 1, info: 'The total amount of credit applied toward investments.',
         },
         {
-          title: 'Lifetime Earned Credit', content: money.format('USD', money.floatToAmount(parseFloat(this.state.totalEarnedCredit))) || '', type: 1, info: 'The total amount of credit you have earned with NextSeed.',
+          title: 'Lifetime Earned Credit', content: money.format('USD', money.floatToAmount(parseFloat(referralData.totalEarnedCredit))) || '', type: 1, info: 'The total amount of credit you have earned with NextSeed.',
         },
         {
-          title: 'Friends Referred', content: this.state.totalReferredUsers || '', type: 0, info: 'How many friends you have referred to NextSeed.',
+          title: 'Friends Referred', content: referralData.totalReferredUsers || '', type: 0, info: 'How many friends you have referred to NextSeed.',
         },
       ],
     };
@@ -103,8 +61,8 @@ export default class ReferralsDetails extends Component {
 
     const myShareLink = (
       <div className="fluid ui big action input">
-        <input id="myReferralLink" type="text" style={codeBoxStyle} value={this.state.myShareLink} readOnly />
-        <CopyToClipboard text={this.state.myShareLink} onCopy={() => Helper.toast('Referral link copied! Happy sharing.', 'success')}>
+        <input id="myReferralLink" type="text" style={codeBoxStyle} value={referralData.myShareLink} readOnly />
+        <CopyToClipboard text={referralData.myShareLink} onCopy={() => Helper.toast('Referral link copied! Happy sharing.', 'success')}>
           <button type="button" className="ui teal right labeled icon button">
             <i className="copy icon" />
             Copy
@@ -117,7 +75,7 @@ export default class ReferralsDetails extends Component {
 
     let button3;
     if (isMobile) {
-      const link = this.state.smsShareLink;
+      const link = referralData.smsShareLink;
       button3 = (
         <Button onClick={() => window.open(`${link}`, '_blank')} className="fluid ui olive labeled icon button">
           <i className="comment alternate outline icon" />
@@ -125,7 +83,7 @@ export default class ReferralsDetails extends Component {
         </Button>
       );
     } else {
-      const link = this.state.messengerShareLink;
+      const link = referralData.messengerShareLink;
       button3 = (
         <Button onClick={() => window.open(`${link}`, '_blank')} className="fluid ui labeled linkedin icon button">
           <i className="facebook messenger icon" />
@@ -134,10 +92,10 @@ export default class ReferralsDetails extends Component {
       );
     }
 
-    const { emailShareLink } = this.state;
-    const { twitterShareLink } = this.state;
+    const { emailShareLink } = referralData;
+    const { twitterShareLink } = referralData;
 
-    let { facebookShareLink } = this.state;
+    let { facebookShareLink } = referralData;
     let button4 = (
       <Button onClick={() => window.open(`${facebookShareLink}`, '_blank')} className="fluid ui labeled facebook icon button">
         <i className="facebook f icon" />
@@ -145,7 +103,7 @@ export default class ReferralsDetails extends Component {
       </Button>
     );
     if (isMobile) {
-      facebookShareLink = this.state.messengerMobileShareLink;
+      facebookShareLink = referralData.messengerMobileShareLink;
       button4 = (
         <Button onClick={() => window.open(`${facebookShareLink}`, '_blank')} className="fluid ui labeled facebook icon button">
           <i className="facebook f icon" />
