@@ -27,11 +27,15 @@ export default class EsAudit extends Component {
     this.props.history.goBack();
   }
 
+  handleSync = (params) => {
+    this.props.elasticSearchStore.syncEsDocuemnt(params);
+  }
+
   renderTitle = title => capitalize(title.replace('_', ' '));
 
   render() {
     const {
-      ES_AUDIT_FRM, formChange, esAuditParaOutput, esAuditParaOutputLoading,
+      ES_AUDIT_FRM, formChange, esAuditParaOutput, esAuditParaOutputLoading, inProgress,
     } = this.props.elasticSearchStore;
     const { auditAlias } = this.props.match.params;
     return (
@@ -43,7 +47,7 @@ export default class EsAudit extends Component {
           {esAuditParaOutputLoading
             ? <InlineLoader />
             : (
-<Form error onSubmit={this.onSubmit}>
+<Form error>
               <Form.Group className="bottom-aligned mb-40">
                 <FormInput
                   containerwidth={10}
@@ -51,8 +55,10 @@ export default class EsAudit extends Component {
                   fielddata={ES_AUDIT_FRM.fields.random}
                   changed={(e, result) => formChange(e, result, 'ES_AUDIT_FRM')}
                 />
-                <Form.Field width={4}>
-                  <Button primary content="Submit" />
+                <Form.Field width={6}>
+                  <Button type="button" primary onClick={this.onSubmit} content="Submit" />
+                  <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_a.indexName')} onClick={() => this.handleSync({ docuemntId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_a.indexName') || '' })} content="Sync a" />
+                  <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_b.indexName')} onClick={() => this.handleSync({ docuemntId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_b.indexName') || '' })} content="Sync b" />
                 </Form.Field>
               </Form.Group>
               <Grid>

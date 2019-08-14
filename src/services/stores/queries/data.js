@@ -104,3 +104,8 @@ query getListOfPartialOrCIPProcessingAccount {
     accountCreatedDate
   }
 }`;
+
+export const syncEsDocuemnt = gql`
+mutation syncEsDocuemnt($docuemntId: docuemntId!, $targetIndex: targetIndex){
+  syncEsDocuemnt(docuemntId: $docuemntId, targetIndex: $targetIndex)
+}`;
