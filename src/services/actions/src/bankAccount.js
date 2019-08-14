@@ -105,6 +105,9 @@ export class BankAccount {
             }
             uiStore.setProgress(false);
             bankAccountStore.setLinkBankSummary(false);
+          }).catch(() => {
+            accountStore.ACC_TYPE_MAPPING[accountValue].store
+              .setStepToBeRendered(accountStore.getStepValue(currentStep));
           });
         }
       },

@@ -47,6 +47,8 @@ export default class AddFunds extends Component {
       this.props.individualAccountStore.createAccount(currentStep).then(() => {
         this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
         this.props.individualAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
+      }).catch(() => {
+        this.props.individualAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
       });
     }
     if (this.props.accountStore.investmentAccType === 'entity') {
@@ -59,6 +61,8 @@ export default class AddFunds extends Component {
       this.props.entityAccountStore.createAccount(currentStep).then(() => {
         this.props.bankAccountStore.resetShowAddFunds();
         this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
+        this.props.entityAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
+      }).catch(() => {
         this.props.entityAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
       });
     }
@@ -73,6 +77,8 @@ export default class AddFunds extends Component {
         // this.props.bankAccountStore.resetAddFundsForm();
         this.props.bankAccountStore.resetShowAddFunds();
         this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
+        this.props.iraAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
+      }).catch(() => {
         this.props.iraAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
       });
     }

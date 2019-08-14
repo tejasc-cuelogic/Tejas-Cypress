@@ -180,6 +180,9 @@ class IndividualAccountStore {
           }))
           .catch(action((err) => {
             this.setFieldValue('apiCall', false);
+            if (currentStep.name === 'Link bank') {
+              bankAccountStore.setPlaidAccDetails({});
+            }
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             uiStore.setProgress(false);
             reject();

@@ -44,6 +44,8 @@ export default class ManualForm extends Component {
           }
         }
         this.props[accTypeStore].setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
+      }).catch(() => {
+        this.props[accTypeStore].setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
       });
     }
   }

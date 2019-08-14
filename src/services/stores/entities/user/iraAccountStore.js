@@ -397,6 +397,7 @@ class IraAccountStore {
         .catch((err) => {
           if (currentStep.name === 'Link bank') {
             bankAccountStore.resetShowAddFunds();
+            bankAccountStore.setPlaidAccDetails({});
           }
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           uiStore.setProgress(false);
