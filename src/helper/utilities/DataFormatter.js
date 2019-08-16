@@ -97,7 +97,7 @@ class DataFormatter {
 
   getDateAsPerTimeZone = (dataParam, isISOString = false, isLLFormat = false, showTime = true, isCustomFormat = undefined, timeZone = 'CST') => {
     // const localTimeZone = timeZone === 'local' ? momentZone.tz.guess(true) : timeZone;
-    const localTimeZone = timeZone === 'CST' ? 'America/Chicago' : momentZone.tz.guess(true);
+    const localTimeZone = timeZone === 'CST' ? 'America/Chicago' : timeZone === 'local' ? momentZone.tz.guess(true) : timeZone;
     const dataVal = isISOString ? moment(dataParam) : dataParam;
     const utcCutoff = moment.utc(dataVal, 'MM/DD/YYYY HH:mm:ss');
     const displayCutoff = utcCutoff.clone().tz(localTimeZone);
