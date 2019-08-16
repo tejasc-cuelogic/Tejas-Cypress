@@ -57,8 +57,8 @@ export default class EsAudit extends Component {
                 />
                 <Form.Field width={6}>
                   <Button type="button" primary onClick={this.onSubmit} content="Submit" />
-                  <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_a.indexName')} onClick={() => this.handleSync({ documentId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_a.indexName') || '', indexAliasName: get(esAuditParaOutput, 'alias') || '' })} content="Sync a" />
-                  <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_b.indexName')} onClick={() => this.handleSync({ documentId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_b.indexName') || '', indexAliasName: get(esAuditParaOutput, 'alias') || '' })} content="Sync b" />
+                  <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_a.indexName')} onClick={() => this.handleSync({ documentId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_a.indexName') || '', indexAliasName: get(esAuditParaOutput, 'alias') || '', userId: get(esAuditParaOutput, 'index_a.record.userId') || '', accountType: get(esAuditParaOutput, 'index_a.record.accountType') || '' })} content="Sync a" />
+                  <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_b.indexName')} onClick={() => this.handleSync({ documentId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_b.indexName') || '', indexAliasName: get(esAuditParaOutput, 'alias') || '', userId: get(esAuditParaOutput, 'index_b.record.userId') || '', accountType: get(esAuditParaOutput, 'index_b.record.accountType') || '' })} content="Sync b" />
                 </Form.Field>
               </Form.Group>
               <Grid>
