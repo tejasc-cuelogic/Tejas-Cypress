@@ -2,7 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import { get, sortBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import * as elasticSearchQueries from '../../queries/elasticSearch';
-import { generateInvestorFolderStructure, storageDetailsForInvestor } from '../../queries/data';
+import { generateInvestorFolderStructure, storageDetailsForInvestor, syncEsDocument } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
@@ -122,6 +122,25 @@ export class ElasticSearchStore {
         this.setFieldValue('inProgress', false);
       });
   });
+
+  @action
+  syncEsDocument = (params) => {
+    this.setFieldValue('inProgress', params.targetIndex);
+    client
+      .mutate({
+        mutation: syncEsDocument,
+        variables: params,
+        refetchQueries: [{ query: elasticSearchQueries.getESAudit }],
+      })
+      .then(() => {
+        Helper.toast('Your request is processed successfully.', 'success');
+        this.setFieldValue('inProgress', false);
+      })
+      .catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        this.setFieldValue('inProgress', false);
+      });
+  }
 
   @action
   getESAuditPara = (indexAliasName) => {
