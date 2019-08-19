@@ -22,6 +22,7 @@ export default class Summary extends React.Component {
       getLegalDocsFileIds();
     }
     this.props.bankAccountStore.fetchRoutingNumber();
+    this.props.uiStore.clearErrors();
   }
 
   componentDidUpdate() {
