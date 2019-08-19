@@ -10,6 +10,21 @@ import { uiStore, userDetailsStore } from '../../index';
 export class ReferralStore {
   @observable referralCode = null;
 
+  @observable referralData = {
+    availableCredit: 0,
+    spentCredit: 0,
+    totalEarnedCredit: 0,
+    totalReferredUsers: 0,
+    myShareLink: '',
+    emailShareLink: '',
+    twitterShareLink: '',
+    messengerShareLink: '',
+    facebookShareLink: '',
+    smsShareLink: '',
+    messengerMobileShareLink: '',
+    loading: false,
+  }
+
   @action
   getJwtReferralEmbeddedWidget = () => new Promise((resolve, reject) => {
     const { userDetails } = userDetailsStore;
@@ -64,6 +79,7 @@ export class ReferralStore {
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data) {
+          this.setReferralData(data);
           resolve(data);
         }
       },
@@ -75,6 +91,11 @@ export class ReferralStore {
       },
     });
   });
+
+  @action
+  setReferralData = (data) => {
+    this.referralData = { ...get(data, 'getUserReferralDetails') };
+  }
 
   @action
   getReferralCreditsInformation = code => new Promise((resolve) => {
