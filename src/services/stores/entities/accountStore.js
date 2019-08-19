@@ -32,15 +32,18 @@ export class AccountStore {
       location: 1,
       accountId: 'individualAccId',
       name: 'individual',
+      linkbankValue: 0,
     },
     1: {
-      store: iraAccountStore, location: 3, accountId: 'iraAccountId', name: 'ira',
+      store: iraAccountStore, location: 3, accountId: 'iraAccountId', name: 'ira', linkbankValue: 3,
+
     },
     2: {
       store: entityAccountStore,
       location: 5,
       accountId: 'entityAccountId',
       name: 'entity',
+      linkbankValue: 5,
     },
   };
 
@@ -135,6 +138,8 @@ export class AccountStore {
   get sortedNavAccounts() {
     return this.sortedAccounts.map(closedAccount => ({ title: closedAccount.details.title, to: closedAccount.details.to }));
   }
+
+  getStepValue = currentStep => (bankAccountStore.isAccountPresent ? currentStep.stepToBeRendered : currentStep.linkBankStepValue)
 
   @action setSelectedClosedAccount = (accountType) => {
     this.selectedClosedAccount = this.sortedAccounts.find(account => (account.details.to === accountType));

@@ -126,11 +126,16 @@ export class ElasticSearchStore {
   @action
   syncEsDocument = (params) => {
     this.setFieldValue('inProgress', params.targetIndex);
+    const syncESVarible = { documentId: params.documentId, targetIndex: params.targetIndex };
+    const getESVariable = { indexAliasName: params.indexAliasName, random: params.documentId };
     client
       .mutate({
         mutation: syncEsDocument,
-        variables: params,
-        refetchQueries: [{ query: elasticSearchQueries.getESAudit }],
+        variables: syncESVarible,
+        refetchQueries: [{
+          query: elasticSearchQueries.getESAudit,
+          variables: getESVariable,
+        }],
       })
       .then(() => {
         Helper.toast('Your request is processed successfully.', 'success');
