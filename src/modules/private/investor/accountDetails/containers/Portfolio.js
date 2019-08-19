@@ -111,6 +111,7 @@ export default class Portfolio extends Component {
     const { match, portfolioStore, userDetailsStore } = this.props;
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
     const { referralData } = this.props.referralsStore;
+    const { getActiveAccounts } = userDetailsStore;
     if (portfolioStore.loading) {
       return (
         <>
@@ -160,7 +161,7 @@ export default class Portfolio extends Component {
     };
     if (get(referralData, 'availableCredit') !== '0.00') {
       const availableCredit = {
-        title: 'Availabe Credit', content: get(referralData, 'availableCredit'), type: 1, info: 'Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest.',
+        title: 'Availabe Credit', content: get(referralData, 'availableCredit'), type: 1, info: `Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest. ${getActiveAccounts.length > 1 ? 'Referral credits are shared amongst all of your investment accounts.' : ''}`,
       };
       summaryDetails.summary.push(availableCredit);
     }
