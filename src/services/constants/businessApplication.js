@@ -185,7 +185,6 @@ const BUSINESS_PREQUAL_COMMON = {
   },
   industryExperience: {
     value: '',
-    label: 'How many years of related industry experience does your team have?',
     error: undefined,
     rule: 'required|numeric',
     maxLength: 2,
@@ -323,7 +322,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'Inventory', icon: 'ns-inventory', value: 'INVENTORY' },
       { label: 'New Product Line', icon: 'ns-new-product', value: 'NEW_PRODUCT_LINE' },
       { label: 'New Location', icon: 'ns-new-location', value: 'NEW_LOCATION' },
-      { label: 'Restructure Debt', icon: 'ns-restructure-debt', value: 'RESTRUCTURE_DEBT' },
+      { label: 'Restructuring / Recapitalization', icon: 'ns-restructure-debt', value: 'RESTRUCTURE_DEBT' },
       { label: 'Other use of fund', value: 'OTHER' },
     ],
     error: undefined,

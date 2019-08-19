@@ -33,17 +33,17 @@ export default class Performance extends Component {
         <Form className="issuer-signup">
           {!hideFields
             && (
-<FormElementWrap
-  as="h1"
-  header="Performance"
-  subHeader="Quickly, safely and accurately submit your business information."
-/>
+            <FormElementWrap
+              as="h1"
+              header="Performance"
+              subHeader={currentApplicationType === 'business' ? 'Quickly, safely and accurately submit your business information.' : 'Quickly, safely and accurately submit your real estate information.'}
+            />
             )
           }
           <FormElementWrap
             hideFields={hideFields}
             noDivider={hideFields || formReadOnlyMode}
-            header={`${currentApplicationType === 'business' ? 'Financial Statements' : 'Upload your Financial Model'}`}
+            header={currentApplicationType === 'business' ? 'Financial Statements' : 'Upload your Financial Model'}
             subHeader={`${currentApplicationType === 'business' ? 'How has the business been performing, and what are your projections? Upload your financial statements in each section.' : 'Working model including all assumptions, project cashflows and distributions (5-10yr projections). Include stress testing'}`}
           >
             <Grid stackable columns="equal">
@@ -67,49 +67,73 @@ export default class Performance extends Component {
               }
             </Grid>
           </FormElementWrap>
-          <FormElementWrap
-            hideFields={hideFields}
-            noDivider={hideFields || formReadOnlyMode}
-            header="Sources & Uses"
-            subHeader={(
-<span>
-                Unless provided in your business plan or financial projections, please upload a table clearly outlining all sources of capital (to include the <br />
-                proposed NextSeed amount) for your project in addition to the proposed uses of that capital.
-              </span>
-)}
-          >
-            <Grid stackable columns="equal">
-              <Grid.Column key="sourcesAndUses">
-                <DropZone
-                  sharableLink
-                  hideFields={hideFields}
-                  disabled={formReadOnlyMode && disableFileUpload}
-                  multiple
-                  key="sourcesAndUses"
-                  name="sourcesAndUses"
-                  fielddata={fields.sourcesAndUses}
-                  ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM', null, this.props.userStore.isApplicationManager)}
-                  onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_PERF_FRM', index)}
-                />
-              </Grid.Column>
-            </Grid>
-          </FormElementWrap>
           {currentApplicationType === 'business'
             && (
-<FormElementWrap
-  hideFields={hideFields}
-  noDivider={hideFields || formReadOnlyMode}
-  header="Performance"
-  subHeader="This information was captured from the Pre-Qualification form. You can update any numbers below if needed."
->
-              <Grid>
-                {getBusinessTypeCondtion
-                  && (
-<Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                    <Header as={hideFields ? 'h6' : 'h5'} content="Prior Year" />
+              <>
+                <FormElementWrap
+                  hideFields={hideFields}
+                  noDivider={hideFields || formReadOnlyMode}
+                  header="Sources & Uses"
+                  subHeader={(
+                    <span>
+                      Unless provided in your business plan or financial projections, please upload a table clearly outlining all sources of capital (to include the <br />
+                      proposed NextSeed amount) for your project in addition to the proposed uses of that capital.
+                    </span>
+                  )}
+                >
+                  <Grid stackable columns="equal">
+                    <Grid.Column key="sourcesAndUses">
+                      <DropZone
+                        sharableLink
+                        hideFields={hideFields}
+                        disabled={formReadOnlyMode && disableFileUpload}
+                        multiple
+                        key="sourcesAndUses"
+                        name="sourcesAndUses"
+                        fielddata={fields.sourcesAndUses}
+                        ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM', null, this.props.userStore.isApplicationManager)}
+                        onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_PERF_FRM', index)}
+                      />
+                    </Grid.Column>
+                  </Grid>
+                </FormElementWrap>
+                <FormElementWrap
+                  hideFields={hideFields}
+                  noDivider={hideFields || formReadOnlyMode}
+                  header="Performance"
+                  subHeader="This information was captured from the Pre-Qualification form. You can update any numbers below if needed."
+                >
+                <Grid>
+                  {getBusinessTypeCondtion
+                    && (
+                    <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
+                      <Header as={hideFields ? 'h6' : 'h5'} content="Prior Year" />
+                      <div className="field-wrap">
+                        {
+                          ['pyGrossSales', 'pyOperatingExpenses', 'pyNetIncome', 'pyCogs'].map(field => (
+                            <MaskedInput
+                              readOnly={formReadOnlyMode}
+                              containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                              key={field}
+                              name={field}
+                              prefix="$ "
+                              currency
+                              asterisk="true"
+                              value={fields[field].value}
+                              fielddata={fields[field]}
+                              changed={businessPerfMaskingChange}
+                            />
+                          ))
+                        }
+                      </div>
+                    </Grid.Column>
+                    )
+                  }
+                  <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
+                    <Header as={hideFields ? 'h6' : 'h5'} content="Future Year" />
                     <div className="field-wrap">
                       {
-                        ['pyGrossSales', 'pyOperatingExpenses', 'pyNetIncome', 'pyCogs'].map(field => (
+                        ['nyGrossSales', 'nyOperatingExpenses', 'nyNetIncome', 'nyCogs'].map(field => (
                           <MaskedInput
                             readOnly={formReadOnlyMode}
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
@@ -126,40 +150,17 @@ export default class Performance extends Component {
                       }
                     </div>
                   </Grid.Column>
-                  )
-                }
-                <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                  <Header as={hideFields ? 'h6' : 'h5'} content="Future Year" />
-                  <div className="field-wrap">
-                    {
-                      ['nyGrossSales', 'nyOperatingExpenses', 'nyNetIncome', 'nyCogs'].map(field => (
-                        <MaskedInput
-                          readOnly={formReadOnlyMode}
-                          containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                          key={field}
-                          name={field}
-                          prefix="$ "
-                          currency
-                          asterisk="true"
-                          value={fields[field].value}
-                          fielddata={fields[field]}
-                          changed={businessPerfMaskingChange}
-                        />
-                      ))
-                    }
-                  </div>
-                </Grid.Column>
-              </Grid>
-            </FormElementWrap>
-            )
-          }
+                </Grid>
+              </FormElementWrap>
+            </>
+            )}
           <AppNavigation
             hideFields={hideFields}
             isFileUploading={this.props.businessAppStore.isFileUploading}
           />
           {this.props.userStore.isAdmin && this.props.userStore.isApplicationManager
             ? (
-<div className="right aligned">
+            <div className="right aligned">
               <Button
                 inverted
                 type="button"

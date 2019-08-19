@@ -79,7 +79,7 @@ export default class PreQualBusiness extends Component {
               <div className="field-wrap">
                 {getFranchiseCondition
                   && (
-<>
+                  <>
                     <Header as="h6" content="Are you an existing or previous franchise holder?*" />
                     <FormRadioGroup
                       disabled={preQualFormDisabled}
@@ -94,7 +94,7 @@ export default class PreQualBusiness extends Component {
                 }
                 {getBusinessTypeCondtion
                   && (
-<>
+                  <>
                     <Header as="h6" content="How long has the existing business been operating?" />
                     <Form.Group widths="equal">
                       {
@@ -121,6 +121,7 @@ export default class PreQualBusiness extends Component {
                 <Experience
                   fields={fields}
                   preQualFormDisabled={preQualFormDisabled}
+                  currentApplicationType={this.props.applicationType || currentApplicationType}
                   businessAppEleMaskChange={businessAppEleMaskChange}
                 />
               </div>
@@ -140,7 +141,7 @@ export default class PreQualBusiness extends Component {
           <Grid>
             {getBusinessTypeCondtion
               && (
-<Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
+              <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
                 <Header as={hideFields ? 'h4' : 'h3'}>
                   Previous year
                   <Header.Subheader>
