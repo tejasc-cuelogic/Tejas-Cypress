@@ -40,6 +40,7 @@ export default class EsAudit extends Component {
     } = this.props.elasticSearchStore;
     const { auditAlias } = this.props.match.params;
     const userIdExsist = get(esAuditParaOutput, 'index_a.record.userId') ? get(esAuditParaOutput, 'index_a.record.userId') : get(esAuditParaOutput, 'index_b.record.userId') ? get(esAuditParaOutput, 'index_b.record.userId') : '';
+    const accountTypeExsist = get(esAuditParaOutput, 'index_a.record.accountType') ? get(esAuditParaOutput, 'index_a.record.accountType') : get(esAuditParaOutput, 'index_b.record.userId') ? get(esAuditParaOutput, 'index_b.record.userId') : '';
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="large" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -59,8 +60,8 @@ export default class EsAudit extends Component {
                 />
                 <Form.Field width={6}>
                   <Button type="button" primary onClick={this.onSubmit} content="Submit" />
-                  <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_a.indexName')} onClick={() => this.handleSync({ documentId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_a.indexName') || '', indexAliasName: get(esAuditParaOutput, 'alias') || '', userId: userIdExsist, accountType: get(esAuditParaOutput, 'index_a.record.accountType') || '' })} content="Sync a" />
-                  <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_b.indexName')} onClick={() => this.handleSync({ documentId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_b.indexName') || '', indexAliasName: get(esAuditParaOutput, 'alias') || '', userId: userIdExsist, accountType: get(esAuditParaOutput, 'index_b.record.accountType') || '' })} content="Sync b" />
+                  <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_a.indexName')} onClick={() => this.handleSync({ documentId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_a.indexName') || '', indexAliasName: get(esAuditParaOutput, 'alias') || '', userId: userIdExsist, accountType: accountTypeExsist })} content="Sync a" />
+                  <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_b.indexName')} onClick={() => this.handleSync({ documentId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_b.indexName') || '', indexAliasName: get(esAuditParaOutput, 'alias') || '', userId: userIdExsist, accountType: accountTypeExsist })} content="Sync b" />
                 </Form.Field>
               </Form.Group>
               <Grid>
