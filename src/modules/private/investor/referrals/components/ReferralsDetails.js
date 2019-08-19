@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import money from 'money-math';
 import { Header, Container, Grid, Button } from 'semantic-ui-react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Link } from 'react-router-dom';
@@ -31,13 +30,13 @@ export default class ReferralsDetails extends Component {
       title: false,
       summary: [
         {
-          title: 'Available Credit', content: money.format('USD', money.floatToAmount(parseFloat(referralData.availableCredit))) || '', type: 1, info: 'Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest.',
+          title: 'Available Credit', content: referralData.availableCredit || '', type: 1, info: 'Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest.',
         },
         {
-          title: 'Spent Credit', content: money.format('USD', money.floatToAmount(parseFloat(referralData.spentCredit))) || '', type: 1, info: 'The total amount of credit applied toward investments.',
+          title: 'Spent Credit', content: referralData.spentCredit || '', type: 1, info: 'The total amount of credit applied toward investments.',
         },
         {
-          title: 'Lifetime Earned Credit', content: money.format('USD', money.floatToAmount(parseFloat(referralData.totalEarnedCredit))) || '', type: 1, info: 'The total amount of credit you have earned with NextSeed.',
+          title: 'Lifetime Earned Credit', content: referralData.totalEarnedCredit || '', type: 1, info: 'The total amount of credit you have earned with NextSeed.',
         },
         {
           title: 'Friends Referred', content: referralData.totalReferredUsers || '', type: 0, info: 'How many friends you have referred to NextSeed.',
@@ -92,10 +91,9 @@ export default class ReferralsDetails extends Component {
       );
     }
 
-    const { emailShareLink } = referralData;
-    const { twitterShareLink } = referralData;
-
+    const { emailShareLink, twitterShareLink } = { ...referralData };
     let { facebookShareLink } = referralData;
+
     let button4 = (
       <Button onClick={() => window.open(`${facebookShareLink}`, '_blank')} className="fluid ui labeled facebook icon button">
         <i className="facebook f icon" />
