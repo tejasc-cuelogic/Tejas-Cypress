@@ -317,6 +317,33 @@ deploy:infosec:
   dependencies:
     - build:infosec
 
+#---------------------------------Staging---------------------------------------
+#Building code
+build:staging:
+  <<: *build_definition
+  only:
+    refs:
+      - master
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION staging $CI_COMMIT_REF_NAME && cd ../..
+    - npm install
+    - npm run build
+
+#Deploying code to s3 bucket
+deploy:staging:
+  <<: *deploy_defination
+  only:
+    refs:
+      - master
+  environment:
+    name: staging
+    url: http://$STAGING_URL
+  script:
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $STAGING_URL && cd ../..
+    - aws cloudfront create-invalidation --distribution-id $INFOSEC_DISTRIBUTION_ID --paths "/*"
+  dependencies:
+    - build:staging
+
 #---------------------------------Production------------------------------------
 build:prod:
 #  tags:
