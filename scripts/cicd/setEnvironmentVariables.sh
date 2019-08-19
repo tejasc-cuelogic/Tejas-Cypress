@@ -78,7 +78,7 @@ settingEnv()
 		sed -i.bak "s#^\(REACT_APP_BUG_SNAG_STAGE=\).*#\1${REACT_APP_BUG_SNAG_STAGE}#" .envTEMPLATE
 
 		#Environment
-		sed -i.bak "s#^\(REACT_APP_DEPLOY_ENV=\).*#\1${CI_COMMIT_REF_NAME}#" .envTEMPLATE
+		sed -i.bak "s#^\(REACT_APP_DEPLOY_ENV=\).*#\1${environment}#" .envTEMPLATE
 	else
 	  #Environment
 		sed -i.bak "s#^\(REACT_APP_DEPLOY_ENV=\).*#\1review#" .envTEMPLATE
