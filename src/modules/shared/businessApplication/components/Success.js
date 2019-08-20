@@ -115,9 +115,7 @@ class Success extends Component {
             </p>
             <p>
               {!userExists || !this.props.isPublic
-                ? `Please begin filling out the rest of the application and
-                submitting the necessary paperwork. Our step-by-step guide
-                will take you through the steps and keep the process organized.`
+                ? 'Our online application will take you step-by-step through the requested fields and keep your information secure and organized.'
                 : `Please log in to finish filling out the rest of the application
                 and submitting the necessary paperwork. Our step-by-step guide
                 will walk you through the steps and keep the process organized.`

@@ -323,7 +323,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'New Product Line', icon: 'ns-new-product', value: 'NEW_PRODUCT_LINE' },
       { label: 'New Location', icon: 'ns-new-location', value: 'NEW_LOCATION' },
       { label: 'Restructuring / Recapitalization', icon: 'ns-restructure-debt', value: 'RESTRUCTURE_DEBT' },
-      { label: 'Other use of fund', value: 'OTHER' },
+      { label: 'Other use of funds', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
@@ -507,16 +507,32 @@ export const BUSINESS_DETAILS = {
   },
   debts: [{
     amount: {
-      value: 0, label: 'Amount', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
+      value: 0, label: 'Principal Amount', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
     },
     remainingPrincipal: {
       value: 0, label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
     },
     interestExpenses: {
-      value: 0, label: 'Interest Expenses', error: undefined, rule: 'required|max:100', placeHolder: '10.0 %', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
+      value: 0, label: 'Interest Rate', error: undefined, rule: 'required|max:100', placeHolder: '10.0 %', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
     },
     term: {
       value: 0, label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' },
+    },
+  }],
+  sources: [{
+    source: {
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Source', customErrors: { required: 'required' },
+    },
+    fund: {
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Type Fund', customErrors: { required: 'required' },
+    },
+  }],
+  uses: [{
+    source: {
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Source', customErrors: { required: 'required' },
+    },
+    fund: {
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Type Fund', customErrors: { required: 'required' },
     },
   }],
   owners: [{

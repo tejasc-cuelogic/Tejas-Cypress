@@ -84,8 +84,10 @@ export default class BusinessDocumentation extends Component {
         <FormElementWrap
           hideFields={hideFields}
           header="Tax Returns"
-          subHeader={`<span>Tax returns are used as part of NextSeed’s diligence process.<br />For new entities, please submit your personal tax returns and, if
-            available, tax returns of a different business entity that you currently own.<br />For existing entities, please submit tax returns for the entity.</span>`}
+          subHeader={(
+            <span>Tax returns are used as part of NextSeed’s diligence process.<br />For new entities, please submit your personal tax returns and, if
+            available, tax returns of a different business entity that you currently own.<br />For existing entities, please submit tax returns for the entity.</span>
+          )}
         >
           <Divider hidden />
           <div className="or-divider">

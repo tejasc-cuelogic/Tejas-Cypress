@@ -1,9 +1,6 @@
-/* eslint-disable jsx-a11y/label-has-for */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm, Popup } from 'semantic-ui-react';
+import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm, Popup, Table } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../theme/shared';
 import { FormInput, DropZoneConfirm as DropZone, MaskedInput } from '../../../../theme/form';
@@ -92,7 +89,7 @@ export default class BusinessDetails extends Component {
             header={currentApplicationType === 'business' ? 'Business Plan or Investment Prospectus' : 'Business Plan'}
             subHeader={(
               <>
-                {currentApplicationType === 'business' ? 'The business plan is intended to describe the who, what, when, where, how and why of your project.*' : 'Upload your Investment Summary or Business Plan.*'}
+                {currentApplicationType === 'business' ? 'This document is intended to describe the who, what, when, where, how and why of your project.*' : 'Upload your Investment Summary or Business Plan.*'}
                 <Popup
                   trigger={<Icon className="ns-help-circle" />}
                   content="Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions."
@@ -118,6 +115,134 @@ export default class BusinessDetails extends Component {
               ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', null, this.props.userStore.isApplicationManager)}
               onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
             />
+          </FormElementWrap>
+          <FormElementWrap
+            hideFields={hideFields}
+            header="Sources & Uses"
+            subHeader="Unless provided in your business plan or financial projections, please provide a table clearly outlining all sources of capital for your project (including the proposed NextSeed amount) and the proposed uses of capital."
+          >
+            <Grid>
+              <Grid.Column largeScreen={7} computer={7} tablet={8} mobile={8}>
+                <Header as="h4">Source</Header>
+                <Table className="inve rted">
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Souce of Funds</Table.HeaderCell>
+                      <Table.HeaderCell>Amount</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {BUSINESS_DETAILS_FRM.fields.sources.length && BUSINESS_DETAILS_FRM.fields.sources.map((source, index) => BUSINESS_DETAILS_FRM.fields.sources.length !== index + 1 && (
+                      <Table.Row>
+                        <Table.Cell>
+                          <FormInput
+                            readOnly={formReadOnlyMode}
+                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                            type="text"
+                            asterisk="true"
+                            name="source"
+                            fielddata={source.source}
+                            changed={(e, res) => businessDetailsChange(e, res, 'sources', index)}
+                          />
+                        </Table.Cell>
+                        <Table.Cell>
+                          <MaskedInput
+                            readOnly={formReadOnlyMode}
+                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                            prefix="$ "
+                            currency
+                            type="text"
+                            name="fund"
+                            fielddata={source.fund}
+                            changed={(values, field) => businessDetailsMaskingChange(field, values, 'sources', index)}
+                          />
+                          <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('sources', index)}>
+                            <Icon color="red" size="small" className="ns-trash" />
+                          </Button>
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                    <Table.Row>
+                      <Table.Cell colspan="2">
+                        <Button type="button" disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'sources')} color="green" className="ghost-button additional-field" content="+ Add Source" />
+                      </Table.Cell>
+                    </Table.Row>
+                    {BUSINESS_DETAILS_FRM.fields.sources.length > 1
+                      && (
+                      <Table.Row>
+                        <Table.Cell>
+                          Total
+                        </Table.Cell>
+                        <Table.Cell>
+                          $Amount
+                        </Table.Cell>
+                      </Table.Row>
+                      )
+                    }
+                  </Table.Body>
+                </Table>
+              </Grid.Column>
+              <Grid.Column largeScreen={7} computer={7} tablet={8} mobile={8}>
+                <Header as="h4">Uses</Header>
+                <Table className="inve rted">
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Use of Funds</Table.HeaderCell>
+                      <Table.HeaderCell>Amount</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {BUSINESS_DETAILS_FRM.fields.uses.length && BUSINESS_DETAILS_FRM.fields.uses.map((source, index) => BUSINESS_DETAILS_FRM.fields.uses.length !== index + 1 && (
+                      <Table.Row>
+                        <Table.Cell>
+                          <FormInput
+                            readOnly={formReadOnlyMode}
+                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                            type="text"
+                            asterisk="true"
+                            name="source"
+                            fielddata={source.source}
+                            changed={(e, res) => businessDetailsChange(e, res, 'uses', index)}
+                          />
+                        </Table.Cell>
+                        <Table.Cell>
+                          <MaskedInput
+                            readOnly={formReadOnlyMode}
+                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                            prefix="$ "
+                            currency
+                            type="text"
+                            name="fund"
+                            fielddata={source.fund}
+                            changed={(values, field) => businessDetailsMaskingChange(field, values, 'uses', index)}
+                          />
+                        </Table.Cell>
+                        <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('uses', index)}>
+                            <Icon color="red" size="small" className="ns-trash" />
+                          </Button>
+                      </Table.Row>
+                    ))}
+                    <Table.Row>
+                      <Table.Cell colspan="2">
+                        <Button type="button" disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'uses')} color="green" className="ghost-button additional-field" content="+ Add Use" />
+                      </Table.Cell>
+                    </Table.Row>
+                    {BUSINESS_DETAILS_FRM.fields.uses.length > 1
+                      && (
+                      <Table.Row>
+                        <Table.Cell>
+                          Total
+                        </Table.Cell>
+                        <Table.Cell>
+                          $Amount
+                        </Table.Cell>
+                      </Table.Row>
+                      )
+                    }
+                  </Table.Body>
+                </Table>
+              </Grid.Column>
+            </Grid>
           </FormElementWrap>
           <FormElementWrap
             hideFields={hideFields}
