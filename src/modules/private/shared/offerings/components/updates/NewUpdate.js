@@ -20,17 +20,23 @@ export default class NewUpdate extends Component {
   state = {
     editForm: false,
     confirmModal: false,
+    loading: false,
   }
 
   componentWillMount() {
-    this.initiateFlow(this.props.match.params.id);
+    this.initiateFlow(this.props.match.params.action, this.props.match.params.id);
     this.props.updateStore.setFieldValue('newUpdateId', null);
   }
 
-  initiateFlow = (id) => {
-    if (id !== 'new') {
+  componentDidMount() {
+    this.setState({ loading: false });
+  }
+
+  initiateFlow = (action, id) => {
+    if (action !== 'new' && id !== undefined) {
       this.props.updateStore.getOne(id);
     } else {
+      this.setState({ loading: true });
       this.props.updateStore.reset();
     }
   }
@@ -76,7 +82,8 @@ export default class NewUpdate extends Component {
   render() {
     const {
       PBUILDER_FRM, UpdateChange, FChange, maskChange, selectTemplate, newUpdateId,
-      loadingCurrentUpdate, sendTestEmail, TEMPLATE_FRM, currentUpdate,
+      loadingCurrentUpdate, sendTestEmail, TEMPLATE_FRM,
+      // currentUpdate,
     } = this.props.updateStore;
     const isNew = this.props.match.params.action === 'new' && !newUpdateId;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -88,7 +95,7 @@ export default class NewUpdate extends Component {
     const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
     const { userDetails } = this.props.userDetailsStore;
     const userInfo = !isNew || isManager ? { firstName: userDetails.info.firstName, lastName: userDetails.info.lastName, avatarUrl: get(userDetails, 'info.avatar.url') || '' } : '';
-    if (loadingCurrentUpdate) {
+    if (loadingCurrentUpdate || this.state.loading) {
       return <InlineLoader />;
     }
     return (
@@ -161,7 +168,7 @@ export default class NewUpdate extends Component {
                                 }
                               </div>
                               <Header.Content className="grey-header">
-                                {!isNew && isManager && !newUpdateId ? get(currentUpdate, 'data.offeringUpdatesById.approved.by') || get(currentUpdate, 'data.offeringUpdatesById.updated.by') : get(offer, 'keyTerms.shorthandBusinessName')}
+                                {get(offer, 'keyTerms.shorthandBusinessName')}
                                 <Header.Subheader>{moment().format('ll')}</Header.Subheader>
                               </Header.Content>
                             </Header>
