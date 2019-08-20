@@ -268,7 +268,7 @@ export class CampaignStore {
     const elevatorPitch = (campaign && campaign.offering && campaign.offering.overview
       && campaign.offering.overview.elevatorPitch)
       || (campaign && campaign.offering && campaign.offering.overview
-      && campaign.offering.overview.highlight);
+        && campaign.offering.overview.highlight);
     campaignStatus.hasTopThingToKnow = elevatorPitch;
     campaignStatus.dataRooms = this.dataRoomDocs.length;
     campaignStatus.gallary = get(campaign, 'media.gallery') ? get(campaign, 'media.gallery').length : 0;
@@ -533,6 +533,7 @@ export class CampaignStore {
         resultObject.processingDate = moment(closingDate).unix() || null;
         return newOfferingsArr.push(resultObject);
       } if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
+        let isReachedMax = false;
         // const labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
         const labelBannerFirst = closeDaysToRemainsInHours < 48 ? `${closeDaysToRemainsInHours} Hours Left` : `${closeDaysToRemains} Days Left`;
         resultObject.isBannerShow = !!labelBannerFirst;
@@ -540,7 +541,12 @@ export class CampaignStore {
         resultObject.bannerSecondText = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
-        return closingOfferingsArr.push(resultObject);
+        if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
+          isReachedMax = true;
+        }
+        if (!isReachedMax) {
+          return closingOfferingsArr.push(resultObject);
+        }
       } if (isInProcessing) {
         resultObject.isBannerShow = true;
         resultObject.bannerFirstText = 'Processing';
@@ -569,7 +575,7 @@ export class CampaignStore {
     closingOfferingsArr = orderBy(closingOfferingsArr, ['processingDate'], ['asc']);
     processingOfferingsArr = orderBy(processingOfferingsArr, ['processingDate'], ['desc']);
     otherOfferingsArr = orderBy(otherOfferingsArr, ['launchDate'], ['desc']);
-    reachedMaxOfferingsArr = orderBy(reachedMaxOfferingsArr, ['processingDate'], ['desc']);
+    reachedMaxOfferingsArr = orderBy(reachedMaxOfferingsArr, ['processingDate'], ['asc']);
     const sortedResultObject = [
       ...parallelOfferingsArr,
       ...newOfferingsArr,
