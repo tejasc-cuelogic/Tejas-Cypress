@@ -172,6 +172,17 @@
                 }
             }
         }
+        &.active{
+            background: @primary-one !important;
+            color: @white !important;
+            border-color: @primary-one !important;
+            .details{
+                color: @white !important;
+                .ui.header,span{
+                    color: @white;
+                }
+            }
+        }
         .details{
             color: @neutral-middark;
             line-height: 20px;

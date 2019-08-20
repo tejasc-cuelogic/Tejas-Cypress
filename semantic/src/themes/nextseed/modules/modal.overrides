@@ -582,6 +582,8 @@
 .ui.modal.basic.multistep-modal{
     color:@neutral;
     will-change:auto;
+    height: 100%;
+    overflow: auto;
     @media only screen and (max-width:@largestMobileScreen){
         width: 100%;
         padding-bottom: @80px;
@@ -728,6 +730,9 @@
         .ui.error.form {
             @media only screen and (max-width:@largestMobileScreen){
                 padding: 0;
+                .ui.vertical.buttons{
+                    width: 100%;
+                }
             }
         }
     }
