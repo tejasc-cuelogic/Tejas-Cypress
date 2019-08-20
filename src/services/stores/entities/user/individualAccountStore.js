@@ -22,6 +22,8 @@ class IndividualAccountStore {
 
   @observable isFormSubmitted = false;
 
+  @observable apiCall = false;
+
   retry = 0;
 
   retryGoldStar = 0;
@@ -133,24 +135,26 @@ class IndividualAccountStore {
     return data;
   }
 
-  createAccount = (currentStep) => {
+  @action
+  createAccount = currentStep => new Promise((resolve, reject) => {
     uiStore.setProgress();
-    const mutation = upsertInvestorAccount;
-    const variables = {
-      accountAttributes: {
-        ...bankAccountStore.accountAttributes,
-        ...this.investmentLimitsAttributes(),
-      },
-      accountType: 'INDIVIDUAL',
-    };
-    const actionPerformed = 'submitted';
-    if (userDetailsStore.currentUser.data) {
-      const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
-      if (accountDetails || this.individualAccId) {
-        variables.accountId = get(accountDetails, 'details.accountId') || this.individualAccId;
+    if (!this.apiCall) {
+      this.setFieldValue('apiCall', true);
+      const mutation = upsertInvestorAccount;
+      const variables = {
+        accountAttributes: {
+          ...bankAccountStore.accountAttributes,
+          ...this.investmentLimitsAttributes(),
+        },
+        accountType: 'INDIVIDUAL',
+      };
+      const actionPerformed = 'submitted';
+      if (userDetailsStore.currentUser.data) {
+        const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
+        if (accountDetails || this.individualAccId) {
+          variables.accountId = get(accountDetails, 'details.accountId') || this.individualAccId;
+        }
       }
-    }
-    return new Promise((resolve, reject) => {
       bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
         client
           .mutate({
@@ -162,6 +166,7 @@ class IndividualAccountStore {
               this.individualAccId = result.data.upsertInvestorAccount.accountId;
               const { linkedBank } = result.data.upsertInvestorAccount;
               bankAccountStore.setPlaidAccDetails(linkedBank);
+              this.setFieldValue('apiCall', false);
             }
             const { isValid } = bankAccountStore.formAddFunds.meta;
             if (currentStep) {
@@ -174,6 +179,10 @@ class IndividualAccountStore {
             resolve(result);
           }))
           .catch(action((err) => {
+            this.setFieldValue('apiCall', false);
+            if (currentStep.name === 'Link bank') {
+              bankAccountStore.setPlaidAccDetails({});
+            }
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             uiStore.setProgress(false);
             reject();
@@ -183,8 +192,8 @@ class IndividualAccountStore {
           uiStore.setProgress(false);
           reject();
         });
-    });
-  }
+    }
+  });
 
   @action
   populateData = (userData) => {
@@ -195,7 +204,9 @@ class IndividualAccountStore {
           bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
           if (account.details.linkedBank) {
             const plaidAccDetails = account.details.linkedBank;
-            bankAccountStore.setPlaidAccDetails(plaidAccDetails);
+            if (!bankAccountStore.isAccountPresent) {
+              bankAccountStore.setPlaidAccDetails(plaidAccDetails);
+            }
           } else {
             Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
               const { details } = account;
@@ -230,6 +241,7 @@ class IndividualAccountStore {
     this.retry = 0;
     this.retryGoldStar = 0;
     this.isFormSubmitted = false;
+    this.apiCall = false;
   }
 }
 export default new IndividualAccountStore();

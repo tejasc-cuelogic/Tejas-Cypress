@@ -17,20 +17,20 @@ class LatestUpdates extends Component {
 
   render() {
     const {
-      updates, companyAvatarUrl, bussinessName,
+      updates, companyAvatarUrl, bussinessName, newLayout,
     } = this.props;
     const update = (updates && updates.length && updates[0]) || null;
     return (
       <>
-        <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} anchor-wrap`}>
+        <Header as="h3" className={`${newLayout && isMobile ? 'mt-40' : newLayout ? 'mt-40' : 'mt-20'} ${isMobile ? 'mb-20' : 'mb-30'} anchor-wrap`}>
           Updates
           <Label circular horizontal color="green">{(updates && updates.length) || 0}</Label>
           <span className="anchor" id="updates" />
         </Header>
-        <Item.Group>
+        <Item.Group className="update-items">
           <Item>
             <Item.Content>
-              <div className="campaign-avatar">
+              <div className={`${newLayout ? 'campaign-avatar-v2' : ''} campaign-avatar`}>
                 <div className="ui image avatar-image">
                   {companyAvatarUrl && companyAvatarUrl.length
                     ? <Image64 srcUrl={companyAvatarUrl} circular />
@@ -43,7 +43,7 @@ class LatestUpdates extends Component {
                   </div> : null
                 } */}
                 <div className="avatar-details">
-                  <Item.Header>
+                  <Item.Header as={(newLayout && isMobile) ? 'h6' : 'h5'} className={newLayout ? 'ui grey-header mb-0' : ''}>
                     <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
                   </Item.Header>
                   {update
@@ -51,12 +51,14 @@ class LatestUpdates extends Component {
                   }
                 </div>
               </div>
-              <Divider hidden />
+              {!newLayout && !isMobile
+                ? <Divider hidden />
+                : null }
               {update
                 ? (
                   <>
-                    <Item.Description className="avatar-description">
-                      <Header as="h4" className="grey-header">{update.title}</Header>
+                    <Item.Description className={newLayout && isMobile ? 'avatar-description-v2' : 'avatar-description'}>
+                      <Header as="h4" className={`${newLayout && isMobile ? 'mb-10' : ''} grey-header`}>{update.title}</Header>
                       <HtmlEditor readOnly content={update.content || ''} />
                     </Item.Description>
                   </>
@@ -70,10 +72,13 @@ class LatestUpdates extends Component {
             </Item.Content>
           </Item>
         </Item.Group>
-        <Button fluid={isTablet} onClick={this.handleViewUpdates} basic compact className="highlight-text mt-40">
-          View Updates
-          <Icon size="small" className="ns-chevron-right right" color="white" />
-        </Button>
+        {!newLayout
+        && (
+          <Button fluid={isTablet} onClick={this.handleViewUpdates} basic compact className="highlight-text mt-40">
+            View Updates
+            <Icon size="small" className="ns-chevron-right right" color="white" />
+          </Button>
+        )}
       </>
     );
   }

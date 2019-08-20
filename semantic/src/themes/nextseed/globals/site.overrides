@@ -87,6 +87,9 @@ h6{
 .mb-10 {
 	margin-bottom: @10px !important;
 }
+.mb-14{
+	margin-bottom: @14px !important;
+}
 .mb-20 {
 	margin-bottom: @20px !important;
 }
@@ -147,6 +150,9 @@ h6{
 .pt-0{
 	padding-top:0 !important;
 }
+.pb-0{
+	padding-bottom:0 !important;
+}
 .pl-50{
 	padding-left: @50px !important;
 }
@@ -175,7 +181,7 @@ h6{
 }
 .intro-text{
 	color:@neutral-middark !important;
-	font-size: @13px;
+	font-size: @13px !important;
 }
 .note{
 	color:@neutral-middark !important;
@@ -329,13 +335,64 @@ i.icon.right {
 	pointer-events: none !important;
 }
 .parsed-data { // for migrated/parsed data
-	.fr-view blockquote {
-		border-left: solid 3px @primary-one;
-		padding: @15px @20px;
-		color: @neutral;
-		font-size: @16px;
-		font-style: italic;
-		background: @neutral-offwhite;
+	.fr-view{
+		blockquote {
+			border-left: solid 3px @primary-one;
+			padding: @15px @20px;
+			color: @neutral;
+			font-size: @16px;
+			font-style: italic;
+			background: @neutral-offwhite;
+		}
+		.fr-fic, .fr-video{
+			margin-top: @30px;
+			margin-bottom: @30px;
+		}
+		//Desktop only
+		@media only screen and (min-width : @largeMonitorBreakpoint){
+			.fr-editor-desktop{
+				display: block;
+			}
+			.fr-editor-mobile, .fr-editor-tablet, .fr-editor-tablet-landscape,.fr-editor-tablet-mobile{
+				display: none;
+			}
+		}
+		//Tablet and mobile
+		@media only screen and (max-width : @monitorBreakpoint){
+			.fr-editor-tablet-mobile{
+				display: block;
+			}
+			.fr-editor-mobile, .fr-editor-desktop, .fr-editor-tablet,.fr-editor-tablet-landscape{
+				display: none;
+			}
+		}
+		//Tablet only
+		@media only screen and (min-width : @tabletBreakpoint) and (max-width : @monitorBreakpoint){
+			.fr-editor-tablet{
+				display: block;
+			}
+			.fr-editor-mobile, .fr-editor-desktop, .fr-editor-tablet-landscape{
+				display: none;
+			}
+		}
+		//Mobile only
+		@media only screen and (max-width : @largestMobileScreen){
+			.fr-editor-mobile{
+				display: block;
+			}
+			.fr-editor-tablet, .fr-editor-desktop, .fr-editor-tablet-landscape{
+				display: none;
+			}
+		}
+		//Tablet landscape only
+		@media only screen and (min-width : @computerBreakpoint) and (max-width : @monitorBreakpoint){
+			.fr-editor-tablet-landscape{
+				display: block;
+			}
+			.fr-editor-mobile, .fr-editor-desktop, .fr-editor-tablet{
+				display: none;
+			}
+		}
 	}
 	.wp-caption {
 		max-width: 100%;
@@ -344,6 +401,21 @@ i.icon.right {
 	img {
 		max-width: 100%;
 		height: auto;
+	}
+	.html-toggle-content{
+		&.read-content{
+			display: block;
+		}
+		&.hide-content{
+			display: none;
+		}
+	}
+	a.toggleReadMore{
+		text-decoration: none;
+		cursor: pointer;
+		.hide-content{
+			display: none;
+		}
 	}
 }
 //	Helper Classes Ends
@@ -574,6 +646,9 @@ footer{
 	padding: @20px @20px 0;
 	@media only screen and (max-width : @largestTabletScreen){
 		padding: @50px @32px @36px;
+		&.offering-intro-v2{
+			padding: @50px @22px @36px;
+		}
 	}
 	h4.ui.header {
 		position: relative;
@@ -628,6 +703,11 @@ footer{
 	.ui.padded.segment h6.ui.header {
 		margin: @7px 0;
 	}
+	.v-2{
+		p b{
+			color: @neutral;
+		}
+	}
 }
 
 /** Share icons **/
@@ -677,10 +757,6 @@ footer{
 	.ui.embed.centered-video {
 		margin: 0;
 	}
-}
-.explore-campaign-button {
-	margin-top: 60px;
-	text-align: center;
 }
 .featured-section, .reward-tier{
 	background-color: @neutral-offwhite;
@@ -742,12 +818,6 @@ footer{
 			width: 100%;
 			margin-top: @14px;
 		}
-	}
-}
-.business-learn-more {
-	p {
-		text-align: left;
-		margin-left: 56px;
 	}
 }
 .content-spacer {
@@ -1422,30 +1492,6 @@ a.icon-link {
 		padding:@20px @10px;
 	}
 }
-
-div.login-form {
-	height: 100%;
-	.column{
-		max-width:380px;
-	}
-	h1.header{
-		margin-bottom:@20px;
-		>span{
-			font-size:@18px;
-			color:@tertiary-text;
-		}
-	}
-	.note{
-		text-align:center;
-		color:@tertiary-text;
-	}
-	ul.error-messages{
-		list-style-type:none;
-		padding:0;
-		text-align:left;
-	}
-}
-
 //	Admin Page Content Styles
 
 //	Page Header Styles
@@ -2471,6 +2517,9 @@ p.check-extra-info{
 	.icon.ns-hamburger{
 		color: @neutral-middark !important;
 	}
+	&.public-header-section-v2 .sign-in{
+		right: 22px;
+	}
 }
 .proven-result-section .ui.grid>* {
 	padding: 0;
@@ -2487,6 +2536,9 @@ p.check-extra-info{
 	.icon.ns-hamburger {
 		font-size: @16px;
 		color: @neutral-middark;
+	}
+	&.full-logo-v2{
+		left: 22px;
 	}
 }
 //	Public responsive end
@@ -2582,23 +2634,28 @@ input[type='range']::-webkit-slider-thumb {
 		margin-top: 0;
 	}
 }
-.about-carousel .slick-slider .slick-slide{
-	display:flex;
-	>div{
-		position:relative;
-		flex:1;
-		padding-top:56.25%;
-	}
-	.about-gallery-bg{
-		position:absolute;
-		top:0;
-		right:0;
-		bottom:0;
-		left:0;
-		background-repeat:no-repeat;
-		background-size:cover;
-		background-position:center center;
-	}
+// .about-carousel .slick-slider .slick-slide{
+// 	display:flex;
+// 	>div{
+// 		position:relative;
+// 		flex:1;
+// 		padding-top:56.25%;
+// 	}
+// 	.about-gallery-bg{
+// 		position:absolute;
+// 		top:0;
+// 		right:0;
+// 		bottom:0;
+// 		left:0;
+// 		background-repeat:no-repeat;
+// 		background-size:cover;
+// 		background-position:center center;
+// 	}
+// }
+.ui.image.about-gallery-bg{
+	max-height: 350px;
+	width: auto;
+	margin: auto;
 }
 .carousel-counter {
 	position: absolute;
@@ -2871,3 +2928,41 @@ table.css-wu4c77-diff-container {
 		}
 	}
 }
+// Offering new design - 1972 - Start
+//Public comment section
+.custom-segment{
+	border: 1px solid @neutral-darkwhite;
+	border-radius: @4px;
+	padding: @30px;
+	&.padded{
+		padding: @40px;
+		@media only screen and (max-width: @largestTabletScreen){
+			padding: @30px @14px;
+		}
+	}
+	@media only screen and (max-width: @largestTabletScreen){
+		padding: @30px @14px;
+	}
+}
+.offering-layout-menu{
+	p{
+		@media only screen and (max-width : @largestTabletScreen){
+			margin-top: 0;
+			font-size: 15px;
+			&.intro-text{
+				color: @white !important;
+				margin-top: @14px;
+			}
+		}
+	}
+}
+// Offering new design - 1972 - End
+.json-text{
+	overflow-x:scroll; 
+}
+// HTML editor images placeholder start
+.ui.placeholder{
+    min-height: 200px;
+    margin: auto;
+}
+// HTML editor images placeholder end

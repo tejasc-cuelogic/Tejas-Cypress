@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allOfferings, campaignDetailsQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
@@ -19,6 +19,8 @@ export class CampaignStore {
   @observable data = [];
 
   @observable details = {};
+
+  @observable additionalDetails = {};
 
   @observable option = false;
 
@@ -53,6 +55,8 @@ export class CampaignStore {
   @observable isInvestBtnClicked = false;
 
   @observable isFetchedError = false;
+
+  @observable docLoading = false;
 
 
   @action
@@ -92,18 +96,52 @@ export class CampaignStore {
       query: queryType ? campaignDetailsForInvestmentQuery : campaignDetailsQuery,
       variables: { id },
       fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data && data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length && !this.details.loading) {
+          this.getCampaignAdditionalDetails(id);
+        }
+      },
     });
   }
 
   @action
-  getIssuerIdForOffering = id => new Promise((resolve) => {
+  getCampaignAdditionalDetails = (id) => {
+    this.additionalDetails = graphql({
+      client: clientPublic,
+      query: campaignDetailsAdditionalQuery,
+      variables: { id },
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data && data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length && !this.additionalDetails.loading) {
+          this.concatOfferingDetails(get(data, 'getOfferingDetailsBySlug[0]'));
+        }
+      },
+    });
+  }
+
+  @action
+  concatOfferingDetails = (newData) => {
+    if (newData && this.campaign && get(this.campaign, 'id') === get(newData, 'id')) {
+      const campaignData = toJS(this.details);
+      campaignData.data.getOfferingDetailsBySlug[0].updates = get(newData, 'updates');
+      campaignData.data.getOfferingDetailsBySlug[0].comments = get(newData, 'comments');
+      this.details = campaignData;
+    }
+  }
+
+  @action
+  getIssuerIdForOffering = id => new Promise((resolve, reject) => {
     this.details = graphql({
       client: clientPublic,
       query: getOfferingById,
       variables: { id },
       onFetch: (data) => {
         if (data && !this.details.loading) {
-          resolve(data.getOfferingDetailsBySlug);
+          if (data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length) {
+            resolve(data.getOfferingDetailsBySlug);
+          } else {
+            reject();
+          }
         }
       },
       fetchPolicy: 'network-only',
@@ -232,18 +270,22 @@ export class CampaignStore {
       || (campaign && campaign.offering && campaign.offering.overview
       && campaign.offering.overview.highlight);
     campaignStatus.hasTopThingToKnow = elevatorPitch;
-    campaignStatus.gallary = get(campaign, 'media.gallery') && get(campaign, 'media.gallery').length;
+    campaignStatus.dataRooms = this.dataRoomDocs.length;
+    campaignStatus.gallary = get(campaign, 'media.gallery') ? get(campaign, 'media.gallery').length : 0;
+    campaignStatus.keyTerms = get(campaign, 'keyTerms');
     campaignStatus.issuerStatement = get(campaign, 'keyTerms.offeringDisclaimer');
     campaignStatus.companyDescription = get(campaign, 'offering.about.theCompany');
     campaignStatus.businessModel = get(campaign, 'offering.about.businessModel');
     campaignStatus.localAnalysis = get(campaign, 'offering.about.locationAnalysis');
-    campaignStatus.history = get(campaign, 'campaign.offering.about.history');
+    campaignStatus.history = get(campaign, 'offering.about.history');
     campaignStatus.team = get(campaign, 'leadership');
     campaignStatus.useOfProcceds = get(campaign, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
     campaignStatus.revenueSharingSummary = get(campaign, 'keyTerms.revShareSummary');
     campaignStatus.updates = get(campaign, 'updates') && get(campaign, 'updates').length;
     campaignStatus.investmentHighlights = true;
-    campaignStatus.doneComputing = (this.details.data && !isEmpty(this.details.data.getOfferingDetailsBySlug[0].keyTerms)) || false;
+    campaignStatus.isRevenueShare = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary;
+    campaignStatus.isTermNote = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
+    campaignStatus.doneComputing = (this.details.data && this.details.data.getOfferingDetailsBySlug[0] && !isEmpty(this.details.data.getOfferingDetailsBySlug[0].keyTerms)) || false;
     return campaignStatus;
   }
 
@@ -551,49 +593,62 @@ export class CampaignStore {
   }
 
   @action
-  modifySubNavs = (navList) => {
+  modifySubNavs = (navList, newLayout = false) => {
     const newNavList = [];
     const offeringStage = get(this.campaign, 'stage');
     navList.forEach((item) => {
       const tempItem = item;
-      let temNavList = item.subNavigations;
-      if (has(item, 'subNavigations') && item.title === 'Investment Details') {
-        const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
-        if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
-          if (existanceResult.length) {
+      if (!newLayout) {
+        let temNavList = item.subNavigations;
+        if (has(item, 'subNavigations') && item.title === 'Investment Details') {
+          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
+          if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
+            if (existanceResult.length) {
+              remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+            }
+            temNavList.push({
+              title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true, key: 'revenueSharingSummary',
+            });
+          } else if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
+            if (existanceResult.length) {
+              remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+            }
+            temNavList.push({
+              title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
+            });
+          } else if (existanceResult.length) {
             remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
           }
-          temNavList.push({
-            title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true, key: 'revenueSharingSummary',
-          });
-        } else if (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
-          if (existanceResult.length) {
-            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
-          }
-          temNavList.push({
-            title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
-          });
-        } else if (existanceResult.length) {
-          remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          tempItem.subNavigations = uniqWith(temNavList, isEqual);
         }
-        tempItem.subNavigations = uniqWith(temNavList, isEqual);
-      }
-      if (tempItem.title === 'Summary' || tempItem.title === 'About the Company' || tempItem.title === 'Investment Details') {
-        const arr = temNavList;
-        if (arr && Array.isArray(arr)) {
-          arr.forEach((i) => {
+        if (tempItem.title === 'Summary' || tempItem.title === 'About the Company' || tempItem.title === 'Investment Details') {
+          const arr = temNavList;
+          if (arr && Array.isArray(arr)) {
+            arr.forEach((i) => {
+              if (i.key && !this.campaignStatus[i.key]) {
+                temNavList = temNavList.filter(n => n.title !== i.title);
+              }
+            });
+          }
+        }
+        if (temNavList && Array.isArray(temNavList)) {
+          temNavList.forEach((i) => {
             if (i.key && !this.campaignStatus[i.key]) {
               temNavList = temNavList.filter(n => n.title !== i.title);
             }
           });
         }
-      }
-      tempItem.subNavigations = temNavList;
-      if (tempItem.to === 'data-room') {
-        if (['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage)) {
+        tempItem.subNavigations = temNavList;
+        if (tempItem.to === 'data-room') {
+          if (['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage)) {
+            newNavList.push(tempItem);
+          }
+        } else if (!temNavList || (temNavList && temNavList.length)) {
           newNavList.push(tempItem);
         }
-      } else if (!temNavList || (temNavList && temNavList.length)) {
+      } else if (tempItem && tempItem.key && this.campaignStatus[tempItem.key]) {
+        newNavList.push(tempItem);
+      } else if (tempItem && !tempItem.key) {
         newNavList.push(tempItem);
       }
     });

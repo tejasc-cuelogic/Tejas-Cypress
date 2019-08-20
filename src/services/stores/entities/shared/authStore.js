@@ -12,7 +12,8 @@ import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication,
 import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '../../index';
+import { uiStore, navStore, identityStore, userDetailsStore, userStore, businessAppStore } from '../../index';
+import { validateOfferingPreviewPassword } from '../../queries/campagin';
 
 
 export class AuthStore {
@@ -24,6 +25,8 @@ export class AuthStore {
 
   @observable cognitoUserSession = null;
 
+  @observable isBoxApiChecked = false;
+
   @observable isOfferPreviewUrl = false;
 
   @observable capabilities = [];
@@ -31,7 +34,7 @@ export class AuthStore {
   @observable userId = null;
 
   @observable devAuth = {
-    required: !['production', 'localhost', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV),
+    required: !['production', 'localhost', 'prod', 'master', 'infosec'].includes(REACT_APP_DEPLOY_ENV),
     authStatus: cookie.load('DEV_AUTH_TOKEN'),
   };
 
@@ -376,8 +379,11 @@ export class AuthStore {
   }
 
   @action
-  checkEmailExistsPresignup = email => new Promise((res, rej) => {
+  checkEmailExistsPresignup = (email, isBusinessApplication = false) => new Promise((res, rej) => {
     if (DataFormatter.validateEmail(email)) {
+      if (isBusinessApplication) {
+        uiStore.setProgress();
+      }
       this.checkEmail = graphql({
         client: clientPublic,
         query: checkEmailExistsPresignup,
@@ -386,12 +392,19 @@ export class AuthStore {
         },
         onFetch: (data) => {
           uiStore.clearErrors();
-          if (!this.checkEmail.loading && data && data.checkEmailExistsPresignup) {
-            this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
-            this.SIGNUP_FRM.meta.isValid = false;
+          if (!this.checkEmail.loading && get(data, 'checkEmailExistsPresignup.isEmailExits')) {
+            if (isBusinessApplication) {
+              businessAppStore.setFieldvalue('userRoles', get(data, 'checkEmailExistsPresignup.roles'));
+              businessAppStore.setFieldvalue('userExists', true);
+              businessAppStore.setBasicFormError(get(data, 'checkEmailExistsPresignup.roles') && get(data, 'checkEmailExistsPresignup.roles').includes('issuer') ? 'This email is already exists as an issuer. Please Log In' : `This email address is already exists as ${get(data, 'checkEmailExistsPresignup.roles').includes('admin') ? 'admin' : 'investor'}. Please try with differrent email.`);
+              res();
+            } else {
+              this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
+              this.SIGNUP_FRM.meta.isValid = false;
+              rej();
+            }
             uiStore.setProgress(false);
-            rej();
-          } else if (!this.checkEmail.loading && data && !data.checkEmailExistsPresignup) {
+          } else if (!this.checkEmail.loading && !get(data, 'checkEmailExistsPresignup.isEmailExits')) {
             this.SIGNUP_FRM.fields.email.error = '';
             uiStore.setProgress(false);
             res();
@@ -515,6 +528,31 @@ export class AuthStore {
       console.log('Error while calling notifyApplicationError', e);
     });
   }
+
+  @action
+  validateOfferingPreviewPassword = (offeringId, previewPassword) => new Promise((res, rej) => {
+    graphql({
+      client: clientPublic,
+      query: validateOfferingPreviewPassword,
+      variables: {
+        offeringId,
+        previewPassword,
+      },
+      onFetch: (data) => {
+        uiStore.clearErrors();
+        if (data) {
+          res(get(data, 'validateOfferingPreviewPassword'));
+        }
+      },
+      onError: (err) => {
+        uiStore.setErrors(err);
+        uiStore.setProgress(false);
+        Helper.toast('Something went wrong, please try again.', 'error');
+        rej();
+      },
+      fetchPolicy: 'network-only',
+    });
+  });
 }
 
 export default new AuthStore();

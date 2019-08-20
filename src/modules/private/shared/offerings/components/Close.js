@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import moment from 'moment';
-import { filter, find, get } from 'lodash';
-import { Form, Card, Header, Divider, Step, Label, Button, Icon, Confirm, Modal } from 'semantic-ui-react';
+import omitDeep from 'omit-deep';
+import { filter, find, get, capitalize } from 'lodash';
+import beautify from 'json-beautify';
+import { Form, Card, Header, Divider, Step, Label, Button, Icon, Confirm, Modal, Grid, Table } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
 // import { SCOPE_VALUES } from '../../../../../services/constants/admin/offerings';
 import { MaskedInput, FormInput } from '../../../../../theme/form';
 import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
+import { FieldError } from '../../../../../theme/shared';
 
 const closingActions = {
   ENUM1: { label: 'save', ref: 1, enum: 'update' },
@@ -43,6 +46,8 @@ export default class Close extends Component {
     action: '',
     confirmed: false,
     inProgress: false,
+    visibilityStatus: false,
+    actionLabel: '',
   }
 
   componentWillMount() {
@@ -71,17 +76,20 @@ export default class Close extends Component {
     this.setState({ open: false, action: '' });
   }
 
-  toggleStep = activeStep => (this.setState({ activeStep }));
+  toggleStep = (activeStep) => {
+    this.setState({ activeStep });
+    this.props.offeringCreationStore.setFieldValue('outputMsg', null);
+  };
 
-  closeAction = async (status, step, forced = false) => {
+  closeAction = async (status, step, forced = false, actionLabel = '') => {
     const { offer } = this.props.offeringsStore;
     const { offeringClose } = this.props.offeringCreationStore;
     const { confirmed } = this.state;
     const confirmFor = find(closingActions, a => a.enum === status && a.confirm === true);
     if (confirmFor && confirmed === false && forced === false) {
       this.showConfirmBox(confirmFor);
-    } else if (status === 'SOFT_CLOSE_NOTIFICATION' || status === 'HARD_CLOSE_NOTIFICATION' || status === 'PROCESS_NOTES') {
-      this.setState({ openModal: true, action: status });
+    } else if (status === 'SOFT_CLOSE_NOTIFICATION' || status === 'HARD_CLOSE_NOTIFICATION' || status === 'PROCESS_NOTES' || status === 'VALIDATE_NOTES') {
+      this.setState({ openModal: true, action: status, actionLabel });
     } else {
       if (status === 'close' || status === 'update') {
         this.handleUpdateOffering(status);
@@ -94,13 +102,13 @@ export default class Close extends Component {
           step,
         );
       }
-      this.setState({ confirmed: false, action: '' });
+      this.setState({ confirmed: false, action: '', actionLabel });
     }
   }
 
   handleHardOrSoftClose = (type) => {
     const { offer } = this.props.offeringsStore;
-    const { offeringClose } = this.props.offeringCreationStore;
+    const { offeringClose, resetForm } = this.props.offeringCreationStore;
     switch (type) {
       case 'Cancel':
         this.handleCloseModal();
@@ -117,6 +125,14 @@ export default class Close extends Component {
           offeringId: offer.id,
           process: this.state.action,
         }, this.state.activeStep, 'INVESTOR');
+        this.handleCloseModal();
+        break;
+      case 'Validate Envelope':
+        offeringClose({
+          offeringId: offer.id,
+          process: this.state.action,
+        }, this.state.activeStep);
+        resetForm('OFFERING_CLOSE_3', ['npaPageCount', 'pnPageCount', 'documentsCount']);
         this.handleCloseModal();
         break;
       default: break;
@@ -154,6 +170,21 @@ export default class Close extends Component {
       });
   }
 
+  jsonModal = json => (
+  <Modal closeIcon trigger={<Button className="link-button highlight-text" content={`Show ${this.state.actionLabel} Response`} />}>
+      <Modal.Content>
+      <pre className="no-updates bg-offwhite padded json-text">
+        {beautify(json, null, 2, 100)}
+      </pre>
+      </Modal.Content>
+      </Modal>
+  );
+
+  toggleVisibilityStatus = () => {
+    const currStatus = this.state.visibilityStatus;
+    this.setState({ visibilityStatus: !currStatus });
+  }
+
   render() {
     const {
       OFFERING_CLOSE_FRM,
@@ -162,12 +193,14 @@ export default class Close extends Component {
       OFFERING_CLOSE_3,
       OFFERING_CLOSE_4,
       CLOSING_CONTITNGENCIES_FRM,
-      maskChange,
+      maskChange, outputMsg,
       formArrayChange, formChange,
     } = this.props.offeringCreationStore;
     const { inProgress } = this.props.uiStore;
     const formName = 'OFFERING_CLOSE_FRM';
     const { offer, offerStatus } = this.props.offeringsStore;
+    let { closureProcess } = offer;
+    closureProcess = omitDeep(closureProcess, ['__typename']);
     const closeDate = offer.closureSummary && offer.closureSummary.processingDate;
     const hoursToClose = DataFormatter.diffDays(closeDate, true) + 24;
     return (
@@ -227,7 +260,7 @@ out of required
                           <MaskedInput
                             key={field}
                             name={field}
-                            number={['interestRate', 'revSharePercentage'].includes(field)}
+                            percentage={['interestRate', 'revSharePercentage'].includes(field)}
                             currency={['nsPayment', 'investorFee', 'multiple', 'nsFee', 'gsFees'].includes(field)}
                             dateOfBirth={['maturityDate', 'hardCloseDate', 'anticipatedPaymentStartDate'].includes(field)}
                             fielddata={OFFERING_CLOSE_1.fields[field]}
@@ -262,7 +295,7 @@ out of required
                       {filter(closingActions, a => a.ref === 1).map(fA => (
                         <Button
                           loading={this.state.inProgress === fA.enum}
-                          onClick={() => this.closeAction(fA.enum, 1)}
+                          onClick={() => this.closeAction(fA.enum, 1, false, fA.label)}
                           primary
                         >
                           {fA.label}
@@ -286,11 +319,21 @@ out of required
                     number
                   />
                 </Form.Group>
+                {outputMsg && outputMsg.data
+                && (
+                  <>
+                  {outputMsg.type === 'success'
+                    ? (<div>{this.jsonModal(outputMsg.data)}</div>)
+                    : (<FieldError error={outputMsg.data} />)
+                  }
+                  </>
+                )
+                }
                 <Button.Group className="mt-50">
                   {filter(closingActions, a => a.ref === 2).map(fA => (
                     <Button
                       loading={inProgress === fA.enum}
-                      onClick={() => this.closeAction(fA.enum, 2)}
+                      onClick={() => this.closeAction(fA.enum, 2, false, fA.label)}
                       primary
                     >{fA.label}
                     </Button>
@@ -316,11 +359,21 @@ out of required
                     ))
                     }
                   </Form.Group>
+                  {outputMsg && outputMsg.data
+                && (
+                  <>
+                  {outputMsg.type === 'success'
+                    ? (<div>{this.jsonModal(outputMsg.data)}</div>)
+                    : (<FieldError error={outputMsg.data} />)
+                  }
+                  </>
+                )
+                }
                   <Button.Group className="mt-50">
                     {filter(closingActions, a => a.ref === 3).map(fA => (
                       <Button
                         loading={inProgress === fA.enum}
-                        onClick={() => this.closeAction(fA.enum, 3)}
+                        onClick={() => this.closeAction(fA.enum, 3, false, fA.label)}
                         primary
                       >{fA.label}
                       </Button>
@@ -342,11 +395,21 @@ out of required
                       number
                     />
                 </Form.Group>
+                {outputMsg && outputMsg.data
+                && (
+                  <>
+                  {outputMsg.type === 'success'
+                    ? (<div>{this.jsonModal(outputMsg.data)}</div>)
+                    : (<FieldError error={outputMsg.data} />)
+                  }
+                  </>
+                )
+                }
                 <Button.Group className="mt-50">
                 {filter(closingActions, a => a.ref === 4).map(fA => (
                   <Button
                     loading={inProgress === fA.enum}
-                    onClick={() => this.closeAction(fA.enum, 4)}
+                    onClick={() => this.closeAction(fA.enum, 4, false, fA.label)}
                     primary
                   >
                     {fA.label}
@@ -402,6 +465,34 @@ out of required
               </Card>
             ) : null
           }
+          <Header as="h4"> Closure Process Status <Icon onClick={this.toggleVisibilityStatus} className={`ns-chevron-${this.state.visibilityStatus === true ? 'up' : 'down'}-compact right`} color="blue" /> </Header>
+          {this.state.visibilityStatus
+          && (
+          <Grid columns={3}>
+          {closureProcess ? Object.keys(closureProcess).map(key => (
+            <Grid.Column className="center-align"><b>{capitalize(key.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</b>
+            <div className="table-wrapper">
+            <Table unstackable basic="very">
+              <Table.Body>
+                {closureProcess[key] ? Object.keys(closureProcess[key]).map(k => (
+                <Table.Row>
+                  <Table.Cell>{capitalize(k.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</Table.Cell>
+                  <Table.Cell>
+                  {['finished', 'started'].includes(k) ? closureProcess[key][k] ? moment(closureProcess[key][k]).format('MM/DD/YYYY') : '-' : closureProcess[key][k] || '-'}
+                  </Table.Cell>
+                </Table.Row>
+                )) : <p>No Data Found</p>
+                }
+                </Table.Body>
+              </Table>
+            </div>
+            </Grid.Column>
+          ))
+            : <p>No Data Found</p>}
+          </Grid>
+          )
+          }
+          <Divider section />
           <Contingency
             formArrayChange={formArrayChange}
             form={CLOSING_CONTITNGENCIES_FRM}
@@ -410,14 +501,50 @@ out of required
             OfferingClose
           />
         </div>
-        <Modal open={this.state.openModal} closeIcon size="tiny" onClose={this.handleCloseModal}>
+        <Modal open={this.state.openModal} closeIcon size={this.state.action === 'VALIDATE_NOTES' ? 'small' : 'tiny'} onClose={this.handleCloseModal}>
           <Modal.Header>
-            {this.state.activeStep === 2 ? 'Soft Close Notification' : 'Hard close Notification'}
+            {this.state.action === 'VALIDATE_NOTES' ? 'Validate Notes' : this.state.activeStep === 2 ? 'Soft Close Notification' : 'Hard close Notification'}
           </Modal.Header>
+          {this.state.action !== 'VALIDATE_NOTES'
+            && (
           <Modal.Content className="pb-20">
             Please select notification action to perform.
           </Modal.Content>
+            )
+          }
           <Modal.Actions>
+            {this.state.action === 'VALIDATE_NOTES'
+              ? (
+            <Form>
+            <Form.Group widths={3} className="left-align">
+            {['npaPageCount', 'pnPageCount'].map(field => (
+                  <FormInput
+                    key={field}
+                    name={field}
+                    fielddata={OFFERING_CLOSE_3.fields[field]}
+                    changed={(e, result) => formChange(e, result, 'OFFERING_CLOSE_3')}
+                  />
+            ))
+              }
+                  <MaskedInput
+                    name="documentsCount"
+                    containerwidth="4"
+                    fielddata={OFFERING_CLOSE_3.fields.documentsCount}
+                    changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
+                    number
+                  />
+              </Form.Group>
+              {['Cancel', 'Validate Envelope'].map(item => (
+              <Button
+                onClick={() => this.handleHardOrSoftClose(item)}
+                primary={item !== 'Cancel'}
+                content={item}
+              />
+              ))
+            }
+            </Form>
+              )
+              : (
             <Button.Group className="actions">
             {['Cancel', 'Send to Test Email', 'Send to Investors'].map(item => (
               <Button
@@ -428,6 +555,8 @@ out of required
             ))
             }
             </Button.Group>
+              )
+            }
           </Modal.Actions>
         </Modal>
         <Confirm

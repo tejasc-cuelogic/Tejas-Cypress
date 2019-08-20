@@ -50,6 +50,12 @@ mutation adminProcessInvestorAccount($userId: String!, $accountId: String!) {
     accountId: $accountId,
   )
 }`;
+export const processTransferRequest = gql`
+mutation processTransferRequest($transferId: Int!) {
+  processTransferRequest(
+    transferId: $transferId,
+  )
+}`;
 export const encryptOrDecryptUtility = gql`
 query _encryptOrDecryptValue($userId: String!, $text: String!, $type: EncryptDecryptEnum!){
   encryptOrDecryptValue(
@@ -97,4 +103,9 @@ query getListOfPartialOrCIPProcessingAccount {
     userStatus
     accountCreatedDate
   }
+}`;
+
+export const syncEsDocument = gql`
+mutation syncEsDocument($documentId: String!, $targetIndex: String!){
+  syncEsDocument(documentId: $documentId, targetIndex: $targetIndex)
 }`;

@@ -24,7 +24,7 @@ export default class ManualForm extends Component {
     this.props.bankAccountStore.setIsManualLinkBankSubmitted();
     const { investmentAccType } = this.props.accountStore;
     const accTypeStore = investmentAccType === 'individual' ? 'individualAccountStore' : investmentAccType === 'entity' ? 'entityAccountStore' : investmentAccType === 'ira' ? 'iraAccountStore' : 'individualAccountStore';
-    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1 };
+    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5, linkBankStepValue: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3, linkBankStepValue: 3 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1, linkBankStepValue: 0 };
     if (this.props.action === 'change') {
       this.props.uiStore.setProgress();
       this.props.bankAccountStore.validateManualAccount(investmentAccType).then(() => {
@@ -35,11 +35,17 @@ export default class ManualForm extends Component {
       });
     } else {
       this.props[accTypeStore].createAccount(currentStep).then(() => {
-        this.props[accTypeStore].setStepToBeRendered(currentStep.stepToBeRendered);
-        this.props.bankAccountStore.resetRoutingNum();
-        this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
-        this.props.bankAccountStore.setBankLinkInterface('list');
-        this.props.bankAccountStore.setShowAddFunds();
+        if (this.props.bankAccountStore.isAccountPresent) {
+          this.props.bankAccountStore.resetRoutingNum();
+          this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
+          this.props.bankAccountStore.setBankLinkInterface('list');
+          if (investmentAccType !== 'individual') {
+            this.props.bankAccountStore.setShowAddFunds();
+          }
+        }
+        this.props[accTypeStore].setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
+      }).catch(() => {
+        this.props[accTypeStore].setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
       });
     }
   }
@@ -117,7 +123,7 @@ export default class ManualForm extends Component {
             </Message>
             )
           }
-          <Button primary size="large" className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid} />
+          <Button primary size="large" className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid || inProgress} />
         </Form>
         <Button color="green" className="link-button mt-30" content="Or link account directly" onClick={this.linkAccountDirectly} />
       </div>

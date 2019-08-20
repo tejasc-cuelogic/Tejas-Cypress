@@ -17,7 +17,7 @@ export default class Filters extends Component {
           <Grid stackable>
             <Grid.Row>
               <Grid.Column width={4}>
-                <DateRangeFilter filters={requestState.search} label="Creation date" name="createdAt" change={change} />
+                <DateRangeFilter filters={requestState.search} label="Creation date" nameStart="accountCreateFromDate" nameEnd="accountCreateToDate" name="createdAt" change={change} />
               </Grid.Column>
               <Grid.Column width={9}>
                 <FormCheckbox

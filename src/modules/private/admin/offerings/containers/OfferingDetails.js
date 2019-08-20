@@ -10,7 +10,8 @@ import CreationSummary from '../components/CreationSummary';
 import OfferingModule from '../../../shared/offerings/components';
 import EditOffering from '../components/EditOfferingModal';
 import EditPoc from '../components/EditPocModal';
-import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
+import { REACT_APP_DEPLOY_ENV, NEXTSEED_BOX_URL } from '../../../../../constants/common';
+import Helper from '../../../../../helper/utility';
 
 @inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore')
 @observer
@@ -38,6 +39,15 @@ export default class OfferingDetails extends Component {
     this.props.offeringCreationStore.resetOfferingId();
     this.props.history.push(`${this.props.refLink}/${this.props.match.params.stage}`);
     window.onpopstate = null;
+  };
+
+  openBoxLink = (e, folderId) => {
+    e.preventDefault();
+    if (folderId) {
+      window.open(`${NEXTSEED_BOX_URL}folder/${folderId}`, '_blank');
+    } else {
+      Helper.toast('Box folder is not created for this user', 'error');
+    }
   };
 
   render() {
@@ -78,7 +88,7 @@ export default class OfferingDetails extends Component {
                   (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
                 ))}
               <Header.Subheader className="mt-10">
-                <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}/overview`}>
+                <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}`}>
                   <Icon className="ns-view" /><b>Preview the offering page</b>
                 </Link>
                 {offer.stage === 'CREATION'
@@ -86,7 +96,7 @@ export default class OfferingDetails extends Component {
                 }
               </Header.Subheader>
             </Header>
-            {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} />}
+            {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} />}
             <Card fluid>
               <SecondaryMenu match={match} navItems={navItems} />
               <Switch>

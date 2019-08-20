@@ -87,7 +87,6 @@ class DataFormatter {
   }
 
   getDateDifferenceInHours = (timeStamp2, isDayEnd = false) => {
-    console.log('Local time zone==>', momentZone.tz.guess());
     const startDate = momentZone.tz('America/Chicago').format('MM/DD/YYYY HH:mm:ss');
     // const startDate = momentZone.tz('Asia/Calcutta').format('MM/DD/YYYY HH:mm:ss');
     const endDate = isDayEnd ? moment(`${timeStamp2} 23:59:59`) : moment(timeStamp2);
@@ -98,6 +97,14 @@ class DataFormatter {
   getDate = (date, iso = true, dayType = null, isUnix = false) => {
     let formatedDate = moment(this.formatedDate(date)).utc();
     formatedDate = dayType === 'startDate' ? moment(new Date(formatedDate)).add(1, 'day').startOf('day') : dayType === 'endDate' ? moment(new Date(formatedDate)).add(1, 'day').endOf('day') : formatedDate;
+    return iso ? moment(new Date(formatedDate)).toISOString()
+      : isUnix ? moment(new Date(formatedDate)).unix() : formatedDate;
+  }
+
+  // TODO this function is created to avoid impacts, need to optimize.
+  getDateForApiFiltering = (date, iso = true, dayType = null, isUnix = false) => {
+    let formatedDate = moment(this.formatedDate(date)).utc();
+    formatedDate = dayType === 'accountCreateFromDate' ? moment(new Date(formatedDate)).add(1, 'day').startOf('day') : dayType === 'accountCreateToDate' ? moment(new Date(formatedDate)).endOf('day') : formatedDate;
     return iso ? moment(new Date(formatedDate)).toISOString()
       : isUnix ? moment(new Date(formatedDate)).unix() : formatedDate;
   }

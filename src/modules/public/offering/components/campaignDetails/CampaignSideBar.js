@@ -6,7 +6,7 @@ import { Header, Icon, Statistic, Button, Menu, Responsive, Progress, Popup, Div
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import Helper from '../../../../../helper/utility';
 import share from './Share';
-import { Image64 } from '../../../../../theme/shared';
+import { Image64, PopUpModal } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 992;
@@ -21,7 +21,7 @@ export default class CampaignSideBar extends Component {
   }
 
   render() {
-    const { campaignStore } = this.props;
+    const { campaignStore, newLayout } = this.props;
     const {
       campaign, navCountData, campaignSideBarShow, offerStructure, campaignStatus,
     } = campaignStore;
@@ -30,11 +30,12 @@ export default class CampaignSideBar extends Component {
       minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, diffForProcessing,
       earlyBird, isEarlyBirdRewards, bonusRewards, countDown,
     } = campaignStatus;
+    const isCampaignLayout = newLayout;
     return (
       <>
-        <div className={`${campaignSideBarShow ? '' : 'collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} offering-side-menu `}>
+        <div className={`${campaignSideBarShow ? '' : 'collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} ${isCampaignLayout ? 'offering-layout-menu' : ''} offering-side-menu `}>
           <Responsive maxWidth={991} as={React.Fragment}>
-            <div className="offering-intro center-align">
+            <div className={`${newLayout && isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`}>
               <Header as="h4" inverted>
                 {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
                 <Header.Subheader>{address}</Header.Subheader>
@@ -43,7 +44,7 @@ export default class CampaignSideBar extends Component {
                 {campaign && campaign.media
                   && campaign.media.heroVideo && campaign.media.heroVideo.url
                   ? (
-<Link to={`${this.props.match.url}/overview/herovideo`}>
+<Link to={`${this.props.match.url}${newLayout ? '' : '/overview'}/herovideo`}>
                       <Image64
                         bg
                         srcUrl={get(campaign, 'media.heroImage.url')}
@@ -74,15 +75,20 @@ export default class CampaignSideBar extends Component {
                 }
               </Statistic>
               {!isClosed
-                ? <Progress className="mb-0" percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
-                : <Progress percent="100" size="tiny" color="green" />
+                ? <Progress className={`${(newLayout && isMobile) ? 'mt-40' : ''} mb-0`} percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
+                : <Progress className={`${(newLayout && isMobile) ? 'mt-40' : ''} mb-0`} percent="100" size="tiny" color="green" />
               }
-              <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
-                <Popup
-                  trigger={<Icon name="help circle" color="green" />}
-                  content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                  position="top center"
-                />
+              <p className={newLayout ? 'mt-10' : ''}>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
+                {isMobile
+                  ? (<PopUpModal label={minFlagStatus ? 'Max target' : 'Min target'} content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account." />)
+                  : (
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                      position="top center"
+                    />
+                  )
+                }
               </p>
               <div className="offer-stats">
                 <Statistic.Group>
@@ -118,12 +124,17 @@ export default class CampaignSideBar extends Component {
               && (
 <p className="raise-type mt-20 mb-0">
                 <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
-                <Popup
-                  hoverable
-                  trigger={<Icon name="help circle" color="green" />}
-                  content={(<span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
-                  position="top center"
-                />
+                {isMobile
+                  ? (<PopUpModal label={CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} content={(<span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)} />)
+                  : (
+                    <Popup
+                      hoverable
+                      trigger={<Icon name="help circle" color="green" />}
+                      content={(<span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
+                      position="top center"
+                    />
+                  )
+                  }
               </p>
               )
               }
@@ -162,7 +173,7 @@ export default class CampaignSideBar extends Component {
                 && (
                 <>
                   <Button
-                    compact
+                    compact={!newLayout && !isMobile}
                     fluid={isMobile}
                     secondary={!isInProcessing}
                     disabled={maxFlagStatus || isInProcessing}
@@ -170,7 +181,7 @@ export default class CampaignSideBar extends Component {
                   >
                     {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
                   </Button>
-                  <p>
+                  <p className={(newLayout && isMobile) ? 'intro-text' : ''}>
                     {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                   </p>
                 </>

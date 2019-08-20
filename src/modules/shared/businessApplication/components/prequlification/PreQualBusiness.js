@@ -21,6 +21,7 @@ export default class PreQualBusiness extends Component {
     const { hideFields } = this.props;
     return (
       <>
+        <span className="application-scroll" />
         <FormElementWrap
           hideFields={hideFields}
           header="What is your Business Model?*"
@@ -49,6 +50,15 @@ export default class PreQualBusiness extends Component {
             disabled={preQualFormDisabled}
             fielddata={fields.industryTypes}
             name="industryTypes"
+            changed={businessAppEleChange}
+            containerclassname="iconic-checkbox"
+          />
+        </FormElementWrap>
+        <FormElementWrap hideFields={hideFields} header="Which of the following securities are you open to exploring with NextSeed?*" subHeader="Please select all that apply.">
+          <FormCheckbox
+            disabled={preQualFormDisabled}
+            fielddata={fields.businessSecurities}
+            name="businessSecurities"
             changed={businessAppEleChange}
             containerclassname="iconic-checkbox"
           />

@@ -258,3 +258,18 @@
 		}
 	}
 }
+
+// Offering new design - 1972 - Start
+.offering-layout-menu .offering-intro{
+	@media only screen and (max-width : @largestTabletScreen){
+		.offer-stats .ui.statistics .statistic{
+			>.value{
+				font-size: @15px;
+			}
+			>.label{
+				font-size: @13px;
+			}
+		}
+	}
+}
+// Offering new design - 1972 - End

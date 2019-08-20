@@ -7,6 +7,8 @@ const COMMON = [
   { from: 'auth/change-password', live: true, to: '/change-password' },
   { from: 'auth/reset-password', live: true, to: '/reset-password' },
   { from: 'auth/forgot-password', live: true, to: '/forgot-password' },
+  { from: 'blog', live: true, to: '/resources/insights' },
+  { from: 'blog/:param1', live: true, to: '/resources/insights/:param1' },
 ];
 export const PRODUCTION_REDIRECT_META = [
   ...COMMON,

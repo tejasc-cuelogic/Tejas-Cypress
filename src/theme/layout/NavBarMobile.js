@@ -39,6 +39,7 @@ export default class NavBarMobile extends Component {
       navStatus, currentUser, stepInRoute,
       hasHeader, userDetailsStore,
     } = this.props;
+    const isNewCampaign = location.pathname.startsWith('/offerings');
     const nav = GetNavMeta(location.pathname, [], true);
     let navTitle = nav ? nav.title : '';
     const logInSignUp = stepInRoute.to !== 'login' ? [
@@ -70,7 +71,7 @@ export default class NavBarMobile extends Component {
           {hasHeader && (
             <>
               <div
-                className={`${location.pathname.startsWith('/business-application/') && 'business-hamburger'} full-logo`}
+                className={`${location.pathname.startsWith('/business-application/') && 'business-hamburger'} full-logo ${isNewCampaign ? 'full-logo-v2' : ''}`}
                 onClick={!visible ? onToggle : false}
                 onKeyPress={!visible ? onToggle : false}
                 role="button"
@@ -87,10 +88,7 @@ export default class NavBarMobile extends Component {
                   />
                 )
                 : (
-                  <div
-                    className={`public-header-section ${visible ? 'active' : ''}
-                  ${navStatus === 'sub' ? 'slide-up' : ''}`}
-                  >
+<div className={`public-header-section ${isNewCampaign ? 'public-header-section-v2' : ''} ${visible ? 'active' : ''} ${navStatus === 'sub' ? 'slide-up' : ''}`}>
                     {navTitle === 'Home' || (location.pathname.startsWith('/offerings') || this.props.userStore.isInvestor)
                       ? (
                         <Link to="/">
@@ -201,7 +199,7 @@ export default class NavBarMobile extends Component {
           <Sidebar.Pusher
             dimmed={visible}
             onClick={onPusherClick}
-            className={`public-pusher ${!hasHeader && 'noheader'}`}
+            className={`public-pusher ${isNewCampaign ? 'public-pusher-v2' : ''} ${!hasHeader && 'noheader'}`}
           >
             {publicContent}
             {this.props.userStore.isInvestor && this.props.children}

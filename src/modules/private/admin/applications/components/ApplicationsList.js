@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Form, Grid, Input, Button, Card, Table, Header, Item, Rating } from 'semantic-ui-react';
+import { get } from 'lodash';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../../constants/user';
 import { FormCheckbox } from '../../../../../theme/form';
@@ -12,7 +13,7 @@ import { AppStatusLabel } from './AppStatusLabel';
 import { InlineLoader, NsPaginationType2 } from '../../../../../theme/shared';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
-@inject('businessAppAdminStore')
+@inject('businessAppAdminStore', 'uiStore')
 @observer
 export default class ApplicationsList extends Component {
   componentWillMount() {
@@ -37,8 +38,9 @@ export default class ApplicationsList extends Component {
     const { match } = this.props;
     const {
       getBusinessApplication, requestState, filterApplicationStatus, columnTitle,
-      totalRecords, businessApplicationsList, setKeyword,
+      totalRecords, businessApplicationsList, setKeyword, exportBusinessApplications,
     } = this.props.businessAppAdminStore;
+    const { inProgress } = this.props.uiStore;
     if (businessApplicationsList.loading) {
       return <InlineLoader />;
     }
@@ -54,7 +56,7 @@ export default class ApplicationsList extends Component {
                 <DropdownFilter name="Sort By Field" keyName="by" change={this.setSearchParam} value={requestState.sort.by} options={FILTER_META.businessAppSortField} />
               </Grid.Column>
               <Grid.Column width={3} floated="right" textAlign="right">
-                <Button primary className="relaxed" content="Export" />
+                <Button primary className="relaxed" loading={inProgress} content="Export" onClick={() => exportBusinessApplications(this.props.match.params.applicationType)} />
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
@@ -90,7 +92,7 @@ export default class ApplicationsList extends Component {
                     (application.applicationStatus || application.prequalStatus)
                     !== BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED
                     && (
-<Table.Row verticalAlign="top">
+                    <Table.Row verticalAlign="top">
                       <Table.Cell singleLine>
                         <Header as="h6">
                           <Link to={`${match.url}/view/${application.applicationId || application.id}/${application.userId || 'new'}`}>
@@ -119,13 +121,19 @@ export default class ApplicationsList extends Component {
                             </span>
                           </p>
                           <p>
+                            {get(application, 'signupCode') && get(application, 'utmSource') && (
+                              <>
+                                <span>Sign-Up Code <b>{get(application, 'signupCode')}</b></span>
+                                <span>Utm Source <b>{get(application, 'utmSource')}</b></span>
+                              </>
+                            )}
                             <span>
                               Started{' '}
                               <b>
-                                {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? moment(` ${application.submittedDate}`).format('MM/DD/YYYY') : '-') : (` ${application.created.date}` ? moment(` ${application.created.date}`).format('MM/DD/YYYY') : '-')}
+                                {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? moment(` ${application.submittedDate}`).format('MM/DD/YYYY') : '-') : (` ${get(application, 'created.date')}` ? moment(` ${get(application, 'created.date')}`).format('MM/DD/YYYY') : '-')}
                               </b>
                             </span>
-                            <span>Updated <b>{application.updated ? moment(application.updated.date).format('MM/DD/YYYY') : '-'}</b></span>
+                            <span>Updated <b>{get(application, 'updated.date') ? moment(get(application, 'updated.date')).format('MM/DD/YYYY') : '-'}</b></span>
                           </p>
                         </div>
                       </Table.Cell>
@@ -134,17 +142,23 @@ export default class ApplicationsList extends Component {
                           <Item.Header><Rating size="large" disabled defaultRating={application.rating || 0} maxRating={5} /></Item.Header>
                           {application.comments && application.comments.length
                             && (
-<Item.Content>
+                            <Item.Content>
                               <Item.Description>
                                 {application.comments[application.comments.length - 1].text}
                               </Item.Description>
                               <Item.Extra>
-                                <b>{moment(application.comments[application.comments.length - 1].commentor.date).format('MM/DD/YYYY  |  h:mmA')}</b>
-                                <b>
-                                  {
-                                  application.comments[application.comments.length - 1].commentor.by
-                                  }
+                                {application.comments[application.comments.length - 1].commentor
+                                && (
+                                  <b>{moment(application.comments[application.comments.length - 1].commentor.date).format('MM/DD/YYYY  |  h:mmA')}</b>
+                                )
+                                }
+                                  {application.comments[application.comments.length - 1].commentor
+                                  && (
+                                <b>{' '}{
+                                  application.comments[application.comments.length - 1].commentor.by}
                                 </b>
+                                  )
+                                }
                               </Item.Extra>
                             </Item.Content>
                             )
@@ -162,7 +176,7 @@ export default class ApplicationsList extends Component {
                     )
                   ))
                   : (
-<Table.Row>
+                  <Table.Row>
                     <Table.Cell colSpan="6">
                       <InlineLoader text="No data available." />
                     </Table.Cell>

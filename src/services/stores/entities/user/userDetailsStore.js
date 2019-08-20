@@ -18,7 +18,7 @@ import {
   investmentStore,
   userListingStore,
 } from '../../index';
-import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -27,6 +27,8 @@ export class UserDetailsStore {
   @observable currentUser = {};
 
   @observable userFirstLoad = false;
+
+  @observable isClosedAccount = false;
 
   @observable currentActiveAccount = null;
 
@@ -63,6 +65,11 @@ export class UserDetailsStore {
   @action
   setFieldValue = (field, value) => {
     this[field] = value;
+  }
+
+  @action
+  setSSNErrorMessage = (msg) => {
+    this.USER_BASIC.fields.ssn.error = msg;
   }
 
   @computed get currentUserId() {
@@ -142,6 +149,9 @@ export class UserDetailsStore {
   }
 
   @computed get currentActiveAccountDetailsOfSelectedUsers() {
+    if (this.isClosedAccount) {
+      return accountStore.selectedClosedAccount;
+    }
     const activeAccounts = this.getActiveAccountsOfSelectedUsers;
     return find(activeAccounts, acc => acc.name === this.currentActiveAccount);
   }
@@ -218,21 +228,20 @@ export class UserDetailsStore {
   }
 
   @action
-  deleteProfile = () => new Promise(async (resolve, reject) => {
+  deleteProfile = (isInvestor = false, isHardDelete = false) => new Promise(async (resolve, reject) => {
     uiStore.addMoreInProgressArray('deleteProfile');
-    const payLoad = { userId: this.selectedUserId };
     try {
       const res = await client
         .mutate({
-          mutation: deleteProfile,
-          variables: payLoad,
+          mutation: !isHardDelete ? deleteProfile : adminHardDeleteUser,
+          variables: !isInvestor ? { userId: this.selectedUserId } : {},
         });
       uiStore.removeOneFromProgressArray('deleteProfile');
-      if (res.data.adminDeleteInvestorOrIssuerUser.status) {
+      if (get(res, 'data.adminDeleteInvestorOrIssuerUser.status') || get(res, 'data.adminHardDeleteUser.status')) {
         Helper.toast('User Profile Deleted Successfully!', 'success');
         resolve();
       } else {
-        reject(res.data.adminDeleteInvestorOrIssuerUser.message);
+        reject(!isHardDelete ? get(res, 'data.adminDeleteInvestorOrIssuerUser.message') : get(res, 'data.adminHardDeleteUser.message'));
       }
     } catch (error) {
       uiStore.removeOneFromProgressArray('deleteProfile');
@@ -492,6 +501,18 @@ export class UserDetailsStore {
     return this.validAccStatus.includes(accDetails.idVerification);
   }
 
+  @computed get isSelectedAccountFull() {
+    return get(this.currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus')
+      ? get(this.currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus') === 'FULL' : null;
+  }
+
+  @computed get userHasOneFullAccount() {
+    return (this.userDetails.status === 'FULL'
+    && (this.signupStatus.activeAccounts.length > 0
+    || this.signupStatus.frozenAccounts.length > 0
+    || this.signupStatus.processingAccounts.length > 0));
+  }
+
   @computed get isLegalDocsPresent() {
     return get(this.userDetails.legalDetails, 'verificationDocs.addressProof.fileId')
       || get(this.userDetails.legalDetails, 'verificationDocs.idProof.fileId');
@@ -500,6 +521,11 @@ export class UserDetailsStore {
   @action
   setDelStatus = (status) => {
     this.deleting = status;
+  }
+
+  @computed get isCipExpirationInProgress() {
+    return get(this.userDetails, 'cip.expiration')
+    && this.signupStatus.investorProfileCompleted && !this.isUserVerified && !this.isLegalDocsPresent && this.signupStatus.partialAccounts.length;
   }
 
   @computed
@@ -522,10 +548,8 @@ export class UserDetailsStore {
           routingUrl = '/app/setup/establish-profile';
         }
       }
-    } else if (get(this.userDetails, 'cip')
-      && !this.isUserVerified
-      && !this.isCompleteIndividualAccount) {
-      routingUrl = '/app/summary/account-creation/individual';
+    } else if (this.isCipExpirationInProgress) {
+      routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {

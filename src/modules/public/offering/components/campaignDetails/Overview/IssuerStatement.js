@@ -3,6 +3,7 @@ import { Header } from 'semantic-ui-react';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { InlineLoader } from '../../../../../../theme/shared';
 
+const isTablet = document.documentElement.clientWidth < 992;
 class IssuerStatement extends Component {
   handleViewGallary = (e, index) => {
     e.preventDefault();
@@ -11,7 +12,7 @@ class IssuerStatement extends Component {
   }
 
   render() {
-    const { campaign } = this.props;
+    const { campaign, newLayout } = this.props;
     const offeirngDisclaimer = campaign && campaign.keyTerms
       && campaign.keyTerms.offeringDisclaimer
       ? campaign.keyTerms.offeringDisclaimer : null;
@@ -20,7 +21,7 @@ class IssuerStatement extends Component {
     //   campaign.keyTerms.shorthandBusinessName : '';
     return (
       <>
-        <Header as="h3" className="anchor-wrap">
+        <Header as="h3" className={`${newLayout && isTablet ? 'mb-20 mt-40' : newLayout ? 'mt-40 mb-30' : ''} anchor-wrap`}>
           Issuer Statement
           <span className="anchor" id="issuer-statement" />
         </Header>

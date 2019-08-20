@@ -3,8 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { includes, startCase, get } from 'lodash';
 import { Header, Icon, Button, Divider, Confirm } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
-
-@inject('userDetailsStore', 'uiStore')
+import { REACT_APP_DEPLOY_ENV } from '../../../../../../../constants/common';
+@inject('userDetailsStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class AccountHeader extends Component {
@@ -26,10 +26,13 @@ export default class AccountHeader extends Component {
     const {
       currentActiveAccountDetailsOfSelectedUsers, getDetailsOfUser,
     } = this.props.userDetailsStore;
+    const isProd = ['production', 'prod', 'master', 'infosec'].includes(REACT_APP_DEPLOY_ENV);
     const userId = get(getDetailsOfUser, 'id');
     const accountId = get(currentActiveAccountDetailsOfSelectedUsers, 'details.accountId');
     const freeze = get(currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus') === 'FROZEN';
     const accountType = includes(this.props.pathname, 'individual') ? 'individual' : includes(this.props.pathname, 'ira') ? 'ira' : 'entity';
+    const access = this.props.userStore.myAccessForModule('USERS');
+    const isFullAccessUser = access.level === 'FULL';
     return (
       <>
         <div className="clearfix">
@@ -43,6 +46,9 @@ export default class AccountHeader extends Component {
               <span className="pull-right">
                 <Button.Group compact size="tiny">
                   <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, freeze ? 'unfreeze' : 'freeze')}><Icon className="ns-freeze" />{freeze ? 'Unfreeze' : 'Freeze'} account</Button>
+                  {(isFullAccessUser && !isProd)
+                    && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'close-account')}>Close account</Button>
+                  }
                 </Button.Group>
               </span>
             )

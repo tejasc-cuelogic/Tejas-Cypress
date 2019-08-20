@@ -5,7 +5,7 @@ import moment from 'moment';
 import Helper from '../../../../../../../helper/utility';
 
 
-const IndividualSummary = ({ account, investor, CopyToClipboardAccountId }) => (
+const IndividualSummary = ({ account, investor, CopyToClipboardAccountId, isClosedAccount }) => (
   <Table.Body>
     <Table.Row>
       <Table.Cell>Account Creation Date: </Table.Cell>
@@ -55,6 +55,18 @@ const IndividualSummary = ({ account, investor, CopyToClipboardAccountId }) => (
       <Table.Cell>Your Initial Deposit</Table.Cell>
       <Table.Cell>{(get(account, 'details.initialDepositAmount') && get(account, 'details.initialDepositAmount') !== '-1.00') ? Helper.MoneyMathDisplayCurrency(get(account, 'details.initialDepositAmount')) : 'N/A'}</Table.Cell>
     </Table.Row>
+    {isClosedAccount && (
+<>
+        <Table.Row>
+          <Table.Cell>Closed Date</Table.Cell>
+          <Table.Cell>{(get(account, 'details.closed.date') ? moment(get(account, 'details.closed.date')).format('MM/DD/YYYY') : 'N/A')}</Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>Closed Reason</Table.Cell>
+          <Table.Cell>{(get(account, 'details.closed.reason') ? get(account, 'details.closed.reason') : 'N/A')}</Table.Cell>
+        </Table.Row>
+      </>
+    )}
   </Table.Body>
 );
 
