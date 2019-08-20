@@ -39,8 +39,8 @@ export default class EsAudit extends Component {
     } = this.props.elasticSearchStore;
     const { auditAlias } = this.props.match.params;
     const userIdExsist = get(esAuditParaOutput, 'index_a.record.userId') ? get(esAuditParaOutput, 'index_a.record.userId') : get(esAuditParaOutput, 'index_b.record.userId') ? get(esAuditParaOutput, 'index_b.record.userId') : '';
-    const accountTypeObtained = get(esAuditParaOutput, 'index_a.record.accountType') ? get(esAuditParaOutput, 'index_a.record.accountType') : get(esAuditParaOutput, 'index_b.record.userId') ? get(esAuditParaOutput, 'index_b.record.userId') : '';
-    const accountTypeExsist = isArray(accountTypeObtained) && accountTypeObtained.length > 0 ? map(accountTypeObtained, val => val.toUpperCase()) : [];
+    const accountTypeListObtained = get(esAuditParaOutput, 'index_a.record.accountType') ? get(esAuditParaOutput, 'index_a.record.accountType') : get(esAuditParaOutput, 'index_b.record.userId') ? get(esAuditParaOutput, 'index_b.record.userId') : '';
+    const accountTypeExsist = isArray(accountTypeListObtained) && accountTypeListObtained.length > 0 ? map(accountTypeListObtained, val => val.toUpperCase()) : [];
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="large" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
