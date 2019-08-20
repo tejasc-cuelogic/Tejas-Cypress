@@ -9,7 +9,6 @@ import PersonalInformation from './PersonalInformation';
 import FormationDocuments from './FormationDocuments';
 import { Plaid } from '../../../../../shared/bankAccount';
 import Summary from './Summary';
-import GsModal from '../../../components/GsProcessingModal';
 
 @inject('uiStore', 'accountStore', 'bankAccountStore', 'entityAccountStore', 'userDetailsStore', 'userStore', 'investmentLimitStore')
 @observer
@@ -41,18 +40,6 @@ export default class AccountCreation extends React.Component {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
 
-  closeProcessingModal = () => {
-    const { partialInvestNowSessionURL, setPartialInvestmenSession } = this.props.userDetailsStore;
-    this.props.entityAccountStore.setFieldValue('showProcessingModal', false);
-    if (partialInvestNowSessionURL) {
-      this.props.history.push(partialInvestNowSessionURL);
-      setPartialInvestmenSession();
-    } else {
-      this.props.history.push('/app/summary');
-      this.props.uiStore.resetcreateAccountMessage();
-    }
-  }
-
   render() {
     const {
       inProgress,
@@ -70,7 +57,7 @@ export default class AccountCreation extends React.Component {
       FORM_DOCS_FRM,
       stepToBeRendered,
       createAccount,
-      isValidEntityForm, showProcessingModal,
+      isValidEntityForm,
     } = this.props.entityAccountStore;
     const {
       formEntityAddFunds, isAccountPresent, formLinkBankManually,
@@ -158,9 +145,6 @@ export default class AccountCreation extends React.Component {
         bankSummary: false,
       },
     ];
-    if (showProcessingModal) {
-      return <GsModal open={showProcessingModal} closeModal={this.closeProcessingModal} />;
-    }
     return (
       <div className="step-progress">
         <MultiStep isAccountCreation setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} page disablePrevBtn bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />

@@ -296,15 +296,23 @@ export class UserDetailsStore {
   }
 
   @action
-  getUserProfileDetails = (userId) => {
-    this.setFieldValue('selectedUserId', userId);
+  getUserProfileDetails = userId => new Promise((resolve, rej) => {
     this.detailsOfUser = graphql({
       client,
       query: selectedUserDetailsQuery,
       variables: { userId },
       fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data) {
+          this.setFieldValue('selectedUserId', userId);
+          resolve(data);
+        }
+      },
+      onError: () => {
+        rej();
+      },
     });
-  }
+  })
 
   getUserStorageDetails = (userId) => {
     uiStore.setProgress('userBoxAccount');

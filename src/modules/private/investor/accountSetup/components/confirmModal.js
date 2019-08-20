@@ -2,19 +2,18 @@
 import React from 'react';
 import { Modal, Header, Divider, Button } from 'semantic-ui-react';
 
-const GsProcessingModal = props => (
+const ConfirmModal = props => (
   <Modal open={props.open} size="mini">
     <Modal.Content className="center-align mt-30">
-      <Header as="h3">Processing</Header>
+      <Header as="h3">Thank you for creating an account with NextSeed</Header>
       <p className="mt-30 mb-30">
-        Thank you for submitting your account request. We have a little more to do
-        on our end, and we'll notify you when your account is ready to use.
+        {props.content}
       </p>
       <Divider hidden />
-      <Button onClick={props.closeModal} primary size="large">Continue</Button>
+      <Button onClick={props.closeModal} primary size="large">Explore Campaigns</Button>
       <Divider hidden />
     </Modal.Content>
   </Modal>
 );
 
-export default GsProcessingModal;
+export default ConfirmModal;

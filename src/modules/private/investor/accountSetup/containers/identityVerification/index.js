@@ -150,13 +150,13 @@ export default class IdentityVerification extends Component {
 
   submitAccountToProcessing = (accountType) => {
     const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
-    const accountId = get(accountDetails, 'details.accountId') || this.props.individualAccountStore.individualAccId;
+    const accountId = get(accountDetails, 'details.accountId');
     const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
     this.props.identityStore.setFieldValue('signUpLoading', true);
     this.props.accountStore.updateToAccountProcessing(accountId, accountvalue).then(() => {
-      window.sessionStorage.removeItem('cipErrorMessage');
-      this.props.history.push('/app/summary');
       this.props.identityStore.setFieldValue('signUpLoading', false);
+      const url = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.showProcessingModal ? `/app/summary/account-creation/${accountType}/processing` : '/app/summary';
+      this.props.history.push(url);
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
     });
   }

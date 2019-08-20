@@ -1,21 +1,48 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Table, Button } from 'semantic-ui-react';
-import { capitalize } from 'lodash';
+import { capitalize, get } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { CROWDPAY_ACCOUNTS_STATUS } from '../../../../../services/constants/crowdpayAccounts';
 
-@inject('crowdpayStore')
+@inject('crowdpayStore', 'identityStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class Actions extends Component {
   ctaHandler = (e, userId, accountId, action, msg) => {
     e.preventDefault();
     const availableActions = ['APPROVE', 'DECLINE', 'EMAIL', 'GSPROCESS', 'VALIDATE', 'CREATEACCOUNT'];
-    if (availableActions.includes(action)) {
+    const attrObj = { userId, accountId, action, msg };
+    if (action === 'CREATEACCOUNT') {
+      const { detailsOfUser, selectedUserId } = this.props.userDetailsStore;
+      if (selectedUserId === '' || selectedUserId !== userId) {
+        this.props.userDetailsStore.getUserProfileDetails(userId).then((data) => {
+          this.checkRequestIdBeforeSubmitInvestor(get(data, 'user'), attrObj);
+        });
+      } else if (get(detailsOfUser, 'data.user')) {
+        this.checkRequestIdBeforeSubmitInvestor(get(detailsOfUser, 'data.user'), attrObj);
+      }
+    } else if (availableActions.includes(action)) {
       this.props.crowdPayCtaHandler(userId, accountId, action, msg);
     } else {
       this.props.history.push(`${this.props.match.url}/${action}`);
+    }
+  }
+
+  handleVerifyUserIdentity = (userId, accountId, action, msg) => {
+    this.props.identityStore.verifyUserIdentity().then((requestId) => {
+      if (requestId) {
+        this.props.crowdPayCtaHandler(userId, accountId, action, msg);
+      }
+    });
+  }
+
+  checkRequestIdBeforeSubmitInvestor = (userObj, attrObj) => {
+    const { userId, accountId, action, msg } = attrObj;
+    if (userObj.legalDetails.status === 'OFFLINE' || userObj.cip.requestId === '-1') {
+      this.handleVerifyUserIdentity(userId, accountId, action, msg);
+    } else {
+      this.props.crowdPayCtaHandler(userId, accountId, action, msg);
     }
   }
 
