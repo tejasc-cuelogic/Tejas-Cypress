@@ -636,8 +636,13 @@
     }
     .ui.card, .card-style{
         border-radius: 0 !important;
-        margin: auto -@10px;
+        margin: @28px -@10px;
         width: calc(100% + 20px);
         max-width: calc(100% + 20px);
+    }
+    .closable-card .ui.card{
+        margin: @28px 0;
+        width: 100%;
+        max-width: 100%;
     }
 }

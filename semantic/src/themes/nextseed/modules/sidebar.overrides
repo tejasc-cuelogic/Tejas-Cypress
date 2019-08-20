@@ -48,6 +48,7 @@
 			}
 			&.private-pusher{
 				background-color: @neutral-offwhite;
+				min-height: 100vh;
 				.private-dropdown~.content-spacer{
 					padding-top: 0;
 				}
