@@ -164,7 +164,7 @@ export default class NavBarMobile extends Component {
                   onToggle={onToggle}
                   navItems={publicNav}
                 />
-                <div className="public-action-nav mt-20">
+                <div className="public-action-nav mt-20 mb-20">
                   {!currentUser ? logInSignUp.map(route => (
                     <Menu.Item className="btn-item">
                       <Button fluid as={Link} onClick={this.setAuthRef} to={`/${route.to}`} className={`${route.className}`} compact>{route.title}</Button>
@@ -199,7 +199,7 @@ export default class NavBarMobile extends Component {
           <Sidebar.Pusher
             dimmed={visible}
             onClick={onPusherClick}
-            className={`public-pusher ${isNewCampaign ? 'public-pusher-v2' : ''} ${!hasHeader && 'noheader'}`}
+            className={`public-pusher ${isNewCampaign ? 'public-pusher-v2' : ''} ${!hasHeader && 'noheader'} ${location.pathname.startsWith('/app') ? 'private-pusher' : ''}`}
           >
             {publicContent}
             {this.props.userStore.isInvestor && this.props.children}

@@ -8,7 +8,7 @@ const COLORS = ['#C782FF', '#28DAC9', '#0681A1', '#86D200', '#D2FF85', '#474747'
 
 const PortfolioAllocations = ({ pieChart, isAdmin }) => (
   <>
-    <Header as="h4">Portfolio Allocations</Header>
+    <Header as={isTablet ? 'h5' : 'h4'}>Portfolio Allocations</Header>
     <Grid celled={isTablet ? undefined : 'internally'}>
       <Grid.Row>
         <Grid.Column className="portfolio-allocation" widescreen={isAdmin ? 7 : 6} largeScreen={7} computer={7} tablet={16} mobile={16}>

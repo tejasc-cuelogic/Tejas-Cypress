@@ -5,7 +5,7 @@ import Helper from '../helper';
 import NSImage from '../../../../shared/NSImage';
 
 const progressMeta = Helper.Progress();
-
+const isMobile = document.documentElement.clientWidth < 768;
 const checkStatus = (signupStatus, key, userDetailsStore) => {
   let status = false;
   if (key === 'contact-card') {
@@ -82,15 +82,24 @@ const ProgressCard = props => (
         return (
           <Card fluid className={`verification ${status === 2 ? 'done' : status === 0 ? 'disabled' : ''}`}>
             <Card.Content>
-              <Icon.Group size="huge">
-                {/* <Icon className={`ns-${key}`} /> */}
-                <NSImage path={(status === 2 || status === 0) ? (`cards/${key}.png`) : (`cards/${key}-green.png`)} />
-                <Icon corner color={status === 2 ? 'green' : status === 1 ? 'red' : ''} className={status === 0 ? '' : `${status === 2 ? 'ns-check-circle' : ''}`} />
-              </Icon.Group>
+              {!isMobile
+                && (
+                  <Icon.Group size="huge">
+                    {/* <Icon className={`ns-${key}`} /> */}
+                          <NSImage path={(status === 2 || status === 0) ? (`cards/${key}.png`) : (`cards/${key}-green.png`)} />
+                          <Icon corner color={status === 2 ? 'green' : status === 1 ? 'red' : ''} className={status === 0 ? '' : `${status === 2 ? 'ns-check-circle' : ''}`} />
+                  </Icon.Group>
+                )
+              }
               <p><b>{currentCard.label}</b></p>
               </Card.Content>
-              <Card.Content extra className="pt-0">
-              {status === 2 ? <p className="mt-0 grey-header"><b>{currentCard.successMsg}</b></p> : '' }
+              <Card.Content extra className={isMobile ? '' : 'pt-0'}>
+              {isMobile && status === 2
+                ? (
+                  <Icon size="large" color={status === 2 ? 'green' : status === 1 ? 'red' : ''} className={status === 0 ? '' : `${status === 2 ? 'ns-check-circle' : ''} mb-half`} />
+                ) : null
+              }
+              {status === 2 ? <p className="mt-0 neutral-text"><b>{currentCard.successMsg}</b></p> : '' }
               {status === 0 && <p className="mt-0" />}
               {status === 0
                 ? ''

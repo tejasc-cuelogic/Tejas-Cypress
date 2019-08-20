@@ -20,6 +20,7 @@ import AccountHeader from '../../../admin/userManagement/components/manage/accou
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import StickyNotification from '../../setup/components/stickyNotification';
 
+const isTablet = document.documentElement.clientWidth < 992;
 @inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore', 'referralsStore')
 @observer
 export default class Portfolio extends Component {
@@ -212,7 +213,7 @@ export default class Portfolio extends Component {
         {(getPieChartData.investmentType.length || getPieChartData.industry.length)
           ? <PortfolioAllocations isAdmin={this.props.isAdmin} pieChart={getPieChartData} /> : ''
         }
-        <Header as="h4">My Investments</Header>
+        <Header as={isTablet ? 'h5' : 'h4'}>My Investments</Header>
         {pendingSorted.length
           ? <InvestmentList isAdmin={this.props.isAdmin} handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={pendingSorted.length} match={match} /> : null
         }

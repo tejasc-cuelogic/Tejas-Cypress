@@ -212,10 +212,13 @@ dl.dl-horizontal dd .ui.selection.dropdown.display-only{
     }
 }
 .private-dropdown {
-	position: absolute;
-	top: 58px;
-	width: 100%;
+    position: fixed;
+    top: 58px;
+    left: 0;
+    width: 100%;
+    z-index: 1;
 	~.page-header-section {
-		margin-top: @58px;
+        margin-top: @58px;
+        background: @neutral-offwhite;
 	}
 }

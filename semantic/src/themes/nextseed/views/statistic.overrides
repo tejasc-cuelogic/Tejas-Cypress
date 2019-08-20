@@ -237,20 +237,21 @@
 		margin:0;
 		flex: 1;
 		padding-left: @20px;
-		@media only screen and (max-width : @largestMobileScreen){
+		@media only screen and (max-width : @largestTabletScreen){
 			padding-right: @18px;
 		}
         .value{
             font-size:@20px !important;
 			text-transform:none;
-			@media only screen and (max-width : @largestMobileScreen){
+			@media only screen and (max-width : @largestTabletScreen){
 				font-size:@16px !important;
 			}
         }
         .label{
 			font-size:@15px;
-			@media only screen and (max-width : @largestMobileScreen){
+			@media only screen and (max-width : @largestTabletScreen){
 				font-size:@12px !important;
+				line-height: 18px;
 			}
 		}
 		~div{

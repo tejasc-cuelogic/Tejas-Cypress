@@ -5,10 +5,20 @@
 // 	Sidebar pushable CSS
 .pushable {
 	&:not(body) {
-		// transform: none;
+		transform: none;
 		position: relative;
 		max-width: 1680px;
 		margin: auto;
+		&.private-pushable{
+			transform: translate3d(0,0,0);
+			height: calc(100vh - 72px);
+			overflow: hidden;
+			@media only screen and (max-width : @largestTabletScreen){
+				transform: none;
+				height: auto;
+				overflow: visible;
+			}
+		}
 	}
 	.ui.push.sidebar {
 		z-index: 100;
@@ -35,6 +45,12 @@
 			background-color: transparent;
 			&.noheader{
 				padding-top: 0;
+			}
+			&.private-pusher{
+				background-color: @neutral-offwhite;
+				.private-dropdown~.content-spacer{
+					padding-top: 0;
+				}
 			}
 		}
 		&.dimmed {
@@ -234,7 +250,6 @@
 		}
 		&.public-sidebar {
 			width: 100%;
-			padding-bottom: @30px;
 		}
 	}
 	.ui.image.logo{
