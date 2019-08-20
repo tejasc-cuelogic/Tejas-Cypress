@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../theme/form';
-import AccCreationHelper from '../../../investor/accountSetup/containers/accountCreation/helper';
 import { ListErrors } from '../../../../../theme/shared';
 import { validationActions } from '../../../../../services/actions';
 import Helper from '../../../../../helper/utility';
@@ -41,14 +40,16 @@ export default class AddFunds extends Component {
 
   renderStep = () => {
     if (this.props.accountStore.investmentAccType === 'individual') {
-      const individualSteps = AccCreationHelper.individualSteps();
       const currentStep = {
         name: 'Add funds',
         stepToBeRendered: 2,
+        linkBankStepValue: 0,
       };
       this.props.individualAccountStore.createAccount(currentStep).then(() => {
         this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
-        this.props.individualAccountStore.setStepToBeRendered(individualSteps.summary);
+        this.props.individualAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
+      }).catch(() => {
+        this.props.individualAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
       });
     }
     if (this.props.accountStore.investmentAccType === 'entity') {
@@ -56,11 +57,14 @@ export default class AddFunds extends Component {
         name: 'Link bank',
         stepToBeRendered: 6,
         validate: validationActions.validateLinkBankForm,
+        linkBankStepValue: 5,
       };
       this.props.entityAccountStore.createAccount(currentStep).then(() => {
         this.props.bankAccountStore.resetShowAddFunds();
         this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
-        this.props.entityAccountStore.setStepToBeRendered(currentStep.stepToBeRendered);
+        this.props.entityAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
+      }).catch(() => {
+        this.props.entityAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
       });
     }
     if (this.props.accountStore.investmentAccType === 'ira') {
@@ -68,12 +72,15 @@ export default class AddFunds extends Component {
         name: 'Link bank',
         validate: validationActions.validateLinkBankForm,
         stepToBeRendered: 4,
+        linkBankStepValue: 3,
       };
       this.props.iraAccountStore.createAccount(currentStep).then(() => {
         // this.props.bankAccountStore.resetAddFundsForm();
         this.props.bankAccountStore.resetShowAddFunds();
         this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
-        this.props.iraAccountStore.setStepToBeRendered(currentStep.stepToBeRendered);
+        this.props.iraAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
+      }).catch(() => {
+        this.props.iraAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
       });
     }
   }
@@ -85,7 +92,7 @@ export default class AddFunds extends Component {
       isAccountPresent,
       addFundsByAccType,
     } = this.props.bankAccountStore;
-    const { errors } = this.props.uiStore;
+    const { errors, inProgress } = this.props.uiStore;
     const isInValid = this.isValidFund(addFundsByAccType);
     return (
       <>
@@ -118,14 +125,11 @@ export default class AddFunds extends Component {
               </Message>
               )
             }
-            <Button primary size="large" fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Confirm" disabled={isInValid || !isAccountPresent} />
+            <Button primary size="large" fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Confirm" disabled={isInValid || !isAccountPresent || inProgress} />
           </Form>
           {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])
-            && (
-<div className="center-align">
-                <Button color="green" className="link-button mt-30" disabled={!isAccountPresent} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
-              </div>
-            )}
+            && <Button color="green" className="link-button mt-30" disabled={!isAccountPresent || inProgress} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
+          }
         </div>
       </>
     );

@@ -124,13 +124,32 @@
     }
 }
 .ui.secondary.menu.menu-secondary-fixed {
+    align-items: center;
     @media only screen and (max-width : @largestLargeMonitor){
         background-color: fade(@white, 50%);
     }
     .item{
-        padding:@3px @18px;
+        padding:@3px @7px;
         &:hover {
             background-color: transparent;
+        }
+        &.menu-button > .ui.button{
+            width: 110px;
+        }
+        &.header > .ui.image.logo,&.menu-button{
+            visibility: hidden;
+        }
+    }
+    &.animate{
+        .item{
+            &.header > .ui.image.logo,&.menu-button{
+                visibility: visible;
+            }
+        }
+        &.reverse .item{
+            &.header > .ui.image.logo,&.menu-button{
+                visibility: hidden;
+            }
         }
     }
     .menu.menu-secondary {
@@ -218,9 +237,12 @@
         top: auto;
         bottom: -58px;
         height: auto;
-        padding: 10px 0;
+        padding: @10px 0;
         .ui.list {
             margin: 0;
+        }
+        &.campaign-secondary-menu-v2{
+            padding: @10px @7px;
         }
     }
     &.active{
@@ -234,7 +256,10 @@
                 top: auto;
                 bottom: 0;
                 height: auto;
-                padding: 10px 0;
+                padding: @10px 0;
+                &.campaign-secondary-menu-v2{
+                    padding: @10px @7px;
+                }
                 .ui.tiny.list {
                     margin: 0;
                     &.right.floated {
@@ -403,6 +428,28 @@ footer .ui.text.menu{
                 &:after{
                     background-color:@primary-one;
                 }
+            }
+        }
+    }
+}
+
+// offering layout menu
+.offering-layout-menu .ui.vertical.menu{
+    .item{
+        &:hover, &.active{
+            color: @neutral;
+            &:first-child:before{
+                display: block !important;
+            }
+            &:before{
+                content: '';
+                width: 3px;
+                height: 15px;
+                position: absolute;
+                left: -14px;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: @primary-one;
             }
         }
     }
@@ -584,7 +631,59 @@ footer .ui.text.menu{
             width: 100%;
         }
 	}
-	//Public Mobile View End
+    //Public Mobile View End
+    //offering new layout mobile menu
+    &.text.campaign-mobile-menu-v2{
+        margin: 0;
+        padding: 0 @13px;
+        overflow-x: scroll;
+        border-bottom: 1px solid @neutral-darkwhite;
+        min-height: @45px;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        &.active{
+            position: fixed;
+            width: 100%;
+            top: 58px;
+            z-index: 9;
+            background: @white;
+        }
+        .item{
+            font-size: @15px;
+            margin: 0 @13px;
+            padding: @5px 0;
+            position: relative;
+            font-weight: @fontMedium;
+            &:last-child{
+                padding-right: @22px;
+                &:after{
+                    width: calc(100% - 22px);
+                }    
+            }
+            &:after{
+                content: '';
+                width: 100%;
+                height: 2px;
+                background: transparent;
+                position: absolute;
+                bottom: -9px;
+                left: 0;
+            }
+            &:hover{
+                color: @neutral-middark;
+            }
+            &.active, &:focus{
+                color: @primary-one;
+                &:after{
+                    background: @primary-one;
+                }
+            }
+            &.hasLabel:after{
+                bottom: -6px;
+            }
+        }
+    }
 }
 .transaction-details .ui.inverted.menu .item{
     padding:@16px @25px;
@@ -783,3 +882,4 @@ footer .ui.text.menu{
     max-width: 1680px;
     margin: auto !important;
 }
+

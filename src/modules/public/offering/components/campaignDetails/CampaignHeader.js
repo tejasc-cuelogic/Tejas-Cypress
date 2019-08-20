@@ -18,15 +18,13 @@ export default class CampaignHeader extends Component {
   }
 
   render() {
-    const { campaignStore } = this.props;
+    const { campaignStore, newLayout } = this.props;
     const { campaign, offerStructure, campaignStatus } = campaignStore;
     const {
-      diff, isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
+      isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
-      percentBefore, diffForProcessing,
+      percentBefore, diffForProcessing, countDown,
     } = campaignStatus;
-    const labelToShow = diffForProcessing < 48 ? 'Hours Left' : 'Days Left';
-    const valueToShow = diffForProcessing < 48 ? diffForProcessing : diff;
     return (
       <>
         <div className="campaign-banner">
@@ -41,7 +39,7 @@ export default class CampaignHeader extends Component {
                     {campaign && campaign.media
                       && campaign.media.heroVideo && campaign.media.heroVideo.url
                       ? (
-<Link to={`${this.props.match.url}/overview/herovideo`}>
+<Link to={`${this.props.match.url}${newLayout ? '' : '/overview'}/herovideo`}>
                           <Image64
                             bg
                             srcUrl={get(campaign, 'media.heroImage.url')}
@@ -63,8 +61,8 @@ export default class CampaignHeader extends Component {
                         {!isClosed && diffForProcessing > 0
                           && (
 <Statistic size="mini" className="basic">
-                            <Statistic.Value>{valueToShow}</Statistic.Value>
-                            <Statistic.Label>{labelToShow}</Statistic.Label>
+                            <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
+                            <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
                           </Statistic>
                           )
                         }
@@ -108,7 +106,7 @@ export default class CampaignHeader extends Component {
                           }
                         </React.Fragment>
                       )) : ''}
-                    <Link to={`${this.props.match.url}/overview/photogallery`} onClick={this.handleViewGallery} className="pull-right">
+                    <Link to={`${this.props.match.url}${newLayout ? '' : '/overview'}/photogallery`} onClick={this.handleViewGallery} className="pull-right">
                       View gallery <Icon size="small" className="ns-chevron-right" />
                     </Link>
                   </div>

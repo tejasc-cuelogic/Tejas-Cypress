@@ -1,13 +1,13 @@
 
-import { observable, action, toJS } from 'mobx';
+import { observable, action, toJS, computed } from 'mobx';
 import { get } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
-import { updateOfferingRepaymentsMeta, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility, auditBoxFolder } from '../../queries/data';
+import { updateOfferingRepaymentsMeta, getListOfPartialOrCIPProcessingAccount, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility, auditBoxFolder, processTransferRequest } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META, RECREATEGOLDSTAR_META, ENCRYPTDECRYPTUTILITY_META, AUDITBOXFOLDER_META } from '../../../constants/admin/data';
+import { PROCESS_TRANSFER_REQ_META, OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META, RECREATEGOLDSTAR_META, ENCRYPTDECRYPTUTILITY_META, AUDITBOXFOLDER_META } from '../../../constants/admin/data';
 
 export class DataStore {
   @observable OFFERING_REPAYMENT_META_FRM = Validator.prepareFormObject(OFFERING_REPAYMENT_META);
@@ -24,13 +24,19 @@ export class DataStore {
   @observable AUDITBOXFOLDER_FRM =
     Validator.prepareFormObject(AUDITBOXFOLDER_META);
 
+  @observable PROCESS_TRANSFER_REQ_FRM =
+    Validator.prepareFormObject(PROCESS_TRANSFER_REQ_META);
+
   @observable inProgress = {
     offeringRepayment: false,
     processFullAccount: false,
     adminProcessCip: false,
     encryptOrDecryptValue: false,
     auditBoxFolder: false,
+    processTransferRequest: false,
   };
+
+  @observable partialOrCipAccountData = {};
 
   @observable outputMsg = null;
 
@@ -153,6 +159,24 @@ export class DataStore {
   });
 
   @action
+  processTransferRequest = () => {
+    const transferId = this.PROCESS_TRANSFER_REQ_FRM.fields.transferId.value;
+    this.setFieldValue('inProgress', true, 'processTransferRequest');
+    client
+      .mutate({
+        mutation: processTransferRequest,
+        variables: { transferId },
+      })
+      .then(() => {
+        this.setFieldValue('inProgress', false, 'processTransferRequest');
+      })
+      .catch((error) => {
+        Helper.toast(get(error, 'message'), 'error');
+        this.setFieldValue('inProgress', false, 'processTransferRequest');
+      });
+  };
+
+  @action
   adminProcessCip = () => {
     const processData = Validator.evaluateFormData(this.RECREATEGOLDSTAR_FRM.fields);
     this.setFieldValue('inProgress', true, 'adminProcessCip');
@@ -243,6 +267,20 @@ export class DataStore {
         this.setFieldValue('inProgress', false, 'auditBoxFolder');
       });
   });
+
+  @action
+  getListOfPartialOrCIPProcessingAccount = () => {
+    this.partialOrCipAccountData = graphql({
+      client,
+      query: getListOfPartialOrCIPProcessingAccount,
+      fetchPolicy: 'network-only',
+    });
+  }
+
+  @computed get partialOrCipAccountList() {
+    return get(this.partialOrCipAccountData, 'data.getListOfPartialOrCIPProcessingAccount') || [];
+  }
 }
+
 
 export default new DataStore();

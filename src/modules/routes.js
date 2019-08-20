@@ -20,6 +20,7 @@ import EdgarForm from './private/admin/edgar/containers/EdgarForm';
 import XmlForm from './private/admin/edgar/containers/XmlForm';
 import BusinessDetails from './private/admin/edgar/containers/BusinessDetails';
 import UserManagement from './private/admin/userManagement';
+import DashboardCta from './shared/DashboardCta';
 
 import {
   AdminAuthorization,
@@ -31,6 +32,11 @@ export const publicRoutes = [
   {
     path: '/',
     component: Home,
+    exact: true,
+  },
+  {
+    path: '/dashboard',
+    component: DashboardCta,
     exact: true,
   },
   {
@@ -58,13 +64,14 @@ export const publicRoutes = [
     path: '/about',
     component: About,
   },
-  {
-    path: '/blog/:postId',
-    component: Blog,
-  },
+  // {
+  //   path: '/blog/:postId',
+  //   component: Blog,
+  // },
   {
     path: '/blog',
     component: Blog,
+    exact: true,
   },
   {
     path: '/invest/get-started',
@@ -83,11 +90,31 @@ export const publicRoutes = [
     component: CaseStudies,
   },
   {
+    path: '/offerings-v2/preview/:id',
+    component: OfferDetails,
+    props: 'newLayout',
+  },
+  {
+    path: '/offerings-v2/:id',
+    component: OfferDetails,
+    props: 'newLayout',
+  },
+  {
     path: '/offerings/preview/:id',
     component: OfferDetails,
+    props: 'newLayout',
   },
   {
     path: '/offerings/:id',
+    component: OfferDetails,
+    props: 'newLayout',
+  },
+  {
+    path: '/offerings-v1/preview/:id',
+    component: OfferDetails,
+  },
+  {
+    path: '/offerings-v1/:id',
     component: OfferDetails,
   },
   {

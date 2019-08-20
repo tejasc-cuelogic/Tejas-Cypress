@@ -106,6 +106,14 @@ export class BusinessAppStore {
   };
 
   @action
+  lendioMaskChange = (values, field) => {
+    this.LENDIO_QUAL_FRM = Validator.onChange(
+      this.LENDIO_QUAL_FRM,
+      { name: field, value: values.floatValue },
+    );
+  }
+
+  @action
   businessLendioEleChange = (e, res) => {
     this.LENDIO_QUAL_FRM = Validator.onChange(this.LENDIO_QUAL_FRM, Validator.pullValues(e, res));
   };

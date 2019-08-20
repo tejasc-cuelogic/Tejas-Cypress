@@ -1,5 +1,6 @@
 import { camelCase, upperFirst, reduce, assign, get } from 'lodash';
 import moment from 'moment';
+import momentZone from 'moment-timezone';
 
 class DataFormatter {
   unMaskInput = maskedInput => (
@@ -86,15 +87,24 @@ class DataFormatter {
   }
 
   getDateDifferenceInHours = (timeStamp2, isDayEnd = false) => {
-    const startDate = moment();
+    const startDate = momentZone.tz('America/Chicago').format('MM/DD/YYYY HH:mm:ss');
+    // const startDate = momentZone.tz('Asia/Calcutta').format('MM/DD/YYYY HH:mm:ss');
     const endDate = isDayEnd ? moment(`${timeStamp2} 23:59:59`) : moment(timeStamp2);
     const resultHours = moment.duration(endDate.diff(startDate)).asHours();
-    return Math.round(resultHours);
+    return Math.floor(resultHours);
   }
 
   getDate = (date, iso = true, dayType = null, isUnix = false) => {
     let formatedDate = moment(this.formatedDate(date)).utc();
     formatedDate = dayType === 'startDate' ? moment(new Date(formatedDate)).add(1, 'day').startOf('day') : dayType === 'endDate' ? moment(new Date(formatedDate)).add(1, 'day').endOf('day') : formatedDate;
+    return iso ? moment(new Date(formatedDate)).toISOString()
+      : isUnix ? moment(new Date(formatedDate)).unix() : formatedDate;
+  }
+
+  // TODO this function is created to avoid impacts, need to optimize.
+  getDateForApiFiltering = (date, iso = true, dayType = null, isUnix = false) => {
+    let formatedDate = moment(this.formatedDate(date)).utc();
+    formatedDate = dayType === 'accountCreateFromDate' ? moment(new Date(formatedDate)).add(1, 'day').startOf('day') : dayType === 'accountCreateToDate' ? moment(new Date(formatedDate)).endOf('day') : formatedDate;
     return iso ? moment(new Date(formatedDate)).toISOString()
       : isUnix ? moment(new Date(formatedDate)).unix() : formatedDate;
   }

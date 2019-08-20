@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { orderBy, get, find, map } from 'lodash';
+import { orderBy, get, find, map, cloneDeep, isEmpty } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { getInvestorListForOffering } from '../../../queries/offering/investor';
@@ -50,7 +50,8 @@ export class OfferingInvestorStore {
         if (res && !this.data.loading) {
           this.requestState.page = 1;
           this.requestState.skip = 0;
-          this.setDb(res.getInvestorListForOffering);
+          const data = this.filterReferralData(res.getInvestorListForOffering);
+          this.setDb(data);
         }
       },
       onError: () => {
@@ -88,7 +89,7 @@ export class OfferingInvestorStore {
     if (this.sortOrder.column && this.sortOrder.direction && this.db) {
       return orderBy(
         this.db,
-        [user => (this.sortOrder.column === 'investmentDate' ? moment(user[this.sortOrder.column]).unix() : this.sortOrder.column === 'amount' ? user[this.sortOrder.column]
+        [user => (this.sortOrder.column === 'investmentDate' ? moment(user[this.sortOrder.column]).unix() : (this.sortOrder.column === 'amount' || this.sortOrder.column === 'earlyBirdEligibility') ? user[this.sortOrder.column]
           : user[this.sortOrder.column] && user[this.sortOrder.column].toString().toLowerCase())],
         [this.sortOrder.direction],
       );
@@ -101,10 +102,13 @@ export class OfferingInvestorStore {
   @computed get investorListsForCsvExport() {
     const { offer } = offeringsStore;
     const referralCode = get(offer, 'referralCode');
-    const investorList = map(this.investorLists, (i) => {
-      const matchReferral = find(i.referralCode, r => r.code === referralCode);
+    const investorList = map(toJS(this.investorLists), (i) => {
+      const investorObj = cloneDeep(toJS({ ...i }));
+      // eslint-disable-next-line no-param-reassign
+      ['street', 'streetTwo'].forEach((el) => { investorObj[el] = !isEmpty(investorObj[el]) ? investorObj[el].split(',').join(' ') : null; });
+      const matchReferral = find(investorObj.referralCode, r => r.code === referralCode);
       const iReferralCode = (matchReferral && get(matchReferral, 'isValid')) ? get(matchReferral, 'code') : '';
-      return { ...i, referralCode: iReferralCode };
+      return { ...investorObj, referralCode: iReferralCode };
     });
     return investorList;
   }
@@ -129,6 +133,21 @@ export class OfferingInvestorStore {
 
   @computed get loading() {
     return this.data.loading;
+  }
+
+  filterReferralData = (prevData) => {
+    const filteredArr = [];
+    const { offer } = offeringsStore;
+    const offerRefCode = get(offer, 'referralCode');
+    prevData.forEach((obj) => {
+      if (obj.referralCode) {
+        const matchReferral = find(obj.referralCode, r => r.code === offerRefCode);
+        filteredArr.push(matchReferral ? obj : { ...obj, referralCode: null });
+      } else {
+        filteredArr.push(obj);
+      }
+    });
+    return filteredArr;
   }
 }
 

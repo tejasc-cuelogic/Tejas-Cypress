@@ -2,20 +2,23 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
+import cleanDeep from 'clean-deep';
 import money from 'money-math';
-import { get, includes, orderBy, isArray } from 'lodash';
+import { get, includes, orderBy, isArray, filter, forEach } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { ClientDb, FormValidator as Validator } from '../../../../helper';
+import { ClientDb, FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
 import { getInvestorAvailableCash } from '../../queries/investNow';
 import { requestOtp, verifyOtp } from '../../queries/profile';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
-import { TRANSFER_FUND, VERIFY_OTP } from '../../../constants/transaction';
+import { TRANSFER_FUND, VERIFY_OTP, ADD_WITHDRAW_FUND } from '../../../constants/transaction';
 import { uiStore, userDetailsStore, userStore, offeringCreationStore } from '../../index';
 import Helper from '../../../../helper/utility';
 
 export class TransactionStore {
   @observable data = [];
+
+  @observable inProgress = [];
 
   @observable hasError = false;
 
@@ -32,6 +35,8 @@ export class TransactionStore {
   };
 
   @observable TRANSFER_FRM = Validator.prepareFormObject(TRANSFER_FUND);
+
+  @observable ADD_WITHDRAW_FUND_FRM = Validator.prepareFormObject(ADD_WITHDRAW_FUND);
 
   @observable OTP_VERIFY_META = Validator.prepareFormObject(VERIFY_OTP);
 
@@ -71,9 +76,20 @@ export class TransactionStore {
 
   @observable apiCall = false;
 
+  @observable agreementIds = [];
+
   @action
   setFieldValue = (field, value) => {
     this[field] = value;
+  }
+
+  @action
+  operateInProgress = (setVal, remove = false) => {
+    if (remove) {
+      this.inProgress = filter(this.inProgress, e => e !== setVal);
+    } else {
+      this.inProgress.push(setVal);
+    }
   }
 
   @action
@@ -133,7 +149,7 @@ export class TransactionStore {
 
   @computed get loading() {
     return this.data.loading || this.investmentsByOffering.loading
-    || this.paymentHistoryData.loading || this.loanAgreementData.loading;
+      || this.paymentHistoryData.loading || this.loanAgreementData.loading;
   }
 
   @computed get error() {
@@ -141,8 +157,9 @@ export class TransactionStore {
   }
 
   @computed get accountTransactions() {
-    const transactions = (this.data.data && toJS(this.data.data.getAccountTransactions
+    let transactions = (this.data.data && toJS(this.data.data.getAccountTransactions
       && this.data.data.getAccountTransactions.transactions)) || [];
+    transactions = transactions.map(t => ({ ...t, date: DataFormatter.formatedDate(t.date) }));
     return this.sortBydate(transactions);
   }
 
@@ -240,6 +257,30 @@ export class TransactionStore {
   }
 
   @action
+  resetAddWithdrawFunds = () => {
+    uiStore.clearErrors();
+    this.ADD_WITHDRAW_FUND_FRM = Validator.prepareFormObject(ADD_WITHDRAW_FUND);
+  }
+
+  @action
+  checkedChange = (value, field, formName) => {
+    uiStore.clearErrors();
+    this[formName].fields[field].value = value;
+    if (field === 'showAgreementId' && !value) {
+      this[formName].fields.agreementId.value = '';
+    }
+  };
+
+  @action
+  formChange = (values, field, formName, mask = false) => {
+    uiStore.clearErrors();
+    this[formName] = Validator.onChange(this[formName], {
+      name: field,
+      value: mask ? values.floatValue : values,
+    });
+  };
+
+  @action
   TransferChange = (values, field, formName = 'TRANSFER_FRM', checkWithdrawAmt = false) => {
     uiStore.clearErrors();
     const errorMessage = 'Please enter a valid amount to deposit.';
@@ -259,6 +300,33 @@ export class TransactionStore {
       this.validWithdrawAmt = money.cmp(this.cash, money.format('USD', money.floatToAmount(values.floatValue))) >= 0 && values.floatValue > 0;
     }
   };
+
+  @action
+  addWithdrawFunds = (userId, accountId, actionType) => new Promise((resolve, reject) => {
+    this.operateInProgress(actionType);
+    const variables = cleanDeep(Validator.evaluateFormData(this.ADD_WITHDRAW_FUND_FRM.fields));
+    client
+      .mutate({
+        mutation: actionType === 'addfunds' ? addFundMutation : withdrawFundMutation,
+        variables: {
+          userId,
+          accountId,
+          ...variables,
+        },
+      })
+      .then(() => {
+        Helper.toast(`Funds ${actionType === 'addfunds' ? 'added' : 'withdraw'} successfully.`, 'success');
+        this.operateInProgress(actionType, true);
+        this.initRequest();
+        resolve();
+      })
+      .catch((error) => {
+        uiStore.setErrors(error.message);
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        this.operateInProgress(actionType, true);
+        reject();
+      });
+  });
 
   @action
   addFunds = (amount, description) => {
@@ -535,6 +603,7 @@ export class TransactionStore {
   getInvestmentsByOfferingId = isAdmin => new Promise((resolve, reject) => {
     const investorDetail = userDetailsStore.getDetailsOfUser;
     const userDetailId = isAdmin ? investorDetail.id : get(userDetailsStore, 'userDetails.id');
+    this.agreementIds = [];
     this.investmentsByOffering = graphql({
       client,
       query: getInvestmentsByUserIdAndOfferingId,
@@ -544,10 +613,15 @@ export class TransactionStore {
       },
       onFetch: (data) => {
         if (data && !this.investmentsByOffering.loading) {
-          this.setInvestmentOptions(data.getInvestmentsByUserIdAndOfferingId);
-          if (data.getInvestmentsByUserIdAndOfferingId[0]) {
-            this.setInvestment(data.getInvestmentsByUserIdAndOfferingId[0].investmentId);
+          const account = !isAdmin ? userDetailsStore.currentActiveAccountDetails
+            : userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+          const accountId = get(account, 'details.accountId');
+          const investmentsByUserIdAndOfferingId = filter(data.getInvestmentsByUserIdAndOfferingId, e => e.accountId === accountId);
+          this.setInvestmentOptions(investmentsByUserIdAndOfferingId);
+          if (get(investmentsByUserIdAndOfferingId, '[0]')) {
+            this.setInvestment(get(investmentsByUserIdAndOfferingId, '[0].investmentId'));
           }
+          this.setAgreementIds(data.getInvestmentsByUserIdAndOfferingId);
           resolve();
         }
       },
@@ -600,6 +674,13 @@ export class TransactionStore {
       },
     });
   });
+
+  @action
+  setAgreementIds(investmentsByUser) {
+    forEach(investmentsByUser, (investment) => {
+      this.agreementIds.push(get(investment, 'agreement.agreementId'));
+    });
+  }
 }
 
 export default new TransactionStore();

@@ -5,6 +5,7 @@ import { Form, Header, Button, Divider, Confirm, Icon, Popup, Grid } from 'seman
 import { withRouter, Link } from 'react-router-dom';
 import { FormInput, MaskedInput, FormTextarea, DropZoneConfirm as DropZone, AutoComplete, FormCheckbox, ImageCropper } from '../../../../../../theme/form';
 import { Image64 } from '../../../../../../theme/shared';
+import Helper from '../../../../../../helper/utility';
 import {
   PROFILE_PHOTO_BYTES,
   PROFILE_PHOTO_EXTENSIONS,
@@ -29,8 +30,16 @@ const HeaderWithTooltip = ({ header, tooltip }) => (
 @withRouter
 @observer
 export default class Leader extends Component {
+  state = {
+    leaderFormInvalid: false,
+  }
+
   componentWillMount() {
     this.props.offeringCreationStore.setLeadershipExpData(this.props.index);
+  }
+
+  componentWillUnmount() {
+    this.setState({ leaderFormInvalid: false });
   }
 
   onFileDrop = (files, name, index) => {
@@ -60,7 +69,12 @@ export default class Leader extends Component {
 
   handleFormSubmit = (isApproved = null, successMsg) => {
     const { LEADERSHIP_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership', null, true, successMsg, isApproved, true, this.props.index || 0);
+    if (LEADERSHIP_FRM.fields.leadership[this.props.index || 0].email.value !== '' && (LEADERSHIP_FRM.fields.leadership[this.props.index || 0].email.error === undefined || LEADERSHIP_FRM.fields.leadership[this.props.index || 0].email.error === false)) {
+      this.setState({ leaderFormInvalid: false });
+      updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership', null, true, successMsg, isApproved, true, this.props.index || 0);
+    } else {
+      this.setState({ leaderFormInvalid: true });
+    }
   }
 
   addMore = (e, formName, arrayName) => {
@@ -106,6 +120,11 @@ export default class Leader extends Component {
     const leaderNumber = this.props.index;
     const index = leaderNumber || 0;
     this.props.offeringCreationStore.uploadMediaForLeadership(name, 'LEADERSHIP_FRM', index);
+  }
+
+  arrayFormChange = (e, result, formName, arrayName, index) => {
+    this.setState({ leaderFormInvalid: false });
+    this.props.offeringCreationStore.formArrayChange(e, result, formName, arrayName, index);
   }
 
   editorChange =
@@ -162,7 +181,7 @@ export default class Leader extends Component {
                   displayMode={isReadonly}
                   name={field}
                   fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
-                  changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
+                  changed={(e, result) => this.arrayFormChange(e, result, formName, 'leadership', index)}
                 />
               ))
             }
@@ -183,14 +202,6 @@ export default class Leader extends Component {
               format="##/##/####"
               changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
               dateOfBirth
-            />
-            <MaskedInput
-              displayMode={isReadonly}
-              name="ssn"
-              type="tel"
-              fielddata={LEADERSHIP_FRM.fields.leadership[index].ssn}
-              ssn
-              changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
             />
             <FormInput
               displayMode={isReadonly}
@@ -219,6 +230,26 @@ export default class Leader extends Component {
               changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
               dateOfBirth
             />
+          {isReadonly
+            ? (
+              <FormInput
+                key="ssn"
+                name="ssn"
+                fielddata={Helper.encrypSsnNumberByForm(LEADERSHIP_FRM.fields.leadership[index]).ssn}
+                changed={(e, result) => formArrayChange(e, result, formName)}
+                displayMode={isReadonly}
+              />
+            )
+            : (
+                <MaskedInput
+                  name="ssn"
+                  type="tel"
+                  fielddata={LEADERSHIP_FRM.fields.leadership[index].ssn}
+                  ssn
+                  changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
+                />
+            )}
+
           </Form.Group>
           <Header as="h4">Address</Header>
           <AutoComplete
@@ -433,6 +464,7 @@ export default class Leader extends Component {
             approved={approved}
             updateOffer={isApproved => this.handleFormSubmit(isApproved, 'Leadership has been Updated Successfully')}
             issuerSubmitted={issuerSubmitted}
+            leaderFormInvalid={this.state.leaderFormInvalid}
           />
         </Form>
         <Confirm

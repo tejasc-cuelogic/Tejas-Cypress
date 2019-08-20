@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { isArray } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Form, Grid, Table, Button } from 'semantic-ui-react';
+import { Form, Grid, Table } from 'semantic-ui-react';
 import { THeader } from '../../../../../../theme/table/NSTable';
 import { DropdownFilter } from '../../../../../../theme/form/Filters';
 import Helper from '../../../../../../helper/utility';
@@ -52,15 +52,6 @@ export default class Transactions extends Component {
     }
   };
 
-  handleViewLoanAgreement = () => {
-    this.props.transactionStore.getDocuSignViewURL().then((res) => {
-      this.setState({
-        open: true,
-        embedUrl: res,
-      });
-    });
-  }
-
   closeModal = () => {
     this.setState({ open: false });
   }
@@ -70,7 +61,6 @@ export default class Transactions extends Component {
       investmentOptions,
       loading,
       allPaymentHistoryData,
-      aggrementId,
     } = this.props.transactionStore;
     const { offerStructure } = this.props.campaignStore;
     const finalResult = offerStructure === 'TERM_NOTE' ? termNote : revShare;
@@ -91,15 +81,8 @@ export default class Transactions extends Component {
             <Grid.Row verticalAlign="middle">
               {investmentOptions.length > 1
                 && (
-<Grid.Column width={4}>
+                <Grid.Column width={4}>
                   <DropdownFilter value={this.props.transactionStore.selectedInvestment} change={this.setSearchParam} name="Select Investment" options={investmentOptions} />
-                </Grid.Column>
-                )
-              }
-              {aggrementId
-                && (
-<Grid.Column floated="right" align="right" width={4}>
-                  <Button onClick={this.handleViewLoanAgreement} className="link-button highlight-text">View Loan Agreement</Button>
                 </Grid.Column>
                 )
               }
@@ -110,7 +93,7 @@ export default class Transactions extends Component {
           {!allPaymentHistoryData.length
             ? <InlineLoader text="No Payments." />
             : (
-<Table unstackable singleLine className="investment-details" textAlign="right">
+            <Table unstackable singleLine className="investment-details" textAlign="right">
               <THeader columns={finalResult.columns} />
               <Table.Body>
                 {

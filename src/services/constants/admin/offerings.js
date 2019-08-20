@@ -13,7 +13,7 @@ Validator.register(
 export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement'];
 
 export const STAGES = {
-  CREATION: { ref: 'creation', accessKey: 1, label: 'Creation' },
+  CREATION: { ref: 'creation', publicRef: 'creation', accessKey: 1, label: 'Creation' },
   LIVE: {
     ref: 'live', publicRef: 'active', accessKey: 2, label: 'Live',
   },
@@ -276,6 +276,18 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'optional',
     placeHolder: 'Enter here',
+  },
+  revShareSummaryUpload: {
+    label: 'Revenue Sharing Summary Upload',
+    value: '',
+    error: undefined,
+    showLoader: false,
+    rule: 'optional',
+    preSignedUrl: '',
+    id: '',
+    fileData: '',
+    fileName: '',
+    objType: 's3File',
   },
   isNewBusiness: {
     value: '',
@@ -1042,6 +1054,7 @@ export const LEADERSHIP = {
       label: 'E-mail address',
       error: undefined,
       rule: 'email',
+      customErrors: { email: 'Email is not valid' },
       placeHolder: 'john.doe@contact.com',
     },
     number: {
@@ -1072,6 +1085,7 @@ export const LEADERSHIP = {
       placeHolder: 'XXX-XXX-XXXX',
       error: undefined,
       rule: 'maskedSSN',
+      customErrors: { maskedSSN: 'SSN is not valid' },
     },
     citizenship: {
       value: '',
@@ -2651,6 +2665,30 @@ export const OFFERING_CLOSE_3 = {
     rule: 'optional|date',
     placeHolder: 'MM/DD/YYYY',
   },
+  documentsCount: {
+    value: '',
+    label: 'Documents Count',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  npaPageCount: {
+    value: '',
+    label: 'Npa Page Count',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  pnPageCount: {
+    value: '',
+    label: 'Pn Page Count',
+    error: undefined,
+    objRefOutput: 'payload',
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
 };
 
 export const OFFERING_CLOSE_1 = {
@@ -2678,7 +2716,7 @@ export const OFFERING_CLOSE_1 = {
     error: undefined,
     objRefOutput: 'closureSummary.keyTerms',
     objRef: 'closureSummary.keyTerms',
-    rule: 'optional',
+    rule: 'optional|date',
     placeHolder: 'MM/DD/YYYY',
   },
   hardCloseDate: {
@@ -2687,7 +2725,7 @@ export const OFFERING_CLOSE_1 = {
     error: undefined,
     objRefOutput: 'closureSummary',
     objRef: 'closureSummary',
-    rule: 'optional',
+    rule: 'optional|date',
     placeHolder: 'MM/DD/YYYY',
   },
   interestRate: {
@@ -2723,7 +2761,7 @@ export const OFFERING_CLOSE_1 = {
     objRefOutput: 'closureSummary.keyTerms',
     objRef: 'closureSummary.keyTerms',
     error: undefined,
-    rule: 'optional',
+    rule: 'optional|date',
     placeHolder: 'MM/DD/YYYY',
   },
   gsFees: {

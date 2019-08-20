@@ -10,9 +10,10 @@ import CreationSummary from '../components/CreationSummary';
 import OfferingModule from '../../../shared/offerings/components';
 import EditOffering from '../components/EditOfferingModal';
 import EditPoc from '../components/EditPocModal';
-import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
+import { REACT_APP_DEPLOY_ENV, NEXTSEED_BOX_URL } from '../../../../../constants/common';
+import Helper from '../../../../../helper/utility';
 
-@inject('navStore', 'offeringsStore', 'offeringCreationStore')
+@inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore')
 @observer
 export default class OfferingDetails extends Component {
   componentWillMount() {
@@ -40,6 +41,15 @@ export default class OfferingDetails extends Component {
     window.onpopstate = null;
   };
 
+  openBoxLink = (e, folderId) => {
+    e.preventDefault();
+    if (folderId) {
+      window.open(`${NEXTSEED_BOX_URL}folder/${folderId}`, '_blank');
+    } else {
+      Helper.toast('Box folder is not created for this user', 'error');
+    }
+  };
+
   render() {
     const { match, offeringsStore, navStore } = this.props;
     let navItems = navStore.specificNavs.subNavigations;
@@ -64,6 +74,10 @@ export default class OfferingDetails extends Component {
     if (this.props.match.params.stage === 'engagement' && !isDev) {
       navItems = navItems.filter(n => (n.title !== 'Transactions'));
     }
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    if (access.level !== 'FULL') {
+      navItems = navItems.filter(n => (n.title !== 'Close'));
+    }
     return (
       <>
         <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
@@ -74,7 +88,7 @@ export default class OfferingDetails extends Component {
                   (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
                 ))}
               <Header.Subheader className="mt-10">
-                <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}/overview`}>
+                <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}`}>
                   <Icon className="ns-view" /><b>Preview the offering page</b>
                 </Link>
                 {offer.stage === 'CREATION'
@@ -82,7 +96,7 @@ export default class OfferingDetails extends Component {
                 }
               </Header.Subheader>
             </Header>
-            {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} />}
+            {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} />}
             <Card fluid>
               <SecondaryMenu match={match} navItems={navItems} />
               <Switch>

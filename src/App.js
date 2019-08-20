@@ -13,7 +13,7 @@ import Public from './modules/public';
 import SecureGateway from './modules/public/shared/SecureGateway';
 import { authActions, activityActions } from './services/actions';
 import MetaTagGenerator from './modules/shared/MetaTagGenerator';
-import { userIdleTime } from './constants/common';
+import { userIdleTime, NEXTSEED_BOX_URL } from './constants/common';
 /**
  * Main App
  */
@@ -44,6 +44,10 @@ const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', 
 @withRouter
 @observer
 class App extends Component {
+  state = {
+    authChecked: false,
+  };
+
   componentWillMount() {
     const { location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
@@ -63,6 +67,8 @@ class App extends Component {
       })
       .catch((err) => {
         console.log('Catch error in app.js verifySession. ', err);
+      }).finally(() => {
+        this.setState({ authChecked: true });
       });
   }
 
@@ -97,6 +103,7 @@ class App extends Component {
     if (this.props.location !== prevProps.location) {
       this.onRouteChanged({ oldLocation: prevProps.location, newLocation: this.props.location });
     }
+
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) {
         // console.log('Browser tab is hidden');
@@ -129,10 +136,27 @@ class App extends Component {
       };
       this.props.navStore.setNavStatus(calculations, 'main');
     }
-    // if (window.analytics) {
-    //   window.analytics.page();
-    // }
+
+    if ((sessionStorage.getItem('isBoxFirewalled') !== 'true' && !this.props.authStore.isBoxApiChecked)) {
+      sessionStorage.setItem('isBoxFirewalled', false);
+      this.isBoxFirewalled().catch(() => {
+        sessionStorage.setItem('isBoxFirewalled', true);
+      });
+      this.props.authStore.setFieldvalue('isBoxApiChecked', true);
+    }
   }
+
+  isBoxFirewalled = () => new Promise((resolve, reject) => {
+    const testURL = NEXTSEED_BOX_URL;
+    const myInit = {
+      method: 'HEAD',
+      mode: 'no-cors',
+    };
+    const myRequest = new Request(testURL, myInit);
+    fetch(myRequest).catch(() => {
+      reject();
+    });
+  });
 
   onIdle = () => {
     if (this.props.authStore.isUserLoggedIn) {
@@ -179,12 +203,13 @@ class App extends Component {
 
   render() {
     const { location } = this.props;
+    const { authChecked } = this.state;
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {
       return (
         <Route path="/secure-gateway" component={SecureGateway} />
       );
     }
-    if (this.props.uiStore.appLoader) {
+    if (this.props.uiStore.appLoader || !authChecked) {
       return (
         <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
       );

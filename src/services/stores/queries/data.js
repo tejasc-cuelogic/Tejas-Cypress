@@ -50,6 +50,12 @@ mutation adminProcessInvestorAccount($userId: String!, $accountId: String!) {
     accountId: $accountId,
   )
 }`;
+export const processTransferRequest = gql`
+mutation processTransferRequest($transferId: Int!) {
+  processTransferRequest(
+    transferId: $transferId,
+  )
+}`;
 export const encryptOrDecryptUtility = gql`
 query _encryptOrDecryptValue($userId: String!, $text: String!, $type: EncryptDecryptEnum!){
   encryptOrDecryptValue(
@@ -73,4 +79,33 @@ mutation _auditBox($role:UserRoleEnum!, $userId: String, $jobId: String, $waitin
     activityTitle
     activity
   }
+}`;
+
+export const getListOfPartialOrCIPProcessingAccount = gql`
+query getListOfPartialOrCIPProcessingAccount {
+  getListOfPartialOrCIPProcessingAccount {
+    userId
+    accountId
+    accountType
+    accountStatus
+    cip {
+      requestId
+      expiration
+      failType
+      failReason {
+        key
+        message
+      }
+    }
+    legalStatus
+    totalBalance
+    numberOfValidAgreements
+    userStatus
+    accountCreatedDate
+  }
+}`;
+
+export const syncEsDocument = gql`
+mutation syncEsDocument($documentId: String!, $targetIndex: String!){
+  syncEsDocument(documentId: $documentId, targetIndex: $targetIndex)
 }`;

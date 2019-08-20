@@ -10,6 +10,54 @@ const INVESTER_ACC_SUB_NAV_ITEMS = {
   ],
 };
 
+const NEW_OFFERING_LAYOUT = [
+  {
+    component: 'CampaignLayout', title: 'Highlights', to: '#top-things-to-know', useRefLink: true, defaultActive: true, key: 'hasTopThingToKnow',
+  },
+  {
+    title: 'Updates', to: '#updates', useRefLink: true, key: 'updates',
+  },
+  {
+    title: 'Investment Terms', to: '#key-terms', useRefLink: true, key: 'keyTerms',
+  },
+  {
+    title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true, key: 'useOfProcceds',
+  },
+  {
+    title: 'Company Description', to: '#company-description', useRefLink: true, key: 'companyDescription',
+  },
+  {
+    title: 'Business Model', to: '#business-model', useRefLink: true, key: 'businessModel',
+  },
+  {
+    title: 'Location Analysis', to: '#location-analysis', useRefLink: true, key: 'localAnalysis',
+  },
+  {
+    title: 'History', to: '#history', useRefLink: true, key: 'history',
+  },
+  {
+    title: 'The Team', to: '#team', useRefLink: true, key: 'team',
+  },
+  {
+    title: 'Bonus Rewards', to: '#bonus-rewards', useRefLink: true, key: 'isBonusReward',
+  },
+  {
+    title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallary',
+  },
+  {
+    title: 'Documents', to: '#data-room', useRefLink: true, key: 'dataRooms',
+  },
+  {
+    title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true, key: 'isRevenueShare',
+  },
+  {
+    title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true, key: 'isTermNote',
+  },
+  {
+    title: 'Comments', to: '#comments', useRefLink: true,
+  },
+];
+
 /*
 subPanel => 0: none, 1: subnavigation, 2: has search panel
 */
@@ -208,7 +256,7 @@ export const PRIVATE_NAV = [
       { title: 'Comments', to: 'comments', accessFor: [2, 3] },
       { title: 'Updates', to: 'updates', accessFor: [2, 3, 4] },
       {
-        title: 'Close', to: 'close', accessFor: [2], accessibleTo: ['admin', 'manager', 'support'],
+        title: 'Close', to: 'close', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
       },
       { title: 'Bonus Rewards', to: 'bonus-rewards', accessFor: [1, 2, 3, 4] },
       {
@@ -498,7 +546,21 @@ export const PUBLIC_NAV = [
   },
   {
     title: 'Explore Campaigns',
-    to: 'offerings',
+    to: 'offerings-v2/',
+    header: false,
+    headerMobile: false,
+    subNavigations: NEW_OFFERING_LAYOUT,
+  },
+  {
+    title: 'Explore Campaigns',
+    to: 'offerings/',
+    subNavigations: NEW_OFFERING_LAYOUT,
+  },
+  {
+    title: 'Explore Campaigns',
+    to: 'offerings-v1',
+    header: false,
+    headerMobile: false,
     subNavigations: [
       {
         defaultOpen: true,

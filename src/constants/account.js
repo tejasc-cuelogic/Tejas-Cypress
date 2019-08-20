@@ -154,6 +154,15 @@ export const FILE_UPLOAD_STEPS = {
   einVerificationDoc: 'ACCOUNT_ENTITY_EIN_VERIFICATION',
 };
 
+export const BANK_REQUEST_VERIFY_DENY_FORM = {
+  reason: {
+    value: '',
+    label: 'Reason:',
+    error: undefined,
+    rule: 'optional',
+  },
+};
+
 export const IND_LINK_BANK_MANUALLY = {
   routingNumber: {
     key: 'routingNumber',
@@ -478,6 +487,15 @@ export const ENTITY_FORMATION_DOCS = {
   },
   einVerificationDoc: {
     key: 'einVerificationDoc', label: 'EIN Verification', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+  },
+};
+
+export const CLOSE_INVESTOR_ACCOUNT = {
+  reason: {
+    value: '',
+    label: 'Reason:',
+    error: undefined,
+    rule: 'required',
   },
 };
 

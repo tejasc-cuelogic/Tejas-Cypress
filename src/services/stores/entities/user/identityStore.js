@@ -878,7 +878,7 @@ export class IdentityStore {
       fields.dateOfBirth.value = legalDetails.dateOfBirth;
     }
     if (legalDetails && legalDetails.ssn) {
-      if (!legalDetails.ssn.includes('X') || window.sessionStorage.getItem('individualAccountCipExp')) {
+      if (!legalDetails.ssn.includes('X') || window.sessionStorage.getItem('individualAccountCipExp') || !userDetailsStore.isLegaLVerificationDone) {
         fields.ssn.value = legalDetails.ssn;
       }
     }

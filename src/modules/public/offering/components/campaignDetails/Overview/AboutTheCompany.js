@@ -4,25 +4,26 @@ import { withRouter } from 'react-router-dom';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { InlineLoader } from '../../../../../../theme/shared';
 
-const isTablet = document.documentElement.clientWidth < 991;
+const isTablet = document.documentElement.clientWidth < 992;
 
 @withRouter
 class AboutTheCompany extends Component {
   handleViewAboutCompany = (e) => {
     e.preventDefault();
-    this.props.history.push(`${this.props.refLink}/about`);
+    const url = this.props.newLayout ? '#company-description' : '/about';
+    this.props.history.push(`${this.props.refLink}${url}`);
   }
 
   render() {
-    const { campaign } = this.props;
+    const { campaign, newLayout } = this.props;
     const elevatorPitch = (campaign && campaign.offering && campaign.offering.overview
       && campaign.offering.overview.elevatorPitch)
       || (campaign && campaign.offering && campaign.offering.overview
       && campaign.offering.overview.highlight);
     return (
       <>
-        <Header as="h3" className="mt-20 mb-30 anchor-wrap">
-          Top Things to Know
+        <Header as="h3" className={`mt-20 anchor-wrap ${newLayout && isTablet ? 'mb-20' : 'mb-30'}`}>
+          {newLayout ? 'Highlights' : 'Top Things to Know'}
           <span className="anchor" id="top-things-to-know" />
         </Header>
         {
@@ -42,7 +43,7 @@ class AboutTheCompany extends Component {
                 ? (
 <List bulleted relaxed="very">
                     {campaign.offering.overview.highlight.map(field => (
-                      <List.Item className="mb-half">{field}</List.Item>
+                      <List.Item className={newLayout ? 'mb-14 pt-0 pb-0' : 'mb-half'}>{field}</List.Item>
                     ))
                     }
                   </List>
@@ -53,10 +54,14 @@ class AboutTheCompany extends Component {
             )
             : <InlineLoader className="bg-offwhite" text="No data found." />
         }
-        <Button fluid={isTablet} onClick={this.handleViewAboutCompany} basic compact className="highlight-text mt-40">
+        {!newLayout
+        && (
+        <Button fluid={isTablet} onClick={this.handleViewAboutCompany} basic={!newLayout} compact={!newLayout} className={`${newLayout ? 'link-button mt-20' : 'mt-40'} highlight-text`}>
           Learn More About the Company
-          <Icon size="small" className="ns-chevron-right right" color="white" />
+          <Icon size={newLayout ? '' : 'small'} className={`${newLayout ? 'ns-caret-down' : 'ns-chevron-right'} right`} color="white" />
         </Button>
+        )
+        }
       </>
     );
   }

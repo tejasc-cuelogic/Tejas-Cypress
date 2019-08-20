@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react';
 import { Image64 } from '../../../../../../theme/shared';
 import NSImage from '../../../../../shared/NSImage';
 
-const isTablet = document.documentElement.clientWidth < 991;
+const isTablet = document.documentElement.clientWidth < 992;
 @inject('campaignStore')
 @withRouter
 @observer
@@ -18,10 +18,10 @@ class Gallery extends Component {
   }
 
   render() {
-    const { campaign } = this.props;
+    const { campaign, newLayout } = this.props;
     return (
       <>
-        <Header as="h3" className="mb-30 anchor-wrap mb-30">
+        <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
           Gallery
           <span className="anchor" id="gallery" />
         </Header>
@@ -29,19 +29,19 @@ class Gallery extends Component {
           {get(campaign, 'media.gallery')
             ? campaign.media.gallery.map((data, index) => (
               <>
-                {index < 3
-                  && <Image64 onClick={e => this.handleViewGallary(e, index)} fluid className="about-gallery-bg" srcUrl={data.url} />
+                {index < (newLayout ? 1 : 3)
+                  && <Image64 onClick={e => this.handleViewGallary(e, index)} fluid={!newLayout} className="about-gallery-bg" srcUrl={data.url} />
                 }
               </>
             ))
-            : <NSImage fluid className="about-gallery-bg" path="gallery-placeholder-16-9.jpg" />
+            : <NSImage fluid={!newLayout} className="about-gallery-bg" path="gallery-placeholder-16-9.jpg" />
           }
         </div>
         {get(campaign, 'media.gallery')
           && (
-<Button fluid={isTablet} onClick={e => this.handleViewGallary(e, null)} basic compact className="highlight-text mt-40">
+<Button fluid={!newLayout && isTablet} onClick={e => this.handleViewGallary(e, null)} basic={!newLayout} compact={!newLayout} className={`${newLayout ? 'link-button' : ''} highlight-text mt-40`}>
             View Gallery
-            <Icon size="small" className="ns-chevron-right right" color="white" />
+            <Icon size={newLayout ? '' : 'small'} className={`${newLayout ? 'ns-caret-down' : 'ns-chevron-right'} right`} color="white" />
           </Button>
           )
         }

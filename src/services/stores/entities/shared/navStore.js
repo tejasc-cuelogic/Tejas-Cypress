@@ -3,7 +3,7 @@ import { matchPath } from 'react-router-dom';
 import cookie from 'react-cookies';
 import _ from 'lodash';
 import { PRIVATE_NAV } from '../../../../constants/NavigationMeta';
-import { userStore, userDetailsStore, offeringsStore, statementStore } from '../../index';
+import { userStore, userDetailsStore, offeringsStore } from '../../index';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 
 export class NavStore {
@@ -76,9 +76,15 @@ export class NavStore {
           signupStatus: userDetailsStore.signupStatus,
           permitted,
         };
-        localStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
+        sessionStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
+      } else {
+        const pInvestorInfo = {
+          signupStatus: userDetailsStore.signupStatus,
+          permitted,
+        };
+        sessionStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
       }
-      const pInvestorInfo = localStorage.getItem(`${uKey}_pInfo`);
+      const pInvestorInfo = sessionStorage.getItem(`${uKey}_pInfo`);
       if (userDetailsStore.userFirstLoad !== true
         && (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0])) {
         if (pInvestorInfo) {
@@ -137,14 +143,6 @@ export class NavStore {
             || n.env.length === 0
             || _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
         nItem.subNavigations = [...newSubNav];
-        if (userStore.isInvestor && ['Individual', 'IRA', 'Entity'].includes(nItem.title)) {
-          if (statementStore.getTaxFormCountInNav(nItem.title.toLocaleLowerCase()) === 0) {
-            nItem.subNavigations = _.filter(
-              nItem.subNavigations,
-              subNavigation => subNavigation.component !== 'Statements',
-            );
-          }
-        }
       }
       filteredNavs.push(nItem);
     });
@@ -223,26 +221,19 @@ export class NavStore {
         && ((acctiveAccountList && acctiveAccountList.length === 0) || (accStatus !== 'FULL'))) {
       this.navMeta.subNavigations = _.filter(this.navMeta.subNavigations, subNavigation => subNavigation.component !== 'InvestmentLimits');
     }
-    if (userStore.isInvestor && this.navMeta && this.navMeta.subNavigations
-      && statementStore.getTaxFormCountInNav(this.navMeta.title.toLocaleLowerCase()) === 0) {
-      this.navMeta.subNavigations = _.filter(
-        this.navMeta.subNavigations,
-        subNavigation => subNavigation.component !== 'Statements',
-      );
-    }
   }
 
   @action
-  setNavStatus(calculations, forced) {
+  setNavStatus(calculations, forced, ignoreUpDirection = false) {
     const {
       topVisible, direction, bottomPassed, isMoveTop,
     } = calculations;
     if (typeof topVisible === 'boolean') {
       this.navStatus = forced || (!topVisible ? 'sub' : 'main');
       if ((this.navStatus === 'sub') && (bottomPassed)) {
-        this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
+        this.subNavStatus = (direction === 'down' ? 'animate' : !ignoreUpDirection ? 'animate reverse' : 'animate');
       } else if ((this.navStatus === 'main') && (bottomPassed) && (isMoveTop)) {
-        this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
+        this.subNavStatus = (direction === 'down' ? 'animate' : !ignoreUpDirection ? 'animate reverse' : 'animate');
       }
     }
   }

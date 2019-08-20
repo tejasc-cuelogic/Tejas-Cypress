@@ -20,17 +20,23 @@ export default class NewUpdate extends Component {
   state = {
     editForm: false,
     confirmModal: false,
+    loading: false,
   }
 
   componentWillMount() {
-    this.initiateFlow(this.props.match.params.id);
+    this.initiateFlow(this.props.match.params.action, this.props.match.params.id);
     this.props.updateStore.setFieldValue('newUpdateId', null);
   }
 
-  initiateFlow = (id) => {
-    if (id !== 'new') {
+  componentDidMount() {
+    this.setState({ loading: false });
+  }
+
+  initiateFlow = (action, id) => {
+    if (action !== 'new' && id !== undefined) {
       this.props.updateStore.getOne(id);
     } else {
+      this.setState({ loading: true });
       this.props.updateStore.reset();
     }
   }
@@ -88,7 +94,7 @@ export default class NewUpdate extends Component {
     const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
     const { userDetails } = this.props.userDetailsStore;
     const userInfo = !isNew || isManager ? { firstName: userDetails.info.firstName, lastName: userDetails.info.lastName, avatarUrl: get(userDetails, 'info.avatar.url') || '' } : '';
-    if (loadingCurrentUpdate) {
+    if (loadingCurrentUpdate || this.state.loading) {
       return <InlineLoader />;
     }
     return (
@@ -161,7 +167,7 @@ export default class NewUpdate extends Component {
                                 }
                               </div>
                               <Header.Content className="grey-header">
-                                {!isNew && isManager ? get(currentUpdate, 'data.offeringUpdatesById.approved.by') || get(currentUpdate, 'data.offeringUpdatesById.updated.by') : get(offer, 'keyTerms.shorthandBusinessName')}
+                                {!isNew && isManager && !newUpdateId ? get(currentUpdate, 'data.offeringUpdatesById.approved.by') || get(currentUpdate, 'data.offeringUpdatesById.updated.by') : get(offer, 'keyTerms.shorthandBusinessName')}
                                 <Header.Subheader>{moment().format('ll')}</Header.Subheader>
                               </Header.Content>
                             </Header>
@@ -171,7 +177,7 @@ export default class NewUpdate extends Component {
                         </Modal>
                       </List.Item>
                       <List.Item>
-                        <Button color="green" className="link-button" disabled={isNew || loaderMessage} content={loaderMessage || 'Send test email to me'} onClick={() => sendTestEmail(this.props.match.params.id)} />
+                        <Button color="green" className="link-button" disabled={isNew || loaderMessage} content={loaderMessage || 'Send test email to me'} onClick={() => sendTestEmail(this.props.match.params.id || this.props.updateStore.newUpdateId)} />
                       </List.Item>
                     </List>
                   </Card.Content>

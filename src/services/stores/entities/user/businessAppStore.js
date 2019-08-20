@@ -93,6 +93,8 @@ export class BusinessAppStore {
 
   @observable userExists = false;
 
+  @observable userRoles = [];
+
   @observable urlParameter = null;
 
   @observable businessAppDataById = null;
@@ -100,6 +102,8 @@ export class BusinessAppStore {
   @observable applicationIssuerId = null;
 
   @observable enableSave = false;
+
+  @observable showUserError = false;
 
   @action
   setFieldvalue = (field, value) => {
@@ -168,7 +172,7 @@ export class BusinessAppStore {
       },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data && data.businessApplication && !this.businessApplicationsDataById.loading) {
+        if ((data && data.businessApplication && !this.businessApplicationsDataById.loading) || (data && data.getPreQualificationById && !this.businessApplicationsDataById.loading)) {
           this.setBusinessApplicationData(isPartialApp);
           uiStore.setAppLoader(false);
           resolve();
@@ -342,6 +346,11 @@ export class BusinessAppStore {
       });
       this.BUSINESS_APP_FRM.fields.phoneNumber.value = data.businessGeneralInfo.contactDetails.phone.number;
       if (this.currentApplicationType === 'business') {
+        if (data.businessSecurities) {
+          data.businessSecurities.forEach((ele) => {
+            this.BUSINESS_APP_FRM.fields.businessSecurities.value.push(ele);
+          });
+        }
         ['businessModel', 'businessGoal', 'businessEntityStructure', 'franchiseHolder'].forEach((ele) => {
           this.BUSINESS_APP_FRM.fields[ele].value = data[ele];
         });
@@ -568,17 +577,18 @@ export class BusinessAppStore {
 
   @action
   businessDetailsMaskingChange = (field, values, subFormName = '', index = -1) => {
+    const val = field === 'ssn' ? values.value : values.floatValue;
     if (subFormName) {
       this.BUSINESS_DETAILS_FRM = Validator.onArrayFieldChange(
         this.BUSINESS_DETAILS_FRM,
-        { name: field, value: values.floatValue },
+        { name: field, value: val },
         subFormName,
         index,
       );
     } else {
       this.BUSINESS_DETAILS_FRM = Validator.onChange(
         this.BUSINESS_DETAILS_FRM,
-        { name: field, value: values.floatValue },
+        { name: field, value: val },
       );
     }
   };
@@ -603,6 +613,11 @@ export class BusinessAppStore {
   @action
   businessAppEleChange = (e, res, formName = 'BUSINESS_APP_FRM') => {
     this[formName] = Validator.onChange(this[formName], Validator.pullValues(e, res));
+    if (formName === 'BUSINESS_APP_FRM_BASIC' && res.name === 'email') {
+      this.userExists = false;
+      this.setBasicFormError('');
+      this.BUSINESS_ACCOUNT.fields.password.value = '';
+    }
   };
 
   @action
@@ -890,6 +905,7 @@ export class BusinessAppStore {
         ...preQualData,
         businessGoal: data.businessGoal.value,
         businessModel: data.businessModel.value,
+        businessSecurities: data.businessSecurities.value,
         legalConfirmations: [...preQualData.legalConfirmations,
           {
             label: 'HAS_NOT_RAISED_SECURITIES',
@@ -973,11 +989,13 @@ export class BusinessAppStore {
                 id,
                 status,
                 userExists,
+                userRoles,
               },
             },
           } = result;
           this.setFieldvalue('BUSINESS_APP_STATUS', status);
           this.setFieldvalue('userExists', userExists);
+          this.setFieldvalue('userRoles', userRoles);
           let lendioPartners = '';
           if (!isEmpty(partnerStatus)) {
             lendioPartners = find(partnerStatus, { partnerId: AFFILIATED_PARTNERS.LENDIO });
@@ -1350,6 +1368,21 @@ export class BusinessAppStore {
       return BUSINESS_APPLICATION_NOTIFICATION_CARD.applicationStatus.find(a => a.applicationStage === 'IN_PROGRESS');
     }
     return card;
+  }
+
+  @computed get applicationRoles() {
+    const roles = [];
+    if (get(this.businessApplicationDetailsAdmin, 'roles')) {
+      get(this.businessApplicationDetailsAdmin, 'roles').forEach((userRole) => {
+        roles.push(userRole.name);
+      });
+    }
+    return roles;
+  }
+
+  @action
+  setBasicFormError = (error) => {
+    this.BUSINESS_APP_FRM_BASIC.fields.email.error = error;
   }
 }
 

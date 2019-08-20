@@ -36,7 +36,7 @@ export const allTaxForms = gql`
   }
 `;
 export const downloadFile = gql`
-query getBoxDownloadLinkByFileId($fileId: String, $accountType: AccountTypeEnum ) {
+query getBoxDownloadLinkByFileId($fileId: String, $accountType: UploadAccountTypeEnum ) {
     getBoxDownloadLinkByFileId (
       boxFileId: $fileId
       accountType: $accountType

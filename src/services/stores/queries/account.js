@@ -97,3 +97,55 @@ export const createIndividualGoldStarInvestor = gql`
     )
   }
 `;
+
+export const getInvestorCloseAccounts = gql`
+query getInvestorCloseAccounts($userId: String!) {
+  getInvestorCloseAccounts(
+    userId: $userId
+  ){
+    userId
+    accountId
+    name
+    skipAddressVerifyCheck
+    accountType
+    accountStatus
+    closed{
+      date
+      reason
+      by
+    }
+    taxStatement{
+      fileId
+      fileName
+      year
+      formType
+    }
+    created{
+      date
+    }
+    accountStatus
+    linkedBank{
+      bankName
+      accountNumber
+    }
+    initialDepositAmount
+    goldstar{
+      contactId investorKey 
+      accountId
+    }
+  }
+}`;
+
+export const closeInvestorAccount = gql`
+mutation _closeInvestorAccount($userId: String!, $accountId: String!, $accountType: InvestorAccountTypeEnum!, $reason: String) {
+  closeInvestorAccount (
+    userId: $userId
+    accountId: $accountId
+    accountType: $accountType
+    reason: $reason
+  )
+  {
+   errorMessage
+   status
+ }
+}`;

@@ -39,24 +39,34 @@ export default class MobileDropDownNav extends React.Component {
 
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
 
+  setActiveHash = hash => this.props.navStore.setFieldValue('currentActiveHash', hash);
+
   render() {
     const {
-      navItems, location, className, navStore, slideUpNot, useIsActive, id,
+      navItems, location, className, navStore, slideUpNot, useIsActive, id, newLayout,
     } = this.props;
     const { navStatus, campaignHeaderStatus } = navStore;
+    const navItemsComponent = <NavItems newLayout={newLayout} onToggle={hash => this.setActiveHash(hash)} sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={this.props.navCountData} navItems={navItems} />;
     return (
-      <Responsive maxWidth={location.pathname.startsWith('/offerings/') ? 991 : 991} as={React.Fragment}>
+      <Responsive maxWidth={991} as={React.Fragment}>
         <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous>
-          <Menu id={id} inverted={this.props.inverted} className={`mobile-dropdown-menu ${className} ${campaignHeaderStatus ? 'active' : (!useIsActive && navStatus === 'sub' && !slideUpNot ? 'active' : '')}`}>
+          {newLayout ? (
+            <Menu text className={`campaign-mobile-menu-v2 ${campaignHeaderStatus ? 'active' : (!useIsActive && navStatus === 'sub' && !slideUpNot ? 'active' : '')}`}>
+              {navItemsComponent}
+            </Menu>
+          )
+            : (
+<Menu id={id} inverted={this.props.inverted} className={`mobile-dropdown-menu ${className} ${campaignHeaderStatus ? 'active' : (!useIsActive && navStatus === 'sub' && !slideUpNot ? 'active' : '')}`}>
             <Dropdown item text={this.activeText()}>
               <Dropdown.Menu>
-                <NavItems sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={this.props.navCountData} navItems={navItems} />
+              {navItemsComponent}
               </Dropdown.Menu>
             </Dropdown>
             {location.pathname.startsWith('/offerings/')
               && <Icon onClick={this.toggleCampaignSideBar} color="white" className="open-campaign-menu ns-campaign-dashboard" />
             }
           </Menu>
+            )}
           <div className="animate-placeholder" />
         </Visibility>
       </Responsive>

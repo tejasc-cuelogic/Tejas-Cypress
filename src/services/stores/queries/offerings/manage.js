@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 const common = {
-  offeringBasics: `id
+  offeringBasics: `
   isAvailablePublicly
   keyTerms {
     legalBusinessName
@@ -46,6 +46,7 @@ const common = {
   closureSummary {
     processingDate
     hardCloseDate
+    launchDate
     repayment {
       currentRepaidAmount
       count
@@ -74,6 +75,7 @@ export const allOfferingsCompact = gql`
 export const allOfferings = gql`
   query _getOfferings($stage: [OfferingStageEnumType]){
     getOfferings(filters: { stage: $stage }){
+      id
       ${common.offeringBasics}
     }
   }
@@ -95,11 +97,84 @@ export const getOfferingDetails = gql`
       referralCode
       previewPassword
       regulation
+      rootFolderId
       goldstar {
         isin
         contactId
         esAccountNumber
         sfAccountNumber
+      }
+      closureProcess {
+        checkBalance {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        exportEnvelopes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        finalizeNotes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        fundEscrow {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        hardCloseNotification {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        issueCredits {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        processNotes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        softCloseNotification {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        validateNotes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        verifySecurityTransaction {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
       }
       linkedBank {
         accountNumber
@@ -134,6 +209,12 @@ export const getOfferingDetails = gql`
       }
       }
       keyTerms {
+        revShareSummaryUpload {
+          id
+          url
+          fileName
+          isPublic
+        }
         unitPrice
         roundType
         premoneyValuation
@@ -966,6 +1047,7 @@ export const getOfferingDetails = gql`
 export const updateOffering = gql`
 mutation _updateOffering($id: String!, $issuerId: String, $adminId: String, $offeringDetails: OfferingInputType!) {
   updateOffering(id: $id, issuerId: $issuerId, adminId: $adminId, offeringDetails: $offeringDetails) {
+    aliasId: id
     ${common.offeringBasics}
   }
 }
@@ -974,6 +1056,7 @@ mutation _updateOffering($id: String!, $issuerId: String, $adminId: String, $off
 export const upsertOffering = gql`
 mutation upsertOffering($id: String, $offeringDetails: OfferingInputType!) {
   upsertOffering(id: $id, offeringDetails: $offeringDetails) {
+    id
     ${common.offeringBasics}
   }
 }

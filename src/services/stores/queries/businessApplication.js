@@ -28,16 +28,18 @@ query allBusinessApplicationses($filters: BusinessApplicationsFilter){
 `;
 
 export const getBusinessApplicationAdmin = gql`
-query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String){
+query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String, $lek: String){
   businessApplicationsAdmin(
     applicationType: $applicationType
     orderBy: $orderBy
     limit: $limit
     search: $search
+    lek: $lek
   ) {
     resultCount
     totalCount
     businessApplications
+    lek
   }  
 }
 `;
@@ -64,6 +66,7 @@ mutation updatePreQualInfo($preQualificationData: PreQualDetailsInput!) {
       status
       failReasons
     }
+    userRoles
   }
 }
 `;
@@ -236,6 +239,7 @@ query _getBusinessApplicationById ($id: String!) {
           netIncome
         }
       }
+      businessSecurities
     }
     businessDetails {
       planDocs {
@@ -449,6 +453,7 @@ mutation updateApplicationData(
   $offers: OffersReviewInput
   $comments: [BusinessApplicationCommentInput]
   $approvedStatus: ApprovedStatusEnum
+  $temporaryPassword: String
 ) {
   updateApplicationStatusAndReview(
     applicationId: $applicationId
@@ -462,6 +467,7 @@ mutation updateApplicationData(
     offers: $offers
     comments: $comments
     approvedStatus: $approvedStatus
+    temporaryPassword: $temporaryPassword
   )
 }
 `;
@@ -577,5 +583,11 @@ mutation applicationDeclinedByIssuer($applicationId: String!, $comments: [Busine
     applicationId: $applicationId
     comments: $comments
   )
+}
+`;
+
+export const exportAllToEmail = gql`
+mutation exportAllToEmail($applicationType: ApplicationTypeEnum!) {
+  exportAllToEmail(applicationType: $applicationType)
 }
 `;
