@@ -33,10 +33,10 @@ class SidebarLeftPush extends Component {
           </Dimmer>
           )
         }
-        <Responsive minWidth={1200}>
+        <Responsive minWidth={992}>
           <MySidebar layoutState={layoutState} toggle={this.toggle} desktop {...this.props} />
         </Responsive>
-        <Responsive maxWidth={1199}>
+        <Responsive maxWidth={991}>
           {this.props.userStore.isInvestor
             ? (
               <NavBarMobile

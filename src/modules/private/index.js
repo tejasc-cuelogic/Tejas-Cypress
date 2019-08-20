@@ -10,7 +10,7 @@ import SidebarLeftOverlay from '../../theme/layout/SidebarLeftOverlay';
 import NsHeader from '../../theme/layout/Header';
 import NotFound from '../shared/NotFound';
 
-const isMobile = document.documentElement.clientWidth < 768;
+const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'accountStore')
 @withRouter

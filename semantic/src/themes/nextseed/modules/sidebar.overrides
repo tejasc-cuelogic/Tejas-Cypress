@@ -18,6 +18,12 @@
 				height: auto;
 				overflow: visible;
 			}
+			.pusher{
+				@media only screen and (min-width: @computerBreakpoint) and (max-width : @largestSmallMonitor){
+					transform: translate3d(0,0,0)!important;
+					padding-left: 260px;
+				}
+			}
 		}
 	}
 	.ui.push.sidebar {
@@ -92,7 +98,7 @@
 		position: fixed;
 		// margin-top: 72px !important;
 		height: calc(100vh - 72px) !important;
-		@media only screen and (max-width : @largestMobileScreen) {
+		@media only screen and (max-width : @largestTabletScreen) {
 			margin-top: 0 !important;
 			height: auto !important;
 		}
