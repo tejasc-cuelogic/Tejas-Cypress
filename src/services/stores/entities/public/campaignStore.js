@@ -509,7 +509,11 @@ export class CampaignStore {
       const isInProcessing = closeDaysToRemainsInHours <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
       const percentageCompairResult = money.cmp(percent, '50.00').toString();
       const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
-      if (regulation === 'BD_CF_506C' && !isInProcessing) {
+      let isReachedMax = false;
+      if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
+        isReachedMax = true;
+      }
+      if (regulation === 'BD_CF_506C' && !isInProcessing && !isReachedMax) {
         if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains
           || closeDaysToRemains === null)
           && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
@@ -533,7 +537,6 @@ export class CampaignStore {
         resultObject.processingDate = moment(closingDate).unix() || null;
         return newOfferingsArr.push(resultObject);
       } if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
-        let isReachedMax = false;
         // const labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
         const labelBannerFirst = closeDaysToRemainsInHours < 48 ? `${closeDaysToRemainsInHours} Hours Left` : `${closeDaysToRemains} Days Left`;
         resultObject.isBannerShow = !!labelBannerFirst;
@@ -541,9 +544,6 @@ export class CampaignStore {
         resultObject.bannerSecondText = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
-        if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
-          isReachedMax = true;
-        }
         if (!isReachedMax) {
           return closingOfferingsArr.push(resultObject);
         }
