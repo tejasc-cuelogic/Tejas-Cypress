@@ -497,7 +497,16 @@ out of required
                     && (
                     <>
                     {closureProcess[key].status
-                      ? <b className={closureProcess[key].status === 'COMPLETE' ? 'positive-text' : closureProcess[key].status === 'PENDING' ? 'warning-text' : 'negative-text'}>{closureProcess[key].status}</b>
+                      ? (
+                       <>
+                      <b className={closureProcess[key].status === 'COMPLETE' ? 'positive-text' : closureProcess[key].status === 'PENDING' ? 'warning-text' : 'negative-text'}>{closureProcess[key].status}</b>
+                      {closureProcess[key].finished && closureProcess[key].started
+                      && (
+                        <span> ({DataFormatter.getDateDifference(closureProcess[key].started, closureProcess[key].finished)})</span>
+                      )
+                      }
+                      </>
+                      )
                       : <>-</>
                     }
                     </>
