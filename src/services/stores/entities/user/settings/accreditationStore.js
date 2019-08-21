@@ -399,8 +399,9 @@ export class AccreditationStore {
   @action
   setInitiateSrch = (name, value) => {
     if (name === 'startDate' || name === 'endDate') {
-      const date = DataFormatter.getDate(value.formattedValue, true, name);
-      this.requestState.search[name] = date;
+      // const dateObtained = DataFormatter.getDate(value.formattedValue, true, name);
+      // this.requestState.search[name] = dateObtained;
+      this.requestState.search[name] = value ? name === 'startDate' ? moment(new Date(`${value.formattedValue} 00:00:00`)).toISOString() : moment(new Date(`${value.formattedValue} 23:59:59`)).toISOString() : '';
       if ((this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '')
       || (this.requestState.search.startDate === '' && this.requestState.search.endDate === '')
       ) {

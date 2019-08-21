@@ -35,18 +35,18 @@ const SortableItem = SortableElement(({
     </div>
     <div className="balance width-130">
       {offering && offering.stage
-        ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) <= 0
+        ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true) <= 0
           ? STAGES.PROCESSING.label
-          : stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) > 0 && DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) <= 2
+          : stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true) < 48
             ? STAGES.LOCK.label
             : STAGES[offering.stage].label
         : STAGES[offering.stage].label
       }
     </div>
     <div className="balance width-250">
-      Create: {get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}<br />
-      Launched: {get(offering, 'offering.launch.targetDate') ? <DateTimeFormat datetime={get(offering, 'offering.launch.targetDate')} /> : 'N/A'}<br />
-      Closed: {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}
+      Create: {get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}<br />
+      Launched: {get(offering, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), true, false, false)} /> : 'N/A'}<br />
+      Closed: {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false)} /> : 'N/A'}
     </div>
     <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
       <p className="overflow-text">
