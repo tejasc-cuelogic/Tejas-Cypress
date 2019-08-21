@@ -159,7 +159,7 @@ export class TransactionStore {
   @computed get accountTransactions() {
     let transactions = (this.data.data && toJS(this.data.data.getAccountTransactions
       && this.data.data.getAccountTransactions.transactions)) || [];
-    transactions = transactions.map(t => ({ ...t, date: DataFormatter.formatedDate(t.date) }));
+    transactions = transactions.map(t => ({ ...t, date: DataFormatter.getDateAsPerTimeZone(t.date, false, false, false) }));
     return this.sortBydate(transactions);
   }
 
@@ -205,8 +205,10 @@ export class TransactionStore {
       ClientDb.filterData('type', transactionType);
     }
     if (dateRange && dateRange !== 'all') {
-      const sDate = moment(new Date()).subtract(dateRange, 'days');
-      const eDate = moment(new Date());
+      // const sDate = moment(new Date()).subtract(dateRange, 'days');
+      // const eDate = moment(new Date());
+      const sDate = DataFormatter.getCurrentCSTMoment().subtract(dateRange, 'days');
+      const eDate = DataFormatter.getCurrentCSTMoment();
       ClientDb.filterByDate(sDate, eDate, 'date', null, true);
     }
     this.db = ClientDb.getDatabase();
