@@ -346,7 +346,7 @@ export class IdentityStore {
           }
         })
         .catch((err) => {
-          if (err.response || err.message) {
+          if (err.response) {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             this.setFieldValue('signUpLoading', false);
             reject(err);
