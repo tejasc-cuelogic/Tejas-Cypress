@@ -31,6 +31,9 @@ export default class BusinessDetails extends Component {
   removeForm = (e) => {
     this.setState({ showPartialSaveModal: !this.state.showPartialSaveModal });
     this.props.businessAppStore.removeForm(e, this.state.currentForm, this.state.currentIndex);
+    if (['sources', 'uses'].includes(this.state.currentForm)) {
+      this.props.businessAppStore.totalChange(this.state.currentForm, this.state.currentForm === 'sources' ? 'sourcesTotal' : 'usesTotal');
+    }
   }
 
   toggleHandel = () => {
@@ -61,6 +64,7 @@ export default class BusinessDetails extends Component {
       businessAppRemoveFiles, addMoreForms, businessDetailsMaskingChange,
       formReadOnlyMode, businessDetailsDateChange, currentApplicationType,
       businessAppParitalSubmit, enableSave, businessApplicationDetailsAdmin,
+      sourcesTotal, usesTotal, totalChange,
     } = this.props.businessAppStore;
     const { hideFields } = this.props;
     const { docLoading, docIdsLoading } = this.props.agreementsStore;
@@ -155,6 +159,7 @@ export default class BusinessDetails extends Component {
                             type="text"
                             name="fund"
                             fielddata={source.fund}
+                            onblur={() => totalChange('sources', 'sourcesTotal')}
                             changed={(values, field) => businessDetailsMaskingChange(field, values, 'sources', index)}
                           />
                         </Table.Cell>
@@ -179,8 +184,8 @@ export default class BusinessDetails extends Component {
                           Total
                         </Table.HeaderCell>
                         <Table.HeaderCell>
-                          $Amount
-                        </Table.HeaderCell>
+                          ${sourcesTotal}
+                          </Table.HeaderCell>
                         <Table.HeaderCell />
                       </Table.Row>
                     </Table.Footer>
@@ -221,6 +226,7 @@ export default class BusinessDetails extends Component {
                             type="text"
                             name="fund"
                             fielddata={source.fund}
+                            onblur={() => totalChange('uses', 'usesTotal')}
                             changed={(values, field) => businessDetailsMaskingChange(field, values, 'uses', index)}
                           />
                         </Table.Cell>
@@ -245,8 +251,8 @@ export default class BusinessDetails extends Component {
                           Total
                         </Table.HeaderCell>
                         <Table.HeaderCell>
-                          $Amount
-                        </Table.HeaderCell>
+                          ${usesTotal}
+                          </Table.HeaderCell>
                         <Table.HeaderCell />
                       </Table.Row>
                     </Table.Footer>

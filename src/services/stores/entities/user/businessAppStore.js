@@ -105,6 +105,10 @@ export class BusinessAppStore {
 
   @observable showUserError = false;
 
+  @observable sourcesTotal = 0;
+
+  @observable usesTotal = 0;
+
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
@@ -113,6 +117,15 @@ export class BusinessAppStore {
   @action
   setAppStepsStatus = (index, key, value) => {
     this.appStepsStatus[index][key] = value;
+  }
+
+  @action
+  totalChange = (fieldName, totalName) => {
+    let total = 0;
+    this.BUSINESS_DETAILS_FRM.fields[fieldName].forEach((field) => {
+      total = total + field.fund.value || 0;
+    });
+    this[totalName] = total;
   }
 
   @action
