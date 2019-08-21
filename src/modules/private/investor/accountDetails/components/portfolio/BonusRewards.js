@@ -30,7 +30,7 @@ class BonusRewards extends Component {
     return (
       <div className="inner-content-spacer">
         <InvestmentTimeline title="Your investment" {...props} />
-        {rewardList.length > 0 &&
+        {rewardList && rewardList.length > 0 &&
         <>
         <Header as="h4">Your rewards</Header>
         <p className="neutral-text mb-30">{metaTitle}</p>

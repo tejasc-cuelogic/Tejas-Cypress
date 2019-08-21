@@ -23,6 +23,7 @@ import {
 import ApiService from '../../../api/restApi';
 import { validationActions } from '..';
 import Helper from '../../../helper/utility';
+import { DataFormatter } from '../../../helper';
 
 export class Business {
   /**
@@ -593,7 +594,7 @@ export class Business {
     const formattedData = {};
     const dateKeys = ['dateIncorporation', 'deadlineDate'];
     _.forEach(info, (data, key) => {
-      formattedData[key] = dateKeys.includes(key) ? moment(data.value).format('MM-DD-YYYY') : data.value;
+      formattedData[key] = dateKeys.includes(key) ? DataFormatter.getDateAsPerTimeZone(data.value, true, false, false, 'MM-DD-YYYY') : data.value;
     });
     return formattedData;
   }
@@ -608,7 +609,7 @@ export class Business {
       const personData = {};
       personData.personSignature = person.personSignature.value;
       personData.personTitle = person.personTitle.value;
-      personData.signatureDate = moment(person.signatureDate.value).format('MM-DD-YYYY');
+      personData.signatureDate = DataFormatter.getDateAsPerTimeZone(person.signatureDate.value, true, false, false, 'MM-DD-YYYY');
       formattedData.signaturePersons.push(personData);
     });
     return formattedData;
@@ -670,14 +671,14 @@ export class Business {
       });
       _.map(data.payload.issuerInformation, (value, key) => {
         if (dateFields.includes(key)) {
-          businessStore.setIssuerInfo(key, moment(value).format('MM-DD-YYYY'));
+          businessStore.setIssuerInfo(key, DataFormatter.getDateAsPerTimeZone(value, true, false, false, 'MM-DD-YYYY'));
         } else {
           businessStore.setIssuerInfo(key, (value || ''));
         }
       });
       _.map(data.payload.offeringInformation, (value, key) => {
         if (dateFields.includes(key)) {
-          businessStore.setOfferingInfo(key,  moment(value).format('MM-DD-YYYY'));
+          businessStore.setOfferingInfo(key,  DataFormatter.getDateAsPerTimeZone(value, true, false, false, 'MM-DD-YYYY'));
         } else {
           businessStore.setOfferingInfo(key, (value || ''))
         }
@@ -698,7 +699,7 @@ export class Business {
           const id = this.addPersonalSignature();
           _.map(signature, (value, key) => {
             if (dateFields.includes(key)) {
-              businessStore.changePersonalSignature(key, id, value ? moment(value).format('MM-DD-YYYY') : moment().format('MM-DD-YYYY'), false);
+              businessStore.changePersonalSignature(key, id, value ? DataFormatter.getDateAsPerTimeZone(value, true, false, false, 'MM-DD-YYYY') : moment().format('MM-DD-YYYY'), false);
             } else {
               businessStore.changePersonalSignature(key, id, value, false);
             }
