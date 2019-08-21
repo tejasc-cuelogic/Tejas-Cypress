@@ -104,7 +104,7 @@ export default class AddFunds extends Component {
           ll transfer funds directly from the bank account you just linked.
           </p>
           <Form error onSubmit={this.handleSubmitForm}>
-            <div className={`${isMobile ? '' : 'field-wrap'} left-align`}>
+            <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
               <MaskedInput
                 name="value"
                 type="tel"
@@ -127,9 +127,11 @@ export default class AddFunds extends Component {
             }
             <Button primary size="large" fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Confirm" disabled={isInValid || !isAccountPresent || inProgress} />
           </Form>
-          {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])
-            && <Button color="green" className="link-button mt-30" disabled={!isAccountPresent || inProgress} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
-          }
+          <div className="center-align">
+            {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])
+              && <Button color="green" className="link-button mt-30" disabled={!isAccountPresent || inProgress} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
+            }
+          </div>
         </div>
       </>
     );

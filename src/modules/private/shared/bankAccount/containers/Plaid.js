@@ -115,7 +115,7 @@ export default class Plaid extends Component {
               value={formBankSearch.fields.bankName.value}
               onChange={bankSearchChange}
               onKeyPress={bankAccountActions.bankSearch}
-              className={isMobile ? 'search-field' : ''}
+              className="search-field"
             />
           </Form>
           <div className="bank-list">

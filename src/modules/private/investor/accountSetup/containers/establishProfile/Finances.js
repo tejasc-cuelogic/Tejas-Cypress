@@ -75,7 +75,9 @@ export default class Finances extends Component {
         <p className="tertiary-text note mt-10 mb-30">
           We will never share your personal information with third parties without your consent
         </p>
-        <Button primary size="large" onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mt-30' : 'mb-20'} relaxed`} disabled={!FINANCES_FORM.meta.isValid} content="Continue" />
+        {isMobile
+        && <Button primary size="large" onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mt-30' : 'mb-20'} relaxed`} disabled={!FINANCES_FORM.meta.isValid} content="Continue" />
+        }
       </div>
     );
   }

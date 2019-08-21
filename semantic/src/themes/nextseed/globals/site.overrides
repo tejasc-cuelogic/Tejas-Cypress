@@ -2700,7 +2700,7 @@ input[type='range']::-webkit-slider-thumb {
 }
 //	IRA account creation
 .promitional-offer-block {
-	border: 1px solid @primary-one;
+	border: 1px solid @neutral-darkwhite;
 	padding: @10px;
 	h5.ui.header {
 		margin: 0;

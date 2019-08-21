@@ -35,7 +35,7 @@ const AccTypeDescription = observer((props) => {
         && (
         <>
           <div className={`${isMobile ? '' : 'center-align'} promitional-offer-block mb-20 bg-offwhite`}>
-            <Header as="h5" className="positive-text">Promotional Offer</Header>
+            <Header as="h5">Promotional Offer</Header>
             <p>
               For new NextSeed IRA accounts, NextSeed will cover the one-time setup fee and
               annual account fees for four years. See the{' '}
