@@ -166,7 +166,7 @@ const BUSINESS_PREQUAL_COMMON = {
     value: '', label: 'Business Name', error: undefined, rule: 'required|string', placeHolder: 'e.g. NextBrewery', customErrors: { required: 'required' },
   },
   website: {
-    value: '', label: 'Website', error: undefined, rule: 'required', placeHolder: 'e.g. http://nextbrewery.com', customErrors: { required: 'required' },
+    value: '', label: 'Website', error: undefined, rule: 'required', placeHolder: 'e.g. www.nextbrewery.com', customErrors: { required: 'required' },
   },
   phoneNumber: {
     value: '', label: 'Phone Number', error: undefined, rule: 'required|maskedField:10', placeHolder: '(123) 456-7890', customErrors: { required: 'required', maskedField: 'required' },
