@@ -63,7 +63,15 @@ export const editUpdate = gql`
     ) {
       id
       title
+      status
+      scope
+      content
+      tiers
       approved {
+        by
+        date
+      }
+      updated {
         by
         date
       }

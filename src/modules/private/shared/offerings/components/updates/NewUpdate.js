@@ -62,6 +62,16 @@ export default class NewUpdate extends Component {
       });
   }
 
+  sendTestEmail = (id) => {
+    if (this.props.updateStore.PBUILDER_FRM.meta.isDirty) {
+      this.props.updateStore.save(id, 'DRAFT', false).then(() => {
+        this.props.updateStore.sendTestEmail(id);
+      });
+    } else {
+      this.props.updateStore.sendTestEmail(id);
+    }
+  }
+
   save = (id, status) => {
     this.props.updateStore.save(id, status)
       .then(() => {
@@ -82,8 +92,7 @@ export default class NewUpdate extends Component {
   render() {
     const {
       PBUILDER_FRM, UpdateChange, FChange, maskChange, selectTemplate, newUpdateId,
-      loadingCurrentUpdate, sendTestEmail, TEMPLATE_FRM,
-      // currentUpdate,
+      loadingCurrentUpdate, TEMPLATE_FRM, currentUpdate,
     } = this.props.updateStore;
     const isNew = this.props.match.params.action === 'new' && !newUpdateId;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -169,7 +178,8 @@ export default class NewUpdate extends Component {
                               </div>
                               <Header.Content className="grey-header">
                                 {get(offer, 'keyTerms.shorthandBusinessName')}
-                                <Header.Subheader>{moment().format('ll')}</Header.Subheader>
+                                <Header.Subheader>{isNew ? moment().format('ll') : moment((get(currentUpdate, 'data.offeringUpdatesById.updated.date') || get(currentUpdate, 'data.offeringUpdatesById.created.date') || '')).format('ll')}</Header.Subheader>
+                                {/* <Header.Subheader>{moment().format('ll')}</Header.Subheader> */}
                               </Header.Content>
                             </Header>
                             <Header as="h4">{PBUILDER_FRM.fields.title.value}</Header>
@@ -178,7 +188,7 @@ export default class NewUpdate extends Component {
                         </Modal>
                       </List.Item>
                       <List.Item>
-                        <Button color="green" className="link-button" disabled={isNew || loaderMessage} content={loaderMessage || 'Send test email to me'} onClick={() => sendTestEmail(this.props.match.params.id || this.props.updateStore.newUpdateId)} />
+                        <Button color="green" className="link-button" disabled={isNew || loaderMessage} content={loaderMessage || 'Send test email to me'} onClick={() => this.sendTestEmail(this.props.match.params.id || this.props.updateStore.newUpdateId)} />
                       </List.Item>
                     </List>
                   </Card.Content>

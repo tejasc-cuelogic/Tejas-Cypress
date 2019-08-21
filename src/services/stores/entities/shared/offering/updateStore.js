@@ -146,6 +146,9 @@ export class UpdateStore {
 
     @action
     selectTemplate = (e, result) => {
+      if (this.TEMPLATE_FRM.fields.type.value !== result.value) {
+        this.PBUILDER_FRM.meta.isDirty = true;
+      }
       this.TEMPLATE_FRM = Validator.onChange(this.TEMPLATE_FRM, Validator.pullValues(e, result), true);
     };
 
@@ -171,7 +174,7 @@ export class UpdateStore {
     }
 
     @action
-    save = (id, status) => new Promise((resolve) => {
+    save = (id, status, showToast = true) => new Promise((resolve) => {
       uiStore.setProgress(status);
       this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
@@ -199,8 +202,12 @@ export class UpdateStore {
             this.setFieldValue('newUpdateId', res.data.createOfferingUpdates.id);
           } else if (status !== 'DRAFT') {
             this.reset();
+          } else {
+            this.currentUpdate.offeringUpdatesById = res.data.updateOfferingUpdatesInfo;
           }
-          Helper.toast(id === 'new' ? 'Update added.' : 'Update Updated Successfully', 'success');
+          if (showToast) {
+            Helper.toast(id === 'new' ? 'Update added.' : 'Update Updated Successfully', 'success');
+          }
           this.setFormIsDirty(false);
           uiStore.setProgress(false);
           resolve();
