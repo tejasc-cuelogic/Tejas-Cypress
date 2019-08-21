@@ -98,9 +98,10 @@ mutation _offeringUpdatesApprovedByInfo($id: ID!) {
 `;
 
 export const sendOfferingUpdateTestEmail = gql`
-mutation sendOfferingUpdateTestEmail($offeringUpdateId: String!) {
+mutation sendOfferingUpdateTestEmail($offeringUpdateId: String!, $emailTemplate: publishLiveEmailTemplate!) {
   sendOfferingUpdateTestEmail(
     offeringUpdateId: $offeringUpdateId
+    emailTemplate: $emailTemplate
   )
 }`;
 

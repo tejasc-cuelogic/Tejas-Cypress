@@ -209,6 +209,19 @@ export default class NewUpdate extends Component {
                           value={PBUILDER_FRM.fields.scope.value}
                         />
                         <Form>
+                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && get(offer, 'rewardsTiers[0]')
+                            ? (
+                            <Form.Field>
+                              <Checkbox
+                                name="allTiers"
+                                readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                onChange={(e, result) => UpdateChange(e, result)}
+                                checked={PBUILDER_FRM.fields.isAllTiers.value}
+                                label="Select all Investors"
+                              />
+                            </Form.Field>
+                            ) : null
+                          }
                           {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
                             <Form.Field key={rewardTier}>
                               <Checkbox

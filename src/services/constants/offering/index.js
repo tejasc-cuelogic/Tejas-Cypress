@@ -18,6 +18,11 @@ export const UPDATES = {
     rule: 'optional',
     key: 0,
   },
+  isAllTiers: {
+    value: false,
+    error: undefined,
+    rule: 'optional',
+  },
   scope: {
     value: 'PUBLIC',
     values: [{ label: 'Public', value: 'PUBLIC' }, { label: 'Investors Only', value: 'INVESTORS' }],
