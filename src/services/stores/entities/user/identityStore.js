@@ -884,7 +884,7 @@ export class IdentityStore {
   @action
   resetStoreData = () => {
     this.resetFormData('ID_VERIFICATION_FRM');
-    this.ID_VERIFICATION_DOCS_FRM = FormValidator.prepareFormObject(IDENTITY_DOCUMENTS); 
+    this.ID_VERIFICATION_DOCS_FRM = FormValidator.prepareFormObject(IDENTITY_DOCUMENTS);
     this.resetFormData('ID_PHONE_VERIFICATION');
     this.resetFormData('ID_VERIFICATION_QUESTIONS');
     this.confirmMigratedUserPhoneNumber = false;
