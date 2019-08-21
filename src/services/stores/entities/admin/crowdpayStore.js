@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { isArray, get, filter as lodashFilter, findIndex, find, omit } from 'lodash';
+import { isArray, get, filter as lodashFilter, findIndex, find, omit, has } from 'lodash';
 import cleanDeep from 'clean-deep';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -159,10 +159,8 @@ export class CrowdpayStore {
             this.resetPagination();
             this.allCrowdpayData = [];
           }
-          if (!initialState && !this.canTriggerNextPage) {
-            this.isLazyLoading = false;
-          }
           this.requestState.resultCount = get(this.data, 'data.getCrowdPayUsers.resultCount');
+          this.setData('isLazyLoading', this.canTriggerNextPage);
           this.appendCrowdPayData();
           this.requestState.search.accountType = accountType;
           this.setCrowdpayAccountsSummary();
@@ -236,6 +234,12 @@ export class CrowdpayStore {
         searchparams[name] = value ? name === 'accountCreateFromDate' ? moment(new Date(`${value.formattedValue} 00:00:00`)).toISOString() : moment(new Date(`${value.formattedValue} 23:59:59`)).toISOString() : '';
         this.requestState.search = searchparams;
         this.initiateSearch(searchparams);
+      } else {
+        delete searchparams[name];
+        this.requestState.search = searchparams;
+        if (!has(this.requestState.search, 'accountCreateFromDate') && !has(this.requestState.search, 'accountCreateToDate')) {
+          this.initiateSearch(searchparams);
+        }
       }
     } else {
       const srchParams = { ...this.requestState.search };
@@ -407,6 +411,7 @@ export class CrowdpayStore {
   reset = () => {
     this.requestState.search.keyword = '';
     this.resetData();
+    this.requestState.search.accountStatus = undefined;
     this.FILTER_FRM = Validator.prepareFormObject(FILTER_META);
     this.isLazyLoading = true;
   }
@@ -415,7 +420,6 @@ export class CrowdpayStore {
   resetData = () => {
     this.resetPagination();
     this.requestState.requestTriggerPage = 1;
-    this.requestState.search.accountStatus = undefined;
     this.allCrowdpayData = [];
   }
 
