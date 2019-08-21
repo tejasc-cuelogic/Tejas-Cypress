@@ -124,17 +124,18 @@ export default class BusinessDetails extends Component {
             <Grid>
               <Grid.Column largeScreen={7} computer={7} tablet={8} mobile={8}>
                 <Header as="h4">Source</Header>
-                <Table className="inve rted">
+                <Table inverted className="form-table source-table">
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>Souce of Funds</Table.HeaderCell>
                       <Table.HeaderCell>Amount</Table.HeaderCell>
+                      <Table.HeaderCell />
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
                     {BUSINESS_DETAILS_FRM.fields.sources.length && BUSINESS_DETAILS_FRM.fields.sources.map((source, index) => BUSINESS_DETAILS_FRM.fields.sources.length !== index + 1 && (
                       <Table.Row>
-                        <Table.Cell>
+                        <Table.Cell width={5}>
                           <FormInput
                             readOnly={formReadOnlyMode}
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
@@ -156,45 +157,51 @@ export default class BusinessDetails extends Component {
                             fielddata={source.fund}
                             changed={(values, field) => businessDetailsMaskingChange(field, values, 'sources', index)}
                           />
+                        </Table.Cell>
+                        <Table.Cell collapsing>
                           <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('sources', index)}>
-                            <Icon color="red" size="small" className="ns-trash" />
+                            <Icon className="ns-trash" />
                           </Button>
                         </Table.Cell>
                       </Table.Row>
                     ))}
                     <Table.Row>
-                      <Table.Cell colspan="2">
-                        <Button type="button" disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'sources')} color="green" className="ghost-button additional-field" content="+ Add Source" />
+                      <Table.Cell colspan="3">
+                        <Button size="small" className="link-button" type="button" disabled={formReadOnlyMode} onClick={e => addMoreForms(e, 'sources')} color="green" content="+ Add Source" />
                       </Table.Cell>
                     </Table.Row>
-                    {BUSINESS_DETAILS_FRM.fields.sources.length > 1
-                      && (
-                      <Table.Row>
-                        <Table.Cell>
-                          Total
-                        </Table.Cell>
-                        <Table.Cell>
-                          $Amount
-                        </Table.Cell>
-                      </Table.Row>
-                      )
-                    }
                   </Table.Body>
+                  {BUSINESS_DETAILS_FRM.fields.sources.length > 1
+                    && (
+                    <Table.Footer>
+                      <Table.Row>
+                        <Table.HeaderCell width={5}>
+                          Total
+                        </Table.HeaderCell>
+                        <Table.HeaderCell>
+                          $Amount
+                        </Table.HeaderCell>
+                        <Table.HeaderCell />
+                      </Table.Row>
+                    </Table.Footer>
+                    )
+                  }
                 </Table>
               </Grid.Column>
               <Grid.Column largeScreen={7} computer={7} tablet={8} mobile={8}>
                 <Header as="h4">Uses</Header>
-                <Table className="inve rted">
+                <Table inverted className="form-table source-table">
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>Use of Funds</Table.HeaderCell>
                       <Table.HeaderCell>Amount</Table.HeaderCell>
+                      <Table.HeaderCell />
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
                     {BUSINESS_DETAILS_FRM.fields.uses.length && BUSINESS_DETAILS_FRM.fields.uses.map((source, index) => BUSINESS_DETAILS_FRM.fields.uses.length !== index + 1 && (
                       <Table.Row>
-                        <Table.Cell>
+                        <Table.Cell width={5}>
                           <FormInput
                             readOnly={formReadOnlyMode}
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
@@ -217,29 +224,34 @@ export default class BusinessDetails extends Component {
                             changed={(values, field) => businessDetailsMaskingChange(field, values, 'uses', index)}
                           />
                         </Table.Cell>
-                        <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('uses', index)}>
-                            <Icon color="red" size="small" className="ns-trash" />
+                        <Table.Cell collapsing>
+                          <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('uses', index)}>
+                            <Icon className="ns-trash" />
                           </Button>
+                        </Table.Cell>
                       </Table.Row>
                     ))}
                     <Table.Row>
-                      <Table.Cell colspan="2">
-                        <Button type="button" disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'uses')} color="green" className="ghost-button additional-field" content="+ Add Use" />
+                      <Table.Cell colspan="3">
+                        <Button size="small" className="link-button" type="button" disabled={formReadOnlyMode} onClick={e => addMoreForms(e, 'uses')} color="green" content="+ Add Use" />
                       </Table.Cell>
                     </Table.Row>
-                    {BUSINESS_DETAILS_FRM.fields.uses.length > 1
-                      && (
-                      <Table.Row>
-                        <Table.Cell>
-                          Total
-                        </Table.Cell>
-                        <Table.Cell>
-                          $Amount
-                        </Table.Cell>
-                      </Table.Row>
-                      )
-                    }
                   </Table.Body>
+                  {BUSINESS_DETAILS_FRM.fields.uses.length > 1
+                    && (
+                    <Table.Footer>
+                      <Table.Row>
+                        <Table.HeaderCell width={5}>
+                          Total
+                        </Table.HeaderCell>
+                        <Table.HeaderCell>
+                          $Amount
+                        </Table.HeaderCell>
+                        <Table.HeaderCell />
+                      </Table.Row>
+                    </Table.Footer>
+                    )
+                  }
                 </Table>
               </Grid.Column>
             </Grid>

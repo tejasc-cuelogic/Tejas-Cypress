@@ -350,6 +350,28 @@
             }
         }
     }
+    &.inverted.source-table{
+        th{
+            background: @tertiary-text;
+            color: @white;
+            font-weight: @bold;
+        }
+        tbody{
+            background: @solidInternalBorderColor;
+            td{
+                padding: @7px @10px;
+            }
+        }
+        tfoot{
+            th{
+                background: @solidInternalBorderColor;
+                color: @fullBlack !important;
+                font-size: @13px;
+                font-weight: @bold;
+                border-top: 1px solid @neutral-darkwhite !important;
+            }
+        } 
+    }
 }
 
 .compare-table {

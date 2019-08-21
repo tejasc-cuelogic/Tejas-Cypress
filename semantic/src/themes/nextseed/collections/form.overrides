@@ -344,6 +344,27 @@
                 padding-left:@24px !important;
             }
         }
+        &.inverted.source-table{
+            input:not([type]),
+            input[type=date],
+            input[type=datetime-local],
+            input[type=email],
+            input[type=file],
+            input[type=number],
+            input[type=password],
+            input[type=search],
+            input[type=tel],
+            input[type=text],
+            input[type=time],
+            input[type=url],
+            textarea{
+                background: transparent;
+                border-radius: 0;
+                border-left: 0;
+                border-right: 0;
+                border-top: 0;
+            }
+        }
     }
     /*  Inverted Form  */
     &.inverted{
