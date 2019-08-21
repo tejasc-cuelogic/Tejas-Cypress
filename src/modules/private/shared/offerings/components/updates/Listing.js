@@ -53,7 +53,7 @@ export default class Listing extends Component {
                     && (
                     <Table.Cell collapsing textAlign="center">
                       <Button icon className="link-button">
-                      <Icon className={record.isVisible ? 'ns-no-view' : 'ns-view'} onClick={() => this.handleUpdatesVisibility(record, !record.isVisible)} />
+                      <Icon className={record.isVisible ? 'ns-view' : 'ns-no-view'} onClick={() => this.handleUpdatesVisibility(record, !record.isVisible)} />
                       </Button>
                     </Table.Cell>
                     )
