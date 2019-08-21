@@ -1620,6 +1620,10 @@ export class OfferingCreationStore {
       .mutate({
         mutation: offerClose,
         variables: { ...params, ...formData },
+        refetchQueries: [{
+          query: getOfferingDetails,
+          variables: { id: this.currentOfferingId },
+        }],
       }).then((data) => {
         uiStore.setProgress(false);
         this.setFieldValue('outputMsg', { type: 'success', data: get(data, 'data.offeringClose') });
