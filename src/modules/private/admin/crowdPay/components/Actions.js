@@ -39,11 +39,23 @@ export default class Actions extends Component {
 
   checkRequestIdBeforeSubmitInvestor = (userObj, attrObj) => {
     const { userId, accountId, action, msg } = attrObj;
-    if (userObj.legalDetails.status === 'OFFLINE' || userObj.cip.requestId === '-1') {
+    if (this.isCipExpired(userObj) || userObj.legalDetails.status === 'OFFLINE' || userObj.cip.requestId === '-1') {
       this.handleVerifyUserIdentity(userId, accountId, action, msg);
     } else {
       this.props.crowdPayCtaHandler(userId, accountId, action, msg);
     }
+  }
+
+  isCipExpired = (userObj) => {
+    if (userObj && userObj.cip) {
+      const { expiration } = userObj.cip;
+      const expirationDate = new Date(expiration);
+      const currentDate = new Date();
+      if (expirationDate < currentDate) {
+        return true;
+      }
+    }
+    return false;
   }
 
   openModal(e, userId, accountId, action) {
