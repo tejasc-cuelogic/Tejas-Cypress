@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { get, sortBy } from 'lodash';
+import { get, sortBy, includes } from 'lodash';
 import graphql from 'mobx-apollo';
 import * as elasticSearchQueries from '../../queries/elasticSearch';
 import { generateInvestorFolderStructure, storageDetailsForInvestor, syncEsDocument } from '../../queries/data';
@@ -126,7 +126,7 @@ export class ElasticSearchStore {
   @action
   syncEsDocument = (params) => {
     this.setFieldValue('inProgress', params.targetIndex);
-    const syncESVarible = { documentId: params.documentId, targetIndex: params.targetIndex };
+    const syncESVarible = params.indexAliasName === 'ACCREDITATIONS' ? { documentId: params.documentId, targetIndex: params.targetIndex, userId: params.userId, accountType: params.accountType } : includes(['CROWDPAY', 'LINKEDBANK'], params.indexAliasName) ? { documentId: params.documentId, targetIndex: params.targetIndex, userId: params.userId } : { documentId: params.documentId, targetIndex: params.targetIndex };
     const getESVariable = { indexAliasName: params.indexAliasName, random: params.documentId };
     client
       .mutate({

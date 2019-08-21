@@ -38,7 +38,7 @@ class Updates extends Component {
     const readMoreStatus = this.props.campaignStore.curretnStatusForReadMore;
     const readLessStatus = this.props.campaignStore.curretnStatusForReadLess;
     const companyAvatarUrl = campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : '';
-    const issuerId = campaign && campaign.issuerId;
+    // const issuerId = campaign && campaign.issuerId;
     return (
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
         <Header as="h3" className={`${newLayout && isMobile ? 'mt-40' : newLayout ? 'mt-40' : 'mt-20'} ${isMobile ? 'mb-20' : 'mb-30'} anchor-wrap`}>
@@ -70,13 +70,14 @@ class Updates extends Component {
                       }
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header">
-                        {(dataItem.actingUserInfo && dataItem.actingUserInfo.id === issuerId)
-                          ? get(campaign, 'keyTerms.shorthandBusinessName')
-                          : `${dataItem.actingUserInfo && dataItem.actingUserInfo.info
-                          && dataItem.actingUserInfo.info.firstName} ${dataItem.actingUserInfo
-                            && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName}`}
-                        <br />
-                      <span>{DataFormatter.getDateAsPerTimeZone(dataItem.updated.date, true, true)}</span>
+                        {get(campaign, 'keyTerms.shorthandBusinessName')
+                          // (dataItem.actingUserInfo && dataItem.actingUserInfo.id === issuerId)
+                          // ? get(campaign, 'keyTerms.shorthandBusinessName')
+                          // : `${dataItem.actingUserInfo && dataItem.actingUserInfo.info
+                          // && dataItem.actingUserInfo.info.firstName} ${dataItem.actingUserInfo
+                          //   && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName}`}
+                        }<br />
+                        <span>{DataFormatter.getDateAsPerTimeZone(dataItem.updated.date, true, true)}</span>
                       </Item.Content>
                     </Item>
                     <Header as="h4">{dataItem.title}</Header>
