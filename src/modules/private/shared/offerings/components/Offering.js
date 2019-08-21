@@ -21,10 +21,6 @@ export default class Offering extends Component {
     }
   }
 
-  shouldComponentUpdate() {
-    return !this.props.uiStore.htmlEditorImageLoading;
-  }
-
   render() {
     const { isIssuer } = this.props.userStore;
     let navItems = [
