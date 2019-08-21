@@ -7,6 +7,7 @@ import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/adm
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
 import { InlineLoader } from '../../../../../../../theme/shared';
+import { DataFormatter } from '../../../../../../../helper';
 
 const SectionHeader = ({ header, subheader }) => (
   <>
@@ -26,7 +27,7 @@ const UploadedDocument = ({
         <Link to="/">
           <Icon className="ns-file" color="blue" />{document.fileName}
         </Link>
-        <span>Attached: {document.attachedDate} by {document.byUser}</span>
+        <span>Attached: {DataFormatter.getDateAsPerTimeZone(document.attachedDate, false, false, false, false)} by {document.byUser}</span>
         <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, 'UPLOADED_DOCUMENTS_FRM')}>
           <Icon className="ns-close-circle" color="grey" />
         </Link>

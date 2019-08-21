@@ -1,6 +1,5 @@
 import { observable, action, toJS } from 'mobx';
 import { isEmpty, find } from 'lodash';
-import moment from 'moment';
 import { userDetailsStore } from '../../index';
 import { DataFormatter } from '../../../../helper';
 
@@ -47,7 +46,7 @@ export class SettingStore {
       });
       if (!this.includeData.includes(accountType)) {
         this.iraInfo.push({ label: 'Identification', value: 'Uploaded' });
-        this.iraInfo.push({ label: 'Requested Date', value: moment(accountDetails.created.date).format('MM/DD/YYYY') });
+        this.iraInfo.push({ label: 'Requested Date', value: DataFormatter.getDateAsPerTimeZone(accountDetails.created.date, true, false, false) });
         this.iraInfo.push({ label: 'Approval Date', value: 'N/A' });
         this.includeData.push(accountType);
       }
@@ -71,13 +70,13 @@ export class SettingStore {
           value: `${accountDetails.address.street}, ${accountDetails.address.city}, ${accountDetails.address.state}, ${accountDetails.address.zipCode}`,
         });
         if (accountDetails.isTrust && accountDetails.trustDate) {
-          this.entityInfo.push({ label: 'Is Entity a trust?', value: `Yes, since ${moment(accountDetails.trustDate).format('MM/DD/YYYY')}` });
+          this.entityInfo.push({ label: 'Is Entity a trust?', value: `Yes, since ${DataFormatter.getDateAsPerTimeZone(accountDetails.trustDate, true, false, false)}` });
         } else {
           this.entityInfo.push({ label: 'Is Entity a trust?', value: 'No' });
         }
         this.entityInfo.push({ label: 'Title with the Entity', value: accountDetails.legalInfo.title });
         this.entityInfo.push({ label: 'Bank account', value: accountDetails.linkedBank ? accountDetails.linkedBank.accountNumber : null });
-        this.entityInfo.push({ label: 'Requested Date', value: moment(accountDetails.created.date).format('MM/DD/YYYY') });
+        this.entityInfo.push({ label: 'Requested Date', value: DataFormatter.getDateAsPerTimeZone(accountDetails.created.date, true, false, false) });
         this.entityInfo.push({ label: 'Approval Date', value: 'N/A' });
         this.includeData.push(accountType);
       }
@@ -85,7 +84,7 @@ export class SettingStore {
     } else if (accountType === 'individual') {
       if (!this.includeData.includes(accountType)) {
         this.individualInfo.push({ label: 'Bank account', value: accountDetails.linkedBank.accountNumber });
-        this.individualInfo.push({ label: 'Requested Date', value: moment(accountDetails.created.date).format('MM/DD/YYYY') });
+        this.individualInfo.push({ label: 'Requested Date', value: DataFormatter.getDateAsPerTimeZone(accountDetails.created.date, true, false, false) });
         this.individualInfo.push({ label: 'Approval Date', value: 'N/A' });
         this.includeData.push(accountType);
       }
