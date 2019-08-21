@@ -4,7 +4,7 @@ import { isArray, get, filter as lodashFilter, findIndex, find, omit } from 'lod
 import cleanDeep from 'clean-deep';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
+import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { getCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountValidate, createIndividualAccount, getDecryptedGoldstarAccountNumber } from '../../queries/CrowdPay';
 import { crowdPayAccountNotifyGs } from '../../queries/account';
 import { FILTER_META, CROWDPAY_FILTERS, CONFIRM_CROWDPAY, CROWDPAY_ACCOUNTS_STATUS } from '../../../constants/crowdpayAccounts';
@@ -232,7 +232,8 @@ export class CrowdpayStore {
     const searchparams = { ...this.requestState.search };
     if (name === 'accountCreateFromDate' || name === 'accountCreateToDate') {
       if (moment(value.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-        searchparams[name] = value ? DataFormatter.getDateForApiFiltering(value.formattedValue, true, name, false) : '';
+        // searchparams[name] = value ? DataFormatter.getDateForApiFiltering(value.formattedValue, true, name, false) : '';
+        searchparams[name] = value ? name === 'accountCreateFromDate' ? moment(new Date(`${value.formattedValue} 00:00:00`)).toISOString() : moment(new Date(`${value.formattedValue} 23:59:59`)).toISOString() : '';
         this.requestState.search = searchparams;
         this.initiateSearch(searchparams);
       }
