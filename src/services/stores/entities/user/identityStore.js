@@ -326,6 +326,7 @@ export class IdentityStore {
           },
         })
         .then((data) => {
+          error;
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
           const requestId = data.data.verifyCIPIdentity.passId
           || data.data.verifyCIPIdentity.softFailId
