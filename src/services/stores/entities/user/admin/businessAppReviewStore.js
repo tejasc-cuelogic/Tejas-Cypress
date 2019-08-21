@@ -394,7 +394,7 @@ export class BusinessAppReviewStore {
 
  @action
   updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag = '', comment = '', applicationStatus = '', temporaryPassword = '') => {
-    const applicationSource = applStatus
+    const applicationSource = applStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_IN_PROGRESS ? 'APPLICATION_IN_PROGRESS' : applStatus
     === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     const formInputData = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
     uiStore.setProgress();
@@ -428,7 +428,7 @@ export class BusinessAppReviewStore {
           mutation: updateApplicationStatusAndReview,
           variables: payload,
           refetchQueries:
-            [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
+              [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
         })
         .then((result) => {
           Helper.toast('Application status updated successfully.', 'success');
