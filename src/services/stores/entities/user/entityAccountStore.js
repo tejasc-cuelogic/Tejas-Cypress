@@ -140,7 +140,7 @@ class EntityAccountStore {
           variables: payLoad,
         })
         .then((res) => {
-          if (Helper.matchRegexWithString(/\bProcessing(?![-])\b/, res.data.submitInvestorAccount)) {
+          if (Helper.matchRegexWithString(/\bprocessing(?![-])\b/, res.data.submitInvestorAccount)) {
             this.setFieldValue('showProcessingModal', true);
           }
           bankAccountStore.resetStoreData();
