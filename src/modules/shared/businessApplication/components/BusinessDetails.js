@@ -135,7 +135,7 @@ export default class BusinessDetails extends Component {
                   <Table.Body>
                     {BUSINESS_DETAILS_FRM.fields.sources.length && BUSINESS_DETAILS_FRM.fields.sources.map((source, index) => BUSINESS_DETAILS_FRM.fields.sources.length !== index + 1 && (
                       <Table.Row>
-                        <Table.Cell width={5}>
+                        <Table.Cell width={7}>
                           <FormInput
                             readOnly={formReadOnlyMode}
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
@@ -175,7 +175,7 @@ export default class BusinessDetails extends Component {
                     && (
                     <Table.Footer>
                       <Table.Row>
-                        <Table.HeaderCell width={5}>
+                        <Table.HeaderCell width={7}>
                           Total
                         </Table.HeaderCell>
                         <Table.HeaderCell>
@@ -201,7 +201,7 @@ export default class BusinessDetails extends Component {
                   <Table.Body>
                     {BUSINESS_DETAILS_FRM.fields.uses.length && BUSINESS_DETAILS_FRM.fields.uses.map((source, index) => BUSINESS_DETAILS_FRM.fields.uses.length !== index + 1 && (
                       <Table.Row>
-                        <Table.Cell width={5}>
+                        <Table.Cell width={7}>
                           <FormInput
                             readOnly={formReadOnlyMode}
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
@@ -241,7 +241,7 @@ export default class BusinessDetails extends Component {
                     && (
                     <Table.Footer>
                       <Table.Row>
-                        <Table.HeaderCell width={5}>
+                        <Table.HeaderCell width={7}>
                           Total
                         </Table.HeaderCell>
                         <Table.HeaderCell>
