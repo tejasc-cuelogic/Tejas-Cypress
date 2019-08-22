@@ -71,7 +71,7 @@ class Updates extends Component {
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header">
                         {get(campaign, 'keyTerms.shorthandBusinessName') }<br />
-                        <span>{moment(dataItem.updated.date).format('ll')}</span>
+                        <span>{DataFormatter.getDateAsPerTimeZone(dataItem.updated.date, true, true, true)}</span>
                       </Item.Content>
                     </Item>
                     <Header as="h4">{dataItem.title}</Header>

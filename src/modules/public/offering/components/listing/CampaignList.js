@@ -78,7 +78,8 @@ export default class CampaignList extends Component {
                           </div>
                         </div>
                         {offering.stage === 'LIVE' ? this.renderBaners(offering) : null }
-                        {/* <Icon name="heart" /> "heart outline" for unliked campaigns */}
+                        {/* <Icon name="heart" /> */}
+                        <ion-icon name="md-heart" />
                         <>
                           <Card.Content>
                             <div className="tags mb-10">
