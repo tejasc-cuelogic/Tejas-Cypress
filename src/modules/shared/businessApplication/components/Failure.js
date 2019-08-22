@@ -15,7 +15,7 @@ export default class Failure extends Component {
           <Icon className="ns-paper-plane" size="massive" color="green" />
           <Header as="h1">Thank you for completing the pre-qualification form</Header>
           <p>
-            <b>Unfortunately, NextSeed is currently unable to help your business at thi s time.</b>
+            <b>Unfortunately, NextSeed is currently unable to help your business at this time.</b>
           </p>
           <p>
             We`ll update you if anything changes in the future. In the meantime, if you have
