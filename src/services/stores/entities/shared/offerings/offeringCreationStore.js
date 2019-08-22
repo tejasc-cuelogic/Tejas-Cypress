@@ -1898,10 +1898,11 @@ export class OfferingCreationStore {
   }
 
   @action
-  setAccreditedOnlyField = (index) => {
+  setAccreditedOnlyField = (index, offeringClose) => {
+    const lockVal = this.DATA_ROOM_FRM.fields.documents[index].accreditedOnly.value;
     this.DATA_ROOM_FRM = Validator.onArrayFieldChange(
       this.DATA_ROOM_FRM,
-      { name: 'accreditedOnly', value: !this.DATA_ROOM_FRM.fields.documents[index].accreditedOnly.value },
+      { name: 'accreditedOnly', value: offeringClose ? lockVal : !lockVal },
       'documents',
       index,
     );
