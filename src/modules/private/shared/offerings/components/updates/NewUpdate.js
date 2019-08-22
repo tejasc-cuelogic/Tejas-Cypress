@@ -171,7 +171,7 @@ export default class NewUpdate extends Component {
                               <div className="ui image avatar-image">
                                 {companyAvatarUrl && companyAvatarUrl.length
                                   ? <Image64 srcUrl={companyAvatarUrl} circular />
-                                  : <UserAvatar UserInfo={{ firstName: get(offer, 'keyTerms.shorthandBusinessName'), lastName: '', avatarUrl: '' }} />
+                                  : <UserAvatar UserInfo={{ name: get(offer, 'keyTerms.shorthandBusinessName'), avatarUrl: '' }} />
                                 }
                               </div>
                               <Header.Content className="grey-header">
