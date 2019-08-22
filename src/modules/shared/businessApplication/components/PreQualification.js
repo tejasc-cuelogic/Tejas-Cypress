@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import moment from 'moment';
+import { get } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Form, Button, Divider } from 'semantic-ui-react';
 import scrollIntoView from 'scroll-into-view';
@@ -222,7 +222,7 @@ export default class PreQualification extends Component {
               && (
               <Button as="span" className="time-stamp">
                 <Icon className="ns-check-circle" color="green" />
-                Submitted on {moment(fetchBusinessApplicationsDataById.created && fetchBusinessApplicationsDataById.created.date).format('MM/DD/YYYY')}
+                Submitted on {DataFormatter.getDateAsPerTimeZone(get(fetchBusinessApplicationsDataById, 'created.date'), true, false, false)}
               </Button>
               )
             }

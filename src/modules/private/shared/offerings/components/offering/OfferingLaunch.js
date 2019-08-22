@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Icon, Label } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../../../../theme/form';
 import ButtonGroupType2 from '../ButtonGroupType2';
 import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
+import { DataFormatter } from '../../../../../../helper';
 
 @inject('offeringCreationStore', 'userStore', 'offeringsStore', 'commonStore')
 @observer
@@ -102,7 +102,7 @@ export default class OfferingLaunch extends Component {
                     </div>
                     <p>uploaded on{' '}
                       {
-                        moment(legalDocs[document].fileHandle.created.date).format('MM/DD/YYYY')
+                        DataFormatter.getDateAsPerTimeZone(legalDocs[document].fileHandle.created.date, true, false, false)
                       }
                     </p>
                   </>

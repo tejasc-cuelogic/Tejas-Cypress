@@ -61,6 +61,19 @@ class CampaignLayout extends Component {
     this.processLazyLoadImages();
   }
 
+  componentDidUpdate() {
+    document.querySelectorAll('.fr-view').forEach((e) => {
+      e.querySelectorAll('img').forEach((ele) => {
+        this.pWrapper(ele);
+        ele.setAttribute('data-src', ele.getAttribute('src'));
+        ele.removeAttribute('src');
+        ele.closest('.closest').classList.add('ui');
+        ele.closest('.closest').classList.add('placeholder');
+      });
+    });
+    this.processLazyLoadImages();
+  }
+
   componentWillUnmount() {
     this.props.navStore.setFieldValue('currentActiveHash', null);
     window.removeEventListener('scroll', this.handleOnScroll);

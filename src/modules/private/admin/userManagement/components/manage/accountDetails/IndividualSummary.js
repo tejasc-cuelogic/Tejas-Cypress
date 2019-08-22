@@ -1,8 +1,8 @@
 import React from 'react';
 import { get } from 'lodash';
 import { Table, Button } from 'semantic-ui-react';
-import moment from 'moment';
 import Helper from '../../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../../helper';
 
 
 const IndividualSummary = ({
@@ -12,7 +12,7 @@ const IndividualSummary = ({
   <Table.Body>
     <Table.Row>
       <Table.Cell>Account Creation Date: </Table.Cell>
-      <Table.Cell>{get(account, 'details.created.date') ? moment(get(account, 'details.created.date')).format('MM/DD/YYYY') : 'N/A'}</Table.Cell>
+      <Table.Cell>{get(account, 'details.created.date') ? DataFormatter.getDateAsPerTimeZone(get(account, 'details.created.date'), true, false, false) : 'N/A'}</Table.Cell>
     </Table.Row>
     <Table.Row>
       <Table.Cell>Account ID: </Table.Cell>
@@ -47,7 +47,7 @@ const IndividualSummary = ({
 <>
         <Table.Row>
           <Table.Cell>Closed Date</Table.Cell>
-          <Table.Cell>{(get(account, 'details.closed.date') ? moment(get(account, 'details.closed.date')).format('MM/DD/YYYY') : 'N/A')}</Table.Cell>
+          <Table.Cell>{(get(account, 'details.closed.date') ? DataFormatter.getDateAsPerTimeZone(get(account, 'details.closed.date'), true, false, false) : 'N/A')}</Table.Cell>
         </Table.Row>
         <Table.Row>
           <Table.Cell>Closed Reason</Table.Cell>
