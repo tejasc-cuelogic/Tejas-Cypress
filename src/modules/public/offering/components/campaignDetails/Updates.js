@@ -7,7 +7,7 @@ import 'react-vertical-timeline-component/style.min.css';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import { Image64, InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
-import { DataFormatter } from '../../../../../helper';
+// import { DataFormatter } from '../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 992;
 
