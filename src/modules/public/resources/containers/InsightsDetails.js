@@ -8,7 +8,8 @@ import HtmlEditor from '../../../shared/HtmlEditor';
 @inject('articleStore')
 @observer
 export default class InsightsDetails extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.articleStore.getArticleDetailsBySlug(this.props.match.params.slug);
   }
 

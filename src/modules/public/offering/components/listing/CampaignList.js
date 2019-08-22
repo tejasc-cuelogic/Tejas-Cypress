@@ -15,7 +15,8 @@ import HtmlEditor from '../../../../shared/HtmlEditor';
 export default class CampaignList extends Component {
   state = { filters: false };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.accreditationStore.resetUserAccreditatedStatus();
   }
 
