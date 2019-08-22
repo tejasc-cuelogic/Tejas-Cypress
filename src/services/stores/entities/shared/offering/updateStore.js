@@ -1,6 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import graphql from 'mobx-apollo';
 import { orderBy } from 'lodash';
+import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
@@ -184,6 +185,7 @@ export class UpdateStore {
     @action
     save = (id, status, showToast = true) => new Promise((resolve) => {
       uiStore.setProgress(status);
+      const currentTime = moment().format('HH:mm:ss');
       this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
       delete data.allInvestor;
@@ -191,6 +193,7 @@ export class UpdateStore {
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
       data.isEarlyBirdOnly = false;
+      data.updatedDate = moment(`${data.updatedDate} ${currentTime}`).utc();
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
       if (id !== 'new' && status === 'PUBLISHED') {
         this.offeringUpdatePublish(id, data).then(() => {

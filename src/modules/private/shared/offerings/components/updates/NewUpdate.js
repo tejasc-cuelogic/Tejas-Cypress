@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button, Checkbox } from 'semantic-ui-react';
 import { get } from 'lodash';
-import moment from 'moment';
+// import moment from 'moment';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import MaskedInput from '../../../../../../theme/form/src/MaskedInput';
@@ -12,6 +12,7 @@ import { InlineLoader, Image64, UserAvatar } from '../../../../../../theme/share
 import Actions from './Actions';
 import Status from './Status';
 import Helper from '../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../helper';
 
 @inject('updateStore', 'userStore', 'offeringsStore', 'uiStore')
 @withRouter
@@ -170,13 +171,13 @@ export default class NewUpdate extends Component {
                             <Header>
                               <div className="ui image avatar-image">
                                 {companyAvatarUrl && companyAvatarUrl.length
-                                  ? <Image64 srcUrl={companyAvatarUrl} circular />
-                                  : <UserAvatar UserInfo={{ name: get(offer, 'keyTerms.shorthandBusinessName'), avatarUrl: '' }} />
+                                  ? <Image64 srcUrl={companyAvatarUrl} circular className="large" />
+                                  : <UserAvatar UserInfo={{ name: get(offer, 'keyTerms.shorthandBusinessName'), avatarUrl: '' }} className="large" />
                                 }
                               </div>
                               <Header.Content className="grey-header">
                                 {get(offer, 'keyTerms.shorthandBusinessName')}
-                                <Header.Subheader>{isNew ? moment().format('ll') : moment((get(currentUpdate, 'data.offeringUpdatesById.updated.date') || get(currentUpdate, 'data.offeringUpdatesById.created.date') || '')).format('ll')}</Header.Subheader>
+                                <Header.Subheader>{isNew ? DataFormatter.getCurrentCSTMoment().format('ll') : DataFormatter.getDateAsPerTimeZone((get(currentUpdate, 'data.offeringUpdatesById.updated.date') || get(currentUpdate, 'data.offeringUpdatesById.created.date') || ''), true, true)}</Header.Subheader>
                                 {/* <Header.Subheader>{moment().format('ll')}</Header.Subheader> */}
                               </Header.Content>
                             </Header>
