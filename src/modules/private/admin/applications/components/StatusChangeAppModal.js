@@ -14,7 +14,7 @@ import Helper from '../../../../../helper/utility';
 export default class StatusChangeAppModal extends Component {
   componentWillMount() {
     this.props.businessAppReviewStore.resetCommentFrm();
-    if (this.props.match.params.action === 'PROMOTE') {
+    if (this.props.match.params.action === 'PROMOTE' && this.props.match.params.id !== 'in-progress') {
       this.props.businessAppReviewStore.resetPasswordFrm();
       this.props.businessAppReviewStore.resetEmailFrm();
       const { businessApplicationsDetailsAdmin, fetchAdminApplicationById } = this.props.businessAppStore;
@@ -124,7 +124,7 @@ export default class StatusChangeAppModal extends Component {
     const { errors } = uiStore;
     const { params } = match;
     let isValid = true;
-    if (this.props.match.params.action === 'PROMOTE') {
+    if (params.action === 'PROMOTE' && params.id !== 'in-progress') {
       isValid = !(APPLICATION_STATUS_COMMENT_FRM.meta.isValid
         && PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.meta.isValid);
     } else {
@@ -144,7 +144,7 @@ export default class StatusChangeAppModal extends Component {
               changed={(e, result) => formChange(e, result, 'APPLICATION_STATUS_COMMENT_FRM')}
               containerclassname="secondary"
             />
-            {params.action === 'PROMOTE'
+            {params.action === 'PROMOTE' && params.id !== 'in-progress'
               ? (
               <>
                 {applicationRoles && applicationRoles.includes('investor') && (
@@ -186,13 +186,13 @@ export default class StatusChangeAppModal extends Component {
             }
             {errors
               && (
-<Message error>
+              <Message error>
                 <ListErrors errors={[errors]} />
               </Message>
               )
             }
             <div className="center-align">
-              <Button primary className="very relaxed" content="Submit" disabled={isValid || inProgress} onClick={params.action === 'PROMOTE' ? this.promoteApplication : this.updateApplicationStatus} loading={inProgress} />
+              <Button primary className="very relaxed" content="Submit" disabled={isValid || inProgress} onClick={params.action === 'PROMOTE' && params.id !== 'in-progress' ? this.promoteApplication : this.updateApplicationStatus} loading={inProgress} />
             </div>
           </Form>
         </Modal.Content>
