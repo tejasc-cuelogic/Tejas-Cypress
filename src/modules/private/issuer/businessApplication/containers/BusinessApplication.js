@@ -125,7 +125,7 @@ export default class BusinessApplication extends Component {
         appStepsStatus={appStepsStatus}
         {...this.props}
         P0={(
-<Link to="/app/dashboard">
+          <Link to="/app/dashboard">
             <Logo
               alt="NextSeed.com"
               dataSrc={logoUrl}
@@ -134,7 +134,7 @@ export default class BusinessApplication extends Component {
               size="small"
             />
           </Link>
-)}
+        )}
         buttonWidth={6}
         P4={(
 <HeaderButtons

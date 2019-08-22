@@ -520,18 +520,18 @@ export const BUSINESS_DETAILS = {
     },
   }],
   sources: [{
-    source: {
+    name: {
       value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Source', customErrors: { required: 'required' },
     },
-    fund: {
+    amount: {
       value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Type Fund', customErrors: { required: 'required' },
     },
   }],
   uses: [{
-    source: {
+    name: {
       value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Source', customErrors: { required: 'required' },
     },
-    fund: {
+    amount: {
       value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Type Fund', customErrors: { required: 'required' },
     },
   }],

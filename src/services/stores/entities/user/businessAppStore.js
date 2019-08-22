@@ -123,7 +123,7 @@ export class BusinessAppStore {
   totalChange = (fieldName, totalName) => {
     let total = 0;
     this.BUSINESS_DETAILS_FRM.fields[fieldName].forEach((field) => {
-      total = total + field.fund.value || 0;
+      total = total + field.amount.value || 0;
     });
     this[totalName] = total;
   }
@@ -700,6 +700,8 @@ export class BusinessAppStore {
 
   @computed get getFormatedBusinessDetailsData() {
     const data = toJS(this.BUSINESS_DETAILS_FRM.fields);
+    data.sources.pop();
+    data.uses.pop();
     return {
       planDocs: this.getFilesArray(data.businessPlan.value, data.businessPlan),
       debts: data.debts.map(item => ({
@@ -723,6 +725,14 @@ export class BusinessAppStore {
             fileName: (item && item.resume.value !== undefined && item.resume.value !== '' && item.resume.value !== null && !item.resume.error) ? item.resume.value : '',
           },
         ],
+      })),
+      sources: data.sources.map(item => ({
+        name: this.getValidDataForString(item.name),
+        amount: item.amount.value || 0.00,
+      })),
+      uses: data.uses.map(item => ({
+        name: this.getValidDataForString(item.name),
+        amount: item.amount.value,
       })),
     };
   }

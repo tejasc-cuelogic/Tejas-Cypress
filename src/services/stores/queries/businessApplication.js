@@ -265,6 +265,14 @@ query _getBusinessApplicationById ($id: String!) {
           fileName
         }
       }
+      sources {
+        name
+        amount
+      }
+      uses {
+        name
+        amount
+      }
       stepStatus
     }
     businessPerformance {

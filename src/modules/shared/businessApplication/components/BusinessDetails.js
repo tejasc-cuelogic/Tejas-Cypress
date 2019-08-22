@@ -145,8 +145,8 @@ export default class BusinessDetails extends Component {
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
                             type="text"
                             asterisk="true"
-                            name="source"
-                            fielddata={source.source}
+                            name="name"
+                            fielddata={source.name}
                             changed={(e, res) => businessDetailsChange(e, res, 'sources', index)}
                           />
                         </Table.Cell>
@@ -157,8 +157,9 @@ export default class BusinessDetails extends Component {
                             prefix="$ "
                             currency
                             type="text"
-                            name="fund"
-                            fielddata={source.fund}
+                            name="amount"
+                            hidelabel
+                            fielddata={source.amount}
                             onblur={() => totalChange('sources', 'sourcesTotal')}
                             changed={(values, field) => businessDetailsMaskingChange(field, values, 'sources', index)}
                           />
@@ -204,7 +205,7 @@ export default class BusinessDetails extends Component {
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
-                    {BUSINESS_DETAILS_FRM.fields.uses.length && BUSINESS_DETAILS_FRM.fields.uses.map((source, index) => BUSINESS_DETAILS_FRM.fields.uses.length !== index + 1 && (
+                    {BUSINESS_DETAILS_FRM.fields.uses.length && BUSINESS_DETAILS_FRM.fields.uses.map((use, index) => BUSINESS_DETAILS_FRM.fields.uses.length !== index + 1 && (
                       <Table.Row>
                         <Table.Cell width={7}>
                           <FormInput
@@ -212,8 +213,8 @@ export default class BusinessDetails extends Component {
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
                             type="text"
                             asterisk="true"
-                            name="source"
-                            fielddata={source.source}
+                            name="name"
+                            fielddata={use.name}
                             changed={(e, res) => businessDetailsChange(e, res, 'uses', index)}
                           />
                         </Table.Cell>
@@ -224,8 +225,9 @@ export default class BusinessDetails extends Component {
                             prefix="$ "
                             currency
                             type="text"
-                            name="fund"
-                            fielddata={source.fund}
+                            name="amount"
+                            hidelabel
+                            fielddata={use.amount}
                             onblur={() => totalChange('uses', 'usesTotal')}
                             changed={(values, field) => businessDetailsMaskingChange(field, values, 'uses', index)}
                           />
