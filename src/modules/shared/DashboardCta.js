@@ -12,7 +12,7 @@ export default class DashboardCta extends React.Component {
       const { roles } = this.props.userStore.currentUser;
       const invLogsIn = roles && roles.includes('investor') ? this.props.userDetailsStore.pendingStep
         : '/app/dashboard';
-      if (invLogsIn === '/app/summary') {
+      if (invLogsIn === '/app/setup') {
         const hasExpanded = this.props.navStore.sidebarItems.find(i => i.to.includes('account-details/'));
         if (hasExpanded) {
           this.props.uiStore.setNavExpanded(hasExpanded.to);
