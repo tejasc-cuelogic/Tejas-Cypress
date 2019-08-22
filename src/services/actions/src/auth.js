@@ -23,6 +23,7 @@ import {
   investmentStore,
   accreditationStore,
   transactionStore,
+  referralsStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -95,7 +96,9 @@ export class Auth {
               if (userStore.isAdmin) {
                 this.setAWSAdminAccess(signInUserSession.idToken.jwtToken);
               }
-
+              if (userStore.isInvestor) {
+                referralsStore.getUserReferralDetails(get(currentUser, 'accessToken.payload.username'));
+              }
               return res({ attributes, session: signInUserSession });
             }).catch((err) => {
               console.log('error in verifysession', err);
@@ -160,6 +163,9 @@ export class Auth {
     try {
       const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
       await this.amplifyLogin(user);
+      if (userStore.isInvestor) {
+        referralsStore.getUserReferralDetails();
+      }
     } catch (err) {
       if (Helper.matchRegexWithString(/\bTemporary password has expired(?![-])\b/, err.message)) {
         await this.resetPasswordExpiration(lowerCasedEmail, password);

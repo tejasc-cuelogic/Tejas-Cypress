@@ -18,6 +18,11 @@ export const UPDATES = {
     rule: 'optional',
     key: 0,
   },
+  allInvestor: {
+    value: false,
+    error: undefined,
+    rule: 'optional',
+  },
   scope: {
     value: 'PUBLIC',
     values: [{ label: 'Public', value: 'PUBLIC' }, { label: 'Investors Only', value: 'INVESTORS' }],
@@ -25,7 +30,7 @@ export const UPDATES = {
     rule: 'optional',
   },
   updatedDate: {
-    value: '', label: 'Updated Date', error: undefined, rule: 'optional', placeHolder: 'Updated Date',
+    value: '', label: 'Updated Date', error: undefined, rule: 'date', placeHolder: 'MM-DD-YYYY',
   },
 };
 

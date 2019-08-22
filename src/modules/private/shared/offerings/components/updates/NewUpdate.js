@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button, Checkbox } from 'semantic-ui-react';
 import { get } from 'lodash';
-import moment from 'moment';
+// import moment from 'moment';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import MaskedInput from '../../../../../../theme/form/src/MaskedInput';
@@ -12,25 +12,32 @@ import { InlineLoader, Image64, UserAvatar } from '../../../../../../theme/share
 import Actions from './Actions';
 import Status from './Status';
 import Helper from '../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../helper';
 
-@inject('updateStore', 'userStore', 'offeringsStore', 'uiStore', 'userDetailsStore')
+@inject('updateStore', 'userStore', 'offeringsStore', 'uiStore')
 @withRouter
 @observer
 export default class NewUpdate extends Component {
   state = {
     editForm: false,
     confirmModal: false,
+    loading: false,
   }
 
   componentWillMount() {
-    this.initiateFlow(this.props.match.params.id);
+    this.initiateFlow(this.props.match.params.action, this.props.match.params.id);
     this.props.updateStore.setFieldValue('newUpdateId', null);
   }
 
-  initiateFlow = (id) => {
-    if (id !== 'new') {
+  componentDidMount() {
+    this.setState({ loading: false });
+  }
+
+  initiateFlow = (action, id) => {
+    if (action !== 'new' && id !== undefined) {
       this.props.updateStore.getOne(id);
     } else {
+      this.setState({ loading: true });
       this.props.updateStore.reset();
     }
   }
@@ -56,6 +63,16 @@ export default class NewUpdate extends Component {
       });
   }
 
+  sendTestEmail = (id) => {
+    if (this.props.updateStore.PBUILDER_FRM.meta.isDirty) {
+      this.props.updateStore.save(id, 'DRAFT', false).then(() => {
+        this.props.updateStore.sendTestEmail(id);
+      });
+    } else {
+      this.props.updateStore.sendTestEmail(id);
+    }
+  }
+
   save = (id, status) => {
     this.props.updateStore.save(id, status)
       .then(() => {
@@ -76,7 +93,7 @@ export default class NewUpdate extends Component {
   render() {
     const {
       PBUILDER_FRM, UpdateChange, FChange, maskChange, selectTemplate, newUpdateId,
-      loadingCurrentUpdate, sendTestEmail, TEMPLATE_FRM, currentUpdate,
+      loadingCurrentUpdate, TEMPLATE_FRM, currentUpdate,
     } = this.props.updateStore;
     const isNew = this.props.match.params.action === 'new' && !newUpdateId;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -86,9 +103,7 @@ export default class NewUpdate extends Component {
     const { inProgress, loaderMessage } = this.props.uiStore;
     const { id } = this.props.match.params;
     const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
-    const { userDetails } = this.props.userDetailsStore;
-    const userInfo = !isNew || isManager ? { firstName: userDetails.info.firstName, lastName: userDetails.info.lastName, avatarUrl: get(userDetails, 'info.avatar.url') || '' } : '';
-    if (loadingCurrentUpdate) {
+    if (loadingCurrentUpdate || this.state.loading) {
       return <InlineLoader />;
     }
     return (
@@ -156,13 +171,14 @@ export default class NewUpdate extends Component {
                             <Header>
                               <div className="ui image avatar-image">
                                 {companyAvatarUrl && companyAvatarUrl.length
-                                  ? <Image64 srcUrl={companyAvatarUrl} circular />
-                                  : <UserAvatar UserInfo={userInfo} />
+                                  ? <Image64 srcUrl={companyAvatarUrl} circular className="large" />
+                                  : <UserAvatar UserInfo={{ name: get(offer, 'keyTerms.shorthandBusinessName'), avatarUrl: '' }} className="large" />
                                 }
                               </div>
                               <Header.Content className="grey-header">
-                                {!isNew && isManager && !newUpdateId ? get(currentUpdate, 'data.offeringUpdatesById.approved.by') || get(currentUpdate, 'data.offeringUpdatesById.updated.by') : get(offer, 'keyTerms.shorthandBusinessName')}
-                                <Header.Subheader>{moment().format('ll')}</Header.Subheader>
+                                {get(offer, 'keyTerms.shorthandBusinessName')}
+                                <Header.Subheader>{isNew ? DataFormatter.getCurrentCSTMoment().format('ll') : DataFormatter.getDateAsPerTimeZone((get(currentUpdate, 'data.offeringUpdatesById.updated.date') || get(currentUpdate, 'data.offeringUpdatesById.created.date') || ''), true, true)}</Header.Subheader>
+                                {/* <Header.Subheader>{moment().format('ll')}</Header.Subheader> */}
                               </Header.Content>
                             </Header>
                             <Header as="h4">{PBUILDER_FRM.fields.title.value}</Header>
@@ -171,7 +187,7 @@ export default class NewUpdate extends Component {
                         </Modal>
                       </List.Item>
                       <List.Item>
-                        <Button color="green" className="link-button" disabled={isNew || loaderMessage} content={loaderMessage || 'Send test email to me'} onClick={() => sendTestEmail(this.props.match.params.id || this.props.updateStore.newUpdateId)} />
+                        <Button color="green" className="link-button" disabled={isNew || loaderMessage} content={loaderMessage || 'Send test email to me'} onClick={() => this.sendTestEmail(this.props.match.params.id || this.props.updateStore.newUpdateId)} />
                       </List.Item>
                     </List>
                   </Card.Content>
@@ -192,6 +208,31 @@ export default class NewUpdate extends Component {
                           value={PBUILDER_FRM.fields.scope.value}
                         />
                         <Form>
+                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC'
+                            ? (
+                            <Form.Field>
+                              <Checkbox
+                                name="allInvestor"
+                                readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                onChange={(e, result) => UpdateChange(e, result)}
+                                checked={PBUILDER_FRM.fields.allInvestor.value}
+                                label="All Investors"
+                              />
+                            </Form.Field>
+                            ) : null
+                          }
+                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.earlyBird && offer.earlyBird.quantity > 0 ? (
+                            <Form.Field>
+                              <Checkbox
+                                name="tiers"
+                                readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                value={-1}
+                                onChange={(e, result) => UpdateChange(e, result)}
+                                checked={PBUILDER_FRM.fields.tiers.values.includes(-1)}
+                                label="Early Bird"
+                              />
+                            </Form.Field>
+                          ) : ''}
                           {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
                             <Form.Field key={rewardTier}>
                               <Checkbox

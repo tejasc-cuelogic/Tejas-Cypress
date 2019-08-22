@@ -37,7 +37,7 @@ class Updates extends Component {
     const readMoreStatus = this.props.campaignStore.curretnStatusForReadMore;
     const readLessStatus = this.props.campaignStore.curretnStatusForReadLess;
     const companyAvatarUrl = campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : '';
-    const issuerId = campaign && campaign.issuerId;
+    // const issuerId = campaign && campaign.issuerId;
     return (
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
         <Header as="h3" className={`${newLayout && isMobile ? 'mt-40' : newLayout ? 'mt-40' : 'mt-20'} ${isMobile ? 'mb-20' : 'mb-30'} anchor-wrap`}>
@@ -65,16 +65,11 @@ class Updates extends Component {
                       <div className="ui image avatar-image">
                         {companyAvatarUrl && companyAvatarUrl.length
                           ? <Image64 srcUrl={companyAvatarUrl} circular />
-                          : <UserAvatar UserInfo={{ firstName: get(dataItem, 'actingUserInfo.info.firstName'), lastName: get(dataItem, 'actingUserInfo.info.lastName'), avatarUrl: get(dataItem, 'actingUserInfo.info.avatar.url') || '' }} />
+                          : <UserAvatar UserInfo={{ name: get(campaign, 'keyTerms.shorthandBusinessName'), avatarUrl: '' }} />
                       }
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header">
-                        {(dataItem.actingUserInfo && dataItem.actingUserInfo.id === issuerId)
-                          ? get(campaign, 'keyTerms.shorthandBusinessName')
-                          : `${dataItem.actingUserInfo && dataItem.actingUserInfo.info
-                          && dataItem.actingUserInfo.info.firstName} ${dataItem.actingUserInfo
-                            && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName}`}
-                        <br />
+                        {get(campaign, 'keyTerms.shorthandBusinessName') }<br />
                         <span>{moment(dataItem.updated.date).format('ll')}</span>
                       </Item.Content>
                     </Item>

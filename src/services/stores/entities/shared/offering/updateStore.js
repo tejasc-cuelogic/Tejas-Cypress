@@ -3,7 +3,7 @@ import graphql from 'mobx-apollo';
 import { orderBy } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { FormValidator as Validator, ClientDb } from '../../../../../helper';
+import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { UPDATES, TEMPLATE } from '../../../../constants/offering';
 import { offeringCreationStore, uiStore } from '../../../index';
@@ -88,6 +88,7 @@ export class UpdateStore {
           mutation: sendOfferingUpdateTestEmail,
           variables: {
             offeringUpdateId,
+            emailTemplate: this.TEMPLATE_FRM.fields.type.value,
           },
         })
         .then(() => {
@@ -131,11 +132,19 @@ export class UpdateStore {
     @action
     UpdateChange = (e, result) => {
       if (result && result.type === 'checkbox') {
-        const index = this.PBUILDER_FRM.fields.tiers.values.indexOf(result.value);
-        if (index === -1) {
-          this.PBUILDER_FRM.fields.tiers.values.push(result.value);
+        if (result.name === 'allInvestor') {
+          this.PBUILDER_FRM.fields.allInvestor.value = result.checked;
+          if (result.checked) {
+            this.PBUILDER_FRM.fields.tiers.values = [];
+          }
         } else {
-          this.PBUILDER_FRM.fields.tiers.values.splice(index, 1);
+          const index = this.PBUILDER_FRM.fields.tiers.values.indexOf(result.value);
+          if (index === -1) {
+            this.PBUILDER_FRM.fields.tiers.values.push(result.value);
+          } else {
+            this.PBUILDER_FRM.fields.tiers.values.splice(index, 1);
+          }
+          this.PBUILDER_FRM.fields.allInvestor.value = this.PBUILDER_FRM.fields.tiers.values.length === 0;
         }
         this.PBUILDER_FRM.meta.isDirty = true;
         Validator.validateForm(this.PBUILDER_FRM, false, false, false);
@@ -146,6 +155,9 @@ export class UpdateStore {
 
     @action
     selectTemplate = (e, result) => {
+      if (this.TEMPLATE_FRM.fields.type.value !== result.value) {
+        this.PBUILDER_FRM.meta.isDirty = true;
+      }
       this.TEMPLATE_FRM = Validator.onChange(this.TEMPLATE_FRM, Validator.pullValues(e, result), true);
     };
 
@@ -171,14 +183,17 @@ export class UpdateStore {
     }
 
     @action
-    save = (id, status) => new Promise((resolve) => {
+    save = (id, status, showToast = true) => new Promise((resolve) => {
       uiStore.setProgress(status);
+      const currentTime = moment().format('HH:mm:ss');
       this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
+      delete data.allInvestor;
       data.status = status;
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
       data.isEarlyBirdOnly = false;
+      data.updatedDate = moment(`${data.updatedDate} ${currentTime}`).utc();
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
       if (id !== 'new' && status === 'PUBLISHED') {
         this.offeringUpdatePublish(id, data).then(() => {
@@ -199,8 +214,12 @@ export class UpdateStore {
             this.setFieldValue('newUpdateId', res.data.createOfferingUpdates.id);
           } else if (status !== 'DRAFT') {
             this.reset();
+          } else {
+            this.currentUpdate.offeringUpdatesById = res.data.updateOfferingUpdatesInfo;
           }
-          Helper.toast(id === 'new' ? 'Update added.' : 'Update Updated Successfully', 'success');
+          if (showToast) {
+            Helper.toast(id === 'new' ? 'Update added.' : 'Update Updated Successfully', 'success');
+          }
           this.setFormIsDirty(false);
           uiStore.setProgress(false);
           resolve();
@@ -276,7 +295,8 @@ export class UpdateStore {
         return null;
       });
       this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];
-      this.PBUILDER_FRM.fields.updatedDate.value = moment(offeringUpdatesById.updated.date).format('MM/DD/YYYY');
+      this.PBUILDER_FRM.fields.allInvestor.value = offeringUpdatesById.tiers.length === 0;
+      this.PBUILDER_FRM.fields.updatedDate.value = DataFormatter.getDateAsPerTimeZone(offeringUpdatesById.updated.date, true, false, false);
       Validator.validateForm(this.PBUILDER_FRM);
     }
 

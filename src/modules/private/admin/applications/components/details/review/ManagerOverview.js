@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
 import { Header, Button, Divider, Icon } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../../../services/constants/businessApplication';
+import { DataFormatter } from '../../../../../../../helper';
 
 @inject('businessAppReviewStore')
 @observer
@@ -40,11 +40,11 @@ export default class ManagerOverview extends Component {
             <Button.Group vertical icon size="tiny" className="time-stamp">
               <Button as="span" className="time-stamp">
                 <Icon className="ns-circle" color="green" />{' '}
-                Submitted By {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
+                Submitted By {submitted.by} on {DataFormatter.getDateAsPerTimeZone(submitted.date, true, false, false)}
               </Button>
               <Button as="span" className="time-stamp">
                 <Icon className="ns-check-circle" color="green" />{' '}
-                Approved By {approved.by} on {moment(approved.date).format('MM/DD/YYYY')}
+                Approved By {approved.by} on {DataFormatter.getDateAsPerTimeZone(approved.date, true, false, false)}
               </Button>
             </Button.Group>
             {isManager && approved && approved.status && applicationStatus
@@ -67,7 +67,7 @@ export default class ManagerOverview extends Component {
                   && (
 <Button as="span" className="time-stamp">
                     <Icon className="ns-circle" color="green" />{' '}
-                    Submitted By {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
+                    Submitted By {submitted.by} on {DataFormatter.getDateAsPerTimeZone(submitted.date, true, false, false)}
                   </Button>
                   )
                 }
