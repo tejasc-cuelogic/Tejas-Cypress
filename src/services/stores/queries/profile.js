@@ -101,8 +101,8 @@ export const checkUserPhoneVerificationCode = gql`
  }`;
 
 export const updateUserCIPInfo = gql`
-mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!, $cip: UserCIPInformation) {
-    updateUserCIPInfo(user: $user, phoneDetails: $phoneDetails, cip: $cip) {
+mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!, $cip: UserCIPInformation, $userId: String) {
+    updateUserCIPInfo(user: $user, phoneDetails: $phoneDetails, cip: $cip, userId: $userId) {
       email {
         address
       } info{

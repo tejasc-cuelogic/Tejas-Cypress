@@ -224,9 +224,11 @@ export const userDetailsQuery = gql`
         verificationDocs {
           addressProof {
             fileId
+            fileName
           }
           idProof {
             fileId
+            fileName
           }
         }
         legalAddress {
@@ -286,6 +288,7 @@ export const selectedUserDetailsQuery = gql`
           key
           message
         }
+        requestId
       }
       limits {
         income
