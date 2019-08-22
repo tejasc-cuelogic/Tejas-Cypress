@@ -8,6 +8,8 @@ import { BUSINESS_APP_USER_STATUS, BUSINESS_APPLICATION_STATUS } from '../../../
 import ApplicationTypeModal from './ApplicationTypeModal';
 import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../../../constants/common';
 import DateTimeFormat from '../../../../../../theme/shared/src/DateTimeFormat';
+import { DataFormatter } from '../../../../../../helper';
+
 
 const { clientWidth } = document.documentElement;
 const isTablet = clientWidth >= 768 && clientWidth < 1300;
@@ -72,9 +74,9 @@ export default class ApplicationCards extends Component {
                       <dt>Application status</dt>
                       <dd>{BUSINESS_APP_USER_STATUS[application.applicationStatus].status}</dd>
                       <dt>Started on</dt>
-                      <dd>{application.created ? <DateTimeFormat datetime={application.created.date} /> : '--'}</dd>
+                      <dd>{application.created ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(application.created.date, true, false, false)} /> : '--'}</dd>
                       <dt>{BUSINESS_APP_USER_STATUS[application.applicationStatus].dateTitle}</dt>
-                      <dd>{(get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated) ? <DateTimeFormat datetime={(get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated.date)} /> : '--'}</dd>
+                      <dd>{(get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated) ? <DateTimeFormat isCSTFormat datetime={(DataFormatter.getDateAsPerTimeZone((get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated.date), true, false, false))} /> : '--'}</dd>
                     </dl>
                     {application.applicationStatus
                     === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED

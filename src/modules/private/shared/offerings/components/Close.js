@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import moment from 'moment';
 import omitDeep from 'omit-deep';
 import { filter, find, get, capitalize } from 'lodash';
 import beautify from 'json-beautify';
@@ -201,7 +200,7 @@ export default class Close extends Component {
     const { offer, offerStatus } = this.props.offeringsStore;
     let { closureProcess } = offer;
     closureProcess = omitDeep(closureProcess, ['__typename']);
-    const closeDate = offer.closureSummary && offer.closureSummary.processingDate;
+    const closeDate = get(offer, 'closureSummary.processingDate') && `${get(offer, 'closureSummary.processingDate')} 23:59:59`;
     const hoursToClose = DataFormatter.diffDays(closeDate, true) + 24;
     return (
       <Form>
@@ -209,7 +208,7 @@ export default class Close extends Component {
           <Header as="h4">
             {hoursToClose > 0
               ? (
-<>This campaign is still live, set to close <span className="highlight-text"> {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'} </span>
+<>This campaign is still live, set to close <span className="highlight-text"> {closeDate ? DataFormatter.getDateAsPerTimeZone(closeDate, true, false, false, 'MMM D, YYYY') : 'N/A'} </span>
               </>
               ) : <>This campaign <span className={offerStatus.isFailed ? 'negative-text' : 'highlight-text'}> {offerStatus.isFailed ? 'has failed' : 'has succeed'}</span></>
             }
@@ -478,7 +477,7 @@ out of required
                 <Table.Row>
                   <Table.Cell>{capitalize(k.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</Table.Cell>
                   <Table.Cell>
-                  {['finished', 'started'].includes(k) ? closureProcess[key][k] ? moment(closureProcess[key][k]).format('MM/DD/YYYY') : '-' : closureProcess[key][k] || '-'}
+                  {['finished', 'started'].includes(k) ? closureProcess[key][k] ? DataFormatter.getDateAsPerTimeZone(closureProcess[key][k], true, false, false) : '-' : closureProcess[key][k] || '-'}
                   </Table.Cell>
                 </Table.Row>
                 )) : <p>No Data Found</p>

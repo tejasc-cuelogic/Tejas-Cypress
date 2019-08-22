@@ -97,7 +97,7 @@ export class Auth {
                 this.setAWSAdminAccess(signInUserSession.idToken.jwtToken);
               }
               if (userStore.isInvestor) {
-                referralsStore.getUserReferralDetails();
+                referralsStore.getUserReferralDetails(get(currentUser, 'accessToken.payload.username'));
               }
               return res({ attributes, session: signInUserSession });
             }).catch((err) => {
