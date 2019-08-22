@@ -15,6 +15,7 @@ class Overview extends Component {
   state = {
     open: false,
     embedUrl: '',
+    loadingDoc: '',
   };
 
   componentWillMount() {
@@ -38,11 +39,16 @@ class Overview extends Component {
   }
 
   handleViewLoanAgreement = (aggrementId) => {
+    this.setState({ loadingDoc: aggrementId });
     this.props.transactionStore.getDocuSignViewURL(aggrementId).then((res) => {
-      this.setState({
-        open: true,
-        embedUrl: res,
-      });
+      this.setState({ open: true, embedUrl: res, loadingDoc: '' });
+    });
+  }
+
+  handleViewSuppAgreement = (aggrementId) => {
+    this.setState({ loadingDoc: aggrementId });
+    this.props.campaignStore.getBoxLink(aggrementId).then((res) => {
+      this.setState({ open: true, embedUrl: res, loadingDoc: '' });
     });
   }
 
@@ -57,6 +63,7 @@ class Overview extends Component {
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     const { agreementIds, loading } = this.props.transactionStore;
+    const aggrementDocs = get(campaign, 'closureSummary.keyTerms.supplementalAgreements.documents');
     if (loading) {
       return (
         <InlineLoader />
@@ -232,18 +239,28 @@ class Overview extends Component {
                       </Table.Row>
                       ) : ''
                     }
-                    {agreementIds
+                    {agreementIds && agreementIds.length
                       ? (
                       <Table.Row verticalAlign="top">
                         <Table.Cell>Investor Agreement{agreementIds.length > 1 && 's'} </Table.Cell>
                         <Table.Cell>
                           {agreementIds.map(agreementId => (
-                            <Button onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text">#{agreementId} </Button>
+                            <Button loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text"><Icon className="ns-file" /> {agreementId} </Button>
                           ))}
                         </Table.Cell>
                       </Table.Row>
                       ) : ''
                     }
+                    {aggrementDocs && aggrementDocs.length && (
+                      <Table.Row>
+                        <Table.Cell>Supplemental Agreements</Table.Cell>
+                        <Table.Cell>
+                          {aggrementDocs.map(doc => (
+                            <Button loading={this.state.loadingDoc === get(doc, 'upload.fileHandle.boxFileId')} onClick={() => this.handleViewSuppAgreement(get(doc, 'upload.fileHandle.boxFileId'))} className="link-button highlight-text"><Icon className="ns-file" /> {doc.name}</Button>
+                          ))}
+                        </Table.Cell>
+                      </Table.Row>
+                    )}
                     {edgarLink
                     && (
                     <Table.Row>
