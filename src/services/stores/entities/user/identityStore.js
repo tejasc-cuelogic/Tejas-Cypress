@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
 import graphql from 'mobx-apollo';
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
