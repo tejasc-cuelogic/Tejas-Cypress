@@ -1595,7 +1595,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  offeringClose = (params, step, scope) => {
+  offeringClose = (params, step, scope) => new Promise((res) => {
     uiStore.setProgress(params.process);
     this.setFieldValue('outputMsg', null);
     let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
@@ -1620,21 +1620,17 @@ export class OfferingCreationStore {
       .mutate({
         mutation: offerClose,
         variables: { ...params, ...formData },
-        refetchQueries: [{
-          query: getOfferingDetails,
-          variables: { id: this.currentOfferingId },
-        }],
       }).then((data) => {
         uiStore.setProgress(false);
         this.setFieldValue('outputMsg', { type: 'success', data: get(data, 'data.offeringClose') });
-        console.log(data);
+        res(get(data, 'data.offeringClose'));
       }).catch((err) => {
         uiStore.setProgress(false);
         this.setFieldValue('outputMsg', { type: 'error', data: get(err, 'message') });
         console.log(err);
         Helper.toast('Something went wrong.', 'error');
       });
-  }
+  });
 
   updateBonusRewardTier = (isDelete = false, amount = 0, earlyBirdQuantity = 0) => {
     const { fields } = this.ADD_NEW_TIER_FRM;
