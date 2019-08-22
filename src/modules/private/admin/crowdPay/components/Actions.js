@@ -13,6 +13,7 @@ export default class Actions extends Component {
     e.preventDefault();
     const availableActions = ['APPROVE', 'DECLINE', 'EMAIL', 'GSPROCESS', 'VALIDATE', 'CREATEACCOUNT'];
     const attrObj = { userId, accountId, action, msg };
+    this.props.crowdpayStore.addLoadingCrowdPayId(accountId);
     if (action === 'CREATEACCOUNT') {
       const { detailsOfUser, selectedUserId } = this.props.userDetailsStore;
       if (selectedUserId === '' || selectedUserId !== userId) {
@@ -33,6 +34,8 @@ export default class Actions extends Component {
     this.props.identityStore.verifyUserIdentity().then((requestId) => {
       if (requestId) {
         this.props.crowdPayCtaHandler(userId, accountId, action, msg);
+      } else {
+        this.props.crowdpayStore.removeLoadingCrowdPayId(accountId, this.props.account.accountStatus);
       }
     });
   }
@@ -106,7 +109,7 @@ export default class Actions extends Component {
                 {!isAccProcess && type === 'individual'
                   && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
                 }
-                {(type === 'individual' || type === 'ira') && isAccProcess
+                {isAccProcess
                   && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'CREATEACCOUNT', `${capitalize(type)} account is Created successfully.`)} as={Link} to={`${urlPara}/CREATEACCOUNT`} className="inverted" color="blue">Create</Button>
                 }
                 {type !== 'review' && isGsProcess
