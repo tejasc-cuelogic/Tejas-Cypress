@@ -13,7 +13,7 @@ import Actions from './Actions';
 import Status from './Status';
 import Helper from '../../../../../../helper/utility';
 
-@inject('updateStore', 'userStore', 'offeringsStore', 'uiStore', 'userDetailsStore')
+@inject('updateStore', 'userStore', 'offeringsStore', 'uiStore')
 @withRouter
 @observer
 export default class NewUpdate extends Component {
@@ -102,8 +102,6 @@ export default class NewUpdate extends Component {
     const { inProgress, loaderMessage } = this.props.uiStore;
     const { id } = this.props.match.params;
     const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
-    const { userDetails } = this.props.userDetailsStore;
-    const userInfo = !isNew || isManager ? { firstName: userDetails.info.firstName, lastName: userDetails.info.lastName, avatarUrl: get(userDetails, 'info.avatar.url') || '' } : '';
     if (loadingCurrentUpdate || this.state.loading) {
       return <InlineLoader />;
     }
@@ -173,7 +171,7 @@ export default class NewUpdate extends Component {
                               <div className="ui image avatar-image">
                                 {companyAvatarUrl && companyAvatarUrl.length
                                   ? <Image64 srcUrl={companyAvatarUrl} circular />
-                                  : <UserAvatar UserInfo={userInfo} />
+                                  : <UserAvatar UserInfo={{ firstName: get(offer, 'keyTerms.shorthandBusinessName'), lastName: '', avatarUrl: '' }} />
                                 }
                               </div>
                               <Header.Content className="grey-header">
@@ -209,19 +207,31 @@ export default class NewUpdate extends Component {
                           value={PBUILDER_FRM.fields.scope.value}
                         />
                         <Form>
-                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && get(offer, 'rewardsTiers[0]')
+                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC'
                             ? (
                             <Form.Field>
                               <Checkbox
-                                name="allTiers"
+                                name="allInvestor"
                                 readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
                                 onChange={(e, result) => UpdateChange(e, result)}
-                                checked={PBUILDER_FRM.fields.isAllTiers.value}
-                                label="Select all Investors"
+                                checked={PBUILDER_FRM.fields.allInvestor.value}
+                                label="All Investors"
                               />
                             </Form.Field>
                             ) : null
                           }
+                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.earlyBird && offer.earlyBird.quantity > 0 ? (
+                            <Form.Field>
+                              <Checkbox
+                                name="tiers"
+                                readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                value={-1}
+                                onChange={(e, result) => UpdateChange(e, result)}
+                                checked={PBUILDER_FRM.fields.tiers.values.includes(-1)}
+                                label="Early Bird"
+                              />
+                            </Form.Field>
+                          ) : ''}
                           {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
                             <Form.Field key={rewardTier}>
                               <Checkbox

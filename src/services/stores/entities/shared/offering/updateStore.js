@@ -5,7 +5,7 @@ import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { UPDATES, TEMPLATE } from '../../../../constants/offering';
-import { offeringCreationStore, uiStore, offeringsStore } from '../../../index';
+import { offeringCreationStore, uiStore } from '../../../index';
 import {
   allUpdates, newUpdate, getUpdate, editUpdate, approveUpdate, deleteOfferingUpdate,
   sendOfferingUpdateTestEmail, offeringUpdatePublish,
@@ -131,15 +131,9 @@ export class UpdateStore {
     @action
     UpdateChange = (e, result) => {
       if (result && result.type === 'checkbox') {
-        const { offer } = offeringsStore;
-        const tiers = offer.rewardsTiers || [];
-        if (result.name === 'allTiers') {
-          this.PBUILDER_FRM.fields.isAllTiers.value = result.checked;
+        if (result.name === 'allInvestor') {
+          this.PBUILDER_FRM.fields.allInvestor.value = result.checked;
           if (result.checked) {
-            tiers.forEach((t) => {
-              this.PBUILDER_FRM.fields.tiers.values.push(t);
-            });
-          } else {
             this.PBUILDER_FRM.fields.tiers.values = [];
           }
         } else {
@@ -149,7 +143,7 @@ export class UpdateStore {
           } else {
             this.PBUILDER_FRM.fields.tiers.values.splice(index, 1);
           }
-          this.PBUILDER_FRM.fields.isAllTiers.value = this.PBUILDER_FRM.fields.tiers.values.length === tiers.length;
+          this.PBUILDER_FRM.fields.allInvestor.value = this.PBUILDER_FRM.fields.tiers.values.length === 0;
         }
         this.PBUILDER_FRM.meta.isDirty = true;
         Validator.validateForm(this.PBUILDER_FRM, false, false, false);
@@ -192,7 +186,7 @@ export class UpdateStore {
       uiStore.setProgress(status);
       this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
-      delete data.isAllTiers;
+      delete data.allInvestor;
       data.status = status;
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
@@ -298,9 +292,7 @@ export class UpdateStore {
         return null;
       });
       this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];
-      const { offer } = offeringsStore;
-      const tiers = offer.rewardsTiers || [];
-      this.PBUILDER_FRM.fields.isAllTiers.value = offeringUpdatesById.tiers.length === tiers.length;
+      this.PBUILDER_FRM.fields.allInvestor.value = offeringUpdatesById.tiers.length === 0;
       this.PBUILDER_FRM.fields.updatedDate.value = DataFormatter.getDateAsPerTimeZone(offeringUpdatesById.updated.date, true, false, false);
       Validator.validateForm(this.PBUILDER_FRM);
     }

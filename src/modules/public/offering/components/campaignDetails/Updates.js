@@ -7,7 +7,6 @@ import 'react-vertical-timeline-component/style.min.css';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import { Image64, InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
-import { DataFormatter } from '../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 992;
 
@@ -66,7 +65,7 @@ class Updates extends Component {
                       <div className="ui image avatar-image">
                         {companyAvatarUrl && companyAvatarUrl.length
                           ? <Image64 srcUrl={companyAvatarUrl} circular />
-                          : <UserAvatar UserInfo={{ firstName: get(dataItem, 'actingUserInfo.info.firstName'), lastName: get(dataItem, 'actingUserInfo.info.lastName'), avatarUrl: get(dataItem, 'actingUserInfo.info.avatar.url') || '' }} />
+                          : <UserAvatar UserInfo={{ firstName: get(campaign, 'keyTerms.shorthandBusinessName'), lastName: '', avatarUrl: '' }} />
                       }
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header">
