@@ -437,6 +437,7 @@ export class BusinessAppStore {
             this.BUSINESS_DETAILS_FRM.fields.sources[key][field].value = ele[field];
           });
         });
+        this.totalChange('sources', 'sourcesTotal');
       } else {
         this.BUSINESS_DETAILS_FRM.fields.sources = [];
       }
@@ -446,6 +447,7 @@ export class BusinessAppStore {
             this.BUSINESS_DETAILS_FRM.fields.uses[key][field].value = ele[field];
           });
         });
+        this.totalChange('uses', 'usesTotal');
       } else {
         this.BUSINESS_DETAILS_FRM.fields.uses = [];
       }

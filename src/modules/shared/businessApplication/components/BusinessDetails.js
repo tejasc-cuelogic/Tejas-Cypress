@@ -28,12 +28,6 @@ export default class BusinessDetails extends Component {
     }
   }
 
-  componentDidMount() {
-    ['sources', 'uses'].forEach((ele) => {
-      this.props.businessAppStore.totalChange(ele, ele === 'sources' ? 'sourcesTotal' : 'usesTotal');
-    });
-  }
-
   removeForm = (e) => {
     this.setState({ showPartialSaveModal: !this.state.showPartialSaveModal });
     this.props.businessAppStore.removeForm(e, this.state.currentForm, this.state.currentIndex);
