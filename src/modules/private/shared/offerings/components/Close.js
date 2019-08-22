@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import omitDeep from 'omit-deep';
-import { filter, find, get, capitalize } from 'lodash';
+import { filter, find, get, capitalize, isEmpty } from 'lodash';
 import beautify from 'json-beautify';
 import { Form, Card, Header, Divider, Step, Label, Button, Icon, Confirm, Modal, Grid, Table } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
@@ -203,7 +203,7 @@ export default class Close extends Component {
 
   processClosureProcessObj = (obj) => {
     const orderedObj = {};
-    if (obj) {
+    if (obj && !isEmpty(obj)) {
       const closureProcess = omitDeep(obj, ['__typename', 'items']);
       ['softCloseNotification', 'checkBalance', 'issueCredits', 'fundEscrow', 'verifySecurityTransaction', 'processNotes', 'validateNotes', 'finalizeNotes', 'hardCloseNotification', 'exportEnvelopes'].forEach((key) => {
         orderedObj[key] = closureProcess[key];
@@ -228,7 +228,7 @@ export default class Close extends Component {
     const { offer, offerStatus } = this.props.offeringsStore;
     const { closureProcessObj } = this.state;
     let { closureProcess } = offer;
-    closureProcess = this.processClosureProcessObj((closureProcessObj && closureProcess) ? { ...closureProcess, ...closureProcessObj } : closureProcess);
+    closureProcess = !closureProcess ? { ...closureProcessObj } : this.processClosureProcessObj((closureProcessObj && closureProcess) ? { ...closureProcess, ...closureProcessObj } : closureProcess);
     const closeDate = get(offer, 'closureSummary.processingDate') && `${get(offer, 'closureSummary.processingDate')} 23:59:59`;
     const hoursToClose = DataFormatter.diffDays(closeDate, true) + 24;
     const dynamicFields = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? ['interestRate'] : ['revSharePercentage', 'multiple'];
@@ -562,7 +562,7 @@ out of required
                     <>
                     {(closureProcess[key].started || closureProcess[key].startedCount) ? (
                     <>
-                      {closureProcess[key].startedCount || '0'} - {closureProcess[key].started ? DataFormatter.getDateAsPerTimeZone(closureProcess[key].started, true, false, false, 'MM-DD-YYYY h:mm a') : ''}
+                      {closureProcess[key].startedCount || '0'} - {closureProcess[key].started ? DataFormatter.getDateAsPerTimeZone(closureProcess[key].started, true, false, false, 'M/D/YYYY h:mm a') : ''}
                     </>
                     ) : <>-</>
                   }
@@ -575,7 +575,7 @@ out of required
                    {
                    (closureProcess[key].remainingCount || closureProcess[key].finished)
                      ? (
-                    <>{closureProcess[key].remainingCount || '0'} - {closureProcess[key].finished ? DataFormatter.getDateAsPerTimeZone(closureProcess[key].finished, true, false, false, 'MM-DD-YYYY h:mm a') : ''}
+                    <>{closureProcess[key].remainingCount || '0'} - {closureProcess[key].finished ? DataFormatter.getDateAsPerTimeZone(closureProcess[key].finished, true, false, false, 'M/D/YYYY h:mm a') : ''}
                     </>
                      ) : <>-</>
                    }
