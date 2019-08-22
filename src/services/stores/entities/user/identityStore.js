@@ -178,7 +178,7 @@ export class IdentityStore {
         lastLegalName: fields.lastLegalName.value,
       },
       dateOfBirth: fields.dateOfBirth.value,
-      ssn: fields.ssn.value,
+      ssn: fields.ssn.value || legalDetails.ssn,
       legalAddress: {
         street: fields.residentalStreet.value,
         city: fields.city.value,
@@ -265,7 +265,7 @@ export class IdentityStore {
       },
       status: this.userCipStatus !== '' ? this.userCipStatus : this.cipStatus,
       dateOfBirth: fields.dateOfBirth.value,
-      ssn: fields.ssn.value,
+      ssn: fields.ssn.value || legalDetails.ssn,
       legalAddress: {
         street: fields.residentalStreet.value,
         city: fields.city.value,
