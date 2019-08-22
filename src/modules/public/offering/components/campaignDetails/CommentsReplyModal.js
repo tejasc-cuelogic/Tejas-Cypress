@@ -11,7 +11,8 @@ import { FormTextarea } from '../../../../../theme/form';
 class CommentsReplyModal extends Component {
   state={ readMore: false }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.messageStore.resetMessageForm();
     this.props.messageStore.setDataValue('currentMessageId', !this.props.match.params.messageType ? this.props.match.params.id : null);
     this.props.messageStore.setDataValue('currentOfferingId', this.props.campaignId);

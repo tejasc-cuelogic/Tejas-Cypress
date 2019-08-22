@@ -35,7 +35,8 @@ class CampaignLayout extends Component {
     expandComments: false,
   }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     window.addEventListener('scroll', this.handleOnScroll);
   }
 

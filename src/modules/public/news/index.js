@@ -56,7 +56,8 @@ const isTablet = document.documentElement.clientWidth < 992;
 @inject('authStore', 'uiStore', 'identityStore')
 @observer
 class News extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.authStore.setDefaultPwdType();
     this.props.authStore.setUserRole('investor');
   }

@@ -21,7 +21,8 @@ class Comments extends Component {
     readMore: false, readMoreInner: false, visible: false, commentId: null, visiblePost: true,
   }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.messageStore.resetMessageForm();
   }
 
