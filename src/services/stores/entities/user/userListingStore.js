@@ -94,8 +94,10 @@ export class UserListingStore {
   @action
   maskChange = (values, field) => {
     if (moment(values.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-      const isoDate = field === 'startDate' ? moment(new Date(values.formattedValue)).toISOString()
-        : moment(new Date(values.formattedValue)).add(1, 'day').toISOString();
+      const formatedStartDate = moment(new Date(`${values.formattedValue} 00:00:00`));
+      const nextDayDate = this.getEndDateInIsoString(formatedStartDate);
+      const isoDate = field === 'startDate' ? formatedStartDate.toISOString()
+        : nextDayDate.toISOString();
       this.setInitiateSrch(field, isoDate);
     }
   }
@@ -238,20 +240,26 @@ export class UserListingStore {
           text: `${capitalize(user.info.firstName)} ${capitalize(user.info.lastName)}`,
           value: user.id,
           icon:
-  <UserAvatar
-    UserInfo={{
-      firstName: user.info ? user.info.firstName : '',
-      lastName: user.info ? user.info.lastName : '',
-      avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
-      roles: user.roles.map(r => r.scope),
-    }}
-    base64url
-  />,
+            <UserAvatar
+              UserInfo={{
+                firstName: user.info ? user.info.firstName : '',
+                lastName: user.info ? user.info.lastName : '',
+                avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
+                roles: user.roles.map(r => r.scope),
+              }}
+              base64url
+            />,
         });
       }
       return false;
     });
     return usersOptions;
+  }
+
+  getEndDateInIsoString = (formatedDate) => {
+    const nextDayFormatedDate = moment(new Date(formatedDate)).format('MM-DD-YYYY');
+    const nextDayFormatedDateWithHours = moment(new Date(`${nextDayFormatedDate} 23:59:59`));
+    return nextDayFormatedDateWithHours;
   }
 }
 
