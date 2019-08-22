@@ -70,14 +70,8 @@ class Updates extends Component {
                       }
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header">
-                        {get(campaign, 'keyTerms.shorthandBusinessName')
-                          // (dataItem.actingUserInfo && dataItem.actingUserInfo.id === issuerId)
-                          // ? get(campaign, 'keyTerms.shorthandBusinessName')
-                          // : `${dataItem.actingUserInfo && dataItem.actingUserInfo.info
-                          // && dataItem.actingUserInfo.info.firstName} ${dataItem.actingUserInfo
-                          //   && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName}`}
-                        }<br />
-                        <span>{DataFormatter.getDateAsPerTimeZone(dataItem.updated.date, true, true)}</span>
+                        {get(campaign, 'keyTerms.shorthandBusinessName') }<br />
+                        <span>{moment(dataItem.updated.date).format('ll')}</span>
                       </Item.Content>
                     </Item>
                     <Header as="h4">{dataItem.title}</Header>
