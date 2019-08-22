@@ -106,7 +106,7 @@ export default class DataRoom extends Component {
     }
   };
   render() {
-    const { match } = this.props;
+    const { match, offeringClose } = this.props;
     const { isIssuer } = this.props.userStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
@@ -128,8 +128,8 @@ export default class DataRoom extends Component {
     return (
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form>
-          <Header as="h4">
-            Data Room Documents
+          <Header as="h4" className={offeringClose ? 'offering-close-header' : ''}>
+          {!offeringClose ? 'Data Room Documents' : ''}
             {!isReadonly &&
               <Button.Group size="mini" floated="right">
                 <Button onClick={e => this.addMore(e, formName)} primary compact content="Add" />
@@ -159,12 +159,17 @@ export default class DataRoom extends Component {
             />
           </div>
           <Divider hidden />
-          <ButtonGroupType2
-            submitted={submitted}
-            isManager={isManager}
-            approved={approved}
-            updateOffer={this.handleFormSubmit}
-          />
+          {!offeringClose
+          &&
+          (
+            <ButtonGroupType2
+              submitted={submitted}
+              isManager={isManager}
+              approved={approved}
+              updateOffer={this.handleFormSubmit}
+            />
+          )
+          }
         </Form>
         <Confirm
           header="Confirm"
