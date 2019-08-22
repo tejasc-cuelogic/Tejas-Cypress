@@ -431,6 +431,24 @@ export class BusinessAppStore {
           this.addMoreForms(null, 'owners');
         }
       });
+      if (data.sources.length) {
+        data.sources.forEach((ele, key) => {
+          ['name', 'amount'].forEach((field) => {
+            this.BUSINESS_DETAILS_FRM.fields.sources[key][field].value = ele[field];
+          });
+        });
+      } else {
+        this.BUSINESS_DETAILS_FRM.fields.sources = [];
+      }
+      if (data.uses.length) {
+        data.uses.forEach((ele, key) => {
+          ['name', 'amount'].forEach((field) => {
+            this.BUSINESS_DETAILS_FRM.fields.uses[key][field].value = ele[field];
+          });
+        });
+      } else {
+        this.BUSINESS_DETAILS_FRM.fields.uses = [];
+      }
       if (data.planDocs && data.planDocs.length) {
         this.setFileObjectToForm(data.planDocs, 'BUSINESS_DETAILS_FRM', 'businessPlan');
       }
@@ -700,8 +718,6 @@ export class BusinessAppStore {
 
   @computed get getFormatedBusinessDetailsData() {
     const data = toJS(this.BUSINESS_DETAILS_FRM.fields);
-    data.sources.pop();
-    data.uses.pop();
     return {
       planDocs: this.getFilesArray(data.businessPlan.value, data.businessPlan),
       debts: data.debts.map(item => ({

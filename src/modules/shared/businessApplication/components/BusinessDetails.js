@@ -28,6 +28,12 @@ export default class BusinessDetails extends Component {
     }
   }
 
+  componentDidMount() {
+    ['sources', 'uses'].forEach((ele) => {
+      this.props.businessAppStore.totalChange(ele, ele === 'sources' ? 'sourcesTotal' : 'usesTotal');
+    });
+  }
+
   removeForm = (e) => {
     this.setState({ showPartialSaveModal: !this.state.showPartialSaveModal });
     this.props.businessAppStore.removeForm(e, this.state.currentForm, this.state.currentIndex);
@@ -137,7 +143,7 @@ export default class BusinessDetails extends Component {
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
-                    {BUSINESS_DETAILS_FRM.fields.sources.length && BUSINESS_DETAILS_FRM.fields.sources.map((source, index) => BUSINESS_DETAILS_FRM.fields.sources.length !== index + 1 && (
+                    {BUSINESS_DETAILS_FRM.fields.sources.length ? BUSINESS_DETAILS_FRM.fields.sources.map((source, index) => (
                       <Table.Row>
                         <Table.Cell width={7}>
                           <FormInput
@@ -170,14 +176,14 @@ export default class BusinessDetails extends Component {
                           </Button>
                         </Table.Cell>
                       </Table.Row>
-                    ))}
+                    )) : ''}
                     <Table.Row>
                       <Table.Cell colspan="3">
                         <Button size="small" className="link-button" type="button" disabled={formReadOnlyMode} onClick={e => addMoreForms(e, 'sources')} color="green" content="+ Add Source" />
                       </Table.Cell>
                     </Table.Row>
                   </Table.Body>
-                  {BUSINESS_DETAILS_FRM.fields.sources.length > 1
+                  {BUSINESS_DETAILS_FRM.fields.sources.length
                     && (
                     <Table.Footer>
                       <Table.Row>
@@ -205,7 +211,7 @@ export default class BusinessDetails extends Component {
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
-                    {BUSINESS_DETAILS_FRM.fields.uses.length && BUSINESS_DETAILS_FRM.fields.uses.map((use, index) => BUSINESS_DETAILS_FRM.fields.uses.length !== index + 1 && (
+                    {BUSINESS_DETAILS_FRM.fields.uses.length ? BUSINESS_DETAILS_FRM.fields.uses.map((use, index) => (
                       <Table.Row>
                         <Table.Cell width={7}>
                           <FormInput
@@ -238,15 +244,15 @@ export default class BusinessDetails extends Component {
                           </Button>
                         </Table.Cell>
                       </Table.Row>
-                    ))}
+                    )) : ''}
                     <Table.Row>
                       <Table.Cell colspan="3">
                         <Button size="small" className="link-button" type="button" disabled={formReadOnlyMode} onClick={e => addMoreForms(e, 'uses')} color="green" content="+ Add Use" />
                       </Table.Cell>
                     </Table.Row>
                   </Table.Body>
-                  {BUSINESS_DETAILS_FRM.fields.uses.length > 1
-                    && (
+                  {BUSINESS_DETAILS_FRM.fields.uses.length
+                    ? (
                     <Table.Footer>
                       <Table.Row>
                         <Table.HeaderCell width={7}>
@@ -258,8 +264,7 @@ export default class BusinessDetails extends Component {
                         <Table.HeaderCell />
                       </Table.Row>
                     </Table.Footer>
-                    )
-                  }
+                    ) : ''}
                 </Table>
               </Grid.Column>
             </Grid>
