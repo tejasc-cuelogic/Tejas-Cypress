@@ -874,7 +874,11 @@ export class OfferingCreationStore {
     if (!offer) {
       return false;
     }
-    offer = Helper.replaceKeysDeep(toJS(offer), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
+    offer = Helper.replaceKeysDeep(toJS(offer), { aliasId: 'id' });
+    offer = {
+      ...offer,
+      closureSummary: Helper.replaceKeysDeep(toJS(get(offer, 'closureSummary')), { aliasAccreditedOnly: 'accreditedOnly' }),
+    };
     if (form === 'MEDIA_FRM') {
       this.MEDIA_FRM = Validator.prepareFormObject(MEDIA);
     }
