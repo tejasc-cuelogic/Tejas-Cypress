@@ -4,6 +4,7 @@ import { kebabCase, capitalize } from 'lodash';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { DateTimeFormat, NsPagination } from '../../../../../../theme/shared';
+import { DataFormatter } from '../../../../../../helper';
 
 @inject('updateStore', 'userStore')
 @observer
@@ -45,14 +46,14 @@ export default class Listing extends Component {
                       <Link to={`${this.props.match.url}/edit/${record.refId}`}>{record.title}</Link>
                     </Table.Cell>
                     <Table.Cell>{capitalize(record.scope)}</Table.Cell>
-                    <Table.Cell><DateTimeFormat datetime={record.updated.date} /></Table.Cell>
+                    <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(record.updated.date, true, false, false)} /></Table.Cell>
                     <Table.Cell className={`status ${kebabCase(record.status)}`}> <Icon className="ns-circle" color={record.status === 'PUBLISHED' ? 'green' : record.status === 'DRAFT' ? 'red' : 'orange'} /> {capitalize(record.status)}</Table.Cell>
                     <Table.Cell textAlign="right">{record.status === 'PUBLISHED' ? 'Update is published' : record.status === 'DRAFT' ? 'Saved To Draft' : 'Sent update for review'}</Table.Cell>
                     {isManager
                     && (
                     <Table.Cell collapsing textAlign="center">
                       <Button icon className="link-button">
-                      <Icon className={record.isVisible ? 'ns-no-view' : 'ns-view'} onClick={() => this.handleUpdatesVisibility(record, !record.isVisible)} />
+                      <Icon className={record.isVisible ? 'ns-view' : 'ns-no-view'} onClick={() => this.handleUpdatesVisibility(record, !record.isVisible)} />
                       </Button>
                     </Table.Cell>
                     )

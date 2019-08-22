@@ -58,7 +58,7 @@ const InvestmentList = (props) => {
                             data && data.offering && data.offering.stage
                               ? props.listOf === 'active' ? 'Active' : data.offering.stage === 'LIVE'
                                 ? get(data.offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHours(get(data.offering, 'closureSummary.processingDate'), true) <= 0 ? STAGES.PROCESSING.label
-                                  : get(data.offering, 'closureSummary.processingDate') && (DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) === 2 || DataFormatter.getDateDifferenceInHours(get(data.offering, 'closureSummary.processingDate'), true) <= 48)
+                                  : get(data.offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHours(get(data.offering, 'closureSummary.processingDate'), true) < 48
                                     ? STAGES.LOCK.label : STAGES[data.offering.stage].label : STAGES[data.offering.stage].label : '-'
                           }
                         </Table.Cell>
@@ -72,7 +72,7 @@ const InvestmentList = (props) => {
                             <>
                               {Helper.CurrencyFormat(data.investedAmount, 0)}
                               <p className="date-stamp">
-                                <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
+                                <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} />
                               </p>
                             </>
                           }
@@ -80,7 +80,7 @@ const InvestmentList = (props) => {
                         <Table.Cell collapsing>
                           {props.listOf === 'pending'
                             ? get(data, 'offering.closureSummary.processingDate') ? DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) < 0 ? '' : DataFormatter.getDateDifferenceInHours(get(data, 'offering.closureSummary.processingDate'), true) < 48 ? `${DataFormatter.getDateDifferenceInHours(get(data, 'offering.closureSummary.processingDate'), true)} Hours` : DataFormatter.diffInDaysHoursMin(get(data, 'offering.closureSummary.processingDate')).diffText : 'N/A'
-                            : get(data, 'offering.closureSummary.hardCloseDate') ? <DateTimeFormat format="MM/DD/YYYY" datetime={get(data, 'offering.closureSummary.hardCloseDate')} /> : 'N/A'}
+                            : get(data, 'offering.closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(data, 'offering.closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}
                         </Table.Cell>
                         <Table.Cell collapsing>
                           {props.listOf === 'pending' && (
@@ -94,11 +94,11 @@ const InvestmentList = (props) => {
                               {(!get(data, 'offering.closureSummary.processingDate') || DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate')) > 2)
                                 && <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
                               }
-                              {get(data.offering, 'closureSummary.processingDate') && (DataFormatter.getDateDifferenceInHours(get(data.offering, 'closureSummary.processingDate'), true) <= 0 || (DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) === 2 || DataFormatter.getDateDifferenceInHours(get(data.offering, 'closureSummary.processingDate'), true) <= 48))
+                              {get(data.offering, 'closureSummary.processingDate') && (DataFormatter.getDateDifferenceInHours(get(data.offering, 'closureSummary.processingDate'), true) <= 0 || DataFormatter.getDateDifferenceInHours(get(data.offering, 'closureSummary.processingDate'), true) < 48)
                                 && (
                                   <Button
                                     disabled
-                                    content={get(data.offering, 'closureSummary.processingDate') && (DataFormatter.diffDays(get(data.offering, 'closureSummary.processingDate'), false, true) === 2 || (DataFormatter.getDateDifferenceInHours(get(data.offering, 'closureSummary.processingDate'), true) >= 0 && DataFormatter.getDateDifferenceInHours(get(data.offering, 'closureSummary.processingDate'), true) <= 48))
+                                    content={get(data.offering, 'closureSummary.processingDate') && (DataFormatter.getDateDifferenceInHours(get(data.offering, 'closureSummary.processingDate'), true) >= 0 && DataFormatter.getDateDifferenceInHours(get(data.offering, 'closureSummary.processingDate'), true) < 48)
                                       ? STAGES.LOCK.label : 'Processing'}
                                     color="red"
                                   />

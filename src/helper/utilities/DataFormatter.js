@@ -1,6 +1,8 @@
 import { camelCase, upperFirst, reduce, assign, get } from 'lodash';
 import moment from 'moment';
 import momentZone from 'moment-timezone';
+import { DEFAULT_TIME_ZONE_TO_DISPLAY } from '../../constants/common';
+
 
 class DataFormatter {
   unMaskInput = maskedInput => (
@@ -52,7 +54,8 @@ class DataFormatter {
     timeStamp2, inHours = false, returnNegative = false, isCustomDate = false,
     customDateObj = undefined,
   ) => {
-    const d1 = moment().format('MM/DD/YYYY');
+    // const d1 = moment().format('MM/DD/YYYY');
+    const d1 = momentZone.tz(DEFAULT_TIME_ZONE_TO_DISPLAY).format('MM/DD/YYYY');
     // const d2 = timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').format('MM/DD/YYYY') : null;
     const d2 = isCustomDate && customDateObj && get(customDateObj, 'number') ? timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').add(customDateObj.number, customDateObj.format.toString()).format('MM/DD/YYYY') : null : timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').format('MM/DD/YYYY') : null;
     const diff = d2 ? moment(d2, 'MM/DD/YYYY').diff(moment(d1, 'MM/DD/YYYY'), 'days') : null;
@@ -87,11 +90,20 @@ class DataFormatter {
   }
 
   getDateDifferenceInHours = (timeStamp2, isDayEnd = false) => {
-    const startDate = momentZone.tz('America/Chicago').format('MM/DD/YYYY HH:mm:ss');
+    const startDate = momentZone.tz(DEFAULT_TIME_ZONE_TO_DISPLAY).format('MM/DD/YYYY HH:mm:ss');
     // const startDate = momentZone.tz('Asia/Calcutta').format('MM/DD/YYYY HH:mm:ss');
     const endDate = isDayEnd ? moment(`${timeStamp2} 23:59:59`) : moment(timeStamp2);
     const resultHours = moment.duration(endDate.diff(startDate)).asHours();
     return Math.floor(resultHours);
+  }
+
+  getDateAsPerTimeZone = (dataParam, isISOString = false, isLLFormat = false, showTime = true, isCustomFormat = undefined, timeZone = 'CST') => {
+    // const localTimeZone = timeZone === 'local' ? momentZone.tz.guess(true) : timeZone;
+    const localTimeZone = timeZone === 'CST' ? DEFAULT_TIME_ZONE_TO_DISPLAY : timeZone === 'local' ? momentZone.tz.guess(true) : timeZone;
+    const dataVal = isISOString ? moment(dataParam) : dataParam;
+    const utcCutoff = moment.utc(dataVal, 'MM/DD/YYYY HH:mm:ss');
+    const displayCutoff = utcCutoff.clone().tz(localTimeZone);
+    return isLLFormat ? displayCutoff.format('ll') : isCustomFormat ? displayCutoff.format(isCustomFormat) : showTime ? displayCutoff.format('MM/DD/YYYY HH:mm:ssa') : displayCutoff.format('MM/DD/YYYY');
   }
 
   getDate = (date, iso = true, dayType = null, isUnix = false) => {
@@ -111,8 +123,20 @@ class DataFormatter {
 
   formatedDate = date => moment(new Date(date)).format('MM/DD/YYYY');
 
+  getCurrentCSTDateInFormat = (showTime = false) => (showTime ? momentZone.tz(DEFAULT_TIME_ZONE_TO_DISPLAY).format('MM/DD/YYYY HH:mm:ss') : momentZone.tz(DEFAULT_TIME_ZONE_TO_DISPLAY).format('MM/DD/YYYY'));
+
+  getCurrentCSTMoment = () => momentZone.tz(DEFAULT_TIME_ZONE_TO_DISPLAY);
+
+  getCSTDateMomentObject = (dataParam, isISOString = false) => {
+    const dataVal = isISOString ? moment(dataParam) : dataParam;
+    const utcCutoff = moment.utc(dataVal, 'MM/DD/YYYY HH:mm:ss');
+    const displayCutoff = utcCutoff.clone().tz(DEFAULT_TIME_ZONE_TO_DISPLAY);
+    return displayCutoff;
+  }
+
   mapDatesToType = (data, keys, dateType = 'iso') => data.map((d) => {
-    const convertedDates = keys.map(k => ({ [k]: this.convertDateType(d[k], dateType) }));
+    // const convertedDates = keys.map(k => ({ [k]: this.convertDateType(d[k], dateType) }));
+    const convertedDates = keys.map(k => ({ [k]: this.convertDateType(this.getDateAsPerTimeZone(d[k], true, false, false), dateType) }));
     const filterInvalidDates = convertedDates
       .filter(obj => moment(Object.values(obj)[0]).isValid());
     const convDatesObj = reduce(filterInvalidDates, (old, current) => assign(old, current), {});

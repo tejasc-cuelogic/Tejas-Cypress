@@ -3,7 +3,6 @@ import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Button, Comment, Form, Segment, Header, Label, Divider } from 'semantic-ui-react';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
-import moment from 'moment';
 import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
 import { FormTextarea } from '../../../../../theme/form';
@@ -184,7 +183,7 @@ class Comments extends Component {
                             {(c.createdUserInfo && c.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(c, 'createdUserInfo.info.firstName')}
                             {(c.createdUserInfo && c.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                           </Comment.Author>
-                          <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date')).format('ll')}</span></Comment.Metadata>
+                          <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date'), true, true)}</span></Comment.Metadata>
                           {isUserLoggedIn && !disablePostComment && !showOnlyOne
                           && (
 <Comment.Actions>
@@ -252,7 +251,7 @@ class Comments extends Component {
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(tc, 'createdUserInfo.info.firstName')}
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                                 </Comment.Author>
-                                <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date')).format('ll')}</span></Comment.Metadata>
+                                <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date'), true, true)}</span></Comment.Metadata>
                                 {isUserLoggedIn && !disablePostComment && !showOnlyOne
                                 && (
 <Comment.Actions>

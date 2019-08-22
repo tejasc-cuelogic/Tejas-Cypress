@@ -10,6 +10,7 @@ import ConfirmModel from './ConfirmModel';
 import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../../../../services/constants/accreditation';
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../services/constants/investmentLimit';
+import { DataFormatter } from '../../../../../helper';
 
 @inject('accreditationStore', 'commonStore', 'userStore')
 @withRouter
@@ -89,10 +90,10 @@ export default class AllAccreditationRequests extends Component {
                 {!get(requestState, 'search.status') || requestState.search.status === 'REQUESTED'
                   ? <Table.HeaderCell textAlign="center" />
                   : (
-<Table.HeaderCell
-  onClick={this.handleSort('reviewed.date')}
-  sorted={sortOrder.column === 'reviewed.date' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
->
+                  <Table.HeaderCell
+                    onClick={this.handleSort('reviewed.date')}
+                    sorted={sortOrder.column === 'reviewed.date' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                  >
                     Status
                   </Table.HeaderCell>
                   )
@@ -130,7 +131,7 @@ export default class AllAccreditationRequests extends Component {
                       <Link to={`/app/users/${accreditation.userId}/profile-data`}><p><b>{`${accreditation.firstName} ${accreditation.lastName}`}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
-                      {accreditation.requestDate ? moment.unix(accreditation.requestDate).format('MM/DD/YYYY') : <p className="note">N/A</p>}
+                      {accreditation.requestDate ? DataFormatter.getDateAsPerTimeZone(moment.unix(accreditation.requestDate), false, false, false) : <p className="note">N/A</p>}
                     </Table.Cell>
                     <Table.Cell>
                       {accreditation.accountType && accreditation.accountType.includes('ENTITY') && <Icon size="large" className="ns-entity-line" color="green" />}
@@ -161,7 +162,7 @@ export default class AllAccreditationRequests extends Component {
                     </Table.Cell>
                     {isManager
                       && (
-<Table.Cell>
+                      <Table.Cell>
                         <p>{accreditation.assetsUpload && accreditation.assetsUpload.length
                           ? accreditation.assetsUpload[0].fileInfo
                           && accreditation.assetsUpload[0].fileInfo[0].fileHandle
@@ -198,15 +199,15 @@ export default class AllAccreditationRequests extends Component {
                         </>
                       )
                       : (
-<Table.Cell>
-                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b>{get(accreditation, 'reviewed.date') ? ` on ${moment.unix(get(accreditation, 'reviewed.date')).format('MM/DD/YYYY')}` : ''}</p>
+                      <Table.Cell>
+                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b>{get(accreditation, 'reviewed.date') ? ` on ${DataFormatter.getDateAsPerTimeZone(moment.unix(get(accreditation, 'reviewed.date')), false, false, false)}` : ''}</p>
                       </Table.Cell>
                       )
                     }
                     {accreditation.accreditationStatus === 'CONFIRMED'
                       && (
                       <>
-                        <Table.Cell>{get(accreditation, 'expiration') ? moment.unix(get(accreditation, 'expiration')).format('MM/DD/YYYY') : '-'}</Table.Cell>
+                        <Table.Cell>{get(accreditation, 'expiration') ? DataFormatter.getDateAsPerTimeZone(moment.unix(get(accreditation, 'expiration')), false, false, false, false) : '-'}</Table.Cell>
                         <Table.Cell>{get(accreditation, 'promotionCredits')}</Table.Cell>
                       </>
                       )
