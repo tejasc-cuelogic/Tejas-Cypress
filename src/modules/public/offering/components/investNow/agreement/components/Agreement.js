@@ -61,7 +61,7 @@ export default class Agreement extends React.Component {
       const { offeringId } = this.props.match.params;
       this.props.history.push(`${this.props.refLink}/${offeringId}`);
     } else {
-      this.props.history.push(`${this.props.refLink}/overview`);
+      this.props.history.push(`${this.props.refLink}`);
     }
   }
 
