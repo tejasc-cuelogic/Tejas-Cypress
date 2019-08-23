@@ -13,7 +13,8 @@ const key = shortid.generate();
 @inject('businessStore', 'uiStore')
 @observer
 export default class EdgarForm extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { params } = this.props.match;
     if (params.filingId && params.businessId) {
       businessActions.fetchEdgarDetails(

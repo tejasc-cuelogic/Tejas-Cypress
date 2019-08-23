@@ -18,7 +18,8 @@ export default class AllRequests extends Component {
     routingNums: {},
   }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.bankAccountStore.apiCall) {
       this.props.bankAccountStore.initRequest();
     }
