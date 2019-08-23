@@ -97,10 +97,24 @@ class DataFormatter {
     return Math.floor(resultHours);
   }
 
+  getDateDifference = (startDate, endDate) => {
+    const dateStart = moment(startDate);
+    const dateEnd = moment(endDate);
+    const diffrerence = dateEnd.diff(dateStart);
+    const duration = moment.duration(diffrerence);
+    const daysToShow = duration.days() > 0 ? `${duration.days()} Day` : null;
+    const hoursToShow = duration.hours() > 0 ? `${duration.hours()} Hours` : null;
+    const minutesToShow = duration.minutes() > 0 ? `${duration.minutes()} Minutes` : null;
+    const secondsToShow = duration.seconds() > 0 ? `${duration.seconds()} Seconds` : null;
+    const diff = dateEnd ? moment(dateEnd, 'MM/DD/YYYY HH:mm:ss').diff(moment(dateStart, 'MM/DD/YYYY HH:mm:ss'), 'Days') : null;
+    const result = hoursToShow > 24 ? `${diff} Day` : (daysToShow === null && hoursToShow === null && minutesToShow === null && secondsToShow === null) ? '' : `${daysToShow || ''} ${hoursToShow || ''} ${minutesToShow || ''} ${secondsToShow || ''}`;
+    return result.trim();
+  }
+
   getDateAsPerTimeZone = (dataParam, isISOString = false, isLLFormat = false, showTime = true, isCustomFormat = undefined, timeZone = 'CST') => {
     // const localTimeZone = timeZone === 'local' ? momentZone.tz.guess(true) : timeZone;
     const localTimeZone = timeZone === 'CST' ? DEFAULT_TIME_ZONE_TO_DISPLAY : timeZone === 'local' ? momentZone.tz.guess(true) : timeZone;
-    const dataVal = isISOString ? moment(dataParam) : dataParam;
+    const dataVal = isISOString ? dataParam ? moment(dataParam) : moment() : dataParam;
     const utcCutoff = moment.utc(dataVal, 'MM/DD/YYYY HH:mm:ss');
     const displayCutoff = utcCutoff.clone().tz(localTimeZone);
     return isLLFormat ? displayCutoff.format('ll') : isCustomFormat ? displayCutoff.format(isCustomFormat) : showTime ? displayCutoff.format('MM/DD/YYYY HH:mm:ssa') : displayCutoff.format('MM/DD/YYYY');

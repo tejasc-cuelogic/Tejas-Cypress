@@ -9,7 +9,6 @@ export const allUpdates = gql`
       title
       isVisible
       offeringId
-      isEarlyBirdOnly
       updated {
         date
       }

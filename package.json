@@ -25,6 +25,7 @@
     "@babel/core": "7.4.3",
     "@bugsnag/js": "^5.2.0",
     "@bugsnag/plugin-react": "^5.2.0",
+    "@ionic/react": "^4.8.0-rc.1",
     "@svgr/webpack": "4.1.0",
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",

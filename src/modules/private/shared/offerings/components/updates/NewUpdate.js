@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button, Checkbox } from 'semantic-ui-react';
 import { get } from 'lodash';
-import moment from 'moment';
+// import moment from 'moment';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import MaskedInput from '../../../../../../theme/form/src/MaskedInput';
@@ -12,8 +12,9 @@ import { InlineLoader, Image64, UserAvatar } from '../../../../../../theme/share
 import Actions from './Actions';
 import Status from './Status';
 import Helper from '../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../helper';
 
-@inject('updateStore', 'userStore', 'offeringsStore', 'uiStore', 'userDetailsStore')
+@inject('updateStore', 'userStore', 'offeringsStore', 'uiStore')
 @withRouter
 @observer
 export default class NewUpdate extends Component {
@@ -102,8 +103,6 @@ export default class NewUpdate extends Component {
     const { inProgress, loaderMessage } = this.props.uiStore;
     const { id } = this.props.match.params;
     const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
-    const { userDetails } = this.props.userDetailsStore;
-    const userInfo = !isNew || isManager ? { firstName: userDetails.info.firstName, lastName: userDetails.info.lastName, avatarUrl: get(userDetails, 'info.avatar.url') || '' } : '';
     if (loadingCurrentUpdate || this.state.loading) {
       return <InlineLoader />;
     }
@@ -172,13 +171,13 @@ export default class NewUpdate extends Component {
                             <Header>
                               <div className="ui image avatar-image">
                                 {companyAvatarUrl && companyAvatarUrl.length
-                                  ? <Image64 srcUrl={companyAvatarUrl} circular />
-                                  : <UserAvatar UserInfo={userInfo} />
+                                  ? <Image64 srcUrl={companyAvatarUrl} circular className="large" />
+                                  : <UserAvatar UserInfo={{ name: get(offer, 'keyTerms.shorthandBusinessName'), avatarUrl: '' }} className="large" />
                                 }
                               </div>
                               <Header.Content className="grey-header">
                                 {get(offer, 'keyTerms.shorthandBusinessName')}
-                                <Header.Subheader>{isNew ? moment().format('ll') : moment((get(currentUpdate, 'data.offeringUpdatesById.updated.date') || get(currentUpdate, 'data.offeringUpdatesById.created.date') || '')).format('ll')}</Header.Subheader>
+                                <Header.Subheader>{isNew ? DataFormatter.getCurrentCSTMoment().format('ll') : DataFormatter.getDateAsPerTimeZone((get(currentUpdate, 'data.offeringUpdatesById.updated.date') || get(currentUpdate, 'data.offeringUpdatesById.created.date') || ''), true, true)}</Header.Subheader>
                                 {/* <Header.Subheader>{moment().format('ll')}</Header.Subheader> */}
                               </Header.Content>
                             </Header>
@@ -209,19 +208,31 @@ export default class NewUpdate extends Component {
                           value={PBUILDER_FRM.fields.scope.value}
                         />
                         <Form>
-                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && get(offer, 'rewardsTiers[0]')
+                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC'
                             ? (
                             <Form.Field>
                               <Checkbox
-                                name="allTiers"
+                                name="allInvestor"
                                 readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
                                 onChange={(e, result) => UpdateChange(e, result)}
-                                checked={PBUILDER_FRM.fields.isAllTiers.value}
-                                label="Select all Investors"
+                                checked={PBUILDER_FRM.fields.allInvestor.value}
+                                label="All Investors"
                               />
                             </Form.Field>
                             ) : null
                           }
+                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.earlyBird && offer.earlyBird.quantity > 0 ? (
+                            <Form.Field>
+                              <Checkbox
+                                name="tiers"
+                                readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                value={-1}
+                                onChange={(e, result) => UpdateChange(e, result)}
+                                checked={PBUILDER_FRM.fields.tiers.values.includes(-1)}
+                                label="Early Bird"
+                              />
+                            </Form.Field>
+                          ) : ''}
                           {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
                             <Form.Field key={rewardTier}>
                               <Checkbox
@@ -303,7 +314,6 @@ export default class NewUpdate extends Component {
                             <List.Item>When do you anticipate opening? (e.g. Fall 2019)</List.Item>
                             <List.Item>What is the status on bonus rewards fulfillment?</List.Item>
                           </List>
-                          <Link to="/"><b>Helpful Tips on Sending Updates</b></Link>
                         </Card.Content>
                       </Card>
                     </>
