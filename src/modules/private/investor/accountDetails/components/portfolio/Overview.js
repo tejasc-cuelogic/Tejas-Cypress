@@ -246,7 +246,10 @@ class Overview extends Component {
                         <Table.Cell>Investor Agreement{agreementIds.length > 1 && 's'} </Table.Cell>
                         <Table.Cell>
                           {agreementIds.map(agreementId => (
-                            <Button loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text"><Icon className="ns-file" /> {agreementId} </Button>
+                            <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text"><Icon className="ns-file" />
+                            <Icon className="ns-pdf-file" color="green" />
+                            {' '}
+                            {agreementId} </Button>
                           ))}
                         </Table.Cell>
                       </Table.Row>
