@@ -192,7 +192,6 @@ export class UpdateStore {
       data.status = status;
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
-      data.isEarlyBirdOnly = false;
       data.updatedDate = moment(`${data.updatedDate} ${currentTime}`).utc();
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
       if (id !== 'new' && status === 'PUBLISHED') {
