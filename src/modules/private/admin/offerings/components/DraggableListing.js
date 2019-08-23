@@ -100,7 +100,8 @@ const SortableList = SortableContainer(({
 export default class DraggableListing extends Component {
   state = { isPublic: false };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.offeringCreationStore.setFieldValue('isListingPage', true);
     this.props.offeringsStore.resetInitLoad();
     this.props.offeringCreationStore.resetInitLoad();

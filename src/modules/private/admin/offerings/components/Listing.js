@@ -19,9 +19,9 @@ const actions = {
 @withRouter
 @observer
 export default class Listing extends Component {
-  state = { isPublic: false, loadingOfferId: '' };
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = { isPublic: false, loadingOfferId: '' };
     this.props.offeringCreationStore.setFieldValue('isListingPage', true);
     this.props.offeringsStore.resetInitLoad();
     this.props.offeringCreationStore.resetInitLoad();

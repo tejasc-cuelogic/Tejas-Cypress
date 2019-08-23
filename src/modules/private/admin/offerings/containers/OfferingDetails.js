@@ -16,7 +16,8 @@ import Helper from '../../../../../helper/utility';
 @inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore')
 @observer
 export default class OfferingDetails extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.offeringCreationStore.setFieldValue('isListingPage', false);
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/overview`);
