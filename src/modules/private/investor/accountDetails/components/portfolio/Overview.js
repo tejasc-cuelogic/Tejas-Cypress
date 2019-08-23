@@ -17,7 +17,8 @@ class Overview extends Component {
     embedUrl: '',
   };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { isAdmin } = this.props;
     const accountDetails = this.props.userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     // const investor = this.props.userDetailsStore.getDetailsOfUser;
