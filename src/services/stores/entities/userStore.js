@@ -170,7 +170,7 @@ export class UserStore {
 
     if (this.confirmDelete) {
       data.header = 'Your account has been deleted';
-      data.message = (<p className="mb-20">Thank you for being a part of the NextSeed community. If you change your mind, we'd love to have you back! <br /> Please let us know if we can be of any help by contacting <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
+      data.message = (<p className="mb-20">Thank you for being a part of the NextSeed community. If you change your mind, we'd love to have you back! <br /> Please let us know if we can be of any help by contacting <br /> <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
       data.isValidForDelete = false;
       data.isCancelDelete = false;
       return data;
