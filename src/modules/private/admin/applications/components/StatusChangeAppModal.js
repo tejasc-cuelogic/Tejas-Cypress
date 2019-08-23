@@ -12,7 +12,8 @@ import Helper from '../../../../../helper/utility';
 @withRouter
 @observer
 export default class StatusChangeAppModal extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.businessAppReviewStore.resetCommentFrm();
     if (this.props.match.params.action === 'PROMOTE' && this.props.match.params.id !== 'in-progress') {
       this.props.businessAppReviewStore.resetPasswordFrm();
