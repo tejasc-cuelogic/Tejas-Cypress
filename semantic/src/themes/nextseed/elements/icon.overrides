@@ -2045,6 +2045,9 @@ i.icon[class*="ns-"]{
 .ns-minus:before{
     content:@ns-minus; 
 }
+.ns-minus-circle:before{
+    content:@ns-minus-circle; 
+}
 .ns-minus-square:before{
     content:@ns-minus-square;
 }
