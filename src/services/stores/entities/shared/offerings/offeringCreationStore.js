@@ -870,10 +870,15 @@ export class OfferingCreationStore {
   @action
   setFormData = (form, ref, keepAtLeastOne) => {
     this.resetForm(form);
-    const { offer } = offeringsStore;
+    let { offer } = offeringsStore;
     if (!offer) {
       return false;
     }
+    offer = Helper.replaceKeysDeep(toJS(offer), { aliasId: 'id' });
+    offer = {
+      ...offer,
+      closureSummary: Helper.replaceKeysDeep(toJS(get(offer, 'closureSummary')), { aliasAccreditedOnly: 'accreditedOnly' }),
+    };
     if (form === 'MEDIA_FRM') {
       this.MEDIA_FRM = Validator.prepareFormObject(MEDIA);
     }
@@ -1082,7 +1087,7 @@ export class OfferingCreationStore {
       .then((result) => {
         let upatedOffering = null;
         if (get(result, 'data.updateOffering')) {
-          upatedOffering = Helper.replaceKeysDeep(toJS(get(result, 'data.updateOffering')), { aliasId: 'id' });
+          upatedOffering = Helper.replaceKeysDeep(toJS(get(result, 'data.updateOffering')), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
           offeringsStore.updateOfferingList(id, upatedOffering, keyName);
         }
         this.removeUploadedFiles(fromS3);
@@ -1131,7 +1136,7 @@ export class OfferingCreationStore {
     msgType = 'success', isLaunchContingency = false,
   ) => new Promise((res, rej) => {
     let { getOfferingById } = offeringsStore.offerData.data;
-    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id' });
+    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
     let payloadData = {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
@@ -1905,7 +1910,18 @@ export class OfferingCreationStore {
   getClosureObject = () => {
     let obj = Validator.evaluateFormData(this.OFFERING_CLOSE_1.fields);
     let { getOfferingById } = offeringsStore.offerData.data;
-    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id' });
+
+    const dataRoomDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
+    const finalDataRoomDocs = [];
+    dataRoomDocs.map((data, index) => {
+      if (data.name !== '' || data.upload.fileId !== '') {
+        finalDataRoomDocs.push(data);
+      }
+      return finalDataRoomDocs;
+    });
+    obj.closureSummary.keyTerms.supplementalAgreements = { documents: finalDataRoomDocs };
+    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
+    obj = Helper.replaceKeysDeep(obj, { accreditedOnly: 'isVisible' });
     obj.closureSummary = mergeWith(
       toJS(getOfferingById.closureSummary),
       obj.closureSummary,

@@ -74,6 +74,11 @@
             }
         }
     }
+    &.offering-close-header{
+        position: absolute;
+        right: 0;
+        top: -40px;
+    }
 }
 
 .notification-panel h4.ui.header{
