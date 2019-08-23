@@ -63,7 +63,8 @@ class Overview extends Component {
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     const { agreementIds, loading } = this.props.transactionStore;
-    const aggrementDocs = get(campaign, 'closureSummary.keyTerms.supplementalAgreements.documents');
+    let aggrementDocs = get(campaign, 'closureSummary.keyTerms.supplementalAgreements.documents') || [];
+    aggrementDocs = aggrementDocs.length ? aggrementDocs.filter(d => d.isVisible) : [];
     if (loading) {
       return (
         <InlineLoader />
@@ -249,9 +250,9 @@ class Overview extends Component {
                           ))}
                         </Table.Cell>
                       </Table.Row>
-                      ) : ''
+                      ) : null
                     }
-                    {aggrementDocs && aggrementDocs.length && (
+                    {aggrementDocs && aggrementDocs.length ? (
                       <Table.Row>
                         <Table.Cell>Supplemental Agreements</Table.Cell>
                         <Table.Cell>
@@ -260,7 +261,7 @@ class Overview extends Component {
                           ))}
                         </Table.Cell>
                       </Table.Row>
-                    )}
+                    ) : null}
                     {edgarLink
                     && (
                     <Table.Row>

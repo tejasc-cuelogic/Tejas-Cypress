@@ -93,7 +93,7 @@ export default class DataRoom extends Component {
     this.props.offeringCreationStore.addMore(formName, 'documents');
   }
   handleLockUnlock = (index) => {
-    this.props.offeringCreationStore.setAccreditedOnlyField(index, this.props.offeringClose);
+    this.props.offeringCreationStore.setAccreditedOnlyField(index);
     this.forceUpdate();
   }
   handleFormSubmit = (isApproved = null) => {
