@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import graphql from 'mobx-apollo';
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
@@ -43,7 +42,8 @@ export class IdentityStore {
 
   @observable signUpLoading = false;
 
-  cipErrorMessage = null;
+  @observable isAdmin = false;
+
 
   @action
   setFieldValue = (field, value) => {
@@ -169,7 +169,8 @@ export class IdentityStore {
   get formattedUserInfoForCip() {
     const { fields } = this.ID_VERIFICATION_FRM;
     const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });
-    const { phone } = userDetailsStore.userDetails;
+    const roles = get(userStore.currentUser, 'roles');
+    const { phone, legalDetails } = roles.includes('investor') ? userDetailsStore.userDetails : userDetailsStore.detailsOfUser.data.user;
     const userInfo = {
       legalName: {
         salutation: fields.title.value,
@@ -177,7 +178,7 @@ export class IdentityStore {
         lastLegalName: fields.lastLegalName.value,
       },
       dateOfBirth: fields.dateOfBirth.value,
-      ssn: fields.ssn.value,
+      ssn: fields.ssn.value || legalDetails.ssn,
       legalAddress: {
         street: fields.residentalStreet.value,
         city: fields.city.value,
@@ -189,15 +190,15 @@ export class IdentityStore {
     const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
     const verificationDocs = {
       idProof: {
-        fileId: photoId.fileId,
-        fileName: photoId.value,
+        fileId: photoId.fileId || get(legalDetails, 'verificationDocs.idProof.fileId'),
+        fileName: photoId.value || get(legalDetails, 'verificationDocs.idProof.fileName'),
       },
       addressProof: {
-        fileId: proofOfResidence.fileId,
-        fileName: proofOfResidence.value,
+        fileId: proofOfResidence.fileId || get(legalDetails, 'verificationDocs.addressProof.fileId'),
+        fileName: proofOfResidence.value || get(legalDetails, 'verificationDocs.addressProof.fileName'),
       },
     };
-    if (this.userCipStatus === 'MANUAL_VERIFICATION_PENDING') {
+    if (photoId.fileId || get(legalDetails, 'verificationDocs.idProof.fileId')) {
       userInfo.verificationDocs = verificationDocs;
     }
     const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
@@ -219,7 +220,8 @@ export class IdentityStore {
     const { fields, response } = this.ID_VERIFICATION_FRM;
     const legalCip = {};
     // eslint-disable-next-line no-unused-vars
-    const { phone, cip } = userDetailsStore.userDetails;
+    const roles = get(userStore.currentUser, 'roles');
+    const { phone, cip, legalDetails } = roles.includes('investor') ? userDetailsStore.userDetails : userDetailsStore.detailsOfUser.data.user;
     if (response.key === 'id.error') {
       legalCip.expiration = Helper.getDaysfromNow(21);
       legalCip.requestId = 'ERROR_NO_REQUEST_ID';
@@ -263,7 +265,7 @@ export class IdentityStore {
       },
       status: this.userCipStatus !== '' ? this.userCipStatus : this.cipStatus,
       dateOfBirth: fields.dateOfBirth.value,
-      ssn: fields.ssn.value,
+      ssn: fields.ssn.value || legalDetails.ssn,
       legalAddress: {
         street: fields.residentalStreet.value,
         city: fields.city.value,
@@ -275,15 +277,15 @@ export class IdentityStore {
     const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
     const verificationDocs = {
       idProof: {
-        fileId: photoId.fileId,
-        fileName: photoId.value,
+        fileId: photoId.fileId || get(legalDetails, 'verificationDocs.idProof.fileId'),
+        fileName: photoId.value || get(legalDetails, 'verificationDocs.idProof.fileName'),
       },
       addressProof: {
-        fileId: proofOfResidence.fileId,
-        fileName: proofOfResidence.value,
+        fileId: proofOfResidence.fileId || get(legalDetails, 'verificationDocs.addressProof.fileId'),
+        fileName: proofOfResidence.value || get(legalDetails, 'verificationDocs.addressProof.fileName'),
       },
     };
-    if (this.userCipStatus === 'MANUAL_VERIFICATION_PENDING') {
+    if (photoId.fileId || get(legalDetails, 'verificationDocs.idProof.fileId')) {
       userInfo.verificationDocs = verificationDocs;
     }
     const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
@@ -306,24 +308,30 @@ export class IdentityStore {
   verifyUserIdentity = () => {
     this.ID_VERIFICATION_FRM.response = {};
     this.setCipStatus('');
+    let userId = userStore.currentUser.sub;
+    const roles = get(userStore.currentUser, 'roles');
+    if (roles.includes('admin')) {
+      this.setCipDetails();
+      userId = userDetailsStore.selectedUserId;
+    }
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: verifyCIPUser,
           variables: {
-            userId: userStore.currentUser.sub,
+            userId,
             user: this.formattedUserInfoForCip.userInfo,
           },
         })
         .then((data) => {
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
-          // TODO optimize signUpLoading call
-          if (data.data.verifyCIPIdentity.passId
-            || data.data.verifyCIPIdentity.softFailId
-            || data.data.verifyCIPIdentity.hardFailId) {
+          const requestId = data.data.verifyCIPIdentity.passId
+          || data.data.verifyCIPIdentity.softFailId
+          || data.data.verifyCIPIdentity.hardFailId;
+          if (requestId) {
             this.updateUserInfo().then(() => {
               this.setFieldValue('signUpLoading', false);
-              resolve();
+              resolve(requestId);
             }).catch((err) => {
               console.log('error update user', err);
               this.setFieldValue('signUpLoading', false);
@@ -342,7 +350,7 @@ export class IdentityStore {
           } else {
             // uiStore.setErrors(JSON.stringify('Something went wrong'));
             this.setCipStatus('OFFLINE');
-            this.cipErrorMessage = JSON.stringify(err);
+            window.sessionStorage.setItem('cipErrorMessage', JSON.stringify(err));
             this.updateUserInfo().then(() => {
               this.setFieldValue('signUpLoading', false);
               resolve();
@@ -481,8 +489,7 @@ export class IdentityStore {
   }
 
   @computed get isUserCipOffline() {
-    return this.userCipStatus === 'OFFLINE'
-    || get(userDetailsStore, 'userDetails.cip.requestId') ? get(userDetailsStore, 'userDetails.cip.requestId') === '-1' : false;
+    return this.userCipStatus === 'OFFLINE';
   }
 
   @action
@@ -609,19 +616,26 @@ export class IdentityStore {
   }
 
   updateUserInfo = () => {
-    this.setCipDetails();
+    const roles = get(userStore.currentUser, 'roles');
+    this.setCipDetails(roles.includes('admin'));
+    const payLoad = {
+      user: this.formattedUserInfo.userInfo,
+      phoneDetails: this.formattedUserInfo.phoneDetails,
+      cip: this.formattedUserInfo.legalCip,
+    };
+    if (roles.includes('admin')) {
+      payLoad.userId = userDetailsStore.selectedUserId;
+    }
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: updateUserCIPInfo,
-          variables: {
-            user: this.formattedUserInfo.userInfo,
-            phoneDetails: this.formattedUserInfo.phoneDetails,
-            cip: this.formattedUserInfo.legalCip,
-          },
+          variables: payLoad,
         })
         .then((data) => {
-          userDetailsStore.getUser(userStore.currentUser.sub).then((d) => {
+          const getUserQuery = roles.includes('investor') ? 'getUser' : 'getUserProfileDetails';
+          const userId = roles.includes('investor') ? userStore.currentUser.sub : userDetailsStore.selectedUserId;
+          userDetailsStore[getUserQuery](userId).then((d) => {
             if (d) {
               this.setCipStatusWithUserDetails();
               resolve(data);
@@ -867,7 +881,7 @@ export class IdentityStore {
   @action
   resetStoreData = () => {
     this.resetFormData('ID_VERIFICATION_FRM');
-    this.resetFormData('ID_VERIFICATION_DOCS_FRM');
+    this.ID_VERIFICATION_DOCS_FRM = FormValidator.prepareFormObject(IDENTITY_DOCUMENTS);
     this.resetFormData('ID_PHONE_VERIFICATION');
     this.resetFormData('ID_VERIFICATION_QUESTIONS');
     this.confirmMigratedUserPhoneNumber = false;
@@ -876,8 +890,8 @@ export class IdentityStore {
   }
 
   @action
-  setCipDetails = () => {
-    const { legalDetails, phone } = userDetailsStore.userDetails;
+  setCipDetails = (isAdmin = false) => {
+    const { legalDetails, phone } = isAdmin ? userDetailsStore.detailsOfUser.data.user : userDetailsStore.userDetails;
     const { fields } = this.ID_VERIFICATION_FRM;
     if (legalDetails && legalDetails.legalName) {
       fields.title.value = legalDetails.legalName.salutation;
@@ -897,7 +911,7 @@ export class IdentityStore {
       fields.dateOfBirth.value = legalDetails.dateOfBirth;
     }
     if (legalDetails && legalDetails.ssn) {
-      if (!legalDetails.ssn.includes('X') || window.sessionStorage.getItem('individualAccountCipExp')) {
+      if (!legalDetails.ssn.includes('X') || window.sessionStorage.getItem('AccountCipExp')) {
         fields.ssn.value = legalDetails.ssn;
       }
     }

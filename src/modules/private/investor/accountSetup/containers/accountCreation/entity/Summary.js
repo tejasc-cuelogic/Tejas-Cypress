@@ -32,8 +32,10 @@ export default class Summary extends Component {
   handleCreateAccount = () => {
     this.props.identityStore.setCipStatusWithUserDetails();
     this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
-    if (this.props.identityStore.isUserCipOffline) {
+    const { userDetails, isCipExpired } = this.props.userDetailsStore;
+    if (isCipExpired || this.props.identityStore.isUserCipOffline || userDetails.cip.requestId === '-1') {
       this.props.handleUserIdentity('entity', this.handleSubmitAccount);
+      this.props.userDetailsStore.setAccountForWhichCipExpired('entity');
     } else {
       this.props.handleLegalDocsBeforeSubmit('entity', this.handleSubmitAccount);
     }
@@ -44,8 +46,9 @@ export default class Summary extends Component {
     this.props.entityAccountStore.submitAccount().then(() => {
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-      // this.props.history.push('app/summary');
+      const url = this.props.entityAccountStore.showProcessingModal ? `${this.props.match.url}/processing` : '/app/summary';
+      this.props.history.push(url);
+      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
     });
   }
 

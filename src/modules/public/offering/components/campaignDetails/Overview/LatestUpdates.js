@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Button, Icon, Item, Header, Label, Divider } from 'semantic-ui-react';
-import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { Image64, UserAvatar } from '../../../../../../theme/shared';
+import { DataFormatter } from '../../../../../../helper';
+
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -34,7 +35,7 @@ class LatestUpdates extends Component {
                 <div className="ui image avatar-image">
                   {companyAvatarUrl && companyAvatarUrl.length
                     ? <Image64 srcUrl={companyAvatarUrl} circular />
-                    : <UserAvatar UserInfo={{}} />
+                    : <UserAvatar UserInfo={{ name: bussinessName || '', avatarUrl: '' }} />
                 }
                 </div>
                 {/* {companyAvatarUrl && companyAvatarUrl.length ?
@@ -47,7 +48,7 @@ class LatestUpdates extends Component {
                     <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
                   </Item.Header>
                   {update
-                    && <Item.Meta>{moment(update.updated.date).format('ll')}</Item.Meta>
+                    && <Item.Meta>{DataFormatter.getDateAsPerTimeZone(update.updated.date, true, true, false)}</Item.Meta>
                   }
                 </div>
               </div>

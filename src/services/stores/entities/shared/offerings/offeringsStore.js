@@ -70,8 +70,9 @@ export class OfferingsStore {
           this.setDb(res.getOfferings, stage);
         }
       },
-      onError: () => {
+      onError: (err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
+        console.log(err);
       },
     });
   }

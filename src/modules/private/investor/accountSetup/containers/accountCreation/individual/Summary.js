@@ -22,6 +22,7 @@ export default class Summary extends React.Component {
       getLegalDocsFileIds();
     }
     this.props.bankAccountStore.fetchRoutingNumber();
+    this.props.uiStore.clearErrors();
   }
 
   componentDidUpdate() {
@@ -31,23 +32,13 @@ export default class Summary extends React.Component {
   }
 
   handleSubmitAccount = () => {
-    const {
-      partialInvestNowSessionURL,
-      setPartialInvestmenSession,
-    } = this.props.userDetailsStore;
     this.props.uiStore.setcreateAccountMessage();
     this.props.individualAccountStore.submitAccount().then(() => {
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-      if (partialInvestNowSessionURL) {
-        this.props.history.push(partialInvestNowSessionURL);
-        setPartialInvestmenSession();
-      } else if (!this.props.individualAccountStore.showProcessingModal) {
-        this.props.history.push('/app/summary');
-        window.sessionStorage.removeItem('individualAccountCipExp');
-        this.props.uiStore.resetcreateAccountMessage();
-      }
+      const confirmModal = this.props.individualAccountStore.showProcessingModal ? 'processing' : 'success';
+      this.props.history.push(`${this.props.match.url}/${confirmModal}`);
     }).catch((err) => {
       if (Helper.matchRegexWithString(/\brequired uploads(?![-])\b/, err.message)) {
         this.props.handleLegalDocsBeforeSubmit('individual', this.handleSubmitAccount);

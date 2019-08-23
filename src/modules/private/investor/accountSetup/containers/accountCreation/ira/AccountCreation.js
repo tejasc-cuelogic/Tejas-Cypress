@@ -8,7 +8,6 @@ import Identity from './Identity';
 import Summary from './Summary';
 import { validationActions } from '../../../../../../../services/actions';
 import { Plaid } from '../../../../../shared/bankAccount';
-import GsModal from '../../../components/GsProcessingModal';
 
 @inject('uiStore', 'accountStore', 'iraAccountStore', 'userDetailsStore', 'userStore', 'bankAccountStore')
 @observer
@@ -48,18 +47,6 @@ export default class AccountCreation extends React.Component {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
 
-  closeProcessingModal = () => {
-    const { partialInvestNowSessionURL, setPartialInvestmenSession } = this.props.userDetailsStore;
-    this.props.iraAccountStore.setFieldValue('showProcessingModal', false);
-    if (partialInvestNowSessionURL) {
-      this.props.history.push(partialInvestNowSessionURL);
-      setPartialInvestmenSession();
-    } else {
-      this.props.history.push('/app/summary');
-      this.props.uiStore.resetcreateAccountMessage();
-    }
-  }
-
   render() {
     let steps = [];
     const {
@@ -70,7 +57,7 @@ export default class AccountCreation extends React.Component {
       createAccountMessage,
     } = this.props.uiStore;
     const {
-      FIN_INFO_FRM, showProcessingModal,
+      FIN_INFO_FRM,
       ACC_TYPES_FRM,
       FUNDING_FRM,
       IDENTITY_FRM,
@@ -212,9 +199,6 @@ export default class AccountCreation extends React.Component {
           bankSummary: false,
         },
       ];
-    }
-    if (showProcessingModal) {
-      return <GsModal open={showProcessingModal} closeModal={this.closeProcessingModal} />;
     }
     return (
       <div className="step-progress">
