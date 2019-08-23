@@ -43,7 +43,7 @@ export class Utility {
     regex => (window.location.href.match(new RegExp(regex)) !== null),
   )
 
-  matchRegexWithString = (regex, str) => str.match(new RegExp(regex)) !== null
+  matchRegexWithString = (regex, str) => str.match(new RegExp(regex, 'i')) !== null
 
   guid = () => {
     function s4() {
