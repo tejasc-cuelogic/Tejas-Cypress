@@ -43,7 +43,7 @@ export class UserDetailsStore {
 
   @observable deleting = 0;
 
-  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING', 'OFFLINE'];
 
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
 
@@ -297,15 +297,23 @@ export class UserDetailsStore {
   }
 
   @action
-  getUserProfileDetails = (userId) => {
-    this.setFieldValue('selectedUserId', userId);
+  getUserProfileDetails = userId => new Promise((resolve, rej) => {
     this.detailsOfUser = graphql({
       client,
       query: selectedUserDetailsQuery,
       variables: { userId },
       fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data) {
+          this.setFieldValue('selectedUserId', userId);
+          resolve(data);
+        }
+      },
+      onError: () => {
+        rej();
+      },
     });
-  }
+  })
 
   getUserStorageDetails = (userId) => {
     uiStore.setProgress('userBoxAccount');
@@ -681,7 +689,7 @@ export class UserDetailsStore {
 
   @action
   setAccountForWhichCipExpired = (accountName) => {
-    window.sessionStorage.setItem('individualAccountCipExp', accountName);
+    window.sessionStorage.setItem('AccountCipExp', accountName);
     this.accountForWhichCipExpired = accountName;
   }
 

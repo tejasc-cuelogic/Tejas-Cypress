@@ -40,6 +40,7 @@ export const FILTER_META = {
     values: [
       { label: 'NS Processing', value: 'NS_PROCESSING' },
       { label: 'GS Processing', value: 'GS_PROCESSING' },
+      { label: 'Account Processing', value: 'ACCOUNT_PROCESSING' },
       { label: 'Declined', value: 'DECLINED' },
     ],
     error: undefined,

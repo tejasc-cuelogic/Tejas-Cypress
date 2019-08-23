@@ -6,7 +6,7 @@ import { Header, Button, Message, Table } from 'semantic-ui-react';
 import { isEmpty, get } from 'lodash';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
-@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'identityStore')
+@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'identityStore', 'accountStore')
 @withRouter
 @observer
 export default class Summary extends React.Component {
@@ -31,54 +31,16 @@ export default class Summary extends React.Component {
     this.props.uiStore.setProgress(get(userDetails, 'info.firstName') === null ? false : !get(userDetails, 'info.firstName'));
   }
 
-  handleuserIdentity = () => {
-    this.props.uiStore.setProgress();
-    this.props.identityStore.setCipDetails();
-    this.props.identityStore.verifyUserIdentity()
-      .then(() => {
-        const {
-          key,
-          route,
-        } = this.props.identityStore.userVerficationStatus;
-        if (key === 'id.failure') {
-          this.props.identityStore.setIdentityQuestions();
-          this.props.history.push(route);
-        } else {
-          this.props.uiStore.setProgress();
-          this.handleLegalDocsBeforeSubmit();
-        }
-      });
-  }
-
-  handleLegalDocsBeforeSubmit = () => {
-    const { isUserVerified, isLegalDocsPresent } = this.props.userDetailsStore;
-    if (!isUserVerified && !isLegalDocsPresent) {
-      this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
-      this.handleuserIdentity();
-    } else {
-      this.handleSubmitAccount();
-    }
-  }
-
   handleSubmitAccount = () => {
-    const {
-      partialInvestNowSessionURL,
-      setPartialInvestmenSession,
-    } = this.props.userDetailsStore;
     this.props.uiStore.setcreateAccountMessage();
     this.props.individualAccountStore.submitAccount().then(() => {
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      if (partialInvestNowSessionURL) {
-        this.props.history.push(partialInvestNowSessionURL);
-        setPartialInvestmenSession();
-      } else if (!this.props.individualAccountStore.showProcessingModal) {
-        this.props.history.push('/app/summary');
-        window.sessionStorage.removeItem('individualAccountCipExp');
-        this.props.uiStore.resetcreateAccountMessage();
-      }
+      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
+      const confirmModal = this.props.individualAccountStore.showProcessingModal ? 'processing' : 'success';
+      this.props.history.push(`${this.props.match.url}/${confirmModal}`);
     }).catch((err) => {
       if (Helper.matchRegexWithString(/\brequired uploads(?![-])\b/, err.message)) {
-        this.handleLegalDocsBeforeSubmit();
+        this.props.handleLegalDocsBeforeSubmit('individual', this.handleSubmitAccount);
       }
     });
   }
@@ -88,14 +50,16 @@ export default class Summary extends React.Component {
       isCipExpired,
       signupStatus,
     } = this.props.userDetailsStore;
+    this.props.identityStore.setCipStatusWithUserDetails();
+    this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
-      this.handleuserIdentity();
+      this.props.handleUserIdentity('individual', this.handleSubmitAccount);
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else if (isCipExpired) {
-      this.handleuserIdentity();
+      this.props.handleUserIdentity('individual', this.handleSubmitAccount);
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else {
-      this.handleLegalDocsBeforeSubmit();
+      this.props.handleLegalDocsBeforeSubmit('individual', this.handleSubmitAccount);
     }
   }
 
