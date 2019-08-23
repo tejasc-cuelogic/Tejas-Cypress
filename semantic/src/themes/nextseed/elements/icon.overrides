@@ -2084,6 +2084,9 @@ i.icon[class*="ns-"]{
 .ns-pdf:before{
     content:@ns-pdf;
 }
+.ns-pdf-file:before{
+    content:@ns-pdf-file;
+}
 .ns-pencil:before{
     content:@ns-pencil;
 }

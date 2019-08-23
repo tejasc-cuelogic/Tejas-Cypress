@@ -7,7 +7,7 @@ import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../theme/
 import ButtonGroupType2 from '../ButtonGroupType2';
 
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder mr-10" />);
-const SortableItem = SortableElement(({ document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length }) => {
+const SortableItem = SortableElement(({ offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length }) => {
   return (
     <div className="row-wrap">
       <div className="balance-half simple-drag-row-title">
@@ -34,8 +34,8 @@ const SortableItem = SortableElement(({ document, isReadonly, formArrayChange, o
         />
       </div>
       <div className="action">
-        <Button disabled={isReadonly} icon circular color={document.accreditedOnly.value ? 'red' : 'green'} className="link-button">
-          <Icon className={document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock'} onClick={() => handleLockUnlock(docIndx)} />
+        <Button disabled={isReadonly} icon circular color={!offeringClose ? document.accreditedOnly.value ? 'red' : 'green' : ''} className="link-button">
+          <Icon className={!offeringClose ? document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock' : document.accreditedOnly.value ? 'ns-view' : 'ns-no-view'} onClick={() => handleLockUnlock(docIndx)} />
         </Button>
         <Button disabled={isReadonly || length === 1} icon circular className="link-button">
           <Icon className="ns-trash" onClick={e => toggleConfirmModal(e, docIndx, formName)} />
@@ -45,11 +45,12 @@ const SortableItem = SortableElement(({ document, isReadonly, formArrayChange, o
   );
 });
 
-const SortableList = SortableContainer(({ docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName }) => {
+const SortableList = SortableContainer(({ offeringClose, docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName }) => {
   return (
     <div>
       {docs.map((doc, index) => (
         <SortableItem
+          offeringClose={offeringClose}
           key={`item-${index}`}
           docIndx={index}
           document={doc}
@@ -106,7 +107,7 @@ export default class DataRoom extends Component {
     }
   };
   render() {
-    const { match } = this.props;
+    const { match, offeringClose } = this.props;
     const { isIssuer } = this.props.userStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
@@ -128,8 +129,8 @@ export default class DataRoom extends Component {
     return (
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form>
-          <Header as="h4">
-            Data Room Documents
+          <Header as="h4" className={offeringClose ? 'offering-close-header' : ''}>
+          {!offeringClose ? 'Data Room Documents' : ''}
             {!isReadonly &&
               <Button.Group size="mini" floated="right">
                 <Button onClick={e => this.addMore(e, formName)} primary compact content="Add" />
@@ -144,6 +145,7 @@ export default class DataRoom extends Component {
               <div className="action width-70">Actions</div>
             </div>
             <SortableList
+              offeringClose={offeringClose}
               docs={docs}
               pressDelay={100}
               onSortEnd={(e) => this.onSortEnd(e, isReadonly)}
@@ -159,12 +161,17 @@ export default class DataRoom extends Component {
             />
           </div>
           <Divider hidden />
-          <ButtonGroupType2
-            submitted={submitted}
-            isManager={isManager}
-            approved={approved}
-            updateOffer={this.handleFormSubmit}
-          />
+          {!offeringClose
+          &&
+          (
+            <ButtonGroupType2
+              submitted={submitted}
+              isManager={isManager}
+              approved={approved}
+              updateOffer={this.handleFormSubmit}
+            />
+          )
+          }
         </Form>
         <Confirm
           header="Confirm"

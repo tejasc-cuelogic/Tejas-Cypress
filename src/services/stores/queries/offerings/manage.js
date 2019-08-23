@@ -964,6 +964,16 @@ export const getOfferingDetails = gql`
           amount
         }
         keyTerms {
+          supplementalAgreements {
+            documents {
+              name
+              aliasAccreditedOnly: isVisible
+              upload {
+                fileId
+                fileName
+              }
+            }
+          }
           multiple
           revSharePercentage
           interestRate

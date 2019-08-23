@@ -11,7 +11,7 @@ import { DataFormatter } from '../../../../../../helper';
 @observer
 export default class Contingency extends Component {
   state = {
-    visibilityStatus: true,
+    visibilityStatus: false,
   }
 
   setContingencyForm = () => {
