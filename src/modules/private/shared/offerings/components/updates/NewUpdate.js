@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button, Checkbox } from 'semantic-ui-react';
 import { get } from 'lodash';
@@ -314,7 +314,6 @@ export default class NewUpdate extends Component {
                             <List.Item>When do you anticipate opening? (e.g. Fall 2019)</List.Item>
                             <List.Item>What is the status on bonus rewards fulfillment?</List.Item>
                           </List>
-                          <Link to="/"><b>Helpful Tips on Sending Updates</b></Link>
                         </Card.Content>
                       </Card>
                     </>

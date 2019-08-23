@@ -7,6 +7,7 @@ import 'react-vertical-timeline-component/style.min.css';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import { Image64, InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+import { DataFormatter } from '../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 992;
 
@@ -70,7 +71,7 @@ class Updates extends Component {
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header">
                         {get(campaign, 'keyTerms.shorthandBusinessName') }<br />
-                        <span>{moment(dataItem.updated.date).format('ll')}</span>
+                        <span>{DataFormatter.getDateAsPerTimeZone(dataItem.updated.date, true, true)}</span>
                       </Item.Content>
                     </Item>
                     <Header as="h4">{dataItem.title}</Header>

@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import graphql from 'mobx-apollo';
-import { orderBy } from 'lodash';
+import { orderBy, get } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../../helper';
@@ -183,6 +183,15 @@ export class UpdateStore {
     }
 
     @action
+    setUpdate = (value) => {
+      if (get(this.currentUpdate, 'data.offeringUpdatesById')) {
+        this.currentUpdate.data.offeringUpdatesById = value;
+      } else {
+        this.currentUpdate = { data: { offeringUpdatesById: value } };
+      }
+    }
+
+    @action
     save = (id, status, showToast = true) => new Promise((resolve) => {
       uiStore.setProgress(status);
       const currentTime = moment().format('HH:mm:ss');
@@ -192,7 +201,6 @@ export class UpdateStore {
       data.status = status;
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
-      data.isEarlyBirdOnly = false;
       data.updatedDate = moment(`${data.updatedDate} ${currentTime}`).utc();
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
       if (id !== 'new' && status === 'PUBLISHED') {
@@ -212,10 +220,11 @@ export class UpdateStore {
           if (id === 'new') {
             this.setStatus(status);
             this.setFieldValue('newUpdateId', res.data.createOfferingUpdates.id);
+            this.setUpdate(res.data.createOfferingUpdates);
           } else if (status !== 'DRAFT') {
             this.reset();
           } else {
-            this.currentUpdate.offeringUpdatesById = res.data.updateOfferingUpdatesInfo;
+            this.setUpdate(res.data.updateOfferingUpdatesInfo);
           }
           if (showToast) {
             Helper.toast(id === 'new' ? 'Update added.' : 'Update Updated Successfully', 'success');
@@ -268,7 +277,7 @@ export class UpdateStore {
           },
           refetchQueries: [{ query: allUpdates, variables }],
         })
-        .then(() => { Helper.toast(`Offering update is ${!isVisible ? 'visible' : 'invisible'}`, 'success'); })
+        .then(() => { Helper.toast(`Offering update is ${isVisible ? 'visible' : 'invisible'}`, 'success'); })
         .catch(() => { Helper.toast('Something went wrong, please try again later. ', 'error'); });
     }
 
