@@ -21,7 +21,7 @@ import {
 } from '../../index';
 import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
-import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
+import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
@@ -46,6 +46,8 @@ export class UserDetailsStore {
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING', 'OFFLINE'];
 
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
+
+  @observable DELETE_MESSAGE_FRM = Validator.prepareFormObject(DELETE_MESSAGE);
 
   @observable USER_PROFILE_ADD_ADMIN_FRM = Validator.prepareFormObject(USER_PROFILE_ADDRESS_ADMIN);
 
