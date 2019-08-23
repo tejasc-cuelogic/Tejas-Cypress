@@ -35,7 +35,7 @@ class LatestUpdates extends Component {
                 <div className="ui image avatar-image">
                   {companyAvatarUrl && companyAvatarUrl.length
                     ? <Image64 srcUrl={companyAvatarUrl} circular />
-                    : <UserAvatar UserInfo={{}} />
+                    : <UserAvatar UserInfo={{ name: bussinessName || '', avatarUrl: '' }} />
                 }
                 </div>
                 {/* {companyAvatarUrl && companyAvatarUrl.length ?

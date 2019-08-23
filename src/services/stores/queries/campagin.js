@@ -371,6 +371,19 @@ query getOfferingById($id: ID) {
         completeDate
       }
       keyTerms {
+        supplementalAgreements {
+          documents {
+            name
+            isVisible
+            upload {
+              fileId
+              fileName
+              fileHandle {
+                boxFileId
+              }
+            }
+          }
+        }
         multiple
         revSharePercentage
         interestRate
@@ -445,7 +458,6 @@ query getOfferingById($id: ID) {
       status
       scope
       tiers
-      isEarlyBirdOnly
       notificationSent {
         by
         date
