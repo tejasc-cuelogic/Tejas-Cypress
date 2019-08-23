@@ -324,7 +324,8 @@ out of required
                         ))
                         }
                       </Form.Group>
-                      <Button.Group className="mt-50">
+                      <Divider hidden />
+                      <Button.Group>
                         {filter(closingActions, a => a.ref === 1).map(fA => (
                           <Button
                             loading={this.state.inProgress === fA.enum}
@@ -344,7 +345,7 @@ out of required
                     && (
                       <>
                         <SupplementalAggrements />
-                        <Button.Group className="mt-50">
+                        <Button.Group>
                         {filter(closingActions, a => a.ref === 1).map(fA => (
                           <Button
                             loading={this.state.inProgress === 'update'}
@@ -385,7 +386,7 @@ out of required
                   </>
                 )
                 }
-                <Button.Group className="mt-50">
+                <Button.Group>
                   {filter(closingActions, a => a.ref === 2).map(fA => (
                     <Button
                       loading={inProgress === fA.enum}
@@ -426,7 +427,7 @@ out of required
                   </>
                 )
                 }
-                  <Button.Group className="mt-50">
+                  <Button.Group>
                     {filter(closingActions, a => a.ref === 3).map(fA => (
                       <Button
                         loading={inProgress === fA.enum}
@@ -463,7 +464,7 @@ out of required
                   </>
                 )
                 }
-                <Button.Group className="mt-50">
+                <Button.Group>
                 {filter(closingActions, a => a.ref === 4).map(fA => (
                   <Button
                     loading={inProgress === fA.enum}
@@ -499,7 +500,7 @@ out of required
                       }
                     </Form.Group>
                   </Form>
-                  <Button.Group className="mt-50">
+                  <Button.Group>
                     <Button primary>Save draft</Button>
                     <Button color="red" onClick={this.handleUpdateOffering}>Close offering </Button>
                   </Button.Group>

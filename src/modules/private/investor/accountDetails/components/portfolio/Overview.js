@@ -246,10 +246,7 @@ class Overview extends Component {
                         <Table.Cell>Investor Agreement{agreementIds.length > 1 && 's'} </Table.Cell>
                         <Table.Cell>
                           {agreementIds.map(agreementId => (
-                            <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text"><Icon className="ns-file" />
-                            <Icon className="ns-pdf-file" color="green" />
-                            {' '}
-                            {agreementId} </Button>
+                            <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text"><Icon className="ns-pdf-file" size="large" /> {agreementId} </Button>
                           ))}
                         </Table.Cell>
                       </Table.Row>
@@ -260,7 +257,7 @@ class Overview extends Component {
                         <Table.Cell>Supplemental Agreements</Table.Cell>
                         <Table.Cell>
                           {aggrementDocs.map(doc => (
-                            <Button loading={this.state.loadingDoc === get(doc, 'upload.fileHandle.boxFileId')} onClick={() => this.handleViewSuppAgreement(get(doc, 'upload.fileHandle.boxFileId'))} className="link-button highlight-text"><Icon className="ns-file" /> {doc.name}</Button>
+                            <Button icon loading={this.state.loadingDoc === get(doc, 'upload.fileHandle.boxFileId')} onClick={() => this.handleViewSuppAgreement(get(doc, 'upload.fileHandle.boxFileId'))} className="link-button highlight-text"><Icon className="ns-pdf-file" size="large" /> {doc.name}</Button>
                           ))}
                         </Table.Cell>
                       </Table.Row>
