@@ -97,7 +97,7 @@ export class Auth {
                 this.setAWSAdminAccess(signInUserSession.idToken.jwtToken);
               }
               if (userStore.isInvestor) {
-                referralsStore.getUserReferralDetails();
+                referralsStore.getUserReferralDetails(get(currentUser, 'accessToken.payload.username'));
               }
               return res({ attributes, session: signInUserSession });
             }).catch((err) => {
@@ -426,7 +426,8 @@ export class Auth {
     commonStore.setToken(undefined);
     localStorage.removeItem('lastActiveTime');
     localStorage.removeItem('defaultNavExpanded');
-    window.sessionStorage.removeItem('individualAccountCipExp');
+    window.sessionStorage.removeItem('AccountCipExp');
+    window.sessionStorage.removeItem('cipErrorMessage');
     const uKey = get(userStore, 'currentUser.sub') || 'public';
     window.sessionStorage.removeItem(`${uKey}_pInfo`);
     authStore.setUserLoggedIn(false);

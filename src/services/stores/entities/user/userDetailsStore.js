@@ -2,6 +2,7 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
+import moment from 'moment';
 import { mapValues, map, concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
@@ -42,7 +43,7 @@ export class UserDetailsStore {
 
   @observable deleting = 0;
 
-  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING', 'OFFLINE'];
 
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
 
@@ -296,15 +297,23 @@ export class UserDetailsStore {
   }
 
   @action
-  getUserProfileDetails = (userId) => {
-    this.setFieldValue('selectedUserId', userId);
+  getUserProfileDetails = userId => new Promise((resolve, rej) => {
     this.detailsOfUser = graphql({
       client,
       query: selectedUserDetailsQuery,
       variables: { userId },
       fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data) {
+          this.setFieldValue('selectedUserId', userId);
+          resolve(data);
+        }
+      },
+      onError: () => {
+        rej();
+      },
     });
-  }
+  })
 
   getUserStorageDetails = (userId) => {
     uiStore.setProgress('userBoxAccount');
@@ -450,7 +459,7 @@ export class UserDetailsStore {
         && !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
       details.isMigratedUser = (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
       details.isMigratedFullAccount = (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION')
-          && this.userDetails.status === 'MIGRATION_FULL');
+        && this.userDetails.status === 'MIGRATION_FULL');
       details.accStatus = this.userDetails.status;
       details.investorProfileCompleted = this.userDetails.investorProfileData === null
         ? false : this.userDetails.investorProfileData
@@ -508,9 +517,9 @@ export class UserDetailsStore {
 
   @computed get userHasOneFullAccount() {
     return (this.userDetails.status === 'FULL'
-    && (this.signupStatus.activeAccounts.length > 0
-    || this.signupStatus.frozenAccounts.length > 0
-    || this.signupStatus.processingAccounts.length > 0));
+      && (this.signupStatus.activeAccounts.length > 0
+        || this.signupStatus.frozenAccounts.length > 0
+        || this.signupStatus.processingAccounts.length > 0));
   }
 
   @computed get isLegalDocsPresent() {
@@ -664,9 +673,14 @@ export class UserDetailsStore {
   @computed get isCipExpired() {
     if (this.userDetails && this.userDetails.cip) {
       const { expiration } = this.userDetails.cip;
-      const expirationDate = new Date(expiration);
-      const currentDate = new Date();
-      if (expirationDate < currentDate) {
+      // const expirationDate = new Date(expiration);
+      // const currentDate = new Date();
+      // if (expirationDate < currentDate) {
+      //   return true;
+      // }
+      const expirationDate = moment(new Date(expiration)).format('MM/DD/YYYY');
+      const currentDate = moment().format('MM/DD/YYYY');
+      if (moment(expirationDate).isBefore(moment(currentDate))) {
         return true;
       }
     }
@@ -675,7 +689,7 @@ export class UserDetailsStore {
 
   @action
   setAccountForWhichCipExpired = (accountName) => {
-    window.sessionStorage.setItem('individualAccountCipExp', accountName);
+    window.sessionStorage.setItem('AccountCipExp', accountName);
     this.accountForWhichCipExpired = accountName;
   }
 
@@ -691,7 +705,7 @@ export class UserDetailsStore {
   @computed get isLegaLVerificationDone() {
     return (this.validAccStatus
       .includes(this.signupStatus.idVerification)
-    && this.signupStatus.phoneVerification === 'DONE');
+      && this.signupStatus.phoneVerification === 'DONE');
   }
 
   @action

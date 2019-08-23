@@ -445,7 +445,6 @@ query getOfferingById($id: ID) {
       status
       scope
       tiers
-      isEarlyBirdOnly
       notificationSent {
         by
         date

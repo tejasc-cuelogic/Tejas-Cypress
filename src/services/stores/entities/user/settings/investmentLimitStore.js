@@ -5,7 +5,7 @@ import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { uiStore, userDetailsStore, campaignStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
-import { FormValidator as Validator } from '../../../../../helper';
+import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorTotalAmountInvested } from '../../../queries/investementLimits';
 import Helper from '../../../../../helper/utility';
 import { userDetailsQuery } from '../../../queries/users';
@@ -303,15 +303,16 @@ export class InvestmentLimitStore {
     const { accountList, isIndAccExist } = this.getActiveAccountList;
     // const dateFilterStart = moment().subtract(1, 'y').toISOString();
     // const dateFilterStop = moment().toISOString();
-    const closeDateFilter = moment().subtract(1, 'y').toISOString();
-
+    // const closeDateFilter = moment().subtract(1, 'y').toISOString();
+    const closeDateinCST = DataFormatter.getCurrentCSTMoment().subtract(1, 'y');
+    const closeDateinCSTFilter = moment(closeDateinCST).format('YYYY-MM-DD HH:mm:ss');
     accountList.forEach((account) => {
       if (account.name === this.currentAccountType) {
         this.getInvestorTotalAmountInvested(
           account.details.accountId,
           // dateFilterStart,
           // dateFilterStop,
-          closeDateFilter,
+          closeDateinCSTFilter,
         ).then((data) => {
           this.setFieldValue('investedAmount', parseFloat(data.getInvestorTotalAmountInvested.replace(/,/g, '') || 0));
         });
@@ -323,7 +324,7 @@ export class InvestmentLimitStore {
         individualAccount.details.accountId,
         // dateFilterStart,
         // dateFilterStop,
-        closeDateFilter,
+        closeDateinCSTFilter,
       ).then((data) => {
         const investedAmount = parseFloat(data.getInvestorTotalAmountInvested.replace(/,/g, '') || 0)
           + this.investedAmount;
