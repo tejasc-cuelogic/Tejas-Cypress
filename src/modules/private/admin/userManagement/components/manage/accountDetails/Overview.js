@@ -36,7 +36,7 @@ export default class Overview extends Component {
     totalBalanceL: false,
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!this.props.copied) {
       const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
       const { setFieldValue } = this.props.userDetailsStore;
