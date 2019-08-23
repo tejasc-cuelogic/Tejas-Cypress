@@ -11,7 +11,8 @@ import { NEXTSEED_BOX_URL } from '../../../../../../../../constants/common';
 @inject('userDetailsStore', 'investmentLimitStore', 'accreditationStore')
 @observer
 export default class AccreditationsLimits extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { getDetailsOfUser } = this.props.userDetailsStore;
     this.props.accreditationStore.getUserAccreditation(get(getDetailsOfUser, 'id')).then(() => {
       this.props.accreditationStore.initiateAccreditation();
