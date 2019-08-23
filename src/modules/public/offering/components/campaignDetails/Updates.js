@@ -66,12 +66,12 @@ class Updates extends Component {
                       <div className="ui image avatar-image">
                         {companyAvatarUrl && companyAvatarUrl.length
                           ? <Image64 srcUrl={companyAvatarUrl} circular />
-                          : <UserAvatar UserInfo={{ firstName: get(dataItem, 'actingUserInfo.info.firstName'), lastName: get(dataItem, 'actingUserInfo.info.lastName'), avatarUrl: get(dataItem, 'actingUserInfo.info.avatar.url') || '' }} />
+                          : <UserAvatar UserInfo={{ name: get(campaign, 'keyTerms.shorthandBusinessName'), avatarUrl: '' }} />
                       }
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header">
                         {get(campaign, 'keyTerms.shorthandBusinessName') }<br />
-                        <span>{moment(dataItem.updated.date).format('ll')}</span>
+                        <span>{DataFormatter.getDateAsPerTimeZone(dataItem.updated.date, true, true)}</span>
                       </Item.Content>
                     </Item>
                     <Header as="h4">{dataItem.title}</Header>
