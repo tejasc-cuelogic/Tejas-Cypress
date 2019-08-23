@@ -36,17 +36,18 @@ const metaTagsData = [
 @inject('navStore', 'userStore', 'referralsStore')
 @observer
 class Invest extends Component {
-  componentWillMount() {
-    const urlParameter = DataFormatter.QueryStringToJSON(this.props.location.search);
+  constructor(props) {
+    super(props);
+    const urlParameter = DataFormatter.QueryStringToJSON(props.location.search);
     const utmCampaign = get(urlParameter, 'utm_campaign') || null;
     const rsCode = get(urlParameter, 'rsCode') || null;
     if (utmCampaign === 'saasquatch' && rsCode) {
-      this.props.referralsStore.getReferralCreditsInformation(rsCode).then(() => {
+      props.referralsStore.getReferralCreditsInformation(rsCode).then(() => {
         window.localStorage.setItem('SAASQUATCH_REFERRAL_CODE', rsCode);
       });
     }
-    if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/why-nextseed`);
+    if (props.match.isExact) {
+      props.history.replace(`${props.match.url}/why-nextseed`);
     }
   }
 

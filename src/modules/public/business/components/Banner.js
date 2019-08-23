@@ -7,8 +7,9 @@ import { inject, observer } from 'mobx-react';
 @withRouter
 @observer
 class Banner extends Component {
-  componentWillMount() {
-    this.props.offeringsStore.getTotalAmount();
+  constructor(props) {
+    super(props);
+    props.offeringsStore.getTotalAmount();
   }
 
   redirectTo = (action = '') => {

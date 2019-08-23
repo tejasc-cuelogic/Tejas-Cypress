@@ -9,7 +9,8 @@ import { ListErrors } from '../../../theme/shared';
 @inject('authStore', 'uiStore')
 @observer
 export default class ForgotPassword extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.authStore.resetForm('FORGOT_PASS_FRM');
   }
 
