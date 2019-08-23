@@ -64,7 +64,7 @@ class Overview extends Component {
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     const { agreementIds, loading } = this.props.transactionStore;
     let aggrementDocs = get(campaign, 'closureSummary.keyTerms.supplementalAgreements.documents') || [];
-    aggrementDocs = aggrementDocs.length ? aggrementDocs.filter(d => d.isVisible) : [];
+    aggrementDocs = aggrementDocs.length ? aggrementDocs.filter(d => d.isVisible && get(d, 'upload.fileHandle.boxFileId')) : [];
     if (loading) {
       return (
         <InlineLoader />
