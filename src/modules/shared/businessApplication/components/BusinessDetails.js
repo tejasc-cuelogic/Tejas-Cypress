@@ -166,7 +166,7 @@ export default class BusinessDetails extends Component {
                         </Table.Cell>
                         <Table.Cell collapsing>
                           <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('sources', index)}>
-                            <Icon className="ns-trash" />
+                            <Icon className="ns-minus-circle" />
                           </Button>
                         </Table.Cell>
                       </Table.Row>
@@ -233,7 +233,7 @@ export default class BusinessDetails extends Component {
                         </Table.Cell>
                         <Table.Cell collapsing>
                           <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('uses', index)}>
-                            <Icon className="ns-trash" />
+                            <Icon className="ns-minus-circle" />
                           </Button>
                         </Table.Cell>
                       </Table.Row>

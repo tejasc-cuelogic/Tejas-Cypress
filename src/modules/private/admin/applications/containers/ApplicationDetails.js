@@ -80,7 +80,7 @@ export default class ApplicationDetails extends Component {
     const {
       id, applicationId, userId, applicationStatus, prequalStatus, prequalDetails, primaryPOC,
       signupCode, rating, businessGeneralInfo, firstName, lastName, failReasons, email, deleted,
-      stashed,
+      stashed, applicationStage,
     } = businessApplicationDetailsAdmin;
     let navItems = [
       { title: 'Activity History', to: 'activity-history', component: ActivityHistory },
@@ -107,6 +107,7 @@ export default class ApplicationDetails extends Component {
     }
     const { businessName, contactDetails } = businessGeneralInfo || prequalDetails.businessGeneralInfo;
     const appStepStatus = (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
+    const appStatus = appStepStatus === 'Failed' ? 'prequal-failed' : 'in-progress';
     return (
       <Modal closeIcon size="large" dimmer="inverted" open closeOnDimmerClick={false} onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
@@ -116,9 +117,9 @@ export default class ApplicationDetails extends Component {
             <AppStatusLabel application={businessApplicationDetailsAdmin} />
             <span className="title-meta">Rating</span>
             <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
-            {(applicationStatus || prequalStatus)
-            === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
-            && <Button secondary compact floated="right" content="Promote" as={Link} to={`${this.props.refLink}/prequal-failed/${id}/new/${prequalStatus}/PROMOTE/confirm`} />
+            {((applicationStatus || prequalStatus)
+            === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED || applicationStage === 'IN_PROGRESS')
+            && <Button secondary compact floated="right" content="Promote" as={Link} to={`${this.props.refLink}/${appStatus}/${id || applicationId}/${userId || 'new'}/${prequalStatus || 'APPLICATION_IN_PROGRESS'}/PROMOTE/confirm`} />
             }
           </Header>
           <Grid columns="equal">

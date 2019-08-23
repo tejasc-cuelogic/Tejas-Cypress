@@ -214,6 +214,7 @@
 @ns-logout: "\e99d";
 @ns-long-arrow-left: "\e92c";
 @ns-minus: "\e99e";
+@ns-minus-circle: "\e9a0";
 @ns-minus-square: "\e986";
 @ns-new-business: "\e95d";
 @ns-new-location: "\e95e";
@@ -227,6 +228,7 @@
 @ns-paper-plane: "\e961";
 @ns-partnership: "\e962";
 @ns-pdf: "\e92f";
+@ns-pdf-file: "\e99f";
 @ns-pencil: "\e930";
 @ns-pencil-circle-line: "\e96e";
 @ns-phone-line: "\e973";

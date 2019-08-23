@@ -370,7 +370,10 @@
                 font-weight: @bold;
                 border-top: 1px solid @neutral-darkwhite !important;
             }
-        } 
+        }
+        i.icon.ns-minus-circle{
+            color: @border-color;
+        }
     }
 }
 

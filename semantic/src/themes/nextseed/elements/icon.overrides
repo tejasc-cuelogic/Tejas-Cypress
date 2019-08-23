@@ -2045,6 +2045,9 @@ i.icon[class*="ns-"]{
 .ns-minus:before{
     content:@ns-minus; 
 }
+.ns-minus-circle:before{
+    content:@ns-minus-circle; 
+}
 .ns-minus-square:before{
     content:@ns-minus-square;
 }
@@ -2083,6 +2086,9 @@ i.icon[class*="ns-"]{
 }
 .ns-pdf:before{
     content:@ns-pdf;
+}
+.ns-pdf-file:before{
+    content:@ns-pdf-file;
 }
 .ns-pencil:before{
     content:@ns-pencil;
