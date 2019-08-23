@@ -720,6 +720,18 @@ export class BusinessAppStore {
 
   @computed get getFormatedBusinessDetailsData() {
     const data = toJS(this.BUSINESS_DETAILS_FRM.fields);
+    const sourcesAndUses = {
+      sources: data.sources.map(item => ({
+        name: this.getValidDataForString(item.name),
+        amount: item.amount.value || 0.00,
+      })),
+      uses: data.uses.map(item => ({
+        name: this.getValidDataForString(item.name),
+        amount: item.amount.value || 0.00,
+      })),
+    };
+    sourcesAndUses.sources = sourcesAndUses.sources.filter(item => item.amount || item.name);
+    sourcesAndUses.uses = sourcesAndUses.uses.filter(item => item.amount || item.name);
     return {
       planDocs: this.getFilesArray(data.businessPlan.value, data.businessPlan),
       debts: data.debts.map(item => ({
@@ -744,14 +756,7 @@ export class BusinessAppStore {
           },
         ],
       })),
-      sources: data.sources.map(item => ({
-        name: this.getValidDataForString(item.name),
-        amount: item.amount.value || 0.00,
-      })),
-      uses: data.uses.map(item => ({
-        name: this.getValidDataForString(item.name),
-        amount: item.amount.value,
-      })),
+      ...sourcesAndUses,
     };
   }
 

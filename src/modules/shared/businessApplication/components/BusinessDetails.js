@@ -178,7 +178,7 @@ export default class BusinessDetails extends Component {
                     </Table.Row>
                   </Table.Body>
                   {BUSINESS_DETAILS_FRM.fields.sources.length
-                    && (
+                    ? (
                     <Table.Footer>
                       <Table.Row>
                         <Table.HeaderCell width={7}>
@@ -190,8 +190,7 @@ export default class BusinessDetails extends Component {
                         <Table.HeaderCell />
                       </Table.Row>
                     </Table.Footer>
-                    )
-                  }
+                    ) : ''}
                 </Table>
               </Grid.Column>
               <Grid.Column largeScreen={7} computer={7} tablet={8} mobile={8}>
