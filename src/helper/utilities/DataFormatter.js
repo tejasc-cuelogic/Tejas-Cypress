@@ -89,12 +89,17 @@ class DataFormatter {
     return { diff: diff < 0 ? 0 : diff, diffType: 'Days', diffText: `${diff < 0 ? 0 : diff} Days` };
   }
 
-  getDateDifferenceInHours = (timeStamp2, isDayEnd = false) => {
+  getDateDifferenceInHoursOrMinutes = (timeStamp2, isDayEnd = false, showLabel = false) => {
     const startDate = momentZone.tz(DEFAULT_TIME_ZONE_TO_DISPLAY).format('MM/DD/YYYY HH:mm:ss');
-    // const startDate = momentZone.tz('Asia/Calcutta').format('MM/DD/YYYY HH:mm:ss');
     const endDate = isDayEnd ? moment(`${timeStamp2} 23:59:59`) : moment(timeStamp2);
-    const resultHours = moment.duration(endDate.diff(startDate)).asHours();
-    return Math.floor(resultHours);
+    // const resultHours = moment.duration(endDate.diff(startDate)).hours();
+    const resultHoursLength = moment.duration(endDate.diff(startDate)).asHours();
+    const resultHours = Math.floor(resultHoursLength);
+    const resultMinutes = moment.duration(endDate.diff(startDate)).minutes();
+    const result = resultHours > 0 ? resultHours : resultMinutes > 0 ? resultMinutes : 0;
+    const resultLables = resultHours > 0 ? 'Hours Left' : resultMinutes > 0 ? 'Minutes Left' : null;
+    const resultantObject = { value: result, label: resultLables };
+    return showLabel ? resultantObject : result;
   }
 
   getDateDifference = (startDate, endDate) => {
