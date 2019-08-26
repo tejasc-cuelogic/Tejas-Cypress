@@ -54,7 +54,8 @@ const summaryDetails = ({
 @inject('userDetailsStore', 'portfolioStore')
 @observer
 export default class Dashboard extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     // TODO change to regex
     if (!Helper.matchRegexWithUrl([/\baccount-creation(?![-])\b/])) {
       this.props.portfolioStore.getSummary();
