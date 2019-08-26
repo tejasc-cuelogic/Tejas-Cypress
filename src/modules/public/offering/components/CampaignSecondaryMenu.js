@@ -23,7 +23,8 @@ export default class CampaignSecondaryMenu extends Component {
   render() {
     const { campaign, campaignStatus } = this.props.campaignStore;
     const {
-      diff, isClosed, isInProcessing, collected, maxFlagStatus,
+      isClosed, isInProcessing, collected, maxFlagStatus,
+      countDown, diffForProcessing,
     } = campaignStatus;
     const { navStatus, subNavStatus } = this.props.navStore;
     const { newLayout } = this.props;
@@ -36,8 +37,8 @@ export default class CampaignSecondaryMenu extends Component {
                 && (
 <>
                   <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
-                  {!isClosed && diff > 0
-                    && <List.Item>{diff} days left</List.Item>
+                  {!isClosed && diffForProcessing.value > 0
+                    && <List.Item>{countDown.valueToShow} {' '} {countDown.labelToShow}</List.Item>
                   }
                   {isClosed && get(campaign, 'closureSummary.repayment.count')
                     ? <List.Item>{get(campaign, 'closureSummary.repayment.count')} Payments made</List.Item>
