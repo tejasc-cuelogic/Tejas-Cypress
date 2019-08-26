@@ -34,7 +34,8 @@ const navItems = [
 @withRouter
 @observer
 export default class Review extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.businessAppReviewStore.setFieldvalue('showGeneratePA', false);
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/${navItems[0].to}`);

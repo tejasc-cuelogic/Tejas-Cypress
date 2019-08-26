@@ -12,7 +12,8 @@ import OtherInformation from './OtherInformation';
 @withRouter
 @observer
 export default class Admin extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
   }
 

@@ -12,7 +12,8 @@ import Filters from './components/Filters';
 @inject('crowdpayStore')
 @observer
 export default class CrowdPay extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     // if (!this.props.crowdpayStore.isApiHit) {
     // this.props.crowdpayStore.reset();
     // this.props.crowdpayStore.initRequest();

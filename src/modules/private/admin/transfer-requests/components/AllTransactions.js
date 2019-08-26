@@ -18,7 +18,8 @@ export default class AllTransactions extends Component {
     GsAccountNum: {},
   }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { statusType } = this.props.match.params;
     const transStatus = STATUS_MAPPING[statusType].status;
     if (this.props.match.isExact && this.props.transactionsStore.pageReload) {
