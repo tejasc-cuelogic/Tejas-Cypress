@@ -34,8 +34,13 @@ export default class InvestNow extends React.Component {
     }
     if (this.props.changeInvest) {
       const { offeringId } = this.props.match.params;
+      const matchURL = this.props.match.url;
       this.props.portfolioStore.setFieldValue('currentOfferingId', offeringId);
       this.props.campaignStore.getCampaignDetails(offeringId, true);
+
+      if (matchURL.includes('portfolio')) {
+        this.setState({ isInvestmentUpdate: true });
+      }
     }
   }
 
