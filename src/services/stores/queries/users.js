@@ -639,9 +639,10 @@ mutation skipAddressValidationCheck($userId: String!, $shouldSkip: Boolean!) {
  }`;
 
 export const deleteProfile = gql`
-mutation adminDeleteInvestorOrIssuerUser($userId: String) {
+mutation adminDeleteInvestorOrIssuerUser($userId: String, $reason: String) {
   adminDeleteInvestorOrIssuerUser(
      cognitoUUId: $userId
+     reason: $reason
   ) {
     status
     message
