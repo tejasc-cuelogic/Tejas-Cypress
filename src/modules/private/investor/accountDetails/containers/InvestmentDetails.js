@@ -21,7 +21,8 @@ const navItems = [
 @inject('portfolioStore', 'campaignStore', 'uiStore', 'offeringCreationStore')
 @observer
 class InvestmentDetails extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { portfolioStore, uiStore, isAdmin } = this.props;
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
