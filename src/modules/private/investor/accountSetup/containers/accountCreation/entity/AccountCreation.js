@@ -9,7 +9,6 @@ import PersonalInformation from './PersonalInformation';
 import FormationDocuments from './FormationDocuments';
 import { Plaid } from '../../../../../shared/bankAccount';
 import Summary from './Summary';
-import GsModal from '../../../components/GsProcessingModal';
 
 @inject('uiStore', 'accountStore', 'bankAccountStore', 'entityAccountStore', 'userDetailsStore', 'userStore', 'investmentLimitStore')
 @observer
@@ -48,18 +47,6 @@ export default class AccountCreation extends React.Component {
     });
   }
 
-  closeProcessingModal = () => {
-    const { partialInvestNowSessionURL, setPartialInvestmenSession } = this.props.userDetailsStore;
-    this.props.entityAccountStore.setFieldValue('showProcessingModal', false);
-    if (partialInvestNowSessionURL) {
-      this.props.history.push(partialInvestNowSessionURL);
-      setPartialInvestmenSession();
-    } else {
-      this.props.history.push('/app/account-details/entity/portfolio');
-      this.props.uiStore.resetcreateAccountMessage();
-    }
-  }
-
   render() {
     const {
       inProgress,
@@ -67,6 +54,7 @@ export default class AccountCreation extends React.Component {
       resetIsEnterPressed,
       setIsEnterPressed,
       createAccountMessage,
+      inProgressArray,
     } = this.props.uiStore;
     const {
       PERSONAL_INFO_FRM,
@@ -76,7 +64,7 @@ export default class AccountCreation extends React.Component {
       FORM_DOCS_FRM,
       stepToBeRendered,
       createAccount,
-      isValidEntityForm, showProcessingModal,
+      isValidEntityForm,
     } = this.props.entityAccountStore;
     const {
       formEntityAddFunds, isAccountPresent, formLinkBankManually,
@@ -158,18 +146,15 @@ export default class AccountCreation extends React.Component {
       },
       {
         name: 'Summary',
-        component: <Summary />,
+        component: <Summary handleUserIdentity={this.props.handleUserIdentity} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
         isValid: isValidEntityForm ? '' : stepToBeRendered > 6 ? 'error' : '',
         // validForm: isValidEntityForm,
         bankSummary: false,
       },
     ];
-    if (showProcessingModal) {
-      return <GsModal open={showProcessingModal} closeModal={this.closeProcessingModal} />;
-    }
     return (
       <div className="step-progress">
-        <MultiStep isAccountCreation setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} page disablePrevBtn bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} page disablePrevBtn bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

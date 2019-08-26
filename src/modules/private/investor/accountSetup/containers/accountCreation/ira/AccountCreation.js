@@ -8,7 +8,6 @@ import Identity from './Identity';
 import Summary from './Summary';
 import { validationActions } from '../../../../../../../services/actions';
 import { Plaid } from '../../../../../shared/bankAccount';
-import GsModal from '../../../components/GsProcessingModal';
 
 @inject('uiStore', 'accountStore', 'iraAccountStore', 'userDetailsStore', 'userStore', 'bankAccountStore')
 @observer
@@ -46,18 +45,6 @@ export default class AccountCreation extends React.Component {
     });
   }
 
-  closeProcessingModal = () => {
-    const { partialInvestNowSessionURL, setPartialInvestmenSession } = this.props.userDetailsStore;
-    this.props.iraAccountStore.setFieldValue('showProcessingModal', false);
-    if (partialInvestNowSessionURL) {
-      this.props.history.push(partialInvestNowSessionURL);
-      setPartialInvestmenSession();
-    } else {
-      this.props.history.push('/app/account-details/ira/portfolio');
-      this.props.uiStore.resetcreateAccountMessage();
-    }
-  }
-
   render() {
     let steps = [];
     const {
@@ -66,9 +53,10 @@ export default class AccountCreation extends React.Component {
       resetIsEnterPressed,
       setIsEnterPressed,
       createAccountMessage,
+      inProgressArray,
     } = this.props.uiStore;
     const {
-      FIN_INFO_FRM, showProcessingModal,
+      FIN_INFO_FRM,
       ACC_TYPES_FRM,
       FUNDING_FRM,
       IDENTITY_FRM,
@@ -149,7 +137,7 @@ export default class AccountCreation extends React.Component {
           name: 'Summary',
           isValid: isValidIraForm ? '' : stepToBeRendered > 5 ? 'error' : '',
           // validForm: isValidIraForm,
-          component: <Summary />,
+          component: <Summary handleUserIdentity={this.props.handleUserIdentity} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
         },
       ];
     } else {
@@ -204,19 +192,16 @@ export default class AccountCreation extends React.Component {
         },
         {
           name: 'Summary',
-          component: <Summary />,
+          component: <Summary handleUserIdentity={this.props.handleUserIdentity} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
           isValid: isValidIraForm ? '' : stepToBeRendered > 4 ? 'error' : '',
           validForm: isValidIraForm,
           bankSummary: false,
         },
       ];
     }
-    if (showProcessingModal) {
-      return <GsModal open={showProcessingModal} closeModal={this.closeProcessingModal} />;
-    }
     return (
       <div className="step-progress">
-        <MultiStep isAccountCreation setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

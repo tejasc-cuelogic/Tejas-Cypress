@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { MultiStep } from '../../../../../../../helper';
 import { Plaid, AddFunds } from '../../../../../shared/bankAccount';
 import Summary from './Summary';
-import GsModal from '../../../components/GsProcessingModal';
 
 @inject('uiStore', 'accountStore', 'bankAccountStore', 'individualAccountStore', 'userStore', 'userDetailsStore')
 @observer
@@ -41,12 +40,6 @@ export default class AccountCreation extends React.Component {
     });
   }
 
-  closeProcessingModal = () => {
-    this.props.individualAccountStore.setFieldValue('showProcessingModal', false);
-    this.props.history.push('/app/account-details/individual/portfolio');
-    this.props.uiStore.resetcreateAccountMessage();
-  }
-
   render() {
     const {
       inProgress,
@@ -54,6 +47,7 @@ export default class AccountCreation extends React.Component {
       setIsEnterPressed,
       resetIsEnterPressed,
       createAccountMessage,
+      inProgressArray,
     } = this.props.uiStore;
     // Done changes for saving link bank details - Alan's feedback point
     // const { plaidAccDetails, formLinkBankManually, formAddFunds } = this.props.bankAccountStore;
@@ -66,7 +60,7 @@ export default class AccountCreation extends React.Component {
       isAccountPresent, setLinkBankSummary,
     } = this.props.bankAccountStore;
     const {
-      stepToBeRendered, createAccount, showProcessingModal,
+      stepToBeRendered, createAccount,
     } = this.props.individualAccountStore;
     const steps = [
       {
@@ -95,17 +89,14 @@ export default class AccountCreation extends React.Component {
       },
       {
         name: 'Summary',
-        component: <Summary />,
+        component: <Summary handleUserIdentity={this.props.handleUserIdentity} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
         disableNextButton: true,
         isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : stepToBeRendered > 2 ? 'error' : '',
       },
     ];
-    if (showProcessingModal) {
-      return <GsModal open={showProcessingModal} closeModal={this.closeProcessingModal} />;
-    }
     return (
       <div className="step-progress">
-        <MultiStep isAccountCreation loaderMsg={createAccountMessage} setLinkbankSummary={setLinkBankSummary} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation loaderMsg={createAccountMessage} setLinkbankSummary={setLinkBankSummary} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

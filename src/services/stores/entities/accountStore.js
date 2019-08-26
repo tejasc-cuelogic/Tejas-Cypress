@@ -3,10 +3,11 @@ import { observable, action, computed } from 'mobx';
 import { find, get, capitalize, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { FormValidator } from '../../../helper';
-import { bankAccountStore, individualAccountStore, iraAccountStore, entityAccountStore, userDetailsStore, uiStore } from '../index';
+import { FormValidator, DataFormatter } from '../../../helper';
+import { bankAccountStore, individualAccountStore, iraAccountStore, entityAccountStore, userDetailsStore, uiStore, identityStore } from '../index';
 import { GqlClient as client } from '../../../api/gqlApi';
-import { getInvestorCloseAccounts, closeInvestorAccount } from '../queries/account';
+// eslint-disable-next-line import/named
+import { getInvestorCloseAccounts, closeInvestorAccount, updateToAccountProcessing } from '../queries/account';
 import Helper from '../../../helper/utility';
 import {
   INVESTMENT_ACCOUNT_TYPES,
@@ -114,6 +115,34 @@ export class AccountStore {
         .catch(() => { reject(); Helper.toast('Error while closing account', 'error'); uiStore.setProgress(false); });
     });
   }
+
+  @action
+  updateToAccountProcessing = (accountId, accountType) => new Promise((resolve, reject) => {
+    identityStore.setFieldValue('signUpLoading', true);
+    client
+      .mutate({
+        mutation: updateToAccountProcessing,
+        variables: {
+          accountId,
+          error: window.sessionStorage.getItem('cipErrorMessage'),
+        },
+      })
+      .then((res) => {
+        this.ACC_TYPE_MAPPING[accountType].store.setFieldValue('showProcessingModal', true);
+        bankAccountStore.resetStoreData();
+        this.ACC_TYPE_MAPPING[accountType].store.isFormSubmitted = true;
+        Helper.toast(`${capitalize(this.ACC_TYPE_MAPPING[accountType].name)} account submitted successfully.`, 'success');
+        identityStore.setFieldValue('signUpLoading', false);
+        resolve(res);
+      })
+      .catch((err) => {
+        Helper.toast('Unable to submit Account', 'error');
+        identityStore.setFieldValue('signUpLoading', false);
+        uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
+        reject();
+      });
+  })
+
 
   @computed
   get sortedAccounts() {

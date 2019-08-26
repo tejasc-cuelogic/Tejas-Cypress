@@ -1298,6 +1298,9 @@ a.icon-link {
 				border-radius: 50%;
 				height: 60px;
 				width: 60px !important;
+				.sb-avatar .sb-avatar__text{
+					font-size: @24px;
+				}
 			}
 			>.image+.content {
 				margin-left: @15px;

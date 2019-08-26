@@ -227,6 +227,7 @@
 @ns-paper-plane: "\e961";
 @ns-partnership: "\e962";
 @ns-pdf: "\e92f";
+@ns-pdf-file: "\e99f";
 @ns-pencil: "\e930";
 @ns-pencil-circle-line: "\e96e";
 @ns-phone-line: "\e973";

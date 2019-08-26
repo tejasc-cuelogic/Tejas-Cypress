@@ -7,7 +7,7 @@ import { inject, observer } from 'mobx-react';
 import Helper from '../../../../../../../helper/utility';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 
-@inject('iraAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore')
+@inject('iraAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'identityStore')
 @withRouter
 @observer
 export default class Summary extends Component {
@@ -32,10 +32,24 @@ export default class Summary extends Component {
   }
 
   handleCreateAccount = () => {
+    this.props.identityStore.setCipStatusWithUserDetails();
+    this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
+    const { userDetails, isCipExpired } = this.props.userDetailsStore;
+    if (isCipExpired || this.props.identityStore.isUserCipOffline || userDetails.cip.requestId === '-1') {
+      this.props.handleUserIdentity('ira', this.handleSubmitAccount);
+      this.props.userDetailsStore.setAccountForWhichCipExpired('ira');
+    } else {
+      this.props.handleLegalDocsBeforeSubmit('ira', this.handleSubmitAccount);
+    }
+  }
+
+  handleSubmitAccount = () => {
     this.props.uiStore.setcreateAccountMessage();
     this.props.iraAccountStore.submitAccount().then(() => {
+      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
+      const url = this.props.iraAccountStore.showProcessingModal ? `${this.props.match.url}/processing` : '/app/setup';
+      this.props.history.push(url);
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      // this.props.history.push('app/setup');
     });
   }
 
