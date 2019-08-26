@@ -120,149 +120,150 @@ export default class BusinessDetails extends Component {
               onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
             />
           </FormElementWrap>
-          <FormElementWrap
-            hideFields={hideFields}
-            header="Sources & Uses"
-            subHeader="Unless provided in your business plan or financial projections, please provide a table clearly outlining all sources of capital for your project (including the proposed NextSeed amount) and the proposed uses of capital."
-          >
-            <Grid>
-              <Grid.Column largeScreen={7} computer={7} tablet={8} mobile={8}>
-                <Header as="h4">Source</Header>
-                <Table inverted className="form-table source-table">
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell>Souce of Funds</Table.HeaderCell>
-                      <Table.HeaderCell>Amount</Table.HeaderCell>
-                      <Table.HeaderCell />
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {BUSINESS_DETAILS_FRM.fields.sources.length ? BUSINESS_DETAILS_FRM.fields.sources.map((source, index) => (
+          {currentApplicationType === 'business' ?
+            <FormElementWrap
+              hideFields={hideFields}
+              header="Sources & Uses"
+              subHeader="Unless provided in your business plan or financial projections, please provide a table clearly outlining all sources of capital for your project (including the proposed NextSeed amount) and the proposed uses of capital."
+            >
+              <Grid>
+                <Grid.Column largeScreen={7} computer={7} tablet={8} mobile={8}>
+                  <Header as="h4">Source</Header>
+                  <Table inverted className="form-table source-table">
+                    <Table.Header>
                       <Table.Row>
-                        <Table.Cell width={7}>
-                          <FormInput
-                            readOnly={formReadOnlyMode}
-                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                            type="text"
-                            asterisk="true"
-                            name="name"
-                            fielddata={source.name}
-                            changed={(e, res) => businessDetailsChange(e, res, 'sources', index)}
-                          />
-                        </Table.Cell>
-                        <Table.Cell>
-                          <MaskedInput
-                            readOnly={formReadOnlyMode}
-                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                            prefix="$ "
-                            currency
-                            type="text"
-                            name="amount"
-                            hidelabel
-                            fielddata={source.amount}
-                            onblur={() => totalChange('sources', 'sourcesTotal')}
-                            changed={(values, field) => businessDetailsMaskingChange(field, values, 'sources', index)}
-                          />
-                        </Table.Cell>
-                        <Table.Cell collapsing>
-                          <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('sources', index)}>
-                            <Icon className="ns-minus-circle" />
-                          </Button>
-                        </Table.Cell>
-                      </Table.Row>
-                    )) : ''}
-                    <Table.Row>
-                      <Table.Cell colspan="3">
-                        <Button size="small" className="link-button" type="button" disabled={formReadOnlyMode} onClick={e => addMoreForms(e, 'sources')} color="green" content="+ Add Source" />
-                      </Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                  {BUSINESS_DETAILS_FRM.fields.sources.length
-                    && (
-                    <Table.Footer>
-                      <Table.Row>
-                        <Table.HeaderCell width={7}>
-                          Total
-                        </Table.HeaderCell>
-                        <Table.HeaderCell>
-                          ${sourcesTotal}
-                          </Table.HeaderCell>
+                        <Table.HeaderCell>Souce of Funds</Table.HeaderCell>
+                        <Table.HeaderCell>Amount</Table.HeaderCell>
                         <Table.HeaderCell />
                       </Table.Row>
-                    </Table.Footer>
-                    )
-                  }
-                </Table>
-              </Grid.Column>
-              <Grid.Column largeScreen={7} computer={7} tablet={8} mobile={8}>
-                <Header as="h4">Uses</Header>
-                <Table inverted className="form-table source-table">
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell>Use of Funds</Table.HeaderCell>
-                      <Table.HeaderCell>Amount</Table.HeaderCell>
-                      <Table.HeaderCell />
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {BUSINESS_DETAILS_FRM.fields.uses.length ? BUSINESS_DETAILS_FRM.fields.uses.map((use, index) => (
+                    </Table.Header>
+                    <Table.Body>
+                      {BUSINESS_DETAILS_FRM.fields.sources.length ? BUSINESS_DETAILS_FRM.fields.sources.map((source, index) => (
+                        <Table.Row>
+                          <Table.Cell width={7}>
+                            <FormInput
+                              readOnly={formReadOnlyMode}
+                              containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                              type="text"
+                              asterisk="true"
+                              name="name"
+                              fielddata={source.name}
+                              changed={(e, res) => businessDetailsChange(e, res, 'sources', index)}
+                            />
+                          </Table.Cell>
+                          <Table.Cell>
+                            <MaskedInput
+                              readOnly={formReadOnlyMode}
+                              containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                              prefix="$ "
+                              currency
+                              type="text"
+                              name="amount"
+                              hidelabel
+                              fielddata={source.amount}
+                              onblur={() => totalChange('sources', 'sourcesTotal')}
+                              changed={(values, field) => businessDetailsMaskingChange(field, values, 'sources', index)}
+                            />
+                          </Table.Cell>
+                          <Table.Cell collapsing>
+                            <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('sources', index)}>
+                              <Icon className="ns-minus-circle" />
+                            </Button>
+                          </Table.Cell>
+                        </Table.Row>
+                      )) : ''}
                       <Table.Row>
-                        <Table.Cell width={7}>
-                          <FormInput
-                            readOnly={formReadOnlyMode}
-                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                            type="text"
-                            asterisk="true"
-                            name="name"
-                            fielddata={use.name}
-                            changed={(e, res) => businessDetailsChange(e, res, 'uses', index)}
-                          />
-                        </Table.Cell>
-                        <Table.Cell>
-                          <MaskedInput
-                            readOnly={formReadOnlyMode}
-                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                            prefix="$ "
-                            currency
-                            type="text"
-                            name="amount"
-                            hidelabel
-                            fielddata={use.amount}
-                            onblur={() => totalChange('uses', 'usesTotal')}
-                            changed={(values, field) => businessDetailsMaskingChange(field, values, 'uses', index)}
-                          />
-                        </Table.Cell>
-                        <Table.Cell collapsing>
-                          <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('uses', index)}>
-                            <Icon className="ns-minus-circle" />
-                          </Button>
+                        <Table.Cell colspan="3">
+                          <Button size="small" className="link-button" type="button" disabled={formReadOnlyMode} onClick={e => addMoreForms(e, 'sources')} color="green" content="+ Add Source" />
                         </Table.Cell>
                       </Table.Row>
-                    )) : ''}
-                    <Table.Row>
-                      <Table.Cell colspan="3">
-                        <Button size="small" className="link-button" type="button" disabled={formReadOnlyMode} onClick={e => addMoreForms(e, 'uses')} color="green" content="+ Add Use" />
-                      </Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                  {BUSINESS_DETAILS_FRM.fields.uses.length
-                    ? (
-                    <Table.Footer>
-                      <Table.Row>
-                        <Table.HeaderCell width={7}>
-                          Total
-                        </Table.HeaderCell>
-                        <Table.HeaderCell>
-                          ${usesTotal}
+                    </Table.Body>
+                    {BUSINESS_DETAILS_FRM.fields.sources.length
+                      ? (
+                      <Table.Footer>
+                        <Table.Row>
+                          <Table.HeaderCell width={7}>
+                            Total
                           </Table.HeaderCell>
+                          <Table.HeaderCell>
+                            ${sourcesTotal}
+                            </Table.HeaderCell>
+                          <Table.HeaderCell />
+                        </Table.Row>
+                      </Table.Footer>
+                      ) : ''}
+                  </Table>
+                </Grid.Column>
+                <Grid.Column largeScreen={7} computer={7} tablet={8} mobile={8}>
+                  <Header as="h4">Uses</Header>
+                  <Table inverted className="form-table source-table">
+                    <Table.Header>
+                      <Table.Row>
+                        <Table.HeaderCell>Use of Funds</Table.HeaderCell>
+                        <Table.HeaderCell>Amount</Table.HeaderCell>
                         <Table.HeaderCell />
                       </Table.Row>
-                    </Table.Footer>
-                    ) : ''}
-                </Table>
-              </Grid.Column>
-            </Grid>
-          </FormElementWrap>
+                    </Table.Header>
+                    <Table.Body>
+                      {BUSINESS_DETAILS_FRM.fields.uses.length ? BUSINESS_DETAILS_FRM.fields.uses.map((use, index) => (
+                        <Table.Row>
+                          <Table.Cell width={7}>
+                            <FormInput
+                              readOnly={formReadOnlyMode}
+                              containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                              type="text"
+                              asterisk="true"
+                              name="name"
+                              fielddata={use.name}
+                              changed={(e, res) => businessDetailsChange(e, res, 'uses', index)}
+                            />
+                          </Table.Cell>
+                          <Table.Cell>
+                            <MaskedInput
+                              readOnly={formReadOnlyMode}
+                              containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                              prefix="$ "
+                              currency
+                              type="text"
+                              name="amount"
+                              hidelabel
+                              fielddata={use.amount}
+                              onblur={() => totalChange('uses', 'usesTotal')}
+                              changed={(values, field) => businessDetailsMaskingChange(field, values, 'uses', index)}
+                            />
+                          </Table.Cell>
+                          <Table.Cell collapsing>
+                            <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('uses', index)}>
+                              <Icon className="ns-minus-circle" />
+                            </Button>
+                          </Table.Cell>
+                        </Table.Row>
+                      )) : ''}
+                      <Table.Row>
+                        <Table.Cell colspan="3">
+                          <Button size="small" className="link-button" type="button" disabled={formReadOnlyMode} onClick={e => addMoreForms(e, 'uses')} color="green" content="+ Add Use" />
+                        </Table.Cell>
+                      </Table.Row>
+                    </Table.Body>
+                    {BUSINESS_DETAILS_FRM.fields.uses.length
+                      ? (
+                      <Table.Footer>
+                        <Table.Row>
+                          <Table.HeaderCell width={7}>
+                            Total
+                          </Table.HeaderCell>
+                          <Table.HeaderCell>
+                            ${usesTotal}
+                            </Table.HeaderCell>
+                          <Table.HeaderCell />
+                        </Table.Row>
+                      </Table.Footer>
+                      ) : ''}
+                  </Table>
+                </Grid.Column>
+              </Grid>
+            </FormElementWrap>
+          : ''}
           <FormElementWrap
             hideFields={hideFields}
             header="Existing Debt"
