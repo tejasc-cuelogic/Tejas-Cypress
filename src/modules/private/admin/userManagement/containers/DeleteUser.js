@@ -12,6 +12,10 @@ export default class DeleteUser extends Component {
     errorMsg: '',
   }
 
+  componentWillMount() {
+    this.props.userDetailsStore.resetForm('DELETE_MESSAGE');
+  }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     const { match } = this.props;
@@ -21,9 +25,10 @@ export default class DeleteUser extends Component {
 
   handleDeleteProfile = () => {
     const isHardDelete = this.props.match.params.action === 'Hard';
+    const redirectURL = isHardDelete ? '/app/users' : `/app/users/${this.props.match.params.userId}/profile-data`;
     this.props.userDetailsStore.deleteProfile(false, isHardDelete).then(() => {
       this.props.userDetailsStore.setFieldValue('selectedUserId', null);
-      this.props.history.push(`/app/users/${this.props.match.params.userId}/profile-data`);
+      this.props.history.push(redirectURL);
     }).catch((res) => {
       this.setState({ errorMsg: res });
     });
