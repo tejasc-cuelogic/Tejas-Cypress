@@ -12,6 +12,7 @@ import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { FieldError } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
+import SupplementalAggrements from './SupplementalAggrements';
 
 const closingActions = {
   ENUM1: { label: 'save', ref: 1, enum: 'update' },
@@ -48,7 +49,9 @@ export default class Close extends Component {
     confirmed: false,
     closureProcessObj: {},
     inProgress: false,
-    visibilityStatus: false,
+    showClosureProcessStatus: false,
+    showCloseInputs: false,
+    showSupplimentAgg: false,
     actionLabel: '',
   }
 
@@ -193,9 +196,9 @@ export default class Close extends Component {
       </Modal>
   );
 
-  toggleVisibilityStatus = () => {
-    const currStatus = this.state.visibilityStatus;
-    this.setState({ visibilityStatus: !currStatus });
+  toggleVisibilityStatus = (of) => {
+    const currStatus = this.state[of];
+    this.setState({ [of]: !currStatus });
   }
 
   processClosureProcessObj = (obj) => {
@@ -281,54 +284,82 @@ out of required
               && (
                 (
                   <>
-                    <Form.Group widths={3}>
-                      {['investorFee', 'maturityDate', 'hardCloseDate', ...dynamicFields, 'anticipatedPaymentStartDate', 'gsFees', 'nsPayment'].map(field => (
-                          <MaskedInput
+                   <Header as="h4"> Close Inputs <Icon onClick={() => this.toggleVisibilityStatus('showCloseInputs')} className={`ns-chevron-${this.state.showCloseInputs === true ? 'up' : 'down'}-compact right`} color="blue" /> </Header>
+                    {this.state.showCloseInputs
+                    && (
+                      <>
+                      <Form.Group widths={3}>
+                        {['investorFee', 'maturityDate', 'hardCloseDate', ...dynamicFields, 'anticipatedPaymentStartDate', 'gsFees', 'nsPayment'].map(field => (
+                            <MaskedInput
+                              key={field}
+                              name={field}
+                              percentage={['interestRate', 'revSharePercentage'].includes(field)}
+                              currency={['nsPayment', 'investorFee', 'multiple', 'nsFee', 'gsFees'].includes(field)}
+                              dateOfBirth={['maturityDate', 'hardCloseDate', 'anticipatedPaymentStartDate'].includes(field)}
+                              fielddata={OFFERING_CLOSE_1.fields[field]}
+                              changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
+                            />
+                        ))
+                        }
+                      </Form.Group>
+                      <Header as="h4">Linked Bank</Header>
+                      <Form.Group widths={3}>
+                        {['bankName', 'accountHolderName'].map(field => (
+                          <FormInput
                             key={field}
                             name={field}
-                            percentage={['interestRate', 'revSharePercentage'].includes(field)}
-                            currency={['nsPayment', 'investorFee', 'multiple', 'nsFee', 'gsFees'].includes(field)}
-                            dateOfBirth={['maturityDate', 'hardCloseDate', 'anticipatedPaymentStartDate'].includes(field)}
                             fielddata={OFFERING_CLOSE_1.fields[field]}
-                            changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
+                            changed={(e, result) => formChange(e, result, 'OFFERING_CLOSE_1')}
                           />
-                      ))
-                      }
-                    </Form.Group>
-                    <Header as="h4">Linked Bank</Header>
-                    <Form.Group widths={3}>
-                      {['bankName', 'accountHolderName'].map(field => (
-                        <FormInput
-                          key={field}
-                          name={field}
-                          fielddata={OFFERING_CLOSE_1.fields[field]}
-                          changed={(e, result) => formChange(e, result, 'OFFERING_CLOSE_1')}
-                        />
-                      ))
-                      }
-                      {['accountNumber', 'routingNumber'].map(field => (
-                          <MaskedInput
-                            key={field}
-                            name={field}
-                            number
-                            fielddata={OFFERING_CLOSE_1.fields[field]}
-                            changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
-                          />
-                      ))
-                      }
-                    </Form.Group>
-                    <Button.Group className="mt-50">
-                      {filter(closingActions, a => a.ref === 1).map(fA => (
-                        <Button
-                          loading={this.state.inProgress === fA.enum}
-                          onClick={() => this.closeAction(fA.enum, 1, false, fA.label)}
-                          primary
-                        >
-                          {fA.label}
-                        </Button>
-                      ))}
-                    </Button.Group>
-                    <Divider className="doubled" />
+                        ))
+                        }
+                        {['accountNumber', 'routingNumber'].map(field => (
+                            <MaskedInput
+                              key={field}
+                              name={field}
+                              number
+                              fielddata={OFFERING_CLOSE_1.fields[field]}
+                              changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
+                            />
+                        ))
+                        }
+                      </Form.Group>
+                      <Divider hidden />
+                      <Button.Group>
+                        {filter(closingActions, a => a.ref === 1).map(fA => (
+                          <Button
+                            loading={this.state.inProgress === fA.enum}
+                            onClick={() => this.closeAction(fA.enum, 1, false, fA.label)}
+                            primary
+                          >
+                            {fA.label}
+                          </Button>
+                        ))}
+                      </Button.Group>
+                      </>
+                    )
+                    }
+                    <Divider section />
+                   <Header as="h4"> Supplemental Agreement <Icon onClick={() => this.toggleVisibilityStatus('showSupplimentAgg')} className={`ns-chevron-${this.state.showSupplimentAgg === true ? 'up' : 'down'}-compact right`} color="blue" /> </Header>
+                    {this.state.showSupplimentAgg
+                    && (
+                      <>
+                        <SupplementalAggrements />
+                        <Button.Group>
+                        {filter(closingActions, a => a.ref === 1).map(fA => (
+                          <Button
+                            loading={this.state.inProgress === 'update'}
+                            onClick={() => this.closeAction('update', 1, false, fA.label)}
+                            primary
+                          >
+                            {fA.label}
+                          </Button>
+                        ))}
+                      </Button.Group>
+                      </>
+                    )
+                    }
+                    <Divider section />
                   </>
                 )
               )
@@ -355,7 +386,7 @@ out of required
                   </>
                 )
                 }
-                <Button.Group className="mt-50">
+                <Button.Group>
                   {filter(closingActions, a => a.ref === 2).map(fA => (
                     <Button
                       loading={inProgress === fA.enum}
@@ -396,7 +427,7 @@ out of required
                   </>
                 )
                 }
-                  <Button.Group className="mt-50">
+                  <Button.Group>
                     {filter(closingActions, a => a.ref === 3).map(fA => (
                       <Button
                         loading={inProgress === fA.enum}
@@ -433,7 +464,7 @@ out of required
                   </>
                 )
                 }
-                <Button.Group className="mt-50">
+                <Button.Group>
                 {filter(closingActions, a => a.ref === 4).map(fA => (
                   <Button
                     loading={inProgress === fA.enum}
@@ -445,6 +476,7 @@ out of required
                   </Button>
                 ))}
               </Button.Group>
+              <Divider className="doubled" />
                   </>
                 )
               }
@@ -468,7 +500,7 @@ out of required
                       }
                     </Form.Group>
                   </Form>
-                  <Button.Group className="mt-50">
+                  <Button.Group>
                     <Button primary>Save draft</Button>
                     <Button color="red" onClick={this.handleUpdateOffering}>Close offering </Button>
                   </Button.Group>
@@ -494,8 +526,8 @@ out of required
               </Card>
             ) : null
           }
-          <Header as="h4"> Closure Process Status <Icon onClick={this.toggleVisibilityStatus} className={`ns-chevron-${this.state.visibilityStatus === true ? 'up' : 'down'}-compact right`} color="blue" /> </Header>
-          {this.state.visibilityStatus
+          <Header as="h4"> Closure Process Status <Icon onClick={() => this.toggleVisibilityStatus('showClosureProcessStatus')} className={`ns-chevron-${this.state.showClosureProcessStatus === true ? 'up' : 'down'}-compact right`} color="blue" /> </Header>
+          {this.state.showClosureProcessStatus
           && (
           <Grid columns={3}>
           {closureProcess ? Object.keys(closureProcess).map(key => (
