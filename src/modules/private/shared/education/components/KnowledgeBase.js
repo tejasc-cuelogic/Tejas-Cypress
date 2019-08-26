@@ -12,8 +12,9 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('educationStore', 'userStore')
 @observer
 export default class KnowledgeBase extends Component {
-  componentWillMount() {
-    const props = { isMkt: this.props.marketing, params: this.props.match.params };
+  constructor(props) {
+    super(props);
+    const params = { isMkt: this.props.marketing, params: this.props.match.params };
     const { currentUser } = this.props.userStore;
     let categoryType;
     if (this.props.match.params.for) {
@@ -21,7 +22,7 @@ export default class KnowledgeBase extends Component {
     } else if (currentUser) {
       categoryType = toJS(currentUser.roles)[0] === 'investor' ? 'INVESTOR_KB' : 'ISSUER_KB';
     }
-    this.props.educationStore.initRequest('KnowledgeBase', props, categoryType);
+    this.props.educationStore.initRequest('KnowledgeBase', params, categoryType);
   }
 
   search = (e) => {

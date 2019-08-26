@@ -11,7 +11,8 @@ const getModule = component => lazy(() => import(`./offering/${component}`));
 @withRouter
 @observer
 export default class Offering extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
     this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
     this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');

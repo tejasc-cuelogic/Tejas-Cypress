@@ -9,7 +9,8 @@ import HtmlEditor from '../../../../../shared/HtmlEditor';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class General extends Component {
-  // componentWillMount() {
+  // constructor(props) {
+  //   super(props);
   //   this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal.general');
   //   this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
   //   if (!this.props.offeringCreationStore.initLoad.includes('DOCUMENTATION_FRM')) {

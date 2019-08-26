@@ -6,7 +6,8 @@ import { InlineLoader } from '../../../../../theme/shared';
 @inject('agreementsStore', 'uiStore')
 @observer
 export default class WelcomePacket extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const {
       getLegalDocsFileIds, getBoxEmbedLink, legalDocsList, readPdfFile,
     } = this.props.agreementsStore;

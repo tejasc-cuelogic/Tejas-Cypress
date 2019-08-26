@@ -11,7 +11,8 @@ import HtmlEditor from '../../../../shared/HtmlEditor';
 @inject('offeringCreationStore', 'uiStore', 'offeringsStore', 'userStore')
 @observer
 export default class KeyTerms extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.offeringCreationStore.setFormData('KEY_TERMS_FRM', 'keyTerms');
     this.props.offeringCreationStore.setFormData('CLOSURE_SUMMARY_FRM', 'closureSummary.keyTerms');
   }

@@ -12,7 +12,8 @@ const getModule = component => lazy(() => import(`./legal/${component}`));
 @withRouter
 @observer
 export default class Legal extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { setFormData } = this.props.offeringCreationStore;
     setFormData('GENERAL_FRM', 'legal.general');
     setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');

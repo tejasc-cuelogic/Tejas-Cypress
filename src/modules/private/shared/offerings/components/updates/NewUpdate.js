@@ -18,13 +18,13 @@ import { DataFormatter } from '../../../../../../helper';
 @withRouter
 @observer
 export default class NewUpdate extends Component {
-  state = {
-    editForm: false,
-    confirmModal: false,
-    loading: false,
-  }
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      editForm: false,
+      confirmModal: false,
+      loading: false,
+    };
     this.initiateFlow(this.props.match.params.action, this.props.match.params.id);
     this.props.updateStore.setFieldValue('newUpdateId', null);
   }
