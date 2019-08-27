@@ -31,6 +31,8 @@ export class UpdateStore {
 
     @observable db;
 
+    @observable isApiHit = false;
+
     @observable PBUILDER_FRM = Validator.prepareFormObject(UPDATES);
 
     @observable TEMPLATE_FRM = Validator.prepareFormObject(TEMPLATE);
@@ -45,6 +47,7 @@ export class UpdateStore {
         fetchPolicy: 'network-only',
         onFetch: (res) => {
           if (res && res.offeringUpdatesByOfferId) {
+            this.setFieldValue('isApiHit', true);
             this.requestState.page = 1;
             this.requestState.skip = 0;
             this.setDb(res.offeringUpdatesByOfferId);
