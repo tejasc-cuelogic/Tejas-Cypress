@@ -96,7 +96,7 @@ export class Auth {
               if (userStore.isAdmin) {
                 this.setAWSAdminAccess(signInUserSession.idToken.jwtToken);
               }
-              if (userStore.isInvestor) {
+              if (userStore.isInvestor && get(userDetailsStore, 'signupStatus.activeAccounts') && get(userDetailsStore, 'signupStatus.activeAccounts').length) {
                 referralsStore.getUserReferralDetails(get(currentUser, 'accessToken.payload.username'));
               }
               return res({ attributes, session: signInUserSession });
@@ -163,7 +163,7 @@ export class Auth {
     try {
       const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
       await this.amplifyLogin(user);
-      if (userStore.isInvestor) {
+      if (userStore.isInvestor && get(userDetailsStore, 'signupStatus.activeAccounts') && get(userDetailsStore, 'signupStatus.activeAccounts').length) {
         referralsStore.getUserReferralDetails();
       }
     } catch (err) {

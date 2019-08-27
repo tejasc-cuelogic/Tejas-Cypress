@@ -58,7 +58,7 @@ export default class CampaignHeader extends Component {
                     }
                     <div className="offer-stats">
                       <Statistic.Group>
-                        {!isClosed && diffForProcessing > 0
+                        {!isClosed && diffForProcessing.value > 0
                           && (
 <Statistic size="mini" className="basic">
                             <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
@@ -182,7 +182,7 @@ export default class CampaignHeader extends Component {
                   }
                   <div className="center-align mt-20">
                     {isCreation
-                      ? <Button fluid secondary={diffForProcessing !== 0} content="Coming Soon" disabled />
+                      ? <Button fluid secondary={diffForProcessing.value !== 0} content="Coming Soon" disabled />
                       : ''
                     }
                     {!isClosed
