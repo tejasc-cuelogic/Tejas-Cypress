@@ -97,7 +97,7 @@ class Comments extends Component {
     const { campaign, commentsMainThreadCount } = this.props.campaignStore;
     const campaignStage = get(campaign, 'stage');
     // const passedProcessingDate = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true) <= 0;
-    const passedProcessingDate = DataFormatter.getDateDifferenceInHours(get(campaign, 'closureSummary.processingDate'), true) <= 0;
+    const passedProcessingDate = DataFormatter.getDateDifferenceInHoursOrMinutes(get(campaign, 'closureSummary.processingDate'), true, true).value <= 0;
     const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull;
     let comments = campaign && campaign.comments;
     const campaignId = campaign && campaign.id;

@@ -35,9 +35,9 @@ const SortableItem = SortableElement(({
     </div>
     <div className="balance width-130">
       {offering && offering.stage
-        ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true) <= 0
+        ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 0
           ? STAGES.PROCESSING.label
-          : stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true) < 48
+          : stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value < 48
             ? STAGES.LOCK.label
             : STAGES[offering.stage].label
         : STAGES[offering.stage].label
