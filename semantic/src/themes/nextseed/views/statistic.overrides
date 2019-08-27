@@ -192,7 +192,23 @@
     padding-left:0;
     &:before{
         display:none;
-    }
+	}
+	@media only screen and (max-width : @largestTabletScreen){
+		justify-content: space-between;
+		width: 100%;
+		.label{
+			font-size: @15px;
+			color: @neutral;
+			a{
+				font-size: @13px;
+				font-weight: @fontMedium;
+			}
+		}
+		.value{
+			font-size: @15px;
+		}
+
+	}
 }
 .tabular-wrap, .sticky-notification{
     .ui.statistic{
