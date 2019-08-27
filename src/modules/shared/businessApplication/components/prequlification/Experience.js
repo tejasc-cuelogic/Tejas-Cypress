@@ -4,7 +4,7 @@ import { MaskedInput } from '../../../../../theme/form';
 const Experience = props => (
   <>
     <MaskedInput
-      maxlength="3"
+      maxlength="2"
       containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
       readOnly={props.preQualFormDisabled}
       key="industryExperience"
@@ -13,7 +13,8 @@ const Experience = props => (
       asterisk="true"
       tooltip={props.fields.industryExperience.tooltip}
       value={props.fields.industryExperience.value}
-      fielddata={{ ...props.fields.industryExperience, label: props.currentApplicationType === 'commercial-real-estate' ? 'How many years of related industry experience does your team have?' : 'How many years of directly relevant industry experience does your team have?' }}
+      label={props.currentApplicationType === 'commercial-real-estate' ? 'How many years of related industry experience does your team have?' : 'How many years of directly relevant industry experience does your team have?'}
+      fielddata={props.fields.industryExperience}
       changed={props.businessAppEleMaskChange}
     />
     <MaskedInput
