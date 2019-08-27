@@ -27,6 +27,19 @@ export const newUpdate = gql`
   mutation _createOfferingUpdates ($updatesInput: OfferingUpdatesInput! ) {
     createOfferingUpdates (updatesInput: $updatesInput) {
       id
+      title
+      isVisible
+      offeringId
+      updated {
+        date
+      }
+      approved {
+        by
+        date
+      }
+      status
+      scope
+      content
     }
   }
 `;
