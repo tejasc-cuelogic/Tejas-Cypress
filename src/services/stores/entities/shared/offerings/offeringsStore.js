@@ -385,6 +385,11 @@ export class OfferingsStore {
     const minOfferingD = get(offer, 'keyTerms.minOfferingAmount506') && get(offer, 'keyTerms.minOfferingAmount506') !== '0.00' ? get(offer, 'keyTerms.minOfferingAmount506') : get(offer, 'keyTerms.minOfferingAmount506C') ? get(offer, 'keyTerms.minOfferingAmount506C') : '0.00';
     offerStatus.minOffering = parseFloat(get(offer, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(minOfferingD, minOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering);
     offerStatus.isFailed = !(offerStatus.collected >= offerStatus.minOffering);
+    offerStatus.diff = DataFormatter.diffDays(closeDate || null, false, true);
+    offerStatus.diffForProcessing = DataFormatter.getDateDifferenceInHoursOrMinutes(closeDate, true, true);
+    offerStatus.countDown = offerStatus.diffForProcessing.value < 48 ? { valueToShow: offerStatus.diffForProcessing.value, labelToShow: offerStatus.diffForProcessing.label } : { valueToShow: offerStatus.diff, labelToShow: 'Days Left' };
+    offerStatus.offeringLiveTitle = offerStatus.diff < 0 || offerStatus.diffForProcessing.value === 0 ? 'Close Date' : offerStatus.diffForProcessing.value < 48 ? `${offerStatus.diffForProcessing.label} Till Close` : 'Days Till Close';
+    offerStatus.offeringLiveContent = closeDate ? offerStatus.diff < 0 || offerStatus.diffForProcessing.value === 0 ? closeDate : offerStatus.diffForProcessing.value < 48 ? `${offerStatus.diffForProcessing.value} ${offerStatus.diffForProcessing.label}` : DataFormatter.diffInDaysHoursMin(closeDate).diffText : 'N/A';
     return offerStatus;
   }
 }
