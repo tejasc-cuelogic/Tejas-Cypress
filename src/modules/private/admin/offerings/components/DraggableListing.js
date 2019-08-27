@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
-import { get } from 'lodash';
+import { get, includes } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Button, Icon, Confirm } from 'semantic-ui-react';
@@ -37,7 +37,7 @@ const SortableItem = SortableElement(({
       {offering && offering.stage
         ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 0
           ? STAGES.PROCESSING.label
-          : stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value < 48
+          : stage === 'live' && get(offering, 'closureSummary.processingDate') && ((includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value < 48)
             ? STAGES.LOCK.label
             : STAGES[offering.stage].label
         : STAGES[offering.stage].label

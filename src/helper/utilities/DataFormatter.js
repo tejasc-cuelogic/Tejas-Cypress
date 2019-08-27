@@ -97,7 +97,7 @@ class DataFormatter {
     const resultHours = Math.floor(resultHoursLength);
     const resultMinutes = moment.duration(endDate.diff(startDate)).minutes();
     const result = resultHours > 0 ? resultHours : resultMinutes > 0 ? resultMinutes : 0;
-    const resultLables = resultHours > 0 ? 'Hours Left' : resultMinutes > 0 ? 'Minutes Left' : null;
+    const resultLables = resultHours > 0 ? resultHours === 1 ? 'Hour Left' : 'Hours Left' : resultMinutes > 0 ? resultMinutes === 1 ? 'Minute Left' : 'Minutes Left' : null;
     const resultantObject = { value: result, label: resultLables };
     return showLabel ? resultantObject : result;
   }
