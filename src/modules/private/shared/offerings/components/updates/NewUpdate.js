@@ -23,21 +23,21 @@ export default class NewUpdate extends Component {
     this.state = {
       editForm: false,
       confirmModal: false,
-      loading: false,
+      loading: true,
     };
-    this.initiateFlow(this.props.match.params.action, this.props.match.params.id);
     this.props.updateStore.setFieldValue('newUpdateId', null);
   }
 
   componentDidMount() {
+    this.initiateFlow(this.props.match.params.action, this.props.match.params.id);
     this.setState({ loading: false });
   }
 
   initiateFlow = (action, id) => {
     if (action !== 'new' && id !== undefined) {
+      this.setState({ loading: false });
       this.props.updateStore.getOne(id);
     } else {
-      this.setState({ loading: true });
       this.props.updateStore.reset();
     }
   }
