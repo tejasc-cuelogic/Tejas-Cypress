@@ -12,7 +12,8 @@ class UpdateDetails extends Component {
   render() {
     const indexId = this.props.match.params.id ? this.props.match.params.id : 0;
     const { updates } = this.props.updateStore;
-    const update = updates && updates.length ? updates[indexId] : null;
+    const filteredUpdates = (updates && updates.length) ? updates.filter(d => d.isVisible) : [];
+    const update = filteredUpdates.length ? filteredUpdates[indexId] : null;
     const calculatedDate = update && update.updated.date
       ? DataFormatter.getDateAsPerTimeZone(update.updated.date, true, true, false) : null;
     return (
