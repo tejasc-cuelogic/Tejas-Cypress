@@ -95,9 +95,10 @@ class DataFormatter {
     // const resultHours = moment.duration(endDate.diff(startDate)).hours();
     const resultHoursLength = moment.duration(endDate.diff(startDate)).asHours();
     const resultHours = Math.floor(resultHoursLength);
-    const resultMinutes = moment.duration(endDate.diff(startDate)).minutes();
-    const result = resultHours > 0 ? resultHours : resultMinutes > 0 ? resultMinutes : 0;
-    const resultLables = resultHours > 0 ? resultHours === 1 ? 'Hour Left' : 'Hours Left' : resultMinutes > 0 ? resultMinutes === 1 ? 'Minute Left' : 'Minutes Left' : null;
+    const resultMinutesLength = moment.duration(endDate.diff(startDate)).asMinutes();
+    const resultMinutes = Math.floor(resultMinutesLength);
+    const result = resultHours > 1 ? resultHours + 1 : resultMinutes > 0 ? resultMinutes > 60 ? 2 : resultMinutes : 0;
+    const resultLables = resultHours > 1 ? 'Hours Left' : resultMinutes > 0 ? resultMinutes > 60 ? 'Hours Left' : resultMinutes === 1 ? 'Minute Left' : 'Minutes Left' : null;
     const resultantObject = { value: result, label: resultLables };
     return showLabel ? resultantObject : result;
   }
