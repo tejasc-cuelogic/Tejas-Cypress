@@ -121,7 +121,6 @@
         }
     }
     .content{
-        word-break: break-all;
         &.scrolling {
             .ui.image.large {
                 min-width: 400px;
@@ -129,6 +128,9 @@
         }
         .pdf-viewer {
             height: 90vh;
+        }
+        &.new-update-modal{
+            word-wrap: break-all;
         }
     }
     &.large {
