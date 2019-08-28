@@ -30,7 +30,7 @@ if (process.env.REACT_APP_BUG_SNAG_KEY) {
 }
 
 // For easier debugging
-if (['localhost', 'develop', 'dev', 'predev'].includes(REACT_APP_DEPLOY_ENV)) {
+if (['localhost', 'develop', 'dev', 'predev', 'review'].includes(REACT_APP_DEPLOY_ENV)) {
   window.APP_STATE = stores;
 }
 
