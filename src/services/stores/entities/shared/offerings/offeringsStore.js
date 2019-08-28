@@ -387,7 +387,7 @@ export class OfferingsStore {
     offerStatus.isFailed = !(offerStatus.collected >= offerStatus.minOffering);
     offerStatus.diff = DataFormatter.diffDays(closeDate || null, false, true);
     offerStatus.diffForProcessing = DataFormatter.getDateDifferenceInHoursOrMinutes(closeDate, true, true);
-    offerStatus.countDown = (includes(['Minute Left', 'Minutes Left'], offerStatus.diffForProcessing.label) && offerStatus.diffForProcessing.value > 0) || offerStatus.diffForProcessing.value < 48 ? { valueToShow: offerStatus.diffForProcessing.value, labelToShow: offerStatus.diffForProcessing.label } : { valueToShow: offerStatus.diff, labelToShow: 'Days Left' };
+    offerStatus.countDown = (includes(['Minute Left', 'Minutes Left'], offerStatus.diffForProcessing.label) && offerStatus.diffForProcessing.value > 0) || offerStatus.diffForProcessing.value < 48 ? { valueToShow: offerStatus.diffForProcessing.value, labelToShow: offerStatus.diffForProcessing.label } : { valueToShow: offerStatus.diff, labelToShow: offerStatus.diff === 1 ? 'Day Left' : 'Days Left' };
     offerStatus.offeringLiveTitle = offerStatus.diff < 0 || offerStatus.diffForProcessing.value === 0 ? 'Close Date' : offerStatus.diffForProcessing.value < 48 ? `${offerStatus.diffForProcessing.label} Till Close` : 'Days Till Close';
     offerStatus.offeringLiveContent = closeDate ? offerStatus.diff < 0 || offerStatus.diffForProcessing.value === 0 ? closeDate : offerStatus.diffForProcessing.value < 48 ? `${offerStatus.diffForProcessing.value} ${offerStatus.diffForProcessing.label}` : DataFormatter.diffInDaysHoursMin(closeDate).diffText : 'N/A';
     return offerStatus;
