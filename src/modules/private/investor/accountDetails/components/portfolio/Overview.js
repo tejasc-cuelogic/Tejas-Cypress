@@ -241,28 +241,23 @@ class Overview extends Component {
                       </Table.Row>
                       ) : ''
                     }
-                    {agreementIds && agreementIds.length
+                    {(agreementIds && agreementIds.length) || (aggrementDocs && aggrementDocs.length)
                       ? (
                       <Table.Row verticalAlign="top">
-                        <Table.Cell>Investor Agreement{agreementIds.length > 1 && 's'} </Table.Cell>
+                        <Table.Cell>Investor Agreement{(agreementIds.length + aggrementDocs.length) > 1 && 's'} </Table.Cell>
                         <Table.Cell>
-                          {agreementIds.map(agreementId => (
-                            <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text"><Icon className="ns-pdf-file" size="large" /> {agreementId} </Button>
-                          ))}
+                          <Button.Group vertical>
+                            {agreementIds && agreementIds.length !== 0 && agreementIds.map(agreementId => (
+                              <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {agreementId} </Button>
+                            ))}
+                            {aggrementDocs && aggrementDocs.length !== 0 && aggrementDocs.map(doc => (
+                              <Button icon loading={this.state.loadingDoc === get(doc, 'upload.fileHandle.boxFileId')} onClick={() => this.handleViewSuppAgreement(get(doc, 'upload.fileHandle.boxFileId'))} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {doc.name}</Button>
+                            ))}
+                          </Button.Group>
                         </Table.Cell>
                       </Table.Row>
                       ) : null
                     }
-                    {aggrementDocs && aggrementDocs.length ? (
-                      <Table.Row>
-                        <Table.Cell>Supplemental Agreements</Table.Cell>
-                        <Table.Cell>
-                          {aggrementDocs.map(doc => (
-                            <Button icon loading={this.state.loadingDoc === get(doc, 'upload.fileHandle.boxFileId')} onClick={() => this.handleViewSuppAgreement(get(doc, 'upload.fileHandle.boxFileId'))} className="link-button highlight-text"><Icon className="ns-pdf-file" size="large" /> {doc.name}</Button>
-                          ))}
-                        </Table.Cell>
-                      </Table.Row>
-                    ) : null}
                     {edgarLink
                     && (
                     <Table.Row>

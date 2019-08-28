@@ -18,7 +18,7 @@ const navItems = [
   { title: 'Updates', to: 'updates', component: 'Updates' },
   { title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards' },
 ];
-@inject('portfolioStore', 'campaignStore', 'uiStore', 'offeringCreationStore')
+@inject('portfolioStore', 'campaignStore', 'uiStore', 'offeringCreationStore', 'updateStore')
 @observer
 class InvestmentDetails extends Component {
   constructor(props) {
@@ -42,6 +42,7 @@ class InvestmentDetails extends Component {
 
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.updateStore.setFieldValue('isApiHit', false);
     this.props.offeringCreationStore.resetOfferingId();
     this.props.history.replace(this.props.refLink);
   };

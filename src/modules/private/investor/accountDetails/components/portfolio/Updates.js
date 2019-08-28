@@ -12,19 +12,22 @@ import { DataFormatter } from '../../../../../../helper';
 class Updates extends Component {
   constructor(props) {
     super(props);
-    this.props.updateStore.initRequest();
+    if (!this.props.updateStore.isApiHit) {
+      this.props.updateStore.initRequest();
+    }
   }
 
   render() {
     const { updates, loading } = this.props.updateStore;
     const summary = [];
-    if (updates && updates.length) {
-      updates.map((dataItem, index) => {
+    const filteredUpdates = (updates && updates.length) ? updates.filter(d => d.isVisible) : [];
+    if (filteredUpdates && filteredUpdates.length) {
+      filteredUpdates.map((dataItem, index) => {
         const dateObj = {};
         dateObj.id = index;
         dateObj.title = dataItem.title;
-        dateObj.date = updates[index].updated.date
-          ? DataFormatter.getDateAsPerTimeZone(updates[index].updated.date, true, true, false) : null;
+        dateObj.date = filteredUpdates[index].updated.date
+          ? DataFormatter.getDateAsPerTimeZone(filteredUpdates[index].updated.date, true, true, false) : null;
         return summary.push(dateObj);
       });
     }
