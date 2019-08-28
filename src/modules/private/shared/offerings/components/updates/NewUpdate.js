@@ -167,7 +167,7 @@ export default class NewUpdate extends Component {
                             </Button>
                           )}
                         >
-                          <Modal.Content>
+                          <Modal.Content className="new-update-modal">
                             <Header>
                               <div className="ui image avatar-image">
                                 {companyAvatarUrl && companyAvatarUrl.length
