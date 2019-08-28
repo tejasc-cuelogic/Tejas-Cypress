@@ -64,8 +64,10 @@ export default class NewUpdate extends Component {
   }
 
   sendTestEmail = (id) => {
+    this.props.uiStore.setProgress();
     if (this.props.updateStore.PBUILDER_FRM.meta.isDirty) {
       this.props.updateStore.save(id, 'DRAFT', false).then(() => {
+        this.props.uiStore.setProgress();
         this.props.updateStore.sendTestEmail(id);
       });
     } else {
@@ -103,6 +105,7 @@ export default class NewUpdate extends Component {
     const { inProgress, loaderMessage } = this.props.uiStore;
     const { id } = this.props.match.params;
     const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
+    const isDraft = PBUILDER_FRM.fields.status.value === 'DRAFT';
     if (loadingCurrentUpdate || this.state.loading) {
       return <InlineLoader />;
     }
@@ -118,7 +121,7 @@ export default class NewUpdate extends Component {
               save={this.save}
               meta={PBUILDER_FRM.meta}
               isManager={isManager}
-              isDraft={PBUILDER_FRM.fields.status.value === 'DRAFT'}
+              isDraft={isDraft}
               isPending={PBUILDER_FRM.fields.status.value === 'PENDING'}
               isPublished={PBUILDER_FRM.fields.status.value === 'PUBLISHED'}
               editForm={this.state.editForm}
@@ -148,7 +151,7 @@ export default class NewUpdate extends Component {
                     changed={FChange}
                     name="content"
                     content={PBUILDER_FRM.fields.content.value}
-                    overrides={{ heightMin: '70vh' }}
+                    overrides={{ heightMin: '80vh', heightMax: '80vh' }}
                   />
                 </Form>
               </Grid.Column>
@@ -186,9 +189,11 @@ export default class NewUpdate extends Component {
                           </Modal.Content>
                         </Modal>
                       </List.Item>
+                      {isManager && (
                       <List.Item>
-                        <Button color="green" className="link-button" disabled={isNew || loaderMessage} content={loaderMessage || 'Send test email to me'} onClick={() => this.sendTestEmail(this.props.match.params.id || this.props.updateStore.newUpdateId)} />
-                      </List.Item>
+                        <Button color="green" className="link-button" disabled={isNew || loaderMessage || inProgress} content={loaderMessage || 'Send test email to me'} onClick={() => this.sendTestEmail(this.props.match.params.id || this.props.updateStore.newUpdateId)} />
+                     </List.Item>
+                      )}
                     </List>
                   </Card.Content>
                 </Card>
@@ -318,6 +323,16 @@ export default class NewUpdate extends Component {
                       </Card>
                     </>
                   )
+              }
+              {id && (isManager || (!isManager && isDraft)) && (
+              <Button
+                inverted
+                color="red"
+                onClick={this.showConfirmModal}
+                disabled={inProgress}
+                content="Delete"
+              />
+              )
               }
               </Grid.Column>
             </Grid.Row>
