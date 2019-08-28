@@ -120,7 +120,7 @@ export default class BusinessDetails extends Component {
               onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
             />
           </FormElementWrap>
-          {currentApplicationType === 'business' ?
+          {currentApplicationType === 'business' ? (
             <FormElementWrap
               hideFields={hideFields}
               header="Sources & Uses"
@@ -263,7 +263,7 @@ export default class BusinessDetails extends Component {
                 </Grid.Column>
               </Grid>
             </FormElementWrap>
-          : ''}
+          ) : ''}
           <FormElementWrap
             hideFields={hideFields}
             header="Existing Debt"
