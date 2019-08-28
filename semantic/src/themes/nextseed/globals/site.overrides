@@ -2059,6 +2059,7 @@ ol.progtrckr{
 		}
 		>.amount{
 			min-width:calc(100% / 7);
+			width: 150px;
 			padding:0 1rem;
 			position:absolute;
 			top:15px;
