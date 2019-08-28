@@ -82,7 +82,7 @@ export default class DeleteUser extends React.Component {
                 <Form className="left-align mt-50 mb-40">
                   <Form.Input
                     fluid
-                    label="E-mail"
+                    label="Email"
                     type="text"
                     name="email"
                     fielddata={USR_FRM.fields.email}

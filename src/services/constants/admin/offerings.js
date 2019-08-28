@@ -1051,7 +1051,7 @@ export const LEADERSHIP = {
     },
     email: {
       value: '',
-      label: 'E-mail address',
+      label: 'Email address',
       error: undefined,
       rule: 'email',
       customErrors: { email: 'Email is not valid' },
