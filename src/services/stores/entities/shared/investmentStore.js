@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { capitalize, orderBy, mapValues, get } from 'lodash';
+import { capitalize, orderBy, mapValues, get, includes } from 'lodash';
 import { Calculator } from 'amortizejs';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
@@ -405,10 +405,11 @@ export class InvestmentStore {
     let resultToReturn = false;
     const offeringDetails = portfolioStore.getInvestorAccountById;
     if (offeringDetails) {
-      const isLokcinPeriod = DataFormatter.getDateDifferenceInHours(offeringDetails && offeringDetails.offering
-        && offeringDetails.offering.closureSummary
-        && offeringDetails.offering.closureSummary.processingDate
-        ? offeringDetails.offering.closureSummary.processingDate : null, true) < 48;
+      const isLokcinPeriod = (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offeringDetails, 'offering.closureSummary.processingDate') || null, true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offeringDetails, 'offering.closureSummary.processingDate') || null, true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offeringDetails, 'offering.closureSummary.processingDate') || null, true, true).isLokinPeriod;
+      // const isLokcinPeriod = DataFormatter.getDateDifferenceInHoursOrMinutes(offeringDetails && offeringDetails.offering
+      //   && offeringDetails.offering.closureSummary
+      //   && offeringDetails.offering.closureSummary.processingDate
+      //   ? offeringDetails.offering.closureSummary.processingDate : null, true, true).value < 48;
       if (isLokcinPeriod) {
         const alreadyInvestedAmount = offeringDetails.investedAmount;
         resultToReturn = money.cmp(this.investmentAmount, alreadyInvestedAmount) < 0;

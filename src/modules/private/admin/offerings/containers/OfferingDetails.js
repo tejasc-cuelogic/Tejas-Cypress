@@ -55,6 +55,7 @@ export default class OfferingDetails extends Component {
     let navItems = navStore.specificNavs.subNavigations;
     const { offerLoading, offerOld } = offeringsStore;
     let { offer } = offeringsStore;
+    const { offerStatus } = offeringsStore;
     offer = !offerLoading && offerOld.stage ? offerOld : offer;
     if (!get(offer, 'id') || (offerLoading && offer && !offer.stage)) {
       return <InlineLoader />;
@@ -96,7 +97,7 @@ export default class OfferingDetails extends Component {
                 }
               </Header.Subheader>
             </Header>
-            {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} />}
+            {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} offerStatus={offerStatus} />}
             <Card fluid>
               <SecondaryMenu match={match} navItems={navItems} />
               <Switch>
