@@ -324,7 +324,7 @@ export default class NewUpdate extends Component {
                     </>
                   )
               }
-              {id && (isManager || (!isManager && isDraft)) && (
+              {(id || newUpdateId) && (isManager || (!isManager && isDraft)) && (
               <Button
                 inverted
                 color="red"
