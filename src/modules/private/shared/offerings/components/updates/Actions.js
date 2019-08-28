@@ -35,7 +35,7 @@ const Actions = observer((props) => {
                       primary
                       onClick={() => save(id, 'PENDING')}
                       content="Submit"
-                      disabled={!(meta.isValid && meta.isDirty) || inProgress}
+                      disabled={!meta.isValid || inProgress}
                       loading={inProgress === 'PENDING'}
                     />
                   </>
