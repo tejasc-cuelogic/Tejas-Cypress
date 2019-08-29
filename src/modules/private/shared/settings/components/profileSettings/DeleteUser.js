@@ -85,6 +85,7 @@ export default class DeleteUser extends React.Component {
                     label="E-mail"
                     type="text"
                     name="email"
+                    placeholder="Enter email here"
                     fielddata={USR_FRM.fields.email}
                     onChange={(e, res) => userEleChange(e, res, 'text', true)}
                   />
