@@ -58,7 +58,7 @@ export default class Security extends Component {
                     <Table compact="very" basic="very" className="no-border mb-20">
                       <Table.Body>
                         <Table.Row>
-                          <Table.Cell collapsing><b>E-mail</b> {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Selected</Label> }</Table.Cell>
+                          <Table.Cell collapsing><b>Email</b> {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Selected</Label> }</Table.Cell>
                           <Table.Cell collapsing>
                             {userDetails.email && userDetails.email.address}
                           </Table.Cell>

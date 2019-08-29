@@ -102,7 +102,7 @@ export default class ProfileData extends Component {
                         <Button as={Link} to={`${this.props.match.url}/update-profile-photo`} circular icon={{ className: 'ns-pencil' }} className="change-profile-icon" color="green" />
                       </div>
                     </Table.Cell>
-                    <Table.Cell><b>E-mail Address</b></Table.Cell>
+                    <Table.Cell><b>Email Address</b></Table.Cell>
                     <Table.Cell>{email && email.address ? email.address : 'N/A'}</Table.Cell>
                     <Table.Cell><Link to={`${this.props.match.url}/new-email-address`}>Change Email</Link></Table.Cell>
                   </Table.Row>
