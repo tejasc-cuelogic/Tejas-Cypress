@@ -4,11 +4,14 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { capitalize, get } from 'lodash';
 import { Container, Card, List, Grid, Message, Label } from 'semantic-ui-react';
+// import { IonIcon } from '@ionic/react';
+// import { heart } from 'ionicons/icons';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_ABREVIATION, CAMPAIGN_OFFERED_BY } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 import NSImage from '../../../../shared/NSImage';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+
 
 @inject('campaignStore', 'accreditationStore')
 @observer
@@ -78,7 +81,7 @@ export default class CampaignList extends Component {
                           </div>
                         </div>
                         {offering.stage === 'LIVE' ? this.renderBaners(offering) : null }
-                        {/* <Icon name="heart" /> "heart outline" for unliked campaigns */}
+                        {/* <IonIcon size="large" icon={heart} /> */}
                         <>
                           <Card.Content>
                             <div className="tags mb-10">
