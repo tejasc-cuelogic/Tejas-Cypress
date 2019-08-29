@@ -519,6 +519,12 @@ export const BUSINESS_DETAILS = {
     term: {
       value: 0, label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' },
     },
+    termStartDate: {
+      value: null, label: 'Term Start Date', error: undefined, rule: 'required|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
+    },
+    maturityDate: {
+      value: null, label: 'Maturity Date', error: undefined, rule: 'required|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
+    },
   }],
   sources: [{
     name: {

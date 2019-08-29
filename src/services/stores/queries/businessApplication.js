@@ -251,6 +251,8 @@ query _getBusinessApplicationById ($id: String!) {
         interestExpenses
         remainingPrincipal
         term
+        termStartDate
+        maturityDate
       }
       owners {
         fullLegalName

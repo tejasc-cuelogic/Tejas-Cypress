@@ -304,7 +304,23 @@ export default class BusinessDetails extends Component {
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                       />
                     </Form.Group>
-                    <Form.Group widths="equal">
+                    {currentApplicationType === 'business'
+                      ? (
+                        <Form.Group widths="equal">
+                          {['termStartDate', 'maturityDate'].map(field => (
+                            <MaskedInput
+                              name={field}
+                              readOnly={formReadOnlyMode}
+                              containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                              fielddata={debt[field]}
+                              format="##/##/####"
+                              changed={values => businessDetailsDateChange(field, values.formattedValue, index, 'debts')}
+                              dateOfBirth
+                            />
+                          ))}
+                        </Form.Group>
+                      ) : ''}
+                    <Form.Group widths={`${currentApplicationType !== 'business' ? 'equal width' : 'columns two'}`}>
                       <MaskedInput
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
@@ -315,15 +331,18 @@ export default class BusinessDetails extends Component {
                         fielddata={debt.remainingPrincipal}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                       />
-                      <MaskedInput
-                        readOnly={formReadOnlyMode}
-                        containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                        number
-                        type="text"
-                        name="term"
-                        fielddata={debt.term}
-                        changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
-                      />
+                      {currentApplicationType !== 'business'
+                        ? (
+                        <MaskedInput
+                          readOnly={formReadOnlyMode}
+                          containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                          number
+                          type="text"
+                          name="term"
+                          fielddata={debt.term}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
+                        />
+                        ) : ''}
                     </Form.Group>
                   </div>
                 </Grid.Column>

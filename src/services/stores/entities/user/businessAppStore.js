@@ -175,6 +175,7 @@ export class BusinessAppStore {
 
   @action
   fetchApplicationDataById = (applicationId, isPartialApp = false) => new Promise((resolve) => {
+    uiStore.setProgress(true);
     uiStore.setAppLoader(true);
     uiStore.setLoaderMessage('Getting application data');
     this.businessApplicationsDataById = graphql({
@@ -187,12 +188,14 @@ export class BusinessAppStore {
       onFetch: (data) => {
         if ((data && data.businessApplication && !this.businessApplicationsDataById.loading) || (data && data.getPreQualificationById && !this.businessApplicationsDataById.loading)) {
           this.setBusinessApplicationData(isPartialApp);
+          uiStore.setProgress(false);
           uiStore.setAppLoader(false);
           resolve();
         }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setProgress(false);
         uiStore.setAppLoader(false);
       },
     });
@@ -411,7 +414,7 @@ export class BusinessAppStore {
     if (data) {
       this.appStepsStatus[1].status = data.stepStatus;
       data.debts.forEach((ele, key) => {
-        ['amount', 'interestExpenses', 'remainingPrincipal', 'term'].forEach((field) => {
+        ['amount', 'interestExpenses', 'remainingPrincipal', 'term', 'maturityDate', 'termStartDate'].forEach((field) => {
           this.BUSINESS_DETAILS_FRM.fields.debts[key][field].value = ele[field];
         });
         if (key < data.debts.length - 1) {
@@ -599,11 +602,11 @@ export class BusinessAppStore {
   }
 
   @action
-  businessDetailsDateChange = (field, date, index = -1) => {
+  businessDetailsDateChange = (field, date, index = -1, subFormName = 'owners') => {
     this.BUSINESS_DETAILS_FRM = Validator.onArrayFieldChange(
       this.BUSINESS_DETAILS_FRM,
       { name: field, value: date },
-      'owners',
+      subFormName,
       index,
     );
   }
@@ -739,12 +742,14 @@ export class BusinessAppStore {
         interestExpenses: this.getValidDataForInt(item.interestExpenses),
         remainingPrincipal: this.getValidDataForInt(item.remainingPrincipal),
         term: this.getValidDataForInt(item.term),
+        termStartDate: item.termStartDate.value ? moment(item.termStartDate.value).format('MM/DD/YYYY') : null,
+        maturityDate: item.maturityDate.value ? moment(item.maturityDate.value).format('MM/DD/YYYY') : null,
       })),
       owners: data.owners.map(item => ({
         fullLegalName: this.getValidDataForString(item.fullLegalName),
         yearsOfExp: item.yearsOfExp.value ? this.getValidDataForInt(item.yearsOfExp) : null,
         ssn: this.getValidDataForString(item.ssn),
-        dateOfService: item.dateOfService.value ? moment(item.dateOfService).format('MM/DD/YYYY') : null,
+        dateOfService: item.dateOfService.value ? moment(item.dateOfService.value).format('MM/DD/YYYY') : null,
         companyOwnerShip: item.companyOwnerShip.value
           ? this.getValidDataForInt(item.companyOwnerShip, 1) : null,
         linkedInUrl: this.getValidDataForString(item.linkedInUrl),
