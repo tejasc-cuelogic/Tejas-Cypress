@@ -405,7 +405,7 @@ export class InvestmentStore {
     let resultToReturn = false;
     const offeringDetails = portfolioStore.getInvestorAccountById;
     if (offeringDetails) {
-      const isLokcinPeriod = (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offeringDetails, 'offering.closureSummary.processingDate') || null, true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offeringDetails, 'offering.closureSummary.processingDate') || null, true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offeringDetails, 'offering.closureSummary.processingDate') || null, true, true).value < 48;
+      const isLokcinPeriod = (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offeringDetails, 'offering.closureSummary.processingDate') || null, true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offeringDetails, 'offering.closureSummary.processingDate') || null, true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offeringDetails, 'offering.closureSummary.processingDate') || null, true, true).isLokinPeriod;
       // const isLokcinPeriod = DataFormatter.getDateDifferenceInHoursOrMinutes(offeringDetails && offeringDetails.offering
       //   && offeringDetails.offering.closureSummary
       //   && offeringDetails.offering.closureSummary.processingDate
