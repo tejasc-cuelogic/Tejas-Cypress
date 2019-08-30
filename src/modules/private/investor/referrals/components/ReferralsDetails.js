@@ -8,17 +8,13 @@ import { InlineLoader } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 
-@inject('referralsStore', 'userDetailsStore')
+@inject('referralsStore', 'userDetailsStore', 'userStore')
 @observer
 export default class ReferralsDetails extends Component {
   componentWillMount() {
-    const { userDetails } = this.props.userDetailsStore;
-    const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
-    const userId = saasQuatchUserId || get(userDetails, 'id');
-    if (userId) {
-      this.props.referralsStore.upsertUserReferralCredits(get(userDetails, 'id')).then(() => {
-        this.props.referralsStore.getUserReferralDetails();
-      });
+    const { userStore, userDetailsStore } = this.props;
+    if (userStore.isInvestor && get(userDetailsStore, 'signupStatus.activeAccounts') && get(userDetailsStore, 'signupStatus.activeAccounts').length) {
+      this.props.referralsStore.getUserReferralDetails();
     }
   }
 
