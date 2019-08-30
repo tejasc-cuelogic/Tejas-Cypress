@@ -425,8 +425,8 @@ export class UserDetailsStore {
   }
 
   @action
-  resetForm = (formName) => {
-    this[formName] = Validator.prepareFormObject(formName);
+  resetDeleteUserForm = () => {
+    this.DELETE_MESSAGE_FRM = Validator.prepareFormObject(DELETE_MESSAGE);
   }
 
   @computed get signupStatus() {
