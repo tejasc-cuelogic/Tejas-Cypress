@@ -63,17 +63,17 @@
   },
   "businessDetails": {
     "existingDebt": {
-      "amount": {
-        "value": 100000
-      },
       "interestExpenses": {
         "value": 30
       },
       "remainingPrincipal": {
         "value": 80000
       },
-      "term": {
-        "value": 35
+      "termStartDate" : {
+        "value": "10/10/2019"
+      },
+      "maturityDate" : {
+        "value": "11/11/2019"
       }
     },
     "owner": {
@@ -97,6 +97,16 @@
       },
       "linkedInUrl": {
         "value": "http://linkedin.com/username"
+      }
+    },
+    "sourcesAndUses": {
+      "sources": {
+        "name": "source",
+        "amount": "1000"
+      },
+      "uses": {
+        "name": "source",
+        "amount": "1000"
       }
     }
   }

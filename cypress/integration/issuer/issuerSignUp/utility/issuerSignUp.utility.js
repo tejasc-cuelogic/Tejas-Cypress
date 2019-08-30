@@ -31,6 +31,7 @@ export const fillNextYearProjection = (nextYearProjection) => {
 export const fillBusinessDetails = async (businessDetails) => {
   cy.uploadFile('/issuer/test-img.png', 'png', 'input[name="businessPlan"]', '/dev/graphql');
   cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
+  fillSourcesAndUses(businessDetails.sourcesAndUses);
   fillExistingDebt(businessDetails.existingDebt);
   fillOwnerInfo(businessDetails.owner);
 }
@@ -48,7 +49,15 @@ export const loginToApplication = () => {
     })
 }
 
+export const fillSourcesAndUses = (sourcesAndUses) => {
+  cy.get('.sources').find('input[name="name"]').type(sourcesAndUses.sources.name);
+  cy.get('.sources').find('input[name="amount"]').type(sourcesAndUses.sources.amount);
+  cy.get('.uses').find('input[name="name"]').type(sourcesAndUses.uses.name);
+  cy.get('.uses').find('input[name="amount"]').type(sourcesAndUses.uses.amount);
+}
+
 export const fillExistingDebt = (existingDebt) => {
+  cy.get('.field-wrap > :nth-child(2) > :nth-child(1) > div > input').type("100000");
   cy.clearFormField(existingDebt);
   cy.formFill(existingDebt);
 }
@@ -93,9 +102,10 @@ export const preQualificationFail = async () => {
 export const completeBusinessApplication = async () => {
   const issuerPreQual = await getJSONDataFromFixtures('issuer/issuerPreQual.json');
   fillPreQaulificationDetails(issuerPreQual);
-  loginToApplication();
+  // loginToApplication();
+  cy.wait(20000);
   registerApiCall('Proceed');
-  cy.get('button').contains('Proceed').click();
+  cy.get('.large').click();
   cy.wait('@Proceed');
   cy.get('<div.ui.large.text.loader>', { timeout: 6000 }).should('not.exist');
   fillBusinessDetails(issuerPreQual.businessDetails);

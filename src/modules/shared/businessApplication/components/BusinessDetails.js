@@ -129,7 +129,7 @@ export default class BusinessDetails extends Component {
               <Grid>
                 <Grid.Column largeScreen={7} computer={7} tablet={8} mobile={8}>
                   <Header as="h4">Source</Header>
-                  <Table inverted className="form-table source-table">
+                  <Table inverted className="form-table source-table sources">
                     <Table.Header>
                       <Table.Row>
                         <Table.HeaderCell>Souce of Funds</Table.HeaderCell>
@@ -196,7 +196,7 @@ export default class BusinessDetails extends Component {
                 </Grid.Column>
                 <Grid.Column largeScreen={7} computer={7} tablet={8} mobile={8}>
                   <Header as="h4">Uses</Header>
-                  <Table inverted className="form-table source-table">
+                  <Table inverted className="form-table source-table uses">
                     <Table.Header>
                       <Table.Row>
                         <Table.HeaderCell>Use of Funds</Table.HeaderCell>
