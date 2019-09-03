@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { get } from 'lodash';
 import { DataFormatter } from '../../../../../helper';
 
-const leftSummary = offer => [
+const leftSummary = (offer, offerStatus) => [
   {
     title: 'Business Name',
     content: (get(offer, 'keyTerms.shorthandBusinessName')
@@ -13,7 +13,8 @@ const leftSummary = offer => [
       )),
   },
   { title: 'Launch Date', content: get(offer, 'closureSummary.launchDate') ? DataFormatter.formatedDate(get(offer, 'closureSummary.launchDate')) : 'N/A' },
-  { title: DataFormatter.diffDays(get(offer, 'closureSummary.processingDate'), false, true) < 0 ? 'Close Date' : DataFormatter.getDateDifferenceInHours(get(offer, 'closureSummary.processingDate'), true) < 48 ? 'Hours Till Close' : 'Days Till Close', content: get(offer, 'closureSummary.processingDate') ? (DataFormatter.diffDays(get(offer, 'closureSummary.processingDate'), false, true) < 0) ? get(offer, 'closureSummary.processingDate') : DataFormatter.getDateDifferenceInHours(get(offer, 'closureSummary.processingDate'), true) < 48 ? `${DataFormatter.getDateDifferenceInHours(get(offer, 'closureSummary.processingDate'), true)} Hours` : DataFormatter.diffInDaysHoursMin(get(offer, 'closureSummary.processingDate')).diffText : 'N/A' },
+  { title: offerStatus.offeringLiveTitle, content: offerStatus.offeringLiveContent },
+
 ];
 
 const rightSummary = offer => [
@@ -22,7 +23,7 @@ const rightSummary = offer => [
   { title: 'Phone', content: get(offer, 'issuerDetails.phone.number') || 'N/A' },
 ];
 
-const LiveSummary = ({ offer, refLink, onClick }) => (
+const LiveSummary = ({ offer, refLink, onClick, offerStatus }) => (
   <Grid columns="equal">
     <Grid.Row>
       <Grid.Column>
@@ -34,7 +35,7 @@ const LiveSummary = ({ offer, refLink, onClick }) => (
           </Card.Header>
           <Card.Content>
             <Grid columns={3}>
-              { leftSummary(offer).map(item => (
+              { leftSummary(offer, offerStatus).map(item => (
                 <Grid.Column>
                   <Header as="h6">
                     <Header.Subheader>{item.title}</Header.Subheader>

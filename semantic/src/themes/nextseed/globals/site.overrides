@@ -319,6 +319,9 @@ a{
 	background-color: @neutral-offwhite;
 	// padding:@14px @20px;       commented to resolve on public homepage
 }
+.bg-midwhite{
+	background-color: @neutral-midwhite;
+}
 .green-block {
 	background-color: @primary-one;
 }
@@ -2063,6 +2066,7 @@ ol.progtrckr{
 		}
 		>.amount{
 			min-width:calc(100% / 7);
+			width: 150px;
 			padding:0 1rem;
 			position:absolute;
 			top:15px;
