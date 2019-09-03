@@ -180,7 +180,7 @@ export default class NewUpdate extends Component {
                               </div>
                               <Header.Content className="grey-header">
                                 {get(offer, 'keyTerms.shorthandBusinessName')}
-                                <Header.Subheader>{isNew ? DataFormatter.getCurrentCSTMoment().format('ll') : DataFormatter.getDateAsPerTimeZone((get(currentUpdate, 'data.offeringUpdatesById.updated.date') || get(currentUpdate, 'data.offeringUpdatesById.created.date') || ''), true, true)}</Header.Subheader>
+                                <Header.Subheader>{isNew ? DataFormatter.getCurrentCSTMoment().format('LL') : DataFormatter.getDateAsPerTimeZone((get(currentUpdate, 'data.offeringUpdatesById.updated.date') || get(currentUpdate, 'data.offeringUpdatesById.created.date') || ''), true, false, false, 'LL')}</Header.Subheader>
                                 {/* <Header.Subheader>{moment().format('ll')}</Header.Subheader> */}
                               </Header.Content>
                             </Header>

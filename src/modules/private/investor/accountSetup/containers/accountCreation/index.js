@@ -52,6 +52,7 @@ export default class AccountCreation extends Component {
             window.sessionStorage.removeItem('cipErrorMessage');
             this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
             const url = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.showProcessingModal ? `${this.props.match.url}/${accountType}/processing` : '/app/summary';
+            this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.setFieldValue('showProcessingModal', false);
             this.props.history.push(url);
             this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
           });

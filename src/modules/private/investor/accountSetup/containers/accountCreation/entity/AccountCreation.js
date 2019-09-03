@@ -14,9 +14,7 @@ import Summary from './Summary';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
-    if (!this.props.entityAccountStore.showProcessingModal) {
-      this.checkIfAccountIsAlreadyPresent('entity');
-    }
+    this.checkIfAccountIsAlreadyPresent('entity');
     if (!this.props.entityAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('entity');

@@ -8,9 +8,7 @@ import Summary from './Summary';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
-    if (!this.props.individualAccountStore.showProcessingModal) {
-      this.checkIfAccountIsAlreadyPresent('individual');
-    }
+    this.checkIfAccountIsAlreadyPresent('individual');
     if (!this.props.individualAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('individual');

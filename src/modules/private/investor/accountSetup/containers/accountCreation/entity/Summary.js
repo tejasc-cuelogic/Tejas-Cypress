@@ -47,6 +47,7 @@ export default class Summary extends Component {
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
       const url = this.props.entityAccountStore.showProcessingModal ? `${this.props.match.url}/processing` : '/app/summary';
+      this.props.entityAccountStore.setFieldValue('showProcessingModal', false);
       this.props.history.push(url);
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
     });

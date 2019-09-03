@@ -13,9 +13,7 @@ import { Plaid } from '../../../../../shared/bankAccount';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
-    if (!this.props.iraAccountStore.showProcessingModal) {
-      this.checkIfAccountIsAlreadyPresent('ira');
-    }
+    this.checkIfAccountIsAlreadyPresent('ira');
     if (!this.props.iraAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('ira');
