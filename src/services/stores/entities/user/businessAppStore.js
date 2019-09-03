@@ -622,9 +622,10 @@ export class BusinessAppStore {
 
   @action
   businessAppEleMaskChange = (values, field, formName = 'BUSINESS_APP_FRM') => {
+    const value = field === 'zipCode' ? values.value : values.floatValue;
     this[formName] = Validator.onChange(
       this[formName],
-      { name: field, value: values.floatValue },
+      { name: field, value },
     );
   };
 
