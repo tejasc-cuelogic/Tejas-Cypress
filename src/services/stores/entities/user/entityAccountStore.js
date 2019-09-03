@@ -75,7 +75,7 @@ class EntityAccountStore {
   maskedGenInfoChange = (values, field) => {
     this.GEN_INFO_FRM = FormValidator.onChange(
       this.GEN_INFO_FRM,
-      { name: field, value: values.floatValue },
+      { name: field, value: values.value },
     );
   }
 

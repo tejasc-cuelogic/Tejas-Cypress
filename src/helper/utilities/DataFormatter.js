@@ -86,7 +86,8 @@ class DataFormatter {
       }
       return { diff: hourDiff, diffType: 'Hours', diffText: `${hourDiff} Hours` };
     }
-    return { diff: diff < 0 ? 0 : diff, diffType: 'Days', diffText: `${diff < 0 ? 0 : diff} Days` };
+    const diffLabel = diff === 1 ? 'Day' : 'Days';
+    return { diff: diff < 0 ? 0 : diff, diffType: 'Days', diffText: `${diff < 0 ? 0 : diff}  ${diffLabel}` };
   }
 
   getDateDifferenceInHoursOrMinutes = (timeStamp2, isDayEnd = false, showLabel = false) => {
@@ -95,10 +96,11 @@ class DataFormatter {
     // const resultHours = moment.duration(endDate.diff(startDate)).hours();
     const resultHoursLength = moment.duration(endDate.diff(startDate)).asHours();
     const resultHours = Math.floor(resultHoursLength);
-    const resultMinutes = moment.duration(endDate.diff(startDate)).minutes();
-    const result = resultHours > 0 ? resultHours : resultMinutes > 0 ? resultMinutes : 0;
-    const resultLables = resultHours > 0 ? 'Hours Left' : resultMinutes > 0 ? 'Minutes Left' : null;
-    const resultantObject = { value: result, label: resultLables };
+    const resultMinutesLength = moment.duration(endDate.diff(startDate)).asMinutes();
+    const resultMinutes = Math.floor(resultMinutesLength);
+    const result = resultHours > 1 ? resultHours + 1 === 48 ? 2 : resultHours + 1 : resultMinutes > 0 ? resultMinutes > 60 ? 2 : resultMinutes : 0;
+    const resultLables = resultHours > 1 ? resultHours + 1 === 48 ? 'Days Left' : 'Hours Left' : resultMinutes > 0 ? resultMinutes > 60 ? 'Hours Left' : resultMinutes === 1 ? 'Minute Left' : 'Minutes Left' : null;
+    const resultantObject = { value: result, label: resultLables, isLokinPeriod: resultHours + 1 < 48 };
     return showLabel ? resultantObject : result;
   }
 
