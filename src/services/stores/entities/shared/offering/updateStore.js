@@ -135,8 +135,8 @@ export class UpdateStore {
     @action
     UpdateChange = (e, result) => {
       if (result && result.type === 'checkbox') {
-        if (result.name === 'allInvestor') {
-          this.PBUILDER_FRM.fields.allInvestor.value = result.checked;
+        if (result.name === 'allInvestor' || result.name === 'shouldSendInvestorNotifications') {
+          this.PBUILDER_FRM.fields[result.name].value = result.checked;
           if (result.checked) {
             this.PBUILDER_FRM.fields.tiers.values = [];
           }
@@ -201,6 +201,7 @@ export class UpdateStore {
       this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
       delete data.allInvestor;
+      delete data.shouldSendInvestorNotifications;
       data.status = status;
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
@@ -208,6 +209,7 @@ export class UpdateStore {
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
       if (id !== 'new' && status === 'PUBLISHED') {
         data.isVisible = true;
+        data.shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
         this.offeringUpdatePublish(id, data).then(() => {
           uiStore.setProgress(false);
           resolve();

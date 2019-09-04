@@ -106,6 +106,7 @@ export default class NewUpdate extends Component {
     const { id } = this.props.match.params;
     const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
     const isDraft = PBUILDER_FRM.fields.status.value === 'DRAFT';
+    const isPending = PBUILDER_FRM.fields.status.value === 'PENDING';
     if (loadingCurrentUpdate || this.state.loading) {
       return <InlineLoader />;
     }
@@ -122,7 +123,7 @@ export default class NewUpdate extends Component {
               meta={PBUILDER_FRM.meta}
               isManager={isManager}
               isDraft={isDraft}
-              isPending={PBUILDER_FRM.fields.status.value === 'PENDING'}
+              isPending={isPending}
               isPublished={PBUILDER_FRM.fields.status.value === 'PUBLISHED'}
               editForm={this.state.editForm}
               edit={this.edit}
@@ -267,6 +268,18 @@ export default class NewUpdate extends Component {
                                 changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
                                 dateOfBirth
                               />
+                              {isPending
+                              && (
+                              <Form.Field>
+                              <Checkbox
+                                name="shouldSendInvestorNotifications"
+                                onChange={(e, result) => UpdateChange(e, result)}
+                                checked={PBUILDER_FRM.fields.shouldSendInvestorNotifications.value}
+                                label="Send Notifications"
+                              />
+                            </Form.Field>
+                              )
+                              }
                             </Form>
                           </Card.Content>
                         </Card>
@@ -289,6 +302,18 @@ export default class NewUpdate extends Component {
                                 changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
                                 dateOfBirth
                               />
+                               {isPending
+                                && (
+                                <Form.Field>
+                                <Checkbox
+                                  name="shouldSendInvestorNotifications"
+                                  onChange={(e, result) => UpdateChange(e, result)}
+                                  checked={PBUILDER_FRM.fields.shouldSendInvestorNotifications.value}
+                                  label="Send Notifications"
+                                />
+                              </Form.Field>
+                                )
+                              }
                               {['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage)
                                 && (
                                     <div className="field">
