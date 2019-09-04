@@ -118,11 +118,12 @@ mutation sendOfferingUpdateTestEmail($offeringUpdateId: String!, $emailTemplate:
 }`;
 
 export const offeringUpdatePublish = gql`
-mutation offeringUpdatePublish($id: ID!, $updatesInput: OfferingUpdatesInput!, $emailTemplate: publishLiveEmailTemplate!) {
+mutation offeringUpdatePublish($id: ID!, $updatesInput: OfferingUpdatesInput!, $emailTemplate: publishLiveEmailTemplate!, $shouldSendInvestorNotifications:Boolean!) {
   offeringUpdatePublish(
     id: $id
     updatesInput: $updatesInput
     emailTemplate: $emailTemplate
+    shouldSendInvestorNotifications:$shouldSendInvestorNotifications
   ) {
     id
   }

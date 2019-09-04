@@ -107,7 +107,7 @@ export class UpdateStore {
     }
 
     @action
-    offeringUpdatePublish = (offeringUpdateId, data) => new Promise((resolve, reject) => {
+    offeringUpdatePublish = (offeringUpdateId, data, shouldSendInvestorNotifications) => new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: offeringUpdatePublish,
@@ -115,6 +115,7 @@ export class UpdateStore {
             id: offeringUpdateId,
             emailTemplate: this.TEMPLATE_FRM.fields.type.value,
             updatesInput: data,
+            shouldSendInvestorNotifications,
           },
         })
         .then(() => {
@@ -207,10 +208,10 @@ export class UpdateStore {
       data.offeringId = offeringCreationStore.currentOfferingId;
       data.updatedDate = moment(`${data.updatedDate} ${currentTime}`).utc();
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
+      const shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
       if (id !== 'new' && status === 'PUBLISHED') {
         data.isVisible = true;
-        data.shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
-        this.offeringUpdatePublish(id, data).then(() => {
+        this.offeringUpdatePublish(id, data, shouldSendInvestorNotifications).then(() => {
           uiStore.setProgress(false);
           resolve();
         });

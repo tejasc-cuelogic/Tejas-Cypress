@@ -268,8 +268,6 @@ export default class NewUpdate extends Component {
                                 changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
                                 dateOfBirth
                               />
-                              {isPending
-                              && (
                               <Form.Field>
                               <Checkbox
                                 name="shouldSendInvestorNotifications"
@@ -278,8 +276,6 @@ export default class NewUpdate extends Component {
                                 label="Send Notifications"
                               />
                             </Form.Field>
-                              )
-                              }
                             </Form>
                           </Card.Content>
                         </Card>
@@ -302,8 +298,6 @@ export default class NewUpdate extends Component {
                                 changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
                                 dateOfBirth
                               />
-                               {isPending
-                                && (
                                 <Form.Field>
                                 <Checkbox
                                   name="shouldSendInvestorNotifications"
@@ -312,8 +306,6 @@ export default class NewUpdate extends Component {
                                   label="Send Notifications"
                                 />
                               </Form.Field>
-                                )
-                              }
                               {['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage)
                                 && (
                                     <div className="field">
