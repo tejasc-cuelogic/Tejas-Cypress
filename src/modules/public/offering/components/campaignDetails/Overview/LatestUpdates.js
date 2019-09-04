@@ -20,7 +20,7 @@ class LatestUpdates extends Component {
     const {
       updates, companyAvatarUrl, bussinessName, newLayout,
     } = this.props;
-    const update = (updates && updates.length && updates[0]) || null;
+    const update = (updates && updates.length && updates[updates.length - 1]) || null;
     return (
       <>
         <Header as="h3" className={`${newLayout && isMobile ? 'mt-40' : newLayout ? 'mt-40' : 'mt-20'} ${isMobile ? 'mb-20' : 'mb-30'} anchor-wrap`}>

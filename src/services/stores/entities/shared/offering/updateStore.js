@@ -207,6 +207,7 @@ export class UpdateStore {
       data.updatedDate = moment(`${data.updatedDate} ${currentTime}`).utc();
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
       if (id !== 'new' && status === 'PUBLISHED') {
+        data.isVisible = true;
         this.offeringUpdatePublish(id, data).then(() => {
           uiStore.setProgress(false);
           resolve();
@@ -315,6 +316,7 @@ export class UpdateStore {
     @action
     reset = () => {
       this.PBUILDER_FRM = Validator.prepareFormObject(UPDATES);
+      this.PBUILDER_FRM.fields.updatedDate.value = DataFormatter.getDateAsPerTimeZone(new Date().toISOString(), true, false, false);
     }
 
     @action
