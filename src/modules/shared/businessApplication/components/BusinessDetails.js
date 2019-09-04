@@ -94,13 +94,15 @@ export default class BusinessDetails extends Component {
             subHeader={(
               <>
                 {currentApplicationType === 'business' ? 'This document is intended to describe the who, what, when, where, how and why of your project.*' : 'Upload your Investment Summary or Business Plan.*'}
-                <Popup
-                  trigger={<Icon className="ns-help-circle" />}
-                  content="Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions."
-                  position="top center"
-                  className={this.props.toolTipClassName ? this.props.toolTipClassName : 'center-align'}
-                  wide
-                />
+                {!hideFields && currentApplicationType !== 'business' && (
+                  <Popup
+                    trigger={<Icon className="ns-help-circle" />}
+                    content="Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions."
+                    position="top center"
+                    className={this.props.toolTipClassName ? this.props.toolTipClassName : 'center-align'}
+                    wide
+                  />
+                )}
                 {!hideFields && currentApplicationType === 'business'
                   && <Link to={this.props.match.url} className="link" onClick={() => this.handleLearnMore()}><small>Learn More</small></Link>
                 }

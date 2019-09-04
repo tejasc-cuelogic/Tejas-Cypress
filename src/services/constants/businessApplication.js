@@ -215,7 +215,7 @@ const BUSINESS_PREQUAL_COMMON = {
       { label: 'LLC', icon: 'ns-business', value: 'LLC' },
       { label: 'Limited Partnership', icon: 'ns-partnership', value: 'LIMITED_PARTNERSHIP' },
       { label: 'Sole Proprietor', icon: 'ns-proprietor', value: 'SOLE_PROPRIETOR' },
-      { label: 'Other use of funds', value: 'OTHER' },
+      { label: 'Other', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
@@ -572,13 +572,13 @@ export const BUSINESS_DETAILS = {
 
 export const BUSINESS_PERF_COMMON = {
   priorToThreeYear: {
-    value: [], label: 'Prior 3 Year Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], uploadtitle: 'Upload a file or drag it here', label: 'Prior 3 Year Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   ytd: {
-    value: [], label: 'YTD Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], uploadtitle: 'Upload a file or drag it here', label: 'YTD Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   fiveYearProjection: {
-    value: [], label: '5 Year Projections', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], uploadtitle: <span>Upload a file or drag it here <br /> (Excel or CSV format preferred)</span>, label: '5 Year Projections', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   sourcesAndUses: {
     value: [], label: '  ', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
