@@ -214,6 +214,7 @@ export default class Leader extends Component {
               name="percentOwned"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].percentOwned}
               percentage
+              allowNegative={false}
               changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
             />
             <FormInput
