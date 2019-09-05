@@ -44,6 +44,7 @@ export default class NewUpdate extends Component {
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.updateStore.setFieldValue('newUpdateId', null);
+    this.props.updateStore.setFieldValue('currentUpdate', {});
     this.props.history.replace(this.props.refLink);
   };
 
