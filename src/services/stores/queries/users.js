@@ -650,9 +650,10 @@ mutation adminDeleteInvestorOrIssuerUser($userId: String, $reason: String) {
  }`;
 
 export const adminHardDeleteUser = gql`
-mutation adminHardDeleteUser($userId: String!) {
+mutation adminHardDeleteUser($userId: String!, $reason: String) {
   adminHardDeleteUser(
      cognitoUUId: $userId
+     reason: $reason
   ) {
     status
     message
