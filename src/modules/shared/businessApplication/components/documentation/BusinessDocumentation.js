@@ -28,7 +28,7 @@ export default class BusinessDocumentation extends Component {
     const { fields } = BUSINESS_DOC_FRM;
     const { hideFields } = this.props;
     const userAccess = this.props.userStore.myAccessForModule('APPLICATIONS');
-    const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['bankStatements'];
+    const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
     const taxFileList = getBusinessTypeCondtion ? ['personalTaxReturn', 'businessTaxReturn'] : ['personalTaxReturn'];
     const { inProgress } = this.props.uiStore;
     let disableFileUpload = true;
