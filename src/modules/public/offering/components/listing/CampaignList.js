@@ -39,10 +39,10 @@ export default class CampaignList extends Component {
       return (
         <Label.Group size="small">
           {bannerFirst
-          && <Label color="blue">{bannerFirst}</Label>
+          && <Label color={bannerFirst === 'Processing' ? 'grey' : 'blue'}>{bannerFirst}</Label>
           }
           {bannerSecond
-          && <Label color="green">{bannerSecond}</Label>
+          && <Label color={bannerFirst === 'Processing' ? 'grey' : 'green'}>{bannerSecond}</Label>
           }
         </Label.Group>
       );
