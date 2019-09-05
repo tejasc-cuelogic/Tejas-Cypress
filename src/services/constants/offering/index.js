@@ -23,6 +23,11 @@ export const UPDATES = {
     error: undefined,
     rule: 'optional',
   },
+  shouldSendInvestorNotifications: {
+    value: false,
+    error: undefined,
+    rule: 'optional',
+  },
   scope: {
     value: 'PUBLIC',
     values: [{ label: 'Public', value: 'PUBLIC' }, { label: 'Investors Only', value: 'INVESTORS' }],
