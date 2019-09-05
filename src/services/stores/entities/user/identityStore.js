@@ -184,7 +184,7 @@ export class IdentityStore {
         city: fields.city.value,
         state: selectedState ? selectedState.key : null,
         zipCode: fields.zipCode.value,
-        streetTwo: fields.zipCode.value,
+        streetTwo: fields.streetTwo.value,
       },
     };
     const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
