@@ -205,7 +205,6 @@ export class UpdateStore {
       data.status = status;
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
-      data.updatedDate = data.updatedDate;
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
       const shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
       if (id !== 'new' && status === 'PUBLISHED') {
