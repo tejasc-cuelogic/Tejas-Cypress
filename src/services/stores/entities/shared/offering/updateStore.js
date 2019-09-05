@@ -1,7 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import graphql from 'mobx-apollo';
 import { orderBy, get } from 'lodash';
-import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
@@ -198,7 +197,6 @@ export class UpdateStore {
     @action
     save = (id, status, showToast = true) => new Promise((resolve) => {
       uiStore.setProgress(status);
-      const currentTime = moment().format('HH:mm:ss');
       this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
       delete data.allInvestor;
@@ -206,7 +204,7 @@ export class UpdateStore {
       data.status = status;
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
-      data.updatedDate = moment(`${data.updatedDate} ${currentTime}`).utc();
+      data.updatedDate = data.updatedDate;
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
       const shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
       if (id !== 'new' && status === 'PUBLISHED') {
@@ -312,7 +310,7 @@ export class UpdateStore {
       });
       this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];
       this.PBUILDER_FRM.fields.allInvestor.value = offeringUpdatesById.tiers.length === 0;
-      this.PBUILDER_FRM.fields.updatedDate.value = DataFormatter.getDateAsPerTimeZone(offeringUpdatesById.updated.date, true, false, false);
+      this.PBUILDER_FRM.fields.updatedDate.value = offeringUpdatesById.updatedDate;
       Validator.validateForm(this.PBUILDER_FRM);
     }
 

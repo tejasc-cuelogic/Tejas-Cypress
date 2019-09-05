@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { orderBy } from 'lodash';
+import { orderBy, get } from 'lodash';
+import moment from 'moment';
 import { Route } from 'react-router-dom';
 import { toJS } from 'mobx';
 import scrollIntoView from 'scroll-into-view';
@@ -156,7 +157,7 @@ class CampaignLayout extends Component {
   render() {
     const { campaign, campaignStatus, dataRoomDocs } = this.props.campaignStore;
     let updates = campaign && campaign.updates;
-    updates = orderBy(updates, ['updated.date'], 'desc');
+    updates = orderBy(updates, o => get(o, 'updatedDate') && moment(new Date(o.updatedDate)).unix(), ['asc']);
     return (
       <div className="campaign-content-wrapper v-2">
         {campaignStatus.hasTopThingToKnow ? (

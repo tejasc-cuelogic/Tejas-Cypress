@@ -30,6 +30,7 @@ export const newUpdate = gql`
       title
       isVisible
       offeringId
+      updatedDate
       updated {
         date
       }
@@ -52,6 +53,7 @@ export const getUpdate = gql`
       id
       title
       status
+      updatedDate
       scope
       content
       tiers
@@ -79,6 +81,7 @@ export const editUpdate = gql`
       scope
       content
       tiers
+      updatedDate
       approved {
         by
         date

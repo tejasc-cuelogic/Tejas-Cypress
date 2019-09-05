@@ -61,7 +61,7 @@ const Actions = observer((props) => {
                     <>
                       <Button
                         inverted
-                        onClick={() => save(id, isPending ? 'PENDING' : 'DRAFT')}
+                        onClick={() => save(id, isPublished ? 'PUBLISHED' : isPending ? 'PENDING' : 'DRAFT')}
                         color="green"
                         content="Save"
                         disabled={!(meta.isValid && meta.isDirty) || inProgress}
