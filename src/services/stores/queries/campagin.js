@@ -335,6 +335,7 @@ export const campaignDetailsAdditionalQuery = gql`
       title
       content
       scope
+      updatedDate
       updated {
         date
       }
