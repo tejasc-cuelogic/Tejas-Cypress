@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Popup, Icon, Divider, Button } from 'semantic-ui-react';
+import { Grid, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
@@ -28,7 +28,7 @@ export default class BusinessDocumentation extends Component {
     const { fields } = BUSINESS_DOC_FRM;
     const { hideFields } = this.props;
     const userAccess = this.props.userStore.myAccessForModule('APPLICATIONS');
-    const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
+    const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['bankStatements'];
     const taxFileList = getBusinessTypeCondtion ? ['personalTaxReturn', 'businessTaxReturn'] : ['personalTaxReturn'];
     const { inProgress } = this.props.uiStore;
     let disableFileUpload = true;
@@ -40,22 +40,6 @@ export default class BusinessDocumentation extends Component {
         <FormElementWrap
           hideFields={hideFields}
           header="Statements & Agreements"
-          subHeader={(
-            <span>
-              Provide the most recent 6 months of bank statements for
-              your business accounts. For new entities, provide if
-              statements are available.<br />
-              Also provide the lease for your location. If only an LOIwith the landlord
-              is currently available, please upload the LOI for review purposes.
-              <Popup
-                trigger={<Icon className="ns-help-circle" />}
-                content="If your campaign is successfully funded, an executed lease will be required at closing in order for you to receive funds."
-                position="top center"
-                className="left-align justify-text"
-                wide
-              />
-            </span>
-          )}
         >
           <Grid stackable columns="equal">
             {
