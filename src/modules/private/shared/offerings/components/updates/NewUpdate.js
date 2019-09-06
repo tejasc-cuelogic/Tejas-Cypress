@@ -96,7 +96,7 @@ export default class NewUpdate extends Component {
   render() {
     const {
       PBUILDER_FRM, UpdateChange, FChange, maskChange, selectTemplate, newUpdateId,
-      loadingCurrentUpdate, TEMPLATE_FRM, currentUpdate,
+      loadingCurrentUpdate, TEMPLATE_FRM,
     } = this.props.updateStore;
     const isNew = this.props.match.params.action === 'new' && !newUpdateId;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -183,7 +183,7 @@ export default class NewUpdate extends Component {
                               </div>
                               <Header.Content className="grey-header">
                                 {get(offer, 'keyTerms.shorthandBusinessName')}
-                                <Header.Subheader>{moment(get(currentUpdate, 'data.offeringUpdatesById.updatedDate') || PBUILDER_FRM.fields.updatedDate.value).format('LL')}</Header.Subheader>
+                                <Header.Subheader>{moment(PBUILDER_FRM.fields.updatedDate.value).format('LL')}</Header.Subheader>
                                 {/* <Header.Subheader>{moment().format('ll')}</Header.Subheader> */}
                               </Header.Content>
                             </Header>
