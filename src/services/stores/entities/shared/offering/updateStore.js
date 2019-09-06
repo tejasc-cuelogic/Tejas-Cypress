@@ -84,14 +84,14 @@ export class UpdateStore {
     }
 
     @action
-    sendTestEmail = (offeringUpdateId) => {
+    sendTestEmail = (offeringUpdateId, emailTemplate = false) => {
       uiStore.setLoaderMessage('...Sending Test Email');
       client
         .mutate({
           mutation: sendOfferingUpdateTestEmail,
           variables: {
             offeringUpdateId,
-            emailTemplate: this.TEMPLATE_FRM.fields.type.value,
+            emailTemplate: emailTemplate || this.TEMPLATE_FRM.fields.type.value,
           },
         })
         .then(() => {
@@ -107,7 +107,7 @@ export class UpdateStore {
     }
 
     @action
-    offeringUpdatePublish = (offeringUpdateId, data, shouldSendInvestorNotifications) => new Promise((resolve, reject) => {
+    offeringUpdatePublish = (offeringUpdateId, data, shouldSendInvestorNotifications, showToast = true) => new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: offeringUpdatePublish,
@@ -119,7 +119,9 @@ export class UpdateStore {
           },
         })
         .then(() => {
-          Helper.toast('Offering Published Successfully ', 'success');
+          if (showToast) {
+            Helper.toast('Offering Published Successfully ', 'success');
+          }
           resolve();
         })
         .catch(() => {
@@ -138,7 +140,7 @@ export class UpdateStore {
       if (result && result.type === 'checkbox') {
         if (result.name === 'allInvestor' || result.name === 'shouldSendInvestorNotifications') {
           this.PBUILDER_FRM.fields[result.name].value = result.checked;
-          if (result.checked) {
+          if (result.checked && result.name !== 'shouldSendInvestorNotifications') {
             this.PBUILDER_FRM.fields.tiers.values = [];
           }
         } else {
@@ -209,7 +211,7 @@ export class UpdateStore {
       const shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
       if (id !== 'new' && status === 'PUBLISHED') {
         data.isVisible = true;
-        this.offeringUpdatePublish(id, data, shouldSendInvestorNotifications).then(() => {
+        this.offeringUpdatePublish(id, data, shouldSendInvestorNotifications, showToast).then(() => {
           uiStore.setProgress(false);
           resolve();
         });
