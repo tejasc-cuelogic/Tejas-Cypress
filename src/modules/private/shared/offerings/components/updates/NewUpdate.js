@@ -63,15 +63,16 @@ export default class NewUpdate extends Component {
       });
   }
 
-  sendTestEmail = (id) => {
+  sendTestEmail = (id, stage, status) => {
+    const emailTemplate = ['STARTUP_PERIOD', 'IN_REPAYMENT'].includes(stage) ? 'FULL' : false;
     this.props.uiStore.setProgress();
     if (this.props.updateStore.PBUILDER_FRM.meta.isDirty) {
-      this.props.updateStore.save(id, 'DRAFT', false).then(() => {
+      this.props.updateStore.save(id, status, false).then(() => {
         this.props.uiStore.setProgress();
-        this.props.updateStore.sendTestEmail(id);
+        this.props.updateStore.sendTestEmail(id, emailTemplate);
       });
     } else {
-      this.props.updateStore.sendTestEmail(id);
+      this.props.updateStore.sendTestEmail(id, emailTemplate);
     }
   }
 
@@ -107,6 +108,7 @@ export default class NewUpdate extends Component {
     const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
     const isDraft = PBUILDER_FRM.fields.status.value === 'DRAFT';
     const isPending = PBUILDER_FRM.fields.status.value === 'PENDING';
+    const isPublished = PBUILDER_FRM.fields.status.value === 'PUBLISHED';
     if (loadingCurrentUpdate || this.state.loading) {
       return <InlineLoader />;
     }
@@ -124,7 +126,7 @@ export default class NewUpdate extends Component {
               isManager={isManager}
               isDraft={isDraft}
               isPending={isPending}
-              isPublished={PBUILDER_FRM.fields.status.value === 'PUBLISHED'}
+              isPublished={isPublished}
               editForm={this.state.editForm}
               edit={this.edit}
               deleteUpdate={this.showConfirmModal}
@@ -137,7 +139,7 @@ export default class NewUpdate extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={12}>
-                <Form onSubmit={this.save}>
+                <Form>
                   <FormInput
                     readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
                     ishidelabel
@@ -192,7 +194,7 @@ export default class NewUpdate extends Component {
                       </List.Item>
                       {isManager && (
                       <List.Item>
-                        <Button color="green" className="link-button" disabled={isNew || loaderMessage || inProgress} content={loaderMessage || 'Send test email to me'} onClick={() => this.sendTestEmail(this.props.match.params.id || this.props.updateStore.newUpdateId)} />
+                        <Button color="green" className="link-button" disabled={isNew || loaderMessage || inProgress} content={loaderMessage || 'Send test email to me'} onClick={() => this.sendTestEmail(this.props.match.params.id || this.props.updateStore.newUpdateId, offer.stage, isPublished ? 'PUBLISHED' : isPending ? 'PENDING' : 'DRAFT')} />
                      </List.Item>
                       )}
                     </List>
