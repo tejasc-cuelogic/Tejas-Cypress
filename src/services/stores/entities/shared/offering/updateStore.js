@@ -140,7 +140,7 @@ export class UpdateStore {
       if (result && result.type === 'checkbox') {
         if (result.name === 'allInvestor' || result.name === 'shouldSendInvestorNotifications') {
           this.PBUILDER_FRM.fields[result.name].value = result.checked;
-          if (result.checked) {
+          if (result.checked && result.name !== 'shouldSendInvestorNotifications') {
             this.PBUILDER_FRM.fields.tiers.values = [];
           }
         } else {
