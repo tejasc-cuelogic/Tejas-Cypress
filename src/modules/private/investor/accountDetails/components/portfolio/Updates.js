@@ -10,7 +10,8 @@ import { DataFormatter } from '../../../../../../helper';
 @inject('updateStore')
 @observer
 class Updates extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.updateStore.isApiHit) {
       this.props.updateStore.initRequest();
     }

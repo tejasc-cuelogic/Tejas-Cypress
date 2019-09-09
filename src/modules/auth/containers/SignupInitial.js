@@ -16,7 +16,8 @@ const GetBtn = ({ type }) => {
 @inject('authStore', 'uiStore', 'navStore')
 @observer
 class signupInitial extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.uiStore.clearErrors();
     this.props.authStore.resetForm('SIGNUP_FRM');
     console.log(this.props.uiStore.authRef);

@@ -9,7 +9,8 @@ import { FieldError, InlineLoader } from '../../../../../theme/shared';
 @inject('categoryStore', 'uiStore')
 @observer
 class AddNewCategory extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.uiStore.clearErrors();
     const { id } = this.props.match.params;
     if (id !== 'new') {

@@ -10,7 +10,8 @@ import Helper from '../../../../../helper/utility';
 @inject('userStore', 'offeringInvestorStore', 'offeringsStore')
 @observer
 export default class BonusRewards extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.offeringInvestorStore.initRequest(this.props.offeringId);
   }
 

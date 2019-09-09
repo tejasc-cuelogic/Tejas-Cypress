@@ -11,7 +11,8 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Offer extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.businessAppReviewStore.setFieldvalue('showGeneratePA', true);
     if (!this.props.businessAppReviewStore.initLoad.includes('OFFERS_FRM')) {
       this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers');

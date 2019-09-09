@@ -8,7 +8,8 @@ import { DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 @inject('offeringCreationStore', 'uiStore', 'userStore', 'offeringsStore')
 @observer
 export default class GenerateDocs extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const {
       currentOfferingId,
       getOfferingFilingList,

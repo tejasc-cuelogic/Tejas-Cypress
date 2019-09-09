@@ -9,7 +9,8 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Documentation extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.businessAppReviewStore.initLoad.includes('DOCUMENTATION_FRM')) {
       this.props.businessAppReviewStore.setFormData('DOCUMENTATION_FRM', 'review.documentation');
     }

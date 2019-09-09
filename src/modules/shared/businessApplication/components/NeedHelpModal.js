@@ -10,7 +10,8 @@ import { ListErrors } from '../../../../theme/shared';
 @withRouter
 @observer
 export default class NeedHelpModal extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match } = this.props;
     if (match.isExact) {
       this.props.businessAppStore.needHelpFormReset();

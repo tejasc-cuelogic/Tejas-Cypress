@@ -11,7 +11,7 @@ const isTablet = document.documentElement.clientWidth < 992;
 class Footer extends Component {
   state = { fShowHide: false };
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.path === '/') {
       this.setState({ fShowHide: true });
     } else {

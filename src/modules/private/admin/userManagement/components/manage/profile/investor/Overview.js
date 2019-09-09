@@ -18,7 +18,7 @@ export default class Overview extends Component {
     totalReferredUsers: 0,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.referralsStore
       .getUserReferralDetails(this.props.userDetailsStore.selectedUserId, false)
       .then((data) => {

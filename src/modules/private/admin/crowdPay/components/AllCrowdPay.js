@@ -32,7 +32,8 @@ export default class AllCrowdPay extends Component {
     GsAccountNum: {},
   }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { type } = this.props.match.params;
     if (this.props.match.isExact && type && this.props.crowdpayStore.isApiHit !== type) {
       this.props.crowdpayStore.setData('isApiHit', type);

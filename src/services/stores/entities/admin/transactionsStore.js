@@ -118,9 +118,6 @@ export class TransactionsStore {
     });
   }
 
-  @computed
-
-
   @action
   setTabCount = (countObj) => {
     this.summary = {

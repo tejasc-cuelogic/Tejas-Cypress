@@ -19,7 +19,8 @@ export default class ApplicationDetails extends Component {
     displayOnly: true,
   }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match } = this.props;
     const { params } = match;
     if (this.props.businessAppStore.applicationId !== params.appId) {

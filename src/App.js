@@ -48,7 +48,7 @@ class App extends Component {
     authChecked: false,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     const { location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
     if (location.pathname.endsWith('/') && !this.props.location.hash) { // resolved trailing slash issue with this...
@@ -70,13 +70,9 @@ class App extends Component {
       }).finally(() => {
         this.setState({ authChecked: true });
       });
-  }
-
-  componentDidMount() {
     if (this.props.uiStore.devBanner) {
       activityActions.log({ action: 'APP_LOAD', status: 'SUCCESS' });
     }
-
     if (window.analytics) {
       window.analytics.page();
     }

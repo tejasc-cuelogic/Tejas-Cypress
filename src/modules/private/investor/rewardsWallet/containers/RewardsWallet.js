@@ -8,7 +8,8 @@ import { InlineLoader } from '../../../../../theme/shared';
 @inject('rewardStore', 'userDetailsStore')
 @observer
 export default class RewardsWallet extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.rewardStore.initRequest();
   }
 

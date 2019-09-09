@@ -7,7 +7,8 @@ import { ListErrors, InlineLoader } from '../../../../../theme/shared';
 @inject('uiStore', 'offeringsStore', 'offeringCreationStore', 'userListingStore')
 @observer
 export default class EditOffering extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.userListingStore.initiateSearch({ accountType: ['ADMIN', 'ISSUER'], accountStatus: [] }, true);
     this.props.uiStore.clearErrors();
     this.props.offeringCreationStore.setFormData('POC_DETAILS_FRM', '');

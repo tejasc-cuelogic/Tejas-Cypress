@@ -7,7 +7,8 @@ import AfIssuer from './AfIssuer';
 @inject('offeringCreationStore', 'userStore')
 @observer
 export default class AffiliatedIssuer extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/1`);
     }

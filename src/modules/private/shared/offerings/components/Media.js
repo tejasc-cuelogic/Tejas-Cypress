@@ -14,9 +14,9 @@ import ButtonGroup from './ButtonGroup';
 @withRouter
 @observer
 export default class Media extends Component {
-  state = { ConfirmModal: false, imageType: '', index: undefined }
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = { ConfirmModal: false, imageType: '', index: undefined };
     this.props.offeringCreationStore.setFormData('MEDIA_FRM', 'media');
   }
 

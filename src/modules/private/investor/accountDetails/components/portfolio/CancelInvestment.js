@@ -14,7 +14,8 @@ export default class CancelInvestment extends Component {
     btnCancel: '',
   }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { setInitialLinkValue, setInvestmentDetailsForCancelRequest } = this.props.portfolioStore;
     setInitialLinkValue(false);
     setInvestmentDetailsForCancelRequest(null);

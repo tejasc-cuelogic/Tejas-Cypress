@@ -21,7 +21,8 @@ export default class ElasticSearch extends Component {
     indexName: '',
   };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.elasticSearchStore.getESAudit();
   }
 

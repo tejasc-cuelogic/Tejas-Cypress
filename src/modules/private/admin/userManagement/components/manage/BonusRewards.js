@@ -7,7 +7,8 @@ import { InlineLoader } from '../../../../../../theme/shared';
 @inject('rewardStore')
 @observer
 export default class BonusRewards extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.rewardStore.initRequest();
   }
 

@@ -8,7 +8,8 @@ import { FormCheckbox } from '../../../../theme/form';
 @inject('bankAccountStore')
 @observer
 export default class CrowdPay extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.bankAccountStore.apiCall) {
       this.props.bankAccountStore.initRequest();
     }

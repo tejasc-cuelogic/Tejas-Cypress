@@ -10,7 +10,8 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class PreQual extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.businessAppReviewStore.initLoad.includes('JUSTIFICATIONS_FRM')) {
       this.props.businessAppReviewStore.setFormData('JUSTIFICATIONS_FRM', 'review.preQualification');
     }
