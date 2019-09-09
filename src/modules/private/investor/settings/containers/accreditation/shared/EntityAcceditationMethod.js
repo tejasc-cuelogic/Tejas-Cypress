@@ -8,7 +8,8 @@ import { Header, Grid, Form } from 'semantic-ui-react';
 @withRouter
 @observer
 export default class VerifyEntityAccreditation extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { accountType } = this.props.match.params;
     this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
   }

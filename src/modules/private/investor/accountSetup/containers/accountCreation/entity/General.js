@@ -8,7 +8,8 @@ import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../
 @inject('entityAccountStore', 'uiStore')
 @observer
 export default class General extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.uiStore.setErrors(null);
   }
 

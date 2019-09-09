@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import bugsnagReact from '@bugsnag/plugin-react';
 import { BrowserRouter } from 'react-router-dom';
 import promiseFinally from 'promise.prototype.finally';
-import { useStrict } from 'mobx';
+import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
 import App from './App';
 import * as stores from './services/stores';
@@ -35,7 +35,7 @@ if (['localhost', 'develop', 'dev', 'predev', 'review'].includes(REACT_APP_DEPLO
 }
 
 promiseFinally.shim();
-useStrict(true);
+configure({ enforceActions: true });
 
 ReactDOM.render(
   <Provider {...stores}>

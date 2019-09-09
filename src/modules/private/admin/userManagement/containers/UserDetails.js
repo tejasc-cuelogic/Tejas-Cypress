@@ -39,13 +39,13 @@ const navMeta = [
 @inject('userStore', 'userDetailsStore', 'uiStore', 'bankAccountStore', 'accountStore')
 @observer
 export default class AccountDetails extends Component {
-  state = {
-    errorMsg: '',
-    copied: false,
-    showConfirm: false,
-  }
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      errorMsg: '',
+      copied: false,
+      showConfirm: false,
+    };
     if ((this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId)) {
       this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
       this.props.accountStore.getInvestorCloseAccounts(this.props.match.params.userId);

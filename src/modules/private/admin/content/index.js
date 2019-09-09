@@ -6,7 +6,8 @@ import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 const getModule = component => lazy(() => import(`../${component}`));
 
 export default class Content extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match } = this.props;
     if (match.isExact) {
       this.props.history.push(`${match.url}/categories`);

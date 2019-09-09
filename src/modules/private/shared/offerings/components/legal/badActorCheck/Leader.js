@@ -8,7 +8,8 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @inject('offeringCreationStore', 'userStore', 'uiStore')
 @observer
 export default class Leader extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const {
       getLeadershipOfferingBac,
       currentOfferingId,

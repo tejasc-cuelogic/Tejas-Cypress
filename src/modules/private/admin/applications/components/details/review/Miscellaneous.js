@@ -77,7 +77,8 @@ const AddMore = ({
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Miscellaneous extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.businessAppReviewStore.initLoad.includes('MISCELLANEOUS_FRM')) {
       this.props.businessAppReviewStore.setFormData('MISCELLANEOUS_FRM', 'review.miscellaneous');
     }

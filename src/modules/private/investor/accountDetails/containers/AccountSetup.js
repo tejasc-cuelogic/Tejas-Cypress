@@ -9,7 +9,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class AccountSetup extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { setFieldValue } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);

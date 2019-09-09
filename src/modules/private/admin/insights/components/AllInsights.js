@@ -24,7 +24,8 @@ const meta = [
 @inject('articleStore', 'uiStore')
 @observer
 export default class AllInsights extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.articleStore.sortArticlesByFilter();
   }
 

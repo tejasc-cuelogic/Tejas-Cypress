@@ -13,7 +13,8 @@ const getModule = component => lazy(() => import(`../components/${component}`));
 @inject('businessAppAdminStore')
 @observer
 export default class ManageApplications extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/prequal-failed`);
     }

@@ -10,7 +10,10 @@ import ConfirmOTPModal from '../../../../../shared/ConfirmOTPModal';
 @withRouter
 @observer
 export default class TransferFundVerifyModal extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    // eslint-disable-next-line no-debugger
+    debugger;
     if (this.props.transactionStore.TRANSFER_FRM.fields.amount.value === '') {
       this.props.history.push(this.props.refLinkList);
     }

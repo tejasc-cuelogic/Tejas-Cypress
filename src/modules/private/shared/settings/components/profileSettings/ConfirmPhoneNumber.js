@@ -14,7 +14,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { identityStore, userDetailsStore } = this.props;
     if (identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
       if (userDetailsStore.userDetails && userDetailsStore.userDetails.phone

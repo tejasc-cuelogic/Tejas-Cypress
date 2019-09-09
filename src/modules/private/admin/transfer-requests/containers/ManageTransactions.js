@@ -13,7 +13,8 @@ import { FILTER_META, STATUS_MAPPING } from '../../../../../services/constants/a
 @withRouter
 @observer
 export default class ManageTransactions extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match, history } = this.props;
     if (match.isExact) {
       history.push(`${match.url}/${Object.keys(STATUS_MAPPING)[0]}`);

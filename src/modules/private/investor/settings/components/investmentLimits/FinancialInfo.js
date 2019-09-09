@@ -12,7 +12,8 @@ import { ACCREDITATION_STATUS_LABEL } from '../../../../../../services/constants
 @withRouter
 @observer
 export default class FinancialInfo extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.investmentLimitStore.getInvestedAmount();
       this.props.investmentLimitStore.setAccountsLimits();

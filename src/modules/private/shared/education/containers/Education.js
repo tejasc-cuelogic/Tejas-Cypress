@@ -10,7 +10,8 @@ const getModule = component => lazy(() => import(`../components/${component}`));
 @inject('userStore')
 @observer
 export default class Education extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       if (this.props.userStore.isIssuer) {
         this.props.history.replace(`${this.props.match.url}/knowledge-base`);

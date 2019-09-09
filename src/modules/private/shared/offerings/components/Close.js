@@ -38,23 +38,23 @@ const closingActions = {
 @inject('offeringCreationStore', 'offeringsStore', 'uiStore')
 @observer
 export default class Close extends Component {
-  state = {
-    openModal: false,
-    activeStep: 1,
-    confirmContentTxt: 'Are all transactions cleared?  Has it been at least 6 business days since the last deposit for any investment?',
-    cancelButtonTxt: 'No, it has not',
-    confirmButtonTxt: 'Yes, it has',
-    open: false,
-    action: '',
-    confirmed: false,
-    closureProcessObj: {},
-    inProgress: false,
-    showClosureProcessStatus: false,
-    showSupplimentAgg: false,
-    actionLabel: '',
-  }
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      openModal: false,
+      activeStep: 1,
+      confirmContentTxt: 'Are all transactions cleared?  Has it been at least 6 business days since the last deposit for any investment?',
+      cancelButtonTxt: 'No, it has not',
+      confirmButtonTxt: 'Yes, it has',
+      open: false,
+      action: '',
+      confirmed: false,
+      closureProcessObj: {},
+      inProgress: false,
+      showClosureProcessStatus: false,
+      showSupplimentAgg: false,
+      actionLabel: '',
+    };
     this.props.offeringCreationStore.setFormData('OFFERING_CLOSE_FRM', 'closureSummary');
     this.props.offeringCreationStore.setFormData('OFFERING_CLOSE_1');
   }

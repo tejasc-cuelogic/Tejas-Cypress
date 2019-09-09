@@ -9,7 +9,8 @@ import { ListErrors } from '../../../theme/shared';
 @inject('authStore', 'uiStore')
 @observer
 export default class ChangePassword extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const loginData = mapValues(this.props.authStore.LOGIN_FRM.fields, f => f.value);
     if (this.props.refModule !== 'security' && loginData.email === '') {
       this.props.history.push('/login');
