@@ -107,7 +107,7 @@ class IndividualAccountStore {
     this.createIndividualGoldStarInvestor(payLoad.accountId).then((res) => {
       uiStore.setProgress(false);
       if (res.data.createIndividualGoldStarInvestor) {
-        this.setFieldValue('showProcessingModal', true);
+        this.setFieldValue('showProcessingModal', false);
         Helper.toast('Individual account created successfully.', 'success');
         bankAccountStore.resetStoreData();
         this.isFormSubmitted = true;

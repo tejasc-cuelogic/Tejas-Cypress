@@ -9,7 +9,6 @@ export const allUpdates = gql`
       title
       isVisible
       offeringId
-      isEarlyBirdOnly
       updated {
         date
       }
@@ -28,6 +27,20 @@ export const newUpdate = gql`
   mutation _createOfferingUpdates ($updatesInput: OfferingUpdatesInput! ) {
     createOfferingUpdates (updatesInput: $updatesInput) {
       id
+      title
+      isVisible
+      offeringId
+      updatedDate
+      updated {
+        date
+      }
+      approved {
+        by
+        date
+      }
+      status
+      scope
+      content
     }
   }
 `;
@@ -40,6 +53,7 @@ export const getUpdate = gql`
       id
       title
       status
+      updatedDate
       scope
       content
       tiers
@@ -67,6 +81,7 @@ export const editUpdate = gql`
       scope
       content
       tiers
+      updatedDate
       approved {
         by
         date
@@ -106,11 +121,12 @@ mutation sendOfferingUpdateTestEmail($offeringUpdateId: String!, $emailTemplate:
 }`;
 
 export const offeringUpdatePublish = gql`
-mutation offeringUpdatePublish($id: ID!, $updatesInput: OfferingUpdatesInput!, $emailTemplate: publishLiveEmailTemplate!) {
+mutation offeringUpdatePublish($id: ID!, $updatesInput: OfferingUpdatesInput!, $emailTemplate: publishLiveEmailTemplate!, $shouldSendInvestorNotifications:Boolean!) {
   offeringUpdatePublish(
     id: $id
     updatesInput: $updatesInput
     emailTemplate: $emailTemplate
+    shouldSendInvestorNotifications:$shouldSendInvestorNotifications
   ) {
     id
   }

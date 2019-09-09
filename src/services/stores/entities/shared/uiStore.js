@@ -295,6 +295,7 @@ export class UiStore {
     this.resetcreateAccountMessage();
     this.setErrors(err);
     this.setProgress(false);
+    this.removeOneFromProgressArray('submitAccountLoader');
   }
 }
 

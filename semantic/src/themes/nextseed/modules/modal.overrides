@@ -143,6 +143,9 @@
         .pdf-viewer {
             height: 90vh;
         }
+        &.new-update-modal{
+            word-wrap: break-all;
+        }
     }
     &.large {
         >.close {

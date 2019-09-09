@@ -18,7 +18,12 @@ export const UPDATES = {
     rule: 'optional',
     key: 0,
   },
-  isAllTiers: {
+  allInvestor: {
+    value: false,
+    error: undefined,
+    rule: 'optional',
+  },
+  shouldSendInvestorNotifications: {
     value: false,
     error: undefined,
     rule: 'optional',

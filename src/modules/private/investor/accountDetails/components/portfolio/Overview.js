@@ -15,6 +15,7 @@ class Overview extends Component {
   state = {
     open: false,
     embedUrl: '',
+    loadingDoc: '',
   };
 
   componentWillMount() {
@@ -38,11 +39,16 @@ class Overview extends Component {
   }
 
   handleViewLoanAgreement = (aggrementId) => {
+    this.setState({ loadingDoc: aggrementId });
     this.props.transactionStore.getDocuSignViewURL(aggrementId).then((res) => {
-      this.setState({
-        open: true,
-        embedUrl: res,
-      });
+      this.setState({ open: true, embedUrl: res, loadingDoc: '' });
+    });
+  }
+
+  handleViewSuppAgreement = (aggrementId) => {
+    this.setState({ loadingDoc: aggrementId });
+    this.props.campaignStore.getBoxLink(aggrementId).then((res) => {
+      this.setState({ open: true, embedUrl: res, loadingDoc: '' });
     });
   }
 
@@ -57,6 +63,8 @@ class Overview extends Component {
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     const { agreementIds, loading } = this.props.transactionStore;
+    let aggrementDocs = get(campaign, 'closureSummary.keyTerms.supplementalAgreements.documents') || [];
+    aggrementDocs = aggrementDocs.length ? aggrementDocs.filter(d => d.isVisible && get(d, 'upload.fileHandle.boxFileId')) : [];
     if (loading) {
       return (
         <InlineLoader />
@@ -232,17 +240,22 @@ class Overview extends Component {
                       </Table.Row>
                       ) : ''
                     }
-                    {agreementIds
+                    {(agreementIds && agreementIds.length) || (aggrementDocs && aggrementDocs.length)
                       ? (
                       <Table.Row verticalAlign="top">
-                        <Table.Cell>Investor Agreement{agreementIds.length > 1 && 's'} </Table.Cell>
+                        <Table.Cell>Investor Agreement{(agreementIds.length + aggrementDocs.length) > 1 && 's'} </Table.Cell>
                         <Table.Cell>
-                          {agreementIds.map(agreementId => (
-                            <Button onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text">#{agreementId} </Button>
-                          ))}
+                          <Button.Group vertical>
+                            {agreementIds && agreementIds.length !== 0 && agreementIds.map(agreementId => (
+                              <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {agreementId} </Button>
+                            ))}
+                            {aggrementDocs && aggrementDocs.length !== 0 && aggrementDocs.map(doc => (
+                              <Button icon loading={this.state.loadingDoc === get(doc, 'upload.fileHandle.boxFileId')} onClick={() => this.handleViewSuppAgreement(get(doc, 'upload.fileHandle.boxFileId'))} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {doc.name}</Button>
+                            ))}
+                          </Button.Group>
                         </Table.Cell>
                       </Table.Row>
-                      ) : ''
+                      ) : null
                     }
                     {edgarLink
                     && (

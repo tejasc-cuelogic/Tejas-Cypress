@@ -77,7 +77,7 @@ class EntityAccountStore {
   maskedGenInfoChange = (values, field) => {
     this.GEN_INFO_FRM = FormValidator.onChange(
       this.GEN_INFO_FRM,
-      { name: field, value: values.floatValue },
+      { name: field, value: values.value },
     );
   }
 
@@ -141,8 +141,10 @@ class EntityAccountStore {
           mutation: submitinvestorAccount,
           variables: payLoad,
         })
-        .then(() => {
-          this.setFieldValue('showProcessingModal', true);
+        .then((res) => {
+          if (Helper.matchRegexWithString(/\bprocessing(?![-])\b/, res.data.submitInvestorAccount)) {
+            this.setFieldValue('showProcessingModal', true);
+          }
           bankAccountStore.resetStoreData();
           this.isFormSubmitted = true;
           if (!isMobile) {

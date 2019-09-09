@@ -182,8 +182,10 @@ class IraAccountStore {
         mutation: submitinvestorAccount,
         variables: payLoad,
       })
-      .then(() => {
-        this.setFieldValue('showProcessingModal', true);
+      .then((res) => {
+        if (Helper.matchRegexWithString(/\bprocessing(?![-])\b/, res.data.submitInvestorAccount)) {
+          this.setFieldValue('showProcessingModal', true);
+        }
         bankAccountStore.resetStoreData();
         this.isFormSubmitted = true;
         uiStore.setProgress(false);

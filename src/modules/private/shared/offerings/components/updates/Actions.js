@@ -5,7 +5,7 @@ import { Button } from 'semantic-ui-react';
 const Actions = observer((props) => {
   const {
     save, meta, isManager, isPublished, inProgress,
-    deleteUpdate, id, cancelUpdate, isDraft,
+    id, cancelUpdate, isPending,
   } = props;
   return (
     <>
@@ -14,7 +14,8 @@ const Actions = observer((props) => {
           inverted
           color="red"
           onClick={cancelUpdate}
-          content="Cancel"
+          disabled={inProgress}
+          content={!meta.isDirty ? 'Close' : 'Cancel'}
         />
         {!isManager && !isPublished
           && (
@@ -22,31 +23,19 @@ const Actions = observer((props) => {
               {id
                 ? (
                   <>
-                    {isDraft
-                      && (
-                        <>
-                          <Button
-                            inverted
-                            color="red"
-                            onClick={deleteUpdate}
-                            content="Delete"
-                          />
-                        </>
-                      )
-                    }
                     <Button
                       inverted
-                      onClick={() => save(id, 'DRAFT')}
+                      onClick={() => save(id, isPending ? 'PENDING' : 'DRAFT')}
                       color="green"
                       content="Save"
-                      disabled={!(meta.isValid && meta.isDirty)}
+                      disabled={!(meta.isValid && meta.isDirty) || inProgress}
                       loading={inProgress === 'DRAFT'}
                     />
                     <Button
                       primary
                       onClick={() => save(id, 'PENDING')}
                       content="Submit"
-                      disabled={!meta.isValid}
+                      disabled={!meta.isValid || inProgress}
                       loading={inProgress === 'PENDING'}
                     />
                   </>
@@ -57,7 +46,7 @@ const Actions = observer((props) => {
                     onClick={() => save('new', 'DRAFT')}
                     color="green"
                     content="Create"
-                    disabled={!meta.isValid}
+                    disabled={!meta.isValid || inProgress}
                   />
                 )
               }
@@ -72,16 +61,10 @@ const Actions = observer((props) => {
                     <>
                       <Button
                         inverted
-                        color="red"
-                        onClick={deleteUpdate}
-                        content="Delete"
-                      />
-                      <Button
-                        inverted
-                        onClick={() => save(id, 'DRAFT')}
+                        onClick={() => save(id, isPublished ? 'PUBLISHED' : isPending ? 'PENDING' : 'DRAFT')}
                         color="green"
                         content="Save"
-                        disabled={!(meta.isValid && meta.isDirty)}
+                        disabled={!(meta.isValid && meta.isDirty) || inProgress}
                         loading={inProgress === 'DRAFT'}
                       />
                       {!isPublished
@@ -90,7 +73,7 @@ const Actions = observer((props) => {
                             primary
                             onClick={() => save(id, 'PUBLISHED')}
                             content="Publish"
-                            disabled={!meta.isValid}
+                            disabled={!meta.isValid || inProgress}
                             loading={inProgress === 'PUBLISHED'}
                           />
                         )
@@ -103,7 +86,7 @@ const Actions = observer((props) => {
                         onClick={() => save('new', 'DRAFT')}
                         color="green"
                         content="Create"
-                        disabled={!meta.isValid}
+                        disabled={!meta.isValid || inProgress}
                         loading={inProgress === 'DRAFT'}
                       />
                     </>

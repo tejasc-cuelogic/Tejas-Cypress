@@ -25,6 +25,14 @@ export const INVESTMENT_ACCOUNT_TYPES = {
   2: 'entity',
 };
 
+export const DELETE_MESSAGE = {
+  message: {
+    value: '',
+    label: 'Delete Reason:',
+    error: undefined,
+    rule: 'required',
+  },
+};
 
 export const US_STATES_FOR_INVESTOR = [
   { key: 'AL', value: 'Alabama', text: 'ALABAMA' },

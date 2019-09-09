@@ -21,7 +21,7 @@ import {
 } from '../../index';
 import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
-import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
+import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
@@ -43,9 +43,11 @@ export class UserDetailsStore {
 
   @observable deleting = 0;
 
-  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING', 'OFFLINE'];
 
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
+
+  @observable DELETE_MESSAGE_FRM = Validator.prepareFormObject(DELETE_MESSAGE);
 
   @observable USER_PROFILE_ADD_ADMIN_FRM = Validator.prepareFormObject(USER_PROFILE_ADDRESS_ADMIN);
 
@@ -231,11 +233,12 @@ export class UserDetailsStore {
   @action
   deleteProfile = (isInvestor = false, isHardDelete = false) => new Promise(async (resolve, reject) => {
     uiStore.addMoreInProgressArray('deleteProfile');
+    const reason = this.DELETE_MESSAGE_FRM.fields.message.value;
     try {
       const res = await client
         .mutate({
           mutation: !isHardDelete ? deleteProfile : adminHardDeleteUser,
-          variables: !isInvestor ? { userId: this.selectedUserId } : {},
+          variables: !isInvestor ? { userId: this.selectedUserId, reason } : {},
         });
       uiStore.removeOneFromProgressArray('deleteProfile');
       if (get(res, 'data.adminDeleteInvestorOrIssuerUser.status') || get(res, 'data.adminHardDeleteUser.status')) {
@@ -297,15 +300,23 @@ export class UserDetailsStore {
   }
 
   @action
-  getUserProfileDetails = (userId) => {
-    this.setFieldValue('selectedUserId', userId);
+  getUserProfileDetails = userId => new Promise((resolve, rej) => {
     this.detailsOfUser = graphql({
       client,
       query: selectedUserDetailsQuery,
       variables: { userId },
       fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data) {
+          this.setFieldValue('selectedUserId', userId);
+          resolve(data);
+        }
+      },
+      onError: () => {
+        rej();
+      },
     });
-  }
+  })
 
   getUserStorageDetails = (userId) => {
     uiStore.setProgress('userBoxAccount');
@@ -409,6 +420,11 @@ export class UserDetailsStore {
   @action
   resetModalForm = () => {
     this.FRM_FREEZE = Validator.prepareFormObject(FREEZE_FORM);
+  }
+
+  @action
+  resetDeleteUserForm = () => {
+    this.DELETE_MESSAGE_FRM = Validator.prepareFormObject(DELETE_MESSAGE);
   }
 
   @computed get signupStatus() {
@@ -681,7 +697,7 @@ export class UserDetailsStore {
 
   @action
   setAccountForWhichCipExpired = (accountName) => {
-    window.sessionStorage.setItem('individualAccountCipExp', accountName);
+    window.sessionStorage.setItem('AccountCipExp', accountName);
     this.accountForWhichCipExpired = accountName;
   }
 
