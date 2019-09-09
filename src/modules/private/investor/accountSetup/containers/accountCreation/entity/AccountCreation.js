@@ -13,7 +13,8 @@ import Summary from './Summary';
 @inject('uiStore', 'accountStore', 'bankAccountStore', 'entityAccountStore', 'userDetailsStore', 'userStore', 'investmentLimitStore')
 @observer
 export default class AccountCreation extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.checkIfAccountIsAlreadyPresent('entity');
     if (!this.props.entityAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();

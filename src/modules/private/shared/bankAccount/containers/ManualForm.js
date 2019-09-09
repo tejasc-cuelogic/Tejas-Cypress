@@ -12,7 +12,8 @@ import HtmlEditor from '../../../../shared/HtmlEditor';
 @withRouter
 @observer
 export default class ManualForm extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     // this.props.bankAccountStore.setIsManualLinkBankSubmitted();
     this.props.bankAccountStore.setShouldValidateAmount();
     this.props.uiStore.clearErrors();

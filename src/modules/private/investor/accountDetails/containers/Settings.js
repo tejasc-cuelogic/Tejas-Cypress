@@ -9,7 +9,8 @@ import Helper from '../../../../../helper/utility';
 @withRouter
 @observer
 export default class Settings extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { setSettingsInfo } = this.props.settingStore;
     setSettingsInfo(accountType);

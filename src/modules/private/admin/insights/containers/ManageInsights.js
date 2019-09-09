@@ -10,7 +10,8 @@ import AllInsights from '../components/AllInsights';
 @inject('articleStore')
 @observer
 export default class ManageInsights extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.articleStore.getCategoryList(false);
   }
 

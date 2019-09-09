@@ -15,7 +15,8 @@ import FinancialInfo from './FinancialInfo';
 export default class InvestNow extends React.Component {
   state = { submitLoading: false, isInvestmentUpdate: false };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.campaignStore.isInvestBtnClicked) {
       this.props.history.push(this.props.refLink);
     }

@@ -13,7 +13,8 @@ import { MAX_BENEFICIARY_LIMIT } from '../../../../../../constants/common';
 @withRouter
 @observer
 export default class AddBeneficiary extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.beneficiaryStore.setCurrentSelectedAccountId(this.props.accountId);
     if (!this.props.beneficiaryStore.isShareModalDataSet) {
       this.props.beneficiaryStore.beneficiaryReset();

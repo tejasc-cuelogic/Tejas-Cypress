@@ -7,7 +7,8 @@ import { FormTextarea } from '../../../../../../theme/form';
 @inject('messageStore')
 @observer
 export default class Compose extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.reset();
   }
 

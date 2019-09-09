@@ -7,7 +7,8 @@ import { InlineLoader } from '../../../../../../theme/shared';
 @inject('agreementsStore')
 @observer
 export default class AgreementsPdfLoader extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const {
       getLegalDocsFileIds, alreadySet,
       getNavItems, getBoxEmbedLink,

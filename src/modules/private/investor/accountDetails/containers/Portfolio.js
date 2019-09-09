@@ -28,7 +28,8 @@ export default class Portfolio extends Component {
     inActiveItems: [],
   };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { setFieldValue } = this.props.userDetailsStore;
     setFieldValue('currentActiveAccount', accountType);

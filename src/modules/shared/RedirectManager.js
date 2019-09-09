@@ -8,10 +8,10 @@ import { REDIRECT_META } from '../../constants/redirect';
 @inject('campaignStore', 'authStore', 'commonStore', 'userStore')
 @observer
 export default class RedirectManager extends React.PureComponent {
-  state = { found: 0, viaProtect: false };
-
   // 0: not started, 1: loading, 2: found, 3: not found
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = { found: 0, viaProtect: false };
     this.processRedirection();
   }
 
@@ -81,7 +81,7 @@ export default class RedirectManager extends React.PureComponent {
   }
 
   findIssuerReferralCode = (referralCode) => {
-    this.props.campaignStore.initRequest(['creation', 'active', 'completed'], referralCode).then((data) => {
+    this.props.campaignStore.initRequest(['creation', 'active', 'completed'], referralCode.toLowerCase()).then((data) => {
       if (data) {
         this.setState({ found: 2 });
         if (this.props.authStore.isUserLoggedIn) {

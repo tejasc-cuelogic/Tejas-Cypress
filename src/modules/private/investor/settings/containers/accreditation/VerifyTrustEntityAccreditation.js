@@ -9,7 +9,8 @@ import PopulateAccreditationSteps from './PopulateAccreditationSteps';
 @withRouter
 @observer
 export default class VerifyTrustEntityAccreditation extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { accountType } = this.props.match.params;
     this.props.accreditationStore.getUserAccreditation().then(() => {
       this.props.accreditationStore.setFormData('TRUST_ENTITY_ACCREDITATION_FRM', 'accreditation', accountType);

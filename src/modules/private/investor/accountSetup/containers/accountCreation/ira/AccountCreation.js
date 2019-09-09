@@ -12,7 +12,8 @@ import { Plaid } from '../../../../../shared/bankAccount';
 @inject('uiStore', 'accountStore', 'iraAccountStore', 'userDetailsStore', 'userStore', 'bankAccountStore')
 @observer
 export default class AccountCreation extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.checkIfAccountIsAlreadyPresent('ira');
     if (!this.props.iraAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();

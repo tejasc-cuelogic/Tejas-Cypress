@@ -7,7 +7,8 @@ import { FormInput, FormCheckbox, MaskedInput } from '../../../../../../theme/fo
 @inject('offeringCreationStore', 'offeringsStore', 'uiStore')
 @observer
 export default class AddNewBonusReward extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { isEditForm } = this.props;
     const { setUpdateBonusRewardsData, resetBonusRewardForm } = this.props.offeringCreationStore;
     if (isEditForm) {

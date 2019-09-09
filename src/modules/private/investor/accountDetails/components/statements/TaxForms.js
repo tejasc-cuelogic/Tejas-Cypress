@@ -19,7 +19,8 @@ const result = {
 @inject('agreementsStore', 'statementStore', 'educationStore', 'userDetailsStore')
 @observer
 export default class TaxForms extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { setFieldValue } = this.props.userDetailsStore;
     this.props.statementStore.resetPagination();
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';

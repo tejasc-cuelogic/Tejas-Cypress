@@ -13,7 +13,8 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 export default class Overview extends Component {
   state = { showModal: false }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.businessAppReviewStore.initLoad.includes('OVERVIEW_FRM')) {
       this.props.businessAppReviewStore.setFormData('OVERVIEW_FRM', 'review.overview.criticalPoint');
     }

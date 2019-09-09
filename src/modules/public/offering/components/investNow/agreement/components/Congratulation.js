@@ -9,7 +9,8 @@ import Helper from '../../../../../../../helper/utility';
 @withRouter
 @observer
 export default class Congratulation extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.changeInvestment) {
       this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
     } else {

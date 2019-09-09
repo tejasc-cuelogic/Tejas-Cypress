@@ -10,7 +10,8 @@ import { FieldError } from '../../shared';
 export default class FormPasswordStrength extends Component {
   state = { showError: false };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.authStore.setDefaultPwdType();
   }
 
