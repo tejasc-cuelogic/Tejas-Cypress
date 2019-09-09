@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button, Checkbox } from 'semantic-ui-react';
 import { get } from 'lodash';
@@ -13,24 +13,30 @@ import Actions from './Actions';
 import Status from './Status';
 import Helper from '../../../../../../helper/utility';
 
-@inject('updateStore', 'userStore', 'offeringsStore', 'uiStore', 'userDetailsStore')
+@inject('updateStore', 'userStore', 'offeringsStore', 'uiStore')
 @withRouter
 @observer
 export default class NewUpdate extends Component {
   state = {
     editForm: false,
     confirmModal: false,
+    loading: false,
   }
 
   componentWillMount() {
-    this.initiateFlow(this.props.match.params.id);
+    this.initiateFlow(this.props.match.params.action, this.props.match.params.id);
     this.props.updateStore.setFieldValue('newUpdateId', null);
   }
 
-  initiateFlow = (id) => {
-    if (id !== 'new') {
+  componentDidMount() {
+    this.setState({ loading: false });
+  }
+
+  initiateFlow = (action, id) => {
+    if (action !== 'new' && id !== undefined) {
       this.props.updateStore.getOne(id);
     } else {
+      this.setState({ loading: true });
       this.props.updateStore.reset();
     }
   }
@@ -38,6 +44,7 @@ export default class NewUpdate extends Component {
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.updateStore.setFieldValue('newUpdateId', null);
+    this.props.updateStore.setFieldValue('currentUpdate', {});
     this.props.history.replace(this.props.refLink);
   };
 
@@ -54,6 +61,19 @@ export default class NewUpdate extends Component {
       .then(() => {
         this.props.history.push(this.props.refLink);
       });
+  }
+
+  sendTestEmail = (id, stage, status) => {
+    const emailTemplate = ['STARTUP_PERIOD', 'IN_REPAYMENT'].includes(stage) ? 'FULL' : false;
+    this.props.uiStore.setProgress();
+    if (this.props.updateStore.PBUILDER_FRM.meta.isDirty) {
+      this.props.updateStore.save(id, status, false).then(() => {
+        this.props.uiStore.setProgress();
+        this.props.updateStore.sendTestEmail(id, emailTemplate);
+      });
+    } else {
+      this.props.updateStore.sendTestEmail(id, emailTemplate);
+    }
   }
 
   save = (id, status) => {
@@ -76,7 +96,7 @@ export default class NewUpdate extends Component {
   render() {
     const {
       PBUILDER_FRM, UpdateChange, FChange, maskChange, selectTemplate, newUpdateId,
-      loadingCurrentUpdate, sendTestEmail, TEMPLATE_FRM, currentUpdate,
+      loadingCurrentUpdate, TEMPLATE_FRM,
     } = this.props.updateStore;
     const isNew = this.props.match.params.action === 'new' && !newUpdateId;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -86,9 +106,10 @@ export default class NewUpdate extends Component {
     const { inProgress, loaderMessage } = this.props.uiStore;
     const { id } = this.props.match.params;
     const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
-    const { userDetails } = this.props.userDetailsStore;
-    const userInfo = !isNew || isManager ? { firstName: userDetails.info.firstName, lastName: userDetails.info.lastName, avatarUrl: get(userDetails, 'info.avatar.url') || '' } : '';
-    if (loadingCurrentUpdate) {
+    const isDraft = PBUILDER_FRM.fields.status.value === 'DRAFT';
+    const isPending = PBUILDER_FRM.fields.status.value === 'PENDING';
+    const isPublished = PBUILDER_FRM.fields.status.value === 'PUBLISHED';
+    if (loadingCurrentUpdate || this.state.loading) {
       return <InlineLoader />;
     }
     return (
@@ -103,9 +124,9 @@ export default class NewUpdate extends Component {
               save={this.save}
               meta={PBUILDER_FRM.meta}
               isManager={isManager}
-              isDraft={PBUILDER_FRM.fields.status.value === 'DRAFT'}
-              isPending={PBUILDER_FRM.fields.status.value === 'PENDING'}
-              isPublished={PBUILDER_FRM.fields.status.value === 'PUBLISHED'}
+              isDraft={isDraft}
+              isPending={isPending}
+              isPublished={isPublished}
               editForm={this.state.editForm}
               edit={this.edit}
               deleteUpdate={this.showConfirmModal}
@@ -118,7 +139,7 @@ export default class NewUpdate extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={12}>
-                <Form onSubmit={this.save}>
+                <Form>
                   <FormInput
                     readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
                     ishidelabel
@@ -133,7 +154,7 @@ export default class NewUpdate extends Component {
                     changed={FChange}
                     name="content"
                     content={PBUILDER_FRM.fields.content.value}
-                    overrides={{ heightMin: '70vh' }}
+                    overrides={{ heightMin: '80vh', heightMax: '80vh' }}
                   />
                 </Form>
               </Grid.Column>
@@ -152,17 +173,18 @@ export default class NewUpdate extends Component {
                             </Button>
                           )}
                         >
-                          <Modal.Content>
+                          <Modal.Content className="new-update-modal">
                             <Header>
                               <div className="ui image avatar-image">
                                 {companyAvatarUrl && companyAvatarUrl.length
-                                  ? <Image64 srcUrl={companyAvatarUrl} circular />
-                                  : <UserAvatar UserInfo={userInfo} />
+                                  ? <Image64 srcUrl={companyAvatarUrl} circular className="large" />
+                                  : <UserAvatar UserInfo={{ name: get(offer, 'keyTerms.shorthandBusinessName'), avatarUrl: '' }} className="large" />
                                 }
                               </div>
                               <Header.Content className="grey-header">
-                                {!isNew && isManager && !newUpdateId ? get(currentUpdate, 'data.offeringUpdatesById.approved.by') || get(currentUpdate, 'data.offeringUpdatesById.updated.by') : get(offer, 'keyTerms.shorthandBusinessName')}
-                                <Header.Subheader>{moment().format('ll')}</Header.Subheader>
+                                {get(offer, 'keyTerms.shorthandBusinessName')}
+                                <Header.Subheader>{moment(PBUILDER_FRM.fields.updatedDate.value).format('LL')}</Header.Subheader>
+                                {/* <Header.Subheader>{moment().format('ll')}</Header.Subheader> */}
                               </Header.Content>
                             </Header>
                             <Header as="h4">{PBUILDER_FRM.fields.title.value}</Header>
@@ -170,9 +192,11 @@ export default class NewUpdate extends Component {
                           </Modal.Content>
                         </Modal>
                       </List.Item>
+                      {isManager && (
                       <List.Item>
-                        <Button color="green" className="link-button" disabled={isNew || loaderMessage} content={loaderMessage || 'Send test email to me'} onClick={() => sendTestEmail(this.props.match.params.id || this.props.updateStore.newUpdateId)} />
-                      </List.Item>
+                        <Button color="green" className="link-button" disabled={isNew || loaderMessage || inProgress} content={loaderMessage || 'Send test email to me'} onClick={() => this.sendTestEmail(this.props.match.params.id || this.props.updateStore.newUpdateId, offer.stage, isPublished ? 'PUBLISHED' : isPending ? 'PENDING' : 'DRAFT')} />
+                     </List.Item>
+                      )}
                     </List>
                   </Card.Content>
                 </Card>
@@ -192,6 +216,31 @@ export default class NewUpdate extends Component {
                           value={PBUILDER_FRM.fields.scope.value}
                         />
                         <Form>
+                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC'
+                            ? (
+                            <Form.Field>
+                              <Checkbox
+                                name="allInvestor"
+                                readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                onChange={(e, result) => UpdateChange(e, result)}
+                                checked={PBUILDER_FRM.fields.allInvestor.value}
+                                label="All Investors"
+                              />
+                            </Form.Field>
+                            ) : null
+                          }
+                          {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.earlyBird && offer.earlyBird.quantity > 0 ? (
+                            <Form.Field>
+                              <Checkbox
+                                name="tiers"
+                                readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                value={-1}
+                                onChange={(e, result) => UpdateChange(e, result)}
+                                checked={PBUILDER_FRM.fields.tiers.values.includes(-1)}
+                                label="Early Bird"
+                              />
+                            </Form.Field>
+                          ) : ''}
                           {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
                             <Form.Field key={rewardTier}>
                               <Checkbox
@@ -221,6 +270,14 @@ export default class NewUpdate extends Component {
                                 changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
                                 dateOfBirth
                               />
+                              <Form.Field>
+                              <Checkbox
+                                name="shouldSendInvestorNotifications"
+                                onChange={(e, result) => UpdateChange(e, result)}
+                                checked={PBUILDER_FRM.fields.shouldSendInvestorNotifications.value}
+                                label="Send Notifications"
+                              />
+                            </Form.Field>
                             </Form>
                           </Card.Content>
                         </Card>
@@ -243,6 +300,14 @@ export default class NewUpdate extends Component {
                                 changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
                                 dateOfBirth
                               />
+                                <Form.Field>
+                                <Checkbox
+                                  name="shouldSendInvestorNotifications"
+                                  onChange={(e, result) => UpdateChange(e, result)}
+                                  checked={PBUILDER_FRM.fields.shouldSendInvestorNotifications.value}
+                                  label="Send Notifications"
+                                />
+                              </Form.Field>
                               {['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage)
                                 && (
                                     <div className="field">
@@ -273,11 +338,20 @@ export default class NewUpdate extends Component {
                             <List.Item>When do you anticipate opening? (e.g. Fall 2019)</List.Item>
                             <List.Item>What is the status on bonus rewards fulfillment?</List.Item>
                           </List>
-                          <Link to="/"><b>Helpful Tips on Sending Updates</b></Link>
                         </Card.Content>
                       </Card>
                     </>
                   )
+              }
+              {(id || newUpdateId) && (isManager || (!isManager && isDraft)) && (
+              <Button
+                inverted
+                color="red"
+                onClick={this.showConfirmModal}
+                disabled={inProgress}
+                content="Delete"
+              />
+              )
               }
               </Grid.Column>
             </Grid.Row>

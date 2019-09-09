@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash';
 import { DateTimeFormat, ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore')
+@inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'identityStore')
 @withRouter
 @observer
 export default class Summary extends Component {
@@ -30,10 +30,24 @@ export default class Summary extends Component {
   }
 
   handleCreateAccount = () => {
+    this.props.identityStore.setCipStatusWithUserDetails();
+    this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
+    const { userDetails, isCipExpired } = this.props.userDetailsStore;
+    if (isCipExpired || this.props.identityStore.isUserCipOffline || userDetails.cip.requestId === '-1') {
+      this.props.handleUserIdentity('entity', this.handleSubmitAccount);
+      this.props.userDetailsStore.setAccountForWhichCipExpired('entity');
+    } else {
+      this.props.handleLegalDocsBeforeSubmit('entity', this.handleSubmitAccount);
+    }
+  }
+
+  handleSubmitAccount = () => {
     this.props.uiStore.setcreateAccountMessage();
     this.props.entityAccountStore.submitAccount().then(() => {
+      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
+      const url = this.props.entityAccountStore.showProcessingModal ? `${this.props.match.url}/processing` : '/app/summary';
+      this.props.history.push(url);
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      // this.props.history.push('app/summary');
     });
   }
 

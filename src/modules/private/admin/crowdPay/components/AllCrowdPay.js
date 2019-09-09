@@ -10,6 +10,7 @@ import { InlineLoader, NsPagination } from '../../../../../theme/shared';
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import Actions from './Actions';
 import MessageModal from './MessageModal';
+import { DataFormatter } from '../../../../../helper';
 
 const statusDetails = {
   PARTIAL: 'Partial',
@@ -133,7 +134,7 @@ export default class AllCrowdPay extends Component {
                     }
                     <Table.Cell>
                       {account.created && account.created.date
-                        ? moment.unix(account.created.date).format('MM-DD-YYYY')
+                        ? DataFormatter.getDateAsPerTimeZone(moment.unix(account.created.date), false, false, false)
                         : <p className="intro-text">N/A</p>
                       }
                     </Table.Cell>
@@ -159,7 +160,7 @@ export default class AllCrowdPay extends Component {
                     {type === 'individual'
                     && (
 <Table.Cell>
-                      {account.processing && account.processing.gs && account.processing.gs.date ? moment.unix(account.processing.gs.date).format('MM-DD-YYYY') : <p className="intro-text">N/A</p>}
+                      {account.processing && account.processing.gs && account.processing.gs.date ? DataFormatter.getDateAsPerTimeZone(moment.unix(account.processing.gs.date), false, false, false) : <p className="intro-text">N/A</p>}
                     </Table.Cell>
                     )
                     }

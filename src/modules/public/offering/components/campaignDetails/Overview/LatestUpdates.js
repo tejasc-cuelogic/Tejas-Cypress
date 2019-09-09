@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Button, Icon, Item, Header, Label, Divider } from 'semantic-ui-react';
-import moment from 'moment';
 import { withRouter } from 'react-router-dom';
+import moment from 'moment';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { Image64, UserAvatar } from '../../../../../../theme/shared';
+
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -19,7 +20,7 @@ class LatestUpdates extends Component {
     const {
       updates, companyAvatarUrl, bussinessName, newLayout,
     } = this.props;
-    const update = (updates && updates.length && updates[0]) || null;
+    const update = (updates && updates.length && updates[updates.length - 1]) || null;
     return (
       <>
         <Header as="h3" className={`${newLayout && isMobile ? 'mt-40' : newLayout ? 'mt-40' : 'mt-20'} ${isMobile ? 'mb-20' : 'mb-30'} anchor-wrap`}>
@@ -27,14 +28,14 @@ class LatestUpdates extends Component {
           <Label circular horizontal color="green">{(updates && updates.length) || 0}</Label>
           <span className="anchor" id="updates" />
         </Header>
-        <Item.Group>
+        <Item.Group className="update-items">
           <Item>
             <Item.Content>
               <div className={`${newLayout ? 'campaign-avatar-v2' : ''} campaign-avatar`}>
                 <div className="ui image avatar-image">
                   {companyAvatarUrl && companyAvatarUrl.length
                     ? <Image64 srcUrl={companyAvatarUrl} circular />
-                    : <UserAvatar UserInfo={{}} />
+                    : <UserAvatar UserInfo={{ name: bussinessName || '', avatarUrl: '' }} />
                 }
                 </div>
                 {/* {companyAvatarUrl && companyAvatarUrl.length ?
@@ -47,7 +48,7 @@ class LatestUpdates extends Component {
                     <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
                   </Item.Header>
                   {update
-                    && <Item.Meta>{moment(update.updated.date).format('ll')}</Item.Meta>
+                    && <Item.Meta>{moment(update.updatedDate).format('LL')}</Item.Meta>
                   }
                 </div>
               </div>

@@ -98,6 +98,14 @@
             &.campaign-avatar-v2 .avatar-image {
                 width:60px;
                 height:60px;
+                .sb-avatar{
+                    width:60px;
+                    height:60px;
+                    line-height: 60px;
+                    .sb-avatar__text{
+                        font-size: @24px;
+                    }
+                }
             }
         }
         .avatar-description{
@@ -260,6 +268,9 @@
     }
     &.meet-team >.item:not(:last-child) {
         margin-bottom: @60px;
+    }
+    &.update-items > .item{
+        display: block;
     }
 }
 .horizontal-items.ui.items{

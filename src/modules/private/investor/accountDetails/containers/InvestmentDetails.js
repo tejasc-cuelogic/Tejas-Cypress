@@ -8,6 +8,8 @@ import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import NotFound from '../../../../shared/NotFound';
+import { DataFormatter } from '../../../../../helper';
+
 
 const getModule = component => lazy(() => import(`../components/portfolio/${component}`));
 const navItems = [
@@ -16,7 +18,7 @@ const navItems = [
   { title: 'Updates', to: 'updates', component: 'Updates' },
   { title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards' },
 ];
-@inject('portfolioStore', 'campaignStore', 'uiStore', 'offeringCreationStore')
+@inject('portfolioStore', 'campaignStore', 'uiStore', 'offeringCreationStore', 'updateStore')
 @observer
 class InvestmentDetails extends Component {
   componentWillMount() {
@@ -39,6 +41,7 @@ class InvestmentDetails extends Component {
 
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.updateStore.setFieldValue('isApiHit', false);
     this.props.offeringCreationStore.resetOfferingId();
     this.props.history.replace(this.props.refLink);
   };
@@ -47,6 +50,7 @@ class InvestmentDetails extends Component {
     const { match, portfolioStore } = this.props;
     const { getInvestor } = portfolioStore;
     const { campaign, details } = this.props.campaignStore;
+    const hardCloseDate = moment(new Date(`${get(campaign, 'closureSummary.hardCloseDate')} 23:59:59`)).format('MM/DD/YYYY HH:mm:ss');
     const summaryDetails = {
       accountType: 'individual',
       url: 'https://www.nextseed.com/offerings/chapman-kirby/',
@@ -56,7 +60,7 @@ class InvestmentDetails extends Component {
           title: 'Total Raised Amount', content: get(getInvestor, 'totalRaisedAmount') || 'N/A', type: 1, fraction: false,
         },
         {
-          title: 'Close Date', content: get(campaign, 'closureSummary.hardCloseDate') ? moment(new Date(get(campaign, 'closureSummary.hardCloseDate'))).format('ll') : 'NA',
+          title: 'Close Date', content: get(campaign, 'closureSummary.hardCloseDate') ? DataFormatter.getDateAsPerTimeZone(hardCloseDate, true, true, false) : 'NA',
         },
         {
           title: 'My Investment', content: get(getInvestor, 'myInvestment') || 'N/A', type: 1, fraction: false,

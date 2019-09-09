@@ -30,11 +30,11 @@ class Gallery extends Component {
             ? campaign.media.gallery.map((data, index) => (
               <>
                 {index < (newLayout ? 1 : 3)
-                  && <Image64 onClick={e => this.handleViewGallary(e, index)} fluid className="about-gallery-bg" srcUrl={data.url} />
+                  && <Image64 onClick={e => this.handleViewGallary(e, index)} fluid={!newLayout} className="about-gallery-bg" srcUrl={data.url} />
                 }
               </>
             ))
-            : <NSImage fluid className="about-gallery-bg" path="gallery-placeholder-16-9.jpg" />
+            : <NSImage fluid={!newLayout} className="about-gallery-bg" path="gallery-placeholder-16-9.jpg" />
           }
         </div>
         {get(campaign, 'media.gallery')

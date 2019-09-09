@@ -1,17 +1,17 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import moment from 'moment';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Checkbox, Confirm, Icon, Modal, Form } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
+import { DataFormatter } from '../../../../../../helper';
 
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @withRouter
 @observer
 export default class Contingency extends Component {
   state = {
-    visibilityStatus: true,
+    visibilityStatus: false,
   }
 
   setContingencyForm = () => {
@@ -209,7 +209,7 @@ export default class Contingency extends Component {
                 && (
 <Button as="span" className="time-stamp">
                   <Icon className="ns-check-circle" color="green" />
-                  Submitted by {contingenciesData[dataKey][index].accepted.by} on {moment(contingenciesData[dataKey][index].accepted.date).format('MM/DD/YYYY')}
+                  Submitted by {contingenciesData[dataKey][index].accepted.by} on {DataFormatter.getDateAsPerTimeZone(contingenciesData[dataKey][index].accepted.date, true, false, false)}
                 </Button>
                 )
                 }

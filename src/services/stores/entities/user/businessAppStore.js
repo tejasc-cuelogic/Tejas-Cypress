@@ -622,9 +622,10 @@ export class BusinessAppStore {
 
   @action
   businessAppEleMaskChange = (values, field, formName = 'BUSINESS_APP_FRM') => {
+    const value = field === 'zipCode' ? values.value : values.floatValue;
     this[formName] = Validator.onChange(
       this[formName],
-      { name: field, value: values.floatValue },
+      { name: field, value },
     );
   };
 
@@ -699,7 +700,7 @@ export class BusinessAppStore {
         fullLegalName: this.getValidDataForString(item.fullLegalName),
         yearsOfExp: item.yearsOfExp.value ? this.getValidDataForInt(item.yearsOfExp) : null,
         ssn: this.getValidDataForString(item.ssn),
-        dateOfService: item.dateOfService.value ? moment(item.dateOfService).format('MM/DD/YYYY') : null,
+        dateOfService: item.dateOfService.value ? moment(item.dateOfService.value).format('MM/DD/YYYY') : null,
         companyOwnerShip: item.companyOwnerShip.value
           ? this.getValidDataForInt(item.companyOwnerShip, 1) : null,
         linkedInUrl: this.getValidDataForString(item.linkedInUrl),

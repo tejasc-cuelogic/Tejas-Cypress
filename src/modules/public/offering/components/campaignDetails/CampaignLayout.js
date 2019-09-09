@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { orderBy, get } from 'lodash';
+import moment from 'moment';
 import { Route } from 'react-router-dom';
 import { toJS } from 'mobx';
 import scrollIntoView from 'scroll-into-view';
@@ -40,6 +42,15 @@ class CampaignLayout extends Component {
   }
 
   componentDidMount() {
+    document.querySelectorAll('.fr-view').forEach((e) => {
+      e.querySelectorAll('img').forEach((ele) => {
+        this.pWrapper(ele);
+        ele.setAttribute('data-src', ele.getAttribute('src'));
+        ele.removeAttribute('src');
+        ele.closest('.closest').classList.add('ui');
+        ele.closest('.closest').classList.add('placeholder');
+      });
+    });
     if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
       document.querySelector(`${this.props.location.hash}`).scrollIntoView({
@@ -48,12 +59,38 @@ class CampaignLayout extends Component {
       });
     }
     Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore');
+    this.processLazyLoadImages();
+  }
+
+  componentDidUpdate() {
+    document.querySelectorAll('.fr-view').forEach((e) => {
+      e.querySelectorAll('img').forEach((ele) => {
+        this.pWrapper(ele);
+        ele.setAttribute('data-src', ele.getAttribute('src'));
+        ele.removeAttribute('src');
+        ele.closest('.closest').classList.add('ui');
+        ele.closest('.closest').classList.add('placeholder');
+      });
+    });
+    this.processLazyLoadImages();
   }
 
   componentWillUnmount() {
     this.props.navStore.setFieldValue('currentActiveHash', null);
     window.removeEventListener('scroll', this.handleOnScroll);
     Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore', 'remove');
+  }
+
+  pWrapper = (el) => {
+    const p = document.createElement('p');
+    p.classList.add('closest');
+    ['fr-editor-desktop', 'fr-editor-mobile', 'fr-editor-tablet', 'fr-editor-tablet-landscape', 'fr-editor-tablet-mobile'].forEach((e) => {
+      if (el.classList.contains(e)) {
+        p.classList.add(e);
+      }
+    });
+    el.parentNode.insertBefore(p, el);
+    p.appendChild(el);
   }
 
   onScrollCallBack = (target) => {
@@ -64,7 +101,33 @@ class CampaignLayout extends Component {
     return returnVal;
   }
 
+  isScrolledIntoView = (el) => {
+    const rect = el.getBoundingClientRect();
+    const elemTop = rect.top - 110;
+    const elemBottom = rect.bottom;
+    const isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+    return isVisible;
+  }
+
+  processLazyLoadImages = () => new Promise((resolve) => {
+    const ele = [...document.querySelectorAll('.fr-view')];
+    ele.forEach((e) => {
+      const lazyImages = e.querySelectorAll('img');
+      lazyImages.forEach((img, i) => {
+        if (this.isScrolledIntoView(img)) {
+          setTimeout(() => {
+            img.setAttribute('src', img.getAttribute('data-src'));
+            img.closest('.closest').classList.remove('ui');
+            img.closest('.closest').classList.remove('placeholder');
+          }, 500);
+        }
+        if (i === lazyImages.length - 1) { setTimeout(() => { resolve(); }, 5000); }
+      });
+    });
+  })
+
   handleOnScroll = () => {
+    this.processLazyLoadImages();
     const { campaignNavData } = this.props.campaignStore;
     const navs = toJS(campaignNavData);
     if (navs && Array.isArray(navs)) {
@@ -93,6 +156,8 @@ class CampaignLayout extends Component {
 
   render() {
     const { campaign, campaignStatus, dataRoomDocs } = this.props.campaignStore;
+    let updates = campaign && campaign.updates;
+    updates = orderBy(updates, o => get(o, 'updatedDate') && moment(new Date(o.updatedDate)).unix(), ['asc']);
     return (
       <div className="campaign-content-wrapper v-2">
         {campaignStatus.hasTopThingToKnow ? (
@@ -111,7 +176,7 @@ class CampaignLayout extends Component {
                   <LatestUpdates
                     newLayout
                     handleUpdateCollapseExpand={this.handleUpdateCollapseExpand}
-                    updates={campaign && campaign.updates}
+                    updates={updates}
                     refLink={this.props.refLink}
                     isTabletLand={isTabletLand}
                     companyAvatarUrl={campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : ''}

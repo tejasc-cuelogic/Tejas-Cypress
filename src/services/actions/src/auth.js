@@ -95,7 +95,6 @@ export class Auth {
               if (userStore.isAdmin) {
                 this.setAWSAdminAccess(signInUserSession.idToken.jwtToken);
               }
-
               return res({ attributes, session: signInUserSession });
             }).catch((err) => {
               console.log('error in verifysession', err);
@@ -420,7 +419,8 @@ export class Auth {
     commonStore.setToken(undefined);
     localStorage.removeItem('lastActiveTime');
     localStorage.removeItem('defaultNavExpanded');
-    window.sessionStorage.removeItem('individualAccountCipExp');
+    window.sessionStorage.removeItem('AccountCipExp');
+    window.sessionStorage.removeItem('cipErrorMessage');
     const uKey = get(userStore, 'currentUser.sub') || 'public';
     window.sessionStorage.removeItem(`${uKey}_pInfo`);
     authStore.setUserLoggedIn(false);

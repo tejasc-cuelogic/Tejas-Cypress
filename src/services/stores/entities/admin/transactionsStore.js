@@ -255,7 +255,8 @@ export class TransactionsStore {
     const searchparams = { ...this.requestState.search };
     if (name === 'dateFilterStart' || name === 'dateFilterStop') {
       if (moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-        searchparams[name] = valueObj ? moment(new Date(valueObj.formattedValue)).add(1, 'day').toISOString() : '';
+        // searchparams[name] = valueObj ? moment(new Date(valueObj.formattedValue)).add(1, 'day').toISOString() : '';
+        searchparams[name] = valueObj ? name === 'dateFilterStart' ? moment(new Date(`${valueObj.formattedValue} 00:00:00`)).toISOString() : moment(new Date(`${valueObj.formattedValue} 23:59:59`)).toISOString() : '';
         this.requestState.search = searchparams;
         this.initRequest(this.transactionStatus);
       } else {

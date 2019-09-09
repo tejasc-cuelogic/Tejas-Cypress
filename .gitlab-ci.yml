@@ -42,9 +42,8 @@ before_script:
   except:
     - predev
     - dev
-    - qa
     - demo
-    - secops
+    - qa
     - master
 
 #.before_script_template: &before_script_defination
@@ -231,36 +230,6 @@ test:dev:
     - build:dev
 
 
-#---------------------------------Qa--------------------------------------------
-
-#Building code
-build:qa:
-  <<: *build_definition
-  only:
-    refs:
-      - qa
-  # <<: *before_script_defination
-  script:
-    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION qa $CI_COMMIT_REF_NAME && cd ../..
-    - npm install
-    - npm run build
-
-#Deploying code to s3 bucket
-deploy:qa:
-  <<: *deploy_defination
-  only:
-    refs:
-      - qa
-  environment:
-    name: qa
-    url: http://$QA_URL
-  script:
-    # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - cd ./scripts/cicd/ && sh ./deployApp.sh $QA_URL && cd ../..
-    - aws cloudfront create-invalidation --distribution-id $QA_DISTRIBUTION_ID --paths "/*"
-  dependencies:
-    - build:qa
-
 #---------------------------------Demo--------------------------------------------
 
 #Building code
@@ -291,24 +260,95 @@ deploy:demo:
   dependencies:
     - build:demo
 
-#---------------------------------Production------------------------------------
+#---------------------------------Qa--------------------------------------------
 
 #Building code
-#build:prod:
-#  <<: *build_definition
-#  only:
-#    refs:
-#      - master
-#  <<: *before_script_defination
-#  script:
-#    - sh ./scripts/cicd/setEnvironmentVariables.sh $REGION prod $CI_COMMIT_REF_NAME
-#    - npm install
-#    - npm run build
+build:qa:
+  <<: *build_definition
+  only:
+    refs:
+      - qa
+  # <<: *before_script_defination
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION qa $CI_COMMIT_REF_NAME && cd ../..
+    - npm install
+    - npm run build
 
-package:prod:
+#Deploying code to s3 bucket
+deploy:qa:
+  <<: *deploy_defination
+  only:
+    refs:
+      - qa
+  environment:
+    name: qa
+    url: http://$QA_URL
+  script:
+    # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $QA_URL && cd ../..
+    - aws cloudfront create-invalidation --distribution-id $QA_DISTRIBUTION_ID --paths "/*"
+  dependencies:
+    - build:qa
+
+#---------------------------------Infosec---------------------------------------
+#Building code
+build:infosec:
+  <<: *build_definition
+  only:
+    refs:
+      - master
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION infosec $CI_COMMIT_REF_NAME && cd ../..
+    - npm install
+    - npm run build
+
+#Deploying code to s3 bucket
+deploy:infosec:
+  <<: *deploy_defination
+  only:
+    refs:
+      - master
+  environment:
+    name: infosec
+    url: http://$INFOSEC_URL
+  script:
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $INFOSEC_URL && cd ../..
+    - aws cloudfront create-invalidation --distribution-id $INFOSEC_DISTRIBUTION_ID --paths "/*"
+  dependencies:
+    - build:infosec
+
+#---------------------------------Staging---------------------------------------
+#Building code
+build:staging:
+  <<: *build_definition
+  only:
+    refs:
+      - master
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION staging $CI_COMMIT_REF_NAME && cd ../..
+    - npm install
+    - npm run build
+
+#Deploying code to s3 bucket
+deploy:staging:
+  <<: *deploy_defination
+  only:
+    refs:
+      - master
+  environment:
+    name: staging
+    url: http://$STAGING_URL
+  script:
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $STAGING_URL && cd ../..
+    - aws cloudfront create-invalidation --distribution-id $INFOSEC_DISTRIBUTION_ID --paths "/*"
+  dependencies:
+    - build:staging
+
+#---------------------------------Production------------------------------------
+build:prod:
 #  tags:
 #    - ns-client
-  stage: package
+  stage: build
   only:
     refs:
       - master
@@ -323,19 +363,3 @@ package:prod:
     - rm -rf /tmp/$CI_COMMIT_REF_NAME.zip  # clean up
     - rm -rf ~/.aws/cli/cache
 
-
-#Deploying code to s3 bucket
-#deploy:prod:
-#  <<: *deploy_defination
-#  only:
-#    refs:
-#      - master
-#  environment:
-#    name: prod
-#    url: http://$PROD_URL_QA
-#  script:
-#    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-#    - sh deployApp.sh ns-client-prod
-#  when: manual
-#  dependencies:
-#    - build:prod

@@ -6,6 +6,7 @@ import moment from 'moment';
 import { UserAvatar, NsPagination } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import UserTypeIcon from './UserTypeIcon';
+import { DataFormatter } from '../../../../../../helper';
 
 class UserListing extends Component {
   statusRow = (props) => {
@@ -83,13 +84,13 @@ class UserListing extends Component {
                   <Table.Cell><UserTypeIcon role={user.roles} /></Table.Cell>
                   <Table.Cell>
                     {user.created
-                      ? moment.unix(user.created.date).format('MM/DD/YYYY')
+                      ? DataFormatter.getDateAsPerTimeZone(moment.unix(user.created.date), false, false, false)
                       : 'N/A'
                     }
                   </Table.Cell>
                   <Table.Cell>
                     {user.lastLoginDate
-                      ? moment.unix(user.lastLoginDate).format('MM/DD/YYYY')
+                      ? DataFormatter.getDateAsPerTimeZone(moment.unix(user.lastLoginDate), false, false, false)
                       : 'N/A'
                     }
                   </Table.Cell>

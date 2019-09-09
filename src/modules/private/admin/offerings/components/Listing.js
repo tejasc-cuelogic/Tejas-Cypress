@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get } from 'lodash';
+import { get, includes } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
@@ -119,9 +119,9 @@ export default class Listing extends Component {
                     </Table.Cell>
                     <Table.Cell className="text-capitalize">
                       {offering && offering.stage
-                        ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true) <= 0
+                        ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 0
                           ? STAGES.PROCESSING.label
-                          : stage === 'live' && get(offering, 'closureSummary.processingDate') && (DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) === 2 || DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true) <= 48)
+                          : stage === 'live' && get(offering, 'closureSummary.processingDate') && ((includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)
                             ? STAGES.LOCK.label
                             : STAGES[offering.stage].label
                         : STAGES[offering.stage].label
@@ -130,22 +130,22 @@ export default class Listing extends Component {
                     {stage !== 'engagement'
                       ? (
                         <>
-                          <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat datetime={get(offering, 'created.date')} /> : 'N/A'}</Table.Cell>
+                          <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}</Table.Cell>
                           <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                             {offering.offering && offering.offering.launch
                               && offering.closureSummary.launchDate
-                              ? DataFormatter.diffDays(get(offering, 'closureSummary.launchDate'), false, true) < 0 ? get(offering, 'closureSummary.launchDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.launchDate')).diffText : 'N/A'
+                              ? DataFormatter.diffDays(get(offering, 'closureSummary.launchDate'), false, true) < 0 ? DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), false, false, false) : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.launchDate')).diffText : 'N/A'
                             }
                           </Table.Cell>
                         </>
                       )
-                      : <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'}</Table.Cell>
+                      : <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}</Table.Cell>
                     }
                     {stage === 'live'
                       && (
                         <Table.Cell>
                           {offering.closureSummary && offering.closureSummary.processingDate
-                            ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 ? get(offering, 'closureSummary.processingDate') : DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true) < 48 ? `${DataFormatter.getDateDifferenceInHours(get(offering, 'closureSummary.processingDate'), true)} Hours` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
+                            ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value === 0 ? get(offering, 'closureSummary.processingDate') : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label}` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
                           }
                         </Table.Cell>
                       )
