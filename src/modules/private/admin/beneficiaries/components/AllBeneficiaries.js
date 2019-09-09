@@ -6,7 +6,8 @@ import { Card, Table } from 'semantic-ui-react';
 @inject('helloWorldStore')
 @observer
 export default class AllBeneficiaries extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.helloWorldStore.initRequest(); // load data
   }
 

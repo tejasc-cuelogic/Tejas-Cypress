@@ -8,7 +8,8 @@ import { FormTextarea, MaskedInput, DropZoneConfirm as DropZone } from '../../..
 @withRouter
 @observer
 export default class ConfirmModel extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.accreditationStore.resetModalForm();
   }
 

@@ -11,7 +11,8 @@ import NewUpdate from './updates/NewUpdate';
 @withRouter
 @observer
 export default class BonusRewards extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.updateStore.initRequest();
     }

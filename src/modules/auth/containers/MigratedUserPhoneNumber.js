@@ -11,7 +11,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class MigratedUserPhoneNumber extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const {
       personalInfoMaskedChange,
       ID_VERIFICATION_FRM,

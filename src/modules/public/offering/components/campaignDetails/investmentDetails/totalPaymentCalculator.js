@@ -17,7 +17,8 @@ class totalPaymentCalculator extends Component {
     RangeValue: 0,
   }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.campaignStore.calculateTotalPaymentData();
   }
 

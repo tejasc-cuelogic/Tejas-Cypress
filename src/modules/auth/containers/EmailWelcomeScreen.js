@@ -8,7 +8,8 @@ import { Modal, Header, Button } from 'semantic-ui-react';
 @inject('authStore', 'uiStore', 'userDetailsStore')
 @observer
 export default class EmailWelcomeScreen extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.authStore.resetForm('FORGOT_PASS_FRM');
   }
 

@@ -36,7 +36,9 @@ class offerDetails extends Component {
     found: 0,
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    const { location, match, newLayout } = this.props;
+    const { isUserLoggedIn } = this.props.authStore;
     const { currentUser, isAdmin } = this.props.userStore;
     this.props.campaignStore.getIssuerIdForOffering(this.props.match.params.id).then((data) => {
       const oMinData = data.length ? data[0] : null;
@@ -79,11 +81,7 @@ class offerDetails extends Component {
         }
       }
     }).catch(() => this.props.history.push('/offerings'));
-  }
 
-  componentDidMount() {
-    const { location, match, newLayout } = this.props;
-    const { isUserLoggedIn } = this.props.authStore;
     if (location.pathname !== match.url) {
       const splittedArr = location.pathname.split('/');
       if ((newLayout && splittedArr.includes('data-room')) || (!newLayout && ['overview', 'about', 'investment-details', 'data-room', 'comments', 'bonus-rewards', 'updates'].includes(splittedArr[splittedArr.length - 1]))) {
