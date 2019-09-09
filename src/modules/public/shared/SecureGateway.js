@@ -3,7 +3,8 @@ import queryString from 'query-string';
 import { InlineLoader } from '../../../theme/shared';
 
 export default class SecureGateway extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     // dont bother if there is no EID or no user logged in
     const parsedHash = queryString.parse(this.props.location.search);
     if (!parsedHash.event) {

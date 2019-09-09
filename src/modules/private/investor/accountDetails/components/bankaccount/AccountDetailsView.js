@@ -16,7 +16,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class AccountDetailsView extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { accountDetails, accountType } = this.props;
     const { setFieldValue } = this.props.userDetailsStore;
     const investorAccount = this.props.location.pathname.includes('individual') ? 'individual' : this.props.location.pathname.includes('ira') ? 'ira' : 'entity';

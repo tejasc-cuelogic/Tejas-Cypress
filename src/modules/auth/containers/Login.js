@@ -12,7 +12,8 @@ import { ListErrors } from '../../../theme/shared';
 @withRouter
 @observer
 class Login extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.uiStore.clearErrors();
     this.props.uiStore.setProgress(false);
     this.props.authStore.resetForm('LOGIN_FRM');

@@ -18,7 +18,8 @@ const topsAsPerWindowheight = window.innerHeight > 1000 ? 500 : 150;
 @inject('campaignStore', 'navStore')
 @observer
 class Overview extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     window.addEventListener('scroll', this.handleOnScroll);
   }
 

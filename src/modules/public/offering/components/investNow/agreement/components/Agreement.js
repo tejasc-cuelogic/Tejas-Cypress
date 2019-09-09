@@ -19,7 +19,7 @@ export default class Agreement extends React.Component {
     showAgreementPdf: false,
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const {
       stepToBeRendered, setStepToBeRendered, investAccTypes, resetAggrementForm, setFieldValue,
     } = this.props.investmentStore;

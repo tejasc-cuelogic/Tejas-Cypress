@@ -37,14 +37,15 @@ const legalDocsMeta = [
 @observer
 class LegalDoc extends Component {
   state = { embedUrl: null };
-  componentWillMount() {
-    const { docKey } = this.props.match.params;
-    const { legalDocs, readPdfFile } = this.props.agreementsStore;
+  constructor(props) {
+    super(props);
+    const { docKey } = props.match.params;
+    const { legalDocs, readPdfFile } = props.agreementsStore;
     const legalDoc = legalDocs.find(d => d.refEnum.toLowerCase() === docKey);
     if (legalDoc) {
       if (sessionStorage.getItem('isBoxFirewalled') === 'true') {
         readPdfFile('', legalDoc.boxId).then((url) => {
-          this.props.agreementsStore.setField('S3DownloadLink', this.setState({ embedUrl: url }));
+          props.agreementsStore.setField('S3DownloadLink', this.setState({ embedUrl: url }));
         });
       } else {
         this.getBoxUrl(legalDoc.boxId);
@@ -77,7 +78,7 @@ class LegalDoc extends Component {
 @observer
 export default class LegalDocuments extends Component {
   state = { loaded: false };
-  componentWillMount() {
+  componentDidMount() {
     const {
       getLegalDocsFileIds, setFileIdsData, legalDocsList,
     } = this.props.agreementsStore;

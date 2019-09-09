@@ -10,7 +10,8 @@ import { DataFormatter } from '../../../../../../helper';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore', 'commonStore')
 @observer
 export default class OfferingLaunch extends Component {
-  // componentWillMount() {
+  // constructor(props) {
+  //   super(props);
   //   this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
   //   this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
   //   this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');

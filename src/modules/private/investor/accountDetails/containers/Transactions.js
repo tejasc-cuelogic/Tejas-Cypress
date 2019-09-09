@@ -22,7 +22,8 @@ const result = {
 @inject('transactionStore', 'userDetailsStore')
 @observer
 export default class Transactions extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { setFieldValue } = this.props.userDetailsStore;
     const { isExact } = this.props.match;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';

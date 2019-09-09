@@ -6,7 +6,8 @@ import { FormInput, MaskedInput } from '../../../../../theme/form';
 @inject('uiStore', 'offeringsStore', 'offeringCreationStore')
 @observer
 export default class EditOffering extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.offeringCreationStore.setFormData('KEY_TERMS_FRM', 'keyTerms');
     this.props.offeringCreationStore.setFormData('CLOSURE_SUMMARY_FRM', 'closureSummary');
   }

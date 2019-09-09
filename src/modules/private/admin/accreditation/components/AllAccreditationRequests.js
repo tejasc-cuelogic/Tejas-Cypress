@@ -16,7 +16,8 @@ import { DataFormatter } from '../../../../../helper';
 @withRouter
 @observer
 export default class AllAccreditationRequests extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.accreditationStore.initRequest();
     }

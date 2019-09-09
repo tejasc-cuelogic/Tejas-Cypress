@@ -9,7 +9,8 @@ import Leader from './leadership/Leader';
 @inject('offeringCreationStore', 'userStore')
 @observer
 export default class Leadership extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/leader/1`);
     }

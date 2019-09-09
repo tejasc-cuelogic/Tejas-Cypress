@@ -62,7 +62,7 @@ export default class ButtonGroupType2 extends Component {
             ) : (!approved || (approved && !approved.status)) && (
               <>
                 {!submitted
-                && <Button loading={inProgress === 'save'} type="button" primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
+                && <Button disabled={htmlEditorImageLoading} loading={inProgress === 'save'} type="button" primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
                 }
                 <Button disabled={submitted || htmlEditorImageLoading} loading={inProgress === 'support_submitted'} type="button" primary={!submitted} onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: 'support_submitted' })} className="relaxed">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
               </>

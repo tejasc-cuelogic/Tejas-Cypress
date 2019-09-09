@@ -63,11 +63,12 @@ const StepsMetaData = {
 @withRouter
 @observer
 export default class PopulateAccreditationSteps extends React.Component {
-  componentWillMount() {
-    // if (this.props.accreditationStore.firstInit === '') {
-    //   this.props.accreditationStore.setFieldVal('firstInit', true);
-    // }
-  }
+  // constructor(props) {
+  //   super(props);
+  // if (this.props.accreditationStore.firstInit === '') {
+  //   this.props.accreditationStore.setFieldVal('firstInit', true);
+  // }
+  // }
 
   handleMultiStepModalclose = () => {
     this.props.history.push('/app/account-settings/investment-limits');

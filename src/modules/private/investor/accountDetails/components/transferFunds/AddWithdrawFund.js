@@ -18,7 +18,8 @@ import Helper from '../../../../../../helper/utility';
 export default class AddWithdrawFund extends Component {
   state = { isActivebutton: true };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { setInitialLinkValue, setInitialFundValue, cash } = this.props.transactionStore;
     if (!cash) {
       this.props.transactionStore.getInvestorAvailableCash(false);

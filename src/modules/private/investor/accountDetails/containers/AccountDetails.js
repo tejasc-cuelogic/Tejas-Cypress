@@ -18,7 +18,8 @@ const processingMsg = `We are currently processing your account creation request
 @inject('userDetailsStore')
 @observer
 export default class AccountDetails extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/portfolio`);
     }

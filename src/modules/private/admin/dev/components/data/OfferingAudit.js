@@ -9,7 +9,8 @@ import { FormInput, FormCheckbox } from '../../../../../../theme/form';
 @withRouter
 @observer
 export default class OfferingAudit extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.dataStore.resetOfferingAudit();
   }
 

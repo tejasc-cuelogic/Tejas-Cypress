@@ -13,7 +13,8 @@ const ACTION_MAPPING = {
 @withRouter
 @observer
 export default class ConfirmModel extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.crowdpayStore.resetModalForm();
   }
 
