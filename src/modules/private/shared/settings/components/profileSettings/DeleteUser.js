@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 import { Button, Modal, Header, Message, Form } from 'semantic-ui-react';
 import { InlineLoader, ListErrors } from '../../../../../../theme/shared';
 import { authActions } from '../../../../../../services/actions';
-// import { FormInput } from '../../../../../../theme/form';
 
 @inject('userStore', 'userDetailsStore', 'uiStore')
 @withRouter
@@ -22,27 +21,37 @@ export default class DeleteUser extends React.Component {
     this.props.userStore.userReset();
     this.props.userStore.handleCancelDeleteUser(false);
     this.props.userStore.setFieldValue('deleteUser', false);
+    this.props.userStore.setFieldValue('confirmDelete', false);
   }
 
   closeModal = () => {
-    this.setState({ modalOpen: false });
+    if (this.props.userStore.confirmDelete) {
+      authActions.logout('user').then(() => {
+        this.props.history.push('/');
+      });
+    } else {
+      this.setState({ modalOpen: false });
+    }
   }
 
   handleDeleteUser = () => {
     this.props.userDetailsStore.deleteProfile(true).then(() => {
       this.setState({ failMessage: false });
-      authActions.logout('user').then(() => {
-        this.props.history.push('/');
-      });
     }).catch(msg => this.setState({ failMessage: msg }));
   }
 
   backToOfferings = () => {
-    this.props.history.push('/');
+    this.props.history.push('/offerings/');
+  }
+
+  createNewAccount = () => {
+    authActions.logout('user').then(() => {
+      this.props.history.push('/register-investor');
+    });
   }
 
   render() {
-    const { getDeleteUserMeta, deleteUserLoading, USR_FRM, userEleChange, deleteUser, handleCancelDeleteUser } = this.props.userStore;
+    const { getDeleteUserMeta, deleteUserLoading, USR_FRM, userEleChange, deleteUser, handleCancelDeleteUser, confirmDelete } = this.props.userStore;
     const { inProgressArray } = this.props.uiStore;
     return (
       <Modal
@@ -73,9 +82,10 @@ export default class DeleteUser extends React.Component {
                 <Form className="left-align mt-50 mb-40">
                   <Form.Input
                     fluid
-                    label="E-mail"
+                    label="Email"
                     type="text"
                     name="email"
+                    placeholder="Enter email here"
                     fielddata={USR_FRM.fields.email}
                     onChange={(e, res) => userEleChange(e, res, 'text', true)}
                   />
@@ -89,6 +99,11 @@ export default class DeleteUser extends React.Component {
             {get(getDeleteUserMeta, 'isCancelDelete') && (
               <>
                 <Button content="Browse Offerings" color="green" loading={inProgressArray.includes('deleteProfile')} onClick={() => this.backToOfferings()} /><br /><br />
+              </>
+            )}
+            {confirmDelete && (
+              <>
+                <Button content="Create new account" color="green" loading={inProgressArray.includes('deleteProfile')} onClick={() => this.createNewAccount()} /><br /><br />
               </>
             )}
           </Modal.Content>

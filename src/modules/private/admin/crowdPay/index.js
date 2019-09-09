@@ -54,7 +54,7 @@ export default class CrowdPay extends Component {
         P1={(
 <ByKeyword
   w={[8]}
-  placeholder="Search by Name or E-mail address"
+  placeholder="Search by name or email address"
   toggleSearch={this.toggleSearch}
   requestState={requestState}
   filters={filters}

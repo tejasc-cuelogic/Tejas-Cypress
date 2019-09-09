@@ -24,6 +24,8 @@ export class UserStore {
 
   @observable cancelDeleteUser = false;
 
+  @observable confirmDelete = false;
+
   @action
   userEleChange = (e, res, type, isDeleteUser) => {
     this.USR_FRM = Validator.onChange(this.USR_FRM, Validator.pullValues(e, res), type);
@@ -150,19 +152,27 @@ export class UserStore {
 
   @computed get getDeleteUserMeta() {
     const deletedUserMeta = this.getDeleteUserData;
-    const commonMsg = (<p>You are unable to delete your account at this time.  Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any additional questions</p>);
+    const commonMsg = (<p className="mb-20">You are unable to delete your account at this time.  Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any additional questions</p>);
     const data = {
       header: 'Delete User Account',
       message: commonMsg,
-      isValidForDelete: true,
+      isValidForDelete: false,
       isCancelDelete: this.cancelDeleteUser,
     };
 
     if (this.cancelDeleteUser) {
       data.header = 'Great!';
-      data.message = (<p>We're so glad you've decided to keep your NextSeed account. If you need any further assistance or wish to contact the NextSeed team, please reach out to us at <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
+      data.message = (<p className="mb-20">We're so glad you've decided to keep your NextSeed account. If you need any further assistance or wish to contact the NextSeed team, please reach out to us at <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
       data.isValidForDelete = false;
       data.isCancelDelete = true;
+      return data;
+    }
+
+    if (this.confirmDelete) {
+      data.header = 'Your account has been deleted';
+      data.message = (<p className="mb-20">Thank you for being a part of the NextSeed community. <br /> If you change your mind, we'd love to have you back! <br /><br /> Please let us know if we can be of any help by contacting <br /> <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
+      data.isValidForDelete = false;
+      data.isCancelDelete = false;
       return data;
     }
 
@@ -172,7 +182,7 @@ export class UserStore {
       data.isCancelDelete = false;
     } if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') <= 0 && get(deletedUserMeta, 'totalBalance') === 0) {
       data.header = 'Are you sure?';
-      data.message = (<p className="mb-20">We hate to see you go, but if you would like to delete your NextSeed account please confirm your intent by entering the email address associated with your account.<br /> Please note that any Credits you may have accumulated in your account will be forfeited.</p>);
+      data.message = (<p className="mb-20">We hate to see you go, but if you would like to delete your NextSeed account please confirm your intent by entering the email address associated with your account.<br /><br /> Please note that any promotional credits you may have <br /> accumulated in your account will be forfeited.</p>);
       data.isValidForDelete = true;
       data.isCancelDelete = false;
     } else if (get(deletedUserMeta, 'validAgreement')) {
