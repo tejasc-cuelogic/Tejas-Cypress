@@ -3,13 +3,22 @@ import { inject, observer } from 'mobx-react';
 import { Header, Container, Grid, Button } from 'semantic-ui-react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Link } from 'react-router-dom';
+import { get } from 'lodash';
 import { InlineLoader } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 
-@inject('referralsStore')
+@inject('referralsStore', 'userDetailsStore', 'userStore')
 @observer
 export default class ReferralsDetails extends Component {
+  constructor(props) {
+    super(props);
+    const { userStore, userDetailsStore } = this.props;
+    if (userStore.isInvestor && get(userDetailsStore, 'signupStatus.activeAccounts') && get(userDetailsStore, 'signupStatus.activeAccounts').length) {
+      this.props.referralsStore.getUserReferralDetails();
+    }
+  }
+
   render() {
     const { referralData } = this.props.referralsStore;
     if (referralData.loading) {
