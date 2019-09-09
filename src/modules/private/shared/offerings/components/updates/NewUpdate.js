@@ -76,10 +76,10 @@ export default class NewUpdate extends Component {
     }
   }
 
-  save = (id, status) => {
+  save = (id, status, redirectToListing = false) => {
     this.props.updateStore.save(id, status)
       .then(() => {
-        if (status !== 'DRAFT') {
+        if (redirectToListing) {
           this.props.updateStore.setFieldValue('newUpdateId', null);
           this.props.history.push(this.props.refLink);
         }
