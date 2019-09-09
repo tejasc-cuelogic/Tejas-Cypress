@@ -37,6 +37,10 @@
                 border:none;
                 text-transform:uppercase;
                 box-shadow:@commonShadow;
+                &.grey{
+                    background: @neutral-middark !important;
+                    color: @white;
+                }
             }
         }
         .icon.heart{
