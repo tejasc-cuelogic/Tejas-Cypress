@@ -228,8 +228,6 @@ export class UpdateStore {
             this.setStatus(status);
             this.setFieldValue('newUpdateId', res.data.createOfferingUpdates.id);
             this.setUpdate(res.data.createOfferingUpdates);
-          } else if (status !== 'DRAFT') {
-            this.reset();
           } else {
             this.setUpdate(res.data.updateOfferingUpdatesInfo);
           }

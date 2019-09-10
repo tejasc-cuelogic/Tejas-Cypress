@@ -33,7 +33,7 @@ const Actions = observer((props) => {
                     />
                     <Button
                       primary
-                      onClick={() => save(id, 'PENDING')}
+                      onClick={() => save(id, 'PENDING', true)}
                       content="Submit"
                       disabled={!meta.isValid || inProgress}
                       loading={inProgress === 'PENDING'}
@@ -71,7 +71,7 @@ const Actions = observer((props) => {
                         && (
                           <Button
                             primary
-                            onClick={() => save(id, 'PUBLISHED')}
+                            onClick={() => save(id, 'PUBLISHED', true)}
                             content="Publish"
                             disabled={!meta.isValid || inProgress}
                             loading={inProgress === 'PUBLISHED'}
