@@ -1,6 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Card, Statistic } from 'semantic-ui-react';
+import { Card, Statistic, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import AccCreationHelper from '../helper';
 import { DataFormatter } from '../../../../../helper';
@@ -22,7 +23,10 @@ const checkStatus = (signupStatus, userDetailsStore) => {
   } else if (signupStatus.phoneVerification !== 'DONE') {
     stepinfo.title = 'Please verify your identity in order to proceed';
   } else if (!signupStatus.investorProfileCompleted) {
-    stepinfo.title = 'Please establish your investor profile in order to proceed';
+    stepinfo.title = 'Get full access';
+    stepinfo.label = 'Finish setting up your account to start investing in local business';
+    stepinfo.btnLabel = 'Access';
+    stepinfo.url = '/app/summary/establish-profile';
   } else if (!isEmpty(signupStatus.roles) && (signupStatus.inActiveAccounts.length <= 2)) {
     stepinfo.title = 'You can open your another NextSeed account!';
     stepinfo.group = 'Congratulations!';
@@ -50,6 +54,17 @@ const StickyNotification = observer(({ signupStatus, userDetailsStore }) => {
               <Statistic.Value>{stepinfo.title}</Statistic.Value>
               <Statistic.Label>{stepinfo.label}</Statistic.Label>
             </Statistic>
+            {stepinfo.btnLabel
+            && (
+              <Button
+                as={Link}
+                to={stepinfo.url}
+                color="green"
+              >
+                {stepinfo.btnLabel}
+              </Button>
+            )
+            }
           </Card.Content>
         </Card>
       </div>
