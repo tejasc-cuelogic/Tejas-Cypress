@@ -53,11 +53,15 @@ export default class StickyNotification extends Component {
     this.props.history.push('/app/referrals');
   }
 
-  getNotificationCard = () => {
+  isUserAccreditated = () => {
     const { accreditationData } = this.props.userDetailsStore;
     const accreditationStatusArr1 = Object.keys(accreditationData).map(a => accreditationData[a] && accreditationData[a].status);
     const accreditationStatusArr2 = ['CONFIRMED', 'REQUESTED', 'EXPIRED', 'INVALID'];
-    if (accreditationStatusArr1.some(item => accreditationStatusArr2.includes(item))) {
+    return accreditationStatusArr1.some(item => accreditationStatusArr2.includes(item));
+  }
+
+  getNotificationCard = () => {
+    if (this.isUserAccreditated) {
       notificationCard.verifiedAccreditation.onClick = this.handleReferral;
       return notificationCard.verifiedAccreditation;
     }

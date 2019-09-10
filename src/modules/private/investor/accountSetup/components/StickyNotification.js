@@ -21,12 +21,12 @@ const checkStatus = (signupStatus, userDetailsStore) => {
   } else if (!signupStatus.investorProfileCompleted) {
     stepinfo.title = 'Get full access';
     stepinfo.label = 'Finish setting up your account to start investing in local business';
-    stepinfo.btnLabel = 'Access';
+    stepinfo.btnText = 'Access';
     stepinfo.url = '/app/summary/establish-profile';
   } else {
     stepinfo.title = 'Complete your account setup';
     stepinfo.label = 'Finish setting up your account to start investing in local business';
-    stepinfo.btnLabel = 'Continue';
+    stepinfo.btnText = 'Continue';
     stepinfo.url = '/app/summary/account-creation';
   }
 };
@@ -43,7 +43,7 @@ const StickyNotification = observer(({ signupStatus, userDetailsStore }) => {
               <Statistic.Value>{stepinfo.title}</Statistic.Value>
               <Statistic.Label>{stepinfo.label}</Statistic.Label>
             </Statistic>
-            {stepinfo.btnLabel
+            {stepinfo.btnText
             && (
               <Button
                 as={Link}
@@ -51,7 +51,7 @@ const StickyNotification = observer(({ signupStatus, userDetailsStore }) => {
                 color="green"
                 floated={!isMobile && 'right'}
               >
-                {stepinfo.btnLabel}
+                {stepinfo.btnText}
               </Button>
             )
             }
