@@ -15,6 +15,7 @@ export default class DeleteUser extends Component {
   constructor(props) {
     super(props);
     this.props.userDetailsStore.resetDeleteUserForm();
+    this.props.userDetailsStore.setFieldValue('selectedUserId', this.props.match.params.userId);
   }
 
   handleCloseModal = (e) => {
