@@ -7,7 +7,8 @@ import Compose from './Compose';
 @inject('messageStore', 'uiStore')
 @observer
 export default class MessagesWrap extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.messageStore.getMessageDetails(this.props.match.params.id);
   }
 

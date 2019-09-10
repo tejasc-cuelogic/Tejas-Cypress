@@ -12,7 +12,8 @@ export default class DeleteUser extends Component {
     errorMsg: '',
   }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.userDetailsStore.resetDeleteUserForm();
   }
 

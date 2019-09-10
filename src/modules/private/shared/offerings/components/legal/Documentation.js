@@ -7,7 +7,8 @@ import ButtonGroup from '../ButtonGroup';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class Documentation extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { setFormData } = this.props.offeringCreationStore;
     // setFormData('GENERAL_FRM', 'legal.general');
     // setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');

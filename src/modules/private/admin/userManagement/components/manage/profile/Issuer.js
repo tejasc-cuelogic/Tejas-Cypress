@@ -8,9 +8,9 @@ import OtherInformation from './OtherInformation';
 @inject('userDetailsStore')
 @observer
 export default class Issuer extends Component {
-  state = { displayMode: true };
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = { displayMode: true };
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
   }
 

@@ -12,7 +12,8 @@ import { InlineLoader } from '../../../../../../theme/shared';
 @inject('campaignStore', 'portfolioStore', 'investmentStore', 'uiStore', 'userDetailsStore')
 @observer
 class BonusRewards extends Component {
-  componentWillMount(){
+  constructor(props) {
+    super(props);
     const { isAdmin } = this.props;
     const accountDetails = this.props.userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     const accountType = isAdmin && get(accountDetails, 'name') ? get(accountDetails, 'name') : includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';

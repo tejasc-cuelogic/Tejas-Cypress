@@ -9,7 +9,8 @@ import Filters from './components/Filters';
 @inject('accreditationStore')
 @observer
 export default class CrowdPay extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.accreditationStore.initRequest();
   }
 

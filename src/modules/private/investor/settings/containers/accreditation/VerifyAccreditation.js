@@ -9,7 +9,8 @@ import { NET_WORTH, INCOME_QAL } from '../../../../../../services/constants/inve
 @withRouter
 @observer
 export default class Accreditation extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match } = this.props;
     const { accountType } = match.params;
     this.props.accreditationStore.getUserAccreditation().then(() => {

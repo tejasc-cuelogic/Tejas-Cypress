@@ -14,7 +14,8 @@ export default class Documents extends Component {
   state = {
     doc: null,
   }
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.authStore.isUserLoggedIn
       && isEmpty(this.props.accreditationStore.userData)) {
       this.props.accreditationStore.getUserAccreditation();

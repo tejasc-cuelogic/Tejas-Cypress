@@ -16,8 +16,9 @@ class Careers extends Component {
     docLoading: false,
   }
 
-  componentWillMount() {
-    this.props.publicStore.getJobListing();
+  constructor(props) {
+    super(props);
+    props.publicStore.getJobListing();
   }
 
   openDoc = (boxFileId) => {

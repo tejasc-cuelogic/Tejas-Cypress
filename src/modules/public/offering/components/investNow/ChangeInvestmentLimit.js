@@ -11,7 +11,8 @@ import { ListErrors } from '../../../../../theme/shared';
 @withRouter
 @observer
 class ChangeInvestmentLimit extends Component {
-  componentWillMount = () => {
+  constructor(props) {
+    super(props);
     this.props.investmentStore.setInvestmentLimitData();
   }
 

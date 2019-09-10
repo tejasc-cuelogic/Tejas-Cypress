@@ -8,7 +8,8 @@ import { FormRadioGroup } from '../../../../../../theme/form';
 @withRouter
 @observer
 export default class ManageMultiFactorAuth extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.multiFactorAuthStore.initialiseMfaMode();
     }

@@ -21,7 +21,8 @@ import EstablishProfile from '../../../investor/accountSetup/containers/establis
 @inject('userDetailsStore', 'userStore', 'identityStore', 'uiStore')
 @observer
 export default class ProfileData extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { ID_PROFILE_INFO, setStateValue } = this.props.identityStore;
     const selectedState = find(US_STATES_FOR_INVESTOR, { key: ID_PROFILE_INFO.fields.state.value });
     if (selectedState) {

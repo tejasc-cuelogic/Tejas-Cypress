@@ -27,7 +27,8 @@ const navMeta = [
 @withRouter
 @observer
 export default class AccountDetails extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.params.closedAccountId) {
       this.props.accountStore.setSelectedClosedAccount(this.props.match.params.closedAccountId);
     }

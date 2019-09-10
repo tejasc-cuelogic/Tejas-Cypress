@@ -13,7 +13,8 @@ const isMobile = document.documentElement.clientWidth < 992;
 @inject('campaignStore')
 @observer
 class Updates extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { campaign } = this.props.campaignStore;
     const updates = campaign && campaign.updates ? campaign.updates : [];
     this.props.campaignStore.setInitialStateForReadMoreAndReadLess(updates);
