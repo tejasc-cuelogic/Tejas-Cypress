@@ -183,7 +183,7 @@ export default class NewUpdate extends Component {
                               </div>
                               <Header.Content className="grey-header">
                                 {get(offer, 'keyTerms.shorthandBusinessName')}
-                                <Header.Subheader>{moment(PBUILDER_FRM.fields.updatedDate.value).format('LL')}</Header.Subheader>
+                                <Header.Subheader>{PBUILDER_FRM.fields.updatedDate.value ? moment(PBUILDER_FRM.fields.updatedDate.value).format('LL') : '-'}</Header.Subheader>
                                 {/* <Header.Subheader>{moment().format('ll')}</Header.Subheader> */}
                               </Header.Content>
                             </Header>
