@@ -8,10 +8,10 @@ import { InlineLoader } from '../../../../../theme/shared';
 @inject('educationStore', 'userStore')
 @observer
 export default class FaqsCombined extends Component {
-  state = { activeIndex: 0, innerActiveIndex: 0 }
-
-  componentWillMount() {
-    const props = { isMkt: this.props.marketing, params: this.props.params };
+  constructor(props) {
+    super(props);
+    this.state = { activeIndex: 0, innerActiveIndex: 0 };
+    const params = { isMkt: this.props.marketing, params: this.props.params };
     const { currentUser } = this.props.userStore;
     let categoryType;
     if (this.props.params.for) {
@@ -19,7 +19,7 @@ export default class FaqsCombined extends Component {
     } else if (currentUser) {
       categoryType = toJS(currentUser.roles)[0] === 'investor' ? 'INV_TAX_FAQ' : 'ISSUER_OFFERING_CREATION_LEADERSHIP_FAQ';
     }
-    this.props.educationStore.initRequest('Faq', props, categoryType);
+    this.props.educationStore.initRequest('Faq', params, categoryType);
   }
 
   toggleAccordion = (index, field) => {

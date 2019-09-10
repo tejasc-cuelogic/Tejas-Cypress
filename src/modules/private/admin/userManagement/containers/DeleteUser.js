@@ -12,8 +12,9 @@ export default class DeleteUser extends Component {
     errorMsg: '',
   }
 
-  componentWillMount() {
-    this.props.userDetailsStore.resetForm('DELETE_MESSAGE');
+  constructor(props) {
+    super(props);
+    this.props.userDetailsStore.resetDeleteUserForm();
   }
 
   handleCloseModal = (e) => {
@@ -42,7 +43,7 @@ export default class DeleteUser extends Component {
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">Application?</Header>
+          <Header as="h3">{this.props.match.params.action} Delete User?</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error>

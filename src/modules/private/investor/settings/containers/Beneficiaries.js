@@ -8,7 +8,8 @@ import { InlineLoader, EmptyDataSet } from '../../../../../theme/shared';
 @inject('beneficiaryStore')
 @observer
 export default class Beneficiaries extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.beneficiaryStore.getBeneficiaries();
     if (this.props.match.url === this.props.location.pathname) {
       this.props.beneficiaryStore.setShareModalData(false);

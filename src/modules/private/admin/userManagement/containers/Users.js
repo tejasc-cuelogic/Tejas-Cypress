@@ -8,7 +8,8 @@ import UserListing from '../components/manage/UserListing';
 @inject('userListingStore', 'userStore', 'portfolioStore', 'transactionStore')
 @observer
 class Users extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.userListingStore.initRequest();
     this.props.portfolioStore.setFieldValue('apiCall', false);
     this.props.transactionStore.setFieldValue('apiCall', false);

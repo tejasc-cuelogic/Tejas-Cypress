@@ -361,7 +361,7 @@ export const ISSUER_INFORMATION = {
     },
   },
   companyName: {
-    value: 'NextSeed US LLC',
+    value: 'NextSeed Securities, LLC',
     key: 'companyName',
     placeHolder: 'Company Name',
     label: 'Company Name',
@@ -373,7 +373,7 @@ export const ISSUER_INFORMATION = {
     },
   },
   commissionCik: {
-    value: '0001667892',
+    value: '0001723503',
     key: 'commissionCik',
     placeHolder: 'CIK Number of Intermediary',
     label: 'CIK',
@@ -385,7 +385,7 @@ export const ISSUER_INFORMATION = {
     },
   },
   commissionFileNumber: {
-    value: '007-00023',
+    value: '008-70055',
     key: 'commissionFileNumber',
     placeHolder: 'Commission File Number',
     label: 'Commission File Number',
@@ -396,7 +396,7 @@ export const ISSUER_INFORMATION = {
     },
   },
   crdNumber: {
-    value: '283225',
+    value: '291387',
     key: 'crdNumber',
     placeHolder: 'CRD Number',
     label: 'CRD Number',

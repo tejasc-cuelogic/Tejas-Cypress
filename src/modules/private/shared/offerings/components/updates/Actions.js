@@ -5,7 +5,7 @@ import { Button } from 'semantic-ui-react';
 const Actions = observer((props) => {
   const {
     save, meta, isManager, isPublished, inProgress,
-    id, cancelUpdate,
+    id, cancelUpdate, isPending,
   } = props;
   return (
     <>
@@ -25,7 +25,7 @@ const Actions = observer((props) => {
                   <>
                     <Button
                       inverted
-                      onClick={() => save(id, 'DRAFT')}
+                      onClick={() => save(id, isPending ? 'PENDING' : 'DRAFT')}
                       color="green"
                       content="Save"
                       disabled={!(meta.isValid && meta.isDirty) || inProgress}
@@ -33,7 +33,7 @@ const Actions = observer((props) => {
                     />
                     <Button
                       primary
-                      onClick={() => save(id, 'PENDING')}
+                      onClick={() => save(id, 'PENDING', true)}
                       content="Submit"
                       disabled={!meta.isValid || inProgress}
                       loading={inProgress === 'PENDING'}
@@ -61,7 +61,7 @@ const Actions = observer((props) => {
                     <>
                       <Button
                         inverted
-                        onClick={() => save(id, 'DRAFT')}
+                        onClick={() => save(id, isPublished ? 'PUBLISHED' : isPending ? 'PENDING' : 'DRAFT')}
                         color="green"
                         content="Save"
                         disabled={!(meta.isValid && meta.isDirty) || inProgress}
@@ -71,7 +71,7 @@ const Actions = observer((props) => {
                         && (
                           <Button
                             primary
-                            onClick={() => save(id, 'PUBLISHED')}
+                            onClick={() => save(id, 'PUBLISHED', true)}
                             content="Publish"
                             disabled={!meta.isValid || inProgress}
                             loading={inProgress === 'PUBLISHED'}

@@ -11,7 +11,8 @@ import Helper from '../../../../../helper/utility';
 const isMobile = document.documentElement.clientWidth < 992;
 @inject('campaignStore', 'navStore')
 class InvestmentDetails extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.campaignStore.calculateTotalPaymentData();
     if (!this.props.newLayout) {
       window.addEventListener('scroll', this.handleOnScroll);

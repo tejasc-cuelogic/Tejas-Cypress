@@ -59,7 +59,8 @@ const SortableList = SortableContainer(({
 export default class AllKnowledgeBaseItems extends Component {
   state = { activeIndex: 0, innerActiveIndex: [] }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.knowledgeBaseStore.resetPagination();
     this.props.knowledgeBaseStore.resetSearch();
     this.props.knowledgeBaseStore.initRequest(); // load data

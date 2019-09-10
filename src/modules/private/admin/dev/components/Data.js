@@ -19,7 +19,8 @@ import ImageProcessingRequest from './data/imageProcessingRequest';
 @withRouter
 @observer
 export default class Data extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.elasticSearchStore.setFieldValue('boxMsg', '');
   }
 

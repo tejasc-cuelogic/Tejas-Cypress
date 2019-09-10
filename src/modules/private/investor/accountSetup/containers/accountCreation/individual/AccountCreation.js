@@ -7,7 +7,8 @@ import Summary from './Summary';
 @inject('uiStore', 'accountStore', 'bankAccountStore', 'individualAccountStore', 'userStore', 'userDetailsStore')
 @observer
 export default class AccountCreation extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.individualAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('individual');

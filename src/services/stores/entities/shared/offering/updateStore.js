@@ -3,7 +3,7 @@ import graphql from 'mobx-apollo';
 import { orderBy, get } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../../helper';
+import { FormValidator as Validator, ClientDb } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { UPDATES, TEMPLATE } from '../../../../constants/offering';
 import { offeringCreationStore, uiStore } from '../../../index';
@@ -84,14 +84,14 @@ export class UpdateStore {
     }
 
     @action
-    sendTestEmail = (offeringUpdateId) => {
+    sendTestEmail = (offeringUpdateId, emailTemplate = false) => {
       uiStore.setLoaderMessage('...Sending Test Email');
       client
         .mutate({
           mutation: sendOfferingUpdateTestEmail,
           variables: {
             offeringUpdateId,
-            emailTemplate: this.TEMPLATE_FRM.fields.type.value,
+            emailTemplate: emailTemplate || this.TEMPLATE_FRM.fields.type.value,
           },
         })
         .then(() => {
@@ -107,7 +107,7 @@ export class UpdateStore {
     }
 
     @action
-    offeringUpdatePublish = (offeringUpdateId, data) => new Promise((resolve, reject) => {
+    offeringUpdatePublish = (offeringUpdateId, data, shouldSendInvestorNotifications, showToast = true) => new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: offeringUpdatePublish,
@@ -115,10 +115,13 @@ export class UpdateStore {
             id: offeringUpdateId,
             emailTemplate: this.TEMPLATE_FRM.fields.type.value,
             updatesInput: data,
+            shouldSendInvestorNotifications,
           },
         })
         .then(() => {
-          Helper.toast('Offering Published Successfully ', 'success');
+          if (showToast) {
+            Helper.toast('Offering Published Successfully ', 'success');
+          }
           resolve();
         })
         .catch(() => {
@@ -135,9 +138,9 @@ export class UpdateStore {
     @action
     UpdateChange = (e, result) => {
       if (result && result.type === 'checkbox') {
-        if (result.name === 'allInvestor') {
-          this.PBUILDER_FRM.fields.allInvestor.value = result.checked;
-          if (result.checked) {
+        if (result.name === 'allInvestor' || result.name === 'shouldSendInvestorNotifications') {
+          this.PBUILDER_FRM.fields[result.name].value = result.checked;
+          if (result.checked && result.name !== 'shouldSendInvestorNotifications') {
             this.PBUILDER_FRM.fields.tiers.values = [];
           }
         } else {
@@ -197,17 +200,18 @@ export class UpdateStore {
     @action
     save = (id, status, showToast = true) => new Promise((resolve) => {
       uiStore.setProgress(status);
-      const currentTime = moment().format('HH:mm:ss');
       this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
       delete data.allInvestor;
+      delete data.shouldSendInvestorNotifications;
       data.status = status;
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
-      data.updatedDate = moment(`${data.updatedDate} ${currentTime}`).utc();
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
+      const shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
       if (id !== 'new' && status === 'PUBLISHED') {
-        this.offeringUpdatePublish(id, data).then(() => {
+        data.isVisible = true;
+        this.offeringUpdatePublish(id, data, shouldSendInvestorNotifications, showToast).then(() => {
           uiStore.setProgress(false);
           resolve();
         });
@@ -224,8 +228,6 @@ export class UpdateStore {
             this.setStatus(status);
             this.setFieldValue('newUpdateId', res.data.createOfferingUpdates.id);
             this.setUpdate(res.data.createOfferingUpdates);
-          } else if (status !== 'DRAFT') {
-            this.reset();
           } else {
             this.setUpdate(res.data.updateOfferingUpdatesInfo);
           }
@@ -308,13 +310,14 @@ export class UpdateStore {
       });
       this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];
       this.PBUILDER_FRM.fields.allInvestor.value = offeringUpdatesById.tiers.length === 0;
-      this.PBUILDER_FRM.fields.updatedDate.value = DataFormatter.getDateAsPerTimeZone(offeringUpdatesById.updated.date, true, false, false);
+      this.PBUILDER_FRM.fields.updatedDate.value = offeringUpdatesById.updatedDate;
       Validator.validateForm(this.PBUILDER_FRM);
     }
 
     @action
     reset = () => {
       this.PBUILDER_FRM = Validator.prepareFormObject(UPDATES);
+      this.PBUILDER_FRM.fields.updatedDate.value = moment().format('MM/DD/YYYY');
     }
 
     @action

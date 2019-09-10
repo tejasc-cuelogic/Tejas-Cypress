@@ -30,11 +30,11 @@ const HeaderWithTooltip = ({ header, tooltip }) => (
 @withRouter
 @observer
 export default class Leader extends Component {
-  state = {
-    leaderFormInvalid: false,
-  }
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      leaderFormInvalid: false,
+    };
     this.props.offeringCreationStore.setLeadershipExpData(this.props.index);
   }
 
@@ -214,6 +214,7 @@ export default class Leader extends Component {
               name="percentOwned"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].percentOwned}
               percentage
+              allowNegative={false}
               changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
             />
             <FormInput

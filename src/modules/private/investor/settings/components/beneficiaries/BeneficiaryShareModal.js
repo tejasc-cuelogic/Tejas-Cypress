@@ -9,7 +9,8 @@ import { ListErrors, FieldError, InlineLoader } from '../../../../../../theme/sh
 @withRouter
 @observer
 export default class BeneficiaryShareModal extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.beneficiaryStore.BENEFICIARY_META.fields.beneficiary.length) {
       this.props.history.push(this.props.refLink);
     }
