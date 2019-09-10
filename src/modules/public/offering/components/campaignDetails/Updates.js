@@ -71,7 +71,7 @@ class Updates extends Component {
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header">
                         {get(campaign, 'keyTerms.shorthandBusinessName') }<br />
-                        <span>{moment(dataItem.updatedDate).format('LL')}</span>
+                        <span>{dataItem.updatedDate ? moment(dataItem.updatedDate).format('LL') : '-'}</span>
                       </Item.Content>
                     </Item>
                     <Header as="h4">{dataItem.title}</Header>
