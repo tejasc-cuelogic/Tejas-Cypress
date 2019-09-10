@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Form } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../theme/form';
@@ -22,6 +23,9 @@ export default class DeleteUser extends Component {
     e.stopPropagation();
     const { match } = this.props;
     const { params } = match;
+    if (!get(this.props.userDetailsStore.getDetailsOfUser, 'id')) {
+      this.props.userDetailsStore.setFieldValue('selectedUserId', null);
+    }
     this.props.history.push(`/app/users/${params.userId}/profile-data`);
   }
 
