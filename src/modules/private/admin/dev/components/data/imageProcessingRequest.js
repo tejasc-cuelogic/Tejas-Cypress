@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Form } from 'semantic-ui-react';
+import { Card, Button, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import beautify from 'json-beautify';
 import { withRouter } from 'react-router-dom';
@@ -32,6 +32,7 @@ export default class ImageProcessingRequest extends Component {
       <Card fluid className="elastic-search">
         <Card.Content header="Image Processing Request" />
         <Card.Content>
+        <Header as="h6">Note: Below form submited without filling any data, then the action executes on root folder.</Header>
           <Card.Description>
             <Form onSubmit={this.onSubmit}>
               <Form.Group className="bottom-aligned">
