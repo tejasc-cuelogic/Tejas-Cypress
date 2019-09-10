@@ -23,7 +23,7 @@ export default class Private extends React.Component {
       this.props.uiStore.setRedirectURL(this.props.history.location);
       this.props.history.push('/login');
     } else if (userStore.isInvestor && get(userDetailsStore, 'signupStatus.activeAccounts') && get(userDetailsStore, 'signupStatus.activeAccounts').length) {
-      referralsStore.getUserReferralDetails(get(currentUser, 'accessToken.payload.username'));
+      referralsStore.getUserReferralDetails(get(currentUser, 'accessToken.payload.username'), false);
     }
   }
 
