@@ -62,7 +62,7 @@ export default class ImageProcessingRequest extends Component {
                 ))
                 }
                 <Form.Field width={16}>
-                  <Button primary content="Submit" disabled={inProgress.imageProcessingRequest || !IMAGEPROCESSINGREQUES_FRM.meta.isValid} loading={inProgress.imageProcessingRequest} />
+                  <Button primary content="Submit" loading={inProgress.imageProcessingRequest} />
                 </Form.Field>
               </Form.Group>
             </Form>
