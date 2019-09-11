@@ -19,7 +19,7 @@ export default class CampaignHeader extends Component {
 
   render() {
     const { campaignStore, newLayout } = this.props;
-    const { campaign, offerStructure, campaignStatus } = campaignStore;
+    const { campaign, offerStructure, campaignStatus, addRemoveWatchList, isWatching } = campaignStore;
     const {
       isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
@@ -180,7 +180,7 @@ export default class CampaignHeader extends Component {
                     </p>
                     )
                   }
-                  <div className="center-align mt-20">
+                  <div className="mt-20">
                     {isCreation
                       ? <Button fluid secondary={diffForProcessing.value !== 0} content="Coming Soon" disabled />
                       : ''
@@ -188,17 +188,27 @@ export default class CampaignHeader extends Component {
                     {!isClosed
                       && (
                       <>
-                        <Button
-                          fluid
-                          secondary={!isInProcessing}
-                          disabled={maxFlagStatus || isInProcessing}
-                          onClick={this.handleInvestNowClick}
-                        >
-                          {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
-                        </Button>
-                        <small>
+                        <Button.Group>
+                          <Button
+                            secondary={!isInProcessing}
+                            disabled={maxFlagStatus || isInProcessing}
+                            onClick={this.handleInvestNowClick}
+                            className="very relaxed"
+                          >
+                            {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                          </Button>
+                          <Button
+                            color="white"
+                            onClick={addRemoveWatchList}
+                            className={!isWatching ? 'inverted' : ''}
+                          >
+                            <Icon name="heart outline" />
+                            Follow
+                          </Button>
+                        </Button.Group>
+                        <p>
                           {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
-                        </small>
+                        </p>
                       </>
                       )
                     }

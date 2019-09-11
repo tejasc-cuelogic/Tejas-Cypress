@@ -51,6 +51,7 @@ class offerDetails extends Component {
         || (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId === currentUser.sub)) {
         this.setState({ preLoading: false, showPassDialog: false });
         this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
+        this.props.campaignStore.setOfferingWatch(this.props.match.params.id);
       } else if (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId !== currentUser.sub) {
         if (oMinData.stage === 'CREATION') {
           this.setState({ showPassDialog: true, preLoading: false });

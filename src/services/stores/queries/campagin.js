@@ -501,3 +501,20 @@ export const validateOfferingPreviewPassword = gql`
 query _validateOfferingPreviewPassword($offeringId: String!, $previewPassword: String!) {
   validateOfferingPreviewPassword (offeringId: $offeringId, previewPassword: $previewPassword)
 }`;
+
+export const addUserToOfferingWatchlist = gql`
+  mutation addUserToOfferingWatchlist($userId: String, $offeringId: String, $isInvestment: Boolean){
+    addUserToOfferingWatchlist(userId: $userId, offeringId: $offeringId, isInvestment: $isInvestment)
+  }
+`;
+
+export const removeUserFromOfferingWatchlist = gql`
+  mutation removeUserFromOfferingWatchlist($userId: String, $offeringId: String){
+    removeUserFromOfferingWatchlist(userId: $userId, offeringId: $offeringId)
+  }
+`;
+
+export const isWatchingOffering = gql`
+query isWatchingOffering($userId: String, $offeringId: String){
+  isWatchingOffering(userId: $userId, offeringId: $offeringId)
+}`;

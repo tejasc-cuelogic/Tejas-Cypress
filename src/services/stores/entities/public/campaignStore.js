@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist, removeUserFromOfferingWatchlist, addUserToOfferingWatchlist, isWatchingOffering } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
@@ -58,6 +58,7 @@ export class CampaignStore {
 
   @observable docLoading = false;
 
+  @observable isWatching = false;
 
   @action
   setFieldValue = (field, val) => {
@@ -99,7 +100,30 @@ export class CampaignStore {
       onFetch: (data) => {
         if (data && data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length && !this.details.loading) {
           this.getCampaignAdditionalDetails(id);
+          this.setOfferingWatch();
         }
+      },
+    });
+  }
+
+  @action
+  setOfferingWatch = () => {
+    if (!this.getOfferingId || !userDetailsStore.currentUserId) {
+      this.isWatching = false;
+      return;
+    }
+
+    const variables = {
+      userId: userDetailsStore.currentUserId,
+      offeringId: this.getOfferingId,
+    };
+    graphql({
+      client,
+      query: isWatchingOffering,
+      variables: { ...variables },
+      fetchPolicy: 'network-only',
+      onFetch: (res) => {
+        this.setFieldValue('isWatching', res.isWatchingOffering);
       },
     });
   }
@@ -117,6 +141,21 @@ export class CampaignStore {
         }
       },
     });
+  }
+
+  @action
+  addRemoveWatchList = () => {
+    const variables = {
+      userId: userDetailsStore.currentUserId,
+      offeringId: this.getOfferingId,
+      isInvestment: false,
+    };
+    client.mutate({
+      mutation: this.isWatching ? removeUserFromOfferingWatchlist : addUserToOfferingWatchlist,
+      variables: { ...variables },
+    }).then(() => {
+      this.isWatching = !this.isWatching;
+    }).catch(() => Helper.toast('Something went wrong. Please try again in some time.', 'error'));
   }
 
   @action
