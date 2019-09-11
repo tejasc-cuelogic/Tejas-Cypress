@@ -38,7 +38,7 @@ const metaTagsData = [
   { type: 'meta', name: 'twitter:image', content: `https://${window.location.hostname}/og-image_A.jpg` },
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
-const isMobile = document.documentElement.clientWidth < 768;
+// const isMobile = document.documentElement.clientWidth < 768;
 const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/'];
 @inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
 @withRouter
@@ -86,7 +86,7 @@ class App extends Component {
 
   componentDidUpdate(prevProps) {
     this.checkForPasswordProtect();
-    if (isMobile) {
+    if (this.props.uiStore.responsiveVars.isMobile) {
       document.activeElement.blur();
     }
     authActions.getUserSession().then((session) => {
@@ -218,6 +218,7 @@ class App extends Component {
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
 
   render() {
+    console.log(this.props.uiStore.responsiveVars.isMobile);
     const { location } = this.props;
     const { authChecked } = this.state;
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {

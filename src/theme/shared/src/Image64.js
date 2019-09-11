@@ -9,7 +9,7 @@ import emptyImage3 from '../../../assets/images/gallery-placeholder-1-1.jpg';
 import userPlaceholder from '../../../assets/images/leader-placeholder.jpg';
 import Helper from '../../../helper/utility';
 
-const Image64 = inject('uiStore')(observer((props) => {
+function Image64(props) {
   const [data, setData] = useState(props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1);
 
   async function getImage() {
@@ -36,6 +36,6 @@ const Image64 = inject('uiStore')(observer((props) => {
     <div {...props} style={{ backgroundImage: `url(${data})` }} />
   )
     : <Image {...props} src={data} />;
-}));
+}
 
-export default Image64;
+export default inject('uiStore')(observer(Image64));
