@@ -48,8 +48,8 @@ export default class NewEmailAddress extends Component {
           <Form error onSubmit={this.handleChangeEmailAddress}>
             <Form.Input
               fluid
-              label="E-mail"
-              placeholder="E-mail address"
+              label="Email"
+              placeholder="Email address"
               name="email"
               value={CONFIRM_FRM.fields.email.value}
               onChange={confirmFormChange}

@@ -18,6 +18,7 @@ import {
   uiStore,
   investmentStore,
   userListingStore,
+  userStore,
 } from '../../index';
 import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
@@ -242,6 +243,7 @@ export class UserDetailsStore {
         });
       uiStore.removeOneFromProgressArray('deleteProfile');
       if (get(res, 'data.adminDeleteInvestorOrIssuerUser.status') || get(res, 'data.adminHardDeleteUser.status')) {
+        userStore.setFieldValue('confirmDelete', true);
         Helper.toast('User Profile Deleted Successfully!', 'success');
         resolve();
       } else {
