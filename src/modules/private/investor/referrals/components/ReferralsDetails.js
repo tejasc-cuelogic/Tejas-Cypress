@@ -15,7 +15,7 @@ export default class ReferralsDetails extends Component {
     super(props);
     const { userStore, userDetailsStore } = this.props;
     if (userStore.isInvestor && get(userDetailsStore, 'signupStatus.activeAccounts') && get(userDetailsStore, 'signupStatus.activeAccounts').length) {
-      this.props.referralsStore.getUserReferralDetails();
+      this.props.referralsStore.getUserReferralDetails(false, false);
     }
   }
 
