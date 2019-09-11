@@ -91,7 +91,7 @@ export default class DeleteUser extends React.Component {
                   />
                 </Form>
                 <div className="center-align mt-30">
-                  <Button content="No thanks, I'll stay!" color="green" loading={inProgressArray.includes('deleteProfile')} onClick={() => handleCancelDeleteUser(true)} />
+                  <Button content="No thanks, I'll stay!" color="green" disabled={inProgressArray.includes('deleteProfile')} loading={inProgressArray.includes('deleteProfile')} onClick={() => handleCancelDeleteUser(true)} />
                   <Button color="green" className="link-button mt-30" onClick={this.handleDeleteUser} type="button" disabled={!deleteUser}>Yes, please delete my NextSeed account</Button>
                 </div>
               </>
