@@ -188,27 +188,31 @@ export default class CampaignHeader extends Component {
                     {!isClosed
                       && (
                       <>
-                        <Button.Group>
-                          <Button
-                            secondary={!isInProcessing}
-                            disabled={maxFlagStatus || isInProcessing}
-                            onClick={this.handleInvestNowClick}
-                            className="very relaxed"
-                          >
-                            {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
-                          </Button>
-                          <Button
-                            color="white"
-                            onClick={addRemoveWatchList}
-                            className={!isWatching ? 'inverted' : ''}
-                          >
-                            <Icon name="heart outline" />
-                            Follow
-                          </Button>
-                        </Button.Group>
-                        <p>
-                          {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
-                        </p>
+                        <Grid>
+                          <Grid.Column width="11" className="center-align">
+                            <Button
+                              secondary={!isInProcessing}
+                              disabled={maxFlagStatus || isInProcessing}
+                              onClick={this.handleInvestNowClick}
+                              fluid
+                            >
+                              {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                            </Button>
+                            <p>
+                              {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
+                            </p>
+                          </Grid.Column>
+                          <Grid.Column width="5">
+                            <Button
+                              color="white"
+                              onClick={addRemoveWatchList}
+                              className={!isWatching ? 'inverted' : ''}
+                            >
+                              <Icon name="heart outline" />
+                              Follow
+                            </Button>
+                          </Grid.Column>
+                        </Grid>
                       </>
                       )
                     }
