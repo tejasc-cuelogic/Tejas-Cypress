@@ -156,14 +156,6 @@ export const transferRequestAdminApprove = gql`
     )
   }`;
 
-export const transferRequestAdminDecline = gql`
-  mutation transferRequestAdminDecline($id: Int!, $reason: String){
-    transferRequestAdminDecline(
-    id: $id
-    reason: $reason
-    )
-  }`;
-
 export const transferRequestAdminVerified = gql`
   mutation transferRequestAdminVerified($id: Int!){
     transferRequestAdminVerified(
@@ -171,9 +163,9 @@ export const transferRequestAdminVerified = gql`
     )
   }`;
 
-export const transactionFailed = gql`
-  mutation transactionFailed($id: Int!, $reason: String){
-    transactionFailed(
+export const declineTransferRequest = gql`
+  mutation declineTransferRequest($id: Int!, $reason: String){
+    declineTransferRequest(
     id: $id
     reason: $reason
     )
