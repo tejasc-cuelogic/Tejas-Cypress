@@ -111,19 +111,16 @@ export default class Listing extends Component {
                   <Table.Cell>{data.state}</Table.Cell>
                   {isAdmin
                     && (
+                      <>
                       <Table.Cell>
                         {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
                       </Table.Cell>
-                    )
-                  }
-                  <Table.Cell>
-                    {data.earlyBirdEligibility
-                      ? <Label color="green" circular empty className="mr-10" />
-                      : ''
-                    }
-                  </Table.Cell>
-                  {isAdmin
-                    ? (
+                      <Table.Cell>
+                        {data.earlyBirdEligibility
+                          ? <Label color="green" circular empty className="mr-10" />
+                          : ''
+                        }
+                      </Table.Cell>
                       <Table.Cell>
                         {Helper.CurrencyFormat(data.amount, 0)}
                         {parseInt(data.investmentsCount, 10) > 1
@@ -150,8 +147,8 @@ export default class Listing extends Component {
                           ) : null
                         }
                       </Table.Cell>
+                      </>
                     )
-                    : null
                   }
                   <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
                   <Table.Cell textAlign="right">{this.showReferralCode(referralCode, data.referralCode)}</Table.Cell>
