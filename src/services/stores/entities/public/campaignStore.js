@@ -123,7 +123,7 @@ export class CampaignStore {
       variables: { ...variables },
       fetchPolicy: 'network-only',
       onFetch: (res) => {
-        this.setFieldValue('isWatching', res.isWatchingOffering);
+        this.setFieldValue('isWatching', get(res, 'isWatchingOffering'));
       },
     });
   }
@@ -154,8 +154,10 @@ export class CampaignStore {
       mutation: this.isWatching ? removeUserFromOfferingWatchlist : addUserToOfferingWatchlist,
       variables: { ...variables },
     }).then(() => {
-      this.isWatching = !this.isWatching;
-    }).catch(() => Helper.toast('Something went wrong. Please try again in some time.', 'error'));
+      this.setFieldValue('isWatching', !this.isWatching);
+    }).catch(() => {
+      Helper.toast('Something went wronasdfsdfg. Please try again in some time.', 'error');
+    });
   }
 
   @action

@@ -23,7 +23,7 @@ export default class CampaignSideBar extends Component {
   render() {
     const { campaignStore, newLayout } = this.props;
     const {
-      campaign, navCountData, campaignSideBarShow, offerStructure, campaignStatus,
+      campaign, navCountData, campaignSideBarShow, offerStructure, campaignStatus, addRemoveWatchList, isWatching,
     } = campaignStore;
     const {
       isClosed, isCreation, isInProcessing, collected, minFlagStatus, isBonusReward,
@@ -170,23 +170,33 @@ export default class CampaignSideBar extends Component {
                 : ''
               }
               {!isClosed
-                && (
-                <>
-                  <Button
-                    compact={!newLayout && !isMobile}
-                    fluid={isMobile}
-                    secondary={!isInProcessing}
-                    disabled={maxFlagStatus || isInProcessing}
-                    onClick={this.handleInvestNowClick}
-                  >
-                    {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
-                  </Button>
-                  <p className={(newLayout && isMobile) ? 'intro-text' : ''}>
-                    {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
-                  </p>
-                </>
-                )
-              }
+                      && (
+                      <>
+                        <Button.Group vertical>
+                          <Button
+                            secondary={!isInProcessing}
+                            disabled={maxFlagStatus || isInProcessing}
+                            onClick={this.handleInvestNowClick}
+                            fluid
+                          >
+                            {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                          </Button>
+                          <Button
+                            fluid
+                            color="white"
+                            onClick={addRemoveWatchList}
+                            className={!isWatching ? 'inverted' : ''}
+                          >
+                            <Icon name="heart outline" />
+                            Follow
+                          </Button>
+                          <p>
+                            {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
+                          </p>
+                        </Button.Group>
+                      </>
+                      )
+                    }
             </div>
           </Responsive>
           {!isMobile
