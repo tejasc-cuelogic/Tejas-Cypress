@@ -121,6 +121,12 @@ export default class Listing extends Component {
                           : ''
                         }
                       </Table.Cell>
+                      </>
+                    )
+                  }
+                  {((isIssuer && hardClosedDate) || (isAdmin))
+                    && (
+                      <>
                       <Table.Cell>
                         {Helper.CurrencyFormat(data.amount, 0)}
                         {parseInt(data.investmentsCount, 10) > 1
