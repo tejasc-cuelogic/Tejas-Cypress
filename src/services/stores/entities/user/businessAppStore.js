@@ -940,6 +940,7 @@ export class BusinessAppStore {
       payload = has(this.urlParameter, 'sc') ? { ...payload, signupCode: this.urlParameter.sc } : { ...payload };
       payload = has(this.urlParameter, 'utmSource') ? { ...payload, utmSource: this.urlParameter.utmSource } : { ...payload };
       payload = has(this.urlParameter, 'utmsource') ? { ...payload, utmSource: this.urlParameter.utmsource } : { ...payload };
+      payload = has(this.urlParameter, 'utm_source') ? { ...payload, utmSource: this.urlParameter.utm_source } : { ...payload };
     }
     payload.email = payload.email.toLowerCase();
     return new Promise((resolve, reject) => {
