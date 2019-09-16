@@ -84,12 +84,12 @@ export class UpdateStore {
     }
 
     @action
-    sendTestEmail = (offeringUpdateId, emailTemplate = false, shouldSendInvestorNotifications = false) => {
+    sendTestEmail = (offeringUpdateId, emailTemplate = false) => {
       uiStore.setLoaderMessage('...Sending Test Email');
       const params = {
         offeringUpdateId,
         emailTemplate: emailTemplate || this.TEMPLATE_FRM.fields.type.value,
-        shouldSendInvestorNotifications,
+        shouldSendInvestorNotifications: this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false,
       };
       client
         .mutate({
@@ -238,7 +238,7 @@ export class UpdateStore {
           }
           this.setFormIsDirty(false);
           uiStore.setProgress(false);
-          resolve(shouldSendInvestorNotifications);
+          resolve();
         })
         .catch((res) => {
           Helper.toast(`${res} Error`, 'error');
@@ -307,7 +307,9 @@ export class UpdateStore {
     @action
     setFormData = (offeringUpdatesById) => {
       Object.keys(this.PBUILDER_FRM.fields).map((key) => {
-        this.PBUILDER_FRM.fields[key].value = offeringUpdatesById[key];
+        if (key !== 'shouldSendInvestorNotifications') {
+          this.PBUILDER_FRM.fields[key].value = offeringUpdatesById[key];
+        }
         return null;
       });
       this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];
