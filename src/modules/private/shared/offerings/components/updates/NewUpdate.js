@@ -76,8 +76,8 @@ export default class NewUpdate extends Component {
     }
   }
 
-  save = (id, status, redirectToListing = false) => {
-    this.props.updateStore.save(id, status)
+  save = (id, status, redirectToListing = false, updateOnly = false) => {
+    this.props.updateStore.save(id, status, true, updateOnly)
       .then(() => {
         if (redirectToListing) {
           this.props.updateStore.setFieldValue('newUpdateId', null);
