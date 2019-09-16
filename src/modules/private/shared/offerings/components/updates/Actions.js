@@ -5,7 +5,7 @@ import { Button } from 'semantic-ui-react';
 const Actions = observer((props) => {
   const {
     save, meta, isManager, isPublished, inProgress,
-    id, cancelUpdate, isPending,
+    id, cancelUpdate, isPending, isDraft,
   } = props;
   return (
     <>
@@ -71,10 +71,10 @@ const Actions = observer((props) => {
                         && (
                           <Button
                             primary
-                            onClick={() => save(id, 'PUBLISHED', true)}
-                            content="Publish"
+                            onClick={() => save(id, isDraft ? 'PENDING' : 'PUBLISHED', !isDraft)}
+                            content={isDraft ? 'Submit' : 'Publish'}
                             disabled={!meta.isValid || inProgress}
-                            loading={inProgress === 'PUBLISHED'}
+                            loading={inProgress === 'PUBLISHED' || inProgress === 'PENDING'}
                           />
                         )
                       }

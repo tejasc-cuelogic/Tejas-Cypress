@@ -194,6 +194,7 @@ export class UpdateStore {
     setUpdate = (value) => {
       if (get(this.currentUpdate, 'data.offeringUpdatesById')) {
         this.currentUpdate.data.offeringUpdatesById = value;
+        this.setStatus(get(this.currentUpdate, 'data.offeringUpdatesById.status'));
       } else {
         this.currentUpdate = { data: { offeringUpdatesById: value } };
       }
