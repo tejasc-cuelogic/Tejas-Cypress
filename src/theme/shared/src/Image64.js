@@ -38,7 +38,7 @@ function Image64(props) {
   return props.bg ? (
     <div {...props} style={{ backgroundImage: `url(${data})` }} />
   )
-    : <Image {...props} src={`${data}23`} onError={(e) => { e.target.error = null; e.target.src = oData; }} />;
+    : <Image {...props} src={`${data}`} onError={(e) => { e.target.error = null; e.target.src = oData; }} />;
 }
 
 export default inject('uiStore')(observer(Image64));
