@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-constant-condition */
 import React, { Component } from 'react';
 import { Table, Popup, Icon, Label } from 'semantic-ui-react';
@@ -77,8 +78,8 @@ export default class Listing extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {investorLists.map(data => (
-                <Table.Row key={data.userId}>
+              {investorLists.map((data, index) => (
+                <Table.Row key={`${index}${data.userId}${Math.random()}`}>
                   <Table.Cell>
                     <UserAvatar
                       size="mini"
@@ -121,6 +122,12 @@ export default class Listing extends Component {
                           : ''
                         }
                       </Table.Cell>
+                      </>
+                    )
+                  }
+                  {((isIssuer && hardClosedDate) || (isAdmin))
+                    && (
+                      <>
                       <Table.Cell>
                         {Helper.CurrencyFormat(data.amount, 0)}
                         {parseInt(data.investmentsCount, 10) > 1

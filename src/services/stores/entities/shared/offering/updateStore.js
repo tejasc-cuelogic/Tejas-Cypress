@@ -198,7 +198,7 @@ export class UpdateStore {
     }
 
     @action
-    save = (id, status, showToast = true) => new Promise((resolve) => {
+    save = (id, status, showToast = true, isSendTestEmail = false) => new Promise((resolve) => {
       uiStore.setProgress(status);
       this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
@@ -208,7 +208,7 @@ export class UpdateStore {
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
-      const shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
+      const shouldSendInvestorNotifications = isSendTestEmail ? false : (this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false);
       if (id !== 'new' && status === 'PUBLISHED') {
         data.isVisible = true;
         this.offeringUpdatePublish(id, data, shouldSendInvestorNotifications, showToast).then(() => {
