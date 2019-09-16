@@ -2,7 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { isArray, get, forOwn, filter, find, findIndex, has } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { transferRequestAdminSync, getTransactions, transferRequestAdminApprove, transferRequestAdminDecline, transferRequestAdminVerified, transactionFailed } from '../../queries/transaction';
+import { transferRequestAdminSync, getTransactions, transferRequestAdminApprove, transferRequestAdminVerified, declineTransferRequest } from '../../queries/transaction';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { ClientDb, FormValidator as Validator } from '../../../../helper';
@@ -14,9 +14,9 @@ export class TransactionsStore {
 
   ctHandler = {
     Approved: transferRequestAdminApprove,
-    Declined: transferRequestAdminDecline,
+    Declined: declineTransferRequest,
     Verified: transferRequestAdminVerified,
-    Failed: transactionFailed,
+    Failed: declineTransferRequest,
     Sync: transferRequestAdminSync,
   }
 
