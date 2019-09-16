@@ -687,7 +687,7 @@ const TermsOfUse = () => (
         Unless otherwise specified is these Terms, all notices under these Terms will be in writing
         and will be deemed to have been duly given when received, if personally delivered or sent
         by certified or registered mail, return receipt requested; when receipt is electronically
-        confirmed, if transmitted by facsimile or e-mail; or the day after it is sent, if sent for
+        confirmed, if transmitted by facsimile or email; or the day after it is sent, if sent for
         next day delivery by recognized overnight delivery service. Electronic notices should be
         sent to support@nextseed.com.
       </p>
