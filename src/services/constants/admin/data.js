@@ -165,3 +165,46 @@ export const AUDITBOXFOLDER_META = {
     rule: 'required',
   },
 };
+
+export const IMAGEPROCESSINGREQUES_META = {
+  waitingTime: {
+    key: 'waitingTime',
+    value: '',
+    label: 'Waiting Time',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  concurrency: {
+    key: 'concurrency',
+    value: '',
+    label: 'Concurrency',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  queueLimit: {
+    key: 'queueLimit',
+    value: '',
+    label: 'Queue Limit',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  key: {
+    key: 'key',
+    value: '',
+    label: 'Key',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  folderName: {
+    key: 'folderName',
+    value: '',
+    label: 'Folder Name',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+};
