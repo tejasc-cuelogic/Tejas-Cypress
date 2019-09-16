@@ -25,7 +25,7 @@ const Actions = observer((props) => {
                   <>
                     <Button
                       inverted
-                      onClick={() => save(id, isPending ? 'PENDING' : 'DRAFT')}
+                      onClick={() => save(id, isPending ? 'PENDING' : 'DRAFT', false, true)}
                       color="green"
                       content="Save"
                       disabled={!(meta.isValid && meta.isDirty) || inProgress}
@@ -61,7 +61,7 @@ const Actions = observer((props) => {
                     <>
                       <Button
                         inverted
-                        onClick={() => save(id, isPublished ? 'PUBLISHED' : isPending ? 'PENDING' : 'DRAFT')}
+                        onClick={() => save(id, isPublished ? 'PUBLISHED' : isPending ? 'PENDING' : 'DRAFT', false, true)}
                         color="green"
                         content="Save"
                         disabled={!(meta.isValid && meta.isDirty) || inProgress}

@@ -67,17 +67,17 @@ export default class NewUpdate extends Component {
     const emailTemplate = ['STARTUP_PERIOD', 'IN_REPAYMENT'].includes(stage) ? 'FULL' : false;
     this.props.uiStore.setProgress();
     if (this.props.updateStore.PBUILDER_FRM.meta.isDirty) {
-      this.props.updateStore.save(id, status, false, true).then(() => {
+      this.props.updateStore.save(id, status, false, true).then((shouldSendInvestorNotifications) => {
         this.props.uiStore.setProgress();
-        this.props.updateStore.sendTestEmail(id, emailTemplate);
+        this.props.updateStore.sendTestEmail(id, emailTemplate, shouldSendInvestorNotifications);
       });
     } else {
       this.props.updateStore.sendTestEmail(id, emailTemplate);
     }
   }
 
-  save = (id, status, redirectToListing = false) => {
-    this.props.updateStore.save(id, status)
+  save = (id, status, redirectToListing = false, updateOnly = false) => {
+    this.props.updateStore.save(id, status, true, updateOnly)
       .then(() => {
         if (redirectToListing) {
           this.props.updateStore.setFieldValue('newUpdateId', null);

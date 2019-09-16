@@ -84,15 +84,17 @@ export class UpdateStore {
     }
 
     @action
-    sendTestEmail = (offeringUpdateId, emailTemplate = false) => {
+    sendTestEmail = (offeringUpdateId, emailTemplate = false, shouldSendInvestorNotifications = false) => {
       uiStore.setLoaderMessage('...Sending Test Email');
+      const params = {
+        offeringUpdateId,
+        emailTemplate: emailTemplate || this.TEMPLATE_FRM.fields.type.value,
+        shouldSendInvestorNotifications,
+      };
       client
         .mutate({
           mutation: sendOfferingUpdateTestEmail,
-          variables: {
-            offeringUpdateId,
-            emailTemplate: emailTemplate || this.TEMPLATE_FRM.fields.type.value,
-          },
+          variables: params,
         })
         .then(() => {
           uiStore.setLoaderMessage('');
@@ -198,7 +200,7 @@ export class UpdateStore {
     }
 
     @action
-    save = (id, status, showToast = true, isSendTestEmail = false) => new Promise((resolve) => {
+    save = (id, status, showToast = true, updateOnly = false) => new Promise((resolve) => {
       uiStore.setProgress(status);
       this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
@@ -208,13 +210,13 @@ export class UpdateStore {
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
-      const shouldSendInvestorNotifications = isSendTestEmail ? false : (this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false);
-      if (id !== 'new' && status === 'PUBLISHED') {
+      const shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
+      if (id !== 'new' && (status === 'PUBLISHED' && !updateOnly)) {
         data.isVisible = true;
         this.offeringUpdatePublish(id, data, shouldSendInvestorNotifications, showToast).then(() => {
           uiStore.setProgress(false);
           resolve();
-        });
+        }).catch(() => uiStore.setProgress(false));
         return;
       }
       client
@@ -236,7 +238,7 @@ export class UpdateStore {
           }
           this.setFormIsDirty(false);
           uiStore.setProgress(false);
-          resolve();
+          resolve(shouldSendInvestorNotifications);
         })
         .catch((res) => {
           Helper.toast(`${res} Error`, 'error');
