@@ -122,11 +122,11 @@ export default class ApplicationsList extends Component {
                               </span>
                             </p>
                             <p>
-                              {get(application, 'signupCode') && get(application, 'utmSource') && (
-                                <>
-                                  <span>Sign-Up Code <b>{get(application, 'signupCode')}</b></span>
-                                  <span>Utm Source <b>{get(application, 'utmSource')}</b></span>
-                                </>
+                              {get(application, 'signupCode') && (
+                                <span>Sign-Up Code <b>{get(application, 'signupCode')}</b></span>
+                              )}
+                              {get(application, 'utmSource') && (
+                                <span>Utm Source <b>{get(application, 'utmSource')}</b></span>
                               )}
                               <span>
                                 Started{' '}
