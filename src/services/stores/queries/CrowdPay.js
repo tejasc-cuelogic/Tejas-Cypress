@@ -206,3 +206,11 @@ export const getDecryptedGoldstarAccountNumber = gql`
 mutation _getDecryptedGoldstarAccountNumber($userId:String!, $accountId: String!){
   getDecryptedGoldstarAccountNumber(userId: $userId , accountId: $accountId )
 }`;
+
+export const crowdPayAccountDecline = gql`
+mutation crowdPayAccountDecline($userId:String!, $accountId: String!,$reason: String! ){
+  crowdPayAccountDecline(userId: $userId , accountId: $accountId, reason: $reason ) {
+    status
+    errorMessage
+  }
+}`;
