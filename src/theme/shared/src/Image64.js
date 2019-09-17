@@ -12,9 +12,11 @@ import Helper from '../../../helper/utility';
 function Image64(props) {
   const [data, setData] = useState(props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1);
   const [oData, setOData] = useState(props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1);
+  const [emptyImg, setEmptyImg] = useState(props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1);
 
   async function getImage() {
     const emptyImage = props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1;
+    setEmptyImg(emptyImage);
     if (props.srcUrl) {
       const imgUrl = (props.srcUrl.includes('https://') || props.srcUrl.includes('http://')) ? props.srcUrl : `https://${UPLOADS_CONFIG.bucket}/${props.srcUrl}`;
       try {
@@ -31,6 +33,22 @@ function Image64(props) {
     }
   }
 
+  function handelOnError(e) {
+    e.target.error = null;
+    let emailContent = 'File Not found: ';
+    if (e.target.src.includes('__1920') || e.target.src.includes('__1024') || e.target.src.includes('__640')) {
+      emailContent = `${emailContent} Key: ${e.target.src}`;
+      e.target.src = `${oData}`;
+    } else {
+      emailContent = `${emailContent} Key: ${e.target.src}`;
+      e.target.src = emptyImg;
+    }
+    const params = {
+      emailContent: emailContent.toString(),
+    };
+    props.authStore.notifyApplicationError(params);
+  }
+
   useEffect(() => {
     getImage();
   }, []);
@@ -38,7 +56,7 @@ function Image64(props) {
   return props.bg ? (
     <div {...props} style={{ backgroundImage: `url(${data})` }} />
   )
-    : <Image {...props} src={`${data}`} onError={(e) => { e.target.error = null; e.target.src = oData; }} />;
+    : <Image {...props} src={`${data}`} onError={handelOnError} />;
 }
 
-export default inject('uiStore')(observer(Image64));
+export default inject('uiStore', 'authStore')(observer(Image64));
