@@ -9,6 +9,7 @@ import { InlineLoader } from '../../../../../theme/shared';
 import { FormInput } from '../../../../../theme/form';
 import { AppStatusLabel } from '../components/AppStatusLabel';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
+import { ACTIVITY_HISTORY_TYPES } from '../../../../../constants/common';
 
 const getModule = component => lazy(() => import(`../components/details/${component}`));
 
@@ -238,6 +239,8 @@ Update
                             showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
                             resourceId={params.appId}
                             appType={params.id}
+                            activityTitle="Comment"
+                            activityType={ACTIVITY_HISTORY_TYPES.COMMENT}
                             {...props}
                           />
                         )

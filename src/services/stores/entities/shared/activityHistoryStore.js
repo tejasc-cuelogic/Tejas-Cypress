@@ -74,12 +74,12 @@ export class ActivityHistoryStore {
   }
 
   @action
-  send = (resourceId) => {
+  send = (resourceId, activityTitle = 'Posted new comment', activityType = ACTIVITY_HISTORY_TYPES.ADMIN_ACTIVITY) => {
     const formData = Validator.ExtractValues(this.ACTIVITY_FRM.fields);
     const data = {
       resourceId,
-      activityType: ACTIVITY_HISTORY_TYPES.ADMIN_ACTIVITY,
-      activityTitle: 'Posted new comment',
+      activityType,
+      activityTitle,
       activity: formData.comment,
       scope: ACTIVITY_HISTORY_SCOPE.ADMIN,
     };
