@@ -5,7 +5,7 @@ import cleanDeep from 'clean-deep';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
-import { getCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountValidate, createIndividualAccount, getDecryptedGoldstarAccountNumber } from '../../queries/CrowdPay';
+import { getCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountDecline, crowdPayAccountValidate, createIndividualAccount, getDecryptedGoldstarAccountNumber } from '../../queries/CrowdPay';
 import { crowdPayAccountNotifyGs } from '../../queries/account';
 import { FILTER_META, CROWDPAY_FILTERS, CONFIRM_CROWDPAY, CROWDPAY_ACCOUNTS_STATUS } from '../../../constants/crowdpayAccounts';
 import Helper from '../../../../helper/utility';
@@ -59,6 +59,7 @@ export class CrowdpayStore {
     EMAIL: crowdPayAccountNotifyGs,
     APPROVE: crowdPayAccountReview,
     DECLINE: crowdPayAccountReview,
+    ACCOUNT_DECLINE: crowdPayAccountDecline,
     VALIDATE: crowdPayAccountValidate,
     CREATEACCOUNT: createIndividualAccount,
   }
@@ -282,6 +283,8 @@ export class CrowdpayStore {
       };
     } else if (ctaAction === 'CREATEACCOUNT') {
       variables.accountType = types[this.requestState.type];
+    } else if (ctaAction === 'ACCOUNT_DECLINE') {
+      variables.reason = commentData.justifyDescription;
     }
     const accountStatuses = {
       DECLINE: CROWDPAY_ACCOUNTS_STATUS.FROZEN,
