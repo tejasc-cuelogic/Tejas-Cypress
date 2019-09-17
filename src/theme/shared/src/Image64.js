@@ -35,18 +35,21 @@ function Image64(props) {
 
   function handelOnError(e) {
     e.target.error = null;
-    let emailContent = 'File Not found: ';
     if (e.target.src.includes('__1920') || e.target.src.includes('__1024') || e.target.src.includes('__640')) {
-      emailContent = `${emailContent} Key: ${e.target.src}`;
       e.target.src = `${oData}`;
     } else {
-      emailContent = `${emailContent} Key: ${e.target.src}`;
       e.target.src = emptyImg;
     }
-    const params = {
-      emailContent: emailContent.toString(),
-    };
-    props.authStore.notifyApplicationError(params);
+    if (!e.target.src.includes('data:') && (e.target.src.includes('http://') || e.target.src.includes('https://'))) {
+      const email = {
+        message: 'The requested file is not found in bucket.',
+        filePath: e.target.src,
+      };
+      const params = {
+        emailContent: JSON.stringify(email),
+      };
+      props.authStore.notifyApplicationError(params);
+    }
   }
 
   useEffect(() => {
