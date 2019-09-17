@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist, removeUserFromOfferingWatchlist, addUserToOfferingWatchlist, isWatchingOffering } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist, removeUserFromOfferingWatchlist, addUserToOfferingWatchlist, isWatchingOffering, offeringWatchList } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
@@ -59,6 +59,8 @@ export class CampaignStore {
   @observable docLoading = false;
 
   @observable isWatching = false;
+
+  @observable watchList = {};
 
   @action
   setFieldValue = (field, val) => {
@@ -203,6 +205,15 @@ export class CampaignStore {
       fetchPolicy: 'network-only',
     });
   });
+
+  @action
+  offeringWatchList = (offeringId) => {
+    this.watchList = graphql({
+      client,
+      query: offeringWatchList,
+      variables: { offeringId },
+    });
+  };
 
   @computed get allData() {
     return this.data;

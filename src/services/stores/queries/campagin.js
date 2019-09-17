@@ -74,6 +74,20 @@ query getOfferingList($filters: OfferingFilterInputType){
   }
 `;
 
+export const offeringWatchList = gql`
+query offeringWatchList($offeringId: String){
+  offeringWatchList(offeringId: $offeringId) {
+    userId
+   userInfo {
+    info { 
+    firstName
+    lastName
+    }
+  }
+  }
+}
+`;
+
 export const getOfferingById = gql`
   query getOfferingDetailsBySlug($id: String) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
