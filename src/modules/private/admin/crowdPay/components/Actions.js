@@ -96,10 +96,10 @@ export default class Actions extends Component {
 <Button
   disabled={loadingCrowdPayIds.includes(accountId)}
   onClick={
-                      e => (type === 'review' ? this.openModal(e, userId, accountId, 'DECLINE', 'Crowdpay account is declined successfully.') : this.ctaHandler(e, userId, accountId, 'DECLINE_A', '.'))
+                      e => (type === 'review' ? this.openModal(e, userId, accountId, 'DECLINE', 'Crowdpay account is declined successfully.') : this.openModal(e, userId, accountId, 'ACCOUNT_DECLINE', 'Crowdpay account is declined successfully.'))
                     }
   as={Link}
-  to={`${urlPara}/DECLINE`}
+  to={`${urlPara}/${type === 'review' ? 'DECLINE' : 'ACCOUNT_DECLINE'}`}
   color="red"
 >
                     Decline
