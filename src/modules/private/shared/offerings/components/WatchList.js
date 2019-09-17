@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import { observer, inject } from 'mobx-react';
-import { Table, Card } from 'semantic-ui-react';
+import { Table, Card, Icon, Button } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../theme/shared';
 
-@inject('watchListStore', 'offeringsStore')
+@inject('watchListStore', 'offeringsStore', 'nsUiStore')
 @withRouter
 @observer
 export default class WatchList extends Component {
@@ -14,16 +14,18 @@ export default class WatchList extends Component {
   }
 
   render() {
-    const { allWatchList, watchListLoading } = this.props.watchListStore;
-    if (watchListLoading) {
+    const { allWatchList } = this.props.watchListStore;
+    if (this.props.nsUiStore.loadingArray.includes('offeringWatchList')) {
       return <InlineLoader />;
     }
     return (
       <Card fluid>
+        <div className="table-wrapper">
         <Table unstackable singleLine className="investment-details">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Investor Name</Table.HeaderCell>
+                <Table.HeaderCell />
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -34,9 +36,16 @@ export default class WatchList extends Component {
               ) : (
                  <>
                  {allWatchList.map(user => (
-              <Table.Cell>
-                {`${get(user, 'userInfo.info.firstName')} ${get(user, 'userInfo.info.lastName')}`}
-              </Table.Cell>
+                   <Table.Row key={user.userId}>
+                    <Table.Cell>
+                      {`${get(user, 'userInfo.info.firstName')} ${get(user, 'userInfo.info.lastName')}`}
+                    </Table.Cell>
+                    <Table.Cell collapsing textAlign="center">
+                    <Button icon className="link-button">
+                      <Icon className="trash" />
+                    </Button>
+                    </Table.Cell>
+                   </Table.Row>
                  ))
                  }
                  </>
@@ -44,7 +53,8 @@ export default class WatchList extends Component {
               }
             </Table.Body>
           </Table>
-      </Card>
+        </div>
+        </Card>
     );
   }
 }

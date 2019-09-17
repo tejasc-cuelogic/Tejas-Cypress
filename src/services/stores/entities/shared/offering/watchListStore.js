@@ -3,7 +3,6 @@ import { get } from 'lodash';
 import DataModelStore, { decorateDefault } from '../dataModelStore';
 import { offeringWatchList } from '../../../queries/campagin';
 
-
 export class WatchListStore extends DataModelStore {
   constructor() {
     super({ offeringWatchList });
@@ -15,15 +14,12 @@ export class WatchListStore extends DataModelStore {
     return get(toJS(this.watchList), 'offeringWatchList') || [];
   }
 
-  get watchListLoading() {
-    return this.watchList.loading;
-  }
-
   offeringWatchList = (offeringId) => {
     this.executeQuery({
       client: 'PRIVATE',
       query: 'offeringWatchList',
       variables: { offeringId },
+      setLoader: 'offeringWatchList',
     }).then((res) => { this.setFieldValue('watchList', res); });
   };
 }
@@ -32,7 +28,6 @@ decorate(WatchListStore, {
   ...decorateDefault,
   watchList: observable,
   offeringWatchList: action,
-  watchListLoading: computed,
   allWatchList: computed,
 });
 
