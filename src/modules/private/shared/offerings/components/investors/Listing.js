@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-constant-condition */
 import React, { Component } from 'react';
 import { Table, Popup, Icon, Label } from 'semantic-ui-react';
@@ -77,8 +78,8 @@ export default class Listing extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {investorLists.map(data => (
-                <Table.Row key={data.userId}>
+              {investorLists.map((data, index) => (
+                <Table.Row key={`${index}${data.userId}${Math.random()}`}>
                   <Table.Cell>
                     <UserAvatar
                       size="mini"
@@ -111,19 +112,22 @@ export default class Listing extends Component {
                   <Table.Cell>{data.state}</Table.Cell>
                   {isAdmin
                     && (
+                      <>
                       <Table.Cell>
                         {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
                       </Table.Cell>
+                      <Table.Cell>
+                        {data.earlyBirdEligibility
+                          ? <Label color="green" circular empty className="mr-10" />
+                          : ''
+                        }
+                      </Table.Cell>
+                      </>
                     )
                   }
-                  <Table.Cell>
-                    {data.earlyBirdEligibility
-                      ? <Label color="green" circular empty className="mr-10" />
-                      : ''
-                    }
-                  </Table.Cell>
-                  {isAdmin
-                    ? (
+                  {((isIssuer && hardClosedDate) || (isAdmin))
+                    && (
+                      <>
                       <Table.Cell>
                         {Helper.CurrencyFormat(data.amount, 0)}
                         {parseInt(data.investmentsCount, 10) > 1
@@ -150,8 +154,8 @@ export default class Listing extends Component {
                           ) : null
                         }
                       </Table.Cell>
+                      </>
                     )
-                    : null
                   }
                   <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
                   <Table.Cell textAlign="right">{this.showReferralCode(referralCode, data.referralCode)}</Table.Cell>

@@ -1253,7 +1253,7 @@ $.fn.form.settings = {
   prompt: {
     empty                : '{name} must have a value',
     checked              : '{name} must be checked',
-    email                : '{name} must be a valid e-mail',
+    email                : '{name} must be a valid email',
     url                  : '{name} must be a valid url',
     regExp               : '{name} is not formatted correctly',
     integer              : '{name} must be an integer',
