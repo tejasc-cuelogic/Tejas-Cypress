@@ -3,7 +3,7 @@ import { Label } from 'semantic-ui-react';
 
 const SMap = {
   DRAFT: { color: 'red', label: 'Draft' },
-  PENDING: { color: 'red', label: 'Waiting for approval' },
+  PENDING: { color: 'orange', label: 'Waiting for approval' },
   PUBLISHED: { color: 'green', label: 'Published' },
 };
 
