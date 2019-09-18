@@ -11,7 +11,7 @@ import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from 
 
 const isMobile = document.documentElement.clientWidth < 992;
 
-@inject('campaignStore')
+@inject('campaignStore', 'authStore')
 @withRouter
 @observer
 export default class CampaignSideBar extends Component {
@@ -181,7 +181,9 @@ export default class CampaignSideBar extends Component {
                           >
                             {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
                           </Button>
-                          {followBtn}
+                          {this.props.authStore.isUserLoggedIn
+                            && <>{followBtn}</>
+                            }
                           <p>
                             {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                           </p>

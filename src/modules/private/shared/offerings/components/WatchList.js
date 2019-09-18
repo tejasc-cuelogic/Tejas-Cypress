@@ -57,7 +57,7 @@ export default class WatchList extends Component {
           <Table.Cell collapsing textAlign="center">
           {user.status !== 'DELETED'
           && (
-          <Button loading={this.props.nsUiStore.loadingArray.includes('removeUserFromOfferingWatchlist')} onClick={() => this.handleDelete({ offeringId: user.offeringId, userId: user.userId })} icon className="link-button">
+          <Button onClick={() => this.handleDelete({ offeringId: user.offeringId, userId: user.userId, status: user.status })} icon className="link-button">
                       <Icon className="trash" />
                     </Button>
           )}

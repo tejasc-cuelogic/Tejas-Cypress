@@ -50,13 +50,13 @@ export default class DataModelStore {
         mutation: this.gqlRef[payLoad.mutation],
         variables: payLoad.variables,
       });
-      nsUiStore.filterLoaderByOperation(payLoad.mutation);
+      nsUiStore.filterLoaderByOperation(payLoad.setLoader);
       if (payLoad.message && payLoad.message !== false && payLoad.message && payLoad.message.success) {
         Utils.toast(payLoad.message && payLoad.message.success, 'success');
       }
       return result || true;
     } catch (err) {
-      nsUiStore.filterLoaderByOperation(payLoad.mutation);
+      nsUiStore.filterLoaderByOperation(payLoad.setLoader);
       this.auStatus = 0;
       if (payLoad.message !== false) {
         Utils.toast(payLoad.message && (payLoad.message.error || 'Error while performing operation.'), 'error');
@@ -78,12 +78,12 @@ export default class DataModelStore {
       onFetch: (data) => {
         if (data) {
           res(data);
-          nsUiStore.filterLoaderByOperation(payLoad.query);
+          nsUiStore.filterLoaderByOperation(payLoad.setLoader);
         }
         this.currTime = +new Date();
       },
       onError: (e) => {
-        nsUiStore.filterLoaderByOperation(payLoad.query);
+        nsUiStore.filterLoaderByOperation(payLoad.setLoader);
         rej(e);
       },
     });
