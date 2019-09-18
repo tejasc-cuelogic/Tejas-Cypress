@@ -7,8 +7,9 @@ import { FormTextarea, FormInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 import { adminActions } from '../../../../../services/actions';
 import Helper from '../../../../../helper/utility';
+import { ACTIVITY_HISTORY_TYPES } from '../../../../../constants/common';
 
-@inject('uiStore', 'businessAppReviewStore', 'businessAppStore', 'adminStore')
+@inject('uiStore', 'businessAppReviewStore', 'businessAppStore', 'adminStore', 'activityHistoryStore')
 @withRouter
 @observer
 export default class StatusChangeAppModal extends Component {
@@ -42,6 +43,9 @@ export default class StatusChangeAppModal extends Component {
     const { params } = match;
     this.props.businessAppReviewStore
       .updateApplicationStatus(params.appId, params.userId, params.appStatus, params.action)
+      .then(() => {
+        this.props.activityHistoryStore.send(params.appId, 'Comment', ACTIVITY_HISTORY_TYPES.COMMENT);
+      })
       .then(() => {
         this.props.uiStore.setErrors(null);
         this.props.history.push(`/app/applications/${params.id}`);
@@ -78,7 +82,6 @@ export default class StatusChangeAppModal extends Component {
                   params.appStatus,
                   params.action,
                   '',
-                  '',
                   userDetails.TemporaryPassword,
                 ).then(() => {
                   this.props.uiStore.setErrors(null);
@@ -94,7 +97,6 @@ export default class StatusChangeAppModal extends Component {
                       this.props.adminStore.userId,
                       params.appStatus,
                       params.action,
-                      '',
                       '',
                       userDetails.TemporaryPassword,
                     ).then(() => {
@@ -114,22 +116,22 @@ export default class StatusChangeAppModal extends Component {
   render() {
     const { uiStore, businessAppReviewStore, match } = this.props;
     const {
-      APPLICATION_STATUS_COMMENT_FRM,
       formChange,
       PROMOTE_APPLICATION_STATUS_PASSWORD_FRM,
       PROMOTE_APPLICATION_STATUS_EMAIL_FRM,
     } = businessAppReviewStore;
     const { applicationRoles } = this.props.businessAppStore;
-    const { fields } = APPLICATION_STATUS_COMMENT_FRM;
+    const { ACTIVITY_FRM, msgEleChange } = this.props.activityHistoryStore;
+    const { fields } = ACTIVITY_FRM;
     const { inProgress } = uiStore;
     const { errors } = uiStore;
     const { params } = match;
     let isValid = true;
     if (params.action === 'PROMOTE' && params.id !== 'in-progress') {
-      isValid = !(APPLICATION_STATUS_COMMENT_FRM.meta.isValid
+      isValid = !(ACTIVITY_FRM.meta.isValid
         && PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.meta.isValid);
     } else {
-      isValid = !APPLICATION_STATUS_COMMENT_FRM.meta.isValid;
+      isValid = !ACTIVITY_FRM.meta.isValid;
     }
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
@@ -143,10 +145,10 @@ export default class StatusChangeAppModal extends Component {
           <Form error>
             <FormTextarea
               type="text"
-              name="text"
-              label={params.id === 'in-progress' ? 'Please enter your justification for submission' : fields.text.label}
-              fielddata={fields.text}
-              changed={(e, result) => formChange(e, result, 'APPLICATION_STATUS_COMMENT_FRM')}
+              name="comment"
+              label={params.id === 'in-progress' ? 'Please enter your justification for submission' : 'Please enter your comments here'}
+              fielddata={fields.comment}
+              changed={msgEleChange}
               containerclassname="secondary"
             />
             {params.action === 'PROMOTE' && params.id !== 'in-progress'

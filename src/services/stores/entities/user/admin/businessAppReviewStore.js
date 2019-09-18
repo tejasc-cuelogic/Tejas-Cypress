@@ -393,16 +393,14 @@ export class BusinessAppReviewStore {
   }
 
  @action
-  updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag = '', comment = '', applicationStatus = '', temporaryPassword = '') => {
+  updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag = '', applicationStatus = '', temporaryPassword = '') => {
     const applicationSource = applStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_IN_PROGRESS ? 'APPLICATION_IN_PROGRESS' : applStatus
     === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
-    const formInputData = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
     uiStore.setProgress();
     let payload = {
       actionType: 'APPLICATION_STATUS',
       applicationId,
       applicationSource,
-      comments: comment !== '' ? { text: comment } : formInputData,
     };
     if (applicationFlag !== '') {
       payload = { ...payload, applicationFlag };
