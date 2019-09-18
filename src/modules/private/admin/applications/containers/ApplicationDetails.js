@@ -9,10 +9,11 @@ import { InlineLoader } from '../../../../../theme/shared';
 import { FormInput } from '../../../../../theme/form';
 import { AppStatusLabel } from '../components/AppStatusLabel';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
+import { ACTIVITY_HISTORY_TYPES } from '../../../../../constants/common';
 
 const getModule = component => lazy(() => import(`../components/details/${component}`));
 
-@inject('businessAppStore', 'businessAppAdminStore', 'businessAppReviewStore')
+@inject('businessAppStore', 'businessAppAdminStore', 'businessAppReviewStore', 'uiStore')
 @observer
 export default class ApplicationDetails extends Component {
   state = {
@@ -68,6 +69,18 @@ export default class ApplicationDetails extends Component {
     this.props.businessAppAdminStore.setBusinessDetails(businessName, signupCode);
   }
 
+  updateApplicationStatus = (e) => {
+    e.preventDefault();
+    const { match } = this.props;
+    const { params } = match;
+    this.props.businessAppReviewStore
+      .updateApplicationStatus(params.appId, params.userId, 'PRE_QUALIFICATION_PROMOTED', 'PROMOTE')
+      .then(() => {
+        this.props.uiStore.setErrors(null);
+        this.props.history.push('/app/applications/in-progress');
+      });
+  }
+
   render() {
     const { match, businessAppStore, businessAppAdminStore } = this.props;
     const {
@@ -106,6 +119,7 @@ export default class ApplicationDetails extends Component {
         { title: 'Review', to: 'review' },
       ];
     }
+    const { inProgress } = this.props.uiStore;
     const { businessName, contactDetails } = businessGeneralInfo || prequalDetails.businessGeneralInfo;
     const appStepStatus = (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
     const appStatus = appStepStatus === 'Failed' ? 'prequal-failed' : 'in-progress';
@@ -118,9 +132,14 @@ export default class ApplicationDetails extends Component {
             <AppStatusLabel application={businessApplicationDetailsAdmin} />
             <span className="title-meta">Rating</span>
             <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
-            {((applicationStatus || prequalStatus)
-            === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED || applicationStage === 'IN_PROGRESS')
+            {((prequalStatus)
+            === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED)
             && <Button secondary compact floated="right" content="Promote" as={Link} to={`${this.props.refLink}/${appStatus}/${id || applicationId}/${userId || 'new'}/${prequalStatus || 'APPLICATION_IN_PROGRESS'}/PROMOTE/confirm`} />
+            }
+
+            {((applicationStatus)
+            === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED || applicationStage === 'IN_PROGRESS')
+            && <Button secondary compact loading={inProgress} floated="right" content="Promote" onClick={this.updateApplicationStatus} />
             }
           </Header>
           <Grid columns="equal">
@@ -238,6 +257,8 @@ Update
                             showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
                             resourceId={params.appId}
                             appType={params.id}
+                            activityTitle="Comment"
+                            activityType={ACTIVITY_HISTORY_TYPES.COMMENT}
                             {...props}
                           />
                         )
