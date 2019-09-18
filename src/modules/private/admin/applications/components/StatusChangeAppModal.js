@@ -141,6 +141,7 @@ export default class StatusChangeAppModal extends Component {
             <FormTextarea
               type="text"
               name="text"
+              label={params.id === 'in-progress' ? 'Please enter your justification for submission' : fields.text.label}
               fielddata={fields.text}
               changed={(e, result) => formChange(e, result, 'APPLICATION_STATUS_COMMENT_FRM')}
               containerclassname="secondary"

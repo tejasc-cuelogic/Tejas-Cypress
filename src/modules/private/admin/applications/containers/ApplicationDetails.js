@@ -121,7 +121,7 @@ export default class ApplicationDetails extends Component {
             <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
             {((applicationStatus || prequalStatus)
             === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED || applicationStage === 'IN_PROGRESS')
-            && <Button secondary compact floated="right" content="Promote" as={Link} to={`${this.props.refLink}/${appStatus}/${id || applicationId}/${userId || 'new'}/${prequalStatus || 'APPLICATION_IN_PROGRESS'}/PROMOTE/confirm`} />
+            && <Button secondary compact floated="right" content={prequalStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Promote PreQual' : 'Submit Application'} as={Link} to={`${this.props.refLink}/${appStatus}/${id || applicationId}/${userId || 'new'}/${prequalStatus || 'APPLICATION_IN_PROGRESS'}/PROMOTE/confirm`} />
             }
           </Header>
           <Grid columns="equal">
