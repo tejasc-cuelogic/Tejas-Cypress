@@ -35,11 +35,6 @@ function Image64(props) {
 
   function handelOnError(e) {
     e.target.error = null;
-    if (e.target.src.includes('__1920') || e.target.src.includes('__1024') || e.target.src.includes('__640')) {
-      e.target.src = `${oData}`;
-    } else {
-      e.target.src = emptyImg;
-    }
     if (!e.target.src.includes('data:') && (e.target.src.includes('http://') || e.target.src.includes('https://'))) {
       const email = {
         message: 'The requested file is not found in bucket.',
@@ -49,6 +44,11 @@ function Image64(props) {
         emailContent: JSON.stringify(email),
       };
       props.authStore.notifyApplicationError(params);
+    }
+    if (e.target.src.includes('__1920') || e.target.src.includes('__1024') || e.target.src.includes('__640')) {
+      e.target.src = `${oData}`;
+    } else {
+      e.target.src = emptyImg;
     }
   }
 
