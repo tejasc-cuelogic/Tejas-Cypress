@@ -18,6 +18,8 @@ export class UiStore {
 
   @observable inProgress = false;
 
+  @observable responsiveVars = {};
+
   @observable inProgressArray = [];
 
   @observable loaderMessage = '';
