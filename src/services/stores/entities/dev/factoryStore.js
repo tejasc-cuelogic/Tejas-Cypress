@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import graphql from 'mobx-apollo';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { getPluginList, requestFactoryPluginTrigger } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
@@ -114,7 +114,9 @@ export class FactoryStore {
     } catch (e) {
       return false;
     }
-    return true;
+    const jsonObj = JSON.parse(json);
+    return !!(jsonObj && !isEmpty(jsonObj));
+    // return true;
   }
 }
 
