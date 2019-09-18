@@ -75,6 +75,7 @@ export class WatchListStore extends DataModelStore {
   updateWatchList = (params) => {
     const user = this.watchList[params.status].find(i => i.userId === params.userId);
     remove(this.watchList[params.status], i => i.userId === params.userId);
+    user.status = 'DELETED';
     this.watchList.DELETED.unshift(user);
   }
 
