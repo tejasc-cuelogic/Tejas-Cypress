@@ -17,7 +17,7 @@ export default class Auth extends React.Component {
     const { location } = this.props;
     return (
       <>
-        {(allowed.find(item => matchPath(location.pathname, { path: `/auth/${item}` })))
+        {(allowed.find(item => matchPath(location.pathname, { path: `/${item}` })))
         && <section className="modalbg-banner" />}
         <Switch>
           <Route path="/login" component={Login} />
