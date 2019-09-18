@@ -26,7 +26,7 @@ import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit
 const getModule = component => lazy(() => import(`../components/campaignDetails/${component}`));
 const isMobile = document.documentElement.clientWidth < 992;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
-@inject('campaignStore', 'userStore', 'navStore', 'uiStore', 'userDetailsStore', 'authStore', 'watchListStore')
+@inject('campaignStore', 'userStore', 'navStore', 'uiStore', 'userDetailsStore', 'authStore', 'watchListStore', 'nsUiStore')
 @withRouter
 @observer
 class offerDetails extends Component {
@@ -196,7 +196,6 @@ class offerDetails extends Component {
       details, campaign, navCountData, modifySubNavs,
     } = campaignStore;
     const { addRemoveWatchList, isWatching } = this.props.watchListStore;
-    const { isInvestor } = this.props.userStore;
     let navItems = [];
     const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
     if (isMobile) {
@@ -219,18 +218,18 @@ class offerDetails extends Component {
     const isBonusReward = bonusRewards && bonusRewards.length;
     const InitialComponent = getModule(!newLayout ? navItems[0].component : 'CampaignLayout');
     const followBtn = (
-              <Button fluid color="white" onClick={() => addRemoveWatchList()} className={!isWatching ? 'inverted' : ''}>
-                <Icon name="heart outline" /> Follow
+              <Button disabled={this.props.nsUiStore.loadingArray.includes('removeUserFromOfferingWatchlist') || this.props.nsUiStore.loadingArray.includes('addUserToOfferingWatchlist')} loading={this.props.nsUiStore.loadingArray.includes('removeUserFromOfferingWatchlist') || this.props.nsUiStore.loadingArray.includes('addUserToOfferingWatchlist')} fluid color="white" onClick={() => addRemoveWatchList()} className={!isWatching ? 'inverted' : ''}>
+                <Icon name="heart outline" /> {isWatching ? 'Following' : 'Follow'}
               </Button>
     );
-    const mobileHeaderAndSideBar = (<CampaignSideBar isInvestor={isInvestor} followBtn={followBtn} newLayout={newLayout} navItems={navItems} />);
+    const mobileHeaderAndSideBar = (<CampaignSideBar followBtn={followBtn} newLayout={newLayout} navItems={navItems} />);
     return (
       <>
         {campaign
           && <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
         {!isMobile
-          && <CampaignHeader isInvestor={isInvestor} followBtn={followBtn} {...this.props} />
+          && <CampaignHeader followBtn={followBtn} {...this.props} />
         }
         {/* {campaignStore && campaignStore.showFireworkAnimation &&
         <Firework />

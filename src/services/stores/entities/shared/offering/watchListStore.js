@@ -11,12 +11,16 @@ export class WatchListStore extends DataModelStore {
     super({ offeringWatchList, removeUserFromOfferingWatchlist, addUserToOfferingWatchlist, isWatchingOffering });
   }
 
-  watchList = {};
+  watchList = {
+    INVESTOR: [],
+    WATCHING: [],
+    DELETED: [],
+  };
 
   isWatching = false;
 
   get allWatchList() {
-    return get(toJS(this.watchList), 'offeringWatchList') || [];
+    return toJS(this.watchList);
   }
 
   offeringWatchList = (offeringId) => {
@@ -25,10 +29,30 @@ export class WatchListStore extends DataModelStore {
       query: 'offeringWatchList',
       variables: { offeringId },
       setLoader: 'offeringWatchList',
-    }).then((res) => { this.setFieldValue('watchList', res); });
+    }).then((res) => {
+      this.setWatchListData(res);
+    });
   };
 
-  @action
+  setWatchListData = (res) => {
+    const watchList = get(toJS(res), 'offeringWatchList') || [];
+    const tempWatchList = this.watchList;
+    watchList.forEach((watcher) => {
+      if (tempWatchList[watcher.status]) {
+        tempWatchList[watcher.status].push(watcher);
+      }
+    });
+    this.setFieldValue('watchList', tempWatchList);
+  }
+
+  resetStore = () => {
+    this.watchList = {
+      INVESTOR: [],
+      WATCHING: [],
+      DELETED: [],
+    };
+  }
+
   setOfferingWatch = () => {
     if (!campaignStore.getOfferingId || !userDetailsStore.currentUserId) {
       this.isWatching = false;
@@ -59,6 +83,7 @@ export class WatchListStore extends DataModelStore {
         client: 'PRIVATE',
         mutation: (this.isWatching || forceRemove) ? 'removeUserFromOfferingWatchlist' : 'addUserToOfferingWatchlist',
         variables: { ...variables },
+        setLoader: (this.isWatching || forceRemove) ? 'removeUserFromOfferingWatchlist' : 'addUserToOfferingWatchlist',
       });
       this.setFieldValue('isWatching', !this.isWatching);
     } catch (error) {
@@ -70,10 +95,14 @@ export class WatchListStore extends DataModelStore {
 decorate(WatchListStore, {
   ...decorateDefault,
   watchList: observable,
+  isApiHit: observable,
+  isWatching: observable,
   offeringWatchList: action,
   addRemoveWatchList: action,
+  setOfferingWatch: action,
+  setWatchListData: action,
+  resetStore: action,
   allWatchList: computed,
-  isWatching: observable,
 });
 
 

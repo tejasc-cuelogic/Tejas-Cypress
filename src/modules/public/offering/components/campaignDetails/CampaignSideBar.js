@@ -21,7 +21,7 @@ export default class CampaignSideBar extends Component {
   }
 
   render() {
-    const { campaignStore, newLayout, followBtn, isInvestor } = this.props;
+    const { campaignStore, newLayout, followBtn } = this.props;
     const {
       campaign, navCountData, campaignSideBarShow, offerStructure, campaignStatus,
     } = campaignStore;
@@ -181,8 +181,7 @@ export default class CampaignSideBar extends Component {
                           >
                             {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
                           </Button>
-                          {isInvestor
-                          && <>{followBtn}</>}
+                          {followBtn}
                           <p>
                             {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                           </p>
