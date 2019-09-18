@@ -134,7 +134,10 @@ export default class StatusChangeAppModal extends Component {
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">{params.action === 'REMOVED' ? 'Remove' : capitalize(params.action)} Application?</Header>
+          {params.action === 'PROMOTE' && params.id !== 'in-progress'
+            ? <Header as="h3">Promote PreQual?</Header>
+            : <Header as="h3">{params.action === 'REMOVED' ? 'Remove' : capitalize(params.action)} Application?</Header>
+          }
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error>
