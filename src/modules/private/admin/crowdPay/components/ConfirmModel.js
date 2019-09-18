@@ -7,6 +7,7 @@ import { FormTextarea } from '../../../../../theme/form';
 const ACTION_MAPPING = {
   APPROVE: { msg: 'approved', content: 'Approve request' },
   DECLINE: { msg: 'declined', content: 'Decline request' },
+  ACCOUNT_DECLINE: { msg: 'declined', content: 'Decline request' },
   GSPROCESS: { msg: 'processed', content: 'Process request' },
 };
 @inject('crowdpayStore', 'uiStore')
@@ -24,7 +25,7 @@ export default class ConfirmModel extends Component {
 
   handleConfirm = () => {
     const { userId, accountId, action } = this.props.match.params;
-    const availableActions = ['APPROVE', 'DECLINE', 'GSPROCESS'];
+    const availableActions = ['APPROVE', 'DECLINE', 'GSPROCESS', 'ACCOUNT_DECLINE'];
     const actionValue = this.props.match.params.action;
     if (availableActions.includes(action)) {
       const msg = `Crowdpay account is ${ACTION_MAPPING[actionValue].msg} successfully.`;
