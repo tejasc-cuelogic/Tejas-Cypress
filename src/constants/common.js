@@ -56,4 +56,6 @@ export const FROALA_EDITOR_LICENSE = process.env.REACT_APP_FROALA_API_KEY_NEW;
 
 export const userIdleTime = ['production', 'prod', 'master', 'infosec'].includes(process.env.REACT_APP_DEPLOY_ENV) ? (1000 * 60 * 60 * 1) : (1000 * 60 * 60 * 12);
 
+export const isLoggingEnabled = ['localhost', 'dev'].includes(process.env.REACT_APP_DEPLOY_ENV);
+
 export const DEFAULT_TIME_ZONE_TO_DISPLAY = 'America/Chicago';

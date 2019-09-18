@@ -8,6 +8,7 @@ import { toJS } from 'mobx';
 import money from 'money-math';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
+import { isLoggingEnabled } from '../constants/common';
 // import userStore from './../services/stores/entities/userStore';
 
 export class Utility {
@@ -288,6 +289,16 @@ export class Utility {
       }
     }
   };
+
+  logger = (params, type = 'log') => {
+    if (isLoggingEnabled) {
+      // eslint-disable-next-line no-unused-expressions
+      type === 'info' ? console.info(params)
+        : type === 'warn' ? console.warn(params)
+          : type === 'clear' ? console.clear()
+            : console.log(params);
+    }
+  }
 }
 
 export default new Utility();
