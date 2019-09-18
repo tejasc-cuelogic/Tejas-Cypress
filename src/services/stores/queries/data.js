@@ -120,3 +120,25 @@ mutation _imageProcessing($key: String, $waitingTime: Int, $concurrency: Int,$qu
     folderName: $folderName
   )
 }`;
+
+export const getPluginList = gql`
+query _requestWorkerPlugins {
+  requestWorkerPlugins {
+    plugins{
+      name
+      pluginInputs {
+        name
+      }
+    }
+  }
+}
+`;
+
+export const requestFactoryPluginTrigger = gql`
+mutation invokeRequest($method: RequestWorkerPluginsEnum!, $payload: String, $invocationType: RequestInvocationEnum) {
+  invokeRequest(
+    method: $method,
+    payload: $payload
+    invocationType: $invocationType
+  )
+}`;
