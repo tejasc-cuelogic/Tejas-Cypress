@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist, removeUserFromOfferingWatchlist, addUserToOfferingWatchlist, isWatchingOffering, offeringWatchList } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
@@ -14,6 +14,7 @@ import { userDetailsStore } from '../../index';
 // import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
+import watchListStore from '../shared/offering/watchListStore';
 
 export class CampaignStore {
   @observable data = [];
@@ -58,10 +59,6 @@ export class CampaignStore {
 
   @observable docLoading = false;
 
-  @observable isWatching = false;
-
-  @observable watchList = {};
-
   @action
   setFieldValue = (field, val) => {
     this[field] = val;
@@ -102,30 +99,8 @@ export class CampaignStore {
       onFetch: (data) => {
         if (data && data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length && !this.details.loading) {
           this.getCampaignAdditionalDetails(id);
-          this.setOfferingWatch();
+          watchListStore.setOfferingWatch();
         }
-      },
-    });
-  }
-
-  @action
-  setOfferingWatch = () => {
-    if (!this.getOfferingId || !userDetailsStore.currentUserId) {
-      this.isWatching = false;
-      return;
-    }
-
-    const variables = {
-      userId: userDetailsStore.currentUserId,
-      offeringId: this.getOfferingId,
-    };
-    graphql({
-      client,
-      query: isWatchingOffering,
-      variables: { ...variables },
-      fetchPolicy: 'network-only',
-      onFetch: (res) => {
-        this.setFieldValue('isWatching', get(res, 'isWatchingOffering'));
       },
     });
   }
@@ -142,23 +117,6 @@ export class CampaignStore {
           this.concatOfferingDetails(get(data, 'getOfferingDetailsBySlug[0]'));
         }
       },
-    });
-  }
-
-  @action
-  addRemoveWatchList = () => {
-    const variables = {
-      userId: userDetailsStore.currentUserId,
-      offeringId: this.getOfferingId,
-      isInvestment: false,
-    };
-    client.mutate({
-      mutation: this.isWatching ? removeUserFromOfferingWatchlist : addUserToOfferingWatchlist,
-      variables: { ...variables },
-    }).then(() => {
-      this.setFieldValue('isWatching', !this.isWatching);
-    }).catch(() => {
-      Helper.toast('Something went wronasdfsdfg. Please try again in some time.', 'error');
     });
   }
 
@@ -205,15 +163,6 @@ export class CampaignStore {
       fetchPolicy: 'network-only',
     });
   });
-
-  @action
-  offeringWatchList = (offeringId) => {
-    this.watchList = graphql({
-      client,
-      query: offeringWatchList,
-      variables: { offeringId },
-    });
-  };
 
   @computed get allData() {
     return this.data;

@@ -21,9 +21,9 @@ export default class CampaignSideBar extends Component {
   }
 
   render() {
-    const { campaignStore, newLayout } = this.props;
+    const { campaignStore, newLayout, followBtn, isInvestor } = this.props;
     const {
-      campaign, navCountData, campaignSideBarShow, offerStructure, campaignStatus, addRemoveWatchList, isWatching,
+      campaign, navCountData, campaignSideBarShow, offerStructure, campaignStatus,
     } = campaignStore;
     const {
       isClosed, isCreation, isInProcessing, collected, minFlagStatus, isBonusReward,
@@ -181,15 +181,8 @@ export default class CampaignSideBar extends Component {
                           >
                             {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
                           </Button>
-                          <Button
-                            fluid
-                            color="white"
-                            onClick={addRemoveWatchList}
-                            className={!isWatching ? 'inverted' : ''}
-                          >
-                            <Icon name="heart outline" />
-                            Follow
-                          </Button>
+                          {isInvestor
+                          && <>{followBtn}</>}
                           <p>
                             {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                           </p>

@@ -18,8 +18,8 @@ export default class CampaignHeader extends Component {
   }
 
   render() {
-    const { campaignStore, newLayout } = this.props;
-    const { campaign, offerStructure, campaignStatus, addRemoveWatchList, isWatching } = campaignStore;
+    const { campaignStore, newLayout, followBtn, isInvestor } = this.props;
+    const { campaign, offerStructure, campaignStatus } = campaignStore;
     const {
       isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
@@ -202,16 +202,13 @@ export default class CampaignHeader extends Component {
                               {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                             </p>
                           </Grid.Column>
+                          {isInvestor
+                          && (
                           <Grid.Column width="5">
-                            <Button
-                              color="white"
-                              onClick={addRemoveWatchList}
-                              className={!isWatching ? 'inverted' : ''}
-                            >
-                              <Icon name="heart outline" />
-                              Follow
-                            </Button>
+                          {followBtn}
                           </Grid.Column>
+                          )
+                          }
                         </Grid>
                       </>
                       )

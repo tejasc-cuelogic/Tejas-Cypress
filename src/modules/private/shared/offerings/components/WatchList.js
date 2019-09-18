@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { get } from 'lodash';
 import { observer, inject } from 'mobx-react';
 import { Table, Card, Icon, Button } from 'semantic-ui-react';
@@ -13,6 +13,10 @@ export default class WatchList extends Component {
     this.props.watchListStore.offeringWatchList(this.props.offeringsStore.currentId);
   }
 
+  handleDelete = (params) => {
+    this.props.watchListStore.addRemoveWatchList(params, true);
+  }
+
   render() {
     const { allWatchList } = this.props.watchListStore;
     if (this.props.nsUiStore.loadingArray.includes('offeringWatchList')) {
@@ -24,7 +28,8 @@ export default class WatchList extends Component {
         <Table unstackable singleLine className="investment-details">
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Investor Name</Table.HeaderCell>
+                <Table.HeaderCell>Investor&#39;s Name</Table.HeaderCell>
+                <Table.HeaderCell>Email</Table.HeaderCell>
                 <Table.HeaderCell />
               </Table.Row>
             </Table.Header>
@@ -37,11 +42,16 @@ export default class WatchList extends Component {
                  <>
                  {allWatchList.map(user => (
                    <Table.Row key={user.userId}>
-                    <Table.Cell>
+                    <Table.Cell collapsing>
+                    <Link to={`/app/users/${user.userId}/profile-data`}>
                       {`${get(user, 'userInfo.info.firstName')} ${get(user, 'userInfo.info.lastName')}`}
+                    </Link>
+                    </Table.Cell>
+                    <Table.Cell>
+                    {get(user, 'userInfo.email.address')}
                     </Table.Cell>
                     <Table.Cell collapsing textAlign="center">
-                    <Button icon className="link-button">
+                    <Button onClick={() => this.handleDelete({ offeringId: user.offeringId, userId: user.userId })} icon className="link-button">
                       <Icon className="trash" />
                     </Button>
                     </Table.Cell>

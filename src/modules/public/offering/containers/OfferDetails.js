@@ -3,7 +3,7 @@ import React, { Component, Suspense, lazy } from 'react';
 import { get, find, has, cloneDeep } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { Responsive, Container, Grid, Visibility } from 'semantic-ui-react';
+import { Responsive, Container, Grid, Visibility, Button, Icon } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
@@ -26,7 +26,7 @@ import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit
 const getModule = component => lazy(() => import(`../components/campaignDetails/${component}`));
 const isMobile = document.documentElement.clientWidth < 992;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
-@inject('campaignStore', 'userStore', 'navStore', 'uiStore', 'userDetailsStore', 'authStore')
+@inject('campaignStore', 'userStore', 'navStore', 'uiStore', 'userDetailsStore', 'authStore', 'watchListStore')
 @withRouter
 @observer
 class offerDetails extends Component {
@@ -51,7 +51,7 @@ class offerDetails extends Component {
         || (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId === currentUser.sub)) {
         this.setState({ preLoading: false, showPassDialog: false });
         this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
-        this.props.campaignStore.setOfferingWatch(this.props.match.params.id);
+        this.props.watchListStore.setOfferingWatch(this.props.match.params.id);
       } else if (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId !== currentUser.sub) {
         if (oMinData.stage === 'CREATION') {
           this.setState({ showPassDialog: true, preLoading: false });
@@ -195,6 +195,8 @@ class offerDetails extends Component {
     const {
       details, campaign, navCountData, modifySubNavs,
     } = campaignStore;
+    const { addRemoveWatchList, isWatching } = this.props.watchListStore;
+    const { isInvestor } = this.props.userStore;
     let navItems = [];
     const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
     if (isMobile) {
@@ -216,13 +218,19 @@ class offerDetails extends Component {
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
     const InitialComponent = getModule(!newLayout ? navItems[0].component : 'CampaignLayout');
+    const followBtn = (
+              <Button fluid color="white" onClick={() => addRemoveWatchList()} className={!isWatching ? 'inverted' : ''}>
+                <Icon name="heart outline" /> Follow
+              </Button>
+    );
+    const mobileHeaderAndSideBar = (<CampaignSideBar isInvestor={isInvestor} followBtn={followBtn} newLayout={newLayout} navItems={navItems} />);
     return (
       <>
         {campaign
           && <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
         {!isMobile
-          && <CampaignHeader {...this.props} />
+          && <CampaignHeader isInvestor={isInvestor} followBtn={followBtn} {...this.props} />
         }
         {/* {campaignStore && campaignStore.showFireworkAnimation &&
         <Firework />
@@ -231,7 +239,7 @@ class offerDetails extends Component {
           <SecondaryMenu newLayout={newLayout} {...this.props} />
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
-              <CampaignSideBar newLayout={newLayout} navItems={navItems} />
+              {mobileHeaderAndSideBar}
               <MobileDropDownNav
                 inverted
                 refMatch={match}
@@ -252,7 +260,7 @@ class offerDetails extends Component {
                 {!isMobile
                   && (
                     <Grid.Column width={4} className={newLayout ? 'left-align' : ''}>
-                      <CampaignSideBar newLayout={newLayout} navItems={navItems} />
+                      {mobileHeaderAndSideBar}
                     </Grid.Column>
                   )
                 }

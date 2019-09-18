@@ -78,7 +78,12 @@ export const offeringWatchList = gql`
 query offeringWatchList($offeringId: String){
   offeringWatchList(offeringId: $offeringId) {
     userId
+    status
+    offeringId
    userInfo {
+    email {
+      address
+    }
     info { 
     firstName
     lastName
