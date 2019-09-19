@@ -14,7 +14,7 @@ export default class DataModelStore {
 
   currTime;
 
-  auStatus;
+  auStatus = null;
 
   // 0: error, 1: loading, 2: success
   loading = false;
@@ -24,6 +24,7 @@ export default class DataModelStore {
   currentScore = 0;
 
   constructor(queryMutations) {
+    this.auStatus = null;
     this.gqlRef = queryMutations;
   }
 
@@ -44,6 +45,7 @@ export default class DataModelStore {
     const apolloClient = payLoad.clientType === 'PUBLIC' ? publicClient : client;
     this.setLoader(payLoad.setLoader);
     this.loading = true;
+    this.auStatus = 1;
     let result = {};
     try {
       result = await apolloClient.mutate({
@@ -54,8 +56,11 @@ export default class DataModelStore {
       if (payLoad.message && payLoad.message !== false && payLoad.message && payLoad.message.success) {
         Utils.toast(payLoad.message && payLoad.message.success, 'success');
       }
+      this.auStatus = 2;
+      this.loading = false;
       return result || true;
     } catch (err) {
+      this.loading = false;
       nsUiStore.filterLoaderByOperation(payLoad.setLoader);
       this.auStatus = 0;
       if (payLoad.message !== false) {
@@ -70,6 +75,7 @@ export default class DataModelStore {
     const payLoad = { clientType: false, setLoader: undefined, ...params };
     const apolloClient = payLoad.clientType === 'PUBLIC' ? publicClient : client;
     this.setLoader(payLoad.setLoader);
+    this.auStatus = 1;
     MobxApollo.graphql({
       client: apolloClient,
       query: this.gqlRef[payLoad.query],
@@ -77,12 +83,16 @@ export default class DataModelStore {
       variables: { ...params.variables },
       onFetch: (data) => {
         if (data) {
+          this.auStatus = 2;
+          this.loading = false;
           res(data);
           nsUiStore.filterLoaderByOperation(payLoad.setLoader);
         }
         this.currTime = +new Date();
       },
       onError: (e) => {
+        this.auStatus = 0;
+        this.loading = false;
         nsUiStore.filterLoaderByOperation(payLoad.setLoader);
         rej(e);
       },
