@@ -109,6 +109,7 @@ export class FactoryStore {
   @action
   setPluginDropDown = () => {
     this.REQUESTFACTORY_FRM.fields.plugin.values = this.dropDownValuesFromArray;
+    this.CRONFACTORY_FRM.fields.plugin.values = this.dropDownValuesFromArray;
   }
 
   isValidJson = (json) => {
@@ -119,7 +120,6 @@ export class FactoryStore {
     }
     const jsonObj = JSON.parse(json);
     return !!(jsonObj && !isEmpty(jsonObj));
-    // return true;
   }
 }
 

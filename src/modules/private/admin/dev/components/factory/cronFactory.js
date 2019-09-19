@@ -7,7 +7,7 @@ import { FormDropDown } from '../../../../../../theme/form';
 @inject('factoryStore')
 @withRouter
 @observer
-export default class RequestFactory extends Component {
+export default class CronFactory extends Component {
   constructor(props) {
     super(props);
     this.props.factoryStore.resetForm('CRONFACTORY_FRM');
