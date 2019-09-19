@@ -208,3 +208,33 @@ export const IMAGEPROCESSINGREQUES_META = {
     placeHolder: 'Enter here',
   },
 };
+
+export const REQUESTFACTORY_META = {
+  plugin: {
+    key: 'plugin',
+    value: '',
+    values: [],
+    label: 'Plugin',
+    error: undefined,
+    rule: 'required',
+  },
+  invocationType: {
+    key: 'invocationType',
+    value: '',
+    values: [
+      { key: 'Event', text: 'Event', value: 'Event' },
+      { key: 'RequestResponse', text: 'RequestResponse', value: 'RequestResponse' },
+    ],
+    label: 'Invocation Type',
+    error: undefined,
+    rule: 'required',
+  },
+  payload: {
+    key: 'payload',
+    value: '',
+    label: 'Payload',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Put your JSON ojbect here...',
+  },
+};
