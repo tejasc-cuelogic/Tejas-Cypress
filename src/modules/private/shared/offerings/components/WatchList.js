@@ -26,7 +26,7 @@ export default class WatchList extends Component {
     this.props.watchListStore.addRemoveWatchList(params, true);
   }
 
-  watchListTable = ({ WatchersList, isFullUser }) => (
+  watchListTable = ({ WatchersList, hasUsersAccess }) => (
     <Card fluid>
         <div className="table-wrapper">
 <Table unstackable singleLine className="investment-details">
@@ -47,7 +47,7 @@ export default class WatchList extends Component {
        {WatchersList.map(user => (
          <Table.Row key={user.userId}>
           <Table.Cell collapsing>
-            {isFullUser
+            {hasUsersAccess
               ? (
           <Link to={`/app/users/${user.userId}/profile-data`}>
             {`${get(user, 'userInfo.info.firstName')} ${get(user, 'userInfo.info.lastName')}`}
@@ -81,7 +81,7 @@ export default class WatchList extends Component {
   render() {
     const { allWatchList } = this.props.watchListStore;
     const access = this.props.userStore.myAccessForModule('USERS');
-    const isFullUser = access.level === 'FULL';
+    const hasUsersAccess = access.level !== 'SUPPORT';
     if (this.props.nsUiStore.loadingArray.includes('offeringWatchList')) {
       return <InlineLoader />;
     }
@@ -90,7 +90,7 @@ export default class WatchList extends Component {
         {watchListMeta.map(watcherType => (
           <>
           <Header as="h4">{watcherType.headerText}</Header>
-          <this.watchListTable isFullUser={isFullUser} WatchersList={allWatchList[watcherType.status]} />
+          <this.watchListTable hasUsersAccess={hasUsersAccess} WatchersList={allWatchList[watcherType.status]} />
           </>
         ))
         }

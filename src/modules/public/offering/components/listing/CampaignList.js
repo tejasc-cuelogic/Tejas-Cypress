@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { capitalize, get } from 'lodash';
-import { Container, Card, List, Grid, Message, Label } from 'semantic-ui-react';
+import { Container, Card, List, Grid, Message, Label, Icon } from 'semantic-ui-react';
 // import { IonIcon } from '@ionic/react';
 // import { heart } from 'ionicons/icons';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
@@ -82,7 +82,11 @@ export default class CampaignList extends Component {
                           </div>
                         </div>
                         {offering.stage === 'LIVE' ? this.renderBaners(offering) : null }
-                        {/* <IonIcon size="large" icon={heart} /> */}
+                        {(['INVESTOR', 'WATCHING'].includes(offering.watchListStatus))
+                        && (
+                          <Icon name="heart" />
+                        )
+                        }
                         <>
                           <Card.Content>
                             <div className="tags mb-10">

@@ -181,12 +181,10 @@ export default class CampaignSideBar extends Component {
                           >
                             {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
                           </Button>
-                          {this.props.authStore.isUserLoggedIn
-                            && <>{followBtn}</>
-                            }
                           <p>
                             {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                           </p>
+                          {followBtn}
                         </Button.Group>
                       </>
                       )

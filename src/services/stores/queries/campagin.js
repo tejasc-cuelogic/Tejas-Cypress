@@ -1,9 +1,10 @@
 import gql from 'graphql-tag';
 
 export const allOfferings = gql`
-query getOfferingList($filters: OfferingFilterInputType){
+query getOfferingList($filters: OfferingFilterInputType, $userId: String){
     getOfferingList(filters: $filters) {
       id
+      watchListStatus(userId: $userId)
       offeringSlug
       stage
       media {
