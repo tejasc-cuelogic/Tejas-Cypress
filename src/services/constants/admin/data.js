@@ -238,3 +238,14 @@ export const REQUESTFACTORY_META = {
     placeHolder: 'Put your JSON ojbect here...',
   },
 };
+
+export const CRONFACTORY_META = {
+  plugin: {
+    key: 'plugin',
+    value: '',
+    values: [],
+    label: 'Plugin',
+    error: undefined,
+    rule: 'required',
+  },
+};

@@ -5,13 +5,16 @@ import { getPluginList, requestFactoryPluginTrigger } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { REQUESTFACTORY_META } from '../../../constants/admin/data';
+import { REQUESTFACTORY_META, CRONFACTORY_META } from '../../../constants/admin/data';
 
 export class FactoryStore {
   @observable REQUESTFACTORY_FRM = Validator.prepareFormObject(REQUESTFACTORY_META);
 
+  @observable CRONFACTORY_FRM = Validator.prepareFormObject(CRONFACTORY_META);
+
   @observable inProgress = {
     requestFactory: false,
+    cronFactory: false,
   };
 
   @observable pluginListArr = null;
