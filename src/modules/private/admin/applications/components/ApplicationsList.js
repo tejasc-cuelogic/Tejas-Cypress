@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Grid, Input, Button, Card, Table, Header, Item, Rating } from 'semantic-ui-react';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../../constants/user';
 import { FormCheckbox } from '../../../../../theme/form';
@@ -39,7 +39,7 @@ export default class ApplicationsList extends Component {
     const { match } = this.props;
     const {
       getBusinessApplication, requestState, filterApplicationStatus, columnTitle,
-      totalRecords, businessApplicationsList, setKeyword, exportBusinessApplications,
+      totalRecords, businessApplicationsList, setKeyword, exportBusinessApplications, updateBusinessDetails,
     } = this.props.businessAppAdminStore;
     const { inProgress } = this.props.uiStore;
     if (businessApplicationsList.loading) {
@@ -136,8 +136,18 @@ export default class ApplicationsList extends Component {
                         </Table.Cell>
                         <Table.Cell>
                           <Item>
-                            <Item.Header><Rating size="large" disabled defaultRating={application.rating || 0} maxRating={5} /></Item.Header>
-                            {application.comments && application.comments.length
+                            <Item.Header>
+                              <Rating
+                                size="large"
+                                defaultRating={application.rating || 0}
+                                maxRating={5}
+                                disabled={application.prequalStatus === 'PRE_QUALIFICATION_FAILED'}
+                                onRate={(e, { rating }) => {
+                                  updateBusinessDetails(application.applicationId, application.userId, null, rating);
+                                }}
+                              />
+                            </Item.Header>
+                            {/* {application.comments && application.comments.length
                               && (
                                 <Item.Content>
                                   <Item.Description>
@@ -156,6 +166,22 @@ export default class ApplicationsList extends Component {
                                         </b>
                                       )
                                     }
+                                  </Item.Extra>
+                                </Item.Content>
+                              )
+                            } */}
+                            {/* Application Activity Last Comment */}
+                            {application.comment && !isEmpty(application.comment)
+                              && (
+                                <Item.Content>
+                                  <Item.Description>
+                                    {application.comment.activity}
+                                  </Item.Description>
+                                  <Item.Extra>
+                                    <b>{DataFormatter.getDateAsPerTimeZone(application.comment.created.date, true, false, true)}</b>
+                                    <b>{' '}
+                                      {application.comment.created.by}
+                                    </b>
                                   </Item.Extra>
                                 </Item.Content>
                               )

@@ -56,9 +56,9 @@ export default class ApplicationDetails extends Component {
     this.setState({ displayOnly: !this.state.displayOnly });
   }
 
-  updateBusinessDetails = (e, appId, appUserId) => {
+  updateBusinessDetails = (e, appId, appUserId, appType = null, rating = 0) => {
     e.preventDefault();
-    this.props.businessAppAdminStore.updateBusinessDetails(appId, appUserId).then(() => {
+    this.props.businessAppAdminStore.updateBusinessDetails(appId, appUserId, appType, rating).then(() => {
       this.setState({ displayOnly: !this.state.displayOnly });
     });
   }
@@ -118,7 +118,17 @@ export default class ApplicationDetails extends Component {
             <span className="title-meta">  Status: <b>{appStepStatus}</b></span>
             <AppStatusLabel application={businessApplicationDetailsAdmin} />
             <span className="title-meta">Rating</span>
-            <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
+            <Rating
+              size="huge"
+              defaultRating={rating || 0}
+              maxRating={5}
+              disabled={prequalStatus === 'PRE_QUALIFICATION_FAILED'}
+              onRate={
+              (e, { rating: newRating }) => {
+                this.updateBusinessDetails(e, applicationId, userId, null, newRating);
+              }
+            }
+            />
             {((applicationStatus || prequalStatus)
             === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED || applicationStage === 'IN_PROGRESS')
             && <Button secondary compact floated="right" content={prequalStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Promote PreQual' : 'Submit Application'} as={Link} to={`${this.props.refLink}/${appStatus}/${id || applicationId}/${userId || 'new'}/${prequalStatus || 'APPLICATION_IN_PROGRESS'}/PROMOTE/confirm`} />
