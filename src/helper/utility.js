@@ -297,6 +297,10 @@ export class Utility {
         : type === 'warn' ? console.warn(params)
           : type === 'clear' ? console.clear()
             : console.log(params);
+    } else {
+      // Send an email for these two type;
+      // type === 'warn' ? console.warn(params)
+      //   : type === 'info' ? console.info(params) : '';
     }
   }
 }
