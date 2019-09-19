@@ -218,7 +218,7 @@ class offerDetails extends Component {
     const isBonusReward = bonusRewards && bonusRewards.length;
     const InitialComponent = getModule(!newLayout ? navItems[0].component : 'CampaignLayout');
     const followBtn = (
-              <Button disabled={this.props.nsUiStore.loadingArray.includes('removeUserFromOfferingWatchlist') || this.props.nsUiStore.loadingArray.includes('addUserToOfferingWatchlist')} loading={this.props.nsUiStore.loadingArray.includes('removeUserFromOfferingWatchlist') || this.props.nsUiStore.loadingArray.includes('addUserToOfferingWatchlist')} fluid color="white" onClick={() => addRemoveWatchList()} className={!isWatching ? 'inverted' : ''}>
+              <Button disabled={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList')} loading={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList')} fluid color="white" onClick={() => addRemoveWatchList()} className={!isWatching ? 'inverted' : ''}>
                 <Icon name="heart outline" /> {isWatching ? 'Following' : 'Follow'}
               </Button>
     );

@@ -10,7 +10,7 @@ const watchListMeta = [
   { headerText: 'Public Watchers', status: 'WATCHING' },
   { headerText: 'Deleted Watchers', status: 'DELETED' },
 ];
-@inject('watchListStore', 'offeringsStore', 'nsUiStore')
+@inject('watchListStore', 'offeringsStore', 'nsUiStore', 'userStore')
 @withRouter
 @observer
 export default class WatchList extends Component {
@@ -26,7 +26,7 @@ export default class WatchList extends Component {
     this.props.watchListStore.addRemoveWatchList(params, true);
   }
 
-  watchListTable = ({ WatchersList }) => (
+  watchListTable = ({ WatchersList, isFullUser }) => (
     <Card fluid>
         <div className="table-wrapper">
 <Table unstackable singleLine className="investment-details">
@@ -47,9 +47,15 @@ export default class WatchList extends Component {
        {WatchersList.map(user => (
          <Table.Row key={user.userId}>
           <Table.Cell collapsing>
+            {isFullUser
+              ? (
           <Link to={`/app/users/${user.userId}/profile-data`}>
             {`${get(user, 'userInfo.info.firstName')} ${get(user, 'userInfo.info.lastName')}`}
           </Link>
+              ) : (
+              <>{`${get(user, 'userInfo.info.firstName')} ${get(user, 'userInfo.info.lastName')}`}</>
+              )
+            }
           </Table.Cell>
           <Table.Cell>
           {get(user, 'userInfo.email.address')}
@@ -57,7 +63,7 @@ export default class WatchList extends Component {
           <Table.Cell collapsing textAlign="center">
           {user.status !== 'DELETED'
           && (
-          <Button loading={this.props.nsUiStore.loadingArray.includes('removeUserFromOfferingWatchlist')} onClick={() => this.handleDelete({ offeringId: user.offeringId, userId: user.userId })} icon className="link-button">
+          <Button onClick={() => this.handleDelete({ offeringId: user.offeringId, userId: user.userId, status: user.status })} icon className="link-button">
                       <Icon className="trash" />
                     </Button>
           )}
@@ -74,6 +80,8 @@ export default class WatchList extends Component {
 
   render() {
     const { allWatchList } = this.props.watchListStore;
+    const access = this.props.userStore.myAccessForModule('USERS');
+    const isFullUser = access.level === 'FULL';
     if (this.props.nsUiStore.loadingArray.includes('offeringWatchList')) {
       return <InlineLoader />;
     }
@@ -82,7 +90,7 @@ export default class WatchList extends Component {
         {watchListMeta.map(watcherType => (
           <>
           <Header as="h4">{watcherType.headerText}</Header>
-          <this.watchListTable WatchersList={allWatchList[watcherType.status]} />
+          <this.watchListTable isFullUser={isFullUser} WatchersList={allWatchList[watcherType.status]} />
           </>
         ))
         }

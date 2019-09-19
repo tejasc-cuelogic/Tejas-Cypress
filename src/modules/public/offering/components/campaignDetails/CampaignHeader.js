@@ -8,7 +8,7 @@ import { Image64 } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 992;
-@inject('campaignStore')
+@inject('campaignStore', 'authStore')
 @withRouter
 @observer
 export default class CampaignHeader extends Component {
@@ -203,7 +203,9 @@ export default class CampaignHeader extends Component {
                             </p>
                           </Grid.Column>
                           <Grid.Column width="6">
-                          {followBtn}
+                            {this.props.authStore.isUserLoggedIn
+                            && <>{followBtn}</>
+                            }
                           </Grid.Column>
                         </Grid>
                       </>

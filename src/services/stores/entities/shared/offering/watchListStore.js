@@ -1,5 +1,5 @@
 import { observable, computed, action, decorate, toJS } from 'mobx';
-import { get } from 'lodash';
+import { get, remove } from 'lodash';
 import DataModelStore, { decorateDefault } from '../dataModelStore';
 import { offeringWatchList, removeUserFromOfferingWatchlist, addUserToOfferingWatchlist, isWatchingOffering } from '../../../queries/campagin';
 import { userDetailsStore } from '../../..';
@@ -72,6 +72,13 @@ export class WatchListStore extends DataModelStore {
     }).then((res) => { this.setFieldValue('isWatching', get(res, 'isWatchingOffering')); });
   }
 
+  updateWatchList = (params) => {
+    const user = this.watchList[params.status].find(i => i.userId === params.userId);
+    remove(this.watchList[params.status], i => i.userId === params.userId);
+    user.status = 'DELETED';
+    this.watchList.DELETED.unshift(user);
+  }
+
   addRemoveWatchList = (params, forceRemove = undefined) => {
     const variables = {
       userId: (params && params.userId) || userDetailsStore.currentUserId,
@@ -83,9 +90,13 @@ export class WatchListStore extends DataModelStore {
         client: 'PRIVATE',
         mutation: (this.isWatching || forceRemove) ? 'removeUserFromOfferingWatchlist' : 'addUserToOfferingWatchlist',
         variables: { ...variables },
-        setLoader: (this.isWatching || forceRemove) ? 'removeUserFromOfferingWatchlist' : 'addUserToOfferingWatchlist',
+        setLoader: 'addRemoveWatchList',
       });
-      this.setFieldValue('isWatching', !this.isWatching);
+      if (forceRemove) {
+        this.updateWatchList(params);
+      } else {
+        this.setFieldValue('isWatching', !this.isWatching);
+      }
     } catch (error) {
       Helper.toast('Something went wronasdfsdfg. Please try again in some time.', 'error');
     }

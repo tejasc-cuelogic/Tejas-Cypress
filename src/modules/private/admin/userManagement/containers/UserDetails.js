@@ -94,11 +94,10 @@ export default class AccountDetails extends Component {
     if (roles.includes('investor')) {
       roles = [...roles, ...details.roles.map(r => r.name)];
     }
-    const isProd = ['production', 'prod', 'master', 'infosec'].includes(REACT_APP_DEPLOY_ENV);
     let navItems = navMeta.filter(n => ((!n.accessibleTo || n.accessibleTo.length === 0
         || intersection(n.accessibleTo, roles).length > 0))
       && (!n.env || n.env.length === 0 || intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
-    navItems = isProd || sortedNavAccounts.length === 0 ? navItems.filter(n => (n.component !== 'ClosedAccount')) : navItems;
+    navItems = sortedNavAccounts.length === 0 ? navItems.filter(n => (n.component !== 'ClosedAccount')) : navItems;
     const { info } = details;
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles,

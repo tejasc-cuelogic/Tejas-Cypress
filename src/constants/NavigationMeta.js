@@ -524,6 +524,9 @@ export const PRIVATE_NAV = [
       {
         title: 'Data', to: 'data', component: 'Data', capability: 'DATA_ANY',
       },
+      {
+        title: 'Factory', to: 'factory', component: 'Factory', capability: 'FACTORY_ANY',
+      },
     ],
   },
 ];
