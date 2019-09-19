@@ -37,8 +37,10 @@ function Image64(props) {
     e.target.error = null;
     if (!e.target.src.includes('data:') && (e.target.src.includes('http://') || e.target.src.includes('https://'))) {
       const email = {
-        message: 'The requested file is not found in bucket.',
+        graphqlError: { operationName: 'Image Processing' },
         filePath: e.target.src,
+        urlLocation: window.location.href,
+        message: 'The requested file is not found in bucket.',
       };
       const params = {
         emailContent: JSON.stringify(email),
