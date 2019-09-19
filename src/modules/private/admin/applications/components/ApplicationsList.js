@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Grid, Input, Button, Card, Table, Header, Item, Rating } from 'semantic-ui-react';
-import { get, isEmpty } from 'lodash';
+import { get } from 'lodash';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../../constants/user';
 import { FormCheckbox } from '../../../../../theme/form';
@@ -147,40 +147,16 @@ export default class ApplicationsList extends Component {
                                 }}
                               />
                             </Item.Header>
-                            {/* {application.comments && application.comments.length
+                            {get(application, 'comment')
                               && (
                                 <Item.Content>
                                   <Item.Description>
-                                    {application.comments[application.comments.length - 1].text}
+                                    {get(application, 'comment.activity')}
                                   </Item.Description>
                                   <Item.Extra>
-                                    {application.comments[application.comments.length - 1].commentor
-                                      && (
-                                        <b>{DataFormatter.getDateAsPerTimeZone(application.comments[application.comments.length - 1].commentor.date, true, false, true)}</b>
-                                      )
-                                    }
-                                    {application.comments[application.comments.length - 1].commentor
-                                      && (
-                                        <b>{' '}
-                                          {application.comments[application.comments.length - 1].commentor.by}
-                                        </b>
-                                      )
-                                    }
-                                  </Item.Extra>
-                                </Item.Content>
-                              )
-                            } */}
-                            {/* Application Activity Last Comment */}
-                            {application.comment && !isEmpty(application.comment)
-                              && (
-                                <Item.Content>
-                                  <Item.Description>
-                                    {application.comment.activity}
-                                  </Item.Description>
-                                  <Item.Extra>
-                                    <b>{DataFormatter.getDateAsPerTimeZone(application.comment.created.date, true, false, true)}</b>
+                                    <b>{DataFormatter.getDateAsPerTimeZone(get(application, 'comment.created.date'), true, false, true)}</b>
                                     <b>{' '}
-                                      {application.comment.created.by}
+                                      {get(application, 'comment.created.by')}
                                     </b>
                                   </Item.Extra>
                                 </Item.Content>
