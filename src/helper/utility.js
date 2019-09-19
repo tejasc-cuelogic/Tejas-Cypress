@@ -303,6 +303,15 @@ export class Utility {
       //   : type === 'info' ? console.info(params) : '';
     }
   }
+
+  processImageFileName = (originalFileName, deviceInfo) => {
+    const fileNameSplit = originalFileName.split('.');
+    const fileExt = fileNameSplit.pop();
+    const fileName = fileNameSplit.join('.');
+    const { isMobile, isTablet } = deviceInfo;
+    const prepName = res => `${fileName}${res ? `__${res}` : ''}.${fileExt}`;
+    return isMobile ? prepName(640) : isTablet ? prepName(1024) : prepName(1920);
+  }
 }
 
 export default new Utility();

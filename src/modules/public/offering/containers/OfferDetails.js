@@ -51,7 +51,6 @@ class offerDetails extends Component {
         || (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId === currentUser.sub)) {
         this.setState({ preLoading: false, showPassDialog: false });
         this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
-        this.props.watchListStore.setOfferingWatch(this.props.match.params.id);
       } else if (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId !== currentUser.sub) {
         if (oMinData.stage === 'CREATION') {
           this.setState({ showPassDialog: true, preLoading: false });
@@ -217,9 +216,10 @@ class offerDetails extends Component {
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
     const InitialComponent = getModule(!newLayout ? navItems[0].component : 'CampaignLayout');
-    const followBtn = (
-              <Button disabled={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList')} loading={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList')} fluid color="white" onClick={() => addRemoveWatchList()} className={!isWatching ? 'inverted' : ''}>
-                <Icon name="heart outline" /> {isWatching ? 'Following' : 'Follow'}
+    const showWatchingBtn = isWatching !== 'loading' && this.props.authStore.isUserLoggedIn;
+    const followBtn = showWatchingBtn && (
+              <Button disabled={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList')} inverted loading={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList')} fluid color="white" onClick={() => addRemoveWatchList()}>
+                <Icon name={` ${!this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') && 'heart'} ${isWatching ? '' : 'outline'}`} color={isWatching ? 'green' : ''} /> {isWatching ? 'Following' : 'Follow'}
               </Button>
     );
     const mobileHeaderAndSideBar = (<CampaignSideBar followBtn={followBtn} newLayout={newLayout} navItems={navItems} />);
@@ -229,7 +229,7 @@ class offerDetails extends Component {
           && <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
         {!isMobile
-          && <CampaignHeader followBtn={followBtn} {...this.props} />
+          && <CampaignHeader showWatchingBtn={showWatchingBtn} followBtn={followBtn} {...this.props} />
         }
         {/* {campaignStore && campaignStore.showFireworkAnimation &&
         <Firework />

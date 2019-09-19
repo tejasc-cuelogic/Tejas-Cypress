@@ -10,11 +10,10 @@ import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, get
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
-import { userDetailsStore } from '../../index';
+import { userDetailsStore, watchListStore, userStore } from '../../index';
 // import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
-import watchListStore from '../shared/offering/watchListStore';
 
 export class CampaignStore {
   @observable data = [];
@@ -67,15 +66,18 @@ export class CampaignStore {
   @action
   initRequest = (publicRef, referralCode = false) => {
     const stage = Object.keys(pickBy(STAGES, s => publicRef.includes(s.publicRef)));
-    const filters = { stage };
+    const variables = { filters: { stage } };
     if (referralCode) {
-      filters.referralCode = referralCode;
+      variables.filters.referralCode = referralCode;
+    }
+    if (userStore.currentUser && userStore.currentUser.sub) {
+      variables.userId = userStore.currentUser.sub;
     }
     return new Promise((resolve) => {
       this.data = graphql({
         client: clientPublic,
         query: referralCode ? getOfferingsReferral : allOfferings,
-        variables: { filters },
+        variables,
         onFetch: (data) => {
           if (data && !this.data.loading) {
             const offering = data.getOfferingList.length && data.getOfferingList[0];
