@@ -45,7 +45,7 @@ export default class WatchList extends Component {
     ) : (
        <>
        {WatchersList.map(user => (
-         <Table.Row key={user.userId}>
+         <Table.Row key={user.userId} className={`${this.props.nsUiStore.loadingArray.includes(`removing-${user.userId}`) ? 'disabled' : ''}`}>
           <Table.Cell collapsing>
             {hasUsersAccess
               ? (

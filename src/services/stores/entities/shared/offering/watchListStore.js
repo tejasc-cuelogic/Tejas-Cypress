@@ -77,18 +77,17 @@ export class WatchListStore extends DataModelStore {
     this.watchList.DELETED.unshift(user);
   }
 
-  addRemoveWatchList = (params, forceRemove = undefined) => {
+  addRemoveWatchList = async (params, forceRemove = undefined) => {
     const variables = {
       userId: (params && params.userId) || userDetailsStore.currentUserId,
       offeringId: (params && params.offeringId) || campaignStore.getOfferingId,
       isInvestment: false,
     };
     try {
-      this.executeMutation({
-        client: 'PRIVATE',
+      await this.executeMutation({
         mutation: (this.isWatching || forceRemove) ? 'removeUserFromOfferingWatchlist' : 'addUserToOfferingWatchlist',
         variables: { ...variables },
-        setLoader: 'addRemoveWatchList',
+        setLoader: forceRemove ? `removing-${params.userId}` : 'addRemoveWatchList',
       });
       if (forceRemove) {
         this.updateWatchList(params);
@@ -96,7 +95,7 @@ export class WatchListStore extends DataModelStore {
         this.setFieldValue('isWatching', !this.isWatching);
       }
     } catch (error) {
-      Helper.toast('Something went wronasdfsdfg. Please try again in some time.', 'error');
+      Helper.toast('Something went wrong. Please try again in some time.', 'error');
     }
   }
 }
@@ -108,6 +107,7 @@ decorate(WatchListStore, {
   isWatching: observable,
   offeringWatchList: action,
   addRemoveWatchList: action,
+  updateWatchList: action,
   setOfferingWatch: action,
   setWatchListData: action,
   resetStore: action,
