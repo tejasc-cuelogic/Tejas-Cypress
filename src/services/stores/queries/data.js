@@ -122,8 +122,8 @@ mutation _imageProcessing($key: String, $waitingTime: Int, $concurrency: Int,$qu
 }`;
 
 export const getPluginList = gql`
-query _requestWorkerPlugins {
-  requestWorkerPlugins {
+query _listRequestPlugins {
+  listRequestPlugins {
     plugins{
       name
       pluginInputs {
