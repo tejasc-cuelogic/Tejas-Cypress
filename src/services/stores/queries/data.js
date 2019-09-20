@@ -109,3 +109,36 @@ export const syncEsDocument = gql`
 mutation syncEsDocument($documentId: String!, $targetIndex: String!, $userId: String, $accountType: [InvestorAccountTypeEnum]){
   syncEsDocument(documentId: $documentId, targetIndex: $targetIndex, userId: $userId, accountType: $accountType)
 }`;
+
+export const imageProcessignRequest = gql`
+mutation _imageProcessing($key: String, $waitingTime: Int, $concurrency: Int,$queueLimit: Int, $folderName: String) {
+  imageProcessing(
+    key: $key,
+    waitingTime: $waitingTime
+    concurrency: $concurrency
+    queueLimit: $queueLimit
+    folderName: $folderName
+  )
+}`;
+
+export const getPluginList = gql`
+query _requestWorkerPlugins {
+  requestWorkerPlugins {
+    plugins{
+      name
+      pluginInputs {
+        name
+      }
+    }
+  }
+}
+`;
+
+export const requestFactoryPluginTrigger = gql`
+mutation invokeRequest($method: RequestWorkerPluginsEnum!, $payload: String, $invocationType: RequestInvocationEnum) {
+  invokeRequest(
+    method: $method,
+    payload: $payload
+    invocationType: $invocationType
+  )
+}`;

@@ -10,7 +10,8 @@ import { InlineLoader } from '../../../../theme/shared';
 @inject('uiStore', 'navStore', 'offeringsStore', 'offeringCreationStore')
 @observer
 export default class Offering extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/overview`);
     }

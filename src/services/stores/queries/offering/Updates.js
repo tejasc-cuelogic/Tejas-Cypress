@@ -30,6 +30,7 @@ export const newUpdate = gql`
       title
       isVisible
       offeringId
+      updatedDate
       updated {
         date
       }
@@ -52,6 +53,7 @@ export const getUpdate = gql`
       id
       title
       status
+      updatedDate
       scope
       content
       tiers
@@ -79,6 +81,7 @@ export const editUpdate = gql`
       scope
       content
       tiers
+      updatedDate
       approved {
         by
         date
@@ -110,19 +113,21 @@ mutation _offeringUpdatesApprovedByInfo($id: ID!) {
 `;
 
 export const sendOfferingUpdateTestEmail = gql`
-mutation sendOfferingUpdateTestEmail($offeringUpdateId: String!, $emailTemplate: publishLiveEmailTemplate!) {
+mutation sendOfferingUpdateTestEmail($offeringUpdateId: String!, $emailTemplate: publishLiveEmailTemplate!, $shouldSendInvestorNotifications:Boolean!) {
   sendOfferingUpdateTestEmail(
     offeringUpdateId: $offeringUpdateId
     emailTemplate: $emailTemplate
+    shouldSendInvestorNotifications:$shouldSendInvestorNotifications
   )
 }`;
 
 export const offeringUpdatePublish = gql`
-mutation offeringUpdatePublish($id: ID!, $updatesInput: OfferingUpdatesInput!, $emailTemplate: publishLiveEmailTemplate!) {
+mutation offeringUpdatePublish($id: ID!, $updatesInput: OfferingUpdatesInput!, $emailTemplate: publishLiveEmailTemplate!, $shouldSendInvestorNotifications:Boolean!) {
   offeringUpdatePublish(
     id: $id
     updatesInput: $updatesInput
     emailTemplate: $emailTemplate
+    shouldSendInvestorNotifications:$shouldSendInvestorNotifications
   ) {
     id
   }

@@ -13,8 +13,9 @@ import NSImage from '../../../shared/NSImage';
 @withRouter
 @observer
 class HowItWorks extends Component {
-  componentWillMount() {
-    this.props.offeringsStore.getTotalAmount();
+  constructor(props) {
+    super(props);
+    props.offeringsStore.getTotalAmount();
   }
 
   handleFundingOptBtn = () => {

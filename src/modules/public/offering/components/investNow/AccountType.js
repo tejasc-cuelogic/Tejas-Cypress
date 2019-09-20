@@ -12,7 +12,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 class AccountType extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const {
       byDefaultRender,
       setStepToBeRendered,

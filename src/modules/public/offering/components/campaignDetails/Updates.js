@@ -7,14 +7,14 @@ import 'react-vertical-timeline-component/style.min.css';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import { Image64, InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import HtmlEditor from '../../../../shared/HtmlEditor';
-import { DataFormatter } from '../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore')
 @observer
 class Updates extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { campaign } = this.props.campaignStore;
     const updates = campaign && campaign.updates ? campaign.updates : [];
     this.props.campaignStore.setInitialStateForReadMoreAndReadLess(updates);
@@ -34,7 +34,7 @@ class Updates extends Component {
     const { newLayout } = this.props;
     const { campaign } = this.props.campaignStore;
     let updates = campaign && campaign.updates;
-    updates = orderBy(updates, ['updated.date'], 'desc');
+    updates = orderBy(updates, o => get(o, 'updatedDate') && moment(new Date(o.updatedDate)).unix(), ['asc']);
     const readMoreStatus = this.props.campaignStore.curretnStatusForReadMore;
     const readLessStatus = this.props.campaignStore.curretnStatusForReadLess;
     const companyAvatarUrl = campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : '';
@@ -71,7 +71,7 @@ class Updates extends Component {
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header">
                         {get(campaign, 'keyTerms.shorthandBusinessName') }<br />
-                        <span>{DataFormatter.getDateAsPerTimeZone(dataItem.updated.date, true, true)}</span>
+                        <span>{dataItem.updatedDate ? moment(dataItem.updatedDate).format('LL') : '-'}</span>
                       </Item.Content>
                     </Item>
                     <Header as="h4">{dataItem.title}</Header>

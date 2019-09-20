@@ -14,7 +14,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class ConfirmVerificationCode extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber) {
       this.props.history.push(this.props.refLink);
     }

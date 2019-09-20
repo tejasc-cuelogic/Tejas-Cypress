@@ -12,7 +12,8 @@ import Helper from '../../../../../helper/utility';
 @inject('businessAppLendioStore', 'businessAppStore', 'uiStore')
 @observer
 export default class Application extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match } = this.props;
     if (match.isExact) {
       const {

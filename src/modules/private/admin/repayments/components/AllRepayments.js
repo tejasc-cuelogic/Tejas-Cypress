@@ -11,7 +11,8 @@ import { DataFormatter } from '../../../../../helper';
 @inject('repaymentStore')
 @observer
 export default class AllRepayments extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.repaymentStore.initRequest();
   }
 

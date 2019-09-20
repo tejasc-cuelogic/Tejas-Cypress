@@ -28,11 +28,10 @@ export const validateBankAccount = gql`
   }
   `;
 
-export const linkBankRequestCancel = gql`
-  mutation linkBankRequestCancel($accountId: String!) {
-    linkBankRequestCancel(accountId: $accountId)
-  }
-`;
+export const declineBankChangeRequest = gql`
+  mutation declineBankChangeRequest($accountId: String!, $userId: String, $justification: String) {
+    declineBankChangeRequest(accountId: $accountId,userId: $userId, justification: $justification)
+  }`;
 
 export const getDecryptedRoutingNumber = gql`
 mutation getDecryptedRoutingNumber($userId: String, $accountId: String, $requestType:RequestTypeEnum!) {

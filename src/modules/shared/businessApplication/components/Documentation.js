@@ -9,7 +9,8 @@ import RealEstateDocumentation from './documentation/RealEstateDocumentation';
 @inject('businessAppStore')
 @observer
 export default class Documentation extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.businessAppStore.setFieldvalue('applicationStep', 'documentation');
   }
 

@@ -8,7 +8,8 @@ import AccountDetails from './AccountDetails';
 @withRouter
 @observer
 export default class ClosedAccount extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       const { sortedNavAccounts } = this.props.accountStore;
       this.props.history.push(`${this.props.match.url}/${sortedNavAccounts[0].to}`);

@@ -18,7 +18,8 @@ import HtmlEditor from '../../../../shared/HtmlEditor';
 export default class CampaignList extends Component {
   state = { filters: false };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.accreditationStore.resetUserAccreditatedStatus();
   }
 
@@ -39,10 +40,10 @@ export default class CampaignList extends Component {
       return (
         <Label.Group size="small">
           {bannerFirst
-          && <Label color="blue">{bannerFirst}</Label>
+          && <Label color={bannerFirst === 'Processing' ? 'grey' : 'blue'}>{bannerFirst}</Label>
           }
           {bannerSecond
-          && <Label color="green">{bannerSecond}</Label>
+          && <Label color={bannerFirst === 'Processing' ? 'grey' : 'green'}>{bannerSecond}</Label>
           }
         </Label.Group>
       );

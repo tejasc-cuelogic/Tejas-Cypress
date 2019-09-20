@@ -10,7 +10,8 @@ import { ByKeyword } from '../../../../../theme/form/Filters';
 @withRouter
 @observer
 export default class RepaymentDetails extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.repaymentStore.initRepaymentDetails();
   }
 

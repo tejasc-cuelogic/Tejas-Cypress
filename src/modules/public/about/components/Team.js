@@ -10,8 +10,9 @@ import TeamList from './TeamList';
 @inject('teamStore')
 @observer
 class team extends Component {
-  componentWillMount() {
-    this.props.teamStore.initRequest();
+  constructor(props) {
+    super(props);
+    props.teamStore.initRequest();
   }
 
   render() {

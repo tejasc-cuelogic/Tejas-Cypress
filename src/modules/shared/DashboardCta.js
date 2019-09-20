@@ -6,7 +6,8 @@ import Home from '../public/home/containers/Home';
 @inject('userStore', 'userDetailsStore', 'uiStore', 'navStore', 'authStore')
 @observer
 export default class DashboardCta extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.authStore.isUserLoggedIn && this.props.userDetailsStore.userFirstLoad) {
       const { redirectURL } = this.props.uiStore;
       const { roles } = this.props.userStore.currentUser;

@@ -9,7 +9,8 @@ import AppNavigation from './AppNavigation';
 @inject('businessAppStore', 'commonStore', 'userStore', 'uiStore')
 @observer
 export default class Performance extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.businessAppStore.setFieldvalue('applicationStep', 'performance');
   }
 

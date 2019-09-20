@@ -13,7 +13,8 @@ import { Spinner } from '../../../../../theme/shared';
 @inject('investmentStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
 @observer
 class FinancialInfo extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.changeInvest
       && !this.props.investmentLimitStore.getCurrentInvestNowHealthCheck) {
       const { getInvestNowHealthCheck } = this.props.investmentLimitStore;

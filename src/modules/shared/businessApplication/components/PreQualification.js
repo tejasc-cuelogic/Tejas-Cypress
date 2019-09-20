@@ -18,7 +18,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class PreQualification extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.isPublic) {
       const { params } = this.props.match;
       const urlParameter = DataFormatter.QueryStringToJSON(this.props.location.search);

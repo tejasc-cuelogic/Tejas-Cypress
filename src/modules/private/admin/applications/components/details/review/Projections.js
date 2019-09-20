@@ -9,7 +9,8 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Projections extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.businessAppReviewStore.initLoad.includes('PROJECTIONS_FRM')) {
       this.props.businessAppReviewStore.setFormData('PROJECTIONS_FRM', 'review.projections');
     }
