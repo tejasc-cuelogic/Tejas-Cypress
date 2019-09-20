@@ -44,7 +44,7 @@ export class FactoryStore {
       client,
       query: getPluginList,
       onFetch: (res) => {
-        if (get(res, 'requestWorkerPlugins.plugins') && !this.pluginListArr.loading) {
+        if (get(res, 'listRequestPlugins.plugins') && !this.pluginListArr.loading) {
           this.setPluginDropDown();
         }
       },
@@ -95,7 +95,7 @@ export class FactoryStore {
 
   @computed get dropDownValuesFromArray() {
     const pluginArr = [];
-    const pluginList = get(this.pluginListArr, 'data.requestWorkerPlugins.plugins');
+    const pluginList = get(this.pluginListArr, 'data.listRequestPlugins.plugins');
     pluginList.forEach((value) => {
       const tempObj = {};
       tempObj.key = value.name;

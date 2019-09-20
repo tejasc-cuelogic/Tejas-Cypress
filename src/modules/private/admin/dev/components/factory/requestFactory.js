@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Form, Grid } from 'semantic-ui-react';
+import { Card, Button, Form, Grid, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { FormDropDown, FormTextarea } from '../../../../../../theme/form';
@@ -30,7 +30,7 @@ export default class RequestFactory extends Component {
           <Card.Description>
             <Form onSubmit={this.onSubmit}>
               <Form.Group>
-                <Grid className="full-width" stackable>
+                <Grid className="full-width mlr-0" stackable>
                   <Grid.Column width={8}>
                     <FormDropDown
                       fielddata={REQUESTFACTORY_FRM.fields.plugin}
@@ -50,6 +50,8 @@ export default class RequestFactory extends Component {
                       name="invocationType"
                       onChange={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
                     />
+                    <Divider section hidden />
+                    <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid} loading={inProgress.requestFactory} />
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <FormTextarea
@@ -58,9 +60,6 @@ export default class RequestFactory extends Component {
                       changed={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
                       containerclassname="secondary huge"
                     />
-                  </Grid.Column>
-                  <Grid.Column width={16}>
-                      <Button primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid} loading={inProgress.requestFactory} />
                   </Grid.Column>
                 </Grid>
               </Form.Group>
