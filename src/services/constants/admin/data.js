@@ -240,12 +240,31 @@ export const REQUESTFACTORY_META = {
 };
 
 export const CRONFACTORY_META = {
-  plugin: {
-    key: 'plugin',
+  cron: {
+    key: 'cron',
     value: '',
     values: [],
-    label: 'Plugin',
+    label: 'cron',
     error: undefined,
     rule: 'required',
+  },
+  cronMetaType: {
+    key: 'cronMetaType',
+    value: '',
+    values: [
+      { key: 'PLUGIN', text: 'PLUGIN', value: 'PLUGIN' },
+      { key: 'LOG', text: 'LOG', value: 'LOG' },
+    ],
+    label: 'Cron Meta Type',
+    error: undefined,
+    rule: 'optional',
+  },
+  jobId: {
+    key: 'jobId',
+    value: '',
+    label: 'Job Id',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
   },
 };

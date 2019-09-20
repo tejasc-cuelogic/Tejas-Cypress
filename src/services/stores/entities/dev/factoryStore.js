@@ -1,7 +1,8 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { get, isEmpty } from 'lodash';
-import { getPluginList, requestFactoryPluginTrigger } from '../../queries/data';
+import { get, isEmpty, isArray } from 'lodash';
+import moment from 'moment';
+import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
@@ -18,6 +19,76 @@ export class FactoryStore {
   };
 
   @observable pluginListArr = null;
+
+  @observable filters = true;
+
+  @observable backup = [];
+
+  @observable requestState = {
+    lek: { 'page-1': null },
+    skip: 0,
+    page: 1,
+    perPage: 25,
+    filters: false,
+    search: {
+    },
+  };
+
+  @action
+  initRequest = (reqParams) => {
+    const {
+      keyword, cron, cronMetaType, status, startDate, endDate, jobId,
+    } = this.requestState.search;
+    const filters = toJS({ ...this.requestState.search });
+    delete filters.keyword;
+    this.requestState.page = (reqParams && reqParams.page) || this.requestState.page;
+    let params = {
+      search: keyword,
+      cron: cron || 'GOLDSTAR_HEALTHCHECK',
+      cronMetaType: cronMetaType || 'LOG',
+      // page: reqParams ? reqParams.page : 1,
+      limit: reqParams ? reqParams.perPage : this.requestState.perPage,
+      jobId: jobId || '',
+    };
+    params = this.requestState.lek[`page-${this.requestState.page}`]
+      ? { ...params, lek: this.requestState.lek[`page-${this.requestState.page}`] } : { ...params };
+
+    if (status && status !== '') {
+      params = {
+        ...params,
+        status,
+      };
+    }
+    this.requestState.page = params.page;
+    if (startDate && endDate) {
+      params = {
+        ...params,
+        ...{ fromDate: startDate, toDate: endDate },
+      };
+    }
+    this.cronLogList = graphql({
+      client,
+      query: fetchCronLogs,
+      variables: params,
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data && !this.cronLogList.loading) {
+          const { lek, cronLog } = data.businessApplicationsAdmin;
+          this.requestState = {
+            ...this.requestState,
+            lek: {
+              ...this.requestState.lek,
+              [`page-${this.requestState.page + 1}`]: lek,
+            },
+          };
+          this.backup = cronLog;
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
+  }
 
   @action
   setFieldValue = (field, value, field2 = false) => {
@@ -44,7 +115,7 @@ export class FactoryStore {
       client,
       query: getPluginList,
       onFetch: (res) => {
-        if (get(res, 'listRequestPlugins.plugins') && !this.pluginListArr.loading) {
+        if ((get(res, 'listRequestPlugins.plugins') || get(res, 'listCronPlugins.plugins')) && !this.pluginListArr.loading) {
           this.setPluginDropDown();
         }
       },
@@ -53,6 +124,67 @@ export class FactoryStore {
         Helper.toast('Something went wrong, please try again later.', 'error');
       },
     });
+  }
+
+  @action
+  initiateSearch = (srchParams) => {
+    this.requestState.lek = { 'page-1': null };
+    this.requestState.page = 1;
+    this.requestState.search = srchParams;
+    this.initRequest();
+  }
+
+  @action
+  setInitiateSrch = (name, value) => {
+    if (name === 'startDate' || name === 'endDate') {
+      this.requestState.search[name] = value ? name === 'startDate' ? moment(new Date(`${value.formattedValue} 00:00:00`)).toISOString() : moment(new Date(`${value.formattedValue} 23:59:59`)).toISOString() : '';
+      if ((this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '')
+        || (this.requestState.search.startDate === '' && this.requestState.search.endDate === '')
+      ) {
+        const srchParams = { ...this.requestState.search };
+        this.initiateSearch(srchParams);
+      }
+    } else {
+      const srchParams = { ...this.requestState.search };
+      const temp = { ...this.requestState };
+      temp.search[name] = { ...this.requestState.search };
+      this.requestState = temp;
+      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+        srchParams[name] = value;
+      } else {
+        delete srchParams[name];
+      }
+      this.initiateSearch(srchParams);
+    }
+  }
+
+  @action
+  toggleSearch = () => {
+    this.filters = !this.filters;
+  }
+
+  @computed get loading() {
+    return this.cronLogList.loading;
+  }
+
+  @computed get count() {
+    return (this.cronLogList.data
+      && this.cronLogList.data.fetchCronLogs
+      && toJS(this.cronLogList.data.fetchCronLogs.resultCount)
+    ) || 0;
+  }
+
+  @action
+  resetFilters = () => {
+    this.requestState = {
+      lek: { 'page-1': null },
+      skip: 0,
+      page: 1,
+      perPage: 25,
+      filters: false,
+      search: {
+      },
+    };
   }
 
   @action
@@ -93,7 +225,7 @@ export class FactoryStore {
     return this.pluginListArr.loading;
   }
 
-  @computed get dropDownValuesFromArray() {
+  @computed get dropDownValuesForRequestPlugin() {
     const pluginArr = [];
     const pluginList = get(this.pluginListArr, 'data.listRequestPlugins.plugins');
     pluginList.forEach((value) => {
@@ -106,10 +238,23 @@ export class FactoryStore {
     return pluginArr;
   }
 
+  @computed get dropDownValuesForCronPlugin() {
+    const pluginArr = [];
+    const pluginList = get(this.pluginListArr, 'data.listCronPlugins.plugins');
+    pluginList.forEach((value) => {
+      const tempObj = {};
+      tempObj.key = value.name;
+      tempObj.text = value.name;
+      tempObj.value = value.name;
+      pluginArr.push(tempObj);
+    });
+    return pluginArr;
+  }
+
   @action
   setPluginDropDown = () => {
-    this.REQUESTFACTORY_FRM.fields.plugin.values = this.dropDownValuesFromArray;
-    this.CRONFACTORY_FRM.fields.plugin.values = this.dropDownValuesFromArray;
+    this.REQUESTFACTORY_FRM.fields.plugin.values = this.dropDownValuesForRequestPlugin;
+    this.CRONFACTORY_FRM.fields.cron.values = this.dropDownValuesForCronPlugin;
   }
 
   isValidJson = (json) => {

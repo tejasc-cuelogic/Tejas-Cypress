@@ -131,6 +131,15 @@ query _listRequestPlugins {
       }
     }
   }
+  listCronPlugins
+  {
+    plugins {
+      name
+      pluginInputs {
+        name
+      }
+    }
+  }
 }
 `;
 
@@ -141,4 +150,27 @@ mutation invokeRequest($method: RequestWorkerPluginsEnum!, $payload: String, $in
     payload: $payload
     invocationType: $invocationType
   )
+}`;
+
+export const fetchCronLogs = gql`
+query _fetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaTypeEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+  fetchCronLogs(
+    cron: $cron,
+    jobId: $jobId
+    cronMetaType: $cronMetaType
+    fromDate: $fromDate
+    toDate: $toDate
+    lek: $lek
+    limit: $limit
+  )
+  {
+    cronLog{
+      jobId
+      execStatus
+      cron
+    }
+    resultCount
+    totalCount
+    lek
+  }
 }`;
