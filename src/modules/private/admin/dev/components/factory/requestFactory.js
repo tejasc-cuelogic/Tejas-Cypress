@@ -30,7 +30,7 @@ export default class RequestFactory extends Component {
           <Card.Description>
             <Form onSubmit={this.onSubmit}>
               <Form.Group>
-                <Grid className="full-width" stackable>
+                <Grid className="full-width mlr-0" stackable>
                   <Grid.Column width={8}>
                     <FormDropDown
                       fielddata={REQUESTFACTORY_FRM.fields.plugin}
@@ -51,7 +51,7 @@ export default class RequestFactory extends Component {
                       onChange={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
                     />
                     <Divider section hidden />
-                    <Button className="mt-80" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid} loading={inProgress.requestFactory} />
+                    <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid} loading={inProgress.requestFactory} />
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <FormTextarea
