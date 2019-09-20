@@ -18,7 +18,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.refLink) {
       this.props.uiStore.setAuthRef(this.props.refLink);
     }
@@ -57,6 +58,7 @@ export default class ConfirmEmailAddress extends Component {
       this.props.authStore.verifyAndUpdateEmail().then(() => {
         this.props.identityStore.setIsOptConfirmed(true);
         Helper.toast('Email has been verified and updated', 'success');
+        this.props.history.push(this.props.refLink);
       })
         .catch(() => { });
     } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === ''

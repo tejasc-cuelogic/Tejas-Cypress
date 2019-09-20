@@ -13,6 +13,7 @@ import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { uiStore, navStore, identityStore, userDetailsStore, userStore, businessAppStore } from '../../index';
+import { validateOfferingPreviewPassword } from '../../queries/campagin';
 
 
 export class AuthStore {
@@ -24,6 +25,8 @@ export class AuthStore {
 
   @observable cognitoUserSession = null;
 
+  @observable isBoxApiChecked = false;
+
   @observable isOfferPreviewUrl = false;
 
   @observable capabilities = [];
@@ -31,7 +34,7 @@ export class AuthStore {
   @observable userId = null;
 
   @observable devAuth = {
-    required: !['production', 'localhost', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV),
+    required: !['production', 'localhost', 'prod', 'master', 'infosec'].includes(REACT_APP_DEPLOY_ENV),
     authStatus: cookie.load('DEV_AUTH_TOKEN'),
   };
 
@@ -396,7 +399,7 @@ export class AuthStore {
               businessAppStore.setBasicFormError(get(data, 'checkEmailExistsPresignup.roles') && get(data, 'checkEmailExistsPresignup.roles').includes('issuer') ? 'This email is already exists as an issuer. Please Log In' : `This email address is already exists as ${get(data, 'checkEmailExistsPresignup.roles').includes('admin') ? 'admin' : 'investor'}. Please try with differrent email.`);
               res();
             } else {
-              this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
+              this.SIGNUP_FRM.fields.email.error = 'Email already exists, did you mean to log in?';
               this.SIGNUP_FRM.meta.isValid = false;
               rej();
             }
@@ -525,6 +528,31 @@ export class AuthStore {
       console.log('Error while calling notifyApplicationError', e);
     });
   }
+
+  @action
+  validateOfferingPreviewPassword = (offeringId, previewPassword) => new Promise((res, rej) => {
+    graphql({
+      client: clientPublic,
+      query: validateOfferingPreviewPassword,
+      variables: {
+        offeringId,
+        previewPassword,
+      },
+      onFetch: (data) => {
+        uiStore.clearErrors();
+        if (data) {
+          res(get(data, 'validateOfferingPreviewPassword'));
+        }
+      },
+      onError: (err) => {
+        uiStore.setErrors(err);
+        uiStore.setProgress(false);
+        Helper.toast('Something went wrong, please try again.', 'error');
+        rej();
+      },
+      fetchPolicy: 'network-only',
+    });
+  });
 }
 
 export default new AuthStore();

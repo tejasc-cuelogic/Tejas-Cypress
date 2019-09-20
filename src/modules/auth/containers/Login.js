@@ -12,7 +12,8 @@ import { ListErrors } from '../../../theme/shared';
 @withRouter
 @observer
 class Login extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.uiStore.clearErrors();
     this.props.uiStore.setProgress(false);
     this.props.authStore.resetForm('LOGIN_FRM');
@@ -136,7 +137,7 @@ class Login extends Component {
             </Form.Field>
             {errors
               && (
-<Message error className="mt-30">
+              <Message error className="mt-30">
                 <ListErrors errors={[customError]} />
               </Message>
               )

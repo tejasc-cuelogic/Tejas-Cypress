@@ -12,7 +12,8 @@ import OtherInformation from './OtherInformation';
 @withRouter
 @observer
 export default class Admin extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
   }
 
@@ -81,14 +82,14 @@ export default class Admin extends Component {
             // changed={(values, name) => formChange(values, formName, name)}
             phoneNumber
             format="(###) ###-####"
-            displayMode={displayMode}
+            displayMode
           />
           <FormInput
             key="address"
             name="address"
             fielddata={USER_BASIC.fields.address}
             changed={(e, result) => formChange(e, result, formName)}
-            displayMode={displayMode}
+            displayMode
           />
         </Form.Group>
         <Divider />

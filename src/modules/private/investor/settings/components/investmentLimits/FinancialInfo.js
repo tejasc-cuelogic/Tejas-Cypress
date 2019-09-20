@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { startCase, get } from 'lodash';
-import moment from 'moment';
 import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
@@ -13,7 +12,8 @@ import { ACCREDITATION_STATUS_LABEL } from '../../../../../../services/constants
 @withRouter
 @observer
 export default class FinancialInfo extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.investmentLimitStore.getInvestedAmount();
       this.props.investmentLimitStore.setAccountsLimits();
@@ -56,7 +56,7 @@ export default class FinancialInfo extends Component {
 
   getDate = (accName) => {
     let date = '';
-    date = accName && accName.status === 'REQUESTED' && accName.requestDate ? moment(accName.requestDate).format('MM/DD/YY') : accName && accName.status === 'CONFIRMED' && accName.expiration ? moment(accName.expiration).format('MM/DD/YY') : accName && accName.status === 'INVALID' && accName.reviewed && accName.reviewed.date ? moment(accName.reviewed.date).format('MM/DD/YY') : '-';
+    date = accName && accName.status === 'REQUESTED' && accName.requestDate ? DataFormatter.getDateAsPerTimeZone(accName.requestDate, true, false, false, 'MM/DD/YY') : accName && accName.status === 'CONFIRMED' && accName.expiration ? DataFormatter.getDateAsPerTimeZone(accName.expiration, true, false, false, 'MM/DD/YY') : accName && accName.status === 'INVALID' && accName.reviewed && accName.reviewed.date ? DataFormatter.getDateAsPerTimeZone(accName.reviewed.date, true, false, false, 'MM/DD/YY') : '-';
     return date;
   }
 

@@ -62,9 +62,14 @@ export const fillOwnerInfo = (owner) => {
 
 export const fillPreQaulificationDetails = (issuerPreQual) => {
   fillBasicDetails(issuerPreQual.basicDetails);
+  if (cy.get('input[name="password"]')) {
+    cy.get('input[name="password"]').type('nextseedTest');
+    btnClickAndWaitByButtonName('Continue');
+  }
   cy.get('input[value="B2C"]').click();
   fillGeneralInfo(issuerPreQual.generalInfo);
   cy.get('input[name="industryTypes"]').click({ force: true, multiple: true });
+  cy.get('input[value="EQUITY"]').click();
   cy.get('input[value="BRAND_NEW"]').click();
   fillExperienceDetails(issuerPreQual.experienceDetails);
   fillNextYearProjection(issuerPreQual.nextYearProjection);

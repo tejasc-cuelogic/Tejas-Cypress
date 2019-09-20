@@ -172,7 +172,7 @@ export class BusinessAppStore {
       },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data && data.businessApplication && !this.businessApplicationsDataById.loading) {
+        if ((data && data.businessApplication && !this.businessApplicationsDataById.loading) || (data && data.getPreQualificationById && !this.businessApplicationsDataById.loading)) {
           this.setBusinessApplicationData(isPartialApp);
           uiStore.setAppLoader(false);
           resolve();
@@ -622,9 +622,10 @@ export class BusinessAppStore {
 
   @action
   businessAppEleMaskChange = (values, field, formName = 'BUSINESS_APP_FRM') => {
+    const value = field === 'zipCode' ? values.value : values.floatValue;
     this[formName] = Validator.onChange(
       this[formName],
-      { name: field, value: values.floatValue },
+      { name: field, value },
     );
   };
 
@@ -699,7 +700,7 @@ export class BusinessAppStore {
         fullLegalName: this.getValidDataForString(item.fullLegalName),
         yearsOfExp: item.yearsOfExp.value ? this.getValidDataForInt(item.yearsOfExp) : null,
         ssn: this.getValidDataForString(item.ssn),
-        dateOfService: item.dateOfService.value ? moment(item.dateOfService).format('MM/DD/YYYY') : null,
+        dateOfService: item.dateOfService.value ? moment(item.dateOfService.value).format('MM/DD/YYYY') : null,
         companyOwnerShip: item.companyOwnerShip.value
           ? this.getValidDataForInt(item.companyOwnerShip, 1) : null,
         linkedInUrl: this.getValidDataForString(item.linkedInUrl),
@@ -939,6 +940,8 @@ export class BusinessAppStore {
       payload = has(this.urlParameter, 'sc') ? { ...payload, signupCode: this.urlParameter.sc } : { ...payload };
       payload = has(this.urlParameter, 'utmSource') ? { ...payload, utmSource: this.urlParameter.utmSource } : { ...payload };
       payload = has(this.urlParameter, 'utmsource') ? { ...payload, utmSource: this.urlParameter.utmsource } : { ...payload };
+      payload = has(this.urlParameter, 'utm_source') ? { ...payload, utmSource: this.urlParameter.utm_source } : { ...payload };
+      payload = has(this.urlParameter, 'adid') ? { ...payload, utmSource: `${payload.utmSource}&&adid=${this.urlParameter.adid}` } : { ...payload };
     }
     payload.email = payload.email.toLowerCase();
     return new Promise((resolve, reject) => {

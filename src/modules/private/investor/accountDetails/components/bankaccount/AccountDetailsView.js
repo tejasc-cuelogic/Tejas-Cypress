@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
 import { Button, Item, Grid, Card } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
@@ -10,13 +9,15 @@ import { LINKED_ACCOUND_STATUS } from '../../../../../../constants/account';
 import { bankAccountActions } from '../../../../../../services/actions';
 import FrozenAccountModal from '../../FrozenAccountModal';
 import NSImage from '../../../../../shared/NSImage';
+import { DataFormatter } from '../../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('bankAccountStore', 'transactionStore', 'uiStore', 'userDetailsStore', 'accountStore')
 @withRouter
 @observer
 export default class AccountDetailsView extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { accountDetails, accountType } = this.props;
     const { setFieldValue } = this.props.userDetailsStore;
     const investorAccount = this.props.location.pathname.includes('individual') ? 'individual' : this.props.location.pathname.includes('ira') ? 'ira' : 'entity';
@@ -107,7 +108,7 @@ export default class AccountDetailsView extends Component {
                   </Item.Extra>
                   <Item.Header>
                     {
-                      moment(accountDetails.dateLinked || accountDetails.dateRequested).format('MM/DD/YYYY')
+                      DataFormatter.getDateAsPerTimeZone((accountDetails.dateLinked || accountDetails.dateRequested), true, false, false)
                     }
                   </Item.Header>
                 </Item.Content>

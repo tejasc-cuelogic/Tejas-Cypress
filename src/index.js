@@ -5,11 +5,12 @@ import ReactDOM from 'react-dom';
 import bugsnagReact from '@bugsnag/plugin-react';
 import { BrowserRouter } from 'react-router-dom';
 import promiseFinally from 'promise.prototype.finally';
-import { useStrict } from 'mobx';
+import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
 import App from './App';
 import * as stores from './services/stores';
 import { ErrorBoundry as CustomErrorBoundry } from './helper';
+import { REACT_APP_DEPLOY_ENV } from './constants/common';
 
 // Set the default error boundry to the customErrorBoundry
 // and reassign it if one from Bugsnag is present
@@ -29,10 +30,12 @@ if (process.env.REACT_APP_BUG_SNAG_KEY) {
 }
 
 // For easier debugging
-window.APP_STATE = stores;
+if (['localhost', 'develop', 'dev', 'predev', 'review'].includes(REACT_APP_DEPLOY_ENV)) {
+  window.APP_STATE = stores;
+}
 
 promiseFinally.shim();
-useStrict(true);
+configure({ enforceActions: true });
 
 ReactDOM.render(
   <Provider {...stores}>

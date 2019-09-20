@@ -9,8 +9,9 @@ import { FormInput, FormDropDown, MaskedInput } from '../../../../../../theme/fo
 @withRouter
 @observer
 export default class AuditBoxFolder extends Component {
-  componentWillMount() {
-    this.setState({ result: '' });
+  constructor(props) {
+    super(props);
+    this.state = { result: '' };
     this.props.dataStore.resetForm('AUDITBOXFOLDER_FRM');
     this.props.dataStore.inProgress.auditBoxFolder = false;
   }

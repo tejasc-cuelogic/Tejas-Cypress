@@ -14,7 +14,8 @@ export default class Insights extends Component {
     sortAsc: false,
   };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.params && this.props.match.params.id) {
       const id = this.props.match.params.id === 'all' ? null : this.props.match.params.id;
       this.props.articleStore.requestAllArticles(true, false, id);

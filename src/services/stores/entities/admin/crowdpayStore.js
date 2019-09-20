@@ -1,10 +1,11 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { isArray, get, filter as lodashFilter, findIndex, find } from 'lodash';
+import { isArray, get, filter as lodashFilter, findIndex, find, omit, has } from 'lodash';
+import cleanDeep from 'clean-deep';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
-import { getCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountValidate, createIndividualAccount, getDecryptedGoldstarAccountNumber } from '../../queries/CrowdPay';
+import { FormValidator as Validator, ClientDb } from '../../../../helper';
+import { getCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountDecline, crowdPayAccountValidate, createIndividualAccount, getDecryptedGoldstarAccountNumber } from '../../queries/CrowdPay';
 import { crowdPayAccountNotifyGs } from '../../queries/account';
 import { FILTER_META, CROWDPAY_FILTERS, CONFIRM_CROWDPAY, CROWDPAY_ACCOUNTS_STATUS } from '../../../constants/crowdpayAccounts';
 import Helper from '../../../../helper/utility';
@@ -58,6 +59,7 @@ export class CrowdpayStore {
     EMAIL: crowdPayAccountNotifyGs,
     APPROVE: crowdPayAccountReview,
     DECLINE: crowdPayAccountReview,
+    ACCOUNT_DECLINE: crowdPayAccountDecline,
     VALIDATE: crowdPayAccountValidate,
     CREATEACCOUNT: createIndividualAccount,
   }
@@ -158,10 +160,8 @@ export class CrowdpayStore {
             this.resetPagination();
             this.allCrowdpayData = [];
           }
-          if (!initialState && !this.canTriggerNextPage) {
-            this.isLazyLoading = false;
-          }
           this.requestState.resultCount = get(this.data, 'data.getCrowdPayUsers.resultCount');
+          this.setData('isLazyLoading', this.canTriggerNextPage);
           this.appendCrowdPayData();
           this.requestState.search.accountType = accountType;
           this.setCrowdpayAccountsSummary();
@@ -231,9 +231,16 @@ export class CrowdpayStore {
     const searchparams = { ...this.requestState.search };
     if (name === 'accountCreateFromDate' || name === 'accountCreateToDate') {
       if (moment(value.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-        searchparams[name] = value ? DataFormatter.getDateForApiFiltering(value.formattedValue, true, name, false) : '';
+        // searchparams[name] = value ? DataFormatter.getDateForApiFiltering(value.formattedValue, true, name, false) : '';
+        searchparams[name] = value ? name === 'accountCreateFromDate' ? moment(new Date(`${value.formattedValue} 00:00:00`)).toISOString() : moment(new Date(`${value.formattedValue} 23:59:59`)).toISOString() : '';
         this.requestState.search = searchparams;
         this.initiateSearch(searchparams);
+      } else {
+        delete searchparams[name];
+        this.requestState.search = searchparams;
+        if (!has(this.requestState.search, 'accountCreateFromDate') && !has(this.requestState.search, 'accountCreateToDate')) {
+          this.initiateSearch(searchparams);
+        }
       }
     } else {
       const srchParams = { ...this.requestState.search };
@@ -276,6 +283,8 @@ export class CrowdpayStore {
       };
     } else if (ctaAction === 'CREATEACCOUNT') {
       variables.accountType = types[this.requestState.type];
+    } else if (ctaAction === 'ACCOUNT_DECLINE') {
+      variables.reason = commentData.justifyDescription;
     }
     const accountStatuses = {
       DECLINE: CROWDPAY_ACCOUNTS_STATUS.FROZEN,
@@ -403,11 +412,14 @@ export class CrowdpayStore {
 
   @action
   reset = () => {
+    this.requestState.search.keyword = '';
     this.resetData();
+    this.requestState.search.accountStatus = undefined;
     this.FILTER_FRM = Validator.prepareFormObject(FILTER_META);
     this.isLazyLoading = true;
   }
 
+  @action
   resetData = () => {
     this.resetPagination();
     this.requestState.requestTriggerPage = 1;
@@ -434,6 +446,10 @@ export class CrowdpayStore {
         reject();
       });
   });
+
+  @computed get filterCount() {
+    return Object.keys(omit(cleanDeep(toJS(this.requestState.search)), 'accountType')).length;
+  }
 }
 
 export default new CrowdpayStore();

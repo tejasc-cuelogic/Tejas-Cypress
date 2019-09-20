@@ -3,15 +3,16 @@ import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { Modal, Comment, Label, Form, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import { FormTextarea } from '../../../../../theme/form';
+import { DataFormatter } from '../../../../../helper';
 
 @inject('messageStore')
 @observer
 class CommentsReplyModal extends Component {
   state={ readMore: false }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.messageStore.resetMessageForm();
     this.props.messageStore.setDataValue('currentMessageId', !this.props.match.params.messageType ? this.props.match.params.id : null);
     this.props.messageStore.setDataValue('currentOfferingId', this.props.campaignId);
@@ -51,7 +52,7 @@ class CommentsReplyModal extends Component {
 <Comment className="issuer-comment">
                 <Comment.Content>
                   <Comment.Author>{get(message, 'createdUserInfo.info.firstName')} {this.props.issuerId === get(message, 'createdUserInfo.id') && <Label color="blue" size="mini">ISSUER</Label>}</Comment.Author>
-                  <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(date).format('ll')}</span></Comment.Metadata>
+                  <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(date, true, true, false)}</span></Comment.Metadata>
                   <Comment.Text className="mt-20">
                     {this.state.readMore === message.id
                       ? message.comment : message.comment.length > readMoreLength ? `${message.comment.substr(0, readMoreLength)}...` : message.comment.substr(0, readMoreLength)}

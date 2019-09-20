@@ -2,7 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { isArray, get, forOwn, filter, find, findIndex, has } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { transferRequestAdminSync, getTransactions, transferRequestAdminApprove, transferRequestAdminDecline, transferRequestAdminVerified, transactionFailed } from '../../queries/transaction';
+import { transferRequestAdminSync, getTransactions, transferRequestAdminApprove, transferRequestAdminVerified, declineTransferRequest } from '../../queries/transaction';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { ClientDb, FormValidator as Validator } from '../../../../helper';
@@ -14,9 +14,9 @@ export class TransactionsStore {
 
   ctHandler = {
     Approved: transferRequestAdminApprove,
-    Declined: transferRequestAdminDecline,
+    Declined: declineTransferRequest,
     Verified: transferRequestAdminVerified,
-    Failed: transactionFailed,
+    Failed: declineTransferRequest,
     Sync: transferRequestAdminSync,
   }
 
@@ -117,9 +117,6 @@ export class TransactionsStore {
       },
     });
   }
-
-  @computed
-
 
   @action
   setTabCount = (countObj) => {
@@ -255,7 +252,8 @@ export class TransactionsStore {
     const searchparams = { ...this.requestState.search };
     if (name === 'dateFilterStart' || name === 'dateFilterStop') {
       if (moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-        searchparams[name] = valueObj ? moment(new Date(valueObj.formattedValue)).add(1, 'day').toISOString() : '';
+        // searchparams[name] = valueObj ? moment(new Date(valueObj.formattedValue)).add(1, 'day').toISOString() : '';
+        searchparams[name] = valueObj ? name === 'dateFilterStart' ? moment(new Date(`${valueObj.formattedValue} 00:00:00`)).toISOString() : moment(new Date(`${valueObj.formattedValue} 23:59:59`)).toISOString() : '';
         this.requestState.search = searchparams;
         this.initRequest(this.transactionStatus);
       } else {

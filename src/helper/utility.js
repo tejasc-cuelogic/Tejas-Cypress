@@ -43,7 +43,7 @@ export class Utility {
     regex => (window.location.href.match(new RegExp(regex)) !== null),
   )
 
-  matchRegexWithString = (regex, str) => str.match(new RegExp(regex)) !== null
+  matchRegexWithString = (regex, str) => str.match(new RegExp(regex, 'i')) !== null
 
   guid = () => {
     function s4() {
@@ -199,7 +199,7 @@ export class Utility {
 
   downloadCSV = (params) => {
     try {
-      const parser = new Parser({ fields: params.fields, quote: params.quote || '', delimiter: params.delimiter || '\t' });
+      const parser = new Parser({ fields: params.fields, quote: params.quote || '' });
       const csv = parser.parse(params.data);
       const uri = `data:text/csv;charset=utf-8,${escape(csv)}`;
       const link = document.createElement('a');
@@ -272,7 +272,7 @@ export class Utility {
       htmlContent.classList.remove('hide-content');
       customTitle.classList.add('hide-content');
       toggleButtonText.innerHTML = 'Collapse ';
-      arrowText.innerHTML = '&#9650';
+      arrowText.innerHTML = '&#9652';
     } else {
       htmlContent.classList.add('hide-content');
       htmlContent.classList.remove('read-content');
@@ -288,6 +288,15 @@ export class Utility {
       }
     }
   };
+
+  processImageFileName = (originalFileName, deviceInfo) => {
+    const fileNameSplit = originalFileName.split('.');
+    const fileExt = fileNameSplit.pop();
+    const fileName = fileNameSplit.join('.');
+    const { isMobile, isTablet } = deviceInfo;
+    const prepName = res => `${fileName}${res ? `__${res}` : ''}.${fileExt}`;
+    return isMobile ? prepName(640) : isTablet ? prepName(1024) : prepName(1920);
+  }
 }
 
 export default new Utility();

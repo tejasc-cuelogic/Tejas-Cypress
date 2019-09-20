@@ -9,10 +9,11 @@ import { Logo, FieldError } from '../../../theme/shared';
 @withRouter
 @observer
 class DevPassProtected extends Component {
-  state = { password: '', error: '' };
+  state = { password: '', error: '', previewPassLoader: false };
 
-  componentWillMount() {
-    this.setState({ password: '', error: '' });
+  constructor(props) {
+    super(props);
+    this.state = { password: '', error: '' };
   }
 
   submit = () => {
@@ -31,11 +32,15 @@ class DevPassProtected extends Component {
   }
 
   authPreviewOffer = () => {
-    if (this.state.password === this.props.previewPassword) {
-      this.props.authPreviewOffer(true, this.state.password);
-    } else {
-      this.setState({ error: 'Entered password is invalid, please try again.' });
-    }
+    this.setState({ previewPassLoader: true });
+    this.props.authStore.validateOfferingPreviewPassword(this.props.offeringId, this.state.password).then((status) => {
+      if (status) {
+        this.props.authPreviewOffer(true, this.state.password);
+      } else {
+        this.setState({ error: 'Entered password is invalid, please try again.' });
+      }
+      this.setState({ previewPassLoader: false });
+    }).catch(() => this.setState({ previewPassLoader: false }));
   }
 
   render() {
@@ -59,7 +64,7 @@ class DevPassProtected extends Component {
               />
               <FieldError error={this.state.error} />
               <div className="center-align">
-                <Button disabled={!this.state.password} primary size="large" className="very relaxed">{this.props.offerPreview ? 'Continue' : 'Log in'}</Button>
+                <Button disabled={!this.state.password} primary size="large" className="very relaxed" loading={this.state.previewPassLoader}>{this.props.offerPreview ? 'Continue' : 'Log in'}</Button>
               </div>
             </Form>
           </Modal.Content>

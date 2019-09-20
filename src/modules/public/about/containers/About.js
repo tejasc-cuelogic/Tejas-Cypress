@@ -12,9 +12,10 @@ const getModule = component => lazy(() => import(`../components/${component}`));
 @inject('navStore', 'userStore')
 @observer
 class About extends Component {
-  componentWillMount() {
-    if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/mission`);
+  constructor(props) {
+    super(props);
+    if (props.match.isExact) {
+      props.history.replace(`${props.match.url}/mission`);
     }
   }
 

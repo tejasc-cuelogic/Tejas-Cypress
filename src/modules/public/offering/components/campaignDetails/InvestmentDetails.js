@@ -11,7 +11,8 @@ import Helper from '../../../../../helper/utility';
 const isMobile = document.documentElement.clientWidth < 992;
 @inject('campaignStore', 'navStore')
 class InvestmentDetails extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.campaignStore.calculateTotalPaymentData();
     if (!this.props.newLayout) {
       window.addEventListener('scroll', this.handleOnScroll);
@@ -68,7 +69,7 @@ class InvestmentDetails extends Component {
         {this.props.newLayout
         && (
         <>
-        <Header as="h3" className={`${this.props.newLayout ? 'mt-40' : ''} ${!isMobile ? 'mb-40' : 'mb-20'} anchor-wrap`}>
+        <Header as="h3" className={`${this.props.newLayout ? 'mt-40 mb-30' : ''} ${!isMobile ? 'mb-40' : 'mb-20'} anchor-wrap`}>
           Investment Terms
           <span className="anchor" id="key-terms" />
         </Header>
@@ -82,8 +83,7 @@ class InvestmentDetails extends Component {
         {campaignStatus.useOfProcceds
         && (
           <>
-          <Divider section hidden />
-          <Header as="h3" className={`${isMobile ? 'mb-20' : 'mb-30'} ${this.props.newLayout ? '' : 'mt-20'}mt-20 anchor-wrap`}>
+          <Header as="h3" className={`${this.props.newLayout && isMobile ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : isMobile ? 'mb-20 mt-20' : 'mb-30 mt-20'} anchor-wrap`}>
           Use of Proceeds
           <span className="anchor" id="use-of-proceeds" />
         </Header>

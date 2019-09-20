@@ -6,7 +6,8 @@ import HtmlEditor from '../../../../../shared/HtmlEditor';
 @inject('educationStore')
 @observer
 export default class Details extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.educationStore.getOne(this.props.module, this.props.match.params.slug);
   }
 

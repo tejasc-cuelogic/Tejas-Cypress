@@ -22,7 +22,8 @@ const getModule = (component) => {
 
 
 export default class ProfileSettings extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/profile-data`);
     }

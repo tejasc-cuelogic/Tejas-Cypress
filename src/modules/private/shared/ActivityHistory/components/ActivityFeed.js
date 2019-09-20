@@ -4,6 +4,7 @@ import { Feed, Transition } from 'semantic-ui-react';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import DateTimeFormat from '../../../../../theme/shared/src/DateTimeFormat';
 import NSImage from '../../../../shared/NSImage';
+import { DataFormatter } from '../../../../../helper';
 
 const ActivityFeed = ({ loading, activities }) => (
   <Transition.Group animation="glow" className="activities" as={Feed} duration={900}>
@@ -33,7 +34,7 @@ const ActivityFeed = ({ loading, activities }) => (
                   ? `${a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.firstName} 
                 ${a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.lastName}`
                   : 'NextSeed Notifications' }
-                <DateTimeFormat format="(M/D/YYYY   |   h:mm a)" datetime={a.activityDate} />
+                <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone((a.activityDate), true, false, false, 'MM/DD/YYYY  |  HH:mm:ssA')} />
               </Feed.Meta>
               <Feed.Summary>{a.activityTitle}</Feed.Summary>
               <Feed.Extra text>{a.activity}</Feed.Extra>

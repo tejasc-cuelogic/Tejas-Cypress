@@ -1,6 +1,6 @@
 import React, { Component, Suspense, lazy } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Link } from 'react-router-dom';
 import { Item, Header, Button, Icon, Modal, Card, Confirm } from 'semantic-ui-react';
 import { intersection, isEmpty, includes, get } from 'lodash';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -39,13 +39,13 @@ const navMeta = [
 @inject('userStore', 'userDetailsStore', 'uiStore', 'bankAccountStore', 'accountStore')
 @observer
 export default class AccountDetails extends Component {
-  state = {
-    errorMsg: '',
-    copied: false,
-    showConfirm: false,
-  }
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      errorMsg: '',
+      copied: false,
+      showConfirm: false,
+    };
     if ((this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId)) {
       this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
       this.props.accountStore.getInvestorCloseAccounts(this.props.match.params.userId);
@@ -94,11 +94,10 @@ export default class AccountDetails extends Component {
     if (roles.includes('investor')) {
       roles = [...roles, ...details.roles.map(r => r.name)];
     }
-    const isProd = ['production', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV);
     let navItems = navMeta.filter(n => ((!n.accessibleTo || n.accessibleTo.length === 0
         || intersection(n.accessibleTo, roles).length > 0))
       && (!n.env || n.env.length === 0 || intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
-    navItems = isProd || sortedNavAccounts.length === 0 ? navItems.filter(n => (n.component !== 'ClosedAccount')) : navItems;
+    navItems = sortedNavAccounts.length === 0 ? navItems.filter(n => (n.component !== 'ClosedAccount')) : navItems;
     const { info } = details;
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles,
@@ -132,8 +131,9 @@ export default class AccountDetails extends Component {
                   </Header>
                   <Button.Group floated="right">
                     {isFullUser
-                      && <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} onClick={() => this.handleConfirmModal(true)} content={`${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'} Delete Profile`} />
+                      && <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} as={Link} to={`${this.props.match.url}/delete/${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'}`} content={`${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'} Delete Profile`} />
                     }
+                    {/* <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} onClick={() => this.handleConfirmModal(true)} content={`${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'} Delete Profile`} /> */}
                     <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
                       <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
                     </Button>

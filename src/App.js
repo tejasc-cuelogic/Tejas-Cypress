@@ -13,7 +13,7 @@ import Public from './modules/public';
 import SecureGateway from './modules/public/shared/SecureGateway';
 import { authActions, activityActions } from './services/actions';
 import MetaTagGenerator from './modules/shared/MetaTagGenerator';
-import { userIdleTime } from './constants/common';
+import { userIdleTime, NEXTSEED_BOX_URL } from './constants/common';
 /**
  * Main App
  */
@@ -40,7 +40,7 @@ const metaTagsData = [
 ];
 const isMobile = document.documentElement.clientWidth < 768;
 const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/'];
-@inject('userStore', 'commonStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
+@inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
 class App extends Component {
@@ -48,7 +48,13 @@ class App extends Component {
     authChecked: false,
   };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    window.addEventListener('resize', this.handleResize);
+    this.props.uiStore.setFieldvalue('responsiveVars', this.getSizes());
+  }
+
+  componentDidMount() {
     const { location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
     if (location.pathname.endsWith('/') && !this.props.location.hash) { // resolved trailing slash issue with this...
@@ -70,13 +76,9 @@ class App extends Component {
       }).finally(() => {
         this.setState({ authChecked: true });
       });
-  }
-
-  componentDidMount() {
     if (this.props.uiStore.devBanner) {
       activityActions.log({ action: 'APP_LOAD', status: 'SUCCESS' });
     }
-
     if (window.analytics) {
       window.analytics.page();
     }
@@ -103,6 +105,7 @@ class App extends Component {
     if (this.props.location !== prevProps.location) {
       this.onRouteChanged({ oldLocation: prevProps.location, newLocation: this.props.location });
     }
+
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) {
         // console.log('Browser tab is hidden');
@@ -135,10 +138,41 @@ class App extends Component {
       };
       this.props.navStore.setNavStatus(calculations, 'main');
     }
-    // if (window.analytics) {
-    //   window.analytics.page();
-    // }
+
+    if ((sessionStorage.getItem('isBoxFirewalled') !== 'true' && !this.props.authStore.isBoxApiChecked)) {
+      sessionStorage.setItem('isBoxFirewalled', false);
+      this.isBoxFirewalled().catch(() => {
+        sessionStorage.setItem('isBoxFirewalled', true);
+      });
+      this.props.authStore.setFieldvalue('isBoxApiChecked', true);
+    }
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  getSizes = () => ({
+    isMobile: document.documentElement.clientWidth < 768,
+    isTablet: document.documentElement.clientWidth >= 768
+    && document.documentElement.clientWidth < 992,
+  });
+
+  handleResize = () => {
+    this.props.uiStore.setFieldvalue('responsiveVars', this.getSizes());
+  }
+
+  isBoxFirewalled = () => new Promise((resolve, reject) => {
+    const testURL = NEXTSEED_BOX_URL;
+    const myInit = {
+      method: 'HEAD',
+      mode: 'no-cors',
+    };
+    const myRequest = new Request(testURL, myInit);
+    fetch(myRequest).catch(() => {
+      reject();
+    });
+  });
 
   onIdle = () => {
     if (this.props.authStore.isUserLoggedIn) {
@@ -186,6 +220,7 @@ class App extends Component {
   render() {
     const { location } = this.props;
     const { authChecked } = this.state;
+    const { isTablet } = this.props.uiStore.responsiveVars;
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {
       return (
         <Route path="/secure-gateway" component={SecureGateway} />
@@ -216,7 +251,7 @@ class App extends Component {
 />
         )
         }
-        <MetaTagGenerator metaTagsData={metaTagsData} />
+        <MetaTagGenerator isMobile={isTablet} metaTagsData={metaTagsData} />
         {this.props.authStore.devPasswdProtection
           ? <Route exact path="/password-protected" component={DevPassProtected} /> : (
             <Layout>

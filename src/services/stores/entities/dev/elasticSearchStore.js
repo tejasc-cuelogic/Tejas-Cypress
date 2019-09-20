@@ -1,8 +1,8 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { get, sortBy } from 'lodash';
+import { get, sortBy, includes } from 'lodash';
 import graphql from 'mobx-apollo';
 import * as elasticSearchQueries from '../../queries/elasticSearch';
-import { generateInvestorFolderStructure, storageDetailsForInvestor } from '../../queries/data';
+import { generateInvestorFolderStructure, storageDetailsForInvestor, syncEsDocument } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
@@ -122,6 +122,30 @@ export class ElasticSearchStore {
         this.setFieldValue('inProgress', false);
       });
   });
+
+  @action
+  syncEsDocument = (params) => {
+    this.setFieldValue('inProgress', params.targetIndex);
+    const syncESVarible = params.indexAliasName === 'ACCREDITATIONS' ? { documentId: params.documentId, targetIndex: params.targetIndex, userId: params.userId, accountType: params.accountType } : includes(['CROWDPAY', 'LINKEDBANK'], params.indexAliasName) ? { documentId: params.documentId, targetIndex: params.targetIndex, userId: params.userId } : { documentId: params.documentId, targetIndex: params.targetIndex };
+    const getESVariable = { indexAliasName: params.indexAliasName, random: params.documentId };
+    client
+      .mutate({
+        mutation: syncEsDocument,
+        variables: syncESVarible,
+        refetchQueries: [{
+          query: elasticSearchQueries.getESAudit,
+          variables: getESVariable,
+        }],
+      })
+      .then(() => {
+        Helper.toast('Your request is processed successfully.', 'success');
+        this.setFieldValue('inProgress', false);
+      })
+      .catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        this.setFieldValue('inProgress', false);
+      });
+  }
 
   @action
   getESAuditPara = (indexAliasName) => {

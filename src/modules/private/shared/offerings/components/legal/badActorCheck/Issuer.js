@@ -8,7 +8,8 @@ import ButtonGroupType2 from '../../ButtonGroupType2';
 @inject('offeringCreationStore', 'userStore')
 @observer
 export default class Issuer extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const {
       getOfferingBac,
       currentOfferingId,

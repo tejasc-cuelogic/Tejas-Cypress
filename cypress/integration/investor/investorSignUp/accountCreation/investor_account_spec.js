@@ -8,7 +8,7 @@ import {
        } from './utility/investorAccount.utlity';
 import { registerApiCall } from '../../../common.utility';
 
-describe('Account Creation', () => {
+describe.skip('Account Creation', () => {
   before(() => {
     investorFlowProcess();
   });
@@ -20,6 +20,10 @@ describe('Account Creation', () => {
 
   afterEach(() => {
     cy.saveLocalStorage();
+  });
+
+  after(() => {
+    cy.deleteUser();
   });
 
   it('should successfully link bank with manual process', () => {

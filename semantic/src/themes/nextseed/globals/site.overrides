@@ -258,6 +258,9 @@ h6{
 .break-text {
 	word-break: break-all;
 }
+.full-width{
+	width: 100%;
+}
 //	normal link styles
 a:not(.item), a:not(.ui.button){
 	color:@link-color;
@@ -318,6 +321,9 @@ a{
 .bg-offwhite {
 	background-color: @neutral-offwhite;
 	// padding:@14px @20px;       commented to resolve on public homepage
+}
+.bg-midwhite{
+	background-color: @neutral-midwhite;
 }
 .green-block {
 	background-color: @primary-one;
@@ -646,6 +652,9 @@ footer{
 	padding: @20px @20px 0;
 	@media only screen and (max-width : @largestTabletScreen){
 		padding: @50px @32px @36px;
+		&.offering-intro-v2{
+			padding: @50px @22px @36px;
+		}
 	}
 	h4.ui.header {
 		position: relative;
@@ -755,10 +764,6 @@ footer{
 		margin: 0;
 	}
 }
-.explore-campaign-button {
-	margin-top: 60px;
-	text-align: center;
-}
 .featured-section, .reward-tier{
 	background-color: @neutral-offwhite;
 	.ui.stackable.grid>.column:not(.row) {
@@ -819,12 +824,6 @@ footer{
 			width: 100%;
 			margin-top: @14px;
 		}
-	}
-}
-.business-learn-more {
-	p {
-		text-align: left;
-		margin-left: 56px;
 	}
 }
 .content-spacer {
@@ -1304,6 +1303,9 @@ a.icon-link {
 				border-radius: 50%;
 				height: 60px;
 				width: 60px !important;
+				.sb-avatar .sb-avatar__text{
+					font-size: @24px;
+				}
 			}
 			>.image+.content {
 				margin-left: @15px;
@@ -1499,30 +1501,6 @@ a.icon-link {
 		padding:@20px @10px;
 	}
 }
-
-div.login-form {
-	height: 100%;
-	.column{
-		max-width:380px;
-	}
-	h1.header{
-		margin-bottom:@20px;
-		>span{
-			font-size:@18px;
-			color:@tertiary-text;
-		}
-	}
-	.note{
-		text-align:center;
-		color:@tertiary-text;
-	}
-	ul.error-messages{
-		list-style-type:none;
-		padding:0;
-		text-align:left;
-	}
-}
-
 //	Admin Page Content Styles
 
 //	Page Header Styles
@@ -2084,6 +2062,7 @@ ol.progtrckr{
 		}
 		>.amount{
 			min-width:calc(100% / 7);
+			width: 150px;
 			padding:0 1rem;
 			position:absolute;
 			top:15px;
@@ -2539,6 +2518,9 @@ p.check-extra-info{
 		height: @25px;
 		width: auto;
 	}
+	&.public-header-section-v2 .sign-in{
+		right: 22px;
+	}
 }
 .proven-result-section .ui.grid>* {
 	padding: 0;
@@ -2555,6 +2537,9 @@ p.check-extra-info{
 	.icon.ns-hamburger {
 		font-size: @16px;
 		color: @neutral-middark;
+	}
+	&.full-logo-v2{
+		left: 22px;
 	}
 }
 //	Public responsive end
@@ -2650,23 +2635,28 @@ input[type='range']::-webkit-slider-thumb {
 		margin-top: 0;
 	}
 }
-.about-carousel .slick-slider .slick-slide{
-	display:flex;
-	>div{
-		position:relative;
-		flex:1;
-		padding-top:56.25%;
-	}
-	.about-gallery-bg{
-		position:absolute;
-		top:0;
-		right:0;
-		bottom:0;
-		left:0;
-		background-repeat:no-repeat;
-		background-size:cover;
-		background-position:center center;
-	}
+// .about-carousel .slick-slider .slick-slide{
+// 	display:flex;
+// 	>div{
+// 		position:relative;
+// 		flex:1;
+// 		padding-top:56.25%;
+// 	}
+// 	.about-gallery-bg{
+// 		position:absolute;
+// 		top:0;
+// 		right:0;
+// 		bottom:0;
+// 		left:0;
+// 		background-repeat:no-repeat;
+// 		background-size:cover;
+// 		background-position:center center;
+// 	}
+// }
+.ui.image.about-gallery-bg{
+	max-height: 350px;
+	width: auto;
+	margin: auto;
 }
 .carousel-counter {
 	position: absolute;
@@ -2948,6 +2938,12 @@ table.css-wu4c77-diff-container {
 	padding: @30px;
 	&.padded{
 		padding: @40px;
+		@media only screen and (max-width: @largestTabletScreen){
+			padding: @30px @14px;
+		}
+	}
+	@media only screen and (max-width: @largestTabletScreen){
+		padding: @30px @14px;
 	}
 }
 .offering-layout-menu{
@@ -2963,3 +2959,12 @@ table.css-wu4c77-diff-container {
 	}
 }
 // Offering new design - 1972 - End
+.json-text{
+	overflow-x:scroll; 
+}
+// HTML editor images placeholder start
+.ui.placeholder{
+    min-height: 200px;
+    margin: auto;
+}
+// HTML editor images placeholder end

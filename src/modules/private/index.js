@@ -9,7 +9,7 @@ import { InlineLoader } from '../../theme/shared';
 import SidebarLeftOverlay from '../../theme/layout/SidebarLeftOverlay';
 import NotFound from '../shared/NotFound';
 
-@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'accountStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'accountStore', 'referralsStore')
 @withRouter
 @observer
 export default class Private extends React.Component {
@@ -17,9 +17,13 @@ export default class Private extends React.Component {
     // if (window.analytics) {
     //   window.analytics.page();
     // }
+    const { userStore, referralsStore, userDetailsStore } = this.props;
+    const { currentUser } = userDetailsStore;
     if (!this.props.authStore.isUserLoggedIn) {
       this.props.uiStore.setRedirectURL(this.props.history.location);
       this.props.history.push('/login');
+    } else if (userStore.isInvestor && get(userDetailsStore, 'signupStatus.activeAccounts') && get(userDetailsStore, 'signupStatus.activeAccounts').length) {
+      referralsStore.getUserReferralDetails(get(currentUser, 'accessToken.payload.username'), false);
     }
   }
 

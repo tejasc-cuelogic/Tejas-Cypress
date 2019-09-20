@@ -4,7 +4,7 @@ import graphql from 'mobx-apollo';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
 import money from 'money-math';
-import { get, includes, orderBy, isArray, filter } from 'lodash';
+import { get, includes, orderBy, isArray, filter, forEach } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { ClientDb, FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
@@ -75,6 +75,8 @@ export class TransactionStore {
   @observable db = [];
 
   @observable apiCall = false;
+
+  @observable agreementIds = [];
 
   @action
   setFieldValue = (field, value) => {
@@ -157,7 +159,7 @@ export class TransactionStore {
   @computed get accountTransactions() {
     let transactions = (this.data.data && toJS(this.data.data.getAccountTransactions
       && this.data.data.getAccountTransactions.transactions)) || [];
-    transactions = transactions.map(t => ({ ...t, date: DataFormatter.formatedDate(t.date) }));
+    transactions = transactions.map(t => ({ ...t, date: DataFormatter.getDateAsPerTimeZone(t.date, false, false, false) }));
     return this.sortBydate(transactions);
   }
 
@@ -203,8 +205,10 @@ export class TransactionStore {
       ClientDb.filterData('type', transactionType);
     }
     if (dateRange && dateRange !== 'all') {
-      const sDate = moment(new Date()).subtract(dateRange, 'days');
-      const eDate = moment(new Date());
+      // const sDate = moment(new Date()).subtract(dateRange, 'days');
+      // const eDate = moment(new Date());
+      const sDate = DataFormatter.getCurrentCSTMoment().subtract(dateRange, 'days');
+      const eDate = DataFormatter.getCurrentCSTMoment();
       ClientDb.filterByDate(sDate, eDate, 'date', null, true);
     }
     this.db = ClientDb.getDatabase();
@@ -601,6 +605,7 @@ export class TransactionStore {
   getInvestmentsByOfferingId = isAdmin => new Promise((resolve, reject) => {
     const investorDetail = userDetailsStore.getDetailsOfUser;
     const userDetailId = isAdmin ? investorDetail.id : get(userDetailsStore, 'userDetails.id');
+    this.agreementIds = [];
     this.investmentsByOffering = graphql({
       client,
       query: getInvestmentsByUserIdAndOfferingId,
@@ -618,6 +623,7 @@ export class TransactionStore {
           if (get(investmentsByUserIdAndOfferingId, '[0]')) {
             this.setInvestment(get(investmentsByUserIdAndOfferingId, '[0].investmentId'));
           }
+          this.setAgreementIds(data.getInvestmentsByUserIdAndOfferingId);
           resolve();
         }
       },
@@ -670,6 +676,13 @@ export class TransactionStore {
       },
     });
   });
+
+  @action
+  setAgreementIds(investmentsByUser) {
+    forEach(investmentsByUser, (investment) => {
+      this.agreementIds.push(get(investment, 'agreement.agreementId'));
+    });
+  }
 }
 
 export default new TransactionStore();

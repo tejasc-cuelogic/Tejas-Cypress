@@ -2,28 +2,32 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
 import UpdatesTimeline from './UpdatesComponents/UpdatesTimeline';
 import UpdateDetails from './UpdatesComponents/UpdateDetails';
 import { InlineLoader } from '../../../../../../theme/shared';
+import { DataFormatter } from '../../../../../../helper';
 
 @inject('updateStore')
 @observer
 class Updates extends Component {
-  componentWillMount() {
-    this.props.updateStore.initRequest();
+  constructor(props) {
+    super(props);
+    if (!this.props.updateStore.isApiHit) {
+      this.props.updateStore.initRequest();
+    }
   }
 
   render() {
     const { updates, loading } = this.props.updateStore;
     const summary = [];
-    if (updates && updates.length) {
-      updates.map((dataItem, index) => {
+    const filteredUpdates = (updates && updates.length) ? updates.filter(d => d.isVisible) : [];
+    if (filteredUpdates && filteredUpdates.length) {
+      filteredUpdates.map((dataItem, index) => {
         const dateObj = {};
         dateObj.id = index;
         dateObj.title = dataItem.title;
-        dateObj.date = updates[index].updated.date
-          ? moment(updates[index].updated.date).format('ll') : null;
+        dateObj.date = filteredUpdates[index].updated.date
+          ? DataFormatter.getDateAsPerTimeZone(filteredUpdates[index].updated.date, true, true, false) : null;
         return summary.push(dateObj);
       });
     }

@@ -21,6 +21,7 @@ export default class PreQualBusiness extends Component {
     const { hideFields } = this.props;
     return (
       <>
+        <span className="application-scroll" />
         <FormElementWrap
           hideFields={hideFields}
           header="What is your Business Model?*"
@@ -35,7 +36,6 @@ export default class PreQualBusiness extends Component {
             containerclassname="button-radio"
           />
         </FormElementWrap>
-        <div className="application-scroll" />
         <GeneralInformation
           hideFields={hideFields}
           fields={fields}

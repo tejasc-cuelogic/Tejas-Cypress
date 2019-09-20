@@ -5,11 +5,12 @@ import { get } from 'lodash';
 import { Modal, Header, Button, Icon, Divider } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
+@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore', 'investmentLimitStore')
 @withRouter
 @observer
 export default class Congratulation extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.changeInvestment) {
       this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
     } else {
@@ -19,6 +20,7 @@ export default class Congratulation extends React.Component {
 
   componentWillUnmount() {
     this.props.accreditationStore.resetUserAccreditatedStatus();
+    this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
   }
 
   handleCloseModal = () => {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
+import { get, find } from 'lodash';
 import Helper from '../../../../../../helper/utility';
 import LegalDetails from '../../components/identityVerification/LegalDetails';
 import LegalDocuments from '../../components/identityVerification/LegalDocuments';
@@ -10,11 +11,12 @@ import { DataFormatter } from '../../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('uiStore', 'identityStore', 'userStore', 'userDetailsStore')
+@inject('uiStore', 'identityStore', 'userStore', 'userDetailsStore', 'accountStore')
 @withRouter
 @observer
 export default class IdentityVerification extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.identityStore.setCipDetails();
     this.props.uiStore.setErrors(null);
   }
@@ -43,6 +45,7 @@ export default class IdentityVerification extends Component {
 
   handleCloseModal = () => {
     this.props.uiStore.setErrors(null);
+    this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
     this.props.history.push('/app/summary');
   }
 
@@ -72,7 +75,7 @@ export default class IdentityVerification extends Component {
                       route,
                       display,
                     } = this.props.identityStore.userVerficationStatus;
-                    if (key === 'id.success') {
+                    if ((key === 'id.success') || this.props.identityStore.isUserCipOffline) {
                       const { phoneVerification } = this.props.userDetailsStore.signupStatus;
                       const {
                         isCipExpired,
@@ -122,13 +125,17 @@ export default class IdentityVerification extends Component {
     this.props.identityStore.uploadAndUpdateCIPInfo().then(() => {
       if (phoneVerification === 'DONE') {
         const { accountForWhichCipExpired } = this.props.userDetailsStore;
-        const expiredAccountFromLocalStorage = window.sessionStorage.getItem('individualAccountCipExp');
-        if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
-          this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired || expiredAccountFromLocalStorage}`);
+        this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
+        const expiredAccountFromLocalStorage = window.sessionStorage.getItem('AccountCipExp');
+        if (window.sessionStorage.getItem('cipErrorMessage')) {
+          this.submitAccountToProcessing(accountForWhichCipExpired || expiredAccountFromLocalStorage);
+        } else if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
+          this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
+          this.props.identityStore.setFieldValue('signUpLoading', false);
         } else {
           this.props.history.push('/app/summary');
+          this.props.identityStore.setFieldValue('signUpLoading', false);
         }
-        this.props.identityStore.setFieldValue('signUpLoading', false);
       } else {
         this.props.identityStore.startPhoneVerification('NEW', undefined, isMobile).then(() => {
           this.props.identityStore.setFieldValue('signUpLoading', false);
@@ -142,6 +149,19 @@ export default class IdentityVerification extends Component {
       .catch(() => { });
   }
 
+  submitAccountToProcessing = (accountType) => {
+    const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
+    const accountId = get(accountDetails, 'details.accountId');
+    const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
+    this.props.identityStore.setFieldValue('signUpLoading', true);
+    this.props.accountStore.updateToAccountProcessing(accountId, accountvalue).then(() => {
+      this.props.identityStore.setFieldValue('signUpLoading', false);
+      const url = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.showProcessingModal ? `/app/summary/account-creation/${accountType}/processing` : '/app/summary';
+      this.props.history.push(url);
+      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+    });
+  }
+
   handleSubmitIdentityQuestions = (e) => {
     e.preventDefault();
     const { phoneVerification } = this.props.userDetailsStore.signupStatus;
@@ -152,13 +172,17 @@ export default class IdentityVerification extends Component {
         Helper.toast('Identity questions verified.', 'success');
         if (phoneVerification === 'DONE') {
           const { accountForWhichCipExpired } = this.props.userDetailsStore;
-          const expiredAccountFromLocalStorage = window.sessionStorage.getItem('individualAccountCipExp');
-          if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
-            this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired || expiredAccountFromLocalStorage}`);
+          this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
+          const expiredAccountFromLocalStorage = window.sessionStorage.getItem('AccountCipExp');
+          if (window.sessionStorage.getItem('cipErrorMessage')) {
+            this.submitAccountToProcessing(accountForWhichCipExpired || expiredAccountFromLocalStorage);
+          } else if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
+            this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
+            this.props.identityStore.setFieldValue('signUpLoading', false);
           } else {
             this.props.history.push('/app/summary');
+            this.props.identityStore.setFieldValue('signUpLoading', false);
           }
-          this.props.identityStore.setFieldValue('signUpLoading', false);
         } else {
           this.props.identityStore.startPhoneVerification('NEW', undefined, isMobile).then(() => {
             this.props.identityStore.setFieldValue('signUpLoading', false);
@@ -228,7 +252,7 @@ export default class IdentityVerification extends Component {
               ? (
 <LegalIdentityQuestions
   form={ID_VERIFICATION_QUESTIONS}
-  inProgress={inProgress}
+  inProgress={inProgress || signUpLoading}
   close={this.handleCloseModal}
   identityQuestionAnswerChange={identityQuestionAnswerChange}
   onSubmit={this.handleSubmitIdentityQuestions}

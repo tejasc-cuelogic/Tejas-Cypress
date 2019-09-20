@@ -3,7 +3,6 @@ import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Button, Comment, Form, Segment, Header, Label, Divider } from 'semantic-ui-react';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
-import moment from 'moment';
 import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
 import { FormTextarea } from '../../../../../theme/form';
@@ -11,7 +10,7 @@ import HtmlEditor from '../../../../shared/HtmlEditor';
 import { DataFormatter } from '../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 768;
-const isTablet = document.documentElement.clientWidth < 991;
+const isTablet = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'messageStore')
 @withRouter
@@ -21,7 +20,8 @@ class Comments extends Component {
     readMore: false, readMoreInner: false, visible: false, commentId: null, visiblePost: true,
   }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.messageStore.resetMessageForm();
   }
 
@@ -56,8 +56,8 @@ class Comments extends Component {
     }
   }
 
-  send = (scope, campaignSlug, currentMessage) => {
-    this.props.messageStore.createNewComment(scope, campaignSlug, currentMessage);
+  send = (scope, campaignSlug, currentMessage, campaignId) => {
+    this.props.messageStore.createNewComment(scope, campaignSlug, currentMessage, campaignId);
   }
 
   toggleVisibility = (comment = null) => {
@@ -97,7 +97,7 @@ class Comments extends Component {
     const { campaign, commentsMainThreadCount } = this.props.campaignStore;
     const campaignStage = get(campaign, 'stage');
     // const passedProcessingDate = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true) <= 0;
-    const passedProcessingDate = DataFormatter.getDateDifferenceInHours(get(campaign, 'closureSummary.processingDate'), true) <= 0;
+    const passedProcessingDate = DataFormatter.getDateDifferenceInHoursOrMinutes(get(campaign, 'closureSummary.processingDate'), true, true).value <= 0;
     const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull;
     let comments = campaign && campaign.comments;
     const campaignId = campaign && campaign.id;
@@ -111,7 +111,7 @@ class Comments extends Component {
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     return (
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
-        <Header as="h3" className={`${newLayout ? 'mt-40' : 'mt-20 mb-30'} anchor-wrap`}>
+        <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
           Comments
           <span className="anchor" id="comments" />
         </Header>
@@ -137,7 +137,7 @@ class Comments extends Component {
         )}
         {!isRightToPostComment
           ? (
-<section className={`${newLayout ? 'custom-segment mb-0' : ''} center-align mt-30`}>
+<section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
             {loggedInAsInvestor && !accountStatusFull
               ? <p>In order to leave comments, please create any type of account first.</p>
               : <p>In order to leave comments, please sign up and verify your identity.</p>
@@ -150,7 +150,7 @@ class Comments extends Component {
             </Form>
           </section>
           )
-          : (!disablePostComment && !showOnlyOne)
+          : (!disablePostComment)
               && (
               <>
                 { visiblePost
@@ -162,7 +162,7 @@ class Comments extends Component {
                       changed={msgEleChange}
                       containerclassname="secondary"
                     />
-                    <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
+                    <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
                   </Form>
                   ) : ''
                 }
@@ -184,7 +184,7 @@ class Comments extends Component {
                             {(c.createdUserInfo && c.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(c, 'createdUserInfo.info.firstName')}
                             {(c.createdUserInfo && c.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                           </Comment.Author>
-                          <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date')).format('ll')}</span></Comment.Metadata>
+                          <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date'), true, true)}</span></Comment.Metadata>
                           {isUserLoggedIn && !disablePostComment && !showOnlyOne
                           && (
 <Comment.Actions>
@@ -221,7 +221,7 @@ class Comments extends Component {
                                 <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(c.id)}>
                                   Cancel Reply
                                 </Button>
-                                <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
+                                <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
                               </Form>
                               <Divider hidden />
                               <p>
@@ -252,7 +252,7 @@ class Comments extends Component {
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(tc, 'createdUserInfo.info.firstName')}
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                                 </Comment.Author>
-                                <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date')).format('ll')}</span></Comment.Metadata>
+                                <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date'), true, true)}</span></Comment.Metadata>
                                 {isUserLoggedIn && !disablePostComment && !showOnlyOne
                                 && (
 <Comment.Actions>
@@ -292,7 +292,7 @@ class Comments extends Component {
                                       <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(tc.id)}>
                                         Cancel Reply
                                       </Button>
-                                      <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
+                                      <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
                                     </Form>
                                     <Divider hidden />
                                     <p>

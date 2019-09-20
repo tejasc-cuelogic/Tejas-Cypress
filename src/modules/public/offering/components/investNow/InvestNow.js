@@ -15,7 +15,8 @@ import FinancialInfo from './FinancialInfo';
 export default class InvestNow extends React.Component {
   state = { submitLoading: false, isInvestmentUpdate: false };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.campaignStore.isInvestBtnClicked) {
       this.props.history.push(this.props.refLink);
     }
@@ -33,8 +34,13 @@ export default class InvestNow extends React.Component {
     }
     if (this.props.changeInvest) {
       const { offeringId } = this.props.match.params;
+      const matchURL = this.props.match.url;
       this.props.portfolioStore.setFieldValue('currentOfferingId', offeringId);
       this.props.campaignStore.getCampaignDetails(offeringId, true);
+
+      if (matchURL.includes('portfolio')) {
+        this.setState({ isInvestmentUpdate: true });
+      }
     }
   }
 

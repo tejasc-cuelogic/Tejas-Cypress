@@ -14,7 +14,8 @@ const navItems = [
 ];
 
 export default class Statements extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       const navigationItems = navItems;
       this.props.history.replace(`${this.props.match.url}/${navigationItems[0].to}`);

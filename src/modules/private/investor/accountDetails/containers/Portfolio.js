@@ -19,7 +19,7 @@ import ChangeInvestmentLimit from '../../../../public/offering/components/invest
 import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
-@inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore')
+@inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore', 'referralsStore')
 @observer
 export default class Portfolio extends Component {
   state = {
@@ -28,7 +28,8 @@ export default class Portfolio extends Component {
     inActiveItems: [],
   };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { setFieldValue } = this.props.userDetailsStore;
     setFieldValue('currentActiveAccount', accountType);
@@ -110,6 +111,8 @@ export default class Portfolio extends Component {
   render() {
     const { match, portfolioStore, userDetailsStore } = this.props;
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
+    const { referralData } = this.props.referralsStore;
+    const { getActiveAccounts } = userDetailsStore;
     if (portfolioStore.loading) {
       return (
         <>
@@ -157,6 +160,12 @@ export default class Portfolio extends Component {
         // },
       ],
     };
+    if (get(referralData, 'availableCredit') !== '0.00') {
+      const availableCredit = {
+        title: 'Availabe Credit', content: get(referralData, 'availableCredit'), type: 1, info: `Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest. ${getActiveAccounts.length > 1 ? 'Referral credits are shared amongst all of your investment accounts.' : ''}`,
+      };
+      summaryDetails.summary.push(availableCredit);
+    }
     const pendingSorted = getInvestorAccounts && getInvestorAccounts.investments.pending.length ? orderBy(getInvestorAccounts.investments.pending, o => get(o, 'offering.closureSummary.processingDate') && DataFormatter.diffDays(get(o, 'offering.closureSummary.processingDate')), ['asc']) : [];
     const activeSorted = getInvestorAccounts && getInvestorAccounts.investments.active.length ? orderBy(getInvestorAccounts.investments.active, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     let completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];

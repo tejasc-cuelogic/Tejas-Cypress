@@ -10,13 +10,13 @@ import OtherInformation from '../OtherInformation';
 import LockedInformation from '../LockedInformation';
 import UserInvestorDetails from '../../../../../../investor/settings/components/UserInvestorDetails';
 
-@inject('userDetailsStore', 'uiStore', 'referralsStore')
+@inject('userDetailsStore', 'uiStore', 'referralsStore', 'identityStore')
 @withRouter
 @observer
 export default class Basic extends Component {
-  state = { displayMode: true };
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = { displayMode: true };
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false);
     this.props.userDetailsStore.setAddressCheck();
@@ -31,10 +31,24 @@ export default class Basic extends Component {
 
   updateUserData = (e) => {
     e.preventDefault();
-    this.props.userDetailsStore.updateUserProfileForSelectedUser().then(() => {
-      this.setState({ displayMode: true });
-    })
-      .catch(() => this.setState({ displayMode: true }));
+    const ssnValue = this.props.userDetailsStore.USER_BASIC.fields.ssn.value;
+    this.props.uiStore.setProgress();
+    this.props.identityStore.isSsnExist(ssnValue)
+      .then((isSSNPresent) => {
+        if (isSSNPresent) {
+          this.props.userDetailsStore.setSSNErrorMessage('The SSN entered is already in use.');
+        } else {
+          this.props.uiStore.setProgress();
+          this.props.userDetailsStore.updateUserProfileForSelectedUser().then(() => {
+            this.setState({ displayMode: true });
+          })
+            .catch(() => this.setState({ displayMode: true }))
+            .finally(() => {
+              this.props.uiStore.setProgress(false);
+            });
+        }
+        this.props.uiStore.setProgress(false);
+      }).catch(() => { });
   }
 
   render() {

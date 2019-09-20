@@ -75,7 +75,7 @@ class EntityAccountStore {
   maskedGenInfoChange = (values, field) => {
     this.GEN_INFO_FRM = FormValidator.onChange(
       this.GEN_INFO_FRM,
-      { name: field, value: values.floatValue },
+      { name: field, value: values.value },
     );
   }
 
@@ -139,8 +139,10 @@ class EntityAccountStore {
           mutation: submitinvestorAccount,
           variables: payLoad,
         })
-        .then(() => {
-          this.setFieldValue('showProcessingModal', true);
+        .then((res) => {
+          if (Helper.matchRegexWithString(/\bprocessing(?![-])\b/, res.data.submitInvestorAccount)) {
+            this.setFieldValue('showProcessingModal', true);
+          }
           bankAccountStore.resetStoreData();
           this.isFormSubmitted = true;
           Helper.toast('Entity account submitted successfully.', 'success');
@@ -492,6 +494,7 @@ class EntityAccountStore {
         .catch((err) => {
           if (currentStep.name === 'Link bank') {
             bankAccountStore.resetShowAddFunds();
+            bankAccountStore.setPlaidAccDetails({});
           }
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           uiStore.setProgress(false);
@@ -578,8 +581,9 @@ class EntityAccountStore {
           }
           bankAccountStore.validateAddFunds();
           if (account.details.linkedBank) {
-            if (isEmpty(bankAccountStore.plaidAccDetails)) {
-              bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
+            const plaidAccDetails = account.details.linkedBank;
+            if (!bankAccountStore.isAccountPresent) {
+              bankAccountStore.setPlaidAccDetails(plaidAccDetails);
             }
             bankAccountStore.formEntityAddFunds.fields.value.value = account.details.initialDepositAmount;
           } else {

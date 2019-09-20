@@ -103,7 +103,7 @@ class IndividualAccountStore {
     this.createIndividualGoldStarInvestor(payLoad.accountId).then((res) => {
       uiStore.setProgress(false);
       if (res.data.createIndividualGoldStarInvestor) {
-        this.setFieldValue('showProcessingModal', true);
+        this.setFieldValue('showProcessingModal', false);
         Helper.toast('Individual account created successfully.', 'success');
         bankAccountStore.resetStoreData();
         this.isFormSubmitted = true;
@@ -180,6 +180,9 @@ class IndividualAccountStore {
           }))
           .catch(action((err) => {
             this.setFieldValue('apiCall', false);
+            if (currentStep.name === 'Link bank') {
+              bankAccountStore.setPlaidAccDetails({});
+            }
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             uiStore.setProgress(false);
             reject();
@@ -201,7 +204,9 @@ class IndividualAccountStore {
           bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
           if (account.details.linkedBank && isEmpty(bankAccountStore.plaidAccDetails)) {
             const plaidAccDetails = account.details.linkedBank;
-            bankAccountStore.setPlaidAccDetails(plaidAccDetails);
+            if (!bankAccountStore.isAccountPresent) {
+              bankAccountStore.setPlaidAccDetails(plaidAccDetails);
+            }
           } else {
             Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
               const { details } = account;

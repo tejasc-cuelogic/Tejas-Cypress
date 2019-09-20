@@ -1,8 +1,8 @@
+/* eslint-disable no-case-declarations */
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import moment from 'moment';
 import omitDeep from 'omit-deep';
-import { filter, find, get, capitalize } from 'lodash';
+import { filter, find, get, capitalize, isEmpty } from 'lodash';
 import beautify from 'json-beautify';
 import { Form, Card, Header, Divider, Step, Label, Button, Icon, Confirm, Modal, Grid, Table } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
@@ -11,46 +11,50 @@ import { MaskedInput, FormInput } from '../../../../../theme/form';
 import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { FieldError } from '../../../../../theme/shared';
+import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
+import SupplementalAggrements from './SupplementalAggrements';
 
 const closingActions = {
   ENUM1: { label: 'save', ref: 1, enum: 'update' },
-  ENUM2: { label: 'Soft Close Notification', ref: 2, enum: 'SOFT_CLOSE_NOTIFICATION' },
-  ENUM3: { label: 'Confirm Balances', ref: 2, enum: 'CHECK_BALANCE' },
-  ENUM4: { label: 'Issue Credits', ref: 2, enum: 'ISSUE_CREDITS' },
-  ENUM5: { label: 'Fund Escrow', ref: 2, enum: 'FUND_ESCROW' },
+  ENUM2: { label: 'Soft Close Notification', keyToEnable: false, ref: 2, enum: 'SOFT_CLOSE_NOTIFICATION', statusKey: 'softCloseNotification' },
+  ENUM3: { label: 'Confirm Balances', keyToEnable: 'softCloseNotification.status', ref: 2, enum: 'CHECK_BALANCE', statusKey: 'checkBalance' },
+  ENUM4: { label: 'Issue Credits', keyToEnable: 'checkBalance.status', ref: 2, enum: 'ISSUE_CREDITS', statusKey: 'issueCredits' },
+  ENUM5: { label: 'Fund Escrow', keyToEnable: 'issueCredits.status', ref: 2, enum: 'FUND_ESCROW', statusKey: 'fundEscrow' },
   ENUM6: {
-    label: 'Verify Escrow', ref: 3, enum: 'VERIFY_SECURITY_TRANSACTION',
+    label: 'Verify Escrow', keyToEnable: 'fundEscrow.status', ref: 3, enum: 'VERIFY_SECURITY_TRANSACTION', statusKey: 'verifySecurityTransaction',
   },
-  ENUM7: { label: 'Process Notes', ref: 3, enum: 'PROCESS_NOTES' },
-  ENUM8: { label: 'Validate Envelope', ref: 3, enum: 'VALIDATE_NOTES' },
-  ENUM9: { label: 'Finalize Envelope', ref: 3, enum: 'FINALIZE_NOTES' },
-  ENUM10: { label: 'Close', ref: 4, enum: 'close' },
+  ENUM7: { label: 'Process Notes', keyToEnable: false, ref: 3, enum: 'PROCESS_NOTES', statusKey: 'processNotes' },
+  ENUM8: { label: 'Validate Envelope', keyToEnable: 'processNotes.status', ref: 3, enum: 'VALIDATE_NOTES', statusKey: 'validateNotes' },
+  ENUM9: { label: 'Finalize Envelope', keyToEnable: 'validateNotes.status', ref: 3, enum: 'FINALIZE_NOTES', statusKey: 'finalizeNotes' },
+  ENUM10: { label: 'Close', keyToEnable: 'finalizeNotes.status', ref: 4, enum: 'close' },
   ENUM11: {
-    label: 'Hard Close Notification', ref: 4, enum: 'HARD_CLOSE_NOTIFICATION',
+    label: 'Hard Close Notification', keyToEnable: false, ref: 4, enum: 'HARD_CLOSE_NOTIFICATION', statusKey: 'hardCloseNotification',
   },
   ENUM12: {
-    label: 'Export Envelopes', ref: 4, enum: 'EXPORT_ENVELOPES',
+    label: 'Export Envelopes', keyToEnable: 'finalizeNotes.status', ref: 4, enum: 'EXPORT_ENVELOPES', statusKey: 'exportEnvelopes',
   },
 };
 
 @inject('offeringCreationStore', 'offeringsStore', 'uiStore')
 @observer
 export default class Close extends Component {
-  state = {
-    openModal: false,
-    activeStep: 1,
-    confirmContentTxt: 'Are all transactions cleared?  Has it been at least 6 business days since the last deposit for any investment?',
-    cancelButtonTxt: 'No, it has not',
-    confirmButtonTxt: 'Yes, it has',
-    open: false,
-    action: '',
-    confirmed: false,
-    inProgress: false,
-    visibilityStatus: false,
-    actionLabel: '',
-  }
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      openModal: false,
+      activeStep: 1,
+      confirmContentTxt: 'Are all transactions cleared?  Has it been at least 6 business days since the last deposit for any investment?',
+      cancelButtonTxt: 'No, it has not',
+      confirmButtonTxt: 'Yes, it has',
+      open: false,
+      action: '',
+      confirmed: false,
+      closureProcessObj: {},
+      inProgress: false,
+      showClosureProcessStatus: false,
+      showSupplimentAgg: false,
+      actionLabel: '',
+    };
     this.props.offeringCreationStore.setFormData('OFFERING_CLOSE_FRM', 'closureSummary');
     this.props.offeringCreationStore.setFormData('OFFERING_CLOSE_1');
   }
@@ -81,7 +85,7 @@ export default class Close extends Component {
     this.props.offeringCreationStore.setFieldValue('outputMsg', null);
   };
 
-  closeAction = async (status, step, forced = false, actionLabel = '') => {
+  closeAction = (status, step, forced = false, actionLabel = '') => {
     const { offer } = this.props.offeringsStore;
     const { offeringClose } = this.props.offeringCreationStore;
     const { confirmed } = this.state;
@@ -94,13 +98,16 @@ export default class Close extends Component {
       if (status === 'close' || status === 'update') {
         this.handleUpdateOffering(status);
       } else {
-        await offeringClose(
+        offeringClose(
           {
             offeringId: offer.id,
             process: status,
           },
           step,
-        );
+        ).then((res) => {
+          const setResponseFor = find(closingActions, a => a.enum === status);
+          this.setState({ closureProcessObj: { ...this.state.closureProcessObj, [setResponseFor.statusKey]: res } });
+        });
       }
       this.setState({ confirmed: false, action: '', actionLabel });
     }
@@ -109,6 +116,7 @@ export default class Close extends Component {
   handleHardOrSoftClose = (type) => {
     const { offer } = this.props.offeringsStore;
     const { offeringClose, resetForm } = this.props.offeringCreationStore;
+    const setResponseFor = find(closingActions, a => a.enum === this.state.action);
     switch (type) {
       case 'Cancel':
         this.handleCloseModal();
@@ -117,21 +125,28 @@ export default class Close extends Component {
         offeringClose({
           offeringId: offer.id,
           process: this.state.action,
-        }, this.state.activeStep, 'ADMIN');
+        }, this.state.activeStep, 'ADMIN').then((res) => {
+          this.setState({ closureProcessObj: { ...this.state.closureProcessObj, [setResponseFor.statusKey]: res } });
+        });
         this.handleCloseModal();
         break;
       case 'Send to Investors':
         offeringClose({
           offeringId: offer.id,
           process: this.state.action,
-        }, this.state.activeStep, 'INVESTOR');
+        }, this.state.activeStep, 'INVESTOR').then((res) => {
+          this.setState({ closureProcessObj: { ...this.state.closureProcessObj, [setResponseFor.statusKey]: res } });
+        });
         this.handleCloseModal();
         break;
       case 'Validate Envelope':
         offeringClose({
           offeringId: offer.id,
           process: this.state.action,
-        }, this.state.activeStep);
+        }, this.state.activeStep).then((res) => {
+          this.setState({ closureProcessObj: { ...this.state.closureProcessObj, [setResponseFor.statusKey]: res } });
+        });
+        this.handleCloseModal();
         resetForm('OFFERING_CLOSE_3', ['npaPageCount', 'pnPageCount', 'documentsCount']);
         this.handleCloseModal();
         break;
@@ -173,16 +188,27 @@ export default class Close extends Component {
   jsonModal = json => (
   <Modal closeIcon trigger={<Button className="link-button highlight-text" content={`Show ${this.state.actionLabel} Response`} />}>
       <Modal.Content>
-      <pre className="no-updates bg-offwhite padded">
+      <pre className="no-updates bg-offwhite padded json-text">
         {beautify(json, null, 2, 100)}
       </pre>
       </Modal.Content>
       </Modal>
   );
 
-  toggleVisibilityStatus = () => {
-    const currStatus = this.state.visibilityStatus;
-    this.setState({ visibilityStatus: !currStatus });
+  toggleVisibilityStatus = (of) => {
+    const currStatus = this.state[of];
+    this.setState({ [of]: !currStatus });
+  }
+
+  processClosureProcessObj = (obj) => {
+    const orderedObj = {};
+    if (obj && !isEmpty(obj)) {
+      const closureProcess = omitDeep(obj, ['__typename', 'items']);
+      ['softCloseNotification', 'checkBalance', 'issueCredits', 'fundEscrow', 'verifySecurityTransaction', 'processNotes', 'validateNotes', 'finalizeNotes', 'hardCloseNotification', 'exportEnvelopes'].forEach((key) => {
+        orderedObj[key] = closureProcess[key];
+      });
+    }
+    return orderedObj;
   }
 
   render() {
@@ -199,17 +225,19 @@ export default class Close extends Component {
     const { inProgress } = this.props.uiStore;
     const formName = 'OFFERING_CLOSE_FRM';
     const { offer, offerStatus } = this.props.offeringsStore;
+    const { closureProcessObj } = this.state;
     let { closureProcess } = offer;
-    closureProcess = omitDeep(closureProcess, ['__typename']);
-    const closeDate = offer.closureSummary && offer.closureSummary.processingDate;
+    closureProcess = !closureProcess ? { ...closureProcessObj } : this.processClosureProcessObj((closureProcessObj && closureProcess) ? { ...closureProcess, ...closureProcessObj } : closureProcess);
+    const closeDate = get(offer, 'closureSummary.processingDate') && `${get(offer, 'closureSummary.processingDate')} 23:59:59`;
     const hoursToClose = DataFormatter.diffDays(closeDate, true) + 24;
+    const dynamicFields = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? ['interestRate'] : ['revSharePercentage', 'multiple'];
     return (
       <Form>
         <div className="inner-content-spacer">
           <Header as="h4">
             {hoursToClose > 0
               ? (
-<>This campaign is still live, set to close <span className="highlight-text"> {closeDate ? moment(closeDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A'} </span>
+<>This campaign is still live, set to close <span className="highlight-text"> {closeDate ? DataFormatter.getDateAsPerTimeZone(closeDate, true, false, false, 'MMM D, YYYY') : 'N/A'} </span>
               </>
               ) : <>This campaign <span className={offerStatus.isFailed ? 'negative-text' : 'highlight-text'}> {offerStatus.isFailed ? 'has failed' : 'has succeed'}</span></>
             }
@@ -255,54 +283,58 @@ out of required
               && (
                 (
                   <>
-                    <Form.Group widths={3}>
-                      {['investorFee', 'maturityDate', 'hardCloseDate', 'interestRate', 'revSharePercentage', 'multiple', 'anticipatedPaymentStartDate', 'gsFees', 'nsPayment'].map(field => (
-                          <MaskedInput
+                   <Header as="h4"> Close Inputs </Header>
+                      <>
+                      <Form.Group widths={3}>
+                        {['investorFee', 'maturityDate', 'hardCloseDate', ...dynamicFields, 'anticipatedPaymentStartDate', 'gsFees', 'nsPayment'].map(field => (
+                            <MaskedInput
+                              key={field}
+                              name={field}
+                              percentage={['interestRate', 'revSharePercentage'].includes(field)}
+                              currency={['nsPayment', 'investorFee', 'multiple', 'nsFee', 'gsFees'].includes(field)}
+                              dateOfBirth={['maturityDate', 'hardCloseDate', 'anticipatedPaymentStartDate'].includes(field)}
+                              fielddata={OFFERING_CLOSE_1.fields[field]}
+                              changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
+                            />
+                        ))
+                        }
+                      </Form.Group>
+                      <Header as="h4">Linked Bank</Header>
+                      <Form.Group widths={3}>
+                        {['bankName', 'accountHolderName'].map(field => (
+                          <FormInput
                             key={field}
                             name={field}
-                            percentage={['interestRate', 'revSharePercentage'].includes(field)}
-                            currency={['nsPayment', 'investorFee', 'multiple', 'nsFee', 'gsFees'].includes(field)}
-                            dateOfBirth={['maturityDate', 'hardCloseDate', 'anticipatedPaymentStartDate'].includes(field)}
                             fielddata={OFFERING_CLOSE_1.fields[field]}
-                            changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
+                            changed={(e, result) => formChange(e, result, 'OFFERING_CLOSE_1')}
                           />
-                      ))
-                      }
-                    </Form.Group>
-                    <Header as="h4">Linked Bank</Header>
-                    <Form.Group widths={3}>
-                      {['bankName', 'accountHolderName'].map(field => (
-                        <FormInput
-                          key={field}
-                          name={field}
-                          fielddata={OFFERING_CLOSE_1.fields[field]}
-                          changed={(e, result) => formChange(e, result, 'OFFERING_CLOSE_1')}
-                        />
-                      ))
-                      }
-                      {['accountNumber', 'routingNumber'].map(field => (
-                          <MaskedInput
-                            key={field}
-                            name={field}
-                            number
-                            fielddata={OFFERING_CLOSE_1.fields[field]}
-                            changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
-                          />
-                      ))
-                      }
-                    </Form.Group>
-                    <Button.Group className="mt-50">
-                      {filter(closingActions, a => a.ref === 1).map(fA => (
-                        <Button
-                          loading={this.state.inProgress === fA.enum}
-                          onClick={() => this.closeAction(fA.enum, 1, false, fA.label)}
-                          primary
-                        >
-                          {fA.label}
-                        </Button>
-                      ))}
-                    </Button.Group>
-                    <Divider className="doubled" />
+                        ))
+                        }
+                        {['accountNumber', 'routingNumber'].map(field => (
+                            <MaskedInput
+                              key={field}
+                              name={field}
+                              number
+                              fielddata={OFFERING_CLOSE_1.fields[field]}
+                              changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
+                            />
+                        ))
+                        }
+                      </Form.Group>
+                      <Divider hidden />
+                      <Button.Group>
+                        {filter(closingActions, a => a.ref === 1).map(fA => (
+                          <Button
+                            loading={this.state.inProgress === fA.enum}
+                            onClick={() => this.closeAction(fA.enum, 1, false, fA.label)}
+                            primary
+                          >
+                            {fA.label}
+                          </Button>
+                        ))}
+                      </Button.Group>
+                      </>
+                    <Divider section />
                   </>
                 )
               )
@@ -329,12 +361,13 @@ out of required
                   </>
                 )
                 }
-                <Button.Group className="mt-50">
+                <Button.Group>
                   {filter(closingActions, a => a.ref === 2).map(fA => (
                     <Button
                       loading={inProgress === fA.enum}
                       onClick={() => this.closeAction(fA.enum, 2, false, fA.label)}
                       primary
+                      disabled={fA.keyToEnable !== false && !(fA.keyToEnable ? get(closureProcess, fA.keyToEnable) === 'COMPLETE' : false)}
                     >{fA.label}
                     </Button>
                   ))}
@@ -369,10 +402,11 @@ out of required
                   </>
                 )
                 }
-                  <Button.Group className="mt-50">
+                  <Button.Group>
                     {filter(closingActions, a => a.ref === 3).map(fA => (
                       <Button
                         loading={inProgress === fA.enum}
+                        disabled={fA.keyToEnable !== false && !(fA.keyToEnable ? get(closureProcess, fA.keyToEnable) === 'COMPLETE' : false)}
                         onClick={() => this.closeAction(fA.enum, 3, false, fA.label)}
                         primary
                       >{fA.label}
@@ -405,10 +439,11 @@ out of required
                   </>
                 )
                 }
-                <Button.Group className="mt-50">
+                <Button.Group>
                 {filter(closingActions, a => a.ref === 4).map(fA => (
                   <Button
                     loading={inProgress === fA.enum}
+                    disabled={fA.keyToEnable !== false && !(fA.keyToEnable ? get(closureProcess, fA.keyToEnable) === 'COMPLETE' : false)}
                     onClick={() => this.closeAction(fA.enum, 4, false, fA.label)}
                     primary
                   >
@@ -416,6 +451,7 @@ out of required
                   </Button>
                 ))}
               </Button.Group>
+              <Divider className="doubled" />
                   </>
                 )
               }
@@ -439,7 +475,7 @@ out of required
                       }
                     </Form.Group>
                   </Form>
-                  <Button.Group className="mt-50">
+                  <Button.Group>
                     <Button primary>Save draft</Button>
                     <Button color="red" onClick={this.handleUpdateOffering}>Close offering </Button>
                   </Button.Group>
@@ -452,7 +488,7 @@ out of required
                     {/* <Button as="span" className="time-stamp note">
                   You cannot close the offering if envelopes are still being processed</Button> */}
                   </Button.Group>
-                  <Divider className="doubled" />
+                  <Divider section />
                 </>
                 )
               }
@@ -465,34 +501,111 @@ out of required
               </Card>
             ) : null
           }
-          <Header as="h4"> Closure Process Status <Icon onClick={this.toggleVisibilityStatus} className={`ns-chevron-${this.state.visibilityStatus === true ? 'up' : 'down'}-compact right`} color="blue" /> </Header>
-          {this.state.visibilityStatus
+          <Header as="h4"> Closure Process Status <Icon onClick={() => this.toggleVisibilityStatus('showClosureProcessStatus')} className={`ns-chevron-${this.state.showClosureProcessStatus === true ? 'up' : 'down'}-compact right`} color="blue" /> </Header>
+          {this.state.showClosureProcessStatus
           && (
-          <Grid columns={3}>
-          {closureProcess ? Object.keys(closureProcess).map(key => (
-            <Grid.Column className="center-align"><b>{capitalize(key.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</b>
+            <>
+            {isEmpty(closureProcess)
+              ? (
+<section className="bg-midwhite center-align">
+            <Header as="h4">No Data Found</Header>
+            </section>
+              )
+              : (
+<Grid columns={3}>
+          { !isEmpty(closureProcess) && Object.keys(closureProcess).map(key => (
+            <Grid.Column className="center-align"><Header as="h5">{capitalize(key.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</Header>
             <div className="table-wrapper">
             <Table unstackable basic="very">
               <Table.Body>
-                {closureProcess[key] ? Object.keys(closureProcess[key]).map(k => (
+                {closureProcess[key] ? ['Status', 'Started', 'Finished'].map(k => (
                 <Table.Row>
-                  <Table.Cell>{capitalize(k.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</Table.Cell>
+                  <Table.Cell>{k}</Table.Cell>
                   <Table.Cell>
-                  {['finished', 'started'].includes(k) ? closureProcess[key][k] ? moment(closureProcess[key][k]).format('MM/DD/YYYY') : '-' : closureProcess[key][k] || '-'}
+                  {k === 'Status'
+                    && (
+                    <>
+                    {closureProcess[key].status
+                      ? (
+                       <>
+                      <b className={closureProcess[key].status === 'COMPLETE' ? 'positive-text' : closureProcess[key].status === 'PENDING' ? 'warning-text' : 'negative-text'}>{closureProcess[key].status}</b>
+                      {closureProcess[key].finished && closureProcess[key].started
+                      && (
+                        <span> ({DataFormatter.getDateDifference(closureProcess[key].started, closureProcess[key].finished)})</span>
+                      )
+                      }
+                      </>
+                      )
+                      : <>-</>
+                    }
+                    </>
+                    )
+                  }
+                  {k === 'Started'
+                  && (
+                    <>
+                    {(closureProcess[key].started || closureProcess[key].startedCount) ? (
+                    <>
+                      {closureProcess[key].startedCount || '0'} - {closureProcess[key].started ? DataFormatter.getDateAsPerTimeZone(closureProcess[key].started, true, false, false, 'M/D/YYYY h:mm a') : ''}
+                    </>
+                    ) : <>-</>
+                  }
+                    </>
+                  )
+                  }
+                   {k === 'Finished'
+                   && (
+                  <>
+                   {
+                   (closureProcess[key].remainingCount || closureProcess[key].finished)
+                     ? (
+                    <>{closureProcess[key].remainingCount || '0'} - {closureProcess[key].finished ? DataFormatter.getDateAsPerTimeZone(closureProcess[key].finished, true, false, false, 'M/D/YYYY h:mm a') : ''}
+                    </>
+                     ) : <>-</>
+                   }
+                   </>
+                   )
+                    }
                   </Table.Cell>
                 </Table.Row>
-                )) : <p>No Data Found</p>
+                )) : (
+<section className="center-align">
+                <Header as="h6">No Data Found</Header>
+              </section>
+                )
                 }
                 </Table.Body>
               </Table>
             </div>
             </Grid.Column>
-          ))
-            : <p>No Data Found</p>}
+          ))}
           </Grid>
+              )
+            }
+            </>
           )
           }
           <Divider section />
+          <Header as="h4"> Supplemental Agreement <Icon onClick={() => this.toggleVisibilityStatus('showSupplimentAgg')} className={`ns-chevron-${this.state.showSupplimentAgg === true ? 'up' : 'down'}-compact right`} color="blue" /> </Header>
+            {this.state.showSupplimentAgg
+            && (
+              <>
+                <SupplementalAggrements />
+                <Button.Group>
+                {filter(closingActions, a => a.ref === 1).map(fA => (
+                  <Button
+                    loading={this.state.inProgress === 'update'}
+                    onClick={() => this.closeAction('update', 1, false, fA.label)}
+                    primary
+                  >
+                    {fA.label}
+                  </Button>
+                ))}
+              </Button.Group>
+              </>
+            )
+            }
+            <Divider section />
           <Contingency
             formArrayChange={formArrayChange}
             form={CLOSING_CONTITNGENCIES_FRM}
@@ -550,6 +663,7 @@ out of required
               <Button
                 onClick={() => this.handleHardOrSoftClose(item)}
                 primary={item !== 'Cancel'}
+                disabled={(item === 'Send to Investors' && this.state.activeStep !== 2) ? get(closureProcess, this.state.activeStep === 3 ? 'verifySecurityTransaction.status' : 'finalizeNotes.status') !== 'COMPLETE' : false}
                 content={item}
               />
             ))

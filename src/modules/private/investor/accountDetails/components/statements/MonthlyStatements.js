@@ -21,7 +21,8 @@ export default class MonthlyStatements extends Component {
     pdfLoading: false,
   }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { setFieldValue } = this.props.userDetailsStore;
     this.props.statementStore.resetPagination();
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';

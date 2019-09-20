@@ -8,7 +8,10 @@ import Helper from '../../../../../helper/utility';
 @withRouter
 @observer
 class TransferRequest extends Component {
-  componentWillMount() {
+  constructor(props) {
+    // eslint-disable-next-line no-debugger
+    debugger;
+    super(props);
     const {
       getTransferRequestAmount,
       setStepToBeRendered,
