@@ -86,7 +86,7 @@ class App extends Component {
 
   componentDidUpdate(prevProps) {
     this.checkForPasswordProtect();
-    if (isMobile) {
+    if (isMobile && !navigator.userAgent.match(/Android/i)) {
       document.activeElement.blur();
     }
     authActions.getUserSession().then((session) => {
