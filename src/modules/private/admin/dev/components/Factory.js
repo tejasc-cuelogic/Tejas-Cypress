@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import RequestFactory from './factory/requestFactory';
 import { InlineLoader } from '../../../../../theme/shared';
-
+import RequestFactory from './factory/requestFactory';
 
 @inject('factoryStore')
 @withRouter

@@ -8,6 +8,7 @@ import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import UserTypeIcon from '../components/manage/UserTypeIcon';
 import ActivityHistory from '../../../shared/ActivityHistory';
+import UserEmailList from '../components/manage/userEmailListing';
 import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
 const getModule = component => lazy(() => import(`../components/manage/${component}`));
@@ -33,6 +34,9 @@ const navMeta = [
   },
   {
     title: 'Activity', to: 'activity', component: ActivityHistory, load: false,
+  },
+  {
+    title: 'Emails', to: 'emails', component: UserEmailList, load: false,
   },
 ];
 
