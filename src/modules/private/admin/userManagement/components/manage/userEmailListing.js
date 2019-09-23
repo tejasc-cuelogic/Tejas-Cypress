@@ -102,7 +102,7 @@ export default class UserEmailList extends Component {
                               </Table.Cell>
                               <Table.Cell collapsing>
                                 {resp.subject} <span><Link onClick={e => this.handleModel(e, idx)} to="/"> (Body)</Link></span> {' '}
-                                {((resp.attachments === null) || (resp.attachments && resp.attachments.length <= 0)) && (
+                                {resp.attachments !== null && resp.attachments && resp.attachments.length > 0 && (
 <Popup
   trigger={<Icon className="ns-attachment" color="blue" size="large" />}
   content={(
