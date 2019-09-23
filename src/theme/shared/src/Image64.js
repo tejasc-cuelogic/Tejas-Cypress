@@ -9,6 +9,11 @@ import emptyImage3 from '../../../assets/images/gallery-placeholder-1-1.jpg';
 import userPlaceholder from '../../../assets/images/leader-placeholder.jpg';
 import Helper from '../../../helper/utility';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
+const isTablet = document.documentElement.clientWidth >= 768
+&& document.documentElement.clientWidth < 992;
+
 function Image64(props) {
   const [data, setData] = useState(props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1);
   const [oData, setOData] = useState(props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1);
@@ -20,7 +25,7 @@ function Image64(props) {
     if (props.srcUrl) {
       const imgUrl = (props.srcUrl.includes('https://') || props.srcUrl.includes('http://')) ? props.srcUrl : `https://${UPLOADS_CONFIG.bucket}/${props.srcUrl}`;
       try {
-        const imgName = props.avatar ? imgUrl : Helper.processImageFileName(imgUrl, props.uiStore.responsiveVars);
+        const imgName = props.avatar ? imgUrl : Helper.processImageFileName(imgUrl, { isMobile, isTablet });
         setOData(imgUrl || emptyImage);
         // const result = await apiService.getRemoteFile(imgName);
         // setData(result.text.includes('data:') ? (result.text || emptyImage) : (imgName || emptyImage));
