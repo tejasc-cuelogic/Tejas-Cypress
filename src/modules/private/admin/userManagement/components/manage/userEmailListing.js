@@ -107,12 +107,11 @@ export default class UserEmailList extends Component {
   trigger={<Icon className="ns-attachment" color="blue" size="large" />}
   content={(
                                     <Item>
-                                      {(resp.attachments === null) || (resp.attachments && resp.attachments.length <= 0) ? 'NA'
-                                        : resp.attachments.map(attach => (
+                                      {resp.attachments.map(attach => (
                                           <Item.Content>
                                             <b>Name: </b>{attach.name ? attach.name : 'N/A'}
                                           </Item.Content>
-                                        ))
+                                      ))
                                       }
                                     </Item>
                                   )}
