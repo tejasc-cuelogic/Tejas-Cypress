@@ -50,7 +50,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    window.addEventListener('resize', this.handleResize);
+    // window.addEventListener('resize', this.handleResize);
     this.props.uiStore.setFieldvalue('responsiveVars', this.getSizes());
   }
 
@@ -149,7 +149,7 @@ class App extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
+    // window.removeEventListener('resize', this.handleResize);
   }
 
   getSizes = () => ({
