@@ -689,3 +689,38 @@ query investorAccountDeleteProcess {
   }
 }
 `;
+
+export const getEmailList = gql`
+query _fetchEmails ($recipientId: String!, $subject: String, $fromDate: String, $toDate: String, $limit: Int, $lek: String){
+  fetchEmails(
+    recipientId: $recipientId
+    subject: $subject
+    fromDate: $fromDate
+    toDate: $toDate
+    limit: $limit
+    lek: $lek
+    )
+  {
+    emails{
+      recipientId
+      fromName
+      fromEmail
+      toFirstName
+      toEmail
+      subject
+      requestDate
+      emailContent
+      attachments {
+        content
+      }
+      mergeVars {
+        content
+        name
+      }     
+    }
+    resultCount
+    totalCount
+    lek
+  }
+}
+`;
