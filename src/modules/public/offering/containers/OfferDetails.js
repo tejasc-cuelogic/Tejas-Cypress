@@ -175,6 +175,15 @@ class offerDetails extends Component {
     this.props.navStore.setMobileNavStatus(calculations);
   }
 
+  handleFollowBtn = () => {
+    if (!this.props.authStore.isUserLoggedIn) {
+      this.props.uiStore.setAuthRef(this.props.match.url);
+      this.props.history.push('/login');
+    } else {
+      this.props.watchListStore.addRemoveWatchList();
+    }
+  }
+
   render() {
     const {
       match, campaignStore, location, newLayout,
@@ -194,7 +203,7 @@ class offerDetails extends Component {
     const {
       details, campaign, navCountData, modifySubNavs,
     } = campaignStore;
-    const { addRemoveWatchList, isWatching } = this.props.watchListStore;
+    const { isWatching } = this.props.watchListStore;
     let navItems = [];
     const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
     if (isMobile) {
@@ -216,10 +225,10 @@ class offerDetails extends Component {
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
     const InitialComponent = getModule(!newLayout ? navItems[0].component : 'CampaignLayout');
-    const showWatchingBtn = isWatching !== 'loading' && this.props.authStore.isUserLoggedIn;
-    const followBtn = showWatchingBtn && (
-              <Button disabled={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList')} inverted loading={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList')} fluid color="white" onClick={() => addRemoveWatchList()}>
-                <Icon name={` ${!this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') && 'heart'} ${isWatching ? '' : 'outline'}`} color={isWatching ? 'green' : ''} /> {isWatching ? 'Following' : 'Follow'}
+    const showWatchingBtn = isWatching !== 'loading';
+    const followBtn = (
+              <Button disabled={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') || !showWatchingBtn} inverted loading={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') || !showWatchingBtn} fluid color="white" onClick={this.handleFollowBtn}>
+                {showWatchingBtn && <Icon name={` ${!this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') && 'heart'} ${isWatching ? '' : 'outline'}`} color={isWatching ? 'green' : ''} />} {isWatching ? 'Following' : 'Follow'}
               </Button>
     );
     const mobileHeaderAndSideBar = (<CampaignSideBar followBtn={followBtn} newLayout={newLayout} navItems={navItems} />);
@@ -229,7 +238,7 @@ class offerDetails extends Component {
           && <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
         {!isMobile
-          && <CampaignHeader showWatchingBtn={showWatchingBtn} followBtn={followBtn} {...this.props} />
+          && <CampaignHeader followBtn={followBtn} {...this.props} />
         }
         {/* {campaignStore && campaignStore.showFireworkAnimation &&
         <Firework />

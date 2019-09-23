@@ -17,7 +17,7 @@ export class WatchListStore extends DataModelStore {
     DELETED: [],
   };
 
-  isWatching = 'loading';
+  isWatching = false;
 
   get allWatchList() {
     return toJS(this.watchList);
@@ -61,7 +61,7 @@ export class WatchListStore extends DataModelStore {
       userId: userDetailsStore.currentUserId,
       offeringId: campaignStore.getOfferingId,
     };
-
+    this.setFieldValue('isWatching', 'loading');
     this.executeQuery({
       client: 'PRIVATE',
       query: 'isWatchingOffering',

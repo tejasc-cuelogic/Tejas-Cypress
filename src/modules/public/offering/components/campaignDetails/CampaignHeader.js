@@ -18,7 +18,7 @@ export default class CampaignHeader extends Component {
   }
 
   render() {
-    const { campaignStore, newLayout, followBtn, showWatchingBtn } = this.props;
+    const { campaignStore, newLayout, followBtn } = this.props;
     const { campaign, offerStructure, campaignStatus } = campaignStore;
     const {
       isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
@@ -189,7 +189,7 @@ export default class CampaignHeader extends Component {
                       && (
                       <>
                         <Grid>
-                          <Grid.Column width={showWatchingBtn ? '10' : ''} className="center-align">
+                          <Grid.Column width="10" className="center-align">
                             <Button
                               secondary={!isInProcessing}
                               disabled={maxFlagStatus || isInProcessing}
@@ -202,12 +202,9 @@ export default class CampaignHeader extends Component {
                               {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                             </p>
                           </Grid.Column>
-                          {showWatchingBtn
-                            && (
-                            <Grid.Column width="6">
-                              <>{followBtn}</>
-                            </Grid.Column>
-                            )}
+                          <Grid.Column width="6">
+                            <>{followBtn}</>
+                          </Grid.Column>
                         </Grid>
                       </>
                       )

@@ -93,6 +93,7 @@ export class CampaignStore {
 
   @action
   getCampaignDetails = (id, queryType) => {
+    watchListStore.setFieldValue('isWatching', false);
     this.details = graphql({
       client: clientPublic,
       query: queryType ? campaignDetailsForInvestmentQuery : campaignDetailsQuery,
