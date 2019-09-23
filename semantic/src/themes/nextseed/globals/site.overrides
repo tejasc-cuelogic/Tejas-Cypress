@@ -258,6 +258,9 @@ h6{
 .break-text {
 	word-break: break-all;
 }
+.full-width{
+	width: 100%;
+}
 //	normal link styles
 a:not(.item), a:not(.ui.button){
 	color:@link-color;
