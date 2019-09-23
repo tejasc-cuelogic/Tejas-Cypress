@@ -45,7 +45,7 @@ export class WatchListStore extends DataModelStore {
     this.setFieldValue('watchList', tempWatchList);
   }
 
-  resetStore = () => {
+  resetWatchList = () => {
     this.watchList = {
       INVESTOR: [],
       WATCHING: [],
@@ -110,7 +110,7 @@ decorate(WatchListStore, {
   updateWatchList: action,
   setOfferingWatch: action,
   setWatchListData: action,
-  resetStore: action,
+  resetWatchList: action,
   allWatchList: computed,
 });
 

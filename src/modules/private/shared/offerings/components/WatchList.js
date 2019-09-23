@@ -19,7 +19,7 @@ export default class WatchList extends Component {
   }
 
   componentWillUnmount() {
-    this.props.watchListStore.resetStore();
+    this.props.watchListStore.resetWatchList();
   }
 
   handleDelete = (params) => {

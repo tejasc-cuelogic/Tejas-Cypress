@@ -9,7 +9,7 @@ import money from 'money-math';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
 import { isLoggingEnabled } from '../constants/common';
-// import userStore from './../services/stores/entities/userStore';
+import authStore from '../services/stores/entities/shared/authStore';
 
 export class Utility {
   // Default options for the toast
@@ -156,7 +156,6 @@ export class Utility {
   });
 
   maskPhoneNumber = (phoneNumber) => {
-    // const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
     const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '($1) $2-$3');
     return maskPhoneNumber;
   }
@@ -297,10 +296,17 @@ export class Utility {
         : type === 'warn' ? console.warn(params)
           : type === 'clear' ? console.clear()
             : console.log(params);
-    } else {
+    } else if (!isLoggingEnabled && (type === 'warn' || type === 'info')) {
       // Send an email for these two type;
-      // type === 'warn' ? console.warn(params)
-      //   : type === 'info' ? console.info(params) : '';
+      const email = {
+        graphqlError: { operationName: `Logging ${type === 'warn' ? 'Warning' : type === 'info' ? 'Information' : ''}` },
+        urlLocation: window.location.href,
+        message: { ...params },
+      };
+      const emailParams = {
+        emailContent: JSON.stringify(email),
+      };
+      authStore.notifyApplicationError(emailParams);
     }
   }
 
