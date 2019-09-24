@@ -168,6 +168,8 @@ query _fetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaType
       jobId
       execStatus
       cron
+      execInitiatedOn
+      cronMetaType
     }
     resultCount
     totalCount

@@ -4,6 +4,8 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import moment from 'moment';
 import Filters from './cronFilters';
+import { InlineLoader } from '../../../../../../theme/shared';
+import { DataFormatter } from '../../../../../../helper';
 
 @inject('factoryStore')
 @withRouter
@@ -13,7 +15,7 @@ export default class CronFactory extends Component {
     super(props);
     this.props.factoryStore.resetForm('CRONFACTORY_FRM');
     this.props.factoryStore.inProgress.cronFactory = false;
-    this.props.factoryStore.initRequest();
+    // this.props.factoryStore.initRequest();
   }
 
   componentWillUnmount() {
@@ -45,7 +47,7 @@ export default class CronFactory extends Component {
   render() {
     const { factoryStore } = this.props;
     const {
-      CRONFACTORY_FRM, requestState, filters, count,
+      CRONFACTORY_FRM, requestState, filters, count, cronLogs, loading,
     } = factoryStore;
     const totalRecords = count || 0;
     return (
@@ -53,11 +55,6 @@ export default class CronFactory extends Component {
         <Card.Content header="Manage Cron Factory" />
         <Card.Content>
           <Card.Description>
-            {/* <Button icon color="blue" onClick={this.toggleSearch} className="link-button">
-              {filters ? <>Hide Filters <Icon className="ns-caret-up" /></>
-                : <>Show Filters <Icon className="ns-caret-down" /></>
-              }
-            </Button> */}
             <Filters
               requestState={requestState}
               filters={filters}
@@ -68,35 +65,43 @@ export default class CronFactory extends Component {
               totalRecords={totalRecords}
               FILTER_FRM={CRONFACTORY_FRM}
             />
+            {loading ? <InlineLoader />
+              : (
             <div className="table-wrapper">
-              <Table unstackable className="application-list">
+              <Table unstackable striped className="application-list">
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>Info</Table.HeaderCell>
-                    <Table.HeaderCell width={4}>Comments</Table.HeaderCell>
-                    <Table.HeaderCell width={4}>Title</Table.HeaderCell>
+                    <Table.HeaderCell>JobId</Table.HeaderCell>
+                    <Table.HeaderCell width={4}>Execute Status</Table.HeaderCell>
+                    <Table.HeaderCell width={4}>Meta Type</Table.HeaderCell>
+                    <Table.HeaderCell width={4}>Executed On</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {/* {getBusinessApplication.length
-                  ? getBusinessApplication.map(application => (
-                    (application.applicationStatus || application.prequalStatus)
-                    !== BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED
-                    && ( */}
-                  <Table.Row verticalAlign="top">
-                    <Table.Cell singleLine>
-                      <Header as="h6">List Elment Header 1</Header>
-                    </Table.Cell>
-                    <Table.Cell singleLine>
-                      <Header as="h6">List Elment Header 2</Header>
-                    </Table.Cell>
-                    <Table.Cell singleLine>
-                      <Header as="h6">List Elment Header 3</Header>
-                    </Table.Cell>
-                  </Table.Row>
+                  {!cronLogs || (cronLogs && cronLogs.length === 0) ? (
+                    <Table.Row><Table.Cell textAlign="center" colSpan="7">No Logs Fond.</Table.Cell></Table.Row>
+                  ) : (
+                    cronLogs && cronLogs.map(resp => (
+                      <Table.Row verticalAlign="top">
+                        <Table.Cell singleLine>
+                          <Header as="h6">{resp.jobId}</Header>
+                        </Table.Cell>
+                        <Table.Cell singleLine>
+                          <Header as="h6">{resp.execStatus}</Header>
+                        </Table.Cell>
+                        <Table.Cell singleLine>
+                          <Header as="h6">{resp.cronMetaType}</Header>
+                        </Table.Cell>
+                        <Table.Cell singleLine>
+                          <Header as="h6">{DataFormatter.getDateAsPerTimeZone(resp.execInitiatedOn, true, false, false)}</Header>
+                        </Table.Cell>
+                      </Table.Row>
+                    ))
+                  )}
                 </Table.Body>
               </Table>
             </div>
+              )}
           </Card.Description>
         </Card.Content>
       </Card>

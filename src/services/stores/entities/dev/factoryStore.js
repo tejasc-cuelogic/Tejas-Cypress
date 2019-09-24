@@ -24,6 +24,8 @@ export class FactoryStore {
 
   @observable backup = [];
 
+  @observable cronLogList = [];
+
   @observable requestState = {
     lek: { 'page-1': null },
     skip: 0,
@@ -45,7 +47,8 @@ export class FactoryStore {
     let params = {
       search: keyword,
       cron: cron || 'GOLDSTAR_HEALTHCHECK',
-      cronMetaType: cronMetaType || 'LOG',
+      // cronMetaType: cronMetaType || 'LOG',
+      cronMetaType,
       // page: reqParams ? reqParams.page : 1,
       limit: reqParams ? reqParams.perPage : this.requestState.perPage,
       jobId: jobId || '',
@@ -158,6 +161,13 @@ export class FactoryStore {
     }
   }
 
+  @computed get cronLogs() {
+    return (this.cronLogList.data
+      && this.cronLogList.data.fetchCronLogs
+      && toJS(this.cronLogList.data.fetchCronLogs.cronLog)
+    ) || [];
+  }
+
   @action
   toggleSearch = () => {
     this.filters = !this.filters;
@@ -185,6 +195,7 @@ export class FactoryStore {
       search: {
       },
     };
+    this.setFieldValue('cronLogList', []);
   }
 
   @action
