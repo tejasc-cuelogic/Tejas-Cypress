@@ -81,15 +81,16 @@ query offeringWatchList($offeringId: String){
     userId
     status
     offeringId
-   userInfo {
-    email {
-      address
-    }
+    lastUpdated
+    userInfo {
+      email {
+        address
+      }
     info { 
-    firstName
-    lastName
+      firstName
+      lastName
     }
-  }
+    }
   }
 }
 `;
