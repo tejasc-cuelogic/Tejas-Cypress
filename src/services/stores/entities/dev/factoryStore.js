@@ -22,8 +22,6 @@ export class FactoryStore {
 
   @observable filters = true;
 
-  @observable backup = [];
-
   @observable cronLogList = [];
 
   @observable requestState = {
@@ -62,7 +60,6 @@ export class FactoryStore {
         status,
       };
     }
-    this.requestState.page = params.page;
     if (startDate && endDate) {
       params = {
         ...params,
@@ -76,7 +73,7 @@ export class FactoryStore {
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data && !this.cronLogList.loading) {
-          const { lek, cronLog } = data.businessApplicationsAdmin;
+          const { lek } = data.fetchCronLogs;
           this.requestState = {
             ...this.requestState,
             lek: {
@@ -84,7 +81,6 @@ export class FactoryStore {
               [`page-${this.requestState.page + 1}`]: lek,
             },
           };
-          this.backup = cronLog;
         }
       },
       onError: () => {
