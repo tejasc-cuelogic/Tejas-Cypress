@@ -81,7 +81,7 @@ export default class UserEmailList extends Component {
                                       {(resp.mergeVars === null) || (resp.mergeVars && resp.mergeVars.length <= 0) ? 'NA'
                                         : resp.mergeVars.map(mergDetails => (
                                           <Item.Content>
-                                            {`${mergDetails.name} - ${mergDetails.content}`}
+                                            <b>{mergDetails.name}:</b>{' '} {mergDetails.content}
                                           </Item.Content>
                                         ))
                                       }
