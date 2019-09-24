@@ -296,7 +296,7 @@ export class Utility {
     const fileName = fileNameSplit.join('.');
     const { isMobile, isTablet } = deviceInfo;
     const prepName = res => `${fileName}${res ? `__${res}` : ''}.${fileExt}`;
-    return isMobile ? prepName(640) : isTablet ? prepName(1024) : prepName(1920);
+    return IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(fileExt.toLowerCase()) ? isMobile ? prepName(640) : isTablet ? prepName(1024) : prepName(1920) : prepName();
   }
 
   validateImageExtension = (ext) => {
