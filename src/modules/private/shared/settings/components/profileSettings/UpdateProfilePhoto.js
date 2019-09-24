@@ -4,9 +4,8 @@ import { withRouter } from 'react-router-dom';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Modal, Form, Button } from 'semantic-ui-react';
 import { ImageCropper } from '../../../../../../theme/form';
-import {
-  PROFILE_PHOTO_BYTES, PROFILE_PHOTO_EXTENSIONS,
-} from '../../../../../../services/constants/user';
+import { PROFILE_PHOTO_BYTES } from '../../../../../../services/constants/user';
+import Helper from '../../../../../../helper/utility';
 
 @inject('identityStore', 'uiStore')
 @withRouter
@@ -32,9 +31,10 @@ export default class UpdateProfilePhoto extends Component {
   }
 
   handleVerifyFileExtension = (fileExt) => {
-    if (PROFILE_PHOTO_EXTENSIONS.indexOf(fileExt) === -1) {
+    const validate = Helper.validateImageExtension(fileExt);
+    if (validate.isInvalid) {
       const field = 'error';
-      const errorMsg = `Only ${PROFILE_PHOTO_EXTENSIONS.join(', ')}  extensions are allowed.`;
+      const { errorMsg } = validate;
       this.props.identityStore.setProfilePhoto(field, errorMsg);
       this.props.identityStore.setProfilePhoto('value', '');
     }

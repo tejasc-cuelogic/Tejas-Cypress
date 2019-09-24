@@ -22,6 +22,7 @@ function Image64(props) {
       try {
         const imgName = props.avatar ? imgUrl : Helper.processImageFileName(imgUrl, props.uiStore.responsiveVars);
         setOData(imgUrl || emptyImage);
+        // Deprecated the API call for getting base64 of an image
         // const result = await apiService.getRemoteFile(imgName);
         // setData(result.text.includes('data:') ? (result.text || emptyImage) : (imgName || emptyImage));
         setData((imgName || emptyImage));

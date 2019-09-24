@@ -4,9 +4,8 @@ import { withRouter } from 'react-router-dom';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Modal, Form, Button } from 'semantic-ui-react';
 import { ImageCropper } from '../../../../../theme/form';
-import {
-  PROFILE_PHOTO_BYTES, PROFILE_PHOTO_EXTENSIONS,
-} from '../../../../../services/constants/user';
+import { PROFILE_PHOTO_BYTES } from '../../../../../services/constants/user';
+import Helper from '../../../../../helper/utility';
 
 @inject('teamStore', 'uiStore')
 @withRouter
@@ -24,30 +23,31 @@ export default class UpdateMemberProfilePhoto extends Component {
     });
   }
 
-  handleVerifyFileSize = (fileSize) => {
+  handleVerifyFileSize = (fileSize, field) => {
     if (fileSize > PROFILE_PHOTO_BYTES) {
-      const field = 'error';
+      const attr = 'error';
       const errorMsg = 'File size cannot be more than 5 MB.';
-      this.props.teamStore.setProfilePhoto(field, errorMsg);
-      this.props.teamStore.setProfilePhoto('value', '');
+      this.props.teamStore.setProfilePhoto(attr, errorMsg, field);
+      this.props.teamStore.setProfilePhoto('value', '', field);
     }
   }
 
-  handleVerifyFileExtension = (fileExt) => {
-    if (PROFILE_PHOTO_EXTENSIONS.indexOf(fileExt) === -1) {
-      const field = 'error';
-      const errorMsg = `Only ${PROFILE_PHOTO_EXTENSIONS.join(', ')}  extensions are allowed.`;
-      this.props.teamStore.setProfilePhoto(field, errorMsg);
-      this.props.teamStore.setProfilePhoto('value', '');
+  handleVerifyFileExtension = (fileExt, field) => {
+    const validate = Helper.validateImageExtension(fileExt);
+    if (validate.isInvalid) {
+      const attr = 'error';
+      const { errorMsg } = validate;
+      this.props.teamStore.setProfilePhoto(attr, errorMsg, field);
+      this.props.teamStore.setProfilePhoto('value', '', field);
     }
   }
 
-  handelImageDeimension = (width, height) => {
+  handelImageDeimension = (width, height, field) => {
     if (width < 200 || height < 200) {
-      const field = 'error';
+      const attr = 'error';
       const errorMsg = 'Image size should not be less than 200 x 200.';
-      this.props.teamStore.setProfilePhoto(field, errorMsg);
-      this.props.teamStore.setProfilePhoto('value', '');
+      this.props.teamStore.setProfilePhoto(attr, errorMsg, field);
+      this.props.teamStore.setProfilePhoto('value', '', field);
     }
   }
 
