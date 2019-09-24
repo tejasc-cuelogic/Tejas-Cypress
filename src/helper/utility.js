@@ -8,8 +8,9 @@ import { toJS } from 'mobx';
 import money from 'money-math';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
-import { isLoggingEnabled } from '../constants/common';
+import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS } from '../constants/common';
 import authStore from '../services/stores/entities/shared/authStore';
+// import userStore from './../services/stores/entities/userStore';
 
 export class Utility {
   // Default options for the toast
@@ -316,8 +317,16 @@ export class Utility {
     const fileName = fileNameSplit.join('.');
     const { isMobile, isTablet } = deviceInfo;
     const prepName = res => `${fileName}${res ? `__${res}` : ''}.${fileExt}`;
-    return isMobile ? prepName(640) : isTablet ? prepName(1024) : prepName(1920);
+    return IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(fileExt.toLowerCase()) ? isMobile ? prepName(640) : isTablet ? prepName(1024) : prepName(1920) : prepName();
   }
+
+  validateImageExtension = (ext) => {
+    const obj = {
+      isInvalid: !IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()),
+      errorMsg: `Only ${IMAGE_UPLOAD_ALLOWED_EXTENSIONS.join(', ')}  extensions are allowed.`,
+    };
+    return obj;
+  };
 }
 
 export default new Utility();

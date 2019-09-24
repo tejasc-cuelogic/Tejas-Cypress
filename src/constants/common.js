@@ -59,3 +59,5 @@ export const userIdleTime = ['production', 'prod', 'master', 'infosec'].includes
 export const isLoggingEnabled = ['localhost', 'dev'].includes(process.env.REACT_APP_DEPLOY_ENV);
 
 export const DEFAULT_TIME_ZONE_TO_DISPLAY = 'America/Chicago';
+
+export const IMAGE_UPLOAD_ALLOWED_EXTENSIONS = ['jpeg', 'jpg', 'png'];
