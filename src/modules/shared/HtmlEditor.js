@@ -17,12 +17,14 @@ import 'froala-editor/css/froala_editor.pkgd.min.css';
 // Require Font Awesome.
 import 'font-awesome/css/font-awesome.css';
 
+import { Confirm } from 'semantic-ui-react';
 import FroalaEditor from 'react-froala-wysiwyg';
 import FroalaEditorView from 'react-froala-wysiwyg/FroalaEditorView';
 import { fileUpload } from '../../services/actions';
 import { FROALA_EDITOR_LICENSE } from '../../constants/common';
 import { UPLOADS_CONFIG } from '../../constants/aws';
 import ShortCodeInforModal from './ShortCodeInfo';
+import Helper from '../../helper/utility';
 
 window.$ = $;
 window.jQuery = $;
@@ -32,6 +34,8 @@ window.jQuery = $;
 export default class HtmlEditor extends React.Component {
   state = {
     showModal: false,
+    showConfirmModal: false,
+    errorMsg: '',
   }
 
   constructor(props) {
@@ -45,6 +49,10 @@ export default class HtmlEditor extends React.Component {
       plugin: 'customPlugin',
       callback: this.toggleModal,
     });
+  }
+
+  updateState = (field, val) => {
+    this.setState({ [field]: val });
   }
 
   toggleModal = () => {
@@ -82,29 +90,37 @@ export default class HtmlEditor extends React.Component {
               type: file.type,
               name: fileName,
             };
-            fileUpload.uploadToS3(fileObj, this.props.imageUploadPath || 'RichTextEditor').then((res) => {
-              editor.edit.off();
-              if (editor && editor.image && editor.image.get()) {
+            const fileExt = get(fileName.split('.'), `[${fileName.split('.').length - 1}]`);
+            const validate = Helper.validateImageExtension(fileExt);
+            if (!validate.isInvalid) {
+              fileUpload.uploadToS3(fileObj, this.props.imageUploadPath || 'RichTextEditor').then((res) => {
                 editor.edit.off();
-                const imgUrl = `https://${UPLOADS_CONFIG.bucket}/${res}`;
+                if (editor && editor.image && editor.image.get()) {
+                  editor.edit.off();
+                  const imgUrl = `https://${UPLOADS_CONFIG.bucket}/${res}`;
+                  editor.edit.off();
+                  // editor.image.get().attr('src', imgUrl);
+                  editor.image.insert(imgUrl, null, null, editor.image.get());
+                  this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
+                  editor.edit.on();
+                } else {
+                  editor.edit.off();
+                  console.log('else block');
+                  this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
+                }
                 editor.edit.off();
-                // editor.image.get().attr('src', imgUrl);
-                editor.image.insert(imgUrl, null, null, editor.image.get());
-                this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
+                return false;
+              }).catch((err) => {
                 editor.edit.on();
-              } else {
-                editor.edit.off();
-                console.log('else block');
+                console.log('catch image', err);
                 this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
-              }
-              editor.edit.off();
-              return false;
-            }).catch((err) => {
+                return false;
+              });
+            } else {
+              this.updateState('errorMsg', validate.errorMsg);
+              this.updateState('showConfirmModal', true);
               editor.edit.on();
-              console.log('catch image', err);
-              this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
-              return false;
-            });
+            }
           }
           editor.edit.off();
         },
@@ -137,6 +153,15 @@ export default class HtmlEditor extends React.Component {
           onModelChange={this.handleModelChange}
         />
         <ShortCodeInforModal toggleModal={this.toggleModal} showModal={this.state.showModal} />
+        <Confirm
+          header="Warning"
+          content={this.state.errorMsg}
+          open={this.state.showConfirmModal}
+          onConfirm={() => this.updateState('showConfirmModal', false)}
+          onCancel={() => this.updateState('showConfirmModal', false)}
+          size="mini"
+          className="deletion"
+        />
       </div>
     );
   }

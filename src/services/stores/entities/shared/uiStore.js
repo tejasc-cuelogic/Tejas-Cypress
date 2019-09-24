@@ -18,7 +18,7 @@ export class UiStore {
 
   @observable inProgress = false;
 
-  @observable responsiveVars = {};
+  @observable.struct responsiveVars = {};
 
   @observable inProgressArray = [];
 
