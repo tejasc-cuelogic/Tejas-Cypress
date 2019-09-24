@@ -82,6 +82,7 @@ export default class UpdateProfilePhoto extends Component {
               handelReset={this.handleresetProfilePhoto}
               verifyImageDimension={this.handelImageDeimension}
               field={ID_PROFILE_INFO.fields.profilePhoto}
+              name="profilePhoto"
             />
           </Form>
         </Modal.Content>
