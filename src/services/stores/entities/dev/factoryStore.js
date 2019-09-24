@@ -6,12 +6,14 @@ import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs } from '../..
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { REQUESTFACTORY_META, CRONFACTORY_META } from '../../../constants/admin/data';
+import { REQUESTFACTORY_META, CRONFACTORY_META, PROCESSFACTORY_META } from '../../../constants/admin/data';
 
 export class FactoryStore {
   @observable REQUESTFACTORY_FRM = Validator.prepareFormObject(REQUESTFACTORY_META);
 
   @observable CRONFACTORY_FRM = Validator.prepareFormObject(CRONFACTORY_META);
+
+  @observable PROCESSACTORY_FRM = Validator.prepareFormObject(PROCESSFACTORY_META);
 
   @observable inProgress = {
     requestFactory: false,
@@ -236,36 +238,11 @@ export class FactoryStore {
     return this.pluginListArr.loading;
   }
 
-  @computed get dropDownValuesForRequestPlugin() {
-    const pluginArr = [];
-    const pluginList = get(this.pluginListArr, 'data.listRequestPlugins.plugins');
-    pluginList.forEach((value) => {
-      const tempObj = {};
-      tempObj.key = value.name;
-      tempObj.text = value.name;
-      tempObj.value = value.name;
-      pluginArr.push(tempObj);
-    });
-    return pluginArr;
-  }
-
-  @computed get dropDownValuesForCronPlugin() {
-    const pluginArr = [];
-    const pluginList = get(this.pluginListArr, 'data.listCronPlugins.plugins');
-    pluginList.forEach((value) => {
-      const tempObj = {};
-      tempObj.key = value.name;
-      tempObj.text = value.name;
-      tempObj.value = value.name;
-      pluginArr.push(tempObj);
-    });
-    return pluginArr;
-  }
-
   @action
   setPluginDropDown = () => {
-    this.REQUESTFACTORY_FRM.fields.plugin.values = this.dropDownValuesForRequestPlugin;
-    this.CRONFACTORY_FRM.fields.cron.values = this.dropDownValuesForCronPlugin;
+    this.REQUESTFACTORY_FRM.fields.plugin.values = this.dropDownValuesForPlugin('listRequestPlugins');
+    this.CRONFACTORY_FRM.fields.cron.values = this.dropDownValuesForPlugin('listCronPlugins');
+    this.PROCESSACTORY_FRM.fields.method.values = this.dropDownValuesForPlugin('listProcessorPlugins');
   }
 
   isValidJson = (json) => {
@@ -276,6 +253,20 @@ export class FactoryStore {
     }
     const jsonObj = JSON.parse(json);
     return !!(jsonObj && !isEmpty(jsonObj));
+  }
+
+  dropDownValuesForPlugin = (pluginList) => {
+    const pluginArr = [];
+    const plugingListStr = `data.${pluginList}.plugins`;
+    const plugins = get(this.pluginListArr, plugingListStr);
+    plugins.forEach((value) => {
+      const tempObj = {};
+      tempObj.key = value.name;
+      tempObj.text = value.name;
+      tempObj.value = value.name;
+      pluginArr.push(tempObj);
+    });
+    return pluginArr;
   }
 }
 

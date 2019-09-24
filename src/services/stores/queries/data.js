@@ -140,6 +140,15 @@ query _listRequestPlugins {
       }
     }
   }
+  listProcessorPlugins
+  {
+    plugins{
+      name
+      pluginInputs{
+        name
+      }
+    }
+  }
 }
 `;
 

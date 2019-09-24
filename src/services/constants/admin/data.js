@@ -268,3 +268,14 @@ export const CRONFACTORY_META = {
     placeHolder: 'Enter here',
   },
 };
+
+export const PROCESSFACTORY_META = {
+  method: {
+    key: 'method',
+    value: '',
+    values: [],
+    label: 'method',
+    error: undefined,
+    rule: 'required',
+  },
+};
