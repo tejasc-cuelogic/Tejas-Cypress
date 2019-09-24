@@ -19,8 +19,15 @@ export default class CancelChangeLinkBankRequest extends Component {
     this.props.history.push(refLink);
   }
 
+  submit = () => {
+    const { declineBankChangeRequest } = this.props.bankAccountStore;
+    declineBankChangeRequest().then(() => {
+      this.handleCloseModal();
+    });
+  }
+
   render() {
-    const { declineBankChangeRequest, hasPendingRequest } = this.props.bankAccountStore;
+    const { hasPendingRequest } = this.props.bankAccountStore;
     return (
     <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
       <Modal.Header className="center-align signup-header">
@@ -30,7 +37,7 @@ export default class CancelChangeLinkBankRequest extends Component {
       <Modal.Content>
         <div className="center-align">
           <Button className="very relaxed red" content="No" onClick={this.handleCloseModal} />
-          <Button primary className="very relaxed" content="Yes" onClick={declineBankChangeRequest} />
+          <Button primary className="very relaxed" content="Yes" onClick={this.submit} />
         </div>
       </Modal.Content>
     </Modal>
