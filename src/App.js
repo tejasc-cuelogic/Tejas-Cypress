@@ -39,8 +39,6 @@ const metaTagsData = [
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
 const isMobile = document.documentElement.clientWidth < 768;
-const isTablet = document.documentElement.clientWidth >= 768
-&& document.documentElement.clientWidth < 992;
 const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/'];
 @inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
 @withRouter
@@ -49,6 +47,12 @@ class App extends Component {
   state = {
     authChecked: false,
   };
+
+  constructor(props) {
+    super(props);
+    window.addEventListener('resize', this.handleResize);
+    this.props.uiStore.setFieldvalue('responsiveVars', this.getSizes());
+  }
 
   componentDidMount() {
     const { location, history } = this.props;
@@ -145,7 +149,7 @@ class App extends Component {
   }
 
   componentWillUnmount() {
-    // window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('resize', this.handleResize);
   }
 
   getSizes = () => ({
@@ -216,6 +220,7 @@ class App extends Component {
   render() {
     const { location } = this.props;
     const { authChecked } = this.state;
+    const { isTablet } = this.props.uiStore.responsiveVars;
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {
       return (
         <Route path="/secure-gateway" component={SecureGateway} />
@@ -246,7 +251,7 @@ class App extends Component {
 />
         )
         }
-        <MetaTagGenerator isMobile={isTablet} metaTagsData={metaTagsData} />
+        <MetaTagGenerator isTablet={isTablet} metaTagsData={metaTagsData} />
         {this.props.authStore.devPasswdProtection
           ? <Route exact path="/password-protected" component={DevPassProtected} /> : (
             <Layout>
