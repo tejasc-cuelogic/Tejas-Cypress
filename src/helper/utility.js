@@ -8,6 +8,7 @@ import { toJS } from 'mobx';
 import money from 'money-math';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
+import { IMAGE_UPLOAD_ALLOWED_EXTENSIONS } from '../constants/common';
 // import userStore from './../services/stores/entities/userStore';
 
 export class Utility {
@@ -287,6 +288,23 @@ export class Utility {
         });
       }
     }
+  };
+
+  processImageFileName = (originalFileName, deviceInfo) => {
+    const fileNameSplit = originalFileName.split('.');
+    const fileExt = fileNameSplit.pop();
+    const fileName = fileNameSplit.join('.');
+    const { isMobile, isTablet } = deviceInfo;
+    const prepName = res => `${fileName}${res ? `__${res}` : ''}.${fileExt}`;
+    return IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(fileExt.toLowerCase()) ? isMobile ? prepName(640) : isTablet ? prepName(1024) : prepName(1920) : prepName();
+  }
+
+  validateImageExtension = (ext) => {
+    const obj = {
+      isInvalid: !IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()),
+      errorMsg: `Only ${IMAGE_UPLOAD_ALLOWED_EXTENSIONS.join(', ')}  extensions are allowed.`,
+    };
+    return obj;
   };
 }
 

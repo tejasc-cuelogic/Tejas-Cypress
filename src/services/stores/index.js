@@ -54,3 +54,4 @@ export { default as faqStore } from './entities/admin/faqStore';
 // dev stores
 export { default as elasticSearchStore } from './entities/dev/elasticSearchStore';
 export { default as dataStore } from './entities/dev/dataStore';
+export { default as factoryStore } from './entities/dev/factoryStore';
