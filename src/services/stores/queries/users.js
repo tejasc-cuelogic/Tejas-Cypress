@@ -684,7 +684,6 @@ export const investorAccountDeleteProcess = gql`
 query investorAccountDeleteProcess {
   investorAccountDeleteProcess {
     totalBalance
-    availableBalance
     validAgreement
   }
 }
