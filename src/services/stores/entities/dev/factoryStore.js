@@ -24,8 +24,6 @@ export class FactoryStore {
 
   @observable filters = true;
 
-  @observable backup = [];
-
   @observable cronLogList = [];
 
   @observable requestState = {
@@ -46,13 +44,14 @@ export class FactoryStore {
     const filters = toJS({ ...this.requestState.search });
     delete filters.keyword;
     this.requestState.page = (reqParams && reqParams.page) || this.requestState.page;
+    this.requestState.perPage = (reqParams && reqParams.first) || this.requestState.perPage;
     let params = {
       search: keyword,
       cron: cron || 'GOLDSTAR_HEALTHCHECK',
       // cronMetaType: cronMetaType || 'LOG',
       cronMetaType,
       // page: reqParams ? reqParams.page : 1,
-      limit: reqParams ? reqParams.perPage : this.requestState.perPage,
+      limit: this.requestState.perPage,
       jobId: jobId || '',
     };
     params = this.requestState.lek[`page-${this.requestState.page}`]
@@ -64,7 +63,6 @@ export class FactoryStore {
         status,
       };
     }
-    this.requestState.page = params.page;
     if (startDate && endDate) {
       params = {
         ...params,
@@ -78,7 +76,7 @@ export class FactoryStore {
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data && !this.cronLogList.loading) {
-          const { lek, cronLog } = data.businessApplicationsAdmin;
+          const { lek } = data.fetchCronLogs;
           this.requestState = {
             ...this.requestState,
             lek: {
@@ -86,7 +84,6 @@ export class FactoryStore {
               [`page-${this.requestState.page + 1}`]: lek,
             },
           };
-          this.backup = cronLog;
         }
       },
       onError: () => {

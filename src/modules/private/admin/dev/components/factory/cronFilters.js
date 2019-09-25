@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { Form, Grid } from 'semantic-ui-react';
 import { DropdownFilter, DateRangeFilter, ByKeyword } from '../../../../../../theme/form/Filters';
-import { NsPaginationType2 } from '../../../../../../theme/shared';
+// import { NsPaginationType2 } from '../../../../../../theme/shared';
+import { NsPaginationHookType } from '../../../../../../theme/shared';
 
+@inject('factoryStore')
 @observer
 export default class Filters extends Component {
   render() {
     const {
-      requestState, setSearchParam, change, filters, FILTER_FRM, executeSearch,
+      setSearchParam, change, filters, FILTER_FRM, executeSearch,
       paginate, totalRecords,
     } = this.props;
+    const { requestState } = this.props.factoryStore;
     return (
       <div className={`search-filters more ${!filters ? 'collapsed' : ''}`}>
         <Form>
@@ -29,7 +32,7 @@ export default class Filters extends Component {
                 <ByKeyword w={[8]} name="jobId" executeSearch={executeSearch} more="no" />
               </Grid.Column>
               <Grid.Column width={3}>
-                <NsPaginationType2 floated="right" initRequest={({ first, page }) => paginate({ first, page, noFilter: true })} meta={{ totalRecords, requestState }} />
+                <NsPaginationHookType floated="right" initRequest={({ first, page }) => paginate({ first, page, noFilter: true })} meta={{ totalRecords, requestState }} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
