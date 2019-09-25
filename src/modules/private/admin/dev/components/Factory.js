@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { InlineLoader } from '../../../../../theme/shared';
 import RequestFactory from './factory/requestFactory';
 import CronFactory from './factory/cronFactory';
+import ProcessFactory from './factory/processFactory';
 
 @inject('factoryStore')
 @withRouter
@@ -25,6 +26,7 @@ export default class Factory extends Component {
             <Grid.Column>
               <RequestFactory />
               <CronFactory />
+              <ProcessFactory />
             </Grid.Column>
           </Grid>
         )

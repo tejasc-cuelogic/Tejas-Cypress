@@ -185,3 +185,11 @@ query _fetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaType
     lek
   }
 }`;
+
+export const processFactoryPluginTrigger = gql`
+mutation _invokeProcessorDriver($method: DevAuditTypeEnum, $payload: String) {
+  invokeProcessorDriver(
+    method: $method,
+    payload: $payload
+  )
+}`;

@@ -2,7 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { get, isEmpty, isArray } from 'lodash';
 import moment from 'moment';
-import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs } from '../../queries/data';
+import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
@@ -18,6 +18,7 @@ export class FactoryStore {
   @observable inProgress = {
     requestFactory: false,
     cronFactory: false,
+    processFactory: false,
   };
 
   @observable pluginListArr = null;
@@ -25,6 +26,8 @@ export class FactoryStore {
   @observable filters = true;
 
   @observable cronLogList = [];
+
+  @observable processFactoryResponse = {};
 
   @observable requestState = {
     lek: { 'page-1': null },
@@ -265,6 +268,40 @@ export class FactoryStore {
     });
     return pluginArr;
   }
+
+  @action
+  processFactoryPluginTrigger = () => new Promise((resolve, reject) => {
+    const { fields } = this.PROCESSACTORY_FRM;
+    const formData = Validator.evaluateFormData(fields);
+    if (!this.isValidJson(formData.payload)) {
+      this.PROCESSACTORY_FRM.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
+      this.PROCESSACTORY_FRM.meta.isValid = false;
+    } else {
+      this.setFieldValue('inProgress', true, 'processFactory');
+      const variables = {};
+      variables.method = formData.method;
+      variables.payload = formData.payload;
+      client
+        .mutate({
+          mutation: processFactoryPluginTrigger,
+          variables,
+        })
+        .then((result) => {
+          Helper.toast('Your request is processed.', 'success');
+          if (result.data.invokeProcessorDriver) {
+            this.setFieldValue('processFactoryResponse', result.data.invokeProcessorDriver);
+            resolve(result.data.invokeProcessorDriver);
+          }
+        })
+        .catch(() => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          reject();
+        })
+        .finally(() => {
+          this.setFieldValue('inProgress', false, 'processFactory');
+        });
+    }
+  });
 }
 
 export default new FactoryStore();
