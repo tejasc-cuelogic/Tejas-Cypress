@@ -37,7 +37,7 @@ export default class ImageCropper extends Component {
     if (this.props.verifySize) {
       this.props.verifySize(files[0].size, this.props.name);
     }
-    this.props.verifyExtension(files[0].type.split('/')[1]);
+    this.props.verifyExtension(files[0].type.split('/')[1], this.props.name);
     const reader = new FileReader();
     reader.onload = () => {
       this.props.setData('src', reader.result);
@@ -126,46 +126,46 @@ export default class ImageCropper extends Component {
     const { field, cropInModal, disabled } = this.props;
     return (
       <>
-        { field.src && !field.error ? cropInModal
+        {field.src && !field.error ? cropInModal
           ? (
-<Modal closeOnRootNodeClick={false} closeIcon size="large" open={this.state.close} onClose={this.handleCloseModal} centered={false} closeOnDimmerClick={false}>
-            <Modal.Content>
-              <Header as="h3">Crop image for {field.label}</Header>
-              <ReactCrop
-                {...this.state}
-                src={field.src}
-                onImageLoaded={this.onImageLoaded}
-                onComplete={this.onCropComplete}
-                onChange={this.onCropChange}
-                crop={this.state.crop}
-              />
-            </Modal.Content>
-            <Modal.Actions>
-              <Button primary disabled={(this.props.aspect === 'none' && !this.state.crop.width)} content="Upload" onClick={() => this.modalUpload(this.props.name, field)} />
-            </Modal.Actions>
-          </Modal>
+            <Modal closeOnRootNodeClick={false} closeIcon size="large" open={this.state.close} onClose={this.handleCloseModal} centered={false} closeOnDimmerClick={false}>
+              <Modal.Content>
+                <Header as="h3">Crop image for {field.label}</Header>
+                <ReactCrop
+                  {...this.state}
+                  src={field.src}
+                  onImageLoaded={this.onImageLoaded}
+                  onComplete={this.onCropComplete}
+                  onChange={this.onCropChange}
+                  crop={this.state.crop}
+                />
+              </Modal.Content>
+              <Modal.Actions>
+                <Button primary disabled={(this.props.aspect === 'none' && !this.state.crop.width)} content="Upload" onClick={() => this.modalUpload(this.props.name, field)} />
+              </Modal.Actions>
+            </Modal>
           )
           : (
-<ReactCrop
-  {...this.state}
-  src={field.src}
-  onImageLoaded={this.onImageLoaded}
-  onComplete={this.onCropComplete}
-  onChange={this.onCropChange}
-  crop={this.state.crop}
-/>
+            <ReactCrop
+              {...this.state}
+              src={field.src}
+              onImageLoaded={this.onImageLoaded}
+              onComplete={this.onCropComplete}
+              onChange={this.onCropChange}
+              crop={this.state.crop}
+            />
           )
           : (
-<>
-            <div className="file-uploader">
-              <div className="file-uploader-inner">
-                <Icon className="ns-upload" /> Choose a file&nbsp;<span>or drag it here</span>
+            <>
+              <div className="file-uploader">
+                <div className="file-uploader-inner">
+                  <Icon className="ns-upload" /> Choose a file&nbsp;<span>or drag it here</span>
+                </div>
+                <input disabled={disabled} type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png" />
               </div>
-              <input disabled={disabled} type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png" />
-            </div>
-            {field.error
-              && <FieldError error={field.error} />
-            }
+              {field.error
+                && <FieldError error={field.error} />
+              }
             </>
           )
         }
