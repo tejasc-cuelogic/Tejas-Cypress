@@ -5,7 +5,7 @@ import PrivateLayout from '../../shared/PrivateLayout';
 import AllRepayments from './components/AllRepayments';
 import RepaymentDetails from './containers/RepaymentDetails';
 
-@inject('repaymentStore')
+@inject('paymentStore')
 @observer
 export default class Repayments extends Component {
   constructor(props) {

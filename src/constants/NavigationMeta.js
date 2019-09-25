@@ -420,7 +420,7 @@ export const PRIVATE_NAV = [
     icon: 'money',
     title: 'Payments',
     capability: 'REPAYMENTS_ANY',
-    to: 'repayments',
+    to: 'payments',
     path: 'admin/repayments',
     accessibleTo: ['admin', 'manager', 'support'],
     subNavigations: [

@@ -14,9 +14,9 @@ export default class DataModelStore {
 
   currTime;
 
+  // 0: error, 1: loading, 2: success
   auStatus = null;
 
-  // 0: error, 1: loading, 2: success
   loading = false;
 
   client = publicClient;
