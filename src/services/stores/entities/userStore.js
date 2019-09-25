@@ -176,11 +176,11 @@ export class UserStore {
       return data;
     }
 
-    if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'availableBalance') > 0) {
+    if (!get(deletedUserMeta, 'validAgreement') && get(deletedUserMeta, 'totalBalance') > 0) {
       data.header = 'You currently have funds remaining in your account';
       data.message = (<p className="mb-20">In order to delete your account, please withdraw all funds and allow 5-7 business days to clear prior to deleting your account. If you have any questions or need assistance, please email us at <a href="mailto:support@nextseed.com">support@nextseed.com</a>.</p>);
       data.isCancelDelete = false;
-    } else if (!get(deletedUserMeta, 'validAgreement') && (get(deletedUserMeta, 'availableBalance') || 0) <= 0 && (get(deletedUserMeta, 'totalBalance') || 0) === 0) {
+    } else if (!get(deletedUserMeta, 'validAgreement') && (get(deletedUserMeta, 'totalBalance') || 0) === 0) {
       data.header = 'Are you sure?';
       data.message = (<><p className="mb-20">We hate to see you go, but if you would like to delete your NextSeed account please confirm your intent by entering the email address associated with your account.</p><p className="mb-20">Please note that any promotional credits you may have <br /> accumulated in your account will be forfeited.</p></>);
       data.isValidForDelete = true;
