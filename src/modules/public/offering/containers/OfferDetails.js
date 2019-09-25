@@ -22,6 +22,7 @@ import OfferingMetaTags from '../components/OfferingMetaTags';
 import VideoModal from '../components/campaignDetails/Overview/VideoModal';
 import AboutPhotoGallery from '../components/campaignDetails/AboutPhotoGallery';
 import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit';
+import { DEV_FEATURE_ONLY } from '../../../../constants/common';
 
 const getModule = component => lazy(() => import(`../components/campaignDetails/${component}`));
 const isMobile = document.documentElement.clientWidth < 992;
@@ -226,7 +227,7 @@ class offerDetails extends Component {
     const isBonusReward = bonusRewards && bonusRewards.length;
     const InitialComponent = getModule(!newLayout ? navItems[0].component : 'CampaignLayout');
     const showWatchingBtn = isWatching !== 'loading';
-    const followBtn = (
+    const followBtn = DEV_FEATURE_ONLY && (
       <Button disabled={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') || !showWatchingBtn} inverted loading={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') || !showWatchingBtn} fluid color="white" onClick={this.handleFollowBtn}>
         {showWatchingBtn && <Icon name={` ${!this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') && 'heart'} ${isWatching ? '' : 'outline'}`} color={isWatching ? 'green' : ''} />} {isWatching ? 'Following' : 'Follow'}
       </Button>

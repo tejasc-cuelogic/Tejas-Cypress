@@ -11,6 +11,7 @@ import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_ABREVIATION, CAMPAIGN
 import Helper from '../../../../../helper/utility';
 import NSImage from '../../../../shared/NSImage';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+import { DEV_FEATURE_ONLY } from '../../../../../constants/common';
 
 
 @inject('campaignStore', 'accreditationStore')
@@ -82,7 +83,7 @@ export default class CampaignList extends Component {
                           </div>
                         </div>
                         {offering.stage === 'LIVE' ? this.renderBaners(offering) : null }
-                        {(['INVESTOR', 'WATCHING'].includes(offering.watchListStatus))
+                        {(DEV_FEATURE_ONLY && ['INVESTOR', 'WATCHING'].includes(offering.watchListStatus))
                         && (
                           <Icon name="heart" />
                         )

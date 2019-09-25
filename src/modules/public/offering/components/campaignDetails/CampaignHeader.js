@@ -189,7 +189,7 @@ export default class CampaignHeader extends Component {
                       && (
                         <>
                           <Grid>
-                            <Grid.Column width="10" className="center-align">
+                            <Grid.Column width={followBtn ? '10' : ''} className="center-align">
                               <Button
                                 secondary={!isInProcessing}
                                 disabled={maxFlagStatus || isInProcessing}
@@ -202,9 +202,13 @@ export default class CampaignHeader extends Component {
                                 {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                             </p>
                             </Grid.Column>
+                            {followBtn
+                            && (
                             <Grid.Column width="6">
                               <>{followBtn}</>
                             </Grid.Column>
+                            )
+                            }
                           </Grid>
                         </>
                       )

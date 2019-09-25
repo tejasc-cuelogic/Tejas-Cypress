@@ -61,3 +61,5 @@ export const isLoggingEnabled = ['localhost', 'dev'].includes(process.env.REACT_
 export const DEFAULT_TIME_ZONE_TO_DISPLAY = 'America/Chicago';
 
 export const IMAGE_UPLOAD_ALLOWED_EXTENSIONS = ['jpeg', 'jpg', 'png'];
+
+export const DEV_FEATURE_ONLY = ['localhost', 'develop', 'dev'].includes(REACT_APP_DEPLOY_ENV);
