@@ -238,3 +238,52 @@ export const REQUESTFACTORY_META = {
     placeHolder: 'Put your JSON ojbect here...',
   },
 };
+
+export const CRONFACTORY_META = {
+  cron: {
+    key: 'cron',
+    value: '',
+    values: [],
+    label: 'cron',
+    error: undefined,
+    rule: 'required',
+  },
+  cronMetaType: {
+    key: 'cronMetaType',
+    value: '',
+    values: [
+      { key: 'PLUGIN', text: 'PLUGIN', value: 'PLUGIN' },
+      { key: 'LOG', text: 'LOG', value: 'LOG' },
+    ],
+    label: 'Cron Meta Type',
+    error: undefined,
+    rule: 'optional',
+  },
+  jobId: {
+    key: 'jobId',
+    value: '',
+    label: 'Job Id',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+};
+
+export const PROCESSFACTORY_META = {
+  method: {
+    key: 'method',
+    value: '',
+    values: [],
+    label: 'method',
+    error: undefined,
+    rule: 'required',
+  },
+  payload: {
+    key: 'payload',
+    value: '',
+    label: 'Payload',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Put your JSON ojbect here...',
+  },
+};
