@@ -42,13 +42,14 @@ export class FactoryStore {
     const filters = toJS({ ...this.requestState.search });
     delete filters.keyword;
     this.requestState.page = (reqParams && reqParams.page) || this.requestState.page;
+    this.requestState.perPage = (reqParams && reqParams.first) || this.requestState.perPage;
     let params = {
       search: keyword,
       cron: cron || 'GOLDSTAR_HEALTHCHECK',
       // cronMetaType: cronMetaType || 'LOG',
       cronMetaType,
       // page: reqParams ? reqParams.page : 1,
-      limit: reqParams ? reqParams.perPage : this.requestState.perPage,
+      limit: this.requestState.perPage,
       jobId: jobId || '',
     };
     params = this.requestState.lek[`page-${this.requestState.page}`]
