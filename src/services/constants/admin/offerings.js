@@ -10,7 +10,7 @@ Validator.register(
   'The :attribute is not in the format XXX-XX-XXXX.',
 );
 
-export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement'];
+export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement', 'closingBinder'];
 
 export const STAGES = {
   CREATION: { ref: 'creation', publicRef: 'creation', accessKey: 1, label: 'Creation' },
@@ -2588,34 +2588,40 @@ export const ADMIN_DOCUMENTATION = {
   },
 };
 
+const DATA_ROOM_COMMON = {
+  name: {
+    label: 'Document Name',
+    value: '',
+    error: undefined,
+    rule: 'required|string',
+    placeHolder: 'Enter here',
+  },
+  upload: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'required',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+  },
+  accreditedOnly: {
+    label: '',
+    value: false,
+    error: undefined,
+    default: false,
+    rule: 'required',
+  },
+};
+
 export const DATA_ROOM = {
-  documents: [{
-    name: {
-      label: 'Document Name',
-      value: '',
-      error: undefined,
-      rule: 'required|string',
-      placeHolder: 'Enter here',
-    },
-    upload: {
-      value: '',
-      label: '',
-      error: undefined,
-      rule: 'required',
-      showLoader: false,
-      preSignedUrl: '',
-      fileId: '',
-      fileData: '',
-      objType: 'FileObjectType',
-    },
-    accreditedOnly: {
-      label: '',
-      value: false,
-      error: undefined,
-      default: false,
-      rule: 'required',
-    },
-  }],
+  documents: [{ ...DATA_ROOM_COMMON }],
+};
+
+export const CLOSING_BINDING = {
+  closingBinder: [{ ...DATA_ROOM_COMMON }],
 };
 
 export const POC_DETAILS = {

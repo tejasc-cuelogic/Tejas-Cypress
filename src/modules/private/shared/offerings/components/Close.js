@@ -12,7 +12,8 @@ import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { FieldError } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
-import SupplementalAggrements from './SupplementalAggrements';
+import SupplementalAgreements from './SupplementalAgreements';
+import ClosingBinder from './ClosingBinder';
 
 const closingActions = {
   ENUM1: { label: 'save', ref: 1, enum: 'update' },
@@ -85,7 +86,7 @@ export default class Close extends Component {
     this.props.offeringCreationStore.setFieldValue('outputMsg', null);
   };
 
-  closeAction = (status, step, forced = false, actionLabel = '') => {
+  closeAction = (status, step, forced = false, actionLabel = '', type = 'SUPPLEMENTAL_AGREEMENT') => {
     const { offer } = this.props.offeringsStore;
     const { offeringClose } = this.props.offeringCreationStore;
     const { confirmed } = this.state;
@@ -96,7 +97,7 @@ export default class Close extends Component {
       this.setState({ openModal: true, action: status, actionLabel });
     } else {
       if (status === 'close' || status === 'update') {
-        this.handleUpdateOffering(status);
+        this.handleUpdateOffering(status, type);
       } else {
         offeringClose(
           {
@@ -158,7 +159,7 @@ export default class Close extends Component {
     this.setState({ openModal: false });
   }
 
-  handleUpdateOffering = (status) => {
+  handleUpdateOffering = (status, type = 'SUPPLEMENTAL_AGREEMENT') => {
     const {
       updateOfferingMutation,
       currentOfferingId,
@@ -166,13 +167,15 @@ export default class Close extends Component {
     } = this.props.offeringCreationStore;
     new Promise((res, rej) => {
       let payload = { stage: 'STARTUP_PERIOD' };
+      let emptyPayload = null;
       if (status === 'update') {
-        payload = getClosureObject();
+        payload = getClosureObject(type);
+        emptyPayload = type === 'CLOSING_BINDER' ? { closingBinder: null } : null;
       }
       this.setState({ inProgress: status });
       updateOfferingMutation(
         currentOfferingId, payload, status === 'close' ? 'CLOSEOFFERING' : false,
-        true, `Offering ${status === 'update' ? 'Updated' : 'Closed'} successfully.`, false, res, rej,
+        true, `Offering ${status === 'update' ? 'Updated' : 'Closed'} successfully.`, false, res, rej, '', null, null, emptyPayload,
       );
     })
       .then(() => {
@@ -180,7 +183,8 @@ export default class Close extends Component {
         if (status === 'close') {
           this.props.history.push(`/app/offerings/completed/edit/${currentOfferingId}/overview`);
         }
-      }).catch(() => {
+      }).catch((e) => {
+        console.log(e);
         this.setState({ inProgress: false });
       });
   }
@@ -322,11 +326,13 @@ out of required
                         }
                       </Form.Group>
                       <Divider hidden />
+                      <Header as="h4">Closing Binder</Header>
+                      <ClosingBinder />
                       <Button.Group>
                         {filter(closingActions, a => a.ref === 1).map(fA => (
                           <Button
                             loading={this.state.inProgress === fA.enum}
-                            onClick={() => this.closeAction(fA.enum, 1, false, fA.label)}
+                            onClick={() => this.closeAction(fA.enum, 1, false, fA.label, 'CLOSING_BINDER')}
                             primary
                           >
                             {fA.label}
@@ -590,12 +596,12 @@ out of required
             {this.state.showSupplimentAgg
             && (
               <>
-                <SupplementalAggrements />
+                <SupplementalAgreements />
                 <Button.Group>
                 {filter(closingActions, a => a.ref === 1).map(fA => (
                   <Button
                     loading={this.state.inProgress === 'update'}
-                    onClick={() => this.closeAction('update', 1, false, fA.label)}
+                    onClick={() => this.closeAction('update', 1, false, fA.label, 'SUPPLEMENTAL_AGREEMENT')}
                     primary
                   >
                     {fA.label}
