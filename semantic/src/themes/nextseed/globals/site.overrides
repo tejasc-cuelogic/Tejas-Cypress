@@ -654,6 +654,9 @@ footer{
 		padding: @50px @32px @36px;
 		&.offering-intro-v2{
 			padding: @50px @22px @36px;
+			.ui.buttons.vertical{
+				display: block;
+			}
 		}
 	}
 	h4.ui.header {
