@@ -418,11 +418,16 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'money',
-    title: 'Repayments',
+    title: 'Payments',
     capability: 'REPAYMENTS_ANY',
-    to: 'repayments',
+    to: 'payments',
     path: 'admin/repayments',
     accessibleTo: ['admin', 'manager', 'support'],
+    subNavigations: [
+      { title: 'Issuers', to: 'issuers' },
+      { title: 'Batches', to: 'batches' },
+      { title: 'Util', to: 'util' },
+    ],
   },
   {
     icon: 'dollar',
