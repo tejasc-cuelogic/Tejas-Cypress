@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
+import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import UpdatesTimeline from './UpdatesComponents/UpdatesTimeline';
 import UpdateDetails from './UpdatesComponents/UpdateDetails';
 import { InlineLoader } from '../../../../../../theme/shared';
-import { DataFormatter } from '../../../../../../helper';
 
 @inject('updateStore')
 @observer
@@ -26,8 +26,8 @@ class Updates extends Component {
         const dateObj = {};
         dateObj.id = index;
         dateObj.title = dataItem.title;
-        dateObj.date = filteredUpdates[index].updated.date
-          ? DataFormatter.getDateAsPerTimeZone(filteredUpdates[index].updated.date, true, true, false) : null;
+        dateObj.date = filteredUpdates[index].updatedDate
+          ? moment(filteredUpdates[index].updatedDate).format('LL') : null;
         return summary.push(dateObj);
       });
     }
