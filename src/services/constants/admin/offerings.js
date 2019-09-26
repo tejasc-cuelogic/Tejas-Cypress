@@ -2621,7 +2621,16 @@ export const DATA_ROOM = {
 };
 
 export const CLOSING_BINDING = {
-  closingBinder: [{ ...DATA_ROOM_COMMON }],
+  closingBinder: [{
+    ...DATA_ROOM_COMMON,
+    status: {
+      label: '',
+      value: false,
+      error: undefined,
+      rule: 'optional',
+      skipField: true,
+    },
+  }],
 };
 
 export const POC_DETAILS = {

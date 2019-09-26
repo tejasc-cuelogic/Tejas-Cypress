@@ -25,16 +25,22 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
         />
       </div>
       <div className="balance-half">
+      {closingBinder && ['PENDING', 'FAILED'].includes(document.status.value) ?
+        document.status.value
+        :
         <DropZone
           disabled={isReadonly}
           size="small"
           className="secondary"
           name="upload"
+          sharableLink
+          hideFields
           fielddata={document.upload}
           uploadtitle="Upload"
           ondrop={(files, name) => onFileDrop(files, name, docIndx)}
           onremove={fieldName => handleDelDoc(fieldName, docIndx)}
         />
+      }
       </div>
       <div className="action">
         <Button disabled={isReadonly} icon circular color={!offeringClose ? document.accreditedOnly.value ? 'red' : 'green' : ''} className="link-button">
@@ -125,7 +131,7 @@ export default class DataRoom extends Component {
       offer.legal.dataroom.submitted) ? offer.legal.dataroom.submitted : null;
     const approved = (offer && offer.legal && offer.legal.dataroom &&
       offer.legal.dataroom.approved) ? offer.legal.dataroom.approved : null;
-    const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
+    const isReadonly = (!offeringClose && ((submitted && !isManager) || (isManager && approved && approved.status)));
     const {
       DATA_ROOM_FRM,
       CLOSING_BINDER_FRM,

@@ -1273,12 +1273,7 @@ export const initializeClosingBinder = gql`
   mutation initializeClosingBinder($offeringId: String!){
     initializeClosingBinder(offeringId: $offeringId) {
       name
-      aliasAccreditedOnly: isVisible
       status
-      upload {
-        fileId
-        fileName
-      }
     }
   }
 `;

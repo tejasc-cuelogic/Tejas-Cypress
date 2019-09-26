@@ -175,7 +175,7 @@ export default class Close extends Component {
       this.setState({ inProgress: status });
       updateOfferingMutation(
         currentOfferingId, payload, status === 'close' ? 'CLOSEOFFERING' : false,
-        true, `Offering ${status === 'update' ? 'Updated' : 'Closed'} successfully.`, false, res, rej, '', null, null, emptyPayload,
+        true, `Offering ${status === 'update' ? 'Updated' : 'Closed'} successfully.`, false, res, rej, 'success', null, null, emptyPayload,
       );
     })
       .then(() => {
