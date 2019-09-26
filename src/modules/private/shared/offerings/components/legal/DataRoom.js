@@ -96,7 +96,8 @@ export default class DataRoom extends Component {
     this.props.offeringCreationStore.setFileUploadDataMulitple(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', closingBinder ? 'closingBinder' : 'documents', name, files, uploadEnum, index, true);
   }
   handleDelDoc = (field, index = undefined) => {
-    this.props.offeringCreationStore.removeUploadedDataMultiple(this.props.closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', field, index, this.props.closingBinder ? 'closingBinder' : 'documents');
+    const { closingBinder } = this.props;
+    this.props.offeringCreationStore.removeUploadedDataMultiple(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', field, index, closingBinder ? 'closingBinder' : 'documents');
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
@@ -199,7 +200,7 @@ export default class DataRoom extends Component {
           content="Are you sure you want to remove this document?"
           open={confirmModal}
           onCancel={this.toggleConfirmModal}
-          onConfirm={() => removeData(confirmModalName, this.props.closingBinder ? 'closingBinder' : 'documents')}
+          onConfirm={() => removeData(confirmModalName, closingBinder ? 'closingBinder' : 'documents')}
           size="mini"
           className="deletion"
         />

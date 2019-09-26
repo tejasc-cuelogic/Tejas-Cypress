@@ -1972,7 +1972,7 @@ export class OfferingCreationStore {
       })
       .then(() => {
         offeringsStore.getOne(this.currentOfferingId, false);
-        Helper.toast('Generate Docs created.', 'success');
+        Helper.toast('Closing binder initiated.', 'success');
       })
       .catch(action((err) => {
         Helper.toast('Something went wrong.', 'error');
