@@ -200,7 +200,7 @@ export default class DataRoom extends Component {
           content="Are you sure you want to remove this document?"
           open={confirmModal}
           onCancel={this.toggleConfirmModal}
-          onConfirm={() => removeData(confirmModalName, closingBinder ? 'closingBinder' : 'documents')}
+          onConfirm={() => removeData(confirmModalName, 'documents')}
           size="mini"
           className="deletion"
         />

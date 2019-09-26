@@ -471,8 +471,9 @@ export class OfferingCreationStore {
 
   @action
   removeData = (formName, subForm = 'data', isApiDelete = false) => {
+    const subArray = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : subForm;
     if (!isApiDelete) {
-      this[formName].fields[subForm].splice(this.removeIndex, 1);
+      this[formName].fields[subArray].splice(this.removeIndex, 1);
     }
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;

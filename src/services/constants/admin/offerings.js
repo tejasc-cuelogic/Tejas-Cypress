@@ -2593,7 +2593,7 @@ const DATA_ROOM_COMMON = {
     label: 'Document Name',
     value: '',
     error: undefined,
-    rule: 'required|string',
+    rule: 'optional',
     placeHolder: 'Enter here',
   },
   upload: {
@@ -2625,7 +2625,7 @@ export const CLOSING_BINDING = {
     ...DATA_ROOM_COMMON,
     status: {
       label: '',
-      value: false,
+      value: 'COMPLETE',
       error: undefined,
       rule: 'optional',
     },
