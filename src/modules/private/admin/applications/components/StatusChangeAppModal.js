@@ -44,7 +44,7 @@ export default class StatusChangeAppModal extends Component {
     this.props.businessAppReviewStore
       .updateApplicationStatus(params.appId, params.userId, params.appStatus, params.action)
       .then(() => {
-        this.props.activityHistoryStore.send(params.appId, 'Comment', ACTIVITY_HISTORY_TYPES.COMMENT);
+        this.props.activityHistoryStore.send(params.appId, params.id === 'in-progress' ? 'Business Application Submitted' : 'Business Application Pre Qual Promoted', ACTIVITY_HISTORY_TYPES.COMMENT);
       })
       .then(() => {
         this.props.uiStore.setErrors(null);
