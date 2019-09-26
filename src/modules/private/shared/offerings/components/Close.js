@@ -170,7 +170,7 @@ export default class Close extends Component {
       let emptyPayload = null;
       if (status === 'update') {
         payload = getClosureObject(type);
-        emptyPayload = type === 'CLOSING_BINDER' ? { closingBinder: null } : null;
+        emptyPayload = type === 'CLOSING_BINDER' && !payload.closingBinder ? { closingBinder: null } : null;
       }
       this.setState({ inProgress: status });
       updateOfferingMutation(

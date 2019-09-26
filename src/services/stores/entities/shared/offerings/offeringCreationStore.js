@@ -1922,7 +1922,7 @@ export class OfferingCreationStore {
       obj = Validator.evaluateFormData(this.OFFERING_CLOSE_1.fields);
       const closerBinderDocs = Validator.evaluateFormData(this.CLOSING_BINDER_FRM.fields).closingBinder || [];
       const filteredCloserBinderDocs = closerBinderDocs.filter(d => d.name !== '' && d.upload.fileId !== '');
-      obj.closingBinder = { ...filteredCloserBinderDocs };
+      obj.closingBinder = [...filteredCloserBinderDocs];
     } else {
       const supplementalAgreementsDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
       const filteredSupplementalAgreementsDocs = supplementalAgreementsDocs.filter(d => d.name !== '' && d.upload.fileId !== '');

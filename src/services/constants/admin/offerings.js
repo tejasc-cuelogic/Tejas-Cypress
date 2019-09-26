@@ -2628,7 +2628,6 @@ export const CLOSING_BINDING = {
       value: false,
       error: undefined,
       rule: 'optional',
-      skipField: true,
     },
   }],
 };
