@@ -59,7 +59,9 @@ export default class ApplicationDetails extends Component {
   updateBusinessDetails = (e, appId, appUserId, appType = null, rating = 0) => {
     e.preventDefault();
     this.props.businessAppAdminStore.updateBusinessDetails(appId, appUserId, appType, rating).then(() => {
-      this.setState({ displayOnly: !this.state.displayOnly });
+      if (!rating) {
+        this.setState({ displayOnly: !this.state.displayOnly });
+      }
     });
   }
 
