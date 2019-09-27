@@ -138,7 +138,7 @@ export default class StatusChangeAppModal extends Component {
         <Modal.Header className="center-align signup-header">
           {params.action === 'PROMOTE' && params.id !== 'in-progress'
             ? <Header as="h3">Promote PreQual?</Header>
-            : <Header as="h3">{params.action === 'REMOVED' ? 'Remove' : capitalize(params.action)} Application?</Header>
+            : <Header as="h3">{params.action === 'REMOVED' ? 'Remove' : capitalize(params.id !== 'in-progress' ? params.action : 'Submit')} Application?</Header>
           }
         </Modal.Header>
         <Modal.Content className="signup-content">

@@ -130,7 +130,7 @@ export default class ApplicationDetails extends Component {
             }
             />
             {((applicationStatus || prequalStatus)
-            === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED || applicationStage === 'IN_PROGRESS')
+            === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED || applicationStage === 'IN_PROGRESS') && match.params.id !== 'completed'
             && <Button secondary compact floated="right" content={prequalStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Promote PreQual' : 'Submit Application'} as={Link} to={`${this.props.refLink}/${appStatus}/${id || applicationId}/${userId || 'new'}/${prequalStatus || 'APPLICATION_IN_PROGRESS'}/PROMOTE/confirm`} />
             }
           </Header>
