@@ -12,6 +12,7 @@ import Updates from './Updates';
 import Comments from './Comments';
 import OfferingCreation from './OfferingCreation';
 import ActivityHistory from '../../ActivityHistory';
+import WatchList from './WatchList';
 
 const OfferingModule = (to) => {
   let module = null;
@@ -30,6 +31,7 @@ const OfferingModule = (to) => {
     case 'updates': module = Updates; break;
     case 'offering-creation': module = OfferingCreation; break;
     case 'activity-history': module = ActivityHistory; break;
+    case 'watch-list': module = WatchList; break;
     default: module = Overview; break;
   }
   return module;

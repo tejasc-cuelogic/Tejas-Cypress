@@ -114,6 +114,9 @@
             float:left;
             margin:@2px @4px @2px 0;
         }
+        &.email-list .item>.content{
+            padding: @7px 0;
+        }
     }
     a:not(.button){
         font-family:@pageFont;
