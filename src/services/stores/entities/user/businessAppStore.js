@@ -973,14 +973,23 @@ export class BusinessAppStore {
 
   @action
   businessPreQualificationFormSumbit = () => {
-    const data = this.getFormatedPreQualificationData;
+    let payload = this.getFormatedPreQualificationData;
+    if (this.urlParameter) {
+      payload = has(this.urlParameter, 'signupCode') ? { ...payload, signupCode: this.urlParameter.signupCode } : { ...payload };
+      payload = has(this.urlParameter, 'signupcode') ? { ...payload, signupCode: this.urlParameter.signupcode } : { ...payload };
+      payload = has(this.urlParameter, 'sc') ? { ...payload, signupCode: this.urlParameter.sc } : { ...payload };
+      payload = has(this.urlParameter, 'utmSource') ? { ...payload, utmSource: this.urlParameter.utmSource } : { ...payload };
+      payload = has(this.urlParameter, 'utmsource') ? { ...payload, utmSource: this.urlParameter.utmsource } : { ...payload };
+      payload = has(this.urlParameter, 'utm_source') ? { ...payload, utmSource: this.urlParameter.utm_source } : { ...payload };
+      payload = has(this.urlParameter, 'adid') ? { ...payload, utmSource: `${payload.utmSource}&&adid=${this.urlParameter.adid}` } : { ...payload };
+    }
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       clientPublic
         .mutate({
           mutation: createBusinessApplicationPrequalificaiton,
           variables: {
-            preQualificationData: data,
+            preQualificationData: payload,
           },
           // refetchQueries: [{ query: getBusinessApplications }],
         })
