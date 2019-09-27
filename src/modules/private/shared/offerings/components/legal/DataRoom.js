@@ -91,8 +91,7 @@ export default class DataRoom extends Component {
   // }
   onFileDrop = (files, name, index) => {
     const { closingBinder, supplementalAgreements } = this.props;
-    // closingBinder ? 'OFFERING_CLOSING_BINDER' : supplementalAgreements ? 'OFFERING_SUPPLEMENTAL_AGREEMENT' : 'DOCUMENTS_LEGAL_DATAROOM';
-    const uploadEnum = 'DOCUMENTS_LEGAL_DATAROOM';
+    const uploadEnum = closingBinder ? 'OFFERING_CLOSING_BINDER' : supplementalAgreements ? 'OFFERING_SUPPLEMENTAL_AGREEMENT' : 'DOCUMENTS_LEGAL_DATAROOM';
     this.props.offeringCreationStore.setFileUploadDataMulitple(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', closingBinder ? 'closingBinder' : 'documents', name, files, uploadEnum, index, true);
   }
   handleDelDoc = (field, index = undefined) => {
