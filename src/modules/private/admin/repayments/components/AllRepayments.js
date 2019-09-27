@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Grid, Form } from 'semantic-ui-react';
+import moment from 'moment';
 import Helper from '../../../../../helper/utility';
 import { InlineLoader } from '../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
@@ -88,7 +89,7 @@ export default class AllRepayments extends Component {
                     <Table.Row key={record.id}>
                       <Table.Cell>{record.shorthandBusinessName}</Table.Cell>
                       <Table.Cell>{record.hardCloseDate}</Table.Cell>
-                      <Table.Cell>{record.maturityDate}</Table.Cell>
+                      <Table.Cell>{record.maturityDate ? `${moment(moment(record.maturityDate)).diff(moment(), 'months')} months` : ''}</Table.Cell>
                       <Table.Cell>{record.expectedPaymentDate}</Table.Cell>
                       <Table.Cell>{record.firstPaymentDate}</Table.Cell>
                       <Table.Cell>{Helper.CurrencyFormat(record.sinkingFundBalance)}</Table.Cell>
