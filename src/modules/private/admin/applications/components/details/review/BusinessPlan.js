@@ -18,7 +18,8 @@ const AddMore = ({
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class BusinessPlan extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.businessAppReviewStore.initLoad.includes('BUSINESS_PLAN_FRM')) {
       this.props.businessAppReviewStore.setFormData('BUSINESS_PLAN_FRM', 'review.businessPlan');
     }

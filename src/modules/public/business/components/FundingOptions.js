@@ -15,9 +15,10 @@ const navItems = [
 const isMobile = document.documentElement.clientWidth < 768;
 
 export default class FundingOption extends Component {
-  componentWillMount() {
-    if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/term-notes`);
+  constructor(props) {
+    super(props);
+    if (props.match.isExact) {
+      props.history.replace(`${props.match.url}/term-notes`);
     }
   }
 

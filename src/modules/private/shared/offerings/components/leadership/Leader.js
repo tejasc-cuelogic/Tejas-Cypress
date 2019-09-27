@@ -6,10 +6,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { FormInput, MaskedInput, FormTextarea, DropZoneConfirm as DropZone, AutoComplete, FormCheckbox, ImageCropper } from '../../../../../../theme/form';
 import { Image64 } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
-import {
-  PROFILE_PHOTO_BYTES,
-  PROFILE_PHOTO_EXTENSIONS,
-} from '../../../../../../services/constants/user';
+import { PROFILE_PHOTO_BYTES } from '../../../../../../services/constants/user';
 import ButtonGroup from '../ButtonGroup';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 
@@ -30,11 +27,11 @@ const HeaderWithTooltip = ({ header, tooltip }) => (
 @withRouter
 @observer
 export default class Leader extends Component {
-  state = {
-    leaderFormInvalid: false,
-  }
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      leaderFormInvalid: false,
+    };
     this.props.offeringCreationStore.setLeadershipExpData(this.props.index);
   }
 
@@ -89,16 +86,19 @@ export default class Leader extends Component {
       const attr = 'error';
       const errorMsg = 'File size cannot be more than 5 MB.';
       this.props.offeringCreationStore.setLeadershipProfilePhoto(attr, errorMsg, field, index);
+      this.props.offeringCreationStore.setLeadershipProfilePhoto('value', '', field, index);
     }
   }
 
-  handleVerifyFileExtension = (fileExt) => {
-    if (PROFILE_PHOTO_EXTENSIONS.indexOf(fileExt) === -1) {
+  handleVerifyFileExtension = (fileExt, field) => {
+    const validate = Helper.validateImageExtension(fileExt);
+    if (validate.isInvalid) {
       const leaderNumber = this.props.index;
       const index = leaderNumber || 0;
-      const field = 'error';
-      const errorMsg = `Only ${PROFILE_PHOTO_EXTENSIONS.join(', ')}  extensions are allowed.`;
-      this.props.offeringCreationStore.setLeadershipProfilePhoto(field, errorMsg, '', index);
+      const attr = 'error';
+      const { errorMsg } = validate;
+      this.props.offeringCreationStore.setLeadershipProfilePhoto(attr, errorMsg, field, index);
+      this.props.offeringCreationStore.setLeadershipProfilePhoto('value', '', field, index);
     }
   }
 
@@ -113,6 +113,7 @@ export default class Leader extends Component {
       const attr = 'error';
       const errorMsg = 'Image size should not be less than 200 x 200.';
       this.props.offeringCreationStore.setLeadershipProfilePhoto(attr, errorMsg, field, index);
+      this.props.offeringCreationStore.setLeadershipProfilePhoto('value', '', field, index);
     }
   }
 

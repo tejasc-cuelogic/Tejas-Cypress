@@ -13,7 +13,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 class InvestorSignup extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.authStore.setDefaultPwdType();
     const userRoleData = cookie.load('ROLE_VALUE');
     this.props.authStore.setUserRole(userRoleData || 'investor');

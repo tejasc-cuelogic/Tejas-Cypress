@@ -10,10 +10,11 @@ import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, get
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
-import { userDetailsStore } from '../../index';
+import { userDetailsStore, watchListStore, userStore } from '../../index';
 // import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
+import { DEV_FEATURE_ONLY } from '../../../../constants/common';
 
 export class CampaignStore {
   @observable data = [];
@@ -58,7 +59,6 @@ export class CampaignStore {
 
   @observable docLoading = false;
 
-
   @action
   setFieldValue = (field, val) => {
     this[field] = val;
@@ -67,15 +67,18 @@ export class CampaignStore {
   @action
   initRequest = (publicRef, referralCode = false) => {
     const stage = Object.keys(pickBy(STAGES, s => publicRef.includes(s.publicRef)));
-    const filters = { stage };
+    const variables = { filters: { stage } };
     if (referralCode) {
-      filters.referralCode = referralCode;
+      variables.filters.referralCode = referralCode;
+    }
+    if (DEV_FEATURE_ONLY && !referralCode && userStore.currentUser && userStore.currentUser.sub) {
+      variables.userId = userStore.currentUser.sub;
     }
     return new Promise((resolve) => {
       this.data = graphql({
         client: clientPublic,
         query: referralCode ? getOfferingsReferral : allOfferings,
-        variables: { filters },
+        variables,
         onFetch: (data) => {
           if (data && !this.data.loading) {
             const offering = data.getOfferingList.length && data.getOfferingList[0];
@@ -91,6 +94,7 @@ export class CampaignStore {
 
   @action
   getCampaignDetails = (id, queryType) => {
+    watchListStore.setFieldValue('isWatching', false);
     this.details = graphql({
       client: clientPublic,
       query: queryType ? campaignDetailsForInvestmentQuery : campaignDetailsQuery,
@@ -99,6 +103,9 @@ export class CampaignStore {
       onFetch: (data) => {
         if (data && data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length && !this.details.loading) {
           this.getCampaignAdditionalDetails(id);
+          if (DEV_FEATURE_ONLY) {
+            watchListStore.setOfferingWatch();
+          }
         }
       },
     });

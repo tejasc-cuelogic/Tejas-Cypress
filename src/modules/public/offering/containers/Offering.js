@@ -14,11 +14,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('campaignStore')
 @observer
 class Offering extends Component {
-  componentWillMount() {
-    this.props.campaignStore.initRequest(['active', 'completed']);
-  }
-
-  componentWillReceiveProps() {
+  constructor(props) {
+    super(props);
     this.props.campaignStore.initRequest(['active', 'completed']);
   }
 

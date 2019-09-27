@@ -11,7 +11,8 @@ import NewMessage from '../components/NewMessage';
 @inject('messageStore')
 @observer
 export default class Messages extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.messageStore.initRequest();
   }
 

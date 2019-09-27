@@ -11,7 +11,8 @@ import DraggableListing from '../components/DraggableListing';
 @inject('uiStore', 'navStore', 'offeringsStore')
 @observer
 export default class Offerings extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const {
       db, initRequest, setFieldValue, requestState,
     } = this.props.offeringsStore;

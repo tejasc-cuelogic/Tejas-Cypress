@@ -8,7 +8,8 @@ import { FormInput } from '../../../../../../theme/form';
 @withRouter
 @observer
 export default class ProcessTransferRequest extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.dataStore.resetForm('PROCESS_TRANSFER_REQ_FRM');
   }
 

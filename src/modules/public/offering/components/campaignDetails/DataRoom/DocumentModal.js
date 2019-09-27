@@ -11,7 +11,7 @@ import { IframeModal } from '../../../../../../theme/shared';
 @observer
 export default class DocumentModal extends Component {
   state = { embedUrl: null, paramsDoc: null, openModal: true };
-  componentWillMount() {
+  componentDidMount() {
     const docNo = this.props.location.hash;
     if (docNo) {
       this.setState({ paramsDoc:  this.props.campaignStore.dataRoomDocs[parseFloat(docNo.substr(1)) - 1]});

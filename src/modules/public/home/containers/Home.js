@@ -13,8 +13,9 @@ import NewsLetter from '../components/NewsLetter';
 @inject('campaignStore')
 @observer
 class Home extends Component {
-  componentWillMount() {
-    this.props.campaignStore.initRequest(['active']);
+  constructor(props) {
+    super(props);
+    props.campaignStore.initRequest(['active']);
   }
 
   componentWillReceiveProps() {

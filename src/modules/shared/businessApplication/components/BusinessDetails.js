@@ -11,14 +11,14 @@ import Helper from '../../../../helper/utility';
 @inject('businessAppStore', 'agreementsStore', 'commonStore', 'userStore', 'uiStore')
 @observer
 export default class BusinessDetails extends Component {
-  state = {
-    showPartialSaveModal: false,
-    currentForm: '',
-    currentIndex: 0,
-    legalNoteToggle: false,
-  }
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showPartialSaveModal: false,
+      currentForm: '',
+      currentIndex: 0,
+      legalNoteToggle: false,
+    };
     this.props.businessAppStore.setFieldvalue('applicationStep', 'business-details');
     const {
       getLegalDocsFileIds, alreadySet,

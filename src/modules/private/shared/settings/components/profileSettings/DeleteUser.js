@@ -2,7 +2,7 @@ import React from 'react';
 import { get } from 'lodash';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Button, Modal, Header, Divider, Message } from 'semantic-ui-react';
+import { Button, Modal, Header, Message, Form } from 'semantic-ui-react';
 import { InlineLoader, ListErrors } from '../../../../../../theme/shared';
 import { authActions } from '../../../../../../services/actions';
 
@@ -18,23 +18,40 @@ export default class DeleteUser extends React.Component {
   toggleModal = () => {
     this.setState({ modalOpen: true });
     this.props.userStore.getUserDeleteMeta();
+    this.props.userStore.userReset();
+    this.props.userStore.handleCancelDeleteUser(false);
+    this.props.userStore.setFieldValue('deleteUser', false);
+    this.props.userStore.setFieldValue('confirmDelete', false);
   }
 
   closeModal = () => {
-    this.setState({ modalOpen: false });
+    if (this.props.userStore.confirmDelete) {
+      authActions.logout('user').then(() => {
+        this.props.history.push('/');
+      });
+    } else {
+      this.setState({ modalOpen: false });
+    }
   }
 
   handleDeleteUser = () => {
     this.props.userDetailsStore.deleteProfile(true).then(() => {
       this.setState({ failMessage: false });
-      authActions.logout('user').then(() => {
-        this.props.history.push('/');
-      });
     }).catch(msg => this.setState({ failMessage: msg }));
   }
 
+  backToOfferings = () => {
+    this.props.history.push('/offerings/');
+  }
+
+  createNewAccount = () => {
+    authActions.logout('user').then(() => {
+      this.props.history.push('/register-investor');
+    });
+  }
+
   render() {
-    const { getDeleteUserMeta, deleteUserLoading } = this.props.userStore;
+    const { getDeleteUserMeta, deleteUserLoading, USR_FRM, userEleChange, deleteUser, handleCancelDeleteUser, confirmDelete } = this.props.userStore;
     const { inProgressArray } = this.props.uiStore;
     return (
       <Modal
@@ -42,37 +59,53 @@ export default class DeleteUser extends React.Component {
         open={this.state.modalOpen}
         onClose={this.closeModal}
         trigger={(
-            <Button color="green" inverted onClick={() => this.toggleModal(true)} content="Delete" />
+            <Button color="green" className="link-button" onClick={() => this.toggleModal(true)} content="Delete your NextSeed Account" />
           )}
         size="mini"
         closeOnDimmerClick={false}
       >
-          <Modal.Header className="center-align signup-header">
-            <Header as="h3">Delete User Account</Header>
-            <Divider />
-          </Modal.Header>
           {deleteUserLoading
             ? (<InlineLoader />)
             : (
-          <Modal.Content>
-            {get(getDeleteUserMeta, 'message')
-            && (
-              <Header as="h5">{get(getDeleteUserMeta, 'message')}</Header>
-            )
-            }
+          <Modal.Content className="center-align">
+            <Header as="h4" className="mt-30">{get(getDeleteUserMeta, 'header')}</Header>
+            {get(getDeleteUserMeta, 'message')}
             {this.state.failMessage
             && (
               <Message error className="mt-30">
                 <ListErrors errors={[this.state.failMessage]} />
               </Message>
             )
-          }
-              <div className="center-align mt-30">
-                <Button.Group>
-                  <Button onClick={this.closeModal} type="button">Cancel</Button>
-                  <Button content="Delete" color="red" loading={inProgressArray.includes('deleteProfile')} onClick={this.handleDeleteUser} disabled={!get(getDeleteUserMeta, 'isValidForDelete')} />
-                </Button.Group>
-              </div>
+            }
+            {get(getDeleteUserMeta, 'isValidForDelete') && (
+              <>
+                <Form className="left-align mt-50 mb-40">
+                  <Form.Input
+                    fluid
+                    label="Email"
+                    type="text"
+                    name="email"
+                    placeholder="Enter email here"
+                    fielddata={USR_FRM.fields.email}
+                    onChange={(e, res) => userEleChange(e, res, 'text', true)}
+                  />
+                </Form>
+                <div className="center-align mt-30">
+                  <Button content="No thanks, I'll stay!" color="green" disabled={inProgressArray.includes('deleteProfile')} loading={inProgressArray.includes('deleteProfile')} onClick={() => handleCancelDeleteUser(true)} />
+                  <Button color="green" className="link-button mt-30" onClick={this.handleDeleteUser} type="button" disabled={!deleteUser}>Yes, please delete my NextSeed account</Button>
+                </div>
+              </>
+            )}
+            {get(getDeleteUserMeta, 'isCancelDelete') && (
+              <>
+                <Button content="Browse Offerings" color="green" loading={inProgressArray.includes('deleteProfile')} onClick={() => this.backToOfferings()} /><br /><br />
+              </>
+            )}
+            {confirmDelete && (
+              <>
+                <Button content="Create new account" color="green" loading={inProgressArray.includes('deleteProfile')} onClick={() => this.createNewAccount()} /><br /><br />
+              </>
+            )}
           </Modal.Content>
             )
           }

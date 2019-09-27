@@ -8,7 +8,8 @@ import { FormRadioGroup } from '../../../../../../theme/form';
 @withRouter
 @observer
 export default class ManageMultiFactorAuth extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.multiFactorAuthStore.initialiseMfaMode();
     }
@@ -40,7 +41,7 @@ export default class ManageMultiFactorAuth extends Component {
             <Divider />
             <p>
               All major actions will require additional confirmation with
-              the code that we will send to your phone or e-mail address.
+              the code that we will send to your phone or email address.
             </p>
           </Modal.Header>
           <Modal.Content className="signup-content center-align">

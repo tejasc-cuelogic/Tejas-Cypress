@@ -72,7 +72,8 @@ const SortableList = SortableContainer(({ offeringClose, docs, isReadonly, formA
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class DataRoom extends Component {
-  // componentWillMount() {
+  // constructor(props) {
+  //   super(props);
   //   const { setFormData } = this.props.offeringCreationStore;
   //   setFormData('DATA_ROOM_FRM', 'legal.dataroom');
   //   setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');

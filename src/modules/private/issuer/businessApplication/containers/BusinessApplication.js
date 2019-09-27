@@ -20,7 +20,8 @@ const getModule = component => lazy(() => import(`../../../../shared/businessApp
 @withRouter
 @observer
 export default class BusinessApplication extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match } = this.props;
     const { pathname } = this.props.location;
     const {

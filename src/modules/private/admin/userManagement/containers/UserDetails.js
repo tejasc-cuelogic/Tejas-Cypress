@@ -8,6 +8,7 @@ import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import UserTypeIcon from '../components/manage/UserTypeIcon';
 import ActivityHistory from '../../../shared/ActivityHistory';
+import UserEmailList from '../components/manage/userEmailListing';
 import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
 const getModule = component => lazy(() => import(`../components/manage/${component}`));
@@ -34,18 +35,21 @@ const navMeta = [
   {
     title: 'Activity', to: 'activity', component: ActivityHistory, load: false,
   },
+  {
+    title: 'Emails', to: 'emails', component: UserEmailList, load: false,
+  },
 ];
 
 @inject('userStore', 'userDetailsStore', 'uiStore', 'bankAccountStore', 'accountStore')
 @observer
 export default class AccountDetails extends Component {
-  state = {
-    errorMsg: '',
-    copied: false,
-    showConfirm: false,
-  }
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      errorMsg: '',
+      copied: false,
+      showConfirm: false,
+    };
     if ((this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId)) {
       this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
       this.props.accountStore.getInvestorCloseAccounts(this.props.match.params.userId);
@@ -94,11 +98,10 @@ export default class AccountDetails extends Component {
     if (roles.includes('investor')) {
       roles = [...roles, ...details.roles.map(r => r.name)];
     }
-    const isProd = ['production', 'prod', 'master', 'infosec'].includes(REACT_APP_DEPLOY_ENV);
     let navItems = navMeta.filter(n => ((!n.accessibleTo || n.accessibleTo.length === 0
         || intersection(n.accessibleTo, roles).length > 0))
       && (!n.env || n.env.length === 0 || intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
-    navItems = isProd || sortedNavAccounts.length === 0 ? navItems.filter(n => (n.component !== 'ClosedAccount')) : navItems;
+    navItems = sortedNavAccounts.length === 0 ? navItems.filter(n => (n.component !== 'ClosedAccount')) : navItems;
     const { info } = details;
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles,

@@ -12,11 +12,11 @@ import Helper from '../../../../helper/utility';
 @withRouter
 @observer
 class Success extends Component {
-  state = {
-    showProgressLoader: false,
-  }
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showProgressLoader: false,
+    };
     if (this.props.isPublic) {
       const { fields } = this.props.businessAppStore.BUSINESS_APP_FRM_BASIC;
       if (fields.email.value === '') {

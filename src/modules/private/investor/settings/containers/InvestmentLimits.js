@@ -13,7 +13,8 @@ import FailedAccreditation from '../components/investmentLimits/accreditation/fa
 @withRouter
 @observer
 export default class InvestmentLimits extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.investmentLimitStore.initiateInvestmentLimit();
     }

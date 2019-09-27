@@ -9,7 +9,8 @@ import Helper from '../../../../../helper/utility';
 @inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore', 'uiStore')
 @observer
 export default class AddFunds extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.bankAccountStore.setDepositMoneyNow(true);
   }
 

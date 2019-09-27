@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Icon, Item, Header, Label, Divider } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
+import moment from 'moment';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { Image64, UserAvatar } from '../../../../../../theme/shared';
-import { DataFormatter } from '../../../../../../helper';
 
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -20,7 +20,7 @@ class LatestUpdates extends Component {
     const {
       updates, companyAvatarUrl, bussinessName, newLayout,
     } = this.props;
-    const update = (updates && updates.length && updates[0]) || null;
+    const update = (updates && updates.length && updates[updates.length - 1]) || null;
     return (
       <>
         <Header as="h3" className={`${newLayout && isMobile ? 'mt-40' : newLayout ? 'mt-40' : 'mt-20'} ${isMobile ? 'mb-20' : 'mb-30'} anchor-wrap`}>
@@ -48,7 +48,7 @@ class LatestUpdates extends Component {
                     <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
                   </Item.Header>
                   {update
-                    && <Item.Meta>{DataFormatter.getDateAsPerTimeZone(update.updated.date, true, true, false)}</Item.Meta>
+                    && <Item.Meta>{update.updatedDate ? moment(update.updatedDate).format('LL') : '-'}</Item.Meta>
                   }
                 </div>
               </div>

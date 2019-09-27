@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button, Checkbox } from 'semantic-ui-react';
 import { get } from 'lodash';
-// import moment from 'moment';
+import moment from 'moment';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import MaskedInput from '../../../../../../theme/form/src/MaskedInput';
@@ -12,32 +12,31 @@ import { InlineLoader, Image64, UserAvatar } from '../../../../../../theme/share
 import Actions from './Actions';
 import Status from './Status';
 import Helper from '../../../../../../helper/utility';
-import { DataFormatter } from '../../../../../../helper';
 
 @inject('updateStore', 'userStore', 'offeringsStore', 'uiStore')
 @withRouter
 @observer
 export default class NewUpdate extends Component {
-  state = {
-    editForm: false,
-    confirmModal: false,
-    loading: false,
-  }
-
-  componentWillMount() {
-    this.initiateFlow(this.props.match.params.action, this.props.match.params.id);
+  constructor(props) {
+    super(props);
+    this.state = {
+      editForm: false,
+      confirmModal: false,
+      loading: true,
+    };
     this.props.updateStore.setFieldValue('newUpdateId', null);
   }
 
   componentDidMount() {
+    this.initiateFlow(this.props.match.params.action, this.props.match.params.id);
     this.setState({ loading: false });
   }
 
   initiateFlow = (action, id) => {
     if (action !== 'new' && id !== undefined) {
+      this.setState({ loading: false });
       this.props.updateStore.getOne(id);
     } else {
-      this.setState({ loading: true });
       this.props.updateStore.reset();
     }
   }
@@ -45,6 +44,7 @@ export default class NewUpdate extends Component {
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.updateStore.setFieldValue('newUpdateId', null);
+    this.props.updateStore.setFieldValue('currentUpdate', {});
     this.props.history.replace(this.props.refLink);
   };
 
@@ -63,22 +63,23 @@ export default class NewUpdate extends Component {
       });
   }
 
-  sendTestEmail = (id) => {
+  sendTestEmail = (id, stage, status) => {
+    const emailTemplate = ['STARTUP_PERIOD', 'IN_REPAYMENT'].includes(stage) ? 'FULL' : false;
     this.props.uiStore.setProgress();
     if (this.props.updateStore.PBUILDER_FRM.meta.isDirty) {
-      this.props.updateStore.save(id, 'DRAFT', false).then(() => {
+      this.props.updateStore.save(id, status, false, true).then(() => {
         this.props.uiStore.setProgress();
-        this.props.updateStore.sendTestEmail(id);
+        this.props.updateStore.sendTestEmail(id, emailTemplate);
       });
     } else {
-      this.props.updateStore.sendTestEmail(id);
+      this.props.updateStore.sendTestEmail(id, emailTemplate);
     }
   }
 
-  save = (id, status) => {
-    this.props.updateStore.save(id, status)
+  save = (id, status, redirectToListing = false, updateOnly = false) => {
+    this.props.updateStore.save(id, status, true, updateOnly)
       .then(() => {
-        if (status !== 'DRAFT') {
+        if (redirectToListing) {
           this.props.updateStore.setFieldValue('newUpdateId', null);
           this.props.history.push(this.props.refLink);
         }
@@ -95,7 +96,7 @@ export default class NewUpdate extends Component {
   render() {
     const {
       PBUILDER_FRM, UpdateChange, FChange, maskChange, selectTemplate, newUpdateId,
-      loadingCurrentUpdate, TEMPLATE_FRM, currentUpdate,
+      loadingCurrentUpdate, TEMPLATE_FRM,
     } = this.props.updateStore;
     const isNew = this.props.match.params.action === 'new' && !newUpdateId;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -106,6 +107,8 @@ export default class NewUpdate extends Component {
     const { id } = this.props.match.params;
     const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
     const isDraft = PBUILDER_FRM.fields.status.value === 'DRAFT';
+    const isPending = PBUILDER_FRM.fields.status.value === 'PENDING';
+    const isPublished = PBUILDER_FRM.fields.status.value === 'PUBLISHED';
     if (loadingCurrentUpdate || this.state.loading) {
       return <InlineLoader />;
     }
@@ -122,8 +125,8 @@ export default class NewUpdate extends Component {
               meta={PBUILDER_FRM.meta}
               isManager={isManager}
               isDraft={isDraft}
-              isPending={PBUILDER_FRM.fields.status.value === 'PENDING'}
-              isPublished={PBUILDER_FRM.fields.status.value === 'PUBLISHED'}
+              isPending={isPending}
+              isPublished={isPublished}
               editForm={this.state.editForm}
               edit={this.edit}
               deleteUpdate={this.showConfirmModal}
@@ -136,7 +139,7 @@ export default class NewUpdate extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={12}>
-                <Form onSubmit={this.save}>
+                <Form>
                   <FormInput
                     readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
                     ishidelabel
@@ -180,7 +183,7 @@ export default class NewUpdate extends Component {
                               </div>
                               <Header.Content className="grey-header">
                                 {get(offer, 'keyTerms.shorthandBusinessName')}
-                                <Header.Subheader>{isNew ? DataFormatter.getCurrentCSTMoment().format('ll') : DataFormatter.getDateAsPerTimeZone((get(currentUpdate, 'data.offeringUpdatesById.updated.date') || get(currentUpdate, 'data.offeringUpdatesById.created.date') || ''), true, true)}</Header.Subheader>
+                                <Header.Subheader>{PBUILDER_FRM.fields.updatedDate.value ? moment(PBUILDER_FRM.fields.updatedDate.value).format('LL') : '-'}</Header.Subheader>
                                 {/* <Header.Subheader>{moment().format('ll')}</Header.Subheader> */}
                               </Header.Content>
                             </Header>
@@ -191,7 +194,7 @@ export default class NewUpdate extends Component {
                       </List.Item>
                       {isManager && (
                       <List.Item>
-                        <Button color="green" className="link-button" disabled={isNew || loaderMessage || inProgress} content={loaderMessage || 'Send test email to me'} onClick={() => this.sendTestEmail(this.props.match.params.id || this.props.updateStore.newUpdateId)} />
+                        <Button color="green" className="link-button" disabled={isNew || loaderMessage || inProgress} content={loaderMessage || 'Send test email to me'} onClick={() => this.sendTestEmail(this.props.match.params.id || this.props.updateStore.newUpdateId, offer.stage, isPublished ? 'PUBLISHED' : isPending ? 'PENDING' : 'DRAFT')} />
                      </List.Item>
                       )}
                     </List>
@@ -267,6 +270,14 @@ export default class NewUpdate extends Component {
                                 changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
                                 dateOfBirth
                               />
+                              <Form.Field>
+                              <Checkbox
+                                name="shouldSendInvestorNotifications"
+                                onChange={(e, result) => UpdateChange(e, result)}
+                                checked={PBUILDER_FRM.fields.shouldSendInvestorNotifications.value}
+                                label="Send Notifications"
+                              />
+                            </Form.Field>
                             </Form>
                           </Card.Content>
                         </Card>
@@ -289,6 +300,14 @@ export default class NewUpdate extends Component {
                                 changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
                                 dateOfBirth
                               />
+                                <Form.Field>
+                                <Checkbox
+                                  name="shouldSendInvestorNotifications"
+                                  onChange={(e, result) => UpdateChange(e, result)}
+                                  checked={PBUILDER_FRM.fields.shouldSendInvestorNotifications.value}
+                                  label="Send Notifications"
+                                />
+                              </Form.Field>
                               {['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage)
                                 && (
                                     <div className="field">

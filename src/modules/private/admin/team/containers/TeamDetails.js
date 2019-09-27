@@ -10,11 +10,11 @@ import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 @withRouter
 @observer
 export default class TeamDetails extends Component {
-  state = {
-    displayOnly: true,
-  }
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      displayOnly: true,
+    };
     const { match, teamStore } = this.props;
     const { id } = match.params;
     const { editMode } = teamStore;
