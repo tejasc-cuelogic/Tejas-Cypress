@@ -473,7 +473,11 @@ export class OfferingCreationStore {
   removeData = (formName, subForm = 'data', isApiDelete = false) => {
     const subArray = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : subForm;
     if (!isApiDelete) {
+      let removeFileIds = '';
+      const { fileId } = this[formName].fields[subArray][this.removeIndex].upload;
+      removeFileIds = fileId;
       this[formName].fields[subArray].splice(this.removeIndex, 1);
+      this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     }
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
