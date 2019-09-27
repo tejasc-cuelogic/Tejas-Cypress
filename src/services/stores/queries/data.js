@@ -120,3 +120,76 @@ mutation _imageProcessing($key: String, $waitingTime: Int, $concurrency: Int,$qu
     folderName: $folderName
   )
 }`;
+
+export const getPluginList = gql`
+query _listRequestPlugins {
+  listRequestPlugins {
+    plugins{
+      name
+      pluginInputs {
+        name
+      }
+    }
+  }
+  listCronPlugins
+  {
+    plugins {
+      name
+      pluginInputs {
+        name
+      }
+    }
+  }
+  listProcessorPlugins
+  {
+    plugins{
+      name
+      pluginInputs{
+        name
+      }
+    }
+  }
+}
+`;
+
+export const requestFactoryPluginTrigger = gql`
+mutation invokeRequest($method: RequestWorkerPluginsEnum!, $payload: String, $invocationType: RequestInvocationEnum) {
+  invokeRequest(
+    method: $method,
+    payload: $payload
+    invocationType: $invocationType
+  )
+}`;
+
+export const fetchCronLogs = gql`
+query _fetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaTypeEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+  fetchCronLogs(
+    cron: $cron,
+    jobId: $jobId
+    cronMetaType: $cronMetaType
+    fromDate: $fromDate
+    toDate: $toDate
+    lek: $lek
+    limit: $limit
+  )
+  {
+    cronLog{
+      jobId
+      execStatus
+      cron
+      execInitiatedOn
+      cronMetaType
+    }
+    resultCount
+    totalCount
+    lek
+  }
+}`;
+
+export const processFactoryPluginTrigger = gql`
+mutation _invokeProcessorDriver($method: DevAuditTypeEnum, $payload: String) {
+  invokeProcessorDriver(
+    method: $method,
+    payload: $payload
+  )
+}`;
