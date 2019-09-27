@@ -140,7 +140,6 @@ export default class DataRoom extends Component {
       confirmModal,
       confirmModalName,
       removeData,
-      initializeClosingBinder,
     } = this.props.offeringCreationStore;
     const formName = closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM';
     const docs = [...(closingBinder ? CLOSING_BINDER_FRM.fields.closingBinder : DATA_ROOM_FRM.fields.documents)];
@@ -151,9 +150,6 @@ export default class DataRoom extends Component {
           {!offeringClose ? 'Data Room Documents' : ''}
             {!isReadonly &&
               <Button.Group size="mini" floated="right">
-                {(closingBinder && (!get(offer, 'closingBinder') || !get(offer, 'closingBinder[0]')))
-                  && <Button loading={inProgress} color="blue" content="Initialize Closing Binder" onClick={initializeClosingBinder} />
-                }
                 <Button onClick={e => this.addMore(e, formName)} primary compact content="Add" />
               </Button.Group>
             }

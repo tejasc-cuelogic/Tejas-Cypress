@@ -190,13 +190,13 @@ export default class Close extends Component {
   }
 
   jsonModal = json => (
-  <Modal closeIcon trigger={<Button className="link-button highlight-text" content={`Show ${this.state.actionLabel} Response`} />}>
+    <Modal closeIcon trigger={<Button className="link-button highlight-text" content={`Show ${this.state.actionLabel} Response`} />}>
       <Modal.Content>
-      <pre className="no-updates bg-offwhite padded json-text">
-        {beautify(json, null, 2, 100)}
-      </pre>
+        <pre className="no-updates bg-offwhite padded json-text">
+          {beautify(json, null, 2, 100)}
+        </pre>
       </Modal.Content>
-      </Modal>
+    </Modal>
   );
 
   toggleVisibilityStatus = (of) => {
@@ -225,6 +225,7 @@ export default class Close extends Component {
       CLOSING_CONTITNGENCIES_FRM,
       maskChange, outputMsg,
       formArrayChange, formChange,
+      initializeClosingBinder,
     } = this.props.offeringCreationStore;
     const { inProgress } = this.props.uiStore;
     const formName = 'OFFERING_CLOSE_FRM';
@@ -241,264 +242,273 @@ export default class Close extends Component {
           <Header as="h4">
             {hoursToClose > 0
               ? (
-<>This campaign is still live, set to close <span className="highlight-text"> {closeDate ? DataFormatter.getDateAsPerTimeZone(closeDate, true, false, false, 'MMM D, YYYY') : 'N/A'} </span>
-              </>
+                <>This campaign is still live, set to close <span className="highlight-text"> {closeDate ? DataFormatter.getDateAsPerTimeZone(closeDate, true, false, false, 'MMM D, YYYY') : 'N/A'} </span>
+                </>
               ) : <>This campaign <span className={offerStatus.isFailed ? 'negative-text' : 'highlight-text'}> {offerStatus.isFailed ? 'has failed' : 'has succeed'}</span></>
             }
           </Header>
           <p>
-                <>
-                Campaign has
-{!offerStatus.isFailed ? ' reached' : ' not reached'}
-{' '}
-minimum required amount.
+            <>
+              Campaign has
+              {!offerStatus.isFailed ? ' reached' : ' not reached'}
+              {' '}
+              minimum required amount.
                 {' '}
-                {get(offer, 'keyTerms.shorthandBusinessName')}
+              {get(offer, 'keyTerms.shorthandBusinessName')}
+              {' '}
+              raised
                 {' '}
-                raised
-                {' '}
-                  <b>{Helper.CurrencyFormat(get(offer, 'closureSummary.totalInvestmentAmount'), 0)}</b>
+              <b>{Helper.CurrencyFormat(get(offer, 'closureSummary.totalInvestmentAmount'), 0)}</b>
+              {' '}
+              out of required
                   {' '}
-out of required
-                  {' '}
-                  <b>{Helper.CurrencyFormat(offerStatus.minOffering || 0, 0)}</b>
-                </>
+              <b>{Helper.CurrencyFormat(offerStatus.minOffering || 0, 0)}</b>
+            </>
           </p>
           <Divider section />
           {((hoursToClose <= 0 && !offerStatus.isFailed) || true)
             ? (
-<>
-              <Step.Group className="campaign-close">
-                {['Offering Close Inputs', 'Fund Escrow', 'Process Notes', 'Finalize Closure'].map((item, index) => (
-                  <Step
-                    style={{ background: 'none', textDecoration: 'none' }}
-                    onClick={() => this.toggleStep(index + 1)}
-                    active={this.state.activeStep === (index + 1)}
-                  >
-                    <Label circular color={this.state.activeStep === (index + 1) ? 'blue' : 'grey'}>{index + 1}</Label>
-                    <Step.Content>
-                      <Step.Title>{item}</Step.Title>
-                    </Step.Content>
-                  </Step>
-                ))
-                }
-              </Step.Group>
-              {this.state.activeStep === 1
-              && (
-                (
-                  <>
-                   <Header as="h4"> Close Inputs </Header>
+              <>
+                <Step.Group className="campaign-close">
+                  {['Offering Close Inputs', 'Fund Escrow', 'Process Notes', 'Finalize Closure'].map((item, index) => (
+                    <Step
+                      style={{ background: 'none', textDecoration: 'none' }}
+                      onClick={() => this.toggleStep(index + 1)}
+                      active={this.state.activeStep === (index + 1)}
+                    >
+                      <Label circular color={this.state.activeStep === (index + 1) ? 'blue' : 'grey'}>{index + 1}</Label>
+                      <Step.Content>
+                        <Step.Title>{item}</Step.Title>
+                      </Step.Content>
+                    </Step>
+                  ))
+                  }
+                </Step.Group>
+                {this.state.activeStep === 1
+                  && (
+                    (
                       <>
+                        <Header as="h4"> Close Inputs </Header>
+                        <>
+                          <Form.Group widths={3}>
+                            {['investorFee', 'maturityDate', 'hardCloseDate', ...dynamicFields, 'anticipatedPaymentStartDate', 'gsFees', 'nsPayment'].map(field => (
+                              <MaskedInput
+                                key={field}
+                                name={field}
+                                percentage={['interestRate', 'revSharePercentage'].includes(field)}
+                                currency={['nsPayment', 'investorFee', 'multiple', 'nsFee', 'gsFees'].includes(field)}
+                                dateOfBirth={['maturityDate', 'hardCloseDate', 'anticipatedPaymentStartDate'].includes(field)}
+                                fielddata={OFFERING_CLOSE_1.fields[field]}
+                                changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
+                              />
+                            ))
+                            }
+                          </Form.Group>
+                          <Header as="h4">Linked Bank</Header>
+                          <Form.Group widths={3}>
+                            {['bankName', 'accountHolderName'].map(field => (
+                              <FormInput
+                                key={field}
+                                name={field}
+                                fielddata={OFFERING_CLOSE_1.fields[field]}
+                                changed={(e, result) => formChange(e, result, 'OFFERING_CLOSE_1')}
+                              />
+                            ))
+                            }
+                            {['accountNumber', 'routingNumber'].map(field => (
+                              <MaskedInput
+                                key={field}
+                                name={field}
+                                number
+                                fielddata={OFFERING_CLOSE_1.fields[field]}
+                                changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
+                              />
+                            ))
+                            }
+                          </Form.Group>
+                          <Divider hidden />
+                          <Header as="h4">Closing Binder</Header>
+                          {(!get(offer, 'closingBinder') || !get(offer, 'closingBinder[0]'))
+                            ? (
+                              <section className="center-align bg-offwhite">
+                                <Button loading={inProgress} color="blue" onClick={initializeClosingBinder} content="Initialize Closing Binder" />
+                              </section>
+                            ) : (
+                              <>
+                                <ClosingBinder />
+                                <Button.Group>
+                                  {filter(closingActions, a => a.ref === 1).map(fA => (
+                                    <Button
+                                      loading={this.state.inProgress === fA.enum}
+                                      onClick={() => this.closeAction(fA.enum, 1, false, fA.label, 'CLOSING_BINDER')}
+                                      primary
+                                    >
+                                      {fA.label}
+                                    </Button>
+                                  ))}
+                                </Button.Group>
+                              </>
+                            )}
+                        </>
+                        <Divider section />
+                      </>
+                    )
+                  )
+                }
+                {this.state.activeStep === 2
+                  && (
+                    <>
                       <Form.Group widths={3}>
-                        {['investorFee', 'maturityDate', 'hardCloseDate', ...dynamicFields, 'anticipatedPaymentStartDate', 'gsFees', 'nsPayment'].map(field => (
-                            <MaskedInput
-                              key={field}
-                              name={field}
-                              percentage={['interestRate', 'revSharePercentage'].includes(field)}
-                              currency={['nsPayment', 'investorFee', 'multiple', 'nsFee', 'gsFees'].includes(field)}
-                              dateOfBirth={['maturityDate', 'hardCloseDate', 'anticipatedPaymentStartDate'].includes(field)}
-                              fielddata={OFFERING_CLOSE_1.fields[field]}
-                              changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
-                            />
-                        ))
-                        }
+                        <MaskedInput
+                          name="queueLimit"
+                          containerwidth="4"
+                          fielddata={OFFERING_CLOSE_2.fields.queueLimit}
+                          changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_2', name)}
+                          number
+                        />
                       </Form.Group>
-                      <Header as="h4">Linked Bank</Header>
+                      {outputMsg && outputMsg.data
+                        && (
+                          <>
+                            {outputMsg.type === 'success'
+                              ? (<div>{this.jsonModal(outputMsg.data)}</div>)
+                              : (<FieldError error={outputMsg.data} />)
+                            }
+                          </>
+                        )
+                      }
+                      <Button.Group>
+                        {filter(closingActions, a => a.ref === 2).map(fA => (
+                          <Button
+                            loading={inProgress === fA.enum}
+                            onClick={() => this.closeAction(fA.enum, 2, false, fA.label)}
+                            primary
+                            disabled={fA.keyToEnable !== false && !(fA.keyToEnable ? get(closureProcess, fA.keyToEnable) === 'COMPLETE' : false)}
+                          >{fA.label}
+                          </Button>
+                        ))}
+                      </Button.Group>
+                      <Divider className="doubled" />
+                    </>
+                  )
+                }
+                {this.state.activeStep === 3
+                  && (
+                    <>
                       <Form.Group widths={3}>
-                        {['bankName', 'accountHolderName'].map(field => (
-                          <FormInput
-                            key={field}
+                        {['queueLimit', 'notePurchaseDate'].map(field => (
+                          <MaskedInput
                             name={field}
-                            fielddata={OFFERING_CLOSE_1.fields[field]}
-                            changed={(e, result) => formChange(e, result, 'OFFERING_CLOSE_1')}
+                            containerwidth="4"
+                            fielddata={OFFERING_CLOSE_3.fields[field]}
+                            changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
+                            dateOfBirth={field === 'notePurchaseDate'}
+                            number={field === 'queueLimit'}
                           />
                         ))
                         }
-                        {['accountNumber', 'routingNumber'].map(field => (
-                            <MaskedInput
-                              key={field}
-                              name={field}
-                              number
-                              fielddata={OFFERING_CLOSE_1.fields[field]}
-                              changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_1', name)}
-                            />
-                        ))
-                        }
                       </Form.Group>
-                      <Divider hidden />
-                      <Header as="h4">Closing Binder</Header>
-                      <ClosingBinder />
+                      {outputMsg && outputMsg.data
+                        && (
+                          <>
+                            {outputMsg.type === 'success'
+                              ? (<div>{this.jsonModal(outputMsg.data)}</div>)
+                              : (<FieldError error={outputMsg.data} />)
+                            }
+                          </>
+                        )
+                      }
                       <Button.Group>
-                        {filter(closingActions, a => a.ref === 1).map(fA => (
+                        {filter(closingActions, a => a.ref === 3).map(fA => (
                           <Button
-                            loading={this.state.inProgress === fA.enum}
-                            onClick={() => this.closeAction(fA.enum, 1, false, fA.label, 'CLOSING_BINDER')}
+                            loading={inProgress === fA.enum}
+                            disabled={fA.keyToEnable !== false && !(fA.keyToEnable ? get(closureProcess, fA.keyToEnable) === 'COMPLETE' : false)}
+                            onClick={() => this.closeAction(fA.enum, 3, false, fA.label)}
+                            primary
+                          >{fA.label}
+                          </Button>
+                        ))}
+                      </Button.Group>
+                      <Divider className="doubled" />
+                    </>
+                  )
+                }
+                {this.state.activeStep === 4
+                  && (
+                    <>
+                      <Form.Group widths={3}>
+                        <MaskedInput
+                          name="queueLimit"
+                          containerwidth="4"
+                          fielddata={OFFERING_CLOSE_4.fields.queueLimit}
+                          changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_2', name)}
+                          number
+                        />
+                      </Form.Group>
+                      {outputMsg && outputMsg.data
+                        && (
+                          <>
+                            {outputMsg.type === 'success'
+                              ? (<div>{this.jsonModal(outputMsg.data)}</div>)
+                              : (<FieldError error={outputMsg.data} />)
+                            }
+                          </>
+                        )
+                      }
+                      <Button.Group>
+                        {filter(closingActions, a => a.ref === 4).map(fA => (
+                          <Button
+                            loading={inProgress === fA.enum}
+                            disabled={fA.keyToEnable !== false && !(fA.keyToEnable ? get(closureProcess, fA.keyToEnable) === 'COMPLETE' : false)}
+                            onClick={() => this.closeAction(fA.enum, 4, false, fA.label)}
                             primary
                           >
                             {fA.label}
                           </Button>
                         ))}
                       </Button.Group>
-                      </>
-                    <Divider section />
-                  </>
-                )
-              )
-              }
-              {this.state.activeStep === 2
-              && (
-              <>
-                <Form.Group widths={3}>
-                  <MaskedInput
-                    name="queueLimit"
-                    containerwidth="4"
-                    fielddata={OFFERING_CLOSE_2.fields.queueLimit}
-                    changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_2', name)}
-                    number
-                  />
-                </Form.Group>
-                {outputMsg && outputMsg.data
-                && (
-                  <>
-                  {outputMsg.type === 'success'
-                    ? (<div>{this.jsonModal(outputMsg.data)}</div>)
-                    : (<FieldError error={outputMsg.data} />)
-                  }
-                  </>
-                )
+                      <Divider className="doubled" />
+                    </>
+                  )
                 }
-                <Button.Group>
-                  {filter(closingActions, a => a.ref === 2).map(fA => (
-                    <Button
-                      loading={inProgress === fA.enum}
-                      onClick={() => this.closeAction(fA.enum, 2, false, fA.label)}
-                      primary
-                      disabled={fA.keyToEnable !== false && !(fA.keyToEnable ? get(closureProcess, fA.keyToEnable) === 'COMPLETE' : false)}
-                    >{fA.label}
+                {this.state.activeStep === 5 && false
+                  && (
+                    <>
+                      <Header as="h4" className="mt-40 mb-30">Finalize Closure</Header>
+                      <Form>
+                        <Form.Group widths={3}>
+                          {['date', 'amount', 'currentRepaidAmount', 'totalCommittedAmount', 'totalInvestorCount'].map(field => (
+                            <MaskedInput
+                              name={field}
+                              fielddata={OFFERING_CLOSE_FRM.fields[field]}
+                              changed={(values, name) => maskChange(values, formName, name)}
+                              dateOfBirth={field === 'date'}
+                              number={field === 'totalInvestorCount'}
+                              currency={field !== 'totalInvestorCount' && field !== 'date'}
+                              prefix={field !== 'totalInvestorCount' && field !== 'date' ? '$' : false}
+                            />
+                          ))
+                          }
+                        </Form.Group>
+                      </Form>
+                      <Button.Group>
+                        <Button primary>Save draft</Button>
+                        <Button color="red" onClick={this.handleUpdateOffering}>Close offering </Button>
+                      </Button.Group>
+                      <Divider hidden fitted clearing />
+                      <Button.Group>
+                        <Button icon color="blue" className="link-button">
+                          <Icon className="ns-envelope-line" />
+                          Send Test Close Mail
                     </Button>
-                  ))}
-                </Button.Group>
-                <Divider className="doubled" />
-              </>
-              )
-              }
-              {this.state.activeStep === 3
-                && (
-<>
-                  <Form.Group widths={3}>
-                    {['queueLimit', 'notePurchaseDate'].map(field => (
-                      <MaskedInput
-                        name={field}
-                        containerwidth="4"
-                        fielddata={OFFERING_CLOSE_3.fields[field]}
-                        changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
-                        dateOfBirth={field === 'notePurchaseDate'}
-                        number={field === 'queueLimit'}
-                      />
-                    ))
-                    }
-                  </Form.Group>
-                  {outputMsg && outputMsg.data
-                && (
-                  <>
-                  {outputMsg.type === 'success'
-                    ? (<div>{this.jsonModal(outputMsg.data)}</div>)
-                    : (<FieldError error={outputMsg.data} />)
-                  }
-                  </>
-                )
-                }
-                  <Button.Group>
-                    {filter(closingActions, a => a.ref === 3).map(fA => (
-                      <Button
-                        loading={inProgress === fA.enum}
-                        disabled={fA.keyToEnable !== false && !(fA.keyToEnable ? get(closureProcess, fA.keyToEnable) === 'COMPLETE' : false)}
-                        onClick={() => this.closeAction(fA.enum, 3, false, fA.label)}
-                        primary
-                      >{fA.label}
-                      </Button>
-                    ))}
-                  </Button.Group>
-                  <Divider className="doubled" />
-                </>
-                )
-              }
-              {this.state.activeStep === 4
-                && (
-                  <>
-                  <Form.Group widths={3}>
-                    <MaskedInput
-                      name="queueLimit"
-                      containerwidth="4"
-                      fielddata={OFFERING_CLOSE_4.fields.queueLimit}
-                      changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_2', name)}
-                      number
-                    />
-                </Form.Group>
-                {outputMsg && outputMsg.data
-                && (
-                  <>
-                  {outputMsg.type === 'success'
-                    ? (<div>{this.jsonModal(outputMsg.data)}</div>)
-                    : (<FieldError error={outputMsg.data} />)
-                  }
-                  </>
-                )
-                }
-                <Button.Group>
-                {filter(closingActions, a => a.ref === 4).map(fA => (
-                  <Button
-                    loading={inProgress === fA.enum}
-                    disabled={fA.keyToEnable !== false && !(fA.keyToEnable ? get(closureProcess, fA.keyToEnable) === 'COMPLETE' : false)}
-                    onClick={() => this.closeAction(fA.enum, 4, false, fA.label)}
-                    primary
-                  >
-                    {fA.label}
-                  </Button>
-                ))}
-              </Button.Group>
-              <Divider className="doubled" />
-                  </>
-                )
-              }
-              {this.state.activeStep === 5 && false
-                && (
-<>
-                  <Header as="h4" className="mt-40 mb-30">Finalize Closure</Header>
-                  <Form>
-                    <Form.Group widths={3}>
-                      {['date', 'amount', 'currentRepaidAmount', 'totalCommittedAmount', 'totalInvestorCount'].map(field => (
-                        <MaskedInput
-                          name={field}
-                          fielddata={OFFERING_CLOSE_FRM.fields[field]}
-                          changed={(values, name) => maskChange(values, formName, name)}
-                          dateOfBirth={field === 'date'}
-                          number={field === 'totalInvestorCount'}
-                          currency={field !== 'totalInvestorCount' && field !== 'date'}
-                          prefix={field !== 'totalInvestorCount' && field !== 'date' ? '$' : false}
-                        />
-                      ))
-                      }
-                    </Form.Group>
-                  </Form>
-                  <Button.Group>
-                    <Button primary>Save draft</Button>
-                    <Button color="red" onClick={this.handleUpdateOffering}>Close offering </Button>
-                  </Button.Group>
-                  <Divider hidden fitted clearing />
-                  <Button.Group>
-                    <Button icon color="blue" className="link-button">
-                      <Icon className="ns-envelope-line" />
-                      Send Test Close Mail
-                    </Button>
-                    {/* <Button as="span" className="time-stamp note">
+                        {/* <Button as="span" className="time-stamp note">
                   You cannot close the offering if envelopes are still being processed</Button> */}
-                  </Button.Group>
-                  <Divider section />
-                </>
-                )
-              }
-            </>
+                      </Button.Group>
+                      <Divider section />
+                    </>
+                  )
+                }
+              </>
             ) : !(hoursToClose > 0) && offerStatus.isFailed ? (
               <Card fluid className="center-align ba-info-card">
                 <Card.Header>
@@ -509,109 +519,109 @@ out of required
           }
           <Header as="h4"> Closure Process Status <Icon onClick={() => this.toggleVisibilityStatus('showClosureProcessStatus')} className={`ns-chevron-${this.state.showClosureProcessStatus === true ? 'up' : 'down'}-compact right`} color="blue" /> </Header>
           {this.state.showClosureProcessStatus
-          && (
-            <>
-            {isEmpty(closureProcess)
-              ? (
-<section className="bg-midwhite center-align">
-            <Header as="h4">No Data Found</Header>
-            </section>
-              )
-              : (
-<Grid columns={3}>
-          { !isEmpty(closureProcess) && Object.keys(closureProcess).map(key => (
-            <Grid.Column className="center-align"><Header as="h5">{capitalize(key.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</Header>
-            <div className="table-wrapper">
-            <Table unstackable basic="very">
-              <Table.Body>
-                {closureProcess[key] ? ['Status', 'Started', 'Finished'].map(k => (
-                <Table.Row>
-                  <Table.Cell>{k}</Table.Cell>
-                  <Table.Cell>
-                  {k === 'Status'
-                    && (
-                    <>
-                    {closureProcess[key].status
-                      ? (
-                       <>
-                      <b className={closureProcess[key].status === 'COMPLETE' ? 'positive-text' : closureProcess[key].status === 'PENDING' ? 'warning-text' : 'negative-text'}>{closureProcess[key].status}</b>
-                      {closureProcess[key].finished && closureProcess[key].started
-                      && (
-                        <span> ({DataFormatter.getDateDifference(closureProcess[key].started, closureProcess[key].finished)})</span>
-                      )
-                      }
-                      </>
-                      )
-                      : <>-</>
-                    }
-                    </>
-                    )
-                  }
-                  {k === 'Started'
-                  && (
-                    <>
-                    {(closureProcess[key].started || closureProcess[key].startedCount) ? (
-                    <>
-                      {closureProcess[key].startedCount || '0'} - {closureProcess[key].started ? DataFormatter.getDateAsPerTimeZone(closureProcess[key].started, true, false, false, 'M/D/YYYY h:mm a') : ''}
-                    </>
-                    ) : <>-</>
-                  }
-                    </>
+            && (
+              <>
+                {isEmpty(closureProcess)
+                  ? (
+                    <section className="bg-midwhite center-align">
+                      <Header as="h4">No Data Found</Header>
+                    </section>
                   )
-                  }
-                   {k === 'Finished'
-                   && (
-                  <>
-                   {
-                   (closureProcess[key].remainingCount || closureProcess[key].finished)
-                     ? (
-                    <>{closureProcess[key].remainingCount || '0'} - {closureProcess[key].finished ? DataFormatter.getDateAsPerTimeZone(closureProcess[key].finished, true, false, false, 'M/D/YYYY h:mm a') : ''}
-                    </>
-                     ) : <>-</>
-                   }
-                   </>
-                   )
-                    }
-                  </Table.Cell>
-                </Table.Row>
-                )) : (
-<section className="center-align">
-                <Header as="h6">No Data Found</Header>
-              </section>
-                )
+                  : (
+                    <Grid columns={3}>
+                      {!isEmpty(closureProcess) && Object.keys(closureProcess).map(key => (
+                        <Grid.Column className="center-align"><Header as="h5">{capitalize(key.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</Header>
+                          <div className="table-wrapper">
+                            <Table unstackable basic="very">
+                              <Table.Body>
+                                {closureProcess[key] ? ['Status', 'Started', 'Finished'].map(k => (
+                                  <Table.Row>
+                                    <Table.Cell>{k}</Table.Cell>
+                                    <Table.Cell>
+                                      {k === 'Status'
+                                        && (
+                                          <>
+                                            {closureProcess[key].status
+                                              ? (
+                                                <>
+                                                  <b className={closureProcess[key].status === 'COMPLETE' ? 'positive-text' : closureProcess[key].status === 'PENDING' ? 'warning-text' : 'negative-text'}>{closureProcess[key].status}</b>
+                                                  {closureProcess[key].finished && closureProcess[key].started
+                                                    && (
+                                                      <span> ({DataFormatter.getDateDifference(closureProcess[key].started, closureProcess[key].finished)})</span>
+                                                    )
+                                                  }
+                                                </>
+                                              )
+                                              : <>-</>
+                                            }
+                                          </>
+                                        )
+                                      }
+                                      {k === 'Started'
+                                        && (
+                                          <>
+                                            {(closureProcess[key].started || closureProcess[key].startedCount) ? (
+                                              <>
+                                                {closureProcess[key].startedCount || '0'} - {closureProcess[key].started ? DataFormatter.getDateAsPerTimeZone(closureProcess[key].started, true, false, false, 'M/D/YYYY h:mm a') : ''}
+                                              </>
+                                            ) : <>-</>
+                                            }
+                                          </>
+                                        )
+                                      }
+                                      {k === 'Finished'
+                                        && (
+                                          <>
+                                            {
+                                              (closureProcess[key].remainingCount || closureProcess[key].finished)
+                                                ? (
+                                                  <>{closureProcess[key].remainingCount || '0'} - {closureProcess[key].finished ? DataFormatter.getDateAsPerTimeZone(closureProcess[key].finished, true, false, false, 'M/D/YYYY h:mm a') : ''}
+                                                  </>
+                                                ) : <>-</>
+                                            }
+                                          </>
+                                        )
+                                      }
+                                    </Table.Cell>
+                                  </Table.Row>
+                                )) : (
+                                    <section className="center-align">
+                                      <Header as="h6">No Data Found</Header>
+                                    </section>
+                                )
+                                }
+                              </Table.Body>
+                            </Table>
+                          </div>
+                        </Grid.Column>
+                      ))}
+                    </Grid>
+                  )
                 }
-                </Table.Body>
-              </Table>
-            </div>
-            </Grid.Column>
-          ))}
-          </Grid>
-              )
-            }
-            </>
-          )
+              </>
+            )
           }
           <Divider section />
           <Header as="h4"> Supplemental Agreement <Icon onClick={() => this.toggleVisibilityStatus('showSupplimentAgg')} className={`ns-chevron-${this.state.showSupplimentAgg === true ? 'up' : 'down'}-compact right`} color="blue" /> </Header>
-            {this.state.showSupplimentAgg
+          {this.state.showSupplimentAgg
             && (
               <>
                 <SupplementalAgreements />
                 <Button.Group>
-                {filter(closingActions, a => a.ref === 1).map(fA => (
-                  <Button
-                    loading={this.state.inProgress === 'update'}
-                    onClick={() => this.closeAction('update', 1, false, fA.label, 'SUPPLEMENTAL_AGREEMENT')}
-                    primary
-                  >
-                    {fA.label}
-                  </Button>
-                ))}
-              </Button.Group>
+                  {filter(closingActions, a => a.ref === 1).map(fA => (
+                    <Button
+                      loading={this.state.inProgress === 'update'}
+                      onClick={() => this.closeAction('update', 1, false, fA.label, 'SUPPLEMENTAL_AGREEMENT')}
+                      primary
+                    >
+                      {fA.label}
+                    </Button>
+                  ))}
+                </Button.Group>
               </>
             )
-            }
-            <Divider section />
+          }
+          <Divider section />
           <Contingency
             formArrayChange={formArrayChange}
             form={CLOSING_CONTITNGENCIES_FRM}
@@ -626,55 +636,55 @@ out of required
           </Modal.Header>
           {this.state.action !== 'VALIDATE_NOTES'
             && (
-          <Modal.Content className="pb-20">
-            Please select notification action to perform.
+              <Modal.Content className="pb-20">
+                Please select notification action to perform.
           </Modal.Content>
             )
           }
           <Modal.Actions>
             {this.state.action === 'VALIDATE_NOTES'
               ? (
-            <Form>
-            <Form.Group widths={3} className="left-align">
-            {['npaPageCount', 'pnPageCount'].map(field => (
-                  <FormInput
-                    key={field}
-                    name={field}
-                    fielddata={OFFERING_CLOSE_3.fields[field]}
-                    changed={(e, result) => formChange(e, result, 'OFFERING_CLOSE_3')}
-                  />
-            ))
-              }
-                  <MaskedInput
-                    name="documentsCount"
-                    containerwidth="4"
-                    fielddata={OFFERING_CLOSE_3.fields.documentsCount}
-                    changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
-                    number
-                  />
-              </Form.Group>
-              {['Cancel', 'Validate Envelope'].map(item => (
-              <Button
-                onClick={() => this.handleHardOrSoftClose(item)}
-                primary={item !== 'Cancel'}
-                content={item}
-              />
-              ))
-            }
-            </Form>
+                <Form>
+                  <Form.Group widths={3} className="left-align">
+                    {['npaPageCount', 'pnPageCount'].map(field => (
+                      <FormInput
+                        key={field}
+                        name={field}
+                        fielddata={OFFERING_CLOSE_3.fields[field]}
+                        changed={(e, result) => formChange(e, result, 'OFFERING_CLOSE_3')}
+                      />
+                    ))
+                    }
+                    <MaskedInput
+                      name="documentsCount"
+                      containerwidth="4"
+                      fielddata={OFFERING_CLOSE_3.fields.documentsCount}
+                      changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_3', name)}
+                      number
+                    />
+                  </Form.Group>
+                  {['Cancel', 'Validate Envelope'].map(item => (
+                    <Button
+                      onClick={() => this.handleHardOrSoftClose(item)}
+                      primary={item !== 'Cancel'}
+                      content={item}
+                    />
+                  ))
+                  }
+                </Form>
               )
               : (
-            <Button.Group className="actions">
-            {['Cancel', 'Send to Test Email', 'Send to Investors'].map(item => (
-              <Button
-                onClick={() => this.handleHardOrSoftClose(item)}
-                primary={item !== 'Cancel'}
-                disabled={(item === 'Send to Investors' && this.state.activeStep !== 2) ? get(closureProcess, this.state.activeStep === 3 ? 'verifySecurityTransaction.status' : 'finalizeNotes.status') !== 'COMPLETE' : false}
-                content={item}
-              />
-            ))
-            }
-            </Button.Group>
+                <Button.Group className="actions">
+                  {['Cancel', 'Send to Test Email', 'Send to Investors'].map(item => (
+                    <Button
+                      onClick={() => this.handleHardOrSoftClose(item)}
+                      primary={item !== 'Cancel'}
+                      disabled={(item === 'Send to Investors' && this.state.activeStep !== 2) ? get(closureProcess, this.state.activeStep === 3 ? 'verifySecurityTransaction.status' : 'finalizeNotes.status') !== 'COMPLETE' : false}
+                      content={item}
+                    />
+                  ))
+                  }
+                </Button.Group>
               )
             }
           </Modal.Actions>
