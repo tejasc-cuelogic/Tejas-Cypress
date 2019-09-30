@@ -8,6 +8,7 @@ import { inject, observer } from 'mobx-react';
 import { DateTimeFormat, InlineLoader, UserAvatar } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
+import { OFFERING_AGREEMENT_REGULATIONS } from '../../../../../../constants/offering';
 
 const meta = [
   { label: '', value: 'avatar' },
@@ -15,7 +16,8 @@ const meta = [
   { label: 'Residence City', value: 'city' },
   { label: 'State', value: 'state' },
   { label: 'Account Type', value: 'accountType' },
-  { label: 'early Bird Eligibility', value: 'earlyBirdEligibility' },
+  { label: 'Early Bird Eligibility', value: 'earlyBirdEligibility' },
+  { label: 'Regulation', value: 'regulation' },
   { label: 'Investment Amount', value: 'amount' },
   { label: 'Date', value: 'investmentDate' },
   { label: 'Referral Code', value: 'referralCode' },
@@ -125,6 +127,9 @@ export default class Listing extends Component {
                       </>
                     )
                   }
+                  <Table.Cell>
+                    {data.regulation ? OFFERING_AGREEMENT_REGULATIONS[data.regulation] : ''}
+                  </Table.Cell>
                   {((isIssuer && hardClosedDate) || (isAdmin))
                     && (
                       <>
