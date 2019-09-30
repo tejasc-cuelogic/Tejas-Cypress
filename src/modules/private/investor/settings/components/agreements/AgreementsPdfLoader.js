@@ -35,13 +35,13 @@ export default class AgreementsPdfLoader extends Component {
               <div className="pdf-viewer">
                 {(docLoading || !embedUrl) ? <InlineLoader />
                   : (
-<iframe
-  width="100%"
-  height="100%"
-  title="agreement"
-  src={embedUrl}
-  ref={(c) => { this.iframeComponent = c; }}
-/>
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      title="agreement"
+                      src={embedUrl}
+                      ref={(c) => { this.iframeComponent = c; }}
+                    />
                   )
                 }
               </div>

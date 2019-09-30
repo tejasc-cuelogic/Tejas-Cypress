@@ -962,6 +962,9 @@ export const getOfferingDetails = gql`
         upload {
           fileId
           fileName
+          fileHandle {
+            boxFileId
+          }
         }
       }
       closureSummary {
