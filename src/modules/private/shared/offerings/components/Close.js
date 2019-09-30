@@ -166,7 +166,7 @@ export default class Close extends Component {
       getClosureObject,
     } = this.props.offeringCreationStore;
     new Promise((res, rej) => {
-      let payload = { stage: 'STARTUP_PERIOD' };
+      let payload = { stage: 'IN_REPAYMENT' };
       let emptyPayload = null;
       if (status === 'update') {
         payload = getClosureObject(type);
