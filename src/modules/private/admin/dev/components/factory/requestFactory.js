@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Card, Button, Form, Grid, Divider } from 'semantic-ui-react';
+import { Card, Button, Form, Grid, Divider, Header, Icon, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
-import { FormDropDown, FormTextarea } from '../../../../../../theme/form';
+import { withRouter, Link } from 'react-router-dom';
+import { FormDropDown, FormInput } from '../../../../../../theme/form';
+// FormTextarea
 
 @inject('factoryStore')
 @withRouter
@@ -18,10 +19,25 @@ export default class RequestFactory extends Component {
     this.props.factoryStore.requestFactoryPluginTrigger();
   }
 
+  addMore = (e, formName, arrayName) => {
+    e.preventDefault();
+    this.props.factoryStore.addMore(formName, arrayName);
+  }
+
+  toggleConfirmModal = (e, index, formName) => {
+    e.preventDefault();
+    this.props.factoryStore.toggleConfirmModal(index, formName);
+  }
+
+  removeData = (confirmModalName, arrayName = 'payload') => {
+    this.props.factoryStore.removeData(confirmModalName, arrayName);
+  }
+
   render() {
     const { factoryStore } = this.props;
     const {
-      REQUESTFACTORY_FRM, formChange, inProgress,
+      REQUESTFACTORY_FRM, formChange, inProgress, formArrayChange,
+      confirmModal, confirmModalName, removeIndex,
     } = factoryStore;
     return (
       <Card fluid className="elastic-search">
@@ -54,16 +70,58 @@ export default class RequestFactory extends Component {
                     <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid} loading={inProgress.requestFactory} />
                   </Grid.Column>
                   <Grid.Column width={8}>
-                    <FormTextarea
+                    {/* <FormTextarea
                       name="payload"
                       fielddata={REQUESTFACTORY_FRM.fields.payload}
                       changed={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
                       containerclassname="secondary huge"
-                    />
+                    /> */}
+                    <Header as="h4">
+                      Payload
+                      <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'REQUESTFACTORY_FRM', 'payload')}><small>+ Add payload parameters</small></Link>
+                    </Header>
+                    {
+                      REQUESTFACTORY_FRM.fields.payload.map((exp, index2) => (
+                        <>
+                          <Header as="h6">
+                          {`Parameter ${index2 + 1}`}
+                            {REQUESTFACTORY_FRM.fields.payload.length > 1
+                              && (
+                                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index2, 'REQUESTFACTORY_FRM')}>
+                                  <Icon className="ns-close-circle" color="grey" />
+                                </Link>
+                              )
+                            }
+                          </Header>
+                          <div className="featured-section">
+                            <Form.Group widths={2}>
+                              {
+                                ['key', 'value'].map(field => (
+                                  <FormInput
+                                    name={field}
+                                    fielddata={exp[field]}
+                                    changed={(e, result) => formArrayChange(e, result, 'REQUESTFACTORY_FRM', 'payload', index2, 0)}
+                                  />
+                                ))
+                              }
+                            </Form.Group>
+                          </div>
+                        </>
+                      ))
+                    }
                   </Grid.Column>
                 </Grid>
               </Form.Group>
             </Form>
+            <Confirm
+              header="Confirm"
+              content={`Are you sure you want to remove this parameter ${removeIndex + 1}?`}
+              open={confirmModal}
+              onCancel={this.toggleConfirmModal}
+              onConfirm={() => this.removeData(confirmModalName, 'payload')}
+              size="mini"
+              className="deletion"
+            />
           </Card.Description>
         </Card.Content>
       </Card>

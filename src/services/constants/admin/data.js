@@ -229,14 +229,36 @@ export const REQUESTFACTORY_META = {
     error: undefined,
     rule: 'required',
   },
-  payload: {
-    key: 'payload',
-    value: '',
-    label: 'Payload',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Put your JSON ojbect here...',
-  },
+  // payload: {
+  //   key: 'payload',
+  //   value: '',
+  //   label: 'Payload',
+  //   error: undefined,
+  //   rule: 'required',
+  //   placeHolder: 'Put your JSON ojbect here...',
+  // },
+  payload: [{
+    key: {
+      key: 'key',
+      value: '',
+      label: 'Key',
+      error: undefined,
+      rule: 'required',
+      customErrors: {
+        required: 'This field is required',
+      },
+    },
+    value: {
+      key: 'value',
+      value: '',
+      label: 'Value',
+      error: undefined,
+      rule: 'required',
+      customErrors: {
+        required: 'This field is required',
+      },
+    },
+  }],
 };
 
 export const CRONFACTORY_META = {

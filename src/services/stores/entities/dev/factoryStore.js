@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { get, isEmpty, isArray } from 'lodash';
+import { get, isEmpty, isArray, forEach } from 'lodash';
 import moment from 'moment';
 import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -28,6 +28,12 @@ export class FactoryStore {
   @observable cronLogList = [];
 
   @observable processFactoryResponse = {};
+
+  @observable confirmModal = false;
+
+  @observable confirmModalName = null;
+
+  @observable removeIndex = null;
 
   @observable requestState = {
     lek: { 'page-1': null },
@@ -111,7 +117,15 @@ export class FactoryStore {
 
   @action
   formChange = (e, res, form) => {
-    this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
+    if (form === 'REQUESTFACTORY_FRM') {
+      // this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        Validator.pullValues(e, res),
+      );
+    } else {
+      this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
+    }
   };
 
   @action
@@ -204,14 +218,16 @@ export class FactoryStore {
   requestFactoryPluginTrigger = () => new Promise((resolve, reject) => {
     const { fields } = this.REQUESTFACTORY_FRM;
     const formData = Validator.evaluateFormData(fields);
-    if (!this.isValidJson(formData.payload)) {
+    const TestformData = this.ExtractArrayObjectToJSON(formData.payload);
+    console.log('TestformData==>', TestformData);
+    if (!this.isValidJson(TestformData)) {
       this.REQUESTFACTORY_FRM.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
       this.REQUESTFACTORY_FRM.meta.isValid = false;
     } else {
       this.setFieldValue('inProgress', true, 'requestFactory');
       const variables = {};
       variables.method = formData.plugin;
-      variables.payload = formData.payload;
+      variables.payload = TestformData;
       variables.invocationType = formData.invocationType;
       client
         .mutate({
@@ -302,6 +318,62 @@ export class FactoryStore {
         });
     }
   });
+
+  @action
+  formArrayChange = (e, result, form, subForm = '', index) => {
+    if (result && (result.type === 'checkbox')) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        Validator.pullValues(e, result),
+        subForm,
+        index,
+        '',
+        { value: result.checked },
+      );
+    } else {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        Validator.pullValues(e, result),
+        subForm,
+        index,
+      );
+      // if (form === 'REQUESTFACTORY_FRM') {
+      //   this.leadershipExperience[index2] = this[form];
+      // }
+    }
+  }
+
+  @action
+  addMore = (form, key, count = 1) => {
+    this[form] = Validator.addMoreRecordToSubSection(this[form], key, count, true);
+  }
+
+  @action
+  toggleConfirmModal = (index, formName = null) => {
+    this.confirmModal = !this.confirmModal;
+    this.confirmModalName = formName;
+    this.removeIndex = this.confirmModal ? index : null;
+  }
+
+  @action
+  removeData = (formName, subForm = 'data', isApiDelete = false) => {
+    if (!isApiDelete) {
+      this[formName].fields[subForm].splice(this.removeIndex, 1);
+    }
+    Validator.validateForm(this[formName], true, false, false);
+    this.confirmModal = !this.confirmModal;
+    this.confirmModalName = null;
+    this.removeIndex = null;
+  }
+
+  ExtractArrayObjectToJSON = (arrayOfObject) => {
+    console.log('arrayOfObject==>', arrayOfObject);
+    const revampObj = {};
+    forEach(arrayOfObject, (val) => {
+      revampObj[val.key] = val.value;
+    });
+    return JSON.stringify(revampObj);
+  }
 }
 
 export default new FactoryStore();
