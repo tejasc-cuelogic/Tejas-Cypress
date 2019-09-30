@@ -105,12 +105,13 @@ export default class WatchList extends Component {
     return (
       <div className="inner-content-spacer">
         {watchListMeta.map(watcherType => (
+          watcherType.status !== 'INVESTOR' && (
           <>
-          <Header as="h4">{`${watcherType.headerText} (${allWatchList[watcherType.status].length}) `} <Icon onClick={() => this.toggleVisibilityStatus(watcherType.status)} className={`ns-chevron-${this.state[watcherType.status] === true ? 'up' : 'down'}-compact right`} color="blue" /></Header>
-          {this.state[watcherType.status] && <this.watchListTable hasUsersAccess={hasUsersAccess} WatchersList={allWatchList[watcherType.status]} />}
-          <Divider section />
+            <Header as="h4">{`${watcherType.headerText} (${allWatchList[watcherType.status].length}) `} <Icon onClick={() => this.toggleVisibilityStatus(watcherType.status)} className={`ns-chevron-${this.state[watcherType.status] === true ? 'up' : 'down'}-compact right`} color="blue" /></Header>
+            {this.state[watcherType.status] && <this.watchListTable hasUsersAccess={hasUsersAccess} WatchersList={allWatchList[watcherType.status]} />}
+            <Divider section />
           </>
-        ))
+          )))
         }
       </div>
     );
