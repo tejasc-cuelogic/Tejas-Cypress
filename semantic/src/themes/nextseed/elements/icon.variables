@@ -199,6 +199,7 @@
 @ns-home-line: "\e97e";
 @ns-hospitality: "\e953";
 @ns-hospitality-2: "\e99a";
+@ns-hospitality-3: "\e9a4";
 @ns-image: "\e927";
 @ns-individual: "\e941";
 @ns-individual-line: "\e94e";

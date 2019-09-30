@@ -2000,6 +2000,9 @@ i.icon[class*="ns-"]{
 .ns-hospitality-2:before {
     content:@ns-hospitality-2; 
 }
+.ns-hospitality-3:before {
+    content:@ns-hospitality-3; 
+}
 .ns-image:before{
     content:@ns-image;
 }
