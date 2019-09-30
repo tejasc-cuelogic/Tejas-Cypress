@@ -22,7 +22,7 @@ export default class KnowledgeBase extends Component {
     const { closingBinderDocs } = offeringsStore;
     const { getBoxLink, documentMeta } = campaignStore;
     if (closingBinderDocs.length === 0) {
-      return <InlineLoader />;
+      return <InlineLoader text="No data found." />;
     }
     return (
       <div>
