@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { Switch, Route } from 'react-router-dom';
 import SecondaryMenu from '../../../../../../../theme/layout/SecondaryMenu';
 import Leader from './Leader';
@@ -22,7 +23,7 @@ export default class Leadership extends Component {
     const navItems = [];
     if (getOfferingById.leadership) {
       getOfferingById.leadership.map((leader, index) => {
-        navItems.push({ title: `Leader ${index + 1}`, to: `leader/${index + 1}` });
+        navItems.push({ title: get(leader, 'firstName') || `Leader ${index + 1}`, to: `leader/${index + 1}` });
         return navItems;
       });
     }
