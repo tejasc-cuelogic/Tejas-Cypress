@@ -9,6 +9,10 @@ import { FormDropDown, FormInput } from '../../../../../../theme/form';
 @withRouter
 @observer
 export default class RequestFactory extends Component {
+  state = {
+    open: false,
+  };
+
   constructor(props) {
     super(props);
     this.props.factoryStore.resetForm('REQUESTFACTORY_FRM');
@@ -32,6 +36,11 @@ export default class RequestFactory extends Component {
   removeData = (confirmModalName, arrayName = 'payload') => {
     this.props.factoryStore.removeData(confirmModalName, arrayName);
   }
+
+  // selectInput = (e, resp) => {
+  //   e.preventDefault();
+  //   console.log(resp);
+  // }
 
   render() {
     const { factoryStore } = this.props;
@@ -84,7 +93,7 @@ export default class RequestFactory extends Component {
                       REQUESTFACTORY_FRM.fields.payload.map((exp, index2) => (
                         <>
                           <Header as="h6">
-                          {`Parameter ${index2 + 1}`}
+                            {`Parameter ${index2 + 1}`}
                             {REQUESTFACTORY_FRM.fields.payload.length > 1
                               && (
                                 <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index2, 'REQUESTFACTORY_FRM')}>
@@ -94,6 +103,15 @@ export default class RequestFactory extends Component {
                             }
                           </Header>
                           <div className="featured-section">
+                            {/* <FormDropDown
+                              fielddata={REQUESTFACTORY_FRM.fields.inputType}
+                              selection
+                              containerclassname="dropdown-field mlr-0"
+                              options={REQUESTFACTORY_FRM.fields.inputType.values}
+                              placeholder="Choose here"
+                              name="inputType"
+                              onChange={(e, result) => this.selectInput(e, result)}
+                            /> */}
                             <Form.Group widths={2}>
                               {
                                 ['key', 'value'].map(field => (
