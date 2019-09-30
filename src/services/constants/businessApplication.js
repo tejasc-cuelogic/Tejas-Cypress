@@ -283,7 +283,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'Food & Beverage', icon: 'ns-food-light', value: 'FOOD_AND_BEVERAGE' },
       { label: 'Real Estate', icon: 'ns-real-estate', value: 'REAL_ESTATE' },
       { label: 'Fitness & Wellness', icon: 'ns-dumbbells', value: 'FITNESS_AND_WELLNESS' },
-      { label: 'Hospitality', icon: 'ns-first-aid', value: 'HOSPITALITY' },
+      { label: 'Hospitality', icon: 'ns-hospitality-3', value: 'HOSPITALITY' },
       { label: 'Technology', icon: 'ns-technology', value: 'TECHNOLOGY' },
       { label: 'Other Industry Type', value: 'OTHER' },
     ],
