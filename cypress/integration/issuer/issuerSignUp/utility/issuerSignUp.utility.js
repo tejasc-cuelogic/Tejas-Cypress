@@ -1,4 +1,5 @@
 import { registerApiCall, getJSONDataFromFixtures, btnClickAndWaitByButtonName } from '../../../common.utility';
+import { async } from 'q';
 
 export const issuerSignUp = () => {
   cy.get('h4').contains('Business').click();
@@ -79,8 +80,12 @@ export const fillPreQaulificationDetails = (issuerPreQual) => {
   fillGeneralInfo(issuerPreQual.generalInfo);
   cy.get('input[name="industryTypes"]').click({ force: true, multiple: true });
   cy.get('input[value="EQUITY"]').click();
-  cy.get('input[value="BRAND_NEW"]').click();
+  cy.get('input[value="UPGRADE"]').click();
   fillExperienceDetails(issuerPreQual.experienceDetails);
+  if (issuerPreQual.previousYearProjection) {
+    fillNextYearProjection(issuerPreQual.previousYearProjection);  
+  }
+  cy.get('input[value="WORKING_CAPITAL"]').click();
   fillNextYearProjection(issuerPreQual.nextYearProjection);
   cy.get('input[value="LLC"]').click();
   cy.get('input[name="legalConfirmation"]').click({ force: true, multiple: true });
@@ -96,6 +101,12 @@ export const preQualificationSuccess = async () => {
 export const preQualificationFail = async () => {
   const issuerPreQual = await getJSONDataFromFixtures('issuer/issuerPreQualFail.json');
   fillPreQaulificationDetails(issuerPreQual);
+  cy.wait(5000);
+}
+
+export const prequalFailButLendioPass = async() => {
+  const businessDetails = await getJSONDataFromFixtures('issuer/issuerPreQualFailLendioPass.json');
+  fillPreQaulificationDetails(businessDetails);
   cy.wait(5000);
 }
 
