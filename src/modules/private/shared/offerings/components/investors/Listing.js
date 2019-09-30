@@ -8,6 +8,7 @@ import { inject, observer } from 'mobx-react';
 import { DateTimeFormat, InlineLoader, UserAvatar } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
+import { OFFERING_AGREEMENT_REGULATIONS } from '../../../../../../constants/offering';
 
 const meta = [
   { label: '', value: 'avatar' },
@@ -127,7 +128,7 @@ export default class Listing extends Component {
                     )
                   }
                   <Table.Cell>
-                    {data.regulation}
+                    {data.regulation ? OFFERING_AGREEMENT_REGULATIONS[data.regulation] : ''}
                   </Table.Cell>
                   {((isIssuer && hardClosedDate) || (isAdmin))
                     && (
