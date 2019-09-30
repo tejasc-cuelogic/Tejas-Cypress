@@ -1,10 +1,10 @@
-import { completeBusinessApplication, preQualificationSuccess, preQualificationFail } from './utility/issuerSignUp.utility';
+import { completeBusinessApplication, preQualificationSuccess, preQualificationFail, prequalFailButLendioPass } from './utility/issuerSignUp.utility';
 
 describe('Issuer Sign Up', () => {
   beforeEach(() => {
     cy.restoreLocalStorage();
-    cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
-    cy.applicationUnlock();
+    cy.visit('localhost:3000', { failOnStatusCode: false, timeout: 100000 });
+    // cy.applicationUnlock();
     if (cy.get('a').contains('Sign Up')) {
       cy.get('a').contains('Sign Up').click();
     } else {
@@ -13,15 +13,19 @@ describe('Issuer Sign Up', () => {
     }
   });
 
-  it ('Pre-qualification should be failed', () => {
+  it.skip ('Pre-qualification should be failed', () => {
     preQualificationFail();
   })
 
-  it ('should be able to fill basic details of issuer', () => {
+  it.skip ('should be able to fill basic details of issuer', () => {
     preQualificationSuccess();
   })
 
-  it ('should able to submit business application and login', () => {
+  it.skip ('should able to submit business application and login', () => {
     completeBusinessApplication();
+  })
+  
+  it ('Prequal failed but lendio passed', () => {
+    prequalFailButLendioPass();
   })
 });
