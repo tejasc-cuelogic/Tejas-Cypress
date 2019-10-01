@@ -126,6 +126,7 @@ query _listRequestPlugins {
   listRequestPlugins {
     plugins{
       name
+      plugin
       pluginInputs {
         name
       }
