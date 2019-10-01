@@ -204,8 +204,8 @@
 				font-weight: @fontMedium;
 			}
 		}
-		.value{
-			font-size: @15px;
+		&.mini.horizontal > .value{
+			font-size: @15px !important;
 		}
 
 	}
