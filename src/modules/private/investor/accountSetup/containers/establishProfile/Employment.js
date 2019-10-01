@@ -20,7 +20,7 @@ export default class Employment extends Component {
     this.props.uiStore.setFieldvalue('inProgressArray', []);
   }
 
-  handleupdateInvestorProfileData = () => {
+  handleUpdateInvestorProfileData = () => {
     const { updateInvestorProfileData, stepToBeRendered, EMPLOYMENT_FORM } = this.props.investorProfileStore;
     const { multiSteps } = this.props.uiStore;
     if (EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED' && isMobile) {
@@ -77,7 +77,7 @@ export default class Employment extends Component {
                   // this.props.uiStore.scrollIntoActiveInputFields();
                 }
               }
-              action={this.handleupdateInvestorProfileData}
+              action={this.handleUpdateInvestorProfileData}
             />
             ) : (
           <FormRadioGroup

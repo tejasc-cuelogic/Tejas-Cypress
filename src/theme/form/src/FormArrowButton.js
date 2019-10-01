@@ -14,32 +14,42 @@ const FormArrowButton = observer((props) => {
     // error,
     // placeHolder,
   } = props.fielddata;
-  const { name, changed, action } = props;
+  const { name, changed, action, ctaErrors } = props;
   if (values && Array.isArray(toJS(values))) {
     return (
 <Button.Group fluid vertical>{values.map(field => (
-  <Button
-    onClick={(e) => {
-      changed(e, { name, value: field.value });
-      action();
-    }}
-    basic
-    fluid
-    labelPosition="left"
-    className={`arrow-button ${value === field.value ? 'active' : ''}`}
-  >
-  <div className="details">
-    {field.label && field.labelDescription
-      ? (
-      <>
-    {field.label && <Header as="h5">{field.label}</Header>}
-    {field.labelDescription && field.labelDescription}
-      </>
-      ) : (field.label && <span>{field.label}</span>)
-    }
-  </div>
-  <Icon className="ns-chevron-right" />
-</Button>
+  <>
+    <Button
+      onClick={(e) => {
+        changed(e, { name, value: field.value });
+        if (action) {
+          action();
+        }
+      }}
+      basic
+      fluid
+      labelPosition="left"
+      className={`arrow-button ${value === field.value ? 'active' : ''} ${ctaErrors && ctaErrors.for === field.value ? 'error' : ''}`}
+    >
+    <div className="details">
+      {field.label && field.labelDescription
+        ? (
+        <>
+      {field.label && <Header as="h5">{field.label}</Header>}
+      {field.labelDescription && field.labelDescription}
+        </>
+        ) : (field.label && <span>{field.label}</span>)
+      }
+    </div>
+    <Icon className="ns-chevron-right" />
+  </Button>
+  {(ctaErrors && ctaErrors.for === field.value) ? (
+    <p className="negative-text mb-20">
+      {ctaErrors.errorMsg}
+      </p>
+  ) : ''
+  }
+  </>
 ))}</Button.Group>
     );
   }
