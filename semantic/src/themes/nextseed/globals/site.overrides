@@ -327,6 +327,7 @@ a{
 }
 .bg-white {
 	background-color: @white !important;
+}
 .bg-midwhite{
 	background-color: @neutral-midwhite;
 }
@@ -2975,4 +2976,4 @@ table.css-wu4c77-diff-container {
     min-height: 200px;
     margin: auto;
 }
-// HTML editor images placeholder end
+// HTML editor images placeholder
