@@ -79,12 +79,15 @@ export const fillPreQaulificationDetails = (issuerPreQual) => {
   cy.get('input[value="B2C"]').click();
   fillGeneralInfo(issuerPreQual.generalInfo);
   cy.get('input[name="industryTypes"]').click({ force: true, multiple: true });
-  cy.get('input[value="EQUITY"]').click();
-  cy.get('input[value="UPGRADE"]').click();
-  fillExperienceDetails(issuerPreQual.experienceDetails);
   if (issuerPreQual.previousYearProjection) {
+    cy.get('input[value="DEBT"]').click();
+    cy.get('input[value="UPGRADE"]').click();
     fillNextYearProjection(issuerPreQual.previousYearProjection);  
+  } else {
+    cy.get('input[value="EQUITY"]').click();
+    cy.get('input[value="BRAND_NEW"]').click();
   }
+  fillExperienceDetails(issuerPreQual.experienceDetails);
   cy.get('input[value="WORKING_CAPITAL"]').click();
   fillNextYearProjection(issuerPreQual.nextYearProjection);
   cy.get('input[value="LLC"]').click();
