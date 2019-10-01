@@ -261,6 +261,16 @@ export default class KeyTerms extends Component {
               allowNegative={false}
               prefix="$"
             />
+            {
+              ['valuationCap', 'discount'].map(field => (
+                <FormInput
+                  displayMode={isReadonly}
+                  name={field}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  changed={(e, result) => formArrayChange(e, result, formName)}
+                />
+              ))
+            }
           </Form.Group>
           <Form.Group widths={2}>
             {['investmentMultipleSummary', 'offeringDisclaimer', 'revShareSummary', 'revSharePercentageDescription'].map(field => (
