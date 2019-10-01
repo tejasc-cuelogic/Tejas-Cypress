@@ -155,7 +155,7 @@ export class NavStore {
           subNavigations,
           _.find(offeringsStore.phases, (s, i) => i === b.stage).accessKey,
         );
-        sNav = sNav.filter(n => (!n.filterKey || (n.filterKey && _.get(offer, n.filterKey))));
+        sNav = sNav.filter(n => (!n.filterKey || _.get(offer, n.filterKey)));
         filteredNavs.splice(
           bIndex,
           0,

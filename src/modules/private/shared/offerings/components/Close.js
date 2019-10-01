@@ -236,6 +236,7 @@ export default class Close extends Component {
     const closeDate = get(offer, 'closureSummary.processingDate') && `${get(offer, 'closureSummary.processingDate')} 23:59:59`;
     const hoursToClose = DataFormatter.diffDays(closeDate, true) + 24;
     const dynamicFields = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? ['interestRate'] : ['revSharePercentage', 'multiple'];
+    const modalHeader = find(closingActions, a => a.enum === this.state.action) ? find(closingActions, a => a.enum === this.state.action).label : '';
     return (
       <Form>
         <div className="inner-content-spacer">
@@ -334,21 +335,20 @@ export default class Close extends Component {
                                 <Button loading={inProgress} color="blue" onClick={initializeClosingBinder} content="Initialize Closing Binder" />
                               </section>
                             ) : (
-                              <>
                                 <ClosingBinder />
-                                <Button.Group>
-                                  {filter(closingActions, a => a.ref === 1).map(fA => (
-                                    <Button
-                                      loading={this.state.inProgress === fA.enum}
-                                      onClick={() => this.closeAction(fA.enum, 1, false, fA.label, 'CLOSING_BINDER')}
-                                      primary
-                                    >
-                                      {fA.label}
-                                    </Button>
-                                  ))}
-                                </Button.Group>
-                              </>
                             )}
+                            <Button.Group>
+                              {filter(closingActions, a => a.ref === 1).map(fA => (
+                                <Button
+                                  className="mt-10"
+                                  loading={this.state.inProgress === fA.enum}
+                                  onClick={() => this.closeAction(fA.enum, 1, false, fA.label, 'CLOSING_BINDER')}
+                                  primary
+                                >
+                                  {fA.label}
+                                </Button>
+                              ))}
+                            </Button.Group>
                         </>
                         <Divider section />
                       </>
@@ -632,7 +632,8 @@ export default class Close extends Component {
         </div>
         <Modal open={this.state.openModal} closeIcon size={this.state.action === 'VALIDATE_NOTES' ? 'small' : 'tiny'} onClose={this.handleCloseModal}>
           <Modal.Header>
-            {this.state.action === 'VALIDATE_NOTES' ? 'Validate Notes' : this.state.activeStep === 2 ? 'Soft Close Notification' : 'Hard close Notification'}
+            {modalHeader}
+            {/* {this.state.action === 'VALIDATE_NOTES' ? 'Validate Notes' : this.state.activeStep === 2 ? 'Soft Close Notification' : 'Hard close Notification'} */}
           </Modal.Header>
           {this.state.action !== 'VALIDATE_NOTES'
             && (
