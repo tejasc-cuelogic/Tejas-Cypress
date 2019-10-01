@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { get, isEmpty, isArray, forEach } from 'lodash';
+import { get, isEmpty, isArray, forEach, find } from 'lodash';
 import moment from 'moment';
 import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -121,10 +121,9 @@ export class FactoryStore {
   formChange = (e, res, form) => {
     if (form === 'REQUESTFACTORY_FRM') {
       // this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
-      this[form] = Validator.onArrayFieldChange(
-        this[form],
-        Validator.pullValues(e, res),
-      );
+      this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
+      const plugnArr = this.pullValuesForDynmicInput(e, res);
+      this.createDynamicFormFields(plugnArr.pluginInput);
     } else {
       this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
     }
@@ -282,6 +281,7 @@ export class FactoryStore {
       tempObj.key = value.name;
       tempObj.text = value.name;
       tempObj.value = pluginList === 'listRequestPlugins' ? value.plugin : value.name;
+      tempObj.pluginInput = [...value.pluginInputs];
       pluginArr.push(tempObj);
     });
     return pluginArr;
@@ -381,6 +381,15 @@ export class FactoryStore {
   createDynamicFormFields = (formFields) => {
     this.DYNAMCI_PAYLOAD_FRM = Validator.prepareFormObject(formFields);
   }
+
+  pullValuesForDynmicInput = (e, data) => {
+    const pluginInput = find(data.fielddata.values, (o) => {
+      console.log(o);
+      return o.value === data.value && o.pluginInput;
+    });
+    return pluginInput;
+    // find(data.fielddata.values.pluginInput, getPluginArr);
+  };
 }
 
 export default new FactoryStore();

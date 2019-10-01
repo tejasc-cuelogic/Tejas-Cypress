@@ -237,37 +237,28 @@ export const REQUESTFACTORY_META = {
   //   rule: 'required',
   //   placeHolder: 'Put your JSON ojbect here...',
   // },
-  inputType: {
-    key: 'inputType',
-    value: '',
-    values: [{ key: 'Form Input', text: 'Form Input', value: 'formInput' },
-      { key: 'Form Textarea', text: 'Form Textarea', value: 'formTextArea' }],
-    label: 'inputType',
-    error: undefined,
-    rule: 'optional',
-  },
-  payload: [{
-    key: {
-      key: 'key',
-      value: '',
-      label: 'Key',
-      error: undefined,
-      rule: 'required',
-      customErrors: {
-        required: 'This field is required',
-      },
-    },
-    value: {
-      key: 'value',
-      value: '',
-      label: 'Value',
-      error: undefined,
-      rule: 'required',
-      customErrors: {
-        required: 'This field is required',
-      },
-    },
-  }],
+  // payload: [{
+  //   key: {
+  //     key: 'key',
+  //     value: '',
+  //     label: 'Key',
+  //     error: undefined,
+  //     rule: 'required',
+  //     customErrors: {
+  //       required: 'This field is required',
+  //     },
+  //   },
+  //   value: {
+  //     key: 'value',
+  //     value: '',
+  //     label: 'Value',
+  //     error: undefined,
+  //     rule: 'required',
+  //     customErrors: {
+  //       required: 'This field is required',
+  //     },
+  //   },
+  // }],
 };
 
 export const CRONFACTORY_META = {

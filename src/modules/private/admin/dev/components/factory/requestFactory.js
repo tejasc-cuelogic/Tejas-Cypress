@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import { get } from 'lodash';
 import { Card, Button, Form, Grid, Divider, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
@@ -11,7 +12,7 @@ import DynamicFormInput from './dynamicFormInput';
 @observer
 export default class RequestFactory extends Component {
   // state = {
-  //   open: false,
+  //   formData: {},
   // };
 
   constructor(props) {
@@ -40,7 +41,12 @@ export default class RequestFactory extends Component {
 
   handlePluginChange = (e, resp) => {
     e.preventDefault();
-    console.log(resp);
+    // const { createDynamicFormFields } = this.props.factoryStore;
+    console.log(resp.fielddata);
+    console.log(resp.fielddata.values);
+    console.log(resp.fielddata.values.pluginInput);
+    // const pluginInputArr = get(resp, 'fielddata.values.pluginInput');
+    // createDynamicFormFields(resp.fielddata.values.pluginInput);
   }
 
   // selectInput = (e, resp) => {
@@ -71,7 +77,7 @@ export default class RequestFactory extends Component {
                       placeholder="Choose here"
                       name="plugin"
                       // onChange={"(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM'); (e, resp) => this.handlePluginChange(e, resp)"}
-                      onChange={(e, resp) => this.handlePluginChange(e, resp)}
+                      onChange={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
                     />
                     <FormDropDown
                       fielddata={REQUESTFACTORY_FRM.fields.invocationType}
