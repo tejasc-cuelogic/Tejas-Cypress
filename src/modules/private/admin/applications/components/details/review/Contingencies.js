@@ -78,7 +78,8 @@ const TableBody = ({
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Contingencies extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.businessAppReviewStore.initLoad.includes('CONTINGENCY_FRM')) {
       this.props.businessAppReviewStore.setFormData('CONTINGENCY_FRM', 'review.contingencies');
     }

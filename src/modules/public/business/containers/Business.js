@@ -35,9 +35,10 @@ const metaTagsData = [
 @inject('navStore', 'userStore')
 @observer
 class Business extends Component {
-  componentWillMount() {
-    if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/how-it-works`);
+  constructor(props) {
+    super(props);
+    if (props.match.isExact) {
+      props.history.replace(`${props.match.url}/how-it-works`);
     }
   }
 

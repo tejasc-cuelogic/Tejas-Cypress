@@ -13,7 +13,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export class SidebarNav extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.navStore.setAccessParams('roles', this.props.roles);
     this.props.navStore.setAccessParams('currentNav', this.props.match.url);
     if (this.props.roles.includes('issuer')) {

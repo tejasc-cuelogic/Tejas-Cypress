@@ -13,7 +13,8 @@ const getModule = component => lazy(() => import(`./tabs/${component}`));
 @withRouter
 @observer
 export default class ChooseOffer extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match, businessAppReviewStore } = this.props;
     businessAppReviewStore.fetchApplicationOffers(match.params.applicationId).then(() => {
       this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers', 'appReviewStore');

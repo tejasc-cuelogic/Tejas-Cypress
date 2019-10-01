@@ -6,26 +6,27 @@ import SummaryHeader from '../../../investor/accountDetails/components/portfolio
 import OfferingList from '../components/OfferingList';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 
-@inject('repaymentStore')
+@inject('paymentStore')
 @withRouter
 @observer
 export default class RepaymentDetails extends Component {
-  componentWillMount() {
-    this.props.repaymentStore.initRepaymentDetails();
+  constructor(props) {
+    super(props);
+    this.props.paymentStore.initRepaymentDetails();
   }
 
-  toggleSearch = () => this.props.repaymentStore.toggleSearch();
+  toggleSearch = () => this.props.paymentStore.toggleSearch();
 
   executeSearch = (e) => {
     if (e.charCode === 13) {
-      this.props.repaymentStore.setInitiateSrch('keyword', e.target.value);
+      this.props.paymentStore.setInitiateSrch('keyword', e.target.value);
     }
   }
 
   render() {
     const {
       summary, repaymentDetails, requestState, filters,
-    } = this.props.repaymentStore;
+    } = this.props.paymentStore;
     return (
       <div>
         <Form>

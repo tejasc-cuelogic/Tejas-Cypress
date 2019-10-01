@@ -11,7 +11,8 @@ import { NEXTSEED_BOX_URL, NEXTSEED_SECURITIES_BOX_URL } from '../../../../../..
 @withRouter
 @observer
 export default class FileSelector extends React.Component {
-  // componentWillMount() {
+  //   constructor(props) {
+  //   super(props);
   //   if (!this.props.offeringsStore.initLoad.includes('getOne')) {
   //     this.props.offeringsStore.getOne(this.props.match.params.offeringId);
   //   }

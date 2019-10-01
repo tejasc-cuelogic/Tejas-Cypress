@@ -8,8 +8,9 @@ import { FormInput } from '../../../../../../theme/form';
 @withRouter
 @observer
 export default class EncryptDecryptUtility extends Component {
-  componentWillMount() {
-    this.setState({ result: '' });
+  constructor(props) {
+    super(props);
+    this.state = { result: '' };
     this.props.dataStore.resetForm('ENCRYPTDECRYPTUTILITY_FRM');
   }
 

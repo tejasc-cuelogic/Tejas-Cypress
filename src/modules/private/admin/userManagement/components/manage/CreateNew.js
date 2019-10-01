@@ -10,7 +10,8 @@ import { ROLES } from '../../../../../../constants/user';
 @withRouter
 @observer
 export default class CreateNew extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.userStore.userReset();
   }
 

@@ -25,3 +25,4 @@ export { default as SocialLinks } from './src/SocialLinks';
 export { default as MobileDropDownNav } from './src/MobileDropDownNav';
 export { default as Image64 } from './src/Image64';
 export { default as SuccessScreen } from './src/SuccessScreen';
+export { default as NsPaginationHookType } from './src/NsPaginationHookType';

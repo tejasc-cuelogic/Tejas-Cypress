@@ -48,7 +48,7 @@ class LatestUpdates extends Component {
                     <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
                   </Item.Header>
                   {update
-                    && <Item.Meta>{moment(update.updatedDate).format('LL')}</Item.Meta>
+                    && <Item.Meta>{update.updatedDate ? moment(update.updatedDate).format('LL') : '-'}</Item.Meta>
                   }
                 </div>
               </div>

@@ -15,7 +15,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class IdentityVerification extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.identityStore.setCipDetails();
     this.props.uiStore.setErrors(null);
   }

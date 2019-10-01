@@ -366,6 +366,20 @@ export const KEY_TERMS = {
     rule: 'optional',
     placeHolder: 'Enter here',
   },
+  valuationCap: {
+    value: '',
+    label: 'Valuation Cap',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  discount: {
+    value: '',
+    label: 'Discount',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
   unitPrice: {
     value: null,
     label: 'Unit Price',
@@ -444,6 +458,8 @@ export const SECURITIES_VALUES = [
   { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
   { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
   { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity' },
+  { key: 'Convertible Notes', value: 'CONVERTIBLE_NOTES', text: 'Convertible Notes' },
+  { key: 'SAFE', value: 'SAFE', text: 'SAFE' },
 ];
 
 export const ROUND_TYPE_VALUES = [
@@ -1035,6 +1051,17 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'optional',
     },
+    // isPublic: {
+    //   value: false,
+    //   values: [
+    //     {
+    //       label: 'Include in Offering Page',
+    //       value: 'IS_APPLIED',
+    //     },
+    //   ],
+    //   error: undefined,
+    //   rule: 'optional',
+    // },
     firstName: {
       value: '',
       label: 'First Name',
@@ -1051,7 +1078,7 @@ export const LEADERSHIP = {
     },
     email: {
       value: '',
-      label: 'E-mail address',
+      label: 'Email address',
       error: undefined,
       rule: 'email',
       customErrors: { email: 'Email is not valid' },
@@ -1155,6 +1182,34 @@ export const LEADERSHIP = {
       placeHolder: 'e.g. 10001',
       objRef: 'address',
       objRefOutput2: 'address',
+    },
+    dlLicenseNumber: {
+      value: '',
+      label: 'DL License Number',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'e.g. 123456789',
+    },
+    dlState: {
+      value: '',
+      label: 'DL State',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'e.g. NY',
+    },
+    dlIssuedDate: {
+      value: '',
+      label: 'DL Issued Date',
+      error: undefined,
+      rule: 'date',
+      placeHolder: 'e.g. 12-12-2019',
+    },
+    dlExpirationDate: {
+      value: '',
+      label: 'DL Expiration Date',
+      error: undefined,
+      rule: 'date',
+      placeHolder: 'e.g. 12-12-2019',
     },
     bio: {
       value: '',

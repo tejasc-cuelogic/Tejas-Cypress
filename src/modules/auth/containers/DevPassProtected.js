@@ -11,8 +11,9 @@ import { Logo, FieldError } from '../../../theme/shared';
 class DevPassProtected extends Component {
   state = { password: '', error: '', previewPassLoader: false };
 
-  componentWillMount() {
-    this.setState({ password: '', error: '' });
+  constructor(props) {
+    super(props);
+    this.state = { password: '', error: '' };
   }
 
   submit = () => {

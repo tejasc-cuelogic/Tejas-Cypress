@@ -13,7 +13,8 @@ import { InlineLoader } from '../../../../../theme/shared';
 @withRouter
 @observer
 export default class EditKnowledgeBaseItem extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.params.id !== 'new') {
       this.props.knowledgeBaseStore.getKnowledgeBase(this.props.match.params.id, false);
     } else {

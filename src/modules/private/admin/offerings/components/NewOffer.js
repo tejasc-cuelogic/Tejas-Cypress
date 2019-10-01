@@ -7,7 +7,8 @@ import { REGULATION_VALUES } from '../../../../../services/constants/admin/offer
 @inject('offeringCreationStore')
 @observer
 export default class NewOffer extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.offeringCreationStore.resetForm('NEW_OFFER_FRM');
   }
 

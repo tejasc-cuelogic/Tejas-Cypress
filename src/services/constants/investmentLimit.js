@@ -199,7 +199,7 @@ export const VERIFICATION_REQUEST = {
     error: undefined,
     placeHolder: 'johndoe@contact.com',
     rule: 'required|email',
-    label: 'Verifier e-mail address',
+    label: 'Verifier email address',
     objRefOutput: 'verifier',
     objRef: 'verifier',
   },

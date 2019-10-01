@@ -21,7 +21,8 @@ export default class TermsOfUse extends Component {
     </Header>
   )
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { docsWithBoxLink, isFetchedError } = this.props.campaignStore;
     if (docsWithBoxLink.length === 0 && !isFetchedError) {
       const { campaign } = this.props.campaignStore;
