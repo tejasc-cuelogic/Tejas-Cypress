@@ -45,6 +45,10 @@ export default class MultiStep extends React.Component {
   }
 
   componentDidMount() {
+    if (this.props.setUiStorevalue) {
+      this.props.setUiStorevalue('multiSteps', this.props.steps);
+    }
+
     if (typeof this.props.stepToBeRendered !== 'undefined' && this.props.stepToBeRendered !== '') {
       this.setNavState(this.props.stepToBeRendered);
     }
