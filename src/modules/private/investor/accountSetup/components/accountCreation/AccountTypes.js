@@ -29,10 +29,12 @@ const AccountTypes = ({
           <Button
             icon={{ className: 'ns-chevron-left' }}
             className="multistep__btn prev"
+            onClick={close}
           />
           <Button
             icon={{ className: 'ns-close-light' }}
             className="link-button pull-right multistep__btn"
+            onClick={close}
           />
         </>
       )}
