@@ -1051,17 +1051,17 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'optional',
     },
-    // isPublic: {
-    //   value: false,
-    //   values: [
-    //     {
-    //       label: 'Include in Offering Page',
-    //       value: 'IS_APPLIED',
-    //     },
-    //   ],
-    //   error: undefined,
-    //   rule: 'optional',
-    // },
+    isBeneficialOwnerDocGeneration: {
+      value: false,
+      values: [
+        {
+          label: 'Include in Beneficial Owner DocGeneration',
+          value: 'IS_APPLIED',
+        },
+      ],
+      error: undefined,
+      rule: 'optional',
+    },
     firstName: {
       value: '',
       label: 'First Name',
