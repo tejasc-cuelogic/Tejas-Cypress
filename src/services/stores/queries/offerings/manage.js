@@ -895,6 +895,7 @@ export const getOfferingDetails = gql`
           dateOfService
         }
         isPublic
+        isBeneficialOwnerDocGeneration
         firstName
         lastName
         email
