@@ -4,17 +4,17 @@ import DataRoom from './legal/DataRoom';
 
 @inject('uiStore', 'offeringCreationStore')
 @observer
-export default class SupplementalAggrements extends Component {
+export default class ClosingBinder extends Component {
   constructor(props) {
     super(props);
     const { setFormData } = this.props.offeringCreationStore;
-    setFormData('DATA_ROOM_FRM', 'closureSummary.keyTerms.supplementalAgreements');
+    setFormData('CLOSING_BINDER_FRM', '');
   }
 
   render() {
     return (
       <div>
-        <DataRoom offeringClose />
+        <DataRoom offeringClose closingBinder />
       </div>
     );
   }

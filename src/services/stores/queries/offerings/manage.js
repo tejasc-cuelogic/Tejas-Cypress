@@ -962,6 +962,18 @@ export const getOfferingDetails = gql`
           status
         }
       }
+      closingBinder {
+        name
+        aliasAccreditedOnly: isVisible
+        status
+        upload {
+          fileId
+          fileName
+          fileHandle {
+            boxFileId
+          }
+        }
+      }
       closureSummary {
         processingDate
         hardCloseDate
@@ -1264,5 +1276,14 @@ export const offerClose = gql`
 export const setOrderForOfferings = gql`
   mutation setOrderForOfferings($offeringOrderDetails:[OfferingOrderInput]){
     setOrderForOfferings(offeringOrderDetails: $offeringOrderDetails)
+  }
+`;
+
+export const initializeClosingBinder = gql`
+  mutation initializeClosingBinder($offeringId: String!){
+    initializeClosingBinder(offeringId: $offeringId) {
+      name
+      status
+    }
   }
 `;

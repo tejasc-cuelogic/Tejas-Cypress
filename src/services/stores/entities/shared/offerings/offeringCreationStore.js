@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, arrow-body-style, max-len, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { includes, sortBy, get, has, map, startCase, mapKeys, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
+import { includes, sortBy, get, has, map, startCase, set, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -10,13 +10,13 @@ import {
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
-  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS,
+  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS, CLOSING_BINDING,
   OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { deleteBonusReward, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, offerClose, deleteBac, upsertBonusReward,
-  getBonusRewards, getOfferingFilingList,
+  getBonusRewards, getOfferingFilingList, initializeClosingBinder,
   generateBusinessFiling, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -102,6 +102,8 @@ export class OfferingCreationStore {
   @observable ADMIN_DOCUMENTATION_FRM = Validator.prepareFormObject(ADMIN_DOCUMENTATION);
 
   @observable DATA_ROOM_FRM = Validator.prepareFormObject(DATA_ROOM);
+
+  @observable CLOSING_BINDER_FRM = Validator.prepareFormObject(CLOSING_BINDING);
 
   @observable POC_DETAILS_FRM = Validator.prepareFormObject(POC_DETAILS);
 
@@ -469,8 +471,13 @@ export class OfferingCreationStore {
 
   @action
   removeData = (formName, subForm = 'data', isApiDelete = false) => {
+    const subArray = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : subForm;
     if (!isApiDelete) {
-      this[formName].fields[subForm].splice(this.removeIndex, 1);
+      let removeFileIds = '';
+      const { fileId } = this[formName].fields[subArray][this.removeIndex].upload;
+      removeFileIds = fileId;
+      this[formName].fields[subArray].splice(this.removeIndex, 1);
+      this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     }
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
@@ -878,6 +885,7 @@ export class OfferingCreationStore {
     offer = {
       ...offer,
       closureSummary: Helper.replaceKeysDeep(toJS(get(offer, 'closureSummary')), { aliasAccreditedOnly: 'accreditedOnly' }),
+      closingBinder: Helper.replaceKeysDeep(toJS(get(offer, 'closingBinder')), { aliasAccreditedOnly: 'accreditedOnly' }),
     };
     if (form === 'MEDIA_FRM') {
       this.MEDIA_FRM = Validator.prepareFormObject(MEDIA);
@@ -950,6 +958,7 @@ export class OfferingCreationStore {
       DOCUMENTATION_FRM: { isMultiForm: false },
       ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
       DATA_ROOM_FRM: { isMultiForm: true },
+      CLOSING_BINDER_FRM: { isMultiForm: true },
       POC_DETAILS_FRM: { isMultiForm: false },
       OFFERING_CLOSE_1: { isMultiForm: false },
     };
@@ -1066,7 +1075,7 @@ export class OfferingCreationStore {
   updateOfferingMutation = (
     id,
     payload, keyName, notify = true,
-    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false, approvedObj,
+    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false, approvedObj, emptyPayload = null,
   ) => {
     uiStore.setProgress(approvedObj && approvedObj.status ? approvedObj.status : 'save');
     const variables = {
@@ -1078,6 +1087,9 @@ export class OfferingCreationStore {
       if (this.POC_DETAILS_FRM.fields.id.value) {
         variables.adminId = this.POC_DETAILS_FRM.fields.id.value;
       }
+    }
+    if (emptyPayload) {
+      variables.offeringDetails = { ...variables.offeringDetails, ...emptyPayload };
     }
     client
       .mutate({
@@ -1898,28 +1910,29 @@ export class OfferingCreationStore {
   }
 
   @action
-  setAccreditedOnlyField = (index) => {
-    this.DATA_ROOM_FRM = Validator.onArrayFieldChange(
-      this.DATA_ROOM_FRM,
-      { name: 'accreditedOnly', value: !this.DATA_ROOM_FRM.fields.documents[index].accreditedOnly.value },
-      'documents',
+  setAccreditedOnlyField = (formName, index) => {
+    const arrName = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : 'documents';
+    this[formName] = Validator.onArrayFieldChange(
+      this[formName],
+      { name: 'accreditedOnly', value: !this[formName].fields[arrName][index].accreditedOnly.value },
+      arrName,
       index,
     );
   }
 
-  getClosureObject = () => {
-    let obj = Validator.evaluateFormData(this.OFFERING_CLOSE_1.fields);
+  getClosureObject = (type) => {
     let { getOfferingById } = offeringsStore.offerData.data;
-
-    const dataRoomDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
-    const finalDataRoomDocs = [];
-    dataRoomDocs.map((data, index) => {
-      if (data.name !== '' || data.upload.fileId !== '') {
-        finalDataRoomDocs.push(data);
-      }
-      return finalDataRoomDocs;
-    });
-    obj.closureSummary.keyTerms.supplementalAgreements = { documents: finalDataRoomDocs };
+    let obj = {};
+    if (type === 'CLOSING_BINDER') {
+      obj = Validator.evaluateFormData(this.OFFERING_CLOSE_1.fields);
+      const closerBinderDocs = Validator.evaluateFormData(this.CLOSING_BINDER_FRM.fields).closingBinder || [];
+      const filteredCloserBinderDocs = closerBinderDocs.filter(d => d.name !== '' && d.upload.fileId !== '');
+      obj.closingBinder = [...filteredCloserBinderDocs];
+    } else {
+      const supplementalAgreementsDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
+      const filteredSupplementalAgreementsDocs = supplementalAgreementsDocs.filter(d => d.name !== '' && d.upload.fileId !== '');
+      set(obj, 'closureSummary.keyTerms.supplementalAgreements', { documents: filteredSupplementalAgreementsDocs });
+    }
     getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
     obj = Helper.replaceKeysDeep(obj, { accreditedOnly: 'isVisible' });
     obj.closureSummary = mergeWith(
@@ -1927,6 +1940,14 @@ export class OfferingCreationStore {
       obj.closureSummary,
       this.mergeCustomize,
     );
+    if (type === 'CLOSING_BINDER' && (!obj.closingBinder || !obj.closingBinder.length)) {
+      // obj.closingBinder = mergeWith(
+      //   toJS(getOfferingById.closingBinder),
+      //   obj.closingBinder,
+      //   this.mergeCustomize,
+      // );
+      obj.closingBinder = null;
+    }
     obj = omitDeep(obj, ['__typename', 'fileHandle']);
     obj = cleanDeep(obj);
     return obj;
@@ -1942,6 +1963,28 @@ export class OfferingCreationStore {
       };
     });
     this.DATA_ROOM_FRM = Validator.setFormData(this.DATA_ROOM_FRM, { documents: dataRoomDocs });
+  }
+
+  @action
+  initializeClosingBinder = () => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: initializeClosingBinder,
+        variables: {
+          offeringId: this.currentOfferingId,
+        },
+      })
+      .then(() => {
+        offeringsStore.getOne(this.currentOfferingId, false);
+        Helper.toast('Closing binder initiated.', 'success');
+      })
+      .catch(action((err) => {
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
   }
 }
 
