@@ -21,7 +21,8 @@ export default class Public extends React.Component {
     visible: false,
   };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.navStore.setNavStatus({}, 'main');
   }
 

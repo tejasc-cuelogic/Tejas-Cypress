@@ -1,9 +1,9 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { GqlClient as client } from '../../../../api/gcoolApi';
-import { allRepayments, allRepaymentDetails } from '../../queries/Repayment';
+import { GqlClient as client } from '../../../../api/gqlApi';
+import { paymentsIssuerList, allRepaymentDetails } from '../../queries/Repayment';
 
-export class RepaymentStore {
+export class PaymentStore {
     @observable data = [];
 
     @observable details = [];
@@ -30,8 +30,13 @@ export class RepaymentStore {
     };
 
     @action
+    setFieldValue = (field, value) => {
+      this[field] = value;
+    }
+
+    @action
     initRequest = () => {
-      this.data = graphql({ client, query: allRepayments });
+      this.data = graphql({ client, query: paymentsIssuerList });
     }
 
     @action
@@ -51,7 +56,7 @@ export class RepaymentStore {
     }
 
     @computed get repayments() {
-      return (this.data.data && toJS(this.data.data.allRepayments)) || [];
+      return (this.data.data && toJS(this.data.data.paymentsIssuerList)) || [];
     }
 
     @computed get repaymentDetails() {
@@ -64,4 +69,4 @@ export class RepaymentStore {
 }
 
 
-export default new RepaymentStore();
+export default new PaymentStore();

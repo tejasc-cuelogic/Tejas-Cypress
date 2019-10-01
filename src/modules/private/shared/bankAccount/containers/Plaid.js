@@ -16,7 +16,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class Plaid extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.bankAccountStore.setPlaidBankVerificationStatus(false);
     this.props.bankAccountStore.setShouldValidateAmount();
     this.setBankSummary();

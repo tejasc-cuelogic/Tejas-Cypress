@@ -11,7 +11,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class LinkbankSummary extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.bankAccountStore.setLoaderForAccountBlank();
     this.props.bankAccountStore.fetchRoutingNumber();
   }

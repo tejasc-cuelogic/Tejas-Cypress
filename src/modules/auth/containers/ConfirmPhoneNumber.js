@@ -15,7 +15,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { userDetailsStore, identityStore } = this.props;
     if (this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
       this.setConfirmPhoneFormData();

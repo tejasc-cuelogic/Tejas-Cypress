@@ -16,7 +16,8 @@ export default class Summary extends Component {
     open: false,
   };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const {
       getLegalDocsFileIds, alreadySet,
     } = this.props.agreementsStore;

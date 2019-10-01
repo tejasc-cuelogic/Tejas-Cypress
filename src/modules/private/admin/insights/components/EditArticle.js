@@ -13,9 +13,9 @@ import Actions from './Actions';
 @withRouter
 @observer
 export default class EditArticle extends Component {
-  state = { displayMode: false };
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = { displayMode: false };
     const { id } = this.props.match.params;
 
     if (id !== 'new') {

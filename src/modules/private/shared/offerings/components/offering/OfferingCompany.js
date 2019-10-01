@@ -9,7 +9,8 @@ import ButtonGroup from '../ButtonGroup';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class OfferingCompany extends Component {
-  // componentWillMount() {
+  // constructor(props) {
+  //   super(props);
   //   if (!this.props.offeringCreationStore.initLoad.includes('OFFERING_COMPANY_FRM')) {
   //     this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
   //   }

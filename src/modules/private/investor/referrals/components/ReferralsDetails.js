@@ -11,10 +11,11 @@ import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHead
 @inject('referralsStore', 'userDetailsStore', 'userStore')
 @observer
 export default class ReferralsDetails extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { userStore, userDetailsStore } = this.props;
     if (userStore.isInvestor && get(userDetailsStore, 'signupStatus.activeAccounts') && get(userDetailsStore, 'signupStatus.activeAccounts').length) {
-      this.props.referralsStore.getUserReferralDetails();
+      this.props.referralsStore.getUserReferralDetails(false, false);
     }
   }
 

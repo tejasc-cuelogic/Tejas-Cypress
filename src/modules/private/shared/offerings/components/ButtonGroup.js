@@ -14,7 +14,7 @@ export default class ButtonGroup extends Component {
     return (
       <div className="sticky-actions">
         {leaderFormInvalid
-          && <p className="negative-text right-align"><small>Leader e-mail address field is required.</small></p>
+          && <p className="negative-text right-align"><small>Leader email address field is required.</small></p>
         }
         <Button.Group vertical icon size="tiny" className="time-stamp">
           {!isIssuer && issuerSubmitted

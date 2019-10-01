@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { Switch, Route } from 'react-router-dom';
 import SecondaryMenu from '../../../../../../../theme/layout/SecondaryMenu';
 import Leader from './Leader';
@@ -7,7 +8,8 @@ import Leader from './Leader';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class Leadership extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/leader/1`);
     }
@@ -21,7 +23,7 @@ export default class Leadership extends Component {
     const navItems = [];
     if (getOfferingById.leadership) {
       getOfferingById.leadership.map((leader, index) => {
-        navItems.push({ title: `Leader ${index + 1}`, to: `leader/${index + 1}` });
+        navItems.push({ title: get(leader, 'firstName') || `Leader ${index + 1}`, to: `leader/${index + 1}` });
         return navItems;
       });
     }

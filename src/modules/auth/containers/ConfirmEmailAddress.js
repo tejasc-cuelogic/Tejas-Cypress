@@ -18,7 +18,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.refLink) {
       this.props.uiStore.setAuthRef(this.props.refLink);
     }

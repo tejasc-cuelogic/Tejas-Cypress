@@ -29,3 +29,16 @@ export const allRepaymentDetails = gql`
     }
   }
 `;
+
+export const paymentsIssuerList = gql`
+  query paymentsIssuerList{
+    paymentsIssuerList {
+      shorthandBusinessName
+      hardCloseDate
+      maturityDate
+      expectedPaymentDate
+      firstPaymentDate
+      sinkingFundBalance
+    }
+  }
+`;

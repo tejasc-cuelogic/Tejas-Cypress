@@ -19,7 +19,8 @@ const isMobile = document.documentElement.clientWidth < 992;
 @withRouter
 @observer
 class AboutCompany extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.newLayout) {
       window.addEventListener('scroll', this.handleOnScroll);
     }

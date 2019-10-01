@@ -14,7 +14,8 @@ const processingMessage = 'While we set up your account, check out some of the i
 @withRouter
 @observer
 export default class AccountCreation extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.bankAccountStore.setBankLinkInterface('list');
     const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
     const accType = INVESTMENT_ACC_TYPES.fields.accType.values[0];

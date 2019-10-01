@@ -1,6 +1,7 @@
 const COMMON = [
   { from: 'auth/login', live: true, to: '/login' },
   { from: 'auth/register', live: true, to: '/register' },
+  { from: 'apply', live: true, to: '/business-application/business' },
   { from: 'auth/register-investor', live: true, to: '/register-investor' },
   { from: 'auth/welcome-email', live: true, to: '/welcome-email' },
   { from: 'auth/confirm-email', live: true, to: '/confirm-email' },

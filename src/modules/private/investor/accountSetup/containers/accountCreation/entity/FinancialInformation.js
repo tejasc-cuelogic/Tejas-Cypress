@@ -10,7 +10,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('entityAccountStore', 'investmentLimitStore')
 @observer
 export default class FinancialInformation extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
     if ((FIN_INFO_FRM.fields.investmentLimit.value === undefined || (FIN_INFO_FRM.fields.investmentLimit.value === '' || (FIN_INFO_FRM.fields.netAssets.value !== '' && FIN_INFO_FRM.fields.annualIncome.value !== ''))) && !(FIN_INFO_FRM.fields.netAssets.value === '' && FIN_INFO_FRM.fields.annualIncome.value === '')) {
       maskedFinInfoChange({ value: { floatValue: FIN_INFO_FRM.fields.netAssets.value }, name: 'netAssets' });

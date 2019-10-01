@@ -12,7 +12,8 @@ import { US_STATES_FOR_INVESTOR } from '../../../../../../constants/account';
 @withRouter
 @observer
 class LegalDetails extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if ((this.props.userDetailsStore.signupStatus.isMigratedFullAccount
       && this.props.match.url !== this.props.userDetailsStore.pendingStep)
       || this.props.userDetailsStore.isLegaLVerificationDone) {

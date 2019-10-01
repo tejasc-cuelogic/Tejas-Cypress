@@ -83,6 +83,10 @@
                 min-height: 150px;
                 max-height: 150px; 
             }
+            &.huge textarea{
+                min-height: 300px;
+                max-height: 300px;
+            }
             textarea{
                 padding:@11px @14px;
                 min-height:80px;

@@ -8,7 +8,8 @@ import { STATUS_MAPPING } from '../../../../../services/constants/admin/transact
 @withRouter
 @observer
 export default class ConfirmModal extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.transactionsStore.resetModalForm();
   }
 

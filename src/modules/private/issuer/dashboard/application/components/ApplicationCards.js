@@ -18,7 +18,8 @@ const isMobile = clientWidth < 768;
 @withRouter
 @observer
 export default class ApplicationCards extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     // getting all application list of user
     if (this.props.match.isExact) {
       this.props.businessAppStore.getBusinessApplications();

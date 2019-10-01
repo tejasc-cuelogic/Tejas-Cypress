@@ -16,7 +16,8 @@ import { DataFormatter } from '../../../../../helper';
 @inject('businessAppAdminStore', 'uiStore')
 @observer
 export default class ApplicationsList extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match } = this.props;
     const { fetchBusinessApplicationsByStatus } = this.props.businessAppAdminStore;
     if (match.isExact) {
