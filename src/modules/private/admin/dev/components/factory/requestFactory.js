@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
-import { Card, Button, Form, Grid, Divider, Header, Icon, Confirm } from 'semantic-ui-react';
+import { Card, Button, Form, Grid, Divider, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { withRouter, Link } from 'react-router-dom';
-import { FormDropDown, FormInput } from '../../../../../../theme/form';
+import { withRouter } from 'react-router-dom';
+import { FormDropDown } from '../../../../../../theme/form';
+import DynamicFormInput from './dynamicFormInput';
 // FormTextarea
 
 @inject('factoryStore')
 @withRouter
 @observer
 export default class RequestFactory extends Component {
-  state = {
-    open: false,
-  };
+  // state = {
+  //   open: false,
+  // };
 
   constructor(props) {
     super(props);
@@ -37,6 +38,11 @@ export default class RequestFactory extends Component {
     this.props.factoryStore.removeData(confirmModalName, arrayName);
   }
 
+  handlePluginChange = (e, resp) => {
+    e.preventDefault();
+    console.log(resp);
+  }
+
   // selectInput = (e, resp) => {
   //   e.preventDefault();
   //   console.log(resp);
@@ -45,7 +51,7 @@ export default class RequestFactory extends Component {
   render() {
     const { factoryStore } = this.props;
     const {
-      REQUESTFACTORY_FRM, formChange, inProgress, formArrayChange,
+      REQUESTFACTORY_FRM, formChange, inProgress,
       confirmModal, confirmModalName, removeIndex,
     } = factoryStore;
     return (
@@ -64,7 +70,8 @@ export default class RequestFactory extends Component {
                       options={REQUESTFACTORY_FRM.fields.plugin.values}
                       placeholder="Choose here"
                       name="plugin"
-                      onChange={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
+                      // onChange={"(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM'); (e, resp) => this.handlePluginChange(e, resp)"}
+                      onChange={(e, resp) => this.handlePluginChange(e, resp)}
                     />
                     <FormDropDown
                       fielddata={REQUESTFACTORY_FRM.fields.invocationType}
@@ -79,54 +86,13 @@ export default class RequestFactory extends Component {
                     <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid} loading={inProgress.requestFactory} />
                   </Grid.Column>
                   <Grid.Column width={8}>
+                    <DynamicFormInput {...this.props} />
                     {/* <FormTextarea
                       name="payload"
                       fielddata={REQUESTFACTORY_FRM.fields.payload}
                       changed={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
                       containerclassname="secondary huge"
                     /> */}
-                    <Header as="h4">
-                      Payload
-                      <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'REQUESTFACTORY_FRM', 'payload')}><small>+ Add payload parameters</small></Link>
-                    </Header>
-                    {
-                      REQUESTFACTORY_FRM.fields.payload.map((exp, index2) => (
-                        <>
-                          <Header as="h6">
-                            {`Parameter ${index2 + 1}`}
-                            {REQUESTFACTORY_FRM.fields.payload.length > 1
-                              && (
-                                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index2, 'REQUESTFACTORY_FRM')}>
-                                  <Icon className="ns-close-circle" color="grey" />
-                                </Link>
-                              )
-                            }
-                          </Header>
-                          <div className="featured-section">
-                            {/* <FormDropDown
-                              fielddata={REQUESTFACTORY_FRM.fields.inputType}
-                              selection
-                              containerclassname="dropdown-field mlr-0"
-                              options={REQUESTFACTORY_FRM.fields.inputType.values}
-                              placeholder="Choose here"
-                              name="inputType"
-                              onChange={(e, result) => this.selectInput(e, result)}
-                            /> */}
-                            <Form.Group widths={2}>
-                              {
-                                ['key', 'value'].map(field => (
-                                  <FormInput
-                                    name={field}
-                                    fielddata={exp[field]}
-                                    changed={(e, result) => formArrayChange(e, result, 'REQUESTFACTORY_FRM', 'payload', index2, 0)}
-                                  />
-                                ))
-                              }
-                            </Form.Group>
-                          </div>
-                        </>
-                      ))
-                    }
                   </Grid.Column>
                 </Grid>
               </Form.Group>

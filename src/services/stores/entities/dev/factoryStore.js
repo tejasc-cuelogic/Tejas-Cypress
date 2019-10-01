@@ -15,6 +15,8 @@ export class FactoryStore {
 
   @observable PROCESSACTORY_FRM = Validator.prepareFormObject(PROCESSFACTORY_META);
 
+  @observable DYNAMCI_PAYLOAD_FRM = {};
+
   @observable inProgress = {
     requestFactory: false,
     cronFactory: false,
@@ -373,6 +375,11 @@ export class FactoryStore {
       revampObj[val.key] = val.value;
     });
     return JSON.stringify(revampObj);
+  }
+
+  @action
+  createDynamicFormFields = (formFields) => {
+    this.DYNAMCI_PAYLOAD_FRM = Validator.prepareFormObject(formFields);
   }
 }
 
