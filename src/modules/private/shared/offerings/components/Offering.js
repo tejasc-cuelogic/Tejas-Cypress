@@ -11,7 +11,8 @@ const getModule = component => lazy(() => import(`./offering/${component}`));
 @withRouter
 @observer
 export default class Offering extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
     this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
     this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
@@ -19,10 +20,6 @@ export default class Offering extends Component {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
-  }
-
-  shouldComponentUpdate() {
-    return !this.props.uiStore.htmlEditorImageLoading;
   }
 
   render() {

@@ -14,7 +14,8 @@ export default class UserInvestorDetails extends Component {
     displayOnly: true,
   }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { investorProfileData } = this.props;
     const { setInvestorDetailInfo } = this.props.investorProfileStore;
     if (this.props.isAdmin) {

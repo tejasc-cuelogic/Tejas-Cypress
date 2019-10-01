@@ -14,9 +14,9 @@ import UserInvestorDetails from '../../../../../../investor/settings/components/
 @withRouter
 @observer
 export default class Basic extends Component {
-  state = { displayMode: true };
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = { displayMode: true };
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false);
     this.props.userDetailsStore.setAddressCheck();

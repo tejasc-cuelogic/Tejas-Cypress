@@ -10,7 +10,8 @@ import Helper from '../../../../../helper/utility';
 @inject('userStore', 'offeringInvestorStore', 'offeringsStore')
 @observer
 export default class BonusRewards extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.offeringInvestorStore.initRequest(this.props.offeringId);
   }
 
@@ -21,7 +22,7 @@ export default class BonusRewards extends Component {
   populateCsvData = () => {
     const { investorListsForCsvExport } = this.props.offeringInvestorStore;
     const { offer } = this.props.offeringsStore;
-    const fields = ['firstName', 'lastName', 'userEmail', 'street', 'streetTwo', 'city', 'state', 'zipCode', 'accountType', 'amount', 'autoDraftAmount', 'credit', 'investmentDate', 'investmentsCount', 'referralCode', 'earlyBirdEligibility'];
+    const fields = ['firstName', 'lastName', 'userEmail', 'street', 'streetTwo', 'city', 'state', 'zipCode', 'accountType', 'amount', 'autoDraftAmount', 'credit', 'investmentDate', 'investmentsCount', 'referralCode', 'earlyBirdEligibility', 'regulation'];
     const params = {
       fields,
       data: toJS(investorListsForCsvExport),

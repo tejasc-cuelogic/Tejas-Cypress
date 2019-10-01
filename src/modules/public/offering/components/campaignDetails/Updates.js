@@ -13,7 +13,8 @@ const isMobile = document.documentElement.clientWidth < 992;
 @inject('campaignStore')
 @observer
 class Updates extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { campaign } = this.props.campaignStore;
     const updates = campaign && campaign.updates ? campaign.updates : [];
     this.props.campaignStore.setInitialStateForReadMoreAndReadLess(updates);
@@ -51,14 +52,14 @@ class Updates extends Component {
               && updates.map((dataItem, index) => (
                 <VerticalTimelineElement
                   position="right"
-                  className={`vertical-timeline-element--work ${(index - 1) > 0 && updates[index - 1].updated.date !== dataItem.updated.date ? '' : 'hide-date'}`}
+                  className={`vertical-timeline-element--work ${(index - 1) > 0 && updates[index - 1].updatedDate !== dataItem.updatedDate ? '' : 'hide-date'}`}
                   iconStyle={
                     index === 0 ? {
                       background: '#20C86D', height: 30, width: 30, marginLeft: -15,
                     } : {}}
                   date={(index - 1) > 0
-                    ? updates[index - 1].updated.date !== dataItem.updated.date
-                      ? moment(updates[index].updated.date).format('MMMM YYYY') : null : null}
+                    ? updates[index - 1].updatedDate !== dataItem.updatedDate
+                      ? moment(updates[index].updatedDate).format('MMMM YYYY') : null : null}
                 >
                   <Item.Group>
                     <Item>
@@ -70,7 +71,7 @@ class Updates extends Component {
                       </div>
                       <Item.Content verticalAlign="middle" className="grey-header">
                         {get(campaign, 'keyTerms.shorthandBusinessName') }<br />
-                        <span>{moment(dataItem.updatedDate).format('LL')}</span>
+                        <span>{dataItem.updatedDate ? moment(dataItem.updatedDate).format('LL') : '-'}</span>
                       </Item.Content>
                     </Item>
                     <Header as="h4">{dataItem.title}</Header>

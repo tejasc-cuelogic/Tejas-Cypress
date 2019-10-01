@@ -274,6 +274,9 @@ export const PRIVATE_NAV = [
       {
         title: 'Activity History', to: 'activity-history', accessFor: [1, 2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
       },
+      {
+        title: 'Watch List', to: 'watch-list', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
+      },
     ],
   },
   // {
@@ -425,11 +428,16 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'money',
-    title: 'Repayments',
+    title: 'Payments',
     capability: 'REPAYMENTS_ANY',
-    to: 'repayments',
+    to: 'payments',
     path: 'admin/repayments',
     accessibleTo: ['admin', 'manager', 'support'],
+    subNavigations: [
+      { title: 'Issuers', to: 'issuers' },
+      { title: 'Batches', to: 'batches' },
+      { title: 'Util', to: 'util' },
+    ],
   },
   {
     icon: 'dollar',
@@ -530,6 +538,9 @@ export const PRIVATE_NAV = [
       },
       {
         title: 'Data', to: 'data', component: 'Data', capability: 'DATA_ANY',
+      },
+      {
+        title: 'Factory', to: 'factory', component: 'Factory', capability: 'FACTORY_ANY',
       },
     ],
   },

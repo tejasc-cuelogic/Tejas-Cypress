@@ -12,7 +12,8 @@ import OfferingDetails from './containers/OfferingDetails';
 @inject('uiStore', 'navStore', 'offeringsStore')
 @observer
 export default class Repayments extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/creation`);
     }

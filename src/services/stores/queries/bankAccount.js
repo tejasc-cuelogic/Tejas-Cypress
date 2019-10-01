@@ -51,6 +51,7 @@ mutation linkBankRequestApprove($accountId: String!, $userId: String!, $justific
   }
 }`;
 
+// TODO: remove this after declineBankChangeRequest works fine
 export const linkBankRequestDeny = gql`
 mutation linkBankRequestDeny($accountId: String!, $userId: String!, $justification: String!) {
   linkBankRequestDeny(

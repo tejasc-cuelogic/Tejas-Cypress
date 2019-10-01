@@ -12,7 +12,7 @@ import ActivityFeed from './components/ActivityFeed';
 export default class ActivityHistory extends Component {
   state = { defaultFilter: true }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.activityHistoryStore.reset();
     if (this.props.resourceId) {
       this.props.activityHistoryStore.initRequest(this.props.resourceId, this.state.defaultFilter);

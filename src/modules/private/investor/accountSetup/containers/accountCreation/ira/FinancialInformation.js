@@ -8,7 +8,8 @@ import Helper from '../../../../../../../helper/utility';
 @inject('iraAccountStore', 'investmentLimitStore')
 @observer
 export default class FinancialInformation extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { FIN_INFO_FRM, finInfoChange } = this.props.iraAccountStore;
     if ((FIN_INFO_FRM.fields.investmentLimit.value === undefined || (FIN_INFO_FRM.fields.investmentLimit.value === '' || (FIN_INFO_FRM.fields.netWorth.value !== '' && FIN_INFO_FRM.fields.income.value !== ''))) && !(FIN_INFO_FRM.fields.netWorth.value === '' && FIN_INFO_FRM.fields.income.value === '')) {
       finInfoChange({ value: { floatValue: FIN_INFO_FRM.fields.netWorth.value }, name: 'netWorth' });

@@ -19,7 +19,8 @@ export default class ApplicationDetails extends Component {
     displayOnly: true,
   }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match } = this.props;
     const { params } = match;
     if (this.props.businessAppStore.applicationId !== params.appId) {
@@ -150,7 +151,7 @@ Update
                   </Card.Header>
                   <Card.Content>
                     <Form>
-                      <Form.Group widths="equal">
+                      <Form.Group widths="2">
                         {
                           ['businessName', 'signupCode', 'utmSource'].map(field => (
                             <FormInput

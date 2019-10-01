@@ -8,7 +8,8 @@ import { FieldError } from '../../shared';
 export default class FormTextarea extends Component {
   state = { showError: false };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.defaultValue && (this.props.fielddata.value === '' || this.props.fielddata.value === undefined)) {
       this.props.changed({}, { name: this.props.name, value: this.props.defaultValue });
     }

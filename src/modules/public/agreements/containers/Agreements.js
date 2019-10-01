@@ -15,13 +15,14 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class TermsOfUse extends Component {
-  componentWillMount() {
-    this.props.navStore.setFieldValue('subNavStatus', 'animate reverse');
-    this.props.navStore.setFieldValue('navStatus', 'main');
-    if (this.props.match.isExact) {
-      const navItems = GetNavMeta(this.props.match.url, [], true).subNavigations;
+  constructor(props) {
+    super(props);
+    props.navStore.setFieldValue('subNavStatus', 'animate reverse');
+    props.navStore.setFieldValue('navStatus', 'main');
+    if (props.match.isExact) {
+      const navItems = GetNavMeta(props.match.url, [], true).subNavigations;
       if (navItems[0]) {
-        this.props.history.push(`${this.props.match.url}/${navItems[0].to}`);
+        props.history.push(`${props.match.url}/${navItems[0].to}`);
       }
     }
   }

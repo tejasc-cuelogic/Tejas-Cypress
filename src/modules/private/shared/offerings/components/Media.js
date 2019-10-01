@@ -4,19 +4,16 @@ import { withRouter } from 'react-router-dom';
 import { Form, Input, Header, Icon, Divider, Button, List, Confirm, Grid, Label } from 'semantic-ui-react';
 import { ImageCropper } from '../../../../../theme/form';
 import { Image64 } from '../../../../../theme/shared';
-import {
-  // PROFILE_PHOTO_BYTES,
-  PROFILE_PHOTO_EXTENSIONS,
-} from '../../../../../services/constants/user';
+import Helper from '../../../../../helper/utility';
 import ButtonGroup from './ButtonGroup';
 
 @inject('offeringCreationStore', 'uiStore', 'userStore', 'offeringsStore')
 @withRouter
 @observer
 export default class Media extends Component {
-  state = { ConfirmModal: false, imageType: '', index: undefined }
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = { ConfirmModal: false, imageType: '', index: undefined };
     this.props.offeringCreationStore.setFormData('MEDIA_FRM', 'media');
   }
 
@@ -44,11 +41,13 @@ export default class Media extends Component {
   //   }
   // }
 
-  handleVerifyFileExtension = (fileExt) => {
-    if (PROFILE_PHOTO_EXTENSIONS.indexOf(fileExt) === -1) {
-      const field = 'error';
-      const errorMsg = `Only ${PROFILE_PHOTO_EXTENSIONS.join(', ')}  extensions are allowed.`;
-      this.props.offeringCreationStore.setProfilePhoto(field, errorMsg);
+  handleVerifyFileExtension = (fileExt, field) => {
+    const validate = Helper.validateImageExtension(fileExt);
+    if (validate.isInvalid) {
+      const attr = 'error';
+      const { errorMsg } = validate;
+      this.props.offeringCreationStore.setProfilePhoto(attr, errorMsg, field);
+      this.props.offeringCreationStore.setProfilePhoto('value', '', field);
     }
   }
 
@@ -57,6 +56,7 @@ export default class Media extends Component {
       const attr = 'error';
       const errorMsg = 'Image size should not be less than 200 x 200.';
       this.props.offeringCreationStore.setProfilePhoto(attr, errorMsg, field);
+      this.props.offeringCreationStore.setProfilePhoto('value', '', field);
     }
   }
 

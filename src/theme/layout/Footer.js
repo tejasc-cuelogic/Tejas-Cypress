@@ -11,12 +11,19 @@ const isTablet = document.documentElement.clientWidth < 992;
 class Footer extends Component {
   state = { fShowHide: false };
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.path === '/') {
       this.setState({ fShowHide: true });
     } else {
       this.setState({ fShowHide: false });
     }
+    setTimeout(() => {
+      if (this.props.location.hash === '#site-footer') {
+        document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+          block: 'start',
+        });
+      }
+    }, 500);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -34,60 +41,24 @@ class Footer extends Component {
     const OfferFooter = ['/offerings/:id/:section?'];
     const isCampaign = matchPath(path, { path: OfferFooter }) != null;
     const isNewCampaign = this.props.location.pathname.startsWith('/offerings');
-    // const offeirngDisclaimer = campaign && campaign.keyTerms &&
-    //   campaign.keyTerms.offeringDisclaimer ?
-    //   campaign.keyTerms.offeringDisclaimer : null;
-    // const shorthandBusinessName = campaign && campaign.keyTerms &&
-    //   campaign.keyTerms.shorthandBusinessName ?
-    //   campaign.keyTerms.shorthandBusinessName : '';
     return (
-      <footer className={`${isCampaign ? 'offering-footer' : ''} ${isNewCampaign && isTablet ? 'offering-footer-v2' : ''}`}>
+      <footer id="site-footer" className={`${isCampaign ? 'offering-footer' : ''} ${isNewCampaign && isTablet ? 'offering-footer-v2' : ''}`}>
         <Container>
-          {/* {(OfferFooter.find(item => matchPath(path, { path: item }))) && offeirngDisclaimer &&
-            <p className="mb-40 copyright-info">
-              <b>{`${shorthandBusinessName} Disclaimer: `}</b>
-              <HtmlEditor readOnly content={(offeirngDisclaimer)} />
-            </p>
-          } */}
           <Grid stackable>
             <Grid.Column computer={6} tablet={16} mobile={16} className="footer-left">
               <div className="footer-left-nav mb-30">
-                {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
-                  <React.Fragment path={path}>
-                    <Menu text vertical={!isMobile} className={isMobile && 'mb-10'}>
-                      <Menu.Item header>Resources</Menu.Item>
-                      <Menu.Item as={NavLink} to="/resources/education-center">Ed Center</Menu.Item>
-                      <Menu.Item as={NavLink} to="/resources/insights">Insights</Menu.Item>
-                    </Menu>
-                    <Menu text vertical={!isMobile} className={isMobile && 'mb-10'}>
-                      <Menu.Item header>About Us</Menu.Item>
-                      <Menu.Item as={NavLink} to="/about/mission">Mission</Menu.Item>
-                      <Menu.Item as={NavLink} to="/about/team">Team & Culture</Menu.Item>
-                      <Menu.Item as={NavLink} to="/about/careers">Careers</Menu.Item>
-                    </Menu>
-                  </React.Fragment>
-                } */}
                 <Menu
                   text
                   vertical
-                  // || (!OfferFooter.find(item => matchPath(path, { path: item })))
-                  // className={isTablet && (OfferFooter.find(item => matchPath(path,
-                  // { path: item }))) ? 'center-align' : ''}
                   className={isTablet ? 'center-align' : ''}
                 >
-                  {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
                   <Menu.Item header>Legal</Menu.Item>
-                  {/* } */}
                   <Menu.Item as={Link} to="/agreements/legal/terms-of-use">Terms of Use</Menu.Item>
                   <Menu.Item as={Link} to="/agreements/legal/privacy-policy">Privacy Policy</Menu.Item>
-                  {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
                   <Menu.Item as={Link} to="/agreements/legal/legal-documents">Legal Documents</Menu.Item>
-                  {/* } */}
                 </Menu>
-                {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) && */}
                 <React.Fragment path={path}>
                   <div className={isTablet && 'mt-20 center-align'}>
-                    <NSImage path="secure-horizontal-1.jpg" />
                     <a href="https://www.aoiplatforms.org/" target="_blank" rel="noopener noreferrer">
                       <NSImage path="aoip.png" />
                     </a>
