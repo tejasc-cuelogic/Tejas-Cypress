@@ -281,7 +281,7 @@ export class FactoryStore {
       const tempObj = {};
       tempObj.key = value.name;
       tempObj.text = value.name;
-      tempObj.value = value.name;
+      tempObj.value = pluginList === 'listRequestPlugins' ? value.plugin : value.name;
       pluginArr.push(tempObj);
     });
     return pluginArr;
