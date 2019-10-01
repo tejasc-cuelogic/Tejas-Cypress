@@ -127,8 +127,12 @@ query _listRequestPlugins {
     plugins{
       name
       plugin
-      pluginInputs {
-        name
+      pluginInputs{
+        label
+        type
+        value
+        rule
+        defaultValue
       }
     }
   }
