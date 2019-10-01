@@ -215,6 +215,8 @@ export const getOfferingDetails = gql`
           fileName
           isPublic
         }
+        discount
+        valuationCap
         unitPrice
         roundType
         premoneyValuation
@@ -913,6 +915,10 @@ export const getOfferingDetails = gql`
           state
           zip
         }
+        dlLicenseNumber
+        dlState
+        dlIssuedDate
+        dlExpirationDate
         bio
         uploads {
           headshot {
