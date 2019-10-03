@@ -551,7 +551,7 @@ export const OFFERS = {
     },
     personalGuarantee: {
       value: '',
-      label: 'Personal Garuntee',
+      label: 'Personal Guarantee',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',

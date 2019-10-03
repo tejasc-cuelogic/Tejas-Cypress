@@ -1026,13 +1026,13 @@ export const LEADERSHIP_EXP = {
       customErrors: { string: '* required.' },
     },
     dateOfService: {
-      label: 'Dates of Service',
+      label: 'Date of Service',
       value: '',
       error: undefined,
       rule: 'date',
       placeHolder: 'MM-DD-YYYY',
       objType: 'DATE',
-      customErrors: { date: 'Dates of Service is not a valid date format.' },
+      customErrors: { date: 'Date of Service is not a valid date format.' },
     },
   }],
 };
@@ -1337,7 +1337,7 @@ export const BUSINESS = {
     placeHolder: 'e.g. bakery',
   },
   dateOfService: {
-    label: 'Dates of Service',
+    label: 'Date of Service',
     value: '',
     error: undefined,
     rule: 'string|required',
