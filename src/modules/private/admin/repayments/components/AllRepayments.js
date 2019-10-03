@@ -34,6 +34,11 @@ export default class AllRepayments extends Component {
     }
   }
 
+  handleAction = (offeringId, offeringStage) => {
+    const stage = ['CREATION'].includes(offeringStage) ? 'creation' : ['LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage) ? 'live' : ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULT'].includes(offeringStage) ? 'completed' : 'failed';
+    this.props.history.push(`/app/offerings/${stage}/edit/${offeringId}`);
+  }
+
   render() {
     const { paymentStore } = this.props;
     const {
@@ -69,25 +74,40 @@ export default class AllRepayments extends Component {
         </Form>
         <Card fluid>
           <div className="table-wrapper">
-            <Table sortable unstackable singleLine>
+            <Table sortable unstackable singleLine className="application-list clickable">
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell
-                    sorted={sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    sorted={sortOrder.column === 'shorthandBusinessName' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
                     onClick={this.handleSort('shorthandBusinessName')}
                   >Short Hand Business Name</Table.HeaderCell>
-                  <Table.HeaderCell>Hard Close Date</Table.HeaderCell>
-                  <Table.HeaderCell>Maturity</Table.HeaderCell>
-                  <Table.HeaderCell>Expected Payment Date</Table.HeaderCell>
-                  <Table.HeaderCell>First Payment Date</Table.HeaderCell>
-                  <Table.HeaderCell>Sinking Fund Balance</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'hardCloseDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('hardCloseDate')}
+                  >Hard Close Date</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'maturityDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('maturityDate')}
+                  >Maturity</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'expectedPaymentDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('expectedPaymentDate')}
+                  >Expected Payment Date</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'firstPaymentDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('firstPaymentDate')}
+                  >First Payment Date</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'sinkingFundBalance' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('sinkingFundBalance')}
+                  >Sinking Fund Balance</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
                 {
                   repayments.map(record => (
                     <Table.Row key={record.id}>
-                      <Table.Cell>{record.shorthandBusinessName}</Table.Cell>
+                      <Table.Cell onClick={() => this.handleAction(record.offering.id, record.offering.stage)}>{record.shorthandBusinessName}</Table.Cell>
                       <Table.Cell>{record.hardCloseDate}</Table.Cell>
                       <Table.Cell>{record.maturityDate ? `${moment(moment(record.maturityDate)).diff(moment(), 'months')} months` : ''}</Table.Cell>
                       <Table.Cell>{record.expectedPaymentDate}</Table.Cell>

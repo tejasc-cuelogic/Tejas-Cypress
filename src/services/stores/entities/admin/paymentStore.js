@@ -1,6 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { orderBy, get } from 'lodash';
+import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { paymentsIssuerList, allRepaymentDetails } from '../../queries/Repayment';
 
@@ -68,7 +69,7 @@ export class PaymentStore {
       if (this.sortOrder.column && this.sortOrder.direction && this.data && toJS(get(this.data, 'data.paymentsIssuerList'))) {
         return orderBy(
           this.data.data.paymentsIssuerList,
-          [issuerList => issuerList[this.sortOrder.column].toString().toLowerCase()],
+          [issuerList => (this.sortOrder.column !== 'shorthandBusinessName' ? issuerList[this.sortOrder.column] ? moment(issuerList[this.sortOrder.column]).unix() : '' : issuerList[this.sortOrder.column].toString().toLowerCase())],
           [this.sortOrder.direction],
         );
       }
