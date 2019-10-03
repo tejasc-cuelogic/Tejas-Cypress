@@ -178,7 +178,7 @@ class Comments extends Component {
                     && c.approved)
                     || (c.createdUserInfo && c.createdUserInfo.id !== issuerId)) && c.scope === 'PUBLIC' && (
                       <Comment.Group minimal>
-                        <Comment key={c.id} className={`${((get(c, 'createdUserInfo.id') === issuerId) || get(c, 'createdUserInfo.roles[0].name') === 'admin') ? 'issuer-comment' : ''}`}>
+                        <Comment key={c.id} className={`${((get(c, 'createdUserInfo.id') === issuerId) || get(c, 'createdUserInfo.roles[0].name') === 'admin') ? 'issuer-co mment' : ''}`}>
                           <Comment.Content>
                             <Comment.Author>
                               {(get(c, 'createdUserInfo.id') === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(c, 'createdUserInfo.roles[0].name') === 'admin' ? 'NextSeed' : get(c, 'createdUserInfo.info.firstName')}
