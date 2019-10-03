@@ -87,7 +87,7 @@ class IndividualAccountStore {
           if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
             if (this.retry < 1) {
               this.retry += 1;
-              this.submitAccount();
+              this.submitAccount().then(() => this.props.uiStore.removeOneFromProgressArray('submitAccountLoader'));
             } else {
               uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
             }

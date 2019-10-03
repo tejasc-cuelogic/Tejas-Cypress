@@ -37,9 +37,11 @@ export default class Summary extends React.Component {
   handleSubmitAccount = () => {
     this.props.uiStore.setcreateAccountMessage();
     this.props.individualAccountStore.submitAccount().then(() => {
+      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
       const confirmModal = this.props.individualAccountStore.showProcessingModal ? 'processing' : 'success';
+      this.props.individualAccountStore.setFieldValue('showProcessingModal', false);
       this.props.history.push(`${this.props.match.url}/${confirmModal}`);
     }).catch((err) => {
       if (Helper.matchRegexWithString(/\brequired uploads(?![-])\b/, err.message)) {
@@ -49,6 +51,7 @@ export default class Summary extends React.Component {
   }
 
   handleCreateAccount = () => {
+    this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
     const {
       isCipExpired,
       signupStatus,

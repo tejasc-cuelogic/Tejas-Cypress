@@ -157,6 +157,7 @@ export default class IdentityVerification extends Component {
     this.props.accountStore.updateToAccountProcessing(accountId, accountvalue).then(() => {
       this.props.identityStore.setFieldValue('signUpLoading', false);
       const url = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.showProcessingModal ? `/app/summary/account-creation/${accountType}/processing` : '/app/summary';
+      this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.setFieldValue('showProcessingModal', false);
       this.props.history.push(url);
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
     });
