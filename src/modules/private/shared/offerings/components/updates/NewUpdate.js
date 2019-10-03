@@ -67,7 +67,7 @@ export default class NewUpdate extends Component {
     const emailTemplate = ['STARTUP_PERIOD', 'IN_REPAYMENT'].includes(stage) ? 'FULL' : false;
     this.props.uiStore.setProgress();
     if (this.props.updateStore.PBUILDER_FRM.meta.isDirty) {
-      this.props.updateStore.save(id, status, false).then(() => {
+      this.props.updateStore.save(id, status, false, true).then(() => {
         this.props.uiStore.setProgress();
         this.props.updateStore.sendTestEmail(id, emailTemplate);
       });
@@ -76,8 +76,8 @@ export default class NewUpdate extends Component {
     }
   }
 
-  save = (id, status, redirectToListing = false) => {
-    this.props.updateStore.save(id, status)
+  save = (id, status, redirectToListing = false, updateOnly = false) => {
+    this.props.updateStore.save(id, status, true, updateOnly)
       .then(() => {
         if (redirectToListing) {
           this.props.updateStore.setFieldValue('newUpdateId', null);
@@ -183,7 +183,7 @@ export default class NewUpdate extends Component {
                               </div>
                               <Header.Content className="grey-header">
                                 {get(offer, 'keyTerms.shorthandBusinessName')}
-                                <Header.Subheader>{moment(PBUILDER_FRM.fields.updatedDate.value).format('LL')}</Header.Subheader>
+                                <Header.Subheader>{PBUILDER_FRM.fields.updatedDate.value ? moment(PBUILDER_FRM.fields.updatedDate.value).format('LL') : '-'}</Header.Subheader>
                                 {/* <Header.Subheader>{moment().format('ll')}</Header.Subheader> */}
                               </Header.Content>
                             </Header>

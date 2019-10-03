@@ -86,13 +86,15 @@ export class UpdateStore {
     @action
     sendTestEmail = (offeringUpdateId, emailTemplate = false) => {
       uiStore.setLoaderMessage('...Sending Test Email');
+      const params = {
+        offeringUpdateId,
+        emailTemplate: emailTemplate || this.TEMPLATE_FRM.fields.type.value,
+        shouldSendInvestorNotifications: this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false,
+      };
       client
         .mutate({
           mutation: sendOfferingUpdateTestEmail,
-          variables: {
-            offeringUpdateId,
-            emailTemplate: emailTemplate || this.TEMPLATE_FRM.fields.type.value,
-          },
+          variables: params,
         })
         .then(() => {
           uiStore.setLoaderMessage('');
@@ -192,13 +194,14 @@ export class UpdateStore {
     setUpdate = (value) => {
       if (get(this.currentUpdate, 'data.offeringUpdatesById')) {
         this.currentUpdate.data.offeringUpdatesById = value;
+        this.setStatus(get(this.currentUpdate, 'data.offeringUpdatesById.status'));
       } else {
         this.currentUpdate = { data: { offeringUpdatesById: value } };
       }
     }
 
     @action
-    save = (id, status, showToast = true) => new Promise((resolve) => {
+    save = (id, status, showToast = true, updateOnly = false) => new Promise((resolve) => {
       uiStore.setProgress(status);
       this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
@@ -209,12 +212,12 @@ export class UpdateStore {
       data.offeringId = offeringCreationStore.currentOfferingId;
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
       const shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
-      if (id !== 'new' && status === 'PUBLISHED') {
+      if (id !== 'new' && (status === 'PUBLISHED' && !updateOnly)) {
         data.isVisible = true;
         this.offeringUpdatePublish(id, data, shouldSendInvestorNotifications, showToast).then(() => {
           uiStore.setProgress(false);
           resolve();
-        });
+        }).catch(() => uiStore.setProgress(false));
         return;
       }
       client
@@ -305,7 +308,9 @@ export class UpdateStore {
     @action
     setFormData = (offeringUpdatesById) => {
       Object.keys(this.PBUILDER_FRM.fields).map((key) => {
-        this.PBUILDER_FRM.fields[key].value = offeringUpdatesById[key];
+        if (key !== 'shouldSendInvestorNotifications') {
+          this.PBUILDER_FRM.fields[key].value = offeringUpdatesById[key];
+        }
         return null;
       });
       this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];

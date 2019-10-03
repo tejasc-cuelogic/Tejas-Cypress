@@ -1,7 +1,7 @@
 import Validator from 'validatorjs';
 import moment from 'moment';
 import React from 'react';
-import { Popup } from 'semantic-ui-react';
+// import { Popup } from 'semantic-ui-react';
 
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
@@ -42,7 +42,7 @@ Validator.register(
 export const securitySections = [
   {
     title: 'Password',
-    description: 'Change your NextSeed Password.',
+    description: 'We strongly recommend that you update your password regularly.',
     action: ['change-password', 'Change Password'],
   },
   // {
@@ -55,14 +55,14 @@ export const securitySections = [
     title: 'Multi-Factor Authentication',
     description:
       (
-        <>You can choose your{' '}
-          <Popup wide position="top center" trigger={<span className="underline-text">Active MFA</span>}>
+        <>Our MFA security feature gives your account an extra layer of protection.
+          {/* <Popup wide position="top center" trigger={<span className="underline-text">Active MFA</span>}>
             <Popup.Header className="grey-header">Active MFA Factor</Popup.Header>
             <Popup.Content>
               Manage your MFA contact preferences. All major actions in your account will
               require additional confirmation with a code sent to your phone or email address.
             </Popup.Content>
-          </Popup>
+          </Popup> */}
         </>
       ),
     descriptionNotAvailable: '',
@@ -381,8 +381,6 @@ export const USER_PROFILE_FOR_ADMIN = {
     objRef: 'legalDetails',
   },
 };
-
-export const PROFILE_PHOTO_EXTENSIONS = ['jpeg', 'jpg', 'png'];
 
 export const PROFILE_PHOTO_BYTES = 5242880;
 

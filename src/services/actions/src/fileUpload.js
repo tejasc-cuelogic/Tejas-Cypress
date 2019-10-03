@@ -72,7 +72,7 @@ export class FileUpload {
   }
 
   uploadToS3 = (fileObj, dir) => new Promise((resolve, reject) => {
-    const key = `${dir}/${moment().unix()}_${fileObj.name}`;
+    const key = `${dir}/${moment().unix()}_${Helper.sanitize(fileObj.name)}`;
     const dataToUpload = Helper.isBase64(fileObj.obj) ? Helper.b64toBlob(fileObj.obj)
       : fileObj.obj;
     commonStore.getCdnSignedUrl(key).then((res) => {

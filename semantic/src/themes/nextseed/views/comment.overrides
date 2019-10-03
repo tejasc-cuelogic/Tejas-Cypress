@@ -47,6 +47,9 @@
             +.comment {
                 border-top: 0;
             }
+            .comments.reply-comments .comment.issuer-comment{
+                background: transparent;
+            }
         }
         .comments {
             margin: 0;
