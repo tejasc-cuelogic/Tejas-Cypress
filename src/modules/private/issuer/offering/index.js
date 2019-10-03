@@ -34,10 +34,7 @@ export default class Offering extends Component {
     if (offerLoading || (offer && !offer.stage)) {
       return <InlineLoader />;
     }
-    let navItems = this.props.navStore.navMeta.subNavigations;
-    if (!offer.closingBinder || offer.closingBinder.lenght === 0) {
-      navItems = navItems.filter(n => n.title !== 'Documents');
-    }
+    const navItems = this.props.navStore.navMeta.subNavigations;
     return (
       <PrivateLayout
         {...this.props}
