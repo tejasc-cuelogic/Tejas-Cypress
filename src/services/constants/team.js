@@ -1,4 +1,4 @@
-import FormHelper from '../../helper';
+import { FormHelper } from '../../helper';
 
 export const TEAM = FormHelper.generateMeta([
   ['title', 'Title', '', 'required', 'Title'],

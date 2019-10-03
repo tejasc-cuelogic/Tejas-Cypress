@@ -3,6 +3,8 @@ import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { forEach, sortBy, get, times } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
+import { FormValidator as Validator } from '../../../../helper';
+import { CANCEL_INVESTMENT } from '../../../constants/investment';
 import { getInvestorAccountPortfolio, getInvestorDetailsById, cancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
 import { userDetailsStore, userStore, uiStore, offeringCreationStore } from '../../index';
 import Helper from '../../../../helper/utility';
@@ -33,6 +35,8 @@ export class PortfolioStore {
   @observable portfolioError = false;
 
   @observable apiCall = false;
+
+  @observable CANCEL_INVESTMENT_FRM = Validator.prepareFormObject(CANCEL_INVESTMENT);
 
   @action
   setFieldValue = (field, value) => {
@@ -80,6 +84,25 @@ export class PortfolioStore {
       query: getUserAccountSummary,
       variables: { userId },
     });
+  }
+
+  @action
+  formChange = (e, result, form) => {
+    if (result && (result.type === 'checkbox')) {
+      this[form].fields[result.name].value = result.checked;
+      // this[form] = Validator.onChange(
+      //   this[form],
+      //   { name: result.name, value: result.checked },
+      //   'checkbox',
+      //   true,
+      //   result.checked,
+      // );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+      );
+    }
   }
 
   @action
@@ -280,10 +303,13 @@ export class PortfolioStore {
   }
 
   @action
-  cancelAgreement = (agreementId) => {
-    uiStore.setProgress(true);
-    const account = userDetailsStore.currentActiveAccountDetails;
+  cancelAgreement = (agreementId, isAdmin = false) => {
+    const investorAccountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+    const investorDetails = userDetailsStore.getDetailsOfUser;
+    const account = isAdmin ? investorAccountDetails : userDetailsStore.currentActiveAccountDetails;
     const { userDetails } = userDetailsStore;
+    const investorUserId = isAdmin ? investorDetails.id : userDetails.id;
+    uiStore.setProgress(true);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -294,7 +320,7 @@ export class PortfolioStore {
           refetchQueries: [{
             query: getInvestorAccountPortfolio,
             variables: {
-              userId: userDetails.id,
+              userId: investorUserId,
               accountId: account.details.accountId,
             },
           }],
