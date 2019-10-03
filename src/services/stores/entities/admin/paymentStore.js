@@ -1,5 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
+import { orderBy, get } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { paymentsIssuerList, allRepaymentDetails } from '../../queries/Repayment';
 
@@ -25,13 +26,21 @@ export class PaymentStore {
       ],
     };
 
-    @observable requestState = {
-      search: {},
-    };
+    @observable sortOrder = {
+      column: null,
+      direction: 'asc',
+    }
 
     @action
     setFieldValue = (field, value) => {
       this[field] = value;
+    }
+
+    @action
+    setSortingOrder = (column = null, direction = null) => {
+      this.sortOrder.column = column;
+      // this.sortOrder.listData = listData;
+      this.sortOrder.direction = direction;
     }
 
     @action
@@ -56,6 +65,13 @@ export class PaymentStore {
     }
 
     @computed get repayments() {
+      if (this.sortOrder.column && this.sortOrder.direction && this.data && toJS(get(this.data, 'data.paymentsIssuerList'))) {
+        return orderBy(
+          this.data.data.paymentsIssuerList,
+          [issuerList => issuerList[this.sortOrder.column].toString().toLowerCase()],
+          [this.sortOrder.direction],
+        );
+      }
       return (this.data.data && toJS(this.data.data.paymentsIssuerList)) || [];
     }
 
