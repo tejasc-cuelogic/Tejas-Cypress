@@ -12,7 +12,8 @@ import Actions from '../components/Actions';
 @withRouter
 @observer
 export default class FaqDetails extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match } = this.props;
     const { id } = match.params;
     if (id !== 'new') {

@@ -41,6 +41,7 @@ export default class Overview extends Component {
             {
               ['offeringSlug', 'previewPassword', 'referralCode'].map(field => (
                 <FormInput
+                  lowercase={field === 'referralCode'}
                   name={field}
                   disabled={isIssuer}
                   fielddata={OFFERING_DETAILS_FRM.fields[field]}

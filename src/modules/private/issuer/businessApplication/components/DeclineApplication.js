@@ -10,7 +10,8 @@ import { ListErrors } from '../../../../../theme/shared';
 @withRouter
 @observer
 export default class DeclineApplication extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.businessAppReviewStore.resetCommentFrm();
   }
 

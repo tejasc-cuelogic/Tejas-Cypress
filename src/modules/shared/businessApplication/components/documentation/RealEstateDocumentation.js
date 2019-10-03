@@ -8,7 +8,8 @@ import FormElementWrap from '../FormElementWrap';
 @inject('businessAppStore', 'userStore', 'uiStore')
 @observer
 export default class RealEstateDocumentation extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.businessAppStore.setFieldvalue('applicationStep', 'documentation');
   }
 

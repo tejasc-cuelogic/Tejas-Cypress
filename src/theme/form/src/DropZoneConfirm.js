@@ -35,8 +35,8 @@ export default class DropZone extends Component {
     if (this.props.sharableLink) {
       const params = {
         uploadId: fileId,
-        accountType: 'SERVICES',
-        type: 'FILES',
+        accountType: this.props.boxAccountType || 'SERVICES',
+        type: this.props.boxType || 'FILES',
       };
       this.props.commonStore.getsharedLink(params).then((shareLink) => {
         window.open(shareLink, '_blank');

@@ -1,6 +1,6 @@
 import React, { Component, Suspense, lazy } from 'react';
 import { Grid } from 'semantic-ui-react';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -10,8 +10,10 @@ const getModule = component => lazy(() => import(`./legal/${component}`));
 
 @inject('userStore', 'offeringsStore', 'offeringCreationStore')
 @withRouter
+@observer
 export default class Legal extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { setFormData } = this.props.offeringCreationStore;
     setFormData('GENERAL_FRM', 'legal.general');
     setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
@@ -23,10 +25,6 @@ export default class Legal extends Component {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/general`);
     }
-  }
-
-  shouldComponentUpdate() {
-    return !this.props.offeringCreationStore.isUploadingFile;
   }
 
   module = name => DataFormatter.upperCamelCase(name);

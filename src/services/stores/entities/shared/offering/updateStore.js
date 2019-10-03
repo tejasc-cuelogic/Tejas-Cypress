@@ -84,15 +84,17 @@ export class UpdateStore {
     }
 
     @action
-    sendTestEmail = (offeringUpdateId) => {
+    sendTestEmail = (offeringUpdateId, emailTemplate = false) => {
       uiStore.setLoaderMessage('...Sending Test Email');
+      const params = {
+        offeringUpdateId,
+        emailTemplate: emailTemplate || this.TEMPLATE_FRM.fields.type.value,
+        shouldSendInvestorNotifications: this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false,
+      };
       client
         .mutate({
           mutation: sendOfferingUpdateTestEmail,
-          variables: {
-            offeringUpdateId,
-            emailTemplate: this.TEMPLATE_FRM.fields.type.value,
-          },
+          variables: params,
         })
         .then(() => {
           uiStore.setLoaderMessage('');
@@ -107,7 +109,7 @@ export class UpdateStore {
     }
 
     @action
-    offeringUpdatePublish = (offeringUpdateId, data, shouldSendInvestorNotifications) => new Promise((resolve, reject) => {
+    offeringUpdatePublish = (offeringUpdateId, data, shouldSendInvestorNotifications, showToast = true) => new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: offeringUpdatePublish,
@@ -119,7 +121,9 @@ export class UpdateStore {
           },
         })
         .then(() => {
-          Helper.toast('Offering Published Successfully ', 'success');
+          if (showToast) {
+            Helper.toast('Offering Published Successfully ', 'success');
+          }
           resolve();
         })
         .catch(() => {
@@ -138,7 +142,7 @@ export class UpdateStore {
       if (result && result.type === 'checkbox') {
         if (result.name === 'allInvestor' || result.name === 'shouldSendInvestorNotifications') {
           this.PBUILDER_FRM.fields[result.name].value = result.checked;
-          if (result.checked) {
+          if (result.checked && result.name !== 'shouldSendInvestorNotifications') {
             this.PBUILDER_FRM.fields.tiers.values = [];
           }
         } else {
@@ -190,13 +194,14 @@ export class UpdateStore {
     setUpdate = (value) => {
       if (get(this.currentUpdate, 'data.offeringUpdatesById')) {
         this.currentUpdate.data.offeringUpdatesById = value;
+        this.setStatus(get(this.currentUpdate, 'data.offeringUpdatesById.status'));
       } else {
         this.currentUpdate = { data: { offeringUpdatesById: value } };
       }
     }
 
     @action
-    save = (id, status, showToast = true) => new Promise((resolve) => {
+    save = (id, status, showToast = true, updateOnly = false) => new Promise((resolve) => {
       uiStore.setProgress(status);
       this.PBUILDER_FRM.meta.isDirty = false;
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
@@ -207,12 +212,12 @@ export class UpdateStore {
       data.offeringId = offeringCreationStore.currentOfferingId;
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
       const shouldSendInvestorNotifications = this.PBUILDER_FRM.fields.shouldSendInvestorNotifications.value || false;
-      if (id !== 'new' && status === 'PUBLISHED') {
+      if (id !== 'new' && (status === 'PUBLISHED' && !updateOnly)) {
         data.isVisible = true;
-        this.offeringUpdatePublish(id, data, shouldSendInvestorNotifications).then(() => {
+        this.offeringUpdatePublish(id, data, shouldSendInvestorNotifications, showToast).then(() => {
           uiStore.setProgress(false);
           resolve();
-        });
+        }).catch(() => uiStore.setProgress(false));
         return;
       }
       client
@@ -226,8 +231,6 @@ export class UpdateStore {
             this.setStatus(status);
             this.setFieldValue('newUpdateId', res.data.createOfferingUpdates.id);
             this.setUpdate(res.data.createOfferingUpdates);
-          } else if (status !== 'DRAFT') {
-            this.reset();
           } else {
             this.setUpdate(res.data.updateOfferingUpdatesInfo);
           }
@@ -305,7 +308,9 @@ export class UpdateStore {
     @action
     setFormData = (offeringUpdatesById) => {
       Object.keys(this.PBUILDER_FRM.fields).map((key) => {
-        this.PBUILDER_FRM.fields[key].value = offeringUpdatesById[key];
+        if (key !== 'shouldSendInvestorNotifications') {
+          this.PBUILDER_FRM.fields[key].value = offeringUpdatesById[key];
+        }
         return null;
       });
       this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];

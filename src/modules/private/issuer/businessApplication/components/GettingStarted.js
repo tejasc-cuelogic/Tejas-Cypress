@@ -8,7 +8,8 @@ import { DataFormatter } from '../../../../../helper';
 @withRouter
 @observer
 export default class GettingStarted extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
   }
 

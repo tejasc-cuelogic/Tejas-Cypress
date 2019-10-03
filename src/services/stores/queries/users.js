@@ -650,9 +650,10 @@ mutation adminDeleteInvestorOrIssuerUser($userId: String, $reason: String) {
  }`;
 
 export const adminHardDeleteUser = gql`
-mutation adminHardDeleteUser($userId: String!) {
+mutation adminHardDeleteUser($userId: String!, $reason: String) {
   adminHardDeleteUser(
      cognitoUUId: $userId
+     reason: $reason
   ) {
     status
     message
@@ -683,8 +684,42 @@ export const investorAccountDeleteProcess = gql`
 query investorAccountDeleteProcess {
   investorAccountDeleteProcess {
     totalBalance
-    availableBalance
     validAgreement
+  }
+}
+`;
+
+export const getEmailList = gql`
+query _fetchEmails ($recipientId: String!, $subject: String, $fromDate: String, $toDate: String, $limit: Int, $lek: String){
+  fetchEmails(
+    recipientId: $recipientId
+    subject: $subject
+    fromDate: $fromDate
+    toDate: $toDate
+    limit: $limit
+    lek: $lek
+    )
+  {
+    emails{
+      recipientId
+      fromName
+      fromEmail
+      toFirstName
+      toEmail
+      subject
+      requestDate
+      emailContent
+      attachments {
+        content
+      }
+      mergeVars {
+        content
+        name
+      }     
+    }
+    resultCount
+    totalCount
+    lek
   }
 }
 `;

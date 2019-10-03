@@ -11,7 +11,8 @@ import HtmlEditor from '../../../../shared/HtmlEditor';
 
 @inject('bankAccountStore', 'educationStore', 'userDetailsStore')
 export default class BankAccount extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     this.props.bankAccountStore.setCurrentAccount(accountType);
   }

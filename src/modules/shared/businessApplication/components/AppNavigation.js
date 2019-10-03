@@ -11,7 +11,7 @@ import Helper from '../../../../helper/utility';
 export default class AppNavigation extends Component {
   state = { step: -1, navItems: [] };
 
-  componentWillMount() {
+  componentDidMount() {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url).subNavigations;
     const step = navItems.findIndex(i => i.to === (match.url.split('/')[5]));

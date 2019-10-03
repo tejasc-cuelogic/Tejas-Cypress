@@ -3,7 +3,7 @@ import React, { Component, Suspense, lazy } from 'react';
 import { get, find, has, cloneDeep } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { Responsive, Container, Grid, Visibility } from 'semantic-ui-react';
+import { Responsive, Container, Grid, Visibility, Button, Icon } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
@@ -26,7 +26,7 @@ import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit
 const getModule = component => lazy(() => import(`../components/campaignDetails/${component}`));
 const isMobile = document.documentElement.clientWidth < 992;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
-@inject('campaignStore', 'userStore', 'navStore', 'uiStore', 'userDetailsStore', 'authStore')
+@inject('campaignStore', 'userStore', 'navStore', 'uiStore', 'userDetailsStore', 'authStore', 'watchListStore', 'nsUiStore')
 @withRouter
 @observer
 class offerDetails extends Component {
@@ -36,7 +36,9 @@ class offerDetails extends Component {
     found: 0,
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    const { location, match, newLayout } = this.props;
+    const { isUserLoggedIn } = this.props.authStore;
     const { currentUser, isAdmin } = this.props.userStore;
     this.props.campaignStore.getIssuerIdForOffering(this.props.match.params.id).then((data) => {
       const oMinData = data.length ? data[0] : null;
@@ -79,11 +81,7 @@ class offerDetails extends Component {
         }
       }
     }).catch(() => this.props.history.push('/offerings'));
-  }
 
-  componentDidMount() {
-    const { location, match, newLayout } = this.props;
-    const { isUserLoggedIn } = this.props.authStore;
     if (location.pathname !== match.url) {
       const splittedArr = location.pathname.split('/');
       if ((newLayout && splittedArr.includes('data-room')) || (!newLayout && ['overview', 'about', 'investment-details', 'data-room', 'comments', 'bonus-rewards', 'updates'].includes(splittedArr[splittedArr.length - 1]))) {
@@ -177,6 +175,15 @@ class offerDetails extends Component {
     this.props.navStore.setMobileNavStatus(calculations);
   }
 
+  handleFollowBtn = () => {
+    if (!this.props.authStore.isUserLoggedIn) {
+      this.props.uiStore.setAuthRef(this.props.match.url);
+      this.props.history.push('/login');
+    } else {
+      this.props.watchListStore.addRemoveWatchList();
+    }
+  }
+
   render() {
     const {
       match, campaignStore, location, newLayout,
@@ -196,6 +203,7 @@ class offerDetails extends Component {
     const {
       details, campaign, navCountData, modifySubNavs,
     } = campaignStore;
+    const { isWatching } = this.props.watchListStore;
     let navItems = [];
     const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
     if (isMobile) {
@@ -217,13 +225,20 @@ class offerDetails extends Component {
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
     const InitialComponent = getModule(!newLayout ? navItems[0].component : 'CampaignLayout');
+    const showWatchingBtn = isWatching !== 'loading';
+    const followBtn = (
+      <Button disabled={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') || !showWatchingBtn} inverted loading={this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') || !showWatchingBtn} fluid color="white" onClick={this.handleFollowBtn}>
+        {showWatchingBtn && <Icon name={` ${!this.props.nsUiStore.loadingArray.includes('addRemoveWatchList') && 'heart'} ${isWatching ? '' : 'outline'}`} color={isWatching ? 'green' : ''} />} {isWatching ? 'Following' : 'Follow'}
+      </Button>
+    );
+    const mobileHeaderAndSideBar = (<CampaignSideBar followBtn={followBtn} newLayout={newLayout} navItems={navItems} />);
     return (
       <>
         {campaign
           && <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
         {!isMobile
-          && <CampaignHeader {...this.props} />
+          && <CampaignHeader followBtn={followBtn} {...this.props} />
         }
         {/* {campaignStore && campaignStore.showFireworkAnimation &&
         <Firework />
@@ -232,7 +247,7 @@ class offerDetails extends Component {
           <SecondaryMenu newLayout={newLayout} {...this.props} />
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
-              <CampaignSideBar newLayout={newLayout} navItems={navItems} />
+              {mobileHeaderAndSideBar}
               <MobileDropDownNav
                 inverted
                 refMatch={match}
@@ -253,7 +268,7 @@ class offerDetails extends Component {
                 {!isMobile
                   && (
                     <Grid.Column width={4} className={newLayout ? 'left-align' : ''}>
-                      <CampaignSideBar newLayout={newLayout} navItems={navItems} />
+                      {mobileHeaderAndSideBar}
                     </Grid.Column>
                   )
                 }

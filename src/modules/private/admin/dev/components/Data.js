@@ -12,12 +12,15 @@ import EncryptDecryptUtility from './data/encryptDecryptUtility';
 import PartialOrCipProcessingList from './data/partialOrCipProcessingList';
 import AuditBoxFolder from './data/auditBoxFolder';
 import ProcessTransferRequest from './data/processTransferRequest';
+import ImageProcessingRequest from './data/imageProcessingRequest';
+
 
 @inject('elasticSearchStore', 'uiStore')
 @withRouter
 @observer
 export default class Data extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.elasticSearchStore.setFieldValue('boxMsg', '');
   }
 
@@ -98,6 +101,7 @@ export default class Data extends Component {
           <AuditBoxFolder />
           <PartialOrCipProcessingList />
           <ProcessTransferRequest />
+          <ImageProcessingRequest />
         </Grid.Column>
       </Grid>
     );

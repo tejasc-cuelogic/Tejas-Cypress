@@ -13,7 +13,8 @@ import Experience from './Experience';
 @withRouter
 @observer
 export default class AccountCreation extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.userDetailsStore.setUserAccDetails();
   }
 

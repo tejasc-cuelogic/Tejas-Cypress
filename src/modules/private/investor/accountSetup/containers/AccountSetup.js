@@ -18,7 +18,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore', 'uiStore', 'userStore')
 @observer
 export default class AccountSetup extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.userDetailsStore.setUserAccDetails(this.props.accountStore.investmentAccType);
     const { signupStatus, validAccTypes } = this.props.userDetailsStore;
     if (signupStatus.inActiveAccounts.length !== 3) {

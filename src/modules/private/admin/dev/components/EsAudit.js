@@ -11,7 +11,8 @@ import { InlineLoader } from '../../../../../theme/shared';
 @inject('elasticSearchStore')
 @observer
 export default class EsAudit extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { auditAlias } = this.props.match.params;
     this.props.elasticSearchStore.getESAuditPara(auditAlias);
     this.props.elasticSearchStore.resetESForm();

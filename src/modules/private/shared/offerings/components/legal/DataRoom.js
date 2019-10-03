@@ -3,35 +3,44 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
 import { Form, Header, Button, Divider, Icon, Confirm } from 'semantic-ui-react';
+import { get } from 'lodash';
 import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 import ButtonGroupType2 from '../ButtonGroupType2';
 
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder mr-10" />);
-const SortableItem = SortableElement(({ offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length }) => {
+const SortableItem = SortableElement(({ closingBinder, offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length }) => {
   return (
     <div className="row-wrap">
       <div className="balance-half simple-drag-row-title">
-        <DragHandle />
+        {!offeringClose
+          && <DragHandle />
+        }
         <FormInput
           displayMode={isReadonly}
           name="name"
           fielddata={document.name}
           size="small"
-          changed={(e, result) => formArrayChange(e, result, formName, 'documents', docIndx)}
+          changed={(e, result) => formArrayChange(e, result, formName, closingBinder ? 'closingBinder' : 'documents', docIndx)}
           ishidelabel
         />
       </div>
       <div className="balance-half">
+      {closingBinder && ['PENDING', 'FAILED'].includes(document.status.value) ?
+        document.status.value
+        :
         <DropZone
           disabled={isReadonly}
           size="small"
           className="secondary"
           name="upload"
+          sharableLink
+          hideFields
           fielddata={document.upload}
           uploadtitle="Upload"
           ondrop={(files, name) => onFileDrop(files, name, docIndx)}
           onremove={fieldName => handleDelDoc(fieldName, docIndx)}
         />
+      }
       </div>
       <div className="action">
         <Button disabled={isReadonly} icon circular color={!offeringClose ? document.accreditedOnly.value ? 'red' : 'green' : ''} className="link-button">
@@ -45,12 +54,13 @@ const SortableItem = SortableElement(({ offeringClose, document, isReadonly, for
   );
 });
 
-const SortableList = SortableContainer(({ offeringClose, docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName }) => {
+const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName }) => {
   return (
     <div>
       {docs.map((doc, index) => (
         <SortableItem
           offeringClose={offeringClose}
+          closingBinder={closingBinder}
           key={`item-${index}`}
           docIndx={index}
           document={doc}
@@ -69,20 +79,24 @@ const SortableList = SortableContainer(({ offeringClose, docs, isReadonly, formA
   );
 });
 
-@inject('offeringCreationStore', 'userStore', 'offeringsStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore', 'uiStore')
 @observer
 export default class DataRoom extends Component {
-  // componentWillMount() {
+  // constructor(props) {
+  //   super(props);
   //   const { setFormData } = this.props.offeringCreationStore;
   //   setFormData('DATA_ROOM_FRM', 'legal.dataroom');
   //   setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
   //   setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
   // }
   onFileDrop = (files, name, index) => {
-    this.props.offeringCreationStore.setFileUploadDataMulitple('DATA_ROOM_FRM', 'documents', name, files, 'DOCUMENTS_LEGAL_DATAROOM', index, true);
+    const { closingBinder, supplementalAgreements } = this.props;
+    const uploadEnum = closingBinder ? 'OFFERING_CLOSING_BINDER' : supplementalAgreements ? 'OFFERING_SUPPLEMENTAL_AGREEMENT' : 'DOCUMENTS_LEGAL_DATAROOM';
+    this.props.offeringCreationStore.setFileUploadDataMulitple(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', closingBinder ? 'closingBinder' : 'documents', name, files, uploadEnum, index, true);
   }
   handleDelDoc = (field, index = undefined) => {
-    this.props.offeringCreationStore.removeUploadedDataMultiple('DATA_ROOM_FRM', field, index, 'documents');
+    const { closingBinder } = this.props;
+    this.props.offeringCreationStore.removeUploadedDataMultiple(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', field, index, closingBinder ? 'closingBinder' : 'documents');
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
@@ -90,15 +104,15 @@ export default class DataRoom extends Component {
   }
   addMore = (e, formName) => {
     e.preventDefault();
-    this.props.offeringCreationStore.addMore(formName, 'documents');
+    this.props.offeringCreationStore.addMore(formName, this.props.closingBinder ? 'closingBinder' : 'documents');
   }
   handleLockUnlock = (index) => {
-    this.props.offeringCreationStore.setAccreditedOnlyField(index);
+    this.props.offeringCreationStore.setAccreditedOnlyField(this.props.closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', index);
     this.forceUpdate();
   }
   handleFormSubmit = (isApproved = null) => {
-    const { DATA_ROOM_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, DATA_ROOM_FRM.fields, 'legal', 'dataroom', true, undefined, isApproved);
+    const { DATA_ROOM_FRM, CLOSING_BINDER_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
+    updateOffering(currentOfferingId, this.props.closingBinder ? CLOSING_BINDER_FRM.fields : DATA_ROOM_FRM.fields, 'legal', 'dataroom', true, undefined, isApproved);
   }
   onSortEnd = ({ oldIndex, newIndex }, isReadonly) => {
     if (!isReadonly) {
@@ -107,7 +121,8 @@ export default class DataRoom extends Component {
     }
   };
   render() {
-    const { match, offeringClose } = this.props;
+    const { match, offeringClose, closingBinder, uiStore } = this.props;
+    const { inProgress } = uiStore;
     const { isIssuer } = this.props.userStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
@@ -116,16 +131,17 @@ export default class DataRoom extends Component {
       offer.legal.dataroom.submitted) ? offer.legal.dataroom.submitted : null;
     const approved = (offer && offer.legal && offer.legal.dataroom &&
       offer.legal.dataroom.approved) ? offer.legal.dataroom.approved : null;
-    const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
+    const isReadonly = (!offeringClose && ((submitted && !isManager) || (isManager && approved && approved.status)));
     const {
       DATA_ROOM_FRM,
+      CLOSING_BINDER_FRM,
       formArrayChange,
       confirmModal,
       confirmModalName,
       removeData,
     } = this.props.offeringCreationStore;
-    const formName = 'DATA_ROOM_FRM';
-    const docs = [...DATA_ROOM_FRM.fields.documents];
+    const formName = closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM';
+    const docs = [...(closingBinder ? CLOSING_BINDER_FRM.fields.closingBinder : DATA_ROOM_FRM.fields.documents)];
     return (
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form>
@@ -146,6 +162,7 @@ export default class DataRoom extends Component {
             </div>
             <SortableList
               offeringClose={offeringClose}
+              closingBinder={closingBinder}
               docs={docs}
               pressDelay={100}
               onSortEnd={(e) => this.onSortEnd(e, isReadonly)}

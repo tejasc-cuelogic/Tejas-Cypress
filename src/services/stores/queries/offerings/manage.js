@@ -215,6 +215,8 @@ export const getOfferingDetails = gql`
           fileName
           isPublic
         }
+        discount
+        valuationCap
         unitPrice
         roundType
         premoneyValuation
@@ -893,6 +895,7 @@ export const getOfferingDetails = gql`
           dateOfService
         }
         isPublic
+        isBeneficialOwnerDocGeneration
         firstName
         lastName
         email
@@ -913,6 +916,10 @@ export const getOfferingDetails = gql`
           state
           zip
         }
+        dlLicenseNumber
+        dlState
+        dlIssuedDate
+        dlExpirationDate
         bio
         uploads {
           headshot {
@@ -953,6 +960,18 @@ export const getOfferingDetails = gql`
           by
           date
           status
+        }
+      }
+      closingBinder {
+        name
+        aliasAccreditedOnly: isVisible
+        status
+        upload {
+          fileId
+          fileName
+          fileHandle {
+            boxFileId
+          }
         }
       }
       closureSummary {
@@ -1257,5 +1276,14 @@ export const offerClose = gql`
 export const setOrderForOfferings = gql`
   mutation setOrderForOfferings($offeringOrderDetails:[OfferingOrderInput]){
     setOrderForOfferings(offeringOrderDetails: $offeringOrderDetails)
+  }
+`;
+
+export const initializeClosingBinder = gql`
+  mutation initializeClosingBinder($offeringId: String!){
+    initializeClosingBinder(offeringId: $offeringId) {
+      name
+      status
+    }
   }
 `;
