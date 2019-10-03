@@ -39,6 +39,11 @@ export const paymentsIssuerList = gql`
       expectedPaymentDate
       firstPaymentDate
       sinkingFundBalance
+      offering {
+        id
+        offeringStatus
+        stage
+      }
     }
   }
 `;
