@@ -20,7 +20,7 @@ import {
   userListingStore,
   userStore,
 } from '../../index';
-import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount, getEmailList } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -65,6 +65,10 @@ export class UserDetailsStore {
   @observable selectedUserId = '';
 
   @observable displayMode = true;
+
+  @observable emailListArr = [];
+
+  @observable emailListIndex = 0;
 
   @action
   setFieldValue = (field, value) => {
@@ -881,6 +885,35 @@ export class UserDetailsStore {
           Helper.toast('Something went wrong, please try again in sometime', 'error');
         });
     });
+  }
+
+  @action
+  getEmailList = () => new Promise((resolve, reject) => {
+    const variables = {};
+    variables.recipientId = get(this.getDetailsOfUser, 'id');
+    this.emailListArr = graphql({
+      client,
+      query: getEmailList,
+      variables,
+      onFetch: (res) => {
+        if (get(res, 'fetchEmails.emails') && !this.emailListArr.loading) {
+          resolve();
+        }
+      },
+      onError: (error) => {
+        console.log(error);
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      },
+    });
+  });
+
+  @computed get emailListOutputLoading() {
+    return this.emailListArr.loading;
+  }
+
+  @computed get userEmals() {
+    return this.emailListArr && this.emailListArr.data.fetchEmails && this.emailListArr.data.fetchEmails.emails;
   }
 }
 

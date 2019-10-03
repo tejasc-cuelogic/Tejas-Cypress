@@ -9,6 +9,7 @@ export const allUpdates = gql`
       title
       isVisible
       offeringId
+      updatedDate
       updated {
         date
       }

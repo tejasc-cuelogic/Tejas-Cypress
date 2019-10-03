@@ -8,7 +8,7 @@ import { Image64 } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 992;
-@inject('campaignStore')
+@inject('campaignStore', 'authStore')
 @withRouter
 @observer
 export default class CampaignHeader extends Component {
@@ -18,7 +18,7 @@ export default class CampaignHeader extends Component {
   }
 
   render() {
-    const { campaignStore, newLayout } = this.props;
+    const { campaignStore, newLayout, followBtn } = this.props;
     const { campaign, offerStructure, campaignStatus } = campaignStore;
     const {
       isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
@@ -39,7 +39,7 @@ export default class CampaignHeader extends Component {
                     {campaign && campaign.media
                       && campaign.media.heroVideo && campaign.media.heroVideo.url
                       ? (
-<Link to={`${this.props.match.url}${newLayout ? '' : '/overview'}/herovideo`}>
+                        <Link to={`${this.props.match.url}${newLayout ? '' : '/overview'}/herovideo`}>
                           <Image64
                             bg
                             srcUrl={get(campaign, 'media.heroImage.url')}
@@ -49,21 +49,21 @@ export default class CampaignHeader extends Component {
                         </Link>
                       )
                       : (
-<Image64
-  bg
-  srcUrl={get(campaign, 'media.heroImage.url')}
-  imgType="heroImage"
-/>
+                        <Image64
+                          bg
+                          srcUrl={get(campaign, 'media.heroImage.url')}
+                          imgType="heroImage"
+                        />
                       )
                     }
                     <div className="offer-stats">
                       <Statistic.Group>
                         {!isClosed && diffForProcessing.value > 0
                           && (
-<Statistic size="mini" className="basic">
-                            <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
-                            <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
-                          </Statistic>
+                            <Statistic size="mini" className="basic">
+                              <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
+                              <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
+                            </Statistic>
                           )
                         }
                         <Statistic size="mini" className="basic">
@@ -74,19 +74,19 @@ export default class CampaignHeader extends Component {
                         </Statistic>
                         {isClosed && get(campaign, 'closureSummary.repayment.count') > 0
                           && (
-<Statistic size="mini" className="basic">
-                            <Statistic.Value>
-                              {get(campaign, 'closureSummary.repayment.count') || 0}
-                            </Statistic.Value>
-                            <Statistic.Label>Payments made</Statistic.Label>
-                          </Statistic>
+                            <Statistic size="mini" className="basic">
+                              <Statistic.Value>
+                                {get(campaign, 'closureSummary.repayment.count') || 0}
+                              </Statistic.Value>
+                              <Statistic.Label>Payments made</Statistic.Label>
+                            </Statistic>
                           )
                         }
                         {earlyBird && earlyBird.available > 0
-                        && isEarlyBirdRewards && !isClosed
+                          && isEarlyBirdRewards && !isClosed
                           && bonusRewards
                           ? (
-<Statistic size="mini" className="basic">
+                            <Statistic size="mini" className="basic">
                               <Statistic.Value>
                                 {get(campaign, 'earlyBird.available') || 0}
                               </Statistic.Value>
@@ -122,8 +122,8 @@ export default class CampaignHeader extends Component {
                     </Statistic.Value>
                     {minFlagStatus
                       && (
-<Statistic.Label className="flag-status">
-                        <Icon name="flag" /> Surpassed minimum goal
+                        <Statistic.Label className="flag-status">
+                          <Icon name="flag" /> Surpassed minimum goal
                       </Statistic.Label>
                       )
                     }
@@ -141,65 +141,76 @@ export default class CampaignHeader extends Component {
                   </p>
                   {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                     && (
-<p className="raise-type mb-0">
-                      <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
-                      <Popup
-                        hoverable
-                        trigger={<Icon name="help circle" color="green" />}
-                        content={
-                          <span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>
-                        }
-                        position="top center"
-                      />
-                    </p>
+                      <p className="raise-type mb-0">
+                        <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
+                        <Popup
+                          hoverable
+                          trigger={<Icon name="help circle" color="green" />}
+                          content={
+                            <span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>
+                          }
+                          position="top center"
+                        />
+                      </p>
                     )
                   }
                   {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
                     && (
-<p className="mb-0">
-                      Interest Rate : { get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-' }
-                    </p>
+                      <p className="mb-0">
+                        Interest Rate : {get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-'}
+                      </p>
                     )
                   }
                   {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE
                     && (
-<p className="mb-0">
-                      Investment Multiple: { get(campaign, 'keyTerms.investmentMultiple') ? get(campaign, 'keyTerms.investmentMultiple') : '-'}
-                    </p>
+                      <p className="mb-0">
+                        Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple') ? get(campaign, 'keyTerms.investmentMultiple') : '-'}
+                      </p>
                     )
                   }
                   {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
                     ? (
-<p className="mb-0">
-                      Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
+                      <p className="mb-0">
+                        Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
                     </p>
                     )
                     : (
-<p className="mb-0">
-                      Share Price: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice')) : '-'}
-                    </p>
+                      <p className="mb-0">
+                        Share Price: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice')) : '-'}
+                      </p>
                     )
                   }
-                  <div className="center-align mt-20">
+                  <div className="mt-20">
                     {isCreation
                       ? <Button fluid secondary={diffForProcessing.value !== 0} content="Coming Soon" disabled />
                       : ''
                     }
                     {!isClosed
                       && (
-                      <>
-                        <Button
-                          fluid
-                          secondary={!isInProcessing}
-                          disabled={maxFlagStatus || isInProcessing}
-                          onClick={this.handleInvestNowClick}
-                        >
-                          {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
-                        </Button>
-                        <small>
-                          {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
-                        </small>
-                      </>
+                        <>
+                          <Grid>
+                            <Grid.Column width={followBtn ? '10' : ''} className="center-align">
+                              <Button
+                                secondary={!isInProcessing}
+                                disabled={maxFlagStatus || isInProcessing}
+                                onClick={this.handleInvestNowClick}
+                                fluid
+                              >
+                                {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                              </Button>
+                              <p className="mt-10">
+                                {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
+                            </p>
+                            </Grid.Column>
+                            {followBtn
+                            && (
+                            <Grid.Column width="6">
+                              <>{followBtn}</>
+                            </Grid.Column>
+                            )
+                            }
+                          </Grid>
+                        </>
                       )
                     }
                   </div>
