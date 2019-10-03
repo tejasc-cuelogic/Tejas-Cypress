@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { get, isEmpty, isArray, forEach, find, includes } from 'lodash';
+import { get, isEmpty, isArray, forEach, find, includes, keyBy } from 'lodash';
 import moment from 'moment';
 import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -119,11 +119,10 @@ export class FactoryStore {
 
   @action
   formChange = (e, res, form) => {
-    if (form === 'REQUESTFACTORY_FRM') {
-      // this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
+    if (includes(['REQUESTFACTORY_FRM'], form) && includes(['plugin'], res.name)) {
       this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
       const plugnArr = this.pullValuesForDynmicInput(e, res);
-      this.createDynamicFormFields(plugnArr.pluginInput);
+      this.createDynamicFormFields(plugnArr);
     } else {
       this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
     }
@@ -218,9 +217,11 @@ export class FactoryStore {
   @action
   requestFactoryPluginTrigger = () => new Promise((resolve, reject) => {
     const { fields } = this.REQUESTFACTORY_FRM;
+    const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.fields;
     const formData = Validator.evaluateFormData(fields);
+    const formPayloadData = Validator.evaluateFormData(fieldsPayload);
     const TestformData = this.ExtractArrayObjectToJSON(formData.payload);
-    console.log('TestformData==>', TestformData);
+    console.log('formPayloadData==>', formPayloadData);
     if (!this.isValidJson(TestformData)) {
       this.REQUESTFACTORY_FRM.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
       this.REQUESTFACTORY_FRM.meta.isValid = false;
@@ -233,7 +234,7 @@ export class FactoryStore {
       client
         .mutate({
           mutation: requestFactoryPluginTrigger,
-          variables,
+          // variables,
         })
         .then((result) => {
           Helper.toast('Your request is processed.', 'success');
@@ -383,21 +384,36 @@ export class FactoryStore {
   }
 
   pullValuesForDynmicInput = (e, data) => {
-    let pluginInputObj = {};
-    const pluginInputData = find(data.fielddata.values, (o) => {
-      console.log(o);
-      return o.value === data.value && o.pluginInput;
-    });
-    pluginInputObj = pluginInputData.pluginInput.map((val, key) => {
-      console.log('Val==>', val);
-      console.log('Key==>', key);
-      // let lableVAl = val.label;
-      // return { ...{ lableVAl: val } };
-      return val;
-    });
-    // find(data.fielddata.values.pluginInput, getPluginArr);
+    const pluginInputData = find(data.fielddata.values, o => o.value === data.value && o.pluginInput);
+    const pluginInputObj = keyBy(pluginInputData.pluginInput, 'value');
     return pluginInputObj;
   };
+
+  getFormElement = (fieldKey, formProps, frm) => {
+    let formElement = '';
+    const elementType = formProps.type;
+    switch (elementType) {
+      case 'textarea':
+        formElement = 'FormTextarea';
+        this.setFormData(frm, fieldKey, formProps.defaultValue);
+        break;
+      case 'input':
+        formElement = 'FormInput';
+        this.setFormData(frm, fieldKey, formProps.defaultValue);
+        break;
+
+      default:
+        formElement = 'FormInput';
+        this.setFormData(frm, fieldKey, formProps.defaultValue);
+        break;
+    }
+    return formElement;
+  }
+
+  @action
+  setFormData = (form, elemRef, elementValue) => {
+    this[form].fields[elemRef].value = elementValue;
+  }
 }
 
 export default new FactoryStore();

@@ -1,22 +1,17 @@
 import React, { Component } from 'react';
-// import { get } from 'lodash';
 import { Card, Button, Form, Grid, Divider, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { FormDropDown } from '../../../../../../theme/form';
 import DynamicFormInput from './dynamicFormInput';
-// FormTextarea
 
 @inject('factoryStore')
 @withRouter
 @observer
 export default class RequestFactory extends Component {
-  // state = {
-  //   formData: {},
-  // };
-
   constructor(props) {
     super(props);
+    this.props.factoryStore.setFieldValue('DYNAMCI_PAYLOAD_FRM', {});
     this.props.factoryStore.resetForm('REQUESTFACTORY_FRM');
     this.props.factoryStore.inProgress.requestFactory = false;
   }
@@ -38,21 +33,6 @@ export default class RequestFactory extends Component {
   removeData = (confirmModalName, arrayName = 'payload') => {
     this.props.factoryStore.removeData(confirmModalName, arrayName);
   }
-
-  handlePluginChange = (e, resp) => {
-    e.preventDefault();
-    // const { createDynamicFormFields } = this.props.factoryStore;
-    console.log(resp.fielddata);
-    console.log(resp.fielddata.values);
-    console.log(resp.fielddata.values.pluginInput);
-    // const pluginInputArr = get(resp, 'fielddata.values.pluginInput');
-    // createDynamicFormFields(resp.fielddata.values.pluginInput);
-  }
-
-  // selectInput = (e, resp) => {
-  //   e.preventDefault();
-  //   console.log(resp);
-  // }
 
   render() {
     const { factoryStore } = this.props;
@@ -93,12 +73,6 @@ export default class RequestFactory extends Component {
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <DynamicFormInput {...this.props} />
-                    {/* <FormTextarea
-                      name="payload"
-                      fielddata={REQUESTFACTORY_FRM.fields.payload}
-                      changed={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
-                      containerclassname="secondary huge"
-                    /> */}
                   </Grid.Column>
                 </Grid>
               </Form.Group>
