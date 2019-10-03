@@ -36,10 +36,10 @@ export default class StickyNotification extends Component {
               {get(props, 'notificationCard.congratulations')
                 ? <p className="intro-text text-uppercase"><b>{get(props, 'notificationCard.congratulations')}</b></p> : ''
               }
-              <Statistic.Value className="mb-half">{get(props, 'notificationCard.header')}</Statistic.Value>
+              <Statistic.Value>{get(props, 'notificationCard.header')}</Statistic.Value>
               <Statistic.Label>{get(props, 'notificationCard.message')}</Statistic.Label>
             </Statistic>
-            <div className="center-align">
+            <div className={`${isMobile ? 'ml-18' : ''} center-align`}>
               <Button onClick={e => this.handleVerifyAccreditation(e)} className={isMobile && 'mt-20'} compact color="green">Verify</Button>
             </div>
           </Card.Content>

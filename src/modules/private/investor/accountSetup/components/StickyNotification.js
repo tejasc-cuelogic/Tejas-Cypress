@@ -47,7 +47,7 @@ const StickyNotification = observer(({ signupStatus, userDetailsStore, isInvesto
           <Card.Content>
             {!isInvestor && <Card.Meta>{stepinfo.group}</Card.Meta>}
             <Statistic size="mini" className="cta">
-              {isInvestor && <p className="intro-text text-uppercase"><b>{stepinfo.group}</b></p>}
+              {/* {isInvestor && <p className="intro-text text-uppercase"><b>{stepinfo.group}</b></p>} */}
               <Statistic.Value>{stepinfo.title}</Statistic.Value>
               <Statistic.Label>{stepinfo.label}</Statistic.Label>
             </Statistic>

@@ -31,7 +31,7 @@ export default class AccountSetup extends Component {
         <Card fluid raised>
           <Card.Content>
             <Statistic size="tiny" className="cta">
-              <Statistic.Value className="mb-half">You&apos;re almost there!</Statistic.Value>
+              <Statistic.Value>You&apos;re almost there!</Statistic.Value>
               <Statistic.Label>Once you finish setting up your {currentActiveAccount === 'ira' ? currentActiveAccount.toUpperCase() : capitalize(currentActiveAccount)} Account, you can begin investing on NextSeed.</Statistic.Label>
             </Statistic>
             <div className="center-align">
