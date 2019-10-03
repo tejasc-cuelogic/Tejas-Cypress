@@ -34,6 +34,11 @@ export default class AllRepayments extends Component {
     }
   }
 
+  handleAction = (offeringId, offeringStage) => {
+    const stage = ['CREATION'].includes(offeringStage) ? 'creation' : ['LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage) ? 'live' : ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULT'].includes(offeringStage) ? 'completed' : 'failed';
+    this.props.history.push(`/app/offerings/${stage}/edit/${offeringId}`);
+  }
+
   render() {
     const { paymentStore } = this.props;
     const {
@@ -69,7 +74,7 @@ export default class AllRepayments extends Component {
         </Form>
         <Card fluid>
           <div className="table-wrapper">
-            <Table sortable unstackable singleLine>
+            <Table sortable unstackable singleLine className="application-list clickable">
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell
@@ -102,7 +107,7 @@ export default class AllRepayments extends Component {
                 {
                   repayments.map(record => (
                     <Table.Row key={record.id}>
-                      <Table.Cell>{record.shorthandBusinessName}</Table.Cell>
+                      <Table.Cell onClick={() => this.handleAction(record.offering.id, record.offering.stage)}>{record.shorthandBusinessName}</Table.Cell>
                       <Table.Cell>{record.hardCloseDate}</Table.Cell>
                       <Table.Cell>{record.maturityDate ? `${moment(moment(record.maturityDate)).diff(moment(), 'months')} months` : ''}</Table.Cell>
                       <Table.Cell>{record.expectedPaymentDate}</Table.Cell>
