@@ -163,7 +163,7 @@
         width: 100%;
         &:focus{
             background: @primary-one !important;
-            color: @white !important;
+            color: @neutral-offdark !important;
             border-color: @white !important;
             .details{
                 color: @white;
@@ -180,6 +180,17 @@
                 color: @white !important;
                 .ui.header,span{
                     color: @white;
+                }
+            }
+            &.error{
+                background: transparent !important;
+                border-color: @highlight-primary !important;
+                color: @neutral-offdark !important;
+                border-width: 2px !important;
+                .details{
+                    .ui.header,span{
+                        color: @neutral !important;
+                    }
                 }
             }
         }
