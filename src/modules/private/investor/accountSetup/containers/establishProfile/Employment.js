@@ -27,7 +27,7 @@ export default class Employment extends Component {
       this.props.uiStore.addMoreInProgressArray('EMPLOYED');
       return;
     }
-    updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered]);
+    updateInvestorProfileData(multiSteps[stepToBeRendered]);
   }
 
   toggleInputFields = () => {

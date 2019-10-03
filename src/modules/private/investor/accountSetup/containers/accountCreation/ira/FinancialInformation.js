@@ -1,13 +1,13 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Divider } from 'semantic-ui-react';
+import { Header, Form, Divider, Button } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('iraAccountStore', 'investmentLimitStore')
+@inject('iraAccountStore', 'investmentLimitStore', 'uiStore')
 @observer
 export default class FinancialInformation extends React.Component {
   constructor(props) {
@@ -17,6 +17,12 @@ export default class FinancialInformation extends React.Component {
       finInfoChange({ value: { floatValue: FIN_INFO_FRM.fields.netWorth.value }, name: 'netWorth' });
     }
     this.props.investmentLimitStore.setFieldValue('investedAmount', 0);
+  }
+
+  handleContinueButton = () => {
+    const { createAccount, stepToBeRendered } = this.props.iraAccountStore;
+    const { multiSteps } = this.props.uiStore;
+    createAccount(multiSteps[stepToBeRendered]);
   }
 
   render() {
@@ -68,6 +74,10 @@ Your net worth and annual income are used to determine your 12-month investment 
             )
           }
           <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20 mb-20' : ''} link display-block`}>How is this calculated?</a>
+          {isMobile && (
+              <Button fluid primary className="relaxed" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
+          )
+          }
         </Form>
       </>
     );

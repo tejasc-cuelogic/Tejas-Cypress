@@ -312,12 +312,14 @@ export const IRA_ACC_TYPES = {
     values: [
       {
         label: 'Traditional',
+        labelDescription: 'Investments are made with pre-tax dollars, and earnings grow tax-deferred',
         value: 0,
         description: 'Earnings from investments on a Traditional Indiviudal Retirement Account grow tax-deferred.',
         rawValue: 'traditional',
       },
       {
         label: 'Roth',
+        labelDescription: 'Investments are made with after-tax dollars, and earnings grow tax-free',
         value: 1,
         description: 'Earnings from investments in a Roth Retirement Account grow tax free.',
         rawValue: 'roth',
@@ -335,6 +337,7 @@ export const IRA_FUNDING = {
     values: [
       {
         label: 'Checking Account',
+        labelDescription: 'Make an initial deposit by linking an external checking account',
         value: 0,
         description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Check!,
         sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
@@ -342,6 +345,7 @@ export const IRA_FUNDING = {
       },
       {
         label: 'IRA Transfer',
+        labelDescription: 'Transfer funds from an existing IRA Account',
         value: 1,
         description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for IRA Transfer!,
         sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
@@ -349,6 +353,7 @@ export const IRA_FUNDING = {
       },
       {
         label: 'Rollover',
+        labelDescription: 'Roll over funds from your 401(k), 403(b), or other qualified account',
         value: 2,
         description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Direct Rollover!,
         sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
