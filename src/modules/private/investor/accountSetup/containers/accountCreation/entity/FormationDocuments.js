@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Divider, Message, Confirm } from 'semantic-ui-react';
+import { Header, Form, Divider, Message, Confirm, Button } from 'semantic-ui-react';
 import { DropZone } from '../../../../../../../theme/form';
 import { ListErrors } from '../../../../../../../theme/shared';
 
@@ -32,6 +32,13 @@ export default class FormationDocumemts extends Component {
   handleDelDoc = (field) => {
     this.props.entityAccountStore.removeUploadedData('FORM_DOCS_FRM', field, 'Formation doc');
     this.props.uiStore.setConfirmBox('');
+  }
+
+
+  handleContinueButton = () => {
+    const { createAccount, stepToBeRendered } = this.props.entityAccountStore;
+    const { multiSteps } = this.props.uiStore;
+    createAccount(multiSteps[stepToBeRendered]);
   }
 
   render() {
@@ -66,12 +73,17 @@ export default class FormationDocumemts extends Component {
             containerclassname="fluid"
             uploadtitle="Choose a file or drag it here"
           />
+            <Divider hidden />
           {errors
             && (
 <Message error className="mt-30">
               <ListErrors errors={[errors.message]} />
             </Message>
             )
+          }
+          {isMobile && (
+            <Button fluid primary className="relaxed" content="Continue" disabled={!FORM_DOCS_FRM.meta.isValid || errors} onClick={this.handleContinueButton} />
+          )
           }
         </Form>
         <Confirm
