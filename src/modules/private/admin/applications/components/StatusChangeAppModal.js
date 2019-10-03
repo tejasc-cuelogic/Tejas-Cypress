@@ -84,6 +84,8 @@ export default class StatusChangeAppModal extends Component {
                   '',
                   userDetails.TemporaryPassword,
                 ).then(() => {
+                  this.props.activityHistoryStore.send(params.appId, params.id === 'in-progress' ? 'Business Application Submitted' : 'Business Application Pre Qual Promoted', ACTIVITY_HISTORY_TYPES.COMMENT);
+                }).then(() => {
                   this.props.uiStore.setErrors(null);
                   this.props.history.push('/app/applications/in-progress');
                 });
@@ -100,6 +102,8 @@ export default class StatusChangeAppModal extends Component {
                       '',
                       userDetails.TemporaryPassword,
                     ).then(() => {
+                      this.props.activityHistoryStore.send(params.appId, params.id === 'in-progress' ? 'Business Application Submitted' : 'Business Application Pre Qual Promoted', ACTIVITY_HISTORY_TYPES.COMMENT);
+                    }).then(() => {
                       this.props.uiStore.setErrors(null);
                       this.props.history.push('/app/applications/in-progress');
                     });
@@ -138,7 +142,7 @@ export default class StatusChangeAppModal extends Component {
         <Modal.Header className="center-align signup-header">
           {params.action === 'PROMOTE' && params.id !== 'in-progress'
             ? <Header as="h3">Promote PreQual?</Header>
-            : <Header as="h3">{params.action === 'REMOVED' ? 'Remove' : capitalize(params.id !== 'in-progress' ? params.action : 'Submit')} Application?</Header>
+            : <Header as="h3">{params.action === 'REMOVED' ? 'Remove' : capitalize(params.id === 'in-progress' && params.action === 'PROMOTE' ? 'Submit' : params.action)} Application?</Header>
           }
         </Modal.Header>
         <Modal.Content className="signup-content">
