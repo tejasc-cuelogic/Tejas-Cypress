@@ -40,10 +40,8 @@ export default class AccountDetailsView extends Component {
   handleCancelRequest = (e) => {
     e.preventDefault();
     this.props.bankAccountStore.setLinkedBankCancelRequestStatus(true);
-    this.props.transactionStore.requestOtpForManageTransactions().then(() => {
-      const confirmUrl = `${this.props.match.url}/cancel-bank-account/confirm`;
-      this.props.history.push(confirmUrl);
-    });
+    const confirmUrl = `${this.props.match.url}/cancel-bank-account/confirm`;
+    this.props.history.push(confirmUrl);
   }
 
   handleClose = () => {
@@ -80,7 +78,7 @@ export default class AccountDetailsView extends Component {
                 {pladidLogo
                   ? <Item.Image size="tiny" src={`data:image/png;base64,${pladidLogo}`} />
                   : (
-<div className="ui tiny image">
+                  <div className="ui tiny image">
                     <NSImage path="banks/default.png" />
                   </div>
                   )
@@ -130,11 +128,11 @@ export default class AccountDetailsView extends Component {
               {accountType === 'active'
                 ? accountDetails && !accountDetails.pendingUpdate
                 && (
-<>
+              <>
                 {
                   <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} color="green" content="Change Linked Bank" />
                 }
-</>
+              </>
                 )
                 : <Button loading={uiStore.inProgress} inverted onClick={this.handleCancelRequest} color="red" content="Cancel Request" />
               }
