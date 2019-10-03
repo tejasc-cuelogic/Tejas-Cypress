@@ -52,14 +52,14 @@ class Updates extends Component {
               && updates.map((dataItem, index) => (
                 <VerticalTimelineElement
                   position="right"
-                  className={`vertical-timeline-element--work ${(index - 1) > 0 && updates[index - 1].updated.date !== dataItem.updated.date ? '' : 'hide-date'}`}
+                  className={`vertical-timeline-element--work ${(index - 1) > 0 && updates[index - 1].updatedDate !== dataItem.updatedDate ? '' : 'hide-date'}`}
                   iconStyle={
                     index === 0 ? {
                       background: '#20C86D', height: 30, width: 30, marginLeft: -15,
                     } : {}}
                   date={(index - 1) > 0
-                    ? updates[index - 1].updated.date !== dataItem.updated.date
-                      ? moment(updates[index].updated.date).format('MMMM YYYY') : null : null}
+                    ? updates[index - 1].updatedDate !== dataItem.updatedDate
+                      ? moment(updates[index].updatedDate).format('MMMM YYYY') : null : null}
                 >
                   <Item.Group>
                     <Item>

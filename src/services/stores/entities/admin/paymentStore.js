@@ -1,9 +1,10 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { GqlClient as client } from '../../../../api/gcoolApi';
-import { allRepayments, allRepaymentDetails } from '../../queries/Repayment';
+import { orderBy, get } from 'lodash';
+import { GqlClient as client } from '../../../../api/gqlApi';
+import { paymentsIssuerList, allRepaymentDetails } from '../../queries/Repayment';
 
-export class RepaymentStore {
+export class PaymentStore {
     @observable data = [];
 
     @observable details = [];
@@ -25,13 +26,26 @@ export class RepaymentStore {
       ],
     };
 
-    @observable requestState = {
-      search: {},
-    };
+    @observable sortOrder = {
+      column: null,
+      direction: 'asc',
+    }
+
+    @action
+    setFieldValue = (field, value) => {
+      this[field] = value;
+    }
+
+    @action
+    setSortingOrder = (column = null, direction = null) => {
+      this.sortOrder.column = column;
+      // this.sortOrder.listData = listData;
+      this.sortOrder.direction = direction;
+    }
 
     @action
     initRequest = () => {
-      this.data = graphql({ client, query: allRepayments });
+      this.data = graphql({ client, query: paymentsIssuerList });
     }
 
     @action
@@ -51,7 +65,14 @@ export class RepaymentStore {
     }
 
     @computed get repayments() {
-      return (this.data.data && toJS(this.data.data.allRepayments)) || [];
+      if (this.sortOrder.column && this.sortOrder.direction && this.data && toJS(get(this.data, 'data.paymentsIssuerList'))) {
+        return orderBy(
+          this.data.data.paymentsIssuerList,
+          [issuerList => issuerList[this.sortOrder.column].toString().toLowerCase()],
+          [this.sortOrder.direction],
+        );
+      }
+      return (this.data.data && toJS(this.data.data.paymentsIssuerList)) || [];
     }
 
     @computed get repaymentDetails() {
@@ -64,4 +85,4 @@ export class RepaymentStore {
 }
 
 
-export default new RepaymentStore();
+export default new PaymentStore();
