@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { get, isEmpty, isArray, forEach, find } from 'lodash';
+import { get, isEmpty, isArray, forEach, find, includes } from 'lodash';
 import moment from 'moment';
 import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -280,7 +280,7 @@ export class FactoryStore {
       const tempObj = {};
       tempObj.key = value.name;
       tempObj.text = value.name;
-      tempObj.value = pluginList === 'listRequestPlugins' ? value.plugin : value.name;
+      tempObj.value = includes(['listRequestPlugins', 'listProcessorPlugins'], pluginList) ? value.plugin : value.name;
       tempObj.pluginInput = [...value.pluginInputs];
       pluginArr.push(tempObj);
     });
@@ -383,12 +383,20 @@ export class FactoryStore {
   }
 
   pullValuesForDynmicInput = (e, data) => {
-    const pluginInput = find(data.fielddata.values, (o) => {
+    let pluginInputObj = {};
+    const pluginInputData = find(data.fielddata.values, (o) => {
       console.log(o);
       return o.value === data.value && o.pluginInput;
     });
-    return pluginInput;
+    pluginInputObj = pluginInputData.pluginInput.map((val, key) => {
+      console.log('Val==>', val);
+      console.log('Key==>', key);
+      // let lableVAl = val.label;
+      // return { ...{ lableVAl: val } };
+      return val;
+    });
     // find(data.fielddata.values.pluginInput, getPluginArr);
+    return pluginInputObj;
   };
 }
 
