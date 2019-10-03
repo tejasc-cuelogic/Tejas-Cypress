@@ -374,6 +374,12 @@ export class OfferingsStore {
     this.initLoad = [];
   }
 
+  @computed get closingBinderDocs() {
+    const closingBinder = get(this.offer, 'closingBinder') || [];
+    const filteredData = closingBinder.filter(c => c.aliasAccreditedOnly).map(c => ({ name: c.name, documentId: get(c, 'upload.fileHandle.boxFileId') }));
+    return filteredData;
+  }
+
   @computed get offerStatus() {
     const offerStatus = {};
     const { offer } = this;

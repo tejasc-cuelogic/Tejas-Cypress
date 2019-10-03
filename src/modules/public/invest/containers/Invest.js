@@ -76,7 +76,6 @@ class Invest extends Component {
           className={`slide-down ${location.pathname.split('/')[2]}`}
         >
           <PublicSubNav
-            navStatus={navStore.navStatus}
             stepInRoute={navStore.stepInRoute}
             location={location}
             currentUser={this.props.userStore.currentUser}

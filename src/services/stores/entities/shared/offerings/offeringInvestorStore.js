@@ -8,6 +8,7 @@ import { getInvestorListForOffering } from '../../../queries/offering/investor';
 import { ClientDb } from '../../../../../helper';
 import { offeringsStore } from '../../../index';
 import Helper from '../../../../../helper/utility';
+import { OFFERING_AGREEMENT_REGULATIONS } from '../../../../../constants/offering';
 
 export class OfferingInvestorStore {
   @observable data = [];
@@ -108,7 +109,8 @@ export class OfferingInvestorStore {
       ['street', 'streetTwo'].forEach((el) => { investorObj[el] = !isEmpty(investorObj[el]) ? investorObj[el].split(',').join(' ') : null; });
       const matchReferral = find(investorObj.referralCode, r => r.code === referralCode);
       const iReferralCode = (matchReferral && get(matchReferral, 'isValid')) ? get(matchReferral, 'code') : '';
-      return { ...investorObj, referralCode: iReferralCode };
+      const regulation = i.regulation ? OFFERING_AGREEMENT_REGULATIONS[i.regulation] : '';
+      return { ...investorObj, referralCode: iReferralCode, regulation };
     });
     return investorList;
   }

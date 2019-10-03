@@ -34,7 +34,7 @@ export default class UserEmailList extends Component {
         <Modal open={this.state.open} closeOnDimmerClick size="small" closeIcon onClose={e => this.handleCancel(e)}>
           <Modal.Content className="center-align">
             <Header as="h3">Email Content</Header>
-            {userEmals && userEmals[emailListIndex].emailContent
+            {userEmals && userEmals.length > 0 && userEmals[emailListIndex].emailContent
               ? <p>{userEmals[emailListIndex].emailContent}</p>
               : (
                 <section className="bg-offwhite mb-20">
