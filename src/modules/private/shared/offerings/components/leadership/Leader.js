@@ -166,14 +166,16 @@ export default class Leader extends Component {
               )
             }
           </Header>
-          <FormCheckbox
-            disabled={isReadonly}
-            fielddata={LEADERSHIP_FRM.fields.leadership[index].isPublic}
-            name="isPublic"
-            changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
-            defaults
-            containerclassname="ui relaxed list"
-          />
+          {['isPublic', 'isBeneficialOwnerDocGeneration'].map(field => (
+            <FormCheckbox
+              disabled={isReadonly}
+              fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
+              name={field}
+              changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
+              defaults
+              containerclassname="ui relaxed list"
+            />
+          ))}
           <Header as="h4">Personal Info</Header>
           <Form.Group widths={2}>
             {
