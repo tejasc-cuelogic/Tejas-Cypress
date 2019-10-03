@@ -73,14 +73,29 @@ export default class AllRepayments extends Component {
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell
-                    sorted={sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    sorted={sortOrder.column === 'shorthandBusinessName' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
                     onClick={this.handleSort('shorthandBusinessName')}
                   >Short Hand Business Name</Table.HeaderCell>
-                  <Table.HeaderCell>Hard Close Date</Table.HeaderCell>
-                  <Table.HeaderCell>Maturity</Table.HeaderCell>
-                  <Table.HeaderCell>Expected Payment Date</Table.HeaderCell>
-                  <Table.HeaderCell>First Payment Date</Table.HeaderCell>
-                  <Table.HeaderCell>Sinking Fund Balance</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'hardCloseDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('hardCloseDate')}
+                  >Hard Close Date</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'maturityDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('maturityDate')}
+                  >Maturity</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'expectedPaymentDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('expectedPaymentDate')}
+                  >Expected Payment Date</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'firstPaymentDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('firstPaymentDate')}
+                  >First Payment Date</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'sinkingFundBalance' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('sinkingFundBalance')}
+                  >Sinking Fund Balance</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
