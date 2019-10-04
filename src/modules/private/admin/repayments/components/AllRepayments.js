@@ -21,7 +21,7 @@ export default class AllRepayments extends Component {
 
   handleSort = clickedColumn => () => {
     const { setSortingOrder, sortOrder } = this.props.paymentStore;
-    setSortingOrder(clickedColumn, sortOrder.direction === 'asc' ? 'desc' : 'asc');
+    setSortingOrder(clickedColumn, clickedColumn === sortOrder.column && sortOrder.direction === 'asc' ? 'desc' : 'asc');
   }
 
   setSearchParam = (e, { name, value }) => this.props.paymentStore.setInitiateSrch(name, value);
@@ -63,7 +63,7 @@ export default class AllRepayments extends Component {
                 more="no"
                 addon={(
                   <Grid.Column width={5} textAlign="right">
-                    <Button color="green" as={Link} floated="right" to="/app/repayments/new">
+                    <Button color="green" as={Link} floated="right" to="/app/payments">
                       Add New Repayment
                     </Button>
                   </Grid.Column>
@@ -105,16 +105,22 @@ export default class AllRepayments extends Component {
               </Table.Header>
               <Table.Body>
                 {
-                  repayments.map(record => (
+                  !repayments.length
+                    ? (
+                      <Table.Row>
+                        <Table.Cell textAlign="center" colspan="6">No records found</Table.Cell>
+                      </Table.Row>
+                    )
+                    : repayments.map(record => (
                     <Table.Row key={record.id}>
-                      <Table.Cell onClick={() => this.handleAction(record.offering.id, record.offering.stage)}>{record.shorthandBusinessName}</Table.Cell>
+                      <Table.Cell onClick={() => this.handleAction(record.offering.id, record.offering.stage)}><b>{record.shorthandBusinessName}</b></Table.Cell>
                       <Table.Cell>{record.hardCloseDate}</Table.Cell>
-                      <Table.Cell>{record.maturityDate ? `${moment(moment(record.maturityDate)).diff(moment(), 'months')} months` : ''}</Table.Cell>
-                      <Table.Cell>{record.expectedPaymentDate}</Table.Cell>
+                      <Table.Cell>{record.maturityDate && moment(record.maturityDate).isValid() ? `${moment(moment(record.maturityDate)).diff(moment(), 'months')} months` : ''}</Table.Cell>
+                      <Table.Cell>{record.expectedPaymentDate && moment(record.expectedPaymentDate, 'MM/DD/YYYY', true).isValid() && record.expectedPaymentDate}</Table.Cell>
                       <Table.Cell>{record.firstPaymentDate}</Table.Cell>
-                      <Table.Cell>{Helper.CurrencyFormat(record.sinkingFundBalance)}</Table.Cell>
+                      <Table.Cell textAlign="right">{Helper.CurrencyFormat(record.sinkingFundBalance)}</Table.Cell>
                     </Table.Row>
-                  ))
+                    ))
                 }
               </Table.Body>
             </Table>
