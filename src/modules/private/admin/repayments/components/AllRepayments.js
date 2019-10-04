@@ -119,11 +119,11 @@ export default class AllRepayments extends Component {
                     : repayments.map(record => (
                     <Table.Row key={record.id}>
                       <Table.Cell onClick={() => this.handleAction(record.offering.id, record.offering.stage)}><b>{record.shorthandBusinessName}</b></Table.Cell>
-                      <Table.Cell>{record.hardCloseDate}</Table.Cell>
+                      <Table.Cell>{record.hardCloseDate && moment(record.hardCloseDate, 'MM/DD/YYYY', true).isValid() && record.hardCloseDate}</Table.Cell>
                       <Table.Cell>{record.maturityDate && moment(record.maturityDate).isValid() ? `${moment(moment(record.maturityDate)).diff(moment(), 'months')} months` : ''}</Table.Cell>
                       <Table.Cell>{record.expectedPaymentDate && moment(record.expectedPaymentDate, 'MM/DD/YYYY', true).isValid() && record.expectedPaymentDate}</Table.Cell>
-                      <Table.Cell>{record.firstPaymentDate}</Table.Cell>
-                      <Table.Cell>{get(record, 'offering.offering.launch.expectedOpsDate')}</Table.Cell>
+                      <Table.Cell>{record.firstPaymentDate && moment(record.firstPaymentDate, 'MM/DD/YYYY', true).isValid() && record.firstPaymentDate}</Table.Cell>
+                      <Table.Cell>{get(record, 'offering.offering.launch.expectedOpsDate') && moment(get(record, 'offering.offering.launch.expectedOpsDate'), 'MM/DD/YYYY', true).isValid() && get(record, 'offering.offering.launch.expectedOpsDate')}</Table.Cell>
                       <Table.Cell textAlign="center">{Helper.CurrencyFormat(record.sinkingFundBalance)}</Table.Cell>
                     </Table.Row>
                     ))
