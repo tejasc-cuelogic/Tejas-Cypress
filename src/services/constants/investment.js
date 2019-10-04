@@ -168,25 +168,7 @@ export const INVESTMENT_LIMITS = {
 
 export const CANCEL_INVESTMENT = FormHelper.generateMeta([
   ['voidReason', 'Void Reason', '', 'optional', 'Void Reason'],
-  ['voidType', 'Void Type', '10', 'optional', 'Void Type',
-    {
-      props: {
-        values: [
-          { label: 'NOSIGN', value: '1' },
-          { label: 'USERCANCEL', value: '2' },
-          { label: 'REPLACED', value: '3' },
-          { label: 'AUTODRAFTFAILED', value: '4' },
-          { label: 'FAILEDVALIDATION_PRESIGN', value: '5' },
-          { label: 'FAILEDVALIDATION_POSTSIGN', value: '6' },
-          { label: 'ERROR', value: '7' },
-          { label: 'OFFERING_RESET', value: '8' },
-          { label: 'OFFERING_FAILED', value: '9' },
-          { label: 'ADMINCANCEL', value: '10' },
-          { label: 'OFFERING_TERMINATED', value: '11' },
-        ],
-      },
-    },
-  ],
+  ['voidType', 'Void Type', '10', 'optional', 'Void Type'],
   ['sendNotification', 'Send Notification', '', 'optional', ''],
 ]);
 

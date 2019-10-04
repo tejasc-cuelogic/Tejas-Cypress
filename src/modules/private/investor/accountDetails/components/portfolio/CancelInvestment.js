@@ -87,7 +87,9 @@ export default class CancelInvestment extends Component {
                 {this.props.isAdmin
                   ? (
                       <>
+                        <Header className="mb-half" as="h6">Void Type</Header>
                         <FormDropDown
+                          ishidelabel
                           fielddata={CANCEL_INVESTMENT_FRM.fields.voidType}
                           className="secondary"
                           name="voidType"
