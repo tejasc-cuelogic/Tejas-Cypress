@@ -104,7 +104,7 @@ export default class CancelInvestment extends Component {
                           changed={(e, result) => formChange(e, result, 'CANCEL_INVESTMENT_FRM')}
                         />
                         <Checkbox
-                          className="field ml-10"
+                          className="field"
                           label={CANCEL_INVESTMENT_FRM.fields.sendNotification.label}
                           name="sendNotification"
                           checked={CANCEL_INVESTMENT_FRM.fields.sendNotification.value}

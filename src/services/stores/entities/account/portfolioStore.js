@@ -309,14 +309,25 @@ export class PortfolioStore {
     const account = isAdmin ? investorAccountDetails : userDetailsStore.currentActiveAccountDetails;
     const { userDetails } = userDetailsStore;
     const investorUserId = isAdmin ? investorDetails.id : userDetails.id;
+    let variables = {
+      agreementId,
+    };
+    if (isAdmin) {
+      const cancelAgreementData = Validator.evaluateFormData(toJS(this.CANCEL_INVESTMENT_FRM.fields));
+      variables = {
+        ...variables,
+        userId: investorUserId,
+        voidReason: cancelAgreementData.voidReason,
+        voidType: cancelAgreementData.voidType,
+        sendNotification: cancelAgreementData.sendNotification,
+      };
+    }
     uiStore.setProgress(true);
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: cancelAgreement,
-          variables: {
-            agreementId,
-          },
+          variables,
           refetchQueries: [{
             query: getInvestorAccountPortfolio,
             variables: {
