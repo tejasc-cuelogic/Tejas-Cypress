@@ -168,7 +168,7 @@ export const INVESTMENT_LIMITS = {
 
 export const CANCEL_INVESTMENT = FormHelper.generateMeta([
   ['voidReason', 'Void Reason', '', 'optional', 'Void Reason'],
-  ['voidType', 'Void Type', '10', 'optional', 'Void Type'],
+  ['voidType', 'Void Type', 10, 'optional', 'Void Type'],
   ['sendNotification', 'Send Notification', '', 'optional', ''],
 ]);
 
