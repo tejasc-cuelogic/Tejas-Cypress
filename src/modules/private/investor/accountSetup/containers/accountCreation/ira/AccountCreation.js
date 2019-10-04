@@ -14,10 +14,17 @@ import { Plaid } from '../../../../../shared/bankAccount';
 export default class AccountCreation extends React.Component {
   constructor(props) {
     super(props);
+    this.checkIfAccountIsAlreadyPresent('ira');
     if (!this.props.iraAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('ira');
       this.props.accountStore.setAccTypeChange(1);
+    }
+  }
+
+  checkIfAccountIsAlreadyPresent = (accountType) => {
+    if (this.props.userDetailsStore.checkIfAccountIsAlreadyPresent(accountType)) {
+      this.props.history.push('/app/summary');
     }
   }
 
@@ -49,12 +56,11 @@ export default class AccountCreation extends React.Component {
   render() {
     let steps = [];
     const {
-      inProgress,
+      inProgress, inProgressArray,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
       createAccountMessage,
-      inProgressArray,
     } = this.props.uiStore;
     const {
       FIN_INFO_FRM,

@@ -55,6 +55,7 @@ export default class AccountCreation extends Component {
             window.sessionStorage.removeItem('cipErrorMessage');
             this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
             const url = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.showProcessingModal ? `${this.props.match.url}/${accountType}/processing` : '/app/setup';
+            this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.setFieldValue('showProcessingModal', false);
             this.props.history.push(url);
             this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
           });
@@ -76,7 +77,7 @@ export default class AccountCreation extends Component {
     }
   }
 
-  closeProcessingModal = () => {
+  HandleModalCta = () => {
     const { partialInvestNowSessionURL, setPartialInvestmenSession } = this.props.userDetailsStore;
     if (partialInvestNowSessionURL) {
       this.props.history.push(partialInvestNowSessionURL);
@@ -114,9 +115,9 @@ export default class AccountCreation extends Component {
           <Route exact path={`${this.props.match.url}/individual`} render={props => <IndividualAccCreation {...props} handleUserIdentity={this.handleUserIdentity} handleLegalDocsBeforeSubmit={this.handleLegalDocsBeforeSubmit} />} />
           <Route exact path={`${this.props.match.url}/ira`} render={props => <IraAccCreation {...props} handleUserIdentity={this.handleUserIdentity} handleLegalDocsBeforeSubmit={this.handleLegalDocsBeforeSubmit} />} />
           <Route exact path={`${this.props.match.url}/entity`} render={props => <EntityAccCreation {...props} handleUserIdentity={this.handleUserIdentity} handleLegalDocsBeforeSubmit={this.handleLegalDocsBeforeSubmit} />} />
-          <Route exact path={`${this.props.match.url}/individual/success`} render={props => <ConfirmModal {...props} open content={successMessage} closeModal={this.closeProcessingModal} />} />;
+          <Route exact path={`${this.props.match.url}/individual/success`} render={props => <ConfirmModal {...props} open content={successMessage} handleCloseModal={this.handleCloseModal} HandleModalCta={this.HandleModalCta} />} />;
           {
-            ['individual', 'ira', 'entity'].map(accType => <Route exact path={`${this.props.match.url}/${accType}/processing`} render={props => <ConfirmModal {...props} open content={processingMessage} closeModal={this.closeProcessingModal} />} />)
+            ['individual', 'ira', 'entity'].map(accType => <Route exact path={`${this.props.match.url}/${accType}/processing`} render={props => <ConfirmModal {...props} open content={processingMessage} handleCloseModal={this.handleCloseModal} HandleModalCta={this.HandleModalCta} />} />)
           }
         </Switch>
       </div>

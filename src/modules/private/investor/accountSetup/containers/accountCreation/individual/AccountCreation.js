@@ -9,10 +9,17 @@ import Summary from './Summary';
 export default class AccountCreation extends React.Component {
   constructor(props) {
     super(props);
+    this.checkIfAccountIsAlreadyPresent('individual');
     if (!this.props.individualAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('individual');
       this.props.accountStore.setAccTypeChange(0);
+    }
+  }
+
+  checkIfAccountIsAlreadyPresent = (accountType) => {
+    if (this.props.userDetailsStore.checkIfAccountIsAlreadyPresent(accountType)) {
+      this.props.history.push('/app/summary');
     }
   }
 
@@ -43,12 +50,11 @@ export default class AccountCreation extends React.Component {
 
   render() {
     const {
-      inProgress,
+      inProgress, inProgressArray,
       isEnterPressed,
       setIsEnterPressed,
       resetIsEnterPressed,
       createAccountMessage,
-      inProgressArray,
     } = this.props.uiStore;
     // Done changes for saving link bank details - Alan's feedback point
     // const { plaidAccDetails, formLinkBankManually, formAddFunds } = this.props.bankAccountStore;

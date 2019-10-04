@@ -15,12 +15,19 @@ import Summary from './Summary';
 export default class AccountCreation extends React.Component {
   constructor(props) {
     super(props);
+    this.checkIfAccountIsAlreadyPresent('entity');
     if (!this.props.entityAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('entity');
       this.props.accountStore.setAccTypeChange(2);
     }
     this.props.investmentLimitStore.getInvestedAmount();
+  }
+
+  checkIfAccountIsAlreadyPresent = (accountType) => {
+    if (this.props.userDetailsStore.checkIfAccountIsAlreadyPresent(accountType)) {
+      this.props.history.push('/app/summary');
+    }
   }
 
   handleMultiStepModalclose = () => {
@@ -50,12 +57,11 @@ export default class AccountCreation extends React.Component {
 
   render() {
     const {
-      inProgress,
+      inProgress, inProgressArray,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
       createAccountMessage,
-      inProgressArray,
     } = this.props.uiStore;
     const {
       PERSONAL_INFO_FRM,
