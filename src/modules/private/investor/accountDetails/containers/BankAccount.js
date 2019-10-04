@@ -5,6 +5,7 @@ import { Header, Grid, Card, Divider, Button } from 'semantic-ui-react';
 import { isEmpty, includes } from 'lodash';
 import AccountDetailsView from '../components/bankaccount/AccountDetailsView';
 import ConfirmBankLinking from '../components/bankaccount/ConfirmBankLinking';
+import CancelChangeLinkBankRequest from '../components/bankaccount/CancelChangeLinkBankRequest';
 import VerifyBankUpdate from '../components/bankaccount/VerifyBankUpdate';
 import LinkBankAccount from './LinkBankAccount';
 import HtmlEditor from '../../../../shared/HtmlEditor';
@@ -57,7 +58,7 @@ export default class BankAccount extends Component {
         />
         <Route
           path={`${this.props.match.url}/cancel-bank-account/confirm`}
-          render={props => <ConfirmBankLinking refLink={this.props.match.url} {...props} />}
+          render={props => <CancelChangeLinkBankRequest refLink={this.props.match.url} {...props} />}
         />
         {accountType !== 'ira'
           ? (
@@ -66,7 +67,7 @@ export default class BankAccount extends Component {
               <Grid>
                 {isEmpty(plaidAccDetails)
                 && (
-<Grid.Row>
+                <Grid.Row>
                   <Grid.Column widescreen={6} largeScreen={8} computer={10} tablet={13} mobile={16}>
                     <Card fluid>
                       <Card.Content>
@@ -84,7 +85,7 @@ export default class BankAccount extends Component {
               }
               {!isEmpty(plaidAccDetails)
                 && (
-<Grid.Row>
+                <Grid.Row>
                   <Grid.Column
                     widescreen={12}
                     largeScreen={16}
@@ -102,12 +103,12 @@ export default class BankAccount extends Component {
                       />
                       {plaidAccDetails.pendingUpdate
                         && (
-<AccountDetailsView
-  accountDetails={pendingAccoungDetails}
-  click={this.handleLinkBankInterface}
-  match={this.props.match}
-  accountType="pending"
-/>
+                          <AccountDetailsView
+                            accountDetails={pendingAccoungDetails}
+                            click={this.handleLinkBankInterface}
+                            match={this.props.match}
+                            accountType="pending"
+                          />
                         )
                       }
                     </Card>
@@ -119,7 +120,7 @@ export default class BankAccount extends Component {
             </>
           )
           : (
-<section className="center-align">
+          <section className="center-align">
             <h4 style={{ color: '#31333d7d' }}><HtmlEditor readOnly content={NO_PERMISSION_MSG} /></h4>
           </section>
           )
