@@ -11,7 +11,7 @@ import DynamicFormInput from './dynamicFormInput';
 export default class RequestFactory extends Component {
   constructor(props) {
     super(props);
-    this.props.factoryStore.setFieldValue('DYNAMCI_PAYLOAD_FRM', {});
+    this.props.factoryStore.setFieldValue('DYNAMCI_PAYLOAD_FRM', {}, 'REQUESTFACTORY');
     this.props.factoryStore.resetForm('REQUESTFACTORY_FRM');
     this.props.factoryStore.inProgress.requestFactory = false;
   }
@@ -53,11 +53,11 @@ export default class RequestFactory extends Component {
                       onChange={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
                     />
                     <Divider section hidden />
-                    <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.meta.isValid} loading={inProgress.requestFactory} />
+                    <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.REQUESTFACTORY.meta.isValid} loading={inProgress.requestFactory} />
                   </Grid.Column>
                   <Grid.Column width={8}>
                   <Header as="h5">Payload</Header>
-                    <DynamicFormInput {...this.props} />
+                    <DynamicFormInput {...this.props} formPayload={DYNAMCI_PAYLOAD_FRM.REQUESTFACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'REQUESTFACTORY' }} />
                   </Grid.Column>
                 </Grid>
               </Form.Group>

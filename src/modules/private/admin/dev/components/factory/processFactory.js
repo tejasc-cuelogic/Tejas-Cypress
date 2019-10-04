@@ -4,7 +4,8 @@ import { isEmpty } from 'lodash';
 import { Card, Button, Form, Grid, Divider, Modal, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { FormDropDown, FormTextarea } from '../../../../../../theme/form';
+import { FormDropDown } from '../../../../../../theme/form';
+// import DynamicFormInput from './dynamicFormInput';
 
 function ProcessFactory(props) {
   const [prev, setPrev] = useState(false);
@@ -13,6 +14,7 @@ function ProcessFactory(props) {
   useEffect(() => {
     props.factoryStore.resetForm('PROCESSACTORY_FRM');
     props.factoryStore.setFieldValue('inProgress', false, 'processFactory');
+    props.factoryStore.setFieldValue('DYNAMCI_PAYLOAD_FRM', {}, 'PROCESSACTORY');
     props.factoryStore.setFieldValue('processFactoryResponse', {});
   }, []);
 
@@ -37,7 +39,7 @@ function ProcessFactory(props) {
 
   const { factoryStore } = props;
   const {
-    PROCESSACTORY_FRM, formChange, inProgress, processFactoryResponse,
+    PROCESSACTORY_FRM, formChange, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM,
   } = factoryStore;
 
   return (
@@ -47,9 +49,9 @@ function ProcessFactory(props) {
           <Header as="h3">Response Payload</Header>
           {processFactoryResponse && !isEmpty(processFactoryResponse)
             ? (
-            <pre className="no-updates bg-offwhite padded json-text">
-              {beautify(processFactoryResponse, null, 2, 100)}
-            </pre>
+              <pre className="no-updates bg-offwhite padded json-text">
+                {beautify(processFactoryResponse, null, 2, 100)}
+              </pre>
             )
             : (
               <section className="bg-offwhite mb-20 center-align">
@@ -78,16 +80,12 @@ function ProcessFactory(props) {
                       className="mb-80"
                     />
                     <Divider section hidden />
-                    <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.processFactory || !PROCESSACTORY_FRM.meta.isValid} loading={inProgress.processFactory} />
+                    <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.processFactory || !PROCESSACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.PROCESSACTORY.meta.isValid} loading={inProgress.processFactory} />
                     {visibleProp && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => showModel(e, true)} title="Show Response"> Show Response </Link>}
                   </Grid.Column>
                   <Grid.Column width={8}>
-                    <FormTextarea
-                      name="payload"
-                      fielddata={PROCESSACTORY_FRM.fields.payload}
-                      changed={(e, result) => formChange(e, result, 'PROCESSACTORY_FRM')}
-                      containerclassname="secondary huge"
-                    />
+                    <Header as="h5">Payload</Header>
+                    {/* <DynamicFormInput {...props} formPayload={DYNAMCI_PAYLOAD_FRM.PROCESSACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'PROCESSACTORY' }} /> */}
                   </Grid.Column>
                 </Grid>
               </Form.Group>

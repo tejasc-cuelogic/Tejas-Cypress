@@ -1,7 +1,7 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { isEmpty } from 'lodash';
 import { Form, Header } from 'semantic-ui-react';
-import { inject, observer } from 'mobx-react';
+import { inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { InlineLoader } from '../../../../../../theme/shared';
 
@@ -9,36 +9,46 @@ const getFields = component => lazy(() => import(`../../../../../../theme/form/s
 
 let FormTag = '';
 
-function DynamicFormInput(props) {
+// function formPropsAreEqual(prevForm, nextForm) {
+//   console.log('Size==>1', size(prevForm.formPayload));
+//   console.log('Size==>2', size(nextForm.formPayload));
+//   return size(prevForm.formPayload) === size(nextForm.formPayload);
+// }
+
+const DynamicFormInput = React.memo((props) => {
   function getFormInput(fieldKey, formProps) {
-    const { formChange, getFormElement } = props.factoryStore;
+    const { formChange, getFormElement, REQUESTFACTORY_FRM } = props.factoryStore;
     const additionalProps = { containerclassname: 'secondary huge' };
     const elementProps = formProps.type === 'textarea' && additionalProps;
-    const formInputData = getFormElement(fieldKey, formProps, 'DYNAMCI_PAYLOAD_FRM');
-    const formElementType = formInputData;
-    FormTag = getFields(formElementType);
+    useEffect(() => {
+      const formInputData = getFormElement(fieldKey, formProps, props.formObj);
+      const formElementType = formInputData;
+      FormTag = getFields(formElementType);
+    }, [REQUESTFACTORY_FRM.fields.plugin.value]);
+    if (FormTag === '') {
+      return (<InlineLoader />);
+    }
     return (
       <FormTag
         {...elementProps}
         name={fieldKey}
         fielddata={formProps}
-        changed={(e, result) => formChange(e, result, 'DYNAMCI_PAYLOAD_FRM')}
+        changed={(e, result) => formChange(e, result, props.formObj, true)}
       />
     );
   }
 
-  const { factoryStore } = props;
-  const { DYNAMCI_PAYLOAD_FRM } = factoryStore;
+  const { formPayload } = props;
   return (
     <>
       {
-        DYNAMCI_PAYLOAD_FRM && DYNAMCI_PAYLOAD_FRM.fields && !isEmpty(DYNAMCI_PAYLOAD_FRM.fields) ? (
+        formPayload && formPayload.fields && !isEmpty(formPayload.fields) ? (
           <div className="featured-section">
             <Suspense fallback={<InlineLoader />}>
-            <Header as="h6">Note: Below field/s are prefilled with dummy values.</Header>
+              <Header as="h6">Note: Below field/s are prefilled with dummy values.</Header>
               <Form>
-                {Object.keys(DYNAMCI_PAYLOAD_FRM.fields).map(val => (
-                  getFormInput(val, DYNAMCI_PAYLOAD_FRM.fields[val])
+                {Object.keys(formPayload.fields).map(val => (
+                  getFormInput(val, formPayload.fields[val])
                 ))
                 }
               </Form>
@@ -49,6 +59,8 @@ function DynamicFormInput(props) {
       }
     </>
   );
-}
+});
 
-export default inject('factoryStore')(withRouter(observer(DynamicFormInput)));
+export default inject('factoryStore')(withRouter(DynamicFormInput));
+
+// export default inject('factoryStore')(withRouter(observer(DynamicFormInput)));

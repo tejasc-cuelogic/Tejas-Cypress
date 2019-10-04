@@ -15,7 +15,10 @@ export class FactoryStore {
 
   @observable PROCESSACTORY_FRM = Validator.prepareFormObject(PROCESSFACTORY_META);
 
-  @observable DYNAMCI_PAYLOAD_FRM = {};
+  @observable DYNAMCI_PAYLOAD_FRM = {
+    REQUESTFACTORY: {},
+    PROCESSACTORY: {},
+  };
 
   @observable inProgress = {
     requestFactory: false,
@@ -118,11 +121,14 @@ export class FactoryStore {
   }
 
   @action
-  formChange = (e, res, form) => {
-    if (includes(['REQUESTFACTORY_FRM'], form) && includes(['plugin'], res.name)) {
+  formChange = (e, res, form, subForm = false) => {
+    if (subForm) {
+      this[form.parentForm][form.childForm] = Validator.onChange(this[form.parentForm][form.childForm], Validator.pullValues(e, res));
+    } else if (includes(['REQUESTFACTORY_FRM', 'PROCESSACTORY_FRM'], form) && includes(['plugin', 'method'], res.name)) {
       this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
       const plugnArr = this.pullValuesForDynmicInput(e, res);
-      this.createDynamicFormFields(plugnArr);
+      const childForm = form === 'REQUESTFACTORY_FRM' ? 'REQUESTFACTORY' : 'PROCESSACTORY';
+      this.createDynamicFormFields(plugnArr, childForm);
     } else {
       this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
     }
@@ -217,7 +223,7 @@ export class FactoryStore {
   @action
   requestFactoryPluginTrigger = () => new Promise((resolve, reject) => {
     const { fields } = this.REQUESTFACTORY_FRM;
-    const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.fields;
+    const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.REQUESTFACTORY.fields;
     const formData = Validator.evaluateFormData(fields);
     const formPayloadData = Validator.evaluateFormData(fieldsPayload);
     const TestformData = this.ExtractToJSON(formPayloadData);
@@ -356,8 +362,8 @@ export class FactoryStore {
   }
 
   @action
-  createDynamicFormFields = (formFields) => {
-    this.DYNAMCI_PAYLOAD_FRM = Validator.prepareFormObject(formFields, false, true, true);
+  createDynamicFormFields = (formFields, form) => {
+    this.DYNAMCI_PAYLOAD_FRM[form] = Validator.prepareFormObject(formFields, false, true, true);
   }
 
   pullValuesForDynmicInput = (e, data) => {
@@ -366,30 +372,34 @@ export class FactoryStore {
     return pluginInputObj;
   };
 
-  getFormElement = (fieldKey, formProps, frm) => {
+  getFormElement = (fieldKey, formProps, formObj) => {
     let formElement = '';
     const elementType = formProps.type;
     switch (elementType) {
       case 'textarea':
         formElement = 'FormTextarea';
-        this.setFormData(frm, fieldKey, formProps.defaultValue);
+        this.setFormData(formObj.parentForm, fieldKey, formProps.defaultValue, formObj.childForm);
         break;
       case 'input':
         formElement = 'FormInput';
-        this.setFormData(frm, fieldKey, formProps.defaultValue);
+        this.setFormData(formObj.parentForm, fieldKey, formProps.defaultValue, formObj.childForm);
         break;
 
       default:
         formElement = 'FormInput';
-        this.setFormData(frm, fieldKey, formProps.defaultValue);
+        this.setFormData(formObj.parentForm, fieldKey, formProps.defaultValue, formObj.childForm);
         break;
     }
     return formElement;
   }
 
   @action
-  setFormData = (form, elemRef, elementValue) => {
-    this[form].fields[elemRef].value = elementValue;
+  setFormData = (form, elemRef, elementValue, subForm = false) => {
+    if (subForm) {
+      this[form][subForm].fields[elemRef].value = elementValue;
+    } else {
+      this[form].fields[elemRef].value = elementValue;
+    }
   }
 }
 

@@ -270,12 +270,12 @@ export const PROCESSFACTORY_META = {
     error: undefined,
     rule: 'required',
   },
-  payload: {
-    key: 'payload',
-    value: '',
-    label: 'Payload',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Put your JSON ojbect here...',
-  },
+  // payload: {
+  //   key: 'payload',
+  //   value: '',
+  //   label: 'Payload',
+  //   error: undefined,
+  //   rule: 'required',
+  //   placeHolder: 'Put your JSON ojbect here...',
+  // },
 };
