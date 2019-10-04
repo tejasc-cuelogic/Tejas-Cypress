@@ -130,7 +130,7 @@ export default class CancelInvestment extends Component {
             )
             : (
               <div className="center-align mt-30">
-                <Link to="/app/account-details/individual/portfolio" className="back-link"><Icon className="ns-arrow-right" />Go to My Dashboard</Link>
+                <Link to={this.props.isAdmin ? `${this.props.refLink}/investments` : '/app/account-details/individual/portfolio'} className="back-link"><Icon className="ns-arrow-right" />Go to My Dashboard</Link>
               </div>
             )
           }
