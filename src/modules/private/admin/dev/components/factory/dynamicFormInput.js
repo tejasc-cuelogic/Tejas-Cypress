@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
-import { Form } from 'semantic-ui-react';
+import { isEmpty } from 'lodash';
+import { Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -31,9 +32,10 @@ function DynamicFormInput(props) {
   return (
     <>
       {
-        DYNAMCI_PAYLOAD_FRM && DYNAMCI_PAYLOAD_FRM.fields ? (
+        DYNAMCI_PAYLOAD_FRM && DYNAMCI_PAYLOAD_FRM.fields && !isEmpty(DYNAMCI_PAYLOAD_FRM.fields) ? (
           <div className="featured-section">
             <Suspense fallback={<InlineLoader />}>
+            <Header as="h6">Note: Below field/s are prefilled with dummy values.</Header>
               <Form>
                 {Object.keys(DYNAMCI_PAYLOAD_FRM.fields).map(val => (
                   getFormInput(val, DYNAMCI_PAYLOAD_FRM.fields[val])
@@ -43,7 +45,7 @@ function DynamicFormInput(props) {
             </Suspense>
           </div>
         )
-          : (<div>No payload found...</div>)
+          : (<InlineLoader text="No payload found..." />)
       }
     </>
   );

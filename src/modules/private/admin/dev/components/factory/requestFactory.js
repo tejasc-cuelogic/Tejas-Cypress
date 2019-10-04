@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Form, Grid, Divider, Confirm } from 'semantic-ui-react';
+import { Card, Button, Form, Grid, Divider, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { FormDropDown } from '../../../../../../theme/form';
@@ -20,25 +20,10 @@ export default class RequestFactory extends Component {
     this.props.factoryStore.requestFactoryPluginTrigger();
   }
 
-  addMore = (e, formName, arrayName) => {
-    e.preventDefault();
-    this.props.factoryStore.addMore(formName, arrayName);
-  }
-
-  toggleConfirmModal = (e, index, formName) => {
-    e.preventDefault();
-    this.props.factoryStore.toggleConfirmModal(index, formName);
-  }
-
-  removeData = (confirmModalName, arrayName = 'payload') => {
-    this.props.factoryStore.removeData(confirmModalName, arrayName);
-  }
-
   render() {
     const { factoryStore } = this.props;
     const {
-      REQUESTFACTORY_FRM, formChange, inProgress,
-      confirmModal, confirmModalName, removeIndex,
+      REQUESTFACTORY_FRM, formChange, inProgress, DYNAMCI_PAYLOAD_FRM,
     } = factoryStore;
     return (
       <Card fluid className="elastic-search">
@@ -56,7 +41,6 @@ export default class RequestFactory extends Component {
                       options={REQUESTFACTORY_FRM.fields.plugin.values}
                       placeholder="Choose here"
                       name="plugin"
-                      // onChange={"(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM'); (e, resp) => this.handlePluginChange(e, resp)"}
                       onChange={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
                     />
                     <FormDropDown
@@ -69,23 +53,15 @@ export default class RequestFactory extends Component {
                       onChange={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
                     />
                     <Divider section hidden />
-                    <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid} loading={inProgress.requestFactory} />
+                    <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.meta.isValid} loading={inProgress.requestFactory} />
                   </Grid.Column>
                   <Grid.Column width={8}>
+                  <Header as="h5">Payload</Header>
                     <DynamicFormInput {...this.props} />
                   </Grid.Column>
                 </Grid>
               </Form.Group>
             </Form>
-            <Confirm
-              header="Confirm"
-              content={`Are you sure you want to remove this parameter ${removeIndex + 1}?`}
-              open={confirmModal}
-              onCancel={this.toggleConfirmModal}
-              onConfirm={() => this.removeData(confirmModalName, 'payload')}
-              size="mini"
-              className="deletion"
-            />
           </Card.Description>
         </Card.Content>
       </Card>

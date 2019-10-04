@@ -220,8 +220,7 @@ export class FactoryStore {
     const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.fields;
     const formData = Validator.evaluateFormData(fields);
     const formPayloadData = Validator.evaluateFormData(fieldsPayload);
-    const TestformData = this.ExtractArrayObjectToJSON(formData.payload);
-    console.log('formPayloadData==>', formPayloadData);
+    const TestformData = this.ExtractToJSON(formPayloadData);
     if (!this.isValidJson(TestformData)) {
       this.REQUESTFACTORY_FRM.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
       this.REQUESTFACTORY_FRM.meta.isValid = false;
@@ -234,7 +233,7 @@ export class FactoryStore {
       client
         .mutate({
           mutation: requestFactoryPluginTrigger,
-          // variables,
+          variables,
         })
         .then((result) => {
           Helper.toast('Your request is processed.', 'success');
@@ -340,47 +339,25 @@ export class FactoryStore {
         subForm,
         index,
       );
-      // if (form === 'REQUESTFACTORY_FRM') {
-      //   this.leadershipExperience[index2] = this[form];
-      // }
     }
   }
 
-  @action
-  addMore = (form, key, count = 1) => {
-    this[form] = Validator.addMoreRecordToSubSection(this[form], key, count, true);
-  }
-
-  @action
-  toggleConfirmModal = (index, formName = null) => {
-    this.confirmModal = !this.confirmModal;
-    this.confirmModalName = formName;
-    this.removeIndex = this.confirmModal ? index : null;
-  }
-
-  @action
-  removeData = (formName, subForm = 'data', isApiDelete = false) => {
-    if (!isApiDelete) {
-      this[formName].fields[subForm].splice(this.removeIndex, 1);
+  ExtractToJSON = (param) => {
+    console.log('param==>', param);
+    let revampObj = {};
+    if (typeof (param) === 'object') {
+      revampObj = param;
+    } else {
+      forEach(param, (val) => {
+        revampObj[val.key] = val.value;
+      });
     }
-    Validator.validateForm(this[formName], true, false, false);
-    this.confirmModal = !this.confirmModal;
-    this.confirmModalName = null;
-    this.removeIndex = null;
-  }
-
-  ExtractArrayObjectToJSON = (arrayOfObject) => {
-    console.log('arrayOfObject==>', arrayOfObject);
-    const revampObj = {};
-    forEach(arrayOfObject, (val) => {
-      revampObj[val.key] = val.value;
-    });
     return JSON.stringify(revampObj);
   }
 
   @action
   createDynamicFormFields = (formFields) => {
-    this.DYNAMCI_PAYLOAD_FRM = Validator.prepareFormObject(formFields);
+    this.DYNAMCI_PAYLOAD_FRM = Validator.prepareFormObject(formFields, false, true, true);
   }
 
   pullValuesForDynmicInput = (e, data) => {
