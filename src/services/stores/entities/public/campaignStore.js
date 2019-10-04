@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty } from 'lodash';
+import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Calculator } from 'amortizejs';
@@ -14,7 +14,6 @@ import { userDetailsStore, watchListStore, userStore } from '../../index';
 // import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
-import { DEV_FEATURE_ONLY } from '../../../../constants/common';
 
 export class CampaignStore {
   @observable data = [];
@@ -59,9 +58,17 @@ export class CampaignStore {
 
   @observable docLoading = false;
 
+  @observable documentMeta = {
+    closingBinder: { selectedDoc: null, accordionActive: true },
+  };
+
   @action
-  setFieldValue = (field, val) => {
-    this[field] = val;
+  setFieldValue = (field, val, path = false) => {
+    if (path) {
+      set(this[field], path, val);
+    } else {
+      this[field] = val;
+    }
   }
 
   @action
@@ -71,7 +78,7 @@ export class CampaignStore {
     if (referralCode) {
       variables.filters.referralCode = referralCode;
     }
-    if (DEV_FEATURE_ONLY && !referralCode && userStore.currentUser && userStore.currentUser.sub) {
+    if (!referralCode && userStore.currentUser && userStore.currentUser.sub) {
       variables.userId = userStore.currentUser.sub;
     }
     return new Promise((resolve) => {
@@ -103,9 +110,7 @@ export class CampaignStore {
       onFetch: (data) => {
         if (data && data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length && !this.details.loading) {
           this.getCampaignAdditionalDetails(id);
-          if (DEV_FEATURE_ONLY) {
-            watchListStore.setOfferingWatch();
-          }
+          watchListStore.setOfferingWatch();
         }
       },
     });
@@ -411,12 +416,18 @@ export class CampaignStore {
   }
 
   getBoxLink = (fileId, accountType) => new Promise((resolve) => {
+    this.setFieldValue('docLoading', true);
     clientPublic.mutate({
       mutation: getBoxEmbedLink,
       variables: { fileId, accountType },
     }).then((res) => {
       resolve(res.data.getBoxEmbedLink);
-    }).catch(() => { this.setFieldValue('isFetchedError', true); Helper.toast('Something went wrong. Please try again in some time.', 'error'); });
+      this.setFieldValue('docLoading', false);
+    }).catch(() => {
+      this.setFieldValue('isFetchedError', true);
+      this.setFieldValue('docLoading', false);
+      Helper.toast('Something went wrong. Please try again in some time.', 'error');
+    });
   });
 
   @computed get navCountData() {

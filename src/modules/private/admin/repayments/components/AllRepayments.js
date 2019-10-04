@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Grid, Form } from 'semantic-ui-react';
+import moment from 'moment';
 import Helper from '../../../../../helper/utility';
-import { InlineLoader, DateTimeFormat } from '../../../../../theme/shared';
+import { InlineLoader } from '../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
-import { DataFormatter } from '../../../../../helper';
 
 @inject('paymentStore')
 @observer
@@ -19,6 +19,11 @@ export default class AllRepayments extends Component {
     }
   }
 
+  handleSort = clickedColumn => () => {
+    const { setSortingOrder, sortOrder } = this.props.paymentStore;
+    setSortingOrder(clickedColumn, sortOrder.direction === 'asc' ? 'desc' : 'asc');
+  }
+
   setSearchParam = (e, { name, value }) => this.props.paymentStore.setInitiateSrch(name, value);
 
   toggleSearch = () => this.props.paymentStore.toggleSearch();
@@ -29,10 +34,15 @@ export default class AllRepayments extends Component {
     }
   }
 
+  handleAction = (offeringId, offeringStage) => {
+    const stage = ['CREATION'].includes(offeringStage) ? 'creation' : ['LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage) ? 'live' : ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULT'].includes(offeringStage) ? 'completed' : 'failed';
+    this.props.history.push(`/app/offerings/${stage}/edit/${offeringId}`);
+  }
+
   render() {
     const { paymentStore } = this.props;
     const {
-      repayments, loading, requestState, filters,
+      repayments, loading, requestState, filters, sortOrder,
     } = paymentStore;
 
     if (loading) {
@@ -64,26 +74,44 @@ export default class AllRepayments extends Component {
         </Form>
         <Card fluid>
           <div className="table-wrapper">
-            <Table unstackable singleLine>
+            <Table sortable unstackable singleLine className="application-list clickable">
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>Short Hand Business Name</Table.HeaderCell>
-                  <Table.HeaderCell>Hard Close Date</Table.HeaderCell>
-                  <Table.HeaderCell>Maturity Date</Table.HeaderCell>
-                  <Table.HeaderCell>Expected Payment Date</Table.HeaderCell>
-                  <Table.HeaderCell>First Payment Date</Table.HeaderCell>
-                  <Table.HeaderCell>Sinking Fund Balance</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'shorthandBusinessName' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('shorthandBusinessName')}
+                  >Short Hand Business Name</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'hardCloseDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('hardCloseDate')}
+                  >Hard Close Date</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'maturityDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('maturityDate')}
+                  >Maturity</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'expectedPaymentDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('expectedPaymentDate')}
+                  >Expected Payment Date</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'firstPaymentDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('firstPaymentDate')}
+                  >First Payment Date</Table.HeaderCell>
+                  <Table.HeaderCell
+                    sorted={sortOrder.column === 'sinkingFundBalance' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('sinkingFundBalance')}
+                  >Sinking Fund Balance</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
                 {
                   repayments.map(record => (
                     <Table.Row key={record.id}>
-                      <Table.Cell>{record.shorthandBusinessName}</Table.Cell>
-                      <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(record.hardCloseDate, true, false, false)} /></Table.Cell>
-                      <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(record.maturityDate, true, false, false)} /></Table.Cell>
-                      <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(record.expectedPaymentDate, true, false, false)} /></Table.Cell>
-                      <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(record.firstPaymentDate, true, false, false)} /></Table.Cell>
+                      <Table.Cell onClick={() => this.handleAction(record.offering.id, record.offering.stage)}>{record.shorthandBusinessName}</Table.Cell>
+                      <Table.Cell>{record.hardCloseDate}</Table.Cell>
+                      <Table.Cell>{record.maturityDate ? `${moment(moment(record.maturityDate)).diff(moment(), 'months')} months` : ''}</Table.Cell>
+                      <Table.Cell>{record.expectedPaymentDate}</Table.Cell>
+                      <Table.Cell>{record.firstPaymentDate}</Table.Cell>
                       <Table.Cell>{Helper.CurrencyFormat(record.sinkingFundBalance)}</Table.Cell>
                     </Table.Row>
                   ))

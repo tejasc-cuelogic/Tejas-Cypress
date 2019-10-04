@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { get, isEmpty, isArray } from 'lodash';
+import { get, isEmpty, isArray, includes } from 'lodash';
 import moment from 'moment';
 import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -263,7 +263,7 @@ export class FactoryStore {
       const tempObj = {};
       tempObj.key = value.name;
       tempObj.text = value.name;
-      tempObj.value = value.name;
+      tempObj.value = includes(['listRequestPlugins', 'listProcessorPlugins'], pluginList) ? value.plugin : value.name;
       pluginArr.push(tempObj);
     });
     return pluginArr;

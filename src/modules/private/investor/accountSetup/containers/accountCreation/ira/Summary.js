@@ -48,7 +48,9 @@ export default class Summary extends Component {
     this.props.uiStore.setcreateAccountMessage();
     this.props.iraAccountStore.submitAccount().then(() => {
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
+      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
       const url = this.props.iraAccountStore.showProcessingModal ? `${this.props.match.url}/processing` : '/app/summary';
+      this.props.iraAccountStore.setFieldValue('showProcessingModal', false);
       this.props.history.push(url);
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
     });
