@@ -103,7 +103,7 @@ export default class BusinessDetails extends Component {
                     wide
                   />
                 )}
-                {!hideFields && currentApplicationType === 'business'
+                {!hideFields && currentApplicationType !== 'business'
                   && <Link to={this.props.match.url} className="link" onClick={() => this.handleLearnMore()}><small>Learn More</small></Link>
                 }
               </>
@@ -150,6 +150,7 @@ export default class BusinessDetails extends Component {
                               asterisk="true"
                               name="name"
                               fielddata={source.name}
+                              placeholder="ex. Bank Loan"
                               changed={(e, res) => businessDetailsChange(e, res, 'sources', index)}
                             />
                           </Table.Cell>
@@ -163,6 +164,7 @@ export default class BusinessDetails extends Component {
                               name="amount"
                               hidelabel
                               fielddata={source.amount}
+                              placeholder="$ Amount"
                               onblur={() => totalChange('sources', 'sourcesTotal')}
                               changed={(values, field) => businessDetailsMaskingChange(field, values, 'sources', index)}
                             />
@@ -452,6 +454,7 @@ export default class BusinessDetails extends Component {
                         fielddata={owner.dateOfService}
                         asterisk="true"
                         format="##/##/####"
+                        label={currentApplicationType === 'business' ? 'Start Date with the Business' : owner.dateOfService.label}
                         changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}
                         dateOfBirth
                       />
