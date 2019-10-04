@@ -264,6 +264,9 @@
         @media only screen and (max-width:@largestMobileScreen){
             left: @20px;
             color: @neutral-middark;
+            &.disabled{
+                color: @neutral-offdark;
+            }
         }
     }
     &.next{

@@ -61,6 +61,7 @@ export default class FinancialInformation extends Component {
             {/* <p className="grey-header">Your investment limit:<span className="highlight-text
           large ml-10">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}</span></p>
           */}
+            <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20 mb-20' : ''} link display-block`}>How is this calculated?</a>
           </div>
           {(FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '')
           && (
@@ -71,7 +72,6 @@ export default class FinancialInformation extends Component {
           </Message>
           )
           }
-          <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20 mb-20' : ''} link display-block`}>How is this calculated?</a>
           {isMobile && (
               <Button fluid primary className="relaxed" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
           )

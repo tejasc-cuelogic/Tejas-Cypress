@@ -26,7 +26,7 @@ export default class AccountType extends Component {
     const { TRUST_INFO_FRM, trustInfoChange, entityInfoDateChange } = this.props.entityAccountStore;
     const { inProgressArray } = this.props.uiStore;
 
-    const isTrustSelected = inProgressArray.includes('TRUST');
+    const isTrustSelected = inProgressArray.includes('TRUST'); // only for mobile screen
     const TrustDateInput = () => (
       <div className={isMobile ? '' : 'field-wrap'}>
         <MaskedInput
@@ -41,7 +41,9 @@ export default class AccountType extends Component {
     );
     return (
       <div>
-        <Header as="h4" textAlign={isMobile ? 'mb-half' : 'center'}>Is this entity a trust?</Header>
+        {!isTrustSelected && (
+        <Header as="h4" textAlign={isMobile ? 'mb-20' : 'center'}>Is this entity a trust?</Header>)
+        }
         <Form error className={`${isMobile ? 'mb-30 mt-0' : ''} account-type-tab`}>
           <>
             {isTrustSelected

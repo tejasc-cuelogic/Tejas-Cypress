@@ -31,7 +31,7 @@ export default class PublicCompanyRel extends Component {
                 changed={(e, result) => employmentChange(e, 'PUBLIC_COMPANY_REL_FORM', result)}
                 showerror
               />
-              <Button primary size="large" fluid className="relaxed" content="Continue" disabled={!PUBLIC_COMPANY_REL_FORM.meta.isValid} />
+              <Button primary size="large" fluid className={`${isMobile ? 'mt-40' : ''} relaxed`} content="Continue" disabled={!PUBLIC_COMPANY_REL_FORM.meta.isValid} />
             </Form.Group>
         </Form>
       );
@@ -59,7 +59,7 @@ Are you (or an immediate family member) a 10% shareholder,
           {!inProgressArray.includes('PUBLIC_COMPANY_REL')
           && (
             <Button.Group vertical>
-            <Button primary size="large" onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mt-30 mb-30' : 'mb-20'} relaxed`} content="No" />
+            <Button primary size="large" onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mb-30' : 'mb-20'} relaxed`} content="No" />
             <Button className="link-button" onClick={this.handleShowFields} color="green" content="Yes" />
             </Button.Group>
           )

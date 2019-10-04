@@ -54,7 +54,7 @@ export default class FormationDocumemts extends Component {
             fielddata={FORM_DOCS_FRM.fields.formationDoc}
             ondrop={this.onFormationDocDrop}
             onremove={this.confirmRemoveDoc}
-            containerclassname="fluid"
+            containerclassname={`${isMobile ? 'mb-30' : ''} fluid`}
             uploadtitle="Choose a file or drag it here"
           />
           <DropZone
@@ -62,7 +62,7 @@ export default class FormationDocumemts extends Component {
             fielddata={FORM_DOCS_FRM.fields.operatingAgreementDoc}
             ondrop={this.onOperatingAgreementDocDrop}
             onremove={this.confirmRemoveDoc}
-            containerclassname="fluid"
+            containerclassname={`${isMobile ? 'mb-30' : ''} fluid`}
             uploadtitle="Choose a file or drag it here"
           />
           <DropZone
@@ -70,7 +70,7 @@ export default class FormationDocumemts extends Component {
             fielddata={FORM_DOCS_FRM.fields.einVerificationDoc}
             ondrop={this.onEinVerificationDocDrop}
             onremove={this.confirmRemoveDoc}
-            containerclassname="fluid"
+            containerclassname={`${isMobile ? 'mb-30' : ''} fluid`}
             uploadtitle="Choose a file or drag it here"
           />
             <Divider hidden />

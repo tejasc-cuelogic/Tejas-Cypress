@@ -49,7 +49,7 @@ export default class MaskedInput extends Component {
               && (
                 <>
                 {isMobile ? (
-                  <Modal size="tiny" trigger={<Icon className="ns-help-circle" />} closeIcon>
+                  <Modal style={{ top: '50%', transform: 'translate(0, -50%)' }} size="tiny" trigger={<Icon className="ns-help-circle" />} closeIcon>
                     <Modal.Content>
                       <Header as="h5">
                         {label}

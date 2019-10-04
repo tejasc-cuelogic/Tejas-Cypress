@@ -100,7 +100,7 @@ export default class Experience extends Component {
           </p>
         )}
         {isExperiencedTypeSelected && (
-          <p className="tertiary-text">
+          <p className={`${isMobile ? 'mb-30' : ''} tertiary-text`}>
             We just need to confirm your understanding of the investment risks on NextSeed
           </p>
         )

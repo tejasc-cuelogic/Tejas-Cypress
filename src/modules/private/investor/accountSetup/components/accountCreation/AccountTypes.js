@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Grid, Button, Header, Form } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import { FormArrowButton, FormRadioGroup } from '../../../../../../theme/form';
 import AccTypeDescription from './AccTypeDescription';
 
@@ -76,11 +77,22 @@ const AccountTypes = ({
           }
           {isMobile
             ? (
-              <p className="grey-header mt-30">
-                NextSeed accounts are provided and held at our partner bank, Happy State Bank
-                DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for up
-                to $250,000 of uninvested cash in NextSeed accounts.
-              </p>
+              <>
+                <div className="promitional-offer-block mb-20 bg-offwhite mt-10">
+                  <Header as="h5" className="highlight-text mb-10">Promotional Offer</Header>
+                  <p>
+                    NextSeed will cover the one-time setup fee and
+                    annual account fees for four years. See the{' '}
+                    <Link to="/agreements/legal" target="_blank" className="link">Terms and Conditions</Link>
+                    {' '}for details.
+                  </p>
+                </div>
+                <p className="grey-header">
+                  NextSeed accounts are provided and held at our partner bank, Happy State Bank
+                  DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for up
+                  to $250,000 of uninvested cash in NextSeed accounts.
+                </p>
+              </>
             )
             : (
             <AccTypeDescription accTypes={form.fields.accType} />

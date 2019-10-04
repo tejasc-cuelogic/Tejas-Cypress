@@ -25,7 +25,7 @@ export default class Finances extends Component {
             {"'"}
           s annual income and net worth?
         </Header>
-        <p className="tertiary-text">
+        <p className={`${isMobile ? 'mb-30' : ''} tertiary-text`}>
           SEC rules and regulations require broker-dealers to collect this information
           to determine investor suitability for private offerings.
         </p>

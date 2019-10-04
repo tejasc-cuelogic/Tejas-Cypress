@@ -100,27 +100,27 @@ export default class Summary extends Component {
             <Table unstackable basic="very">
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell>Type:</Table.Cell>
+                  <Table.Cell className="grey-header">Type:</Table.Cell>
                   <Table.Cell>{accountType ? accountType.label : ''}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Funding Option:</Table.Cell>
+                  <Table.Cell className="grey-header">Funding Option:</Table.Cell>
                   <Table.Cell>{fundingOption ? fundingOption.label : ''}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Net Worth:</Table.Cell>
+                  <Table.Cell className="grey-header">Net Worth:</Table.Cell>
                   <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netWorth.value
                     ? FIN_INFO_FRM.fields.netWorth.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Annual Income:</Table.Cell>
+                  <Table.Cell className="grey-header">Annual Income:</Table.Cell>
                   <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.income.value
                     ? FIN_INFO_FRM.fields.income.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Identification:</Table.Cell>
+                  <Table.Cell className="grey-header">Identification:</Table.Cell>
                   <Table.Cell>
                     {IDENTITY_FRM.fields.identityDoc.value
                       ? <span>Uploaded</span>
@@ -130,7 +130,7 @@ export default class Summary extends Component {
                 {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
                   && (
 <Table.Row>
-                    <Table.Cell>Bank: </Table.Cell>
+                    <Table.Cell className="grey-header">Bank: </Table.Cell>
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
                   )
@@ -138,7 +138,7 @@ export default class Summary extends Component {
                 {fundingOption && fundingOption.value === 0
                   && (
 <Table.Row>
-                    <Table.Cell>Bank Account:</Table.Cell>
+                    <Table.Cell className="grey-header">Bank Account:</Table.Cell>
                     <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                   </Table.Row>
                   )
@@ -147,7 +147,7 @@ export default class Summary extends Component {
                 { !isEmpty(routingNum)
                   && (
 <Table.Row>
-                    <Table.Cell>Routing Number</Table.Cell>
+                    <Table.Cell className="grey-header">Routing Number</Table.Cell>
                     <Table.Cell>
                       { routingNum || '' }
                     </Table.Cell>
@@ -155,7 +155,7 @@ export default class Summary extends Component {
                   )
                 }
                 <Table.Row>
-                  <Table.Cell>Your Initial Deposit</Table.Cell>
+                  <Table.Cell className="grey-header">Your Initial Deposit</Table.Cell>
                   <Table.Cell>
                     {[-1, ''].includes(accountAttributes.initialDepositAmount)
                       ? Helper.CurrencyFormat(0)

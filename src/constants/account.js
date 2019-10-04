@@ -478,7 +478,7 @@ export const ENTITY_TRUST_INFO = {
     rule: 'required',
   },
   trustDate: {
-    key: 'trustDate', value: moment(`${new Date().getFullYear()}-01-01`).format('MM-DD-YYYY'), error: undefined, rule: 'required', label: 'Date of Trust',
+    key: 'trustDate', value: moment(`${new Date().getFullYear()}-01-01`).format('MM-DD-YYYY'), error: undefined, rule: 'required', label: 'Date Trust Established',
   },
 };
 
