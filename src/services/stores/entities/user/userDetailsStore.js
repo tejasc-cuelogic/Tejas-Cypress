@@ -519,6 +519,8 @@ export class UserDetailsStore {
     return status;
   }
 
+  checkIfAccountIsAlreadyPresent = accountType => (this.signupStatus.processingAccounts.includes(accountType) || this.signupStatus.frozenAccounts.includes(accountType) || this.signupStatus.activeAccounts.includes(accountType));
+
   @computed get isUserVerified() {
     const accDetails = this.signupStatus;
     return this.validAccStatus.includes(accDetails.idVerification);
