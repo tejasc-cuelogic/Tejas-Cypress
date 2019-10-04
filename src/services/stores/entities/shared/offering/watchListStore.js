@@ -81,7 +81,6 @@ export class WatchListStore extends DataModelStore {
     const variables = {
       userId: (params && params.userId) || userDetailsStore.currentUserId,
       offeringId: (params && params.offeringId) || campaignStore.getOfferingId,
-      isInvestment: false,
     };
     try {
       await this.executeMutation({
