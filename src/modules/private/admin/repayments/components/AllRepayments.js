@@ -81,27 +81,27 @@ export default class AllRepayments extends Component {
                   <Table.HeaderCell
                     sorted={sortOrder.column === 'shorthandBusinessName' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
                     onClick={this.handleSort('shorthandBusinessName')}
-                  >Short Hand Business Name</Table.HeaderCell>
+                  >Offering</Table.HeaderCell>
                   <Table.HeaderCell
                     sorted={sortOrder.column === 'hardCloseDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
                     onClick={this.handleSort('hardCloseDate')}
-                  >Hard Close Date</Table.HeaderCell>
+                  >Hard Close</Table.HeaderCell>
                   <Table.HeaderCell
                     sorted={sortOrder.column === 'maturityDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
                     onClick={this.handleSort('maturityDate')}
                   >Maturity</Table.HeaderCell>
                   <Table.HeaderCell
+                    sorted={sortOrder.column === 'offering.offering.launch.expectedOpsDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('offering.offering.launch.expectedOpsDate')}
+                  >Expected Operations</Table.HeaderCell>
+                  <Table.HeaderCell
                     sorted={sortOrder.column === 'expectedPaymentDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
                     onClick={this.handleSort('expectedPaymentDate')}
-                  >Expected Payment Date</Table.HeaderCell>
+                  >Expected Payment</Table.HeaderCell>
                   <Table.HeaderCell
                     sorted={sortOrder.column === 'firstPaymentDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
                     onClick={this.handleSort('firstPaymentDate')}
-                  >First Payment Date</Table.HeaderCell>
-                  <Table.HeaderCell
-                    sorted={sortOrder.column === 'offering.offering.launch.expectedOpsDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
-                    onClick={this.handleSort('offering.offering.launch.expectedOpsDate')}
-                  >Expected Operations Date</Table.HeaderCell>
+                  >First Payment</Table.HeaderCell>
                   <Table.HeaderCell
                     sorted={sortOrder.column === 'sinkingFundBalance' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
                     onClick={this.handleSort('sinkingFundBalance')}
@@ -119,11 +119,11 @@ export default class AllRepayments extends Component {
                     : repayments.map(record => (
                     <Table.Row key={record.id}>
                       <Table.Cell onClick={() => this.handleAction(record.offering.id, record.offering.stage)}><b>{record.shorthandBusinessName}</b></Table.Cell>
-                      <Table.Cell>{record.hardCloseDate && moment(record.hardCloseDate, 'MM/DD/YYYY', true).isValid() && record.hardCloseDate}</Table.Cell>
-                      <Table.Cell>{record.maturityDate && moment(record.maturityDate).isValid() ? `${moment(moment(record.maturityDate)).diff(moment(), 'months')} months` : ''}</Table.Cell>
-                      <Table.Cell>{record.expectedPaymentDate && moment(record.expectedPaymentDate, 'MM/DD/YYYY', true).isValid() && record.expectedPaymentDate}</Table.Cell>
-                      <Table.Cell>{record.firstPaymentDate && moment(record.firstPaymentDate, 'MM/DD/YYYY', true).isValid() && record.firstPaymentDate}</Table.Cell>
-                      <Table.Cell>{get(record, 'offering.offering.launch.expectedOpsDate') && moment(get(record, 'offering.offering.launch.expectedOpsDate'), 'MM/DD/YYYY', true).isValid() && get(record, 'offering.offering.launch.expectedOpsDate')}</Table.Cell>
+                      <Table.Cell>{record.hardCloseDate && moment(record.hardCloseDate, 'MM/DD/YYYY', true).isValid() && moment(record.hardCloseDate).format('M/D/YY')}</Table.Cell>
+                      <Table.Cell>{record.maturityDate && moment(record.maturityDate).isValid() ? `${moment(record.maturityDate).format('M/D/YY')} (${moment(moment(record.maturityDate)).diff(moment(), 'months')})` : ''}</Table.Cell>
+                      <Table.Cell>{get(record, 'offering.offering.launch.expectedOpsDate') && moment(get(record, 'offering.offering.launch.expectedOpsDate'), 'MM/DD/YYYY', true).isValid() && moment(get(record, 'offering.offering.launch.expectedOpsDate')).format('M/D/YY')}</Table.Cell>
+                      <Table.Cell>{record.expectedPaymentDate && moment(record.expectedPaymentDate, 'MM/DD/YYYY', true).isValid() && moment(record.expectedPaymentDate).format('M/D/YY')}</Table.Cell>
+                      <Table.Cell>{record.firstPaymentDate && moment(record.firstPaymentDate, 'MM/DD/YYYY', true).isValid() && moment(record.firstPaymentDate).format('M/D/YY')}</Table.Cell>
                       <Table.Cell textAlign="center">{Helper.CurrencyFormat(record.sinkingFundBalance)}</Table.Cell>
                     </Table.Row>
                     ))
