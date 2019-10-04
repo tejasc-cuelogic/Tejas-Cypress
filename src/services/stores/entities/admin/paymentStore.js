@@ -69,7 +69,7 @@ export class PaymentStore {
       if (this.sortOrder.column && this.sortOrder.direction && this.data && toJS(get(this.data, 'data.paymentsIssuerList'))) {
         return orderBy(
           this.data.data.paymentsIssuerList,
-          [issuerList => (this.sortOrder.column !== 'shorthandBusinessName' ? issuerList[this.sortOrder.column] && moment(issuerList[this.sortOrder.column], 'MM/DD/YYYY', true).isValid() ? moment(issuerList[this.sortOrder.column], 'MM/DD/YYYY', true).unix() : '' : issuerList[this.sortOrder.column].toString().toLowerCase())],
+          [issuerList => (this.sortOrder.column !== 'shorthandBusinessName' ? get(issuerList, this.sortOrder.column) && moment(get(issuerList, this.sortOrder.column), 'MM/DD/YYYY', true).isValid() ? moment(get(issuerList, this.sortOrder.column), 'MM/DD/YYYY', true).unix() : '' : issuerList[this.sortOrder.column].toString().toLowerCase())],
           [this.sortOrder.direction],
         );
       }

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Grid, Form } from 'semantic-ui-react';
 import moment from 'moment';
+import { get } from 'lodash';
 import Helper from '../../../../../helper/utility';
 import { InlineLoader } from '../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
@@ -98,6 +99,10 @@ export default class AllRepayments extends Component {
                     onClick={this.handleSort('firstPaymentDate')}
                   >First Payment Date</Table.HeaderCell>
                   <Table.HeaderCell
+                    sorted={sortOrder.column === 'offering.offering.launch.expectedOpsDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('offering.offering.launch.expectedOpsDate')}
+                  >Expected Operations Date</Table.HeaderCell>
+                  <Table.HeaderCell
                     sorted={sortOrder.column === 'sinkingFundBalance' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
                     onClick={this.handleSort('sinkingFundBalance')}
                   >Sinking Fund Balance</Table.HeaderCell>
@@ -118,7 +123,8 @@ export default class AllRepayments extends Component {
                       <Table.Cell>{record.maturityDate && moment(record.maturityDate).isValid() ? `${moment(moment(record.maturityDate)).diff(moment(), 'months')} months` : ''}</Table.Cell>
                       <Table.Cell>{record.expectedPaymentDate && moment(record.expectedPaymentDate, 'MM/DD/YYYY', true).isValid() && record.expectedPaymentDate}</Table.Cell>
                       <Table.Cell>{record.firstPaymentDate}</Table.Cell>
-                      <Table.Cell textAlign="right">{Helper.CurrencyFormat(record.sinkingFundBalance)}</Table.Cell>
+                      <Table.Cell>{get(record, 'offering.offering.launch.expectedOpsDate')}</Table.Cell>
+                      <Table.Cell textAlign="center">{Helper.CurrencyFormat(record.sinkingFundBalance)}</Table.Cell>
                     </Table.Row>
                     ))
                 }
