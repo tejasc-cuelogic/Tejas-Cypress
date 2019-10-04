@@ -34,7 +34,7 @@ class EntityAccountStore {
 
   @observable entityData = {};
 
-  @observable stepToBeRendered = '';
+  @observable stepToBeRendered = 0;
 
   @observable entityAccountId = null;
 

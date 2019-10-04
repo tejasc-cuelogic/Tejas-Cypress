@@ -2,17 +2,23 @@ import React, { Component } from 'react';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import find from 'lodash/find';
-import { FormRadioGroup } from '../../../../../../../theme/form';
+import { FormRadioGroup, FormArrowButton } from '../../../../../../../theme/form';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('iraAccountStore')
+@inject('iraAccountStore', 'uiStore')
 @observer
 export default class Funding extends Component {
   getOptionDetails = () => {
     const { value, values } = this.props.iraAccountStore.FUNDING_FRM.fields.fundingType;
     return find(values, v => v.value === value) ? find(values, v => v.value === value).description : '';
   };
+
+  handleArrowButtonClick = () => {
+    const { createAccount, stepToBeRendered } = this.props.iraAccountStore;
+    const { multiSteps } = this.props.uiStore;
+    createAccount(multiSteps[stepToBeRendered]);
+  }
 
   render() {
     const { FUNDING_FRM, fundingChange } = this.props.iraAccountStore;
@@ -29,6 +35,17 @@ export default class Funding extends Component {
           )
         }
         <Form error className={isMobile ? '' : 'account-type-tab'}>
+          {isMobile
+            ? (
+          <FormArrowButton
+            fielddata={FUNDING_FRM.fields.fundingType}
+            name="fundingType"
+            changed={fundingChange}
+            action={this.handleArrowButtonClick}
+          />
+            )
+            : (
+          <>
           <FormRadioGroup
             fielddata={FUNDING_FRM.fields.fundingType}
             name="fundingType"
@@ -40,7 +57,7 @@ export default class Funding extends Component {
             {
               FUNDING_FRM.fields.fundingType.value === 0
                 ? (
-<p className="mt-20 grey-header">
+                <p className="mt-20 grey-header">
                   Set up a new self-directed IRA with
                   an initial deposit from an external checking account.
                   Annual contribution limits apply.
@@ -69,6 +86,9 @@ export default class Funding extends Component {
             }
           </div>
           <Divider section hidden />
+          </>
+            )
+          }
         </Form>
       </div>
     );

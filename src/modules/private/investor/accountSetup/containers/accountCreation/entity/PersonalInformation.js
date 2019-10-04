@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Form, Message, Confirm } from 'semantic-ui-react';
+import { Header, Form, Message, Confirm, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { ListErrors } from '../../../../../../../theme/shared';
 import { FormInput, DropZone } from '../../../../../../../theme/form';
@@ -24,6 +24,12 @@ export default class PersonalInformation extends Component {
 
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
+  }
+
+  handleContinueButton = () => {
+    const { createAccount, stepToBeRendered } = this.props.entityAccountStore;
+    const { multiSteps } = this.props.uiStore;
+    createAccount(multiSteps[stepToBeRendered]);
   }
 
   render() {
@@ -74,6 +80,10 @@ export default class PersonalInformation extends Component {
               <ListErrors errors={[errors.message]} />
             </Message>
             )
+          }
+          {isMobile && (
+            <Button fluid primary className="relaxed" content="Continue" disabled={!PERSONAL_INFO_FRM.meta.isValid || errors} onClick={this.handleContinueButton} />
+          )
           }
         </Form>
         <Confirm

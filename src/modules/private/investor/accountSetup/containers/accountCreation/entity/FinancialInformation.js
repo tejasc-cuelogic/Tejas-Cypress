@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Message, Divider } from 'semantic-ui-react';
+import { Header, Form, Message, Divider, Button } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('entityAccountStore', 'investmentLimitStore')
+@inject('entityAccountStore', 'investmentLimitStore', 'uiStore')
 @observer
 export default class FinancialInformation extends Component {
   constructor(props) {
@@ -17,6 +17,12 @@ export default class FinancialInformation extends Component {
       maskedFinInfoChange({ value: { floatValue: FIN_INFO_FRM.fields.netAssets.value }, name: 'netAssets' });
     }
     this.props.investmentLimitStore.setFieldValue('investedAmount', 0);
+  }
+
+  handleContinueButton = () => {
+    const { createAccount, stepToBeRendered } = this.props.entityAccountStore;
+    const { multiSteps } = this.props.uiStore;
+    createAccount(multiSteps[stepToBeRendered]);
   }
 
   render() {
@@ -66,6 +72,10 @@ export default class FinancialInformation extends Component {
           )
           }
           <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20 mb-20' : ''} link display-block`}>How is this calculated?</a>
+          {isMobile && (
+              <Button fluid primary className="relaxed" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
+          )
+          }
         </Form>
       </>
     );

@@ -506,7 +506,7 @@ class IraAccountStore {
   }
 
   @action
-  setFileUploadData = (field, files) => {
+  setFileUploadData = (field, files, callApi = true) => {
     uiStore.setProgress();
     const file = files[0];
     const stepName = FILE_UPLOAD_STEPS[field];
@@ -529,7 +529,11 @@ class IraAccountStore {
             form: 'IDENTITY_FRM',
             stepToBeRendered: this.FUNDING_FRM.fields.fundingType.value === 0 ? 5 : 4,
           };
-          this.createAccount(currentStep, false);
+          if (callApi) {
+            this.createAccount(currentStep, false);
+          } else {
+            uiStore.setProgress(false);
+          }
         })
         .catch((err) => {
           Helper.toast('Something went wrong, please try again later.', 'error');

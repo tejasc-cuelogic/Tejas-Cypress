@@ -68,7 +68,7 @@ export default class Experience extends Component {
     } = this.props.investorProfileStore;
     const { inProgressArray } = this.props.uiStore;
     const { errorMessage } = this.state;
-    const isExpertTypeSelected = inProgressArray.includes('EXPERIENCED');
+    const isExperiencedTypeSelected = inProgressArray.includes('EXPERIENCED'); // only for mobile screen
     const CheckBoxes = () => (
     <>
       {['isRiskTaker', 'isComfortable'].map(field => (
@@ -90,7 +90,7 @@ export default class Experience extends Component {
     return (
       <>
       <Header as="h4" textAlign={!isMobile ? 'center' : ''}>
-        {!isMobile ? 'Investment Experience' : isExpertTypeSelected ? 'Almost there!' : 'Please select the box that best describes your investment experience'
+        {!isMobile ? 'Investment Experience' : isExperiencedTypeSelected ? 'Almost there!' : 'Please select the box that best describes your investment experience'
         }
       </Header>
         {!isMobile && (
@@ -99,14 +99,14 @@ export default class Experience extends Component {
             Select the box that best describes your investment experience to date:
           </p>
         )}
-        {isExpertTypeSelected && (
+        {isExperiencedTypeSelected && (
           <p className="tertiary-text">
             We just need to confirm your understanding of the investment risks on NextSeed
           </p>
         )
         }
         <Form error={!isInvestmentExperienceValid}>
-          {isExpertTypeSelected ? (
+          {isExperiencedTypeSelected ? (
           <CheckBoxes />
           )
             : (
@@ -164,12 +164,12 @@ export default class Experience extends Component {
           </div>
           ) : (
             <>
-            {isExpertTypeSelected && (
+            {isExperiencedTypeSelected && (
             <div className="center-align mt-20">
               <Button fluid={isMobile} primary className="relaxed" content="Create Account" disabled={!isValidInvestorProfileForm} onClick={this.handleSubmitInvestmentExperience} />
             </div>
             )}
-            {isExpertTypeSelected && !isInvestmentExperienceValid
+            {isExperiencedTypeSelected && !isInvestmentExperienceValid
             && (<RequestMsg />)
             }
             </>

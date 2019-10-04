@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Form, Message } from 'semantic-ui-react';
+import { Header, Form, Message, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { US_STATES_FOR_INVESTOR, ENTITY_TYPES } from '../../../../../../../constants/account';
 import { ListErrors } from '../../../../../../../theme/shared';
@@ -15,6 +15,12 @@ export default class General extends Component {
     this.props.uiStore.setErrors(null);
   }
 
+  handleContinueButton = () => {
+    const { createAccount, stepToBeRendered } = this.props.entityAccountStore;
+    const { multiSteps } = this.props.uiStore;
+    createAccount(multiSteps[stepToBeRendered]);
+  }
+
   render() {
     const {
       GEN_INFO_FRM,
@@ -25,12 +31,12 @@ export default class General extends Component {
     const { errors } = this.props.uiStore;
     return (
       <>
-      <Header as="h4" textAlign={isMobile ? '' : 'center'}>General information</Header>
+        <Header as="h4" textAlign={isMobile ? '' : 'center'}>General information</Header>
         <p className={isMobile ? '' : 'center-align'}>
           Let
           {"'"}
-s create your Entity Investment Account. Get started by providing your
-          entity information.
+          s create your Entity Investment Account. Get started by providing your
+                    entity information.
         </p>
         <Form error>
           <div className={isMobile ? '' : 'field-wrap'}>
@@ -99,10 +105,14 @@ s create your Entity Investment Account. Get started by providing your
           </div>
           {errors
             && (
-            <Message className={isMobile ? '' : 'center-align'} error>
-              <ListErrors errors={[errors]} />
-            </Message>
+              <Message className={isMobile ? '' : 'center-align'} error>
+                <ListErrors errors={[errors]} />
+              </Message>
             )
+          }
+          {isMobile && (
+            <Button fluid primary className="relaxed" content="Continue" disabled={!GEN_INFO_FRM.meta.isValid || errors} onClick={this.handleContinueButton} />
+          )
           }
         </Form>
       </>
