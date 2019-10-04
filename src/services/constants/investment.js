@@ -173,15 +173,15 @@ export const CANCEL_INVESTMENT = FormHelper.generateMeta([
 ]);
 
 export const VOID_TYPE = [
-  { key: 'NOSIGN', value: '1', text: 'NO SIGN' },
-  { key: 'USERCANCEL', value: '2', text: 'USER CANCEL' },
-  { key: 'REPLACED', value: '3', text: 'REPLACED' },
-  { key: 'AUTODRAFTFAILED', value: '4', text: 'AUTO DRAFT FAILED' },
-  { key: 'FAILEDVALIDATION_PRESIGN', value: '5', text: 'FAILED VALIDATION PRESIGN' },
-  { key: 'FAILEDVALIDATION_POSTSIGN', value: '6', text: 'FAILED VALIDATION POSTSIGN' },
-  { key: 'ERROR', value: '7', text: 'ERROR' },
-  { key: 'OFFERING_RESET', value: '8', text: 'OFFERING RESET' },
-  { key: 'OFFERING_FAILED', value: '9', text: 'OFFERING FAILED' },
+  { key: 'NOSIGN', value: 'NOSIGN', text: 'NO SIGN' },
+  { key: 'USERCANCEL', value: 'USERCANCEL', text: 'USER CANCEL' },
+  { key: 'REPLACED', value: 'REPLACED', text: 'REPLACED' },
+  { key: 'AUTODRAFTFAILED', value: 'AUTODRAFTFAILED', text: 'AUTO DRAFT FAILED' },
+  { key: 'FAILEDVALIDATION_PRESIGN', value: 'FAILEDVALIDATION_PRESIGN', text: 'FAILED VALIDATION PRESIGN' },
+  { key: 'FAILEDVALIDATION_POSTSIGN', value: 'FAILEDVALIDATION_POSTSIGN', text: 'FAILED VALIDATION POSTSIGN' },
+  { key: 'ERROR', value: 'ERROR', text: 'ERROR' },
+  { key: 'OFFERING_RESET', value: 'OFFERING_RESET', text: 'OFFERING RESET' },
+  { key: 'OFFERING_FAILED', value: 'OFFERING_FAILED', text: 'OFFERING FAILED' },
   { key: 'ADMINCANCEL', value: 'ADMINCANCEL', text: 'ADMIN CANCEL' },
-  { key: 'OFFERING_TERMINATED', value: '11', text: 'OFFERING TERMINATED' },
+  { key: 'OFFERING_TERMINATED', value: 'OFFERING_TERMINATED', text: 'OFFERING TERMINATED' },
 ];
