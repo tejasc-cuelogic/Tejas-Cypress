@@ -287,43 +287,23 @@ export class IdentityStore {
 
   @action
   verifyCip = async () => {
-    try {
-      let url = '';
-      this.setFieldValue('signUpLoading', true);
-      const res = await client
-        .mutate({
-          mutation: verifyCip,
-          variables: { userId: userDetailsStore.selectedUserId, ...this.formattedUserInfoForCip },
-        });
-
-      if (res.data.verifyCip) {
-        if (res.data.verifyCip.questions) {
-          this.setIdentityQuestions(res.data.verifyCip.questions);
-        }
-        this.setVerifyIdentityResponse(res.data.verifyCip);
-
-        const stepName = Object.keys(this.cipStepUrlMapping).find((key => (
-          this.cipStepUrlMapping[key].steps.includes(res.data.verifyCip.step)
-        )));
-
-        if (stepName === 'cipPass') {
-          await this.updateUserDataAndSendOtp();
-        }
-        this.setFieldValue('signUpLoading', false);
-        // eslint-disable-next-line prefer-destructuring
-        url = this.cipStepUrlMapping[stepName].url;
-      }
-      return { res, url };
-    } catch (err) {
-      uiStore.setFieldvalue('errors', DataFormatter.getSimpleErr(err));
-      this.setFieldValue('signUpLoading', false);
-      return false;
+    const payLoad = {
+      mutation: verifyCip,
+      mutationName: 'verifyCip',
+      variables: { userId: userDetailsStore.selectedUserId, ...this.formattedUserInfoForCip },
+    };
+    const { res, url } = await this.cipWrapper(payLoad);
+    if (res.data.verifyCip.questions) {
+      this.setIdentityQuestions(res.data.verifyCip.questions);
     }
+    this.setVerifyIdentityResponse(res.data.verifyCip);
+    return { res, url };
   }
 
   updateUserDataAndSendOtp = async () => {
     userDetailsStore.updateUserDetails('legalDetails', this.formattedUserInfoForCip.user);
     userDetailsStore.updateUserDetails('phone', this.formattedUserInfoForCip.phoneDetails);
+    userDetailsStore.updateUserDetails('legalDetails', { status: 'PASS' });
     await this.startPhoneVerification();
   }
 
@@ -388,6 +368,11 @@ cipWrapper = async (payLoad) => {
       await this.updateUserDataAndSendOtp();
     } else if (get(payLoad, 'message.error')) {
       Helper.toast(payLoad.message.error, 'error');
+    } else if (!get(res, `data.${payLoad.mutationName}.status`)) {
+      uiStore.setFieldvalue('errors',
+        DataFormatter.getSimpleErr({
+          message: res.data[`${payLoad.mutationName}`].message,
+        }));
     }
     this.setFieldValue('signUpLoading', false);
     // eslint-disable-next-line prefer-destructuring

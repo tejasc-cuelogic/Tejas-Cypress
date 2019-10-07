@@ -15,7 +15,6 @@ export default class IdentityVerification extends Component {
   constructor(props) {
     super(props);
     this.props.identityStore.setCipDetails();
-    this.props.uiStore.setErrors(null);
   }
 
   onPhotoIdDrop = (files) => {
