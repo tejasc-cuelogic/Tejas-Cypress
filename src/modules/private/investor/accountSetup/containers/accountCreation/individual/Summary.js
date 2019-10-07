@@ -91,6 +91,7 @@ export default class Summary extends React.Component {
       isAccountPresent,
       accountAttributes,
     } = this.props.bankAccountStore;
+    const { setStepToBeRendered } = this.props.individualAccountStore;
     const { userDetails } = this.props.userDetailsStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails)
       ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
@@ -135,7 +136,7 @@ export default class Summary extends React.Component {
                       ? Helper.CurrencyFormat(0)
                       : Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
                       <span className="pull-right">
-                        <Button className="link-button highlight-text" onClick={() => this.handleStepChange(1)}>Change</Button>
+                        <Button className="link-button highlight-text" onClick={() => setStepToBeRendered(1)}>Change</Button>
                       </span>
                   </Table.Cell>
                 </Table.Row>
