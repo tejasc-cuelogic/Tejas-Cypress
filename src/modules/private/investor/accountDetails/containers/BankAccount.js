@@ -10,6 +10,8 @@ import VerifyBankUpdate from '../components/bankaccount/VerifyBankUpdate';
 import LinkBankAccount from './LinkBankAccount';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('bankAccountStore', 'educationStore', 'userDetailsStore')
 export default class BankAccount extends Component {
   constructor(props) {
@@ -63,7 +65,7 @@ export default class BankAccount extends Component {
         {accountType !== 'ira'
           ? (
             <>
-              <Header as="h4">Bank Account</Header>
+              {!isMobile ? <Header as="h4">Bank Account</Header> : ''}
               <Grid>
                 {isEmpty(plaidAccDetails)
                 && (
