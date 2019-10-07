@@ -23,7 +23,7 @@ export default class PreviewUpdate extends Component {
     const companyAvatarUrl = get(offer, 'media.avatar.url') || '';
     const { PBUILDER_FRM, loadingCurrentUpdate } = this.props.updateStore;
     return (
-      <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack} size="mini">
+      <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack}>
         <Modal.Content className="new-update-modal">
           <Header>
             <div className="ui image avatar-image">
