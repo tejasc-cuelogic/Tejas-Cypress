@@ -229,14 +229,6 @@ export const REQUESTFACTORY_META = {
     error: undefined,
     rule: 'required',
   },
-  payload: {
-    key: 'payload',
-    value: '',
-    label: 'Payload',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Put your JSON ojbect here...',
-  },
 };
 
 export const CRONFACTORY_META = {

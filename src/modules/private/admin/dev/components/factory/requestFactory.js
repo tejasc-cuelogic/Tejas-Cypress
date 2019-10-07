@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Card, Button, Form, Grid, Divider } from 'semantic-ui-react';
+import { Card, Button, Form, Grid, Divider, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { FormDropDown, FormTextarea } from '../../../../../../theme/form';
+import { FormDropDown } from '../../../../../../theme/form';
+import DynamicFormInput from './dynamicFormInput';
 
 @inject('factoryStore')
 @withRouter
@@ -10,6 +11,7 @@ import { FormDropDown, FormTextarea } from '../../../../../../theme/form';
 export default class RequestFactory extends Component {
   constructor(props) {
     super(props);
+    this.props.factoryStore.setFieldValue('DYNAMCI_PAYLOAD_FRM', {});
     this.props.factoryStore.resetForm('REQUESTFACTORY_FRM');
     this.props.factoryStore.inProgress.requestFactory = false;
   }
@@ -21,7 +23,7 @@ export default class RequestFactory extends Component {
   render() {
     const { factoryStore } = this.props;
     const {
-      REQUESTFACTORY_FRM, formChange, inProgress,
+      REQUESTFACTORY_FRM, formChange, inProgress, DYNAMCI_PAYLOAD_FRM,
     } = factoryStore;
     return (
       <Card fluid className="elastic-search">
@@ -51,15 +53,11 @@ export default class RequestFactory extends Component {
                       onChange={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
                     />
                     <Divider section hidden />
-                    <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid} loading={inProgress.requestFactory} />
+                    <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.meta.isValid} loading={inProgress.requestFactory} />
                   </Grid.Column>
                   <Grid.Column width={8}>
-                    <FormTextarea
-                      name="payload"
-                      fielddata={REQUESTFACTORY_FRM.fields.payload}
-                      changed={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
-                      containerclassname="secondary huge"
-                    />
+                  <Header as="h5">Payload</Header>
+                    <DynamicFormInput {...this.props} />
                   </Grid.Column>
                 </Grid>
               </Form.Group>

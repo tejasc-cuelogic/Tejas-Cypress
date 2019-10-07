@@ -339,24 +339,21 @@ export const IRA_FUNDING = {
         label: 'Checking Account',
         labelDescription: 'Make an initial deposit by linking an external checking account',
         value: 0,
-        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Check!,
-        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+        description: 'Fund IRA by Check',
         rawValue: 'check',
       },
       {
         label: 'IRA Transfer',
         labelDescription: 'Transfer funds from an existing IRA Account',
         value: 1,
-        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for IRA Transfer!,
-        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+        description: 'Fund IRA by Transfer',
         rawValue: 'iraTransfer',
       },
       {
         label: 'Rollover',
         labelDescription: 'Roll over funds from your 401(k), 403(b), or other qualified account',
         value: 2,
-        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Direct Rollover!,
-        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+        description: 'Fund IRA by Direct Rollover',
         rawValue: 'directRollOver',
       },
     ],
@@ -521,10 +518,10 @@ export const ACC_TYPE = {
         labelDescription: 'Get started with a personal NextSeed Investment Account',
         value: 0,
         description: `Open a NextSeed investment account to begin investing in local businesses.
-        An initial deposit can be quickly and securely completed by linking your checking account. 
-        You can easily connect your account by logging in through our secure system or by 
-        manually entering your account information. The uninvested cash in your account is 
-        [FDIC-insured][note: hover over with footnote] up to $250,000 and is interest-bearing. 
+        An initial deposit can be quickly and securely completed by linking your checking account.
+        You can easily connect your account by logging in through our secure system or by
+        manually entering your account information. The uninvested cash in your account is
+        [FDIC-insured][note: hover over with footnote] up to $250,000 and is interest-bearing.
         We safeguard your information with bank-level security measures.`,
         accType: 'individual',
       },
@@ -532,8 +529,8 @@ export const ACC_TYPE = {
         label: 'Self-Directed IRA',
         labelDescription: 'Open a traditional or Roth IRA (minimum deposit of $5,000)',
         value: 1,
-        description: `Open a self-directed NextSeed IRA to begin investing in local businesses. (Traditional and Roth IRA options available.) 
-        Minimum opening deposit: $5,000. Investment limits apply. 
+        description: `Open a self-directed NextSeed IRA to begin investing in local businesses. (Traditional and Roth IRA options available.)
+        Minimum opening deposit: $5,000. Investment limits apply.
         For new NextSeed IRA accounts, NextSeed will cover the one-time setup fee and annual account
         fees for four years. See the Terms and Conditions for full details`,
         accType: 'ira',
@@ -542,8 +539,8 @@ export const ACC_TYPE = {
         label: 'Entity Account',
         labelDescription: 'Invest with a corporate, LLC or Trust investment account',
         value: 2,
-        description: `Invest in local businesses through an Entity investment account. (Note: Investment limits for Entity accounts are treated separately from Individual investment accounts) 
-        An initial deposit can be quickly and securely completed by linking your entity checking account. You can easily connect your account by logging in through our secure system or by manually entering your account information. 
+        description: `Invest in local businesses through an Entity investment account. (Note: Investment limits for Entity accounts are treated separately from Individual investment accounts)
+        An initial deposit can be quickly and securely completed by linking your entity checking account. You can easily connect your account by logging in through our secure system or by manually entering your account information.
         The uninvested cash in your account is [FDIC-insured][note: hover over with footnote] up to $250,000 and is interest-bearing.   We safeguard your information with bank-level security measures.  `,
         accType: 'entity',
       },
