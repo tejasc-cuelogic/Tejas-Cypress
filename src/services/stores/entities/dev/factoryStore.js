@@ -20,6 +20,8 @@ export class FactoryStore {
     PROCESSACTORY: {},
   };
 
+  @observable currentPluginSelected = '';
+
   @observable inProgress = {
     requestFactory: false,
     cronFactory: false,
@@ -125,7 +127,9 @@ export class FactoryStore {
     if (subForm) {
       this[form.parentForm][form.childForm] = Validator.onChange(this[form.parentForm][form.childForm], Validator.pullValues(e, res));
     } else if (includes(['REQUESTFACTORY_FRM', 'PROCESSACTORY_FRM'], form) && includes(['plugin', 'method'], res.name)) {
+      const currentSelectedPlugin = Validator.pullValues(e, res).value;
       this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
+      this.currentPluginSelected = currentSelectedPlugin;
       const plugnArr = this.pullValuesForDynmicInput(e, res);
       const childForm = form === 'REQUESTFACTORY_FRM' ? 'REQUESTFACTORY' : 'PROCESSACTORY';
       this.createDynamicFormFields(plugnArr, childForm);
@@ -133,6 +137,11 @@ export class FactoryStore {
       this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
     }
   };
+
+  @action
+  formChangeForPayload = (e, res, form) => {
+    this[form.parentForm][form.childForm] = Validator.onChange(this[form.parentForm][form.childForm], Validator.pullValues(e, res));
+  }
 
   @action
   fetchPlugins = () => {
@@ -296,15 +305,18 @@ export class FactoryStore {
   @action
   processFactoryPluginTrigger = () => new Promise((resolve, reject) => {
     const { fields } = this.PROCESSACTORY_FRM;
+    const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.PROCESSACTORY.fields;
     const formData = Validator.evaluateFormData(fields);
-    if (!this.isValidJson(formData.payload)) {
+    const formPayloadData = Validator.evaluateFormData(fieldsPayload);
+    const TestformData = this.ExtractToJSON(formPayloadData);
+    if (!this.isValidJson(TestformData)) {
       this.PROCESSACTORY_FRM.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
       this.PROCESSACTORY_FRM.meta.isValid = false;
     } else {
       this.setFieldValue('inProgress', true, 'processFactory');
       const variables = {};
       variables.method = formData.method;
-      variables.payload = formData.payload;
+      variables.payload = TestformData;
       client
         .mutate({
           mutation: processFactoryPluginTrigger,

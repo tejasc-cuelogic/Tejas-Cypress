@@ -5,7 +5,7 @@ import { Card, Button, Form, Grid, Divider, Modal, Header } from 'semantic-ui-re
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { FormDropDown } from '../../../../../../theme/form';
-// import DynamicFormInput from './dynamicFormInput';
+import DynamicFormInput from './dynamicFormInput';
 
 function ProcessFactory(props) {
   const [prev, setPrev] = useState(false);
@@ -39,7 +39,7 @@ function ProcessFactory(props) {
 
   const { factoryStore } = props;
   const {
-    PROCESSACTORY_FRM, formChange, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM,
+    PROCESSACTORY_FRM, formChange, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
   } = factoryStore;
 
   return (
@@ -85,7 +85,7 @@ function ProcessFactory(props) {
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <Header as="h5">Payload</Header>
-                    {/* <DynamicFormInput {...props} formPayload={DYNAMCI_PAYLOAD_FRM.PROCESSACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'PROCESSACTORY' }} /> */}
+                    <DynamicFormInput {...props} formPayload={DYNAMCI_PAYLOAD_FRM.PROCESSACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'PROCESSACTORY' }} selectedPlugin={currentPluginSelected} />
                   </Grid.Column>
                 </Grid>
               </Form.Group>
@@ -96,5 +96,4 @@ function ProcessFactory(props) {
     </>
   );
 }
-
 export default inject('factoryStore')(withRouter(observer(ProcessFactory)));

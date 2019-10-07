@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { isEmpty } from 'lodash';
 import { Form, Header } from 'semantic-ui-react';
 import { inject } from 'mobx-react';
@@ -9,25 +9,14 @@ const getFields = component => lazy(() => import(`../../../../../../theme/form/s
 
 let FormTag = '';
 
-// function formPropsAreEqual(prevForm, nextForm) {
-//   console.log('Size==>1', size(prevForm.formPayload));
-//   console.log('Size==>2', size(nextForm.formPayload));
-//   return size(prevForm.formPayload) === size(nextForm.formPayload);
-// }
-
 const DynamicFormInput = React.memo((props) => {
   function getFormInput(fieldKey, formProps) {
-    const { formChange, getFormElement, REQUESTFACTORY_FRM } = props.factoryStore;
+    const { formChange, getFormElement } = props.factoryStore;
     const additionalProps = { containerclassname: 'secondary huge' };
     const elementProps = formProps.type === 'textarea' && additionalProps;
-    useEffect(() => {
-      const formInputData = getFormElement(fieldKey, formProps, props.formObj);
-      const formElementType = formInputData;
-      FormTag = getFields(formElementType);
-    }, [REQUESTFACTORY_FRM.fields.plugin.value]);
-    if (FormTag === '') {
-      return (<InlineLoader />);
-    }
+    const formInputData = getFormElement(fieldKey, formProps, props.formObj);
+    const formElementType = formInputData;
+    FormTag = getFields(formElementType);
     return (
       <FormTag
         {...elementProps}
@@ -36,6 +25,22 @@ const DynamicFormInput = React.memo((props) => {
         changed={(e, result) => formChange(e, result, props.formObj, true)}
       />
     );
+  }
+
+  function loadFormElements(formPayload) {
+    const [elem, setElem] = useState([]);
+    const elementArr = [];
+    useEffect(() => {
+      Object.keys(formPayload.fields).map(val => (
+        elementArr.push(getFormInput(val, formPayload.fields[val]))
+      ));
+      setElem(elementArr);
+    }, [props.selectedPlugin]);
+    return elem;
+  }
+
+  function loadEmptyStatement() {
+    return (<InlineLoader text="No payload found..." />);
   }
 
   const { formPayload } = props;
@@ -47,20 +52,15 @@ const DynamicFormInput = React.memo((props) => {
             <Suspense fallback={<InlineLoader />}>
               <Header as="h6">Note: Below field/s are prefilled with dummy values.</Header>
               <Form>
-                {Object.keys(formPayload.fields).map(val => (
-                  getFormInput(val, formPayload.fields[val])
-                ))
-                }
+                {loadFormElements(formPayload)}
               </Form>
             </Suspense>
           </div>
         )
-          : (<InlineLoader text="No payload found..." />)
+          : loadEmptyStatement()
       }
     </>
   );
 });
 
 export default inject('factoryStore')(withRouter(DynamicFormInput));
-
-// export default inject('factoryStore')(withRouter(observer(DynamicFormInput)));

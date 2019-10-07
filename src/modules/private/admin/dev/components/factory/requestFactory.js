@@ -23,7 +23,7 @@ export default class RequestFactory extends Component {
   render() {
     const { factoryStore } = this.props;
     const {
-      REQUESTFACTORY_FRM, formChange, inProgress, DYNAMCI_PAYLOAD_FRM,
+      REQUESTFACTORY_FRM, formChange, inProgress, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
     } = factoryStore;
     return (
       <Card fluid className="elastic-search">
@@ -57,7 +57,7 @@ export default class RequestFactory extends Component {
                   </Grid.Column>
                   <Grid.Column width={8}>
                   <Header as="h5">Payload</Header>
-                    <DynamicFormInput {...this.props} formPayload={DYNAMCI_PAYLOAD_FRM.REQUESTFACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'REQUESTFACTORY' }} />
+                    <DynamicFormInput {...this.props} formPayload={DYNAMCI_PAYLOAD_FRM.REQUESTFACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'REQUESTFACTORY' }} selectedPlugin={currentPluginSelected} />
                   </Grid.Column>
                 </Grid>
               </Form.Group>
