@@ -7,7 +7,7 @@ import moment from 'moment';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import MaskedInput from '../../../../../../theme/form/src/MaskedInput';
-import ActivityHistory from '../../../ActivityHistory';
+// import ActivityHistory from '../../../ActivityHistory';
 import { InlineLoader, Image64, UserAvatar } from '../../../../../../theme/shared';
 import Actions from './Actions';
 import Status from './Status';
@@ -355,7 +355,7 @@ export default class NewUpdate extends Component {
               }
               </Grid.Column>
             </Grid.Row>
-            {id && isManager
+            {/* {id && isManager
               && (
                 <Grid.Row>
                   <Grid.Column width={16}>
@@ -367,7 +367,7 @@ export default class NewUpdate extends Component {
                     </div>
                   </Grid.Column>
                 </Grid.Row>
-              )}
+              )} */}
           </Grid>
           <Confirm
             header="Confirm"
