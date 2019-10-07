@@ -63,8 +63,8 @@ securities brokerage firm?
           {!inProgressArray.includes('BROKERAGE_EMPLOYMENT')
           && (
             <Button.Group vertical>
-            <Button primary size="large" onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mb-30' : 'mb-20'} relaxed`} content="No" />
-            <Button className="link-button" onClick={this.handleShowFields} color="green" content="Yes" />
+            <Button type="button" primary size="large" onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mb-30' : 'mb-20'} relaxed`} content="No" />
+            <Button type="button" className="link-button" onClick={this.handleShowFields} color="green" content="Yes" />
             </Button.Group>
           )
           }

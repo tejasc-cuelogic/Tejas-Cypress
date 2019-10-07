@@ -216,7 +216,7 @@ class InvestorProfileStore {
         formPayload = { publicCompanyTicker: fields.publicCompanyTicker.value };
       } else if (currentStep.form === 'FINANCES_FORM') {
         formPayload = {
-          // taxFilingAs: this.FINANCES_FORM.fields.investorProfileType.value,
+          taxFilingAs: this.FINANCES_FORM.fields.investorProfileType.value,
           annualIncome: [
             {
               year: this.FINANCES_FORM.fields.annualIncomeCurrentYear.year,

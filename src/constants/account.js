@@ -551,22 +551,22 @@ export const ACC_TYPE = {
 };
 
 export const BROKERAGE_EMPLOYMENT = {
-  // brokerageEmployment: {
-  //   key: 'brokerageEmployment',
-  //   value: '',
-  //   values:
-  //     [
-  //       {
-  //         label: 'Yes', value: 'yes', key: 'Yes', text: 'Yes',
-  //       },
-  //       {
-  //         label: 'No', value: 'no', key: 'No', text: 'No',
-  //       },
-  //     ],
-  //   skipField: true,
-  //   error: undefined,
-  //   rule: 'required',
-  // },
+  brokerageEmployment: {
+    key: 'brokerageEmployment',
+    value: '',
+    values:
+      [
+        {
+          label: 'Yes', value: 'yes', key: 'Yes', text: 'Yes',
+        },
+        {
+          label: 'No', value: 'no', key: 'No', text: 'No',
+        },
+      ],
+    skipField: true,
+    error: undefined,
+    rule: 'required',
+  },
   brokerageFirmName: {
     key: 'brokerageFirmName',
     value: '',
@@ -582,22 +582,22 @@ export const BROKERAGE_EMPLOYMENT = {
 };
 
 export const PUBLIC_COMPANY_REL = {
-  // publicCompanyRel: {
-  //   key: 'publicCompanyRel',
-  //   value: '',
-  //   values:
-  //     [
-  //       {
-  //         label: 'Yes', value: 'yes', key: 'Yes', text: 'Yes',
-  //       },
-  //       {
-  //         label: 'No', value: 'no', key: 'No', text: 'No',
-  //       },
-  //     ],
-  //   skipField: true,
-  //   error: undefined,
-  //   rule: 'required',
-  // },
+  publicCompanyRel: {
+    key: 'publicCompanyRel',
+    value: '',
+    values:
+      [
+        {
+          label: 'Yes', value: 'yes', key: 'Yes', text: 'Yes',
+        },
+        {
+          label: 'No', value: 'no', key: 'No', text: 'No',
+        },
+      ],
+    skipField: true,
+    error: undefined,
+    rule: 'required',
+  },
   publicCompanyTicker: {
     key: 'publicCompanyTicker',
     value: '',
@@ -681,15 +681,15 @@ export const INVESTOR_PROFILE = {
 };
 
 export const FINANCES = {
-  // investorProfileType: {
-  //   value: '',
-  //   values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint (Married)', value: 'JOINT' }],
-  //   error: undefined,
-  //   rule: 'required',
-  //   customErrors: {
-  //     required: 'required',
-  //   },
-  // },
+  investorProfileType: {
+    value: '',
+    values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint (Married)', value: 'JOINT' }],
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: 'required',
+    },
+  },
   netWorth: {
     value: '',
     label: 'Net Worth',

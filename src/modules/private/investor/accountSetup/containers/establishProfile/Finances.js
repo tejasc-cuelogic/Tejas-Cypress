@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Message, Divider, Button } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { MaskedInput } from '../../../../../../theme/form';
+import { MaskedInput, FormRadioGroup } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -14,7 +14,7 @@ export default class Finances extends Component {
   render() {
     const {
       FINANCES_FORM, stepToBeRendered,
-      financesChange,
+      financesChange, investorProfileChange,
       updateInvestorProfileData,
     } = this.props.investorProfileStore;
     const { errors, multiSteps } = this.props.uiStore;
@@ -34,7 +34,7 @@ export default class Finances extends Component {
         </p> */}
         {!isMobile && <Divider hidden />}
         <Form error>
-          {/* <FormRadioGroup
+          <FormRadioGroup
             fielddata={FINANCES_FORM.fields.investorProfileType}
             name="investorProfileType"
             changed={(e, result) => {
@@ -44,7 +44,7 @@ export default class Finances extends Component {
             containerclassname="three wide button-radio center-align"
             showerror
           />
-          <Divider hidden /> */}
+          <Divider hidden />
           <div className={`${isMobile ? '' : 'field-wrap'} left-align`}>
             <Form.Group widths={2}>
               {['netWorth', 'annualIncomeCurrentYear'].map(field => (

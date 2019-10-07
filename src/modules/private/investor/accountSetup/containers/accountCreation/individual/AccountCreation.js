@@ -51,7 +51,7 @@ export default class AccountCreation extends React.Component {
   render() {
     const {
       inProgress, inProgressArray,
-      isEnterPressed,
+      isEnterPressed, setFieldvalue,
       setIsEnterPressed,
       resetIsEnterPressed,
       createAccountMessage,
@@ -103,7 +103,7 @@ export default class AccountCreation extends React.Component {
     ];
     return (
       <div className="step-progress">
-        <MultiStep isAccountCreation loaderMsg={createAccountMessage} setLinkbankSummary={setLinkBankSummary} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} loaderMsg={createAccountMessage} setLinkbankSummary={setLinkBankSummary} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }
