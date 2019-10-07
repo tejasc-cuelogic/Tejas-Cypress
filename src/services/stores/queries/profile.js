@@ -176,6 +176,26 @@ export const isUniqueSSN = gql`
     }
   }`;
 
+export const verifyCip = gql`
+  mutation _verifyCip($userId: String!, $user: UserCIPInput, $phoneDetails: phoneInput!){
+    verifyCip(userId: $userId, user: $user, phoneDetails: $phoneDetails)
+  }`;
+
+export const verifyCipSoftFail = gql`
+  mutation verifyCipSoftFail($answers: [CIPAnswerInput]){
+    verifyCipSoftFail(answers: $answers)
+  }`;
+
+export const verifyCipHardFail = gql`
+mutation verifyCipHardFail($license: String!, $residence: String!, $userId: String) {
+    verifyCipHardFail(
+      license: $license
+      residence: $residence
+      userId: $userId
+    )
+  }`;
+
+
 export const portPrequalDataToApplication = gql`
   mutation portPrequalDataToApplication($prequalApplicationData: PrequalApplicationInput!) {
     portPrequalDataToApplication(
@@ -233,18 +253,3 @@ export const checkMigrationByEmail = gql`
   mutation checkMigrationByEmail($migrationByEmailData: CheckMigrationByEmailInput!) {
     checkMigrationByEmail(migrationByEmailData: $migrationByEmailData)
  }`;
-
-export const checkValidAddress = gql`
-  query checkValidInvestorAddress($street: String!, $city: String!, $state: String!, $zipCode: String!, $streetTwo: String!) {
-    checkValidInvestorAddress(
-      street: $street,
-      city: $city,
-      state: $state,
-      zipCode: $zipCode,
-      streetTwo: $streetTwo
-    ){
-      valid
-      message
-    }
-  }
-`;

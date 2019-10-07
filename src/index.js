@@ -37,6 +37,12 @@ if (['localhost', 'develop', 'dev', 'predev', 'review'].includes(REACT_APP_DEPLO
   window.APP_STATE = stores;
 }
 
+// window.addEventListener('unhandledrejection', (e) => {
+//   window.logger('Error occurred:', e);
+//   e.preventDefault();
+// });
+
+
 promiseFinally.shim();
 configure({ enforceActions: true });
 

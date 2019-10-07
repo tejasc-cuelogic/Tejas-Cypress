@@ -14,6 +14,21 @@ export class NsUiStore extends DataModelStore {
     this.loadingArray = [];
   }
 
+  setLoader = (setLoader) => {
+    if (setLoader) {
+      this.setFieldValue('loadingArray', setLoader, false, true);
+    }
+  }
+
+  resetLoader = (removeLoader, operation) => {
+    if (removeLoader) {
+      removeLoader.map(item => (this.filterLoaderByOperation(item)));
+    } else {
+      this.filterLoaderByOperation(operation);
+    }
+  }
+
+
   filterLoaderByOperation = (operation) => {
     this.loadingArray = this.loadingArray.filter(el => el !== operation);
   }

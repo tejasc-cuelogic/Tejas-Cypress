@@ -6,14 +6,15 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
-import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, checkValidAddress, isUniqueSSN, verifyCIPUser, updateUserCIPInfo, verifyCIPAnswers, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
+import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isUniqueSSN, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserCIPInfo, verifyCIPAnswers, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
 import { fileUpload } from '../../../actions';
+import { INVESTOR_URLS } from '../../../constants/url';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
-import { US_STATES_FOR_INVESTOR, FILE_UPLOAD_STEPS } from '../../../../constants/account';
+import { US_STATES, FILE_UPLOAD_STEPS } from '../../../../constants/account';
 
 export class IdentityStore {
   @observable ID_VERIFICATION_FRM = FormValidator.prepareFormObject(USER_IDENTITY);
@@ -44,6 +45,12 @@ export class IdentityStore {
 
   @observable isAdmin = false;
 
+  cipStepUrlMapping = {
+    ciphardFail: { steps: ['userCIPHardFail'], url: INVESTOR_URLS.cipHardFail },
+    cipSoftFail: { steps: ['userCIPSoftFail'], url: INVESTOR_URLS.cipSoftFail },
+    cipPass: { steps: ['userCIPPass', 'OFFLINE', 'phoneMfa'], url: INVESTOR_URLS.phoneVerification },
+    cip: { steps: ['Unique SSN check', 'Address Verification', 'PHONE_VERIFICATION'], url: INVESTOR_URLS.cip },
+  }
 
   @action
   setFieldValue = (field, value) => {
@@ -168,42 +175,16 @@ export class IdentityStore {
   @computed
   get formattedUserInfoForCip() {
     const { fields } = this.ID_VERIFICATION_FRM;
-    const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });
-    const roles = get(userStore.currentUser, 'roles');
-    const { phone, legalDetails } = roles.includes('investor') ? userDetailsStore.userDetails : userDetailsStore.detailsOfUser.data.user;
-    const userInfo = {
-      legalName: {
-        salutation: fields.title.value,
-        firstLegalName: fields.firstLegalName.value,
-        lastLegalName: fields.lastLegalName.value,
-      },
-      dateOfBirth: fields.dateOfBirth.value,
-      ssn: fields.ssn.value || legalDetails.ssn,
-      legalAddress: {
-        street: fields.residentalStreet.value,
-        city: fields.city.value,
-        state: selectedState ? selectedState.key : null,
-        zipCode: fields.zipCode.value,
-        streetTwo: fields.streetTwo.value,
-      },
-    };
-    const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
-    const verificationDocs = {
-      idProof: {
-        fileId: photoId.fileId || get(legalDetails, 'verificationDocs.idProof.fileId'),
-        fileName: photoId.value || get(legalDetails, 'verificationDocs.idProof.fileName'),
-      },
-      addressProof: {
-        fileId: proofOfResidence.fileId || get(legalDetails, 'verificationDocs.addressProof.fileId'),
-        fileName: proofOfResidence.value || get(legalDetails, 'verificationDocs.addressProof.fileName'),
-      },
-    };
-    if (photoId.fileId || get(legalDetails, 'verificationDocs.idProof.fileId')) {
-      userInfo.verificationDocs = verificationDocs;
-    }
-    const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
-    const phoneDetails = { number };
-    return { userInfo, phoneDetails };
+    const user = FormValidator.evaluateFormData(fields);
+    const phoneDetails = { number: fields.phoneNumber.value };
+    return { user, phoneDetails };
+  }
+
+  @computed
+  get formattedCipAnswers() {
+    return Object.keys(this.ID_VERIFICATION_QUESTIONS.fields).map(type => ({
+      type, text: this.ID_VERIFICATION_QUESTIONS.fields[type].value,
+    }));
   }
 
   checkIncorrectAns = res => res.key && (res.key.split('.').includes('incorrect') || res.key.split('.').includes('incomplete'))
@@ -256,10 +237,10 @@ export class IdentityStore {
           : this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
       }
     }
-    const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });
+    const selectedState = find(US_STATES, { value: fields.state.value });
     const userInfo = {
       legalName: {
-        salutation: fields.title.value,
+        salutation: fields.salutation.value,
         firstLegalName: fields.firstLegalName.value,
         lastLegalName: fields.lastLegalName.value,
       },
@@ -267,7 +248,7 @@ export class IdentityStore {
       dateOfBirth: fields.dateOfBirth.value,
       ssn: fields.ssn.value || legalDetails.ssn,
       legalAddress: {
-        street: fields.residentalStreet.value,
+        street: fields.street.value,
         city: fields.city.value,
         state: selectedState ? selectedState.key : null,
         zipCode: fields.zipCode.value,
@@ -305,7 +286,122 @@ export class IdentityStore {
   }
 
   @action
-  verifyUserIdentity = () => {
+  verifyCip = async () => {
+    try {
+      let url = '';
+      this.setFieldValue('signUpLoading', true);
+      const res = await client
+        .mutate({
+          mutation: verifyCip,
+          variables: { userId: userDetailsStore.selectedUserId, ...this.formattedUserInfoForCip },
+        });
+
+      if (res.data.verifyCip) {
+        if (res.data.verifyCip.questions) {
+          this.setIdentityQuestions(res.data.verifyCip.questions);
+        }
+        this.setVerifyIdentityResponse(res.data.verifyCip);
+
+        const stepName = Object.keys(this.cipStepUrlMapping).find((key => (
+          this.cipStepUrlMapping[key].steps.includes(res.data.verifyCip.step)
+        )));
+
+        if (stepName === 'cipPass') {
+          await this.updateUserDataAndSendOtp();
+        }
+        this.setFieldValue('signUpLoading', false);
+        // eslint-disable-next-line prefer-destructuring
+        url = this.cipStepUrlMapping[stepName].url;
+      }
+      return { res, url };
+    } catch (err) {
+      uiStore.setFieldvalue('errors', DataFormatter.getSimpleErr(err));
+      this.setFieldValue('signUpLoading', false);
+      return false;
+    }
+  }
+
+  updateUserDataAndSendOtp = async () => {
+    userDetailsStore.updateUserDetails('legalDetails', this.formattedUserInfoForCip.user);
+    userDetailsStore.updateUserDetails('phone', this.formattedUserInfoForCip.phoneDetails);
+    await this.startPhoneVerification();
+  }
+
+  @action
+  verifyCipSoftFail = async () => {
+    const payLoad = {
+      mutation: verifyCipSoftFail,
+      mutationName: 'verifyCipSoftFail',
+      variables: {
+        cipAnswers: {
+          id: this.ID_VERIFICATION_FRM.response.Id,
+          answers: this.formattedCipAnswers,
+        },
+      },
+      message: {
+        success: 'Identity questions are verified!',
+        error: 'Identity questions are not verified.',
+      },
+    };
+    const { res, url } = await this.cipWrapper(payLoad);
+    return { res, url };
+  }
+
+
+@action
+verifyCipHardFail = async () => {
+  const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
+  const payLoad = {
+    mutation: verifyCipHardFail,
+    mutationName: 'verifyCipHardFail',
+    variables: {
+      license: photoId.fileId,
+      residence: proofOfResidence.fileId,
+    },
+    message: {
+      success: 'CIP documents are verified!',
+      error: 'CIP documents are not verified.',
+    },
+  };
+  const { res, url } = await this.cipWrapper(payLoad);
+  return { res, url };
+}
+
+cipWrapper = async (payLoad) => {
+  try {
+    let url = '';
+    this.setFieldValue('signUpLoading', true);
+    const res = await client
+      .mutate({
+        mutation: payLoad.mutation,
+        variables: payLoad.variables,
+      });
+
+    const stepName = Object.keys(this.cipStepUrlMapping).find((key => (
+      this.cipStepUrlMapping[key].steps.includes(get(res, `data.${payLoad.mutationName}.step`))
+    )));
+
+    if (stepName === 'cipPass') {
+      if (get(payLoad, 'message.success')) {
+        Helper.toast(payLoad.message.success, 'success');
+      }
+      await this.updateUserDataAndSendOtp();
+    } else if (get(payLoad, 'message.error')) {
+      Helper.toast(payLoad.message.error, 'error');
+    }
+    this.setFieldValue('signUpLoading', false);
+    // eslint-disable-next-line prefer-destructuring
+    url = this.cipStepUrlMapping[stepName].url;
+    return { res, url };
+  } catch (err) {
+    uiStore.setFieldvalue('errors', DataFormatter.getSimpleErr(err));
+    this.setFieldValue('signUpLoading', false);
+    return false;
+  }
+}
+
+  @action
+  verifyUserIdentity = async () => {
     this.ID_VERIFICATION_FRM.response = {};
     this.setCipStatus('');
     let userId = userStore.currentUser.sub;
@@ -317,7 +413,7 @@ export class IdentityStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: verifyCIPUser,
+          mutation: verifyCip,
           variables: {
             userId,
             user: this.formattedUserInfoForCip.userInfo,
@@ -373,8 +469,7 @@ export class IdentityStore {
   }
 
   @action
-  setIdentityQuestions = () => {
-    const { response } = this.ID_VERIFICATION_FRM;
+  setIdentityQuestions = (response) => {
     const questionsArray = identityHelper.setIdentityQuestions(response);
     this.ID_VERIFICATION_QUESTIONS.fields = questionsArray;
     this.setFieldValue('signUpLoading', false);
@@ -726,7 +821,7 @@ export class IdentityStore {
   @computed
   get profileDetails() {
     const { fields } = this.ID_PROFILE_INFO;
-    const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });
+    const selectedState = find(US_STATES, { value: fields.state.value });
     const profileDetails = {
       firstName: fields.firstName.value,
       lastName: fields.lastName.value,
@@ -846,39 +941,6 @@ export class IdentityStore {
   })
 
   @action
-  checkValidAddress = () => new Promise((resolve) => {
-    const {
-      residentalStreet, state, city, zipCode, streetTwo,
-    } = this.ID_VERIFICATION_FRM.fields;
-    const payLoad = {
-      street: residentalStreet.value,
-      city: city.value,
-      state: state.value,
-      zipCode: zipCode.value,
-      streetTwo: streetTwo.value,
-    };
-    this.setFieldValue('signUpLoading', true);
-    const result = graphql({
-      client,
-      query: checkValidAddress,
-      fetchPolicy: 'network-only',
-      variables: payLoad,
-      onFetch: (res) => {
-        if (result && !result.loading) {
-          if (res.checkValidInvestorAddress && res.checkValidInvestorAddress.valid === false) {
-            this.setFieldValue('signUpLoading', false);
-          }
-          resolve(res.checkValidInvestorAddress);
-        }
-      },
-      onError: (err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        this.setFieldValue('signUpLoading', false);
-      },
-    });
-  })
-
-  @action
   resetStoreData = () => {
     this.resetFormData('ID_VERIFICATION_FRM');
     this.ID_VERIFICATION_DOCS_FRM = FormValidator.prepareFormObject(IDENTITY_DOCUMENTS);
@@ -894,17 +956,17 @@ export class IdentityStore {
     const { legalDetails, phone } = isAdmin ? userDetailsStore.detailsOfUser.data.user : userDetailsStore.userDetails;
     const { fields } = this.ID_VERIFICATION_FRM;
     if (legalDetails && legalDetails.legalName) {
-      fields.title.value = legalDetails.legalName.salutation;
+      fields.salutation.value = legalDetails.legalName.salutation;
       fields.firstLegalName.value = legalDetails.legalName.firstLegalName;
       fields.lastLegalName.value = legalDetails.legalName.lastLegalName;
     }
     if (legalDetails && legalDetails.legalAddress) {
       fields.city.value = legalDetails.legalAddress.city;
-      const selectedState = find(US_STATES_FOR_INVESTOR, { key: legalDetails.legalAddress.state });
+      const selectedState = find(US_STATES, { key: legalDetails.legalAddress.state });
       if (selectedState) {
         fields.state.value = selectedState.value;
       }
-      fields.residentalStreet.value = legalDetails.legalAddress.street;
+      fields.street.value = legalDetails.legalAddress.street;
       fields.zipCode.value = legalDetails.legalAddress.zipCode;
     }
     if (legalDetails && legalDetails.dateOfBirth) {
@@ -955,7 +1017,6 @@ export class IdentityStore {
     uiStore.setProgress();
     const { email, code, givenName } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
     const verifyOTPData = {
-      resourceId: this.requestOtpResponse,
       confirmationCode: code,
       address: email,
       firstName: givenName,
