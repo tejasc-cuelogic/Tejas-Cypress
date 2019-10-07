@@ -654,8 +654,10 @@
         margin: @28px -@10px;
         width: calc(100% + 20px);
         max-width: calc(100% + 20px);
+        @media only screen and (max-width : @largestMobileScreen){
+            margin-top: 0;
+        }
         @media only screen and (max-width : @largestTabletScreen){
-            margin: 0 -@10px;
             &.investment-summary {
                 margin-top: 0;
             }

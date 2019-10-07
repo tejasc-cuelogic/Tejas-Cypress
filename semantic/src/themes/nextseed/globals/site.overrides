@@ -468,7 +468,7 @@ footer{
 			}
 			img.ui.image {
 				display: inline-block;
-				margin-right: @38px;
+				// margin-right: @38px;
 				~a img.ui.image{
 					margin-right: 0;
 				}

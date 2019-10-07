@@ -135,7 +135,7 @@ export const PRIVATE_NAV = [
     ],
   },
   {
-    title: 'Accounts',
+    title: 'Setup',
     accessibleTo: ['investor'],
     to: 'setup',
     path: 'investor/setup',
