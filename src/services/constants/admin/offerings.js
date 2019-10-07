@@ -1026,13 +1026,13 @@ export const LEADERSHIP_EXP = {
       customErrors: { string: '* required.' },
     },
     dateOfService: {
-      label: 'Dates of Service',
+      label: 'Date of Service',
       value: '',
       error: undefined,
       rule: 'date',
       placeHolder: 'MM-DD-YYYY',
       objType: 'DATE',
-      customErrors: { date: 'Dates of Service is not a valid date format.' },
+      customErrors: { date: 'Date of Service is not a valid date format.' },
     },
   }],
 };
@@ -1337,7 +1337,7 @@ export const BUSINESS = {
     placeHolder: 'e.g. bakery',
   },
   dateOfService: {
-    label: 'Dates of Service',
+    label: 'Date of Service',
     value: '',
     error: undefined,
     rule: 'string|required',
@@ -1687,7 +1687,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   businessRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Business risks.  (See below for a sample)',
     value: '',
     refSelector: 'isBusinessRisk',
     error: undefined,
@@ -1701,7 +1701,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   financingRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Financing risks.  (See below for a sample)',
     value: '',
     refSelector: 'isFinancingRisk',
     error: undefined,
@@ -1717,7 +1717,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   developmentRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Development risks.  (See below for a sample)',
     value: '',
     refSelector: 'isDevelopmentRisk',
     error: undefined,
@@ -1733,7 +1733,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   reputationalRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Reputational risks.  (See below for a sample)',
     value: '',
     refSelector: 'isReputationalRisk',
     error: undefined,
@@ -1747,7 +1747,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   competitionRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your competition risks.  (See below for a sample)',
     value: '',
     refSelector: 'isCompetitionRisk',
     error: undefined,
@@ -1761,7 +1761,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   marketRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your market risks.  (See below for a sample)',
     value: '',
     refSelector: 'isMarketRisk',
     error: undefined,
@@ -1775,7 +1775,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   workStoppagesRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe the risks involved in work stoppages.',
     value: '',
     refSelector: 'isWorkStoppagesRisks',
     error: undefined,
@@ -1789,7 +1789,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   managementRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Management risks.  (See below for a sample)',
     value: '',
     refSelector: 'isManagementRisk',
     error: undefined,
@@ -1803,7 +1803,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   personnelRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Personnel risks.  (See below for a sample)',
     value: '',
     refSelector: 'isPersonnelRisk',
     error: undefined,
@@ -1817,7 +1817,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   laborSupplyRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Labor Supply risks.  (See below for a sample)',
     value: '',
     refSelector: 'isLaborSupplyRisk',
     error: undefined,
@@ -1831,7 +1831,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   privacyRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Privacy risks.  (See below for a sample)',
     value: '',
     refSelector: 'isPrivacyRisk',
     error: undefined,
@@ -1845,7 +1845,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   realEstateRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Real Estate risks.  (See below for a sample)',
     value: '',
     refSelector: 'isRealEstateRisks',
     error: undefined,
@@ -1859,7 +1859,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   supplyRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Supply risks.  (See below for a sample)',
     value: '',
     refSelector: 'isSupplyRisks',
     error: undefined,
@@ -1875,7 +1875,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   foodSafetyRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Food Safety risks.  (See below for a sample)',
     value: '',
     refSelector: 'isFoodSafetyRisks',
     error: undefined,
@@ -1891,7 +1891,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   nutritionalDisclosureRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Nutritional Disclosure risks.  (See below for a sample)',
     value: '',
     refSelector: 'isNutritionalDisclosureRisks',
     error: undefined,
@@ -1907,7 +1907,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   foodRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Food risks.  (See below for a sample)',
     value: '',
     refSelector: 'isFoodRisks',
     error: undefined,
@@ -1923,7 +1923,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   alcoholSalesRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Alcohol Sales risks.  (See below for a sample)',
     value: '',
     refSelector: 'isAlcoholSalesRisks',
     error: undefined,
@@ -1939,7 +1939,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   alcoholInvestmentRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Alcolhol Investment risks.  (See below for a sample)',
     value: '',
     refSelector: 'isAlcoholInvestmentRisks',
     error: undefined,
@@ -1955,7 +1955,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   industryRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Industry risks.  (See below for a sample)',
     value: '',
     refSelector: 'isIndustryRisks',
     error: undefined,
@@ -1971,7 +1971,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   healthcareRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Healthcare risks.  (See below for a sample)',
     value: '',
     refSelector: 'isHealthcareRisks',
     error: undefined,
@@ -1987,7 +1987,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   legalRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Legal risks.  (See below for a sample)',
     value: '',
     refSelector: 'isLegalRisks',
     error: undefined,
@@ -2003,7 +2003,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   environmentalRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Environmental risks.  (See below for a sample)',
     value: '',
     refSelector: 'isEnvironmentalRisks',
     error: undefined,
@@ -2017,7 +2017,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   itRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your IT risks.  (See below for a sample)',
     value: '',
     refSelector: 'isItRisks',
     error: undefined,
@@ -2031,7 +2031,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   accountingRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Accounting risks.  (See below for a sample)',
     value: '',
     refSelector: 'isAccountingRisks',
     error: undefined,
@@ -2045,7 +2045,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   ipRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your IP risks.  (See below for a sample)',
     value: '',
     refSelector: 'isIpRisks',
     error: undefined,
@@ -2059,7 +2059,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   regulatoryRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Regulatory risks.  (See below for a sample)',
     value: '',
     refSelector: 'isRegulatoryRisks',
     error: undefined,
@@ -2075,7 +2075,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   regulatoryFoodRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Regulatory Food risks.  (See below for a sample)',
     value: '',
     refSelector: 'isRegulatoryFoodRisks',
     error: undefined,
@@ -2091,7 +2091,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   taxRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Tax risks.  (See below for a sample)',
     value: '',
     refSelector: 'isTaxRisks',
     error: undefined,
@@ -2105,7 +2105,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   limitedRepaymentRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Limited Repayment risks.  (See below for a sample)',
     value: '',
     refSelector: 'isLimitedRepaymentRisks',
     error: undefined,
@@ -2119,7 +2119,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   relatingForecastsRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Relating Forecasts risks.  (See below for a sample)',
     value: '',
     refSelector: 'isRelatingForecastsRisks',
     error: undefined,
@@ -2133,7 +2133,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   debtFinancingRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Debt Financing risks.  (See below for a sample)',
     value: '',
     refSelector: 'isDebtFinancingRisks',
     error: undefined,
@@ -2147,7 +2147,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   conflictOfInterestRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Conflict of Interest risks.  (See below for a sample)',
     value: '',
     refSelector: 'isConflictOfInterestRisks',
     error: undefined,
@@ -2155,6 +2155,7 @@ export const RISK_FACTORS = {
     defaultValue: 'The key persons individually or as an entity may wish to own, operate or consult with other operations in the area similar to {{shorthand_name}}, including operations utilizing the brand associated with us. Such other businesses may be owned by entities other than {{shorthand_name}}. While it is the intention of the key persons to place such businesses operations strategically so as to maximize the revenue and profitability of each business, there can be no guarantee that such activities will not have a deleterious effect on the revenues of {{shorthand_name}}’s operations due to unintended competitive factors resulting from the comparative accessibility and desirability of the respective businesses. The relevant key persons will have no duty to account to {{shorthand_name}} for profits derived from such other such activities.',
   },
 };
+
 
 export const COMMON = {
   hasTheIssuer: {

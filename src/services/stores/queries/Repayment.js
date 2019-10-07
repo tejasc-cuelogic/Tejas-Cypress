@@ -43,6 +43,11 @@ export const paymentsIssuerList = gql`
         id
         offeringStatus
         stage
+        offering {
+          launch {
+            expectedOpsDate
+          }
+        }
       }
     }
   }
