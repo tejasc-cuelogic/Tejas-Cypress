@@ -14,6 +14,7 @@ import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
 import Helper from '../../../../../../helper/utility';
 import ConfirmModel from './accountDetails/ConfirmModel';
 import AddWithdrawFunds from './accountDetails/AddWithdrawFunds';
+import CancelInvestment from '../../../../investor/accountDetails/components/portfolio/CancelInvestment';
 
 const navMeta = [
   { title: 'Overview', to: 'overview' },
@@ -75,6 +76,11 @@ export default class AccountDetails extends Component {
             <Route exact path={`${match.url}/activity`} render={props => <ActivityHistory resourceId={get(account, 'details.accountId')} module="userDetails" showFilters={['activityType', 'activityUserType']} {...props} />} />
             <Route path={`${match.url}/statements`} render={props => <Statements isAdmin {...props} />} />
             <Route exact path={`${match.url}/investments`} render={props => <Portfolio isAdmin {...props} />} />
+            <Route
+              isAdmin
+              path={`${match.url}/investments/cancel-investment/:id`}
+              render={props => <CancelInvestment isAdmin accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}
+            />
             <Route path={`${match.url}/investments/investment-details/:id`} render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} />
             <Route exact path={`${match.url}/transactions`} render={props => <Transactions isAdmin {...props} />} />
             <Route exact path={`${match.url}/transactions/:action`} render={props => <AddWithdrawFunds {...props} userId={get(this.props.userDetailsStore.getDetailsOfUser, 'id')} refLink={`${match.url}/transactions`} accountId={get(account, 'details.accountId')} />} />

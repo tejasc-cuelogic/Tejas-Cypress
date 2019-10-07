@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Popup, List } from 'semantic-ui-react';
+import { FormHelper } from '../../helper';
 
 
 export const INVESTMENT_INFO = {
@@ -164,3 +165,23 @@ export const INVESTMENT_LIMITS = {
     tooltip: 'Other Crowdfunding investments',
   },
 };
+
+export const CANCEL_INVESTMENT = FormHelper.generateMeta([
+  ['voidReason', 'Void Reason', '', 'optional', 'Void Reason'],
+  ['voidType', 'Void Type', 'ADMINCANCEL', 'optional', 'Void Type'],
+  ['sendNotification', 'Send Notification', '', 'optional', ''],
+]);
+
+export const VOID_TYPE = [
+  { key: 'NOSIGN', value: 'NOSIGN', text: 'NO SIGN' },
+  { key: 'USERCANCEL', value: 'USERCANCEL', text: 'USER CANCEL' },
+  { key: 'REPLACED', value: 'REPLACED', text: 'REPLACED' },
+  { key: 'AUTODRAFTFAILED', value: 'AUTODRAFTFAILED', text: 'AUTO DRAFT FAILED' },
+  { key: 'FAILEDVALIDATION_PRESIGN', value: 'FAILEDVALIDATION_PRESIGN', text: 'FAILED VALIDATION PRESIGN' },
+  { key: 'FAILEDVALIDATION_POSTSIGN', value: 'FAILEDVALIDATION_POSTSIGN', text: 'FAILED VALIDATION POSTSIGN' },
+  { key: 'ERROR', value: 'ERROR', text: 'ERROR' },
+  { key: 'OFFERING_RESET', value: 'OFFERING_RESET', text: 'OFFERING RESET' },
+  { key: 'OFFERING_FAILED', value: 'OFFERING_FAILED', text: 'OFFERING FAILED' },
+  { key: 'ADMINCANCEL', value: 'ADMINCANCEL', text: 'ADMIN CANCEL' },
+  { key: 'OFFERING_TERMINATED', value: 'OFFERING_TERMINATED', text: 'OFFERING TERMINATED' },
+];
