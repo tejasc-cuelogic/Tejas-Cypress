@@ -6,6 +6,7 @@ import { ListErrors } from '../../../../../theme/shared';
 import { validationActions } from '../../../../../services/actions';
 import Helper from '../../../../../helper/utility';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore', 'uiStore')
 @observer
 export default class AddFunds extends Component {
@@ -96,11 +97,15 @@ export default class AddFunds extends Component {
     const isInValid = this.isValidFund(addFundsByAccType);
     return (
       <>
-        <div className="center-align">
-          <Header as="h3">Add funds</Header>
-          <p>How much would you like to deposit into your account today?</p>
+        <div className={isMobile ? '' : 'center-align'}>
+          <Header as="h4">How much would you like to deposit?</Header>
+          <p>
+            We
+          {"'"}
+          ll transfer funds directly from the bank account you just linked.
+          </p>
           <Form error onSubmit={this.handleSubmitForm}>
-            <div className="field-wrap left-align">
+            <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
               <MaskedInput
                 name="value"
                 type="tel"
@@ -121,11 +126,13 @@ export default class AddFunds extends Component {
               </Message>
               )
             }
-            <Button primary size="large" className="relaxed" content="Confirm" disabled={isInValid || !isAccountPresent || inProgress} />
+            <Button primary size="large" fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Confirm" disabled={isInValid || !isAccountPresent || inProgress} />
           </Form>
-          {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])
-            && <Button color="green" className="link-button mt-30" disabled={!isAccountPresent || inProgress} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
-          }
+          <div className="center-align">
+            {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])
+              && <Button color="green" className="link-button mt-30" disabled={!isAccountPresent || inProgress} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
+            }
+          </div>
         </div>
       </>
     );

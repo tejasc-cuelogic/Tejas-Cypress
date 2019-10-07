@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import moment from 'moment';
 import React from 'react';
-import { Icon } from 'semantic-ui-react';
 import Validator from 'validatorjs';
 import Helper from '../helper/utility';
 
@@ -313,12 +312,14 @@ export const IRA_ACC_TYPES = {
     values: [
       {
         label: 'Traditional',
+        labelDescription: 'Investments are made with pre-tax dollars, and earnings grow tax-deferred',
         value: 0,
         description: 'Earnings from investments on a Traditional Indiviudal Retirement Account grow tax-deferred.',
         rawValue: 'traditional',
       },
       {
         label: 'Roth',
+        labelDescription: 'Investments are made with after-tax dollars, and earnings grow tax-free',
         value: 1,
         description: 'Earnings from investments in a Roth Retirement Account grow tax free.',
         rawValue: 'roth',
@@ -335,19 +336,22 @@ export const IRA_FUNDING = {
     key: 'fundingType',
     values: [
       {
-        label: 'Check',
+        label: 'Checking Account',
+        labelDescription: 'Make an initial deposit by linking an external checking account',
         value: 0,
         description: 'Fund IRA by Check',
         rawValue: 'check',
       },
       {
         label: 'IRA Transfer',
+        labelDescription: 'Transfer funds from an existing IRA Account',
         value: 1,
         description: 'Fund IRA by Transfer',
         rawValue: 'iraTransfer',
       },
       {
-        label: 'Direct Rollover',
+        label: 'Rollover',
+        labelDescription: 'Roll over funds from your 401(k), 403(b), or other qualified account',
         value: 2,
         description: 'Fund IRA by Direct Rollover',
         rawValue: 'directRollOver',
@@ -364,7 +368,7 @@ export const IRA_FIN_INFO = {
     value: '',
     error: undefined,
     rule: 'required|numeric',
-    tooltip: (<span>Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the <a target="_blank" rel="noopener noreferrer" href="https://www.sec.gov/oiea/investor-alerts-bulletins/ib_crowdfunding-.html">SEC`s Investor Bulletin</a> for the latest information</span>),
+    tooltip: (<>Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the <a target="_blank" rel="noopener noreferrer" href="https://www.sec.gov/oiea/investor-alerts-bulletins/ib_crowdfunding-.html">SEC`s Investor Bulletin</a> for the latest information</>),
     label: 'Net worth',
     placeHolder: 'Your networth',
     maxLength: 15,
@@ -471,7 +475,7 @@ export const ENTITY_TRUST_INFO = {
     rule: 'required',
   },
   trustDate: {
-    key: 'trustDate', value: moment(`${new Date().getFullYear()}-01-01`).format('MM-DD-YYYY'), error: undefined, rule: 'required', label: 'Date of Trust',
+    key: 'trustDate', value: moment(`${new Date().getFullYear()}-01-01`).format('MM-DD-YYYY'), error: undefined, rule: 'required', label: 'Date Trust Established',
   },
 };
 
@@ -510,7 +514,8 @@ export const ACC_TYPE = {
     value: 0,
     values: [
       {
-        label: (<label><Icon className="ns-individual-line" />Individual</label>),
+        label: 'Individual Account',
+        labelDescription: 'Get started with a personal NextSeed Investment Account',
         value: 0,
         description: `Open a NextSeed investment account to begin investing in local businesses.
         An initial deposit can be quickly and securely completed by linking your checking account.
@@ -521,7 +526,8 @@ export const ACC_TYPE = {
         accType: 'individual',
       },
       {
-        label: (<label><Icon className="ns-ira-line" />IRA</label>),
+        label: 'Self-Directed IRA',
+        labelDescription: 'Open a traditional or Roth IRA (minimum deposit of $5,000)',
         value: 1,
         description: `Open a self-directed NextSeed IRA to begin investing in local businesses. (Traditional and Roth IRA options available.)
         Minimum opening deposit: $5,000. Investment limits apply.
@@ -530,7 +536,8 @@ export const ACC_TYPE = {
         accType: 'ira',
       },
       {
-        label: (<label><Icon className="ns-entity-line" />Entity</label>),
+        label: 'Entity Account',
+        labelDescription: 'Invest with a corporate, LLC or Trust investment account',
         value: 2,
         description: `Invest in local businesses through an Entity investment account. (Note: Investment limits for Entity accounts are treated separately from Individual investment accounts)
         An initial deposit can be quickly and securely completed by linking your entity checking account. You can easily connect your account by logging in through our secure system or by manually entering your account information.
@@ -544,28 +551,29 @@ export const ACC_TYPE = {
 };
 
 export const BROKERAGE_EMPLOYMENT = {
-  brokerageEmployment: {
-    key: 'brokerageEmployment',
-    value: '',
-    values:
-      [
-        {
-          label: 'Yes', value: 'yes', key: 'Yes', text: 'Yes',
-        },
-        {
-          label: 'No', value: 'no', key: 'No', text: 'No',
-        },
-      ],
-    skipField: true,
-    error: undefined,
-    rule: 'required',
-  },
+  // brokerageEmployment: {
+  //   key: 'brokerageEmployment',
+  //   value: '',
+  //   values:
+  //     [
+  //       {
+  //         label: 'Yes', value: 'yes', key: 'Yes', text: 'Yes',
+  //       },
+  //       {
+  //         label: 'No', value: 'no', key: 'No', text: 'No',
+  //       },
+  //     ],
+  //   skipField: true,
+  //   error: undefined,
+  //   rule: 'required',
+  // },
   brokerageFirmName: {
     key: 'brokerageFirmName',
     value: '',
     label: 'Member Firm Name',
     error: undefined,
-    rule: 'alphaBrokerage|required_if:brokerageEmployment,yes',
+    // rule: 'alphaBrokerage|required_if:brokerageEmployment,yes',
+    rule: 'optional',
     placeHolder: 'Enter here',
     customErrors: {
       required_if: 'required',
@@ -574,22 +582,22 @@ export const BROKERAGE_EMPLOYMENT = {
 };
 
 export const PUBLIC_COMPANY_REL = {
-  publicCompanyRel: {
-    key: 'publicCompanyRel',
-    value: '',
-    values:
-      [
-        {
-          label: 'Yes', value: 'yes', key: 'Yes', text: 'Yes',
-        },
-        {
-          label: 'No', value: 'no', key: 'No', text: 'No',
-        },
-      ],
-    skipField: true,
-    error: undefined,
-    rule: 'required',
-  },
+  // publicCompanyRel: {
+  //   key: 'publicCompanyRel',
+  //   value: '',
+  //   values:
+  //     [
+  //       {
+  //         label: 'Yes', value: 'yes', key: 'Yes', text: 'Yes',
+  //       },
+  //       {
+  //         label: 'No', value: 'no', key: 'No', text: 'No',
+  //       },
+  //     ],
+  //   skipField: true,
+  //   error: undefined,
+  //   rule: 'required',
+  // },
   publicCompanyTicker: {
     key: 'publicCompanyTicker',
     value: '',
@@ -613,7 +621,7 @@ export const EMPLOYMENT = {
           label: 'Employed', value: 'EMPLOYED', key: 'Employed', text: 'Employed',
         },
         {
-          label: 'Self Employed', value: 'SELF_EMPLOYED', key: 'Self Employed', text: 'Self Employed',
+          label: 'Self-Employed', value: 'SELF_EMPLOYED', key: 'Self Employed', text: 'Self Employed',
         },
         {
           label: 'Retired', value: 'RETIRED', key: 'Retired', text: 'Retired',
@@ -636,7 +644,7 @@ export const EMPLOYMENT = {
     label: 'Employer',
     error: undefined,
     rule: 'required_if:status,EMPLOYED',
-    placeHolder: 'Type employer name',
+    placeHolder: 'Enter employer name',
     objRef: 'employment',
     objRefOutput: 'employment',
     customErrors: {
@@ -646,10 +654,10 @@ export const EMPLOYMENT = {
   position: {
     key: 'position',
     value: '',
-    label: 'Current Position Held',
+    label: 'Position',
     error: undefined,
     rule: 'required_if:status,EMPLOYED',
-    placeHolder: 'E.g. CEO',
+    placeHolder: 'e.g. Manager',
     objRef: 'employment',
     objRefOutput: 'employment',
     customErrors: {
@@ -673,15 +681,15 @@ export const INVESTOR_PROFILE = {
 };
 
 export const FINANCES = {
-  investorProfileType: {
-    value: '',
-    values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint (Married)', value: 'JOINT' }],
-    error: undefined,
-    rule: 'required',
-    customErrors: {
-      required: 'required',
-    },
-  },
+  // investorProfileType: {
+  //   value: '',
+  //   values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint (Married)', value: 'JOINT' }],
+  //   error: undefined,
+  //   rule: 'required',
+  //   customErrors: {
+  //     required: 'required',
+  //   },
+  // },
   netWorth: {
     value: '',
     label: 'Net Worth',

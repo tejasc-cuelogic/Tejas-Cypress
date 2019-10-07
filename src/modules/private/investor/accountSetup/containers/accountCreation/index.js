@@ -8,6 +8,7 @@ import IndividualAccCreation from './individual/AccountCreation';
 import EntityAccCreation from './entity/AccountCreation';
 import ConfirmModal from '../../components/confirmModal';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const successMessage = 'Check out some of the investment opportunities now available to you as a member of the NextSeed community.';
 const processingMessage = 'While we set up your account, check out some of the investment opportunities now available to you as a member of the NextSeed community.';
 @inject('identityStore', 'accountStore', 'bankAccountStore', 'uiStore', 'userDetailsStore', 'userStore')
@@ -20,7 +21,9 @@ export default class AccountCreation extends Component {
     const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
     const accType = INVESTMENT_ACC_TYPES.fields.accType.values[0];
     // eslint-disable-next-line prefer-destructuring
-    if (accType) {
+    if (isMobile) {
+      this.props.accountStore.setAccTypeChange();
+    } else if (accType) {
       this.props.accountStore.setAccTypeChange(accType.value);
     }
   }

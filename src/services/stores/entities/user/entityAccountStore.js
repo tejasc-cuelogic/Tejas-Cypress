@@ -19,6 +19,8 @@ import { validationActions, fileUpload } from '../../../actions';
 import Helper from '../../../../helper/utility';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 class EntityAccountStore {
   @observable FIN_INFO_FRM = FormValidator.prepareFormObject(ENTITY_FIN_INFO);
 
@@ -32,7 +34,7 @@ class EntityAccountStore {
 
   @observable entityData = {};
 
-  @observable stepToBeRendered = '';
+  @observable stepToBeRendered = 0;
 
   @observable entityAccountId = null;
 
@@ -145,7 +147,9 @@ class EntityAccountStore {
           }
           bankAccountStore.resetStoreData();
           this.isFormSubmitted = true;
-          Helper.toast('Entity account submitted successfully.', 'success');
+          if (!isMobile) {
+            Helper.toast('Entity account submitted successfully.', 'success');
+          }
           uiStore.setProgress(false);
           resolve();
         })
@@ -466,7 +470,9 @@ class EntityAccountStore {
         })
         .then(action((result) => {
           this.entityAccountId = result.data.upsertInvestorAccount.accountId;
-          accountStore.accountToastMessage(currentStep, actionPerformed, 'formEntityAddFunds');
+          if (!isMobile) {
+            accountStore.accountToastMessage(currentStep, actionPerformed, 'formEntityAddFunds');
+          }
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);

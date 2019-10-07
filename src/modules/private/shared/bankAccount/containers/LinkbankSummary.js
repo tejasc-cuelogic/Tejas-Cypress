@@ -5,6 +5,8 @@ import { Header, Button, Table } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 // import { ListErrors } from '../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'accountStore', 'iraAccountStore', 'entityAccountStore')
 @withRouter
 @observer
@@ -32,9 +34,8 @@ export default class LinkbankSummary extends React.Component {
       ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     return (
       <>
-        <Header as="h3" textAlign="center">Linked Bank</Header>
-        <p className="center-align mb-50">The bank account you have currently linked to this account is</p>
-        <div className="field-wrap">
+        <Header as="h4" textAlign={isMobile ? '' : 'center'}>The bank account you have currently linked to this account is</Header>
+        <div className={isMobile ? '' : 'field-wrap'}>
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
               <Table.Body>
@@ -76,8 +77,8 @@ export default class LinkbankSummary extends React.Component {
           content="Continue" onClick={() => this.handleSubmit()}
           disabled={errors || !bankAccountNumber} />
         </div> */}
-        <div className="center-align mt-30">
-          <Button color="green" className="link-button" content="or change linked bank" onClick={() => changeLinkbank()} />
+        <div className={`${isMobile ? 'mb-30' : ''} center-align mt-30`}>
+          <Button color="green" className="link-button" content="Change link bank account" onClick={() => changeLinkbank()} />
         </div>
       </>
     );

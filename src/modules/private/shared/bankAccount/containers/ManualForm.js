@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Button, Message, Dimmer, Loader } from 'semantic-ui-react';
+import { Header, Form, Button, Dimmer, Loader } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { MaskedInput, FormRadioGroup } from '../../../../../theme/form';
 import { validationActions } from '../../../../../services/actions';
 import AddFunds from './AddFunds';
 import LinkbankSummary from './LinkbankSummary';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore', 'transactionStore')
 @withRouter
@@ -17,6 +19,10 @@ export default class ManualForm extends Component {
     // this.props.bankAccountStore.setIsManualLinkBankSubmitted();
     this.props.bankAccountStore.setShouldValidateAmount();
     this.props.uiStore.clearErrors();
+    const modalEle = document.getElementById('multistep-modal');
+    if (modalEle && isMobile) {
+      modalEle.parentNode.scrollTo(0, 0);
+    }
   }
 
   handleSubmitForm = (e) => {
@@ -83,11 +89,14 @@ export default class ManualForm extends Component {
     }
     const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
     return (
-      <div className="center-align">
-        <Header as="h3">Link bank manually</Header>
-        <p>Enter your bank{"'"}s routing number and your checking account number.</p>
+      <div className={isMobile ? '' : 'center-align'}>
+        <Header as="h4">
+        Enter your bank
+          {"'"}
+s account and routing number
+        </Header>
         <Form error={!!errors} onSubmit={this.handleSubmitForm}>
-          <div className="field-wrap left-align">
+          <div className={`${isMobile ? '' : 'field-wrap'} left-align`}>
             <MaskedInput
               name="accountNumber"
               fielddata={formLinkBankManually.fields.accountNumber}
@@ -119,14 +128,18 @@ export default class ManualForm extends Component {
           </div>
           {errors
             && (
-<Message error className="mb-30">
-              <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />              {/* <ListErrors errors={[errors.message]} /> */}
-            </Message>
+            <p className="error mb-30">
+              <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />
+              {' '}
+              {/* <ListErrors errors={[errors.message]} /> */}
+            </p>
             )
           }
-          <Button primary size="large" className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid || inProgress} />
+          <Button primary size="large" fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Confirm" disabled={!formLinkBankManually.meta.isValid || inProgress} />
         </Form>
-        <Button color="green" className="link-button mt-30" content="Or link account directly" onClick={this.linkAccountDirectly} />
+        <div className="center-align">
+          <Button color="green" className="link-button mt-30" content="Link bank account automatically" onClick={this.linkAccountDirectly} />
+        </div>
       </div>
     );
   }
