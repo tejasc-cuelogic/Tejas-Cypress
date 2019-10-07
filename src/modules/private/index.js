@@ -17,7 +17,7 @@ const isMobile = document.documentElement.clientWidth < 992;
 @observer
 export default class Private extends React.Component {
   componentWillMount() {
-    this.props.uiStore.addMoreInProgressArray('privateLoading');
+    this.props.uiStore.setFieldvalue('resizeLoader', true);
   }
 
   componentDidMount() {
@@ -25,7 +25,7 @@ export default class Private extends React.Component {
     //   window.analytics.page();
     // }
     setTimeout(() => {
-      this.props.uiStore.removeOneFromProgressArray('privateLoading');
+      this.props.uiStore.setFieldvalue('resizeLoader', false);
     }, 500);
     const { userStore, referralsStore, userDetailsStore } = this.props;
     const { currentUser } = userDetailsStore;
@@ -76,7 +76,7 @@ export default class Private extends React.Component {
     const routes = this.getPrivateRoutes(UserInfo.roles);
     const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
     const { location } = this.props;
-    if (userFirstLoad === false || this.props.uiStore.inProgressArray.includes('privateLoading')) {
+    if (userFirstLoad === false || this.props.uiStore.resizeLoader) {
       return <Spinner loaderMessage="Loading..." />;
     }
     if (this.props.authStore.isUserLoggedIn) {

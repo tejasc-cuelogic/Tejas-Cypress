@@ -134,14 +134,14 @@ export const PRIVATE_NAV = [
       { title: 'Messages', to: 'talk', component: 'Messages' },
     ],
   },
-  {
-    title: 'Setup',
-    accessibleTo: ['investor'],
-    to: 'setup',
-    path: 'investor/setup',
-    isMenuHeader: true,
-    subPanel: 0,
-  },
+  // {
+  //   title: 'Setup',
+  //   accessibleTo: ['investor'],
+  //   to: 'setup',
+  //   path: 'investor/setup',
+  //   isMenuHeader: true,
+  //   subPanel: 0,
+  // },
   {
     icon: 'ns-dashboard',
     title: 'Setup',

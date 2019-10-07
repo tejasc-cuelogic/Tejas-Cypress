@@ -565,7 +565,7 @@ export const BROKERAGE_EMPLOYMENT = {
       ],
     skipField: true,
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
   },
   brokerageFirmName: {
     key: 'brokerageFirmName',
@@ -596,7 +596,7 @@ export const PUBLIC_COMPANY_REL = {
       ],
     skipField: true,
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
   },
   publicCompanyTicker: {
     key: 'publicCompanyTicker',

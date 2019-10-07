@@ -92,12 +92,13 @@ export class NavItems extends Component {
   render() {
     const { activeIndex } = this.state;
     const {
-      location, isApp, roles, match, isMobile, onToggle, refLink, newLayout,
+      location, isApp, roles, match, isMobile, onToggle, refLink, newLayout, userDetailsStore,
     } = this.props;
     const app = (isApp) ? 'app' : '';
     const myNavItems = this.props.navItems.filter(n => (n.headerMobile !== false && n.title === 'My Account' ? this.props.userStore.isInvestor : n.headerMobile !== false && n.noNav !== true));
     const investorAccounts = this.props.userDetailsStore.getAccountList;
     const hasMoreThanOneAcc = investorAccounts.length > 1;
+    const hideSetupNav = (userDetailsStore.signupStatus.activeAccounts.length > 0 || userDetailsStore.signupStatus.partialAccounts.length > 0 || userDetailsStore.signupStatus.inprogressAccounts.length > 0);
     return myNavItems.map((item, key) => (
       <>
         {item.subPanel === 1 && item.subNavigations && isMobile && !isApp ? (
@@ -183,7 +184,7 @@ export class NavItems extends Component {
               <Menu.Header>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</Menu.Header>
             </Menu.Item>
             )
-            : (item.title === 'Bonus Rewards' && !this.props.bonusRewards) || (item.isMenuHeader)
+            : (item.title === 'Bonus Rewards' && !this.props.bonusRewards) || (item.isMenuHeader) || (item.title === 'Setup' && hideSetupNav)
               ? null
               : (((item.to === 'updates' || item.to === '#updates') && this.props.countData && this.props.countData[item.to])
               || (item.to !== 'updates' || item.to !== '#updates')

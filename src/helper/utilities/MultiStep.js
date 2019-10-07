@@ -180,7 +180,7 @@ export default class MultiStep extends React.Component {
   }
 
   previous() {
-    if (this.props.inProgressArray.length) {
+    if (this.props.inProgressArray && this.props.inProgressArray.length) {
       this.props.setUiStorevalue('inProgressArray', []);
       return;
     }
