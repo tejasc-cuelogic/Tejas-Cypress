@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Table, Button, Icon, Card } from 'semantic-ui-react';
 import { kebabCase, capitalize } from 'lodash';
 import { observer, inject } from 'mobx-react';
-import { Link } from 'react-router-dom';
 import { DateTimeFormat, NsPagination } from '../../../../../../theme/shared';
 import { DataFormatter } from '../../../../../../helper';
 
@@ -13,6 +12,11 @@ export default class Listing extends Component {
 
   handleUpdatesVisibility = (record, isVisible) => {
     this.props.updateStore.updateVisibility(record, isVisible);
+  }
+
+  handleViewUpdate = (id, status) => {
+    const redirectTo = this.props.userStore.isIssuer && ['PENDING', 'PUBLISHED'].includes(status) ? 'preview' : 'edit';
+    this.props.history.push(`${this.props.match.url}/${redirectTo}/${id}`);
   }
 
   render() {
@@ -43,7 +47,7 @@ export default class Listing extends Component {
                 : this.props.data.map(record => (
                   <Table.Row key={record.refId}>
                     <Table.Cell>
-                      <Link to={`${this.props.match.url}/edit/${record.refId}`}>{record.title}</Link>
+                      <Button className="link-button" onClick={() => this.handleViewUpdate(record.refId, record.status)}>{record.title}</Button>
                     </Table.Cell>
                     <Table.Cell>{capitalize(record.scope)}</Table.Cell>
                     <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(record.updated.date, true, false, false)} /></Table.Cell>

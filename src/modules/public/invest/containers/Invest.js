@@ -8,6 +8,7 @@ import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
 import { PublicSubNav, InlineLoader } from '../../../../theme/shared';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
+import { REDIRECT_META } from '../../../../constants/redirect';
 
 const getModule = component => lazy(() => import(`../components/${component}`));
 
@@ -44,6 +45,10 @@ class Invest extends Component {
     if (utmCampaign === 'saasquatch' && rsCode) {
       props.referralsStore.getReferralCreditsInformation(rsCode).then(() => {
         window.localStorage.setItem('SAASQUATCH_REFERRAL_CODE', rsCode);
+        const redirectMeta = REDIRECT_META.find(r => r.live && r.rsCode === rsCode);
+        if (redirectMeta && redirectMeta.rsRedirect) {
+          props.history.push(redirectMeta.rsRedirect);
+        }
       });
     }
     if (props.match.isExact) {

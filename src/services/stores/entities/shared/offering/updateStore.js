@@ -314,7 +314,7 @@ export class UpdateStore {
         return null;
       });
       this.PBUILDER_FRM.fields.tiers.values = offeringUpdatesById.tiers || [];
-      this.PBUILDER_FRM.fields.allInvestor.value = offeringUpdatesById.tiers.length === 0;
+      this.PBUILDER_FRM.fields.allInvestor.value = offeringUpdatesById.tiers && offeringUpdatesById.tiers.length === 0;
       this.PBUILDER_FRM.fields.updatedDate.value = offeringUpdatesById.updatedDate;
       Validator.validateForm(this.PBUILDER_FRM);
     }
