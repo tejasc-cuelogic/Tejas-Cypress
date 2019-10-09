@@ -7,7 +7,7 @@ import RequestFactory from './factory/requestFactory';
 import CronFactory from './factory/cronFactory';
 import ProcessFactory from './factory/processFactory';
 
-@inject('factoryStore', 'nsUiStore')
+@inject('factoryStore')
 @withRouter
 @observer
 export default class Factory extends Component {
@@ -21,9 +21,9 @@ export default class Factory extends Component {
   }
 
   render() {
-    const { loadingArray } = this.props.nsUiStore;
+    const { loading } = this.props.factoryStore;
     return (
-      loadingArray.includes('getPluginList')
+      loading
         ? <InlineLoader />
         : (
           <Grid>

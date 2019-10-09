@@ -2,7 +2,6 @@ import { observable, action, computed, toJS, decorate } from 'mobx';
 import { get, isEmpty, isArray, forEach, find, includes, keyBy } from 'lodash';
 import moment from 'moment';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
-import { nsUiStore } from '../../index';
 import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger } from '../../queries/data';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
@@ -94,22 +93,18 @@ export class FactoryStore extends DataModelStore {
         client: 'PRIVATE',
         query: 'fetchCronLogs',
         variables: params,
-        setLoader: 'fetchCronLogs',
         fetchPolicy: 'network-only',
       });
-      const { loadingArray } = nsUiStore;
-      if (data && !loadingArray.includes('fetchCronLogs')) {
-        this.setFieldValue('cronLogList', data);
-        const { lek } = data.fetchCronLogs;
-        const requestStateObj = {
-          ...this.requestState,
-          lek: {
-            ...this.requestState.lek,
-            [`page-${this.requestState.page + 1}`]: lek,
-          },
-        };
-        this.setFieldValue('requestState', requestStateObj);
-      }
+      this.setFieldValue('cronLogList', data);
+      const { lek } = data.fetchCronLogs;
+      const requestStateObj = {
+        ...this.requestState,
+        lek: {
+          ...this.requestState.lek,
+          [`page-${this.requestState.page + 1}`]: lek,
+        },
+      };
+      this.setFieldValue('requestState', requestStateObj);
     } catch (error) {
       Helper.toast('Something went wrong, please try again later.', 'error');
     }

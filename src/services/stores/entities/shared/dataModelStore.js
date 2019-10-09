@@ -76,6 +76,7 @@ export default class DataModelStore {
     const apolloClient = payLoad.clientType === 'PUBLIC' ? publicClient : client;
     this.setLoader(payLoad.setLoader);
     this.auStatus = 1;
+    this.loading = true;
     MobxApollo.graphql({
       client: apolloClient,
       query: this.gqlRef[payLoad.query],
