@@ -109,7 +109,7 @@ export default class FinancialInfo extends Component {
                             Crowdfunding offerings within a 12-month period depends on your income
                             and net worth. `
                           }
-                          <Link target="_blank" to="/app/resources/faq">See FAQ on investment limits</Link>
+                          <Link target="_blank" to="/resources/education-center/investor/faq">See FAQ on investment limits</Link>
                         </p>
                         <Statistic size="tiny">
                           <Statistic.Label>
@@ -176,7 +176,7 @@ export default class FinancialInfo extends Component {
 <Card.Content>
                           <Header as="h4">Accredited Investor Status</Header>
                           <p className="intro-text">In order to participate in Reg D 506(c) offerings, you will need to verify your accredited investor status.</p>
-                          <Link target="_blank" to="/app/resources/knowledge-base/what-is-an-accredited-investor" className="intro-text highlight-text">What is an accredited investor?</Link>
+                          <Link target="_blank" to="/resources/education-center/investor/what-is-an-accredited-investor" className="intro-text highlight-text">What is an accredited investor?</Link>
                           <Divider hidden />
                           <Card.Description>
                             <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify Status" />
