@@ -45,7 +45,7 @@ export default class Overview extends Component {
   }
 
   updateApplicationStatus = (applicationId, userId) => {
-    this.props.businessAppReviewStore.updateApplicationStatus(applicationId, userId, 'APPLICATION_COMPLETED', '', 'REVIEW_FAILED').then(() => {
+    this.props.businessAppReviewStore.updateApplicationStatus(applicationId, userId, 'APPLICATION_COMPLETED', '', '', 'REVIEW_FAILED').then(() => {
       this.props.history.push(`/app/applications/${this.props.appType}`);
     });
   }
