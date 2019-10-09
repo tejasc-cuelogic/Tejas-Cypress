@@ -23,7 +23,7 @@ export default class RequestFactory extends Component {
   render() {
     const { factoryStore } = this.props;
     const {
-      REQUESTFACTORY_FRM, formChange, inProgress, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
+      REQUESTFACTORY_FRM, formChangeForPlugin, inProgress, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
     } = factoryStore;
     return (
       <Card fluid className="elastic-search">
@@ -41,7 +41,7 @@ export default class RequestFactory extends Component {
                       options={REQUESTFACTORY_FRM.fields.plugin.values}
                       placeholder="Choose here"
                       name="plugin"
-                      onChange={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
+                      onChange={(e, result) => formChangeForPlugin(e, result, 'REQUESTFACTORY_FRM')}
                     />
                     <FormDropDown
                       fielddata={REQUESTFACTORY_FRM.fields.invocationType}
@@ -50,7 +50,7 @@ export default class RequestFactory extends Component {
                       options={REQUESTFACTORY_FRM.fields.invocationType.values}
                       placeholder="Choose here"
                       name="invocationType"
-                      onChange={(e, result) => formChange(e, result, 'REQUESTFACTORY_FRM')}
+                      onChange={(e, result) => formChangeForPlugin(e, result, 'REQUESTFACTORY_FRM')}
                     />
                     <Divider section hidden />
                     <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.requestFactory || !REQUESTFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.REQUESTFACTORY.meta.isValid} loading={inProgress.requestFactory} />

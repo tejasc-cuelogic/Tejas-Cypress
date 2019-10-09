@@ -1,3 +1,5 @@
+import { FormHelper } from '../../../helper';
+
 export const common = {
   userId: {
     value: '',
@@ -209,73 +211,58 @@ export const IMAGEPROCESSINGREQUES_META = {
   },
 };
 
-export const REQUESTFACTORY_META = {
-  plugin: {
-    key: 'plugin',
-    value: '',
-    values: [],
-    label: 'Plugin',
-    error: undefined,
-    rule: 'required',
-  },
-  invocationType: {
-    key: 'invocationType',
-    value: '',
-    values: [
-      { key: 'Event', text: 'Event', value: 'Event' },
-      { key: 'RequestResponse', text: 'RequestResponse', value: 'RequestResponse' },
-    ],
-    label: 'Invocation Type',
-    error: undefined,
-    rule: 'required',
-  },
-};
+export const REQUESTFACTORY_META = FormHelper.generateMeta([
+  ['plugin', 'Plugin', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+  ['invocationType', 'Invocation Type', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'Event', text: 'Event', value: 'Event' },
+          { key: 'RequestResponse', text: 'RequestResponse', value: 'RequestResponse' },
+        ],
+      },
+    },
+  ],
+]);
 
-export const CRONFACTORY_META = {
-  cron: {
-    key: 'cron',
-    value: '',
-    values: [],
-    label: 'cron',
-    error: undefined,
-    rule: 'required',
-  },
-  cronMetaType: {
-    key: 'cronMetaType',
-    value: '',
-    values: [
-      { key: 'PLUGIN', text: 'PLUGIN', value: 'PLUGIN' },
-      { key: 'LOG', text: 'LOG', value: 'LOG' },
-    ],
-    label: 'Cron Meta Type',
-    error: undefined,
-    rule: 'optional',
-  },
-  jobId: {
-    key: 'jobId',
-    value: '',
-    label: 'Job Id',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-};
+export const PROCESSFACTORY_META = FormHelper.generateMeta([
+  ['method', 'Method', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+]);
 
-export const PROCESSFACTORY_META = {
-  method: {
-    key: 'method',
-    value: '',
-    values: [],
-    label: 'method',
-    error: undefined,
-    rule: 'required',
-  },
-  // payload: {
-  //   key: 'payload',
-  //   value: '',
-  //   label: 'Payload',
-  //   error: undefined,
-  //   rule: 'required',
-  //   placeHolder: 'Put your JSON ojbect here...',
-  // },
-};
+export const CRONFACTORY_META = FormHelper.generateMeta([
+  ['cron', 'Cron', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+  ['cronMetaType', 'Cron Meta Type', '', '', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'PLUGIN', text: 'PLUGIN', value: 'PLUGIN' },
+          { key: 'LOG', text: 'LOG', value: 'LOG' },
+        ],
+      },
+    },
+  ],
+  ['jobId', 'Job Id', '', '', 'Enter here'],
+]);

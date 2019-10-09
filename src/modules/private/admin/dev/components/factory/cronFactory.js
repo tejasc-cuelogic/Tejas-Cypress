@@ -7,7 +7,7 @@ import Filters from './cronFilters';
 import { InlineLoader } from '../../../../../../theme/shared';
 import { DataFormatter } from '../../../../../../helper';
 
-@inject('factoryStore')
+@inject('factoryStore', 'nsUiStore')
 @withRouter
 @observer
 export default class CronFactory extends Component {
@@ -45,9 +45,10 @@ export default class CronFactory extends Component {
   paginate = params => this.props.factoryStore.initRequest(params);
 
   render() {
+    const { loadingArray } = this.props.nsUiStore;
     const { factoryStore } = this.props;
     const {
-      CRONFACTORY_FRM, requestState, filters, count, cronLogs, loading,
+      CRONFACTORY_FRM, requestState, filters, count, cronLogs,
     } = factoryStore;
     const totalRecords = count || 0;
     return (
@@ -65,7 +66,7 @@ export default class CronFactory extends Component {
               totalRecords={totalRecords}
               FILTER_FRM={CRONFACTORY_FRM}
             />
-            {loading ? <InlineLoader />
+            {loadingArray.includes('fetchCronLogs') ? <InlineLoader />
               : (
             <div className="table-wrapper">
               <Table unstackable striped className="application-list">

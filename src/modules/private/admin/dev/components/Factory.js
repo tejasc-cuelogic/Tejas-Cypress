@@ -7,7 +7,7 @@ import RequestFactory from './factory/requestFactory';
 import CronFactory from './factory/cronFactory';
 import ProcessFactory from './factory/processFactory';
 
-@inject('factoryStore')
+@inject('factoryStore', 'nsUiStore')
 @withRouter
 @observer
 export default class Factory extends Component {
@@ -16,10 +16,14 @@ export default class Factory extends Component {
     this.props.factoryStore.fetchPlugins();
   }
 
+  componentDidMount() {
+    this.props.factoryStore.fetchPlugins();
+  }
+
   render() {
-    const { pluginListOutputLoading } = this.props.factoryStore;
+    const { loadingArray } = this.props.nsUiStore;
     return (
-      pluginListOutputLoading
+      loadingArray.includes('getPluginList')
         ? <InlineLoader />
         : (
           <Grid>

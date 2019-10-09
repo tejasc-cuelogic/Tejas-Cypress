@@ -39,7 +39,7 @@ function ProcessFactory(props) {
 
   const { factoryStore } = props;
   const {
-    PROCESSACTORY_FRM, formChange, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
+    PROCESSACTORY_FRM, formChangeForPlugin, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
   } = factoryStore;
 
   return (
@@ -76,7 +76,7 @@ function ProcessFactory(props) {
                       options={PROCESSACTORY_FRM.fields.method.values}
                       placeholder="Choose here"
                       name="method"
-                      onChange={(e, result) => formChange(e, result, 'PROCESSACTORY_FRM')}
+                      onChange={(e, result) => formChangeForPlugin(e, result, 'PROCESSACTORY_FRM')}
                       className="mb-80"
                     />
                     <Divider section hidden />

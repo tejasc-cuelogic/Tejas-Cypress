@@ -79,7 +79,7 @@ export default class DataModelStore {
     MobxApollo.graphql({
       client: apolloClient,
       query: this.gqlRef[payLoad.query],
-      fetchPolicy: 'network-only',
+      fetchPolicy: payLoad.fetchPolicy || 'network-only',
       variables: { ...params.variables },
       onFetch: (data) => {
         if (data) {

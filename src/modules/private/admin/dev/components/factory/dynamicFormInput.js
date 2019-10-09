@@ -11,7 +11,7 @@ let FormTag = '';
 
 const DynamicFormInput = React.memo((props) => {
   function getFormInput(fieldKey, formProps) {
-    const { formChange, getFormElement } = props.factoryStore;
+    const { formChangeForPlugin, getFormElement } = props.factoryStore;
     const additionalProps = { containerclassname: 'secondary huge' };
     const elementProps = formProps.type === 'textarea' && additionalProps;
     const formInputData = getFormElement(fieldKey, formProps, props.formObj);
@@ -22,7 +22,7 @@ const DynamicFormInput = React.memo((props) => {
         {...elementProps}
         name={fieldKey}
         fielddata={formProps}
-        changed={(e, result) => formChange(e, result, props.formObj, true)}
+        changed={(e, result) => formChangeForPlugin(e, result, props.formObj, true)}
       />
     );
   }
