@@ -35,7 +35,7 @@ export const UPDATES = {
     rule: 'optional',
   },
   updatedDate: {
-    value: '', label: 'Updated Date', error: undefined, rule: 'date', placeHolder: 'MM-DD-YYYY',
+    value: '', label: 'Published Date', error: undefined, rule: 'date', placeHolder: 'MM-DD-YYYY',
   },
 };
 
