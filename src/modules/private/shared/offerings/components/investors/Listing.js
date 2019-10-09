@@ -48,7 +48,7 @@ export default class Listing extends Component {
     const referralCode = get(offer, 'referralCode');
     let computedList = (isIssuer && hardClosedDate) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
-    computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'early Bird Eligibility', value: 'earlyBirdEligibility' });
+    computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Early Bird Eligibility', value: 'earlyBirdEligibility' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
     const isUsersCapablities = this.props.userStore.myAccessForModule('USERS');
@@ -95,7 +95,7 @@ export default class Listing extends Component {
                   </Table.Cell>
                   <Table.Cell>
                     <div>
-                      {get(isUsersCapablities, 'level') !== 'SUPPORT'
+                      {get(isUsersCapablities, 'level') && get(isUsersCapablities, 'level') !== 'SUPPORT'
                         ? <Link to={`/app/users/${data.userId}/profile-data`}><p><b>{`${data.firstName} ${data.lastName}`}</b></p></Link>
                         : `${data.firstName} ${data.lastName}`
                       }
@@ -108,10 +108,10 @@ export default class Listing extends Component {
                       }
                     </div>
                   </Table.Cell>
-                  <Table.Cell title={`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}${data.city}, ${data.state}, ${data.zipCode}`}>
-                    {data.city}
+                  <Table.Cell title={data.city && `${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}${data.city}, ${data.state}, ${data.zipCode}`}>
+                    {data.city || 'N/A'}
                   </Table.Cell>
-                  <Table.Cell>{data.state}</Table.Cell>
+                  <Table.Cell>{data.state || 'N/A'}</Table.Cell>
                   {isAdmin
                     && (
                       <>
@@ -163,7 +163,7 @@ export default class Listing extends Component {
                     )
                   }
                   <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
-                  <Table.Cell textAlign="right">{this.showReferralCode(referralCode, data.referralCode)}</Table.Cell>
+                  <Table.Cell textAlign="right">{data.referralCode ? this.showReferralCode(referralCode, data.referralCode) : 'N/A'}</Table.Cell>
                 </Table.Row>
               ))
               }
