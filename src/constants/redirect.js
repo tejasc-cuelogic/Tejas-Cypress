@@ -21,7 +21,7 @@ export const PRODUCTION_REDIRECT_META = [
 
 export const DEV_REDIRECT_META = [
   ...COMMON,
-  { from: 'batmansucks', live: true, to: '/invest/why-nextseed?utm_source=invite&utm_medium=link&utm_campaign=saasquatch&rsCode=BATMANSUCKS&rsShareMedium=UNKNOWN&rsEngagementMedium=UNKNOWN', rsCode: 'BATMANSUCKS', rsRedirect: '/offerings/railway-heights' },
+  { from: 'batmansucks', live: true, to: '/invest/why-nextseed?utm_source=invite&utm_medium=link&utm_campaign=saasquatch&rsCode=BATMANSUCKS&rsShareMedium=UNKNOWN&rsEngagementMedium=UNKNOWN' },
 ];
 
 export const REDIRECT_META = ['production', 'prod', 'master'].includes(process.env.REACT_APP_DEPLOY_ENV) ? PRODUCTION_REDIRECT_META : DEV_REDIRECT_META;
