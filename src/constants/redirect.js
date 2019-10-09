@@ -14,7 +14,7 @@ const COMMON = [
 ];
 export const PRODUCTION_REDIRECT_META = [
   ...COMMON,
-  { from: 'rh50', live: true, to: '/invest?utm_campaign=saasquatch&rsCode=RH50' },
+  { from: 'rh50', live: true, to: '/invest?utm_campaign=saasquatch&rsCode=RH50', rsCode: 'RH50', rsRedirect: '/offerings/railway-heights' },
   { from: 'get20', live: true, to: '/invest/why-nextseed?utm_source=invite&utm_medium=link&utm_campaign=saasquatch&rsCode=GET20&rsShareMedium=UNKNOWN&rsEngagementMedium=UNKNOWN' },
   { from: 'greenway', live: true, to: '/invest/why-nextseed?utm_source=invite&utm_medium=link&utm_campaign=saasquatch&rsCode=GWAY&rsShareMedium=UNKNOWN&rsEngagementMedium=UNKNOWN' },
 ];
