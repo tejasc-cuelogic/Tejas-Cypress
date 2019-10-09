@@ -45,21 +45,14 @@ export default class IdentityVerification extends Component {
     this.props.history.push('/app/summary');
   }
 
-  handleVerifyUserIdentity = async (e) => {
-    e.preventDefault();
-    // this.props.identityStore.setFormError();
-    if (this.props.identityStore.ID_VERIFICATION_FRM.meta.isValid) {
-      const { url } = await this.props.identityStore.verifyCip();
+  redirectTo = (url) => {
+    if (url) {
       this.props.history.push(url);
     }
   }
 
-  handleUploadDocuments = async (e) => {
-    e.preventDefault();
-    this.props.identityStore.setSubmitVerificationDocs(true);
+  handleCipExpiration = () => {
     const { phoneVerification } = this.props.userDetailsStore.signupStatus;
-    this.props.identityStore.setFieldValue('signUpLoading', true);
-    const { url } = await this.props.identityStore.verifyCipHardFail();
     if (phoneVerification === 'DONE') {
       const { accountForWhichCipExpired } = this.props.userDetailsStore;
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
@@ -74,7 +67,24 @@ export default class IdentityVerification extends Component {
         this.props.identityStore.setFieldValue('signUpLoading', false);
       }
     }
-    this.props.history.push(url);
+  }
+
+  handleVerifyUserIdentity = async (e) => {
+    e.preventDefault();
+    // this.props.identityStore.setFormError();
+    if (this.props.identityStore.ID_VERIFICATION_FRM.meta.isValid) {
+      const { url } = await this.props.identityStore.verifyCip();
+      this.redirectTo(url);
+    }
+  }
+
+  handleUploadDocuments = async (e) => {
+    e.preventDefault();
+    this.props.identityStore.setSubmitVerificationDocs(true);
+    this.props.identityStore.setFieldValue('signUpLoading', true);
+    const { url } = await this.props.identityStore.verifyCipHardFail();
+    this.handleCipExpiration();
+    this.redirectTo(url);
   }
 
   submitAccountToProcessing = (accountType) => {
@@ -93,26 +103,10 @@ export default class IdentityVerification extends Component {
 
   handleSubmitIdentityQuestions = async (e) => {
     e.preventDefault();
-    const { phoneVerification } = this.props.userDetailsStore.signupStatus;
     this.props.identityStore.setFieldValue('signUpLoading', true);
     const { url } = await this.props.identityStore.verifyCipSoftFail();
-    /* eslint-disable no-underscore-dangle */
-
-    if (phoneVerification === 'DONE') {
-      const { accountForWhichCipExpired } = this.props.userDetailsStore;
-      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-      const expiredAccountFromLocalStorage = window.sessionStorage.getItem('AccountCipExp');
-      if (window.sessionStorage.getItem('cipErrorMessage')) {
-        this.submitAccountToProcessing(accountForWhichCipExpired || expiredAccountFromLocalStorage);
-      } else if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
-        this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
-        this.props.identityStore.setFieldValue('signUpLoading', false);
-      } else {
-        this.props.history.push('/app/summary');
-        this.props.identityStore.setFieldValue('signUpLoading', false);
-      }
-    }
-    this.props.history.push(url);
+    this.handleCipExpiration();
+    this.redirectTo(url);
   }
 
   render() {

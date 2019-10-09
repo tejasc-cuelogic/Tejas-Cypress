@@ -49,7 +49,7 @@ export class IdentityStore {
     ciphardFail: { steps: ['userCIPHardFail'], url: INVESTOR_URLS.cipHardFail },
     cipSoftFail: { steps: ['userCIPSoftFail'], url: INVESTOR_URLS.cipSoftFail },
     cipPass: { steps: ['userCIPPass', 'OFFLINE', 'phoneMfa'], url: INVESTOR_URLS.phoneVerification },
-    cip: { steps: ['Unique SSN check', 'Address Verification', 'PHONE_VERIFICATION'], url: INVESTOR_URLS.cip },
+    cip: { steps: ['UNIQUE_SSN', 'Address Verification', 'PHONE_VERIFICATION'], url: INVESTOR_URLS.cip },
   }
 
   @action
@@ -300,10 +300,10 @@ export class IdentityStore {
     return { res, url };
   }
 
-  updateUserDataAndSendOtp = async () => {
+  updateUserDataAndSendOtp = async (cipStatus) => {
     userDetailsStore.updateUserDetails('legalDetails', this.formattedUserInfoForCip.user);
     userDetailsStore.updateUserDetails('phone', this.formattedUserInfoForCip.phoneDetails);
-    userDetailsStore.updateUserDetails('legalDetails', { status: 'PASS' });
+    userDetailsStore.updateUserDetails('legalDetails', { status: cipStatus });
     await this.startPhoneVerification();
   }
 
@@ -313,10 +313,7 @@ export class IdentityStore {
       mutation: verifyCipSoftFail,
       mutationName: 'verifyCipSoftFail',
       variables: {
-        cipAnswers: {
-          id: this.ID_VERIFICATION_FRM.response.Id,
-          answers: this.formattedCipAnswers,
-        },
+        answers: this.formattedCipAnswers,
       },
       message: {
         success: 'Identity questions are verified!',
@@ -338,45 +335,57 @@ verifyCipHardFail = async () => {
       license: photoId.fileId,
       residence: proofOfResidence.fileId,
     },
+    cipPassStatus: 'MANUAL_VERIFICATION_PENDING',
     message: {
       success: 'CIP documents are verified!',
       error: 'CIP documents are not verified.',
     },
   };
+  this.setFieldValue('userCipStatus', 'MANUAL_VERIFICATION_PENDING');
   const { res, url } = await this.cipWrapper(payLoad);
   return { res, url };
 }
 
 cipWrapper = async (payLoad) => {
   try {
-    let url = '';
+    let url;
     this.setFieldValue('signUpLoading', true);
     const res = await client
       .mutate({
         mutation: payLoad.mutation,
         variables: payLoad.variables,
       });
-
     const stepName = Object.keys(this.cipStepUrlMapping).find((key => (
       this.cipStepUrlMapping[key].steps.includes(get(res, `data.${payLoad.mutationName}.step`))
     )));
+    // eslint-disable-next-line prefer-destructuring
+    url = this.cipStepUrlMapping[stepName].url;
 
     if (stepName === 'cipPass') {
       if (get(payLoad, 'message.success')) {
         Helper.toast(payLoad.message.success, 'success');
       }
-      await this.updateUserDataAndSendOtp();
+
+      const OFFLINE_STATUS = get(res,
+        `data.${payLoad.mutationName}.step`) === 'OFFLINE'
+        ? 'OFFLINE' : undefined;
+
+      await this.updateUserDataAndSendOtp(
+        OFFLINE_STATUS || payLoad.cipPassStatus || 'PASS',
+      );
     } else if (get(payLoad, 'message.error')) {
       Helper.toast(payLoad.message.error, 'error');
-    } else if (!get(res, `data.${payLoad.mutationName}.status`)) {
+      url = undefined;
+    } else if (!get(res, `data.${payLoad.mutationName}.status`)
+    && res.data[`${payLoad.mutationName}`].message) {
+      url = undefined;
       uiStore.setFieldvalue('errors',
         DataFormatter.getSimpleErr({
           message: res.data[`${payLoad.mutationName}`].message,
         }));
     }
+
     this.setFieldValue('signUpLoading', false);
-    // eslint-disable-next-line prefer-destructuring
-    url = this.cipStepUrlMapping[stepName].url;
     return { res, url };
   } catch (err) {
     uiStore.setFieldvalue('errors', DataFormatter.getSimpleErr(err));
