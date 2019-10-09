@@ -54,6 +54,7 @@ export default class AccountSetup extends Component {
     return (
       <PrivateLayout
         {...this.props}
+        forceTitle="Setup"
         P5={!signupStatus.finalStatus ? !currentUser.loading
           ? (
 <StickyNotification
