@@ -16,11 +16,11 @@ export class FactoryStore extends DataModelStore {
 
   CRONFACTORY_FRM = Validator.prepareFormObject(CRONFACTORY_META);
 
-  PROCESSACTORY_FRM = Validator.prepareFormObject(PROCESSFACTORY_META);
+  PROCESSFACTORY_FRM = Validator.prepareFormObject(PROCESSFACTORY_META);
 
   DYNAMCI_PAYLOAD_FRM = {
     REQUESTFACTORY: {},
-    PROCESSACTORY: {},
+    PROCESSFACTORY: {},
   };
 
   currentPluginSelected = '';
@@ -114,12 +114,12 @@ export class FactoryStore extends DataModelStore {
   formChangeForPlugin = (e, res, form, subForm = false) => {
     if (subForm) {
       this[form.parentForm][form.childForm] = Validator.onChange(this[form.parentForm][form.childForm], Validator.pullValues(e, res));
-    } else if (includes(['REQUESTFACTORY_FRM', 'PROCESSACTORY_FRM'], form) && includes(['plugin', 'method'], res.name)) {
+    } else if (includes(['REQUESTFACTORY_FRM', 'PROCESSFACTORY_FRM'], form) && includes(['plugin', 'method'], res.name)) {
       const currentSelectedPlugin = Validator.pullValues(e, res).value;
       this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
       this.currentPluginSelected = currentSelectedPlugin;
       const plugnArr = this.pullValuesForDynmicInput(e, res);
-      const childForm = form === 'REQUESTFACTORY_FRM' ? 'REQUESTFACTORY' : 'PROCESSACTORY';
+      const childForm = form === 'REQUESTFACTORY_FRM' ? 'REQUESTFACTORY' : 'PROCESSFACTORY';
       this.createDynamicFormFields(plugnArr, childForm);
     } else {
       this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
@@ -248,7 +248,7 @@ export class FactoryStore extends DataModelStore {
   setPluginDropDown = () => {
     this.REQUESTFACTORY_FRM.fields.plugin.values = this.dropDownValuesForPlugin('listRequestPlugins');
     this.CRONFACTORY_FRM.fields.cron.values = this.dropDownValuesForPlugin('listCronPlugins');
-    this.PROCESSACTORY_FRM.fields.method.values = this.dropDownValuesForPlugin('listProcessorPlugins');
+    this.PROCESSFACTORY_FRM.fields.method.values = this.dropDownValuesForPlugin('listProcessorPlugins');
   }
 
   isValidJson = (json) => {
@@ -278,14 +278,14 @@ export class FactoryStore extends DataModelStore {
 
   processFactoryPluginTrigger = () => new Promise(async (resolve, reject) => {
     try {
-      const { fields } = this.PROCESSACTORY_FRM;
-      const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.PROCESSACTORY.fields;
+      const { fields } = this.PROCESSFACTORY_FRM;
+      const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY.fields;
       const formData = Validator.evaluateFormData(fields);
       const formPayloadData = Validator.evaluateFormData(fieldsPayload);
       const TestformData = this.ExtractToJSON(formPayloadData);
       if (!this.isValidJson(TestformData)) {
-        this.PROCESSACTORY_FRM.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
-        this.PROCESSACTORY_FRM.meta.isValid = false;
+        this.PROCESSFACTORY_FRM.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
+        this.PROCESSFACTORY_FRM.meta.isValid = false;
       } else {
         this.setFieldValue('inProgress', true, 'processFactory');
         const variables = {};
@@ -365,7 +365,7 @@ decorate(FactoryStore, {
   ...decorateDefault,
   REQUESTFACTORY_FRM: observable,
   CRONFACTORY_FRM: observable,
-  PROCESSACTORY_FRM: observable,
+  PROCESSFACTORY_FRM: observable,
   DYNAMCI_PAYLOAD_FRM: observable,
   currentPluginSelected: observable,
   inProgress: observable,

@@ -4,17 +4,22 @@ import { isEmpty } from 'lodash';
 import { Card, Button, Form, Grid, Divider, Modal, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { FormDropDown } from '../../../../../../theme/form';
+import formHOC from '../../../../../../theme/form/formHOC';
 import DynamicFormInput from './dynamicFormInput';
+
+const metaInfo = {
+  store: 'factoryStore',
+  form: 'PROCESSFACTORY_FRM',
+};
 
 function ProcessFactory(props) {
   const [prev, setPrev] = useState(false);
   const [visibleProp, setVisibleProp] = useState(false);
 
   useEffect(() => {
-    props.factoryStore.resetForm('PROCESSACTORY_FRM');
+    props.factoryStore.resetForm('PROCESSFACTORY_FRM');
     props.factoryStore.setFieldValue('inProgress', false, 'processFactory');
-    props.factoryStore.setFieldValue('DYNAMCI_PAYLOAD_FRM', {}, 'PROCESSACTORY');
+    props.factoryStore.setFieldValue('DYNAMCI_PAYLOAD_FRM', {}, 'PROCESSFACTORY');
     props.factoryStore.setFieldValue('processFactoryResponse', {});
   }, []);
 
@@ -37,9 +42,9 @@ function ProcessFactory(props) {
     setPrev(val);
   }
 
-  const { factoryStore } = props;
+  const { factoryStore, smartElement } = props;
   const {
-    PROCESSACTORY_FRM, formChangeForPlugin, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
+    PROCESSFACTORY_FRM, formChangeForPlugin, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
   } = factoryStore;
 
   return (
@@ -65,27 +70,24 @@ function ProcessFactory(props) {
         <Card.Content header="Trigger Process Factory Plugin" />
         <Card.Content>
           <Card.Description>
-            <Form onSubmit={PROCESSACTORY_FRM.meta.isValid && onSubmit}>
+            <Form onSubmit={PROCESSFACTORY_FRM.meta.isValid && onSubmit}>
               <Form.Group>
                 <Grid className="full-width mlr-0" stackable>
                   <Grid.Column width={8}>
-                    <FormDropDown
-                      fielddata={PROCESSACTORY_FRM.fields.method}
-                      selection
-                      containerclassname="dropdown-field mlr-0"
-                      options={PROCESSACTORY_FRM.fields.method.values}
-                      placeholder="Choose here"
-                      name="method"
-                      onChange={(e, result) => formChangeForPlugin(e, result, 'PROCESSACTORY_FRM')}
-                      className="mb-80"
-                    />
+                    {smartElement.FormDropDown('method', {
+                      onChange: (e, result) => formChangeForPlugin(e, result, 'PROCESSFACTORY_FRM'),
+                      containerclassname: 'dropdown-field mlr-0',
+                      placeholder: 'Choose here 12345',
+                      options: PROCESSFACTORY_FRM.fields.method.values,
+                      className: 'mb-80',
+                    })}
                     <Divider section hidden />
-                    <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.processFactory || !PROCESSACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.PROCESSACTORY.meta.isValid} loading={inProgress.processFactory} />
+                    <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.processFactory || !PROCESSFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY.meta.isValid} loading={inProgress.processFactory} />
                     {visibleProp && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => showModel(e, true)} title="Show Response"> Show Response </Link>}
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <Header as="h5">Payload</Header>
-                    <DynamicFormInput {...props} formPayload={DYNAMCI_PAYLOAD_FRM.PROCESSACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'PROCESSACTORY' }} selectedPlugin={currentPluginSelected} />
+                    <DynamicFormInput {...props} formPayload={DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'PROCESSFACTORY' }} selectedPlugin={currentPluginSelected} />
                   </Grid.Column>
                 </Grid>
               </Form.Group>
@@ -96,4 +98,5 @@ function ProcessFactory(props) {
     </>
   );
 }
-export default inject('factoryStore')(withRouter(observer(ProcessFactory)));
+
+export default inject('factoryStore')(withRouter(formHOC(observer(ProcessFactory), metaInfo)));
