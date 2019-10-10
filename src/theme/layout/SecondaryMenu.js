@@ -36,22 +36,22 @@ const NavItems = ({
           {item.showIcon
             ? stepsStatus[key].status === 'IN_PROGRESS'
               ? (
-<Popup
-  trigger={(
-<Icon
-  name={item.icon[stepsStatus[key].status]}
-  color={item.icon_color[stepsStatus[key].status]}
-/>
-)}
-  content={item.toolTipTitle || ''}
-  position="top center"
-/>
+                <Popup
+                  trigger={(
+                    <Icon
+                      name={item.icon[stepsStatus[key].status]}
+                      color={item.icon_color[stepsStatus[key].status]}
+                    />
+                  )}
+                  content={item.toolTipTitle || ''}
+                  position="top center"
+                />
               )
               : (
-<Icon
-  color={item.icon_color[stepsStatus[key].status]}
-  name={item.icon[stepsStatus[key].status] || 'ns-circle'}
-/>
+                <Icon
+                  color={item.icon_color[stepsStatus[key].status]}
+                  name={item.icon[stepsStatus[key].status] || 'ns-circle'}
+                />
               )
             : null
           }
@@ -79,6 +79,13 @@ class SecondaryMenu extends Component {
       noinvert, attached, className, stepsStatus, addon, heading,
       force2ary, navCustomClick,
     } = this.props;
+    let options = [];
+    const showMoreMenuLength = 8;
+    const showMoreMenu = this.props.offering && navItems && navItems.length > showMoreMenuLength;
+    if (showMoreMenu) {
+      const dropOptions = navItems.splice(7, navItems.length - showMoreMenuLength);
+      options = dropOptions.map(o => ({ key: o.to, text: o.title, value: o.to }));
+    }
     // const mobNavItems = map(navItemList, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
       <>
@@ -105,6 +112,7 @@ class SecondaryMenu extends Component {
               stepsStatus={stepsStatus}
               navCustomClick={navCustomClick}
             />
+            {showMoreMenu && <Dropdown selectOnBlur={false} onChange={(e, data) => this.props.history.push(data.value)} text="More..." options={options} className="more-items link item" />}
             {this.props.rightLabel}
           </Menu>
         </Responsive>
