@@ -93,6 +93,7 @@ export class FactoryStore extends DataModelStore {
         client: 'PRIVATE',
         query: 'fetchCronLogs',
         variables: params,
+        setLoader: 'fetchCronLogs',
         fetchPolicy: 'network-only',
       });
       this.setFieldValue('cronLogList', data);
