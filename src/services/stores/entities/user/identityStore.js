@@ -46,7 +46,7 @@ export class IdentityStore {
   @observable isAdmin = false;
 
   cipStepUrlMapping = {
-    ciphardFail: { steps: ['userCIPHardFail'], url: INVESTOR_URLS.cipHardFail },
+    ciphardFail: { steps: ['userCIPHardFail', 'userCIPFail'], url: INVESTOR_URLS.cipHardFail },
     cipSoftFail: { steps: ['userCIPSoftFail'], url: INVESTOR_URLS.cipSoftFail },
     cipPass: { steps: ['userCIPPass', 'OFFLINE', 'phoneMfa'], url: INVESTOR_URLS.phoneVerification },
     cip: { steps: ['UNIQUE_SSN', 'Address Verification', 'PHONE_VERIFICATION'], url: INVESTOR_URLS.cip },
@@ -176,7 +176,7 @@ export class IdentityStore {
   get formattedUserInfoForCip() {
     const { fields } = this.ID_VERIFICATION_FRM;
     const user = FormValidator.evaluateFormData(fields);
-    const phoneDetails = { number: fields.phoneNumber.value };
+    const phoneDetails = { number: fields.phoneNumber.value || '1111111111' };
     return { user, phoneDetails };
   }
 
@@ -255,6 +255,23 @@ export class IdentityStore {
         streetTwo: fields.streetTwo.value,
       },
     };
+
+    const { photoId } = this.ID_VERIFICATION_DOCS_FRM.fields;
+
+    if (photoId.fileId || get(legalDetails, 'verificationDocs.idProof.fileId')) {
+      userInfo.verificationDocs = this.verificationDocs(legalDetails);
+    }
+    const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
+    const phoneDetails = { number };
+    return { userInfo, phoneDetails, legalCip };
+  }
+
+  @action
+  setStateValue = (stateValue) => {
+    this.ID_PROFILE_INFO.fields.state.value = stateValue;
+  }
+
+  verificationDocs = (legalDetails = undefined) => {
     const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
     const verificationDocs = {
       idProof: {
@@ -266,17 +283,8 @@ export class IdentityStore {
         fileName: proofOfResidence.value || get(legalDetails, 'verificationDocs.addressProof.fileName'),
       },
     };
-    if (photoId.fileId || get(legalDetails, 'verificationDocs.idProof.fileId')) {
-      userInfo.verificationDocs = verificationDocs;
-    }
-    const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
-    const phoneDetails = { number };
-    return { userInfo, phoneDetails, legalCip };
-  }
 
-  @action
-  setStateValue = (stateValue) => {
-    this.ID_PROFILE_INFO.fields.state.value = stateValue;
+    return verificationDocs;
   }
 
   @computed get cipStatus() {
@@ -290,12 +298,19 @@ export class IdentityStore {
     const payLoad = {
       mutation: verifyCip,
       mutationName: 'verifyCip',
-      variables: { userId: userDetailsStore.selectedUserId, ...this.formattedUserInfoForCip },
+      variables: { isCipOffline: false, userId: userDetailsStore.selectedUserId, ...this.formattedUserInfoForCip },
     };
     const { res, url } = await this.cipWrapper(payLoad);
+
     if (res.data.verifyCip.questions) {
       this.setIdentityQuestions(res.data.verifyCip.questions);
     }
+
+    if (res.data.verifyCip.step === 'OFFLINE') {
+      window.sessionStorage.setItem('cipErrorMessage',
+        JSON.stringify(res.data.verifyCip.errorMessage));
+    }
+
     this.setVerifyIdentityResponse(res.data.verifyCip);
     return { res, url };
   }
@@ -345,6 +360,8 @@ verifyCipHardFail = async () => {
   };
   this.setFieldValue('userCipStatus', 'MANUAL_VERIFICATION_PENDING');
   const { res, url } = await this.cipWrapper(payLoad);
+  userDetailsStore.updateUserDetails('legalDetails', { verificationDocs: this.verificationDocs() });
+
   return { res, url };
 }
 
@@ -375,9 +392,9 @@ cipWrapper = async (payLoad) => {
       await this.updateUserDataAndSendOtp(
         OFFLINE_STATUS || payLoad.cipPassStatus || 'PASS',
       );
-    } else if (get(payLoad, 'message.error')) {
+    } else if (!get(res, `data.${payLoad.mutationName}.status`)
+       && get(payLoad, 'message.error')) {
       Helper.toast(payLoad.message.error, 'error');
-      url = undefined;
     } else if (!get(res, `data.${payLoad.mutationName}.status`)
     && res.data[`${payLoad.mutationName}`].message) {
       url = undefined;
@@ -550,10 +567,10 @@ cipWrapper = async (payLoad) => {
           variables: {
             userId: userStore.currentUser.sub || authStore.userId,
             type: type || (mfaMethod.value !== '' ? mfaMethod.value : 'NEW'),
-            address: userAddress || '',
+            address: userAddress || '1111111111',
           },
         });
-      const requestMode = type === 'EMAIL' ? `code sent to ${emailAddress}` : (type === 'CALL' ? `call to ${phone}` : `code texted to ${phoneNumber}`);
+      const requestMode = type === 'EMAIL' ? `code sent to ${emailAddress}` : (type === 'CALL' ? `call to ${phone}` : `code texted to ${phone}`);
       if (type === 'EMAIL') {
         this.setSendOtpToMigratedUser('EMAIL');
       } else {
@@ -917,9 +934,7 @@ cipWrapper = async (payLoad) => {
       fields.dateOfBirth.value = legalDetails.dateOfBirth;
     }
     if (legalDetails && legalDetails.ssn) {
-      if (!legalDetails.ssn.includes('X') || window.sessionStorage.getItem('AccountCipExp')) {
-        fields.ssn.value = legalDetails.ssn;
-      }
+      fields.ssn.value = legalDetails.ssn;
     }
     if (legalDetails && phone && phone.number) {
       fields.phoneNumber.value = get(fields, 'phoneNumber.value') ? fields.phoneNumber.value : phone.number;

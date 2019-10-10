@@ -162,8 +162,8 @@ export const isUniqueSSN = gql`
   }`;
 
 export const verifyCip = gql`
-  mutation _verifyCip($userId: String!, $user: UserCIPInput, $phoneDetails: phoneInput!){
-    verifyCip(userId: $userId, user: $user, phoneDetails: $phoneDetails)
+  mutation _verifyCip($userId: String!, $user: UserCIPInput, $phoneDetails: phoneInput!, $isCipOffline: Boolean){
+    verifyCip(userId: $userId, user: $user, phoneDetails: $phoneDetails, isCipOffline: $isCipOffline)
   }`;
 
 export const verifyCipSoftFail = gql`

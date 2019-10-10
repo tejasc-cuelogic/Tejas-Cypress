@@ -35,8 +35,8 @@ export default class Summary extends Component {
   handleCreateAccount = () => {
     this.props.identityStore.setCipStatusWithUserDetails();
     this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
-    const { isCipExpired } = this.props.userDetailsStore;
-    if (isCipExpired || this.props.identityStore.isUserCipOffline) {
+    const { isCipExpired, isUserverified } = this.props.userDetailsStore;
+    if (isCipExpired || !isUserverified) {
       this.props.handleUserIdentity('ira', this.handleSubmitAccount);
       this.props.userDetailsStore.setAccountForWhichCipExpired('ira');
     } else {

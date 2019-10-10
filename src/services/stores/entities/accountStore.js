@@ -31,7 +31,7 @@ export class AccountStore {
     0: {
       store: individualAccountStore,
       location: 1,
-      accountId: 'individualAccId',
+      accountId: 'individualAccountId',
       name: 'individual',
       linkbankValue: 0,
     },

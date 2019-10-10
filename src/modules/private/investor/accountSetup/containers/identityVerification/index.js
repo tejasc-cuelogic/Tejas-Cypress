@@ -51,14 +51,15 @@ export default class IdentityVerification extends Component {
     }
   }
 
-  handleCipExpiration = () => {
+  handleCipExpiration = async () => {
+    let url;
     const { phoneVerification } = this.props.userDetailsStore.signupStatus;
-    if (phoneVerification === 'DONE') {
-      const { accountForWhichCipExpired } = this.props.userDetailsStore;
-      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
+    if (phoneVerification) {
+      const { accountForWhichCipExpired, isUserVerified } = this.props.userDetailsStore;
+      this.props.uiStore.setFieldvalue('inProgressArray', []);
       const expiredAccountFromLocalStorage = window.sessionStorage.getItem('AccountCipExp');
-      if (window.sessionStorage.getItem('cipErrorMessage')) {
-        this.submitAccountToProcessing(accountForWhichCipExpired || expiredAccountFromLocalStorage);
+      if (window.sessionStorage.getItem('cipErrorMessage') && !isUserVerified) {
+        url = await this.submitAccountToProcessing(accountForWhichCipExpired || expiredAccountFromLocalStorage);
       } else if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
         this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
         this.props.identityStore.setFieldValue('signUpLoading', false);
@@ -67,6 +68,7 @@ export default class IdentityVerification extends Component {
         this.props.identityStore.setFieldValue('signUpLoading', false);
       }
     }
+    return url;
   }
 
   handleVerifyUserIdentity = async (e) => {
@@ -82,30 +84,37 @@ export default class IdentityVerification extends Component {
     e.preventDefault();
     this.props.identityStore.setSubmitVerificationDocs(true);
     this.props.identityStore.setFieldValue('signUpLoading', true);
-    const { url } = await this.props.identityStore.verifyCipHardFail();
-    this.handleCipExpiration();
+    let { url } = await this.props.identityStore.verifyCipHardFail();
+    const { accountForWhichCipExpired, userDetails } = this.props.userDetailsStore;
+    if (userDetails.legalDetails.status === 'OFFLINE' || accountForWhichCipExpired) {
+      url = await this.handleCipExpiration();
+    }
     this.redirectTo(url);
   }
 
-  submitAccountToProcessing = (accountType) => {
+  submitAccountToProcessing = async (accountType) => {
     const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
-    const accountId = get(accountDetails, 'details.accountId');
     const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
+    const { store } = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue];
+    const accountId = get(accountDetails, 'details.accountId') || store[`${accountType}AccountId`];
     this.props.identityStore.setFieldValue('signUpLoading', true);
-    this.props.accountStore.updateToAccountProcessing(accountId, accountvalue).then(() => {
-      this.props.identityStore.setFieldValue('signUpLoading', false);
-      const url = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.showProcessingModal ? `/app/summary/account-creation/${accountType}/processing` : '/app/summary';
-      this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.setFieldValue('showProcessingModal', false);
-      this.props.history.push(url);
-      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-    });
+    await this.props.accountStore.updateToAccountProcessing(accountId, accountvalue);
+    this.props.identityStore.setFieldValue('signUpLoading', false);
+    const url = store.storeshowProcessingModal ? `/app/summary/account-creation/${accountType}/processing` : '/app/summary';
+    store.setFieldValue('showProcessingModal', false);
+    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+    return url;
   }
 
   handleSubmitIdentityQuestions = async (e) => {
     e.preventDefault();
     this.props.identityStore.setFieldValue('signUpLoading', true);
-    const { url } = await this.props.identityStore.verifyCipSoftFail();
-    this.handleCipExpiration();
+    let { url } = await this.props.identityStore.verifyCipSoftFail();
+    const { accountForWhichCipExpired, userDetails } = this.props.userDetailsStore;
+    if ((userDetails.legalDetails.status === 'OFFLINE' || accountForWhichCipExpired)
+      && this.props.identityStore.cipStepUrlMapping.ciphardFail.url !== url) {
+      url = await this.handleCipExpiration();
+    }
     this.redirectTo(url);
   }
 

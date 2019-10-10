@@ -111,7 +111,7 @@ export default class ConfirmPhoneNumber extends Component {
     } else {
       this.props.history.push('/app/summary/establish-profile');
     }
-    this.props.identityStore.setIsOptConfirmed(true);
+    this.props.identityStore.setIsOptConfirmed(false);
   }
 
   render() {

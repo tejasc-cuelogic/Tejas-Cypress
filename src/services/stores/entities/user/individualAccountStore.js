@@ -16,7 +16,7 @@ class IndividualAccountStore {
 
   @observable isManualLinkBankSubmitted = false;
 
-  @observable individualAccId = null;
+  @observable individualAccountId = null;
 
   @observable showProcessingModal = false;
 
@@ -56,7 +56,7 @@ class IndividualAccountStore {
   submitAccount = () => {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
     const payLoad = {
-      accountId: get(accountDetails, 'details.accountId') || this.individualAccId,
+      accountId: get(accountDetails, 'details.accountId') || this.individualAccountId,
       accountType: 'INDIVIDUAL',
     };
     return new Promise((resolve, reject) => {
@@ -151,8 +151,8 @@ class IndividualAccountStore {
       const actionPerformed = 'submitted';
       if (userDetailsStore.currentUser.data) {
         const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
-        if (accountDetails || this.individualAccId) {
-          variables.accountId = get(accountDetails, 'details.accountId') || this.individualAccId;
+        if (accountDetails || this.individualAccountId) {
+          variables.accountId = get(accountDetails, 'details.accountId') || this.individualAccountId;
         }
       }
       bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
@@ -163,7 +163,7 @@ class IndividualAccountStore {
           })
           .then(action((result) => {
             if (result.data.upsertInvestorAccount) {
-              this.individualAccId = result.data.upsertInvestorAccount.accountId;
+              this.individualAccountId = result.data.upsertInvestorAccount.accountId;
               const { linkedBank } = result.data.upsertInvestorAccount;
               bankAccountStore.setPlaidAccDetails(linkedBank);
               this.setFieldValue('apiCall', false);
@@ -237,7 +237,7 @@ class IndividualAccountStore {
   resetStoreData = () => {
     this.stepToBeRendered = 0;
     this.submited = false;
-    this.individualAccId = null;
+    this.individualAccountId = null;
     this.retry = 0;
     this.retryGoldStar = 0;
     this.isFormSubmitted = false;

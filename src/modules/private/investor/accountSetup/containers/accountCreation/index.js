@@ -30,27 +30,37 @@ export default class AccountCreation extends Component {
   }
 
   handleUserIdentity = async (accountType, submitAccount) => {
-    this.props.uiStore.setProgress();
-    const { isLegalDocsPresent } = this.props.userDetailsStore;
-    this.props.identityStore.setCipDetails();
-    await this.props.identityStore.verifyCip();
-    if (this.props.identityStore.isUserCipOffline && !isLegalDocsPresent) {
-      this.props.history.push('/app/summary/identity-verification/1');
-    } else if (isLegalDocsPresent && this.props.identityStore.isUserCipOffline) {
-      const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
-      const accountId = get(accountDetails, 'details.accountId');
-      const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
-      this.props.accountStore.updateToAccountProcessing(accountId, accountvalue).then(() => {
+    try {
+      this.props.uiStore.setProgress();
+      const { isLegalDocsPresent, isUserVerified } = this.props.userDetailsStore;
+      this.props.identityStore.setCipDetails();
+      const { res, url } = await this.props.identityStore.verifyCip();
+      const { cipStepUrlMapping } = this.props.identityStore;
+      const isCipOffline = res.data.verifyCip.step === 'OFFLINE';
+
+      if (!isUserVerified && cipStepUrlMapping.cipSoftFail.url === url) {
+        this.props.history.push(cipStepUrlMapping.cipSoftFail.url);
+      } else if (!isUserVerified && !isLegalDocsPresent) {
+        this.props.history.push(cipStepUrlMapping.ciphardFail.url);
+      } else if (!isUserVerified && isLegalDocsPresent && isCipOffline) {
+        const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
+        const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
+        const { store } = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue];
+        const accountId = get(accountDetails, 'details.accountId') || store[`${accountType}AccountId`];
+        await this.props.accountStore.updateToAccountProcessing(accountId, accountvalue);
         window.sessionStorage.removeItem('cipErrorMessage');
         this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-        const url = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.showProcessingModal ? `${this.props.match.url}/${accountType}/processing` : '/app/summary';
+        // eslint-disable-next-line no-shadow
+        const url = store.showProcessingModal ? `${this.props.match.url}/${accountType}/processing` : '/app/summary';
         this.props.history.push(url);
-        this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.setFieldValue('showProcessingModal', false);
+        store.setFieldValue('showProcessingModal', false);
         this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      });
-    } else {
-      this.props.uiStore.setProgress();
-      this.handleLegalDocsBeforeSubmit(accountType, submitAccount);
+      } else {
+        this.props.uiStore.setProgress();
+        this.handleLegalDocsBeforeSubmit(accountType, submitAccount);
+      }
+    } catch {
+      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
     }
   }
 

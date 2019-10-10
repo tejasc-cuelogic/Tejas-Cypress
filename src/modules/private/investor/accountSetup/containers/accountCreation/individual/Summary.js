@@ -52,10 +52,11 @@ export default class Summary extends React.Component {
     this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
     const {
       isCipExpired,
+      isUserVerified,
     } = this.props.userDetailsStore;
     this.props.identityStore.setCipStatusWithUserDetails();
     this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
-    if (isCipExpired || this.props.identityStore.isUserCipOffline) {
+    if (isCipExpired || !isUserVerified) {
       this.props.handleUserIdentity('individual', this.handleSubmitAccount);
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else if (isCipExpired) {

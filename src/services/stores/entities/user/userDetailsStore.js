@@ -44,7 +44,7 @@ export class UserDetailsStore {
 
   @observable deleting = 0;
 
-  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING', 'OFFLINE'];
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
 
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
 
@@ -481,8 +481,7 @@ export class UserDetailsStore {
       details.inprogressAccounts = map(filter(details.roles, a => a.name !== 'investor' && a.status !== 'FULL'), 'name');
       details.phoneVerification = this.userDetails.phone
         && this.userDetails.phone.number
-        // eslint-disable-next-line no-prototype-builtins
-        && this.userDetails.phone.hasOwnProperty('verified')
+        && this.userDetails.phone.verified
         ? 'DONE' : 'FAIL';
       details.isMigratedUser = (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
       details.isMigratedFullAccount = (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION')

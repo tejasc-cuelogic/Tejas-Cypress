@@ -30,19 +30,18 @@ export default class Actions extends Component {
     }
   }
 
-  handleVerifyUserIdentity = (userId, accountId, action, msg) => {
-    this.props.identityStore.verifyUserIdentity().then((requestId) => {
-      if (requestId) {
-        this.props.crowdPayCtaHandler(userId, accountId, action, msg);
-      } else {
-        this.props.crowdpayStore.removeLoadingCrowdPayId(accountId, this.props.account.accountStatus);
-      }
-    });
+  handleVerifyUserIdentity = async (userId, accountId, action, msg) => {
+    const { res } = await this.props.identityStore.verifyCip();
+    if (res.data.verifyCip.step === 'userCIPPass') {
+      this.props.crowdPayCtaHandler(userId, accountId, action, msg);
+    } else {
+      this.props.crowdpayStore.removeLoadingCrowdPayId(accountId, this.props.account.accountStatus);
+    }
   }
 
   checkRequestIdBeforeSubmitInvestor = (userObj, attrObj) => {
     const { userId, accountId, action, msg } = attrObj;
-    if (this.isCipExpired(userObj) || userObj.legalDetails.status === 'OFFLINE' || userObj.cip.requestId === '-1') {
+    if (this.isCipExpired(userObj) || userObj.legalDetails.status === 'OFFLINE') {
       this.handleVerifyUserIdentity(userId, accountId, action, msg);
     } else {
       this.props.crowdPayCtaHandler(userId, accountId, action, msg);
