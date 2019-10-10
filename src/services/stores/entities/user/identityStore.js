@@ -6,7 +6,7 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
-import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isUniqueSSN, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserCIPInfo, verifyCIPAnswers, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
+import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isUniqueSSN, verifyCipSoftFail, verifyCip, verifyCipHardFail, verifyCIPAnswers, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
@@ -301,10 +301,12 @@ export class IdentityStore {
   }
 
   updateUserDataAndSendOtp = async (cipStatus) => {
+    if (userDetailsStore.signupStatus.phoneVerification !== 'DONE') {
+      await this.startPhoneVerification();
+    }
     userDetailsStore.updateUserDetails('legalDetails', this.formattedUserInfoForCip.user);
     userDetailsStore.updateUserDetails('phone', this.formattedUserInfoForCip.phoneDetails);
     userDetailsStore.updateUserDetails('legalDetails', { status: cipStatus });
-    await this.startPhoneVerification();
   }
 
   @action
@@ -390,7 +392,7 @@ cipWrapper = async (payLoad) => {
   } catch (err) {
     uiStore.setFieldvalue('errors', DataFormatter.getSimpleErr(err));
     this.setFieldValue('signUpLoading', false);
-    return false;
+    return Promise.reject(err);
   }
 }
 
@@ -531,17 +533,18 @@ cipWrapper = async (payLoad) => {
     });
   }
 
-  startPhoneVerification = (type, address = undefined, isMobile = false) => {
-    const { user } = userDetailsStore.currentUser.data;
-    const phoneNumber = address || get(user, 'phone.number');
-    const emailAddress = get(user, 'email.address');
-    const userAddress = type === 'EMAIL' ? emailAddress.toLowerCase() : phoneNumber;
-    const { mfaMethod } = this.ID_VERIFICATION_FRM.fields;
-    uiStore.clearErrors();
-    uiStore.setProgress();
-    this.setFieldValue('signUpLoading', true);
-    return new Promise((resolve, reject) => {
-      client
+  @action
+  startPhoneVerification = async (type, address = undefined, isMobile = false) => {
+    try {
+      const { user } = userDetailsStore.currentUser.data;
+      const { mfaMethod, phoneNumber } = this.ID_VERIFICATION_FRM.fields;
+      const phone = address || get(user, 'phone.number') || phoneNumber.value;
+      const emailAddress = get(user, 'email.address');
+      const userAddress = type === 'EMAIL' ? emailAddress.toLowerCase() : phone;
+      uiStore.clearErrors();
+      uiStore.setProgress();
+      this.setFieldValue('signUpLoading', true);
+      const res = await client
         .mutate({
           mutation: requestOtp,
           variables: {
@@ -549,32 +552,25 @@ cipWrapper = async (payLoad) => {
             type: type || (mfaMethod.value !== '' ? mfaMethod.value : 'NEW'),
             address: userAddress || '',
           },
-        })
-        .then((result) => {
-          const requestMode = type === 'EMAIL' ? `code sent to ${emailAddress}` : (type === 'CALL' ? `call to ${phoneNumber}` : `code texted to ${phoneNumber}`);
-          if (type === 'EMAIL') {
-            this.setSendOtpToMigratedUser('EMAIL');
-          } else {
-            this.setConfirmMigratedUserPhoneNumber(true);
-            this.setSendOtpToMigratedUser('PHONE');
-          }
-          this.setRequestOtpResponse(result.data.requestOtp);
-          if (!isMobile) {
-            Helper.toast(`Verification ${requestMode}.`, 'success');
-          }
-          this.setFieldValue('signUpLoading', false);
-          resolve();
-        })
-        .catch((err) => {
-          // uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
-          this.setFieldValue('signUpLoading', false);
-          uiStore.setErrors(toJS(DataFormatter.getSimpleErr(err)));
-          reject(err);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
         });
-    });
+      const requestMode = type === 'EMAIL' ? `code sent to ${emailAddress}` : (type === 'CALL' ? `call to ${phone}` : `code texted to ${phoneNumber}`);
+      if (type === 'EMAIL') {
+        this.setSendOtpToMigratedUser('EMAIL');
+      } else {
+        this.setConfirmMigratedUserPhoneNumber(true);
+        this.setSendOtpToMigratedUser('PHONE');
+      }
+      this.setRequestOtpResponse(res.data.requestOtp);
+      if (!isMobile) {
+        Helper.toast(`Verification ${requestMode}.`, 'success');
+      }
+      userDetailsStore.updateUserDetails('phone', this.formattedUserInfoForCip.phoneDetails);
+      this.setFieldValue('signUpLoading', false);
+    } catch (err) {
+      this.setFieldValue('signUpLoading', false);
+      uiStore.setErrors(toJS(DataFormatter.getSimpleErr(err)));
+      Promise.reject(err);
+    }
   }
 
   @computed get isUserCipOffline() {
@@ -649,7 +645,6 @@ cipWrapper = async (payLoad) => {
         })
         .then((result) => {
           if (result.data.verifyOtp) {
-            this.updateUserPhoneDetails();
             userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
               resolve();
             });
@@ -684,7 +679,10 @@ cipWrapper = async (payLoad) => {
         })
         .then((result) => {
           if (result.data.verifyOtp) {
-            this.updateUserPhoneDetails();
+            userDetailsStore.updateUserDetails('phone', {
+              ...this.formattedUserInfoForCip.phoneDetails,
+              verified: moment().tz('America/Chicago').toISOString(),
+            });
             resolve();
           } else {
             const error = {
@@ -703,54 +701,6 @@ cipWrapper = async (payLoad) => {
         });
     });
   }
-
-  updateUserInfo = () => {
-    const roles = get(userStore.currentUser, 'roles');
-    this.setCipDetails(roles.includes('admin'));
-    const payLoad = {
-      user: this.formattedUserInfo.userInfo,
-      phoneDetails: this.formattedUserInfo.phoneDetails,
-      cip: this.formattedUserInfo.legalCip,
-    };
-    if (roles.includes('admin')) {
-      payLoad.userId = userDetailsStore.selectedUserId;
-    }
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: updateUserCIPInfo,
-          variables: payLoad,
-        })
-        .then((data) => {
-          const getUserQuery = roles.includes('investor') ? 'getUser' : 'getUserProfileDetails';
-          const userId = roles.includes('investor') ? userStore.currentUser.sub : userDetailsStore.selectedUserId;
-          userDetailsStore[getUserQuery](userId).then((d) => {
-            if (d) {
-              this.setCipStatusWithUserDetails();
-              resolve(data);
-            }
-          });
-        })
-        .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-        });
-    });
-  };
-
-  updateUserPhoneDetails = () => new Promise((res, rej) => {
-    client
-      .mutate({
-        mutation: updateUserPhoneDetail,
-        variables: {
-          phoneDetails: {
-            number: this.ID_VERIFICATION_FRM.fields.phoneNumber.value,
-          },
-        },
-      })
-      .then(() => { res(); })
-      .catch(() => { rej(); });
-  })
 
   uploadProfilePhoto = () => {
     uiStore.setProgress();

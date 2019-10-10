@@ -100,21 +100,6 @@ export const checkUserPhoneVerificationCode = gql`
     }
  }`;
 
-export const updateUserCIPInfo = gql`
-mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!, $cip: UserCIPInformation, $userId: String) {
-    updateUserCIPInfo(user: $user, phoneDetails: $phoneDetails, cip: $cip, userId: $userId) {
-      email {
-        address
-      } info{
-        firstName
-        lastName
-      } lastLoginDate
-      accreditation {
-        status
-      }
-    }
-  }`;
-
 export const updateUserProfileData = gql`
   mutation _updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: ProfileDataLegalInput, $capabilities: [String], $targetUserId: String) {
   updateUserProfileData(

@@ -29,39 +29,29 @@ export default class AccountCreation extends Component {
     this.props.history.push('/app/summary');
   }
 
-  handleUserIdentity = (accountType, submitAccount) => {
+  handleUserIdentity = async (accountType, submitAccount) => {
     this.props.uiStore.setProgress();
-    this.props.identityStore.setCipStatusWithUserDetails();
+    const { isLegalDocsPresent } = this.props.userDetailsStore;
     this.props.identityStore.setCipDetails();
-    const { isLegalDocsPresent, userDetails } = this.props.userDetailsStore;
-    this.props.identityStore.verifyUserIdentity()
-      .then(() => {
-        const {
-          key,
-          route,
-        } = this.props.identityStore.userVerficationStatus;
-        if (key === 'id.failure') {
-          this.props.identityStore.setIdentityQuestions();
-          this.props.history.push(route);
-        } else if (this.props.identityStore.isUserCipOffline && !isLegalDocsPresent) {
-          this.props.history.push('/app/summary/identity-verification/1');
-        } else if (isLegalDocsPresent && userDetails.cip.requestId === '-1') {
-          const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
-          const accountId = get(accountDetails, 'details.accountId');
-          const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
-          this.props.accountStore.updateToAccountProcessing(accountId, accountvalue).then(() => {
-            window.sessionStorage.removeItem('cipErrorMessage');
-            this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-            const url = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.showProcessingModal ? `${this.props.match.url}/${accountType}/processing` : '/app/summary';
-            this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.setFieldValue('showProcessingModal', false);
-            this.props.history.push(url);
-            this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-          });
-        } else {
-          this.props.uiStore.setProgress();
-          this.handleLegalDocsBeforeSubmit(accountType, submitAccount);
-        }
+    await this.props.identityStore.verifyCip();
+    if (this.props.identityStore.isUserCipOffline && !isLegalDocsPresent) {
+      this.props.history.push('/app/summary/identity-verification/1');
+    } else if (isLegalDocsPresent && this.props.identityStore.isUserCipOffline) {
+      const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
+      const accountId = get(accountDetails, 'details.accountId');
+      const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
+      this.props.accountStore.updateToAccountProcessing(accountId, accountvalue).then(() => {
+        window.sessionStorage.removeItem('cipErrorMessage');
+        this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
+        const url = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.showProcessingModal ? `${this.props.match.url}/${accountType}/processing` : '/app/summary';
+        this.props.history.push(url);
+        this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.setFieldValue('showProcessingModal', false);
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
       });
+    } else {
+      this.props.uiStore.setProgress();
+      this.handleLegalDocsBeforeSubmit(accountType, submitAccount);
+    }
   }
 
   handleLegalDocsBeforeSubmit = (accountType, submitAccount) => {
@@ -101,13 +91,13 @@ export default class AccountCreation extends Component {
             exact
             path={this.props.match.url}
             render={props => (
-<AccountTypes
-  form={INVESTMENT_ACC_TYPES}
-  close={this.handleCloseModal}
-  renderAccType={this.renderAccType}
-  handleAccTypeChange={setInvestmentAccType}
-  {...props}
-/>
+              <AccountTypes
+                form={INVESTMENT_ACC_TYPES}
+                close={this.handleCloseModal}
+                renderAccType={this.renderAccType}
+                handleAccTypeChange={setInvestmentAccType}
+                {...props}
+              />
             )}
           />
           <Route exact path={`${this.props.match.url}/individual`} render={props => <IndividualAccCreation {...props} handleUserIdentity={this.handleUserIdentity} handleLegalDocsBeforeSubmit={this.handleLegalDocsBeforeSubmit} />} />

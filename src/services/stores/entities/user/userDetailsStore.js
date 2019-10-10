@@ -3,7 +3,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
 import moment from 'moment';
-import { mapValues, map, concat, set, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get, findIndex } from 'lodash';
+import { mapValues, map, concat, set, isEmpty, difference, find, findKey, filter, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM } from '../../../constants/user';
@@ -479,9 +479,11 @@ export class UserDetailsStore {
       details.frozenAccounts = map(filter(details.roles, a => a.status === 'FROZEN'), 'name');
       details.processingAccounts = map(filter(details.roles, a => (a.status ? a.status.endsWith('PROCESSING') : null)), 'name');
       details.inprogressAccounts = map(filter(details.roles, a => a.name !== 'investor' && a.status !== 'FULL'), 'name');
-      details.phoneVerification = (this.userDetails.phone
+      details.phoneVerification = this.userDetails.phone
         && this.userDetails.phone.number
-        && !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
+        // eslint-disable-next-line no-prototype-builtins
+        && this.userDetails.phone.hasOwnProperty('verified')
+        ? 'DONE' : 'FAIL';
       details.isMigratedUser = (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
       details.isMigratedFullAccount = (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION')
         && this.userDetails.status === 'MIGRATION_FULL');

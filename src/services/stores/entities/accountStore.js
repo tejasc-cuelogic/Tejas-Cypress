@@ -124,7 +124,7 @@ export class AccountStore {
         mutation: updateToAccountProcessing,
         variables: {
           accountId,
-          error: window.sessionStorage.getItem('cipErrorMessage'),
+          error: 'error message',
         },
       })
       .then((res) => {
@@ -133,12 +133,14 @@ export class AccountStore {
         this.ACC_TYPE_MAPPING[accountType].store.isFormSubmitted = true;
         Helper.toast(`${capitalize(this.ACC_TYPE_MAPPING[accountType].name)} account submitted successfully.`, 'success');
         identityStore.setFieldValue('signUpLoading', false);
+        uiStore.removeOneFromProgressArray('submitAccountLoader');
         resolve(res);
       })
       .catch((err) => {
         Helper.toast('Unable to submit Account', 'error');
         identityStore.setFieldValue('signUpLoading', false);
         uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
+        uiStore.removeOneFromProgressArray('submitAccountLoader');
         reject();
       });
   })
