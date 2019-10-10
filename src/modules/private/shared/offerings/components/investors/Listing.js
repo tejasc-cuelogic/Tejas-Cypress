@@ -44,10 +44,10 @@ export default class Listing extends Component {
     const { offer } = this.props.offeringsStore;
     const { isIssuer, isAdmin } = this.props.userStore;
     const headerList = [...meta];
-    // const hardClosedDate = get(offer, 'closureSummary.hardCloseDate');
     const referralCode = get(offer, 'referralCode');
     const isOfferingClose = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE'].includes(get(offer, 'stage'));
     let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
+    computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'Early Bird Eligibility', value: 'earlyBirdEligibility' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Regulation', value: 'regulation' });
     const listHeader = computedList;
@@ -109,8 +109,14 @@ export default class Listing extends Component {
                       }
                     </div>
                   </Table.Cell>
-                  <Table.Cell title={data.city && `${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}${data.city}, ${data.state}, ${data.zipCode}`}>
-                    {data.city || 'N/A'}
+                  <Table.Cell>
+                  <div className="table-info-wrap">
+                    <p>
+                      {((isIssuer && isOfferingClose) || (isAdmin)) && <span>{`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}`}</span>}
+                      <span>{data.city || 'N/A'}</span>
+                    </p>
+                  </div>
+                    {/* {data.city || 'N/A'} */}
                   </Table.Cell>
                   <Table.Cell>{data.state || 'N/A'}</Table.Cell>
                   {isAdmin
