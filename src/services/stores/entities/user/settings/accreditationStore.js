@@ -695,6 +695,7 @@ export class AccreditationStore {
   @action
   getUserAccreditation = (userId = false) => new Promise((res) => {
     uiStore.setProgress();
+    uiStore.addMoreInProgressArray('getUserAccreditation');
     if (userId || userDetailsStore.currentUserId) {
       this.userData = graphql({
         client,
@@ -703,12 +704,14 @@ export class AccreditationStore {
         variables: { userId: userId || userDetailsStore.currentUserId },
         onFetch: () => {
           if (!this.userData.loading) {
+            uiStore.removeOneFromProgressArray('getUserAccreditation');
             uiStore.setProgress(false);
             res();
           }
         },
         onError: () => {
           uiStore.setProgress(false);
+          uiStore.removeOneFromProgressArray('getUserAccreditation');
           Helper.toast('Something went wrong, please try again later.', 'error');
         },
       });

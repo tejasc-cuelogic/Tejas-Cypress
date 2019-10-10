@@ -44,11 +44,12 @@ export default class Listing extends Component {
     const { offer } = this.props.offeringsStore;
     const { isIssuer, isAdmin } = this.props.userStore;
     const headerList = [...meta];
-    const hardClosedDate = get(offer, 'closureSummary.hardCloseDate');
     const referralCode = get(offer, 'referralCode');
-    let computedList = (isIssuer && hardClosedDate) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
+    const isOfferingClose = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE'].includes(get(offer, 'stage'));
+    let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
+    computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'Early Bird Eligibility', value: 'earlyBirdEligibility' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
-    computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Early Bird Eligibility', value: 'earlyBirdEligibility' });
+    computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Regulation', value: 'regulation' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
     const isUsersCapablities = this.props.userStore.myAccessForModule('USERS');
@@ -108,29 +109,44 @@ export default class Listing extends Component {
                       }
                     </div>
                   </Table.Cell>
-                  <Table.Cell title={data.city && `${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}${data.city}, ${data.state}, ${data.zipCode}`}>
-                    {data.city || 'N/A'}
+                  <Table.Cell>
+                  <div className="table-info-wrap">
+                    <p>
+                      {((isIssuer && isOfferingClose) || (isAdmin)) && <span>{`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}`}</span>}
+                      <span>{data.city || 'N/A'}</span>
+                    </p>
+                  </div>
+                    {/* {data.city || 'N/A'} */}
                   </Table.Cell>
                   <Table.Cell>{data.state || 'N/A'}</Table.Cell>
                   {isAdmin
                     && (
-                      <>
                       <Table.Cell>
                         {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
                       </Table.Cell>
-                      <Table.Cell>
-                        {data.earlyBirdEligibility
-                          ? <Label color="green" circular empty className="mr-10" />
-                          : ''
-                        }
-                      </Table.Cell>
-                      </>
                     )
                   }
-                  <Table.Cell>
-                    {data.regulation ? OFFERING_AGREEMENT_REGULATIONS[data.regulation] : ''}
+                  <Table.Cell textAlign="center">
+                    {data.earlyBirdEligibility
+                      ? (
+                        <Popup
+                          trigger={<Label color="green" circular empty className="mr-10" />}
+                          content="Eligible for Early Bird Reward"
+                          hoverable
+                          position="top center"
+                        />
+                      )
+                      : ''
+                    }
                   </Table.Cell>
-                  {((isIssuer && hardClosedDate) || (isAdmin))
+                  {isAdmin
+                    && (
+                      <Table.Cell>
+                        {data.regulation ? OFFERING_AGREEMENT_REGULATIONS[data.regulation] : ''}
+                      </Table.Cell>
+                    )
+                  }
+                  {((isIssuer && isOfferingClose) || (isAdmin))
                     && (
                       <>
                       <Table.Cell>
