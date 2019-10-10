@@ -95,24 +95,6 @@ export const editUpdate = gql`
   }
 `;
 
-export const approveUpdate = gql`
-mutation _offeringUpdatesApprovedByInfo($id: ID!) {
-  offeringUpdatesApprovedByInfo(id: $id) {
-    id
-    title
-    status
-    scope
-    content
-    approved {
-      by
-      date
-      __typename
-    }
-    __typename
-  }
-}
-`;
-
 export const sendOfferingUpdateTestEmail = gql`
 mutation sendOfferingUpdateTestEmail($offeringUpdateId: String!, $emailTemplate: publishLiveEmailTemplate!, $shouldSendInvestorNotifications:Boolean!) {
   sendOfferingUpdateTestEmail(

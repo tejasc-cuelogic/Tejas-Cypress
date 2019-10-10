@@ -8,7 +8,7 @@ import Helper from '../../../../../helper/utility';
 import { UPDATES, TEMPLATE } from '../../../../constants/offering';
 import { offeringCreationStore, uiStore } from '../../../index';
 import {
-  allUpdates, newUpdate, getUpdate, editUpdate, approveUpdate, deleteOfferingUpdate,
+  allUpdates, newUpdate, getUpdate, editUpdate, deleteOfferingUpdate,
   sendOfferingUpdateTestEmail, offeringUpdatePublish,
 } from '../../../queries/offering/Updates';
 
@@ -255,17 +255,6 @@ export class UpdateStore {
     @action
     setFormIsDirty = (isDirty) => {
       this.PBUILDER_FRM.meta.isDirty = isDirty;
-    }
-
-    @action
-    approveUpdate = (id) => {
-      client.mutate({
-        mutation: approveUpdate,
-        variables: { id },
-      }).then(() => {
-        Helper.toast('Update published.', 'success');
-      })
-        .catch(() => Helper.toast('Error', 'error'));
     }
 
     @action

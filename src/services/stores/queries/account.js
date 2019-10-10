@@ -68,20 +68,6 @@ query isUniqueTaxId($taxId: String!) {
   }
 }`;
 
-export const createIndividual = gql`
-  mutation createIndividiaul($accountAttributes: AccountInputType!, $accountStatus: InvestorAccountStatusEnum!, $accountType: InvestorAccountTypeEnum!){
-    createInvestorAccount(accountAttributes: $accountAttributes, accountStatus: $accountStatus, accountType: $accountType){
-      userId
-      accountId
-      linkedBank {
-        accountNumber
-        routingNumber
-        bankName
-      }
-      accountType
-    }
-  }`;
-
 export const crowdPayAccountNotifyGs = gql`
   mutation _crowdPayAccountNotifyGS($userId: String, $accountId: String!) {
     crowdPayAccountNotifyGS(

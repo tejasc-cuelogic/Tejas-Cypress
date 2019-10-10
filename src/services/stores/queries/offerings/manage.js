@@ -1156,14 +1156,6 @@ query _getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
 }
 `;
 
-export const createOffer = gql`
-  mutation _createOffering($applicationId: String!){
-    createOffering(applicationId: $applicationId) {
-      id
-    }
-  }
-`;
-
 export const createBac = gql`
 mutation _createBAC($offeringBacDetails: OfferingBacInputType!) {
   createOfferingBac(offeringBacDetails: $offeringBacDetails) {
