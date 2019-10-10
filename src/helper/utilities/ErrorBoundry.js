@@ -30,7 +30,6 @@ class ErrorBoundary extends React.Component {
         ...emailContent,
         fullStoryUrl: fullStorySession,
       };
-      console.log('FullStory current session', fullStorySession);
     }
     if (catchErrorBoundry) {
       try {
