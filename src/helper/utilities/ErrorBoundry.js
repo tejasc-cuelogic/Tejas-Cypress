@@ -23,11 +23,19 @@ class ErrorBoundary extends React.Component {
     const redirectToHome = () => {
       window.location = window.location.origin;
     };
-
+    let emailContent = error.stack;
+    if (window.FS && window.FS.getCurrentSessionURL) {
+      const fullStorySession = window.FS.getCurrentSessionURL(true);
+      emailContent = {
+        ...emailContent,
+        fullStoryUrl: fullStorySession,
+      };
+      console.log('FullStory current session', fullStorySession);
+    }
     if (catchErrorBoundry) {
       try {
         const params = {
-          emailContent: error.stack.toString(),
+          emailContent: emailContent.toString(),
         };
         this.props.authStore.notifyApplicationError(params).then(() => {
           redirectToHome();
