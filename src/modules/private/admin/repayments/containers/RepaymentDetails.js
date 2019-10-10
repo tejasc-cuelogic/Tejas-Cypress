@@ -1,59 +1,73 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Button, Grid, Form } from 'semantic-ui-react';
-import SummaryHeader from '../../../investor/accountDetails/components/portfolio/SummaryHeader';
-import OfferingList from '../components/OfferingList';
-import { ByKeyword } from '../../../../../theme/form/Filters';
+import { Modal, Header, Form, Button } from 'semantic-ui-react';
+import { get } from 'lodash';
+import { FormInput, FormDropDown, MaskedInput } from '../../../../../theme/form';
+import { SECURITIES_VALUES } from '../../../../../services/constants/admin/offerings';
+import { InlineLoader } from '../../../../../theme/shared';
 
-@inject('paymentStore')
+@inject('paymentStore', 'uiStore')
 @withRouter
 @observer
 export default class RepaymentDetails extends Component {
   constructor(props) {
     super(props);
-    this.props.paymentStore.initRepaymentDetails();
+    this.props.paymentStore.getOfferingById(get(this.props, 'match.params.id'));
   }
 
-  toggleSearch = () => this.props.paymentStore.toggleSearch();
-
-  executeSearch = (e) => {
-    if (e.charCode === 13) {
-      this.props.paymentStore.setInitiateSrch('keyword', e.target.value);
-    }
+  handleCloseModal = () => {
+    this.props.history.push('/app/payments');
   }
 
   render() {
-    const {
-      summary, repaymentDetails, requestState, filters,
-    } = this.props.paymentStore;
+    const { PAYMENT_FRM, maskChange } = this.props.paymentStore;
+    const { inProgress } = this.props.uiStore;
+    if (inProgress) {
+      return <InlineLoader />;
+    }
     return (
-      <div>
-        <Form>
-          <Grid stackable>
-            <Grid.Row>
-              <ByKeyword
-                executeSearch={this.executeSearch}
-                w={[11]}
-                placeholder="Search by keyword or phrase"
-                toggleSearch={this.toggleSearch}
-                requestState={requestState}
-                filters={filters}
-                more="no"
-                addon={(
-<Grid.Column width={5} textAlign="right">
-                    <Button primary floated="right">Process Payments</Button>
-                    <Button secondary floated="right">Save as Draft</Button>
-                  </Grid.Column>
-)}
+      <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
+        <Modal.Header className="center-align signup-header">
+          <Header as="h3">Edit Payment</Header>
+        </Modal.Header>
+        <Modal.Content className="signup-content">
+            <Form>
+              <FormInput
+                disabled
+                fluid
+                type="text"
+                name="shorthandBusinessName"
+                fielddata={PAYMENT_FRM.fields.shorthandBusinessName}
               />
-            </Grid.Row>
-          </Grid>
-        </Form>
-        <SummaryHeader details={summary} cols={4} />
-        <OfferingList listOf="Term Loan Offerings" data={repaymentDetails} />
-        <OfferingList listOf="Rev Share Offerings" data={repaymentDetails} />
-      </div>
+              <FormDropDown
+                disabled
+                fielddata={PAYMENT_FRM.fields.securities}
+                selection
+                value={PAYMENT_FRM.fields.securities.value}
+                placeholder="Choose here"
+                name="securities"
+                options={SECURITIES_VALUES}
+              />
+              {
+                ['maturityDate', 'hardCloseDate', 'expectedOpsDate', 'operationsDate', 'expectedPaymentDate', 'firstPaymentDate'].map(field => (
+                  <MaskedInput
+                    disabled={['maturityDate', 'hardCloseDate'].includes(field)}
+                    name={field}
+                    placeHolder={PAYMENT_FRM.fields[field].placeHolder}
+                    fielddata={PAYMENT_FRM.fields[field]}
+                    changed={(values, name) => maskChange(values, 'PAYMENT_FRM', name)}
+                    dateOfBirth
+                  />
+                ))
+              }
+              <div className="center-align">
+                <Button className="very relaxed red" content="Cancel" onClick={this.handleCloseModal} />
+                <Button primary className="very relaxed" content="Submit" />
+              </div>
+            </Form>
+        </Modal.Content>
+      </Modal>
     );
   }
 }

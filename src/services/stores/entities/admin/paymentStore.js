@@ -2,8 +2,12 @@ import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { orderBy, get } from 'lodash';
 import moment from 'moment';
+import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { paymentsIssuerList, allRepaymentDetails } from '../../queries/Repayment';
+import { getOfferingDetails } from '../../queries/offerings/manage';
+import { PAYMENT } from '../../../constants/payment';
+import { uiStore } from '../../index';
 
 export class PaymentStore {
     @observable data = [];
@@ -11,6 +15,10 @@ export class PaymentStore {
     @observable details = [];
 
     @observable filters = false;
+
+    @observable PAYMENT_FRM = Validator.prepareFormObject(PAYMENT);
+
+    @observable offeringDetails = null;
 
     @observable summary = {
       title: false,
@@ -38,6 +46,14 @@ export class PaymentStore {
     }
 
     @action
+    formChange = (e, result, form) => {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+      );
+    }
+
+    @action
     setSortingOrder = (column = null, direction = null) => {
       this.sortOrder.column = column;
       // this.sortOrder.listData = listData;
@@ -55,6 +71,61 @@ export class PaymentStore {
     }
 
     @action
+    formArrayChange = (e, result, form) => {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        Validator.pullValues(e, result),
+      );
+    }
+
+    @action
+    maskChange = (values, form, field) => {
+      const cMap = ['expectedPaymentDate', 'firstPaymentDate', 'expectedOpsDate', 'maturityDate', 'hardCloseDate', 'operationsDate'];
+      const fieldValue = (cMap.includes(field)) ? values.formattedValue : values.floatValue;
+      this[form] = Validator.onChange(
+        this[form],
+        { name: field, value: fieldValue },
+      );
+    }
+
+    @action
+    getOfferingById = (id) => {
+      uiStore.setProgress();
+      this.offeringDetails = graphql({
+        client,
+        query: getOfferingDetails,
+        variables: { id },
+        onFetch: (res) => {
+          if (res && res.getOfferingById) {
+            const data = {
+              shorthandBusinessName: get(res.getOfferingById, 'keyTerms.shorthandBusinessName'),
+              securities: get(res.getOfferingById, 'keyTerms.securities'),
+              hardCloseDate: get(res.getOfferingById, 'closureSummary.hardCloseDate'),
+              maturityDate: get(res.getOfferingById, 'closureSummary.keyTerms.maturityDate'),
+              expectedOpsDate: get(res.getOfferingById, 'offering.launch.expectedOpsDate'),
+              expectedPaymentDate: get(res.getOfferingById, 'closureSummary.keyTerms.anticipatedPaymentStartDate'),
+              firstPaymentDate: get(res.getOfferingById, 'closureSummary.repayment.startDate'),
+              operationsDate: get(res.getOfferingById, 'closingSummary.operationsDate'),
+            };
+            this.setFormData(data);
+          }
+          uiStore.setProgress(false);
+        },
+      });
+    }
+
+    @action
+    setFormData = (formData) => {
+      Object.keys(this.PAYMENT_FRM.fields).map(action((key) => {
+        if (!this.PAYMENT_FRM.fields[key].ArrayObjItem) {
+          this.PAYMENT_FRM.fields[key].value = formData[key];
+        }
+        return null;
+      }));
+      Validator.validateForm(this.PAYMENT_FRM);
+    }
+
+    @action
     setInitiateSrch = (name, value) => {
       this.requestState.search[name] = value;
       this.initRequest({ ...this.requestState.search });
@@ -69,7 +140,7 @@ export class PaymentStore {
       if (this.sortOrder.column && this.sortOrder.direction && this.data && toJS(get(this.data, 'data.paymentsIssuerList'))) {
         return orderBy(
           this.data.data.paymentsIssuerList,
-          [issuerList => (this.sortOrder.column !== 'shorthandBusinessName' ? get(issuerList, this.sortOrder.column) && moment(get(issuerList, this.sortOrder.column), 'MM/DD/YYYY', true).isValid() ? moment(get(issuerList, this.sortOrder.column), 'MM/DD/YYYY', true).unix() : '' : issuerList[this.sortOrder.column].toString().toLowerCase())],
+          [issuerList => (!['keyTerms.shorthandBusinessName', 'offering.keyTerms.securities'].includes(this.sortOrder.column) ? get(issuerList, this.sortOrder.column) && moment(get(issuerList, this.sortOrder.column), 'MM/DD/YYYY', true).isValid() ? moment(get(issuerList, this.sortOrder.column), 'MM/DD/YYYY', true).unix() : '' : get(issuerList, this.sortOrder.column) && get(issuerList, this.sortOrder.column).toString().toLowerCase())],
           [this.sortOrder.direction],
         );
       }

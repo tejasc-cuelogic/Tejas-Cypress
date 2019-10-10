@@ -33,16 +33,23 @@ export const allRepaymentDetails = gql`
 export const paymentsIssuerList = gql`
   query paymentsIssuerList{
     paymentsIssuerList {
-      shorthandBusinessName
-      hardCloseDate
-      maturityDate
-      expectedPaymentDate
-      firstPaymentDate
       sinkingFundBalance
       offering {
         id
         offeringStatus
         stage
+        keyTerms {
+          securities
+          shorthandBusinessName
+          securities
+        }
+        closureSummary {
+          hardCloseDate
+          keyTerms {
+            maturityDate
+            anticipatedPaymentStartDate
+          }          
+        }
         offering {
           launch {
             expectedOpsDate
