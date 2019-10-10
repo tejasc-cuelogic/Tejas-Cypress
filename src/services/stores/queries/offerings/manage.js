@@ -1102,6 +1102,7 @@ query _getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
     id
     offeringId
     controlPersonQuestionnaire
+    otherEntities
     residenceTenYears
     legalName
     email
