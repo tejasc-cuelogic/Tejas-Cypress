@@ -78,13 +78,13 @@ class InvestorProfileStore {
       this.INVESTOR_PROFILE_FULL.fields.brokerageFirmName.value = '';
       this.INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value = 'no';
     }
-    // if (investorProfileData && investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== ''
-    //   && investorProfileData.publicCompanyTicker !== 'false') {
-    //   this.INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value = 'yes';
-    // } else {
-    //   this.INVESTOR_PROFILE_FULL.fields.publicCompanyTicker.value = '';
-    //   this.INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value = 'no';
-    // }
+    if (investorProfileData && investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== ''
+      && investorProfileData.publicCompanyTicker !== 'false') {
+      this.INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value = 'yes';
+    } else {
+      this.INVESTOR_PROFILE_FULL.fields.publicCompanyTicker.value = '';
+      this.INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value = 'no';
+    }
     ['isRiskTaker', 'isComfortable'].map((field) => {
       if (investorProfileData && investorProfileData[field]) {
         this.INVESTOR_PROFILE_FULL.fields[field].value = investorProfileData[field] ? ['checked'] : [];
