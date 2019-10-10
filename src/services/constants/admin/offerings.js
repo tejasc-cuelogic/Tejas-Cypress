@@ -2361,6 +2361,13 @@ export const LEADER = {
       rule: 'string',
       skipField: true,
     },
+    otherEntities: {
+      label: 'Names of other entities over which you have control',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      defaultValue: 'Type your text here...',
+    },
     controlPersonQuestionnaire: {
       label: 'Control Person Questionnaire',
       value: '',
