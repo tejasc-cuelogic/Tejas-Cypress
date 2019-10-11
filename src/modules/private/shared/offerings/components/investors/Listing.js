@@ -126,6 +126,8 @@ export default class Listing extends Component {
                       </Table.Cell>
                     )
                   }
+                  {((isIssuer && isOfferingClose) || (isAdmin))
+                    && (
                   <Table.Cell textAlign="center">
                     {data.earlyBirdEligibility
                       ? (
@@ -136,9 +138,9 @@ export default class Listing extends Component {
                           position="top center"
                         />
                       )
-                      : ''
-                    }
-                  </Table.Cell>
+                      : ''}
+                     </Table.Cell>
+                    )}
                   {isAdmin
                     && (
                       <Table.Cell>
