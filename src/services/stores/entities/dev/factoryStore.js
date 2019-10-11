@@ -327,7 +327,7 @@ export class FactoryStore extends DataModelStore {
 
   pullValuesForDynmicInput = (e, data) => {
     const pluginInputData = find(data.fielddata.values, o => o.value === data.value && o.pluginInput);
-    const pluginInputObj = keyBy(pluginInputData.pluginInput, 'value');
+    const pluginInputObj = keyBy(pluginInputData.pluginInput, 'key');
     return pluginInputObj;
   };
 

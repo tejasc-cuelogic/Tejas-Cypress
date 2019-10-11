@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, Button, Form, Grid, Divider, Header } from 'semantic-ui-react';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import formHOC from '../../../../../../theme/form/formHOC';
 import DynamicFormInput from './dynamicFormInput';
@@ -10,7 +10,6 @@ const metaInfo = {
   form: 'REQUESTFACTORY_FRM',
 };
 
-@inject('factoryStore')
 @withRouter
 @observer
 class RequestFactory extends Component {

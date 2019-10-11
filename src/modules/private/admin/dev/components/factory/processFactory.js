@@ -99,4 +99,4 @@ function ProcessFactory(props) {
   );
 }
 
-export default inject('factoryStore')(withRouter(formHOC(observer(ProcessFactory), metaInfo)));
+export default (withRouter(formHOC(observer(ProcessFactory), metaInfo)));
