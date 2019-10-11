@@ -131,6 +131,7 @@ query _listRequestPlugins {
         label
         type
         value
+        key
         rule
         defaultValue
       }
@@ -154,6 +155,7 @@ query _listRequestPlugins {
         label
         type
         value
+        key
         rule
         defaultValue
       }
