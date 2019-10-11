@@ -118,7 +118,7 @@ export class AccountStore {
 
   @action
   accountProcessingWrapper = async (accountType, match) => {
-    const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
+    const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: accountType });
     const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
     const { store } = this.ACC_TYPE_MAPPING[accountvalue];
     const accountId = get(accountDetails, 'details.accountId') || store[`${accountType}AccountId`];
@@ -126,7 +126,6 @@ export class AccountStore {
     window.sessionStorage.removeItem('cipErrorMessage');
     const url = store.showProcessingModal ? `${match.url}/${accountType}/processing` : '/app/summary';
     store.setFieldValue('showProcessingModal', false);
-    await this.props.userDetailsStore.getUser(userStore.currentUser.sub);
     return url;
   }
 
@@ -143,6 +142,7 @@ export class AccountStore {
           },
         });
       this.ACC_TYPE_MAPPING[accountType].store.setFieldValue('showProcessingModal', true);
+      await userDetailsStore.getUser(userStore.currentUser.sub);
       bankAccountStore.resetStoreData();
       this.ACC_TYPE_MAPPING[accountType].store.isFormSubmitted = true;
       Helper.toast(`${capitalize(this.ACC_TYPE_MAPPING[accountType].name)} account submitted successfully.`, 'success');

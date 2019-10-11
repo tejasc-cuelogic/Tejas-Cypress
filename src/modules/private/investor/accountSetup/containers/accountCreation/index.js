@@ -32,19 +32,20 @@ export default class AccountCreation extends Component {
   handleUserIdentity = async (accountType) => {
     try {
       this.props.uiStore.setProgress();
-      const { isLegalDocsPresent } = this.props.userDetailsStore;
+      const { isLegalDocsPresent, isUserVerified } = this.props.userDetailsStore;
       this.props.identityStore.setCipDetails();
       const { res, url } = await this.props.identityStore.verifyCip();
       const { cipStepUrlMapping } = this.props.identityStore;
       const { step } = res.data.verifyCip;
       const isCipOffline = step === 'OFFLINE';
 
-      if (step === 'userCIPSoftFail' && cipStepUrlMapping.cipSoftFail.url === url) {
+      if (!isUserVerified && (step === 'userCIPSoftFail' && cipStepUrlMapping.cipSoftFail.url === url)) {
         this.props.history.push(cipStepUrlMapping.cipSoftFail.url);
-      } else if (['userCIPHardFail', 'userCIPFail'].includes(step) && !isLegalDocsPresent) {
+      } else if (!isUserVerified && ['userCIPHardFail', 'userCIPFail'].includes(step) && !isLegalDocsPresent) {
         this.props.history.push(cipStepUrlMapping.ciphardFail.url);
-      } else if (step !== 'phoneMfa' && isLegalDocsPresent && isCipOffline) {
-        await this.props.accountStore.accountProcessingWrapper(accountType, this.props.match);
+      } else if (!isUserVerified && step !== 'phoneMfa' && isCipOffline) {
+        const processingUrl = await this.props.accountStore.accountProcessingWrapper(accountType, this.props.match);
+        this.props.history.push(processingUrl);
       } else {
         this.props.uiStore.setProgress();
         this.handleLegalDocsBeforeSubmit(accountType);
@@ -55,43 +56,45 @@ export default class AccountCreation extends Component {
   }
 
 
-  handleCreateAccount = (accountType) => {
+  handleCreateAccount = async (accountType) => {
     this.props.identityStore.setCipStatusWithUserDetails();
     this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
     const { isCipExpired, isUserVerified } = this.props.userDetailsStore;
     if (isCipExpired || !isUserVerified) {
-      this.handleUserIdentity(accountType);
+      await this.handleUserIdentity(accountType);
       this.props.userDetailsStore.setAccountForWhichCipExpired(accountType);
     } else {
-      this.handleLegalDocsBeforeSubmit(accountType);
+      await this.handleLegalDocsBeforeSubmit(accountType);
     }
   }
 
-  handleLegalDocsBeforeSubmit = (accountType) => {
+  handleLegalDocsBeforeSubmit = async (accountType) => {
     const { isUserVerified, isLegalDocsPresent } = this.props.userDetailsStore;
     this.props.identityStore.setCipStatusWithUserDetails();
     if ((!isUserVerified && !isLegalDocsPresent) || this.props.identityStore.isUserCipOffline) {
       this.props.userDetailsStore.setAccountForWhichCipExpired(accountType);
-      this.handleUserIdentity(accountType);
+      await this.handleUserIdentity(accountType);
     } else {
-      this.handleSubmitAccount(accountType);
+      await this.handleSubmitAccount(accountType);
     }
   }
 
-  handleSubmitAccount = (accountType) => {
-    this.props.uiStore.setcreateAccountMessage();
-    this.props[`${accountType}AccountStore`].submitAccount().then(() => {
+  handleSubmitAccount = async (accountType) => {
+    try {
+      this.props.uiStore.setcreateAccountMessage();
+      await this.props[`${accountType}AccountStore`].submitAccount();
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
+      this.props.uiStore.resetcreateAccountMessage();
       const confirmModal = this.props[`${accountType}AccountStore`].showProcessingModal ? 'processing' : 'success';
       this.props[`${accountType}AccountStore`].setFieldValue('showProcessingModal', false);
       this.props.history.push(`${this.props.match.url}/${confirmModal}`);
-    }).catch((err) => {
+    } catch (err) {
       if (Helper.matchRegexWithString(/\brequired uploads(?![-])\b/, err.message)) {
         this.props.handleLegalDocsBeforeSubmit('individual', this.handleSubmitAccount);
       }
-    });
+    }
   }
 
   HandleModalCta = () => {
