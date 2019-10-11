@@ -133,6 +133,7 @@ export class PaymentStore {
         })
         .then((res) => {
           console.log(res);
+          this.updatePaymentList(id);
           resolve();
         })
         .catch((err) => {
