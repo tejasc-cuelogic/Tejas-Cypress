@@ -77,6 +77,7 @@ export const updatePaymentIssuer = gql`
       }
       closureSummary {
         hardCloseDate
+        operationsDate
         keyTerms {
           maturityDate
           anticipatedPaymentStartDate

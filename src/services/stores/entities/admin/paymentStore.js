@@ -79,7 +79,7 @@ export class PaymentStore {
 
     @action
     maskChange = (values, form, field) => {
-      const cMap = ['expectedPaymentDate', 'firstPaymentDate', 'expectedOpsDate', 'maturityDate', 'hardCloseDate', 'operationsDate'];
+      const cMap = ['expectedPaymentDate', 'firstPaymentDate', 'expectedOpsDate', 'operationsDate'];
       const fieldValue = (cMap.includes(field)) ? values.formattedValue : values.floatValue;
       this[form] = Validator.onChange(
         this[form],
@@ -133,7 +133,7 @@ export class PaymentStore {
         })
         .then((res) => {
           console.log(res);
-          this.updatePaymentList(id);
+          this.updatePaymentList(id, res.updatePaymentIssuer);
           resolve();
         })
         .catch((err) => {
@@ -146,21 +146,13 @@ export class PaymentStore {
     });
 
     @action
-    updatePaymentList = (id) => {
+    updatePaymentList = (id, res) => {
       const data = { ...toJS(this.data) };
       const paymentIndex = findIndex(data, d => d.id === id);
       if (paymentIndex !== -1) {
         const newData = {
-          id,
-          shorthandBusinessName: this.PAYMENT_FRM.shorthandBusinessName.field.value,
-          securities: this.PAYMENT_FRM.securities.field.value,
-          hardCloseDate: this.PAYMENT_FRM.hardCloseDate.field.value,
-          maturityDate: this.PAYMENT_FRM.maturityDate.field.value,
-          expectedOpsDate: this.PAYMENT_FRM.expectedOpsDate.field.value,
-          expectedPaymentDate: this.PAYMENT_FRM.expectedPaymentDate.field.value,
-          firstPaymentDate: this.PAYMENT_FRM.firstPaymentDate.field.value,
-          operationsDate: this.PAYMENT_FRM.operationsDate.field.value,
-          sinkingFundBalance: this.PAYMENT_FRM.sinkingFundBalance.field.value,
+          ...res,
+          sinkingFundBalance: this.PAYMENT_FRM.fields.sinkingFundBalance.value,
         };
         this.data[paymentIndex] = newData;
       }
