@@ -980,11 +980,6 @@ export class AccreditationStore {
   }
 
   @action
-  updateAccreditationExpiray = () => {
-    console.log('going to update accreditation expiray date');
-  }
-
-  @action
   expirationChange = (e, result) => {
     this.formChange(e, result, 'ACCREDITATION_EXPIRY_FORM');
   }
