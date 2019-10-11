@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { orderBy, get, forEach } from 'lodash';
+import { orderBy, get, forEach, findIndex } from 'lodash';
 import moment from 'moment';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -143,6 +143,27 @@ export class PaymentStore {
           uiStore.setProgress(false);
         });
     });
+
+    @action
+    updatePaymentList = (id) => {
+      const data = { ...toJS(this.data) };
+      const paymentIndex = findIndex(data, d => d.id === id);
+      if (paymentIndex !== -1) {
+        const newData = {
+          id,
+          shorthandBusinessName: this.PAYMENT_FRM.shorthandBusinessName.field.value,
+          securities: this.PAYMENT_FRM.securities.field.value,
+          hardCloseDate: this.PAYMENT_FRM.hardCloseDate.field.value,
+          maturityDate: this.PAYMENT_FRM.maturityDate.field.value,
+          expectedOpsDate: this.PAYMENT_FRM.expectedOpsDate.field.value,
+          expectedPaymentDate: this.PAYMENT_FRM.expectedPaymentDate.field.value,
+          firstPaymentDate: this.PAYMENT_FRM.firstPaymentDate.field.value,
+          operationsDate: this.PAYMENT_FRM.operationsDate.field.value,
+          sinkingFundBalance: this.PAYMENT_FRM.sinkingFundBalance.field.value,
+        };
+        this.data[paymentIndex] = newData;
+      }
+    }
 
     @action
     setFormData = (formData) => {
