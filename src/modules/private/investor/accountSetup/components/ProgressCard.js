@@ -54,6 +54,7 @@ const ProgressCard = props => (
   <Card.Group stackable itemsPerRow={3}>
     {
       (isEmpty(props.signupStatus.activeAccounts)
+      || !isEmpty(props.signupStatus.inActiveAccounts)
       || (props.signupStatus.isMigratedFullAccount
         && (!props.isBasicVerDoneForMigratedFullUser
         || !props.signupStatus.investorProfileCompleted)))

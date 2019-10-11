@@ -1,7 +1,7 @@
 import graphql from 'mobx-apollo';
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
-import { mapValues, keyBy, find, flatMap, map, omit, get, uniqWith, isEqual } from 'lodash';
+import { mapValues, keyBy, find, flatMap, map, get } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
@@ -176,7 +176,7 @@ export class IdentityStore {
   get formattedUserInfoForCip() {
     const { fields } = this.ID_VERIFICATION_FRM;
     const user = FormValidator.evaluateFormData(fields);
-    const phoneDetails = { number: fields.phoneNumber.value || '1111111111' };
+    const phoneDetails = { number: fields.phoneNumber.value };
     return { user, phoneDetails };
   }
 
@@ -185,85 +185,6 @@ export class IdentityStore {
     return Object.keys(this.ID_VERIFICATION_QUESTIONS.fields).map(type => ({
       type, text: this.ID_VERIFICATION_QUESTIONS.fields[type].value,
     }));
-  }
-
-  checkIncorrectAns = res => res.key && (res.key.split('.').includes('incorrect') || res.key.split('.').includes('incomplete'))
-
-  CipFailReasons = (failReasonArr, obj) => {
-    failReasonArr.push(obj);
-    // eslint-disable-next-line no-shadow
-    const filteredArr = map(failReasonArr, obj => (omit(obj, [['__typename']])));
-    return uniqWith(filteredArr, isEqual);
-  }
-
-  @computed
-  get formattedUserInfo() {
-    const { fields, response } = this.ID_VERIFICATION_FRM;
-    const legalCip = {};
-    // eslint-disable-next-line no-unused-vars
-    const roles = get(userStore.currentUser, 'roles');
-    const { phone, cip, legalDetails } = roles.includes('investor') ? userDetailsStore.userDetails : userDetailsStore.detailsOfUser.data.user;
-    if (response.key === 'id.error') {
-      legalCip.expiration = Helper.getDaysfromNow(21);
-      legalCip.requestId = 'ERROR_NO_REQUEST_ID';
-    } else if (response.message === 'PASS' || (response.summary && response.summary === 'pass')) {
-      legalCip.expiration = Helper.getDaysfromNow(21);
-      legalCip.requestId = response.passId;
-      if (response.key && Helper.matchRegexWithString(/\bcorrect(?![-])\b/, response.message)) {
-        legalCip.failReason = !get(cip, 'failReason') ? [{ key: response.key, message: response.message }]
-          : this.CipFailReasons(cip.failReason, { key: response.key, message: response.message });
-        legalCip.failType = 'FAIL_WITH_QUESTIONS';
-      }
-    } else if (response.message === 'FAIL' && response.questions) {
-      legalCip.expiration = Helper.getDaysfromNow(21);
-      legalCip.requestId = response.softFailId;
-      legalCip.failType = 'FAIL_WITH_QUESTIONS';
-      legalCip.failReason = !get(cip, 'failReason') ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])]
-        : this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
-    } else if (this.checkIncorrectAns(response) && response.hardFailId) {
-      legalCip.expiration = Helper.getDaysfromNow(21);
-      legalCip.requestId = response.hardFailId;
-      legalCip.failType = 'FAIL_WITH_UPLOADS';
-      legalCip.failReason = !get(cip, 'failReason') ? [{ key: response.key, message: response.message }]
-        : this.CipFailReasons(cip.failReason, { key: response.key, message: response.message });
-    } else {
-      legalCip.expiration = this.isUserCipOffline ? moment().subtract(1, 'days').toISOString() : Helper.getDaysfromNow(21);
-      legalCip.requestId = response.hardFailId || '-1';
-      if (this.userCipStatus !== 'OFFLINE') {
-        legalCip.failType = 'FAIL_WITH_UPLOADS';
-      }
-      if (response.qualifiers && response.qualifiers !== null) {
-        legalCip.failReason = !get(cip, 'failReason') ? [omit(response.qualifiers && response.qualifiers[0], ['__typename'])]
-          : this.CipFailReasons(cip.failReason, omit(response.qualifiers && response.qualifiers[0], ['__typename']));
-      }
-    }
-    const selectedState = find(US_STATES, { value: fields.state.value });
-    const userInfo = {
-      legalName: {
-        salutation: fields.salutation.value,
-        firstLegalName: fields.firstLegalName.value,
-        lastLegalName: fields.lastLegalName.value,
-      },
-      status: this.userCipStatus !== '' ? this.userCipStatus : this.cipStatus,
-      dateOfBirth: fields.dateOfBirth.value,
-      ssn: fields.ssn.value || legalDetails.ssn,
-      legalAddress: {
-        street: fields.street.value,
-        city: fields.city.value,
-        state: selectedState ? selectedState.key : null,
-        zipCode: fields.zipCode.value,
-        streetTwo: fields.streetTwo.value,
-      },
-    };
-
-    const { photoId } = this.ID_VERIFICATION_DOCS_FRM.fields;
-
-    if (photoId.fileId || get(legalDetails, 'verificationDocs.idProof.fileId')) {
-      userInfo.verificationDocs = this.verificationDocs(legalDetails);
-    }
-    const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
-    const phoneDetails = { number };
-    return { userInfo, phoneDetails, legalCip };
   }
 
   @action
@@ -298,7 +219,7 @@ export class IdentityStore {
     const payLoad = {
       mutation: verifyCip,
       mutationName: 'verifyCip',
-      variables: { isCipOffline: false, userId: userDetailsStore.selectedUserId, ...this.formattedUserInfoForCip },
+      variables: { isCipOffline: true, userId: userDetailsStore.selectedUserId, ...this.formattedUserInfoForCip },
     };
     const { res, url } = await this.cipWrapper(payLoad);
 
@@ -414,69 +335,6 @@ cipWrapper = async (payLoad) => {
 }
 
   @action
-  verifyUserIdentity = async () => {
-    this.ID_VERIFICATION_FRM.response = {};
-    this.setCipStatus('');
-    let userId = userStore.currentUser.sub;
-    const roles = get(userStore.currentUser, 'roles');
-    if (roles.includes('admin')) {
-      this.setCipDetails();
-      userId = userDetailsStore.selectedUserId;
-    }
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: verifyCip,
-          variables: {
-            userId,
-            user: this.formattedUserInfoForCip.userInfo,
-          },
-        })
-        .then((data) => {
-          this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
-          const requestId = data.data.verifyCIPIdentity.passId
-          || data.data.verifyCIPIdentity.softFailId
-          || data.data.verifyCIPIdentity.hardFailId;
-          if (requestId) {
-            this.updateUserInfo().then(() => {
-              this.setFieldValue('signUpLoading', false);
-              resolve(requestId);
-            }).catch((err) => {
-              console.log('error update user', err);
-              this.setFieldValue('signUpLoading', false);
-              reject();
-            });
-          } else {
-            this.setFieldValue('signUpLoading', false);
-            uiStore.setErrors(data.data.verifyCIPIdentity.message);
-          }
-        })
-        .catch((err) => {
-          if (err.response) {
-            uiStore.setErrors(DataFormatter.getSimpleErr(err));
-            this.setFieldValue('signUpLoading', false);
-            reject(err);
-          } else {
-            // uiStore.setErrors(JSON.stringify('Something went wrong'));
-            this.setCipStatus('OFFLINE');
-            window.sessionStorage.setItem('cipErrorMessage', JSON.stringify(err));
-            this.updateUserInfo().then(() => {
-              this.setFieldValue('signUpLoading', false);
-              resolve();
-            }).catch(() => {
-              this.setFieldValue('signUpLoading', false);
-              reject();
-            });
-          // reject(err);
-          }
-        });
-      // .finally(() => {
-      //   uiStore.setProgress(false);
-      // });
-    });
-  }
-
-  @action
   setCipStatusWithUserDetails = () => {
     this.userCipStatus = userDetailsStore.userDetails.legalDetails.status;
   }
@@ -527,27 +385,6 @@ cipWrapper = async (payLoad) => {
       this.ID_VERIFICATION_DOCS_FRM.fields[field].preSignedUrl = '';
     }))
       .catch(() => { });
-  }
-
-  uploadAndUpdateCIPInfo = () => {
-    uiStore.setProgress();
-    const cipStatus = 'MANUAL_VERIFICATION_PENDING';
-    this.setCipStatus(cipStatus);
-    console.log('upload mutation');
-    return new Promise((resolve, reject) => {
-      this.updateUserInfo()
-        .then(() => {
-          uiStore.setProgress(false);
-          resolve();
-        })
-        .catch((err) => {
-          console.log('upload error', err);
-          uiStore.setProgress(false);
-          reject(err);
-        });
-      // .finally(() => {
-      // });
-    });
   }
 
   @action

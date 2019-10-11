@@ -54,12 +54,14 @@ export default class IdentityVerification extends Component {
   handleCipExpiration = async () => {
     let url;
     const { phoneVerification } = this.props.userDetailsStore.signupStatus;
-    if (phoneVerification) {
+    if (phoneVerification === 'DONE') {
       const { accountForWhichCipExpired, isUserVerified } = this.props.userDetailsStore;
       this.props.uiStore.setFieldvalue('inProgressArray', []);
       const expiredAccountFromLocalStorage = window.sessionStorage.getItem('AccountCipExp');
       if (window.sessionStorage.getItem('cipErrorMessage') && !isUserVerified) {
-        url = await this.submitAccountToProcessing(accountForWhichCipExpired || expiredAccountFromLocalStorage);
+        url = await this.props.accountStore.accountProcessingWrapper(
+          accountForWhichCipExpired || expiredAccountFromLocalStorage, this.props.match,
+        );
       } else if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
         this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
         this.props.identityStore.setFieldValue('signUpLoading', false);
@@ -97,9 +99,7 @@ export default class IdentityVerification extends Component {
     const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
     const { store } = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue];
     const accountId = get(accountDetails, 'details.accountId') || store[`${accountType}AccountId`];
-    this.props.identityStore.setFieldValue('signUpLoading', true);
     await this.props.accountStore.updateToAccountProcessing(accountId, accountvalue);
-    this.props.identityStore.setFieldValue('signUpLoading', false);
     const url = store.storeshowProcessingModal ? `/app/summary/account-creation/${accountType}/processing` : '/app/summary';
     store.setFieldValue('showProcessingModal', false);
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);

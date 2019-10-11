@@ -4,7 +4,7 @@ import { find, get, capitalize, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { FormValidator, DataFormatter } from '../../../helper';
-import { bankAccountStore, individualAccountStore, iraAccountStore, entityAccountStore, userDetailsStore, uiStore, identityStore } from '../index';
+import { bankAccountStore, individualAccountStore, iraAccountStore, userStore, entityAccountStore, userDetailsStore, uiStore, identityStore } from '../index';
 import { GqlClient as client } from '../../../api/gqlApi';
 // eslint-disable-next-line import/named
 import { getInvestorCloseAccounts, closeInvestorAccount, updateToAccountProcessing } from '../queries/account';
@@ -117,6 +117,20 @@ export class AccountStore {
   }
 
   @action
+  accountProcessingWrapper = async (accountType, match) => {
+    const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
+    const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
+    const { store } = this.ACC_TYPE_MAPPING[accountvalue];
+    const accountId = get(accountDetails, 'details.accountId') || store[`${accountType}AccountId`];
+    await this.updateToAccountProcessing(accountId, accountvalue);
+    window.sessionStorage.removeItem('cipErrorMessage');
+    const url = store.showProcessingModal ? `${match.url}/${accountType}/processing` : '/app/summary';
+    store.setFieldValue('showProcessingModal', false);
+    await this.props.userDetailsStore.getUser(userStore.currentUser.sub);
+    return url;
+  }
+
+  @action
   updateToAccountProcessing = (accountId, accountType) => new Promise((resolve, reject) => {
     identityStore.setFieldValue('signUpLoading', true);
     client
@@ -124,7 +138,7 @@ export class AccountStore {
         mutation: updateToAccountProcessing,
         variables: {
           accountId,
-          error: 'error message',
+          error: window.sessionStorage.getItem('cipErrorMessage'),
         },
       })
       .then((res) => {

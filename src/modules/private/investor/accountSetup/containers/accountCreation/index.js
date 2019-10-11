@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { get, find } from 'lodash';
 import AccountTypes from '../../components/accountCreation/AccountTypes';
 import IraAccCreation from './ira/AccountCreation';
 import IndividualAccCreation from './individual/AccountCreation';
@@ -43,18 +42,7 @@ export default class AccountCreation extends Component {
       } else if (!isUserVerified && !isLegalDocsPresent) {
         this.props.history.push(cipStepUrlMapping.ciphardFail.url);
       } else if (!isUserVerified && isLegalDocsPresent && isCipOffline) {
-        const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
-        const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
-        const { store } = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue];
-        const accountId = get(accountDetails, 'details.accountId') || store[`${accountType}AccountId`];
-        await this.props.accountStore.updateToAccountProcessing(accountId, accountvalue);
-        window.sessionStorage.removeItem('cipErrorMessage');
-        this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-        // eslint-disable-next-line no-shadow
-        const url = store.showProcessingModal ? `${this.props.match.url}/${accountType}/processing` : '/app/summary';
-        this.props.history.push(url);
-        store.setFieldValue('showProcessingModal', false);
-        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+        await this.props.accountStore.accountProcessingWrapper(accountType, this.props.match);
       } else {
         this.props.uiStore.setProgress();
         this.handleLegalDocsBeforeSubmit(accountType, submitAccount);
