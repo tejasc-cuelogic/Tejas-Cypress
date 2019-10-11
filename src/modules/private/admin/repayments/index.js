@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import PrivateLayout from '../../shared/PrivateLayout';
 import AllRepayments from './components/AllRepayments';
-import RepaymentDetails from './containers/RepaymentDetails';
+import PaymentDetails from './containers/PaymentDetails';
 
 @inject('paymentStore')
 @observer
@@ -24,7 +24,7 @@ export default class Repayments extends Component {
       >
         <Switch>
           <Route exact path={`${match.url}/:status`} component={AllRepayments} />
-          <Route exact path={`${match.url}/:status/:id`} component={RepaymentDetails} />
+          <Route exact path={`${match.url}/:status/:id`} component={PaymentDetails} />
         </Switch>
       </PrivateLayout>
     );

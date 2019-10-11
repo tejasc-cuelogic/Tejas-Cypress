@@ -10,7 +10,7 @@ import { InlineLoader } from '../../../../../theme/shared';
 @inject('paymentStore', 'uiStore')
 @withRouter
 @observer
-export default class RepaymentDetails extends Component {
+export default class PaymentDetails extends Component {
   constructor(props) {
     super(props);
     this.props.paymentStore.getOfferingById(get(this.props, 'match.params.id'));
