@@ -32,41 +32,6 @@ export default class Summary extends React.Component {
     this.props.uiStore.setProgress(get(userDetails, 'info.firstName') === null ? false : !get(userDetails, 'info.firstName'));
   }
 
-  handleSubmitAccount = () => {
-    this.props.uiStore.setcreateAccountMessage();
-    this.props.individualAccountStore.submitAccount().then(() => {
-      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-      const confirmModal = this.props.individualAccountStore.showProcessingModal ? 'processing' : 'success';
-      this.props.individualAccountStore.setFieldValue('showProcessingModal', false);
-      this.props.history.push(`${this.props.match.url}/${confirmModal}`);
-    }).catch((err) => {
-      if (Helper.matchRegexWithString(/\brequired uploads(?![-])\b/, err.message)) {
-        this.props.handleLegalDocsBeforeSubmit('individual', this.handleSubmitAccount);
-      }
-    });
-  }
-
-  handleCreateAccount = () => {
-    this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
-    const {
-      isCipExpired,
-      isUserVerified,
-    } = this.props.userDetailsStore;
-    this.props.identityStore.setCipStatusWithUserDetails();
-    this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
-    if (isCipExpired || !isUserVerified) {
-      this.props.handleUserIdentity('individual', this.handleSubmitAccount);
-      this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
-    } else if (isCipExpired) {
-      this.props.handleUserIdentity('individual', this.handleSubmitAccount);
-      this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
-    } else {
-      this.props.handleLegalDocsBeforeSubmit('individual', this.handleSubmitAccount);
-    }
-  }
-
   openModal = (type) => {
     const { getBoxEmbedLink } = this.props.agreementsStore;
     getBoxEmbedLink(type);
@@ -159,7 +124,7 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid || isEmpty(routingNum)} />
+          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.props.handleCreateAccount('individual')} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid || isEmpty(routingNum)} />
         </div>
       </>
     );

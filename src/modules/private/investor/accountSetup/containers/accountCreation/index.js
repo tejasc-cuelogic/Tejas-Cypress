@@ -6,10 +6,11 @@ import IraAccCreation from './ira/AccountCreation';
 import IndividualAccCreation from './individual/AccountCreation';
 import EntityAccCreation from './entity/AccountCreation';
 import ConfirmModal from '../../components/confirmModal';
+import Helper from '../../../../../../helper/utility';
 
 const successMessage = 'Check out some of the investment opportunities now available to you as a member of the NextSeed community.';
 const processingMessage = 'While we set up your account, check out some of the investment opportunities now available to you as a member of the NextSeed community.';
-@inject('identityStore', 'accountStore', 'bankAccountStore', 'uiStore', 'userDetailsStore', 'userStore')
+@inject('identityStore', 'accountStore', 'bankAccountStore', 'uiStore', 'userDetailsStore', 'userStore', 'iraAccountStore', 'entityAccountStore', 'individualAccountStore')
 @withRouter
 @observer
 export default class AccountCreation extends Component {
@@ -28,39 +29,69 @@ export default class AccountCreation extends Component {
     this.props.history.push('/app/summary');
   }
 
-  handleUserIdentity = async (accountType, submitAccount) => {
+  handleUserIdentity = async (accountType) => {
     try {
       this.props.uiStore.setProgress();
-      const { isLegalDocsPresent, isUserVerified } = this.props.userDetailsStore;
+      const { isLegalDocsPresent } = this.props.userDetailsStore;
       this.props.identityStore.setCipDetails();
       const { res, url } = await this.props.identityStore.verifyCip();
       const { cipStepUrlMapping } = this.props.identityStore;
-      const isCipOffline = res.data.verifyCip.step === 'OFFLINE';
+      const { step } = res.data.verifyCip;
+      const isCipOffline = step === 'OFFLINE';
 
-      if (!isUserVerified && cipStepUrlMapping.cipSoftFail.url === url) {
+      if (step === 'userCIPSoftFail' && cipStepUrlMapping.cipSoftFail.url === url) {
         this.props.history.push(cipStepUrlMapping.cipSoftFail.url);
-      } else if (!isUserVerified && !isLegalDocsPresent) {
+      } else if (['userCIPHardFail', 'userCIPFail'].includes(step) && !isLegalDocsPresent) {
         this.props.history.push(cipStepUrlMapping.ciphardFail.url);
-      } else if (!isUserVerified && isLegalDocsPresent && isCipOffline) {
+      } else if (step !== 'phoneMfa' && isLegalDocsPresent && isCipOffline) {
         await this.props.accountStore.accountProcessingWrapper(accountType, this.props.match);
       } else {
         this.props.uiStore.setProgress();
-        this.handleLegalDocsBeforeSubmit(accountType, submitAccount);
+        this.handleLegalDocsBeforeSubmit(accountType);
       }
     } catch {
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
     }
   }
 
-  handleLegalDocsBeforeSubmit = (accountType, submitAccount) => {
+
+  handleCreateAccount = (accountType) => {
+    this.props.identityStore.setCipStatusWithUserDetails();
+    this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
+    const { isCipExpired, isUserVerified } = this.props.userDetailsStore;
+    if (isCipExpired || !isUserVerified) {
+      this.handleUserIdentity(accountType);
+      this.props.userDetailsStore.setAccountForWhichCipExpired(accountType);
+    } else {
+      this.handleLegalDocsBeforeSubmit(accountType);
+    }
+  }
+
+  handleLegalDocsBeforeSubmit = (accountType) => {
     const { isUserVerified, isLegalDocsPresent } = this.props.userDetailsStore;
     this.props.identityStore.setCipStatusWithUserDetails();
     if ((!isUserVerified && !isLegalDocsPresent) || this.props.identityStore.isUserCipOffline) {
       this.props.userDetailsStore.setAccountForWhichCipExpired(accountType);
-      this.handleUserIdentity(accountType, submitAccount);
+      this.handleUserIdentity(accountType);
     } else {
-      submitAccount();
+      this.handleSubmitAccount(accountType);
     }
+  }
+
+  handleSubmitAccount = (accountType) => {
+    this.props.uiStore.setcreateAccountMessage();
+    this.props[`${accountType}AccountStore`].submitAccount().then(() => {
+      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
+      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
+      const confirmModal = this.props[`${accountType}AccountStore`].showProcessingModal ? 'processing' : 'success';
+      this.props[`${accountType}AccountStore`].setFieldValue('showProcessingModal', false);
+      this.props.history.push(`${this.props.match.url}/${confirmModal}`);
+    }).catch((err) => {
+      if (Helper.matchRegexWithString(/\brequired uploads(?![-])\b/, err.message)) {
+        this.props.handleLegalDocsBeforeSubmit('individual', this.handleSubmitAccount);
+      }
+    });
   }
 
   HandleModalCta = () => {
@@ -98,9 +129,9 @@ export default class AccountCreation extends Component {
               />
             )}
           />
-          <Route exact path={`${this.props.match.url}/individual`} render={props => <IndividualAccCreation {...props} handleUserIdentity={this.handleUserIdentity} handleLegalDocsBeforeSubmit={this.handleLegalDocsBeforeSubmit} />} />
-          <Route exact path={`${this.props.match.url}/ira`} render={props => <IraAccCreation {...props} handleUserIdentity={this.handleUserIdentity} handleLegalDocsBeforeSubmit={this.handleLegalDocsBeforeSubmit} />} />
-          <Route exact path={`${this.props.match.url}/entity`} render={props => <EntityAccCreation {...props} handleUserIdentity={this.handleUserIdentity} handleLegalDocsBeforeSubmit={this.handleLegalDocsBeforeSubmit} />} />
+          <Route exact path={`${this.props.match.url}/individual`} render={props => <IndividualAccCreation {...props} handleLegalDocsBeforeSubmit={this.handleLegalDocsBeforeSubmit} handleCreateAccount={this.handleCreateAccount} />} />
+          <Route exact path={`${this.props.match.url}/ira`} render={props => <IraAccCreation {...props} handleLegalDocsBeforeSubmit={this.handleLegalDocsBeforeSubmit} handleCreateAccount={this.handleCreateAccount} />} />
+          <Route exact path={`${this.props.match.url}/entity`} render={props => <EntityAccCreation {...props} handleLegalDocsBeforeSubmit={this.handleLegalDocsBeforeSubmit} handleCreateAccount={this.handleCreateAccount} />} />
           <Route exact path={`${this.props.match.url}/individual/success`} render={props => <ConfirmModal {...props} open content={successMessage} handleCloseModal={this.handleCloseModal} HandleModalCta={this.HandleModalCta} />} />;
           {
             ['individual', 'ira', 'entity'].map(accType => <Route exact path={`${this.props.match.url}/${accType}/processing`} render={props => <ConfirmModal {...props} open content={processingMessage} handleCloseModal={this.handleCloseModal} HandleModalCta={this.HandleModalCta} />} />)

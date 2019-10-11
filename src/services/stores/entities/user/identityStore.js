@@ -219,7 +219,7 @@ export class IdentityStore {
     const payLoad = {
       mutation: verifyCip,
       mutationName: 'verifyCip',
-      variables: { isCipOffline: true, userId: userDetailsStore.selectedUserId, ...this.formattedUserInfoForCip },
+      variables: { isCipOffline: false, userId: userDetailsStore.selectedUserId, ...this.formattedUserInfoForCip },
     };
     const { res, url } = await this.cipWrapper(payLoad);
 

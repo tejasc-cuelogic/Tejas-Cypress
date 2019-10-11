@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { get, find } from 'lodash';
 import LegalDetails from '../../components/identityVerification/LegalDetails';
 import LegalDocuments from '../../components/identityVerification/LegalDocuments';
 import LegalIdentityQuestions from '../../components/identityVerification/LegalIdentityQuestions';
@@ -92,18 +91,6 @@ export default class IdentityVerification extends Component {
       url = await this.handleCipExpiration();
     }
     this.redirectTo(url);
-  }
-
-  submitAccountToProcessing = async (accountType) => {
-    const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
-    const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
-    const { store } = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue];
-    const accountId = get(accountDetails, 'details.accountId') || store[`${accountType}AccountId`];
-    await this.props.accountStore.updateToAccountProcessing(accountId, accountvalue);
-    const url = store.storeshowProcessingModal ? `/app/summary/account-creation/${accountType}/processing` : '/app/summary';
-    store.setFieldValue('showProcessingModal', false);
-    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-    return url;
   }
 
   handleSubmitIdentityQuestions = async (e) => {

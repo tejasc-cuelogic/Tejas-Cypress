@@ -131,34 +131,30 @@ export class AccountStore {
   }
 
   @action
-  updateToAccountProcessing = (accountId, accountType) => new Promise((resolve, reject) => {
-    identityStore.setFieldValue('signUpLoading', true);
-    client
-      .mutate({
-        mutation: updateToAccountProcessing,
-        variables: {
-          accountId,
-          error: window.sessionStorage.getItem('cipErrorMessage'),
-        },
-      })
-      .then((res) => {
-        this.ACC_TYPE_MAPPING[accountType].store.setFieldValue('showProcessingModal', true);
-        bankAccountStore.resetStoreData();
-        this.ACC_TYPE_MAPPING[accountType].store.isFormSubmitted = true;
-        Helper.toast(`${capitalize(this.ACC_TYPE_MAPPING[accountType].name)} account submitted successfully.`, 'success');
-        identityStore.setFieldValue('signUpLoading', false);
-        uiStore.removeOneFromProgressArray('submitAccountLoader');
-        resolve(res);
-      })
-      .catch((err) => {
-        Helper.toast('Unable to submit Account', 'error');
-        identityStore.setFieldValue('signUpLoading', false);
-        uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
-        uiStore.removeOneFromProgressArray('submitAccountLoader');
-        reject();
-      });
-  })
-
+  updateToAccountProcessing = async (accountId, accountType) => {
+    try {
+      identityStore.setFieldValue('signUpLoading', true);
+      await client
+        .mutate({
+          mutation: updateToAccountProcessing,
+          variables: {
+            accountId,
+            error: window.sessionStorage.getItem('cipErrorMessage'),
+          },
+        });
+      this.ACC_TYPE_MAPPING[accountType].store.setFieldValue('showProcessingModal', true);
+      bankAccountStore.resetStoreData();
+      this.ACC_TYPE_MAPPING[accountType].store.isFormSubmitted = true;
+      Helper.toast(`${capitalize(this.ACC_TYPE_MAPPING[accountType].name)} account submitted successfully.`, 'success');
+      identityStore.setFieldValue('signUpLoading', false);
+      uiStore.removeOneFromProgressArray('submitAccountLoader');
+    } catch (err) {
+      Helper.toast('Unable to submit Account', 'error');
+      identityStore.setFieldValue('signUpLoading', false);
+      uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
+      uiStore.removeOneFromProgressArray('submitAccountLoader');
+    }
+  }
 
   @computed
   get sortedAccounts() {
