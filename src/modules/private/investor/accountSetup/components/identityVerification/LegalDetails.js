@@ -29,6 +29,8 @@ class LegalDetails extends React.Component {
 
   render() {
     const { form, change, close, autoComplete, name, inProgress, errors, onSubmit, maskChange } = this.props;
+    const state = US_STATES.find(s => s.text === form.fields.state.value.toUpperCase());
+    const stateValue = state ? state.key : form.fields.state.value;
     return (
       <Modal size="mini" open closeIcon onClose={close} closeOnEscape={false} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -100,9 +102,10 @@ class LegalDetails extends React.Component {
               <FormDropDown
                 name="state"
                 fielddata={
-                  { ...form.fields.state,
-                    value: form.fields.state.value !== ''
-                      ? US_STATES.find(state => state.text === form.fields.state.value.toUpperCase()).key : '' }
+                  {
+                    ...form.fields.state,
+                    value: stateValue,
+                  }
                 }
                 options={US_STATES}
                 search
