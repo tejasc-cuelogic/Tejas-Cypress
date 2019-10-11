@@ -33,16 +33,27 @@ export const allRepaymentDetails = gql`
 export const paymentsIssuerList = gql`
   query paymentsIssuerList{
     paymentsIssuerList {
-      shorthandBusinessName
-      hardCloseDate
-      maturityDate
-      expectedPaymentDate
-      firstPaymentDate
       sinkingFundBalance
       offering {
         id
         offeringStatus
         stage
+        keyTerms {
+          securities
+          shorthandBusinessName
+          securities
+        }
+        closureSummary {
+          hardCloseDate
+          operationsDate
+          keyTerms {
+            maturityDate
+            anticipatedPaymentStartDate
+          }
+          repayment {
+            startDate
+          }
+        }
         offering {
           launch {
             expectedOpsDate
@@ -51,4 +62,35 @@ export const paymentsIssuerList = gql`
       }
     }
   }
+`;
+
+export const updatePaymentIssuer = gql`
+  mutation updatePaymentIssuer($offeringId: String!, $paymentIssuerDetailsInput: PaymentIssuerInput!){
+    updatePaymentIssuer(offeringId: $offeringId, paymentIssuerDetailsInput: $paymentIssuerDetailsInput) {
+      id
+      offeringStatus
+      stage
+      keyTerms {
+        securities
+        shorthandBusinessName
+        securities
+      }
+      closureSummary {
+        hardCloseDate
+        operationsDate
+        keyTerms {
+          maturityDate
+          anticipatedPaymentStartDate
+        }
+        repayment {
+          startDate
+        }
+      }
+      offering {
+        launch {
+          expectedOpsDate
+        }
+      }
+    }
+  }  
 `;
