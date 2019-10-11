@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import beautify from 'json-beautify';
 import { isEmpty } from 'lodash';
 import { Card, Button, Form, Grid, Divider, Modal, Header } from 'semantic-ui-react';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import formHOC from '../../../../../../theme/form/formHOC';
 import DynamicFormInput from './dynamicFormInput';
