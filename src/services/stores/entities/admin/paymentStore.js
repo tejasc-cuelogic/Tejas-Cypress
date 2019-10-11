@@ -1,11 +1,10 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { orderBy, get } from 'lodash';
+import { orderBy, get, forEach } from 'lodash';
 import moment from 'moment';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { paymentsIssuerList, allRepaymentDetails } from '../../queries/Repayment';
-import { getOfferingDetails } from '../../queries/offerings/manage';
+import { paymentsIssuerList, allRepaymentDetails, updatePaymentIssuer } from '../../queries/Repayment';
 import { PAYMENT } from '../../../constants/payment';
 import { uiStore } from '../../index';
 
@@ -90,29 +89,60 @@ export class PaymentStore {
 
     @action
     getOfferingById = (id) => {
-      uiStore.setProgress();
-      this.offeringDetails = graphql({
-        client,
-        query: getOfferingDetails,
-        variables: { id },
-        onFetch: (res) => {
-          if (res && res.getOfferingById) {
-            const data = {
-              shorthandBusinessName: get(res.getOfferingById, 'keyTerms.shorthandBusinessName'),
-              securities: get(res.getOfferingById, 'keyTerms.securities'),
-              hardCloseDate: get(res.getOfferingById, 'closureSummary.hardCloseDate'),
-              maturityDate: get(res.getOfferingById, 'closureSummary.keyTerms.maturityDate'),
-              expectedOpsDate: get(res.getOfferingById, 'offering.launch.expectedOpsDate'),
-              expectedPaymentDate: get(res.getOfferingById, 'closureSummary.keyTerms.anticipatedPaymentStartDate'),
-              firstPaymentDate: get(res.getOfferingById, 'closureSummary.repayment.startDate'),
-              operationsDate: get(res.getOfferingById, 'closingSummary.operationsDate'),
-            };
-            this.setFormData(data);
-          }
-          uiStore.setProgress(false);
-        },
-      });
+      let res = this.repayments.filter(payment => payment.offering.id === id);
+      res = { ...res[0] };
+      if (res) {
+        const data = {
+          shorthandBusinessName: get(res.offering, 'keyTerms.shorthandBusinessName'),
+          securities: get(res.offering, 'keyTerms.securities'),
+          hardCloseDate: get(res.offering, 'closureSummary.hardCloseDate'),
+          maturityDate: get(res.offering, 'closureSummary.keyTerms.maturityDate'),
+          expectedOpsDate: get(res.offering, 'offering.launch.expectedOpsDate'),
+          expectedPaymentDate: get(res.offering, 'closureSummary.keyTerms.anticipatedPaymentStartDate'),
+          firstPaymentDate: get(res.offering, 'closureSummary.repayment.startDate'),
+          operationsDate: get(res.offering, 'closureSummary.operationsDate'),
+          sinkingFundBalance: get(res, 'sinkingFundBalance') || '0.00',
+        };
+        this.setFormData(data);
+      }
     }
+
+    @action
+    getPaymentFormData = () => {
+      const data = {};
+      forEach(this.PAYMENT_FRM.fields, (t, key) => {
+        data[key] = this.PAYMENT_FRM.fields[key].value;
+      });
+      return data;
+    }
+
+    @action
+    updatePayment = id => new Promise((resolve, reject) => {
+      uiStore.setProgress();
+      const data = this.getPaymentFormData();
+      const variables = {
+        launchExpectedOpsDate: data.expectedOpsDate,
+        operationsDate: data.operationsDate,
+        keyTermsAnticipatedPaymentStartDate: data.expectedPaymentDate,
+        repaymentStartDate: data.firstPaymentDate,
+      };
+      client
+        .mutate({
+          mutation: updatePaymentIssuer,
+          variables: { offeringId: id, paymentIssuerDetailsInput: { ...variables } },
+        })
+        .then((res) => {
+          console.log(res);
+          resolve();
+        })
+        .catch((err) => {
+          reject();
+          console.log(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
 
     @action
     setFormData = (formData) => {

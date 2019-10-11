@@ -1,64 +1,13 @@
-export const PAYMENT = {
-  shorthandBusinessName: {
-    value: '',
-    label: 'Short Hand Business Name',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Short Hand Business Name',
-  },
-  securities: {
-    value: '',
-    label: 'Securities',
-    error: undefined,
-    rule: 'required|string',
-    placeHolder: 'Choose here',
-  },
-  hardCloseDate: {
-    value: '',
-    label: 'Hard Close Date',
-    error: undefined,
-    rule: 'required|date',
-    customErrors: { date: 'Target Hard Close Date is not a valid date format.' },
-    placeHolder: 'Hard Close Date',
-  },
-  maturityDate: {
-    value: '',
-    label: 'Maturity Date',
-    error: undefined,
-    rule: 'required|date',
-    customErrors: { date: 'Target Maturity Date is not a valid date format.' },
-    placeHolder: 'Maturity Date',
-  },
-  expectedOpsDate: {
-    value: '',
-    label: 'Expected Operations Date',
-    error: undefined,
-    rule: 'required|date',
-    customErrors: { date: 'Target Expected Operations Date is not a valid date format.' },
-    placeHolder: 'Expected Operations Date',
-  },
-  expectedPaymentDate: {
-    value: '',
-    label: 'Expected Payment Date',
-    error: undefined,
-    rule: 'required|date',
-    customErrors: { date: 'Target Expected Payment Date is not a valid date format.' },
-    placeHolder: 'Expected Payment Date',
-  },
-  firstPaymentDate: {
-    value: '',
-    label: 'First Payment Date',
-    error: undefined,
-    rule: 'required|date',
-    customErrors: { date: 'Target First Payment Date is not a valid date format.' },
-    placeHolder: 'First Payment Date',
-  },
-  operationsDate: {
-    value: '',
-    label: 'Operations Date',
-    error: undefined,
-    rule: 'required|date',
-    customErrors: { date: 'Target Operations Date is not a valid date format.' },
-    placeHolder: 'Operations Date',
-  },
-};
+import { FormHelper } from '../../helper';
+
+export const PAYMENT = FormHelper.generateMeta([
+  ['shorthandBusinessName', 'Short Hand Business Name', '', 'required', 'Short Hand Business Name'],
+  ['securities', 'Securities', '', 'required|string', 'Choose here'],
+  ['hardCloseDate', 'Hard Close Date', '', 'required|date', 'Hard Close Date', { customErrors: { date: 'Target Hard Close Date is not a valid date format.' } }],
+  ['maturityDate', 'Maturity Date', '', 'required|date', 'Maturity Date', { customErrors: { date: 'Target Maturity Date is not a valid date format.' } }],
+  ['expectedOpsDate', 'Expected Operations Date', '', 'required|date', 'Expected Operations Date', { customErrors: { date: 'Target Expected Operations Date is not a valid date format.' } }],
+  ['expectedPaymentDate', 'Expected Payment Date', '', 'required|date', 'Expected Payment Date', { customErrors: { date: 'Target Expected Payment Date is not a valid date format.' } }],
+  ['firstPaymentDate', 'First Payment Date', '', 'required|date', 'First Payment Date', { customErrors: { date: 'Target First Payment Date is not a valid date format.' } }],
+  ['operationsDate', 'Operations Date', '', 'required|date', 'Operations Date', { customErrors: { date: 'Target Operations Date is not a valid date format.' } }],
+  ['sinkingFundBalance', 'Sinking Fund Balance', 0, 'required', '', { customErrors: { required: 'required' } }],
+]);

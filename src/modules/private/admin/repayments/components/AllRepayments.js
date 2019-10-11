@@ -15,7 +15,7 @@ import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering'
 export default class AllRepayments extends Component {
   constructor(props) {
     super(props);
-    if (this.props.match.params.status === 'issuers') {
+    if (this.props.match.params.paymentType === 'issuers') {
       this.props.paymentStore.initRequest();
     } else {
       this.props.paymentStore.setFieldValue('data', []);
@@ -106,8 +106,8 @@ export default class AllRepayments extends Component {
                     onClick={this.handleSort('offering.offering.launch.expectedOpsDate')}
                   >Expected Ops</Table.HeaderCell>
                   <Table.HeaderCell
-                    sorted={sortOrder.column === 'offering.closingSummary.operationsDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
-                    onClick={this.handleSort('offering.closingSummary.operationsDate')}
+                    sorted={sortOrder.column === 'offering.closureSummary.operationsDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('offering.closureSummary.operationsDate')}
                   >Ops Date</Table.HeaderCell>
                   <Table.HeaderCell
                     sorted={sortOrder.column === 'offering.closureSummary.keyTerms.anticipatedPaymentStartDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
@@ -129,7 +129,7 @@ export default class AllRepayments extends Component {
                   !repayments.length
                     ? (
                       <Table.Row>
-                        <Table.Cell textAlign="center" colspan="6">No records found</Table.Cell>
+                        <Table.Cell textAlign="center" colspan="10">No records found</Table.Cell>
                       </Table.Row>
                     )
                     : repayments.map(record => (
@@ -139,7 +139,7 @@ export default class AllRepayments extends Component {
                       <Table.Cell>{get(record, 'offering.closureSummary.hardCloseDate') && moment(get(record, 'offering.closureSummary.hardCloseDate'), 'MM/DD/YYYY', true).isValid() && moment(get(record, 'offering.closureSummary.hardCloseDate')).format('M/D/YY')}</Table.Cell>
                       <Table.Cell>{get(record, 'offering.closureSummary.keyTerms.maturityDate') && moment(get(record, 'offering.closureSummary.keyTerms.maturityDate')).isValid() ? `${moment(get(record, 'offering.closureSummary.keyTerms.maturityDate')).format('M/D/YY')} (${moment(moment(get(record, 'offering.closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months')})` : ''}</Table.Cell>
                       <Table.Cell>{get(record, 'offering.offering.launch.expectedOpsDate') && moment(get(record, 'offering.offering.launch.expectedOpsDate'), 'MM/DD/YYYY', true).isValid() && moment(get(record, 'offering.offering.launch.expectedOpsDate')).format('M/D/YY')}</Table.Cell>
-                      <Table.Cell>{get(record, 'offering.closingSummary.operationsDate') && moment(get(record, 'offering.closingSummary.operationsDate'), 'MM/DD/YYYY', true).isValid() && moment(get(record, 'offering.closingSummary.operationsDate')).format('M/D/YY')}</Table.Cell>
+                      <Table.Cell>{get(record, 'offering.closureSummary.operationsDate') && moment(get(record, 'offering.closureSummary.operationsDate'), 'MM/DD/YYYY', true).isValid() && moment(get(record, 'offering.closureSummary.operationsDate')).format('M/D/YY')}</Table.Cell>
                       <Table.Cell>{get(record, 'offering.closureSummary.keyTerms.anticipatedPaymentStartDate') && moment(get(record, 'offering.closureSummary.keyTerms.anticipatedPaymentStartDate'), 'MM/DD/YYYY', true).isValid() && moment(get(record, 'offering.closureSummary.keyTerms.anticipatedPaymentStartDate')).format('M/D/YY')}</Table.Cell>
                       <Table.Cell>{get(record, 'offering.closureSummary.repayment.startDate') && moment(get(record, 'offering.closureSummary.repayment.startDate'), 'MM/DD/YYYY', true).isValid() && moment(get(record, 'offering.closureSummary.repayment.startDate')).format('M/D/YY')}</Table.Cell>
                       <Table.Cell textAlign="center">{Helper.CurrencyFormat(record.sinkingFundBalance)}</Table.Cell>

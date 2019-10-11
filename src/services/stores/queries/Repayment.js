@@ -45,10 +45,14 @@ export const paymentsIssuerList = gql`
         }
         closureSummary {
           hardCloseDate
+          operationsDate
           keyTerms {
             maturityDate
             anticipatedPaymentStartDate
-          }          
+          }
+          repayment {
+            startDate
+          }
         }
         offering {
           launch {
@@ -58,4 +62,34 @@ export const paymentsIssuerList = gql`
       }
     }
   }
+`;
+
+export const updatePaymentIssuer = gql`
+  mutation updatePaymentIssuer($offeringId: String!, $paymentIssuerDetailsInput: PaymentIssuerInput!){
+    updatePaymentIssuer(offeringId: $offeringId, paymentIssuerDetailsInput: $paymentIssuerDetailsInput) {
+      id
+      offeringStatus
+      stage
+      keyTerms {
+        securities
+        shorthandBusinessName
+        securities
+      }
+      closureSummary {
+        hardCloseDate
+        keyTerms {
+          maturityDate
+          anticipatedPaymentStartDate
+        }
+        repayment {
+          startDate
+        }
+      }
+      offering {
+        launch {
+          expectedOpsDate
+        }
+      }
+    }
+  }  
 `;
