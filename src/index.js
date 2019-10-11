@@ -23,6 +23,12 @@ if (process.env.REACT_APP_BUG_SNAG_KEY) {
     appType: 'client',
     appVersion: process.env.CI_PIPELINE_ID,
     releaseStage: process.env.REACT_APP_BUG_SNAG_STAGE,
+    beforeSend: (report) => {
+      // Make sure FullStory object exists.
+      if (window.FS && window.FS.getCurrentSessionURL) {
+        report.updateMetaData('fullstory', { urlAtTime: window.FS.getCurrentSessionURL(true) });
+      }
+    },
   });
   bugsnagClient.use(bugsnagReact, React);
   // wrap your entire app tree in the ErrorBoundary provided
