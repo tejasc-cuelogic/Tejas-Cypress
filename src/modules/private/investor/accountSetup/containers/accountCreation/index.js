@@ -89,7 +89,7 @@ export default class AccountCreation extends Component {
       this.props.uiStore.resetcreateAccountMessage();
       const confirmModal = this.props[`${accountType}AccountStore`].showProcessingModal ? 'processing' : 'success';
       this.props[`${accountType}AccountStore`].setFieldValue('showProcessingModal', false);
-      this.props.history.push(`${this.props.match.url}/${confirmModal}`);
+      this.props.history.push(`${this.props.match.url}/${accountType}/${confirmModal}`);
     } catch (err) {
       if (Helper.matchRegexWithString(/\brequired uploads(?![-])\b/, err.message)) {
         this.props.handleLegalDocsBeforeSubmit('individual', this.handleSubmitAccount);
