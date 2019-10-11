@@ -18,10 +18,10 @@ export default class Actions extends Component {
       const { detailsOfUser, selectedUserId } = this.props.userDetailsStore;
       if (selectedUserId === '' || selectedUserId !== userId) {
         this.props.userDetailsStore.getUserProfileDetails(userId).then((data) => {
-          this.checkRequestIdBeforeSubmitInvestor(get(data, 'user'), attrObj);
+          this.checkCipBeforeSubmitInvestor(get(data, 'user'), attrObj);
         });
       } else if (get(detailsOfUser, 'data.user')) {
-        this.checkRequestIdBeforeSubmitInvestor(get(detailsOfUser, 'data.user'), attrObj);
+        this.checkCipBeforeSubmitInvestor(get(detailsOfUser, 'data.user'), attrObj);
       }
     } else if (availableActions.includes(action)) {
       this.props.crowdPayCtaHandler(userId, accountId, action, msg);
@@ -32,14 +32,14 @@ export default class Actions extends Component {
 
   handleVerifyUserIdentity = async (userId, accountId, action, msg) => {
     const { res } = await this.props.identityStore.verifyCip();
-    if (res.data.verifyCip.step === 'userCIPPass') {
+    if (res.data.verifyCip.step !== 'OFFLINE') {
       this.props.crowdPayCtaHandler(userId, accountId, action, msg);
     } else {
       this.props.crowdpayStore.removeLoadingCrowdPayId(accountId, this.props.account.accountStatus);
     }
   }
 
-  checkRequestIdBeforeSubmitInvestor = (userObj, attrObj) => {
+  checkCipBeforeSubmitInvestor = (userObj, attrObj) => {
     const { userId, accountId, action, msg } = attrObj;
     if (this.isCipExpired(userObj) || userObj.legalDetails.status === 'OFFLINE') {
       this.handleVerifyUserIdentity(userId, accountId, action, msg);
