@@ -41,9 +41,9 @@ export default class AccountCreation extends Component {
 
       if (!isUserVerified && (step === 'userCIPSoftFail' && cipStepUrlMapping.cipSoftFail.url === url)) {
         this.props.history.push(cipStepUrlMapping.cipSoftFail.url);
-      } else if (!isUserVerified && ['userCIPHardFail', 'userCIPFail'].includes(step) && !isLegalDocsPresent) {
+      } else if (!isUserVerified && !isLegalDocsPresent) {
         this.props.history.push(cipStepUrlMapping.ciphardFail.url);
-      } else if (!isUserVerified && step !== 'phoneMfa' && isCipOffline) {
+      } else if (!isUserVerified && isLegalDocsPresent && isCipOffline) {
         const processingUrl = await this.props.accountStore.accountProcessingWrapper(accountType, this.props.match);
         this.props.history.push(processingUrl);
       } else {

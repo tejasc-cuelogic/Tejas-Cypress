@@ -215,7 +215,8 @@ export class IdentityStore {
   }
 
   @action
-  verifyCip = async () => {
+  verifyCip = async (isAdmin = false) => {
+    this.setCipDetails(isAdmin);
     const payLoad = {
       mutation: verifyCip,
       mutationName: 'verifyCip',
