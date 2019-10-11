@@ -28,7 +28,7 @@ export default class EditOffering extends React.Component {
     render() {
       const {
         KEY_TERMS_FRM,
-        formChange,
+        formArrayChange,
         maskChange,
         CLOSURE_SUMMARY_FRM,
       } = this.props.offeringCreationStore;
@@ -41,7 +41,7 @@ export default class EditOffering extends React.Component {
                 name="shorthandBusinessName"
                 fielddata={KEY_TERMS_FRM.fields.shorthandBusinessName}
                 label="Business Name"
-                changed={(e, result) => formChange(e, result, 'KEY_TERMS_FRM')}
+                changed={(e, result) => formArrayChange(e, result, 'KEY_TERMS_FRM')}
               />
               <MaskedInput
                 name="launchDate"
