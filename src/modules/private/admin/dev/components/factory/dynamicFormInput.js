@@ -39,10 +39,6 @@ const DynamicFormInput = React.memo((props) => {
     return elem;
   }
 
-  function loadEmptyStatement() {
-    return (<InlineLoader text="No payload found..." />);
-  }
-
   const { formPayload } = props;
   const tempFormPAyload = { ...formPayload };
 
@@ -59,7 +55,7 @@ const DynamicFormInput = React.memo((props) => {
             </Suspense>
           </div>
         )
-          : loadEmptyStatement()
+          : <InlineLoader text="No payload found..." />
       }
     </>
   );
