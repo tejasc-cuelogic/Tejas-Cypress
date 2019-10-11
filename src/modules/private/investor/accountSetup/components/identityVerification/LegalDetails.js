@@ -99,7 +99,11 @@ class LegalDetails extends React.Component {
               />
               <FormDropDown
                 name="state"
-                fielddata={form.fields.state}
+                fielddata={
+                  { ...form.fields.state,
+                    value: form.fields.state.value !== ''
+                      ? US_STATES.find(state => state.text === form.fields.state.value.toUpperCase()).key : '' }
+                }
                 options={US_STATES}
                 search
                 selection

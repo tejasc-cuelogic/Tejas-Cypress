@@ -23,8 +23,9 @@ export default class Summary extends Component {
             && activeAccLength === 0
             && inActivAccLength !== 0)
             || (signupStatus.isMigratedFullAccount
-            || !isBasicVerDoneForMigratedFullUser
-            || !signupStatus.investorProfileCompleted))
+            && !isBasicVerDoneForMigratedFullUser)
+            || !signupStatus.investorProfileCompleted
+           )
              ? AccountSetup : Dashboard}
       />
     );

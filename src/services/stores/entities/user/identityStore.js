@@ -762,7 +762,7 @@ cipWrapper = async (payLoad) => {
       fields.city.value = legalDetails.legalAddress.city;
       const selectedState = find(US_STATES, { key: legalDetails.legalAddress.state });
       if (selectedState) {
-        fields.state.value = selectedState.value;
+        fields.state.value = selectedState.text;
       }
       fields.street.value = legalDetails.legalAddress.street;
       fields.zipCode.value = legalDetails.legalAddress.zipCode;
