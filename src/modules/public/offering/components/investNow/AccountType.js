@@ -214,6 +214,7 @@ class AccountType extends Component {
 
   handlUpdateExpiration = (url) => {
     this.props.accreditationStore.resetUserAccreditatedStatus();
+    this.props.userDetailsStore.setPartialInvestmenSession(this.props.match.url);
     this.props.history.push(url);
   }
 
