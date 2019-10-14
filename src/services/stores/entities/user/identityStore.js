@@ -751,6 +751,7 @@ cipWrapper = async (payLoad) => {
     this.resetFormData('ID_PHONE_VERIFICATION');
     this.resetFormData('ID_VERIFICATION_QUESTIONS');
     this.confirmMigratedUserPhoneNumber = false;
+    this.isAdmin = false;
     this.signUpLoading = false;
     this.isOptConfirmed = false;
   }
