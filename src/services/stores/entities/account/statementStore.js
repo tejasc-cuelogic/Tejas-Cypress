@@ -5,6 +5,8 @@ import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { downloadFile, generateMonthlyStatementsPdf } from '../../queries/statement';
 import { uiStore, userDetailsStore, transactionStore } from '../../index';
+import { DataFormatter } from '../../../../helper';
+
 
 export class StatementStore {
   @observable data = [];
@@ -106,6 +108,11 @@ export class StatementStore {
         description: statementObj.text,
         fileId: moment(new Date(d)).format(statementObj.format),
       }
+      // {
+      //   [statementObj.field]: DataFormatter.getDateAsPerTimeZone(new Date(d), true, false, false, statementObj.format),
+      //   description: statementObj.text,
+      //   fileId: DataFormatter.getDateAsPerTimeZone(new Date(d), true, false, false, statementObj.format),
+      // }
     ));
   }
 
@@ -118,7 +125,14 @@ export class StatementStore {
         timeValues.push(dateStart.format('MM/DD/YYYY'));
         dateStart.add(1, statementObj.rangeParam);
       }
-      const fifthDateOfMonth = moment().startOf('month').day(6);
+      // const dateStart = statementObj.date ? DataFormatter.getCSTDateMomentObject(new Date(statementObj.date), true) : '';
+      // const dateEnd = DataFormatter.getCurrentCSTMoment();
+      // const timeValues = [];
+      // while (dateStart.isBefore(dateEnd) && !dateEnd.isSame(new Date(dateStart.format('MM/DD/YYYY')), 'month')) {
+      //   timeValues.push(dateStart);
+      //   dateStart.add(1, statementObj.rangeParam);
+      // }
+      const fifthDateOfMonth = DataFormatter.getCurrentCSTMoment().startOf('month').day(6);
       if (fifthDateOfMonth > dateEnd) {
         timeValues.pop();
       }
@@ -170,7 +184,7 @@ export class StatementStore {
     const accDetails = find(userDetailsStore.userDetails.roles, account => account.name === accountType
       && account.name !== 'investor'
       && account && account.details
-        && (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
+      && (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
     const taxStatement = get(accDetails, 'details.taxStatement');
     return (taxStatement && taxStatement.length) || 0;
   }

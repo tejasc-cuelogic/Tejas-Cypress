@@ -8,7 +8,8 @@ import { InlineLoader } from '../../../../../theme/shared';
 @inject('offeringCreationStore', 'messageStore', 'userStore', 'offeringsStore')
 @observer
 export default class Comments extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.messageStore.initRequest();
   }
 

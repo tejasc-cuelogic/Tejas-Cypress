@@ -5,14 +5,14 @@ import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import Helper from '../../../../helper/utility';
 
-const isMobile = document.documentElement.clientWidth < 991;
+const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore', 'navStore')
 @withRouter
 @observer
 export default class CampaignSecondaryMenu extends Component {
   handleUpdate = (e, { calculations }) => {
-    this.props.navStore.setNavStatus(calculations);
+    this.props.navStore.setNavStatus(calculations, false, true);
   }
 
   handleInvestNowClick = () => {
@@ -23,24 +23,26 @@ export default class CampaignSecondaryMenu extends Component {
   render() {
     const { campaign, campaignStatus } = this.props.campaignStore;
     const {
-      diff, isClosed, isInProcessing, collected, maxFlagStatus,
+      isClosed, isInProcessing, collected, maxFlagStatus,
+      countDown, diffForProcessing,
     } = campaignStatus;
     const { navStatus, subNavStatus } = this.props.navStore;
+    const { newLayout } = this.props;
     return (
       <Visibility offset={[72, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
-        <div className={`menu-secondary-fixed ${navStatus && navStatus === 'sub' && 'active'} ${subNavStatus}`}>
+        <div className={`menu-secondary-fixed ${navStatus && navStatus === 'sub' && 'active'} ${subNavStatus} ${newLayout && isMobile ? 'campaign-secondary-menu-v2' : ''}`}>
           <Container fluid={!isMobile}>
             <List size={isMobile && 'tiny'} bulleted={!isMobile} floated="right" horizontal={!isMobile}>
               {!isMobile
                 && (
 <>
                   <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
-                  {!isClosed && diff > 0
-                    && <List.Item>{diff} days left</List.Item>
+                  {!isClosed && diffForProcessing.value > 0
+                    && <List.Item>{countDown.valueToShow} {' '} {countDown.labelToShow}</List.Item>
                   }
                   {isClosed && get(campaign, 'closureSummary.repayment.count')
                     ? <List.Item>{get(campaign, 'closureSummary.repayment.count')} Payments made</List.Item>
-                    : (get(campaign, 'closureSummary.hardCloseDate') && get(campaign, 'closureSummary.repayment.count') === 0) ? <List.Item><b>Funded</b></List.Item> : ''
+                    : (get(campaign, 'closureSummary.hardCloseDate') && get(campaign, 'closureSummary.hardCloseDate') !== 'Invalid date' && get(campaign, 'closureSummary.repayment.count') === 0) ? <List.Item><b>Funded</b></List.Item> : ''
                   }
                 </>
                 )

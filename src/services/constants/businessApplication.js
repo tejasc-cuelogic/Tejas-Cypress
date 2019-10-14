@@ -34,6 +34,7 @@ export const BUSINESS_APPLICATION_STATUS = {
   LENDIO_SUCCESS: 'SUCCESS',
   REVIEW_FAILED: 'REVIEW_FAILED',
   ISSUER_DECLINED: 'ISSUER_DECLINED',
+  APPLICATION_IN_PROGRESS: 'APPLICATION_IN_PROGRESS',
 };
 
 export const BUSINESS_APP_ADMIN_STATUS = [
@@ -495,7 +496,7 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
 
 export const BUSINESS_SIGNUP = {
   emailAddress: {
-    value: '', label: 'E-mail address', error: undefined, rule: 'required', placeHolder: 'e.g. john.doe@contact.com',
+    value: '', label: 'Email address', error: undefined, rule: 'required', placeHolder: 'e.g. john.doe@contact.com',
   },
   password: {
     value: '', label: 'Password', error: undefined, rule: 'required', placeHolder: 'Password',

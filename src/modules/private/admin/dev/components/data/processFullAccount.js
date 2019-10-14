@@ -8,7 +8,8 @@ import { FormInput, FormCheckbox } from '../../../../../../theme/form';
 @withRouter
 @observer
 export default class ProcessFullAccount extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.dataStore.resetForm('PROCESS_FULL_ACCOUNT_META_FRM');
   }
 

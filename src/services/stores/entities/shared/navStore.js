@@ -149,11 +149,13 @@ export class NavStore {
     const bIndex = filteredNavs.findIndex(r => r.title === 'Offering');
     if (bIndex !== -1) {
       const subNavigations = [...filteredNavs[bIndex].subNavigations];
+      const { offer } = offeringsStore;
       offeringsStore.offerings.forEach((b) => {
-        const sNav = this.filterByAccess(
+        let sNav = this.filterByAccess(
           subNavigations,
           _.find(offeringsStore.phases, (s, i) => i === b.stage).accessKey,
         );
+        sNav = sNav.filter(n => (!n.filterKey || _.get(offer, n.filterKey)));
         filteredNavs.splice(
           bIndex,
           0,
@@ -224,16 +226,16 @@ export class NavStore {
   }
 
   @action
-  setNavStatus(calculations, forced) {
+  setNavStatus(calculations, forced, ignoreUpDirection = false) {
     const {
-      topVisible, direction, bottomPassed, isMoveTop,
+      topVisible, direction, bottomPassed, isMoveTop, topPassed,
     } = calculations;
     if (typeof topVisible === 'boolean') {
-      this.navStatus = forced || (!topVisible ? 'sub' : 'main');
+      this.navStatus = forced || (topPassed ? 'sub' : 'main');
       if ((this.navStatus === 'sub') && (bottomPassed)) {
-        this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
+        this.subNavStatus = (direction === 'down' ? 'animate' : !ignoreUpDirection ? 'animate reverse' : 'animate');
       } else if ((this.navStatus === 'main') && (bottomPassed) && (isMoveTop)) {
-        this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
+        this.subNavStatus = (direction === 'down' ? 'animate' : !ignoreUpDirection ? 'animate reverse' : 'animate');
       }
     }
   }

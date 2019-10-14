@@ -8,6 +8,8 @@ import { toJS } from 'mobx';
 import money from 'money-math';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
+import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS } from '../constants/common';
+import authStore from '../services/stores/entities/shared/authStore';
 // import userStore from './../services/stores/entities/userStore';
 
 export class Utility {
@@ -43,7 +45,7 @@ export class Utility {
     regex => (window.location.href.match(new RegExp(regex)) !== null),
   )
 
-  matchRegexWithString = (regex, str) => str.match(new RegExp(regex)) !== null
+  matchRegexWithString = (regex, str) => str.match(new RegExp(regex, 'i')) !== null
 
   guid = () => {
     function s4() {
@@ -155,7 +157,6 @@ export class Utility {
   });
 
   maskPhoneNumber = (phoneNumber) => {
-    // const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
     const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '($1) $2-$3');
     return maskPhoneNumber;
   }
@@ -199,7 +200,7 @@ export class Utility {
 
   downloadCSV = (params) => {
     try {
-      const parser = new Parser({ fields: params.fields, quote: params.quote || '', delimiter: params.delimiter || '\t' });
+      const parser = new Parser({ fields: params.fields, quote: params.quote || '' });
       const csv = parser.parse(params.data);
       const uri = `data:text/csv;charset=utf-8,${escape(csv)}`;
       const link = document.createElement('a');
@@ -272,7 +273,7 @@ export class Utility {
       htmlContent.classList.remove('hide-content');
       customTitle.classList.add('hide-content');
       toggleButtonText.innerHTML = 'Collapse ';
-      arrowText.innerHTML = '&#9650';
+      arrowText.innerHTML = '&#9652';
     } else {
       htmlContent.classList.add('hide-content');
       htmlContent.classList.remove('read-content');
@@ -287,6 +288,44 @@ export class Utility {
         });
       }
     }
+  };
+
+  logger = (params, type = 'log') => {
+    if (isLoggingEnabled) {
+      // eslint-disable-next-line no-unused-expressions
+      type === 'info' ? console.info(params)
+        : type === 'warn' ? console.warn(params)
+          : type === 'clear' ? console.clear()
+            : console.log(params);
+    } else if (!isLoggingEnabled && (type === 'warn' || type === 'info')) {
+      // Send an email for these two type;
+      const email = {
+        graphqlError: { operationName: `Logging ${type === 'warn' ? 'Warning' : type === 'info' ? 'Information' : ''}` },
+        urlLocation: window.location.href,
+        message: { ...params },
+      };
+      const emailParams = {
+        emailContent: JSON.stringify(email),
+      };
+      authStore.notifyApplicationError(emailParams);
+    }
+  }
+
+  processImageFileName = (originalFileName, deviceInfo) => {
+    const fileNameSplit = originalFileName.split('.');
+    const fileExt = fileNameSplit.pop();
+    const fileName = fileNameSplit.join('.');
+    const { isMobile, isTablet } = deviceInfo;
+    const prepName = res => `${fileName}${res ? `__${res}` : ''}.${fileExt}`;
+    return IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(fileExt.toLowerCase()) ? isMobile ? prepName(640) : isTablet ? prepName(1024) : prepName(1920) : prepName();
+  }
+
+  validateImageExtension = (ext) => {
+    const obj = {
+      isInvalid: !IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()),
+      errorMsg: `Only ${IMAGE_UPLOAD_ALLOWED_EXTENSIONS.join(', ')}  extensions are allowed.`,
+    };
+    return obj;
   };
 }
 

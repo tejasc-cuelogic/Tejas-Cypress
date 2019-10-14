@@ -18,6 +18,8 @@ export class UiStore {
 
   @observable inProgress = false;
 
+  @observable.struct responsiveVars = {};
+
   @observable inProgressArray = [];
 
   @observable loaderMessage = '';
@@ -32,7 +34,7 @@ export class UiStore {
 
   @observable asyncCheckLoader = false;
 
-  @observable devBanner = !['production', 'prod', 'master', 'localhost'].includes(REACT_APP_DEPLOY_ENV);
+  @observable devBanner = !['production', 'prod', 'master', 'localhost', 'infosec'].includes(REACT_APP_DEPLOY_ENV);
 
   @observable confirmBox = {
     entity: '',
@@ -278,6 +280,7 @@ export class UiStore {
     this.resetcreateAccountMessage();
     this.setErrors(err);
     this.setProgress(false);
+    this.removeOneFromProgressArray('submitAccountLoader');
   }
 }
 

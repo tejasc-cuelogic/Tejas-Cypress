@@ -63,11 +63,12 @@ const StepsMetaData = {
 @withRouter
 @observer
 export default class PopulateAccreditationSteps extends React.Component {
-  componentWillMount() {
-    // if (this.props.accreditationStore.firstInit === '') {
-    //   this.props.accreditationStore.setFieldVal('firstInit', true);
-    // }
-  }
+  // constructor(props) {
+  //   super(props);
+  // if (this.props.accreditationStore.firstInit === '') {
+  //   this.props.accreditationStore.setFieldVal('firstInit', true);
+  // }
+  // }
 
   handleMultiStepModalclose = () => {
     this.props.history.push('/app/account-settings/investment-limits');
@@ -116,7 +117,7 @@ export default class PopulateAccreditationSteps extends React.Component {
       formValidCheck, showLoader,
     } = this.props.accreditationStore;
     const {
-      inProgress,
+      inProgress, inProgressArray,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
@@ -140,7 +141,7 @@ export default class PopulateAccreditationSteps extends React.Component {
           setIsEnterPressed={setIsEnterPressed}
           isEnterPressed={isEnterPressed}
           resetEnterPressed={resetIsEnterPressed}
-          inProgress={inProgress || showLoader}
+          inProgress={inProgress || showLoader || inProgressArray.includes('getUserAccreditation')}
           handleMultiStepModalclose={this.handleMultiStepModalclose}
           setStepTobeRendered={this.handleStepChange}
           stepToBeRendered={this.props.accreditationStore.stepToBeRendered}

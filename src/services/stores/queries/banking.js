@@ -28,14 +28,19 @@ export const validateBankAccount = gql`
   }
   `;
 
-export const linkBankRequestCancel = gql`
-  mutation linkBankRequestCancel($accountId: String!) {
-    linkBankRequestCancel(accountId: $accountId)
-  }
-`;
+export const declineBankChangeRequest = gql`
+  mutation declineBankChangeRequest($accountId: String!, $userId: String, $justification: String) {
+    declineBankChangeRequest(accountId: $accountId,userId: $userId, justification: $justification)
+  }`;
 
 export const getDecryptedRoutingNumber = gql`
 mutation getDecryptedRoutingNumber($userId: String, $accountId: String, $requestType:RequestTypeEnum!) {
   getDecryptedRoutingNumber(userId: $userId, accountId: $accountId, requestType: $requestType) 
  }
+`;
+
+export const hasPendingTransfersWithPendingBankChange = gql`
+query hasPendingTransfersWithPendingBankChange($userId: String, $accountId: String!) {
+  hasPendingTransfersWithPendingBankChange(userId: $userId, accountId: $accountId)
+}
 `;

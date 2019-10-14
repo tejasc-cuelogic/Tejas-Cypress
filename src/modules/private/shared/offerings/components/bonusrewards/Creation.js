@@ -13,7 +13,8 @@ import Helper from '../../../../../../helper/utility';
 @inject('offeringCreationStore', 'uiStore', 'userStore', 'offeringsStore')
 @observer
 export default class Creation extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { getBonusRewards, setTiersForBonusRewardsForm } = this.props.offeringCreationStore;
     setTiersForBonusRewardsForm();
     getBonusRewards();

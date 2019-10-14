@@ -124,13 +124,32 @@
     }
 }
 .ui.secondary.menu.menu-secondary-fixed {
+    align-items: center;
     @media only screen and (max-width : @largestLargeMonitor){
         background-color: fade(@white, 50%);
     }
     .item{
-        padding:@3px @18px;
+        padding:@3px @7px;
         &:hover {
             background-color: transparent;
+        }
+        &.menu-button > .ui.button{
+            width: 110px;
+        }
+        &.header > .ui.image.logo,&.menu-button{
+            visibility: hidden;
+        }
+    }
+    &.animate{
+        .item{
+            &.header > .ui.image.logo,&.menu-button{
+                visibility: visible;
+            }
+        }
+        &.reverse .item{
+            &.header > .ui.image.logo,&.menu-button{
+                visibility: hidden;
+            }
         }
     }
     .menu.menu-secondary {
@@ -218,9 +237,12 @@
         top: auto;
         bottom: -58px;
         height: auto;
-        padding: 10px 0;
+        padding: @10px 0;
         .ui.list {
             margin: 0;
+        }
+        &.campaign-secondary-menu-v2{
+            padding: @10px @7px;
         }
     }
     &.active{
@@ -234,7 +256,10 @@
                 top: auto;
                 bottom: 0;
                 height: auto;
-                padding: 10px 0;
+                padding: @10px 0;
+                &.campaign-secondary-menu-v2{
+                    padding: @10px @7px;
+                }
                 .ui.tiny.list {
                     margin: 0;
                     &.right.floated {
@@ -630,6 +655,12 @@ footer .ui.text.menu{
             padding: @5px 0;
             position: relative;
             font-weight: @fontMedium;
+            &:last-child{
+                padding-right: @22px;
+                &:after{
+                    width: calc(100% - 22px);
+                }    
+            }
             &:after{
                 content: '';
                 width: 100%;
@@ -639,7 +670,10 @@ footer .ui.text.menu{
                 bottom: -9px;
                 left: 0;
             }
-            &.active,&:hover,&:focus{
+            &:hover{
+                color: @neutral-middark;
+            }
+            &.active, &:focus{
                 color: @primary-one;
                 &:after{
                     background: @primary-one;
@@ -648,6 +682,19 @@ footer .ui.text.menu{
             &.hasLabel:after{
                 bottom: -6px;
             }
+        }
+    }
+    &.inverted{
+        .ui.dropdown.more-items{
+            position: absolute;
+            right: 0;
+            top: 0;
+            &:before{
+                left: 0;
+            }
+        }
+        &.secondary{
+            position: relative;
         }
     }
 }

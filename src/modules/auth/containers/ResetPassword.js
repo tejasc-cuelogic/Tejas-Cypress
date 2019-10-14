@@ -13,7 +13,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('authStore', 'uiStore')
 @observer
 export default class ResetPassword extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { FORGOT_PASS_FRM, RESET_PASS_FRM } = this.props.authStore;
     RESET_PASS_FRM.fields.email.value = FORGOT_PASS_FRM.fields.email.value;
   }

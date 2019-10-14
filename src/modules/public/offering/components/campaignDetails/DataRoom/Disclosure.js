@@ -13,7 +13,7 @@ class Disclosure extends Component {
     boxUrl: '',
   };
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.fileId) {
       const { campaign } = this.props.campaignStore;
       const regulation = get(campaign, 'regulation');

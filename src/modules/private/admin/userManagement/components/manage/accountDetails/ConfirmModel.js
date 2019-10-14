@@ -8,7 +8,8 @@ import { FormTextarea } from '../../../../../../../theme/form';
 @withRouter
 @observer
 export default class ConfirmModel extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.userDetailsStore.resetModalForm();
     this.props.accountStore.closeAccountForm();
   }

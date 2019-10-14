@@ -18,7 +18,7 @@ export { default as settingStore } from './entities/account/settingStore';
 export { default as portfolioStore } from './entities/account/portfolioStore';
 export { default as articleStore } from './entities/admin/articleStore';
 export { default as crowdpayStore } from './entities/admin/crowdpayStore';
-export { default as repaymentStore } from './entities/admin/repaymentStore';
+export { default as paymentStore } from './entities/admin/paymentStore';
 export { default as transactionsStore } from './entities/admin/transactionsStore';
 
 export { default as educationStore } from './entities/education/educationStore';
@@ -41,6 +41,7 @@ export { default as businessAppReviewStore } from './entities/user/admin/busines
 export { default as businessAppLendioStore } from './entities/user/businessAppLendioStore';
 export { default as investmentLimitStore } from './entities/user/settings/investmentLimitStore';
 export { default as campaignStore } from './entities/public/campaignStore';
+export { default as publicStore } from './entities/public/publicStore';
 export { default as investmentStore } from './entities/shared/investmentStore';
 export { default as agreementsStore } from './entities/user/settings/agreementsStore';
 export { default as accreditationStore } from './entities/user/settings/accreditationStore';
@@ -53,3 +54,7 @@ export { default as faqStore } from './entities/admin/faqStore';
 // dev stores
 export { default as elasticSearchStore } from './entities/dev/elasticSearchStore';
 export { default as dataStore } from './entities/dev/dataStore';
+
+export { default as nsUiStore } from './entities/shared/nsUiStore';
+export { default as watchListStore } from './entities/shared/offering/watchListStore';
+export { default as factoryStore } from './entities/dev/factoryStore';

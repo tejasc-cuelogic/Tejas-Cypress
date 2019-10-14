@@ -12,7 +12,8 @@ import { Spinner } from '../../../../../theme/shared';
 @inject('businessStore', 'uiStore')
 @observer
 class Business extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     businessActions.listBusinesses();
   }
 

@@ -1,3 +1,5 @@
+import { FormHelper } from '../../../helper';
+
 export const common = {
   userId: {
     value: '',
@@ -97,6 +99,17 @@ export const RECREATEGOLDSTAR_META = {
   accountId: { ...common.accountId },
 };
 
+export const PROCESS_TRANSFER_REQ_META = {
+  transferId: {
+    key: 'transferId',
+    value: '',
+    label: 'transferId',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+  },
+};
+
 export const ENCRYPTDECRYPTUTILITY_META = {
   userId: { ...common.userId },
   text: { ...common.text },
@@ -154,3 +167,102 @@ export const AUDITBOXFOLDER_META = {
     rule: 'required',
   },
 };
+
+export const IMAGEPROCESSINGREQUES_META = {
+  waitingTime: {
+    key: 'waitingTime',
+    value: '',
+    label: 'Waiting Time',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  concurrency: {
+    key: 'concurrency',
+    value: '',
+    label: 'Concurrency',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  queueLimit: {
+    key: 'queueLimit',
+    value: '',
+    label: 'Queue Limit',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  key: {
+    key: 'key',
+    value: '',
+    label: 'Key',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  folderName: {
+    key: 'folderName',
+    value: '',
+    label: 'Folder Name',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+};
+
+export const REQUESTFACTORY_META = FormHelper.generateMeta([
+  ['plugin', 'Plugin', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+  ['invocationType', 'Invocation Type', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'Event', text: 'Event', value: 'Event' },
+          { key: 'RequestResponse', text: 'RequestResponse', value: 'RequestResponse' },
+        ],
+      },
+    },
+  ],
+]);
+
+export const PROCESSFACTORY_META = FormHelper.generateMeta([
+  ['method', 'Method', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+]);
+
+export const CRONFACTORY_META = FormHelper.generateMeta([
+  ['cron', 'Cron', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+  ['cronMetaType', 'Cron Meta Type', '', '', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'PLUGIN', text: 'PLUGIN', value: 'PLUGIN' },
+          { key: 'LOG', text: 'LOG', value: 'LOG' },
+        ],
+      },
+    },
+  ],
+  ['jobId', 'Job Id', '', '', 'Enter here'],
+]);

@@ -30,7 +30,7 @@ export const PROMOTE_APPLICATION_STATUS_PASSWORD = {
 
 export const PROMOTE_APPLICATION_STATUS_EMAIL = {
   emailAddress: {
-    value: '', label: 'E-mail address', error: undefined, rule: 'required', placeHolder: 'e.g. john.doe@contact.com',
+    value: '', label: 'Email address', error: undefined, rule: 'required', placeHolder: 'e.g. john.doe@contact.com',
   },
 };
 
@@ -551,7 +551,7 @@ export const OFFERS = {
     },
     personalGuarantee: {
       value: '',
-      label: 'Personal Garuntee',
+      label: 'Personal Guarantee',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',

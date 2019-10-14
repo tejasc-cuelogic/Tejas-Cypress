@@ -18,6 +18,7 @@ export const getInvestorListForOffering = gql`
         code
         isValid
       }
+      regulation
       avatar
       investmentsCount
       accountType

@@ -1,9 +1,10 @@
 import gql from 'graphql-tag';
 
 export const allOfferings = gql`
-query getOfferingList($filters: OfferingFilterInputType){
+query getOfferingList($filters: OfferingFilterInputType, $userId: String){
     getOfferingList(filters: $filters) {
       id
+      watchListStatus(userId: $userId)
       offeringSlug
       stage
       media {
@@ -66,6 +67,7 @@ export const getOfferingsReferral = gql`
 query getOfferingList($filters: OfferingFilterInputType){
     getOfferingList(filters: $filters) {
       id
+      stage
       offeringSlug
       referralCode
       order
@@ -73,12 +75,31 @@ query getOfferingList($filters: OfferingFilterInputType){
   }
 `;
 
+export const offeringWatchList = gql`
+query offeringWatchList($offeringId: String){
+  offeringWatchList(offeringId: $offeringId) {
+    userId
+    status
+    offeringId
+    lastUpdated
+    userInfo {
+      email {
+        address
+      }
+    info { 
+      firstName
+      lastName
+    }
+    }
+  }
+}
+`;
+
 export const getOfferingById = gql`
   query getOfferingDetailsBySlug($id: String) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
       id
-      previewPassword
       isAvailablePublicly
       stage
     }
@@ -273,6 +294,15 @@ export const campaignDetailsQuery = gql`
         multiple
       }
     }
+    earlyBirdsCount
+  }
+}
+`;
+
+export const campaignDetailsAdditionalQuery = gql`
+  query getOfferingDetailsBySlug($id: String) {
+    getOfferingDetailsBySlug (offeringSlug: $id) {
+    id
     comments {
       id
       scope
@@ -326,6 +356,7 @@ export const campaignDetailsQuery = gql`
       title
       content
       scope
+      updatedDate
       updated {
         date
       }
@@ -341,10 +372,10 @@ export const campaignDetailsQuery = gql`
         }
       }
     }
-    earlyBirdsCount
+    }
   }
-}
 `;
+
 export const campaignDetailsForInvestmentQuery = gql`
 query getOfferingById($id: ID) {
   getOfferingDetailsById (id: $id) {
@@ -362,6 +393,19 @@ query getOfferingById($id: ID) {
         completeDate
       }
       keyTerms {
+        supplementalAgreements {
+          documents {
+            name
+            isVisible
+            upload {
+              fileId
+              fileName
+              fileHandle {
+                boxFileId
+              }
+            }
+          }
+        }
         multiple
         revSharePercentage
         interestRate
@@ -436,7 +480,6 @@ query getOfferingById($id: ID) {
       status
       scope
       tiers
-      isEarlyBirdOnly
       notificationSent {
         by
         date
@@ -474,3 +517,25 @@ query getOfferingById($id: ID) {
   }
 }
 `;
+
+export const validateOfferingPreviewPassword = gql`
+query _validateOfferingPreviewPassword($offeringId: String!, $previewPassword: String!) {
+  validateOfferingPreviewPassword (offeringId: $offeringId, previewPassword: $previewPassword)
+}`;
+
+export const addUserToOfferingWatchlist = gql`
+  mutation addUserToOfferingWatchlist($userId: String, $offeringId: String, $isInvestment: Boolean){
+    addUserToOfferingWatchlist(userId: $userId, offeringId: $offeringId, isInvestment: $isInvestment)
+  }
+`;
+
+export const removeUserFromOfferingWatchlist = gql`
+  mutation removeUserFromOfferingWatchlist($userId: String, $offeringId: String){
+    removeUserFromOfferingWatchlist(userId: $userId, offeringId: $offeringId)
+  }
+`;
+
+export const isWatchingOffering = gql`
+query isWatchingOffering($userId: String, $offeringId: String){
+  isWatchingOffering(userId: $userId, offeringId: $offeringId)
+}`;

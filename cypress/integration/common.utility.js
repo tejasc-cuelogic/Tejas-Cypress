@@ -102,6 +102,16 @@ export const apiRequest = (operationName, requestParams, headers = { "content-ty
   }
 });
 
+export const prepRequest = (query, authToken) => ({
+  url: "https://dev-api-us-east-1.nextseed.qa/dev/graphql",
+  method: "POST",
+  body: { query },
+  headers: {
+    "content-type": "application/json",
+    authorization: `Bearer ${authToken}`
+  }
+});
+
 export const prepareTestsForDevices = (page, devices, callback) => {
   devices.forEach(device => {
     context(`Testing on ${device.model}`, () => {

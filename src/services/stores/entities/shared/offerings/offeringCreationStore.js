@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, arrow-body-style, max-len, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { includes, sortBy, get, has, map, startCase, mapKeys, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
+import { includes, sortBy, get, has, map, startCase, set, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -10,17 +10,17 @@ import {
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
-  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS,
+  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS, CLOSING_BINDING,
   OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { deleteBonusReward, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, offerClose, deleteBac, upsertBonusReward,
-  getBonusRewards, getOfferingFilingList,
+  getBonusRewards, getOfferingFilingList, initializeClosingBinder,
   generateBusinessFiling, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore } from '../../../index';
+import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore, offeringInvestorStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
 import { INDUSTRY_TYPES } from '../../../../../constants/offering';
@@ -102,6 +102,8 @@ export class OfferingCreationStore {
   @observable ADMIN_DOCUMENTATION_FRM = Validator.prepareFormObject(ADMIN_DOCUMENTATION);
 
   @observable DATA_ROOM_FRM = Validator.prepareFormObject(DATA_ROOM);
+
+  @observable CLOSING_BINDER_FRM = Validator.prepareFormObject(CLOSING_BINDING);
 
   @observable POC_DETAILS_FRM = Validator.prepareFormObject(POC_DETAILS);
 
@@ -255,6 +257,8 @@ export class OfferingCreationStore {
 
   @action
   resetAllForms = () => {
+    offeringInvestorStore.setData('db', undefined);
+    offeringInvestorStore.setData('data', []);
     const forms = ['KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'CLOSURE_SUMMARY_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM'];
     forms.forEach((f) => {
       this[f] = Validator.resetFormData(this[f]);
@@ -343,7 +347,6 @@ export class OfferingCreationStore {
         this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
       })
       .catch((err) => {
-        // force record deletion from db;
         this.resetFormField('MEDIA_FRM', name, undefined, index);
         this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
         console.log(err);
@@ -362,13 +365,9 @@ export class OfferingCreationStore {
       .then((res) => {
         Helper.toast(`${this.LEADERSHIP_FRM.fields.leadership[index][name].label} removed successfully.`, 'success');
         this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
-        // this.updateOffering
-        // (this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
         this.updateOffering(this.currentOfferingId, this.LEADERSHIP_FRM.fields, 'leadership', null, true, null, null, true, index);
       })
       .catch((err) => {
-        // force record deletion from db;
-        // this.resetFormField('LEADERSHIP_FRM', name, undefined, index);
         this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
         this.updateOffering(this.currentOfferingId, this.LEADERSHIP_FRM.fields, 'leadership', null, true, null, null, true, index);
         console.log(err);
@@ -379,7 +378,6 @@ export class OfferingCreationStore {
   uploadMedia = (name, form = 'MEDIA_FRM') => {
     const fileObj = {
       obj: this[form].fields[name].base64String,
-      // type: this[form].fields[name].meta.type,
       name: Helper.sanitize(this[form].fields[name].fileName),
     };
     fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`)
@@ -473,8 +471,13 @@ export class OfferingCreationStore {
 
   @action
   removeData = (formName, subForm = 'data', isApiDelete = false) => {
+    const subArray = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : subForm;
     if (!isApiDelete) {
-      this[formName].fields[subForm].splice(this.removeIndex, 1);
+      let removeFileIds = '';
+      const { fileId } = this[formName].fields[subArray][this.removeIndex].upload;
+      removeFileIds = fileId;
+      this[formName].fields[subArray].splice(this.removeIndex, 1);
+      this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     }
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
@@ -836,8 +839,8 @@ export class OfferingCreationStore {
   }
 
   @action
-  addMore = (form, key) => {
-    this[form] = Validator.addMoreRecordToSubSection(this[form], key, 1, true);
+  addMore = (form, key, count = 1) => {
+    this[form] = Validator.addMoreRecordToSubSection(this[form], key, count, true);
     if (form === 'DATA_ROOM_FRM' && key === 'documents') {
       this[form].fields[key][this[form].fields[key].length - 1].upload.showLoader = false;
     } else if (form === 'LEADER_FRM') {
@@ -874,10 +877,16 @@ export class OfferingCreationStore {
   @action
   setFormData = (form, ref, keepAtLeastOne) => {
     this.resetForm(form);
-    const { offer } = offeringsStore;
+    let { offer } = offeringsStore;
     if (!offer) {
       return false;
     }
+    offer = Helper.replaceKeysDeep(toJS(offer), { aliasId: 'id' });
+    offer = {
+      ...offer,
+      closureSummary: Helper.replaceKeysDeep(toJS(get(offer, 'closureSummary')), { aliasAccreditedOnly: 'accreditedOnly' }),
+      closingBinder: Helper.replaceKeysDeep(toJS(get(offer, 'closingBinder')), { aliasAccreditedOnly: 'accreditedOnly' }),
+    };
     if (form === 'MEDIA_FRM') {
       this.MEDIA_FRM = Validator.prepareFormObject(MEDIA);
     }
@@ -949,6 +958,7 @@ export class OfferingCreationStore {
       DOCUMENTATION_FRM: { isMultiForm: false },
       ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
       DATA_ROOM_FRM: { isMultiForm: true },
+      CLOSING_BINDER_FRM: { isMultiForm: true },
       POC_DETAILS_FRM: { isMultiForm: false },
       OFFERING_CLOSE_1: { isMultiForm: false },
     };
@@ -1065,7 +1075,7 @@ export class OfferingCreationStore {
   updateOfferingMutation = (
     id,
     payload, keyName, notify = true,
-    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false, approvedObj,
+    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false, approvedObj, emptyPayload = null,
   ) => {
     uiStore.setProgress(approvedObj && approvedObj.status ? approvedObj.status : 'save');
     const variables = {
@@ -1078,6 +1088,9 @@ export class OfferingCreationStore {
         variables.adminId = this.POC_DETAILS_FRM.fields.id.value;
       }
     }
+    if (emptyPayload) {
+      variables.offeringDetails = { ...variables.offeringDetails, ...emptyPayload };
+    }
     client
       .mutate({
         mutation: updateOffering,
@@ -1086,7 +1099,7 @@ export class OfferingCreationStore {
       .then((result) => {
         let upatedOffering = null;
         if (get(result, 'data.updateOffering')) {
-          upatedOffering = Helper.replaceKeysDeep(toJS(get(result, 'data.updateOffering')), { aliasId: 'id' });
+          upatedOffering = Helper.replaceKeysDeep(toJS(get(result, 'data.updateOffering')), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
           offeringsStore.updateOfferingList(id, upatedOffering, keyName);
         }
         this.removeUploadedFiles(fromS3);
@@ -1135,7 +1148,7 @@ export class OfferingCreationStore {
     msgType = 'success', isLaunchContingency = false,
   ) => new Promise((res, rej) => {
     let { getOfferingById } = offeringsStore.offerData.data;
-    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id' });
+    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
     let payloadData = {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
@@ -1410,6 +1423,7 @@ export class OfferingCreationStore {
 
   @action
   getLeadershipOfferingBac = (offeringId, bacType) => {
+    uiStore.addMoreInProgressArray('getLeadershipOfferingBac');
     this.leaderShipOfferingBac = graphql({
       client,
       fetchPolicy: 'network-only',
@@ -1421,9 +1435,10 @@ export class OfferingCreationStore {
           const leadersCount = this.LEADERSHIP_FRM.fields.leadership.length;
           if (leadersCount
             !== this.LEADER_FRM.fields.getOfferingBac.length && (leadersCount - 1 !== 0)) {
-            this.addMore('LEADER_FRM', 'getOfferingBac', leadersCount - 1);
+            this.addMore('LEADER_FRM', 'getOfferingBac', leadersCount - this.LEADER_FRM.fields.getOfferingBac.length);
           }
         }
+        uiStore.removeOneFromProgressArray('getLeadershipOfferingBac');
       },
     });
   }
@@ -1545,8 +1560,9 @@ export class OfferingCreationStore {
       .then(() => {
         this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
         offeringsStore.getOne(getOfferingById.id);
-
-        // this.getAffiliatedIssuerOfferingBac(this.currentOfferingId, 'AFFILIATED_ISSUER');
+        if (bacType === 'LEADERSHIP') {
+          this.getLeadershipOfferingBac(this.currentOfferingId, 'LEADERSHIP');
+        }
         Helper.toast('Offering has been saved successfully.', 'success');
       })
       .catch((err) => {
@@ -1596,7 +1612,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  offeringClose = (params, step, scope) => {
+  offeringClose = (params, step, scope) => new Promise((res) => {
     uiStore.setProgress(params.process);
     this.setFieldValue('outputMsg', null);
     let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
@@ -1624,14 +1640,14 @@ export class OfferingCreationStore {
       }).then((data) => {
         uiStore.setProgress(false);
         this.setFieldValue('outputMsg', { type: 'success', data: get(data, 'data.offeringClose') });
-        console.log(data);
+        res(get(data, 'data.offeringClose'));
       }).catch((err) => {
         uiStore.setProgress(false);
         this.setFieldValue('outputMsg', { type: 'error', data: get(err, 'message') });
         console.log(err);
         Helper.toast('Something went wrong.', 'error');
       });
-  }
+  });
 
   updateBonusRewardTier = (isDelete = false, amount = 0, earlyBirdQuantity = 0) => {
     const { fields } = this.ADD_NEW_TIER_FRM;
@@ -1894,24 +1910,44 @@ export class OfferingCreationStore {
   }
 
   @action
-  setAccreditedOnlyField = (index) => {
-    this.DATA_ROOM_FRM = Validator.onArrayFieldChange(
-      this.DATA_ROOM_FRM,
-      { name: 'accreditedOnly', value: !this.DATA_ROOM_FRM.fields.documents[index].accreditedOnly.value },
-      'documents',
+  setAccreditedOnlyField = (formName, index) => {
+    const arrName = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : 'documents';
+    this[formName] = Validator.onArrayFieldChange(
+      this[formName],
+      { name: 'accreditedOnly', value: !this[formName].fields[arrName][index].accreditedOnly.value },
+      arrName,
       index,
     );
   }
 
-  getClosureObject = () => {
-    let obj = Validator.evaluateFormData(this.OFFERING_CLOSE_1.fields);
+  getClosureObject = (type) => {
     let { getOfferingById } = offeringsStore.offerData.data;
-    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id' });
+    let obj = {};
+    if (type === 'CLOSING_BINDER') {
+      obj = Validator.evaluateFormData(this.OFFERING_CLOSE_1.fields);
+      const closerBinderDocs = Validator.evaluateFormData(this.CLOSING_BINDER_FRM.fields).closingBinder || [];
+      const filteredCloserBinderDocs = closerBinderDocs.filter(d => d.name !== '' && d.upload.fileId !== '');
+      obj.closingBinder = [...filteredCloserBinderDocs];
+    } else {
+      const supplementalAgreementsDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
+      const filteredSupplementalAgreementsDocs = supplementalAgreementsDocs.filter(d => d.name !== '' && d.upload.fileId !== '');
+      set(obj, 'closureSummary.keyTerms.supplementalAgreements', { documents: filteredSupplementalAgreementsDocs });
+    }
+    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
+    obj = Helper.replaceKeysDeep(obj, { accreditedOnly: 'isVisible' });
     obj.closureSummary = mergeWith(
       toJS(getOfferingById.closureSummary),
       obj.closureSummary,
       this.mergeCustomize,
     );
+    if (type === 'CLOSING_BINDER' && (!obj.closingBinder || !obj.closingBinder.length)) {
+      // obj.closingBinder = mergeWith(
+      //   toJS(getOfferingById.closingBinder),
+      //   obj.closingBinder,
+      //   this.mergeCustomize,
+      // );
+      obj.closingBinder = null;
+    }
     obj = omitDeep(obj, ['__typename', 'fileHandle']);
     obj = cleanDeep(obj);
     return obj;
@@ -1927,6 +1963,28 @@ export class OfferingCreationStore {
       };
     });
     this.DATA_ROOM_FRM = Validator.setFormData(this.DATA_ROOM_FRM, { documents: dataRoomDocs });
+  }
+
+  @action
+  initializeClosingBinder = () => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: initializeClosingBinder,
+        variables: {
+          offeringId: this.currentOfferingId,
+        },
+      })
+      .then(() => {
+        offeringsStore.getOne(this.currentOfferingId, false);
+        Helper.toast('Closing binder initiated.', 'success');
+      })
+      .catch(action((err) => {
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
   }
 }
 

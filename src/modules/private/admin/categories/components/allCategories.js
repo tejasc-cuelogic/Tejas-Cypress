@@ -58,7 +58,8 @@ const SortableList = SortableContainer(({
 export default class AllCategories extends Component {
   state = { activeIndex: 0 }
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.categoryStore.ifApiHitFirstTime) {
       this.props.categoryStore.initRequest();
       this.props.categoryStore.ifApiHitFirstTime = false;

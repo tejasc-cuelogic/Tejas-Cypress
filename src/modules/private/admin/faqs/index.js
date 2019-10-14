@@ -7,7 +7,8 @@ import FaqDetails from './containers/FaqDetails';
 @inject('articleStore')
 @withRouter
 export default class Faqs extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.articleStore.getCategoryListByTypes(false, ['INV_FAQ', 'ISSUER_FAQ']);
   }
 

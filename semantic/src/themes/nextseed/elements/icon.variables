@@ -124,7 +124,7 @@
 @ns-bell: "\e909";
 @ns-box: "\e90a";
 @ns-business: "\e90b";
-@ns-calculator-icon: "\e99f";
+@ns-calculator-icon: "\e9a1";
 @ns-calendar: "\e90c";
 @ns-campaign-dashboard: "\e994";
 @ns-caret-down: "\e90d";
@@ -161,12 +161,12 @@
 @ns-comments-q-a: "\e97a";
 @ns-compas: "\e91e";
 @ns-contact-card: "\e971";
-@ns-convertible-icon: "\e9a0";
+@ns-convertible-icon: "\e9a2";
 @ns-corporation: "\e955";
 @ns-credit-card: "\e91f";
 @ns-dashboard: "\e920";
 @ns-dashboard-circle: "\e921";
-@ns-debt-icon: "\e9a1";
+@ns-debt-icon: "\e9a3";
 @ns-document: "\e977";
 @ns-document-search: "\e97b";
 @ns-doller-circle: "\e922";
@@ -227,6 +227,7 @@
 @ns-paper-plane: "\e961";
 @ns-partnership: "\e962";
 @ns-pdf: "\e92f";
+@ns-pdf-file: "\e99f";
 @ns-pencil: "\e930";
 @ns-pencil-circle-line: "\e96e";
 @ns-phone-line: "\e973";

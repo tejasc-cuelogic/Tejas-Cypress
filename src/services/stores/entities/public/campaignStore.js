@@ -1,16 +1,16 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty } from 'lodash';
+import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allOfferings, campaignDetailsQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
-import { userDetailsStore } from '../../index';
+import { userDetailsStore, watchListStore, userStore } from '../../index';
 // import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
@@ -19,6 +19,8 @@ export class CampaignStore {
   @observable data = [];
 
   @observable details = {};
+
+  @observable additionalDetails = {};
 
   @observable option = false;
 
@@ -56,24 +58,34 @@ export class CampaignStore {
 
   @observable docLoading = false;
 
+  @observable documentMeta = {
+    closingBinder: { selectedDoc: null, accordionActive: true },
+  };
 
   @action
-  setFieldValue = (field, val) => {
-    this[field] = val;
+  setFieldValue = (field, val, path = false) => {
+    if (path) {
+      set(this[field], path, val);
+    } else {
+      this[field] = val;
+    }
   }
 
   @action
   initRequest = (publicRef, referralCode = false) => {
     const stage = Object.keys(pickBy(STAGES, s => publicRef.includes(s.publicRef)));
-    const filters = { stage };
+    const variables = { filters: { stage } };
     if (referralCode) {
-      filters.referralCode = referralCode;
+      variables.filters.referralCode = referralCode;
+    }
+    if (!referralCode && userStore.currentUser && userStore.currentUser.sub) {
+      variables.userId = userStore.currentUser.sub;
     }
     return new Promise((resolve) => {
       this.data = graphql({
         client: clientPublic,
         query: referralCode ? getOfferingsReferral : allOfferings,
-        variables: { filters },
+        variables,
         onFetch: (data) => {
           if (data && !this.data.loading) {
             const offering = data.getOfferingList.length && data.getOfferingList[0];
@@ -89,12 +101,44 @@ export class CampaignStore {
 
   @action
   getCampaignDetails = (id, queryType) => {
+    watchListStore.setFieldValue('isWatching', false);
     this.details = graphql({
       client: clientPublic,
       query: queryType ? campaignDetailsForInvestmentQuery : campaignDetailsQuery,
       variables: { id },
       fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data && data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length && !this.details.loading) {
+          this.getCampaignAdditionalDetails(id);
+          watchListStore.setOfferingWatch();
+        }
+      },
     });
+  }
+
+  @action
+  getCampaignAdditionalDetails = (id) => {
+    this.additionalDetails = graphql({
+      client: clientPublic,
+      query: campaignDetailsAdditionalQuery,
+      variables: { id },
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data && data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length && !this.additionalDetails.loading) {
+          this.concatOfferingDetails(get(data, 'getOfferingDetailsBySlug[0]'));
+        }
+      },
+    });
+  }
+
+  @action
+  concatOfferingDetails = (newData) => {
+    if (newData && this.campaign && get(this.campaign, 'id') === get(newData, 'id')) {
+      const campaignData = toJS(this.details);
+      campaignData.data.getOfferingDetailsBySlug[0].updates = get(newData, 'updates');
+      campaignData.data.getOfferingDetailsBySlug[0].comments = get(newData, 'comments');
+      this.details = campaignData;
+    }
   }
 
   @action
@@ -203,9 +247,9 @@ export class CampaignStore {
     const campaignStatus = {};
     const closingDate = get(campaign, 'closureSummary.processingDate') && get(campaign, 'closureSummary.processingDate') !== 'Invalid date' ? get(campaign, 'closureSummary.processingDate') : null;
     campaignStatus.diff = DataFormatter.diffDays(closingDate || null, false, true);
-    campaignStatus.diffForProcessing = DataFormatter.getDateDifferenceInHours(closingDate, true);
-    campaignStatus.countDown = campaignStatus.diffForProcessing < 48 ? { valueToShow: campaignStatus.diffForProcessing, labelToShow: 'Hours Left' } : { valueToShow: campaignStatus.diff, labelToShow: 'Days Left' };
-    campaignStatus.isInProcessing = campaignStatus.diffForProcessing <= 0 && (!get(campaign, 'closureSummary.hardCloseDate') || get(campaign, 'closureSummary.hardCloseDate') === 'Invalid date');
+    campaignStatus.diffForProcessing = DataFormatter.getDateDifferenceInHoursOrMinutes(closingDate, true, true);
+    campaignStatus.countDown = (includes(['Minute Left', 'Minutes Left'], campaignStatus.diffForProcessing.label) && campaignStatus.diffForProcessing.value > 0) || campaignStatus.diffForProcessing.value <= 48 ? { valueToShow: campaignStatus.diffForProcessing.value, labelToShow: campaignStatus.diffForProcessing.label } : { valueToShow: campaignStatus.diff, labelToShow: campaignStatus.diff === 1 ? 'Day Left' : 'Days Left' };
+    campaignStatus.isInProcessing = campaignStatus.diffForProcessing.value <= 0 && (!get(campaign, 'closureSummary.hardCloseDate') || get(campaign, 'closureSummary.hardCloseDate') === 'Invalid date');
     campaignStatus.collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const offeringRegulation = get(campaign, 'keyTerms.regulation');
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
@@ -236,7 +280,7 @@ export class CampaignStore {
     const elevatorPitch = (campaign && campaign.offering && campaign.offering.overview
       && campaign.offering.overview.elevatorPitch)
       || (campaign && campaign.offering && campaign.offering.overview
-      && campaign.offering.overview.highlight);
+        && campaign.offering.overview.highlight);
     campaignStatus.hasTopThingToKnow = elevatorPitch;
     campaignStatus.dataRooms = this.dataRoomDocs.length;
     campaignStatus.gallary = get(campaign, 'media.gallery') ? get(campaign, 'media.gallery').length : 0;
@@ -372,12 +416,18 @@ export class CampaignStore {
   }
 
   getBoxLink = (fileId, accountType) => new Promise((resolve) => {
+    this.setFieldValue('docLoading', true);
     clientPublic.mutate({
       mutation: getBoxEmbedLink,
       variables: { fileId, accountType },
     }).then((res) => {
       resolve(res.data.getBoxEmbedLink);
-    }).catch(() => { this.setFieldValue('isFetchedError', true); Helper.toast('Something went wrong. Please try again in some time.', 'error'); });
+      this.setFieldValue('docLoading', false);
+    }).catch(() => {
+      this.setFieldValue('isFetchedError', true);
+      this.setFieldValue('docLoading', false);
+      Helper.toast('Something went wrong. Please try again in some time.', 'error');
+    });
   });
 
   @computed get navCountData() {
@@ -473,17 +523,21 @@ export class CampaignStore {
         false, true, true, customAddingHoursDateObject,
       );
       const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
-      const closeDaysToRemainsInHours = DataFormatter.getDateDifferenceInHours(closingDate, true);
-      const isInProcessing = closeDaysToRemainsInHours <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
+      const closeDaysToRemainsInHours = DataFormatter.getDateDifferenceInHoursOrMinutes(closingDate, true, true);
+      const isInProcessing = closeDaysToRemainsInHours.value <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
       const percentageCompairResult = money.cmp(percent, '50.00').toString();
       const amountCompairResult = money.cmp(raisedAmount, maxOfferingAmount).toString();
-      if (regulation === 'BD_CF_506C' && !isInProcessing) {
+      let isReachedMax = false;
+      if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
+        isReachedMax = true;
+      }
+      if (regulation === 'BD_CF_506C' && !isInProcessing && !isReachedMax) {
         if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains
           || closeDaysToRemains === null)
           && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
           resultObject.bannerFirstText = 'NEW';
         } else if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
-          const labelBannerFirst = closeDaysToRemainsInHours < 48 ? `${closeDaysToRemainsInHours} Hours Left` : `${closeDaysToRemains} Days Left`;
+          const labelBannerFirst = (includes(['Minute Left', 'Minutes Left'], closeDaysToRemainsInHours.label) && closeDaysToRemainsInHours.value > 0) || closeDaysToRemainsInHours.value < 48 ? `${closeDaysToRemainsInHours.value} ${closeDaysToRemainsInHours.label}` : closeDaysToRemains === 1 ? `${closeDaysToRemains} Day Left` : `${closeDaysToRemains} Days Left`;
           resultObject.bannerFirstText = labelBannerFirst;
         }
         resultObject.isBannerShow = true;
@@ -500,15 +554,17 @@ export class CampaignStore {
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         return newOfferingsArr.push(resultObject);
-      } if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7) {
+      } if (closingDate && closeDaysToRemains >= 0 && closeDaysToRemains <= 7 && !isInProcessing) {
         // const labelBannerFirst = closeDaysToRemains !== 0 ? `${closeDaysToRemains} ${closeDaysToRemains === 1 ? 'Day' : 'Days'} Left` : 'Processing';
-        const labelBannerFirst = closeDaysToRemainsInHours < 48 ? `${closeDaysToRemainsInHours} Hours Left` : `${closeDaysToRemains} Days Left`;
+        const labelBannerFirst = ((includes(['Minute Left', 'Minutes Left'], closeDaysToRemainsInHours.label) && closeDaysToRemainsInHours.value > 0) || closeDaysToRemainsInHours.value <= 48) ? `${closeDaysToRemainsInHours.value} ${closeDaysToRemainsInHours.label}` : closeDaysToRemains === 1 ? `${closeDaysToRemains} Day Left` : `${closeDaysToRemains} Days Left`;
         resultObject.isBannerShow = !!labelBannerFirst;
         resultObject.bannerFirstText = labelBannerFirst;
         resultObject.bannerSecondText = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
-        return closingOfferingsArr.push(resultObject);
+        if (!isReachedMax) {
+          return closingOfferingsArr.push(resultObject);
+        }
       } if (isInProcessing) {
         resultObject.isBannerShow = true;
         resultObject.bannerFirstText = 'Processing';
@@ -537,7 +593,7 @@ export class CampaignStore {
     closingOfferingsArr = orderBy(closingOfferingsArr, ['processingDate'], ['asc']);
     processingOfferingsArr = orderBy(processingOfferingsArr, ['processingDate'], ['desc']);
     otherOfferingsArr = orderBy(otherOfferingsArr, ['launchDate'], ['desc']);
-    reachedMaxOfferingsArr = orderBy(reachedMaxOfferingsArr, ['processingDate'], ['desc']);
+    reachedMaxOfferingsArr = orderBy(reachedMaxOfferingsArr, ['processingDate'], ['asc']);
     const sortedResultObject = [
       ...parallelOfferingsArr,
       ...newOfferingsArr,

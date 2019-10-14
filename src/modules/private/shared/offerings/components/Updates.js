@@ -6,12 +6,14 @@ import { ByKeyword } from '../../../../../theme/form/Filters';
 import { InlineLoader } from '../../../../../theme/shared';
 import Listing from './updates/Listing';
 import NewUpdate from './updates/NewUpdate';
+import PreviewUpdate from './updates/PreviewUpdate';
 
 @inject('updateStore', 'userStore')
 @withRouter
 @observer
 export default class BonusRewards extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.updateStore.initRequest();
     }
@@ -59,6 +61,7 @@ export default class BonusRewards extends Component {
         </Form>
         <Switch>
           <Route exact path={match.url} render={props => <Listing data={updates} count={count} match={match} requestState={requestState} {...props} />} />
+          <Route exact path={`${match.url}/preview/:id?`} render={props => <PreviewUpdate match={match} refLink={match.url} {...props} />} />
           <Route exact path={`${match.url}/:action?/:id?`} render={props => <NewUpdate match={match} refLink={match.url} {...props} />} />
         </Switch>
       </>

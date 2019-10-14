@@ -12,7 +12,8 @@ import Filters from './components/Filters';
 @inject('crowdpayStore')
 @observer
 export default class CrowdPay extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     // if (!this.props.crowdpayStore.isApiHit) {
     // this.props.crowdpayStore.reset();
     // this.props.crowdpayStore.initRequest();
@@ -43,7 +44,7 @@ export default class CrowdPay extends Component {
   render() {
     const { match, crowdpayStore } = this.props;
     const {
-      requestState, filters, FILTER_FRM, fChange,
+      requestState, filters, FILTER_FRM, fChange, filterCount,
       // summary,
     } = crowdpayStore;
     return (
@@ -54,10 +55,11 @@ export default class CrowdPay extends Component {
         P1={(
 <ByKeyword
   w={[8]}
-  placeholder="Search by Name or E-mail address"
+  placeholder="Search by name or email address"
   toggleSearch={this.toggleSearch}
   requestState={requestState}
   filters={filters}
+  filterCount={filterCount}
   change={this.executeSearch}
 />
 )}

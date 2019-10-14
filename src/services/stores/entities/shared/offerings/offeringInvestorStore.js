@@ -1,13 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { orderBy, get, find, map } from 'lodash';
+import { orderBy, get, find, map, cloneDeep, isEmpty } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { getInvestorListForOffering } from '../../../queries/offering/investor';
 import { ClientDb } from '../../../../../helper';
 import { offeringsStore } from '../../../index';
 import Helper from '../../../../../helper/utility';
+import { OFFERING_AGREEMENT_REGULATIONS } from '../../../../../constants/offering';
 
 export class OfferingInvestorStore {
   @observable data = [];
@@ -102,10 +103,14 @@ export class OfferingInvestorStore {
   @computed get investorListsForCsvExport() {
     const { offer } = offeringsStore;
     const referralCode = get(offer, 'referralCode');
-    const investorList = map(this.investorLists, (i) => {
-      const matchReferral = find(i.referralCode, r => r.code === referralCode);
+    const investorList = map(toJS(this.investorLists), (i) => {
+      const investorObj = cloneDeep(toJS({ ...i }));
+      // eslint-disable-next-line no-param-reassign
+      ['street', 'streetTwo'].forEach((el) => { investorObj[el] = !isEmpty(investorObj[el]) ? investorObj[el].split(',').join(' ') : null; });
+      const matchReferral = find(investorObj.referralCode, r => r.code === referralCode);
       const iReferralCode = (matchReferral && get(matchReferral, 'isValid')) ? get(matchReferral, 'code') : '';
-      return { ...i, referralCode: iReferralCode };
+      const regulation = i.regulation ? OFFERING_AGREEMENT_REGULATIONS[i.regulation] : '';
+      return { ...investorObj, referralCode: iReferralCode, regulation };
     });
     return investorList;
   }

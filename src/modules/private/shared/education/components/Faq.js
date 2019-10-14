@@ -9,7 +9,8 @@ import { InlineLoader } from '../../../../../theme/shared';
 @inject('educationStore', 'userStore')
 @observer
 export default class KnowledgeBase extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.educationStore.initRequest('Faq', null, this.props.userStore.isIssuer ? 'ISSUER_FAQ' : 'INV_FAQ');
   }
 

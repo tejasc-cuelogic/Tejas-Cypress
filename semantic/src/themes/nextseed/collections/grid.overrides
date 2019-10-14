@@ -95,6 +95,11 @@
                 margin-right: 0 !important;
             }
         }
+        &.investment-grid-v2.divided{
+            >.column:not(.row):last-child{
+                box-shadow: none;
+            }
+        }
     }
     &[class*="three column"].doubling>.column:not(.row){
         @media only screen and (min-width : @computerBreakpoint){
@@ -205,5 +210,17 @@
 .legal-section.ui.grid {
     @media only screen and (max-width: @largestTabletScreen) {
         padding: 0;
+    }
+}
+.public-pusher-v2{
+    .ui.grid>.column:not(.row).offer-details-v2 {
+        padding-left: @22px;
+        padding-right: @22px; 
+    }
+    footer.offering-footer-v2 .ui.grid>.column:not(.row){
+        &.copyright-info, &.footer-left{
+            padding-left: @7px !important;
+            padding-right: @7px !important; 
+        }
     }
 }

@@ -6,7 +6,8 @@ import { FormInput, MaskedInput } from '../../../../../theme/form';
 @inject('uiStore', 'offeringsStore', 'offeringCreationStore')
 @observer
 export default class EditOffering extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.offeringCreationStore.setFormData('KEY_TERMS_FRM', 'keyTerms');
     this.props.offeringCreationStore.setFormData('CLOSURE_SUMMARY_FRM', 'closureSummary');
   }
@@ -27,7 +28,7 @@ export default class EditOffering extends React.Component {
     render() {
       const {
         KEY_TERMS_FRM,
-        formChange,
+        formArrayChange,
         maskChange,
         CLOSURE_SUMMARY_FRM,
       } = this.props.offeringCreationStore;
@@ -40,7 +41,7 @@ export default class EditOffering extends React.Component {
                 name="shorthandBusinessName"
                 fielddata={KEY_TERMS_FRM.fields.shorthandBusinessName}
                 label="Business Name"
-                changed={(e, result) => formChange(e, result, 'KEY_TERMS_FRM')}
+                changed={(e, result) => formArrayChange(e, result, 'KEY_TERMS_FRM')}
               />
               <MaskedInput
                 name="launchDate"
