@@ -176,6 +176,9 @@ export class IdentityStore {
   get formattedUserInfoForCip() {
     const { fields } = this.ID_VERIFICATION_FRM;
     const user = FormValidator.evaluateFormData(fields);
+    if (userDetailsStore.isLegalDocsPresent) {
+      user.verificationDocs = this.verificationDocs();
+    }
     const phoneDetails = { number: fields.phoneNumber.value };
     return { user, phoneDetails };
   }
@@ -192,7 +195,8 @@ export class IdentityStore {
     this.ID_PROFILE_INFO.fields.state.value = stateValue;
   }
 
-  verificationDocs = (legalDetails = undefined) => {
+  verificationDocs = () => {
+    const { legalDetails } = this.isAdmin ? userDetailsStore.detailsOfUser.data.user : userDetailsStore.userDetails;
     const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
     const verificationDocs = {
       idProof: {
@@ -216,7 +220,8 @@ export class IdentityStore {
 
   @action
   verifyCip = async (isAdmin = false) => {
-    this.setCipDetails(isAdmin);
+    this.setFieldValue('isAdmin', isAdmin);
+    this.setCipDetails();
     const payLoad = {
       mutation: verifyCip,
       mutationName: 'verifyCip',
@@ -751,8 +756,8 @@ cipWrapper = async (payLoad) => {
   }
 
   @action
-  setCipDetails = (isAdmin = false) => {
-    const { legalDetails, phone } = isAdmin ? userDetailsStore.detailsOfUser.data.user : userDetailsStore.userDetails;
+  setCipDetails = () => {
+    const { legalDetails, phone } = this.isAdmin ? userDetailsStore.detailsOfUser.data.user : userDetailsStore.userDetails;
     const { fields } = this.ID_VERIFICATION_FRM;
     if (legalDetails && legalDetails.legalName) {
       fields.salutation.value = legalDetails.legalName.salutation;
@@ -761,9 +766,10 @@ cipWrapper = async (payLoad) => {
     }
     if (legalDetails && legalDetails.legalAddress) {
       fields.city.value = legalDetails.legalAddress.city;
-      const selectedState = find(US_STATES, { key: legalDetails.legalAddress.state });
+      const state = US_STATES.find(s => s.key === legalDetails.legalAddress.state);
+      const selectedState = state ? state.key : fields.state.value;
       if (selectedState) {
-        fields.state.value = selectedState.text;
+        fields.state.value = selectedState;
       }
       fields.street.value = legalDetails.legalAddress.street;
       fields.zipCode.value = legalDetails.legalAddress.zipCode;
@@ -771,6 +777,7 @@ cipWrapper = async (payLoad) => {
     if (legalDetails && legalDetails.dateOfBirth) {
       fields.dateOfBirth.value = legalDetails.dateOfBirth;
     }
+
     if (legalDetails && legalDetails.ssn) {
       fields.ssn.value = legalDetails.ssn;
     }
