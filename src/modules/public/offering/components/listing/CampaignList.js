@@ -108,8 +108,8 @@ export default class CampaignList extends Component {
                           <Icon name="heart" />
                         )
                         }
-                        <div className="campaign-card-details anime">
-                          <Card.Content className="test">
+                        <div className="campaign-card-details">
+                          <Card.Content>
                             {/* <div className="tags mb-10">
                               {offering && offering.keyTerms && offering.keyTerms.industry ? capitalize(offering.keyTerms.industry.split('_').join(' ')) : '-'}
                               <span className="pull-right">
@@ -138,14 +138,14 @@ export default class CampaignList extends Component {
                               />
                             </Card.Description>
                             <Divider />
-                            <Table basic="very" compact="very" className="no-border campaign-card">
+                            <Table verticalAlign="top" basic="very" compact="very" className="no-border campaign-card">
                             <Table.Body>
                                 {keyTermList.map(row => (
                                   <>
                                   {(row.for.includes('ALL') || row.for.includes(offering.keyTerms.securities))
                                   && (
                                   <Table.Row>
-                                    <Table.Cell>{row.label}</Table.Cell>
+                                    <Table.Cell collapsing>{row.label}</Table.Cell>
                                     <Table.Cell className={!row.for.includes('ALL') ? 'highlight-text' : ''}>
                                       {get(offering, row.key)
                                         ? (

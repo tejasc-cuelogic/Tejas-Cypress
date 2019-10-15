@@ -13,12 +13,16 @@
                 padding-top: 0;
             }
             .campaign-card-details{
-                overflow: visible;
                 margin-top: 0;
+                min-height: 392px;
                 max-height: 392px;
             }
             .ui.labels, .icon.heart{
                 display: none;
+            }
+            >.content.card-hidden{
+                min-height: 155px;
+                max-height: 155px;
             }
         }
         .campaign-image-wrap{
@@ -49,6 +53,7 @@
             top:12px;
             left:12px;
             display: inline-block;
+            transition: all 0.5s ease-in-out;
             .ui.label{
                 border:none;
                 text-transform:uppercase;
@@ -67,6 +72,7 @@
             top:12px;
             right:12px;
             display: block;
+            transition: all 0.5s ease-in-out;
             &.outline{
                 color:@white;
             }
@@ -153,6 +159,7 @@
             padding:@10px 0;
             border:none;
             border-radius: @4px !important;
+            transition: none;
             .lock-image {
                 position: relative;
                 display: flex;

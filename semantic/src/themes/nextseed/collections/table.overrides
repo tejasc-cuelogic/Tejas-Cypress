@@ -233,7 +233,8 @@
             border-top: none;
         }
         &.campaign-card td{		
-            padding: 0;		
+            padding-top: 0;
+            padding-bottom: 0;
         }
     }
     &.basic.form-table {
