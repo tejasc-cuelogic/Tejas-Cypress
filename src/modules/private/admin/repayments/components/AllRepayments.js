@@ -28,8 +28,6 @@ export default class AllRepayments extends Component {
     setSortingOrder(clickedColumn, clickedColumn === sortOrder.column && sortOrder.direction === 'asc' ? 'desc' : 'asc');
   }
 
-  setSearchParam = e => this.props.paymentStore.setInitiateSrch(e.target.value);
-
   toggleSearch = () => this.props.paymentStore.toggleSearch();
 
   executeSearch = (e) => {
