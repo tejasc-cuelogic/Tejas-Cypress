@@ -103,12 +103,6 @@ export default class CampaignList extends Component {
                         }
                         <div className="campaign-card-details anime">
                           <Card.Content className="test">
-                            {/* <div className="tags mb-10">
-                              {offering && offering.keyTerms && offering.keyTerms.industry ? capitalize(offering.keyTerms.industry.split('_').join(' ')) : '-'}
-                              <span className="pull-right">
-                                {offering && offering.keyTerms && offering.keyTerms.regulation ? CAMPAIGN_REGULATION_ABREVIATION[offering.keyTerms.regulation] : '-'}
-                              </span>
-                            </div> */}
                             <Card.Header>{offering && offering.keyTerms
                               && offering.keyTerms.shorthandBusinessName ? offering.keyTerms.shorthandBusinessName : ''
                             }
@@ -180,14 +174,6 @@ export default class CampaignList extends Component {
                             ? CAMPAIGN_OFFERED_BY[offering.regulation]
                             : CAMPAIGN_OFFERED_BY[offering.keyTerms.regulation]}
                           </p>
-                          {/* <List divided horizontal>
-                            <List.Item>
-                              Raised {Helper.CurrencyFormat((get(offering, 'closureSummary.totalInvestmentAmount') || 0), 0)}
-                            </List.Item>
-                            <List.Item>
-                              {get(offering, 'closureSummary.totalInvestorCount') || 0} investors
-                            </List.Item>
-                          </List> */}
                         </Card.Content>
                         {offering.stage === 'LOCK' && (
                           <Card.Content className="card-hidden">
