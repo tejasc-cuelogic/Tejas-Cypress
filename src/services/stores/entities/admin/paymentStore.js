@@ -1,50 +1,36 @@
-import { observable, action, computed, toJS } from 'mobx';
+import { observable, action, computed, toJS, decorate } from 'mobx';
 import graphql from 'mobx-apollo';
-import { orderBy, get, forEach, findIndex } from 'lodash';
+import { orderBy, get, forEach, findIndex, map } from 'lodash';
 import moment from 'moment';
-import { FormValidator as Validator } from '../../../../helper';
+import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { paymentsIssuerList, allRepaymentDetails, updatePaymentIssuer } from '../../queries/Repayment';
 import { PAYMENT } from '../../../constants/payment';
 import { uiStore } from '../../index';
+import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 
-export class PaymentStore {
-    @observable data = [];
+export class PaymentStore extends DataModelStore {
+  constructor() {
+    super({ paymentsIssuerList, allRepaymentDetails, updatePaymentIssuer });
+  }
 
-    @observable details = [];
+    data = [];
 
-    @observable filters = false;
+    tempData = [];
 
-    @observable PAYMENT_FRM = Validator.prepareFormObject(PAYMENT);
+    details = [];
 
-    @observable offeringDetails = null;
+    filters = false;
 
-    @observable summary = {
-      title: false,
-      summary: [
-        { title: 'Date', content: '7/5/18', type: 0 },
-        {
-          title: 'Status', content: 'Pending', type: 0, status: 'pending',
-        },
-        { title: '# of RS', content: 8, type: 0 },
-        { title: '# of TL', content: 5, type: 0 },
-        { title: 'Processed Date', content: 'N/A', type: 0 },
-        { title: 'Amount Repaid', content: 'N/A', type: 0 },
-        { title: 'Investor Repaid', content: 'N/A', type: 0 },
-      ],
-    };
+    PAYMENT_FRM = Validator.prepareFormObject(PAYMENT);
 
-    @observable sortOrder = {
+    offeringDetails = null;
+
+    sortOrder = {
       column: null,
       direction: 'asc',
     }
 
-    @action
-    setFieldValue = (field, value) => {
-      this[field] = value;
-    }
-
-    @action
     formChange = (e, result, form) => {
       this[form] = Validator.onChange(
         this[form],
@@ -52,24 +38,35 @@ export class PaymentStore {
       );
     }
 
-    @action
     setSortingOrder = (column = null, direction = null) => {
       this.sortOrder.column = column;
       // this.sortOrder.listData = listData;
       this.sortOrder.direction = direction;
     }
 
-    @action
     initRequest = () => {
-      this.data = graphql({ client, query: paymentsIssuerList });
+      this.executeQuery({
+        client: 'PRIVATE',
+        query: 'paymentsIssuerList',
+        setLoader: 'paymentsIssuerList',
+      }).then((res) => {
+        this.setDb(res.paymentsIssuerList);
+      });
+    };
+
+    setDb = (data) => {
+      const d = map(data, (dd) => {
+        const de = { ...dd };
+        return de;
+      });
+      this.setFieldValue('tempData', d);
+      this.setFieldValue('data', ClientDb.initiateDb(d, true));
     }
 
-    @action
     initRepaymentDetails = () => {
       this.details = graphql({ client, query: allRepaymentDetails });
     }
 
-    @action
     formArrayChange = (e, result, form) => {
       this[form] = Validator.onArrayFieldChange(
         this[form],
@@ -77,7 +74,6 @@ export class PaymentStore {
       );
     }
 
-    @action
     maskChange = (values, form, field) => {
       const cMap = ['expectedPaymentDate', 'firstPaymentDate', 'expectedOpsDate', 'operationsDate'];
       const fieldValue = (cMap.includes(field)) ? values.formattedValue : values.floatValue;
@@ -87,7 +83,6 @@ export class PaymentStore {
       );
     }
 
-    @action
     getOfferingById = (id) => {
       let res = this.repayments.filter(payment => payment.offering.id === id);
       res = { ...res[0] };
@@ -107,7 +102,6 @@ export class PaymentStore {
       }
     }
 
-    @action
     getPaymentFormData = () => {
       const data = {};
       forEach(this.PAYMENT_FRM.fields, (t, key) => {
@@ -116,7 +110,6 @@ export class PaymentStore {
       return data;
     }
 
-    @action
     updatePayment = id => new Promise((resolve, reject) => {
       uiStore.setProgress();
       const data = this.getPaymentFormData();
@@ -132,7 +125,6 @@ export class PaymentStore {
           variables: { offeringId: id, paymentIssuerDetailsInput: { ...variables } },
         })
         .then((res) => {
-          console.log(res);
           this.updatePaymentList(id, res.updatePaymentIssuer);
           resolve();
         })
@@ -145,7 +137,6 @@ export class PaymentStore {
         });
     });
 
-    @action
     updatePaymentList = (id, res) => {
       const data = { ...toJS(this.data) };
       const paymentIndex = findIndex(data, d => d.id === id);
@@ -158,7 +149,6 @@ export class PaymentStore {
       }
     }
 
-    @action
     setFormData = (formData) => {
       Object.keys(this.PAYMENT_FRM.fields).map(action((key) => {
         if (!this.PAYMENT_FRM.fields[key].ArrayObjItem) {
@@ -169,36 +159,59 @@ export class PaymentStore {
       Validator.validateForm(this.PAYMENT_FRM);
     }
 
-    @action
-    setInitiateSrch = (name, value) => {
-      this.requestState.search[name] = value;
-      this.initRequest({ ...this.requestState.search });
+    setInitiateSrch = (keyword) => {
+      this.setDb(this.tempData);
+      if (keyword) {
+        ClientDb.filterFromNestedObjs('offering.keyTerms.shorthandBusinessName', keyword);
+      }
+      this.data = ClientDb.getDatabase();
     }
 
-    @action
     toggleSearch = () => {
       this.filters = !this.filters;
     }
 
-    @computed get repayments() {
-      if (this.sortOrder.column && this.sortOrder.direction && this.data && toJS(get(this.data, 'data.paymentsIssuerList'))) {
+    get repayments() {
+      if (this.sortOrder.column && this.sortOrder.direction && this.data && toJS(this.data)) {
         return orderBy(
-          this.data.data.paymentsIssuerList,
-          [issuerList => (!['keyTerms.shorthandBusinessName', 'offering.keyTerms.securities'].includes(this.sortOrder.column) ? get(issuerList, this.sortOrder.column) && moment(get(issuerList, this.sortOrder.column), 'MM/DD/YYYY', true).isValid() ? moment(get(issuerList, this.sortOrder.column), 'MM/DD/YYYY', true).unix() : '' : get(issuerList, this.sortOrder.column) && get(issuerList, this.sortOrder.column).toString().toLowerCase())],
+          this.data,
+          [issuerList => (!['offering.keyTerms.shorthandBusinessName', 'offering.keyTerms.securities'].includes(this.sortOrder.column) ? get(issuerList, this.sortOrder.column) && moment(get(issuerList, this.sortOrder.column), 'MM/DD/YYYY', true).isValid() ? moment(get(issuerList, this.sortOrder.column), 'MM/DD/YYYY', true).unix() : '' : get(issuerList, this.sortOrder.column) && get(issuerList, this.sortOrder.column).toString().toLowerCase())],
           [this.sortOrder.direction],
         );
       }
-      return (this.data.data && toJS(this.data.data.paymentsIssuerList)) || [];
+      return this.data || [];
     }
 
-    @computed get repaymentDetails() {
+    get repaymentDetails() {
       return (this.details.data && toJS(this.details.data.allRepaymentDetails)) || [];
-    }
-
-    @computed get loading() {
-      return this.data.loading;
     }
 }
 
+decorate(PaymentStore, {
+  ...decorateDefault,
+  data: observable,
+  details: observable,
+  filters: observable,
+  PAYMENT_FRM: observable,
+  tempData: observable,
+  offeringDetails: observable,
+  sortOrder: observable,
+  formChange: action,
+  setSortingOrder: action,
+  initRequest: action,
+  initRepaymentDetails: action,
+  formArrayChange: action,
+  maskChange: action,
+  getOfferingById: action,
+  getPaymentFormData: action,
+  updatePayment: action,
+  updatePaymentList: action,
+  setFormData: action,
+  setInitiateSrch: action,
+  setDb: action,
+  toggleSearch: action,
+  repayments: computed,
+  repaymentDetails: computed,
+});
 
 export default new PaymentStore();

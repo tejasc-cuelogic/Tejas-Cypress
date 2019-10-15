@@ -8,8 +8,9 @@ import Helper from '../../../../../helper/utility';
 import { InlineLoader } from '../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
+import { DEV_FEATURE_ONLY } from '../../../../../constants/common';
 
-@inject('paymentStore')
+@inject('paymentStore', 'nsUiStore')
 @withRouter
 @observer
 export default class AllRepayments extends Component {
@@ -27,14 +28,12 @@ export default class AllRepayments extends Component {
     setSortingOrder(clickedColumn, clickedColumn === sortOrder.column && sortOrder.direction === 'asc' ? 'desc' : 'asc');
   }
 
-  setSearchParam = (e, { name, value }) => this.props.paymentStore.setInitiateSrch(name, value);
+  setSearchParam = e => this.props.paymentStore.setInitiateSrch(e.target.value);
 
   toggleSearch = () => this.props.paymentStore.toggleSearch();
 
   executeSearch = (e) => {
-    if (e.charCode === 13) {
-      this.props.paymentStore.setInitiateSrch('keyword', e.target.value);
-    }
+    this.props.paymentStore.setInitiateSrch(e.target.value);
   }
 
   handleAction = (offeringId, offeringStage) => {
@@ -50,10 +49,10 @@ export default class AllRepayments extends Component {
   render() {
     const { paymentStore } = this.props;
     const {
-      repayments, loading, requestState, filters, sortOrder,
+      repayments, requestState, filters, sortOrder,
     } = paymentStore;
 
-    if (loading) {
+    if (this.props.nsUiStore.loadingArray.includes('paymentsIssuerList')) {
       return <InlineLoader />;
     }
     return (
@@ -62,19 +61,21 @@ export default class AllRepayments extends Component {
           <Grid stackable>
             <Grid.Row>
               <ByKeyword
-                executeSearch={this.executeSearch}
+                change={this.executeSearch}
                 w={[11]}
                 placeholder="Search by keyword or phrase"
                 toggleSearch={this.toggleSearch}
                 requestState={requestState}
                 filters={filters}
                 more="no"
-                addon={(
+                addon={(DEV_FEATURE_ONLY
+                  && (
                   <Grid.Column width={5} textAlign="right">
                     <Button color="green" as={Link} floated="right" to="/app/payments">
                       Add New Repayment
                     </Button>
                   </Grid.Column>
+                  )
                 )}
               />
             </Grid.Row>
@@ -86,8 +87,8 @@ export default class AllRepayments extends Component {
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell
-                    sorted={sortOrder.column === 'keyTerms.shorthandBusinessName' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
-                    onClick={this.handleSort('keyTerms.shorthandBusinessName')}
+                    sorted={sortOrder.column === 'offering.keyTerms.shorthandBusinessName' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('offering.keyTerms.shorthandBusinessName')}
                   >Offering</Table.HeaderCell>
                   <Table.HeaderCell
                     sorted={sortOrder.column === 'offering.keyTerms.securities' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
