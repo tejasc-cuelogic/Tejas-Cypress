@@ -473,11 +473,13 @@ export class OfferingCreationStore {
   removeData = (formName, subForm = 'data', isApiDelete = false) => {
     const subArray = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : subForm;
     if (!isApiDelete) {
-      let removeFileIds = '';
-      const { fileId } = this[formName].fields[subArray][this.removeIndex].upload;
-      removeFileIds = fileId;
+      if (formName === 'CLOSING_BINDER_FRM' || formName === 'DATA_ROOM_FRM') {
+        let removeFileIds = '';
+        const { fileId } = this[formName].fields[subArray][this.removeIndex].upload;
+        removeFileIds = fileId;
+        this.removeFileIdsList = removeFileIds ? [...this.removeFileIdsList, removeFileIds] : [...this.removeFileIdsList];
+      }
       this[formName].fields[subArray].splice(this.removeIndex, 1);
-      this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     }
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
@@ -1918,6 +1920,17 @@ export class OfferingCreationStore {
       arrName,
       index,
     );
+  }
+
+  @action
+  validateLeadership = () => {
+    let isValid = false;
+    this.LEADERSHIP_FRM.fields.leadership.forEach((leader) => {
+      if (leader.email.value === '' && !this.LEADERSHIP_FRM.meta.error) {
+        isValid = true;
+      }
+    });
+    return isValid;
   }
 
   getClosureObject = (type) => {
