@@ -61,7 +61,7 @@ export default class StickyNotification extends Component {
   }
 
   getNotificationCard = () => {
-    if (this.isUserAccreditated) {
+    if (this.isUserAccreditated()) {
       notificationCard.verifiedAccreditation.onClick = this.handleReferral;
       return notificationCard.verifiedAccreditation;
     }
