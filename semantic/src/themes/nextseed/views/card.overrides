@@ -7,13 +7,27 @@
         box-shadow:none;
         &:hover, &:focus {
             text-decoration: none;
+            box-shadow: none; //@cardHoverShadow;
+            border: 1px solid @neutral-darkwhite;
+            .campaign-image-wrap .campaign-card-image{
+                padding-top: 0;
+            }
+            .campaign-card-details{
+                overflow: visible;
+                margin-top: 0;
+            }
+            .ui.labels, .icon.heart{
+                display: none;
+            }
         }
         .campaign-image-wrap{
+            display: block;
             .campaign-card-image{
                 position:relative;
                 padding-top:66.66%;
                 border-radius:@6px @6px 0 0;
                 overflow:hidden;
+                transition: all 0.5s ease-in-out;
                 >div{
                     background-size:cover;
                     background-repeat:no-repeat;
@@ -33,6 +47,7 @@
             position:absolute;
             top:12px;
             left:12px;
+            display: inline-block;
             .ui.label{
                 border:none;
                 text-transform:uppercase;
@@ -50,45 +65,73 @@
             position:absolute;
             top:12px;
             right:12px;
+            display: block;
             &.outline{
                 color:@white;
             }
         }
-        >.content{
-            padding:@21px @28px;
-            @media only screen and (max-width : @largestMobileScreen){
-                padding:@20px @22px;
-            }
-            >.header:not(.ui) {
-                clear: both;
-            }
-            .tags{
-                font-size:@13px;
-                font-weight:@fontMedium;
-                color:@neutral-middark;
-                text-transform:capitalize;
-                >span{
+        .campaign-card-details{
+            position: relative;
+            width: 100%;
+            min-height: 155px;
+            height: 155px;
+            overflow: hidden;
+            transition: all 0.5s ease-in-out;
+            .content{
+                padding:@21px @28px;
+                transition: all 0.5s ease-in-out;
+                @media only screen and (max-width : @largestMobileScreen){
+                    padding:@20px @22px;
+                }
+                >.header:not(.ui) {
+                    clear: both;
+                    font-size: @20px;
+                    line-height: 24px;
+                    color: @neutral;
+                    font-weight: @bold;
+                }
+                .tags{
+                    font-size:@13px;
+                    font-weight:@fontMedium;
+                    color:@neutral-middark;
+                    text-transform:capitalize;
+                    >span{
+                        text-transform:none;
+                    }
+                }
+                > .meta{
                     text-transform:none;
                 }
+                .description{
+                    min-height:63px;
+                    max-height:63px;
+                    margin:@14px 0 0;
+                    overflow:hidden;
+                    font-size:@15px;
+                    line-height:@20px;
+                    color: @neutral;
+                    transition: all 0.5s ease-in-out;
+                }
+                p{
+                    font-size: @13px;
+                    color: @neutral;
+                    margin-bottom: 0;
+                }
+                .ui.button{
+                    margin-bottom: @8px;
+                }
             }
-            > .meta{
-                text-transform:none;
-            }
-            .description{
-                max-height:80px;
-                margin:@14px 0 0;
-                overflow:hidden;
-                font-size:@13px;
-                line-height:@20px;
+        }
+        >.content.extra {
+            padding:0 @28px @21px;
+            border-top: 0!important;
+            @media only screen and (max-width : @largestMobileScreen){
+                padding:0 @22px @20px;
             }
             p{
                 font-size: @13px;
                 color: @neutral;
                 margin-bottom: 0;
-            }
-            &.extra {
-                padding-top: 0;
-                border-top: 0!important;
             }
         }
         .message {
@@ -135,10 +178,6 @@
             .meta{
                 text-transform:none;
             }
-        }
-        &:hover{
-            box-shadow:@cardHoverShadow;
-            border: 1px solid @neutral-darkwhite;
         }
         &.info-card {
             border-color: transparent;
