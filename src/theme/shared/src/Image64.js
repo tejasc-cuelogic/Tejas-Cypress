@@ -62,7 +62,7 @@ function Image64(props) {
   return props.bg ? (
     <div {...props} style={{ backgroundImage: `url(${data})` }} />
   )
-    : <Image {...props} src={`${data}`} onError={handelOnError} />;
+    : <Image {...props} alt={props.alt || 'Image not found!'} src={`${data}`} onError={handelOnError} />;
 }
 
 export default inject('uiStore', 'authStore')(observer(Image64));
