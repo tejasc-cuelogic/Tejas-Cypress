@@ -7,11 +7,23 @@ import { Container, Card, Grid, Label, Icon, Button, Divider, Table } from 'sema
 // import { IonIcon } from '@ionic/react';
 // import { heart } from 'ionicons/icons';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY } from '../../../../../constants/offering';
-// import Helper from '../../../../../helper/utility';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../constants/offering';
+import Helper from '../../../../../helper/utility';
 import NSImage from '../../../../shared/NSImage';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
+const keyTermList = [
+  { label: 'Security', key: 'keyTerms.securities', type: CAMPAIGN_KEYTERMS_SECURITIES, for: ['ALL'] },
+  { label: 'Offering', key: 'keyTerms.regulation', type: CAMPAIGN_KEYTERMS_REGULATION, for: ['ALL'] },
+  { label: 'Investment Minimum', key: 'keyTerms.minInvestAmt', type: '$', for: ['ALL'] },
+  { label: 'Multiple', key: 'keyTerms.investmentMultiple', type: '', for: ['REVENUE_SHARING_NOTE'] },
+  { label: 'Interest Rate', key: 'keyTerms.interestRate', type: '%', for: ['TERM_NOTE'] },
+  { label: 'Maturity', key: 'keyTerms.maturity', type: 'months', for: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
+  { label: 'Valuation', key: 'keyTerms.premoneyValuation', type: '$', for: ['PREFERRED_EQUITY_506C'] },
+  { label: 'Share Price', key: 'keyTerms.unitPrice', type: '$', for: ['PREFERRED_EQUITY_506C'] },
+  { label: 'Valuation Cap', key: 'keyTerms.valuationCap', type: '$', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
+  { label: 'Discount', key: 'keyTerms.discount', type: '%', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
+];
 
 @inject('campaignStore', 'accreditationStore')
 @observer
@@ -127,27 +139,37 @@ export default class CampaignList extends Component {
                             </Card.Description>
                             <Divider />
                             <Table basic="very" compact="very" className="no-border campaign-card">
-                              <Table.Body>
-                                <Table.Row>
-                                  <Table.Cell>Security</Table.Cell>
-                                  <Table.Cell><b>Revenue Sharing Note</b></Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
-                                  <Table.Cell>Offering</Table.Cell>
-                                  <Table.Cell><b>Reg CF</b></Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
-                                  <Table.Cell>Investment Minimum</Table.Cell>
-                                  <Table.Cell><b>$100</b></Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
-                                  <Table.Cell>Multiple</Table.Cell>
-                                  <Table.Cell className="highlight-text"><b>1.6x return</b></Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
-                                  <Table.Cell>Maturity</Table.Cell>
-                                  <Table.Cell className="highlight-text"><b>48 months</b></Table.Cell>
-                                </Table.Row>
+                            <Table.Body>
+                                {keyTermList.map(row => (
+                                  <>
+                                  {(row.for.includes('ALL') || row.for.includes(offering.keyTerms.securities))
+                                  && (
+                                  <Table.Row>
+                                    <Table.Cell>{row.label}</Table.Cell>
+                                    <Table.Cell className={!row.for.includes('ALL') ? 'highlight-text' : ''}>
+                                      {get(offering, row.key)
+                                        ? (
+                                      <>
+                                      <b>
+                                        {typeof row.type === 'object' ? (
+                                          row.type[get(offering, row.key)]
+                                        ) : row.type === '$' ? Helper.CurrencyFormat(get(offering, row.key), 0)
+                                          : row.type === '%' ? `${get(offering, row.key)}%`
+                                            : row.type === 'months' ? `${get(offering, row.key)} months`
+                                              : get(offering, row.key)
+                                        }
+                                      </b>
+                                      </>
+                                        )
+                                        : '-'
+                                      }
+                                      </Table.Cell>
+                                  </Table.Row>
+                                  )
+                                  }
+                                  </>
+                                ))
+                                }
                               </Table.Body>
                             </Table>
                             <Button className="mt-30" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
