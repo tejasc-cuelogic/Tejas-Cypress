@@ -526,6 +526,12 @@ footer{
 		color: @neutral-middark;
 		margin-bottom: @35px;
 	}
+	.campaign-subheader{
+		font-size: @28px;
+		line-height: 24px;
+		font-weight: @semiBold;
+		margin-bottom: 100px;
+	}
 }
 .offer-filter {
 	position: absolute;
