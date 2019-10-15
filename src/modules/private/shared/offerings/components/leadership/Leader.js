@@ -65,10 +65,16 @@ export default class Leader extends Component {
   }
 
   handleFormSubmit = (isApproved = null, successMsg) => {
-    const { LEADERSHIP_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    if (LEADERSHIP_FRM.fields.leadership[this.props.index || 0].email.value !== '' && (LEADERSHIP_FRM.fields.leadership[this.props.index || 0].email.error === undefined || LEADERSHIP_FRM.fields.leadership[this.props.index || 0].email.error === false)) {
+    const { LEADERSHIP_FRM, updateOffering, currentOfferingId, checkFormValid, validateLeadership } = this.props.offeringCreationStore;
+    const res = validateLeadership();
+    if (!res) {
       this.setState({ leaderFormInvalid: false });
-      updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership', null, true, successMsg, isApproved, true, this.props.index || 0);
+      checkFormValid('LEADERSHIP_FRM', true, true);
+      if (LEADERSHIP_FRM.meta.isValid) {
+        updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership', null, true, successMsg, isApproved, true, this.props.index || 0);
+      } else if (LEADERSHIP_FRM.meta.error) {
+        this.setState({ leaderFormInvalid: true });
+      }
     } else {
       this.setState({ leaderFormInvalid: true });
     }
@@ -181,6 +187,7 @@ export default class Leader extends Component {
             {
               ['firstName', 'lastName', 'email'].map(field => (
                 <FormInput
+                  triggerError={field === 'email'}
                   displayMode={isReadonly}
                   name={field}
                   fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
@@ -481,6 +488,7 @@ export default class Leader extends Component {
           }
           <Divider hidden />
           <ButtonGroup
+            leaderFormErrorMsg={LEADERSHIP_FRM.meta.error || 'Leader e-mail address field is required.'}
             isIssuer={isIssuer}
             submitted={submitted}
             isManager={isManager}
