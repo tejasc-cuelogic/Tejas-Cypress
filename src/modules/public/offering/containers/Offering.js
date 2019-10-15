@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Container, Button, Divider, Form, Grid } from 'semantic-ui-react';
+import { Header, Container, Button, Divider } from 'semantic-ui-react';
 // import Banner from '../components/Banner';
 import CampaignList from '../components/listing/CampaignList';
-// import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
-import { FormInput } from '../../../../theme/form';
+import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 
 const LoadMoreBtn = ({ action, param }) => (
   <div className="center-align mb-50" data-cy={param}>
@@ -42,7 +41,7 @@ class Offering extends Component {
           subheading={<p className="campaign-subheader center-align">Invest in the growth of the following local businesses</p>}
         />
         {activeList && activeList.length > RECORDS_TO_DISPLAY
-        && activeToDisplay < activeList.length
+          && activeToDisplay < activeList.length
           && <LoadMoreBtn action={loadMoreRecord} param="activeToDisplay" />
         }
         <Divider section hidden />
@@ -53,42 +52,23 @@ class Offering extends Component {
             <p className="mb-30">
               Sign up to have exclusive investment opportunities delivered straight to your inbox.
             </p>
-            {/* <SubscribeForNewsletter className="public-form" /> */}
-            <Form className="public-form ">
-              <Grid centered>
-                <Grid.Row>
-                  <Grid.Column computer={6} tablet={7} mobile={16}>
-                    <FormInput
-                      type="text"
-                      name="fdsf"
-                      fielddata={['fsdf', 'fsafs']}
-                      ishidelabel
-                      placeholder="Email"
-                    />
-                  </Grid.Column>
-                  <Grid.Column computer={2} tablet={3} mobile={16}>
-                    <Button primary fluid>
-                        Subscribe
-                    </Button>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </Form>
+            <SubscribeForNewsletter className="public-form" />
           </Container>
         </section>
         {!loading
           && (
-<CampaignList
-  loading={loading}
-  campaigns={completed}
-  locked={3}
-  heading={<Header as="h2" textAlign="center" caption className="mb-50">Successfully Funded on NextSeed</Header>}
-/>
+            <CampaignList
+              isFunded
+              loading={loading}
+              campaigns={completed}
+              locked={3}
+              heading={<Header as="h2" textAlign="center" caption className="mb-50">Successfully Funded on NextSeed</Header>}
+            />
           )
         }
         {completedList && completedList.length > RECORDS_TO_DISPLAY
-        && completedToDisplay < completedList.length
-        && <LoadMoreBtn action={loadMoreRecord} param="completedToDisplay" />
+          && completedToDisplay < completedList.length
+          && <LoadMoreBtn action={loadMoreRecord} param="completedToDisplay" />
         }
         <Divider section hidden />
         <Divider hidden />
