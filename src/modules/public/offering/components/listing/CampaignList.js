@@ -11,6 +11,7 @@ import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_RE
 import Helper from '../../../../../helper/utility';
 import NSImage from '../../../../shared/NSImage';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+import { DataFormatter } from '../../../../../helper';
 
 const keyTermList = [
   { label: 'Security', key: 'keyTerms.securities', type: CAMPAIGN_KEYTERMS_SECURITIES, for: ['ALL'] },
@@ -63,16 +64,8 @@ export default class CampaignList extends Component {
     return null;
   }
 
-  // handleMouseEnter = (id) => {
-  //   this.setState({ hoveringId: id });
-  // }
-
-  // handleMouseLeave = () => {
-  //   this.setState({ hoveringId: '' });
-  // }
-
   render() {
-    const { campaigns, loading } = this.props;
+    const { campaigns, loading, isFunded } = this.props;
     return (
       <>
         {/* {this.props.filters &&
@@ -88,7 +81,7 @@ export default class CampaignList extends Component {
                   <Grid doubling columns={3} stackable>
                   {campaigns.map(offering => (
                     <Grid.Column key={offering.id} data-cy={offering.id}>
-                      <Card onMouseLeave={() => this.handleMouseLeave()} onMouseEnter={() => this.handleMouseEnter(offering.id)} className="campaign" fluid as={Link} to={`/offerings/${offering.offeringSlug}`}>
+                      <Card className="campaign" fluid as={Link} to={`/offerings/${offering.offeringSlug}`}>
                         <div className="campaign-image-wrap">
                           <div className="campaign-card-image">
                             <Image64
@@ -176,9 +169,12 @@ export default class CampaignList extends Component {
                           </Card.Content>
                         </div>
                         <Card.Content extra>
-                          {/* {this.state.hoveringId === offering.id
-                          && ( */}
-                          <p><b>{offering && offering.keyTerms && offering.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities] : '-'}</b></p>
+                          <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0)} from {get(offering, 'closureSummary.totalInvestorCount') || 0} investors</b></p>
+                          {isFunded
+                          && (
+                            <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>
+                          )
+                          }
                           <p className="more-info">
                             Offered by {offering && offering.regulation
                             ? CAMPAIGN_OFFERED_BY[offering.regulation]

@@ -79,6 +79,7 @@ class Offering extends Component {
         {!loading
           && (
 <CampaignList
+  isFunded
   loading={loading}
   campaigns={completed}
   locked={3}
