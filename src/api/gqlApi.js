@@ -33,7 +33,7 @@ export const GqlClient = new ApolloClient({
     });
   },
   onError: (res) => {
-    if (['production', 'prod', 'master', 'demo'].includes(REACT_APP_DEPLOY_ENV)) {
+    if (['production', 'prod', 'master', 'demo'].includes(REACT_APP_DEPLOY_ENV) && get(res, 'graphQLErrors[0]')) {
       authStore.sendErrorMail(res);
     }
     if (get(res, 'networkError.statusCode') === 401 || get(res, 'networkError.result.message') === 'The incoming token has expired') {
