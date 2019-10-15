@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Table, Button, Icon, Card } from 'semantic-ui-react';
 import { kebabCase, capitalize } from 'lodash';
+import moment from 'moment';
 import { observer, inject } from 'mobx-react';
-import { Link } from 'react-router-dom';
 import { DateTimeFormat, NsPagination } from '../../../../../../theme/shared';
 import { DataFormatter } from '../../../../../../helper';
 
@@ -15,10 +15,15 @@ export default class Listing extends Component {
     this.props.updateStore.updateVisibility(record, isVisible);
   }
 
+  handleViewUpdate = (id, status) => {
+    const redirectTo = this.props.userStore.isIssuer && ['PENDING', 'PUBLISHED'].includes(status) ? 'preview' : 'edit';
+    this.props.history.push(`${this.props.match.url}/${redirectTo}/${id}`);
+  }
+
   render() {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
-    const meta = isManager ? ['Title', 'Recipients', 'Last status change', 'Status', 'Last update', ''] : ['Title', 'Recipients', 'Last status change', 'Status', 'Last update'];
+    const meta = isManager ? ['Title', 'Published Date', 'Recipients', 'Status', 'Updated date', ''] : ['Title', 'Published Date', 'Recipients', 'Status', 'Updated date'];
     const listHeader = [...meta];
     const totalRecords = this.props.count || 0;
     return (
@@ -43,12 +48,12 @@ export default class Listing extends Component {
                 : this.props.data.map(record => (
                   <Table.Row key={record.refId}>
                     <Table.Cell>
-                      <Link to={`${this.props.match.url}/edit/${record.refId}`}>{record.title}</Link>
+                      <Button className="link-button" onClick={() => this.handleViewUpdate(record.refId, record.status)}>{record.title}</Button>
                     </Table.Cell>
+                    <Table.Cell>{record.updatedDate ? moment(record.updatedDate).format('LL') : '-'}</Table.Cell>
                     <Table.Cell>{capitalize(record.scope)}</Table.Cell>
+                    <Table.Cell className={`status ${kebabCase(record.status)}`}> <Icon className="ns-circle" color={record.status === 'PUBLISHED' ? 'green' : record.status === 'DRAFT' ? 'red' : 'orange'} /></Table.Cell>
                     <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(record.updated.date, true, false, false)} /></Table.Cell>
-                    <Table.Cell className={`status ${kebabCase(record.status)}`}> <Icon className="ns-circle" color={record.status === 'PUBLISHED' ? 'green' : record.status === 'DRAFT' ? 'red' : 'orange'} /> {capitalize(record.status)}</Table.Cell>
-                    <Table.Cell textAlign="right">{record.status === 'PUBLISHED' ? 'Update is published' : record.status === 'DRAFT' ? 'Saved To Draft' : 'Sent update for review'}</Table.Cell>
                     {isManager
                     && (
                     <Table.Cell collapsing textAlign="center">

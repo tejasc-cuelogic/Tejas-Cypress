@@ -693,8 +693,11 @@ export class AccreditationStore {
   }
 
   @action
-  getUserAccreditation = (userId = false) => new Promise((res) => {
+  getUserAccreditation = (userId = false, setInProgressArray = true) => new Promise((res) => {
     uiStore.setProgress();
+    if (setInProgressArray) {
+      uiStore.addMoreInProgressArray('getUserAccreditation');
+    }
     if (userId || userDetailsStore.currentUserId) {
       this.userData = graphql({
         client,
@@ -703,12 +706,18 @@ export class AccreditationStore {
         variables: { userId: userId || userDetailsStore.currentUserId },
         onFetch: () => {
           if (!this.userData.loading) {
+            if (setInProgressArray) {
+              uiStore.removeOneFromProgressArray('getUserAccreditation');
+            }
             uiStore.setProgress(false);
             res();
           }
         },
         onError: () => {
           uiStore.setProgress(false);
+          if (setInProgressArray) {
+            uiStore.removeOneFromProgressArray('getUserAccreditation');
+          }
           Helper.toast('Something went wrong, please try again later.', 'error');
         },
       });
@@ -964,16 +973,10 @@ export class AccreditationStore {
   checkIsAccreditationExpired = (expirationDate) => {
     let dateDiff = '';
     if (expirationDate) {
-      const validDate = new Date(expirationDate);
-      dateDiff = DataFormatter.diffDays(validDate);
-      return dateDiff === 0 ? 'EXPIRED' : 'ACTIVE';
+      dateDiff = DataFormatter.diffDays(DataFormatter.formatedDate(expirationDate), false, true);
+      return dateDiff < 0 ? 'EXPIRED' : 'ACTIVE';
     }
     return dateDiff;
-  }
-
-  @action
-  updateAccreditationExpiray = () => {
-    console.log('going to update accreditation expiray date');
   }
 
   @action

@@ -140,3 +140,9 @@ export const OFFERING_REGULATIONS = {
   BD_506B: 'BD - 506B',
   BD_CF_506C: 'BD - Parallel',
 };
+
+export const OFFERING_AGREEMENT_REGULATIONS = {
+  BD_CF: 'NSS CF',
+  BD_506C: 'RegD506C',
+  FP_CF: 'NSUS CF',
+};

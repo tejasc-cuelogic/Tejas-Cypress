@@ -151,7 +151,7 @@ Update
                   </Card.Header>
                   <Card.Content>
                     <Form>
-                      <Form.Group widths="equal">
+                      <Form.Group widths="2">
                         {
                           ['businessName', 'signupCode', 'utmSource'].map(field => (
                             <FormInput

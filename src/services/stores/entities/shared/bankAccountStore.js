@@ -4,14 +4,14 @@ import { isEmpty, map, uniqWith, isEqual, find, get, filter } from 'lodash';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore, individualAccountStore, entityAccountStore } from '../../index';
-import { linkBankRequestPlaid, linkBankRequestManual, validateBankAccount, linkBankRequestCancel, getDecryptedRoutingNumber } from '../../queries/banking';
+import { linkBankRequestPlaid, linkBankRequestManual, validateBankAccount, declineBankChangeRequest, getDecryptedRoutingNumber, hasPendingTransfersWithPendingBankChange } from '../../queries/banking';
 import Helper from '../../../../helper/utility';
 import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META, ENTITY_ADD_FUND,
   IRA_ADD_FUND, BANK_REQUEST_VERIFY_DENY_FORM,
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
-import { getlistLinkedBankUsers, isValidOpeningDepositAmount, linkBankRequestApprove, linkBankRequestDeny } from '../../queries/bankAccount';
+import { getlistLinkedBankUsers, isValidOpeningDepositAmount, linkBankRequestApprove } from '../../queries/bankAccount';
 import { validationActions } from '../../../actions';
 
 export class BankAccountStore {
@@ -70,6 +70,8 @@ export class BankAccountStore {
   @observable shouldValidateAmount = false;
 
   @observable loadingState = false;
+
+  @observable hasPendingRequest = false;
 
   @observable requestState = {
     skip: 0,
@@ -303,6 +305,32 @@ export class BankAccountStore {
   @action
   setShowAddFunds = (funds = true) => {
     this.showAddFunds = funds;
+  }
+
+  @action
+  hasPendingTransfersWithPendingBankChange = () => {
+    const data = {
+      userId: userDetailsStore.userDetails.id,
+      accountId: this.CurrentAccountId,
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: hasPendingTransfersWithPendingBankChange,
+          variables: { ...data },
+        })
+        .then((res) => {
+          this.setFieldValue('hasPendingRequest', get(res, 'data.hasPendingTransfersWithPendingBankChange'));
+          resolve();
+        })
+        .catch((error) => {
+          uiStore.setErrors(error.message);
+          Helper.toast(error.message, 'error');
+          reject(error.message);
+        }).finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
   }
 
   @action
@@ -565,14 +593,14 @@ export class BankAccountStore {
   }
 
   @action
-  linkBankRequestCancel = () => {
+  declineBankChangeRequest = () => {
     const canceldData = {
       accountId: this.CurrentAccountId,
     };
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: linkBankRequestCancel,
+          mutation: declineBankChangeRequest,
           variables: canceldData,
         })
         .then(() => {
@@ -708,7 +736,7 @@ export class BankAccountStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: isDeny ? linkBankRequestDeny : linkBankRequestApprove,
+          mutation: isDeny ? declineBankChangeRequest : linkBankRequestApprove,
           variables: {
             accountId,
             userId,
@@ -717,7 +745,7 @@ export class BankAccountStore {
         })
         .then((res) => {
           this.removeLoadingRequestId(userId);
-          Helper.toast(isDeny ? (res.data.linkBankRequestDeny ? 'Link bank requested is denied successfully.' : 'Something went wrong, please try again later.') : res.data.linkBankRequestApprove.message, (isDeny && !res.data.linkBankRequestDeny) ? 'error' : 'success');
+          Helper.toast(isDeny ? (res.data.declineBankChangeRequest ? 'Link bank requested is denied successfully.' : 'Something went wrong, please try again later.') : res.data.linkBankRequestApprove.message, (isDeny && !res.data.declineBankChangeRequest) ? 'error' : 'success');
           uiStore.setProgress(false);
           resolve();
         })

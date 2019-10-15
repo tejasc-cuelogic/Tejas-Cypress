@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-constant-condition */
 import React, { Component } from 'react';
 import { Table, Popup, Icon, Label } from 'semantic-ui-react';
@@ -7,6 +8,7 @@ import { inject, observer } from 'mobx-react';
 import { DateTimeFormat, InlineLoader, UserAvatar } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
+import { OFFERING_AGREEMENT_REGULATIONS } from '../../../../../../constants/offering';
 
 const meta = [
   { label: '', value: 'avatar' },
@@ -14,7 +16,8 @@ const meta = [
   { label: 'Residence City', value: 'city' },
   { label: 'State', value: 'state' },
   { label: 'Account Type', value: 'accountType' },
-  { label: 'early Bird Eligibility', value: 'earlyBirdEligibility' },
+  { label: 'Early Bird Eligibility', value: 'earlyBirdEligibility' },
+  { label: 'Regulation', value: 'regulation' },
   { label: 'Investment Amount', value: 'amount' },
   { label: 'Date', value: 'investmentDate' },
   { label: 'Referral Code', value: 'referralCode' },
@@ -41,11 +44,12 @@ export default class Listing extends Component {
     const { offer } = this.props.offeringsStore;
     const { isIssuer, isAdmin } = this.props.userStore;
     const headerList = [...meta];
-    const hardClosedDate = get(offer, 'closureSummary.hardCloseDate');
     const referralCode = get(offer, 'referralCode');
-    let computedList = (isIssuer && hardClosedDate) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
+    const isOfferingClose = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE'].includes(get(offer, 'stage'));
+    let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
+    computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'Early Bird Eligibility', value: 'earlyBirdEligibility' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
-    computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'early Bird Eligibility', value: 'earlyBirdEligibility' });
+    computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Regulation', value: 'regulation' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
     const isUsersCapablities = this.props.userStore.myAccessForModule('USERS');
@@ -77,8 +81,8 @@ export default class Listing extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {investorLists.map(data => (
-                <Table.Row key={data.userId}>
+              {investorLists.map((data, index) => (
+                <Table.Row key={`${index}${data.userId}${Math.random()}`}>
                   <Table.Cell>
                     <UserAvatar
                       size="mini"
@@ -92,7 +96,7 @@ export default class Listing extends Component {
                   </Table.Cell>
                   <Table.Cell>
                     <div>
-                      {get(isUsersCapablities, 'level')
+                      {get(isUsersCapablities, 'level') && get(isUsersCapablities, 'level') !== 'SUPPORT'
                         ? <Link to={`/app/users/${data.userId}/profile-data`}><p><b>{`${data.firstName} ${data.lastName}`}</b></p></Link>
                         : `${data.firstName} ${data.lastName}`
                       }
@@ -105,10 +109,16 @@ export default class Listing extends Component {
                       }
                     </div>
                   </Table.Cell>
-                  <Table.Cell title={`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}${data.city}, ${data.state}, ${data.zipCode}`}>
-                    {data.city}
+                  <Table.Cell>
+                  <div className="table-info-wrap">
+                    <p>
+                      {((isIssuer && isOfferingClose) || (isAdmin)) && <span>{`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}`}</span>}
+                      <span>{data.city || 'N/A'}</span>
+                    </p>
+                  </div>
+                    {/* {data.city || 'N/A'} */}
                   </Table.Cell>
-                  <Table.Cell>{data.state}</Table.Cell>
+                  <Table.Cell>{data.state || 'N/A'}</Table.Cell>
                   {isAdmin
                     && (
                       <Table.Cell>
@@ -116,14 +126,31 @@ export default class Listing extends Component {
                       </Table.Cell>
                     )
                   }
-                  <Table.Cell>
+                  {((isIssuer && isOfferingClose) || (isAdmin))
+                    && (
+                  <Table.Cell textAlign="center">
                     {data.earlyBirdEligibility
-                      ? <Label color="green" circular empty className="mr-10" />
-                      : ''
-                    }
-                  </Table.Cell>
+                      ? (
+                        <Popup
+                          trigger={<Label color="green" circular empty className="mr-10" />}
+                          content="Eligible for Early Bird Reward"
+                          hoverable
+                          position="top center"
+                        />
+                      )
+                      : ''}
+                     </Table.Cell>
+                    )}
                   {isAdmin
-                    ? (
+                    && (
+                      <Table.Cell>
+                        {data.regulation ? OFFERING_AGREEMENT_REGULATIONS[data.regulation] : ''}
+                      </Table.Cell>
+                    )
+                  }
+                  {((isIssuer && isOfferingClose) || (isAdmin))
+                    && (
+                      <>
                       <Table.Cell>
                         {Helper.CurrencyFormat(data.amount, 0)}
                         {parseInt(data.investmentsCount, 10) > 1
@@ -150,11 +177,11 @@ export default class Listing extends Component {
                           ) : null
                         }
                       </Table.Cell>
+                      </>
                     )
-                    : null
                   }
                   <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
-                  <Table.Cell textAlign="right">{this.showReferralCode(referralCode, data.referralCode)}</Table.Cell>
+                  <Table.Cell textAlign="right">{data.referralCode ? this.showReferralCode(referralCode, data.referralCode) : 'N/A'}</Table.Cell>
                 </Table.Row>
               ))
               }

@@ -8,13 +8,13 @@ import { Button, Icon } from 'semantic-ui-react';
 export default class ButtonGroup extends Component {
   render() {
     const {
-      isManager, approved, updateOffer, isIssuer, submitted, issuerSubmitted, leaderFormInvalid,
+      isManager, approved, updateOffer, isIssuer, submitted, issuerSubmitted, leaderFormInvalid, leaderFormErrorMsg,
     } = this.props;
     const { inProgress, htmlEditorImageLoading } = this.props.uiStore;
     return (
       <div className="sticky-actions">
         {leaderFormInvalid
-          && <p className="negative-text right-align"><small>Leader e-mail address field is required.</small></p>
+          && <p className="negative-text right-align"><small>{leaderFormErrorMsg}</small></p>
         }
         <Button.Group vertical icon size="tiny" className="time-stamp">
           {!isIssuer && issuerSubmitted

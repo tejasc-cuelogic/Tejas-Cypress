@@ -11,7 +11,7 @@ import { DataFormatter } from '../../../../../../helper';
 @observer
 export default class Contingency extends Component {
   state = {
-    visibilityStatus: false,
+    visibilityStatus: !this.props.OfferingClose,
   }
 
   setContingencyForm = () => {

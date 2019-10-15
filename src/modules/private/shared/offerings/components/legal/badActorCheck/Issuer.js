@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { FormTextarea, FormCheckbox } from '../../../../../../../theme/form';
 import { InlineLoader } from '../../../../../../../theme/shared';
 import ButtonGroupType2 from '../../ButtonGroupType2';
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class Issuer extends Component {
   constructor(props) {
@@ -39,7 +40,7 @@ export default class Issuer extends Component {
     const approved = (issuerOfferingBacData && issuerOfferingBacData.length
       && issuerOfferingBacData[0].approved) ? issuerOfferingBacData[0].approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
-
+    const { offer } = this.props.offeringsStore;
     if (issuerOfferingBac && issuerOfferingBac.loading) {
       return <InlineLoader />;
     }
@@ -51,7 +52,7 @@ export default class Issuer extends Component {
             ['issuerDiligence', 'certificateFormation', 'operatingAgreement', 'evidenceGoodStanding', 'executiveTeam'].map(field => (
               <>
                 {field === 'issuerDiligence'
-                  && <Header as="h4">{ISSUER_FRM.fields[field].label}</Header>
+                  && <Header as="h4">{get(offer, 'keyTerms.legalBusinessName') ? `${get(offer, 'keyTerms.legalBusinessName')} Diligence` : ISSUER_FRM.fields[field].label}</Header>
                 }
                 <FormTextarea
                   readOnly={isReadonly}

@@ -100,7 +100,7 @@ export default class OfferingDetails extends Component {
             </Header>
             {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} offerStatus={offerStatus} />}
             <Card fluid>
-              <SecondaryMenu match={match} navItems={navItems} />
+              <SecondaryMenu offering match={match} navItems={navItems} />
               <Switch>
                 <Route exact path={match.url} component={OfferingModule('overview')} />
                 {

@@ -40,13 +40,19 @@ const metaTagsData = [
 ];
 const isMobile = document.documentElement.clientWidth < 768;
 const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/'];
-@inject('userStore', 'commonStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
+@inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
 class App extends Component {
   state = {
     authChecked: false,
   };
+
+  constructor(props) {
+    super(props);
+    window.addEventListener('resize', this.handleResize);
+    this.props.uiStore.setFieldvalue('responsiveVars', this.getSizes());
+  }
 
   componentDidMount() {
     const { location, history } = this.props;
@@ -142,6 +148,20 @@ class App extends Component {
     }
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  getSizes = () => ({
+    isMobile: document.documentElement.clientWidth < 768,
+    isTablet: document.documentElement.clientWidth >= 768
+      && document.documentElement.clientWidth < 992,
+  });
+
+  handleResize = () => {
+    this.props.uiStore.setFieldvalue('responsiveVars', this.getSizes());
+  }
+
   isBoxFirewalled = () => new Promise((resolve, reject) => {
     const testURL = NEXTSEED_BOX_URL;
     const myInit = {
@@ -200,6 +220,7 @@ class App extends Component {
   render() {
     const { location } = this.props;
     const { authChecked } = this.state;
+    const { isTablet } = this.props.uiStore.responsiveVars;
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {
       return (
         <Route path="/secure-gateway" component={SecureGateway} />
@@ -213,24 +234,24 @@ class App extends Component {
     return (
       <div className={(!matchPath(location.pathname, { path: '/app' })) ? 'public-pages' : ''}>
         {this.props.authStore.isUserLoggedIn
-        && (
-<IdleTimer
-  ref={(ref) => { this.props.authStore.idleTimer = ref; }}
-  element={document}
-  events={['mousedown', 'touchmove', 'MSPointerMove', 'MSPointerDown']}
-  onIdle={this.onIdle}
-  onAction={() => {
-    if (this.props.authStore.idleTimer) {
-      localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
-    }
-  }}
-  debounce={250}
-  timeout={userIdleTime}
-  stopOnIdle
-/>
-        )
+          && (
+            <IdleTimer
+              ref={(ref) => { this.props.authStore.idleTimer = ref; }}
+              element={document}
+              events={['mousedown', 'touchmove', 'MSPointerMove', 'MSPointerDown']}
+              onIdle={this.onIdle}
+              onAction={() => {
+                if (this.props.authStore.idleTimer) {
+                  localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
+                }
+              }}
+              debounce={250}
+              timeout={userIdleTime}
+              stopOnIdle
+            />
+          )
         }
-        <MetaTagGenerator metaTagsData={metaTagsData} />
+        <MetaTagGenerator isTablet={isTablet} metaTagsData={metaTagsData} />
         {this.props.authStore.devPasswdProtection
           ? <Route exact path="/password-protected" component={DevPassProtected} /> : (
             <Layout>

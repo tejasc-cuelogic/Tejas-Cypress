@@ -10,7 +10,7 @@ Validator.register(
   'The :attribute is not in the format XXX-XX-XXXX.',
 );
 
-export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement'];
+export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement', 'closingBinder'];
 
 export const STAGES = {
   CREATION: { ref: 'creation', publicRef: 'creation', accessKey: 1, label: 'Creation' },
@@ -366,6 +366,20 @@ export const KEY_TERMS = {
     rule: 'optional',
     placeHolder: 'Enter here',
   },
+  valuationCap: {
+    value: '',
+    label: 'Valuation Cap',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  discount: {
+    value: '',
+    label: 'Discount',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
   unitPrice: {
     value: null,
     label: 'Unit Price',
@@ -444,6 +458,8 @@ export const SECURITIES_VALUES = [
   { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
   { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
   { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity' },
+  { key: 'Convertible Notes', value: 'CONVERTIBLE_NOTES', text: 'Convertible Notes' },
+  { key: 'SAFE', value: 'SAFE', text: 'SAFE' },
 ];
 
 export const ROUND_TYPE_VALUES = [
@@ -1010,13 +1026,13 @@ export const LEADERSHIP_EXP = {
       customErrors: { string: '* required.' },
     },
     dateOfService: {
-      label: 'Dates of Service',
+      label: 'Date of Service',
       value: '',
       error: undefined,
       rule: 'date',
       placeHolder: 'MM-DD-YYYY',
       objType: 'DATE',
-      customErrors: { date: 'Dates of Service is not a valid date format.' },
+      customErrors: { date: 'Date of Service is not a valid date format.' },
     },
   }],
 };
@@ -1029,6 +1045,17 @@ export const LEADERSHIP = {
       values: [
         {
           label: 'Include in Offering Page',
+          value: 'IS_APPLIED',
+        },
+      ],
+      error: undefined,
+      rule: 'optional',
+    },
+    isBeneficialOwnerDocGeneration: {
+      value: false,
+      values: [
+        {
+          label: 'Include in Beneficial Owner DocGeneration',
           value: 'IS_APPLIED',
         },
       ],
@@ -1051,10 +1078,10 @@ export const LEADERSHIP = {
     },
     email: {
       value: '',
-      label: 'E-mail address',
+      label: 'Email address',
       error: undefined,
       rule: 'email',
-      customErrors: { email: 'Email is not valid' },
+      customErrors: { email: 'email is not valid' },
       placeHolder: 'john.doe@contact.com',
     },
     number: {
@@ -1155,6 +1182,34 @@ export const LEADERSHIP = {
       placeHolder: 'e.g. 10001',
       objRef: 'address',
       objRefOutput2: 'address',
+    },
+    dlLicenseNumber: {
+      value: '',
+      label: 'DL License Number',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'e.g. 123456789',
+    },
+    dlState: {
+      value: '',
+      label: 'DL State',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'e.g. NY',
+    },
+    dlIssuedDate: {
+      value: '',
+      label: 'DL Issued Date',
+      error: undefined,
+      rule: 'date',
+      placeHolder: 'e.g. 12-12-2019',
+    },
+    dlExpirationDate: {
+      value: '',
+      label: 'DL Expiration Date',
+      error: undefined,
+      rule: 'date',
+      placeHolder: 'e.g. 12-12-2019',
     },
     bio: {
       value: '',
@@ -1282,7 +1337,7 @@ export const BUSINESS = {
     placeHolder: 'e.g. bakery',
   },
   dateOfService: {
-    label: 'Dates of Service',
+    label: 'Date of Service',
     value: '',
     error: undefined,
     rule: 'string|required',
@@ -1632,7 +1687,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   businessRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Business risks.  (See below for a sample)',
     value: '',
     refSelector: 'isBusinessRisk',
     error: undefined,
@@ -1646,7 +1701,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   financingRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Financing risks.  (See below for a sample)',
     value: '',
     refSelector: 'isFinancingRisk',
     error: undefined,
@@ -1662,7 +1717,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   developmentRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Development risks.  (See below for a sample)',
     value: '',
     refSelector: 'isDevelopmentRisk',
     error: undefined,
@@ -1678,7 +1733,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   reputationalRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Reputational risks.  (See below for a sample)',
     value: '',
     refSelector: 'isReputationalRisk',
     error: undefined,
@@ -1692,7 +1747,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   competitionRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your competition risks.  (See below for a sample)',
     value: '',
     refSelector: 'isCompetitionRisk',
     error: undefined,
@@ -1706,7 +1761,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   marketRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your market risks.  (See below for a sample)',
     value: '',
     refSelector: 'isMarketRisk',
     error: undefined,
@@ -1720,7 +1775,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   workStoppagesRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe the risks involved in work stoppages.',
     value: '',
     refSelector: 'isWorkStoppagesRisks',
     error: undefined,
@@ -1734,7 +1789,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   managementRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Management risks.  (See below for a sample)',
     value: '',
     refSelector: 'isManagementRisk',
     error: undefined,
@@ -1748,7 +1803,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   personnelRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Personnel risks.  (See below for a sample)',
     value: '',
     refSelector: 'isPersonnelRisk',
     error: undefined,
@@ -1762,7 +1817,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   laborSupplyRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Labor Supply risks.  (See below for a sample)',
     value: '',
     refSelector: 'isLaborSupplyRisk',
     error: undefined,
@@ -1776,7 +1831,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   privacyRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Privacy risks.  (See below for a sample)',
     value: '',
     refSelector: 'isPrivacyRisk',
     error: undefined,
@@ -1790,7 +1845,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   realEstateRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Real Estate risks.  (See below for a sample)',
     value: '',
     refSelector: 'isRealEstateRisks',
     error: undefined,
@@ -1804,7 +1859,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   supplyRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Supply risks.  (See below for a sample)',
     value: '',
     refSelector: 'isSupplyRisks',
     error: undefined,
@@ -1820,7 +1875,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   foodSafetyRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Food Safety risks.  (See below for a sample)',
     value: '',
     refSelector: 'isFoodSafetyRisks',
     error: undefined,
@@ -1836,7 +1891,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   nutritionalDisclosureRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Nutritional Disclosure risks.  (See below for a sample)',
     value: '',
     refSelector: 'isNutritionalDisclosureRisks',
     error: undefined,
@@ -1852,7 +1907,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   foodRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Food risks.  (See below for a sample)',
     value: '',
     refSelector: 'isFoodRisks',
     error: undefined,
@@ -1868,7 +1923,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   alcoholSalesRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Alcohol Sales risks.  (See below for a sample)',
     value: '',
     refSelector: 'isAlcoholSalesRisks',
     error: undefined,
@@ -1884,7 +1939,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   alcoholInvestmentRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Alcolhol Investment risks.  (See below for a sample)',
     value: '',
     refSelector: 'isAlcoholInvestmentRisks',
     error: undefined,
@@ -1900,7 +1955,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   industryRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Industry risks.  (See below for a sample)',
     value: '',
     refSelector: 'isIndustryRisks',
     error: undefined,
@@ -1916,7 +1971,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   healthcareRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Healthcare risks.  (See below for a sample)',
     value: '',
     refSelector: 'isHealthcareRisks',
     error: undefined,
@@ -1932,7 +1987,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   legalRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Legal risks.  (See below for a sample)',
     value: '',
     refSelector: 'isLegalRisks',
     error: undefined,
@@ -1948,7 +2003,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   environmentalRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Environmental risks.  (See below for a sample)',
     value: '',
     refSelector: 'isEnvironmentalRisks',
     error: undefined,
@@ -1962,7 +2017,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   itRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your IT risks.  (See below for a sample)',
     value: '',
     refSelector: 'isItRisks',
     error: undefined,
@@ -1976,7 +2031,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   accountingRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Accounting risks.  (See below for a sample)',
     value: '',
     refSelector: 'isAccountingRisks',
     error: undefined,
@@ -1990,7 +2045,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   ipRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your IP risks.  (See below for a sample)',
     value: '',
     refSelector: 'isIpRisks',
     error: undefined,
@@ -2004,7 +2059,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   regulatoryRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Regulatory risks.  (See below for a sample)',
     value: '',
     refSelector: 'isRegulatoryRisks',
     error: undefined,
@@ -2020,7 +2075,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   regulatoryFoodRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Regulatory Food risks.  (See below for a sample)',
     value: '',
     refSelector: 'isRegulatoryFoodRisks',
     error: undefined,
@@ -2036,7 +2091,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   taxRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Tax risks.  (See below for a sample)',
     value: '',
     refSelector: 'isTaxRisks',
     error: undefined,
@@ -2050,7 +2105,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   limitedRepaymentRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Limited Repayment risks.  (See below for a sample)',
     value: '',
     refSelector: 'isLimitedRepaymentRisks',
     error: undefined,
@@ -2064,7 +2119,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   relatingForecastsRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Relating Forecasts risks.  (See below for a sample)',
     value: '',
     refSelector: 'isRelatingForecastsRisks',
     error: undefined,
@@ -2078,7 +2133,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   debtFinancingRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Debt Financing risks.  (See below for a sample)',
     value: '',
     refSelector: 'isDebtFinancingRisks',
     error: undefined,
@@ -2092,7 +2147,7 @@ export const RISK_FACTORS = {
     skipField: true,
   },
   conflictOfInterestRisks: {
-    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    label: 'Please describe your Conflict of Interest risks.  (See below for a sample)',
     value: '',
     refSelector: 'isConflictOfInterestRisks',
     error: undefined,
@@ -2101,118 +2156,119 @@ export const RISK_FACTORS = {
   },
 };
 
+
 export const COMMON = {
   hasTheIssuer: {
     label: '1. Has the issuer, its predecessors or any affiliated issuer been convicted of any felony or misdemeanor in the last 5 years: i) In connection with the purchase or sale of any security; ii) Involving the making of any false filing with the SEC; iii) Arising out of the conduct of the business of an underwriter, broker, dealer, municipal securities dealer, investment adviser, funding portal or paid solicitor of purchasers of securities',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   isTheIssuerSubjectTo: {
     label: '2. Is the Issuer subject to any order, judgment or decree of any court of competent jurisdiction, within 5 years before the filing that restrains or enjoins such person from engaging or continuing to engage in any conduct or practice: i) In connection with the purchase or sale of any security; ii) Involving the making of any false filing with the SEC; iii) Arising out of the conduct of the business of an underwriter, broker, dealer, municipal securities dealer, investment adviser, funding portal or paid solicitor of purchasers of securities',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   isAnyCoveredPersonSubjectToAnOrderThree: {
     label: '3. Is any covered person subject to a final order of a state securities commission (or an agency or officer of a state performing like functions); a state authority that supervises or examines banks, savings associations or credit unions, a state insurance commission (or an agency or officer of a state performing like functions); an appropriate federal banking agency; the U.S. Commodity Futures Trading Commission; or the National Credit Union Administration that: i) At the time of filing, bars the person from (A) Association with an entity regulated by such commission, authority, agency or officer (B) Engaging in the business of securities, insurance or banking; or (C) Engaging in savings association or credit union activities; or ii) Constitutes a final order based on a violation of any law or regulation that prohibits fraudulent, manipulative or deceptive conduct entered within ten years before such filing of the offering statement',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   isAnyCoveredPersonSubjectToAnOrderFour: {
     label: '4. Is any covered person subject to an order of the Commission entered pursuant to section 15(b) or 15B(c) of the Exchange Act or section 203(e) or (f) of the Investment Advisers Act of 1940 that at the time of filing: i) Suspends or revokes such person`s registration as a broker, dealer, municipal securities dealer, investment adviser or funding portal; ii) Places limitations on the activities, functions or operations of such person; iii) Bars such person from being associated with any entity or from participating in the offering of any penny stock',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   isAnyCoveredPersonSubjectToOrderFive: {
     label: '5. Is any covered person subject to any order of the Commission entered within 5 years before the filing that orders the person to cease and desist from committing or causing a violation or future violation of: i) any scienter-based anti-fraud provision of the federal securities laws or ii) Section 5 of the Securities Act',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   isAnyCoveredPersonSubjectToOrderSix: {
     label: '6. Is any covered person suspended or expelled from membership in, or suspended or barred from association with a member of, a registered national securities exchange or a registered national or affiliated securities association for any act or omission to act constituting conduct inconsistent with just and equitable principles of trade',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   isAnyCoveredPersonSubjectToOrderSeven: {
     label: '7. Has any covered person filed (as a registrant or user), or was named as an underwriter in, any registration statement or Reg A offering statement filed with the Commission that, within 5 years before this filing, was the subject of a refusal order, stop order, or order suspending the Reg A exemption, or is, at the time of such filing, the subject of an investigation or proceeding to determine whether a stop order or suspension order should be issued',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   isAnyCoveredPersonSubjectToOrderEight: {
     label: '8. Is any covered person subject to a U.S.P.S. false representation order entered within 5 years before the filing of the information required by section 4A(b) of the Securities Act, or is, at the time of such filing, subject to a temporary restraining order or preliminary injunction with respect to conduct alleged by the U.S.P.S. to constitute a scheme or device for obtaining money or property through the mail by means of false representations',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   certificateOfFormation: {
     label: 'Certificate of Formation',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   operatingAgreement: {
     label: 'Operating Agreement',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   evidenceOfGoodStanding: {
     label: 'Evidence of good standing',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   whoAreThesePeople: {
     label: 'Who are executive officers, directors, control persons, promoters, beneficial owners of 20 percent or more of the issuer’s outstanding voting equity securities, calculated on the basis of voting power?',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   sanctionsListSearch: {
     label: 'OFAC sanctions list search',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   pendingCivilLawsuits: {
     label: 'Pending civil lawsuits',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   pendingLiens: {
     label: 'Pending liens/bankruptcy judgments',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   generalOnlineReputationSearch: {
     label: 'General online reputation search',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
 };
 
@@ -2222,7 +2278,7 @@ export const ISSUER = {
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   certificateFormation: { ...COMMON.certificateOfFormation },
   operatingAgreement: { ...COMMON.operatingAgreement },
@@ -2304,6 +2360,13 @@ export const LEADER = {
       error: undefined,
       rule: 'string',
       skipField: true,
+    },
+    otherEntities: {
+      label: 'Names of other entities over which you have control',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      defaultValue: 'Type your text here...',
     },
     controlPersonQuestionnaire: {
       label: 'Control Person Questionnaire',
@@ -2588,32 +2651,46 @@ export const ADMIN_DOCUMENTATION = {
   },
 };
 
+const DATA_ROOM_COMMON = {
+  name: {
+    label: 'Document Name',
+    value: '',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  upload: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'required',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+  },
+  accreditedOnly: {
+    label: '',
+    value: false,
+    error: undefined,
+    default: false,
+    rule: 'required',
+  },
+};
+
 export const DATA_ROOM = {
-  documents: [{
-    name: {
-      label: 'Document Name',
-      value: '',
-      error: undefined,
-      rule: 'required|string',
-      placeHolder: 'Enter here',
-    },
-    upload: {
-      value: '',
+  documents: [{ ...DATA_ROOM_COMMON }],
+};
+
+export const CLOSING_BINDING = {
+  closingBinder: [{
+    ...DATA_ROOM_COMMON,
+    status: {
       label: '',
+      value: 'COMPLETE',
       error: undefined,
-      rule: 'required',
-      showLoader: false,
-      preSignedUrl: '',
-      fileId: '',
-      fileData: '',
-      objType: 'FileObjectType',
-    },
-    accreditedOnly: {
-      label: '',
-      value: false,
-      error: undefined,
-      default: false,
-      rule: 'required',
+      rule: 'optional',
     },
   }],
 };

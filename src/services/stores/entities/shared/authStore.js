@@ -399,7 +399,7 @@ export class AuthStore {
               businessAppStore.setBasicFormError(get(data, 'checkEmailExistsPresignup.roles') && get(data, 'checkEmailExistsPresignup.roles').includes('issuer') ? 'This email is already exists as an issuer. Please Log In' : `This email address is already exists as ${get(data, 'checkEmailExistsPresignup.roles').includes('admin') ? 'admin' : 'investor'}. Please try with differrent email.`);
               res();
             } else {
-              this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
+              this.SIGNUP_FRM.fields.email.error = 'Email already exists, did you mean to log in?';
               this.SIGNUP_FRM.meta.isValid = false;
               rej();
             }
@@ -519,8 +519,10 @@ export class AuthStore {
 
       errors.networkError = networkErr;
     }
-
-
+    if (window.FS && window.FS.getCurrentSessionURL) {
+      const fullStorySession = window.FS.getCurrentSessionURL(true);
+      errors.fullStoryUrl = fullStorySession;
+    }
     const params = {
       emailContent: JSON.stringify(errors),
     };

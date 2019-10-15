@@ -110,7 +110,7 @@ const PrivacyPolicy = () => (
         </p>
         <p>
           In addition to the information we gather on the Site and Platform, we may use
-          web beacons within e-mails that we send to track whether you actually view our
+          web beacons within emails that we send to track whether you actually view our
           messages or content.<br />
           At this time, the Service does not respond to Do Not Track (“DNT”) signals sent
           by your browser, but some of our third-party providers may honor these signals
@@ -283,7 +283,7 @@ const PrivacyPolicy = () => (
           Service, you consent to Personal Information being transferred to the United States for
           the purposes described in this Privacy Policy.
         </p>
-        <Header as="h5">8. Opting Out of Receiving E-Mail Communications </Header>
+        <Header as="h5">8. Opting Out of Receiving EMail Communications </Header>
         <p>
           With your permission, we may send notifications, promotions, or other information via
           email (“Communications”). You may choose to stop receiving Communications by indicating
@@ -319,7 +319,7 @@ const PrivacyPolicy = () => (
           Personal Information from us for their direct marketing purposes during that calendar
           year, and (iii) examples of the products or services marketed (if we have that
           information). If you are a California resident and would like to make such a request,
-          please e-mail us at{' '}
+          please email us at{' '}
           <a target="_blank" className="positive-text" href="mailto:privacy@nextseedsecurities.com">privacy@nextseed.com</a>.
         </p>
         <Header as="h5">11. Children&apos;s Online Privacy Protection</Header>
@@ -328,7 +328,7 @@ const PrivacyPolicy = () => (
         <p>
           We may change, modify, add, or remove portions of this Privacy Policy at any time. We
           will provide you with notice of material changes to the Privacy Policy as appropriate
-          under the circumstances (e.g., by posting a notice on the Service; by sending an e-mail
+          under the circumstances (e.g., by posting a notice on the Service; by sending an email
           to you if you are a registered user). Any changes or updates will be effective
           immediately upon posting to this page, and the date of such change or update will be
           posted at the top of the page.

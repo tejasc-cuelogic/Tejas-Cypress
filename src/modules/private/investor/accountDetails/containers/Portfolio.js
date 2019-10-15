@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { includes, orderBy, get, filter } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Switch } from 'react-router-dom';
 import { Header, Card, Button } from 'semantic-ui-react';
 import money from 'money-math';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
@@ -88,7 +88,7 @@ export default class Portfolio extends Component {
   routesList = () => {
     const { match } = this.props;
     return (
-      <>
+      <Switch>
         <Route
           path={`${match.url}/investment-details/:id`}
           render={props => <InvestmentDetails refLink={match.url} {...props} />}
@@ -104,7 +104,7 @@ export default class Portfolio extends Component {
           path={`${match.url}/cancel-investment/:id`}
           render={props => <CancelInvestment accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}
         />
-      </>
+      </Switch>
     );
   }
 
@@ -162,7 +162,7 @@ export default class Portfolio extends Component {
     };
     if (get(referralData, 'availableCredit') !== '0.00') {
       const availableCredit = {
-        title: 'Availabe Credit', content: get(referralData, 'availableCredit'), type: 1, info: `Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest. ${getActiveAccounts.length > 1 ? 'Referral credits are shared amongst all of your investment accounts.' : ''}`,
+        title: 'Available Credit', content: get(referralData, 'availableCredit'), type: 1, info: `Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest. ${getActiveAccounts.length > 1 ? 'Referral credits are shared amongst all of your investment accounts.' : ''}`,
       };
       summaryDetails.summary.push(availableCredit);
     }

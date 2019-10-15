@@ -109,3 +109,99 @@ export const syncEsDocument = gql`
 mutation syncEsDocument($documentId: String!, $targetIndex: String!, $userId: String, $accountType: [InvestorAccountTypeEnum]){
   syncEsDocument(documentId: $documentId, targetIndex: $targetIndex, userId: $userId, accountType: $accountType)
 }`;
+
+export const imageProcessignRequest = gql`
+mutation _imageProcessing($key: String, $waitingTime: Int, $concurrency: Int,$queueLimit: Int, $folderName: String) {
+  imageProcessing(
+    key: $key,
+    waitingTime: $waitingTime
+    concurrency: $concurrency
+    queueLimit: $queueLimit
+    folderName: $folderName
+  )
+}`;
+
+export const getPluginList = gql`
+query _listRequestPlugins {
+  listRequestPlugins {
+    plugins{
+      name
+      plugin
+      pluginInputs{
+        label
+        type
+        value
+        key
+        rule
+        defaultValue
+      }
+    }
+  }
+  listCronPlugins
+  {
+    plugins {
+      name
+      pluginInputs {
+        name
+      }
+    }
+  }
+  listProcessorPlugins
+  {
+    plugins{
+      name
+      plugin
+      pluginInputs{
+        label
+        type
+        value
+        key
+        rule
+        defaultValue
+      }
+    }
+  }
+}
+`;
+
+export const requestFactoryPluginTrigger = gql`
+mutation invokeRequest($method: RequestWorkerPluginsEnum!, $payload: String, $invocationType: RequestInvocationEnum) {
+  invokeRequest(
+    method: $method,
+    payload: $payload
+    invocationType: $invocationType
+  )
+}`;
+
+export const fetchCronLogs = gql`
+query _fetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaTypeEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+  fetchCronLogs(
+    cron: $cron,
+    jobId: $jobId
+    cronMetaType: $cronMetaType
+    fromDate: $fromDate
+    toDate: $toDate
+    lek: $lek
+    limit: $limit
+  )
+  {
+    cronLog{
+      jobId
+      execStatus
+      cron
+      execInitiatedOn
+      cronMetaType
+    }
+    resultCount
+    totalCount
+    lek
+  }
+}`;
+
+export const processFactoryPluginTrigger = gql`
+mutation _invokeProcessorDriver($method: DevAuditTypeEnum, $payload: String) {
+  invokeProcessorDriver(
+    method: $method,
+    payload: $payload
+  )
+}`;

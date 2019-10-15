@@ -50,7 +50,7 @@ export default class FinancialInfo extends Component {
 
   getStatus = (accName) => {
     let status = '';
-    status = accName ? (accName.status === 'REQUESTED' && accName.expiration && (DataFormatter.diffDays(DataFormatter.formatedDate(accName.expiration), false, true) < 0)) ? 'Expired' : (accName.status && ACCREDITATION_STATUS_LABEL[accName.status]) : '-';
+    status = accName ? (accName.status === 'CONFIRMED' && accName.expiration && (DataFormatter.diffDays(DataFormatter.formatedDate(accName.expiration), false, true) < 0)) ? 'Expired' : (accName.status && ACCREDITATION_STATUS_LABEL[accName.status]) : '-';
     return status;
   }
 
@@ -163,10 +163,10 @@ export default class FinancialInfo extends Component {
                             <dd>{this.getDate(accreditationData[account.name])}</dd>
                           </dl>
                           <Divider hidden />
-                          {accreditationData[account.name].status === 'INVALID'
+                          {(accreditationData[account.name].status === 'INVALID' || this.getStatus(accreditationData[account.name]) === 'Expired')
                             ? (
 <Card.Description>
-                              <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify Accreditation" />
+                              <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content={this.getStatus(accreditationData[account.name]) === 'Expired' ? 'Re-verify status' : 'Verify Status'} />
                             </Card.Description>
                             ) : ''
                           }
