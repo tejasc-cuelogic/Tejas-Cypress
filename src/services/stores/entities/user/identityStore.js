@@ -49,7 +49,7 @@ export class IdentityStore {
     ciphardFail: { steps: ['userCIPHardFail', 'userCIPFail'], url: INVESTOR_URLS.cipHardFail },
     cipSoftFail: { steps: ['userCIPSoftFail'], url: INVESTOR_URLS.cipSoftFail },
     cipPass: { steps: ['userCIPPass', 'OFFLINE', 'phoneMfa'], url: INVESTOR_URLS.phoneVerification },
-    cip: { steps: ['UNIQUE_SSN', 'Address Verification', 'PHONE_VERIFICATION'], url: INVESTOR_URLS.cip },
+    cip: { steps: ['UNIQUE_SSN', 'ADDRESS_VERIFICATION', 'PHONE_VERIFICATION'], url: INVESTOR_URLS.cip },
   }
 
   @action
