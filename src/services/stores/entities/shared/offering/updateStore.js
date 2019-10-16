@@ -67,13 +67,12 @@ export class UpdateStore {
   initiateFilters = () => {
     const { keyword } = this.requestState.search;
     let resultArray = [];
+    this.setDb(this.data.data.offeringUpdatesByOfferId);
     if (keyword) {
       resultArray = ClientDb.filterData('title', keyword, 'likenocase');
       this.setDb(resultArray);
       this.requestState.page = 1;
       this.requestState.skip = 0;
-    } else {
-      this.setDb(this.data.data.offeringUpdatesByOfferId);
     }
   }
 
