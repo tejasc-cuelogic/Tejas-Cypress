@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
-import { orderBy, get, forEach, findIndex, map } from 'lodash';
+import { orderBy, get, forEach, findIndex } from 'lodash';
 import moment from 'moment';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -7,6 +7,7 @@ import { paymentsIssuerList, updatePaymentIssuer } from '../../queries/Repayment
 import { PAYMENT } from '../../../constants/payment';
 import { uiStore } from '../../index';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
+import Helper from '../../../../helper/utility';
 
 export class PaymentStore extends DataModelStore {
   constructor() {
@@ -30,13 +31,6 @@ export class PaymentStore extends DataModelStore {
       direction: 'asc',
     }
 
-    formChange = (e, result, form) => {
-      this[form] = Validator.onChange(
-        this[form],
-        Validator.pullValues(e, result),
-      );
-    }
-
     setSortingOrder = (column = null, direction = null) => {
       this.sortOrder.column = column;
       // this.sortOrder.listData = listData;
@@ -54,12 +48,8 @@ export class PaymentStore extends DataModelStore {
     };
 
     setDb = (data) => {
-      const d = map(data, (dd) => {
-        const de = { ...dd };
-        return de;
-      });
-      this.setFieldValue('initialData', d);
-      this.setFieldValue('data', ClientDb.initiateDb(d, true));
+      this.setFieldValue('initialData', data);
+      this.setFieldValue('data', ClientDb.initiateDb(data, true));
     }
 
     getOfferingById = (id) => {
@@ -77,13 +67,7 @@ export class PaymentStore extends DataModelStore {
 
     updatePayment = id => new Promise((resolve, reject) => {
       uiStore.setProgress();
-      const data = this.getPaymentFormData();
-      const variables = {
-        launchExpectedOpsDate: data.expectedOpsDate,
-        operationsDate: data.operationsDate,
-        keyTermsAnticipatedPaymentStartDate: data.expectedPaymentDate,
-        repaymentStartDate: data.firstPaymentDate,
-      };
+      const variables = Helper.replaceKeysDeep(toJS(Validator.evaluateFormData(this.PAYMENT_FRM.fields)), { expectedOpsDate: 'launchExpectedOpsDate', operationsDate: 'operationsDate', expectedPaymentDate: 'keyTermsAnticipatedPaymentStartDate', firstPaymentDate: 'repaymentStartDate' });
       client
         .mutate({
           mutation: updatePaymentIssuer,
@@ -143,7 +127,6 @@ decorate(PaymentStore, {
   initialData: observable,
   offeringDetails: observable,
   sortOrder: observable,
-  formChange: action,
   setSortingOrder: action,
   initRequest: action,
   getOfferingById: action,
