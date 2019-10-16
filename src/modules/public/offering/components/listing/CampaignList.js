@@ -125,15 +125,15 @@ export default class CampaignList extends Component {
                               />
                             </Card.Description>
                             <Divider />
-                            <Table verticalAlign="top" basic="very" compact="very" className="no-border campaign-card">
+                            <Table basic="very" compact="very" unstackable className="no-border campaign-card">
                             <Table.Body>
                                 {keyTermList.map(row => (
                                   <>
                                   {(row.for.includes('ALL') || row.for.includes(offering.keyTerms.securities))
                                   && (
-                                  <Table.Row>
-                                    <Table.Cell collapsing>{row.label}</Table.Cell>
-                                    <Table.Cell className={!row.for.includes('ALL') ? 'highlight-text' : ''}>
+                                  <Table.Row verticalAlign="top">
+                                    <Table.Cell collapsing>{row.label}:</Table.Cell>
+                                    <Table.Cell className={`${!row.for.includes('ALL') ? 'highlight-text' : ''} right-align`}>
                                       {get(offering, row.key)
                                         ? (
                                       <>

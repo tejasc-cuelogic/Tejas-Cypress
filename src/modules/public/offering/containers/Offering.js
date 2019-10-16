@@ -37,7 +37,7 @@ class Offering extends Component {
           loading={loading}
           campaigns={active}
           filters
-          heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-30' : 'mb-50'}>Active Campaigns</Header>}
+          heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-10' : 'mb-50'}>Active Campaigns</Header>}
           subheading={<p className="campaign-subheader center-align">Invest in the growth of the following local businesses</p>}
         />
         {activeList && activeList.length > RECORDS_TO_DISPLAY
@@ -48,7 +48,7 @@ class Offering extends Component {
         <Divider hidden />
         <section className="bg-offwhite">
           <Container textAlign="center">
-            <Header as="h2">Be the first to know about new opportunities</Header>
+            <Header as={isMobile ? 'h3' : 'h2'}>Be the first to know about new opportunities</Header>
             <p className="mb-30">
               Sign up to have exclusive investment opportunities delivered straight to your inbox.
             </p>
@@ -62,7 +62,7 @@ class Offering extends Component {
               loading={loading}
               campaigns={completed}
               locked={3}
-              heading={<Header as="h2" textAlign="center" caption className="mb-50">Successfully Funded on NextSeed</Header>}
+              heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-10' : 'mb-50'}>Successfully Funded on NextSeed</Header>}
             />
           )
         }

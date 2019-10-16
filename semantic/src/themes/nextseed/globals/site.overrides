@@ -531,6 +531,10 @@ footer{
 		line-height: 24px;
 		font-weight: @semiBold;
 		margin-bottom: 100px;
+		@media only screen and (max-width : @largestMobileScreen){
+			font-size: @15px;
+			margin-bottom: @20px;
+		}
 	}
 }
 .offer-filter {
