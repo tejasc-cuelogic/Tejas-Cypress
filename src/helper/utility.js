@@ -320,6 +320,8 @@ export class Utility {
     return IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(fileExt.toLowerCase()) ? isMobile ? prepName(640) : isTablet ? prepName(1024) : prepName(1920) : prepName();
   }
 
+  caseify = s => _.startCase(_.lowerCase(s));
+
   validateImageExtension = (ext) => {
     const obj = {
       isInvalid: !IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()),

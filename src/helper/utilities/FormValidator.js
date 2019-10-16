@@ -3,7 +3,7 @@
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
 import moment from 'moment';
-import { mapValues, set, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach } from 'lodash';
+import { mapValues, set, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach, get } from 'lodash';
 import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
@@ -127,7 +127,10 @@ class FormValidator {
           if (field[0] === 'businessPlan') {
             currentForm.fields[field[0]].error = err;
           } else {
-            currentForm.fields[field[0]][field[1]][field[2]].error = err;
+            let cusErr = get(currentForm.fields[field[0]][field[1]][field[2]], `customErrors.${[field[2]]}`);
+            cusErr = cusErr && field[0] === 'leadership' ? `Leader ${(parseInt(field[1], 10) + 1)} ${cusErr}` : cusErr;
+            currentForm.fields[field[0]][field[1]][field[2]].error = cusErr || err;
+            currentForm.meta.error = cusErr || err;
           }
         } else {
           currentForm.fields[key].error = err;
