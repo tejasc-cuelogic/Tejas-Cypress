@@ -137,7 +137,7 @@ export default class CampaignList extends Component {
                                     <Table.Cell collapsing>{row.label}</Table.Cell>
                                     <Table.Cell className={`${!isFunded && !row.for.includes('ALL') ? 'highlight-text' : ''} right-align`}>
                                       <b>
-                                      {get(offering, row.key) !== undefined
+                                      {(get(offering, row.key) !== undefined && get(offering, row.key) !== null)
                                         ? (
                                       <>
                                         {typeof row.type === 'object' ? (
