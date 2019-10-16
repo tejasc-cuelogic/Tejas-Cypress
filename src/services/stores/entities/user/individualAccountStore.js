@@ -74,7 +74,6 @@ class IndividualAccountStore {
             this.setFieldValue('showProcessingModal', true);
             bankAccountStore.resetStoreData();
             this.isFormSubmitted = true;
-            Helper.toast('Individual account submitted successfully.', 'success');
             resolve();
           }
         }).catch((err) => {
@@ -104,7 +103,6 @@ class IndividualAccountStore {
       uiStore.setProgress(false);
       if (res.data.createIndividualGoldStarInvestor) {
         this.setFieldValue('showProcessingModal', false);
-        Helper.toast('Individual account created successfully.', 'success');
         bankAccountStore.resetStoreData();
         this.isFormSubmitted = true;
       }
@@ -148,7 +146,6 @@ class IndividualAccountStore {
         },
         accountType: 'INDIVIDUAL',
       };
-      const actionPerformed = 'submitted';
       if (userDetailsStore.currentUser.data) {
         const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
         if (accountDetails || this.individualAccountId) {
@@ -167,12 +164,6 @@ class IndividualAccountStore {
               const { linkedBank } = result.data.upsertInvestorAccount;
               bankAccountStore.setPlaidAccDetails(linkedBank);
               this.setFieldValue('apiCall', false);
-            }
-            const { isValid } = bankAccountStore.formAddFunds.meta;
-            if (currentStep) {
-              if (currentStep.name === 'Add funds' && isValid) {
-                Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
-              }
             }
             uiStore.setErrors(null);
             uiStore.setProgress(false);
