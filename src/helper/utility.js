@@ -10,7 +10,7 @@ import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
 import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS } from '../constants/common';
 import authStore from '../services/stores/entities/shared/authStore';
-import userStore from './../services/stores/entities/userStore';
+import userStore from '../services/stores/entities/userStore';
 
 export class Utility {
   // Default options for the toast
