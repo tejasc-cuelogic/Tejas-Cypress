@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, withRouter, Link } from 'react-router-dom';
-import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
+import { Header, Form, Popup, Icon, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { get, includes } from 'lodash';
 import { MaskedInput } from '../../../../../theme/form';
@@ -9,6 +9,7 @@ import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 import Helper from '../../../../../helper/utility';
 import { Spinner } from '../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @inject('investmentStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
 @observer
@@ -50,7 +51,7 @@ class FinancialInfo extends Component {
     const validBonusRewards = investmentBonusRewards(investmentAmount);
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
-    const { match, refLink, offeringDetails } = this.props;
+    const { match, refLink, offeringDetails, submitStep, disableContinueButton } = this.props;
     const currentInvestmentLimit = getCurrentInvestNowHealthCheck
       && getCurrentInvestNowHealthCheck.investmentLimit
       ? getCurrentInvestNowHealthCheck.investmentLimit : 0;
@@ -136,6 +137,11 @@ class FinancialInfo extends Component {
             autoFocus
             allowNegative={false}
           />
+            {isMobile
+                && (
+                  <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+                )
+              }
         </Form>
         {this.props.changeInvest && getDiffInvestmentLimitAmount
           && INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00'

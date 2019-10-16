@@ -1,3 +1,4 @@
+/* eslint-disable react/sort-comp */
 import React from 'react';
 import { findIndex, map } from 'lodash';
 import { inject, observer } from 'mobx-react';
@@ -11,54 +12,6 @@ import NetWorthCheck from './shared/NetWorthQualCheck';
 import EntityAccreditationMethod from './shared/EntityAcceditationMethod';
 import TrustEntityAccreditationMethod from './shared/TrustEntityAccreditationMethod';
 
-const StepsMetaData = {
-  ACCREDITATION_FORM: {
-    name: '',
-    component: <IncomeQualCheck />,
-    isHideLabel: true,
-    formName: 'ACCREDITATION_FORM',
-    isDirty: true,
-    disablePrevButton: true,
-  },
-  NETWORTH_QAL_FORM: {
-    name: 'Net worth',
-    component: <NetWorthCheck />,
-    formName: 'NETWORTH_QAL_FORM',
-    isDirty: true,
-  },
-  NET_WORTH_FORM: {
-    name: 'Net worth',
-    component: <NetWorth />,
-    formName: 'NET_WORTH_FORM',
-    isDirty: true,
-  },
-  INCOME_EVIDENCE_FORM: {
-    name: 'Evidence',
-    component: <IncomeEvidence />,
-    formName: 'INCOME_EVIDENCE_FORM',
-    isDirty: true,
-  },
-  VERIFICATION: {
-    name: 'Verification',
-    component: <Verification />,
-    isDirty: true,
-  },
-  ENTITY_ACCREDITATION_FORM: {
-    name: '',
-    component: <EntityAccreditationMethod />,
-    isHideLabel: true,
-    isDirty: true,
-    formName: 'ENTITY_ACCREDITATION_FORM',
-  },
-  TRUST_ENTITY_ACCREDITATION_FRM: {
-    name: '',
-    component: <TrustEntityAccreditationMethod />,
-    isHideLabel: true,
-    isDirty: true,
-    formName: 'TRUST_ENTITY_ACCREDITATION_FRM',
-  },
-};
-
 @inject('uiStore', 'accreditationStore')
 @withRouter
 @observer
@@ -69,6 +22,60 @@ export default class PopulateAccreditationSteps extends React.Component {
   //   this.props.accreditationStore.setFieldVal('firstInit', true);
   // }
   // }
+
+  handleSubmitStep = () => { // only for mobile screens
+    const { stepToBeRendered } = this.props.accreditationStore;
+    const { multiSteps } = this.props.uiStore;
+    this.props.multiClickHandler(multiSteps[stepToBeRendered]);
+  }
+
+  StepsMetaData = {
+    ACCREDITATION_FORM: {
+      name: '',
+      component: <IncomeQualCheck submitStep={this.handleSubmitStep} />,
+      isHideLabel: true,
+      formName: 'ACCREDITATION_FORM',
+      isDirty: true,
+      disablePrevButton: true,
+    },
+    NETWORTH_QAL_FORM: {
+      name: 'Net worth',
+      component: <NetWorthCheck submitStep={this.handleSubmitStep} />,
+      formName: 'NETWORTH_QAL_FORM',
+      isDirty: true,
+    },
+    NET_WORTH_FORM: {
+      name: 'Net worth',
+      component: <NetWorth submitStep={this.handleSubmitStep} />,
+      formName: 'NET_WORTH_FORM',
+      isDirty: true,
+    },
+    INCOME_EVIDENCE_FORM: {
+      name: 'Evidence',
+      component: <IncomeEvidence submitStep={this.handleSubmitStep} />,
+      formName: 'INCOME_EVIDENCE_FORM',
+      isDirty: true,
+    },
+    VERIFICATION: {
+      name: 'Verification',
+      component: <Verification submitStep={this.handleSubmitStep} />,
+      isDirty: true,
+    },
+    ENTITY_ACCREDITATION_FORM: {
+      name: '',
+      component: <EntityAccreditationMethod submitStep={this.handleSubmitStep} />,
+      isHideLabel: true,
+      isDirty: true,
+      formName: 'ENTITY_ACCREDITATION_FORM',
+    },
+    TRUST_ENTITY_ACCREDITATION_FRM: {
+      name: '',
+      component: <TrustEntityAccreditationMethod submitStep={this.handleSubmitStep} />,
+      isHideLabel: true,
+      isDirty: true,
+      formName: 'TRUST_ENTITY_ACCREDITATION_FRM',
+    },
+  };
 
   handleMultiStepModalclose = () => {
     this.props.history.push('/app/account-settings/investment-limits');
@@ -85,8 +92,8 @@ export default class PopulateAccreditationSteps extends React.Component {
     const { formArray, accreditationStore } = this.props;
     const steps = map(formArray, (form, index) => {
       const formObj = {
-        ...StepsMetaData[form.key],
-        isHideLabel: StepsMetaData[form.key].isHideLabel || false,
+        ...this.StepsMetaData[form.key],
+        isHideLabel: this.StepsMetaData[form.key].isHideLabel || false,
       };
       formObj.stepToBeRendered = index + 1;
       if (form.component) {
@@ -117,7 +124,7 @@ export default class PopulateAccreditationSteps extends React.Component {
       formValidCheck, showLoader,
     } = this.props.accreditationStore;
     const {
-      inProgress, inProgressArray,
+      inProgress, setFieldvalue, inProgressArray,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
@@ -146,6 +153,7 @@ export default class PopulateAccreditationSteps extends React.Component {
           setStepTobeRendered={this.handleStepChange}
           stepToBeRendered={this.props.accreditationStore.stepToBeRendered}
           formHeaderClick
+          setUiStorevalue={setFieldvalue}
         />
       </div>
     );

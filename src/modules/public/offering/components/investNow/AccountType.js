@@ -249,6 +249,7 @@ class AccountType extends Component {
     const { getCurrentInvestNowHealthCheck, investNowError } = this.props.investmentLimitStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { campaign } = this.props.campaignStore;
+    const { disableContinueButton, submitStep } = this.props;
     const offeringId = get(campaign, 'id');
     // const offeringDetailObj =
     //  this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
@@ -350,6 +351,11 @@ class AccountType extends Component {
                     fielddata={investAccTypes}
                     changed={accTypeChanged}
                   />
+                  {isMobile
+                  && (
+                    <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+                  )
+                  }
                 </>
                 )
                 : (

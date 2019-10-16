@@ -253,7 +253,10 @@ export default class MultiStep extends React.Component {
           dimmer={isMobile && 'inverted'}
           centered={!isMobile}
         >
-          {!this.props.hideHeader && !isMobile
+          {!this.props.hideHeader
+            && (
+          <>
+          {!isMobile
             ? (
             <>
               <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
@@ -283,6 +286,9 @@ export default class MultiStep extends React.Component {
                 />
                 <Progress percent={((this.state.compState + 1) / (this.props.steps.length + 1)) * 100} attached="bottom" color="green" />
               </Modal.Header>
+            )
+          }
+          </>
             )
           }
           <Dimmer active={this.props.inProgress} className={this.props.inProgress && 'fullscreen' ? 'fullscreen' : ''}>
