@@ -2141,6 +2141,32 @@ svg:not(:root).recharts-surface{
 	overflow:visible;
 }
 .donut-chart, .portfolio-allocation{
+	.recharts-legend-wrapper .chartLegends{
+		@media only screen and (max-width : @largestMobileScreen){
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: space-around;
+			padding-left: @20px;		
+		}
+		li{
+			font-size:@22px;
+			line-height: 30px;
+			margin: 0 @10px 0 0;
+			span{
+				font-size:@13px;
+				color:@fullBlack;
+				i {
+					color: @neutral-offdark;
+				}
+			}
+		}
+	}
+	&.industry-chart .recharts-legend-wrapper .chartLegends{
+		@media only screen and (max-width : @largestMobileScreen){
+			justify-content: space-between;		
+		}
+	}
 	.recharts-wrapper{
 		.recharts-legend-wrapper{
 			z-index:-1;
