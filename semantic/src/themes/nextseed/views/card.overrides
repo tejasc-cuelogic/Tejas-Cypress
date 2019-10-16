@@ -11,11 +11,18 @@
             border: 1px solid @neutral-darkwhite;
             .campaign-image-wrap .campaign-card-image{
                 padding-top: 0;
+                @media only screen and (max-width : @monitorBreakpoint){
+                    padding-top: 66.66%;
+                }
             }
             .campaign-card-details{
                 margin-top: 0;
                 min-height: 392px;
                 max-height: 392px;
+                @media only screen and (max-width : @monitorBreakpoint){
+                    min-height: 415px;
+                    max-height: 100%;
+                }
             }
             .ui.labels, .icon.heart{
                 display: none;
@@ -23,6 +30,10 @@
             >.content.card-hidden{
                 min-height: 155px;
                 max-height: 155px;
+                @media only screen and (max-width : @monitorBreakpoint){
+                    min-height: 415px;
+                    max-height: 100%;
+                }
             }
         }
         .campaign-image-wrap{
@@ -33,6 +44,9 @@
                 border-radius:@6px @6px 0 0;
                 overflow:hidden;
                 transition: all 0.5s ease-in-out;
+                @media only screen and (max-width : @monitorBreakpoint){
+                    transition: none;
+                }
                 >div{
                     background-size:cover;
                     background-repeat:no-repeat;
@@ -54,6 +68,9 @@
             left:12px;
             display: inline-block;
             transition: all 0.5s ease-in-out;
+            @media only screen and (max-width : @monitorBreakpoint){
+                transition: none;
+            }
             .ui.label{
                 border:none;
                 text-transform:uppercase;
@@ -85,9 +102,17 @@
             overflow: hidden;
             transition: all 0.5s ease-in-out;
             background: @white;
+            @media only screen and (max-width : @monitorBreakpoint){
+                min-height: 415px;
+                max-height: 100%;
+                transition: none;
+            }
             .content{
                 padding:@21px @28px;
                 transition: all 0.5s ease-in-out;
+                @media only screen and (max-width : @monitorBreakpoint){
+                    transition: none;
+                }
                 @media only screen and (max-width : @largestMobileScreen){
                     padding:@20px @22px;
                 }
@@ -97,6 +122,9 @@
                     line-height: 24px;
                     color: @neutral;
                     font-weight: @bold;
+                    @media only screen and (max-width : @monitorBreakpoint){
+                        font-size: @16px;
+                    }
                 }
                 .tags{
                     font-size:@13px;
