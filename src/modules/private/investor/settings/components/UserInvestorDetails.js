@@ -289,7 +289,7 @@ export default class UserInvestorDetails extends Component {
           {!this.state.displayOnly && !isInvestmentExperienceValid
             && (
 <p className="negative-text">
-              Otherwise, please reference our <Link to="/app/resources/welcome-packet">Education Center </Link>
+              Otherwise, please reference our <Link to="/resources/education-center/investor">Education Center </Link>
               to learn more about investing on NextSeed.
             </p>
             )

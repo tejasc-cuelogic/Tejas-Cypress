@@ -125,7 +125,7 @@ export const AGREEMENT_DETAILS_INFO = {
       {
         label: (
           <>
-            I have reviewed NextSeed’s <Link to="/app/resources/welcome-packet">educational materials</Link>, understand that
+            I have reviewed NextSeed’s <Link to="/resources/education-center/investor">educational materials</Link>, understand that
             the entire amount of my investment may be lost, and confirm that I am in a
             financial condition to bear the loss. I have read and agree to the terms of
             the <a href="/">CrowdPay Custodial Account Agreement</a>,

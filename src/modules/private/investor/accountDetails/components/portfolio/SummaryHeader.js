@@ -10,7 +10,7 @@ import Helper from '../../../../../../helper/utility';
   1: amount so prefix $ sign
   2: date representation
 */
-
+const isMobile = document.documentElement.clientWidth < 992;
 const showValue = props => ((props.type === 1) && (props.title !== 'TNAR')
   ? (Helper.MoneyMathDisplayCurrency(props.content)) : (props.type === 1) && (props.title === 'TNAR') ? (props.content !== 'N/A') ? `${props.content} %` : `${props.content}`
     : (((props.type === 2) ? `date ${props.content}` : props.content)));
@@ -37,32 +37,37 @@ const SummaryHeader = props => (
       {props.details.title !== false && !props.details.businessName
         && <SummaryTitle {...props} />
       }
-      <Grid stackable doubling celled columns={props.cols || props.details.summary.length} className="custom-divided">
+      <Grid relaxed={!isMobile} stackable doubling celled columns={props.cols || props.details.summary.length} className="custom-divided">
         {
           props.details.summary.map(row => (
             <Grid.Column key={snakeCase(row.title)}>
               <Card.Content>
-                <Statistic size="mini" className={row.status}>
+                <Statistic size="mini" horizontal={isMobile} className={row.status}>
                   <Statistic.Label>
-                    {row.title}
-                    {row.info
-                      && (
-<Popup
-  trigger={<Icon className="ns-help-circle" />}
-  content={row.info}
-  position="top center"
-  wide
-  hoverable
-/>
-                      )
+                    <div>
+                      {row.title}
+                      {row.info
+                        && (
+                        <Popup
+                          trigger={<Icon className="ns-help-circle" />}
+                          content={row.info}
+                          position="top center"
+                          wide
+                          hoverable
+                        />
+                        )
+                      }
+                    </div>
+                    {row.title === 'Total Balance'
+                      && isMobile && <Link to={`/app/account-details/${props.details.accountType}/transfer-funds/add`}>Deposit funds</Link>
                     }
                   </Statistic.Label>
                   <Statistic.Value>{showValue(row)}</Statistic.Value>
-                  {row.title === 'Total Balance'
-                    && <Statistic.Label as={Link} className={props.details.isAccountFrozen ? 'disabled' : ''} to={`/app/account-details/${props.details.accountType}/transfer-funds/add`}>Deposit funds</Statistic.Label>
-                  }
                 </Statistic>
               </Card.Content>
+              {row.title === 'Total Balance'
+                && !isMobile && <Link className={`${props.details.isAccountFrozen ? 'disabled' : ''} mt-14 ml-18 display-block`} to={`/app/account-details/${props.details.accountType}/transfer-funds/add`}>Deposit funds</Link>
+              }
             </Grid.Column>
           ))
         }

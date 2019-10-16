@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
 import { Header, Card, Button } from 'semantic-ui-react';
-import { get } from 'lodash';
 // import money from 'money-math';
 import { InlineLoader } from '../../../../../theme/shared';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import CashMovement from '../components/CashMovement';
-import StickyNotification from '../components/stickyNotification';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 import AccountCreation from '../../accountSetup/containers/accountCreation';
 import IdentityVerification from '../../accountSetup/containers/identityVerification';
@@ -66,43 +64,33 @@ export default class Dashboard extends Component {
     const { summaryLoading, summary, getChartData } = this.props.portfolioStore;
     const cashMovementData = getChartData('cashMovement');
     const {
-      multipleUserAccounts, userAccreditationStatus,
       signupStatus,
     } = this.props.userDetailsStore;
     const isInitialAccountProcessing = signupStatus.activeAccounts.length === 0
     && signupStatus.processingAccounts.length > 0;
-    const notificationCard = {
-      message:
-  <span>
-        Are you an accredited investor? Go through the steps to verify your status
-        today, and for a limited time, we will add a $100 credit to your account.
-    <br /><a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
-  </span>,
-      header: 'Earn $100 by verifying your accredited investor status',
-    };
     if (summaryLoading) {
       return <InlineLoader />;
     }
     return (
       <>
-        <Route path="/app/summary/account-creation" component={AccountCreation} />
-        <Route exact path="/app/summary/identity-verification/:step" component={IdentityVerification} />
-        <Route path="/app/summary/establish-profile" component={EstablishProfile} />
+        <Route path="/app/setup/account-creation" component={AccountCreation} />
+        <Route exact path="/app/setup/identity-verification/:step" component={IdentityVerification} />
+        <Route path="/app/setup/establish-profile" component={EstablishProfile} />
         <PrivateLayout
           {...this.props}
           P4={
             <Button secondary as={Link} to="/offerings" content={isInitialAccountProcessing ? 'Browse Offerings' : 'Invest Now'} />
           }
-          P5={userAccreditationStatus && !get(multipleUserAccounts, 'noAccounts')
-            ? (
-<StickyNotification
-  {...this.props}
-  notificationCard={notificationCard}
-  multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
-  accountId={get(multipleUserAccounts, 'accountId') || null}
-  accountType={get(multipleUserAccounts, 'accountType') || null}
-/>
-            ) : ''}
+//           P5={userAccreditationStatus && !get(multipleUserAccounts, 'noAccounts')
+//             ? (
+// <StickyNotification
+//   {...this.props}
+//   notificationCard={notificationCard}
+//   multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
+//   accountId={get(multipleUserAccounts, 'accountId') || null}
+//   accountType={get(multipleUserAccounts, 'accountType') || null}
+// />
+//             ) : ''}
         >
           {
             isInitialAccountProcessing

@@ -57,7 +57,7 @@ export class SidebarNav extends Component {
           && props.signupStatus.inActiveAccounts.length > 0
             && (
 <Menu.Item className="btn-item mt-30">
-              <Button fluid basic compact as={Link} to="/app/summary/account-creation" content="Open New Account" />
+              <Button fluid basic compact as={Link} to="/app/setup/account-creation" content="Add New Account" />
             </Menu.Item>
             )
         }

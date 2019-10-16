@@ -41,7 +41,7 @@ export default class Congratulation extends React.Component {
     const { investmentAmount, investAccTypes } = this.props.investmentStore;
     const { campaign } = this.props.campaignStore;
     const accountType = investAccTypes && investAccTypes.value ? investAccTypes.value : '-';
-    const accountRedirectURL = accountType && accountType !== '-' ? `/app/account-details/${accountType}/portfolio` : '/app/summary';
+    const accountRedirectURL = accountType && accountType !== '-' ? `/app/account-details/${accountType}/portfolio` : '/app/setup';
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
     setTimeout(() => {

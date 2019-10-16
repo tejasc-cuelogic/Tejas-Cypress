@@ -7,23 +7,33 @@ import NotFound from '../../shared/NotFound';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const overrideContainerClass = ['account-details/:accountType/transactions'];
-@inject('uiStore', 'navStore')
+@inject('uiStore', 'navStore', 'userStore', 'userDetailsStore')
 @observer
 class PrivateLayout extends Component {
   render() {
     const { location, navStore } = this.props;
     const pageMeta = navStore.navMeta;
+    const { isInvestor } = this.props.userStore;
+    const { match } = this.props;
+    const {
+      processingAccounts,
+      partialAccounts,
+    } = this.props.userDetailsStore.signupStatus;
+    const splittedUrl = match.url.split('/');
+    const accType = splittedUrl.pop();
+    const isAccProcessing = processingAccounts.includes(accType);
+    const isAccPartial = partialAccounts.includes(accType);
     if (!pageMeta) {
       return <NotFound />;
     }
     return (
       <>
-        <div className="page-header-section">
+        <div className={`page-header-section ${isInvestor ? 'investor' : ''}`}>
           <Grid columns="equal" stackable>
             <Grid.Row>
               <Grid.Column verticalAlign="middle">
                 {!this.props.P0
-                  ? <Header as="h1">{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
+                  ? <Header as={isInvestor ? 'h3' : 'h1'}>{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
                   : this.props.P0
                 }
               </Grid.Column>
@@ -40,8 +50,8 @@ class PrivateLayout extends Component {
             </Grid.Row>
           </Grid>
         </div>
-        {((pageMeta.subPanel === 1 || this.props.subNav) && !this.props.hideSubNav)
-          && <SecondaryMenu addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
+        {((pageMeta.subPanel === 1 || this.props.subNav) && !this.props.hideSubNav && !(isInvestor && (isAccPartial || isAccProcessing)))
+          && <SecondaryMenu addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className={`${isInvestor ? 'investor' : ''} secondary-menu`} navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
         }
         {this.props.P1
           && (

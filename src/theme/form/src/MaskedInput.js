@@ -1,18 +1,21 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon, Button } from 'semantic-ui-react';
+import { Form, Popup, Icon, Button, Modal, Header } from 'semantic-ui-react';
 import { has } from 'lodash';
 import NumberFormat from 'react-number-format';
 import InputMask from 'react-input-mask';
 import { Link } from 'react-router-dom';
 import { FieldError } from '../../shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const NumberFormatWrapped = props => (
   <div className={props.wrapperClass}>
     <NumberFormat {...props} />
   </div>
 );
+
+
 @observer
 export default class MaskedInput extends Component {
   state = { showError: false };
@@ -44,18 +47,33 @@ export default class MaskedInput extends Component {
             {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
             {tooltip
               && (
-<Popup
-  hoverable={props.hoverable}
-  trigger={<Icon className="ns-help-circle" />}
-                // content={tooltip}
-  position="top center"
-  className={props.containerClassname}
-  wide
->
-                <Popup.Content>
-                  {tooltip}
-                </Popup.Content>
-              </Popup>
+                <>
+                {isMobile ? (
+                  <Modal style={{ top: '50%', transform: 'translate(0, -50%)' }} size="tiny" trigger={<Icon className="ns-help-circle" />} closeIcon>
+                    <Modal.Content>
+                      <Header as="h5">
+                        {label}
+                      </Header>
+                      <span>{tooltip}</span>
+                    </Modal.Content>
+                  </Modal>
+                )
+                  : (
+                  <Popup
+                    hoverable={props.hoverable}
+                    trigger={<Icon className="ns-help-circle" />}
+                    // content={tooltip}
+                    position={isMobile ? 'bottom center' : 'top center'}
+                    className={props.containerClassname}
+                    wide
+                  >
+                    <Popup.Content>
+                      {tooltip}
+                    </Popup.Content>
+                  </Popup>
+                  )
+                }
+                </>
               )
             }
             {props.removed

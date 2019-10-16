@@ -17,7 +17,7 @@ class LegalDetails extends React.Component {
     if ((this.props.userDetailsStore.signupStatus.isMigratedFullAccount
       && this.props.match.url !== this.props.userDetailsStore.pendingStep)
       || this.props.userDetailsStore.isLegaLVerificationDone) {
-      this.props.history.push('/app/summary');
+      this.props.history.push('/app/setup');
     }
   }
 
@@ -31,7 +31,7 @@ class LegalDetails extends React.Component {
   render() {
     const { form, change, close, autoComplete, name, inProgress, errors, onSubmit, maskChange } = this.props;
     return (
-        <Modal size="mini" open closeIcon onClose={close} closeOnEscape={false} closeOnDimmerClick={false}>
+        <Modal className={this.props.inProgress && 'dimmer-visible'} size="mini" open closeIcon onClose={close} closeOnEscape={false} closeOnDimmerClick={false}>
       <Modal.Header className="center-align signup-header">
         <Header as="h3" title={name} className="greeting">Welcome {name}</Header>
         <p>Let’s create your NextSeed investment account.</p>
@@ -167,7 +167,7 @@ class LegalDetails extends React.Component {
         </Form>
       </Modal.Content>
       <Modal.Actions className="signup-actions">
-        <p><Link to="/app/summary" onClick={close}>I’ll finish this later</Link></p>
+        <p><Link to="/app/setup" onClick={close}>I’ll finish this later</Link></p>
       </Modal.Actions>
     </Modal>
     );

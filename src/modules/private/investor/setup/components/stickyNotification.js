@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Statistic, Button } from 'semantic-ui-react';
+import { Card, Statistic, Button, Icon } from 'semantic-ui-react';
 import { get } from 'lodash';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -26,21 +26,24 @@ export default class StickyNotification extends Component {
   render() {
     const { props } = this;
     return (
-      <div className="top-cta-section">
-        <div className="sticky-notification">
-          <Card fluid raised>
-            <Card.Content>
+      <div className="closable-card">
+        <Button onClick={props.onCloseSticky} icon className="link-button">
+          <Icon className="ns-close-light" />
+        </Button>
+        <Card fluid raised>
+          <Card.Content>
+            <Statistic size="tiny" className="cta">
               {get(props, 'notificationCard.congratulations')
-                ? <Card.Meta>{get(props, 'notificationCard.congratulations')}</Card.Meta> : ''
+                ? <p className="intro-text text-uppercase"><b>{get(props, 'notificationCard.congratulations')}</b></p> : ''
               }
-              <Statistic size="mini" className="cta acc-verify-status">
-                <Statistic.Value className="mb-10">{get(props, 'notificationCard.header')}</Statistic.Value>
-                <Statistic.Label>{get(props, 'notificationCard.message')}</Statistic.Label>
-              </Statistic>
-              <Button onClick={e => this.handleVerifyAccreditation(e)} floated={!isMobile && 'right'} className={isMobile && 'mt-20'} compact color="green">Verify</Button>
-            </Card.Content>
-          </Card>
-        </div>
+              <Statistic.Value>{get(props, 'notificationCard.header')}</Statistic.Value>
+              <Statistic.Label>{get(props, 'notificationCard.message')}</Statistic.Label>
+            </Statistic>
+            <div className={`${isMobile ? 'ml-18' : ''} center-align`}>
+              <Button onClick={e => this.handleVerifyAccreditation(e)} className={isMobile && 'mt-20'} compact color="green">Verify</Button>
+            </div>
+          </Card.Content>
+        </Card>
       </div>
     );
   }

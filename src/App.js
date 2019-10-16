@@ -232,7 +232,7 @@ class App extends Component {
       );
     }
     return (
-      <div className={(!matchPath(location.pathname, { path: '/app' })) ? 'public-pages' : ''}>
+      <div className="public-pages">
         {this.props.authStore.isUserLoggedIn
           && (
             <IdleTimer

@@ -38,15 +38,16 @@ const checkStatus = (signupStatus, userDetailsStore) => {
   }
 };
 
-const StickyNotification = observer(({ signupStatus, userDetailsStore }) => {
+const StickyNotification = observer(({ signupStatus, userDetailsStore, isInvestor }) => {
   checkStatus(signupStatus, userDetailsStore);
   return (
-    <div className="top-cta-section">
-      <div className="sticky-notification">
+    <div className={!isInvestor && 'top-cta-section'}>
+      <div className={isInvestor ? 'closable-card' : 'sticky-notification'}>
         <Card fluid raised>
           <Card.Content>
-            <Card.Meta>{stepinfo.group}</Card.Meta>
+            {!isInvestor && <Card.Meta>{stepinfo.group}</Card.Meta>}
             <Statistic size="mini" className="cta">
+              {/* {isInvestor && <p className="intro-text text-uppercase"><b>{stepinfo.group}</b></p>} */}
               <Statistic.Value>{stepinfo.title}</Statistic.Value>
               <Statistic.Label>{stepinfo.label}</Statistic.Label>
             </Statistic>

@@ -15,6 +15,7 @@ const NO_PERMISSION_MSG = `Please contact
 const NO_LINKED_BANK_MSG = `No Linked Bank available to Transfer Fund, go to
   <a href='/app/account-details/ira/bank-accounts'>Bank Accounts<a>`;
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('educationStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'accountStore')
 @withRouter
 @observer
@@ -51,7 +52,7 @@ export default class TransferFunds extends Component {
         { !isEmpty(linkedBank) && accountType !== 'ira'
           ? (
             <>
-              <Header as="h4">Transfer funds</Header>
+              {!isMobile ? <Header as="h4">Transfer funds</Header> : ''}
               <Grid>
                 <Grid.Row>
                   <Grid.Column widescreen={7} largeScreen={10} computer={10} tablet={16} mobile={16}>

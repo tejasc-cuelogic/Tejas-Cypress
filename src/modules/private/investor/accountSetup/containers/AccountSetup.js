@@ -15,7 +15,7 @@ import {
 } from '../../../../../constants/account';
 
 const isMobile = document.documentElement.clientWidth < 768;
-@inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore', 'uiStore')
+@inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore', 'uiStore', 'userStore')
 @observer
 export default class AccountSetup extends Component {
   constructor(props) {
@@ -50,18 +50,21 @@ export default class AccountSetup extends Component {
       getStepStatus,
       isBasicVerDoneForMigratedFullUser,
     } = this.props.userDetailsStore;
+    const { isInvestor } = this.props.userStore;
     return (
       <PrivateLayout
         {...this.props}
+        forceTitle="Setup"
         P5={!signupStatus.finalStatus ? !currentUser.loading
           ? (
 <StickyNotification
+  isInvestor={isInvestor}
   signupStatus={signupStatus}
   userDetailsStore={this.props.userDetailsStore}
 />
           ) : <InlineLoader /> : ''}
       >
-        <Header as="h4" className={isMobile ? 'mb-20' : ''}>{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
+        <Header as={isMobile ? 'h5' : 'h4'} className={isMobile ? 'mb-30 center-align' : 'mt-80 mb-30'}>{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
         {!currentUser.loading
           ? (
 <ProgressCard

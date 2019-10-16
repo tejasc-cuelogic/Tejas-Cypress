@@ -6,6 +6,8 @@ import { Header, Button, Message, Table } from 'semantic-ui-react';
 import { isEmpty, get } from 'lodash';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
+
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'identityStore', 'accountStore')
 @withRouter
 @observer
@@ -89,37 +91,38 @@ export default class Summary extends React.Component {
       isAccountPresent,
       accountAttributes,
     } = this.props.bankAccountStore;
+    const { setStepToBeRendered } = this.props.individualAccountStore;
     const { userDetails } = this.props.userDetailsStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails)
       ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
       <>
-        <Header as="h3" textAlign="center">Confirm Account</Header>
-        <div className="field-wrap">
+        <Header as="h4" textAlign={isMobile ? '' : 'center'}>Confirm your account to start investing! </Header>
+        <div className={isMobile ? '' : 'field-wrap'}>
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell>Investor: </Table.Cell>
+                  <Table.Cell className="grey-header">Investor: </Table.Cell>
                   <Table.Cell>{`${get(userDetails, 'info.firstName') || ''} ${get(userDetails, 'info.lastName') || ''} `}</Table.Cell>
                 </Table.Row>
                 {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
                   && (
 <Table.Row>
-                    <Table.Cell>Bank: </Table.Cell>
+                    <Table.Cell className="grey-header">Bank: </Table.Cell>
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
                   )
                 }
                 <Table.Row>
-                  <Table.Cell>Bank Account Number: </Table.Cell>
+                  <Table.Cell className="grey-header">Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
                 {!isEmpty(routingNum)
                   && (
 <Table.Row>
-                    <Table.Cell>Routing Number</Table.Cell>
+                    <Table.Cell className="grey-header">Routing Number</Table.Cell>
                     <Table.Cell>
                       {routingNum || ''}
                     </Table.Cell>
@@ -127,11 +130,14 @@ export default class Summary extends React.Component {
                   )
                 }
                 <Table.Row>
-                  <Table.Cell>Your Initial Deposit</Table.Cell>
+                  <Table.Cell className="grey-header">Your Initial Deposit</Table.Cell>
                   <Table.Cell>
                     {[-1, ''].includes(accountAttributes.initialDepositAmount)
                       ? Helper.CurrencyFormat(0)
                       : Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
+                      <span className="pull-right">
+                        <Button className="link-button highlight-text" onClick={() => setStepToBeRendered(1)}>Change</Button>
+                      </span>
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
@@ -145,12 +151,20 @@ export default class Summary extends React.Component {
           </Message>
           )
         }
-        <p className="center-align grey-header mt-30">
-          By continuing, I acknowledge that I have read and agree to the terms of the{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>CrowdPay Custodial Account Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>NextSeed US LLC Member Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>NextSeed Securities LLC Investor Agreement</span>, and {' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>Substitute IRS Form W-9 Certification</span>.
+        <p className={`${isMobile ? '' : 'center-align'} grey-header mt-30`}>
+          By continuing, I acknowledge that I have read and agree to the terms of the
+          {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>CrowdPay Custodial Account Agreement</span>
+,
+          {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>NextSeed US LLC Member Agreement</span>
+,
+          {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>NextSeed Securities LLC Investor Agreement</span>
+, and
+          {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>Substitute IRS Form W-9 Certification</span>
+.
           <IframeModal
             open={this.state.open}
             close={this.closeModal}
@@ -159,7 +173,7 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid || isEmpty(routingNum)} />
+          <Button primary size="large" fluid={isMobile} className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid || isEmpty(routingNum)} />
         </div>
       </>
     );

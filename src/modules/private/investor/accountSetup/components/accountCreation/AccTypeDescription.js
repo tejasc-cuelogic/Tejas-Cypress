@@ -4,11 +4,12 @@ import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import find from 'lodash/find';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const AccTypeDescription = observer((props) => {
   const { value, values } = props.accTypes;
   const isAccExist = find(values, v => v.value === value);
   return (
-    <div className="option-details">
+    <div className={isMobile ? '' : 'option-details'}>
       { /* Individual */ }
       {isAccExist && value === 0
         && (
@@ -33,13 +34,13 @@ const AccTypeDescription = observer((props) => {
       {isAccExist && value === 1
         && (
         <>
-          <div className="promitional-offer-block center-align mb-20 bg-offwhite">
+          <div className={`${isMobile ? '' : 'center-align'} promitional-offer-block mb-20 bg-offwhite`}>
             <Header as="h5">Promotional Offer</Header>
             <p>
-              For new NextSeed IRA accounts, NextSeed will cover the one-time setup fee and
+              NextSeed will cover the one-time setup fee and
               annual account fees for four years. See the{' '}
               <Link to="/agreements/legal" target="_blank" className="link">Terms and Conditions</Link>
-              {' '}for full details.
+              {' '}for details.
             </p>
           </div>
           <p>
@@ -51,7 +52,7 @@ const AccTypeDescription = observer((props) => {
             The uninvested cash in your account is FDIC-insured up to $250,000 and is
             interest-bearing. We safeguard your information with bank-level security measures.
             <br />Questions? Please see our{' '}
-            <Link to="/app/resources/faq" target="_blank" className="link">FAQs on IRAs</Link>.
+            <Link to="/resources/education-center/investor/faq" target="_blank" className="link">FAQs on IRAs</Link>.
           </p>
           <p className="grey-text">
             NextSeed is not a tax, investment or legal advisor and does not provide any tax,

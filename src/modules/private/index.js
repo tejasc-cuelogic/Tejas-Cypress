@@ -5,18 +5,28 @@ import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { authActions } from '../../services/actions';
 import { privateRoutes } from '../routes';
-import { InlineLoader } from '../../theme/shared';
+import { InlineLoader, Spinner } from '../../theme/shared';
 import SidebarLeftOverlay from '../../theme/layout/SidebarLeftOverlay';
+import NsHeader from '../../theme/layout/Header';
 import NotFound from '../shared/NotFound';
+
+const isMobile = document.documentElement.clientWidth < 992;
 
 @inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'accountStore', 'referralsStore')
 @withRouter
 @observer
 export default class Private extends React.Component {
+  componentWillMount() {
+    this.props.uiStore.setFieldvalue('resizeLoader', true);
+  }
+
   componentDidMount() {
     // if (window.analytics) {
     //   window.analytics.page();
     // }
+    setTimeout(() => {
+      this.props.uiStore.setFieldvalue('resizeLoader', false);
+    }, 500);
     const { userStore, referralsStore, userDetailsStore } = this.props;
     const { currentUser } = userDetailsStore;
     if (!this.props.authStore.isUserLoggedIn) {
@@ -65,11 +75,27 @@ export default class Private extends React.Component {
     };
     const routes = this.getPrivateRoutes(UserInfo.roles);
     const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
-    if (userFirstLoad === false) {
-      return <InlineLoader />;
+    const { location } = this.props;
+    if (userFirstLoad === false || this.props.uiStore.resizeLoader) {
+      return <Spinner loaderMessage="Loading..." />;
     }
     if (this.props.authStore.isUserLoggedIn) {
       return (
+        <>
+        {!isMobile
+        && (
+          <NsHeader
+            location={location}
+            stepInRoute={this.props.navStore.stepInRoute}
+            currentUser={this.props.userStore.currentUser}
+            handleLogOut={this.handleLogOut}
+            // canSubmitApp={isValid}
+            // isPrequalQulify={isPrequalQulify}
+            // preQualSubmit={this.preQualSubmit}
+            // loading={inProgress}
+          />
+        )
+        }
         <SidebarLeftOverlay
           match={match}
           UserInfo={UserInfo}
@@ -94,6 +120,7 @@ export default class Private extends React.Component {
             </Switch>
           </Suspense>
         </SidebarLeftOverlay>
+        </>
       );
     }
     return null;

@@ -8,6 +8,7 @@ import IndividualAccCreation from './individual/AccountCreation';
 import EntityAccCreation from './entity/AccountCreation';
 import ConfirmModal from '../../components/confirmModal';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const successMessage = 'Check out some of the investment opportunities now available to you as a member of the NextSeed community.';
 const processingMessage = 'While we set up your account, check out some of the investment opportunities now available to you as a member of the NextSeed community.';
 @inject('identityStore', 'accountStore', 'bankAccountStore', 'uiStore', 'userDetailsStore', 'userStore')
@@ -20,13 +21,17 @@ export default class AccountCreation extends Component {
     const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
     const accType = INVESTMENT_ACC_TYPES.fields.accType.values[0];
     // eslint-disable-next-line prefer-destructuring
-    if (accType) {
+    if (isMobile) {
+      this.props.accountStore.setAccTypeChange();
+    } else if (accType) {
       this.props.accountStore.setAccTypeChange(accType.value);
     }
   }
 
   handleCloseModal = () => {
-    this.props.history.push('/app/summary');
+    const { signupStatus } = this.props.userDetailsStore;
+    const accountType = signupStatus.activeAccounts[0] || signupStatus.partialAccounts[0];
+    this.props.history.push(accountType ? `/app/account-details/${accountType}/portfolio` : '/app/setup');
   }
 
   handleUserIdentity = (accountType, submitAccount) => {
@@ -44,7 +49,7 @@ export default class AccountCreation extends Component {
           this.props.identityStore.setIdentityQuestions();
           this.props.history.push(route);
         } else if (this.props.identityStore.isUserCipOffline && !isLegalDocsPresent) {
-          this.props.history.push('/app/summary/identity-verification/1');
+          this.props.history.push('/app/setup/identity-verification/1');
         } else if (isLegalDocsPresent && userDetails.cip.requestId === '-1') {
           const accountDetails = find(this.props.userDetailsStore.currentUser.data.user.roles, { name: accountType });
           const accountId = get(accountDetails, 'details.accountId');
@@ -52,7 +57,7 @@ export default class AccountCreation extends Component {
           this.props.accountStore.updateToAccountProcessing(accountId, accountvalue).then(() => {
             window.sessionStorage.removeItem('cipErrorMessage');
             this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-            const url = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.showProcessingModal ? `${this.props.match.url}/${accountType}/processing` : '/app/summary';
+            const url = this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.showProcessingModal ? `${this.props.match.url}/${accountType}/processing` : '/app/setup';
             this.props.accountStore.ACC_TYPE_MAPPING[accountvalue].store.setFieldValue('showProcessingModal', false);
             this.props.history.push(url);
             this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);

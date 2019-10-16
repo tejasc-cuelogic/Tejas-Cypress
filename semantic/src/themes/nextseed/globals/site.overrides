@@ -114,6 +114,9 @@ h6{
 .mt-10 {
 	margin-top: @10px !important;
 }
+.mt-14{
+	margin-top:@14px !important;
+}
 .mt-20 {
 	margin-top: @20px !important;
 }
@@ -125,6 +128,9 @@ h6{
 }
 .mt-50 {
 	margin-top: @50px !important;
+}
+.mt-60 {
+	margin-top: @60px !important;
 }
 .mt-74 {
 	margin-top: @74px;
@@ -144,6 +150,9 @@ h6{
 .ml-10 {
 	margin-left: @10px !important;
 }
+.ml-18 {
+	margin-left: @18px !important;
+}
 .pb-20{
 	padding-bottom: @20px !important;
 }
@@ -162,6 +171,9 @@ h6{
 .mlr-0{
 	margin-left: 0 !important;
 	margin-right: 0 !important;
+}
+.display-block{
+	display: block !important;
 }
 .pull-left{
 	float:left !important;
@@ -312,6 +324,9 @@ a{
 		color: @primary-one !important;
 	}
 }
+.display-block {
+	display: block !important;
+}
 .green-hover.ui.button.link-button.grey:hover {
 	color: @primary-one !important;
 }
@@ -321,6 +336,9 @@ a{
 .bg-offwhite {
 	background-color: @neutral-offwhite;
 	// padding:@14px @20px;       commented to resolve on public homepage
+}
+.bg-white {
+	background-color: @white !important;
 }
 .bg-midwhite{
 	background-color: @neutral-midwhite;
@@ -446,10 +464,11 @@ footer{
 			}
 			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
 				justify-content: center;
+				align-items: center;
 			}
 			img.ui.image {
 				display: inline-block;
-				margin-right: @38px;
+				// margin-right: @38px;
 				~a img.ui.image{
 					margin-right: 0;
 				}
@@ -1513,11 +1532,17 @@ a.icon-link {
 	padding:@20px @40px;
 	@media only screen and (max-width : @largestSmallMonitor){
 		min-height:auto;
-		padding:@20px @60px;
+		padding: @14px;
 	}
 	@media only screen and (max-width : @largestMobileScreen){
 		~ .secondary-menu{
 			padding:0 @20px @14px;
+		}
+	}
+	&.investor{
+		background: transparent;
+		h3.ui.header{
+			position:relative;
 		}
 	}
 	h1.ui.header{
@@ -2398,14 +2423,14 @@ p.check-extra-info{
 		font-weight:@fontMedium;
 		border-radius:100%;
 	}
-	&.admin{
-		background-color:@highlight-primary;
-	}
-	&.issuer{
-		background-color:@fullBlack;
-	}
-	&.investor{
-		background-color:@highlight-tertiary;
+	// &.admin{
+	// 	background-color:@highlight-primary;
+	// }
+	// &.issuer{
+	// 	background-color:@fullBlack;
+	// }
+	&.investor .sb-avatar__text{
+		color: @neutral-offdark;
 	}
 }
 
@@ -2546,6 +2571,9 @@ p.check-extra-info{
 	.ui.image.logo {
 		height: @25px;
 		width: auto;
+	}
+	.icon.ns-hamburger{
+		color: @neutral-middark !important;
 	}
 	&.public-header-section-v2 .sign-in{
 		right: 22px;
@@ -2733,7 +2761,7 @@ input[type='range']::-webkit-slider-thumb {
 }
 //	IRA account creation
 .promitional-offer-block {
-	border: 1px solid @primary-one;
+	border: 1px solid @neutral-darkwhite;
 	padding: @10px;
 	h5.ui.header {
 		margin: 0;
@@ -2958,7 +2986,6 @@ table.css-wu4c77-diff-container {
 		}
 	}
 }
-
 // Offering new design - 1972 - Start
 //Public comment section
 .custom-segment{

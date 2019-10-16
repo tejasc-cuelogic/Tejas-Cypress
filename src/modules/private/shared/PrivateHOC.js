@@ -4,22 +4,24 @@ import { Grid, Header } from 'semantic-ui-react';
 import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 import NotFound from '../../shared/NotFound';
 
-@inject('uiStore', 'navStore')
+const isMobile = document.documentElement.clientWidth < 768;
+@inject('uiStore', 'navStore', 'userStore')
 @observer
 class PrivateHOC extends Component {
   render() {
     const pageMeta = this.props.navStore.navMeta;
+    const { isInvestor } = this.props.userStore;
     if (!pageMeta) {
       return <NotFound />;
     }
     return (
       <>
-        <div className="page-header-section">
+        <div className={`${isInvestor ? 'investor' : ''} page-header-section`}>
           <Grid columns="equal" stackable>
             <Grid.Row>
               <Grid.Column verticalAlign="middle">
                 {!this.props.P0
-                  ? <Header as="h1">{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
+                  ? <Header as={isInvestor ? 'h3' : 'h1'}>{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
                   : this.props.P0
                 }
               </Grid.Column>
@@ -39,11 +41,12 @@ class PrivateHOC extends Component {
             </Grid.Row>
           </Grid>
         </div>
-        {this.props.P5}
+        {!isInvestor && this.props.P5}
         {(pageMeta.subPanel === 1 || this.props.subNav)
           && <SecondaryMenu navCustomClick={this.props.navCustomClick} addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
         }
-        <div className="content-spacer">
+        <div className={`${isInvestor && isMobile ? 'pt-0' : ''} content-spacer`}>
+        {isInvestor && this.props.P5}
           {this.props.children}
         </div>
       </>

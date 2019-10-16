@@ -6,12 +6,37 @@
 .pushable {
 	&:not(body) {
 		transform: none;
+		position: relative;
+		max-width: 1680px;
+		margin: auto;
+		&.private-pushable{
+			transform: translate3d(0,0,0);
+			height: calc(100vh - 72px);
+			overflow: hidden;
+			@media only screen and (max-width : @largestTabletScreen){
+				transform: none;
+				height: auto;
+				overflow: visible;
+			}
+			.pusher{
+				@media only screen and (min-width: @computerBreakpoint) and (max-width : @largestSmallMonitor){
+					transform: translate3d(0,0,0)!important;
+					padding-left: 260px;
+				}
+			}
+		}
+	}
+	.ui.push.sidebar {
+		z-index: 100;
 	}
 	>.sidebar ~ .pusher{
 		transition:all .5s ease;
-		height:100vh;
+		height: calc(100vh - 72px);
 		overflow-y:auto;
 		background-color:@neutral-offwhite;
+		@media only screen and (max-width : @largestMobileScreen){
+			height: auto;
+		}
 		.ui.vertical.segment.content{
 			padding:0;
 			min-height:~"calc(100vh - 58px)";
@@ -26,6 +51,13 @@
 			background-color: transparent;
 			&.noheader{
 				padding-top: 0;
+			}
+			&.private-pusher{
+				background-color: @neutral-offwhite;
+				min-height: 100vh;
+				.private-dropdown~.content-spacer{
+					padding-top: 0;
+				}
 			}
 		}
 		&.dimmed {
@@ -60,12 +92,19 @@
 }
 .ui.sidebar.menu{
 	&.vertical{
-		padding:@10px 0;
+		padding:0;
 		visibility:visible;
 		transition:all .5s ease;
+		position: fixed;
+		// margin-top: 72px !important;
+		height: calc(100vh - 72px) !important;
+		@media only screen and (max-width : @largestTabletScreen) {
+			margin-top: 0 !important;
+			height: auto !important;
+		}
 		.ns-scrollbar{
 			.view{
-				padding:@50px 0 0;
+				padding:0 @15px;
 			}
 			.track-vertical{
 				width:4px !important;
@@ -91,7 +130,11 @@
 			margin-bottom:@1px !important;
 			font-weight:400;
 			&.menu-header .header:not(.ui){
-				margin:@18px 0 0;
+				margin:0 0 @10px;
+				padding-top: 0;
+				color: @neutral-middark;
+				text-transform: uppercase;
+				font-size: @12px;
 			}
 			&.dropdown{
 				.icon.dropdown{
@@ -129,7 +172,8 @@
 				}
 			}
 			&.ui.dropdown>.text{
-				min-width:~"calc(100% - 27px)";
+				min-width:~"calc(100% - 30px)";
+				max-width:~"calc(100% - 30px)";
 			}
 			&:first-child:before, &:before{
 				display:none;
@@ -154,12 +198,17 @@
 				&:hover, &:focus, &.active{
 					background:@neutral-offwhite;
 					.icon:not(.dropdown){
-						color:@primary-one;
+						color:@neutral;
 					}
 				}
 			}
 			&.menu-header:hover{
 				background-color:transparent;
+			}
+		}
+		&.admin, &.issuer{
+			.user-picture p{
+				color: @white;
 			}
 		}
 	}
@@ -181,6 +230,7 @@
 			text-align:left;
 			margin:0 0 @20px;
 			padding:@10px @26px @20px;
+			color: @neutral-offdark;
 			>img, .sb-avatar{
 				max-width:40px;
 			}
@@ -198,7 +248,7 @@
 			font-size:@16px;
 			color:@white;
 			position:absolute;
-			top:18px;
+			top:14px;
 			left:18px;
 			z-index:1;
 			&:hover, &:active, &:focus{
@@ -206,10 +256,7 @@
 			}
 		}
 		&.public-sidebar {
-			padding-bottom: @64px;
-			.ns-close-light {
-				top: 7px;		
-			}
+			width: 100%;
 		}
 	}
 	.ui.image.logo{
@@ -218,8 +265,8 @@
 		margin:0 auto;
 	}
 	.user-picture{
-		margin:@28px 0;
-		padding:@12px @26px @40px;
+		margin:@28px -@15px;
+		padding:@4px @26px @32px;
 		text-align:center;
 		color:@neutral-middark;
 		border-bottom:@neutral-midwhite 1px solid;
@@ -230,6 +277,7 @@
 		p{
 			font-weight:@normal;
 			margin-top:@14px;
+			color: @darken-bg-color;
 		}
 		.sb-avatar{
 			width:60px;
@@ -239,6 +287,7 @@
 				height:60px;
 				font-size:@20px;
 				line-height:60px;
+				border: 1px solid @neutral-offdark;
 			}
 		}
 		> img, p, .sb-avatar, .sb-avatar__text{
@@ -345,3 +394,9 @@
 	}
 }
 
+.public-pages > .pushable {
+	width: 100%;
+	.ui.push.sidebar {
+		z-index: 102;
+	}
+}

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Header, Form, Message, Confirm } from 'semantic-ui-react';
+import { Header, Form, Message, Confirm, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { ListErrors } from '../../../../../../../theme/shared';
 import { FormInput, DropZone } from '../../../../../../../theme/form';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('uiStore', 'userStore', 'entityAccountStore')
 @observer
@@ -24,6 +26,12 @@ export default class PersonalInformation extends Component {
     this.props.uiStore.setConfirmBox('');
   }
 
+  handleContinueButton = () => {
+    const { createAccount, stepToBeRendered } = this.props.entityAccountStore;
+    const { multiSteps } = this.props.uiStore;
+    createAccount(multiSteps[stepToBeRendered]);
+  }
+
   render() {
     const {
       PERSONAL_INFO_FRM,
@@ -33,10 +41,11 @@ export default class PersonalInformation extends Component {
     const { errors, confirmBox } = this.props.uiStore;
     return (
       <>
-        <Header as="h3" textAlign="center">Authorized Signatory Information</Header>
-        <p className="center-align">Please provide your title and a copy of your photo ID.</p>
+      <Header as="h4" textAlign={isMobile ? '' : 'center'}>Authorized Signatory Information</Header>
+        <p className={`${isMobile ? 'mb-30 mt-0' : ''} account-type-tab`}>Please provide your title and a copy of your photo ID.</p>
+        {isMobile && <p className="highlight-text"><b>Authorized Signatory</b></p>}
         <Form error>
-          <div className="field-wrap">
+          <div className={isMobile ? '' : 'field-wrap'}>
             <Form.Group widths="equal">
               <Form.Input
                 label="First Name (Legal)"
@@ -64,7 +73,7 @@ export default class PersonalInformation extends Component {
             ondrop={this.onLegalDocUrlDrop}
             onremove={this.confirmRemoveDoc}
             uploadtitle="Choose a file or drag it here"
-            containerclassname="fluid"
+            containerclassname={`${isMobile ? 'mt-30 mb-30' : ''} fluid`}
           />
           {errors
             && (
@@ -72,6 +81,10 @@ export default class PersonalInformation extends Component {
               <ListErrors errors={[errors.message]} />
             </Message>
             )
+          }
+          {isMobile && (
+            <Button fluid primary className="relaxed" content="Continue" disabled={!PERSONAL_INFO_FRM.meta.isValid || errors} onClick={this.handleContinueButton} />
+          )
           }
         </Form>
         <Confirm

@@ -5,7 +5,7 @@ import IncomeEvidence from './shared/IncomeEvidence';
 import Verification from './shared/Verification';
 import PopulateAccreditationSteps from './PopulateAccreditationSteps';
 
-@inject('accreditationStore')
+@inject('accreditationStore', 'uiStore')
 @withRouter
 @observer
 export default class VerifyEntityAccreditation extends React.Component {
@@ -46,10 +46,16 @@ export default class VerifyEntityAccreditation extends React.Component {
     }
   }
 
+  handleSubmitStep = () => { // only for mobile screens
+    const { stepToBeRendered } = this.props.accreditationStore;
+    const { multiSteps } = this.props.uiStore;
+    this.multiClickHandler(multiSteps[stepToBeRendered]);
+  }
+
   render() {
     const formArray = [
       { key: 'ENTITY_ACCREDITATION_FORM' },
-      { key: 'INCOME_EVIDENCE_FORM', component: <IncomeEvidence isEntity /> },
+      { key: 'INCOME_EVIDENCE_FORM', component: <IncomeEvidence isEntity submitStep={this.handleSubmitStep} /> },
       {
         key: 'VERIFICATION',
         component: <Verification refLink={this.props.refLink} isEntity type={2} />,

@@ -27,7 +27,7 @@ const InvestmentList = (props) => {
           ? <InlineLoader text="No data available" />
           : (
             <div className="table-wrapper">
-              <Table unstackable singleLine className={`investment-details ${props.listOf !== 'pending' ? 'clickable' : ''}`} selectable={props.listOf !== 'pending'}>
+              <Table unstackable singleLine selectable className={`investment-details ${props.listOf !== 'pending' ? 'clickable' : ''}`}>
                 <Table.Header>
                   <Table.Row>
                     {
@@ -44,9 +44,9 @@ const InvestmentList = (props) => {
                       <Table.Row key={data.investmentDate} onClick={() => { if (!isMobile) { handleViewInvestment(props.listOf !== 'pending' ? data.offering.id : ''); } }}>
                         <Table.Cell>
                           <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />
-                          <div className="offering-title">
+                          <div className="offering-title highlight-text">
                             {props.listOf === 'pending' && !isAdmin ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
-                              <Link className={isMobile ? 'disable-click' : ''} to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
+                              <Link className={`${isMobile ? 'disable-click' : ''}`} to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
                             )}
                             <p className="date-stamp">
                               {get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || ''}
