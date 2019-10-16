@@ -60,7 +60,7 @@ export default class PaymentDetails extends Component {
                     name={field}
                     placeHolder={PAYMENT_FRM.fields[field].placeHolder}
                     fielddata={PAYMENT_FRM.fields[field]}
-                    changed={(values, name) => maskChange(values, 'PAYMENT_FRM', name)}
+                    changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'formatted')}
                     dateOfBirth
                   />
                 ))
