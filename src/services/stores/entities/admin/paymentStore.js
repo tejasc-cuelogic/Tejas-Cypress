@@ -18,13 +18,7 @@ export class PaymentStore extends DataModelStore {
 
     initialData = [];
 
-    details = [];
-
-    filters = false;
-
     PAYMENT_FRM = Validator.prepareFormObject(PAYMENT);
-
-    offeringDetails = null;
 
     sortOrder = {
       column: null,
@@ -33,7 +27,6 @@ export class PaymentStore extends DataModelStore {
 
     setSortingOrder = (column = null, direction = null) => {
       this.sortOrder.column = column;
-      // this.sortOrder.listData = listData;
       this.sortOrder.direction = direction;
     }
 
@@ -113,11 +106,8 @@ export class PaymentStore extends DataModelStore {
 decorate(PaymentStore, {
   ...decorateDefault,
   data: observable,
-  details: observable,
-  filters: observable,
   PAYMENT_FRM: observable,
   initialData: observable,
-  offeringDetails: observable,
   sortOrder: observable,
   setSortingOrder: action,
   initRequest: action,
