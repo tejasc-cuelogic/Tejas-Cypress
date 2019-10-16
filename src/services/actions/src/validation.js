@@ -19,25 +19,6 @@ import { FormValidator } from '../../../helper';
  */
 export class Validation {
   /**
-  * @desc Validates single field on registration form
-  * @param $field @type String - field name to be validated
-  * @param $value @type String/Object - value that needs to be assigned to the field
-  * @returns null
-  */
-  validateRegisterField = (field, value) => {
-    // First set value to authStore
-    authStore.setValue(field, value);
-    // Vaidate whether field value is valid
-    // Extra parameter for password needed to check verify password matched or not
-    const { errors } = validationService.validate(
-      authStore.values[field],
-      authStore.values[CONDITIONAL_REQUIRE[field]],
-    );
-    // Set errors if any to store or else `undefined` will get set to variable.
-    authStore.setError(field, errors && errors[field][0]);
-  }
-
-  /**
    * @desc Validates fields on new offering creation in business panel
    * @param $field @type String - field on form that need to be validated
    * @param $value @type String/Object - value that need to be set to field

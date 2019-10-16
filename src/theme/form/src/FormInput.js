@@ -11,6 +11,13 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class FormInput extends Component {
   state = { showError: false };
 
+  constructor(props) {
+    super(props);
+    if (props.triggerError && props.fielddata.value !== '') {
+      this.setState({ showError: props.fielddata.error !== undefined });
+    }
+  }
+
   triggerError = (val) => {
     this.setState({ showError: val });
   }

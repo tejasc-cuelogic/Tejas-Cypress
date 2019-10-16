@@ -45,22 +45,22 @@ export default class BonusRewards extends Component {
                 placeholder="Search by name, city"
                 more="no"
                 requestState={requestState}
-                // addon={
-                // }
+              // addon={
+              // }
               />
               {isAdmin
-              && (
-<Grid.Column floated="right" width={3} className="right-align">
-                <Button
-                  primary
-                  className="relaxed"
-                  content="Export"
-                  onClick={this.populateCsvData}
-                  // loading={inProgress}
-                  disabled={!investorLists.length}
-                />
-              </Grid.Column>
-              )
+                && (
+                  <Grid.Column floated="right" width={3} className="right-align">
+                    <Button
+                      primary
+                      className="relaxed"
+                      content="Export"
+                      onClick={this.populateCsvData}
+                      // loading={inProgress}
+                      disabled={!investorLists.length}
+                    />
+                  </Grid.Column>
+                )
               }
             </Grid.Row>
           </Grid>

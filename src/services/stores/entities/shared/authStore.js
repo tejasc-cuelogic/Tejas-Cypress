@@ -519,8 +519,10 @@ export class AuthStore {
 
       errors.networkError = networkErr;
     }
-
-
+    if (window.FS && window.FS.getCurrentSessionURL) {
+      const fullStorySession = window.FS.getCurrentSessionURL(true);
+      errors.fullStoryUrl = fullStorySession;
+    }
     const params = {
       emailContent: JSON.stringify(errors),
     };

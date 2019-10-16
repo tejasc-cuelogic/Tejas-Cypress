@@ -212,12 +212,10 @@ class AccountType extends Component {
     this.setState({ investAccountType: { ...this.state.investAccountType, value: res.value } });
   }
 
-  handlUpdateExpiration = (e) => {
-    e.preventDefault();
-    const { updateAccreditationExpiray } = this.props.accreditationStore;
-    updateAccreditationExpiray();
+  handlUpdateExpiration = (url) => {
     this.props.accreditationStore.resetUserAccreditatedStatus();
-    this.props.history.push(this.props.refLink);
+    this.props.userDetailsStore.setPartialInvestmenSession(this.props.match.url);
+    this.props.history.push(url);
   }
 
   handlBackToOffering = (e) => {
@@ -432,7 +430,7 @@ class AccountType extends Component {
                                 defaults
                                 containerclassname="ui relaxed list"
                               />
-                              <Button as={Link} to="/" onClick={e => this.handlUpdateExpiration(e)} primary className="relaxed" content="Update accrditation" disabled={!(ACCREDITATION_EXPIRY_FORM.meta.isValid)} />
+                              <Button onClick={() => this.handlUpdateExpiration(redirectURL)} primary className="relaxed" content="Re-verify status" disabled={!(ACCREDITATION_EXPIRY_FORM.meta.isValid)} />
                               <Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" />
                             </Form>
                             )

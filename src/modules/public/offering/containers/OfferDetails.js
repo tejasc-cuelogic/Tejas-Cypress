@@ -222,6 +222,7 @@ class offerDetails extends Component {
       return <NotFound />;
     }
     const offeringId = get(campaign, 'id');
+    const offeringName = get(campaign, 'keyTerms.shorthandBusinessName');
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
     const InitialComponent = getModule(!newLayout ? navItems[0].component : 'CampaignLayout');
@@ -275,13 +276,13 @@ class offerDetails extends Component {
                 <Grid.Column computer={newLayout ? 9 : 12} mobile={16} className={newLayout ? 'left-align offer-details-v2' : ''}>
                   <Suspense fallback={<InlineLoader />}>
                     <Switch>
-                      <Route exact path={match.url} render={props => <InitialComponent refLink={this.props.match.url} {...props} />} />
+                      <Route exact path={match.url} render={props => <InitialComponent offeringName={offeringName} refLink={this.props.match.url} {...props} />} />
                       {!newLayout
                         && (
                           navItems.map((item) => {
                             const CurrentComponent = getModule(item.component);
                             return (
-                              <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
+                              <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent offeringName={offeringName} refLink={this.props.match.url} {...props} />} />
                             );
                           })
                         )

@@ -11,8 +11,10 @@ const FormDropDown = observer((props) => {
     value,
     tooltip,
   } = props.fielddata;
+  const { displayMode } = props;
+  const fieldClass = `${props.containerclassname || ''} ${displayMode ? ' display-only' : ''}`;
   return (
-    <Form.Field error={error} width={props.containerwidth || false} className={props.containerclassname || ''}>
+    <Form.Field error={error} width={props.containerwidth || false} className={fieldClass}>
       {!props.ishidelabel && label !== ''
         && (
 <label>
@@ -31,7 +33,7 @@ const FormDropDown = observer((props) => {
         </label>
         )
       }
-      <Dropdown {...props} value={value} />
+      <Dropdown {...props} value={value} className="readonly" disabled={displayMode} />
       {!props.ishidelabel && label !== ''
         && <div className="dropdown-effect">{label}</div>
       }

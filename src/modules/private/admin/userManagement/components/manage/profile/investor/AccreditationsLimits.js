@@ -14,7 +14,8 @@ export default class AccreditationsLimits extends Component {
   constructor(props) {
     super(props);
     const { getDetailsOfUser } = this.props.userDetailsStore;
-    this.props.accreditationStore.getUserAccreditation(get(getDetailsOfUser, 'id')).then(() => {
+    console.log('in acc limits');
+    this.props.accreditationStore.getUserAccreditation(get(getDetailsOfUser, 'id'), false).then(() => {
       this.props.accreditationStore.initiateAccreditation();
     });
   }
