@@ -80,7 +80,7 @@ export default class CronFactory extends Component {
                 </Table.Header>
                 <Table.Body>
                   {!cronLogs || (cronLogs && cronLogs.length === 0) ? (
-                    <Table.Row><Table.Cell textAlign="center" colSpan="7">No Logs Fond.</Table.Cell></Table.Row>
+                    <Table.Row><Table.Cell textAlign="center" colSpan="7">No Logs Found.</Table.Cell></Table.Row>
                   ) : (
                     cronLogs && cronLogs.map(resp => (
                       <Table.Row verticalAlign="top">

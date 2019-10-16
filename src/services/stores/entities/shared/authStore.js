@@ -33,6 +33,8 @@ export class AuthStore {
 
   @observable userId = null;
 
+  @observable emailList = [];
+
   @observable devAuth = {
     required: !['production', 'localhost', 'prod', 'master', 'infosec'].includes(REACT_APP_DEPLOY_ENV),
     authStatus: cookie.load('DEV_AUTH_TOKEN'),
@@ -378,9 +380,11 @@ export class AuthStore {
     this.capabilities = capabilities;
   }
 
+  isEmailExist = email => (this.emailList.find(e => e === email))
+
   @action
-  checkEmailExistsPresignup = (email, isBusinessApplication = false) => new Promise((res, rej) => {
-    if (DataFormatter.validateEmail(email)) {
+  checkEmailExistsPresignup = (email, isBusinessApplication = false) => new Promise((res) => {
+    if (DataFormatter.validateEmail(email) && !this.isEmailExist(email)) {
       if (isBusinessApplication) {
         uiStore.setProgress();
       }
@@ -397,17 +401,18 @@ export class AuthStore {
               businessAppStore.setFieldvalue('userRoles', get(data, 'checkEmailExistsPresignup.roles'));
               businessAppStore.setFieldvalue('userExists', true);
               businessAppStore.setBasicFormError(get(data, 'checkEmailExistsPresignup.roles') && get(data, 'checkEmailExistsPresignup.roles').includes('issuer') ? 'This email is already exists as an issuer. Please Log In' : `This email address is already exists as ${get(data, 'checkEmailExistsPresignup.roles').includes('admin') ? 'admin' : 'investor'}. Please try with differrent email.`);
-              res();
+              res(true);
             } else {
+              this.emailList.push(email);
               this.SIGNUP_FRM.fields.email.error = 'Email already exists, did you mean to log in?';
               this.SIGNUP_FRM.meta.isValid = false;
-              rej();
+              res(false);
             }
             uiStore.setProgress(false);
           } else if (!this.checkEmail.loading && !get(data, 'checkEmailExistsPresignup.isEmailExits')) {
             this.SIGNUP_FRM.fields.email.error = '';
             uiStore.setProgress(false);
-            res();
+            res(true);
           }
         },
         onError: (err) => {
@@ -416,6 +421,11 @@ export class AuthStore {
         },
         fetchPolicy: 'network-only',
       });
+    } else {
+      this.SIGNUP_FRM.fields.email.error = 'Email already exists, did you mean to log in?';
+      this.SIGNUP_FRM.meta.isValid = false;
+      uiStore.setProgress(false);
+      res(false);
     }
   });
 

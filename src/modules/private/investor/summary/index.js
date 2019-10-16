@@ -13,16 +13,19 @@ export default class Summary extends Component {
     const activeAccLength = signupStatus.activeAccounts.length;
     const processingAccLength = signupStatus.processingAccounts.length;
     const frozenAccLength = signupStatus.frozenAccounts.length;
+    const inActivAccLength = signupStatus.inActiveAccounts.length;
     return (
       <Route
         component={
            ((processingAccLength === 0
             && partialAccLength >= 0
             && frozenAccLength === 0
-            && activeAccLength === 0)
+            && activeAccLength === 0
+            && inActivAccLength !== 0)
             || (signupStatus.isMigratedFullAccount
-            || !isBasicVerDoneForMigratedFullUser
-            || !signupStatus.investorProfileCompleted))
+            && !isBasicVerDoneForMigratedFullUser)
+            || !signupStatus.investorProfileCompleted
+           )
              ? AccountSetup : Dashboard}
       />
     );
