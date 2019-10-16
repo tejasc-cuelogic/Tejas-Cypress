@@ -16,9 +16,9 @@ const meta = [
   { label: 'Residence City', value: 'city' },
   { label: 'State', value: 'state' },
   { label: 'Account Type', value: 'accountType' },
-  { label: 'Early Bird Eligibility', value: 'earlyBirdEligibility' },
   { label: 'Regulation', value: 'regulation' },
-  { label: 'Investment Amount', value: 'amount' },
+  { label: 'Amount', value: 'amount' },
+  { label: 'EB', value: 'earlyBirdEligibility' },
   { label: 'Date', value: 'investmentDate' },
   { label: 'Referral Code', value: 'referralCode' },
 ];
