@@ -57,14 +57,6 @@ export class PaymentStore extends DataModelStore {
       this.PAYMENT_FRM = Validator.setFormData(this.PAYMENT_FRM, res);
     }
 
-    getPaymentFormData = () => {
-      const data = {};
-      forEach(this.PAYMENT_FRM.fields, (t, key) => {
-        data[key] = this.PAYMENT_FRM.fields[key].value;
-      });
-      return data;
-    }
-
     updatePayment = id => new Promise((resolve, reject) => {
       uiStore.setProgress();
       const variables = Helper.replaceKeysDeep(toJS(Validator.evaluateFormData(this.PAYMENT_FRM.fields)), { expectedOpsDate: 'launchExpectedOpsDate', operationsDate: 'operationsDate', expectedPaymentDate: 'keyTermsAnticipatedPaymentStartDate', firstPaymentDate: 'repaymentStartDate' });
@@ -130,7 +122,6 @@ decorate(PaymentStore, {
   setSortingOrder: action,
   initRequest: action,
   getOfferingById: action,
-  getPaymentFormData: action,
   updatePayment: action,
   updatePaymentList: action,
   setInitiateSrch: action,
