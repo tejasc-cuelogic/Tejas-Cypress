@@ -284,7 +284,7 @@ export default class MultiStep extends React.Component {
                   className="link-button pull-right multistep__btn"
                   onClick={this.props.handleMultiStepModalclose}
                 />
-                <Progress percent={((this.state.compState + 1) / (this.props.steps.length + 1)) * 100} attached="bottom" color="green" />
+                <Progress className={this.props.steps[this.state.compState].name === '' ? 'no-header' : ''} percent={((this.state.compState + 1) / (this.props.steps.length + 1)) * 100} attached="bottom" color="green" />
               </Modal.Header>
             )
           }

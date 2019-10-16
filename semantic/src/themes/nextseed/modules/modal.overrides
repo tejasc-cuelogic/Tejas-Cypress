@@ -610,6 +610,9 @@
                 bottom: -18px;
                 border-radius: 0;
                 background-color: @neutral-darkwhite;
+                &.no-header{
+                    bottom: -35px;
+                }
             }
             .ui.button.link-button {
                 position: absolute;
