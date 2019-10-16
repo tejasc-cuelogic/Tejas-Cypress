@@ -1,6 +1,6 @@
 import { observable, action, reaction } from 'mobx';
 import graphql from 'mobx-apollo';
-import { getBoxFileDetails, updateUserReferralCode, createCdnSignedUrl, deleteCdnS3File, getsharedLink } from '../queries/common';
+import { getBoxFileDetails, updateUserReferralCode, createCdnSignedUrl, deleteCdnS3File, getsharedLink, fetchEmailContent } from '../queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';
 import Helper from '../../../helper/utility';
 
@@ -120,6 +120,27 @@ export class CommonStore {
       },
       onError: () => {
         this.setFieldValue('inProgress', false);
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
+  });
+
+  @action
+  fetchEmailContent = params => new Promise((res, rej) => {
+    graphql({
+      client,
+      query: fetchEmailContent,
+      fetchPolicy: 'network-only',
+      variables: {
+        ...params,
+      },
+      onFetch: (data) => {
+        if (data) {
+          res(data);
+        }
+      },
+      onError: (e) => {
+        rej(e);
         Helper.toast('Something went wrong, please try again later.', 'error');
       },
     });
