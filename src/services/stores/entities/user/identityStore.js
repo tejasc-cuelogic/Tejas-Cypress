@@ -259,9 +259,6 @@ export class IdentityStore {
       variables: {
         answers: this.formattedCipAnswers,
       },
-      message: {
-        success: 'CIP questions are verified!',
-      },
     };
     const { res, url } = await this.cipWrapper(payLoad);
     return { res, url };
@@ -279,10 +276,6 @@ verifyCipHardFail = async () => {
       residence: proofOfResidence.fileId,
     },
     cipPassStatus: 'MANUAL_VERIFICATION_PENDING',
-    message: {
-      success: 'CIP documents are verified!',
-      error: 'CIP documents are not verified.',
-    },
   };
   this.setFieldValue('userCipStatus', 'MANUAL_VERIFICATION_PENDING');
   const { res, url } = await this.cipWrapper(payLoad);
@@ -307,10 +300,6 @@ cipWrapper = async (payLoad) => {
     url = this.cipStepUrlMapping[stepName].url;
 
     if (stepName === 'cipPass') {
-      if (get(payLoad, 'message.success')) {
-        Helper.toast(payLoad.message.success, 'success');
-      }
-
       const OFFLINE_STATUS = get(res,
         `data.${payLoad.mutationName}.step`) === 'OFFLINE'
         ? 'OFFLINE' : undefined;
@@ -318,9 +307,6 @@ cipWrapper = async (payLoad) => {
       await this.updateUserDataAndSendOtp(
         OFFLINE_STATUS || payLoad.cipPassStatus || 'PASS',
       );
-    } else if (!get(res, `data.${payLoad.mutationName}.status`)
-       && get(payLoad, 'message.error')) {
-      Helper.toast(payLoad.message.error, 'error');
     } else if (!get(res, `data.${payLoad.mutationName}.status`)
     && res.data[`${payLoad.mutationName}`].message) {
       url = undefined;

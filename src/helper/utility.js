@@ -10,7 +10,7 @@ import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
 import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS } from '../constants/common';
 import authStore from '../services/stores/entities/shared/authStore';
-// import userStore from './../services/stores/entities/userStore';
+import userStore from './../services/stores/entities/userStore';
 
 export class Utility {
   // Default options for the toast
@@ -26,14 +26,14 @@ export class Utility {
    * reference: https://fkhadra.github.io/react-toastify/
    */
   toast = (msg, alertType, optionsOverride) => {
-    // if (userStore.isAdmin) {
-    const cleanMsg = s => (s ? s.replace('GraphQL error: ', '') : '');
-    if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
-      toast[alertType](`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
-    } else {
-      toast(`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride));
+    if (!userStore.isInvestor) {
+      const cleanMsg = s => (s ? s.replace('GraphQL error: ', '') : '');
+      if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
+        toast[alertType](`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
+      } else {
+        toast(`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride));
+      }
     }
-    // }
   }
 
   unMaskInput = maskedInput => (
