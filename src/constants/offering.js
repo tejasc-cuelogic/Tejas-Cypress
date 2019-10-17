@@ -66,14 +66,23 @@ export const CAMPAIGN_OFFERING_STATUS = {
   IN_REPAYMENT: 'In repayment',
   IN_DEFAULT: 'In default',
 };
-export const CAMPAIGN_KEYTERMS_REGULATION = {
+const KEYTERMS_REGULATION_COMMON = {
   FP_TX: 'Rule 147, TX',
   FP_CF: 'Reg CF - US',
   BD_CF: 'Reg CF Offering',
   BD_506C: 'Reg D Offering',
   BD_506B: 'Reg B Offering',
+};
+export const CAMPAIGN_KEYTERMS_REGULATION = {
+  ...KEYTERMS_REGULATION_COMMON,
   BD_CF_506C: 'Parallel Offering (Reg CF & Reg D)',
 };
+
+export const CAMPAIGN_KEYTERMS_REGULATION_PARALLEL = {
+  ...KEYTERMS_REGULATION_COMMON,
+  BD_CF_506C: <>Parallel Offering<br />(Reg CF &amp; Reg D)</>,
+};
+
 export const CAMPAIGN_REGULATION_DETAILED = {
   REGULATION: {
     FP_TX: 'Texas Intrastate Crowdfunding',
