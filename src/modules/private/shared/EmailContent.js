@@ -1,78 +1,57 @@
-/* eslint-disable jsx-a11y/label-has-for */
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
-import { Modal, Button, Header, Message } from 'semantic-ui-react';
-import { ListErrors, InlineLoader } from '../../../theme/shared';
+import { get } from 'lodash';
+import { Modal, Button, Header } from 'semantic-ui-react';
+import { InlineLoader } from '../../../theme/shared';
+import Helper from '../../../helper/utility';
 import HtmlEditor from '../../shared/HtmlEditor';
 
-@inject('uiStore', 'commonStore')
-@withRouter
-@observer
-export default class EmailContent extends Component {
-  state = {
-    emailContent: null,
-    loading: false,
-  }
 
-  constructor(props) {
-    super(props);
-    const { commonStore, match } = this.props;
+function EmailContent(props) {
+  const [emailContent, setEmailContent] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    Helper.modalCssUpdate('show-top', 'show-top');
+    const { commonStore, match } = props;
     const params = {
       id: match.params.id,
       requestDate: match.params.requestDate,
     };
-    this.setState({ loading: true });
+    setLoading(true);
     commonStore.fetchEmailContent(params).then((res) => {
-      console.log(res);
-      this.setState({ emailContent: res });
-      this.setState({ loading: false });
+      setEmailContent(get(res, 'fetchEmailContent.html'));
+      setLoading(false);
     }).catch((e) => {
-      this.setState({ loading: false });
-      console.log(e);
+      setLoading(false);
+      setErrorMsg(get(e, 'message'));
     });
-  }
+  }, []);
 
-  componentDidMount() {
-    const modal = document.querySelector('.show-top').closest('.page');
-    modal.classList.add('show-top');
-  }
-
-  handleCloseModal = (e) => {
+  function handleCloseModal(e) {
     e.preventDefault();
-    this.props.history.push(this.props.refLink);
+    props.history.push(props.refLink);
   }
 
-  render() {
-    if (this.state.loading) {
-      return <InlineLoader />;
-    }
-    return (
-      <Modal open closeOnDimmerClick size="small" className="show-top" closeIcon onClose={e => this.handleCancel(e)}>
-        <Modal.Content className="center-align">
-          <Header as="h3">Email Content</Header>
-          {this.state.loading ? <InlineLoader />
-            : (
-              <HtmlEditor
-                readOnly
-                content={this.state.emailContent}
-              />
-            )
-          }
-          {!'errors'
-            && (
-              <Message error className="mb-40">
-                <ListErrors errors={['']} />
-              </Message>
-            )
-          }
-          <div className="center-align">
-            <Button.Group widths="2" className="inline">
-              <Button primary content="Back" onClick={this.handleCancel} />
-            </Button.Group>
-          </div>
-        </Modal.Content>
-      </Modal>
-    );
-  }
+  return (
+    <Modal open closeOnDimmerClick size="large" className="show-top" closeIcon onClose={e => handleCloseModal(e)}>
+      <Modal.Content className="center-align">
+        <Header as="h3" textAlign="center">Email Content</Header>
+        {loading ? <InlineLoader /> : ''}
+        <HtmlEditor
+          readOnly
+          content={emailContent}
+        />
+        {errorMsg && <p>{errorMsg}</p>}
+        <div className="center-align">
+          <Button.Group widths="2" className="inline">
+            <Button primary content="Back" onClick={handleCloseModal} />
+          </Button.Group>
+        </div>
+      </Modal.Content>
+    </Modal>
+  );
 }
+
+export default inject('uiStore', 'commonStore')(observer(EmailContent));

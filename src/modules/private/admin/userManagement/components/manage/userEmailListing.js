@@ -14,18 +14,13 @@ export default class UserEmailList extends Component {
     this.props.userDetailsStore.getEmailList();
   }
 
-  handleModel = (e, indexId) => {
-    e.preventDefault();
-    console.log(indexId);
-  }
-
   render() {
     const { userDetailsStore, match } = this.props;
     const { userEmals, emailListOutputLoading } = userDetailsStore;
     return (
       <>
         <Route
-          path={`${match.url}/:id/:date`}
+          path={`${match.url}/:id/:requestDate`}
           render={props => <EmailContent refLink={match.url} {...props} />
           }
         />
@@ -51,7 +46,7 @@ export default class UserEmailList extends Component {
                       {!userEmals || (userEmals && userEmals.length === 0) ? (
                         <Table.Row><Table.Cell textAlign="center" colSpan="7">No emails to display.</Table.Cell></Table.Row>
                       ) : (
-                        userEmals && userEmals.map((resp, idx) => (
+                        userEmals && userEmals.map(resp => (
                             <Table.Row>
                               <Table.Cell>
                                 <Popup
@@ -79,7 +74,7 @@ export default class UserEmailList extends Component {
                                 {resp.toEmail ? resp.toEmail : ''}
                               </Table.Cell>
                               <Table.Cell collapsing>
-                                {resp.subject} <span><Link onClick={e => this.handleModel(e, idx)} to="/"> (Body)</Link></span> {' '}
+                                {resp.subject} <span><Link to={`${match.url}/${resp.recipientId}/${resp.requestDate}`}> (Body)</Link></span> {' '}
                                 {resp.attachments !== null && resp.attachments && resp.attachments.length > 0 && (
                                   <Popup
                                     trigger={<Icon className="ns-attachment" color="blue" size="large" />}
