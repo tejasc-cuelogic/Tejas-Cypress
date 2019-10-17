@@ -15,8 +15,6 @@ import { DataFormatter, FormValidator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 import { uiStore, userStore, userDetailsStore } from '../../index';
 
-const isMobile = document.documentElement.clientWidth < 768;
-
 class InvestorProfileStore {
   @observable EMPLOYMENT_FORM = FormValidator.prepareFormObject(EMPLOYMENT, true);
 
