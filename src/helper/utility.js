@@ -329,6 +329,11 @@ export class Utility {
     };
     return obj;
   };
+
+  modalCssUpdate = (searchClass, addClass) => {
+    const modal = document.querySelector(`.${searchClass}`).closest('.page');
+    modal.classList.add(addClass);
+  }
 }
 
 export default new Utility();
