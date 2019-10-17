@@ -132,7 +132,7 @@ export const campaignDetailsQuery = gql`
       unitPrice
       discount
       valuationCap
-      priceCalculation
+      totalRoundSize
       equityClass
       equityUnitType
       roundType

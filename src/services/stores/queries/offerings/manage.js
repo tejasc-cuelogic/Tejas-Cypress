@@ -219,7 +219,7 @@ export const getOfferingDetails = gql`
         discount
         valuationCap
         unitPrice
-        priceCalculation
+        totalRoundSize
         equityClass
         equityUnitType
         roundType
@@ -997,6 +997,7 @@ export const getOfferingDetails = gql`
               }
             }
           }
+          unitPrice
           multiple
           revSharePercentage
           interestRate

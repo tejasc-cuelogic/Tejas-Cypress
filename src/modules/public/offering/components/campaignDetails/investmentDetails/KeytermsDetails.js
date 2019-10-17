@@ -265,6 +265,11 @@ class KeyTermsDetails extends Component {
               field="equityClass"
               title="Equity Class"
             />
+            <KeyTermsFieldHoc
+              data={KeyTerms}
+              field="totalRoundSize"
+              title="Total Round Size"
+            />
             {/* Total Round Size */}
             {get(KeyTerms, 'premoneyValuation')
               && (
