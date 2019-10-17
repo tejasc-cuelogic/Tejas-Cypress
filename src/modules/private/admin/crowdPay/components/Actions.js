@@ -18,10 +18,10 @@ export default class Actions extends Component {
       const { detailsOfUser, selectedUserId } = this.props.userDetailsStore;
       if (selectedUserId === '' || selectedUserId !== userId) {
         this.props.userDetailsStore.getUserProfileDetails(userId).then((data) => {
-          this.checkRequestIdBeforeSubmitInvestor(get(data, 'user'), attrObj);
+          this.checkCipBeforeSubmitInvestor(get(data, 'user'), attrObj);
         });
       } else if (get(detailsOfUser, 'data.user')) {
-        this.checkRequestIdBeforeSubmitInvestor(get(detailsOfUser, 'data.user'), attrObj);
+        this.checkCipBeforeSubmitInvestor(get(detailsOfUser, 'data.user'), attrObj);
       }
     } else if (availableActions.includes(action)) {
       this.props.crowdPayCtaHandler(userId, accountId, action, msg);
@@ -30,19 +30,20 @@ export default class Actions extends Component {
     }
   }
 
-  handleVerifyUserIdentity = (userId, accountId, action, msg) => {
-    this.props.identityStore.verifyUserIdentity().then((requestId) => {
-      if (requestId) {
-        this.props.crowdPayCtaHandler(userId, accountId, action, msg);
-      } else {
-        this.props.crowdpayStore.removeLoadingCrowdPayId(accountId, this.props.account.accountStatus);
-      }
-    });
+  handleVerifyUserIdentity = async (userId, accountId, action, msg) => {
+    const { res } = await this.props.identityStore.verifyCip(true);
+    const { cipStepUrlMapping } = this.props.identityStore;
+    const { step } = res.data.verifyCip;
+    if (step !== 'OFFLINE' && !cipStepUrlMapping.cip.steps.includes(step)) {
+      this.props.crowdPayCtaHandler(userId, accountId, action, msg);
+    } else {
+      this.props.crowdpayStore.removeLoadingCrowdPayId(accountId, this.props.account.accountStatus);
+    }
   }
 
-  checkRequestIdBeforeSubmitInvestor = (userObj, attrObj) => {
+  checkCipBeforeSubmitInvestor = (userObj, attrObj) => {
     const { userId, accountId, action, msg } = attrObj;
-    if (this.isCipExpired(userObj) || userObj.legalDetails.status === 'OFFLINE' || userObj.cip.requestId === '-1') {
+    if (this.isCipExpired(userObj)) {
       this.handleVerifyUserIdentity(userId, accountId, action, msg);
     } else {
       this.props.crowdPayCtaHandler(userId, accountId, action, msg);
