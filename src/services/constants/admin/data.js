@@ -266,3 +266,25 @@ export const CRONFACTORY_META = FormHelper.generateMeta([
   ],
   ['jobId', 'Job Id', '', '', 'Enter here'],
 ]);
+
+export const EMAILLIST_META = FormHelper.generateMeta([
+  ['emailType', 'Email Type', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'DEV', text: 'DEV', value: 'DEV' },
+          { key: 'NOTIFICATIONS', text: 'NOTIFICATIONS', value: 'NOTIFICATIONS' },
+          { key: 'ACCOUNTS', text: 'ACCOUNTS', value: 'ACCOUNTS' },
+          { key: 'ACCREDITATION', text: 'ACCREDITATION', value: 'ACCREDITATION' },
+          { key: 'TRANSFERS', text: 'TRANSFERS', value: 'TRANSFERS' },
+          { key: 'SALES', text: 'SALES', value: 'SALES' },
+          { key: 'APPLY', text: 'APPLY', value: 'APPLY' },
+          { key: 'COMMENTS', text: 'COMMENTS', value: 'COMMENTS' },
+          { key: 'PAYMENTS', text: 'PAYMENTS', value: 'PAYMENTS' },
+          { key: 'SUPPORT_SERVICES', text: 'SUPPORT_SERVICES', value: 'SUPPORT_SERVICES' },
+        ],
+      },
+    },
+  ],
+]);

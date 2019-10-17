@@ -14,7 +14,7 @@ import validationService from '../../../../api/validation';
 import { fileUpload } from '../../../actions';
 import { INVESTOR_URLS } from '../../../constants/url';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
-import { US_STATES, FILE_UPLOAD_STEPS } from '../../../../constants/account';
+import { US_STATES, FILE_UPLOAD_STEPS, US_STATES_FOR_INVESTOR } from '../../../../constants/account';
 
 export class IdentityStore {
   @observable ID_VERIFICATION_FRM = FormValidator.prepareFormObject(USER_IDENTITY);
@@ -46,9 +46,9 @@ export class IdentityStore {
   @observable isAdmin = false;
 
   cipStepUrlMapping = {
-    ciphardFail: { steps: ['userCIPHardFail', 'userCIPFail'], url: INVESTOR_URLS.cipHardFail },
-    cipSoftFail: { steps: ['userCIPSoftFail'], url: INVESTOR_URLS.cipSoftFail },
-    cipPass: { steps: ['userCIPPass', 'OFFLINE', 'phoneMfa'], url: INVESTOR_URLS.phoneVerification },
+    ciphardFail: { steps: ['userCIPHardFail', 'userCIPFail'], url: INVESTOR_URLS.cipHardFail, status: 'HARD_FAIL' },
+    cipSoftFail: { steps: ['userCIPSoftFail'], url: INVESTOR_URLS.cipSoftFail, status: 'SOFT_FAIL' },
+    cipPass: { steps: ['userCIPPass', 'OFFLINE', 'phoneMfa'], url: INVESTOR_URLS.phoneVerification, status: 'PASS' },
     cip: { steps: ['UNIQUE_SSN', 'ADDRESS_VERIFICATION', 'PHONE_VERIFICATION'], url: INVESTOR_URLS.cip },
   }
 
@@ -143,6 +143,8 @@ export class IdentityStore {
   @action
   setAddressFieldsForUserVerification = (place) => {
     FormValidator.setAddressFields(place, this.ID_VERIFICATION_FRM);
+    const state = US_STATES.find(s => s.text === this.ID_VERIFICATION_FRM.fields.state.value.toUpperCase());
+    this.ID_VERIFICATION_FRM.fields.state.value = state ? state.key : '';
   }
 
   @action
@@ -234,6 +236,7 @@ export class IdentityStore {
     }
 
     if (res.data.verifyCip.step === 'OFFLINE') {
+      userDetailsStore.updateUserDetails('legalDetails', { status: 'OFFLINE' });
       window.sessionStorage.setItem('cipErrorMessage',
         JSON.stringify(res.data.verifyCip.errorMessage));
     }
@@ -242,13 +245,12 @@ export class IdentityStore {
     return { res, url };
   }
 
-  updateUserDataAndSendOtp = async (cipStatus) => {
+  updateUserDataAndSendOtp = async () => {
     if (userDetailsStore.signupStatus.phoneVerification !== 'DONE') {
       await this.startPhoneVerification();
     }
     userDetailsStore.updateUserDetails('legalDetails', this.formattedUserInfoForCip.user);
     userDetailsStore.updateUserDetails('phone', this.formattedUserInfoForCip.phoneDetails);
-    userDetailsStore.updateUserDetails('legalDetails', { status: cipStatus });
   }
 
   @action
@@ -300,13 +302,7 @@ cipWrapper = async (payLoad) => {
     url = this.cipStepUrlMapping[stepName].url;
 
     if (stepName === 'cipPass') {
-      const OFFLINE_STATUS = get(res,
-        `data.${payLoad.mutationName}.step`) === 'OFFLINE'
-        ? 'OFFLINE' : undefined;
-
-      await this.updateUserDataAndSendOtp(
-        OFFLINE_STATUS || payLoad.cipPassStatus || 'PASS',
-      );
+      await this.updateUserDataAndSendOtp();
     } else if (!get(res, `data.${payLoad.mutationName}.status`)
     && res.data[`${payLoad.mutationName}`].message) {
       url = undefined;
@@ -316,7 +312,17 @@ cipWrapper = async (payLoad) => {
         }));
     }
 
+    if (stepName !== 'cip') {
+      userDetailsStore.updateUserDetails('legalDetails', {
+        status: this.cipStepUrlMapping[stepName].status || payLoad.mutation.cipPassStatus,
+      });
+      userDetailsStore.updateUserDetails('cip', {
+        expiration: Helper.getDaysfromNow(21),
+      });
+    }
+
     this.setFieldValue('signUpLoading', false);
+
     return { res, url };
   } catch (err) {
     uiStore.setFieldvalue('errors', DataFormatter.getSimpleErr(err));
@@ -610,7 +616,7 @@ cipWrapper = async (payLoad) => {
   @computed
   get profileDetails() {
     const { fields } = this.ID_PROFILE_INFO;
-    const selectedState = find(US_STATES, { value: fields.state.value });
+    const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });
     const profileDetails = {
       firstName: fields.firstName.value,
       lastName: fields.lastName.value,
