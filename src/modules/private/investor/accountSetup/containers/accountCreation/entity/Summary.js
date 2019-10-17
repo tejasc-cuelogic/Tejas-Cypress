@@ -31,30 +31,6 @@ export default class Summary extends Component {
     this.props.bankAccountStore.setLoaderForAccountBlank();
   }
 
-  handleCreateAccount = () => {
-    this.props.identityStore.setCipStatusWithUserDetails();
-    this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
-    const { userDetails, isCipExpired } = this.props.userDetailsStore;
-    if (isCipExpired || this.props.identityStore.isUserCipOffline || userDetails.cip.requestId === '-1') {
-      this.props.handleUserIdentity('entity', this.handleSubmitAccount);
-      this.props.userDetailsStore.setAccountForWhichCipExpired('entity');
-    } else {
-      this.props.handleLegalDocsBeforeSubmit('entity', this.handleSubmitAccount);
-    }
-  }
-
-  handleSubmitAccount = () => {
-    this.props.uiStore.setcreateAccountMessage();
-    this.props.entityAccountStore.submitAccount().then(() => {
-      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      const url = this.props.entityAccountStore.showProcessingModal ? `${this.props.match.url}/processing` : '/app/setup';
-      this.props.entityAccountStore.setFieldValue('showProcessingModal', false);
-      this.props.history.push(url);
-      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-    });
-  }
-
   openModal = (type) => {
     const { getBoxEmbedLink } = this.props.agreementsStore;
     getBoxEmbedLink(type);
@@ -146,7 +122,7 @@ export default class Summary extends Component {
                   <Table.Cell className="grey-header">Bank Account</Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                { !isEmpty(routingNum)
+                {!isEmpty(routingNum)
                   && (
                   <Table.Row>
                     <Table.Cell className="grey-header">Routing Number</Table.Cell>
@@ -170,9 +146,9 @@ export default class Summary extends Component {
         </div>
         {errors
           && (
-<Message error>
-            <ListErrors errors={[errors.message]} />
-          </Message>
+            <Message error>
+              <ListErrors errors={[errors.message]} />
+            </Message>
           )
         }
         <Responsive maxWidth={767}>
@@ -206,7 +182,7 @@ export default class Summary extends Component {
           </p>
         </Responsive>
         <div className="center-align mt-30">
-          <Button fluid={isMobile} primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent} />
+          <Button fluid={isMobile} primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount('entity')} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent} />
         </div>
         <Responsive minWidth={768}>
           <p className="center-align grey-header mt-30 mb-0">

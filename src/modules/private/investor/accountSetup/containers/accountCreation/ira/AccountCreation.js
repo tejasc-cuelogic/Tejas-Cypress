@@ -147,8 +147,8 @@ export default class AccountCreation extends React.Component {
           name: 'Summary',
           isValid: isValidIraForm ? '' : stepToBeRendered > 5 ? 'error' : '',
           // validForm: isValidIraForm,
-          component: <Summary handleUserIdentity={this.props.handleUserIdentity} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
           disableNextButton: true,
+          component: <Summary handleCreateAccount={this.props.handleCreateAccount} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
         },
       ];
     } else {
@@ -203,8 +203,12 @@ export default class AccountCreation extends React.Component {
         },
         {
           name: 'Summary',
+<<<<<<< HEAD
           component: <Summary handleUserIdentity={this.props.handleUserIdentity} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
           disableNextButton: true,
+=======
+          component: <Summary handleCreateAccount={this.props.handleCreateAccount} />,
+>>>>>>> c42806abcf5670fb4dd531a401361b9aa30e3eaf
           isValid: isValidIraForm ? '' : stepToBeRendered > 4 ? 'error' : '',
           validForm: isValidIraForm,
           bankSummary: false,

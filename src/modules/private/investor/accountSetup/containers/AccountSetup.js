@@ -57,23 +57,23 @@ export default class AccountSetup extends Component {
         forceTitle="Setup"
         P5={!signupStatus.finalStatus ? !currentUser.loading
           ? (
-<StickyNotification
-  isInvestor={isInvestor}
-  signupStatus={signupStatus}
-  userDetailsStore={this.props.userDetailsStore}
-/>
+            <StickyNotification
+              isInvestor={isInvestor}
+              signupStatus={signupStatus}
+              userDetailsStore={this.props.userDetailsStore}
+            />
           ) : <InlineLoader /> : ''}
       >
         <Header as={isMobile ? 'h5' : 'h4'} className={isMobile ? 'mb-30 center-align' : 'mt-80 mb-30'}>{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
         {!currentUser.loading
           ? (
-<ProgressCard
-  {...this.props}
-  isBasicVerDoneForMigratedFullUser={isBasicVerDoneForMigratedFullUser}
-  signupStatus={signupStatus}
-  getStepStatus={getStepStatus}
-  navToAccTypes={this.navToAccTypes}
-/>
+            <ProgressCard
+              {...this.props}
+              isBasicVerDoneForMigratedFullUser={isBasicVerDoneForMigratedFullUser}
+              signupStatus={signupStatus}
+              getStepStatus={getStepStatus}
+              navToAccTypes={this.navToAccTypes}
+            />
           ) : <InlineLoader />
 
         }

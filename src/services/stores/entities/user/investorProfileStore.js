@@ -290,9 +290,6 @@ class InvestorProfileStore {
             this.setStepToBeRendered(currentStep.stepToBeRendered);
             resolve();
           }
-          if (!isMobile) {
-            Helper.toast(`${currentStep.name} submitted successfully.`, 'success');
-          }
         }))
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));

@@ -4,7 +4,7 @@ import { find, get, capitalize, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { FormValidator, DataFormatter } from '../../../helper';
-import { bankAccountStore, individualAccountStore, iraAccountStore, entityAccountStore, userDetailsStore, uiStore, identityStore } from '../index';
+import { bankAccountStore, individualAccountStore, iraAccountStore, userStore, entityAccountStore, userDetailsStore, uiStore, identityStore } from '../index';
 import { GqlClient as client } from '../../../api/gqlApi';
 // eslint-disable-next-line import/named
 import { getInvestorCloseAccounts, closeInvestorAccount, updateToAccountProcessing } from '../queries/account';
@@ -31,7 +31,7 @@ export class AccountStore {
     0: {
       store: individualAccountStore,
       location: 1,
-      accountId: 'individualAccId',
+      accountId: 'individualAccountId',
       name: 'individual',
       linkbankValue: 0,
     },
@@ -117,32 +117,44 @@ export class AccountStore {
   }
 
   @action
-  updateToAccountProcessing = (accountId, accountType) => new Promise((resolve, reject) => {
-    identityStore.setFieldValue('signUpLoading', true);
-    client
-      .mutate({
-        mutation: updateToAccountProcessing,
-        variables: {
-          accountId,
-          error: window.sessionStorage.getItem('cipErrorMessage'),
-        },
-      })
-      .then((res) => {
-        this.ACC_TYPE_MAPPING[accountType].store.setFieldValue('showProcessingModal', true);
-        bankAccountStore.resetStoreData();
-        this.ACC_TYPE_MAPPING[accountType].store.isFormSubmitted = true;
-        Helper.toast(`${capitalize(this.ACC_TYPE_MAPPING[accountType].name)} account submitted successfully.`, 'success');
-        identityStore.setFieldValue('signUpLoading', false);
-        resolve(res);
-      })
-      .catch((err) => {
-        Helper.toast('Unable to submit Account', 'error');
-        identityStore.setFieldValue('signUpLoading', false);
-        uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
-        reject();
-      });
-  })
+  accountProcessingWrapper = async (accountType, match) => {
+    const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: accountType });
+    const accountvalue = accountType === 'individual' ? 0 : accountType === 'ira' ? 1 : 2;
+    const { store } = this.ACC_TYPE_MAPPING[accountvalue];
+    const accountId = get(accountDetails, 'details.accountId') || store[`${accountType}AccountId`];
+    await this.updateToAccountProcessing(accountId, accountvalue);
+    window.sessionStorage.removeItem('cipErrorMessage');
+    const url = store.showProcessingModal ? `${match.url}/${accountType}/processing` : '/app/setup';
+    store.setFieldValue('showProcessingModal', false);
+    return url;
+  }
 
+  @action
+  updateToAccountProcessing = async (accountId, accountType) => {
+    try {
+      identityStore.setFieldValue('signUpLoading', true);
+      await client
+        .mutate({
+          mutation: updateToAccountProcessing,
+          variables: {
+            accountId,
+            error: window.sessionStorage.getItem('cipErrorMessage'),
+          },
+        });
+      this.ACC_TYPE_MAPPING[accountType].store.setFieldValue('showProcessingModal', true);
+      await userDetailsStore.getUser(userStore.currentUser.sub);
+      bankAccountStore.resetStoreData();
+      this.ACC_TYPE_MAPPING[accountType].store.isFormSubmitted = true;
+      Helper.toast(`${capitalize(this.ACC_TYPE_MAPPING[accountType].name)} account submitted successfully.`, 'success');
+      identityStore.setFieldValue('signUpLoading', false);
+      uiStore.removeOneFromProgressArray('submitAccountLoader');
+    } catch (err) {
+      Helper.toast('Unable to submit Account', 'error');
+      identityStore.setFieldValue('signUpLoading', false);
+      uiStore.resetUIAccountCreationError(DataFormatter.getSimpleErr(err));
+      uiStore.removeOneFromProgressArray('submitAccountLoader');
+    }
+  }
 
   @computed
   get sortedAccounts() {

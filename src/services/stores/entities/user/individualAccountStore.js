@@ -18,7 +18,7 @@ class IndividualAccountStore {
 
   @observable isManualLinkBankSubmitted = false;
 
-  @observable individualAccId = null;
+  @observable individualAccountId = null;
 
   @observable showProcessingModal = false;
 
@@ -58,7 +58,7 @@ class IndividualAccountStore {
   submitAccount = () => {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
     const payLoad = {
-      accountId: get(accountDetails, 'details.accountId') || this.individualAccId,
+      accountId: get(accountDetails, 'details.accountId') || this.individualAccountId,
       accountType: 'INDIVIDUAL',
     };
     return new Promise((resolve, reject) => {
@@ -76,9 +76,6 @@ class IndividualAccountStore {
             this.setFieldValue('showProcessingModal', true);
             bankAccountStore.resetStoreData();
             this.isFormSubmitted = true;
-            if (!isMobile) {
-              Helper.toast('Individual account submitted successfully.', 'success');
-            }
             resolve();
           }
         }).catch((err) => {
@@ -108,7 +105,6 @@ class IndividualAccountStore {
       uiStore.setProgress(false);
       if (res.data.createIndividualGoldStarInvestor) {
         this.setFieldValue('showProcessingModal', false);
-        Helper.toast('Individual account created successfully.', 'success');
         bankAccountStore.resetStoreData();
         this.isFormSubmitted = true;
       }
@@ -152,11 +148,10 @@ class IndividualAccountStore {
         },
         accountType: 'INDIVIDUAL',
       };
-      const actionPerformed = 'submitted';
       if (userDetailsStore.currentUser.data) {
         const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
-        if (accountDetails || this.individualAccId) {
-          variables.accountId = get(accountDetails, 'details.accountId') || this.individualAccId;
+        if (accountDetails || this.individualAccountId) {
+          variables.accountId = get(accountDetails, 'details.accountId') || this.individualAccountId;
         }
       }
       bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
@@ -167,17 +162,20 @@ class IndividualAccountStore {
           })
           .then(action((result) => {
             if (result.data.upsertInvestorAccount) {
-              this.individualAccId = result.data.upsertInvestorAccount.accountId;
+              this.individualAccountId = result.data.upsertInvestorAccount.accountId;
               const { linkedBank } = result.data.upsertInvestorAccount;
               bankAccountStore.setPlaidAccDetails(linkedBank);
               this.setFieldValue('apiCall', false);
             }
+<<<<<<< HEAD
             const { isValid } = bankAccountStore.formAddFunds.meta;
             if (currentStep) {
               if (currentStep.name === 'Add funds' && isValid && !isMobile) {
                 Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
               }
             }
+=======
+>>>>>>> c42806abcf5670fb4dd531a401361b9aa30e3eaf
             uiStore.setErrors(null);
             uiStore.setProgress(false);
             resolve(result);
@@ -241,7 +239,7 @@ class IndividualAccountStore {
   resetStoreData = () => {
     this.stepToBeRendered = 0;
     this.submited = false;
-    this.individualAccId = null;
+    this.individualAccountId = null;
     this.retry = 0;
     this.retryGoldStar = 0;
     this.isFormSubmitted = false;

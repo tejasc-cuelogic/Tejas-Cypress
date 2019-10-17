@@ -147,9 +147,6 @@ class EntityAccountStore {
           }
           bankAccountStore.resetStoreData();
           this.isFormSubmitted = true;
-          if (!isMobile) {
-            Helper.toast('Entity account submitted successfully.', 'success');
-          }
           uiStore.setProgress(false);
           resolve();
         })

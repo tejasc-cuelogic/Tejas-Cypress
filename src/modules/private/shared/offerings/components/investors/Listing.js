@@ -16,9 +16,9 @@ const meta = [
   { label: 'Residence City', value: 'city' },
   { label: 'State', value: 'state' },
   { label: 'Account Type', value: 'accountType' },
-  { label: 'Early Bird Eligibility', value: 'earlyBirdEligibility' },
   { label: 'Regulation', value: 'regulation' },
-  { label: 'Investment Amount', value: 'amount' },
+  { label: 'Amount', value: 'amount' },
+  { label: 'EB', value: 'earlyBirdEligibility' },
   { label: 'Date', value: 'investmentDate' },
   { label: 'Referral Code', value: 'referralCode' },
 ];
@@ -46,8 +46,8 @@ export default class Listing extends Component {
     const headerList = [...meta];
     const referralCode = get(offer, 'referralCode');
     const isOfferingClose = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE'].includes(get(offer, 'stage'));
-    let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
-    computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'Early Bird Eligibility', value: 'earlyBirdEligibility' });
+    let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Amount', value: 'amount' });
+    computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'EB', value: 'earlyBirdEligibility' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Regulation', value: 'regulation' });
     const listHeader = computedList;
