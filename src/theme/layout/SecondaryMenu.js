@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
+import { get } from 'lodash';
 import { Responsive, Menu, Dropdown, Icon, Header, Popup } from 'semantic-ui-react';
 import { MobileDropDownNav } from '../shared';
 
@@ -77,13 +78,13 @@ class SecondaryMenu extends Component {
     const {
       navItems, match, refMatch, location, vertical,
       noinvert, attached, className, stepsStatus, addon, heading,
-      force2ary, navCustomClick,
+      force2ary, navCustomClick, responsiveVars,
     } = this.props;
     let options = [];
-    const showMoreMenuLength = 8;
+    const showMoreMenuLength = get(responsiveVars, 'isTablet') ? 5 : 8;
     const showMoreMenu = this.props.offering && navItems && navItems.length > showMoreMenuLength;
     if (showMoreMenu) {
-      const dropOptions = navItems.splice(7, navItems.length - showMoreMenuLength);
+      const dropOptions = navItems.splice(showMoreMenuLength - 1, navItems.length - showMoreMenuLength);
       options = dropOptions.map(o => ({ key: o.to, text: o.title, value: o.to }));
     }
     // const mobNavItems = map(navItemList, i => mapKeys(i, (v, k) => iMap[k] || k));

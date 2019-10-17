@@ -11,7 +11,7 @@ export default class ConfirmModal extends Component {
   handleCloseModal = (e) => {
     e.preventDefault();
     this.props.uiStore.setErrors(null);
-    this.props.history.goBack();
+    this.props.history.push('/app/dashboard');
   }
 
   render() {
@@ -24,7 +24,7 @@ export default class ConfirmModal extends Component {
           <Form error onSubmit={this.props.partialSave}>
             {errors
               && (
-<Message error className="mb-30">
+              <Message error className="mb-30">
                 <ListErrors errors={[errors]} />
               </Message>
               )

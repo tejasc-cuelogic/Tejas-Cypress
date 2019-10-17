@@ -9,7 +9,7 @@ import OffersPanel from '../../../shared/offerings/components/shared/OffersPanel
 
 const getModule = component => lazy(() => import(`./tabs/${component}`));
 
-@inject('businessAppReviewStore', 'uiStore')
+@inject('businessAppReviewStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class ChooseOffer extends Component {
@@ -59,6 +59,7 @@ export default class ChooseOffer extends Component {
       { title: 'Tax Reporting', to: 'tax-reporting' },
       { title: 'Payment Chart', to: 'payment-chart' },
     ];
+    const { isIssuer } = this.props.userStore;
     if (fetchBusinessApplicationOffers) {
       const offer = fetchBusinessApplicationOffers.offers.offer[selectedOfferIndex];
       if (offer && offer.additionalTerms) {
@@ -96,6 +97,7 @@ export default class ChooseOffer extends Component {
                 selectOffer={this.handleSetField}
                 refModule="issuer"
                 selectedOfferIndex={selectedOfferIndex}
+                isIssuer={isIssuer}
               />
             </div>
             )
