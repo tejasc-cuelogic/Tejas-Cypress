@@ -182,7 +182,7 @@ export default class Summary extends Component {
           </p>
         </Responsive>
         <div className="center-align mt-30">
-          <Button fluid={isMobile} primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount('entity')} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent} />
+          <Button fluid={isMobile} primary size="large" className="relaxed" content="Submit for review" onClick={() => this.props.handleCreateAccount('entity')} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent} />
         </div>
         <Responsive minWidth={768}>
           <p className="center-align grey-header mt-30 mb-0">
