@@ -219,6 +219,9 @@ export const getOfferingDetails = gql`
         discount
         valuationCap
         unitPrice
+        priceCalculation
+        equityClass
+        equityUnitType
         roundType
         premoneyValuation
         additionalKeyterms {

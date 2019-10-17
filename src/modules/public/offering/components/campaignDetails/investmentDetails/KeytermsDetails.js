@@ -17,6 +17,16 @@ import { PopUpModal } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
+const KeyTermsFieldHoc = ({ data, title, key, content, titleAddon }) => (
+  get(data, key)
+    ? (
+      <Table.Row verticalAlign="top">
+        <Table.Cell width={7} className="neutral-text"><b>{title}{' '}</b>{titleAddon}</Table.Cell>
+        <Table.Cell>{content}</Table.Cell>
+      </Table.Row>
+    ) : ''
+);
+
 @inject('campaignStore')
 @observer
 class KeyTermsDetails extends Component {
@@ -118,85 +128,82 @@ class KeyTermsDetails extends Component {
               </React.Fragment>
             ))
             }
-            {get(KeyTerms, 'regulation') === 'BD_CF_506C'
-              && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text"><b>Raised to date{' '}</b>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>
-                      {Helper.CurrencyFormat(totalInvestmentAmount, 0)}
-                    </p>
-                    <p>
-                      <i>{`${Helper.CurrencyFormat(totalInvestmentAmountCf, 0)} (under Regulation Crowdfunding)`}</i>
-                    </p>
-                    <p>
-                      <i>{`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}</i>
-                    </p>
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
-            {get(KeyTerms, 'securities')
-              && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text"><b>Type of Securities{' '}</b></Table.Cell>
-                  <Table.Cell>
-                    <p>
-                      {offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}
-                    </p>
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
-            {get(KeyTerms, 'investmentMultiple')
-              && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text"><b>Investment Multiple{' '}</b>
-                    {isMobile
-                      ? (<PopUpModal label="Investment Multiple" content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth}. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`} />)
-                      : (
-                        <Popup
-                          trigger={<Icon name="help circle" color="green" />}
-                          content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth}. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
-                          position="top center"
-                        />
-                      )
-                    }
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>
-                      {get(KeyTerms, 'investmentMultiple') ? get(KeyTerms, 'investmentMultiple') : 'NA'}
-                    </p>
-                    <HtmlEditor
-                      readOnly
-                      content={get(KeyTerms, 'investmentMultipleSummary')
-                        ? get(KeyTerms, 'investmentMultipleSummary')
-                        : ''}
+            <KeyTermsFieldHoc
+              data={campaign}
+              key="closureSummary.totalInvestmentAmount"
+              title="Raised to date"
+              content={(
+                <>
+                  <p>
+                    {Helper.CurrencyFormat(totalInvestmentAmount, 0)}
+                  </p>
+                  <p>
+                    <i>{`${Helper.CurrencyFormat(totalInvestmentAmountCf, 0)} (under Regulation Crowdfunding)`}</i>
+                  </p>
+                  <p>
+                    <i>{`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}</i>
+                  </p>
+                </>
+              )}
+            />
+            <KeyTermsFieldHoc
+              data={KeyTerms}
+              key="securities"
+              title="Type of Securities"
+              content={(
+                <p>
+                  {offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}
+                </p>
+              )}
+            />
+            <KeyTermsFieldHoc
+              data={KeyTerms}
+              key="investmentMultiple"
+              title="Investment Multiple"
+              titleAddon={
+                isMobile
+                  ? (<PopUpModal label="Investment Multiple" content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth}. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`} />)
+                  : (
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth}. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
+                      position="top center"
                     />
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
-            {get(KeyTerms, 'revSharePercentage')
-              && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text"><b>Revenue Sharing Percentage</b></Table.Cell>
-                  <Table.Cell>
-                    <p>
-                      {get(KeyTerms, 'revSharePercentage') < 10 ? 'Up to ' : ''}
-                      {`${get(KeyTerms, 'revSharePercentage')}${get(KeyTerms, 'revSharePercentage').includes('%') ? '' : '%'}` || ''}
-                    </p>
-                    <HtmlEditor
-                      readOnly
-                      content={get(KeyTerms, 'revSharePercentageDescription')
-                        ? get(KeyTerms, 'revSharePercentageDescription')
-                        : ''}
-                    />
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
+                  )
+              }
+              content={(
+                <>
+                  <p>
+                    {get(KeyTerms, 'investmentMultiple') ? get(KeyTerms, 'investmentMultiple') : 'NA'}
+                  </p>
+                  <HtmlEditor
+                    readOnly
+                    content={get(KeyTerms, 'investmentMultipleSummary')
+                      ? get(KeyTerms, 'investmentMultipleSummary')
+                      : ''}
+                  />
+                </>
+              )}
+            />
+            <KeyTermsFieldHoc
+              data={KeyTerms}
+              key="revSharePercentage"
+              title="Revenue Sharing Percentage"
+              content={(
+                <>
+                  <p>
+                    {get(KeyTerms, 'revSharePercentage') < 10 ? 'Up to ' : ''}
+                    {`${get(KeyTerms, 'revSharePercentage')}${get(KeyTerms, 'revSharePercentage').includes('%') ? '' : '%'}` || ''}
+                  </p>
+                  <HtmlEditor
+                    readOnly
+                    content={get(KeyTerms, 'revSharePercentageDescription')
+                      ? get(KeyTerms, 'revSharePercentageDescription')
+                      : ''}
+                  />
+                </>
+              )}
+            />
             {get(KeyTerms, 'maturity')
               && (
                 <Table.Row verticalAlign="top">

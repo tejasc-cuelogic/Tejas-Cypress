@@ -387,6 +387,27 @@ export const KEY_TERMS = {
     rule: 'numeric',
     placeHolder: 'Enter here',
   },
+  priceCalculation: {
+    value: null,
+    label: 'Price (calculation)',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  equityClass: {
+    value: null,
+    label: 'Equity Class',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  equityUnitType: {
+    value: null,
+    label: 'Equity unit type',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
   premoneyValuation: {
     value: null,
     label: 'Pre-Money Valuation',
