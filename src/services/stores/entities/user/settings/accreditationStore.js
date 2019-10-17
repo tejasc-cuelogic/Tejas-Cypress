@@ -43,7 +43,7 @@ export class AccreditationStore {
 
   @observable removeFileIdsList = [];
 
-  @observable stepToBeRendered = '';
+  @observable stepToBeRendered = 0;
 
   @observable filters = false;
 

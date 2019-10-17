@@ -61,7 +61,7 @@ export default class NavBarMobile extends Component {
       navTitle = 'Legal';
     }
     const { signupStatus, pendingStep } = userDetailsStore;
-    const isAddNewAccount = signupStatus && signupStatus.finalStatus && signupStatus.investorProfileCompleted && signupStatus.inActiveAccounts.length > 0;
+    const isAddNewAccount = signupStatus && !signupStatus.finalStatus && signupStatus.investorProfileCompleted && signupStatus.inActiveAccounts.length > 0;
     const loggedInNavs = this.props.navStore.myMobileRoutes.filter(e => (e.isLoggedIn && this.props.userStore.isInvestor && (e.title !== 'Add New Account' || (e.title === 'Add New Account' && isAddNewAccount))));
     const publicNav = this.props.navStore.myMobileRoutes.filter(e => !e.isLoggedIn || (!this.props.userStore.isInvestor && e.to === 'offerings'));
     // const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
