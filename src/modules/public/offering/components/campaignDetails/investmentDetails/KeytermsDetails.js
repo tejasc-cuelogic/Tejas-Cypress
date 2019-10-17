@@ -17,12 +17,12 @@ import { PopUpModal } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-const KeyTermsFieldHoc = ({ data, title, key, content, titleAddon }) => (
-  get(data, key)
+const KeyTermsFieldHoc = ({ data, title, field, content, titleAddon }) => (
+  get(data, field)
     ? (
       <Table.Row verticalAlign="top">
         <Table.Cell width={7} className="neutral-text"><b>{title}{' '}</b>{titleAddon}</Table.Cell>
-        <Table.Cell>{content}</Table.Cell>
+        <Table.Cell>{content || get(data, field)}</Table.Cell>
       </Table.Row>
     ) : ''
 );
@@ -130,7 +130,7 @@ class KeyTermsDetails extends Component {
             }
             <KeyTermsFieldHoc
               data={campaign}
-              key="closureSummary.totalInvestmentAmount"
+              field="closureSummary.totalInvestmentAmount"
               title="Raised to date"
               content={(
                 <>
@@ -148,7 +148,7 @@ class KeyTermsDetails extends Component {
             />
             <KeyTermsFieldHoc
               data={KeyTerms}
-              key="securities"
+              field="securities"
               title="Type of Securities"
               content={(
                 <p>
@@ -158,7 +158,7 @@ class KeyTermsDetails extends Component {
             />
             <KeyTermsFieldHoc
               data={KeyTerms}
-              key="investmentMultiple"
+              field="investmentMultiple"
               title="Investment Multiple"
               titleAddon={
                 isMobile
@@ -187,7 +187,7 @@ class KeyTermsDetails extends Component {
             />
             <KeyTermsFieldHoc
               data={KeyTerms}
-              key="revSharePercentage"
+              field="revSharePercentage"
               title="Revenue Sharing Percentage"
               content={(
                 <>
@@ -204,6 +204,37 @@ class KeyTermsDetails extends Component {
                 </>
               )}
             />
+            <KeyTermsFieldHoc
+              data={KeyTerms}
+              field="securities"
+              title="Valuation Cap"
+            />
+            <KeyTermsFieldHoc
+              data={KeyTerms}
+              field="discount"
+              title="Discount"
+            />
+            {get(KeyTerms, 'interestRate')
+              && (
+                <Table.Row verticalAlign="top">
+                  <Table.Cell width={7} className="neutral-text"><b>Interest Rate{' '}</b>
+                    {isMobile
+                      ? (<PopUpModal label="Interest Rate" content={`Interest payment is calculated at a gross annualized interest rate of ${get(KeyTerms, 'interestRate') || ' - '}% each month on the remaining balance of your investment from the prior month.`} />)
+                      : (
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content={`Interest payment is calculated at a gross annualized interest rate of ${get(KeyTerms, 'interestRate') || ' - '}% each month on the remaining balance of your investment from the prior month.`}
+                          position="top center"
+                        />
+                      )
+                    }
+                  </Table.Cell>
+                  <Table.Cell>
+                    {KeyTerms && KeyTerms.interestRate ? `${KeyTerms.interestRate}%` : 'NA'}
+                  </Table.Cell>
+                </Table.Row>
+              )
+            }
             {get(KeyTerms, 'maturity')
               && (
                 <Table.Row verticalAlign="top">
@@ -225,6 +256,38 @@ class KeyTermsDetails extends Component {
                       KeyTerms && KeyTerms.startupPeriod
                       && `, including a ${KeyTerms.startupPeriod}-month startup period for ramp up`
                     }
+                  </Table.Cell>
+                </Table.Row>
+              )
+            }
+            <KeyTermsFieldHoc
+              data={KeyTerms}
+              field="equityClass"
+              title="Equity Class"
+            />
+            {/* Total Round Size */}
+            {get(KeyTerms, 'premoneyValuation')
+              && (
+                <Table.Row verticalAlign="top">
+                  <Table.Cell width={7} className="neutral-text"><b>Pre-Money valuation{' '}</b>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <p>
+                      {Helper.CurrencyFormat(KeyTerms.premoneyValuation)}
+                    </p>
+                  </Table.Cell>
+                </Table.Row>
+              )
+            }
+            {get(KeyTerms, 'unitPrice')
+              && (
+                <Table.Row verticalAlign="top">
+                  <Table.Cell width={7} className="neutral-text"><b>Share Price{' '}</b>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <p>
+                      {Helper.CurrencyFormat(KeyTerms.unitPrice)}
+                    </p>
                   </Table.Cell>
                 </Table.Row>
               )
@@ -282,64 +345,6 @@ class KeyTermsDetails extends Component {
                       )
                       : 'NA'
                     }
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
-            {get(KeyTerms, 'interestRate')
-              && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text"><b>Interest Rate{' '}</b>
-                    {isMobile
-                      ? (<PopUpModal label="Interest Rate" content={`Interest payment is calculated at a gross annualized interest rate of ${get(KeyTerms, 'interestRate') || ' - '}% each month on the remaining balance of your investment from the prior month.`} />)
-                      : (
-                        <Popup
-                          trigger={<Icon name="help circle" color="green" />}
-                          content={`Interest payment is calculated at a gross annualized interest rate of ${get(KeyTerms, 'interestRate') || ' - '}% each month on the remaining balance of your investment from the prior month.`}
-                          position="top center"
-                        />
-                      )
-                    }
-                  </Table.Cell>
-                  <Table.Cell>
-                    {KeyTerms && KeyTerms.interestRate ? `${KeyTerms.interestRate}%` : 'NA'}
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
-            {/* {get(KeyTerms, 'roundType') &&
-              <Table.Row verticalAlign="top">
-                <Table.Cell width={7} className="neutral-text"><b>Round Type{' '}</b>
-                </Table.Cell>
-                <Table.Cell>
-                  <p>
-                    {ROUND_TYPES_ENUM[KeyTerms.roundType]}
-                  </p>
-                </Table.Cell>
-              </Table.Row>
-            } */}
-            {get(KeyTerms, 'unitPrice')
-              && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text"><b>Share Price{' '}</b>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>
-                      {Helper.CurrencyFormat(KeyTerms.unitPrice)}
-                    </p>
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
-            {get(KeyTerms, 'premoneyValuation')
-              && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text"><b>Pre-Money valuation{' '}</b>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>
-                      {Helper.CurrencyFormat(KeyTerms.premoneyValuation)}
-                    </p>
                   </Table.Cell>
                 </Table.Row>
               )

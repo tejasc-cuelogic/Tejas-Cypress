@@ -382,7 +382,7 @@ export const KEY_TERMS = {
   },
   unitPrice: {
     value: null,
-    label: 'Unit Price',
+    label: 'Price (copy)',
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
