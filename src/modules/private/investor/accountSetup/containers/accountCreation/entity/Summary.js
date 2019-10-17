@@ -30,30 +30,6 @@ export default class Summary extends Component {
     this.props.bankAccountStore.setLoaderForAccountBlank();
   }
 
-  handleCreateAccount = () => {
-    this.props.identityStore.setCipStatusWithUserDetails();
-    this.props.uiStore.addMoreInProgressArray('submitAccountLoader');
-    const { userDetails, isCipExpired } = this.props.userDetailsStore;
-    if (isCipExpired || this.props.identityStore.isUserCipOffline || userDetails.cip.requestId === '-1') {
-      this.props.handleUserIdentity('entity', this.handleSubmitAccount);
-      this.props.userDetailsStore.setAccountForWhichCipExpired('entity');
-    } else {
-      this.props.handleLegalDocsBeforeSubmit('entity', this.handleSubmitAccount);
-    }
-  }
-
-  handleSubmitAccount = () => {
-    this.props.uiStore.setcreateAccountMessage();
-    this.props.entityAccountStore.submitAccount().then(() => {
-      this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-      const url = this.props.entityAccountStore.showProcessingModal ? `${this.props.match.url}/processing` : '/app/summary';
-      this.props.entityAccountStore.setFieldValue('showProcessingModal', false);
-      this.props.history.push(url);
-      this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-    });
-  }
-
   openModal = (type) => {
     const { getBoxEmbedLink } = this.props.agreementsStore;
     getBoxEmbedLink(type);
@@ -135,24 +111,24 @@ export default class Summary extends Component {
                 </Table.Row>
                 {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
                   && (
-<Table.Row>
-                    <Table.Cell>Bank: </Table.Cell>
-                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
-                  </Table.Row>
+                    <Table.Row>
+                      <Table.Cell>Bank: </Table.Cell>
+                      <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                    </Table.Row>
                   )
                 }
                 <Table.Row>
                   <Table.Cell>Bank Account</Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                { !isEmpty(routingNum)
+                {!isEmpty(routingNum)
                   && (
-<Table.Row>
-                    <Table.Cell>Routing Number</Table.Cell>
-                    <Table.Cell>
-                      { routingNum || '' }
-                    </Table.Cell>
-                  </Table.Row>
+                    <Table.Row>
+                      <Table.Cell>Routing Number</Table.Cell>
+                      <Table.Cell>
+                        {routingNum || ''}
+                      </Table.Cell>
+                    </Table.Row>
                   )
                 }
                 <Table.Row>
@@ -169,13 +145,13 @@ export default class Summary extends Component {
         </div>
         {errors
           && (
-<Message error>
-            <ListErrors errors={[errors.message]} />
-          </Message>
+            <Message error>
+              <ListErrors errors={[errors.message]} />
+            </Message>
           )
         }
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent} />
+          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.props.handleCreateAccount('entity')} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent} />
         </div>
         <p className="center-align grey-header mt-30 mb-0">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
