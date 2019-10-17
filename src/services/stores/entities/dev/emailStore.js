@@ -1,6 +1,4 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
-import { isArray } from 'lodash';
-import moment from 'moment';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import { getEmailList } from '../../queries/users';
 import Helper from '../../../../helper/utility';
@@ -17,16 +15,6 @@ export class EmailStore extends DataModelStore {
   filters = true;
 
   emailLogList = [];
-
-  requestState = {
-    lek: { 'page-1': null },
-    skip: 0,
-    page: 1,
-    perPage: 25,
-    filters: false,
-    search: {
-    },
-  };
 
   initRequest = async (reqParams) => {
     try {
@@ -72,37 +60,6 @@ export class EmailStore extends DataModelStore {
     }
   }
 
-  initiateSearch = (srchParams) => {
-    this.setFieldValue('requestState', { 'page-1': null }, 'lek');
-    this.setFieldValue('requestState', 1, 'page');
-    this.setFieldValue('requestState', srchParams, 'search');
-    this.initRequest();
-  }
-
-  setInitiateSrch = (name, value) => {
-    if (name === 'startDate' || name === 'endDate') {
-      this.requestState.search[name] = value ? name === 'startDate' ? moment(new Date(`${value.formattedValue} 00:00:00`)).toISOString() : moment(new Date(`${value.formattedValue} 23:59:59`)).toISOString() : '';
-      if ((this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '')
-        || (this.requestState.search.startDate === '' && this.requestState.search.endDate === '')
-      ) {
-        const srchParams = { ...this.requestState.search };
-        this.initiateSearch(srchParams);
-      }
-    } else {
-      const srchParams = { ...this.requestState.search };
-      const temp = { ...this.requestState };
-      // temp.search[name] = { ...this.requestState.search };
-      this.setFieldValue(temp.search[name], { ...this.requestState.search });
-      this.setFieldValue('requestState', temp);
-      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
-        srchParams[name] = value;
-      } else {
-        delete srchParams[name];
-      }
-      this.initiateSearch(srchParams);
-    }
-  }
-
   get emailList() {
     return (this.emailLogList && this.emailLogList.fetchEmails
       && toJS(this.emailLogList.fetchEmails.emails)
@@ -114,27 +71,6 @@ export class EmailStore extends DataModelStore {
       && toJS(this.emailLogList.fetchEmails.resultCount)
     ) || 0;
   }
-
-  setFormData = (form, elemRef, elementValue, subForm = false) => {
-    if (subForm) {
-      this[form][subForm].fields[elemRef].value = elementValue;
-    } else {
-      this[form].fields[elemRef].value = elementValue;
-    }
-  }
-
-  resetFilters = () => {
-    this.requestState = {
-      lek: { 'page-1': null },
-      skip: 0,
-      page: 1,
-      perPage: 25,
-      filters: false,
-      search: {
-      },
-    };
-    this.setFieldValue('emailLogList', []);
-  }
 }
 
 decorate(EmailStore, {
@@ -143,10 +79,8 @@ decorate(EmailStore, {
   initRequest: action,
   emailList: computed,
   count: computed,
-  resetFilters: action,
   emailLogList: observable,
   filters: observable,
-  requestState: observable,
 });
 
 export default new EmailStore();

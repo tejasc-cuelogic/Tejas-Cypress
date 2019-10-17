@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, Table, Item, Icon, Popup, Modal, Button, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
+import { get } from 'lodash';
 import moment from 'moment';
 import Filters from './filter';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -21,6 +22,7 @@ function EmailList(props) {
     props.emailStore.resetForm('EMAIL_LIST_FRM');
     return () => {
       props.emailStore.resetFilters();
+      props.emailStore.setFieldValue('emailLogList', []);
     };
   }, []);
 
@@ -56,13 +58,11 @@ function EmailList(props) {
       <Modal open={displyProp} closeOnDimmerClick size="small" closeIcon onClose={e => handleCancel(e)}>
         <Modal.Content className="center-align">
           <Header as="h3">Email Content</Header>
-          {emailList && emailList.length > 0 && emailList[index].emailContent
-            ? <p>{emailList[index].emailContent}</p>
-            : (
-              <section className="bg-offwhite mb-20">
-                <Header as="h5">Content not exists.</Header>
-              </section>
-            )
+          {get(emailList, `[${index}].emailContent`) || (
+            <section className="bg-offwhite mb-20">
+              <Header as="h5">Content not exists.</Header>
+            </section>
+          )
           }
           <div className="center-align">
             <Button.Group widths="2" className="inline">
@@ -120,23 +120,23 @@ function EmailList(props) {
                                 />
                               </Table.Cell>
                               <Table.Cell className="user-status">
-                                <span className="user-name"><b>{resp.fromName ? resp.fromName : ''}</b></span>
-                                {resp.fromEmail ? resp.fromEmail : ''}
+                                <span className="user-name"><b>{resp.fromName || ''}</b></span>
+                                {resp.fromEmail || ''}
                               </Table.Cell>
                               <Table.Cell className="user-status">
-                                <span className="user-name"><b>{resp.toFirstName ? resp.toFirstName : ''}</b></span>
-                                {resp.toEmail ? resp.toEmail : ''}
+                                <span className="user-name"><b>{resp.toFirstName || ''}</b></span>
+                                {resp.toEmail || ''}
                               </Table.Cell>
                               <Table.Cell collapsing>
                                 {resp.subject} <span><Link onClick={e => handleModel(e, idx)} to="/"> (Body)</Link></span> {' '}
-                                {resp.attachments !== null && resp.attachments && resp.attachments.length > 0 && (
+                                {resp.attachments && resp.attachments.length > 0 && (
                                   <Popup
                                     trigger={<Icon className="ns-attachment" color="blue" size="large" />}
                                     content={(
                                       <Item>
                                         {resp.attachments.map(attach => (
                                           <Item.Content>
-                                            <b>Name: </b>{attach.name ? attach.name : 'N/A'}
+                                            <b>Name: </b>{attach.name || 'N/A'}
                                           </Item.Content>
                                         ))
                                         }
