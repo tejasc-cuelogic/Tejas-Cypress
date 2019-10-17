@@ -68,8 +68,6 @@ export class UserDetailsStore {
 
   @observable emailListArr = [];
 
-  @observable emailListIndex = 0;
-
   @action
   setFieldValue = (field, value) => {
     this[field] = value;

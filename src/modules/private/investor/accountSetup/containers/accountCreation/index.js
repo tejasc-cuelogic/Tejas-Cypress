@@ -32,18 +32,21 @@ export default class AccountCreation extends Component {
   handleUserIdentity = async (accountType) => {
     try {
       this.props.uiStore.setProgress();
-      const { isLegalDocsPresent, isUserVerified } = this.props.userDetailsStore;
       this.props.identityStore.setCipDetails();
       const { res, url } = await this.props.identityStore.verifyCip();
       const { cipStepUrlMapping } = this.props.identityStore;
       const { step } = res.data.verifyCip;
       const isCipOffline = step === 'OFFLINE';
 
-      if (!isUserVerified && (step === 'userCIPSoftFail' && cipStepUrlMapping.cipSoftFail.url === url)) {
+      if (!this.props.userDetailsStore.isUserVerified
+        && (step === 'userCIPSoftFail' && cipStepUrlMapping.cipSoftFail.url === url)) {
         this.props.history.push(cipStepUrlMapping.cipSoftFail.url);
-      } else if (!isUserVerified && !isLegalDocsPresent) {
+      } else if ((!this.props.userDetailsStore.isUserVerified
+        || (step === 'userCIPHardFail'
+        && cipStepUrlMapping.ciphardFail.url === url))
+        || isCipOffline) {
         this.props.history.push(cipStepUrlMapping.ciphardFail.url);
-      } else if (isLegalDocsPresent && isCipOffline) {
+      } else if (this.props.userDetailsStore.isLegalDocsPresent && isCipOffline) {
         const processingUrl = await this.props.accountStore.accountProcessingWrapper(accountType, this.props.match);
         this.props.history.push(processingUrl);
       } else {
@@ -69,9 +72,9 @@ export default class AccountCreation extends Component {
   }
 
   handleLegalDocsBeforeSubmit = async (accountType) => {
-    const { isUserVerified, isLegalDocsPresent } = this.props.userDetailsStore;
     this.props.identityStore.setCipStatusWithUserDetails();
-    if (!isUserVerified && !isLegalDocsPresent) {
+    if (!this.props.userDetailsStore.isUserVerified
+      && !this.props.userDetailsStore.isLegalDocsPresent) {
       this.props.userDetailsStore.setAccountForWhichCipExpired(accountType);
       await this.handleUserIdentity(accountType);
     } else {
@@ -92,7 +95,7 @@ export default class AccountCreation extends Component {
       this.props.history.push(`${this.props.match.url}/${accountType}/${confirmModal}`);
     } catch (err) {
       if (Helper.matchRegexWithString(/\brequired uploads(?![-])\b/, err.message)) {
-        this.handleLegalDocsBeforeSubmit(accountType, this.handleSubmitAccount);
+        this.props.history.push(this.props.identityStore.cipStepUrlMapping.ciphardFail.url);
       }
     }
   }
