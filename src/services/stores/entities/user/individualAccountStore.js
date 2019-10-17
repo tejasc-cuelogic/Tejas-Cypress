@@ -9,7 +9,6 @@ import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 // import userStore from '../userStore';
 
-const isMobile = document.documentElement.clientWidth < 768;
 
 class IndividualAccountStore {
   @observable stepToBeRendered = 0;
@@ -167,15 +166,6 @@ class IndividualAccountStore {
               bankAccountStore.setPlaidAccDetails(linkedBank);
               this.setFieldValue('apiCall', false);
             }
-<<<<<<< HEAD
-            const { isValid } = bankAccountStore.formAddFunds.meta;
-            if (currentStep) {
-              if (currentStep.name === 'Add funds' && isValid && !isMobile) {
-                Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
-              }
-            }
-=======
->>>>>>> c42806abcf5670fb4dd531a401361b9aa30e3eaf
             uiStore.setErrors(null);
             uiStore.setProgress(false);
             resolve(result);
