@@ -120,12 +120,12 @@ function EmailList(props) {
                                 />
                               </Table.Cell>
                               <Table.Cell className="user-status">
-                                <span className="user-name"><b>{resp.fromName || ''}</b></span>
-                                {resp.fromEmail || ''}
+                                <span className="user-name"><b>{resp.fromName}</b></span>
+                                {resp.fromEmail}
                               </Table.Cell>
                               <Table.Cell className="user-status">
-                                <span className="user-name"><b>{resp.toFirstName || ''}</b></span>
-                                {resp.toEmail || ''}
+                                <span className="user-name"><b>{resp.toFirstName}</b></span>
+                                {resp.toEmail}
                               </Table.Cell>
                               <Table.Cell collapsing>
                                 {resp.subject} <span><Link onClick={e => handleModel(e, idx)} to="/"> (Body)</Link></span> {' '}
