@@ -111,7 +111,7 @@ export default class General extends Component {
             )
           }
           {isMobile && (
-            <Button fluid primary className="relaxed" content="Continue" disabled={!GEN_INFO_FRM.meta.isValid || errors} onClick={this.handleContinueButton} />
+            <Button fluid primary className="relaxed" content="Continue" disabled={!GEN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
           )
           }
         </Form>

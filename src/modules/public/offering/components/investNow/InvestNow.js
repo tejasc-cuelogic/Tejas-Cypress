@@ -9,6 +9,8 @@ import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
 // import Helper from '../../../../../helper/utility';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @withRouter
 @inject('uiStore', 'portfolioStore', 'campaignStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
 @observer
@@ -272,7 +274,7 @@ export default class InvestNow extends React.Component {
             disableNxtbtn={this.props.investmentStore.disableNextbtn}
             isEnterPressed={isEnterPressed}
             resetEnterPressed={resetIsEnterPressed}
-            hideHeader
+            hideHeader={!isMobile}
             setStepTobeRendered={this.handleStepChange}
             setStepTobeRenderedForAlert={this.handleStepChnageOnPreviousForAlert}
             stepToBeRendered={this.props.investmentStore.stepToBeRendered}

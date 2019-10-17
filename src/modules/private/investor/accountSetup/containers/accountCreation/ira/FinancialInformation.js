@@ -62,7 +62,7 @@ Your net worth and annual income are used to determine your 12-month investment 
                 </span>
               </b>
             </p>
-            <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20 mb-20' : ''} link display-block`}>How is this calculated?</a>
+            <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20 mb-20' : ''} link`}>How is this calculated?</a>
           </div>
           {(FIN_INFO_FRM.fields.investmentLimit.value < 5000
             && FIN_INFO_FRM.fields.investmentLimit.value !== '')
