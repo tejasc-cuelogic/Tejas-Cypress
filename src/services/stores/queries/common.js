@@ -79,10 +79,8 @@ query getsharedLink($id: ID, $uploadId: ID, $type: ShareLinkTypeEnum!, $accountT
   }
 `;
 
-export const fetchEmailContent = gql`
-query fetchEmailContent($id: String!, $requestDate: String!){
-  fetchEmailContent(recipientId: $id, requestDate: $requestDate) {
-    html
-  }
+export const getEmail = gql`
+query getEmail($id: String!, $requestDate: String!){
+  getEmail(recipientId: $id, requestDate: $requestDate)
   }
 `;

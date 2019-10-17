@@ -20,8 +20,8 @@ function EmailContent(props) {
       requestDate: match.params.requestDate,
     };
     setLoading(true);
-    commonStore.fetchEmailContent(params).then((res) => {
-      setEmailContent(get(res, 'fetchEmailContent.html'));
+    commonStore.getEmail(params).then((res) => {
+      setEmailContent(get(res, 'getEmail'));
       setLoading(false);
     }).catch((e) => {
       setLoading(false);

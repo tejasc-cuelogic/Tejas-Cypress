@@ -1,6 +1,6 @@
 import { observable, action, reaction } from 'mobx';
 import graphql from 'mobx-apollo';
-import { getBoxFileDetails, updateUserReferralCode, createCdnSignedUrl, deleteCdnS3File, getsharedLink, fetchEmailContent } from '../queries/common';
+import { getBoxFileDetails, updateUserReferralCode, createCdnSignedUrl, deleteCdnS3File, getsharedLink, getEmail } from '../queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';
 import Helper from '../../../helper/utility';
 
@@ -126,10 +126,10 @@ export class CommonStore {
   });
 
   @action
-  fetchEmailContent = params => new Promise((res, rej) => {
+  getEmail = params => new Promise((res, rej) => {
     graphql({
       client,
-      query: fetchEmailContent,
+      query: getEmail,
       fetchPolicy: 'network-only',
       variables: {
         ...params,
