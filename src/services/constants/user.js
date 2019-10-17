@@ -363,7 +363,7 @@ export const UPDATE_PROFILE_INFO = {
 };
 
 export const USER_PROFILE_ADDRESS_ADMIN = {
-  street: { ...USER_IDENTITY.residentalStreet, objRef: 'info.mailingAddress' },
+  street: { ...USER_IDENTITY.street, objRef: 'info.mailingAddress' },
   streetTwo: { ...USER_IDENTITY.streetTwo, objRef: 'info.mailingAddress' },
   city: { ...USER_IDENTITY.city, objRef: 'info.mailingAddress' },
   state: { ...USER_IDENTITY.state, objRef: 'info.mailingAddress' },
@@ -378,7 +378,7 @@ export const USER_PROFILE_FOR_ADMIN = {
   firstLegalName: { ...USER_IDENTITY.firstLegalName },
   lastLegalName: { ...USER_IDENTITY.lastLegalName },
   dateOfBirth: { ...USER_IDENTITY.dateOfBirth },
-  street: { ...USER_IDENTITY.residentalStreet },
+  street: { ...USER_IDENTITY.street },
   streetTwo: { ...USER_IDENTITY.streetTwo },
   city: { ...USER_IDENTITY.city },
   state: { ...USER_IDENTITY.state },
