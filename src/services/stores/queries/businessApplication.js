@@ -75,6 +75,8 @@ export const createBusinessApplicationBasicInfo = gql`
 mutation createBasicInfo($basicInfo: BasicInfoInput!) {
   upsertPreQualBasicInfo(basicInfo: $basicInfo) {
     id
+    signupCode
+    utmSource
   }
 }
 `;
@@ -425,6 +427,7 @@ mutation updateBusinessApplicationInformation(
   $businessName: String
   $signupCode: String
   $utmSource: String
+  $rating: Int
 ) {
   updateBusinessApplicationInformation(
     applicationId: $applicationId
@@ -432,10 +435,12 @@ mutation updateBusinessApplicationInformation(
     businessName: $businessName
     signupCode: $signupCode
     utmSource: $utmSource
+    rating: $rating
   ){
     applicationId
     signupCode
     utmSource
+    rating
   }
 }
 `;
