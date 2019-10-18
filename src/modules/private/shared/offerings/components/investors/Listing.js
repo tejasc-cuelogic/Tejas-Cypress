@@ -126,21 +126,6 @@ export default class Listing extends Component {
                       </Table.Cell>
                     )
                   }
-                  {((isIssuer && isOfferingClose) || (isAdmin))
-                    && (
-                  <Table.Cell textAlign="center">
-                    {data.earlyBirdEligibility
-                      ? (
-                        <Popup
-                          trigger={<Label color="green" circular empty className="mr-10" />}
-                          content="Eligible for Early Bird Reward"
-                          hoverable
-                          position="top center"
-                        />
-                      )
-                      : ''}
-                     </Table.Cell>
-                    )}
                   {isAdmin
                     && (
                       <Table.Cell>
@@ -178,6 +163,22 @@ export default class Listing extends Component {
                         }
                       </Table.Cell>
                       </>
+                    )
+                  }
+                  {((isIssuer && isOfferingClose) || (isAdmin))
+                    && (
+                    <Table.Cell textAlign="center">
+                      {data.earlyBirdEligibility
+                        ? (
+                          <Popup
+                            trigger={<Label color="green" circular empty className="mr-10" />}
+                            content="Eligible for Early Bird Reward"
+                            hoverable
+                            position="top center"
+                          />
+                        )
+                        : ''}
+                      </Table.Cell>
                     )
                   }
                   <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
