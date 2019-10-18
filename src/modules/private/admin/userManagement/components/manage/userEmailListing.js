@@ -74,7 +74,7 @@ export default class UserEmailList extends Component {
                                 {resp.toEmail ? resp.toEmail : ''}
                               </Table.Cell>
                               <Table.Cell collapsing>
-                                {resp.subject} <span><Link to={`${match.url}/${resp.recipientId}/${resp.requestDate}`}> (Body)</Link></span> {' '}
+                                {resp.subject} <span><Link className="highlight-text" to={`${match.url}/${resp.recipientId}/${resp.requestDate}`}> (Body)</Link></span> {' '}
                                 {resp.attachments !== null && resp.attachments && resp.attachments.length > 0 && (
                                   <Popup
                                     trigger={<Icon className="ns-attachment" color="blue" size="large" />}

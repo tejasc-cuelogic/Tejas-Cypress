@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import { mapValues } from 'lodash';
-// import moment from 'moment';
+import moment from 'moment';
 import { Label } from 'semantic-ui-react';
 import PrivateLayout from '../../shared/PrivateLayout';
 import AllCrowdPay from './components/AllCrowdPay';
@@ -32,9 +32,9 @@ export default class CrowdPay extends Component {
   }
 
   change = (date, field) => {
-    // if (date && moment(date.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-    this.props.crowdpayStore.setInitiateSrch(field, date);
-    // }
+    if (date && moment(date.formattedValue, 'MM-DD-YYYY', true).isValid()) {
+      this.props.crowdpayStore.setInitiateSrch(field, date);
+    }
   }
 
   representAddon = summary => mapValues(summary, s => (

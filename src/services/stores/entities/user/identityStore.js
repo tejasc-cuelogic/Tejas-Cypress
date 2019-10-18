@@ -419,6 +419,7 @@ cipWrapper = async (payLoad) => {
       this.setFieldValue('signUpLoading', false);
     } catch (err) {
       this.setFieldValue('signUpLoading', false);
+      uiStore.setProgress(false);
       uiStore.setErrors(toJS(DataFormatter.getSimpleErr(err)));
       Promise.reject(err);
     }
@@ -492,6 +493,7 @@ cipWrapper = async (payLoad) => {
           variables: {
             resourceId: this.requestOtpResponse,
             verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
+            isPhoneNumberUpdated: true,
           },
         })
         .then((result) => {
@@ -855,6 +857,7 @@ cipWrapper = async (payLoad) => {
           variables: {
             resourceId: this.requestOtpResponse,
             verificationCode: authStore.CONFIRM_FRM.fields.code.value,
+            isEmailVerify: true,
           },
         })
         .then((result) => {

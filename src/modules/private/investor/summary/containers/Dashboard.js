@@ -51,7 +51,7 @@ const summaryDetails = ({
   };
 };
 
-@inject('userDetailsStore', 'portfolioStore')
+@inject('userDetailsStore', 'portfolioStore', 'accreditationStore')
 @observer
 export default class Dashboard extends Component {
   constructor(props) {
@@ -66,20 +66,11 @@ export default class Dashboard extends Component {
     const { summaryLoading, summary, getChartData } = this.props.portfolioStore;
     const cashMovementData = getChartData('cashMovement');
     const {
-      multipleUserAccounts, userAccreditationStatus,
+      multipleUserAccounts,
       signupStatus,
     } = this.props.userDetailsStore;
     const isInitialAccountProcessing = signupStatus.activeAccounts.length === 0
     && signupStatus.processingAccounts.length > 0;
-    const notificationCard = {
-      message:
-  <span>
-        Are you an accredited investor? Go through the steps to verify your status
-        today, and for a limited time, we will add a $100 credit to your account.
-    <br /><a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
-  </span>,
-      header: 'Earn $100 by verifying your accredited investor status',
-    };
     if (summaryLoading) {
       return <InlineLoader />;
     }
@@ -93,15 +84,14 @@ export default class Dashboard extends Component {
           P4={
             <Button secondary as={Link} to="/offerings" content={isInitialAccountProcessing ? 'Browse Offerings' : 'Invest Now'} />
           }
-          P5={userAccreditationStatus && !get(multipleUserAccounts, 'noAccounts')
+          P5={!get(multipleUserAccounts, 'noAccounts')
             ? (
-<StickyNotification
-  {...this.props}
-  notificationCard={notificationCard}
-  multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
-  accountId={get(multipleUserAccounts, 'accountId') || null}
-  accountType={get(multipleUserAccounts, 'accountType') || null}
-/>
+            <StickyNotification
+              {...this.props}
+              multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
+              accountId={get(multipleUserAccounts, 'accountId') || null}
+              accountType={get(multipleUserAccounts, 'accountType') || null}
+            />
             ) : ''}
         >
           {
