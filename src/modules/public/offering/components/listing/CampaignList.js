@@ -145,9 +145,9 @@ export default class CampaignList extends Component {
                                             row.type[get(offering, row.key)] || '-'
                                           ) : row.type === '$' ? Helper.CurrencyFormat(get(offering, row.key), 0)
                                             : row.type === '%' ? `${get(offering, row.key)}%`
-                                            : row.type === 'X' ? `${get(offering, row.key)}x`
-                                            : row.type === 'months' ? `${get(offering, row.key)} months`
-                                            : get(offering, row.key) === 0 ? 0 : (get(offering, row.key) || '')
+                                              : row.type === 'X' ? `${get(offering, row.key)}x`
+                                                : row.type === 'months' ? `${get(offering, row.key)} months`
+                                                  : get(offering, row.key) === 0 ? 0 : (get(offering, row.key) || '')
                                           }
                                         </>
                                           )
