@@ -1,9 +1,35 @@
 import React, { Component } from 'react';
 import { Card, Statistic, Button } from 'semantic-ui-react';
-import { get } from 'lodash';
 
 const isMobile = document.documentElement.clientWidth < 768;
+
+const notificationCard = {
+  verifyAccreditation: {
+    message:
+    <span>
+          Are you an accredited investor? Go through the steps to verify your status
+          today, and for a limited time, we will add a $100 credit to your account.
+      <br /><a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
+    </span>,
+    btnText: 'Verify',
+    header: 'Earn $100 by verifying your accredited investor status',
+  },
+  verifiedAccreditation: {
+    message:
+    <span>
+       Earn a $20 referral credit for every person who signs up using your code. They get a $20 credit as well. Build the community together
+      <br />
+    </span>,
+    btnText: 'Refer',
+    header: 'Refer friends to NextSeed',
+  },
+};
 export default class StickyNotification extends Component {
+  constructor(props) {
+    super(props);
+    this.props.userDetailsStore.initiateAccreditation();
+  }
+
   handleVerifyAccreditation = (e) => {
     e.preventDefault();
     const url = '/app/account-settings/investment-limits';
@@ -23,21 +49,38 @@ export default class StickyNotification extends Component {
     }
   }
 
+  handleReferral = () => {
+    this.props.history.push('/app/referrals');
+  }
+
+  isUserAccreditated = () => {
+    const { accreditationData } = this.props.userDetailsStore;
+    const accreditationStatusArr1 = Object.keys(accreditationData).map(a => accreditationData[a] && accreditationData[a].status);
+    const accreditationStatusArr2 = ['CONFIRMED', 'REQUESTED', 'EXPIRED', 'INVALID'];
+    return accreditationStatusArr1.some(item => accreditationStatusArr2.includes(item));
+  }
+
+  getNotificationCard = () => {
+    if (this.isUserAccreditated()) {
+      notificationCard.verifiedAccreditation.onClick = this.handleReferral;
+      return notificationCard.verifiedAccreditation;
+    }
+    notificationCard.verifyAccreditation.onClick = this.handleVerifyAccreditation;
+    return notificationCard.verifyAccreditation;
+  }
+
   render() {
-    const { props } = this;
+    const cardData = this.getNotificationCard();
     return (
       <div className="top-cta-section">
         <div className="sticky-notification">
           <Card fluid raised>
             <Card.Content>
-              {get(props, 'notificationCard.congratulations')
-                ? <Card.Meta>{get(props, 'notificationCard.congratulations')}</Card.Meta> : ''
-              }
               <Statistic size="mini" className="cta acc-verify-status">
-                <Statistic.Value className="mb-10">{get(props, 'notificationCard.header')}</Statistic.Value>
-                <Statistic.Label>{get(props, 'notificationCard.message')}</Statistic.Label>
+                <Statistic.Value className="mb-10">{cardData.header}</Statistic.Value>
+                <Statistic.Label>{cardData.message}</Statistic.Label>
               </Statistic>
-              <Button onClick={e => this.handleVerifyAccreditation(e)} floated={!isMobile && 'right'} className={isMobile && 'mt-20'} compact color="green">Verify</Button>
+              <Button onClick={e => cardData.onClick(e)} floated={!isMobile && 'right'} className={isMobile && 'mt-20'} compact color="green">{cardData.btnText}</Button>
             </Card.Content>
           </Card>
         </div>
