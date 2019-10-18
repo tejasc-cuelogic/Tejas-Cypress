@@ -135,7 +135,6 @@ class FinancialInfo extends Component {
             changed={values => investMoneyChange(values, 'investmentAmount')}
             onkeyup={validateMaskedInputForAmount}
             autoFocus
-            allowNegative={false}
           />
             {isMobile
                 && (

@@ -26,7 +26,7 @@ export default class Congratulation extends React.Component {
   handleCloseModal = () => {
     this.props.investmentStore.resetData();
     this.props.accreditationStore.resetUserAccreditatedStatus();
-    this.props.history.push('overview');
+    this.props.history.push(`${this.props.refLink}`);
   }
 
   handleCloseModalWithRefferalLink = (e) => {

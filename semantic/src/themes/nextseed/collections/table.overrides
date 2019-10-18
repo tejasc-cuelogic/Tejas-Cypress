@@ -358,6 +358,12 @@
                 border-bottom: 0;
             }
         }
+        &:not(.sortable){
+            td:first-child{
+                padding-left: @18px !important;
+            }
+
+        }
     }
 }
 
