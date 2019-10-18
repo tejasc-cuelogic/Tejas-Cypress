@@ -3,7 +3,7 @@ import { capitalize, orderBy, mapValues, get, includes } from 'lodash';
 import { Calculator } from 'amortizejs';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
-import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
+import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO, PREFERRED_EQUITY_INVESTMENT_INFO } from '../../../constants/investment';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
@@ -26,6 +26,8 @@ export class InvestmentStore {
   @observable AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_DETAILS_INFO);
 
   @observable INVESTMENT_LIMITS_FORM = Validator.prepareFormObject(INVESTMENT_LIMITS);
+
+  @observable PREFERRED_EQUITY_INVESTMONEY_FORM = Validator.prepareFormObject(PREFERRED_EQUITY_INVESTMENT_INFO);
 
   @observable cashAvailable = 0;
 
@@ -635,6 +637,7 @@ export class InvestmentStore {
     Validator.resetFormData(this.INVESTMONEY_FORM);
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
+    Validator.resetFormData(this.PREFERRED_EQUITY_INVESTMONEY_FORM, ['shares']);
     this.setByDefaultRender(true);
     investmentLimitStore.setInvestNowErrorStatus(false);
     // accreditationStore.resetAccreditationObject();
@@ -686,6 +689,26 @@ export class InvestmentStore {
   isValidMultipleAmount = (amount) => {
     const formatedAmount = parseFloat(amount) || 0;
     return formatedAmount >= 100 && formatedAmount % 100 === 0;
+  }
+
+  @action
+  investMoneyChangeForEquiry = (values, field) => {
+    console.log('values==>', values);
+    console.log('field==>', field);
+    this.PREFERRED_EQUITY_INVESTMONEY_FORM = Validator.onChange(this.PREFERRED_EQUITY_INVESTMONEY_FORM, {
+      name: field,
+      value: values.floatValue,
+    });
+  }
+
+  @action
+  calculatedInvestmentAmountForPreferredEquity = () => {
+    const pricePerShare = this.PREFERRED_EQUITY_INVESTMONEY_FORM.fields.pricePerShare.value;
+    const sharePrice = money.floatToAmount(this.PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares.value || 0);
+    const resultAmount = money.mul(sharePrice, pricePerShare);
+    const investedAmount = money.isZero(resultAmount) ? '0' : resultAmount;
+    this.investMoneyChange({ floatValue: investedAmount }, 'investmentAmount');
+    this.validateMaskedInputForAmount();
   }
 }
 
