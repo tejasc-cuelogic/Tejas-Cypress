@@ -110,13 +110,12 @@ export default class Listing extends Component {
                     </div>
                   </Table.Cell>
                   <Table.Cell>
-                  <div className="table-info-wrap">
-                    <p>
-                      {((isIssuer && isOfferingClose) || (isAdmin)) && <span>{`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}`}</span>}
-                      <span>{data.city || 'N/A'}</span>
-                    </p>
-                  </div>
-                    {/* {data.city || 'N/A'} */}
+                    <div className="table-info-wrap">
+                      <p>
+                        {((isIssuer && isOfferingClose) || (isAdmin)) && <span>{`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}`}</span>}
+                        <span>{data.city || 'N/A'}</span>
+                      </p>
+                    </div>
                   </Table.Cell>
                   <Table.Cell>{data.state || 'N/A'}</Table.Cell>
                   {isAdmin
@@ -126,21 +125,6 @@ export default class Listing extends Component {
                       </Table.Cell>
                     )
                   }
-                  {((isIssuer && isOfferingClose) || (isAdmin))
-                    && (
-                  <Table.Cell textAlign="center">
-                    {data.earlyBirdEligibility
-                      ? (
-                        <Popup
-                          trigger={<Label color="green" circular empty className="mr-10" />}
-                          content="Eligible for Early Bird Reward"
-                          hoverable
-                          position="top center"
-                        />
-                      )
-                      : ''}
-                     </Table.Cell>
-                    )}
                   {isAdmin
                     && (
                       <Table.Cell>
@@ -180,6 +164,21 @@ export default class Listing extends Component {
                       </>
                     )
                   }
+                  {((isIssuer && isOfferingClose) || (isAdmin))
+                    && (
+                    <Table.Cell textAlign="center">
+                    {data.earlyBirdEligibility
+                      ? (
+                        <Popup
+                          trigger={<Label color="green" circular empty className="mr-10" />}
+                          content="Eligible for Early Bird Reward"
+                          hoverable
+                          position="top center"
+                        />
+                      )
+                      : ''}
+                     </Table.Cell>
+                    )}
                   <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
                   <Table.Cell textAlign="right">{data.referralCode ? this.showReferralCode(referralCode, data.referralCode) : 'N/A'}</Table.Cell>
                 </Table.Row>
