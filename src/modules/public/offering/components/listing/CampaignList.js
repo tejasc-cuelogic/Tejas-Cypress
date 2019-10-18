@@ -17,7 +17,7 @@ const keyTermList = [
   { label: 'Security', forFunded: true, key: 'keyTerms.securities', type: CAMPAIGN_KEYTERMS_SECURITIES, for: ['ALL'] },
   { label: 'Offering', key: 'keyTerms.regulation', type: CAMPAIGN_KEYTERMS_REGULATION_PARALLEL, for: ['ALL'] },
   { label: 'Investment Minimum', key: 'keyTerms.minInvestAmt', type: '$', for: ['ALL'] },
-  { label: 'Multiple', forFunded: true, key: 'closureSummary.keyTerms.multiple', type: '', for: ['REVENUE_SHARING_NOTE'] },
+  { label: 'Multiple', forFunded: true, key: 'closureSummary.keyTerms.multiple', type: 'X', for: ['REVENUE_SHARING_NOTE'] },
   { label: 'Interest Rate', forFunded: true, key: 'closureSummary.keyTerms.interestRate', type: '%', for: ['TERM_NOTE'] },
   { label: 'Maturity', key: 'keyTerms.maturity', type: 'months', for: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
   { label: 'Valuation', key: 'keyTerms.premoneyValuation', type: '$', for: ['PREFERRED_EQUITY_506C'] },
@@ -145,8 +145,9 @@ export default class CampaignList extends Component {
                                             row.type[get(offering, row.key)] || '-'
                                           ) : row.type === '$' ? Helper.CurrencyFormat(get(offering, row.key), 0)
                                             : row.type === '%' ? `${get(offering, row.key)}%`
-                                              : row.type === 'months' ? `${get(offering, row.key)} months`
-                                                : get(offering, row.key) === 0 ? 0 : (get(offering, row.key) || '')
+                                            : row.type === 'X' ? `${get(offering, row.key)}x`
+                                            : row.type === 'months' ? `${get(offering, row.key)} months`
+                                            : get(offering, row.key) === 0 ? 0 : (get(offering, row.key) || '')
                                           }
                                         </>
                                           )
