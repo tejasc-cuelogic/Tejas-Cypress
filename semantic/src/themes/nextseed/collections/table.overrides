@@ -373,8 +373,10 @@
         border-top: none;
     }
     &.campaign-card{
+        min-height: 115px;
         @media only screen and (max-width : @monitorBreakpoint){
             font-size: @13px;
+            min-height: 135px;
         }
         tr{
             border-bottom: 0;
