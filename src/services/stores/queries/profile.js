@@ -200,10 +200,12 @@ export const requestOtp = gql`
   }`;
 
 export const verifyOtp = gql`
-  mutation verifyOtp($resourceId: String! $verificationCode: String!){
+  mutation verifyOtp($resourceId: String! $verificationCode: String!, $isEmailVerify: Boolean, $isPhoneNumberUpdated: Boolean){
     verifyOtp(
       resourceId: $resourceId
       verificationCode: $verificationCode
+      isEmailVerify: $isEmailVerify
+      isPhoneNumberUpdated: $isPhoneNumberUpdated
     )
   }
 `;
