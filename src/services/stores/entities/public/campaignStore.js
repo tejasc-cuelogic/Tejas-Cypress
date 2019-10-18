@@ -18,6 +18,8 @@ import { DataFormatter } from '../../../../helper';
 export class CampaignStore {
   @observable data = [];
 
+  @observable completedOfferings = [];
+
   @observable details = {};
 
   @observable additionalDetails = {};
@@ -72,7 +74,7 @@ export class CampaignStore {
   }
 
   @action
-  initRequest = (publicRef, referralCode = false) => {
+  initRequest = (publicRef, referralCode = false, field = 'data') => {
     const stage = Object.keys(pickBy(STAGES, s => publicRef.includes(s.publicRef)));
     const variables = { filters: { stage } };
     if (referralCode) {
@@ -82,12 +84,12 @@ export class CampaignStore {
       variables.userId = userStore.currentUser.sub;
     }
     return new Promise((resolve) => {
-      this.data = graphql({
+      this[field] = graphql({
         client: clientPublic,
         query: referralCode ? getOfferingsReferral : allOfferings,
         variables,
         onFetch: (data) => {
-          if (data && !this.data.loading) {
+          if (data && !this[field].loading) {
             const offering = data.getOfferingList.length && data.getOfferingList[0];
             resolve(offering);
           }
@@ -193,19 +195,24 @@ export class CampaignStore {
       && toJS(this.allData.data.getOfferingList)) || [];
   }
 
+  @computed get CompletedOfferingList() {
+    return (this.completedOfferings.data && this.completedOfferings.data.getOfferingList
+      && toJS(this.completedOfferings.data.getOfferingList)) || [];
+  }
+
   @computed get active() {
     const offeringList = this.orderedActiveList.slice();
     return offeringList.splice(0, this.activeToDisplay);
   }
 
   @computed get activeList() {
-    const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
-    return orderBy(activeListArr, o => (get(o, 'keyTerms.shorthandBusinessName') ? get(o, 'keyTerms.shorthandBusinessName').toLowerCase() : get(o, 'keyTerms.shorthandBusinessName')), ['asc']);
+    // const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
+    return orderBy(this.OfferingList, o => (get(o, 'keyTerms.shorthandBusinessName') ? get(o, 'keyTerms.shorthandBusinessName').toLowerCase() : get(o, 'keyTerms.shorthandBusinessName')), ['asc']);
   }
 
   @computed get orderedActiveList() {
-    const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
-    const orderedActiveListArr = this.generateBanner(activeListArr, true);
+    // const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
+    const orderedActiveListArr = this.generateBanner(this.OfferingList, true);
     return orderedActiveListArr;
   }
 
@@ -215,7 +222,8 @@ export class CampaignStore {
   }
 
   @computed get completedList() {
-    return sortBy(this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage)), ['order']);
+    // return sortBy(this.CompletedOfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage)), ['order']);
+    return sortBy(this.CompletedOfferingList, ['order']);
   }
 
   @action
@@ -342,6 +350,10 @@ export class CampaignStore {
 
   @computed get loading() {
     return this.allData.loading || this.details.loading;
+  }
+
+  @computed get completedLoading() {
+    return this.completedOfferings.loading;
   }
 
   @action

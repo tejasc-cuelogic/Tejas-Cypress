@@ -273,6 +273,9 @@ h6{
 .full-width{
 	width: 100%;
 }
+.show-top{
+	z-index: 99999 !important;
+}
 //	normal link styles
 a:not(.item), a:not(.ui.button){
 	color:@link-color;
