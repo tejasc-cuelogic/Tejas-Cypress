@@ -105,6 +105,10 @@ export class BusinessAppStore {
 
   @observable showUserError = false;
 
+  @observable sourcesTotal = 0;
+
+  @observable usesTotal = 0;
+
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
@@ -113,6 +117,15 @@ export class BusinessAppStore {
   @action
   setAppStepsStatus = (index, key, value) => {
     this.appStepsStatus[index][key] = value;
+  }
+
+  @action
+  totalChange = (fieldName, totalName) => {
+    let total = 0;
+    this.BUSINESS_DETAILS_FRM.fields[fieldName].forEach((field) => {
+      total = total + field.amount.value || 0;
+    });
+    this[totalName] = total;
   }
 
   @action
@@ -162,6 +175,7 @@ export class BusinessAppStore {
 
   @action
   fetchApplicationDataById = (applicationId, isPartialApp = false) => new Promise((resolve) => {
+    uiStore.setProgress(true);
     uiStore.setAppLoader(true);
     uiStore.setLoaderMessage('Getting application data');
     this.businessApplicationsDataById = graphql({
@@ -174,12 +188,14 @@ export class BusinessAppStore {
       onFetch: (data) => {
         if ((data && data.businessApplication && !this.businessApplicationsDataById.loading) || (data && data.getPreQualificationById && !this.businessApplicationsDataById.loading)) {
           this.setBusinessApplicationData(isPartialApp);
+          uiStore.setProgress(false);
           uiStore.setAppLoader(false);
           resolve();
         }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setProgress(false);
         uiStore.setAppLoader(false);
       },
     });
@@ -398,7 +414,7 @@ export class BusinessAppStore {
     if (data) {
       this.appStepsStatus[1].status = data.stepStatus;
       data.debts.forEach((ele, key) => {
-        ['amount', 'interestExpenses', 'remainingPrincipal', 'term'].forEach((field) => {
+        ['amount', 'interestExpenses', 'remainingPrincipal', 'term', 'maturityDate', 'termStartDate'].forEach((field) => {
           this.BUSINESS_DETAILS_FRM.fields.debts[key][field].value = ele[field];
         });
         if (key < data.debts.length - 1) {
@@ -418,6 +434,26 @@ export class BusinessAppStore {
           this.addMoreForms(null, 'owners');
         }
       });
+      if (data.sources.length) {
+        data.sources.forEach((ele, key) => {
+          ['name', 'amount'].forEach((field) => {
+            this.BUSINESS_DETAILS_FRM.fields.sources[key][field].value = ele[field];
+          });
+        });
+        this.totalChange('sources', 'sourcesTotal');
+      } else {
+        this.BUSINESS_DETAILS_FRM.fields.sources = [];
+      }
+      if (data.uses.length) {
+        data.uses.forEach((ele, key) => {
+          ['name', 'amount'].forEach((field) => {
+            this.BUSINESS_DETAILS_FRM.fields.uses[key][field].value = ele[field];
+          });
+        });
+        this.totalChange('uses', 'usesTotal');
+      } else {
+        this.BUSINESS_DETAILS_FRM.fields.uses = [];
+      }
       if (data.planDocs && data.planDocs.length) {
         this.setFileObjectToForm(data.planDocs, 'BUSINESS_DETAILS_FRM', 'businessPlan');
       }
@@ -566,11 +602,11 @@ export class BusinessAppStore {
   }
 
   @action
-  businessDetailsDateChange = (field, date, index = -1) => {
+  businessDetailsDateChange = (field, date, index = -1, subFormName = 'owners') => {
     this.BUSINESS_DETAILS_FRM = Validator.onArrayFieldChange(
       this.BUSINESS_DETAILS_FRM,
       { name: field, value: date },
-      'owners',
+      subFormName,
       index,
     );
   }
@@ -688,6 +724,18 @@ export class BusinessAppStore {
 
   @computed get getFormatedBusinessDetailsData() {
     const data = toJS(this.BUSINESS_DETAILS_FRM.fields);
+    const sourcesAndUses = {
+      sources: data.sources.map(item => ({
+        name: this.getValidDataForString(item.name),
+        amount: item.amount.value || 0.00,
+      })),
+      uses: data.uses.map(item => ({
+        name: this.getValidDataForString(item.name),
+        amount: item.amount.value || 0.00,
+      })),
+    };
+    sourcesAndUses.sources = sourcesAndUses.sources.filter(item => item.amount || item.name);
+    sourcesAndUses.uses = sourcesAndUses.uses.filter(item => item.amount || item.name);
     return {
       planDocs: this.getFilesArray(data.businessPlan.value, data.businessPlan),
       debts: data.debts.map(item => ({
@@ -695,6 +743,8 @@ export class BusinessAppStore {
         interestExpenses: this.getValidDataForInt(item.interestExpenses),
         remainingPrincipal: this.getValidDataForInt(item.remainingPrincipal),
         term: this.getValidDataForInt(item.term),
+        termStartDate: item.termStartDate.value ? moment(item.termStartDate.value).format('MM/DD/YYYY') : null,
+        maturityDate: item.maturityDate.value ? moment(item.maturityDate.value).format('MM/DD/YYYY') : null,
       })),
       owners: data.owners.map(item => ({
         fullLegalName: this.getValidDataForString(item.fullLegalName),
@@ -712,6 +762,7 @@ export class BusinessAppStore {
           },
         ],
       })),
+      ...sourcesAndUses,
     };
   }
 

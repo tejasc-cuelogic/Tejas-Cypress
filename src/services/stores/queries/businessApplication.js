@@ -253,6 +253,8 @@ query _getBusinessApplicationById ($id: String!) {
         interestExpenses
         remainingPrincipal
         term
+        termStartDate
+        maturityDate
       }
       owners {
         fullLegalName
@@ -266,6 +268,14 @@ query _getBusinessApplicationById ($id: String!) {
           fileId
           fileName
         }
+      }
+      sources {
+        name
+        amount
+      }
+      uses {
+        name
+        amount
       }
       stepStatus
     }
