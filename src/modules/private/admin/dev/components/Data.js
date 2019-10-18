@@ -67,7 +67,6 @@ export default class Data extends Component {
                   <MaskedInput
                     key="limit"
                     name="limit"
-                    allowNegative={false}
                     label={BULK_STORAGE_DETAILS_SYNC_FRM.fields.limit.label}
                     number
                     containerwidth="12"

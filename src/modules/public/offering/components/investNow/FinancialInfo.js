@@ -134,7 +134,6 @@ class FinancialInfo extends Component {
             changed={values => investMoneyChange(values, 'investmentAmount')}
             onkeyup={validateMaskedInputForAmount}
             autoFocus
-            allowNegative={false}
           />
         </Form>
         {this.props.changeInvest && getDiffInvestmentLimitAmount
