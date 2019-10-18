@@ -51,7 +51,6 @@ export default class ImageProcessingRequest extends Component {
                   <MaskedInput
                     key={field}
                     name={field}
-                    allowNegative={false}
                     label={IMAGEPROCESSINGREQUES_FRM.fields[field].label}
                     number
                     containerwidth="8"

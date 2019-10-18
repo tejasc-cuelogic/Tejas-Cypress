@@ -123,7 +123,6 @@ export default class AddWithdrawFund extends Component {
                         name="amount"
                         containerclassname="fund-amount"
                         currency
-                        allowNegative={false}
                         fielddata={TRANSFER_FRM.fields.amount}
                         changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM', match.params.action === 'withdraw')}
                       />
