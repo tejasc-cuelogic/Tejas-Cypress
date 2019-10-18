@@ -31,30 +31,32 @@ const KeyTermsFieldHoc = ({ data, title, field, content, titleAddon }) => (
 @observer
 class KeyTermsDetails extends Component {
   render() {
-    const { KeyTerms, newLayout } = this.props;
+    const { newLayout } = this.props;
     const {
       campaign, offerStructure, campaignStatus,
     } = this.props.campaignStore;
+    const { keyTerms } = campaign;
     const investmentMultiple = get(campaign, 'closureSummary.keyTerms.multiple') || 'XXX';
     const totalInvestmentAmount = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const totalInvestmentAmountCf = get(campaign, 'closureSummary.totalInvestmentAmountCf') || 0;
     const totalInvestmentAmount506C = get(campaign, 'closureSummary.totalInvestmentAmount506C') || 0;
     const investmentMultipleTooltip = isNaN(toNumber(investmentMultiple) * 100) ? 0 : investmentMultiple;
     const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
-    const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
+    const maturityMonth = keyTerms && keyTerms.maturity ? `${keyTerms.maturity} Months` : '[XX] Months';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
     const keytermsMeta = [
       { key: 'minOfferingAmountCF', label: 'Offering Min', popupContent: 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' },
       { key: 'maxOfferingAmountCF', label: 'Offering Max', popupContent: 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.' },
       { key: 'minInvestAmt', label: 'Min Individual Investment', popupContent: 'This is the minimum individual investment amount to participate in this offering.' },
     ];
-    // const minOfferingAmountD = get(KeyTerms, 'minOfferingAmount506') ? get(KeyTerms, 'minOfferingAmount506') : get(KeyTerms, 'minOfferingAmount506C');
-    // const maxOfferingAmountD = get(KeyTerms, 'maxOfferingAmount506') ? get(KeyTerms, 'maxOfferingAmount506') : get(KeyTerms, 'maxOfferingAmount506C');
+
+    // const minOfferingAmountD = get(keyTerms, 'minOfferingAmount506') ? get(keyTerms, 'minOfferingAmount506') : get(keyTerms, 'minOfferingAmount506C');
+    // const maxOfferingAmountD = get(keyTerms, 'maxOfferingAmount506') ? get(keyTerms, 'maxOfferingAmount506') : get(keyTerms, 'maxOfferingAmount506C');
     return (
       <>
         <Grid columns={3} divided stackable className="vertical-gutter neutral-text">
           <Grid.Column>
-            <p><b className={newLayout ? 'neutral-text' : ''}>Issuer</b><br />{get(KeyTerms, 'legalBusinessName') || 'NA'}</p>
+            <p><b className={newLayout ? 'neutral-text' : ''}>Issuer</b><br />{get(keyTerms, 'legalBusinessName') || 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
             <p>
@@ -80,7 +82,7 @@ class KeyTermsDetails extends Component {
           </Grid.Column>
           <Grid.Column>
             <p><b className={newLayout ? 'neutral-text' : ''}>Offered By</b><br />
-              {CAMPAIGN_OFFERED_BY[get(KeyTerms, 'regulation')]}
+              {CAMPAIGN_OFFERED_BY[get(keyTerms, 'regulation')]}
             </p>
           </Grid.Column>
         </Grid>
@@ -89,42 +91,39 @@ class KeyTermsDetails extends Component {
           <Table.Body>
             {keytermsMeta.map(type => (
               <React.Fragment key={type.key}>
-                {get(KeyTerms, type.key)
-                  ? (
-                    <Table.Row verticalAlign="top">
-                      <Table.Cell width={7} className="neutral-text"><b>{type.label}{' '}</b>
-                        {type.popupContent
-                          && isMobile
-                          ? (<PopUpModal label={type.label} content={type.popupContent} />)
-                          : (
-                            <Popup
-                              trigger={<Icon name="help circle" color="green" />}
-                              content={type.popupContent}
-                              position="top center"
-                            />
-                          )
-                        }
-                      </Table.Cell>
-                      <Table.Cell>
-                        <p>
-                          {get(KeyTerms, 'regulation') === 'BD_CF_506C' && get(KeyTerms, type.key) && ['minOfferingAmountCF', 'maxOfferingAmountCF'].includes(type.key)
-                            ? type.key === 'minOfferingAmountCF'
-                              ? Helper.CurrencyFormat(campaignStatus.minOffering, 0)
-                              : type.key === 'maxOfferingAmountCF'
-                              && Helper.CurrencyFormat(campaignStatus.maxOffering, 0)
-                            : ['BD_506C', 'BD_506B'].includes(get(KeyTerms, 'regulation')) && get(KeyTerms, type.key) && ['minOfferingAmountCF', 'maxOfferingAmountCF'].includes(type.key)
-                              ? type.key === 'minOfferingAmountCF'
-                                ? Helper.CurrencyFormat(campaignStatus.minOffering, 0)
-                                : type.key === 'maxOfferingAmountCF'
-                                && Helper.CurrencyFormat(campaignStatus.maxOffering, 0)
-                              : get(KeyTerms, type.key)
-                                ? Helper.CurrencyFormat(get(KeyTerms, type.key), 0)
-                                : 'NA'}
-                        </p>
-                      </Table.Cell>
-                    </Table.Row>
-                  ) : ''
-                }
+                <KeyTermsFieldHoc
+                  title={type.label}
+                  data={keyTerms}
+                  field={type.key}
+                  content={(
+                    <p>
+                      {get(keyTerms, 'regulation') === 'BD_CF_506C' && get(keyTerms, type.key) && ['minOfferingAmountCF', 'maxOfferingAmountCF'].includes(type.key)
+                        ? type.key === 'minOfferingAmountCF'
+                          ? Helper.CurrencyFormat(campaignStatus.minOffering, 0)
+                          : type.key === 'maxOfferingAmountCF'
+                          && Helper.CurrencyFormat(campaignStatus.maxOffering, 0)
+                        : ['BD_506C', 'BD_506B'].includes(get(keyTerms, 'regulation')) && get(keyTerms, type.key) && ['minOfferingAmountCF', 'maxOfferingAmountCF'].includes(type.key)
+                          ? type.key === 'minOfferingAmountCF'
+                            ? Helper.CurrencyFormat(campaignStatus.minOffering, 0)
+                            : type.key === 'maxOfferingAmountCF'
+                            && Helper.CurrencyFormat(campaignStatus.maxOffering, 0)
+                          : get(keyTerms, type.key)
+                            ? Helper.CurrencyFormat(get(keyTerms, type.key), 0)
+                            : 'NA'}
+                    </p>
+                  )}
+                  titleAddon={type.popupContent
+                    && isMobile
+                    ? (<PopUpModal label={type.label} content={type.popupContent} />)
+                    : (
+                      <Popup
+                        trigger={<Icon name="help circle" color="green" />}
+                        content={type.popupContent}
+                        position="top center"
+                      />
+                    )
+                  }
+                />
               </React.Fragment>
             ))
             }
@@ -147,7 +146,7 @@ class KeyTermsDetails extends Component {
               )}
             />
             <KeyTermsFieldHoc
-              data={KeyTerms}
+              data={keyTerms}
               field="securities"
               title="Type of Securities"
               content={(
@@ -157,7 +156,7 @@ class KeyTermsDetails extends Component {
               )}
             />
             <KeyTermsFieldHoc
-              data={KeyTerms}
+              data={keyTerms}
               field="investmentMultiple"
               title="Investment Multiple"
               titleAddon={
@@ -174,188 +173,161 @@ class KeyTermsDetails extends Component {
               content={(
                 <>
                   <p>
-                    {get(KeyTerms, 'investmentMultiple') ? get(KeyTerms, 'investmentMultiple') : 'NA'}
+                    {get(keyTerms, 'investmentMultiple') ? get(keyTerms, 'investmentMultiple') : 'NA'}
                   </p>
                   <HtmlEditor
                     readOnly
-                    content={get(KeyTerms, 'investmentMultipleSummary')
-                      ? get(KeyTerms, 'investmentMultipleSummary')
+                    content={get(keyTerms, 'investmentMultipleSummary')
+                      ? get(keyTerms, 'investmentMultipleSummary')
                       : ''}
                   />
                 </>
               )}
             />
             <KeyTermsFieldHoc
-              data={KeyTerms}
+              data={keyTerms}
               field="revSharePercentage"
               title="Revenue Sharing Percentage"
               content={(
                 <>
                   <p>
-                    {get(KeyTerms, 'revSharePercentage') < 10 ? 'Up to ' : ''}
-                    {`${get(KeyTerms, 'revSharePercentage')}${get(KeyTerms, 'revSharePercentage').includes('%') ? '' : '%'}` || ''}
+                    {get(keyTerms, 'revSharePercentage') < 10 ? 'Up to ' : ''}
+                    {`${get(keyTerms, 'revSharePercentage')}${get(keyTerms, 'revSharePercentage') && get(keyTerms, 'revSharePercentage').includes('%') ? '' : '%'}` || ''}
                   </p>
                   <HtmlEditor
                     readOnly
-                    content={get(KeyTerms, 'revSharePercentageDescription')
-                      ? get(KeyTerms, 'revSharePercentageDescription')
+                    content={get(keyTerms, 'revSharePercentageDescription')
+                      ? get(keyTerms, 'revSharePercentageDescription')
                       : ''}
                   />
                 </>
               )}
             />
             <KeyTermsFieldHoc
-              data={KeyTerms}
-              field="securities"
+              data={keyTerms}
+              field="valuationCap"
               title="Valuation Cap"
             />
             <KeyTermsFieldHoc
-              data={KeyTerms}
+              data={keyTerms}
               field="discount"
               title="Discount"
             />
-            {get(KeyTerms, 'interestRate')
-              && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text"><b>Interest Rate{' '}</b>
-                    {isMobile
-                      ? (<PopUpModal label="Interest Rate" content={`Interest payment is calculated at a gross annualized interest rate of ${get(KeyTerms, 'interestRate') || ' - '}% each month on the remaining balance of your investment from the prior month.`} />)
-                      : (
-                        <Popup
-                          trigger={<Icon name="help circle" color="green" />}
-                          content={`Interest payment is calculated at a gross annualized interest rate of ${get(KeyTerms, 'interestRate') || ' - '}% each month on the remaining balance of your investment from the prior month.`}
-                          position="top center"
-                        />
-                      )
-                    }
-                  </Table.Cell>
-                  <Table.Cell>
-                    {KeyTerms && KeyTerms.interestRate ? `${KeyTerms.interestRate}%` : 'NA'}
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
-            {get(KeyTerms, 'maturity')
-              && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text"><b>Maturity{' '}</b>
-                    {isMobile
-                      ? (<PopUpModal label="Maturity" content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`} />)
-                      : (
-                        <Popup
-                          trigger={<Icon name="help circle" color="green" />}
-                          content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
-                          position="top center"
-                        />
-                      )
-                    }
-                  </Table.Cell>
-                  <Table.Cell>
-                    {KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} months` : 'N/A'}
-                    {
-                      KeyTerms && KeyTerms.startupPeriod
-                      && `, including a ${KeyTerms.startupPeriod}-month startup period for ramp up`
-                    }
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
             <KeyTermsFieldHoc
-              data={KeyTerms}
+              data={keyTerms}
+              field="interestRate"
+              title="Annualized Interest Rate"
+              titleAddon={isMobile
+                ? (<PopUpModal label="Interest Rate" content={`Interest payment is calculated at a gross annualized interest rate of ${get(keyTerms, 'interestRate') || ' - '}% each month on the remaining balance of your investment from the prior month.`} />)
+                : (
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content={`Interest payment is calculated at a gross annualized interest rate of ${get(keyTerms, 'interestRate') || ' - '}% each month on the remaining balance of your investment from the prior month.`}
+                    position="top center"
+                  />
+                )
+              }
+              content={keyTerms && keyTerms.interestRate ? `${keyTerms.interestRate}%` : 'NA'}
+            />
+            <KeyTermsFieldHoc
+              data={keyTerms}
+              field="maturity"
+              title="Maturity"
+              content={(
+                <>
+                  {keyTerms && keyTerms.maturity ? `${keyTerms.maturity} months` : 'N/A'}
+                  {
+                    keyTerms && keyTerms.startupPeriod
+                    && `, including a ${keyTerms.startupPeriod}-month startup period for ramp up`
+                  }
+                </>
+              )}
+              titleAddon={isMobile
+                ? (<PopUpModal label="Maturity" content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`} />)
+                : (
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
+                    position="top center"
+                  />
+                )
+              }
+            />
+            <KeyTermsFieldHoc
+              data={keyTerms}
               field="equityClass"
               title="Equity Class"
             />
             <KeyTermsFieldHoc
-              data={KeyTerms}
+              data={keyTerms}
               field="totalRoundSize"
               title="Total Round Size"
             />
-            {/* Total Round Size */}
-            {get(KeyTerms, 'premoneyValuation')
-              && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text"><b>Pre-Money valuation{' '}</b>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>
-                      {Helper.CurrencyFormat(KeyTerms.premoneyValuation)}
-                    </p>
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
-            {get(KeyTerms, 'unitPrice')
-              && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text"><b>Share Price{' '}</b>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>
-                      {Helper.CurrencyFormat(KeyTerms.unitPrice)}
-                    </p>
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
-            {get(KeyTerms, 'frequencyOfPayments')
-              && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text"><b>Payments{' '}</b>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>
-                      {KeyTerms && KeyTerms.frequencyOfPayments ? KeyTerms.frequencyOfPayments
-                        : 'NA'}
-                    </p>
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
-            {get(KeyTerms, 'securityInterest')
-              && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text"><b>Security Interest{' '}</b>
-                    {isMobile
-                      ? (<PopUpModal label="Security Interest" content="The Issuer will grant a security interest in all of it's assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement." />)
-                      : (
-                        <Popup
-                          trigger={<Icon name="help circle" color="green" />}
-                          content="The Issuer will grant a security interest in all of it's assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement."
-                          position="top center"
-                        />
-                      )
-                    }
-                  </Table.Cell>
-                  <Table.Cell>
-                    {KeyTerms && KeyTerms.securityInterest ? KeyTerms.securityInterest : ' NA'}
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
-            {get(KeyTerms, 'securitiesOwnershipPercentage')
-              && (
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={7} className="neutral-text">
-                    <b>Ownership % Represented by Securities</b>
-                  </Table.Cell>
-                  <Table.Cell>
-                    {KeyTerms && KeyTerms.securitiesOwnershipPercentage
-                      ? (
-                        <p>
-                          {KeyTerms.securitiesOwnershipPercentage}% {' '}
-                          Investors will not receive any equity interests in the Issuer or
-                          any voting or management rights with respect to the Issuer as a result of
-                          an investment in Securities.
-                    </p>
-                      )
-                      : 'NA'
-                    }
-                  </Table.Cell>
-                </Table.Row>
-              )
-            }
-            {get(KeyTerms, 'additionalKeyterms') && get(KeyTerms, 'additionalKeyterms').length !== 0
-              && KeyTerms.additionalKeyterms.map(item => (
+            <KeyTermsFieldHoc
+              data={keyTerms}
+              field="premoneyValuation"
+              title="Pre-Money valuation"
+              content={(
+                <p>
+                  {Helper.CurrencyFormat(keyTerms.premoneyValuation, 0)}
+                </p>
+              )}
+            />
+            <KeyTermsFieldHoc
+              data={keyTerms}
+              field="unitPrice"
+              title="Share Price"
+              content={(
+                <p>
+                  {Helper.CurrencyFormat(keyTerms.unitPrice, 0)}
+                </p>
+              )}
+            />
+            <KeyTermsFieldHoc
+              data={keyTerms}
+              field="frequencyOfPayments"
+              title="Payments"
+              content={(
+                <p>
+                  {keyTerms && keyTerms.frequencyOfPayments ? keyTerms.frequencyOfPayments
+                    : 'NA'}
+                </p>
+              )}
+            />
+            <KeyTermsFieldHoc
+              data={keyTerms}
+              field="securityInterest"
+              title="Payments"
+              content={keyTerms && keyTerms.securityInterest ? keyTerms.securityInterest : ' NA'}
+              titleAddon={isMobile
+                ? (<PopUpModal label="Security Interest" content="The Issuer will grant a security interest in all of it's assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement." />)
+                : (
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content="The Issuer will grant a security interest in all of it's assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement."
+                    position="top center"
+                  />
+                )
+              }
+            />
+            <KeyTermsFieldHoc
+              data={keyTerms}
+              title="Ownership % Represented by Securities"
+              content={keyTerms && keyTerms.securitiesOwnershipPercentage
+                ? (
+                  <p>
+                    {keyTerms.securitiesOwnershipPercentage}% {' '}
+                    Investors will not receive any equity interests in the Issuer or
+                    any voting or management rights with respect to the Issuer as a result of
+                    an investment in Securities.
+              </p>
+                )
+                : 'NA'
+              }
+              field="securitiesOwnershipPercentage"
+            />
+            {get(keyTerms, 'additionalKeyterms') && get(keyTerms, 'additionalKeyterms').length !== 0
+              && keyTerms.additionalKeyterms.map(item => (
                 <Table.Row verticalAlign="top">
                   <Table.Cell width={7} className="neutral-text"><b>{item.label}{' '}</b>
                   </Table.Cell>
@@ -372,7 +344,7 @@ class KeyTermsDetails extends Component {
               && (
                 <Table.Row verticalAlign="top">
                   <Table.Cell colSpan={2} className="center-align">
-                    <a href={edgarLink.includes('http') ? edgarLink : `http://${edgarLink}`} target="blank" className="highlight-text">
+                    <a href={edgarLink && edgarLink.includes('http') ? edgarLink : `http://${edgarLink}`} target="blank" className="highlight-text">
                       View the Issuer&apos;s SEC Form C filing
                   </a>
                   </Table.Cell>

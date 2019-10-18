@@ -75,7 +75,6 @@ class InvestmentDetails extends Component {
         </Header>
         <KeytermsDetails
           refLink={this.props.refLink}
-          KeyTerms={campaign && campaign.keyTerms}
           {...this.props}
         />
         </>
@@ -114,7 +113,6 @@ class InvestmentDetails extends Component {
         </Header>
         <KeytermsDetails
           refLink={this.props.refLink}
-          KeyTerms={campaign && campaign.keyTerms}
           {...this.props}
         />
         </>
