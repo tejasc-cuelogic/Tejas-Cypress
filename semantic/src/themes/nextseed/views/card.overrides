@@ -28,8 +28,7 @@
                 display: none;
             }
             >.content.card-hidden{
-                min-height: 155px;
-                max-height: 155px;
+                transition: none;
                 @media only screen and (max-width : @monitorBreakpoint){
                     min-height: 415px;
                     max-height: 100%;

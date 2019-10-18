@@ -183,8 +183,8 @@ export default class CampaignList extends Component {
                               <NSImage mini path="icon_lock.png" />
                             </div>
                             <div className="details">
-                              <div className="tags mb-10">
-                                hidden
+                              <div className="tags mb-10 text-uppercase intro-text">
+                                <b>hidden</b>
                               </div>
                               <Card.Header>For NextSeed members only.</Card.Header>
                               <Card.Meta>
