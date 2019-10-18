@@ -49,7 +49,6 @@ export default class Finances extends Component {
                   showerror
                   disableDecimal
                   maxlength={13}
-                  allowNegative={false}
                 />
               ))}
             </Form.Group>

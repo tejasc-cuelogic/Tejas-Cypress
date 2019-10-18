@@ -142,6 +142,11 @@ export const campaignDetailsQuery = gql`
         isPublic
       }
       unitPrice
+      discount
+      valuationCap
+      totalRoundSize
+      equityClass
+      equityUnitType
       roundType
       premoneyValuation
       additionalKeyterms {

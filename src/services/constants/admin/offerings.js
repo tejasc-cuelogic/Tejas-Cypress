@@ -382,9 +382,30 @@ export const KEY_TERMS = {
   },
   unitPrice: {
     value: null,
-    label: 'Unit Price',
+    label: 'Price (copy)',
     error: undefined,
     rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  totalRoundSize: {
+    value: null,
+    label: 'Total Round Size',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  equityClass: {
+    value: null,
+    label: 'Equity Class',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  equityUnitType: {
+    value: null,
+    label: 'Equity unit type',
+    error: undefined,
+    rule: 'optional',
     placeHolder: 'Enter here',
   },
   premoneyValuation: {
@@ -729,6 +750,13 @@ export const CLOSURE_SUMMARY = {
     label: 'Investment Multiple (calculation)',
     error: undefined,
     rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  unitPrice: {
+    value: null,
+    label: 'Price (calculation)',
+    error: undefined,
+    rule: 'numeric',
     placeHolder: 'Enter here',
   },
   processingDate: {

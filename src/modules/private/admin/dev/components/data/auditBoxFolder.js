@@ -58,7 +58,6 @@ export default class AuditBoxFolder extends Component {
                   <MaskedInput
                     key={field}
                     name={field}
-                    allowNegative={false}
                     label={AUDITBOXFOLDER_FRM.fields[field].label}
                     number
                     containerwidth="8"

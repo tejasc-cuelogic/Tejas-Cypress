@@ -219,6 +219,9 @@ export const getOfferingDetails = gql`
         discount
         valuationCap
         unitPrice
+        totalRoundSize
+        equityClass
+        equityUnitType
         roundType
         premoneyValuation
         additionalKeyterms {
@@ -994,6 +997,7 @@ export const getOfferingDetails = gql`
               }
             }
           }
+          unitPrice
           multiple
           revSharePercentage
           interestRate

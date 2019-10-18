@@ -40,7 +40,6 @@ export default class FinancialInformation extends React.Component {
                   maxLength={FIN_INFO_FRM.fields[field].maxLength}
                   currency
                   showerror
-                  allowNegative={false}
                 />
               ))
             }

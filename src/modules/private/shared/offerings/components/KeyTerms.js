@@ -126,7 +126,6 @@ export default class KeyTerms extends Component {
                 fielddata={KEY_TERMS_FRM.fields[field]}
                 changed={(values, name) => maskArrayChange(values, formName, name)}
                 currency
-                allowNegative={false}
                 prefix="$"
               />
             ))}
@@ -136,7 +135,6 @@ export default class KeyTerms extends Component {
               fielddata={KEY_TERMS_FRM.fields.minOfferingAmount506 && KEY_TERMS_FRM.fields.minOfferingAmount506.value && KEY_TERMS_FRM.fields.minOfferingAmount506.value !== '0.00' ? KEY_TERMS_FRM.fields.minOfferingAmount506 : KEY_TERMS_FRM.fields.minOfferingAmount506C}
               changed={(values, name) => maskArrayChange(values, formName, name)}
               currency
-              allowNegative={false}
               prefix="$"
             />
             <MaskedInput
@@ -145,7 +143,6 @@ export default class KeyTerms extends Component {
               fielddata={KEY_TERMS_FRM.fields.maxOfferingAmount506 && KEY_TERMS_FRM.fields.maxOfferingAmount506.value && KEY_TERMS_FRM.fields.maxOfferingAmount506.value !== '0.00' ? KEY_TERMS_FRM.fields.maxOfferingAmount506 : KEY_TERMS_FRM.fields.maxOfferingAmount506C}
               changed={(values, name) => maskArrayChange(values, formName, name)}
               currency
-              allowNegative={false}
               prefix="$"
             />
             <FormDropDown
@@ -208,7 +205,6 @@ export default class KeyTerms extends Component {
               name="interestRate"
               fielddata={KEY_TERMS_FRM.fields.interestRate}
               changed={(values, name) => maskArrayChange(values, formName, name)}
-              allowNegative={false}
               percentage
             />
             <MaskedInput
@@ -217,7 +213,6 @@ export default class KeyTerms extends Component {
               fielddata={KEY_TERMS_FRM.fields.minInvestAmt}
               changed={(values, name) => maskArrayChange(values, formName, name)}
               currency
-              allowNegative={false}
               prefix="$"
             />
             <FormInput
@@ -231,7 +226,6 @@ export default class KeyTerms extends Component {
               name="securitiesOwnershipPercentage"
               fielddata={KEY_TERMS_FRM.fields.securitiesOwnershipPercentage}
               changed={(values, name) => maskArrayChange(values, formName, name)}
-              allowNegative={false}
               percentage
             />
             <FormInput
@@ -252,17 +246,27 @@ export default class KeyTerms extends Component {
               options={ROUND_TYPE_VALUES}
               onChange={(e, result) => formArrayChange(e, result, formName)}
             /> */}
+            {
+              ['totalRoundSize', 'unitPrice'].map(field => (
+                <MaskedInput
+                  displayMode={isReadonly}
+                  name={field}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  changed={(values, name) => maskArrayChange(values, formName, name)}
+                  currency
+                  prefix="$"
+                />
+              ))
+            }
             <MaskedInput
               displayMode={isReadonly}
               name="unitPrice"
-              fielddata={KEY_TERMS_FRM.fields.unitPrice}
-              changed={(values, name) => maskArrayChange(values, formName, name)}
+              fielddata={CLOSURE_SUMMARY_FRM.fields.unitPrice}
+              changed={(values, name) => maskArrayChange(values, 'CLOSURE_SUMMARY_FRM', name)}
               currency
-              allowNegative={false}
-              prefix="$"
             />
             {
-              ['valuationCap', 'discount'].map(field => (
+              ['valuationCap', 'discount', 'equityClass', 'equityUnitType'].map(field => (
                 <FormInput
                   displayMode={isReadonly}
                   name={field}
@@ -350,7 +354,6 @@ export default class KeyTerms extends Component {
                 fielddata={KEY_TERMS_FRM.fields[field]}
                 changed={(values, name) => maskArrayChange(values, formName, name)}
                 currency
-                allowNegative={false}
                 prefix="$"
               />
             ))}
@@ -361,7 +364,6 @@ export default class KeyTerms extends Component {
                 fielddata={KEY_TERMS_FRM.fields[field]}
                 changed={(values, name) => maskArrayChange(values, formName, name)}
                 currency
-                allowNegative={false}
                 prefix="$"
               />
             ))}
