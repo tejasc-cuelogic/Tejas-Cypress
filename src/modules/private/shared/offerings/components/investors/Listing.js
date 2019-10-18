@@ -110,13 +110,12 @@ export default class Listing extends Component {
                     </div>
                   </Table.Cell>
                   <Table.Cell>
-                  <div className="table-info-wrap">
-                    <p>
-                      {((isIssuer && isOfferingClose) || (isAdmin)) && <span>{`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}`}</span>}
-                      <span>{data.city || 'N/A'}</span>
-                    </p>
-                  </div>
-                    {/* {data.city || 'N/A'} */}
+                    <div className="table-info-wrap">
+                      <p>
+                        {((isIssuer && isOfferingClose) || (isAdmin)) && <span>{`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}`}</span>}
+                        <span>{data.city || 'N/A'}</span>
+                      </p>
+                    </div>
                   </Table.Cell>
                   <Table.Cell>{data.state || 'N/A'}</Table.Cell>
                   {isAdmin
