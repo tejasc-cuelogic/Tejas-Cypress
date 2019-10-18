@@ -232,6 +232,16 @@
         &.no-border td {
             border-top: none;
         }
+        &.campaign-card{
+            tr{
+                border-bottom: 0;
+            }
+            td{		
+                padding-top: 0;
+                padding-bottom: 0;
+                border-top: none;
+            }
+        }
     }
     &.basic.form-table {
         background: @neutral-offwhite;
@@ -357,6 +367,23 @@
                 padding-left: @18px !important;
             }
 
+        }
+    }
+    &.no-border td {
+        border-top: none;
+    }
+    &.campaign-card{
+        @media only screen and (max-width : @monitorBreakpoint){
+            font-size: @13px;
+            // min-height: 135px;
+        }
+        tr{
+            border-bottom: 0;
+        }
+        td{		
+            padding-top: 0;
+            padding-bottom: 0;
+            border-top: none;
         }
     }
 }
