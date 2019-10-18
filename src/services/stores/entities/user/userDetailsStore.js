@@ -3,7 +3,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
 import moment from 'moment';
-import { mapValues, map, concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get, findIndex } from 'lodash';
+import { mapValues, map, concat, set, isEmpty, difference, find, findKey, filter, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM } from '../../../constants/user';
@@ -46,7 +46,7 @@ export class UserDetailsStore {
 
   @observable deleting = 0;
 
-  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING', 'OFFLINE'];
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
 
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
 
@@ -69,8 +69,6 @@ export class UserDetailsStore {
   @observable displayMode = true;
 
   @observable emailListArr = [];
-
-  @observable emailListIndex = 0;
 
   @action
   setFieldValue = (field, value) => {
@@ -231,6 +229,17 @@ export class UserDetailsStore {
       }
       investorProfileStore.populateData(this.userDetails);
     }
+  }
+
+  @action
+  updateUserDetails = (key, payload, path) => {
+    const tempData = { ...this.currentUser };
+    if (path) {
+      tempData.data.user[key] = set({ ...tempData.data.user[key], ...payload }, path, payload);
+    } else {
+      tempData.data.user[key] = { ...tempData.data.user[key], ...payload };
+    }
+    this.currentUser = { ...tempData };
   }
 
   @action
@@ -484,9 +493,10 @@ export class UserDetailsStore {
       details.frozenAccounts = map(filter(details.roles, a => a.status === 'FROZEN'), 'name');
       details.processingAccounts = map(filter(details.roles, a => (a.status ? a.status.endsWith('PROCESSING') : null)), 'name');
       details.inprogressAccounts = map(filter(details.roles, a => a.name !== 'investor' && a.status !== 'FULL'), 'name');
-      details.phoneVerification = (this.userDetails.phone
+      details.phoneVerification = this.userDetails.phone
         && this.userDetails.phone.number
-        && !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
+        && this.userDetails.phone.verified
+        ? 'DONE' : 'FAIL';
       details.isMigratedUser = (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
       details.isMigratedFullAccount = (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION')
         && this.userDetails.status === 'MIGRATION_FULL');
@@ -592,6 +602,7 @@ export class UserDetailsStore {
     } else if (this.isCipExpirationInProgress) {
       routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
+      && this.signupStatus.idVerification !== 'OFFLINE'
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
       routingUrl = '/app/summary/identity-verification/0';

@@ -187,7 +187,6 @@ class IraAccountStore {
         bankAccountStore.resetStoreData();
         this.isFormSubmitted = true;
         uiStore.setProgress(false);
-        Helper.toast('IRA account submitted successfully.', 'success');
         resolve();
       })
       .catch((err) => {

@@ -48,7 +48,7 @@ const DynamicFormInput = React.memo((props) => {
         tempFormPAyload && tempFormPAyload.fields && !isEmpty(tempFormPAyload.fields) ? (
           <div className="featured-section">
             <Suspense fallback={<InlineLoader />}>
-              <Header as="h6">Note: Below field/s are prefilled with dummy values.</Header>
+              <Header as="h6">Note: Below field(s) are prefilled with dummy values.</Header>
               <Form>
                 {loadFormElements(tempFormPAyload)}
               </Form>

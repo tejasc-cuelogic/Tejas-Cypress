@@ -470,7 +470,6 @@ export class TransactionStore {
           },
         })
         .then((response) => {
-          // this.updateUserPhoneDetails();
           if (response.data.verifyOtp) {
             resolve();
           } else {

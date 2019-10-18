@@ -71,8 +71,8 @@ export const securitySections = [
 ];
 
 export const USER_IDENTITY = {
-  title: {
-    key: 'title',
+  salutation: {
+    key: 'salutation',
     value: '',
     label: 'Title',
     placeHolder: 'Select',
@@ -81,6 +81,8 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRefOutput: 'legalName',
+    objRef: 'legalDetails.legalName',
   },
   firstLegalName: {
     key: 'firstLegalName',
@@ -92,6 +94,7 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRefOutput: 'legalName',
     objRef: 'legalDetails.legalName',
   },
   lastLegalName: {
@@ -104,10 +107,11 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRefOutput: 'legalName',
     objRef: 'legalDetails.legalName',
   },
-  residentalStreet: {
-    key: 'residentalStreet',
+  street: {
+    key: 'street',
     value: '',
     label: 'Residential Address',
     placeHolder: 'Street Address, City, State, Zip',
@@ -116,6 +120,7 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRefOutput: 'legalAddress',
     objRef: 'legalDetails.legalAddress',
   },
   streetTwo: {
@@ -128,6 +133,8 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    skipField: true,
+    objRefOutput: 'legalAddress',
     objRef: 'legalDetails.legalAddress',
   },
   city: {
@@ -140,6 +147,7 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRefOutput: 'legalAddress',
     objRef: 'legalDetails.legalAddress',
   },
   state: {
@@ -152,11 +160,13 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRefOutput: 'legalAddress',
     objRef: 'legalDetails.legalAddress',
   },
   zipCode: {
     key: 'zipCode',
     value: '',
+    showError: true,
     label: 'Zip Code',
     placeHolder: '10011',
     error: undefined,
@@ -165,15 +175,21 @@ export const USER_IDENTITY = {
       required: '* required.',
       maskedField: 'The ZIP Code should be at least 5 digits',
     },
+    objRefOutput: 'legalAddress',
     objRef: 'legalDetails.legalAddress',
   },
   phoneNumber: {
     key: 'phoneNumber',
     value: '',
     label: 'Phone Number',
+    showError: true,
+    format: '(###) ###-####',
+    type: 'tel',
     placeHolder: '(123) 456-7890',
     error: undefined,
     rule: 'required|maskedPhoneNumber',
+    skipField: true,
+    objRef: 'phone',
     customErrors: {
       required: '* required.',
       maskedPhoneNumber: 'The phone number is not in the format XXX-XXX-XXXX.',
@@ -183,6 +199,8 @@ export const USER_IDENTITY = {
     key: 'dateOfBirth',
     value: '',
     label: 'Date of Birth',
+    showError: true,
+    format: '##/##/####',
     placeHolder: 'mm/dd/yyyy',
     error: undefined,
     rule: 'required|date|dob|leastAge|afterDate',
@@ -190,6 +208,7 @@ export const USER_IDENTITY = {
       required: '* required.',
     },
     objRef: 'legalDetails',
+    maskFormattedChange: 'formatted',
   },
   ssn: {
     key: 'ssn',
@@ -198,10 +217,12 @@ export const USER_IDENTITY = {
     placeHolder: '123-456-7890',
     error: undefined,
     rule: 'required|maskedSSN',
+    format: '###-##-####',
     customErrors: {
       required: '* required.',
     },
     objRef: 'legalDetails',
+    showError: true,
   },
   mfaMethod: {
     key: 'mfaMethod',
@@ -209,6 +230,7 @@ export const USER_IDENTITY = {
     values: [{ label: 'Text', value: 'TEXT' }, { label: 'Call', value: 'CALL' }],
     label: 'How would you like to receive the MFA Code ?',
     error: undefined,
+    skipField: true,
     rule: 'optional',
   },
 };
@@ -341,7 +363,7 @@ export const UPDATE_PROFILE_INFO = {
 };
 
 export const USER_PROFILE_ADDRESS_ADMIN = {
-  street: { ...USER_IDENTITY.residentalStreet, objRef: 'info.mailingAddress' },
+  street: { ...USER_IDENTITY.street, objRef: 'info.mailingAddress' },
   streetTwo: { ...USER_IDENTITY.streetTwo, objRef: 'info.mailingAddress' },
   city: { ...USER_IDENTITY.city, objRef: 'info.mailingAddress' },
   state: { ...USER_IDENTITY.state, objRef: 'info.mailingAddress' },
@@ -356,7 +378,7 @@ export const USER_PROFILE_FOR_ADMIN = {
   firstLegalName: { ...USER_IDENTITY.firstLegalName },
   lastLegalName: { ...USER_IDENTITY.lastLegalName },
   dateOfBirth: { ...USER_IDENTITY.dateOfBirth },
-  street: { ...USER_IDENTITY.residentalStreet },
+  street: { ...USER_IDENTITY.street },
   streetTwo: { ...USER_IDENTITY.streetTwo },
   city: { ...USER_IDENTITY.city },
   state: { ...USER_IDENTITY.state },

@@ -57,7 +57,7 @@ mutation subscribeToNewsLetterNotifyAdmin($subscriberName: String!, $emailAddres
 `;
 
 export const notifyAdmins = gql`
-mutation sendAlertToAdminFromClient($emailContent: String!){ 
+mutation sendAlertToAdminFromClient($emailContent: String!){
   sendAlertToAdminFromClient(
     type: BUG
     emailContent: $emailContent
@@ -76,5 +76,11 @@ export const createUploadEntryAccreditationAdmin = gql`
 export const getsharedLink = gql`
 query getsharedLink($id: ID, $uploadId: ID, $type: ShareLinkTypeEnum!, $accountType: BoxAccountTypeEnum!, $expiration: String ){
   sharedLink(id: $id, uploadId: $uploadId, type: $type, accountType: $accountType, expiration: $expiration)
+  }
+`;
+
+export const getEmail = gql`
+query getEmail($id: String!, $requestDate: String!){
+  getEmail(recipientId: $id, requestDate: $requestDate)
   }
 `;

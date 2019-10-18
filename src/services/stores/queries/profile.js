@@ -100,21 +100,6 @@ export const checkUserPhoneVerificationCode = gql`
     }
  }`;
 
-export const updateUserCIPInfo = gql`
-mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!, $cip: UserCIPInformation, $userId: String) {
-    updateUserCIPInfo(user: $user, phoneDetails: $phoneDetails, cip: $cip, userId: $userId) {
-      email {
-        address
-      } info{
-        firstName
-        lastName
-      } lastLoginDate
-      accreditation {
-        status
-      }
-    }
-  }`;
-
 export const updateUserProfileData = gql`
   mutation _updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: ProfileDataLegalInput, $capabilities: [String], $targetUserId: String) {
   updateUserProfileData(
@@ -176,6 +161,26 @@ export const isUniqueSSN = gql`
     }
   }`;
 
+export const verifyCip = gql`
+  mutation _verifyCip($userId: String!, $user: UserCIPInput, $phoneDetails: phoneInput!, $isCipOffline: Boolean){
+    verifyCip(userId: $userId, user: $user, phoneDetails: $phoneDetails, isCipOffline: $isCipOffline)
+  }`;
+
+export const verifyCipSoftFail = gql`
+  mutation verifyCipSoftFail($answers: [CIPAnswerInput]){
+    verifyCipSoftFail(answers: $answers)
+  }`;
+
+export const verifyCipHardFail = gql`
+mutation verifyCipHardFail($license: String!, $residence: String!, $userId: String) {
+    verifyCipHardFail(
+      license: $license
+      residence: $residence
+      userId: $userId
+    )
+  }`;
+
+
 export const portPrequalDataToApplication = gql`
   mutation portPrequalDataToApplication($prequalApplicationData: PrequalApplicationInput!) {
     portPrequalDataToApplication(
@@ -233,18 +238,3 @@ export const checkMigrationByEmail = gql`
   mutation checkMigrationByEmail($migrationByEmailData: CheckMigrationByEmailInput!) {
     checkMigrationByEmail(migrationByEmailData: $migrationByEmailData)
  }`;
-
-export const checkValidAddress = gql`
-  query checkValidInvestorAddress($street: String!, $city: String!, $state: String!, $zipCode: String!, $streetTwo: String!) {
-    checkValidInvestorAddress(
-      street: $street,
-      city: $city,
-      state: $state,
-      zipCode: $zipCode,
-      streetTwo: $streetTwo
-    ){
-      valid
-      message
-    }
-  }
-`;

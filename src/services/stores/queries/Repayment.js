@@ -48,10 +48,10 @@ export const paymentsIssuerList = gql`
           operationsDate
           keyTerms {
             maturityDate
-            anticipatedPaymentStartDate
+            expectedPaymentDate: anticipatedPaymentStartDate
           }
           repayment {
-            startDate
+            firstPaymentDate: startDate
           }
         }
         offering {
