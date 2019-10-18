@@ -24,8 +24,8 @@ const keyTermList = [
   { label: 'Share Price', key: 'keyTerms.unitPrice', type: '$', for: ['PREFERRED_EQUITY_506C'] },
   { label: 'Valuation Cap', key: 'keyTerms.valuationCap', type: '$', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
   { label: 'Discount', key: 'keyTerms.discount', type: '%', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
+  { label: 'Total net payments', forFunded: true, key: 'closureSummary.repayment.currentRepaidAmount', type: '$', for: ['ALL'] }
   // { label: 'Total Payments to investors', forFunded: true, key: 'closureSummary.repayment.count', type: '', for: [''] },
-  // { label: 'Total paid to investors', forFunded: true, key: 'closureSummary.repayment.count', type: '', for: [''] }, // will change the key later
 ];
 
 @inject('campaignStore', 'accreditationStore')
