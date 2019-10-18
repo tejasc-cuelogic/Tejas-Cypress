@@ -4,6 +4,7 @@ import { Header, Form, Divider, Button, Grid } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { DropZoneConfirm as DropZone, FormCheckbox } from '../../../../../../../theme/form';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('uiStore', 'accreditationStore')
 @withRouter
 @observer
@@ -31,7 +32,7 @@ export default class UploadDocument extends Component {
     return (
       <div>
         <Header as="h3" textAlign="center">Upload documents</Header>
-        <p className="center-align">Upload your W2, 1040, or other IRS or foreign tax authority documents containing your salary for the past 2 years, or a letter from your lawyer, CPA, investment advisor or investment broker verifying your income.</p>
+        <p className={isMobile ? 'left-align' : 'center-align'}>Upload your W2, 1040, or other IRS or foreign tax authority documents containing your salary for the past 2 years, or a letter from your lawyer, CPA, investment advisor or investment broker verifying your income.</p>
         <Divider hidden />
         <Form>
           <Grid stackable columns="equal">
@@ -62,7 +63,7 @@ export default class UploadDocument extends Component {
             containerclassname="ui relaxed list"
           />
           <div className="center-align">
-            <Button onClick={() => this.props.clicked('INCOME_UPLOAD_DOC_FORM')} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Submit</Button>
+            <Button fluid={isMobile} onClick={() => this.props.clicked('INCOME_UPLOAD_DOC_FORM')} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Submit</Button>
           </div>
         </Form>
       </div>

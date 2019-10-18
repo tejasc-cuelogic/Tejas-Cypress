@@ -19,7 +19,7 @@ export default class ConfirmCancelModal extends React.Component {
 
     render() {
       return (
-        <Modal size="mini" open>
+        <Modal size="mini" open className="finish-later">
           <Modal.Content>
             <p className={`${isMobile ? '' : 'center-align'} mt-30 mb-30`}>
               In order to participate in new investments, you will need to complete

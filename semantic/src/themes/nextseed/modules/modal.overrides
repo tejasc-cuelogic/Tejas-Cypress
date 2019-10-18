@@ -26,6 +26,11 @@
             }
 
         }
+        // &.finish-later{
+        @media only screen and (max-width:@largestMobileScreen){
+            margin: @28px;
+        }        
+        // }
     }
     @media only screen and (max-width:@largestMobileScreen){
         // background: @white;

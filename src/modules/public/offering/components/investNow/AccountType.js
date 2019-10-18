@@ -4,7 +4,7 @@ import { Header, Form, Button, Icon, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import cookie from 'react-cookies';
-import { FormRadioGroup, FormCheckbox } from '../../../../../theme/form';
+import { FormRadioGroup, FormCheckbox, FormArrowButton } from '../../../../../theme/form';
 import { Spinner } from '../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -249,7 +249,7 @@ class AccountType extends Component {
     const { getCurrentInvestNowHealthCheck, investNowError } = this.props.investmentLimitStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { campaign } = this.props.campaignStore;
-    const { disableContinueButton, submitStep } = this.props;
+    const { submitStep } = this.props;
     const offeringId = get(campaign, 'id');
     // const offeringDetailObj =
     //  this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
@@ -345,17 +345,28 @@ class AccountType extends Component {
                 ? (
 <>
                   <p className="center-align">{headerSubheaderObj.subHeader}</p>
-                  <FormRadioGroup
-                    name="investAccountType"
-                    containerclassname="button-radio center-align"
-                    fielddata={investAccTypes}
-                    changed={accTypeChanged}
-                  />
                   {isMobile
+                    ? (
+                    <FormArrowButton
+                      fielddata={investAccTypes}
+                      name="investAccountType"
+                      changed={accTypeChanged}
+                      action={submitStep}
+                    />
+                    )
+                    : (
+                    <FormRadioGroup
+                      name="investAccountType"
+                      containerclassname="button-radio center-align"
+                      fielddata={investAccTypes}
+                      changed={accTypeChanged}
+                    />
+                    )}
+                  {/* {isMobile
                   && (
                     <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
                   )
-                  }
+                  } */}
                 </>
                 )
                 : (
