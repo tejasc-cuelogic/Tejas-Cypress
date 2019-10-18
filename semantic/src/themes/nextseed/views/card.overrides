@@ -7,13 +7,45 @@
         box-shadow:none;
         &:hover, &:focus {
             text-decoration: none;
+            box-shadow: none; //@cardHoverShadow;
+            border: 1px solid @neutral-darkwhite;
+            .campaign-image-wrap .campaign-card-image{
+                padding-top: 0;
+                @media only screen and (max-width : @monitorBreakpoint){
+                    padding-top: 66.66%;
+                }
+            }
+            .campaign-card-details{
+                margin-top: 0;
+                min-height: 392px;
+                max-height: 392px;
+                @media only screen and (max-width : @monitorBreakpoint){
+                    min-height: 415px;
+                    max-height: 100%;
+                }
+            }
+            .ui.labels, .icon.heart{
+                display: none;
+            }
+            >.content.card-hidden{
+                transition: none;
+                @media only screen and (max-width : @monitorBreakpoint){
+                    min-height: 415px;
+                    max-height: 100%;
+                }
+            }
         }
         .campaign-image-wrap{
+            display: block;
             .campaign-card-image{
                 position:relative;
                 padding-top:66.66%;
                 border-radius:@6px @6px 0 0;
                 overflow:hidden;
+                transition: all 0.5s ease-in-out;
+                @media only screen and (max-width : @monitorBreakpoint){
+                    transition: none;
+                }
                 >div{
                     background-size:cover;
                     background-repeat:no-repeat;
@@ -33,6 +65,11 @@
             position:absolute;
             top:12px;
             left:12px;
+            display: inline-block;
+            transition: all 0.5s ease-in-out;
+            @media only screen and (max-width : @monitorBreakpoint){
+                transition: none;
+            }
             .ui.label{
                 border:none;
                 text-transform:uppercase;
@@ -50,45 +87,92 @@
             position:absolute;
             top:12px;
             right:12px;
+            display: block;
+            transition: all 0.5s ease-in-out;
             &.outline{
                 color:@white;
             }
         }
-        >.content{
-            padding:@21px @28px;
-            @media only screen and (max-width : @largestMobileScreen){
-                padding:@20px @22px;
+        .campaign-card-details{
+            position: relative;
+            width: 100%;
+            min-height: 155px;
+            max-height: 155px;
+            overflow: hidden;
+            transition: all 0.5s ease-in-out;
+            background: @white;
+            @media only screen and (max-width : @monitorBreakpoint){
+                min-height: 415px;
+                max-height: 100%;
+                transition: none;
             }
-            >.header:not(.ui) {
-                clear: both;
-            }
-            .tags{
-                font-size:@13px;
-                font-weight:@fontMedium;
-                color:@neutral-middark;
-                text-transform:capitalize;
-                >span{
+            .content{
+                padding:@21px @28px;
+                transition: all 0.5s ease-in-out;
+                @media only screen and (max-width : @monitorBreakpoint){
+                    transition: none;
+                }
+                @media only screen and (max-width : @largestMobileScreen){
+                    padding:@20px @22px;
+                }
+                >.header:not(.ui) {
+                    clear: both;
+                    font-size: @20px;
+                    line-height: 24px;
+                    color: @neutral;
+                    font-weight: @bold;
+                    @media only screen and (max-width : @monitorBreakpoint){
+                        font-size: @16px;
+                    }
+                }
+                .tags{
+                    font-size:@13px;
+                    font-weight:@fontMedium;
+                    color:@neutral-middark;
+                    text-transform:capitalize;
+                    >span{
+                        text-transform:none;
+                    }
+                }
+                > .meta{
                     text-transform:none;
                 }
+                .description{
+                    min-height:63px;
+                    max-height:63px;
+                    margin:@14px 0 0;
+                    overflow:hidden;
+                    font-size:@15px;
+                    line-height:@20px;
+                    color: @neutral;
+                    transition: all 0.5s ease-in-out;
+                }
+                .campaign-card-table-wrapper{
+                    min-height: 115px;
+                    @media only screen and (max-width : @monitorBreakpoint){
+                        min-height: 135px;
+                    }
+                }
+                p{
+                    font-size: @13px;
+                    color: @neutral;
+                    margin-bottom: 0;
+                }
+                .ui.button{
+                    margin-bottom: @8px;
+                }
             }
-            > .meta{
-                text-transform:none;
-            }
-            .description{
-                max-height:80px;
-                margin:@14px 0 0;
-                overflow:hidden;
-                font-size:@13px;
-                line-height:@20px;
+        }
+        >.content.extra {
+            padding:0 @28px @21px;
+            border-top: 0!important;
+            @media only screen and (max-width : @largestMobileScreen){
+                padding:0 @22px @20px;
             }
             p{
                 font-size: @13px;
                 color: @neutral;
                 margin-bottom: 0;
-            }
-            &.extra {
-                padding-top: 0;
-                border-top: 0!important;
             }
         }
         .message {
@@ -108,6 +192,7 @@
             padding:@10px 0;
             border:none;
             border-radius: @4px !important;
+            transition: none;
             .lock-image {
                 position: relative;
                 display: flex;
@@ -135,10 +220,6 @@
             .meta{
                 text-transform:none;
             }
-        }
-        &:hover{
-            box-shadow:@cardHoverShadow;
-            border: 1px solid @neutral-darkwhite;
         }
         &.info-card {
             border-color: transparent;

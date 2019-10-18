@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Container, Button, Responsive } from 'semantic-ui-react';
-import Banner from '../components/Banner';
+import { Header, Container, Button, Divider } from 'semantic-ui-react';
+// import Banner from '../components/Banner';
 import CampaignList from '../components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 
@@ -28,29 +28,31 @@ class Offering extends Component {
     } = this.props.campaignStore;
     return (
       <>
-        <Banner />
-        <Responsive maxWidth={767} as={Container}>
+        {/* <Banner /> */}
+        {/* <Responsive maxWidth={767} as={Container}>
           <Header as="h2" className="mt-30">
             Invest in growing local businesses
           </Header>
-        </Responsive>
+        </Responsive> */}
         <CampaignList
           refLink={this.props.match.url}
           loading={loading}
           campaigns={active}
           filters
-          heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-30' : 'mb-50'}>Active Campaigns</Header>}
+          heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-10' : 'mb-50'}>Active Campaigns</Header>}
+          subheading={<p className="campaign-subheader center-align">Invest in the growth of the following local businesses</p>}
         />
         {activeList && activeList.length > RECORDS_TO_DISPLAY
           && activeToDisplay < activeList.length
           && <LoadMoreBtn action={loadMoreRecord} param="activeToDisplay" />
         }
-        <section className="learn-more">
+        <Divider section hidden />
+        <Divider hidden />
+        <section className="bg-offwhite">
           <Container textAlign="center">
-            <Header as="h2">Want to learn more about NextSeed?</Header>
+            <Header as={isMobile ? 'h3' : 'h2'}>Be the first to know about new opportunities</Header>
             <p className="mb-30">
-              Sign up for the mailing list to stay informed about new offerings,
-              updates and events.
+              Sign up to have exclusive investment opportunities delivered straight to your inbox.
             </p>
             <SubscribeForNewsletter className="public-form" />
           </Container>
@@ -58,10 +60,11 @@ class Offering extends Component {
         {!loading
           && (
             <CampaignList
+              isFunded
               loading={completedLoading}
               campaigns={completed}
               locked={3}
-              heading={<Header as="h2" textAlign="center" caption className="mb-50">Successfully Funded Campaigns</Header>}
+              heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-10' : 'mb-50'}>Successfully Funded on NextSeed</Header>}
             />
           )
         }
@@ -69,6 +72,8 @@ class Offering extends Component {
           && completedToDisplay < completedList.length
           && <LoadMoreBtn action={loadMoreRecord} param="completedToDisplay" />
         }
+        <Divider section hidden />
+        <Divider hidden />
       </>
     );
   }

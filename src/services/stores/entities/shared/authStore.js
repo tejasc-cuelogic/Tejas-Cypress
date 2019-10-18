@@ -230,8 +230,9 @@ export class AuthStore {
     if (this.isUserLoggedIn) {
       const { password, email } = this.CONFIRM_FRM.fields;
       const userCredentials = {
-        email: email.value || localStorage.getItem('changedEmail')
-          || get(userDetailsStore, 'userDetails.email.address') || '',
+        email: email.value
+        || get(userDetailsStore, 'userDetails.email.address')
+        || sessionStorage.getItem('changedEmail') || '',
         password: password.value,
         givenName: get(userDetailsStore, 'userDetails.info.firstName') || '',
       };

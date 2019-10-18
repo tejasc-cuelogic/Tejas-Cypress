@@ -88,7 +88,7 @@ export class PaymentStore extends DataModelStore {
       if (keyword) {
         ClientDb.filterFromNestedObjs('offering.keyTerms.shorthandBusinessName', keyword);
       }
-      this.data = ClientDb.getDatabase();
+      this.setFieldValue('data', ClientDb.getDatabase());
     }
 
     get repayments() {
