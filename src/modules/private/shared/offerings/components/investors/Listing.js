@@ -167,18 +167,19 @@ export default class Listing extends Component {
                   {((isIssuer && isOfferingClose) || (isAdmin))
                     && (
                     <Table.Cell textAlign="center">
-                    {data.earlyBirdEligibility
-                      ? (
-                        <Popup
-                          trigger={<Label color="green" circular empty className="mr-10" />}
-                          content="Eligible for Early Bird Reward"
-                          hoverable
-                          position="top center"
-                        />
-                      )
-                      : ''}
-                     </Table.Cell>
-                    )}
+                      {data.earlyBirdEligibility
+                        ? (
+                          <Popup
+                            trigger={<Label color="green" circular empty className="mr-10" />}
+                            content="Eligible for Early Bird Reward"
+                            hoverable
+                            position="top center"
+                          />
+                        )
+                        : ''}
+                      </Table.Cell>
+                    )
+                  }
                   <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
                   <Table.Cell textAlign="right">{data.referralCode ? this.showReferralCode(referralCode, data.referralCode) : 'N/A'}</Table.Cell>
                 </Table.Row>
