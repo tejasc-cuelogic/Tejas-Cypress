@@ -262,6 +262,11 @@ class KeyTermsDetails extends Component {
               data={keyTerms}
               field="totalRoundSize"
               title="Total Round Size"
+              content={(
+                <p>
+                  {Helper.CurrencyFormat(keyTerms.totalRoundSize, 0)}
+                </p>
+              )}
             />
             <KeyTermsFieldHoc
               data={keyTerms}
