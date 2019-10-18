@@ -1185,9 +1185,9 @@ export const LEADERSHIP = {
     },
     dlLicenseNumber: {
       value: '',
-      label: 'DL License Number',
+      label: 'Driver License Number',
       error: undefined,
-      rule: 'optional',
+      rule: 'numeric',
       placeHolder: 'Enter here',
     },
     dlState: {
