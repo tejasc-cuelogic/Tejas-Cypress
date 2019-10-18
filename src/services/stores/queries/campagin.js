@@ -35,10 +35,12 @@ query getOfferingList($filters: OfferingFilterInputType, $userId: String){
         totalInvestorCount
         keyTerms {
           multiple
+          interestRate
         }
         hardCloseDate
         repayment {
           count
+          currentRepaidAmount
         }
       }
       keyTerms {
@@ -98,7 +100,7 @@ query offeringWatchList($offeringId: String){
       email {
         address
       }
-    info { 
+    info {
       firstName
       lastName
     }
