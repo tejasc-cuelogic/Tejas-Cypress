@@ -24,8 +24,8 @@ const keyTermList = [
   { label: 'Share Price', key: 'keyTerms.unitPrice', type: '$', for: ['PREFERRED_EQUITY_506C'] },
   { label: 'Valuation Cap', key: 'keyTerms.valuationCap', type: '$', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
   { label: 'Discount', key: 'keyTerms.discount', type: '%', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
-  { label: 'Total Payments to investors', forFunded: true, key: 'closureSummary.repayment.count', type: '', for: [''] },
-  { label: 'Total paid to investors', forFunded: true, key: 'closureSummary.repayment.count', type: '', for: [''] }, // will change the key later
+  // { label: 'Total Payments to investors', forFunded: true, key: 'closureSummary.repayment.count', type: '', for: [''] },
+  // { label: 'Total paid to investors', forFunded: true, key: 'closureSummary.repayment.count', type: '', for: [''] }, // will change the key later
 ];
 
 @inject('campaignStore', 'accreditationStore')
@@ -127,40 +127,42 @@ export default class CampaignList extends Component {
                               />
                             </Card.Description>
                             <Divider />
-                            <Table basic="very" compact="very" unstackable className="no-border campaign-card">
-                            <Table.Body>
-                                {(isFunded ? keyTermList.filter(i => i.forFunded) : keyTermList).map(row => (
-                                  <>
-                                  {(isFunded || row.for.includes('ALL') || row.for.includes(offering.keyTerms.securities))
-                                  && (
-                                  <Table.Row verticalAlign="top">
-                                    <Table.Cell collapsing>{row.label}</Table.Cell>
-                                    <Table.Cell className={`${!isFunded && !row.for.includes('ALL') ? 'highlight-text' : ''} right-align`}>
-                                      <b>
-                                      {(get(offering, row.key) !== undefined && get(offering, row.key) !== null)
-                                        ? (
-                                      <>
-                                        {typeof row.type === 'object' ? (
-                                          row.type[get(offering, row.key)] || '-'
-                                        ) : row.type === '$' ? Helper.CurrencyFormat(get(offering, row.key), 0)
-                                          : row.type === '%' ? `${get(offering, row.key)}%`
-                                            : row.type === 'months' ? `${get(offering, row.key)} months`
-                                              : get(offering, row.key) || '-'
+                            <div className="campaign-card-table-wrapper">
+                              <Table basic="very" compact="very" unstackable className="no-border campaign-card">
+                              <Table.Body>
+                                  {(isFunded ? keyTermList.filter(i => i.forFunded) : keyTermList).map(row => (
+                                    <>
+                                    {((isFunded || row.for.includes('ALL') || row.for.includes(offering.keyTerms.securities)) && (get(offering, row.key) === 0 || get(offering, row.key)))
+                                    && (
+                                    <Table.Row verticalAlign="top">
+                                      <Table.Cell collapsing>{row.label}</Table.Cell>
+                                      <Table.Cell className={`${!isFunded && !row.for.includes('ALL') ? 'highlight-text' : ''} right-align`}>
+                                        <b>
+                                        {(get(offering, row.key) !== undefined && get(offering, row.key) !== null)
+                                          ? (
+                                        <>
+                                          {typeof row.type === 'object' ? (
+                                            row.type[get(offering, row.key)] || '-'
+                                          ) : row.type === '$' ? Helper.CurrencyFormat(get(offering, row.key), 0)
+                                            : row.type === '%' ? `${get(offering, row.key)}%`
+                                              : row.type === 'months' ? `${get(offering, row.key)} months`
+                                                : get(offering, row.key) === 0 ? 0 : (get(offering, row.key) || '')
+                                          }
+                                        </>
+                                          )
+                                          : '-'
                                         }
-                                      </>
-                                        )
-                                        : '-'
-                                      }
-                                      </b>
-                                      </Table.Cell>
-                                  </Table.Row>
-                                  )
+                                        </b>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    )
+                                    }
+                                    </>
+                                  ))
                                   }
-                                  </>
-                                ))
-                                }
-                              </Table.Body>
-                            </Table>
+                                </Table.Body>
+                              </Table>
+                            </div>
                             <Button className="mt-30" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
                           </Card.Content>
                         </div>
