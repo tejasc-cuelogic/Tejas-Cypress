@@ -16,12 +16,14 @@ const isMobile = document.documentElement.clientWidth < 768;
 class Offering extends Component {
   constructor(props) {
     super(props);
-    this.props.campaignStore.initRequest(['active', 'completed']);
+    this.props.campaignStore.initRequest(['active']).finally(() => {
+      this.props.campaignStore.initRequest(['completed'], false, 'completedOfferings');
+    });
   }
 
   render() {
     const {
-      active, completed, loading, loadMoreRecord, activeList,
+      active, completed, loading, completedLoading, loadMoreRecord, activeList,
       completedList, activeToDisplay, completedToDisplay, RECORDS_TO_DISPLAY,
     } = this.props.campaignStore;
     return (
@@ -59,14 +61,14 @@ class Offering extends Component {
           && (
             <CampaignList
               isFunded
-              loading={loading}
+              loading={completedLoading}
               campaigns={completed}
               locked={3}
               heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-10' : 'mb-50'}>Successfully Funded on NextSeed</Header>}
             />
           )
         }
-        {completedList && completedList.length > RECORDS_TO_DISPLAY
+        {!loading && completedList && completedList.length > RECORDS_TO_DISPLAY
           && completedToDisplay < completedList.length
           && <LoadMoreBtn action={loadMoreRecord} param="completedToDisplay" />
         }

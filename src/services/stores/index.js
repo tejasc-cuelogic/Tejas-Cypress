@@ -58,3 +58,4 @@ export { default as dataStore } from './entities/dev/dataStore';
 export { default as nsUiStore } from './entities/shared/nsUiStore';
 export { default as watchListStore } from './entities/shared/offering/watchListStore';
 export { default as factoryStore } from './entities/dev/factoryStore';
+export { default as emailStore } from './entities/dev/emailStore';
