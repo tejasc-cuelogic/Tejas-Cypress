@@ -20,12 +20,12 @@ const checkStatus = (signupStatus, userDetailsStore) => {
     stepinfo.title = 'Please verify your identity in order to proceed';
   } else if (!signupStatus.investorProfileCompleted) {
     stepinfo.title = 'Get full access';
-    stepinfo.label = 'Finish setting up your account to start investing in local business';
+    stepinfo.label = 'To continue investing on Nextseed`s new Broker-Dealer platform, you`ll need to answer a few questions';
     stepinfo.btnText = 'Access';
     stepinfo.url = '/app/summary/establish-profile';
   } else {
     stepinfo.title = 'Complete your account setup';
-    stepinfo.label = 'Finish setting up your account to start investing in local business';
+    stepinfo.label = 'Finish setting up your account to start investing in local businesses';
     stepinfo.btnText = 'Continue';
     stepinfo.url = '/app/summary/account-creation';
   }

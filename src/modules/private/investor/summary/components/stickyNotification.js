@@ -17,7 +17,7 @@ const notificationCard = {
   verifiedAccreditation: {
     message:
     <span>
-       Earn a $20 referral credit fro every person who signs up using your code. They get a $20 credit as well. Build the community together
+       Earn a $20 referral credit for every person who signs up using your code. They get a $20 credit as well. Build the community together
       <br />
     </span>,
     btnText: 'Refer',
