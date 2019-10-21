@@ -17,10 +17,10 @@ import { PopUpModal } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-const KeyTermsFieldHoc = ({ data, title, field, content, titleAddon }) => (
+const KeyTermsFieldHoc = ({ data, title, field, content, titleAddon, noBgOffWhite }) => (
   get(data, field)
     ? (
-      <Table.Row verticalAlign="top">
+      <Table.Row className={!noBgOffWhite ? 'bg-offwhite' : ''} verticalAlign="top">
         <Table.Cell width={7} className="neutral-text"><b>{title}{' '}</b>{titleAddon}</Table.Cell>
         <Table.Cell>{content || get(data, field)}</Table.Cell>
       </Table.Row>
@@ -95,6 +95,7 @@ class KeyTermsDetails extends Component {
                   title={type.label}
                   data={keyTerms}
                   field={type.key}
+                  noBgOffWhite
                   content={(
                     <p>
                       {get(keyTerms, 'regulation') === 'BD_CF_506C' && get(keyTerms, type.key) && ['minOfferingAmountCF', 'maxOfferingAmountCF'].includes(type.key)
@@ -131,6 +132,7 @@ class KeyTermsDetails extends Component {
               data={campaign}
               field="closureSummary.totalInvestmentAmount"
               title="Raised to date"
+              noBgOffWhite
               content={(
                 <>
                   <p>
@@ -333,7 +335,7 @@ class KeyTermsDetails extends Component {
             />
             {get(keyTerms, 'additionalKeyterms') && get(keyTerms, 'additionalKeyterms').length !== 0
               && keyTerms.additionalKeyterms.map(item => (
-                <Table.Row verticalAlign="top">
+                <Table.Row className="bg-offwhite" verticalAlign="top">
                   <Table.Cell width={7} className="neutral-text"><b>{item.label}{' '}</b>
                   </Table.Cell>
                   <Table.Cell>

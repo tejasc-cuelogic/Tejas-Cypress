@@ -34,6 +34,8 @@ export class UserDetailsStore {
 
   @observable currentActiveAccount = null;
 
+  @observable accreditationData = {};
+
   @observable isAddressSkip = false;
 
   @observable isFrozen = false;
@@ -120,6 +122,20 @@ export class UserDetailsStore {
   @action
   setAddressFieldsForProfile = (place, form) => {
     Validator.setAddressFields(place, this[form]);
+  }
+
+  @action
+  initiateAccreditation = () => {
+    const { userDetails } = this;
+    const entityAccreditation = userDetails && userDetails.roles
+      && userDetails.roles.find(role => role.name === 'entity');
+    const accData = {
+      individual: userDetails && userDetails.accreditation,
+      ira: userDetails && userDetails.accreditation,
+      entity: entityAccreditation && entityAccreditation.details
+        && entityAccreditation.details.accreditation,
+    };
+    this.accreditationData = accData;
   }
 
   @computed get getActiveAccounts() {

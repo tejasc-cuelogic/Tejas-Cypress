@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
 import { Header, Card, Button } from 'semantic-ui-react';
 // import money from 'money-math';
+import { get } from 'lodash';
 import { InlineLoader } from '../../../../../theme/shared';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import CashMovement from '../components/CashMovement';
@@ -12,6 +13,7 @@ import IdentityVerification from '../../accountSetup/containers/identityVerifica
 import EstablishProfile from '../../accountSetup/containers/establishProfile';
 import Helper from '../../../../../helper/utility';
 import ProccessingAccountsScreen from '../components/processingAccountsScreen';
+import StickyNotification from '../../accountSetup/components/StickyNotification';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const summaryDetails = ({
@@ -49,7 +51,7 @@ const summaryDetails = ({
   };
 };
 
-@inject('userDetailsStore', 'portfolioStore')
+@inject('userDetailsStore', 'portfolioStore', 'accreditationStore')
 @observer
 export default class Dashboard extends Component {
   constructor(props) {
@@ -64,6 +66,7 @@ export default class Dashboard extends Component {
     const { summaryLoading, summary, getChartData } = this.props.portfolioStore;
     const cashMovementData = getChartData('cashMovement');
     const {
+      multipleUserAccounts,
       signupStatus,
     } = this.props.userDetailsStore;
     const isInitialAccountProcessing = signupStatus.activeAccounts.length === 0
@@ -81,16 +84,15 @@ export default class Dashboard extends Component {
           P4={
             <Button secondary as={Link} to="/offerings" content={isInitialAccountProcessing ? 'Browse Offerings' : 'Invest Now'} />
           }
-//           P5={userAccreditationStatus && !get(multipleUserAccounts, 'noAccounts')
-//             ? (
-// <StickyNotification
-//   {...this.props}
-//   notificationCard={notificationCard}
-//   multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
-//   accountId={get(multipleUserAccounts, 'accountId') || null}
-//   accountType={get(multipleUserAccounts, 'accountType') || null}
-// />
-//             ) : ''}
+          P5={!get(multipleUserAccounts, 'noAccounts')
+            ? (
+            <StickyNotification
+              {...this.props}
+              multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
+              accountId={get(multipleUserAccounts, 'accountId') || null}
+              accountType={get(multipleUserAccounts, 'accountType') || null}
+            />
+            ) : ''}
         >
           {
             isInitialAccountProcessing
