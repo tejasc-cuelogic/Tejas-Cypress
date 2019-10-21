@@ -167,7 +167,7 @@ const BUSINESS_PREQUAL_COMMON = {
     value: '', label: 'Business Name', error: undefined, rule: 'required|string', placeHolder: 'e.g. NextBrewery', customErrors: { required: 'required' },
   },
   website: {
-    value: '', label: 'Website', error: undefined, rule: 'required', placeHolder: 'e.g. http://nextbrewery.com', customErrors: { required: 'required' },
+    value: '', label: 'Website', error: undefined, rule: 'required', placeHolder: 'e.g. www.nextbrewery.com', customErrors: { required: 'required' },
   },
   phoneNumber: {
     value: '', label: 'Phone Number', error: undefined, rule: 'required|maskedField:10', placeHolder: '(123) 456-7890', customErrors: { required: 'required', maskedField: 'required' },
@@ -186,7 +186,6 @@ const BUSINESS_PREQUAL_COMMON = {
   },
   industryExperience: {
     value: '',
-    label: 'How many years of related industry experience does your team have?',
     error: undefined,
     rule: 'required|numeric',
     maxLength: 2,
@@ -216,7 +215,7 @@ const BUSINESS_PREQUAL_COMMON = {
       { label: 'LLC', icon: 'ns-business', value: 'LLC' },
       { label: 'Limited Partnership', icon: 'ns-partnership', value: 'LIMITED_PARTNERSHIP' },
       { label: 'Sole Proprietor', icon: 'ns-proprietor', value: 'SOLE_PROPRIETOR' },
-      { label: 'Other use of funds', value: 'OTHER' },
+      { label: 'Other', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
@@ -284,7 +283,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'Food & Beverage', icon: 'ns-food-light', value: 'FOOD_AND_BEVERAGE' },
       { label: 'Real Estate', icon: 'ns-real-estate', value: 'REAL_ESTATE' },
       { label: 'Fitness & Wellness', icon: 'ns-dumbbells', value: 'FITNESS_AND_WELLNESS' },
-      { label: 'Hospitality', icon: 'ns-first-aid', value: 'HOSPITALITY' },
+      { label: 'Hospitality', icon: 'ns-hospitality-3', value: 'HOSPITALITY' },
       { label: 'Technology', icon: 'ns-technology', value: 'TECHNOLOGY' },
       { label: 'Other Industry Type', value: 'OTHER' },
     ],
@@ -324,8 +323,8 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'Inventory', icon: 'ns-inventory', value: 'INVENTORY' },
       { label: 'New Product Line', icon: 'ns-new-product', value: 'NEW_PRODUCT_LINE' },
       { label: 'New Location', icon: 'ns-new-location', value: 'NEW_LOCATION' },
-      { label: 'Restructure Debt', icon: 'ns-restructure-debt', value: 'RESTRUCTURE_DEBT' },
-      { label: 'Other use of fund', value: 'OTHER' },
+      { label: 'Restructuring / Recapitalization', icon: 'ns-restructure-debt', value: 'RESTRUCTURE_DEBT' },
+      { label: 'Other use of funds', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
@@ -509,16 +508,38 @@ export const BUSINESS_DETAILS = {
   },
   debts: [{
     amount: {
-      value: 0, label: 'Amount', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
+      value: 0, label: 'Principal Amount', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
     },
     remainingPrincipal: {
       value: 0, label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
     },
     interestExpenses: {
-      value: 0, label: 'Interest Expenses', error: undefined, rule: 'required|max:100', placeHolder: '10.0 %', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
+      value: 0, label: 'Interest Rate', error: undefined, rule: 'required|max:100', placeHolder: '10.0 %', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
     },
     term: {
       value: 0, label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' },
+    },
+    termStartDate: {
+      value: null, label: 'Term Start Date', error: undefined, rule: 'required|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
+    },
+    maturityDate: {
+      value: null, label: 'Maturity Date', error: undefined, rule: 'required|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
+    },
+  }],
+  sources: [{
+    name: {
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Source', customErrors: { required: 'required' },
+    },
+    amount: {
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Type Fund', customErrors: { required: 'required' },
+    },
+  }],
+  uses: [{
+    name: {
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Source', customErrors: { required: 'required' },
+    },
+    amount: {
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Type Fund', customErrors: { required: 'required' },
     },
   }],
   owners: [{
@@ -551,13 +572,13 @@ export const BUSINESS_DETAILS = {
 
 export const BUSINESS_PERF_COMMON = {
   priorToThreeYear: {
-    value: [], label: 'Prior 3 Year Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], uploadtitle: 'Upload a file or drag it here', label: 'Prior 3 Year Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   ytd: {
-    value: [], label: 'YTD Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], uploadtitle: 'Upload a file or drag it here', label: 'YTD Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   fiveYearProjection: {
-    value: [], label: '5 Year Projections', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], uploadtitle: <span>Upload a file or drag it here <br /> (Excel or CSV format preferred)</span>, label: '5 Year Projections', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   sourcesAndUses: {
     value: [], label: '  ', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },

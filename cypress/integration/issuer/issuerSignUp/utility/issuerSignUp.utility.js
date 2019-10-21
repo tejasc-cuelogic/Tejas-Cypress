@@ -1,4 +1,5 @@
 import { registerApiCall, getJSONDataFromFixtures, btnClickAndWaitByButtonName } from '../../../common.utility';
+import { async } from 'q';
 
 export const issuerSignUp = () => {
   cy.get('h4').contains('Business').click();
@@ -31,6 +32,7 @@ export const fillNextYearProjection = (nextYearProjection) => {
 export const fillBusinessDetails = async (businessDetails) => {
   cy.uploadFile('/issuer/test-img.png', 'png', 'input[name="businessPlan"]', '/dev/graphql');
   cy.get('.file-uploader > .active', { timeout: 6000 }).should('not.exist');
+  fillSourcesAndUses(businessDetails.sourcesAndUses);
   fillExistingDebt(businessDetails.existingDebt);
   fillOwnerInfo(businessDetails.owner);
 }
@@ -48,7 +50,15 @@ export const loginToApplication = () => {
     })
 }
 
+export const fillSourcesAndUses = (sourcesAndUses) => {
+  cy.get('.sources').find('input[name="name"]').type(sourcesAndUses.sources.name);
+  cy.get('.sources').find('input[name="amount"]').type(sourcesAndUses.sources.amount);
+  cy.get('.uses').find('input[name="name"]').type(sourcesAndUses.uses.name);
+  cy.get('.uses').find('input[name="amount"]').type(sourcesAndUses.uses.amount);
+}
+
 export const fillExistingDebt = (existingDebt) => {
+  cy.get('.field-wrap > :nth-child(2) > :nth-child(1) > div > input').type("100000");
   cy.clearFormField(existingDebt);
   cy.formFill(existingDebt);
 }
@@ -69,9 +79,16 @@ export const fillPreQaulificationDetails = (issuerPreQual) => {
   cy.get('input[value="B2C"]').click();
   fillGeneralInfo(issuerPreQual.generalInfo);
   cy.get('input[name="industryTypes"]').click({ force: true, multiple: true });
-  cy.get('input[value="EQUITY"]').click();
-  cy.get('input[value="BRAND_NEW"]').click();
+  if (issuerPreQual.previousYearProjection) {
+    cy.get('input[value="DEBT"]').click();
+    cy.get('input[value="UPGRADE"]').click();
+    fillNextYearProjection(issuerPreQual.previousYearProjection);  
+  } else {
+    cy.get('input[value="EQUITY"]').click();
+    cy.get('input[value="BRAND_NEW"]').click();
+  }
   fillExperienceDetails(issuerPreQual.experienceDetails);
+  cy.get('input[value="WORKING_CAPITAL"]').click();
   fillNextYearProjection(issuerPreQual.nextYearProjection);
   cy.get('input[value="LLC"]').click();
   cy.get('input[name="legalConfirmation"]').click({ force: true, multiple: true });
@@ -90,12 +107,19 @@ export const preQualificationFail = async () => {
   cy.wait(5000);
 }
 
+export const prequalFailButLendioPass = async() => {
+  const businessDetails = await getJSONDataFromFixtures('issuer/issuerPreQualFailLendioPass.json');
+  fillPreQaulificationDetails(businessDetails);
+  cy.wait(5000);
+}
+
 export const completeBusinessApplication = async () => {
   const issuerPreQual = await getJSONDataFromFixtures('issuer/issuerPreQual.json');
   fillPreQaulificationDetails(issuerPreQual);
-  loginToApplication();
+  // loginToApplication();
+  cy.wait(20000);
   registerApiCall('Proceed');
-  cy.get('button').contains('Proceed').click();
+  cy.get('.large').click();
   cy.wait('@Proceed');
   cy.get('<div.ui.large.text.loader>', { timeout: 6000 }).should('not.exist');
   fillBusinessDetails(issuerPreQual.businessDetails);

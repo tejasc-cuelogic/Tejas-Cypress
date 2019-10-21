@@ -9,6 +9,7 @@ import { InlineLoader } from '../../../../../theme/shared';
 import { FormInput } from '../../../../../theme/form';
 import { AppStatusLabel } from '../components/AppStatusLabel';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
+import { ACTIVITY_HISTORY_TYPES } from '../../../../../constants/common';
 
 const getModule = component => lazy(() => import(`../components/details/${component}`));
 
@@ -55,10 +56,12 @@ export default class ApplicationDetails extends Component {
     this.setState({ displayOnly: !this.state.displayOnly });
   }
 
-  updateBusinessDetails = (e, appId, appUserId) => {
+  updateBusinessDetails = (e, appId, appUserId, appType = null, rating = 0) => {
     e.preventDefault();
-    this.props.businessAppAdminStore.updateBusinessDetails(appId, appUserId).then(() => {
-      this.setState({ displayOnly: !this.state.displayOnly });
+    this.props.businessAppAdminStore.updateBusinessDetails(appId, appUserId, appType, rating).then(() => {
+      if (!rating) {
+        this.setState({ displayOnly: !this.state.displayOnly });
+      }
     });
   }
 
@@ -113,10 +116,20 @@ export default class ApplicationDetails extends Component {
             <span className="title-meta">  Status: <b>{appStepStatus}</b></span>
             <AppStatusLabel application={businessApplicationDetailsAdmin} />
             <span className="title-meta">Rating</span>
-            <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
+            <Rating
+              size="huge"
+              defaultRating={rating || 0}
+              maxRating={5}
+              disabled={prequalStatus === 'PRE_QUALIFICATION_FAILED'}
+              onRate={
+              (e, { rating: newRating }) => {
+                this.updateBusinessDetails(e, applicationId, userId, null, newRating);
+              }
+            }
+            />
             {((applicationStatus || prequalStatus)
-            === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED || applicationStage === 'IN_PROGRESS')
-            && <Button secondary compact floated="right" content="Promote" as={Link} to={`${this.props.refLink}/${appStatus}/${id || applicationId}/${userId || 'new'}/${prequalStatus || 'APPLICATION_IN_PROGRESS'}/PROMOTE/confirm`} />
+            === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED || applicationStage === 'IN_PROGRESS') && match.params.id !== 'completed'
+            && <Button secondary compact floated="right" content={prequalStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Promote PreQual' : 'Submit Application'} as={Link} to={`${this.props.refLink}/${appStatus}/${id || applicationId}/${userId || 'new'}/${prequalStatus || 'APPLICATION_IN_PROGRESS'}/PROMOTE/confirm`} />
             }
           </Header>
           <Grid columns="equal">
@@ -234,6 +247,8 @@ Update
                             showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
                             resourceId={params.appId}
                             appType={params.id}
+                            activityTitle="Comment"
+                            activityType={ACTIVITY_HISTORY_TYPES.COMMENT}
                             {...props}
                           />
                         )

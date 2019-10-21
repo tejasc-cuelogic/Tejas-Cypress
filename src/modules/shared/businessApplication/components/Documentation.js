@@ -22,11 +22,11 @@ export default class Documentation extends Component {
         <Form className="issuer-signup">
           {!hideFields
             && (
-<FormElementWrap
-  as="h1"
-  header="Documentation"
-  subHeader={`Quickly, safely and accurately submit your ${currentApplicationType === 'business' ? 'business' : 'real estate'} information.`}
-/>
+            <FormElementWrap
+              as="h1"
+              header="Documentation"
+              subHeader={`Quickly, safely and accurately submit your ${currentApplicationType === 'business' ? 'business' : 'real estate'} information.`}
+            />
             )
           }
           {currentApplicationType === 'business'
