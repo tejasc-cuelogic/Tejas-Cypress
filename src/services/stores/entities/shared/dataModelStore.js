@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import { set } from 'lodash';
+import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import { FormValidator, DataFormatter, MobxApollo, Utilities as Utils } from '../../../../helper';
@@ -22,6 +23,16 @@ export default class DataModelStore {
   client = publicClient;
 
   currentScore = 0;
+
+  requestState = {
+    lek: { 'page-1': null },
+    skip: 0,
+    page: 1,
+    perPage: 25,
+    filters: false,
+    search: {
+    },
+  };
 
   constructor(queryMutations) {
     this.auStatus = null;
@@ -187,6 +198,56 @@ export default class DataModelStore {
   resetAll = () => {
     this.client.clearStore();
   }
+
+  setFormData = (form, elemRef, elementValue, subForm = false) => {
+    if (subForm) {
+      this[form][subForm].fields[elemRef].value = elementValue;
+    } else {
+      this[form].fields[elemRef].value = elementValue;
+    }
+  }
+
+  initiateSearch = (srchParams) => {
+    this.setFieldValue('requestState', { 'page-1': null }, 'lek');
+    this.setFieldValue('requestState', 1, 'page');
+    this.setFieldValue('requestState', srchParams, 'search');
+    this.initRequest();
+  }
+
+  setInitiateSrch = (name, value) => {
+    if (name === 'startDate' || name === 'endDate') {
+      this.requestState.search[name] = value ? name === 'startDate' ? moment(new Date(`${value.formattedValue} 00:00:00`)).toISOString() : moment(new Date(`${value.formattedValue} 23:59:59`)).toISOString() : '';
+      if ((this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '')
+        || (this.requestState.search.startDate === '' && this.requestState.search.endDate === '')
+      ) {
+        const srchParams = { ...this.requestState.search };
+        this.initiateSearch(srchParams);
+      }
+    } else {
+      const srchParams = { ...this.requestState.search };
+      const temp = { ...this.requestState };
+      temp.search[name] = { ...this.requestState.search };
+      this.setFieldValue('requestState', temp);
+      if ((Array.isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+        srchParams[name] = value;
+      } else {
+        delete srchParams[name];
+      }
+      this.initiateSearch(srchParams);
+    }
+  }
+
+  resetFilters = () => {
+    this.requestState = {
+      lek: { 'page-1': null },
+      skip: 0,
+      page: 1,
+      perPage: 25,
+      filters: false,
+      search: {
+      },
+    };
+  }
 }
 
 export const decorateDefault = {
@@ -207,4 +268,9 @@ export const decorateDefault = {
   setLoader: action,
   auStatus: observable.ref,
   loading: observable.ref,
+  requestState: observable,
+  initiateSearch: action,
+  setInitiateSrch: action,
+  setFormData: action,
+  resetFilters: action,
 };

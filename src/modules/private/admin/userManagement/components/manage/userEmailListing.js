@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
-import { Container, Header, Table, Card, Visibility, Item, Modal, Button, Icon, Popup } from 'semantic-ui-react';
+import { Link, Route } from 'react-router-dom';
+import { Container, Header, Table, Card, Visibility, Item, Icon, Popup } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 import { DataFormatter } from '../../../../../../helper';
+import EmailContent from '../../../../shared/EmailContent';
 
 @inject('userDetailsStore')
 @observer
@@ -13,42 +14,16 @@ export default class UserEmailList extends Component {
     this.props.userDetailsStore.getEmailList();
   }
 
-  state = { open: false }
-
-  handleModel = (e, indexId) => {
-    e.preventDefault();
-    this.props.userDetailsStore.setFieldValue('emailListIndex', indexId);
-    this.setState({ open: true });
-  }
-
-  handleCancel = (e) => {
-    e.preventDefault();
-    this.setState({ open: false });
-  }
-
-
   render() {
-    const { userEmals, emailListOutputLoading, emailListIndex } = this.props.userDetailsStore;
+    const { userDetailsStore, match } = this.props;
+    const { userEmals, emailListOutputLoading } = userDetailsStore;
     return (
       <>
-        <Modal open={this.state.open} closeOnDimmerClick size="small" closeIcon onClose={e => this.handleCancel(e)}>
-          <Modal.Content className="center-align">
-            <Header as="h3">Email Content</Header>
-            {userEmals && userEmals.length > 0 && userEmals[emailListIndex].emailContent
-              ? <p>{userEmals[emailListIndex].emailContent}</p>
-              : (
-                <section className="bg-offwhite mb-20">
-                  <Header as="h5">Content not exists.</Header>
-                </section>
-              )
-            }
-            <div className="center-align">
-              <Button.Group widths="2" className="inline">
-                <Button primary content="Back" onClick={this.handleCancel} />
-              </Button.Group>
-            </div>
-          </Modal.Content>
-        </Modal>
+        <Route
+          path={`${match.url}/:id/:requestDate`}
+          render={props => <EmailContent refLink={match.url} {...props} />
+          }
+        />
         {emailListOutputLoading ? <InlineLoader />
           : (
             <>
@@ -71,7 +46,7 @@ export default class UserEmailList extends Component {
                       {!userEmals || (userEmals && userEmals.length === 0) ? (
                         <Table.Row><Table.Cell textAlign="center" colSpan="7">No emails to display.</Table.Cell></Table.Row>
                       ) : (
-                        userEmals && userEmals.map((resp, idx) => (
+                        userEmals && userEmals.map(resp => (
                             <Table.Row>
                               <Table.Cell>
                                 <Popup
@@ -99,23 +74,23 @@ export default class UserEmailList extends Component {
                                 {resp.toEmail ? resp.toEmail : ''}
                               </Table.Cell>
                               <Table.Cell collapsing>
-                                {resp.subject} <span><Link onClick={e => this.handleModel(e, idx)} to="/"> (Body)</Link></span> {' '}
+                                {resp.subject} <span><Link className="highlight-text" to={`${match.url}/${resp.recipientId}/${resp.requestDate}`}> (Body)</Link></span> {' '}
                                 {resp.attachments !== null && resp.attachments && resp.attachments.length > 0 && (
-<Popup
-  trigger={<Icon className="ns-attachment" color="blue" size="large" />}
-  content={(
-                                    <Item>
-                                      {resp.attachments.map(attach => (
+                                  <Popup
+                                    trigger={<Icon className="ns-attachment" color="blue" size="large" />}
+                                    content={(
+                                      <Item>
+                                        {resp.attachments.map(attach => (
                                           <Item.Content>
                                             <b>Name: </b>{attach.name ? attach.name : 'N/A'}
                                           </Item.Content>
-                                      ))
-                                      }
-                                    </Item>
-                                  )}
-  hoverable
-  position="top center"
-/>
+                                        ))
+                                        }
+                                      </Item>
+                                    )}
+                                    hoverable
+                                    position="top center"
+                                  />
                                 )}
                               </Table.Cell>
                             </Table.Row>

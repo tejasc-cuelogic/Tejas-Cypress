@@ -4,7 +4,7 @@ import { Table, Button } from 'semantic-ui-react';
 import { capitalize, get } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { CROWDPAY_ACCOUNTS_STATUS } from '../../../../../services/constants/crowdpayAccounts';
-
+import Helper from '../../../../../helper/utility';
 @inject('crowdpayStore', 'identityStore', 'userDetailsStore')
 @withRouter
 @observer
@@ -43,8 +43,10 @@ export default class Actions extends Component {
 
   checkCipBeforeSubmitInvestor = (userObj, attrObj) => {
     const { userId, accountId, action, msg } = attrObj;
+
     if (this.isCipExpired(userObj)) {
-      this.handleVerifyUserIdentity(userId, accountId, action, msg);
+      Helper.toast('The Account is Processing', 'error');
+      this.props.crowdpayStore.removeLoadingCrowdPayId(accountId, this.props.account.accountStatus);
     } else {
       this.props.crowdPayCtaHandler(userId, accountId, action, msg);
     }
@@ -77,7 +79,7 @@ export default class Actions extends Component {
     const isGsProcess = accountStatus === CROWDPAY_ACCOUNTS_STATUS.GS_PROCESSING;
     const isAccProcess = accountStatus === CROWDPAY_ACCOUNTS_STATUS.ACCOUNT_PROCESSING;
     const isDeclined = accountStatus === CROWDPAY_ACCOUNTS_STATUS.DECLINED
-    || (accountStatus === CROWDPAY_ACCOUNTS_STATUS.FROZEN && declined);
+      || (accountStatus === CROWDPAY_ACCOUNTS_STATUS.FROZEN && declined);
     const urlPara = `${refLink}/${userId}/${accountId}`;
     return (
       <>
@@ -87,35 +89,35 @@ export default class Actions extends Component {
               ? (
                 <>
                   {!approved && type === 'review'
-                && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.openModal(e, userId, accountId, 'APPROVE', 'Crowdpay account is approved successfully.')} as={Link} to={`${urlPara}/APPROVE`} color="green">Approve</Button>
-                }
+                    && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.openModal(e, userId, accountId, 'APPROVE', 'Crowdpay account is approved successfully.')} as={Link} to={`${urlPara}/APPROVE`} color="green">Approve</Button>
+                  }
                   {type !== 'review' && type !== 'individual' && !isGsProcess && !isAccProcess
-                  && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.openModal(e, userId, accountId, 'GSPROCESS', 'Crowdpay account successfully processed for gold star.')} as={Link} to={`${urlPara}/GSPROCESS`} color={isGsProcess ? 'gray' : 'green'}>{isGsProcess ? 'Processing' : 'GS Process'}</Button>
-                }
-                {!isAccProcess
-                  && (
-<Button
-  disabled={loadingCrowdPayIds.includes(accountId)}
-  onClick={
-                      e => this.openModal(e, userId, accountId, type === 'review' ? 'DECLINE' : 'ACCOUNT_DECLINE', 'Crowdpay account is declined successfully.')
-                    }
-  as={Link}
-  to={`${urlPara}/${type === 'review' ? 'DECLINE' : 'ACCOUNT_DECLINE'}`}
-  color="red"
->
-                    Decline
+                    && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.openModal(e, userId, accountId, 'GSPROCESS', 'Crowdpay account successfully processed for gold star.')} as={Link} to={`${urlPara}/GSPROCESS`} color={isGsProcess ? 'gray' : 'green'}>{isGsProcess ? 'Processing' : 'GS Process'}</Button>
+                  }
+                  {!isAccProcess
+                    && (
+                      <Button
+                        disabled={loadingCrowdPayIds.includes(accountId)}
+                        onClick={
+                          e => this.openModal(e, userId, accountId, type === 'review' ? 'DECLINE' : 'ACCOUNT_DECLINE', 'Crowdpay account is declined successfully.')
+                        }
+                        as={Link}
+                        to={`${urlPara}/${type === 'review' ? 'DECLINE' : 'ACCOUNT_DECLINE'}`}
+                        color="red"
+                      >
+                        Decline
                   </Button>
-                  )
-                }
-                {!isAccProcess && type === 'individual'
-                  && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
-                }
-                {isAccProcess
-                  && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'CREATEACCOUNT', `${capitalize(type)} account is Created successfully.`)} as={Link} to={`${urlPara}/CREATEACCOUNT`} className="inverted" color="blue">Create</Button>
-                }
-                {type !== 'review' && isGsProcess
-                  && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
-                }
+                    )
+                  }
+                  {!isAccProcess && type === 'individual'
+                    && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
+                  }
+                  {isAccProcess
+                    && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'CREATEACCOUNT', `${capitalize(type)} account is Created successfully.`)} as={Link} to={`${urlPara}/CREATEACCOUNT`} className={`inverted ${this.isCipExpired(account) ? 'disabled' : ''}`} color="blue">Create</Button>
+                  }
+                  {type !== 'review' && isGsProcess
+                    && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
+                  }
                 </>
               )
               : (

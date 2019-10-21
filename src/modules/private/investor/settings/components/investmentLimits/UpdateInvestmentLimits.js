@@ -62,7 +62,6 @@ export default class UpdateInvestmentLimits extends Component {
                     fielddata={fields[field]}
                     changed={maskingFieldChange}
                     onblur={investmentCalculate}
-                    allowNegative={false}
                   />
                 ))
               }
