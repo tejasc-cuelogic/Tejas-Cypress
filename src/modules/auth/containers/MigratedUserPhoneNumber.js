@@ -74,11 +74,11 @@ export default class MigratedUserPhoneNumber extends Component {
             <Divider hidden />
             <Button disabled={!(ID_VERIFICATION_FRM.fields.phoneNumber.value !== '' && ID_VERIFICATION_FRM.fields.phoneNumber.error === undefined)} primary size="large" className="very relaxed" content="Confirm" loading={this.props.uiStore.inProgress} />
           </Form>
-          { errors
+          {errors
             && (
-<Message error textAlign="left" className="mb-30">
-              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-            </Message>
+              <Message error textAlign="left" className="mb-30">
+                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+              </Message>
             )
           }
         </Modal.Content>

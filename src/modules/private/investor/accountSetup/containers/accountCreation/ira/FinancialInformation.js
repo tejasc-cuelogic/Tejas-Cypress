@@ -48,7 +48,6 @@ Your net worth and annual income are used to determine your 12-month investment 
                   maxLength={FIN_INFO_FRM.fields[field].maxLength}
                   currency
                   showerror
-                  allowNegative={false}
                 />
               ))
             }

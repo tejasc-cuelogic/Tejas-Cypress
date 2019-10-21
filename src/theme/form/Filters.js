@@ -125,7 +125,7 @@ export const DateRangeFilter = props => (
           type="text"
           format="##-##-####"
           placeholder="MM-DD-YYYY"
-          onValueChange={values => props.change(values, props.nameEnd || 'endDate')}
+          onValueChange={values => props.change(values, props.nameEnd || 'endDate', true)}
         />
       </Form.Field>
     </Form.Group>

@@ -262,7 +262,7 @@ h6{
 	font-weight: @normal !important;
 }
 .more-info {
-	font-size: 12px;
+	font-size: 12px !important;
 }
 .underline-text {
 	text-decoration: underline !important;
@@ -547,6 +547,16 @@ footer{
 	h5.ui.header {
 		color: @neutral-middark;
 		margin-bottom: @35px;
+	}
+	.campaign-subheader{
+		font-size: @28px;
+		line-height: 24px;
+		font-weight: @semiBold;
+		margin-bottom: 100px;
+		@media only screen and (max-width : @largestMobileScreen){
+			font-size: @15px;
+			margin-bottom: @20px;
+		}
 	}
 }
 .offer-filter {
