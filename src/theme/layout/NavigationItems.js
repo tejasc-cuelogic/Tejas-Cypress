@@ -94,11 +94,12 @@ export class NavItems extends Component {
     const {
       location, isApp, roles, match, isMobile, onToggle, refLink, newLayout, userDetailsStore,
     } = this.props;
+    const { signupStatus, hasAnyAccount } = userDetailsStore;
     const app = (isApp) ? 'app' : '';
     const myNavItems = this.props.navItems.filter(n => (n.headerMobile !== false && n.title === 'My Account' ? this.props.userStore.isInvestor : n.headerMobile !== false && n.noNav !== true));
     const investorAccounts = this.props.userDetailsStore.getAccountList;
     const hasMoreThanOneAcc = investorAccounts.length > 1;
-    const hideSetupNav = (userDetailsStore.signupStatus.activeAccounts.length > 0 || userDetailsStore.signupStatus.partialAccounts.length > 0 || userDetailsStore.signupStatus.inprogressAccounts.length > 0);
+    const hideSetupNav = signupStatus.investorProfileCompleted && (hasAnyAccount);
     return myNavItems.map((item, key) => (
       <>
         {item.subPanel === 1 && item.subNavigations && isMobile && !isApp ? (

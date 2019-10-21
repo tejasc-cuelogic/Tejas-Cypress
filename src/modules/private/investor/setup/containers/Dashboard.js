@@ -87,7 +87,10 @@ export default class Dashboard extends Component {
           P5={!get(multipleUserAccounts, 'noAccounts')
             ? (
             <StickyNotification
+              isInvestor
               {...this.props}
+              signupStatus={signupStatus}
+              userDetailsStore={this.props.userDetailsStore}
               multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
               accountId={get(multipleUserAccounts, 'accountId') || null}
               accountType={get(multipleUserAccounts, 'accountType') || null}

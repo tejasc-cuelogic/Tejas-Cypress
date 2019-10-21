@@ -282,8 +282,7 @@ class InvestorProfileStore {
             if (data.data.createInvestorProfile && data.data.createInvestorProfile.status) {
               userDetailsStore.setUserStatus(data.data.createInvestorProfile.status);
             }
-            userDetailsStore.getUser(userStore.currentUser.sub);
-            resolve();
+            userDetailsStore.getUser(userStore.currentUser.sub).then(() => resolve());
           } else {
             this.setStepToBeRendered(currentStep.stepToBeRendered);
             resolve();

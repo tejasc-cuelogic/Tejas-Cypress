@@ -564,6 +564,10 @@ export class UserDetailsStore {
         || this.signupStatus.processingAccounts.length > 0));
   }
 
+  @computed get hasAnyAccount() {
+    return (this.signupStatus.activeAccounts.length > 0 || this.signupStatus.partialAccounts.length > 0 || this.signupStatus.inprogressAccounts.length > 0);
+  }
+
   @computed get isLegalDocsPresent() {
     return get(this.userDetails.legalDetails, 'verificationDocs.addressProof.fileId')
       || get(this.userDetails.legalDetails, 'verificationDocs.idProof.fileId');

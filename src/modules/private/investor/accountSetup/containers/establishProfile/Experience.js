@@ -34,10 +34,15 @@ export default class Experience extends Component {
           stepToBeRendered: 6,
         };
         updateInvestorProfileData(currentStep).then(() => {
-          const { signupStatus, userStatus } = this.props.userDetailsStore;
+          const { signupStatus, userStatus, hasAnyAccount, getInvestorAccountsRoute } = this.props.userDetailsStore;
           if (signupStatus.isMigratedFullAccount
             || (userStatus && userStatus.includes('FULL'))) {
-            this.props.history.push('/app/setup');
+            if (hasAnyAccount) {
+              const route = getInvestorAccountsRoute();
+              this.props.history.push(`/app/account-details/${route}/portfolio`);
+            } else {
+              this.props.history.push('/app/setup');
+            }
             setTimeout(() => this.props.uiStore.setProgress(false), 2000);
           } else {
             this.props.history.push('/app/setup/account-creation');
@@ -70,17 +75,17 @@ export default class Experience extends Component {
     const { errorMessage } = this.state;
     const isExperiencedTypeSelected = inProgressArray.includes('EXPERIENCED'); // only for mobile screen
     const CheckBoxes = () => (
-    <>
-      {['isRiskTaker', 'isComfortable'].map(field => (
-      <FormCheckbox
-        fielddata={INVESTMENT_EXP_FORM.fields[field]}
-        name={field}
-        changed={experiencesChange}
-        defaults
-        containerclassname="ui relaxed list"
-      />
-      ))}
-    </>
+      <>
+        {['isRiskTaker', 'isComfortable'].map(field => (
+          <FormCheckbox
+            fielddata={INVESTMENT_EXP_FORM.fields[field]}
+            name={field}
+            changed={experiencesChange}
+            defaults
+            containerclassname="ui relaxed list"
+          />
+        ))}
+      </>
     );
     const RequestMsg = () => (
       <p className="negative-text mb-20">
@@ -89,10 +94,10 @@ export default class Experience extends Component {
     );
     return (
       <>
-      <Header as="h4" textAlign={!isMobile ? 'center' : ''}>
-        {!isMobile ? 'Investment Experience' : isExperiencedTypeSelected ? 'Almost there!' : 'Please select the box that best describes your investment experience'
-        }
-      </Header>
+        <Header as="h4" textAlign={!isMobile ? 'center' : ''}>
+          {!isMobile ? 'Investment Experience' : isExperiencedTypeSelected ? 'Almost there!' : 'Please select the box that best describes your investment experience'
+          }
+        </Header>
         {!isMobile && (
           <p className="center-align mb-40">
             Confirm your experience and understanding of the investment risks on NextSeed.
@@ -107,72 +112,72 @@ export default class Experience extends Component {
         }
         <Form error={!isInvestmentExperienceValid}>
           {isExperiencedTypeSelected ? (
-          <CheckBoxes />
+            <CheckBoxes />
           )
             : (
-        <>
-          {isMobile
-            ? (
-              <FormArrowButton
-                fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}
-                name="experienceLevel"
-                changed={
-                  (e, result) => {
-                    experiencesChange(e, result);
-                    this.handleOnClick(e, result);
-                  }
+              <>
+                {isMobile
+                  ? (
+                    <FormArrowButton
+                      fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}
+                      name="experienceLevel"
+                      changed={
+                        (e, result) => {
+                          experiencesChange(e, result);
+                          this.handleOnClick(e, result);
+                        }
+                      }
+                      ctaErrors={this.state.ctaErrors}
+                    />
+                  ) : (
+                    <>
+                      <FormRadioGroup
+                        fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}
+                        name="experienceLevel"
+                        changed={experiencesChange}
+                        containerclassname="two wide button-radio center-align mb-50"
+                        showerror
+                      />
+                      <CheckBoxes />
+                    </>
+                  )
                 }
-                ctaErrors={this.state.ctaErrors}
-              />
-            ) : (
-          <>
-          <FormRadioGroup
-            fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}
-            name="experienceLevel"
-            changed={experiencesChange}
-            containerclassname="two wide button-radio center-align mb-50"
-            showerror
-          />
-          <CheckBoxes />
-          </>
-            )
-            }
-          </>
+              </>
             )
           }
           {errorMessage
-          && (
-<Message error className="mt-20">
-            <ListErrors errors={errorMessage ? [errorMessage] : ['']} />
-          </Message>
-          )
+            && (
+              <Message error className="mt-20">
+                <ListErrors errors={errorMessage ? [errorMessage] : ['']} />
+              </Message>
+            )
           }
           {!isMobile ? (
-          <div className="center-align mt-20">
-            {!isInvestmentExperienceValid
-              && (
-              <p className="negative-text mb-20">
-                NextSeed investments are suitable for experienced investors who are comfortable
-                with long-term risk.
-              </p>
-              )
-            }
-            <Button fluid={isMobile} primary className="relaxed" content="Continue to Account" disabled={!isValidInvestorProfileForm} onClick={this.handleSubmitInvestmentExperience} />
-            {!isInvestmentExperienceValid
-              && (<RequestMsg />)
-            }
-          </div>
-          ) : (
-            <>
-            {isExperiencedTypeSelected && (
             <div className="center-align mt-20">
-              <Button fluid={isMobile} primary className="relaxed" content="Create Account" disabled={!isValidInvestorProfileForm} onClick={this.handleSubmitInvestmentExperience} />
+              {!isInvestmentExperienceValid
+                && (
+                  <p className="negative-text mb-20">
+                    NextSeed investments are suitable for experienced investors who are comfortable
+                    with long-term risk.
+              </p>
+                )
+              }
+              <Button fluid={isMobile} primary className="relaxed" content="Continue to Account" disabled={!isValidInvestorProfileForm} onClick={this.handleSubmitInvestmentExperience} />
+              {!isInvestmentExperienceValid
+                && (<RequestMsg />)
+              }
             </div>
-            )}
-            {isExperiencedTypeSelected && !isInvestmentExperienceValid
-            && (<RequestMsg />)
-            }
-            </>
+          ) : (
+              <>
+                {isExperiencedTypeSelected && (
+                  <div className="center-align mt-20">
+                    <Button fluid={isMobile} primary className="relaxed" content="Create Account" disabled={!isValidInvestorProfileForm} onClick={this.handleSubmitInvestmentExperience} />
+                  </div>
+                )}
+                {isExperiencedTypeSelected && !isInvestmentExperienceValid
+                  && (<RequestMsg />)
+                }
+              </>
           )
           }
         </Form>
