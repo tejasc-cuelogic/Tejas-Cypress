@@ -10,9 +10,7 @@ import ProcessFullAccount from './data/processFullAccount';
 import RecreateGoldstar from './data/recreateGoldstar';
 import EncryptDecryptUtility from './data/encryptDecryptUtility';
 import PartialOrCipProcessingList from './data/partialOrCipProcessingList';
-import AuditBoxFolder from './data/auditBoxFolder';
 import ProcessTransferRequest from './data/processTransferRequest';
-import ImageProcessingRequest from './data/imageProcessingRequest';
 
 
 @inject('elasticSearchStore', 'uiStore')
@@ -97,10 +95,8 @@ export default class Data extends Component {
           <RecreateGoldstar />
           <OfferingAudit />
           <EncryptDecryptUtility />
-          <AuditBoxFolder />
           <PartialOrCipProcessingList />
           <ProcessTransferRequest />
-          <ImageProcessingRequest />
         </Grid.Column>
       </Grid>
     );
