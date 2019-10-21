@@ -22,7 +22,7 @@ export default class Filters extends Component {
                 <DateRangeFilter filters={requestState.search} label="Date" name="createdAt" change={change} />
               </Grid.Column>
               <Grid.Column width={3}>
-                <DropdownFilter value={requestState.search.emailType} name="emailType" change={setSearchParam} options={FILTER_FRM.fields.emailType.values} />
+                <DropdownFilter value={requestState.search.emailType} label="Email Type" name="emailType" change={setSearchParam} options={FILTER_FRM.fields.emailType.values} />
               </Grid.Column>
               <Grid.Column width={3}>
                 <NsPaginationHookType floated="right" initRequest={({ first, page }) => paginate({ first, page, noFilter: true })} meta={{ totalRecords, requestState }} />

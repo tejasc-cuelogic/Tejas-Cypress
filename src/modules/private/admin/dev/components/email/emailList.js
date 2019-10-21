@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Table, Item, Icon, Popup, Modal, Button, Header } from 'semantic-ui-react';
+import { Card, Table, Item, Icon, Popup } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { withRouter, Link } from 'react-router-dom';
-import { get } from 'lodash';
+import { withRouter, Link, Route } from 'react-router-dom';
 import moment from 'moment';
 import Filters from './filter';
 import { InlineLoader } from '../../../../../../theme/shared';
 import formHOC from '../../../../../../theme/form/formHOC';
 import { DataFormatter } from '../../../../../../helper';
+import EmailContent from '../../../../shared/EmailContent';
 
 const metaInfo = {
   store: 'emailStore',
@@ -15,62 +15,49 @@ const metaInfo = {
 };
 
 function EmailList(props) {
-  const [index, setIndex] = useState(0);
-  const [displyProp, setdisplyProp] = useState(false);
+  const [displyRecord, setdisplyRecord] = useState(false);
 
   useEffect(() => {
     props.emailStore.resetForm('EMAIL_LIST_FRM');
     return () => {
       props.emailStore.resetFilters();
       props.emailStore.setFieldValue('emailLogList', []);
+      setdisplyRecord(false);
     };
   }, []);
 
   const change = (date, field) => {
+    setdisplyRecord(true);
     if ((date && moment(date.formattedValue, 'MM-DD-YYYY', true).isValid()) || date.value === '') {
       props.emailStore.setInitiateSrch(field, date);
     }
   };
 
-  const setSearchParam = (e, { name, value }) => props.emailStore.setInitiateSrch(name, value);
+  const setSearchParam = (e, { name, value }) => {
+    setdisplyRecord(true);
+    props.emailStore.setInitiateSrch(name, value);
+  };
 
   const paginate = params => props.emailStore.initRequest(params);
 
-  const handleModel = (e, indexId) => {
+  const handleModel = (e, dataObj) => {
     e.preventDefault();
-    setIndex(indexId);
-    setdisplyProp(true);
-  };
-
-  const handleCancel = (e) => {
-    e.preventDefault();
-    setdisplyProp(false);
+    props.history.push(`${props.match.url}/${dataObj.recipientId}/${dataObj.requestDate}`);
   };
 
   const { loadingArray } = props.nsUiStore;
-  const { emailStore } = props;
+  const { emailStore, match } = props;
   const {
     EMAIL_LIST_FRM, requestState, filters, count, emailList,
   } = emailStore;
   const totalRecords = count || 0;
   return (
     <>
-      <Modal open={displyProp} closeOnDimmerClick size="small" closeIcon onClose={e => handleCancel(e)}>
-        <Modal.Content className="center-align">
-          <Header as="h3">Email Content</Header>
-          {get(emailList, `[${index}].emailContent`) || (
-            <section className="bg-offwhite mb-20">
-              <Header as="h5">Content not exists.</Header>
-            </section>
-          )
-          }
-          <div className="center-align">
-            <Button.Group widths="2" className="inline">
-              <Button primary content="Back" onClick={handleCancel} />
-            </Button.Group>
-          </div>
-        </Modal.Content>
-      </Modal>
+      <Route
+        path={`${match.url}/:id/:requestDate`}
+        render={prop => <EmailContent refLink={match.url} {...prop} />
+        }
+      />
       <Card fluid className="elastic-search">
         <Card.Content header="Manage Email" />
         <Card.Content>
@@ -98,9 +85,9 @@ function EmailList(props) {
                     </Table.Header>
                     <Table.Body>
                       {!emailList || (emailList && emailList.length === 0) ? (
-                        <Table.Row><Table.Cell textAlign="center" colSpan="7">No emails to display.</Table.Cell></Table.Row>
+                        <Table.Row><Table.Cell textAlign="center" colSpan="7">{displyRecord && 'No emails to display.'}</Table.Cell></Table.Row>
                       ) : (
-                        emailList && emailList.map((resp, idx) => (
+                        emailList && emailList.map(resp => (
                             <Table.Row>
                               <Table.Cell>
                                 <Popup
@@ -121,14 +108,14 @@ function EmailList(props) {
                               </Table.Cell>
                               <Table.Cell className="user-status">
                                 <span className="user-name"><b>{resp.fromName}</b></span>
-                                {resp.fromEmail}
+                                <p>{resp.fromEmail}</p>
                               </Table.Cell>
                               <Table.Cell className="user-status">
                                 <span className="user-name"><b>{resp.toFirstName}</b></span>
-                                {resp.toEmail}
+                                <p>{resp.toEmail}</p>
                               </Table.Cell>
                               <Table.Cell collapsing>
-                                {resp.subject} <span><Link onClick={e => handleModel(e, idx)} to="/"> (Body)</Link></span> {' '}
+                                {resp.subject} <span><Link className="highlight-text" onClick={e => handleModel(e, { recipientId: resp.recipientId, requestDate: resp.requestDate })} to="/">(Body)</Link></span> {' '}
                                 {resp.attachments && resp.attachments.length > 0 && (
                                   <Popup
                                     trigger={<Icon className="ns-attachment" color="blue" size="large" />}
