@@ -134,7 +134,7 @@ export default class BusinessDetails extends Component {
                   <Table inverted className="form-table source-table sources">
                     <Table.Header>
                       <Table.Row>
-                        <Table.HeaderCell>Souce of Funds</Table.HeaderCell>
+                        <Table.HeaderCell>Source of Funds</Table.HeaderCell>
                         <Table.HeaderCell>Amount</Table.HeaderCell>
                         <Table.HeaderCell />
                       </Table.Row>
@@ -150,7 +150,6 @@ export default class BusinessDetails extends Component {
                               asterisk="true"
                               name="name"
                               fielddata={source.name}
-                              placeholder="ex. Bank Loan"
                               changed={(e, res) => businessDetailsChange(e, res, 'sources', index)}
                             />
                           </Table.Cell>
@@ -164,7 +163,6 @@ export default class BusinessDetails extends Component {
                               name="amount"
                               hidelabel
                               fielddata={source.amount}
-                              placeholder="$ Amount"
                               onblur={() => totalChange('sources', 'sourcesTotal')}
                               changed={(values, field) => businessDetailsMaskingChange(field, values, 'sources', index)}
                             />

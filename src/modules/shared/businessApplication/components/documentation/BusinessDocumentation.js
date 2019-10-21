@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Divider, Button } from 'semantic-ui-react';
+import { Grid, Divider, Button, Popup, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
@@ -41,6 +41,19 @@ export default class BusinessDocumentation extends Component {
         <FormElementWrap
           hideFields={hideFields}
           header="Statements & Agreements"
+          subHeader={(
+            <span>
+              Provide the most recent 6 months of bank statements for your business accounts. For new entities, provide if statements are available.<br />
+              Also provide the lease for your location, if applicable. If only an LOI with the landlord is currently available, please upload the LOI for review purposes.
+              <Popup
+                trigger={<Icon className="ns-help-circle" />}
+                content="If your campaign is successfully funded, an executed lease will be required at closing in order for you to receive funds."
+                position="top center"
+                className="left-align justify-text"
+                wide
+              />
+            </span>
+          )}
         >
           <Grid stackable columns="equal">
             {
@@ -54,7 +67,7 @@ export default class BusinessDocumentation extends Component {
                     multiple
                     key={field}
                     name={field}
-                    asterisk="true"
+                    asterisk={fields[field].rule.includes('required')}
                     fielddata={fields[field]}
                     ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                     onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}

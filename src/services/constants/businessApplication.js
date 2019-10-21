@@ -508,13 +508,13 @@ export const BUSINESS_DETAILS = {
   },
   debts: [{
     amount: {
-      value: 0, label: 'Principal Amount', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
+      value: 0, label: 'Principal Amount', error: undefined, rule: 'required', placeHolder: '$500,000', customErrors: { required: 'required' },
     },
     remainingPrincipal: {
-      value: 0, label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
+      value: 0, label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '$150,000', customErrors: { required: 'required' },
     },
     interestExpenses: {
-      value: 0, label: 'Interest Rate', error: undefined, rule: 'required|max:100', placeHolder: '10.0 %', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
+      value: 0, label: 'Interest Rate', error: undefined, rule: 'required|max:100', placeHolder: '10%', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
     },
     term: {
       value: 0, label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' },
@@ -528,18 +528,18 @@ export const BUSINESS_DETAILS = {
   }],
   sources: [{
     name: {
-      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Source', customErrors: { required: 'required' },
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'ex. Bank Loan', customErrors: { required: 'required' },
     },
     amount: {
-      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Type Fund', customErrors: { required: 'required' },
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: '$ Amount', customErrors: { required: 'required' },
     },
   }],
   uses: [{
     name: {
-      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Source', customErrors: { required: 'required' },
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'ex. Build-Out', customErrors: { required: 'required' },
     },
     amount: {
-      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'Type Fund', customErrors: { required: 'required' },
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: '$ Amount', customErrors: { required: 'required' },
     },
   }],
   owners: [{
@@ -618,7 +618,7 @@ export const BUSINESS_DOC = {
     value: [], label: 'Prior 6 months Bank Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   leaseAgreementsOrLOIs: {
-    value: [], label: 'Lease Agreement / Letter of Intent', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], tooltip: 'NextSeed requires a lease or LOI prior to launching your campaign. Before disbursing funds, the executed lease is required. If you are currently still in negotiations with your lease, please submit a draft of the current terms.', customErrors: { required: 'required' },
+    value: [], label: 'Lease Agreement / Letter of Intent', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], tooltip: 'NextSeed requires a lease or LOI prior to launching your campaign. Before disbursing funds, the executed lease is required. If you are currently still in negotiations with your lease, please submit a draft of the current terms.', customErrors: { required: 'required' },
   },
   personalTaxReturn: {
     value: [], label: 'Prior 2 Years of Personal Tax Returns', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
