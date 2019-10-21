@@ -64,22 +64,6 @@ query _encryptOrDecryptValue($userId: String!, $text: String!, $type: EncryptDec
    type: $type
  )
 }`;
-export const auditBoxFolder = gql`
-mutation _auditBox($role:UserRoleEnum!, $userId: String, $jobId: String, $waitingTime: Int, $concurrency: Int,$queueLimit: Int) {
-  auditBox(
-    role: $role,
-    userId: $userId
-    jobId: $jobId
-    waitingTime: $waitingTime
-    concurrency: $concurrency
-    queueLimit: $queueLimit
-  ){
-    activityType
-    subType
-    activityTitle
-    activity
-  }
-}`;
 
 export const getListOfPartialOrCIPProcessingAccount = gql`
 query getListOfPartialOrCIPProcessingAccount {
@@ -108,17 +92,6 @@ query getListOfPartialOrCIPProcessingAccount {
 export const syncEsDocument = gql`
 mutation syncEsDocument($documentId: String!, $targetIndex: String!, $userId: String, $accountType: [InvestorAccountTypeEnum]){
   syncEsDocument(documentId: $documentId, targetIndex: $targetIndex, userId: $userId, accountType: $accountType)
-}`;
-
-export const imageProcessignRequest = gql`
-mutation _imageProcessing($key: String, $waitingTime: Int, $concurrency: Int,$queueLimit: Int, $folderName: String) {
-  imageProcessing(
-    key: $key,
-    waitingTime: $waitingTime
-    concurrency: $concurrency
-    queueLimit: $queueLimit
-    folderName: $folderName
-  )
 }`;
 
 export const getPluginList = gql`
