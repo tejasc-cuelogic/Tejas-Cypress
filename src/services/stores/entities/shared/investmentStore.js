@@ -59,7 +59,7 @@ export class InvestmentStore {
 
   @observable isGetTransferRequestCall = false;
 
-  @observable equityInvestmentAmount = '0';
+  @observable equityInvestmentAmount = '$ 0';
 
   @action
   setShowTransferRequestErr = (status) => {
@@ -646,7 +646,7 @@ export class InvestmentStore {
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
     Validator.resetFormData(this.PREFERRED_EQUITY_INVESTMONEY_FORM, ['shares']);
     this.setByDefaultRender(true);
-    this.setFieldValue('equityInvestmentAmount', '0');
+    this.setFieldValue('equityInvestmentAmount', '$ 0');
     investmentLimitStore.setInvestNowErrorStatus(false);
     // accreditationStore.resetAccreditationObject();
     this.setFieldValue('isGetTransferRequestCall', false);
@@ -700,7 +700,7 @@ export class InvestmentStore {
   }
 
   @action
-  investMoneyChangeForEquiry = (values, field) => {
+  investMoneyChangeForEquity = (values, field) => {
     this.PREFERRED_EQUITY_INVESTMONEY_FORM = Validator.onChange(this.PREFERRED_EQUITY_INVESTMONEY_FORM, {
       name: field,
       value: values.floatValue,
@@ -717,7 +717,8 @@ export class InvestmentStore {
     const resultAmount = money.mul(sharePrice, pricePerShare);
     const investedAmount = money.isZero(resultAmount) ? '0' : resultAmount;
     this.investMoneyChange({ floatValue: investedAmount }, 'investmentAmount', true);
-    this.setFieldValue('equityInvestmentAmount', investedAmount);
+    const formatedInvestedAmount = Helper.CurrencyFormat(investedAmount);
+    this.setFieldValue('equityInvestmentAmount', formatedInvestedAmount);
     if (this.investmentAmount > 0 && !money.isZero(this.investmentAmount)) {
       this.setFieldValue('disableNextbtn', true);
     } else {
@@ -732,6 +733,17 @@ export class InvestmentStore {
     } else {
       this.INVESTMONEY_FORM.fields.investmentAmount.rule = 'required|hundreds';
     }
+  }
+
+  @action
+  equityCalculateShareAmount = () => {
+    const { campaign } = campaignStore;
+    const unitPrice = get(campaign, 'closureSummary.keyTerms.unitPrice') || '0';
+    const offeringMinInvestment = get(campaign, 'keyTerms.minInvestAmt') || '0';
+    const formatedUnitPrice = money.floatToAmount(unitPrice || 0);
+    const formatedMinInvestment = money.floatToAmount(offeringMinInvestment || 0);
+    const result = Math.ceil(money.div(formatedMinInvestment, formatedUnitPrice));
+    return result;
   }
 }
 

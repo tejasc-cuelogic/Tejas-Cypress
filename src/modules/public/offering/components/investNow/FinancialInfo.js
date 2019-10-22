@@ -48,8 +48,9 @@ class FinancialInfo extends Component {
       INVESTMONEY_FORM,
       PREFERRED_EQUITY_INVESTMONEY_FORM,
       investMoneyChange,
-      investMoneyChangeForEquiry,
+      investMoneyChangeForEquity,
       equityInvestmentAmount,
+      equityCalculateShareAmount,
       estReturnVal,
       calculateEstimatedReturn,
       setStepToBeRendered,
@@ -78,6 +79,7 @@ class FinancialInfo extends Component {
     const prefferedEquityLabel = get(campaign, 'keyTerms.equityUnitType');
     const prefferedEquityAmount = get(campaign, 'closureSummary.keyTerms.unitPrice') || '0';
     const offeringReuglation = campaignRegulation || get(getInvestorAccountById, 'offering.keyTerms.regulation');
+    const offeringMinInvestmentAmount = Helper.CurrencyFormat((get(campaign, 'keyTerms.minInvestAmt') || '0'), 0);
     const showLimitComponent = !((offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || (offeringReuglation === 'BD_CF_506C' && includes(['REQUESTED', 'CONFIRMED'], accreditationStatus))));
     const { getInvestorAmountInvestedLoading } = this.props.investmentLimitStore;
     if (!getCurrentInvestNowHealthCheck || getInvestorAmountInvestedLoading
@@ -139,57 +141,49 @@ class FinancialInfo extends Component {
           {includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)
             ? (
               <>
-              <Table unstackable basic className="mt-30" padded="very">
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell className="grey-header plr-0" width="11">{`${prefferedEquityLabel}*:`}</Table.Cell>
-                    <Table.Cell className="plr-0">
-                      <MaskedInput
-                        data-cy="shares"
-                        name="shares"
-                        // label={prefferedEquityLabel}
-                        asterisk="true"
-                        // currency
-                        number
-                        showerror
-                        fielddata={PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares}
-                        changed={values => investMoneyChangeForEquiry(values, 'shares')}
-                        // onkeyup={calculatedInvestmentAmountForPreferredEquity}
-                        autoFocus
-                        allowNegative={false}
-                        hidelabel
-                      />
-                    </Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell className="grey-header plr-0">{`Price per ${prefferedEquityLabel}:`}</Table.Cell>
-                    <Table.Cell className="plr-0 grey-header right-align">{prefferedEquityAmount}</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell className="plr-0 grey-header">Your investment:</Table.Cell>
-                    <Table.Cell className="plr-0 highlight-text right-align">
-                      {/* <MaskedInput
-                        data-cy="investmentAmount"
-                        name="investmentAmount"
-                        label="Your investment"
-                        currency
-                        prefix="$ "
-                        showerror
-                        fielddata={INVESTMONEY_FORM.fields.investmentAmount}
-                        autoFocus
-                        allowNegative={false}
-                        hidelabel
-                      /> */}
-                      <b>{equityInvestmentAmount}</b>
-                    </Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table>
-              <Message className="bg-offwhite no-shadow">
-                <Message.Header>Bonus Rewards to be Received:</Message.Header>
-                <p>+ 2 Private VIP Launch Party Invitations</p>
-              </Message>
-              <p className="note mt-40 center-align">*Minimum investment amount: 7 shares = $1,995 </p>
+                <Table unstackable basic className="mt-30" padded="very">
+                  <Table.Body>
+                    <Table.Row>
+                      <Table.Cell className="grey-header plr-0" width="11">{`${prefferedEquityLabel}*:`}</Table.Cell>
+                      <Table.Cell className="plr-0">
+                        <MaskedInput
+                          data-cy="shares"
+                          name="shares"
+                          asterisk="true"
+                          number
+                          showerror
+                          fielddata={PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares}
+                          changed={values => investMoneyChangeForEquity(values, 'shares')}
+                          autoFocus
+                          allowNegative={false}
+                          hidelabel
+                        />
+                      </Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                      <Table.Cell className="grey-header plr-0">{`Price per ${prefferedEquityLabel}:`}</Table.Cell>
+                      <Table.Cell className="plr-0 grey-header right-align">{prefferedEquityAmount}</Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                      <Table.Cell className="plr-0 grey-header">Your investment:</Table.Cell>
+                      <Table.Cell className="plr-0 highlight-text right-align">
+                        <b>{equityInvestmentAmount}</b>
+                      </Table.Cell>
+                    </Table.Row>
+                  </Table.Body>
+                </Table>
+                {validBonusRewards && validBonusRewards.length > 0
+                  && (
+                    <Message className="bg-offwhite no-shadow">
+                      <Message.Header>Bonus Rewards to be Received:</Message.Header>
+                      {validBonusRewards.map(reward => (
+                        <p>+ {reward.title}</p>
+                      ))
+                      }
+                    </Message>
+                  )
+                }
+                <p className="note mt-40 center-align">{`*Minimum investment amount: ${equityCalculateShareAmount()} ${prefferedEquityLabel} = ${offeringMinInvestmentAmount}`} </p>
               </>
             )
             : (
@@ -230,7 +224,8 @@ class FinancialInfo extends Component {
         }
         {
           // isValidInvestAmtInOffering &&
-          validBonusRewards && validBonusRewards.length > 0
+          !includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)
+          && validBonusRewards && validBonusRewards.length > 0
           && validBonusRewards.map(reward => (
             <p className="grey-header">+ {reward.title}</p>
           ))
