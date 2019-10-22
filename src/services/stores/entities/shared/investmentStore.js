@@ -61,6 +61,8 @@ export class InvestmentStore {
 
   @observable equityInvestmentAmount = '$ 0';
 
+  @observable investmentFlowEquityErrorMessage = null;
+
   @action
   setShowTransferRequestErr = (status) => {
     this.showTransferRequestErr = status;
@@ -388,6 +390,12 @@ export class InvestmentStore {
               const errorMessage = !status ? message : null;
               this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             }
+
+            if (includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)) {
+              const errorMessage = !status ? message : null;
+              this.setFieldValue('investmentFlowEquityErrorMessage', errorMessage);
+            }
+
             if (!resp.data.investNowGeneratePurchaseAgreement) {
               this.setShowTransferRequestErr(true);
             }
@@ -647,6 +655,7 @@ export class InvestmentStore {
     Validator.resetFormData(this.PREFERRED_EQUITY_INVESTMONEY_FORM, ['shares']);
     this.setByDefaultRender(true);
     this.setFieldValue('equityInvestmentAmount', '$ 0');
+    this.setFieldValue('investmentFlowEquityErrorMessage', null);
     investmentLimitStore.setInvestNowErrorStatus(false);
     // accreditationStore.resetAccreditationObject();
     this.setFieldValue('isGetTransferRequestCall', false);
@@ -711,6 +720,7 @@ export class InvestmentStore {
   @action
   calculatedInvestmentAmountForPreferredEquity = () => {
     const { campaign } = campaignStore;
+    this.setFieldValue('investmentFlowEquityErrorMessage', null);
     const pricePerShare = money.floatToAmount(this.PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares.value || 0);
     const unitPrice = get(campaign, 'closureSummary.keyTerms.unitPrice') || '0';
     const sharePrice = money.floatToAmount(unitPrice || 0);

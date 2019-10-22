@@ -7,7 +7,7 @@ import { MaskedInput } from '../../../../../theme/form';
 import InvestmentLimit from './financialInfo/InvestmentLimit';
 import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 import Helper from '../../../../../helper/utility';
-import { Spinner } from '../../../../../theme/shared';
+import { Spinner, FieldError } from '../../../../../theme/shared';
 
 @withRouter
 @inject('investmentStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
@@ -51,6 +51,7 @@ class FinancialInfo extends Component {
       investMoneyChangeForEquity,
       equityInvestmentAmount,
       equityCalculateShareAmount,
+      investmentFlowEquityErrorMessage,
       estReturnVal,
       calculateEstimatedReturn,
       setStepToBeRendered,
@@ -165,13 +166,16 @@ class FinancialInfo extends Component {
                       <Table.Cell className="plr-0 grey-header right-align">{prefferedEquityAmount}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
-                      <Table.Cell className="plr-0 grey-header">Your investment:</Table.Cell>
+                      <Table.Cell className="plr-0 grey-header"><b>Your investment:</b></Table.Cell>
                       <Table.Cell className="plr-0 highlight-text right-align">
                         <b>{equityInvestmentAmount}</b>
                       </Table.Cell>
                     </Table.Row>
                   </Table.Body>
                 </Table>
+                {investmentFlowEquityErrorMessage
+                  && (<FieldError error={investmentFlowEquityErrorMessage} />)
+                }
                 {validBonusRewards && validBonusRewards.length > 0
                   && (
                     <Message className="bg-offwhite no-shadow">
