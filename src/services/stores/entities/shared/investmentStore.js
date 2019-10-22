@@ -157,12 +157,14 @@ export class InvestmentStore {
   }
 
   @action
-  investMoneyChange = (values, field) => {
+  investMoneyChange = (values, field, isPreferredEquiry = false) => {
     this.INVESTMONEY_FORM = Validator.onChange(this.INVESTMONEY_FORM, {
       name: field,
       value: values.floatValue,
     });
-    this.calculateEstimatedReturn();
+    if (!isPreferredEquiry) {
+      this.calculateEstimatedReturn();
+    }
   };
 
   @action
@@ -338,6 +340,8 @@ export class InvestmentStore {
   validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {
     uiStore.setProgress();
     if (this.investmentAmount) {
+      const { campaign } = campaignStore;
+      const offeringSecurityType = get(campaign, 'keyTerms.securities') || '0';
       if (this.checkLockinPeriod()) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
         this.setFieldValue('disableNextbtn', false);
@@ -345,7 +349,7 @@ export class InvestmentStore {
         this.INVESTMONEY_FORM.meta.isValid = false;
         uiStore.setProgress(false);
         resolve();
-      } else if (!this.isValidMultipleAmount(this.investmentAmount)) {
+      } else if (!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) && !this.isValidMultipleAmount(this.investmentAmount)) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
         this.setFieldValue('disableNextbtn', false);
         this.setFieldValue('investmentFlowErrorMessage', 'Investments must be in increments of $100');
@@ -634,6 +638,7 @@ export class InvestmentStore {
 
   @action
   resetData = () => {
+    this.overrideMultipleValidationForInvestment(true);
     Validator.resetFormData(this.INVESTMONEY_FORM);
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
@@ -693,22 +698,36 @@ export class InvestmentStore {
 
   @action
   investMoneyChangeForEquiry = (values, field) => {
-    console.log('values==>', values);
-    console.log('field==>', field);
     this.PREFERRED_EQUITY_INVESTMONEY_FORM = Validator.onChange(this.PREFERRED_EQUITY_INVESTMONEY_FORM, {
       name: field,
       value: values.floatValue,
     });
+    this.calculatedInvestmentAmountForPreferredEquity();
   }
 
   @action
   calculatedInvestmentAmountForPreferredEquity = () => {
-    const pricePerShare = this.PREFERRED_EQUITY_INVESTMONEY_FORM.fields.pricePerShare.value;
-    const sharePrice = money.floatToAmount(this.PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares.value || 0);
+    const { campaign } = campaignStore;
+    const pricePerShare = money.floatToAmount(this.PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares.value || 0);
+    const unitPrice = get(campaign, 'closureSummary.keyTerms.unitPrice') || '0';
+    const sharePrice = money.floatToAmount(unitPrice || 0);
     const resultAmount = money.mul(sharePrice, pricePerShare);
     const investedAmount = money.isZero(resultAmount) ? '0' : resultAmount;
-    this.investMoneyChange({ floatValue: investedAmount }, 'investmentAmount');
-    this.validateMaskedInputForAmount();
+    this.investMoneyChange({ floatValue: investedAmount }, 'investmentAmount', true);
+    if (this.investmentAmount > 0 && !money.isZero(this.investmentAmount)) {
+      this.setFieldValue('disableNextbtn', true);
+    } else {
+      this.setFieldValue('disableNextbtn', false);
+    }
+  }
+
+  @action
+  overrideMultipleValidationForInvestment = (isReset = false) => {
+    if (!isReset) {
+      this.INVESTMONEY_FORM.fields.investmentAmount.rule = 'required';
+    } else {
+      this.INVESTMONEY_FORM.fields.investmentAmount.rule = 'required|hundreds';
+    }
   }
 }
 

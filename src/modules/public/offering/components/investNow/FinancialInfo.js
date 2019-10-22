@@ -15,6 +15,13 @@ import { Spinner } from '../../../../../theme/shared';
 class FinancialInfo extends Component {
   constructor(props) {
     super(props);
+    const { campaign } = this.props.campaignStore;
+    const offeringSecurityType = get(campaign, 'keyTerms.securities');
+    if (includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)) {
+      const { overrideMultipleValidationForInvestment } = this.props.investmentStore;
+      overrideMultipleValidationForInvestment();
+    }
+
     if (this.props.changeInvest
       && !this.props.investmentLimitStore.getCurrentInvestNowHealthCheck) {
       const { getInvestNowHealthCheck } = this.props.investmentLimitStore;
@@ -42,7 +49,7 @@ class FinancialInfo extends Component {
       PREFERRED_EQUITY_INVESTMONEY_FORM,
       investMoneyChange,
       investMoneyChangeForEquiry,
-      calculatedInvestmentAmountForPreferredEquity,
+      // calculatedInvestmentAmountForPreferredEquity,
       estReturnVal,
       calculateEstimatedReturn,
       setStepToBeRendered,
@@ -142,7 +149,7 @@ class FinancialInfo extends Component {
                   showerror
                   fielddata={PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares}
                   changed={values => investMoneyChangeForEquiry(values, 'shares')}
-                  onkeyup={calculatedInvestmentAmountForPreferredEquity}
+                  // onkeyup={calculatedInvestmentAmountForPreferredEquity}
                   autoFocus
                   allowNegative={false}
                 />
