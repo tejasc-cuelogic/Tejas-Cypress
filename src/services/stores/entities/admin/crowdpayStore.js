@@ -132,8 +132,8 @@ export class CrowdpayStore {
     let params = {};
     const accountType = type.toLowerCase();
     if (accountType !== 'review' && initialState) {
-      params.accountStatus = CROWDPAY_FILTERS[accountType].initialStatus;
-      this.requestState.search.accountStatus = CROWDPAY_FILTERS[accountType].initialStatus;
+      params.accountStatus = CROWDPAY_FILTERS[accountType].initialFilters;
+      this.requestState.search.accountStatus = CROWDPAY_FILTERS[accountType].initialFilters;
     }
     if (CROWDPAY_FILTERS[accountType].accountType.length) {
       // eslint-disable-next-line prefer-destructuring

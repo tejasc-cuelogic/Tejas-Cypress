@@ -76,7 +76,7 @@ export default class PaymentDetails extends Component {
               />
               <div className="center-align">
                 <Button className="very relaxed red" content="Cancel" onClick={this.handleCloseModal} />
-                <Button primary className="very relaxed" loading={inProgress} content="Submit" onClick={() => this.handleUpdatePayment(get(this.props, 'match.params.id'))} />
+                <Button primary className="very relaxed" loading={inProgress} content="Save" onClick={() => this.handleUpdatePayment(get(this.props, 'match.params.id'))} />
               </div>
             </Form>
         </Modal.Content>

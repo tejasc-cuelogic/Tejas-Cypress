@@ -2,12 +2,11 @@
 import { observable, action, toJS, computed } from 'mobx';
 import { get } from 'lodash';
 import graphql from 'mobx-apollo';
-import cleanDeep from 'clean-deep';
-import { updateOfferingRepaymentsMeta, getListOfPartialOrCIPProcessingAccount, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility, auditBoxFolder, processTransferRequest, imageProcessignRequest } from '../../queries/data';
+import { updateOfferingRepaymentsMeta, getListOfPartialOrCIPProcessingAccount, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility, processTransferRequest } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { PROCESS_TRANSFER_REQ_META, OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META, RECREATEGOLDSTAR_META, ENCRYPTDECRYPTUTILITY_META, AUDITBOXFOLDER_META, IMAGEPROCESSINGREQUES_META } from '../../../constants/admin/data';
+import { PROCESS_TRANSFER_REQ_META, OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META, RECREATEGOLDSTAR_META, ENCRYPTDECRYPTUTILITY_META } from '../../../constants/admin/data';
 
 export class DataStore {
   @observable OFFERING_REPAYMENT_META_FRM = Validator.prepareFormObject(OFFERING_REPAYMENT_META);
@@ -21,23 +20,16 @@ export class DataStore {
   @observable ENCRYPTDECRYPTUTILITY_FRM =
     Validator.prepareFormObject(ENCRYPTDECRYPTUTILITY_META);
 
-  @observable AUDITBOXFOLDER_FRM =
-    Validator.prepareFormObject(AUDITBOXFOLDER_META);
 
   @observable PROCESS_TRANSFER_REQ_FRM =
     Validator.prepareFormObject(PROCESS_TRANSFER_REQ_META);
-
-  @observable IMAGEPROCESSINGREQUES_FRM =
-    Validator.prepareFormObject(IMAGEPROCESSINGREQUES_META);
 
   @observable inProgress = {
     offeringRepayment: false,
     processFullAccount: false,
     adminProcessCip: false,
     encryptOrDecryptValue: false,
-    auditBoxFolder: false,
     processTransferRequest: false,
-    imageProcessingRequest: false,
   };
 
   @observable partialOrCipAccountData = {};
@@ -247,54 +239,6 @@ export class DataStore {
       });
     });
   }
-
-  @action
-  auditBoxFolder = () => new Promise((res, rej) => {
-    const processData = cleanDeep(Validator.evaluateFormData(this.AUDITBOXFOLDER_FRM.fields));
-    this.setFieldValue('inProgress', true, 'auditBoxFolder');
-    client
-      .mutate({
-        mutation: auditBoxFolder,
-        variables: processData,
-      })
-      .then((result) => {
-        Helper.toast('Your request is processed.', 'success');
-        if (result.data.auditBox) {
-          res(result.data.auditBox);
-        }
-      })
-      .catch(() => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-        rej();
-      })
-      .finally(() => {
-        this.setFieldValue('inProgress', false, 'auditBoxFolder');
-      });
-  });
-
-  @action
-  imageProcessingRequest = () => new Promise((res, rej) => {
-    const processData = cleanDeep(Validator.evaluateFormData(this.IMAGEPROCESSINGREQUES_FRM.fields));
-    this.setFieldValue('inProgress', true, 'imageProcessingRequest');
-    client
-      .mutate({
-        mutation: imageProcessignRequest,
-        variables: processData,
-      })
-      .then((result) => {
-        Helper.toast('Your request is processed.', 'success');
-        if (result.data.imageProcessing) {
-          res(result.data.imageProcessing);
-        }
-      })
-      .catch(() => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-        rej();
-      })
-      .finally(() => {
-        this.setFieldValue('inProgress', false, 'imageProcessingRequest');
-      });
-  });
 
   @action
   getListOfPartialOrCIPProcessingAccount = () => {
