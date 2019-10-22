@@ -100,7 +100,7 @@ export default class AllRepayments extends Component {
                     onClick={this.handleSort('offering.closureSummary.keyTerms.maturityDate')}
                   >Maturity</Table.HeaderCell>
                   <Table.HeaderCell
-                    sorted={sortOrder.column === 'offering.launch.expectedOpsDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    sorted={sortOrder.column === 'offering.offering.launch.expectedOpsDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
                     onClick={this.handleSort('offering.offering.launch.expectedOpsDate')}
                   >Expected Ops</Table.HeaderCell>
                   <Table.HeaderCell
