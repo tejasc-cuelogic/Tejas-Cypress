@@ -59,6 +59,8 @@ export class InvestmentStore {
 
   @observable isGetTransferRequestCall = false;
 
+  @observable equityInvestmentAmount = '0';
+
   @action
   setShowTransferRequestErr = (status) => {
     this.showTransferRequestErr = status;
@@ -644,6 +646,7 @@ export class InvestmentStore {
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
     Validator.resetFormData(this.PREFERRED_EQUITY_INVESTMONEY_FORM, ['shares']);
     this.setByDefaultRender(true);
+    this.setFieldValue('equityInvestmentAmount', '0');
     investmentLimitStore.setInvestNowErrorStatus(false);
     // accreditationStore.resetAccreditationObject();
     this.setFieldValue('isGetTransferRequestCall', false);
@@ -714,6 +717,7 @@ export class InvestmentStore {
     const resultAmount = money.mul(sharePrice, pricePerShare);
     const investedAmount = money.isZero(resultAmount) ? '0' : resultAmount;
     this.investMoneyChange({ floatValue: investedAmount }, 'investmentAmount', true);
+    this.setFieldValue('equityInvestmentAmount', investedAmount);
     if (this.investmentAmount > 0 && !money.isZero(this.investmentAmount)) {
       this.setFieldValue('disableNextbtn', true);
     } else {

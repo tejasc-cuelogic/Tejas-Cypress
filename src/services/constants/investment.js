@@ -26,6 +26,9 @@ export const PREFERRED_EQUITY_INVESTMENT_INFO = {
     key: 'shares',
     value: '',
     error: undefined,
+    customErrors: {
+      required: '* required.',
+    },
     rule: 'required',
     placeHolder: '$ 0',
     maxLength: 15,

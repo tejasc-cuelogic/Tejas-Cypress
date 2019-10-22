@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, withRouter, Link } from 'react-router-dom';
-import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
+import { Header, Form, Popup, Icon, Divider, Table, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { get, includes } from 'lodash';
 import { MaskedInput } from '../../../../../theme/form';
@@ -49,7 +49,7 @@ class FinancialInfo extends Component {
       PREFERRED_EQUITY_INVESTMONEY_FORM,
       investMoneyChange,
       investMoneyChangeForEquiry,
-      // calculatedInvestmentAmountForPreferredEquity,
+      equityInvestmentAmount,
       estReturnVal,
       calculateEstimatedReturn,
       setStepToBeRendered,
@@ -139,33 +139,57 @@ class FinancialInfo extends Component {
           {includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)
             ? (
               <>
-                <MaskedInput
-                  data-cy="shares"
-                  name="shares"
-                  label={prefferedEquityLabel}
-                  asterisk="true"
-                  currency
-                  prefix="$ "
-                  showerror
-                  fielddata={PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares}
-                  changed={values => investMoneyChangeForEquiry(values, 'shares')}
-                  // onkeyup={calculatedInvestmentAmountForPreferredEquity}
-                  autoFocus
-                  allowNegative={false}
-                />
-                <span>{`Price per ${prefferedEquityLabel}:`}</span>
-                <p>{prefferedEquityAmount}</p>
-                <MaskedInput
-                  data-cy="investmentAmount"
-                  name="investmentAmount"
-                  label="Your investment"
-                  currency
-                  prefix="$ "
-                  showerror
-                  fielddata={INVESTMONEY_FORM.fields.investmentAmount}
-                  autoFocus
-                  allowNegative={false}
-                />
+              <Table unstackable basic className="mt-30" padded="very">
+                <Table.Body>
+                  <Table.Row>
+                    <Table.Cell className="grey-header plr-0" width="11">{`${prefferedEquityLabel}*:`}</Table.Cell>
+                    <Table.Cell className="plr-0">
+                      <MaskedInput
+                        data-cy="shares"
+                        name="shares"
+                        // label={prefferedEquityLabel}
+                        asterisk="true"
+                        // currency
+                        number
+                        showerror
+                        fielddata={PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares}
+                        changed={values => investMoneyChangeForEquiry(values, 'shares')}
+                        // onkeyup={calculatedInvestmentAmountForPreferredEquity}
+                        autoFocus
+                        allowNegative={false}
+                        hidelabel
+                      />
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell className="grey-header plr-0">{`Price per ${prefferedEquityLabel}:`}</Table.Cell>
+                    <Table.Cell className="plr-0 grey-header right-align">{prefferedEquityAmount}</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell className="plr-0 grey-header">Your investment:</Table.Cell>
+                    <Table.Cell className="plr-0 highlight-text right-align">
+                      {/* <MaskedInput
+                        data-cy="investmentAmount"
+                        name="investmentAmount"
+                        label="Your investment"
+                        currency
+                        prefix="$ "
+                        showerror
+                        fielddata={INVESTMONEY_FORM.fields.investmentAmount}
+                        autoFocus
+                        allowNegative={false}
+                        hidelabel
+                      /> */}
+                      <b>{equityInvestmentAmount}</b>
+                    </Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+              </Table>
+              <Message className="bg-offwhite no-shadow">
+                <Message.Header>Bonus Rewards to be Received:</Message.Header>
+                <p>+ 2 Private VIP Launch Party Invitations</p>
+              </Message>
+              <p className="note mt-40 center-align">*Minimum investment amount: 7 shares = $1,995 </p>
               </>
             )
             : (
