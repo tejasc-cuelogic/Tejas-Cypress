@@ -9,7 +9,7 @@ import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 import Helper from '../../../../../helper/utility';
 import { Spinner } from '../../../../../theme/shared';
 
-const isPrefferedEquity = false;
+const isPrefferedEquity = true;
 @withRouter
 @inject('investmentStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
 @observer
@@ -68,7 +68,9 @@ class FinancialInfo extends Component {
     const offerName = get(campaign, 'keyTerms.shorthandBusinessName') ? get(campaign, 'keyTerms.shorthandBusinessName') : get(getInvestorAccountById, 'offering.keyTerms.shorthandBusinessName') ? get(getInvestorAccountById, 'offering.keyTerms.shorthandBusinessName') : '-';
     const campaignRegulation = get(campaign, 'keyTerms.regulation');
     const accreditationStatus = get(userDetails, 'accreditation.status');
-    // const offeringSecurityType = get(userDetails, 'keyTerms.securities');
+    // const offeringSecurityType = get(campaign, 'keyTerms.securities');
+    const prefferedEquityLabel = get(campaign, 'keyTerms.equityUnitType');
+    const prefferedEquityAmount = get(campaign, 'keyTerms.equityClass') ? get(userDetails, 'keyTerms.equityClass') : '0';
     const offeringReuglation = campaignRegulation || get(getInvestorAccountById, 'offering.keyTerms.regulation');
     const showLimitComponent = !((offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || (offeringReuglation === 'BD_CF_506C' && includes(['REQUESTED', 'CONFIRMED'], accreditationStatus))));
     const { getInvestorAmountInvestedLoading } = this.props.investmentLimitStore;
@@ -134,6 +136,8 @@ class FinancialInfo extends Component {
                 <MaskedInput
                   data-cy="shares"
                   name="shares"
+                  label={prefferedEquityLabel}
+                  asterisk="true"
                   currency
                   prefix="$ "
                   showerror
@@ -143,19 +147,12 @@ class FinancialInfo extends Component {
                   autoFocus
                   allowNegative={false}
                 />
-                <MaskedInput
-                  data-cy="pricePerShare"
-                  name="pricePerShare"
-                  currency
-                  prefix="$ "
-                  showerror
-                  displayMode
-                  fielddata={PREFERRED_EQUITY_INVESTMONEY_FORM.fields.pricePerShare}
-                  allowNegative={false}
-                />
+                <span>{`Price per ${prefferedEquityLabel}:`}</span>
+                <p>{prefferedEquityAmount}</p>
                 <MaskedInput
                   data-cy="investmentAmount"
                   name="investmentAmount"
+                  label="Your investment"
                   currency
                   prefix="$ "
                   showerror

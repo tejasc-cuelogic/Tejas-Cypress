@@ -30,15 +30,6 @@ export const PREFERRED_EQUITY_INVESTMENT_INFO = {
     placeHolder: '$ 0',
     maxLength: 15,
   },
-  pricePerShare: {
-    label: 'Price Per Share',
-    key: 'pricePerShare',
-    value: '100.00',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: '$ 0',
-    maxLength: 15,
-  },
 };
 
 export const TRANSFER_REQ_INFO = {
