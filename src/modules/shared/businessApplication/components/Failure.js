@@ -20,7 +20,7 @@ export default class Failure extends Component {
           <p>
             We`ll update you if anything changes in the future. In the meantime, if you have
             any questions, you can contact us at <a href="mailto:apply@nextseed.com" className="link"><b>apply@nextseed.com</b></a> or<br />
-            check out our <Link to="business/how-it-works" className="link"><b>How it Works</b></Link> or <Link to="/resources/education-center/business" className="link"><b>Education Center </b></Link>
+            check out our <Link to="/business/how-it-works" className="link"><b>How it Works</b></Link> or <Link to="/resources/education-center/business" className="link"><b>Education Center </b></Link>
                  for more information on our general business requirements.
           </p>
           <Divider section hidden />
