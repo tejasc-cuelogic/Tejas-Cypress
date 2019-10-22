@@ -26,8 +26,10 @@ export class PaymentStore extends DataModelStore {
     }
 
     setSortingOrder = (column = null, direction = null) => {
-      this.sortOrder.column = column;
-      this.sortOrder.direction = direction;
+      this.sortOrder = {
+        column,
+        direction,
+      };
     }
 
     initRequest = () => {
