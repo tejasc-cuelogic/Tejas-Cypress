@@ -5,12 +5,12 @@ import { Header, Container, Button, Divider } from 'semantic-ui-react';
 import CampaignList from '../components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const LoadMoreBtn = ({ action, param }) => (
-  <div className="center-align mb-50" data-cy={param}>
-    <Button secondary content="Load More" onClick={() => action(param)} />
+  <div className={`${isMobile ? 'mb-30' : 'mb-50'} center-align`} data-cy={param}>
+    <Button secondary content="View More" onClick={() => action(param)} />
   </div>
 );
-const isMobile = document.documentElement.clientWidth < 768;
 @inject('campaignStore')
 @observer
 class Offering extends Component {
@@ -40,7 +40,7 @@ class Offering extends Component {
           campaigns={active}
           filters
           heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-10' : 'mb-50'}>Active Campaigns</Header>}
-          subheading={<p className="campaign-subheader center-align">Invest in the growth of the following local businesses</p>}
+          subheading={<p className="campaign-subheader center-align">Invest in the growth of the following {isMobile ? <br /> : ''} local businesses</p>}
         />
         {activeList && activeList.length > RECORDS_TO_DISPLAY
           && activeToDisplay < activeList.length
@@ -50,7 +50,7 @@ class Offering extends Component {
         <Divider hidden />
         <section className="bg-offwhite">
           <Container textAlign="center">
-            <Header as={isMobile ? 'h3' : 'h2'}>Be the first to know about new opportunities</Header>
+            <Header as={isMobile ? 'h3' : 'h2'}>Be the first to know about {isMobile ? <br /> : ''} new opportunities</Header>
             <p className="mb-30">
               Sign up to have exclusive investment opportunities delivered straight to your inbox.
             </p>
@@ -64,7 +64,7 @@ class Offering extends Component {
               loading={completedLoading}
               campaigns={completed}
               locked={3}
-              heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-10' : 'mb-50'}>Successfully Funded on NextSeed</Header>}
+              heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-30' : 'mb-50'}>Successfully Funded on NextSeed</Header>}
             />
           )
         }

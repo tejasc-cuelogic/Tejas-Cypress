@@ -168,7 +168,7 @@ export default class CampaignList extends Component {
                           </Card.Content>
                         </div>
                         <Card.Content extra>
-                          <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0)} from {get(offering, 'closureSummary.totalInvestorCount') || 0} investors</b></p>
+                          <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} from {get(offering, 'closureSummary.totalInvestorCount') || 0} investors</b></p>
                           {isFunded
                           && (
                             <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>
