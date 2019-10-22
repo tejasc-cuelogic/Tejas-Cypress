@@ -67,7 +67,7 @@ export default class BusinessDocumentation extends Component {
                     multiple
                     key={field}
                     name={field}
-                    asterisk={field === 'bankStatements' ? 'true' : ''}
+                    asterisk={fields[field].rule.includes('required') ? 'true' : ''}
                     fielddata={fields[field]}
                     ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                     onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
