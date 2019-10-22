@@ -372,7 +372,8 @@ class AccountType extends Component {
                               {headerSubheaderObj.subHeader
                                 ? <p className="center-align">{headerSubheaderObj.subHeader}</p> : null
                               }
-                              {(userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' || userAccredetiationState === 'PENDING' || (userAccredetiationState === 'EXPIRED' && offeringReuglation === 'BD_CF_506C'))
+                              {(userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' || userAccredetiationState === 'PENDING'
+                              // || (userAccredetiationState === 'EXPIRED' && offeringReuglation === 'BD_CF_506C'))
                                 ? offeringReuglation && offeringReuglation === 'BD_CF_506C'
                                   ? (
                                     <Card.Group itemsPerRow={isMobile ? '1' : '2'}>
@@ -420,7 +421,8 @@ class AccountType extends Component {
                                       </div>
                                     </>
                                   )
-                                : (userAccredetiationState === 'EXPIRED' && ['BD_506C', 'BD_506B'].includes(offeringReuglation))
+                                : (userAccredetiationState === 'EXPIRED'
+                                // && ['BD_506C', 'BD_506B'].includes(offeringReuglation))
                                   ? (
                                     <Form error>
                                       <FormCheckbox
