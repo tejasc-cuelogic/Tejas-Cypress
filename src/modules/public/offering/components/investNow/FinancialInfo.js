@@ -9,7 +9,6 @@ import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 import Helper from '../../../../../helper/utility';
 import { Spinner } from '../../../../../theme/shared';
 
-const isPrefferedEquity = true;
 @withRouter
 @inject('investmentStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
 @observer
@@ -68,7 +67,7 @@ class FinancialInfo extends Component {
     const offerName = get(campaign, 'keyTerms.shorthandBusinessName') ? get(campaign, 'keyTerms.shorthandBusinessName') : get(getInvestorAccountById, 'offering.keyTerms.shorthandBusinessName') ? get(getInvestorAccountById, 'offering.keyTerms.shorthandBusinessName') : '-';
     const campaignRegulation = get(campaign, 'keyTerms.regulation');
     const accreditationStatus = get(userDetails, 'accreditation.status');
-    // const offeringSecurityType = get(campaign, 'keyTerms.securities');
+    const offeringSecurityType = get(campaign, 'keyTerms.securities');
     const prefferedEquityLabel = get(campaign, 'keyTerms.equityUnitType');
     const prefferedEquityAmount = get(campaign, 'keyTerms.equityClass') ? get(userDetails, 'keyTerms.equityClass') : '0';
     const offeringReuglation = campaignRegulation || get(getInvestorAccountById, 'offering.keyTerms.regulation');
@@ -130,7 +129,7 @@ class FinancialInfo extends Component {
           )
         }
         <Form error size="huge">
-          {isPrefferedEquity
+          {includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)
             ? (
               <>
                 <MaskedInput
