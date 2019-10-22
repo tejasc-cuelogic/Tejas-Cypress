@@ -138,12 +138,18 @@ class KeyTermsDetails extends Component {
                   <p>
                     {Helper.CurrencyFormat(totalInvestmentAmount, 0)}
                   </p>
-                  <p>
-                    <i>{`${Helper.CurrencyFormat(totalInvestmentAmountCf, 0)} (under Regulation Crowdfunding)`}</i>
-                  </p>
-                  <p>
-                    <i>{`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}</i>
-                  </p>
+                  {get(keyTerms, 'regulation') === 'BD_CF_506C'
+                  && (
+                  <>
+                    <p>
+                      <i>{`${Helper.CurrencyFormat(totalInvestmentAmountCf, 0)} (under Regulation Crowdfunding)`}</i>
+                    </p>
+                    <p>
+                      <i>{`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}</i>
+                    </p>
+                  </>
+                  )
+                  }
                 </>
               )}
             />

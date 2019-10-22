@@ -265,6 +265,14 @@ export default class KeyTerms extends Component {
               changed={(values, name) => maskArrayChange(values, 'CLOSURE_SUMMARY_FRM', name)}
               currency
             />
+            <MaskedInput
+              displayMode={isReadonly}
+              name="premoneyValuation"
+              fielddata={KEY_TERMS_FRM.fields.premoneyValuation}
+              changed={(values, name) => maskArrayChange(values, 'KEY_TERMS_FRM', name)}
+              currency
+              prefix="$"
+            />
             {
               ['valuationCap', 'discount', 'equityClass', 'equityUnitType'].map(field => (
                 <FormInput
