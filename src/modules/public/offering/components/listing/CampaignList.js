@@ -25,7 +25,7 @@ const keyTermList = [
   { label: 'Valuation Cap', key: 'keyTerms.valuationCap', type: '$', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
   { label: 'Discount', key: 'keyTerms.discount', type: '%', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
   { label: 'Total Payments to investors', forFunded: true, key: 'closureSummary.repayment.count', type: '', for: [''] },
-  { label: 'Total Paid to investors', forFunded: true, key: 'closureSummary.repayment.currentRepaidAmount', type: '$', for: ['ALL'] },
+  { label: 'Total Paid to investors', forFunded: true, key: 'closureSummary.repayment.currentRepaidAmount', type: '$', for: [''] },
 ];
 
 @inject('campaignStore', 'accreditationStore')
