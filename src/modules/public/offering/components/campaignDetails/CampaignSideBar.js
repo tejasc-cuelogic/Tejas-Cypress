@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Route, Link } from 'react-router-dom';
-import { get } from 'lodash';
+import { get, capitalize } from 'lodash';
 import { Header, Icon, Statistic, Button, Menu, Responsive, Progress, Popup, Divider } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import Helper from '../../../../../helper/utility';
@@ -159,9 +159,14 @@ export default class CampaignSideBar extends Component {
                 </p>
                 )
                 : (
-                  <p className="mb-0">
-                    Share Price: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice')) : '-'}
-                  </p>
+                  <>
+                    <p className="mb-0">
+                      {`${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price:`} {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice'), 0) : '-'}
+                    </p>
+                    <p className="mb-0">
+                      Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : '-'}
+                    </p>
+                  </>
                 )
               }
               <Divider hidden />

@@ -402,11 +402,14 @@ export const KEY_TERMS = {
     placeHolder: 'Enter here',
   },
   equityUnitType: {
-    value: null,
+    value: 'share',
+    values: [
+      { key: 'share', value: 'share', text: 'Shares' },
+      { key: 'unit', value: 'unit', text: 'Units' },
+    ],
     label: 'Equity unit type',
     error: undefined,
     rule: 'optional',
-    placeHolder: 'Enter here',
   },
   premoneyValuation: {
     value: null,

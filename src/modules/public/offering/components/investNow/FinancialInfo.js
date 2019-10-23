@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, withRouter, Link } from 'react-router-dom';
 import { Header, Form, Popup, Icon, Divider, Table, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { get, includes } from 'lodash';
+import { get, includes, capitalize } from 'lodash';
 import { MaskedInput } from '../../../../../theme/form';
 import InvestmentLimit from './financialInfo/InvestmentLimit';
 import ChangeInvestmentLimit from './ChangeInvestmentLimit';
@@ -145,7 +145,7 @@ class FinancialInfo extends Component {
                 <Table unstackable basic className="mt-30" padded="very">
                   <Table.Body>
                     <Table.Row>
-                      <Table.Cell className="grey-header plr-0" width="11">{`${prefferedEquityLabel}*:`}</Table.Cell>
+                      <Table.Cell className="grey-header plr-0" width="11">{`${capitalize(prefferedEquityLabel)}s*:`}</Table.Cell>
                       <Table.Cell className="plr-0">
                         <MaskedInput
                           data-cy="shares"
@@ -187,7 +187,7 @@ class FinancialInfo extends Component {
                     </Message>
                   )
                 }
-                <p className="note mt-40 center-align">{`*Minimum investment amount: ${equityCalculateShareAmount()} ${prefferedEquityLabel} = ${offeringMinInvestmentAmount}`} </p>
+                <p className="note mt-40 center-align">{`*Minimum investment amount: ${equityCalculateShareAmount()} ${prefferedEquityLabel}s = ${offeringMinInvestmentAmount}`} </p>
               </>
             )
             : (

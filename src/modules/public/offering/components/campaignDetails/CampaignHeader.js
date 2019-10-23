@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get } from 'lodash';
+import { get, capitalize } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Popup, Statistic, Grid, Button } from 'semantic-ui-react';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
@@ -175,9 +175,15 @@ export default class CampaignHeader extends Component {
                     </p>
                     )
                     : (
-                      <p className="mb-0">
-                        Share Price: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice')) : '-'}
-                      </p>
+                      <>
+                        <p className="mb-0">
+                          {/* Share Price: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice'), 0) : '-'} */}
+                          {`${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price:`} {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice'), 0) : '-'}
+                        </p>
+                        <p className="mb-0">
+                          Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : '-'}
+                        </p>
+                      </>
                     )
                   }
                   <div className="mt-20">
@@ -203,11 +209,11 @@ export default class CampaignHeader extends Component {
                             </p>
                             </Grid.Column>
                             {followBtn
-                            && (
-                            <Grid.Column width="6">
-                              <>{followBtn}</>
-                            </Grid.Column>
-                            )
+                              && (
+                                <Grid.Column width="6">
+                                  <>{followBtn}</>
+                                </Grid.Column>
+                              )
                             }
                           </Grid>
                         </>
