@@ -5,12 +5,6 @@ import React from 'react';
 
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
-Validator.register(
-  'maskedSSN', (value, attribute) => {
-    return value.toString().length === 9;
-  },
-  'The :attribute is not in the format XXX-XX-XXXX.',
-);
 
 Validator.register(
   'dob', (value, attribute) => {
