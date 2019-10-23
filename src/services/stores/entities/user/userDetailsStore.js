@@ -3,7 +3,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
 import moment from 'moment';
-import { mapValues, map, concat, set, isEmpty, difference, find, findKey, filter, lowerCase, get, findIndex } from 'lodash';
+import { mapValues, map, concat, set, isEmpty, difference, pick, find, findKey, filter, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM } from '../../../constants/user';
@@ -828,45 +828,29 @@ export class UserDetailsStore {
     const profileDetails = {
       firstName: basicData.firstName,
       lastName: basicData.lastName,
-      mailingAddress: {
-        street: infoAdd.street,
-        streetTwo: infoAdd.streetTwo,
-        city: infoAdd.city,
-        state: infoAdd.state,
-        zipCode: infoAdd.zipCode,
-      },
+      mailingAddress: { ...infoAdd.legalAddress },
     };
+    const { capabilities } = basicData;
     if (this.detailsOfUser.data.user.info.avatar) {
-      profileDetails.avatar = {
-        name: this.detailsOfUser.data.user.info.avatar.name,
-        url: this.detailsOfUser.data.user.info.avatar.url,
-      };
+      profileDetails.avatar = pick(
+        get(this.detailsOfUser, 'data.user.info.avatar'),
+        ['name', 'url'],
+      );
     }
-    const legalDetails = {
-      dateOfBirth: basicData.dateOfBirth,
-      legalAddress: {
-        street: basicData.street,
-        streetTwo: basicData.streetTwo,
-        city: basicData.city,
-        state: basicData.state,
-        zipCode: basicData.zipCode,
-      },
-      legalName: {
-        firstLegalName: basicData.firstLegalName,
-        lastLegalName: basicData.lastLegalName,
-      },
-    };
+    const legalDetails = pick(get(basicData), ['dateOfBirth', 'legalAddress', 'legalName']);
     if (String(basicData.ssn).length === 9) {
       legalDetails.ssn = basicData.ssn;
     }
+
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: updateUserProfileData,
           variables: {
-            profileDetails: { ...profileDetails },
-            legalDetails: { ...legalDetails },
+            profileDetails,
+            legalDetails,
+            capabilities,
             targetUserId: get(this.getDetailsOfUser, 'id'),
           },
           refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id') } }],

@@ -21,7 +21,7 @@ export default class UserEmailList extends Component {
       <>
         <Route
           path={`${match.url}/:id/:requestDate`}
-          render={props => <EmailContent refLink={match.url} {...props} />
+          render={props => <EmailContent overrideTop refLink={match.url} {...props} />
           }
         />
         {emailListOutputLoading ? <InlineLoader />
