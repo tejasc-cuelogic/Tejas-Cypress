@@ -134,7 +134,7 @@ export const NEWSLETTER = {
   subscriberName: {
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     label: 'Name',
     placeHolder: 'Name',
   },
