@@ -56,39 +56,6 @@ const InvestmentList = (props) => {
                 <Button className="mt-30 mb-14" primary fluid content="Open Offering Details" />
               </Accordion.Content>
             </Accordion>
-            <Accordion fluid styled>
-              <Accordion.Title className="text-capitalize">
-                <Header as="h6" className="mt-0">
-                  <Icon className="ns-chevron-down" color="green" />
-                  Business Name Here
-                  <Header.Subheader>Revenue Sharing Note</Header.Subheader>
-                </Header>
-                $1,000.00
-              </Accordion.Title>
-              <Accordion.Content active>
-                <Table basic="very" unstackable className="no-border campaign-card">
-                  <Table.Body>
-                    <Table.Row>
-                      <Table.Cell>Interest Rate</Table.Cell>
-                      <Table.Cell className="grey-header right-align">xx.x%</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Term</Table.Cell>
-                      <Table.Cell className="grey-header right-align">xx months</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Close Date</Table.Cell>
-                      <Table.Cell className="grey-header right-align">01/24/2019</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Principal Remaining</Table.Cell>
-                      <Table.Cell className="grey-header right-align">$100.00</Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                </Table>
-                <Button className="mt-30 mb-14" primary fluid content="Open Offering Details" />
-              </Accordion.Content>
-            </Accordion>
           </Card.Content>
         </Card>
       </>
