@@ -441,6 +441,7 @@ query getOfferingById($id: ID) {
       legalBusinessName
       shorthandBusinessName
       maturity
+      equityUnitType
       frequencyOfPayments
       securities
       securityInterest

@@ -87,7 +87,7 @@ class FinancialInfo extends Component {
       || this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
       return <Spinner loaderMessage="Loading.." />;
     }
-
+    const isCenterAlignedCls = includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) ? 'center-align' : '';
     return (
       <>
         <Route exact path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
@@ -97,10 +97,12 @@ class FinancialInfo extends Component {
             <>
               <Header as="h4" textAlign="center" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
               <Divider section className="small" />
-              <Header as="h4" className="mb-half">Enter new investment amount. </Header>
+              {!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)
+                && (<Header as="h4" className={`mb-half ${isCenterAlignedCls}`}>Enter new investment amount. </Header>)
+              }
               {!includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) && showLimitComponent
                 && (
-                  <p>
+                  <p className={isCenterAlignedCls}>
                     Your investment limit: {' '}
                     {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
                     <Popup
@@ -158,6 +160,7 @@ class FinancialInfo extends Component {
                           autoFocus
                           allowNegative={false}
                           hidelabel
+                          className="right-align-placeholder"
                         />
                       </Table.Cell>
                     </Table.Row>
@@ -173,6 +176,10 @@ class FinancialInfo extends Component {
                     </Table.Row>
                   </Table.Body>
                 </Table>
+                {this.props.changeInvest && getDiffInvestmentLimitAmount
+                  && INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00'
+                  ? <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
+                }
                 {investmentFlowEquityErrorMessage
                   && (<FieldError error={investmentFlowEquityErrorMessage} />)
                 }
@@ -206,7 +213,7 @@ class FinancialInfo extends Component {
               />
             )}
         </Form>
-        {this.props.changeInvest && getDiffInvestmentLimitAmount
+        {this.props.changeInvest && !includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) && getDiffInvestmentLimitAmount
           && INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00'
           ? <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
         }

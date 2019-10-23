@@ -193,6 +193,17 @@
             overflow:hidden;
             text-overflow:ellipsis;
         }
+        input[type="text"].right-align-placeholder{
+            text-align: right;
+            &::placeholder {
+                /* Firefox, Chrome, Opera */ 
+                text-align: right; 
+            }
+            &:-ms-input-placeholder {        
+                /* Internet Explorer 10-11 */ 
+                text-align: right; 
+            }  
+        }
     }
     .otp-wrap{
         margin:@32px 0 @42px 0;
