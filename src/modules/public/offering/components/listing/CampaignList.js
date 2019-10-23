@@ -24,8 +24,8 @@ const keyTermList = [
   { label: 'Share Price', key: 'keyTerms.unitPrice', type: '$', for: ['PREFERRED_EQUITY_506C'] },
   { label: 'Valuation Cap', key: 'keyTerms.valuationCap', type: '$', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
   { label: 'Discount', key: 'keyTerms.discount', type: '%', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
-  // { label: 'Total net payments', forFunded: true, key: 'closureSummary.repayment.currentRepaidAmount', type: '$', for: ['ALL'] },
   // { label: 'Total Payments to investors', forFunded: true, key: 'closureSummary.repayment.count', type: '', for: [''] },
+  // { label: 'Total Paid to investors', forFunded: true, key: 'closureSummary.repayment.currentRepaidAmount', type: '$', for: [''] },
 ];
 
 @inject('campaignStore', 'accreditationStore')
@@ -168,7 +168,7 @@ export default class CampaignList extends Component {
                           </Card.Content>
                         </div>
                         <Card.Content extra>
-                          <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0)} from {get(offering, 'closureSummary.totalInvestorCount') || 0} investors</b></p>
+                          <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} from {get(offering, 'closureSummary.totalInvestorCount') || 0} investors</b></p>
                           {isFunded
                           && (
                             <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>

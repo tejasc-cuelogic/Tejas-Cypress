@@ -20,17 +20,20 @@
                 min-height: 392px;
                 max-height: 392px;
                 @media only screen and (max-width : @monitorBreakpoint){
-                    min-height: 415px;
+                    min-height: auto;
                     max-height: 100%;
                 }
             }
             .ui.labels, .icon.heart{
                 display: none;
+                @media only screen and (max-width : @monitorBreakpoint){
+                    display: inline-block;
+                }
             }
             >.content.card-hidden{
                 transition: none;
                 @media only screen and (max-width : @monitorBreakpoint){
-                    min-height: 415px;
+                    min-height: auto;
                     max-height: 100%;
                 }
             }
@@ -74,6 +77,10 @@
                 border:none;
                 text-transform:uppercase;
                 box-shadow:@commonShadow;
+                transition: all 0.5s ease-in-out;
+                @media only screen and (max-width : @monitorBreakpoint){
+                    transition: none;
+                }
                 &.grey{
                     background: @neutral-middark !important;
                     color: @white;
@@ -102,7 +109,7 @@
             transition: all 0.5s ease-in-out;
             background: @white;
             @media only screen and (max-width : @monitorBreakpoint){
-                min-height: 415px;
+                min-height: auto;
                 max-height: 100%;
                 transition: none;
             }
@@ -150,7 +157,7 @@
                 .campaign-card-table-wrapper{
                     min-height: 115px;
                     @media only screen and (max-width : @monitorBreakpoint){
-                        min-height: 135px;
+                        min-height: auto;
                     }
                 }
                 p{
