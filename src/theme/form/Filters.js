@@ -1,5 +1,5 @@
 /*  eslint-disable jsx-a11y/label-has-for */
-import React from 'react';
+import React, { useState } from 'react';
 import { toJS } from 'mobx';
 import { Grid, Input, Dropdown, Form, Label, Icon, List, Button } from 'semantic-ui-react';
 import moment from 'moment';
@@ -106,31 +106,58 @@ export const ByKeyword = ({
   </>
 );
 
-export const DateRangeFilter = props => (
-  <Form.Field>
-    <label>{props.label}</label>
-    <Form.Group widths="equal" className="range">
-      <Form.Field>
-        <NumberFormat
-          value={props.startDate}
-          type="text"
-          format="##-##-####"
-          placeholder="MM-DD-YYYY"
-          onValueChange={values => props.change(values, props.nameStart || 'startDate')}
-        />
-      </Form.Field>
-      <Form.Field>
-        <NumberFormat
-          value={props.endDate}
-          type="text"
-          format="##-##-####"
-          placeholder="MM-DD-YYYY"
-          onValueChange={values => props.change(values, props.nameEnd || 'endDate', true)}
-        />
-      </Form.Field>
-    </Form.Group>
-  </Form.Field>
-);
+export const DateRangeFilter = (props) => {
+  const [errorObj, setError] = useState({});
+  const startDate = props.startDate || props.filters.startDate;
+  const endDate = props.endDate || props.filters.endDate;
+  window.momentLib = moment;
+  const IsStartDateBeforeEndDate = (val, field) => ((moment(field === (props.nameStart || 'startDate') ? val : startDate).isValid() && moment(field === (props.nameEnd || 'endDate') ? val : endDate).isValid())
+    && !(moment(field === (props.nameStart || 'startDate') ? val : startDate).isBefore(moment(field === (props.nameEnd || 'endDate') ? val : endDate))));
+
+  const validateDate = (values, fieldName, isEndDate = false) => {
+    const year = moment(values.formattedValue, 'MM-DD-YYYY', true).year();
+    if (moment(values.formattedValue, 'MM/DD/YYYY').isValid() && year < 1950) {
+      setError({ fieldName, error: 'Date year should be greater or equal to 1950' });
+    } else if (isEndDate && year > 1950 && moment(values.formattedValue, 'MM/DD/YYYY').isValid() && !moment(values.formattedValue, 'MM/DD/YYYY').isSameOrBefore(moment())) {
+      setError({ fieldName, error: 'Date should not be greater than Today`s date' });
+    } else if (IsStartDateBeforeEndDate(values.formattedValue, fieldName)) {
+      setError({ error: 'Start Date should not be greater than End date' });
+    } else {
+      setError('');
+      props.change(values, fieldName);
+    }
+  };
+  return (
+    <Form.Field>
+      <label>{props.label}</label>
+      <Form.Group widths="equal" className="range">
+        <Form.Field className={errorObj.fieldName === (props.nameStart || 'startDate') ? 'error' : ''}>
+          <NumberFormat
+            value={props.startDate}
+            type="text"
+            format="##-##-####"
+            className={errorObj.fieldName === (props.nameStart || 'startDate') ? 'error' : ''}
+            placeholder="MM-DD-YYYY"
+            onValueChange={values => validateDate(values, props.nameStart || 'startDate')}
+          />
+        </Form.Field>
+        <Form.Field className={errorObj.fieldName === (props.nameEnd || 'endDate') ? 'error' : ''}>
+          <NumberFormat
+            className={errorObj.fieldName === (props.nameEnd || 'endDate') ? 'error' : ''}
+            value={props.endDate}
+            type="text"
+            format="##-##-####"
+            placeholder="MM-DD-YYYY"
+            onValueChange={values => validateDate(values, props.nameEnd || 'endDate', true)}
+          />
+        </Form.Field>
+      </Form.Group>
+      {errorObj.error && (
+      <p className="negative-text">{errorObj.error || ''}</p>
+      )}
+    </Form.Field>
+  );
+};
 
 export const AmountRangeFilter = props => (
   <Form.Field>

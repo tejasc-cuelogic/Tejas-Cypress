@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Table, Item, Icon, Popup } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { withRouter, Link, Route } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import moment from 'moment';
 import Filters from './filter';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -16,6 +16,9 @@ const metaInfo = {
 
 function EmailList(props) {
   const [displyRecord, setdisplyRecord] = useState(false);
+  const [showContentModal, toggleModal] = useState(false);
+  const [id, setId] = useState(false);
+  const [requestDate, setRequestDate] = useState(false);
 
   useEffect(() => {
     props.emailStore.resetForm('EMAIL_LIST_FRM');
@@ -42,22 +45,33 @@ function EmailList(props) {
 
   const handleModel = (e, dataObj) => {
     e.preventDefault();
-    props.history.push(`${props.match.url}/${dataObj.recipientId}/${dataObj.requestDate}`);
+    setRequestDate(dataObj.requestDate);
+    setId(dataObj.recipientId);
+    toggleModal(true);
+  };
+
+  const handleCloseModal = () => {
+    toggleModal(false);
   };
 
   const { loadingArray } = props.nsUiStore;
-  const { emailStore, match } = props;
+  const { emailStore } = props;
   const {
     EMAIL_LIST_FRM, requestState, filters, count, emailList,
   } = emailStore;
   const totalRecords = count || 0;
   return (
     <>
-      <Route
-        path={`${match.url}/:id/:requestDate`}
-        render={prop => <EmailContent refLink={match.url} {...prop} />
-        }
-      />
+      {showContentModal && (
+        <EmailContent
+          id={id}
+          requestDate={requestDate}
+          handleCloseModal={handleCloseModal}
+          showContentModal={showContentModal}
+          {...props}
+        />
+      )
+      }
       <Filters
         requestState={requestState}
         filters={filters}

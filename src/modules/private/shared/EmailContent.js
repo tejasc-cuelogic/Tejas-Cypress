@@ -13,11 +13,13 @@ function EmailContent(props) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    Helper.modalCssUpdate('show-top', 'show-top');
-    const { commonStore, match } = props;
+    if (props.overrideTop) {
+      Helper.modalCssUpdate('show-top', 'show-top');
+    }
+    const { commonStore, match, requestDate, id } = props;
     const params = {
-      id: match.params.id,
-      requestDate: match.params.requestDate,
+      id: id || match.params.id,
+      requestDate: requestDate || match.params.requestDate,
     };
     setLoading(true);
     commonStore.getEmail(params).then((res) => {
@@ -29,13 +31,13 @@ function EmailContent(props) {
     });
   }, []);
 
-  function handleCloseModal(e) {
+  const handleCloseModal = (e) => {
     e.preventDefault();
     props.history.push(props.refLink);
-  }
-
+  };
+  const handelClose = props.handleCloseModal || handleCloseModal;
   return (
-    <Modal open closeOnDimmerClick size="large" className="show-top" closeIcon onClose={e => handleCloseModal(e)}>
+    <Modal open={props.overrideTop || props.showContentModal} closeOnDimmerClick size="large" className="show-top" closeIcon onClose={e => handelClose(e)}>
       <Modal.Content className="center-align">
         <Header as="h3" textAlign="center">Email Content</Header>
         {loading ? <InlineLoader /> : ''}
@@ -46,7 +48,7 @@ function EmailContent(props) {
         {errorMsg && <p>{errorMsg}</p>}
         <div className="center-align">
           <Button.Group widths="2" className="inline">
-            <Button primary content="Back" onClick={handleCloseModal} />
+            <Button primary content="Back" onClick={e => handelClose(e)} />
           </Button.Group>
         </div>
       </Modal.Content>
