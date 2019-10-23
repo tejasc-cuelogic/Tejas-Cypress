@@ -310,7 +310,7 @@ class KeyTermsDetails extends Component {
             <KeyTermsFieldHoc
               data={keyTerms}
               field="securityInterest"
-              title="Payments"
+              title="Security Interest"
               content={keyTerms && keyTerms.securityInterest ? keyTerms.securityInterest : ' NA'}
               titleAddon={isMobile
                 ? (<PopUpModal label="Security Interest" content="The Issuer will grant a security interest in all of it's assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement." />)

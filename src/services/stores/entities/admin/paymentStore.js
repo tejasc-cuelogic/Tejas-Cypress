@@ -26,8 +26,10 @@ export class PaymentStore extends DataModelStore {
     }
 
     setSortingOrder = (column = null, direction = null) => {
-      this.sortOrder.column = column;
-      this.sortOrder.direction = direction;
+      this.sortOrder = {
+        column,
+        direction,
+      };
     }
 
     initRequest = () => {
@@ -48,6 +50,7 @@ export class PaymentStore extends DataModelStore {
     getOfferingById = (id) => {
       const res = this.repayments.find(payment => payment.offering.id === id);
       this.PAYMENT_FRM = Validator.setFormData(this.PAYMENT_FRM, res);
+      this.validateForm('PAYMENT_FRM');
     }
 
     updatePayment = id => new Promise((resolve, reject) => {
