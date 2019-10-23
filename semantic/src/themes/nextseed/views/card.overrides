@@ -490,6 +490,7 @@
         font-size:24px;
         color:@highlight-tertiary;
         vertical-align:top;
+        margin-right: @14px;
         &:not(:first-of-type){
             margin-left:@20px;
         }
@@ -563,6 +564,50 @@
     &.investment-summary{
         box-shadow:0px 1px 4px fade(@fullBlack, 15%);
         border: 0;
+        &.investment-card{
+            >.header{
+                font-size: @16px;
+                color: @neutral;
+                line-height: 22px;
+                padding: @17px @22px 0;
+                font-weight: @bold;
+            }
+            .content{
+                border-top: 0;
+                padding-top: 0;
+            }
+            .ui.accordion{
+                box-shadow: none;
+                .title{
+                    padding: @13px 0;
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    font-weight: @normal;
+                    border-bottom: 1px solid @neutral-darkwhite;
+                    .ui.header{
+                        padding: 0;
+                        font-size: @14px;
+                        font-weight: @normal;
+                        .sub.header{
+                            margin-left: @30px;
+                        }
+                    }
+                    i.icon{
+                        margin-right: @14px;
+                    }
+                }
+                .content{
+                    padding: 0 0 0 @30px;
+                }
+            }
+            .ui.table.campaign-card{
+                font-size: @15px;
+                td{
+                    padding-top: @15px;
+                }
+            }
+        }
     }
 }
 .ui{

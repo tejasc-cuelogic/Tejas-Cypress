@@ -119,7 +119,7 @@ export default class Portfolio extends Component {
   render() {
     const { match, portfolioStore, userDetailsStore } = this.props;
     const {
-      multipleUserAccounts, userAccreditationStatus,
+      multipleUserAccounts,
     } = userDetailsStore;
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
     const { referralData } = this.props.referralsStore;
@@ -198,7 +198,7 @@ export default class Portfolio extends Component {
         {this.props.isAdmin
           && <AccountHeader module="Investments" pathname={this.props.location.pathname} />
         }
-        {userAccreditationStatus && !get(multipleUserAccounts, 'noAccounts') && this.state.showSticky && !hideNotifications
+        {!get(multipleUserAccounts, 'noAccounts') && this.state.showSticky && !hideNotifications
         && (
           <StickyNotification
             {...this.props}

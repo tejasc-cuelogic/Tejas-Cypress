@@ -8,9 +8,9 @@ const notificationCard = {
   verifyAccreditation: {
     message:
     <span>
-          Are you an accredited investor? Go through the steps to verify your status
-          today, and for a limited time, we will add a $100 credit to your account.
-      <br /><a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
+      Are you an accredited investor? Go through the steps to verify your status
+      today, and for a limited time, we will add a $100 credit to your account.
+      {!isMobile ? <><br /><a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a></> : ''}
     </span>,
     btnText: 'Verify',
     header: 'Earn $100 by verifying your accredited investor status',
@@ -86,8 +86,19 @@ export default class StickyNotification extends Component {
                <Statistic.Value>{cardData.header}</Statistic.Value>
                 <Statistic.Label>{cardData.message}</Statistic.Label>
             </Statistic>
+            {isMobile && (
+              <>
+                {!this.isUserAccreditated()
+                  && (
+                    <div className="ml-18 mt-14">
+                      <a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
+                    </div>
+                  )
+                }
+              </>
+            )}
             <div className={`${isMobile ? 'ml-18' : ''} center-align`}>
-            <Button onClick={e => cardData.onClick(e)} className={isMobile && 'mt-20'} compact color="green">{cardData.btnText}</Button>
+              <Button onClick={e => cardData.onClick(e)} className={isMobile && 'mt-20'} compact color="green">{cardData.btnText}</Button>
             </div>
           </Card.Content>
         </Card>

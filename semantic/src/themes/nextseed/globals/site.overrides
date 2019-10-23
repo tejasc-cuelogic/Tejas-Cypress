@@ -2178,14 +2178,22 @@ ol.progtrckr{
 svg:not(:root).recharts-surface{
 	overflow:visible;
 }
+.portfolio-allocation{
+	@media only screen and (max-width : @largestMobileScreen){
+		background: @white;
+		padding: @24px;
+		&:first-child{
+			border-bottom: 1px solid @neutral-darkwhite;
+		}
+	}
+}
 .donut-chart, .portfolio-allocation{
 	.recharts-legend-wrapper .chartLegends{
 		@media only screen and (max-width : @largestMobileScreen){
 			display: flex;
 			flex-direction: row;
 			flex-wrap: wrap;
-			justify-content: space-around;
-			padding-left: @20px;		
+			justify-content: space-between;		
 		}
 		li{
 			font-size:@22px;
@@ -2198,11 +2206,6 @@ svg:not(:root).recharts-surface{
 					color: @neutral-offdark;
 				}
 			}
-		}
-	}
-	&.industry-chart .recharts-legend-wrapper .chartLegends{
-		@media only screen and (max-width : @largestMobileScreen){
-			justify-content: space-between;		
 		}
 	}
 	.recharts-wrapper{
