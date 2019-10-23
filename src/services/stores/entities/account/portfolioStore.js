@@ -50,6 +50,8 @@ export class PortfolioStore {
         TERM_NOTE: { name: 'Term Note', value: 0 },
         REVENUE_SHARING_NOTE: { name: 'Rev Share', value: 0 },
         PREFERRED_EQUITY_506C: { name: 'Preferred Equity', value: 0 },
+        CONVERTIBLE_NOTES: { name: 'Convertible Notes', value: 0 },
+        SAFE: { name: 'Safe', value: 0 },
       },
       industry: {
         FASHION_AND_MERCHANDISING: { name: 'Fashion and Merchandising', value: 0 },
