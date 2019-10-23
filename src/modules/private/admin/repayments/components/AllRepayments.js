@@ -45,10 +45,7 @@ export default class AllRepayments extends Component {
   validDate = (data, field) => (get(data, field) && moment(get(data, field), 'MM/DD/YYYY', true).isValid() ? moment(get(data, field)).format('M/D/YY') : '');
 
   render() {
-    const { paymentStore } = this.props;
-    const {
-      repayments, requestState, filters, sortOrder,
-    } = paymentStore;
+    const { repayments, sortOrder } = this.props.paymentStore;
 
     if (this.props.nsUiStore.loadingArray.includes('paymentsIssuerList')) {
       return <InlineLoader />;
@@ -62,8 +59,6 @@ export default class AllRepayments extends Component {
                 change={this.executeSearch}
                 w={[11]}
                 placeholder="Search by keyword or phrase"
-                requestState={requestState}
-                filters={filters}
                 more="no"
                 addon={(DEV_FEATURE_ONLY
                   && (
@@ -100,7 +95,7 @@ export default class AllRepayments extends Component {
                     onClick={this.handleSort('offering.closureSummary.keyTerms.maturityDate')}
                   >Maturity</Table.HeaderCell>
                   <Table.HeaderCell
-                    sorted={sortOrder.column === 'offering.launch.expectedOpsDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    sorted={sortOrder.column === 'offering.offering.launch.expectedOpsDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
                     onClick={this.handleSort('offering.offering.launch.expectedOpsDate')}
                   >Expected Ops</Table.HeaderCell>
                   <Table.HeaderCell

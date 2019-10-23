@@ -26,6 +26,9 @@
             }
             .ui.labels, .icon.heart{
                 display: none;
+                @media only screen and (max-width : @monitorBreakpoint){
+                    display: inline-block;
+                }
             }
             >.content.card-hidden{
                 transition: none;
@@ -74,6 +77,10 @@
                 border:none;
                 text-transform:uppercase;
                 box-shadow:@commonShadow;
+                transition: all 0.5s ease-in-out;
+                @media only screen and (max-width : @monitorBreakpoint){
+                    transition: none;
+                }
                 &.grey{
                     background: @neutral-middark !important;
                     color: @white;
