@@ -215,7 +215,7 @@ export class FactoryStore extends DataModelStore {
       const tempObj = {};
       tempObj.key = value.name;
       tempObj.text = value.name;
-      tempObj.value = includes(['listRequestPlugins', 'listProcessorPlugins'], pluginList) ? value.plugin : value.name;
+      tempObj.value = value.plugin;
       tempObj.pluginInput = [...value.pluginInputs];
       pluginArr.push(tempObj);
     });

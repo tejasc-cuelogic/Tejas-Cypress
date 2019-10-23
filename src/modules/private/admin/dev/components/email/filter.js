@@ -14,7 +14,7 @@ export default class Filters extends Component {
     } = this.props;
     const { requestState } = this.props.emailStore;
     return (
-      <div className={`search-filters more ${!filters ? 'collapsed' : ''}`}>
+      <div className={`more ${!filters ? 'collapsed' : ''}`}>
         <Form>
           <Grid stackable>
             <Grid.Row verticalAlign="bottom">
@@ -22,9 +22,9 @@ export default class Filters extends Component {
                 <DateRangeFilter filters={requestState.search} label="Date" name="createdAt" change={change} />
               </Grid.Column>
               <Grid.Column width={3}>
-                <DropdownFilter value={requestState.search.emailType} name="emailType" change={setSearchParam} options={FILTER_FRM.fields.emailType.values} />
+                <DropdownFilter value={requestState.search.emailType} label="Email Type" name="emailType" change={setSearchParam} options={FILTER_FRM.fields.emailType.values} />
               </Grid.Column>
-              <Grid.Column width={3}>
+              <Grid.Column width={9}>
                 <NsPaginationHookType floated="right" initRequest={({ first, page }) => paginate({ first, page, noFilter: true })} meta={{ totalRecords, requestState }} />
               </Grid.Column>
             </Grid.Row>
