@@ -824,37 +824,22 @@ export class UserDetailsStore {
     const profileDetails = {
       firstName: basicData.firstName,
       lastName: basicData.lastName,
-      mailingAddress: {
-        street: infoAdd.street,
-        streetTwo: infoAdd.streetTwo,
-        city: infoAdd.city,
-        state: infoAdd.state,
-        zipCode: infoAdd.zipCode,
-      },
+      mailingAddress: { ...infoAdd.legalAddress },
     };
+    const { capabilities } = basicData;
     if (this.detailsOfUser.data.user.info.avatar) {
       profileDetails.avatar = {
         name: this.detailsOfUser.data.user.info.avatar.name,
         url: this.detailsOfUser.data.user.info.avatar.url,
       };
     }
-    const legalDetails = {
-      dateOfBirth: basicData.dateOfBirth,
-      legalAddress: {
-        street: basicData.street,
-        streetTwo: basicData.streetTwo,
-        city: basicData.city,
-        state: basicData.state,
-        zipCode: basicData.zipCode,
-      },
-      legalName: {
-        firstLegalName: basicData.firstLegalName,
-        lastLegalName: basicData.lastLegalName,
-      },
-    };
+    ['capabilities', 'address', 'number', 'firstName', 'lastName']
+      .forEach(key => delete basicData[key]);
+    const legalDetails = { ...basicData };
     if (String(basicData.ssn).length === 9) {
       legalDetails.ssn = basicData.ssn;
     }
+
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -863,6 +848,7 @@ export class UserDetailsStore {
           variables: {
             profileDetails: { ...profileDetails },
             legalDetails: { ...legalDetails },
+            capabilities,
             targetUserId: get(this.getDetailsOfUser, 'id'),
           },
           refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id') } }],

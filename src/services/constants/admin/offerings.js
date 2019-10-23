@@ -5,7 +5,9 @@ import React from 'react';
 /* eslint-disable arrow-body-style */
 Validator.register(
   'maskedSSN', (value, attribute) => {
-    return value.toString().length === 9;
+    // eslint-disable-next-line no-useless-escape
+    const regex = '^(?!(000|666|9))\d{3}-(?!00)\d{2}-(?!0000)\d{4}$';
+    return !value.match(regex) || value.toString().length === 9;
   },
   'The :attribute is not in the format XXX-XX-XXXX.',
 );
