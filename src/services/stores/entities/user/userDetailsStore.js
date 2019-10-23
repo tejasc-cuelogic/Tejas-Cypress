@@ -833,7 +833,7 @@ export class UserDetailsStore {
         ['name', 'url'],
       );
     }
-    const legalDetails = pick(basicData, ['dateOfBirth', 'legalAddress', 'legalName']);
+    const legalDetails = pick(get(basicData), ['dateOfBirth', 'legalAddress', 'legalName']);
     if (String(basicData.ssn).length === 9) {
       legalDetails.ssn = basicData.ssn;
     }
