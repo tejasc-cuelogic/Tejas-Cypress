@@ -112,7 +112,7 @@ export default class Contingency extends Component {
       EDIT_CONTINGENCY_FRM,
     } = this.props.offeringCreationStore;
     const {
-      form, formName, addon,
+      form, formName, addon, isIssuer,
     } = this.props;
     const { isAdmin } = this.props.userStore;
     const dataKey = formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'launch' : 'close';
@@ -125,7 +125,7 @@ export default class Contingency extends Component {
           {this.props.OfferingClose && <Icon onClick={this.toggleVisibilityStatus} className={`ns-chevron-${this.state.visibilityStatus === true ? 'up' : 'down'}-compact right`} color="blue" />}
           {access.asManager
             ? (
-<Modal size="small" trigger={!this.props.OfferingClose && <Button as="a" color="green" size="small" className="link link-button" onClick={() => this.setContingencyForm()}>+ Add {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Button>} closeIcon>
+            <Modal size="small" trigger={!this.props.OfferingClose && <Button as="a" color="green" size="small" className="link link-button" onClick={() => this.setContingencyForm()}>+ Add {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Button>} closeIcon>
               <Modal.Header>Add New {contingencyFormSelected === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Modal.Header>
               <Modal.Content>
                 <Form>
@@ -155,7 +155,7 @@ export default class Contingency extends Component {
             <Checkbox
               name="status"
               label={(
-<label>
+                <label>
                   <Header as="h4">
                     {contingency.contingency.value}
                     <Header.Subheader>
@@ -163,13 +163,14 @@ export default class Contingency extends Component {
                     </Header.Subheader>
                   </Header>
                 </label>
-)}
+              )}
               disabled={!isAdmin}
               checked={form.fields[dataKey][index].status.value}
               onChange={(e, result) => this.formArrayChange(e, result, formName, dataKey, index)}
             />
             <div className="checkbox-description">
               <FormTextarea
+                readOnly={isIssuer}
                 fielddata={contingency.comment}
                 name="comment"
                 containerclassname="secondary"
@@ -202,12 +203,14 @@ export default class Contingency extends Component {
                   </>
                   )
                 }
-                <Button type="button" primary content="Submit" onClick={() => this.handleSubmitComment(null, formName)} />
+                {isIssuer ? ''
+                  : <Button type="button" primary content="Submit" onClick={() => this.handleSubmitComment(null, formName)} />
+                 }
                 {contingenciesData && contingenciesData[dataKey]
                 && contingenciesData[dataKey][index] && contingenciesData[dataKey][index].accepted
                 && contingenciesData[dataKey][index].accepted.status
                 && (
-<Button as="span" className="time-stamp">
+                <Button as="span" className="time-stamp">
                   <Icon className="ns-check-circle" color="green" />
                   Submitted by {contingenciesData[dataKey][index].accepted.by} on {DataFormatter.getDateAsPerTimeZone(contingenciesData[dataKey][index].accepted.date, true, false, false)}
                 </Button>
@@ -221,7 +224,7 @@ export default class Contingency extends Component {
             <>
               {!this.props.OfferingClose
             && (
-<div className="featured-section collapsed-checkbox">
+              <div className="featured-section collapsed-checkbox">
               No data found
             </div>
             )

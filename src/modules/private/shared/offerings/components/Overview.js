@@ -31,8 +31,8 @@ export default class Overview extends Component {
     const { inProgress } = this.props.uiStore;
     const isLaunchContingency = !isIssuer ? true
       : LAUNCH_CONTITNGENCIES_FRM.fields.launch && LAUNCH_CONTITNGENCIES_FRM.fields.launch.length > 0;
-    const isCloseContingency = !isIssuer ? true : CLOSING_CONTITNGENCIES_FRM.fields.launch
-      && CLOSING_CONTITNGENCIES_FRM.fields.launch.length > 0;
+    const isCloseContingency = !isIssuer ? true : CLOSING_CONTITNGENCIES_FRM.fields.close
+      && CLOSING_CONTITNGENCIES_FRM.fields.close.length > 0;
     return (
       <div className={isIssuer ? 'ui card fluid form-card' : 'inner-content-spacer'}>
         <Form>
@@ -58,10 +58,10 @@ export default class Overview extends Component {
             )
           }
           {isLaunchContingency
-            && <Contingency formArrayChange={formArrayChange} form={LAUNCH_CONTITNGENCIES_FRM} formName="LAUNCH_CONTITNGENCIES_FRM" />
+            && <Contingency formArrayChange={formArrayChange} isIssuer={isIssuer} form={LAUNCH_CONTITNGENCIES_FRM} formName="LAUNCH_CONTITNGENCIES_FRM" />
           }
           {isCloseContingency
-            && <Contingency formArrayChange={formArrayChange} form={CLOSING_CONTITNGENCIES_FRM} formName="CLOSING_CONTITNGENCIES_FRM" />
+            && <Contingency formArrayChange={formArrayChange} isIssuer={isIssuer} form={CLOSING_CONTITNGENCIES_FRM} formName="CLOSING_CONTITNGENCIES_FRM" />
           }
         </Form>
       </div>
