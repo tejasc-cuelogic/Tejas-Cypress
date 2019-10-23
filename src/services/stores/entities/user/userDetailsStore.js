@@ -3,7 +3,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
 import moment from 'moment';
-import { mapValues, map, concat, set, isEmpty, difference, find, findKey, filter, lowerCase, get, findIndex } from 'lodash';
+import { mapValues, map, concat, set, isEmpty, difference, pick, find, findKey, filter, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM } from '../../../constants/user';
@@ -828,14 +828,12 @@ export class UserDetailsStore {
     };
     const { capabilities } = basicData;
     if (this.detailsOfUser.data.user.info.avatar) {
-      profileDetails.avatar = {
-        name: this.detailsOfUser.data.user.info.avatar.name,
-        url: this.detailsOfUser.data.user.info.avatar.url,
-      };
+      profileDetails.avatar = pick(
+        get(this.detailsOfUser, 'data.user.info.avatar'),
+        ['name', 'url'],
+      );
     }
-    ['capabilities', 'address', 'number', 'firstName', 'lastName']
-      .forEach(key => delete basicData[key]);
-    const legalDetails = { ...basicData };
+    const legalDetails = pick(basicData, ['dateOfBirth', 'legalAddress', 'legalName']);
     if (String(basicData.ssn).length === 9) {
       legalDetails.ssn = basicData.ssn;
     }
@@ -846,8 +844,8 @@ export class UserDetailsStore {
         .mutate({
           mutation: updateUserProfileData,
           variables: {
-            profileDetails: { ...profileDetails },
-            legalDetails: { ...legalDetails },
+            profileDetails,
+            legalDetails,
             capabilities,
             targetUserId: get(this.getDetailsOfUser, 'id'),
           },

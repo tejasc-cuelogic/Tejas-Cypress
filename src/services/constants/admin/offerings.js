@@ -1,16 +1,6 @@
-import Validator from 'validatorjs';
 import React from 'react';
-
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
-Validator.register(
-  'maskedSSN', (value, attribute) => {
-    // eslint-disable-next-line no-useless-escape
-    const regexp = new RegExp(/^(?!\b(\d)\1+\b)(?!123456789|219099999|078051120)(?!666|000|9\d{2})\d{3}(?!00)\d{2}(?!0{4})\d{4}$/);
-    return regexp.test(value);
-  },
-  'The :attribute is not in the format XXX-XX-XXXX.',
-);
 
 export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement', 'closingBinder'];
 
