@@ -90,9 +90,9 @@ function EmailList(props) {
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>Send Date</Table.HeaderCell>
-                      <Table.HeaderCell width={4}>From Details</Table.HeaderCell>
-                      <Table.HeaderCell width={4}>To Details</Table.HeaderCell>
-                      <Table.HeaderCell width={4}>Subject</Table.HeaderCell>
+                      <Table.HeaderCell>From Details</Table.HeaderCell>
+                      <Table.HeaderCell>To Details</Table.HeaderCell>
+                      <Table.HeaderCell>Subject</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>

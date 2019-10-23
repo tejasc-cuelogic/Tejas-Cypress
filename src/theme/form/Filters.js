@@ -111,8 +111,11 @@ export const DateRangeFilter = (props) => {
   const startDate = props.startDate || props.filters.startDate;
   const endDate = props.endDate || props.filters.endDate;
   window.momentLib = moment;
-  const IsStartDateBeforeEndDate = (val, field) => ((moment(field === (props.nameStart || 'startDate') ? val : startDate).isValid() && moment(field === (props.nameEnd || 'endDate') ? val : endDate).isValid())
-    && !(moment(field === (props.nameStart || 'startDate') ? val : startDate).isBefore(moment(field === (props.nameEnd || 'endDate') ? val : endDate))));
+  const IsStartDateBeforeEndDate = (val, field) => {
+    console.log();
+    return ((moment(field === (props.nameStart || 'startDate') ? val : startDate).isValid() && moment(field === (props.nameEnd || 'endDate') ? val : endDate).isValid())
+      && !(moment(field === (props.nameStart || 'startDate') ? val : startDate).isBefore(moment(field === (props.nameEnd || 'endDate') ? val : endDate))));
+  };
 
   const validateDate = (values, fieldName, isEndDate = false) => {
     const year = moment(values.formattedValue, 'MM-DD-YYYY', true).year();
@@ -120,7 +123,7 @@ export const DateRangeFilter = (props) => {
       setError({ fieldName, error: 'Date year should be greater or equal to 1950' });
     } else if (isEndDate && year > 1950 && moment(values.formattedValue, 'MM/DD/YYYY').isValid() && !moment(values.formattedValue, 'MM/DD/YYYY').isSameOrBefore(moment())) {
       setError({ fieldName, error: 'Date should not be greater than Today`s date' });
-    } else if (IsStartDateBeforeEndDate(values.formattedValue, fieldName)) {
+    } else if (!(values.formattedValue.trim().length <= 10) && IsStartDateBeforeEndDate(values.formattedValue, fieldName)) {
       setError({ error: 'Start Date should not be greater than End date' });
     } else {
       setError('');
