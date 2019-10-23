@@ -299,7 +299,7 @@ cipWrapper = async (payLoad) => {
       this.cipStepUrlMapping[key].steps.includes(get(res, `data.${payLoad.mutationName}.step`))
     )));
     // eslint-disable-next-line prefer-destructuring
-    url = this.cipStepUrlMapping[stepName].url;
+    url = get(this.cipStepUrlMapping[stepName], 'url');
 
     if (stepName === 'cipPass') {
       await this.updateUserDataAndSendOtp();
@@ -312,7 +312,7 @@ cipWrapper = async (payLoad) => {
         }));
     }
 
-    if (stepName !== 'cip') {
+    if (stepName !== 'cip' && get(this.cipStepUrlMapping[stepName], 'status')) {
       userDetailsStore.updateUserDetails('legalDetails', {
         status: this.cipStepUrlMapping[stepName].status || payLoad.mutation.cipPassStatus,
       });
@@ -774,7 +774,7 @@ cipWrapper = async (payLoad) => {
       fields.ssn.value = legalDetails.ssn;
     }
     if (legalDetails && phone && phone.number) {
-      fields.phoneNumber.value = get(fields, 'phoneNumber.value') ? fields.phoneNumber.value : phone.number;
+      fields.phoneNumber.value = get(fields, 'phoneNumber.value') && !this.isAdmin ? fields.phoneNumber.value : phone.number;
     }
   }
 
