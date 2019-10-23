@@ -8,9 +8,8 @@ import React from 'react';
 Validator.register(
   'maskedSSN', (value, attribute) => {
     // eslint-disable-next-line no-useless-escape
-    const regex = '^(?!219-09-9999|078-05-1120)(?!666|000|9\d{2})d{3}-(?!00)\d{2}-(?!0{4})\d{4}$';
-    console.log('ssn regex');
-    return value.match(regex);
+    const regexp = new RegExp(/^(?!\b(\d)\1+\b)(?!123456789|219099999|078051120)(?!666|000|9\d{2})\d{3}(?!00)\d{2}(?!0{4})\d{4}$/);
+    return !regexp.test(value);
   },
   'The :attribute is not in the format XXX-XX-XXXX.',
 );
