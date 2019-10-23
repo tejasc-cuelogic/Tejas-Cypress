@@ -147,7 +147,7 @@ class FinancialInfo extends Component {
                 <Table unstackable basic className="mt-30" padded="very">
                   <Table.Body>
                     <Table.Row>
-                      <Table.Cell className="grey-header plr-0" width="11">{`${capitalize(prefferedEquityLabel)}s*:`}</Table.Cell>
+                      <Table.Cell className="grey-header plr-0" width="13">{`${capitalize(prefferedEquityLabel)}s*:`}</Table.Cell>
                       <Table.Cell className="plr-0">
                         <MaskedInput
                           data-cy="shares"
@@ -161,12 +161,13 @@ class FinancialInfo extends Component {
                           allowNegative={false}
                           hidelabel
                           className="right-align-placeholder"
+                          containerclassname="right-align"
                         />
                       </Table.Cell>
                     </Table.Row>
                     <Table.Row>
                       <Table.Cell className="grey-header plr-0">{`Price per ${prefferedEquityLabel}:`}</Table.Cell>
-                      <Table.Cell className="plr-0 grey-header right-align">{prefferedEquityAmount}</Table.Cell>
+                      <Table.Cell className="plr-0 grey-header right-align">{Helper.CurrencyFormat(prefferedEquityAmount, 0)}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                       <Table.Cell className="plr-0 grey-header"><b>Your investment:</b></Table.Cell>

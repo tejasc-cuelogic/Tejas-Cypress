@@ -30,7 +30,7 @@ export const PREFERRED_EQUITY_INVESTMENT_INFO = {
       required: '* required.',
     },
     rule: 'required',
-    placeHolder: '0',
+    placeHolder: 'Enter here',
     maxLength: 15,
   },
 };
