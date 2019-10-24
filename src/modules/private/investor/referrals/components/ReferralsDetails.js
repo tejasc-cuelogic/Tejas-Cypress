@@ -18,7 +18,7 @@ export default class ReferralsDetails extends Component {
       this.props.referralsStore.getUserReferralDetails(false, false);
     }
   }
-  
+
   render() {
     const { referralData } = this.props.referralsStore;
     if (referralData.loading) {
