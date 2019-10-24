@@ -18,7 +18,7 @@ export default class ReferralsDetails extends Component {
       this.props.referralsStore.getUserReferralDetails(false, false);
     }
   }
-
+  
   render() {
     const { referralData } = this.props.referralsStore;
     if (referralData.loading) {
@@ -33,7 +33,7 @@ export default class ReferralsDetails extends Component {
       fontWeight: '600',
       backgroundColor: '#e9edf9',
     };
-
+    const totalEarnedCredit = get(referralData, 'totalEarnedCredit') ? parseFloat(referralData.totalEarnedCredit).toFixed(2) : '';
     const summaryDetails = {
       accountType: 'individual',
       title: false,
@@ -45,7 +45,7 @@ export default class ReferralsDetails extends Component {
           title: 'Spent Credit', content: referralData.spentCredit || '', type: 1, info: 'The total amount of credit applied toward investments.',
         },
         {
-          title: 'Lifetime Earned Credit', content: parseFloat(referralData.totalEarnedCredit).toFixed(2) || '', type: 1, info: 'The total amount of credit you have earned with NextSeed.',
+          title: 'Lifetime Earned Credit', content: totalEarnedCredit, type: 1, info: 'The total amount of credit you have earned with NextSeed.',
         },
         {
           title: 'Friends Referred', content: referralData.totalReferredUsers || '', type: 0, info: 'How many friends you have referred to NextSeed.',
