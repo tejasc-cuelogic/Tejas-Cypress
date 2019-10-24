@@ -18,12 +18,12 @@ export default class Leader extends Component {
     getLeadershipOfferingBac(currentOfferingId, 'LEADERSHIP');
   }
 
-  handleSubmitIssuer = (leaderId, approved) => {
+  handleSubmitIssuer = (leaderId, approved, index = null) => {
     const {
       createOrUpdateOfferingBac,
       LEADER_FRM,
     } = this.props.offeringCreationStore;
-    const leaderNumber = this.props.index;
+    const leaderNumber = index;
     createOrUpdateOfferingBac('LEADERSHIP', LEADER_FRM.fields, undefined, leaderNumber, leaderId, approved);
   }
 
@@ -35,11 +35,15 @@ export default class Leader extends Component {
       leaderShipOfferingBacData,
     } = this.props.offeringCreationStore;
     const issuerNumber = this.props.index;
-    const index = issuerNumber || 0;
+    let index = issuerNumber || 0;
     const formName = 'LEADER_FRM';
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    const { match, offeringsStore } = this.props;
+    const { match, offeringsStore, bacId } = this.props;
     const { offer } = offeringsStore;
+    if (bacId) {
+      const bacIndex = LEADER_FRM.fields.getOfferingBac.findIndex(b => bacId === b.id.value);
+      index = bacIndex;
+    }
     const { isIssuer } = this.props.userStore;
     const isManager = access.asManager;
     const submitted = (leaderShipOfferingBacData && leaderShipOfferingBacData.length
@@ -107,7 +111,7 @@ export default class Leader extends Component {
           isManager={access.asManager}
           formValid={LEADER_FRM.meta.isValid}
           approved={approved}
-          updateOffer={approved1 => this.handleSubmitIssuer(leaderId, approved1)}
+          updateOffer={approved1 => this.handleSubmitIssuer(leaderId, approved1, index)}
         />
       </Form>
     );
