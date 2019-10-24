@@ -1,9 +1,10 @@
 import gql from 'graphql-tag';
 
 export const allUpdates = gql`
-  query _fetchUpdatesByOfferId ($offerId: String!) {
+  query _fetchUpdatesByOfferId ($offerId: String!, $userId: String) {
     offeringUpdatesByOfferId (
       offerId: $offerId
+      userId: $userId
     ) {
       id
       title

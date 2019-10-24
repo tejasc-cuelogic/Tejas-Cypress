@@ -135,6 +135,11 @@ export default class Leader extends Component {
     this.props.offeringCreationStore.formArrayChange(e, result, formName, arrayName, index);
   }
 
+  maskArrayChange = (values, formName, name, arrayName, index1, index2) => {
+    this.setState({ leaderFormInvalid: false });
+    this.props.offeringCreationStore.maskArrayChange(values, formName, name, arrayName, index1, index2);
+  }
+
   editorChange =
     (field, value, form, index) => this.props.offeringCreationStore.rtEditorChange(field, value, form, 'leadership', index);
 
@@ -144,7 +149,7 @@ export default class Leader extends Component {
     const index = leaderNumber || 0;
     const {
       LEADERSHIP_EXP_FRM, confirmModal, confirmModalName, removeIndex, LEADERSHIP_FRM,
-      formArrayChange, maskArrayChange, setAddressFields, currentOfferingId,
+      formArrayChange, setAddressFields, currentOfferingId,
     } = this.props.offeringCreationStore;
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
@@ -201,7 +206,7 @@ export default class Leader extends Component {
               name="number"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].number}
               format="(###) ###-####"
-              changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
+              changed={(values, name) => this.maskArrayChange(values, formName, name, 'leadership', index)}
               phoneNumber
             />
           </Form.Group>
@@ -211,7 +216,7 @@ export default class Leader extends Component {
               name="dob"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].dob}
               format="##/##/####"
-              changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
+              changed={(values, name) => this.maskArrayChange(values, formName, name, 'leadership', index)}
               dateOfBirth
             />
             <FormInput
@@ -225,7 +230,7 @@ export default class Leader extends Component {
               name="percentOwned"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].percentOwned}
               percentage
-              changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
+              changed={(values, name) => this.maskArrayChange(values, formName, name, 'leadership', index)}
             />
             <FormInput
               displayMode={isReadonly}
@@ -238,7 +243,7 @@ export default class Leader extends Component {
               name="dateOfService"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].dateOfService}
               format="##/##/####"
-              changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
+              changed={(values, name) => this.maskArrayChange(values, formName, name, 'leadership', index)}
               dateOfBirth
             />
             {isReadonly
@@ -257,7 +262,7 @@ export default class Leader extends Component {
                   type="tel"
                   fielddata={LEADERSHIP_FRM.fields.leadership[index].ssn}
                   ssn
-                  changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
+                  changed={(values, name) => this.maskArrayChange(values, formName, name, 'leadership', index)}
                 />
               )
             }
@@ -282,7 +287,7 @@ export default class Leader extends Component {
                 name={field}
                 fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
                 format="##/##/####"
-                changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
+                changed={(values, name) => this.maskArrayChange(values, formName, name, 'leadership', index)}
                 dateOfBirth
               />
             ))
@@ -313,7 +318,7 @@ export default class Leader extends Component {
               displayMode={isReadonly}
               name="zip"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].zip}
-              changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
+              changed={(values, name) => this.maskArrayChange(values, formName, name, 'leadership', index)}
               zipCode
             />
           </Form.Group>
@@ -459,7 +464,7 @@ export default class Leader extends Component {
                       name="dateOfService"
                       fielddata={exp.dateOfService}
                       format="##-##-####"
-                      changed={(values, name) => maskArrayChange(values, 'LEADERSHIP_EXP_FRM', name, 'employer', index2, index)}
+                      changed={(values, name) => this.maskArrayChange(values, 'LEADERSHIP_EXP_FRM', name, 'employer', index2, index)}
                       dateOfBirth
                     />
                     <FormInput

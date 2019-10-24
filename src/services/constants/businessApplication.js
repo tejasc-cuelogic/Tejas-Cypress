@@ -508,22 +508,22 @@ export const BUSINESS_DETAILS = {
   },
   debts: [{
     amount: {
-      value: 0, label: 'Principal Amount', error: undefined, rule: 'required', placeHolder: '$500,000', customErrors: { required: 'required' },
+      value: null, label: 'Principal Amount', error: undefined, rule: 'optional', placeHolder: '$500,000', customErrors: { required: 'required' },
     },
     remainingPrincipal: {
-      value: 0, label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '$150,000', customErrors: { required: 'required' },
+      value: null, label: 'Remaining Principal', error: undefined, rule: 'optional', placeHolder: '$150,000', customErrors: { required: 'required' },
     },
     interestExpenses: {
-      value: 0, label: 'Interest Rate', error: undefined, rule: 'required|max:100', placeHolder: '10%', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
+      value: null, label: 'Interest Rate', error: undefined, rule: 'optional|max:100', placeHolder: '10%', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
     },
     term: {
-      value: 0, label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' },
+      value: null, label: 'Term (in months)', error: undefined, rule: 'optional', placeHolder: '5', customErrors: { required: 'required' },
     },
     termStartDate: {
-      value: null, label: 'Term Start Date', error: undefined, rule: 'required|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
+      value: null, label: 'Term Start Date', error: undefined, rule: 'optional|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
     },
     maturityDate: {
-      value: null, label: 'Maturity Date', error: undefined, rule: 'required|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
+      value: null, label: 'Maturity Date', error: undefined, rule: 'optional|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
     },
   }],
   sources: [{

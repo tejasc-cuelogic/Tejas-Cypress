@@ -6,9 +6,6 @@ import Validator from 'validatorjs';
 import Helper from '../helper/utility';
 
 /* eslint-disable no-unused-vars, arrow-body-style */
-Validator.register('taxId', (value, attribute) => {
-  return value.toString().length === 9;
-}, 'The :attribute is not in the format XX-XXXXXXX.');
 
 Validator.register('minAcnum', (value, requirement, attribute) => {
   return value.toString().length > 3 && value.toString().length < 18;
