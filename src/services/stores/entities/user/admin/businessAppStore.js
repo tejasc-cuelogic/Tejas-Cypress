@@ -217,14 +217,23 @@ export class BusinessAppStore {
   }
 
   @action
-  updateBusinessDetails = (appId, issuerId, appType) => {
+  updateBusinessDetails = (appId, issuerId, appType, rating = 0) => {
     const payload = Validator.ExtractValues(this.BUSINESS_DETAILS_EDIT_FRM.fields);
     const refetchPayLoad = {
       applicationId: appId,
       userId: issuerId,
       applicationType: appType === 'PRE_QUALIFICATION_FAILED' ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED',
     };
-    uiStore.setProgress();
+    if (!rating) {
+      uiStore.setProgress();
+    }
+    const additionalVariables = !rating ? {
+      businessName: payload.businessName,
+      signupCode: payload.signupCode,
+      utmSource: payload.utmSource,
+    } : {
+      rating,
+    };
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -232,14 +241,12 @@ export class BusinessAppStore {
           variables: {
             applicationId: appId,
             issuerId,
-            businessName: payload.businessName,
-            signupCode: payload.signupCode,
-            utmSource: payload.utmSource,
+            ...additionalVariables,
           },
-          refetchQueries: [{
+          refetchQueries: !rating ? [{
             query: getBusinessApplicationsDetailsAdmin,
             variables: refetchPayLoad,
-          }],
+          }] : null,
         })
         .then(() => {
           resolve();

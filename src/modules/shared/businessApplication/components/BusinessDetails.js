@@ -1,9 +1,6 @@
-/* eslint-disable jsx-a11y/label-has-for */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm, Popup } from 'semantic-ui-react';
+import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm, Popup, Table } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../theme/shared';
 import { FormInput, DropZoneConfirm as DropZone, MaskedInput } from '../../../../theme/form';
@@ -34,6 +31,9 @@ export default class BusinessDetails extends Component {
   removeForm = (e) => {
     this.setState({ showPartialSaveModal: !this.state.showPartialSaveModal });
     this.props.businessAppStore.removeForm(e, this.state.currentForm, this.state.currentIndex);
+    if (['sources', 'uses'].includes(this.state.currentForm)) {
+      this.props.businessAppStore.totalChange(this.state.currentForm, this.state.currentForm === 'sources' ? 'sourcesTotal' : 'usesTotal');
+    }
   }
 
   toggleHandel = () => {
@@ -64,6 +64,7 @@ export default class BusinessDetails extends Component {
       businessAppRemoveFiles, addMoreForms, businessDetailsMaskingChange,
       formReadOnlyMode, businessDetailsDateChange, currentApplicationType,
       businessAppParitalSubmit, enableSave, businessApplicationDetailsAdmin,
+      sourcesTotal, usesTotal, totalChange,
     } = this.props.businessAppStore;
     const { hideFields } = this.props;
     const { docLoading, docIdsLoading } = this.props.agreementsStore;
@@ -80,34 +81,33 @@ export default class BusinessDetails extends Component {
         <Form className="issuer-signup">
           {!hideFields
             && (
-<FormElementWrap
-  as="h1"
-  header={`${currentApplicationType === 'business' ? 'Business' : 'Real Estate'} Details`}
-  subHeader="Quickly, safely and accurately submit your business information."
-/>
+            <FormElementWrap
+              as="h1"
+              header={`${currentApplicationType === 'business' ? 'Business' : 'Real Estate'} Details`}
+              subHeader={currentApplicationType === 'business' ? 'Quickly, safely and accurately submit your business information.' : 'Quickly, safely and accurately submit your real estate information.'}
+            />
             )
           }
           <FormElementWrap
             hideFields={hideFields}
-            header="Business Plan"
+            header={currentApplicationType === 'business' ? 'Business Plan or Investment Prospectus' : 'Business Plan'}
             subHeader={(
               <>
-                The business plan is intended to describe the who, what, when, where,
-                how and why of your project.*
-                {!hideFields && currentApplicationType === 'business'
-                  ? <Link to={this.props.match.url} className="link" onClick={() => this.handleLearnMore()}><small>Learn More</small></Link>
-                  : (
-<Popup
-  trigger={<Icon className="ns-help-circle" />}
-  content="Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions."
-  position="top center"
-  className={this.props.toolTipClassName ? this.props.toolTipClassName : 'center-align'}
-  wide
-/>
-                  )
+                {currentApplicationType === 'business' ? 'This document is intended to describe the who, what, when, where, how and why of your project.*' : 'Upload your Investment Summary or Business Plan.*'}
+                {!hideFields && currentApplicationType !== 'business' && (
+                  <Popup
+                    trigger={<Icon className="ns-help-circle" />}
+                    content="Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions."
+                    position="top center"
+                    className={this.props.toolTipClassName ? this.props.toolTipClassName : 'center-align'}
+                    wide
+                  />
+                )}
+                {!hideFields && currentApplicationType !== 'business'
+                  && <Link to={this.props.match.url} className="link" onClick={() => this.handleLearnMore()}><small>Learn More</small></Link>
                 }
               </>
-)}
+            )}
           >
             <DropZone
               sharableLink
@@ -122,6 +122,150 @@ export default class BusinessDetails extends Component {
               onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
             />
           </FormElementWrap>
+          {currentApplicationType === 'business' ? (
+            <FormElementWrap
+              hideFields={hideFields}
+              header="Sources & Uses"
+              subHeader="Unless provided in your business plan or financial projections, please provide a table clearly outlining all sources of capital for your project (including the proposed NextSeed amount) and the proposed uses of capital."
+            >
+              <Grid>
+                <Grid.Column largeScreen={7} computer={7} tablet={8} mobile={8}>
+                  <Header as="h4">Source</Header>
+                  <Table inverted className="form-table source-table sources">
+                    <Table.Header>
+                      <Table.Row>
+                        <Table.HeaderCell>Source of Funds</Table.HeaderCell>
+                        <Table.HeaderCell>Amount</Table.HeaderCell>
+                        <Table.HeaderCell />
+                      </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                      {BUSINESS_DETAILS_FRM.fields.sources.length ? BUSINESS_DETAILS_FRM.fields.sources.map((source, index) => (
+                        <Table.Row>
+                          <Table.Cell width={7}>
+                            <FormInput
+                              readOnly={formReadOnlyMode}
+                              containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                              type="text"
+                              asterisk="true"
+                              name="name"
+                              fielddata={source.name}
+                              changed={(e, res) => businessDetailsChange(e, res, 'sources', index)}
+                            />
+                          </Table.Cell>
+                          <Table.Cell>
+                            <MaskedInput
+                              readOnly={formReadOnlyMode}
+                              containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                              prefix="$ "
+                              currency
+                              type="text"
+                              name="amount"
+                              hidelabel
+                              fielddata={source.amount}
+                              onblur={() => totalChange('sources', 'sourcesTotal')}
+                              changed={(values, field) => businessDetailsMaskingChange(field, values, 'sources', index)}
+                            />
+                          </Table.Cell>
+                          <Table.Cell collapsing>
+                            <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('sources', index)}>
+                              <Icon className="ns-minus-circle" />
+                            </Button>
+                          </Table.Cell>
+                        </Table.Row>
+                      )) : ''}
+                      <Table.Row>
+                        <Table.Cell colspan="3">
+                          <Button size="small" className="link-button" type="button" disabled={formReadOnlyMode} onClick={e => addMoreForms(e, 'sources')} color="green" content="+ Add Source" />
+                        </Table.Cell>
+                      </Table.Row>
+                    </Table.Body>
+                    {BUSINESS_DETAILS_FRM.fields.sources.length
+                      ? (
+                      <Table.Footer>
+                        <Table.Row>
+                          <Table.HeaderCell width={7}>
+                            Total
+                          </Table.HeaderCell>
+                          <Table.HeaderCell>
+                            ${sourcesTotal}
+                            </Table.HeaderCell>
+                          <Table.HeaderCell />
+                        </Table.Row>
+                      </Table.Footer>
+                      ) : ''}
+                  </Table>
+                </Grid.Column>
+                <Grid.Column largeScreen={7} computer={7} tablet={8} mobile={8}>
+                  <Header as="h4">Uses</Header>
+                  <Table inverted className="form-table source-table uses">
+                    <Table.Header>
+                      <Table.Row>
+                        <Table.HeaderCell>Use of Funds</Table.HeaderCell>
+                        <Table.HeaderCell>Amount</Table.HeaderCell>
+                        <Table.HeaderCell />
+                      </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                      {BUSINESS_DETAILS_FRM.fields.uses.length ? BUSINESS_DETAILS_FRM.fields.uses.map((use, index) => (
+                        <Table.Row>
+                          <Table.Cell width={7}>
+                            <FormInput
+                              readOnly={formReadOnlyMode}
+                              containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                              type="text"
+                              asterisk="true"
+                              name="name"
+                              fielddata={use.name}
+                              changed={(e, res) => businessDetailsChange(e, res, 'uses', index)}
+                            />
+                          </Table.Cell>
+                          <Table.Cell>
+                            <MaskedInput
+                              readOnly={formReadOnlyMode}
+                              containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                              prefix="$ "
+                              currency
+                              type="text"
+                              name="amount"
+                              hidelabel
+                              fielddata={use.amount}
+                              onblur={() => totalChange('uses', 'usesTotal')}
+                              changed={(values, field) => businessDetailsMaskingChange(field, values, 'uses', index)}
+                            />
+                          </Table.Cell>
+                          <Table.Cell collapsing>
+                            <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('uses', index)}>
+                              <Icon className="ns-minus-circle" />
+                            </Button>
+                          </Table.Cell>
+                        </Table.Row>
+                      )) : ''}
+                      <Table.Row>
+                        <Table.Cell colspan="3">
+                          <Button size="small" className="link-button" type="button" disabled={formReadOnlyMode} onClick={e => addMoreForms(e, 'uses')} color="green" content="+ Add Use" />
+                        </Table.Cell>
+                      </Table.Row>
+                    </Table.Body>
+                    {BUSINESS_DETAILS_FRM.fields.uses.length
+                      ? (
+                      <Table.Footer>
+                        <Table.Row>
+                          <Table.HeaderCell width={7}>
+                            Total
+                          </Table.HeaderCell>
+                          <Table.HeaderCell>
+                            ${usesTotal}
+                            </Table.HeaderCell>
+                          <Table.HeaderCell />
+                        </Table.Row>
+                      </Table.Footer>
+                      ) : ''}
+                  </Table>
+                </Grid.Column>
+              </Grid>
+            </FormElementWrap>
+          ) : ''}
           <FormElementWrap
             hideFields={hideFields}
             header="Existing Debt"
@@ -135,7 +279,7 @@ export default class BusinessDetails extends Component {
                     <Header as={hideFields ? 'h6' : 'h5'} className="mb-20">Existing Debt {index + 1}
                       {!hideFields && BUSINESS_DETAILS_FRM.fields.debts.length > 1
                         && (
-<Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
+                        <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
                           <Icon color="red" size="small" className="ns-trash" />
                         </Button>
                         )
@@ -162,7 +306,23 @@ export default class BusinessDetails extends Component {
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                       />
                     </Form.Group>
-                    <Form.Group widths="equal">
+                    {currentApplicationType === 'business'
+                      ? (
+                        <Form.Group widths="equal">
+                          {['termStartDate', 'maturityDate'].map(field => (
+                            <MaskedInput
+                              name={field}
+                              readOnly={formReadOnlyMode}
+                              containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                              fielddata={debt[field]}
+                              format="##/##/####"
+                              changed={values => businessDetailsDateChange(field, values.formattedValue, index, 'debts')}
+                              dateOfBirth
+                            />
+                          ))}
+                        </Form.Group>
+                      ) : ''}
+                    <Form.Group widths={`${currentApplicationType !== 'business' ? 'equal width' : 'columns two'}`}>
                       <MaskedInput
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
@@ -173,15 +333,18 @@ export default class BusinessDetails extends Component {
                         fielddata={debt.remainingPrincipal}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                       />
-                      <MaskedInput
-                        readOnly={formReadOnlyMode}
-                        containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                        number
-                        type="text"
-                        name="term"
-                        fielddata={debt.term}
-                        changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
-                      />
+                      {currentApplicationType !== 'business'
+                        ? (
+                        <MaskedInput
+                          readOnly={formReadOnlyMode}
+                          containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                          number
+                          type="text"
+                          name="term"
+                          fielddata={debt.term}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
+                        />
+                        ) : ''}
                     </Form.Group>
                   </div>
                 </Grid.Column>
@@ -201,7 +364,7 @@ export default class BusinessDetails extends Component {
           >
             {!hideFields
               && (
-<Accordion>
+              <Accordion>
                 <Accordion.Title onClick={this.toggleHandel} active={this.state.legalNoteToggle}>
                   <Icon className="ns-chevron-up" />
                   {this.state.legalNoteToggle ? 'Hide' : 'Show'} legal note
@@ -236,7 +399,7 @@ export default class BusinessDetails extends Component {
                   <Header as={hideFields ? 'h6' : 'h5'}>Owner {index + 1}
                     {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length > 1
                       && (
-<Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
+                      <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
                         <Icon color="red" size="small" className="ns-trash" />
                       </Button>
                       )
@@ -289,6 +452,7 @@ export default class BusinessDetails extends Component {
                         fielddata={owner.dateOfService}
                         asterisk="true"
                         format="##/##/####"
+                        label={currentApplicationType === 'business' ? 'Start Date with the Business' : owner.dateOfService.label}
                         changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}
                         dateOfBirth
                       />

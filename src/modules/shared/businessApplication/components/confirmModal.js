@@ -11,7 +11,7 @@ export default class ConfirmModal extends Component {
   handleCloseModal = (e) => {
     e.preventDefault();
     this.props.uiStore.setErrors(null);
-    this.props.history.goBack();
+    this.props.history.push('/app/dashboard');
   }
 
   render() {
@@ -20,11 +20,11 @@ export default class ConfirmModal extends Component {
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Content className="center-align relaxed">
-          <Header as="h3" className="mb-30">Do you want to save your progress?</Header>
+          <Header as="h3" className="mb-30">Do you want to save <br />your progress?</Header>
           <Form error onSubmit={this.props.partialSave}>
             {errors
               && (
-<Message error className="mb-30">
+              <Message error className="mb-30">
                 <ListErrors errors={[errors]} />
               </Message>
               )
