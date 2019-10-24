@@ -1,4 +1,4 @@
-import { completeBusinessApplication, preQualificationSuccess, preQualificationFail } from './utility/issuerSignUp.utility';
+import { completeBusinessApplication, preQualificationSuccess, preQualificationFail, prequalFailButLendioPass } from './utility/issuerSignUp.utility';
 
 describe('Issuer Sign Up', () => {
   beforeEach(() => {
@@ -17,11 +17,15 @@ describe('Issuer Sign Up', () => {
     preQualificationFail();
   })
 
-  it ('should be able to fill basic details of issuer', () => {
+  it ('should be able to fill prequalification success', () => {
     preQualificationSuccess();
   })
 
-  it.skip ('should able to submit business application and login', () => {
+  it ('should able to submit business application and login', () => {
     completeBusinessApplication();
+  })
+  
+  it ('Prequal failed but lendio passed', () => {
+    prequalFailButLendioPass();
   })
 });

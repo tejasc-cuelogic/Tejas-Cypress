@@ -39,7 +39,7 @@ export default class ApplicationsList extends Component {
     const { match } = this.props;
     const {
       getBusinessApplication, requestState, filterApplicationStatus, columnTitle,
-      totalRecords, businessApplicationsList, setKeyword, exportBusinessApplications,
+      totalRecords, businessApplicationsList, setKeyword, exportBusinessApplications, updateBusinessDetails,
     } = this.props.businessAppAdminStore;
     const { inProgress } = this.props.uiStore;
     if (businessApplicationsList.loading) {
@@ -122,12 +122,8 @@ export default class ApplicationsList extends Component {
                               </span>
                             </p>
                             <p>
-                              {get(application, 'signupCode') && get(application, 'utmSource') && (
-                                <>
-                                  <span>Sign-Up Code <b>{get(application, 'signupCode')}</b></span>
-                                  <span>Utm Source <b>{get(application, 'utmSource')}</b></span>
-                                </>
-                              )}
+                              {get(application, 'signupCode') && (<span>Sign-Up Code <b>{get(application, 'signupCode')}</b></span>)}
+                              {get(application, 'utmSource') && (<span>Utm Source <b>{get(application, 'utmSource')}</b></span>)}
                               <span>
                                 Started{' '}
                                 <b>
@@ -140,26 +136,28 @@ export default class ApplicationsList extends Component {
                         </Table.Cell>
                         <Table.Cell>
                           <Item>
-                            <Item.Header><Rating size="large" disabled defaultRating={application.rating || 0} maxRating={5} /></Item.Header>
-                            {application.comments && application.comments.length
+                            <Item.Header>
+                              <Rating
+                                size="large"
+                                defaultRating={application.rating || 0}
+                                maxRating={5}
+                                disabled={application.prequalStatus === 'PRE_QUALIFICATION_FAILED'}
+                                onRate={(e, { rating }) => {
+                                  updateBusinessDetails(application.applicationId, application.userId, null, rating);
+                                }}
+                              />
+                            </Item.Header>
+                            {get(application, 'comment')
                               && (
                                 <Item.Content>
                                   <Item.Description>
-                                    {application.comments[application.comments.length - 1].text}
+                                    {get(application, 'comment.activity')}
                                   </Item.Description>
                                   <Item.Extra>
-                                    {application.comments[application.comments.length - 1].commentor
-                                      && (
-                                        <b>{DataFormatter.getDateAsPerTimeZone(application.comments[application.comments.length - 1].commentor.date, true, false, true)}</b>
-                                      )
-                                    }
-                                    {application.comments[application.comments.length - 1].commentor
-                                      && (
-                                        <b>{' '}
-                                          {application.comments[application.comments.length - 1].commentor.by}
-                                        </b>
-                                      )
-                                    }
+                                    <b>{DataFormatter.getDateAsPerTimeZone(get(application, 'comment.created.date'), true, false, true)}</b>
+                                    <b>{' '}
+                                      {get(application, 'comment.created.by')}
+                                    </b>
                                   </Item.Extra>
                                 </Item.Content>
                               )

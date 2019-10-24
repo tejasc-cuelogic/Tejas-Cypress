@@ -27,7 +27,7 @@ export default class ActivityHistory extends Component {
 
   setSearchParam = (e, { name, value }) => this.props.activityHistoryStore.setInitiateSrch(name, value, this.props.resourceId);
 
-  logActivity = () => this.props.activityHistoryStore.send(this.props.resourceId);
+  logActivity = () => this.props.activityHistoryStore.send(this.props.resourceId, this.props.activityTitle, this.props.activityType);
 
   change = (date, field) => {
     if ((date && moment(date.formattedValue, 'MM-DD-YYYY', true).isValid()) || !date.formattedValue) {

@@ -3,10 +3,11 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Button, Divider, Confirm, Icon, Popup, Grid } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
-import { FormInput, MaskedInput, FormTextarea, DropZoneConfirm as DropZone, AutoComplete, FormCheckbox, ImageCropper } from '../../../../../../theme/form';
+import { FormInput, MaskedInput, FormTextarea, DropZoneConfirm as DropZone, AutoComplete, FormCheckbox, ImageCropper, FormDropDown } from '../../../../../../theme/form';
 import { Image64 } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import { PROFILE_PHOTO_BYTES } from '../../../../../../services/constants/user';
+import { US_STATES_FOR_INVESTOR } from '../../../../../../constants/account';
 import ButtonGroup from '../ButtonGroup';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 
@@ -263,16 +264,23 @@ export default class Leader extends Component {
                   ssn
                   changed={(values, name) => this.maskArrayChange(values, formName, name, 'leadership', index)}
                 />
-              )}
-            {['dlLicenseNumber', 'dlState'].map(field => (
-              <FormInput
-                displayMode={isReadonly}
-                name={field}
-                fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
-                changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
-              />
-            ))
+              )
             }
+            <FormInput
+              displayMode={isReadonly}
+              name="dlLicenseNumber"
+              fielddata={LEADERSHIP_FRM.fields.leadership[index].dlLicenseNumber}
+              changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
+            />
+            <FormDropDown
+              name="dlState"
+              fielddata={LEADERSHIP_FRM.fields.leadership[index].dlState}
+              value={LEADERSHIP_FRM.fields.leadership[index].dlState}
+              options={US_STATES_FOR_INVESTOR}
+              selection
+              onChange={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
+              placeholder="Texas"
+            />
             {['dlIssuedDate', 'dlExpirationDate'].map(field => (
               <MaskedInput
                 displayMode={isReadonly}
