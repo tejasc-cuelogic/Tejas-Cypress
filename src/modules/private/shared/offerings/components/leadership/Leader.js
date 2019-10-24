@@ -164,19 +164,19 @@ export default class Leader extends Component {
       && offer.leadership[index].issuerSubmitted) ? offer.leadership[index].issuerSubmitted : null;
     const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer)
       || (isManager && approved && approved.status));
-    const leaderCount = LEADERSHIP_FRM.fields.leadership.length;
+    // const leaderCount = LEADERSHIP_FRM.fields.leadership.length;
     return (
       <>
         <Form className={isIssuer && !match.url.includes('offering-creation') ? 'ui card fluid form-card' : ''}>
           <Header as="h4">
             {`Leader ${index + 1}`}
-            {!isReadonly && leaderCount > 1
+            {/* {!isReadonly && leaderCount > 1
               && (
                 <Button.Group size="mini" floated="right">
                   <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, formName)} />
                 </Button.Group>
               )
-            }
+            } */}
           </Header>
           {['isPublic', 'isBeneficialOwnerDocGeneration'].map(field => (
             <FormCheckbox
