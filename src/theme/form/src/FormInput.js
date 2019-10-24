@@ -90,6 +90,8 @@ export default class FormInput extends Component {
             }}
           onBlur={
             (e) => {
+              e.target.value = e.target.value ? e.target.value.trim() : e.target.value;
+              this.change(e);
               this.triggerError(true);
               if (props.onblur) {
                 this.props.onblur(e.target.value);
