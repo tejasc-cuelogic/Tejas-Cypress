@@ -482,8 +482,8 @@ export class AuthStore {
 
   @action
   subscribeToNewsletter = () => new Promise((res, rej) => {
+    this.NEWSLETTER_FRM = Validator.validateForm(this.NEWSLETTER_FRM, false, true);
     if (!this.NEWSLETTER_FRM.meta.isValid) {
-      this.resetForm('NEWSLETTER_FRM', null);
       rej();
     } else {
       uiStore.setProgress();

@@ -112,12 +112,18 @@ query _listRequestPlugins {
   }
   listCronPlugins
   {
-    plugins {
-      name
-      pluginInputs {
-        name
+    plugins{   
+      name   
+      plugin   
+      pluginInputs{   
+       label
+       type
+       key
+       value
+       rule
+       defaultValue
       }
-    }
+    }     
   }
   listProcessorPlugins
   {
@@ -138,7 +144,7 @@ query _listRequestPlugins {
 `;
 
 export const requestFactoryPluginTrigger = gql`
-mutation invokeRequest($method: RequestWorkerPluginsEnum!, $payload: String, $invocationType: RequestInvocationEnum) {
+mutation invokeRequest($method: String!, $payload: String, $invocationType: RequestInvocationEnum) {
   invokeRequest(
     method: $method,
     payload: $payload

@@ -1,14 +1,6 @@
-import Validator from 'validatorjs';
 import React from 'react';
-
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
-Validator.register(
-  'maskedSSN', (value, attribute) => {
-    return value.toString().length === 9;
-  },
-  'The :attribute is not in the format XXX-XX-XXXX.',
-);
 
 export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement', 'closingBinder'];
 
