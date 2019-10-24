@@ -1,12 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Table, Accordion, Button, Card, Header } from 'semantic-ui-react';
-import { get, includes } from 'lodash';
+import { get, includes, capitalize } from 'lodash';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
 import { STAGES } from '../../../../../../services/constants/admin/offerings';
-import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
+import { INDUSTRY_TYPES_ICONS, CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
+
+const InvestmentCard = ({ data }) => {
+  const [active, setActive] = useState(false);
+  const toggleAccordion = () => setActive(!active);
+  return (
+<Accordion fluid styled>
+    <Accordion.Title className="text-capitalize">
+      <Header as="h6" className="mt-0" onClick={toggleAccordion}>
+        <Icon className={`ns-chevron-${active ? 'up' : 'down'}`} color="green" />
+        {get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}
+        <Header.Subheader>{CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')] || 'N/A'}</Header.Subheader>
+      </Header>
+      {Helper.CurrencyFormat(data.investedAmount, 0)}
+    </Accordion.Title>
+    <Accordion.Content active={active}>
+      <Table basic="very" unstackable className="no-border campaign-card">
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell>Interest Rate</Table.Cell>
+            <Table.Cell className="grey-header right-align">xx.x%</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>Term</Table.Cell>
+            <Table.Cell className="grey-header right-align">xx months</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>Close Date</Table.Cell>
+            <Table.Cell className="grey-header right-align">01/24/2019</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>Principal Remaining</Table.Cell>
+            <Table.Cell className="grey-header right-align">$100.00</Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table>
+      <Button className="mt-30 mb-14" primary fluid content="Open Offering Details" />
+    </Accordion.Content>
+  </Accordion>
+  );
+};
 
 const isMobile = document.documentElement.clientWidth < 768;
 const InvestmentList = (props) => {
@@ -21,41 +61,12 @@ const InvestmentList = (props) => {
     {isMobile ? (
       <>
         <Card className="investment-summary investment-card">
-          <Card.Header>Active</Card.Header>
+          <Card.Header>{capitalize(props.listOf)}</Card.Header>
           <Card.Content>
-            <Accordion fluid styled>
-              <Accordion.Title className="text-capitalize">
-                <Header as="h6" className="mt-0">
-                  <Icon className="ns-chevron-down" color="green" />
-                  Business Name Here
-                  <Header.Subheader>Revenue Sharing Note</Header.Subheader>
-                </Header>
-                $1,000.00
-              </Accordion.Title>
-              <Accordion.Content active>
-                <Table basic="very" unstackable className="no-border campaign-card">
-                  <Table.Body>
-                    <Table.Row>
-                      <Table.Cell>Interest Rate</Table.Cell>
-                      <Table.Cell className="grey-header right-align">xx.x%</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Term</Table.Cell>
-                      <Table.Cell className="grey-header right-align">xx months</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Close Date</Table.Cell>
-                      <Table.Cell className="grey-header right-align">01/24/2019</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Principal Remaining</Table.Cell>
-                      <Table.Cell className="grey-header right-align">$100.00</Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                </Table>
-                <Button className="mt-30 mb-14" primary fluid content="Open Offering Details" />
-              </Accordion.Content>
-            </Accordion>
+            {investments.map(data => (
+              <InvestmentCard data={data} />
+            ))
+            }
           </Card.Content>
         </Card>
       </>
@@ -107,7 +118,7 @@ const InvestmentList = (props) => {
                         </Table.Cell>
                         <Table.Cell>
                           {
-                            get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'
+                            CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')] || 'N/A'
                           }
                         </Table.Cell>
                         <Table.Cell className="text-capitalize">
