@@ -67,6 +67,7 @@ const InvestmentList = (props) => {
               <InvestmentCard data={data} />
             ))
             }
+            <p className="right-align neutral-text">Total: <b>$1000</b></p>
           </Card.Content>
         </Card>
       </>

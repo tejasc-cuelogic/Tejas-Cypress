@@ -616,6 +616,9 @@
                     padding-top: @15px;
                 }
             }
+            p{
+                padding: @15px @22px;
+            }
         }
     }
 }
