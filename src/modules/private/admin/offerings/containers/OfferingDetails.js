@@ -13,7 +13,7 @@ import EditPoc from '../components/EditPocModal';
 import { REACT_APP_DEPLOY_ENV, NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import Helper from '../../../../../helper/utility';
 
-@inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore')
+@inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore', 'uiStore')
 @observer
 export default class OfferingDetails extends Component {
   constructor(props) {
@@ -80,6 +80,7 @@ export default class OfferingDetails extends Component {
     if (access.level !== 'FULL') {
       navItems = navItems.filter(n => (n.title !== 'Close'));
     }
+    const { responsiveVars } = this.props.uiStore;
     return (
       <>
         <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
@@ -100,7 +101,7 @@ export default class OfferingDetails extends Component {
             </Header>
             {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} offerStatus={offerStatus} />}
             <Card fluid>
-              <SecondaryMenu offering match={match} navItems={navItems} />
+              <SecondaryMenu offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
               <Switch>
                 <Route exact path={match.url} component={OfferingModule('overview')} />
                 {

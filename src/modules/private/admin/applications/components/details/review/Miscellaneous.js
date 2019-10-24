@@ -8,6 +8,7 @@ import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
 import { InlineLoader } from '../../../../../../../theme/shared';
 import { DataFormatter } from '../../../../../../../helper';
+import { DEV_FEATURE_ONLY } from '../../../../../../../constants/common';
 
 const SectionHeader = ({ header, subheader }) => (
   <>
@@ -230,25 +231,29 @@ export default class Miscellaneous extends Component {
               }
             </Table.Body>
           </Table>
-          <SectionHeader header="NS Admin Uploaded Documents" subheader="Uploaded via the Activity History" />
-          <div className="featured-section mb-20">
-            <Item.Group relaxed="very">
-              {
-              UPLOADED_DOCUMENTS_FRM.fields.data.length
-                ? UPLOADED_DOCUMENTS_FRM.fields.data.map((document, index) => (
-                  <>
-                    <UploadedDocument
-                      match={this.props.match}
-                      index={index}
-                      toggleConfirmModal={this.toggleConfirmModal}
-                      document={document.document}
-                    />
-                  </>
-                ))
-                : <p>No documents to show</p>
-              }
-            </Item.Group>
-          </div>
+          {DEV_FEATURE_ONLY && (
+            <>
+              <SectionHeader header="NS Admin Uploaded Documents" subheader="Uploaded via the Activity History" />
+              <div className="featured-section mb-20">
+                <Item.Group relaxed="very">
+                  {
+                  UPLOADED_DOCUMENTS_FRM.fields.data.length
+                    ? UPLOADED_DOCUMENTS_FRM.fields.data.map((document, index) => (
+                      <>
+                        <UploadedDocument
+                          match={this.props.match}
+                          index={index}
+                          toggleConfirmModal={this.toggleConfirmModal}
+                          document={document.document}
+                        />
+                      </>
+                    ))
+                    : <p>No documents to show</p>
+                  }
+              </Item.Group>
+            </div>
+            </>
+          )}
           <ButtonGroup
             inProgress={inProgress}
             formName="MISCELLANEOUS_FRM"

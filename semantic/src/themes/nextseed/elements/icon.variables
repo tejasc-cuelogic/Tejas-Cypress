@@ -199,6 +199,7 @@
 @ns-home-line: "\e97e";
 @ns-hospitality: "\e953";
 @ns-hospitality-2: "\e99a";
+@ns-hospitality-3: "\e9a4";
 @ns-image: "\e927";
 @ns-individual: "\e941";
 @ns-individual-line: "\e94e";
@@ -214,6 +215,7 @@
 @ns-logout: "\e99d";
 @ns-long-arrow-left: "\e92c";
 @ns-minus: "\e99e";
+@ns-minus-circle: "\e9a0";
 @ns-minus-square: "\e986";
 @ns-new-business: "\e95d";
 @ns-new-location: "\e95e";

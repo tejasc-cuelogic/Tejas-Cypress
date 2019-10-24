@@ -127,7 +127,7 @@
             }
         }
     }
-    &.display-only{
+    &.display-only, &.readonly{
         min-height:auto;
         padding:0 !important;
         border:none !important;
@@ -178,6 +178,11 @@
         &.active .menu {
             padding: 0 @24px;
             max-height: 150px;
+        }
+    }
+    &.disabled {
+        >i.icon.dropdown{
+            display:none;
         }
     }
 }
