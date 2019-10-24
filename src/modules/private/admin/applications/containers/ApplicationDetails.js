@@ -99,7 +99,7 @@ export default class ApplicationDetails extends Component {
         { title: 'Documentation', to: 'documentation' },
       ];
     }
-    if (!deleted && !stashed) {
+    if (!deleted && !stashed && match.params.id === 'completed') {
       navItems = [
         ...navItems,
         { title: 'Review', to: 'review' },

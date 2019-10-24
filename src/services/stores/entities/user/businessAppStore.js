@@ -739,9 +739,9 @@ export class BusinessAppStore {
     return {
       planDocs: this.getFilesArray(data.businessPlan.value, data.businessPlan),
       debts: data.debts.map(item => ({
-        amount: this.getValidDataForInt(item.amount),
-        interestExpenses: this.getValidDataForInt(item.interestExpenses),
-        remainingPrincipal: this.getValidDataForInt(item.remainingPrincipal),
+        amount: item.amount.value ? this.getValidDataForInt(item.amount) : null,
+        interestExpenses: item.interestExpenses.value ? this.getValidDataForInt(item.interestExpenses) : null,
+        remainingPrincipal: item.remainingPrincipal.value ? this.getValidDataForInt(item.remainingPrincipal) : null,
         term: this.getValidDataForInt(item.term),
         termStartDate: item.termStartDate.value ? moment(item.termStartDate.value).format('MM/DD/YYYY') : null,
         maturityDate: item.maturityDate.value ? moment(item.maturityDate.value).format('MM/DD/YYYY') : null,

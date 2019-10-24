@@ -72,6 +72,7 @@ export default class BusinessApplication extends Component {
         businessApplicationSubmitAction().then(() => {
           Helper.toast('Business application submitted successfully!', 'success');
           this.props.history.push('/app/dashboard');
+          window.location.reload();
         });
       } else if (isRedirect) {
         this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${applicationStep}`);
