@@ -1457,6 +1457,7 @@ export class OfferingCreationStore {
     leaderNumber = undefined,
     afIssuerId,
     approvedObj,
+    index = undefined,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const issuerBacId = getOfferingById.legal && getOfferingById.legal.issuerBacId;
@@ -1498,7 +1499,7 @@ export class OfferingCreationStore {
       const { leadership } = getOfferingById;
       if (!afIssuerId) {
         mutation = createBac;
-        payload.email = leadership[leaderNumber].email;
+        payload.email = leadership[index].email;
         variables = {
           offeringBacDetails: payload,
         };

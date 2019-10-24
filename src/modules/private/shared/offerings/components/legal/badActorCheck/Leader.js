@@ -18,13 +18,13 @@ export default class Leader extends Component {
     getLeadershipOfferingBac(currentOfferingId, 'LEADERSHIP');
   }
 
-  handleSubmitIssuer = (leaderId, approved, index = null) => {
+  handleSubmitIssuer = (leaderId, approved, index = null, issuerNumber = null) => {
     const {
       createOrUpdateOfferingBac,
       LEADER_FRM,
     } = this.props.offeringCreationStore;
     const leaderNumber = index;
-    createOrUpdateOfferingBac('LEADERSHIP', LEADER_FRM.fields, undefined, leaderNumber, leaderId, approved);
+    createOrUpdateOfferingBac('LEADERSHIP', LEADER_FRM.fields, undefined, leaderNumber, leaderId, approved, issuerNumber);
   }
 
   render() {
@@ -112,7 +112,7 @@ export default class Leader extends Component {
           isManager={access.asManager}
           formValid={LEADER_FRM.meta.isValid}
           approved={approved}
-          updateOffer={approved1 => this.handleSubmitIssuer(leaderId, approved1, index)}
+          updateOffer={approved1 => this.handleSubmitIssuer(leaderId, approved1, index, issuerNumber)}
         />
       </Form>
     );
