@@ -38,10 +38,11 @@ export default class Leader extends Component {
     let index = issuerNumber || 0;
     const formName = 'LEADER_FRM';
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    const { match, offeringsStore, bacId } = this.props;
+    const { match, offeringsStore, bacId, leadership } = this.props;
     const { offer } = offeringsStore;
-    if (bacId) {
-      const bacIndex = LEADER_FRM.fields.getOfferingBac.findIndex(b => bacId === b.id.value);
+    if (leadership) {
+      const id = bacId || '';
+      const bacIndex = LEADER_FRM.fields.getOfferingBac.findIndex(b => id === b.id.value);
       index = bacIndex;
     }
     const { isIssuer } = this.props.userStore;

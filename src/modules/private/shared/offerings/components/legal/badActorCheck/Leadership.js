@@ -43,7 +43,7 @@ export default class Leadership extends Component {
           />
           {
             navItems.map((item, index) => (
-              <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} render={props => <Leader refLink={match.url} {...props} bacId={item.bacId} index={index || 0} />} />
+              <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} render={props => <Leader refLink={match.url} {...props} leadership bacId={item.bacId} index={index || 0} />} />
             ))
           }
         </Switch>
