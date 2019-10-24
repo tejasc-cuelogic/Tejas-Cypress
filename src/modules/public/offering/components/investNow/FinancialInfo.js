@@ -80,7 +80,6 @@ class FinancialInfo extends Component {
     const prefferedEquityLabel = get(campaign, 'keyTerms.equityUnitType');
     const prefferedEquityAmount = get(campaign, 'closureSummary.keyTerms.unitPrice') || '0';
     const offeringReuglation = campaignRegulation || get(getInvestorAccountById, 'offering.keyTerms.regulation');
-    const offeringMinInvestmentAmount = Helper.CurrencyFormat((get(campaign, 'keyTerms.minInvestAmt') || '0'), 0);
     const showLimitComponent = !((offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || (offeringReuglation === 'BD_CF_506C' && includes(['REQUESTED', 'CONFIRMED'], accreditationStatus))));
     const { getInvestorAmountInvestedLoading } = this.props.investmentLimitStore;
     if (!getCurrentInvestNowHealthCheck || getInvestorAmountInvestedLoading
@@ -195,7 +194,7 @@ class FinancialInfo extends Component {
                     </Message>
                   )
                 }
-                <p className="note mt-40 center-align">{`*Minimum investment amount: ${equityCalculateShareAmount()} ${prefferedEquityLabel}s = ${offeringMinInvestmentAmount}`} </p>
+                <p className="note mt-40 center-align">{equityCalculateShareAmount()}</p>
               </>
             )
             : (

@@ -748,12 +748,16 @@ export class InvestmentStore {
   @action
   equityCalculateShareAmount = () => {
     const { campaign } = campaignStore;
+    const prefferedEquityLabel = get(campaign, 'keyTerms.equityUnitType');
+    const offeringMinInvestmentAmount = Helper.CurrencyFormat((get(campaign, 'keyTerms.minInvestAmt') || '0'), 0);
     const unitPrice = get(campaign, 'closureSummary.keyTerms.unitPrice') || '0';
     const offeringMinInvestment = get(campaign, 'keyTerms.minInvestAmt') || '0';
     const formatedUnitPrice = money.floatToAmount(unitPrice || 0);
     const formatedMinInvestment = money.floatToAmount(offeringMinInvestment || 0);
     const result = Math.ceil(money.div(formatedMinInvestment, formatedUnitPrice));
-    return result;
+    const dynamicLabel = result <= 1 ? `${prefferedEquityLabel}` : `${prefferedEquityLabel}s`;
+    const returnStatement = `*Minimum investment amount: ${result} ${dynamicLabel} = ${offeringMinInvestmentAmount}`;
+    return returnStatement;
   }
 }
 
