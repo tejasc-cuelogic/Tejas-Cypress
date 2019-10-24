@@ -1,12 +1,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link, Route } from 'react-router-dom';
 import { get, startsWith, includes } from 'lodash';
 import { Modal, Header, Button, Grid, Form, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../../theme/shared';
-// import ChangeInvestmentLimit from '../../ChangeInvestmentLimit';
+import ChangeInvestmentLimit from '../../ChangeInvestmentLimit';
 
 @inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore', 'agreementsStore', 'investmentLimitStore')
 @withRouter
@@ -294,6 +294,7 @@ export default class Agreement extends React.Component {
             </div>
           </Modal.Content>
         </Modal>
+        <Route path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={this.props.offeringId || false} changeInvestment={this.props.changeInvestment} refLink={`${match.url}`} {...props} />} />
       </>
     );
   }
