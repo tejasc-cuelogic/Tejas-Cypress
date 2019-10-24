@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Popup, Icon, List, Divider, Button } from 'semantic-ui-react';
+import { Grid, Divider, Button, Popup, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
@@ -42,12 +42,9 @@ export default class BusinessDocumentation extends Component {
           hideFields={hideFields}
           header="Statements & Agreements"
           subHeader={(
-<span>
-              Provide the most recent 6 months of bank statements for
-              your business accounts. For new entities, provide if
-              statements are available.<br />
-              Also provide the lease for your location. If only an LOIwith the landlord
-              is currently available, please upload the LOI for review purposes.
+            <span>
+              Provide the most recent 6 months of bank statements for your business accounts. For new entities, provide if statements are available.<br />
+              Also provide the lease for your location, if applicable. If only an LOI with the landlord is currently available, please upload the LOI for review purposes.
               <Popup
                 trigger={<Icon className="ns-help-circle" />}
                 content="If your campaign is successfully funded, an executed lease will be required at closing in order for you to receive funds."
@@ -56,7 +53,7 @@ export default class BusinessDocumentation extends Component {
                 wide
               />
             </span>
-)}
+          )}
         >
           <Grid stackable columns="equal">
             {
@@ -70,7 +67,7 @@ export default class BusinessDocumentation extends Component {
                     multiple
                     key={field}
                     name={field}
-                    asterisk="true"
+                    asterisk={fields[field].rule.includes('required') ? 'true' : ''}
                     fielddata={fields[field]}
                     ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
                     onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
@@ -85,21 +82,11 @@ export default class BusinessDocumentation extends Component {
         <FormElementWrap
           hideFields={hideFields}
           header="Tax Returns"
-          subHeader="Tax returns are used as part of NextSeed’s diligence process."
+          subHeader={(
+            <span>Tax returns are used as part of NextSeed’s diligence process.<br />For new entities, please submit your personal tax returns and, if
+            available, tax returns of a different business entity that you currently own.<br />For existing entities, please submit tax returns for the entity.</span>
+          )}
         >
-          {!hideFields
-            && (
-<List bulleted>
-              <List.Item>
-                <b>For new entities</b>, please submit your personal tax returns and, if
-                available, tax returns of a different business entity that you currently own.
-              </List.Item>
-              <List.Item>
-                <b>For existing entities</b>, please submit tax returns for the entity.
-              </List.Item>
-            </List>
-            )
-          }
           <Divider hidden />
           <div className="or-divider">
             {
@@ -124,7 +111,7 @@ export default class BusinessDocumentation extends Component {
         <FormElementWrap
           hideFields={hideFields}
           header="Will you accept a blanket lien on the business if your campaign is successfully funded?*"
-          subHeader="NextSeed will require it. (Note that if you have existing debt with liens attached, a second lien will be accepted.)"
+          subHeader="This is a NextSeed requirement for Debt products only. (Note that if you have existing debt with liens attached, a second lien will be accepted.)"
         >
           <FormRadioGroup
             disabled={formReadOnlyMode}
@@ -138,7 +125,7 @@ export default class BusinessDocumentation extends Component {
           hideFields={hideFields}
           noDivider={hideFields || formReadOnlyMode}
           header="Are you willing to provide a personal guarantee?*"
-          subHeader="(This is not a requirement, but a personal guarantee can positively impact the terms provided.)"
+          subHeader="This is applicable for Debt products only."
         >
           <FormRadioGroup
             disabled={formReadOnlyMode}
@@ -149,10 +136,10 @@ export default class BusinessDocumentation extends Component {
           />
           {getPersonalGuaranteeCondition
             && (
-<div>
+            <div>
               {!hideFields
               && (
-<p>
+              <p>
                 Please <a href="https://nextseed.box.com/shared/static/cnru75v5lv5akiz5p7fap0d7nqljwuy9.pdf" className="link"><b>download</b></a>, fill out and upload the
                 Personal Guarantee Form along with any supporting documentation
               </p>

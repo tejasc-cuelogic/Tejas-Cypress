@@ -114,13 +114,9 @@ class Success extends Component {
               <b>You have been prequalified for a NextSeed campaign.</b>
             </p>
             <p>
-              {!userExists || !this.props.isPublic
-                ? `Please begin filling out the rest of the application and
-                submitting the necessary paperwork. Our step-by-step guide
-                will take you through the steps and keep the process organized.`
-                : `Please log in to finish filling out the rest of the application
-                and submitting the necessary paperwork. Our step-by-step guide
-                will walk you through the steps and keep the process organized.`
+              {!userExists
+                ? 'Create an account to save your information. Then, our online application will take you step-by-step through the requested fields and keep your information secure and organized.'
+                : 'Our online application will take you step-by-step through the requested fields and keep your information secure and organized.'
               }
             </p>
             {this.props.isPublic && userExists && userRoles.includes('issuer')
