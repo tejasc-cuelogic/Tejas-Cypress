@@ -1432,7 +1432,7 @@ export class OfferingCreationStore {
       query: getOfferingBac,
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac) {
+        if (res && res.getOfferingBac && !this.leaderShipOfferingBac.loading) {
           this.setBacFormData('LEADER_FRM', res || {}, false);
           const leadersCount = this.LEADERSHIP_FRM.fields.leadership.length;
           if (leadersCount
@@ -1563,6 +1563,7 @@ export class OfferingCreationStore {
         this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
         offeringsStore.getOne(getOfferingById.id);
         if (bacType === 'LEADERSHIP') {
+          this.initLoad.splice(this.initLoad.indexOf('LEADER_FRM'), 1);
           this.getLeadershipOfferingBac(this.currentOfferingId, 'LEADERSHIP');
         }
         Helper.toast('Offering has been saved successfully.', 'success');
