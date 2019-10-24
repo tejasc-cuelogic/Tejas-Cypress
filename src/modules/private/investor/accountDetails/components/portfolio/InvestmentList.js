@@ -42,7 +42,7 @@ const InvestmentCard = ({ data }) => {
           </Table.Row>
         </Table.Body>
       </Table>
-      <Button className="mt-30 mb-14" primary fluid content="Open Offering Details" />
+      <Button className="mt-30 mb-30" primary fluid content="Open Offering Details" />
     </Accordion.Content>
   </Accordion>
   );
