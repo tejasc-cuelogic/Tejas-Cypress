@@ -434,7 +434,7 @@ export class BusinessAppStore {
           this.addMoreForms(null, 'owners');
         }
       });
-      if (data.sources &&  data.sources.length) {
+      if (data.sources && data.sources.length) {
         data.sources.forEach((ele, key) => {
           ['name', 'amount'].forEach((field) => {
             this.BUSINESS_DETAILS_FRM.fields.sources[key][field].value = ele[field];
