@@ -7,7 +7,7 @@ export const SubmitButton = props => (
     loading={props.loading}
     onClick={props.click}
     className="primary"
-    disabled={!props.canSubmitApp || props.readOnlyForm}
+    disabled={!props.canSubmitApp || props.readOnlyForm || props.loading}
     {...props}
   >
     {props.buttonText || 'Submit'}

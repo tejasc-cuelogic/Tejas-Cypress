@@ -394,11 +394,14 @@ export const KEY_TERMS = {
     placeHolder: 'Enter here',
   },
   equityUnitType: {
-    value: null,
+    value: 'share',
+    values: [
+      { key: 'share', value: 'share', text: 'Shares' },
+      { key: 'unit', value: 'unit', text: 'Units' },
+    ],
     label: 'Equity unit type',
     error: undefined,
     rule: 'optional',
-    placeHolder: 'Enter here',
   },
   premoneyValuation: {
     value: null,
@@ -1161,7 +1164,7 @@ export const LEADERSHIP = {
       label: 'Start Date of Service',
       error: undefined,
       rule: 'date',
-      placeHolder: 'MM-DD-YYYY',
+      placeHolder: 'MM/DD/YYYY',
       customErrors: {
         date: 'Start Date of Service is not a valid date format.',
       },
@@ -1205,31 +1208,31 @@ export const LEADERSHIP = {
     },
     dlLicenseNumber: {
       value: '',
-      label: 'DL License Number',
+      label: 'Driver License Number',
       error: undefined,
-      rule: 'optional',
-      placeHolder: 'e.g. 123456789',
+      rule: 'numeric',
+      placeHolder: 'Enter here',
     },
     dlState: {
       value: '',
       label: 'DL State',
       error: undefined,
       rule: 'optional',
-      placeHolder: 'e.g. NY',
+      placeHolder: 'Texas',
     },
     dlIssuedDate: {
       value: '',
       label: 'DL Issued Date',
       error: undefined,
       rule: 'date',
-      placeHolder: 'e.g. 12-12-2019',
+      placeHolder: 'MM/DD/YYYY',
     },
     dlExpirationDate: {
       value: '',
       label: 'DL Expiration Date',
       error: undefined,
       rule: 'date',
-      placeHolder: 'e.g. 12-12-2019',
+      placeHolder: 'MM/DD/YYYY',
     },
     bio: {
       value: '',

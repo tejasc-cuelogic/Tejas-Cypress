@@ -32,11 +32,13 @@ export default class Actions extends Component {
 
   handleVerifyUserIdentity = async (userId, accountId, action, msg) => {
     const { res } = await this.props.identityStore.verifyCip(true);
-    const { cipStepUrlMapping } = this.props.identityStore;
-    const { step } = res.data.verifyCip;
-    if (step !== 'OFFLINE' && !cipStepUrlMapping.cip.steps.includes(step)) {
+    const { requestId, message } = res.data.verifyCip;
+    if (requestId && !message) {
       this.props.crowdPayCtaHandler(userId, accountId, action, msg);
     } else {
+      if (message) {
+        Helper.toast(message, 'error');
+      }
       this.props.crowdpayStore.removeLoadingCrowdPayId(accountId, this.props.account.accountStatus);
     }
   }
@@ -44,9 +46,9 @@ export default class Actions extends Component {
   checkCipBeforeSubmitInvestor = (userObj, attrObj) => {
     const { userId, accountId, action, msg } = attrObj;
 
-    if (this.isCipExpired(userObj)) {
-      Helper.toast('The Account is Processing', 'error');
-      this.props.crowdpayStore.removeLoadingCrowdPayId(accountId, this.props.account.accountStatus);
+    if (this.isCipExpired(userObj)
+    || userObj.legalDetails.status === 'OFFLINE') {
+      this.handleVerifyUserIdentity(userId, accountId, action, msg);
     } else {
       this.props.crowdPayCtaHandler(userId, accountId, action, msg);
     }
@@ -113,7 +115,7 @@ export default class Actions extends Component {
                     && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
                   }
                   {isAccProcess
-                    && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'CREATEACCOUNT', `${capitalize(type)} account is Created successfully.`)} as={Link} to={`${urlPara}/CREATEACCOUNT`} className={`inverted ${this.isCipExpired(account) ? 'disabled' : ''}`} color="blue">Create</Button>
+                    && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'CREATEACCOUNT', `${capitalize(type)} account is Created successfully.`)} as={Link} to={`${urlPara}/CREATEACCOUNT`} className="inverted" color="blue">Create</Button>
                   }
                   {type !== 'review' && isGsProcess
                     && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>

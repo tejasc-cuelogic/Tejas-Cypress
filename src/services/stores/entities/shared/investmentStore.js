@@ -3,7 +3,7 @@ import { capitalize, orderBy, mapValues, get, includes } from 'lodash';
 import { Calculator } from 'amortizejs';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
-import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
+import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO, PREFERRED_EQUITY_INVESTMENT_INFO } from '../../../constants/investment';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
@@ -26,6 +26,8 @@ export class InvestmentStore {
   @observable AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_DETAILS_INFO);
 
   @observable INVESTMENT_LIMITS_FORM = Validator.prepareFormObject(INVESTMENT_LIMITS);
+
+  @observable PREFERRED_EQUITY_INVESTMONEY_FORM = Validator.prepareFormObject(PREFERRED_EQUITY_INVESTMENT_INFO);
 
   @observable cashAvailable = 0;
 
@@ -56,6 +58,10 @@ export class InvestmentStore {
   @observable investmentFlowErrorMessage = null;
 
   @observable isGetTransferRequestCall = false;
+
+  @observable equityInvestmentAmount = '$ 0';
+
+  @observable investmentFlowEquityErrorMessage = null;
 
   @action
   setShowTransferRequestErr = (status) => {
@@ -155,12 +161,14 @@ export class InvestmentStore {
   }
 
   @action
-  investMoneyChange = (values, field) => {
+  investMoneyChange = (values, field, isPreferredEquiry = false) => {
     this.INVESTMONEY_FORM = Validator.onChange(this.INVESTMONEY_FORM, {
       name: field,
       value: values.floatValue,
     });
-    this.calculateEstimatedReturn();
+    if (!isPreferredEquiry) {
+      this.calculateEstimatedReturn();
+    }
   };
 
   @action
@@ -336,6 +344,8 @@ export class InvestmentStore {
   validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {
     uiStore.setProgress();
     if (this.investmentAmount) {
+      const { campaign } = campaignStore;
+      const offeringSecurityType = get(campaign, 'keyTerms.securities') || '0';
       if (this.checkLockinPeriod()) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
         this.setFieldValue('disableNextbtn', false);
@@ -343,7 +353,7 @@ export class InvestmentStore {
         this.INVESTMONEY_FORM.meta.isValid = false;
         uiStore.setProgress(false);
         resolve();
-      } else if (!this.isValidMultipleAmount(this.investmentAmount)) {
+      } else if (!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) && !this.isValidMultipleAmount(this.investmentAmount)) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
         this.setFieldValue('disableNextbtn', false);
         this.setFieldValue('investmentFlowErrorMessage', 'Investments must be in increments of $100');
@@ -380,6 +390,12 @@ export class InvestmentStore {
               const errorMessage = !status ? message : null;
               this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             }
+
+            if (includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)) {
+              const errorMessage = !status ? message : null;
+              this.setFieldValue('investmentFlowEquityErrorMessage', errorMessage);
+            }
+
             if (!resp.data.investNowGeneratePurchaseAgreement) {
               this.setShowTransferRequestErr(true);
             }
@@ -632,10 +648,14 @@ export class InvestmentStore {
 
   @action
   resetData = () => {
+    this.overrideMultipleValidationForInvestment(true);
     Validator.resetFormData(this.INVESTMONEY_FORM);
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
     Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
+    Validator.resetFormData(this.PREFERRED_EQUITY_INVESTMONEY_FORM, ['shares']);
     this.setByDefaultRender(true);
+    this.setFieldValue('equityInvestmentAmount', '$ 0');
+    this.setFieldValue('investmentFlowEquityErrorMessage', null);
     investmentLimitStore.setInvestNowErrorStatus(false);
     // accreditationStore.resetAccreditationObject();
     this.setFieldValue('isGetTransferRequestCall', false);
@@ -686,6 +706,58 @@ export class InvestmentStore {
   isValidMultipleAmount = (amount) => {
     const formatedAmount = parseFloat(amount) || 0;
     return formatedAmount >= 100 && formatedAmount % 100 === 0;
+  }
+
+  @action
+  investMoneyChangeForEquity = (values, field) => {
+    this.PREFERRED_EQUITY_INVESTMONEY_FORM = Validator.onChange(this.PREFERRED_EQUITY_INVESTMONEY_FORM, {
+      name: field,
+      value: values.floatValue,
+    });
+    this.calculatedInvestmentAmountForPreferredEquity();
+  }
+
+  @action
+  calculatedInvestmentAmountForPreferredEquity = () => {
+    const { campaign } = campaignStore;
+    this.setFieldValue('investmentFlowEquityErrorMessage', null);
+    const pricePerShare = money.floatToAmount(this.PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares.value || 0);
+    const unitPrice = get(campaign, 'closureSummary.keyTerms.unitPrice') || '0';
+    const sharePrice = money.floatToAmount(unitPrice || 0);
+    const resultAmount = money.mul(sharePrice, pricePerShare);
+    const investedAmount = money.isZero(resultAmount) ? '0' : resultAmount;
+    this.investMoneyChange({ floatValue: investedAmount }, 'investmentAmount', true);
+    const formatedInvestedAmount = Helper.CurrencyFormat(investedAmount);
+    this.setFieldValue('equityInvestmentAmount', formatedInvestedAmount);
+    if (this.investmentAmount > 0 && !money.isZero(this.investmentAmount)) {
+      this.setFieldValue('disableNextbtn', true);
+    } else {
+      this.setFieldValue('disableNextbtn', false);
+    }
+  }
+
+  @action
+  overrideMultipleValidationForInvestment = (isReset = false) => {
+    if (!isReset) {
+      this.INVESTMONEY_FORM.fields.investmentAmount.rule = 'required';
+    } else {
+      this.INVESTMONEY_FORM.fields.investmentAmount.rule = 'required|hundreds';
+    }
+  }
+
+  @action
+  equityCalculateShareAmount = () => {
+    const { campaign } = campaignStore;
+    const prefferedEquityLabel = get(campaign, 'keyTerms.equityUnitType');
+    const offeringMinInvestmentAmount = Helper.CurrencyFormat((get(campaign, 'keyTerms.minInvestAmt') || '0'), 0);
+    const unitPrice = get(campaign, 'closureSummary.keyTerms.unitPrice') || '0';
+    const offeringMinInvestment = get(campaign, 'keyTerms.minInvestAmt') || '0';
+    const formatedUnitPrice = money.floatToAmount(unitPrice || 0);
+    const formatedMinInvestment = money.floatToAmount(offeringMinInvestment || 0);
+    const result = Math.ceil(money.div(formatedMinInvestment, formatedUnitPrice));
+    const dynamicLabel = result <= 1 ? `${prefferedEquityLabel}` : `${prefferedEquityLabel}s`;
+    const returnStatement = `*Minimum investment amount: ${result} ${dynamicLabel} = ${offeringMinInvestmentAmount}`;
+    return returnStatement;
   }
 }
 
