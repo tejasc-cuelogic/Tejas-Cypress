@@ -698,14 +698,23 @@ footer .ui.text.menu{
         }
     }
 }
-.transaction-details .ui.inverted.menu .item{
-    padding:@16px @25px;
-    &:before{
-        background-color:@neutral-middark;
+.transaction-details{
+    .ui.card .mobile-dropdown-menu.private-secondary-menu{
+        overflow: visible;
     }
-    &:hover, &:focus, &.active{
-        background-color:@white;
-        color:@link-color !important;
+    
+    .ui.inverted.menu .item{
+        padding:@16px @25px;
+        @media only screen and (max-width : @largestTabletScreen){
+            padding: @16px @20px;
+        }
+        &:before{
+            background-color:@neutral-middark;
+        }
+        &:hover, &:focus, &.active{
+            background-color:@white;
+            color:@link-color !important;
+        }
     }
 }
 
