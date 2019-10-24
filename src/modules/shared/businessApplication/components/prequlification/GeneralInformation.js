@@ -18,7 +18,7 @@ const GeneralInformation = props => (
                 type="text"
                 name={field}
                 asterisk="true"
-                label={field === 'businessName' ? props.currentApplicationType === 'business' ? 'Business Name' : 'Entity Name' : 'Website'}
+                label={field === 'businessName' ? 'Entity Name' : 'Website'}
                 fielddata={props.fields[field]}
                 changed={props.businessAppEleChange}
               />
@@ -37,17 +37,17 @@ const GeneralInformation = props => (
       <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
         <div className="field-wrap">
           <Header as="h6">
-            {props.currentApplicationType === 'business' ? 'Business Address' : 'Entity Address '}
+            Entity Address
             {props.currentApplicationType === 'commercial-real-estate'
             && (
-<Popup
-  trigger={<Icon className="ns-help-circle" />}
-  content="Enter address of investment location,
-              not of owner or entity."
-  position="top center"
-  className="left-align"
-  wide
-/>
+            <Popup
+              trigger={<Icon className="ns-help-circle" />}
+              content="Enter address of investment location,
+                          not of owner or entity."
+              position="top center"
+              className="left-align"
+              wide
+            />
             )
           }
           </Header>

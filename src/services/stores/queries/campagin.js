@@ -36,6 +36,7 @@ query getOfferingList($filters: OfferingFilterInputType, $userId: String){
         keyTerms {
           multiple
           interestRate
+          unitPrice
         }
         hardCloseDate
         repayment {
@@ -311,6 +312,7 @@ export const campaignDetailsQuery = gql`
       }
       keyTerms {
         multiple
+        unitPrice
       }
     }
     earlyBirdsCount
@@ -426,6 +428,7 @@ query getOfferingById($id: ID) {
           }
         }
         multiple
+        unitPrice
         revSharePercentage
         interestRate
         businessOpenDate
@@ -438,6 +441,7 @@ query getOfferingById($id: ID) {
       legalBusinessName
       shorthandBusinessName
       maturity
+      equityUnitType
       frequencyOfPayments
       securities
       securityInterest

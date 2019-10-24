@@ -46,7 +46,7 @@ export default class OffersPanel extends Component {
   render() {
     const {
       OFFERS_FRM, isReadonly, match, selectOffer, selectedOfferIndex, refModule,
-      toggleConfirmModal,
+      toggleConfirmModal, isIssuer,
     } = this.props;
     const settings = {
       dots: false,
@@ -87,6 +87,7 @@ export default class OffersPanel extends Component {
                           containerclassname={isReadonly ? 'display-only' : ''}
                           className={isReadonly ? 'display-only secondary' : 'secondary'}
                           readOnly={isReadonly}
+                          displayMode={isIssuer}
                           name="structure"
                           placeholder="Choose"
                           fluid
@@ -227,6 +228,7 @@ export default class OffersPanel extends Component {
                         <FormDropDown
                           fielddata={offer.personalGuarantee}
                           ishidelabel
+                          displayMode={isIssuer}
                           containerclassname={isReadonly ? 'display-only' : ''}
                           className={isReadonly ? 'display-only secondary' : 'secondary'}
                           readOnly={isReadonly}

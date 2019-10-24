@@ -23,7 +23,7 @@ export default class Leadership extends Component {
     const navItems = [];
     if (getOfferingById.leadership) {
       getOfferingById.leadership.map((leader, index) => {
-        navItems.push({ title: get(leader, 'firstName') || `Leader ${index + 1}`, to: `leader/${index + 1}` });
+        navItems.push({ title: get(leader, 'firstName') || `Leader ${index + 1}`, to: `leader/${index + 1}`, bacId: leader.leaderBacId });
         return navItems;
       });
     }
@@ -43,7 +43,7 @@ export default class Leadership extends Component {
           />
           {
             navItems.map((item, index) => (
-              <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} render={props => <Leader refLink={match.url} {...props} index={index || 0} />} />
+              <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} render={props => <Leader refLink={match.url} {...props} leadership bacId={item.bacId} index={index || 0} />} />
             ))
           }
         </Switch>

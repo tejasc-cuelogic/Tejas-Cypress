@@ -163,6 +163,10 @@ h6{
 	margin-left: 0 !important;
 	margin-right: 0 !important;
 }
+.plr-0{
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
 .pull-left{
 	float:left !important;
 }
@@ -322,7 +326,7 @@ a{
 	opacity:0 !important;
 }
 .bg-offwhite {
-	background-color: @neutral-offwhite;
+	background-color: @neutral-offwhite !important;
 	// padding:@14px @20px;       commented to resolve on public homepage
 }
 .bg-midwhite{
