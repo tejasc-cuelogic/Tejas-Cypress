@@ -132,9 +132,9 @@ export default class Agreement extends React.Component {
     const { campaign } = this.props.campaignStore;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     const offeringRegulationType = get(campaign, 'keyTerms.regulation');
-    const { currentInvestmentStatus } = this.props.accreditationStore;
+    const { currentInvestmentStatus, userAccredetiationState } = this.props.accreditationStore;
     const investmentRegulation = get(getInvestorAccountById, 'regulation');
-    const regulationCheck = this.props.changeInvestment && investmentRegulation
+    const regulationCheck = this.props.changeInvestment && investmentRegulation && userAccredetiationState !== 'EXPIRED'
       ? investmentRegulation : currentInvestmentStatus;
     // regulationCheck === ('BD_506C' || 'BD_506B')
     // const regualtionTypeStatement =
