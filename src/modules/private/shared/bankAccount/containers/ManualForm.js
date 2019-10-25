@@ -94,6 +94,7 @@ export default class ManualForm extends Component {
               changed={linkBankManuallyChange}
               value={isAccNumberEncrypted ? '' : formLinkBankManually.fields.accountNumber.value}
               accountNumber
+              className="fs-block"
               showerror
             />
             <MaskedInput
@@ -102,6 +103,7 @@ export default class ManualForm extends Component {
               changed={linkBankManuallyChange}
               value={isEncrypted(formLinkBankManually.fields.routingNumber.value) ? '' : formLinkBankManually.fields.routingNumber.value}
               routingNumber
+              className="fs-block"
               showerror
             />
             <Form.Field>
