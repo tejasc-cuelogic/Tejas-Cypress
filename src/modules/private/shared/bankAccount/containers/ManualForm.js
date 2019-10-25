@@ -29,7 +29,7 @@ export default class ManualForm extends Component {
     if (this.props.action === 'change') {
       this.props.uiStore.setProgress();
       this.props.bankAccountStore.validateManualAccount(investmentAccType).then(() => {
-        this.props.transactionStore.requestOtpForManageTransactions().then(() => {
+        this.props.transactionStore.requestOtpForManageTransactions(true).then(() => {
           const confirmUrl = `${this.props.refLink}/confirm`;
           this.props.history.push(confirmUrl);
         });
