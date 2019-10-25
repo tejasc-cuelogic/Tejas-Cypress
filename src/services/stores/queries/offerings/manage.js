@@ -8,6 +8,9 @@ const common = {
     shorthandBusinessName
     securities
     regulation
+    offeringSize
+    preferredReturn
+    targetInvestmentPeriod
   }
   leadDetails {
     email {
@@ -219,6 +222,9 @@ export const getOfferingDetails = gql`
         discount
         valuationCap
         unitPrice
+        offeringSize
+        preferredReturn
+        targetInvestmentPeriod
         totalRoundSize
         equityClass
         equityUnitType
