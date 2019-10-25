@@ -17,6 +17,10 @@ const keyTermList = [
   { label: 'Security', forFunded: true, key: 'keyTerms.securities', type: CAMPAIGN_KEYTERMS_SECURITIES, for: ['ALL'] },
   { label: 'Offering', key: 'keyTerms.regulation', type: CAMPAIGN_KEYTERMS_REGULATION_PARALLEL, for: ['ALL'] },
   { label: 'Investment Minimum', key: 'keyTerms.minInvestAmt', type: '$', for: ['ALL'] },
+  { label: 'Offering Size', key: 'keyTerms.offeringSize', type: '$', for: ['REAL_ESTATE'] },
+  { label: 'Preferred Return', key: 'keyTerms.preferredReturn', type: '%', for: ['REAL_ESTATE'] },
+  { label: 'Targeted IRR', value: 'View Disclosure', type: 'string', for: ['REAL_ESTATE'] },
+  { label: 'Targeted Investment Period', key: 'keyTerms.targetInvestmentPeriod', type: 'months', for: ['REAL_ESTATE'] },
   { label: 'Multiple', forFunded: true, key: 'closureSummary.keyTerms.multiple', type: 'X', for: ['REVENUE_SHARING_NOTE'] },
   { label: 'Interest Rate', forFunded: true, key: 'closureSummary.keyTerms.interestRate', type: '%', for: ['TERM_NOTE'] },
   { label: 'Maturity', key: 'keyTerms.maturity', type: 'months', for: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
@@ -143,11 +147,12 @@ export default class CampaignList extends Component {
                                         <>
                                           {typeof row.type === 'object' ? (
                                             row.type[get(offering, row.key)] || '-'
-                                          ) : row.type === '$' ? Helper.CurrencyFormat(get(offering, row.key), 0)
-                                            : row.type === '%' ? `${get(offering, row.key)}%`
-                                              : row.type === 'X' ? `${get(offering, row.key)}x`
-                                                : row.type === 'months' ? `${get(offering, row.key)} months`
-                                                  : get(offering, row.key) === 0 ? 0 : (get(offering, row.key) || '')
+                                          ) : row.type === '$' ? row.key ? Helper.CurrencyFormat(get(offering, row.key), 0) : row.value
+                                            : row.type === '%' ? row.key ? `${get(offering, row.key)}%` : row.value
+                                              : row.type === 'X' ? row.key ? `${get(offering, row.key)}x` : row.value
+                                                : row.type === 'months' ? row.key ? `${get(offering, row.key)} months` : row.value
+                                                  : row.type === 'string' ? row.key ? `${get(offering, row.key)}` : row.value
+                                                    : row.key ? get(offering, row.key) === 0 ? 0 : (get(offering, row.key) || '') : row.value
                                           }
                                         </>
                                           )
