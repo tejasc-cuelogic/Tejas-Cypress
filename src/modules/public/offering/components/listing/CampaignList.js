@@ -136,7 +136,7 @@ export default class CampaignList extends Component {
                               <Table.Body>
                                   {(isFunded ? keyTermList.filter(i => i.forFunded) : keyTermList).map(row => (
                                     <>
-                                    {((isFunded || row.for.includes('ALL') || row.for.includes(offering.keyTerms.securities)) && (get(offering, row.key) === 0 || get(offering, row.key)))
+                                    {((isFunded || row.for.includes('ALL') || row.for.includes(offering.keyTerms.securities)) && ((get(offering, row.key) === 0 || get(offering, row.key)) || row.value))
                                     && (
                                     <Table.Row verticalAlign="top">
                                       <Table.Cell collapsing>{(row.label === 'Share Price') ? `${capitalize(get(offering, 'keyTerms.equityUnitType'))} Price` : row.label}</Table.Cell>
