@@ -2,16 +2,31 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { capitalize, get } from 'lodash';
-import { Container, Card, List, Grid, Message, Label, Icon } from 'semantic-ui-react';
+import { get, capitalize } from 'lodash';
+import { Container, Card, Grid, Label, Icon, Button, Divider, Table } from 'semantic-ui-react';
 // import { IonIcon } from '@ionic/react';
 // import { heart } from 'ionicons/icons';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_REGULATION_ABREVIATION, CAMPAIGN_OFFERED_BY } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_REGULATION_PARALLEL } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 import NSImage from '../../../../shared/NSImage';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+import { DataFormatter } from '../../../../../helper';
 
+const keyTermList = [
+  { label: 'Security', forFunded: true, key: 'keyTerms.securities', type: CAMPAIGN_KEYTERMS_SECURITIES, for: ['ALL'] },
+  { label: 'Offering', key: 'keyTerms.regulation', type: CAMPAIGN_KEYTERMS_REGULATION_PARALLEL, for: ['ALL'] },
+  { label: 'Investment Minimum', key: 'keyTerms.minInvestAmt', type: '$', for: ['ALL'] },
+  { label: 'Multiple', forFunded: true, key: 'closureSummary.keyTerms.multiple', type: 'X', for: ['REVENUE_SHARING_NOTE'] },
+  { label: 'Interest Rate', forFunded: true, key: 'closureSummary.keyTerms.interestRate', type: '%', for: ['TERM_NOTE'] },
+  { label: 'Maturity', key: 'keyTerms.maturity', type: 'months', for: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
+  { label: 'Pre-Money Valuation', key: 'keyTerms.premoneyValuation', type: '$', for: ['PREFERRED_EQUITY_506C'] },
+  { label: 'Share Price', key: 'keyTerms.unitPrice', type: '$', for: ['PREFERRED_EQUITY_506C'] },
+  { label: 'Valuation Cap', key: 'keyTerms.valuationCap', type: '$', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
+  { label: 'Discount', key: 'keyTerms.discount', type: '%', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
+  // { label: 'Total Payments to investors', forFunded: true, key: 'closureSummary.repayment.count', type: '', for: [''] },
+  // { label: 'Total Paid to investors', forFunded: true, key: 'closureSummary.repayment.currentRepaidAmount', type: '$', for: [''] },
+];
 
 @inject('campaignStore', 'accreditationStore')
 @observer
@@ -52,7 +67,7 @@ export default class CampaignList extends Component {
   }
 
   render() {
-    const { campaigns, loading } = this.props;
+    const { campaigns, loading, isFunded } = this.props;
     return (
       <>
         {/* {this.props.filters &&
@@ -61,10 +76,11 @@ export default class CampaignList extends Component {
         <section className="campaign-list-wrapper">
           <Container>
             {this.props.heading}
+            {this.props.subheading}
             {loading ? <InlineLoader />
               : campaigns && campaigns.length
                 ? (
-<Grid doubling columns={3} stackable>
+                  <Grid doubling columns={3} stackable>
                   {campaigns.map(offering => (
                     <Grid.Column key={offering.id} data-cy={offering.id}>
                       <Card className="campaign" fluid as={Link} to={`/offerings/${offering.offeringSlug}`}>
@@ -87,14 +103,8 @@ export default class CampaignList extends Component {
                           <Icon name="heart" />
                         )
                         }
-                        <>
+                        <div className="campaign-card-details">
                           <Card.Content>
-                            <div className="tags mb-10">
-                              {offering && offering.keyTerms && offering.keyTerms.industry ? capitalize(offering.keyTerms.industry.split('_').join(' ')) : '-'}
-                              <span className="pull-right">
-                                {offering && offering.keyTerms && offering.keyTerms.regulation ? CAMPAIGN_REGULATION_ABREVIATION[offering.keyTerms.regulation] : '-'}
-                              </span>
-                            </div>
                             <Card.Header>{offering && offering.keyTerms
                               && offering.keyTerms.shorthandBusinessName ? offering.keyTerms.shorthandBusinessName : ''
                             }
@@ -116,32 +126,68 @@ export default class CampaignList extends Component {
                                   ? offering.offering.overview.tombstoneDescription : '')}
                               />
                             </Card.Description>
+                            <Divider />
+                            <div className="campaign-card-table-wrapper">
+                              <Table basic="very" compact="very" unstackable className="no-border campaign-card">
+                              <Table.Body>
+                                  {(isFunded ? keyTermList.filter(i => i.forFunded) : keyTermList).map(row => (
+                                    <>
+                                    {((isFunded || row.for.includes('ALL') || row.for.includes(offering.keyTerms.securities)) && (get(offering, row.key) === 0 || get(offering, row.key)))
+                                    && (
+                                    <Table.Row verticalAlign="top">
+                                      <Table.Cell collapsing>{(row.label === 'Share Price') ? `${capitalize(get(offering, 'keyTerms.equityUnitType'))} Price` : row.label}</Table.Cell>
+                                      <Table.Cell className={`${!isFunded && !row.for.includes('ALL') ? 'highlight-text' : ''} right-align`}>
+                                        <b>
+                                        {(get(offering, row.key) !== undefined && get(offering, row.key) !== null)
+                                          ? (
+                                        <>
+                                          {typeof row.type === 'object' ? (
+                                            row.type[get(offering, row.key)] || '-'
+                                          ) : row.type === '$' ? Helper.CurrencyFormat(get(offering, row.key), 0)
+                                            : row.type === '%' ? `${get(offering, row.key)}%`
+                                              : row.type === 'X' ? `${get(offering, row.key)}x`
+                                                : row.type === 'months' ? `${get(offering, row.key)} months`
+                                                  : get(offering, row.key) === 0 ? 0 : (get(offering, row.key) || '')
+                                          }
+                                        </>
+                                          )
+                                          : '-'
+                                        }
+                                        </b>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    )
+                                    }
+                                    </>
+                                  ))
+                                  }
+                                </Table.Body>
+                              </Table>
+                            </div>
+                            <Button className="mt-30" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
                           </Card.Content>
-                          <Card.Content extra>
-                            <p><b>{offering && offering.keyTerms && offering.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities] : '-'}</b></p>
-                            <List divided horizontal>
-                              <List.Item>
-                                Raised {Helper.CurrencyFormat((get(offering, 'closureSummary.totalInvestmentAmount') || 0), 0)}
-                              </List.Item>
-                              <List.Item>
-                                {get(offering, 'closureSummary.totalInvestorCount') || 0} investors
-                              </List.Item>
-                            </List>
-                          </Card.Content>
-                          <Message attached="bottom" color="teal">
+                        </div>
+                        <Card.Content extra>
+                          <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} from {get(offering, 'closureSummary.totalInvestorCount') || 0} investors</b></p>
+                          {isFunded
+                          && (
+                            <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>
+                          )
+                          }
+                          <p className="more-info">
                             Offered by {offering && offering.regulation
                             ? CAMPAIGN_OFFERED_BY[offering.regulation]
                             : CAMPAIGN_OFFERED_BY[offering.keyTerms.regulation]}
-                          </Message>
-                        </>
+                          </p>
+                        </Card.Content>
                         {offering.stage === 'LOCK' && (
                           <Card.Content className="card-hidden">
                             <div className="lock-image">
                               <NSImage mini path="icon_lock.png" />
                             </div>
                             <div className="details">
-                              <div className="tags mb-10">
-                                hidden
+                              <div className="tags mb-10 text-uppercase intro-text">
+                                <b>hidden</b>
                               </div>
                               <Card.Header>For NextSeed members only.</Card.Header>
                               <Card.Meta>

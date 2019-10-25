@@ -8,8 +8,9 @@ import Helper from '../../../../../helper/utility';
 import { InlineLoader } from '../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
+import { DEV_FEATURE_ONLY } from '../../../../../constants/common';
 
-@inject('paymentStore')
+@inject('paymentStore', 'nsUiStore')
 @withRouter
 @observer
 export default class AllRepayments extends Component {
@@ -27,14 +28,8 @@ export default class AllRepayments extends Component {
     setSortingOrder(clickedColumn, clickedColumn === sortOrder.column && sortOrder.direction === 'asc' ? 'desc' : 'asc');
   }
 
-  setSearchParam = (e, { name, value }) => this.props.paymentStore.setInitiateSrch(name, value);
-
-  toggleSearch = () => this.props.paymentStore.toggleSearch();
-
   executeSearch = (e) => {
-    if (e.charCode === 13) {
-      this.props.paymentStore.setInitiateSrch('keyword', e.target.value);
-    }
+    this.props.paymentStore.setInitiateSrch(e.target.value);
   }
 
   handleAction = (offeringId, offeringStage) => {
@@ -47,13 +42,12 @@ export default class AllRepayments extends Component {
     this.props.history.push(`${match.url}/${id}`);
   }
 
-  render() {
-    const { paymentStore } = this.props;
-    const {
-      repayments, loading, requestState, filters, sortOrder,
-    } = paymentStore;
+  validDate = (data, field) => (get(data, field) && moment(get(data, field), 'MM/DD/YYYY', true).isValid() ? moment(get(data, field)).format('M/D/YY') : '');
 
-    if (loading) {
+  render() {
+    const { repayments, sortOrder } = this.props.paymentStore;
+
+    if (this.props.nsUiStore.loadingArray.includes('paymentsIssuerList')) {
       return <InlineLoader />;
     }
     return (
@@ -62,19 +56,18 @@ export default class AllRepayments extends Component {
           <Grid stackable>
             <Grid.Row>
               <ByKeyword
-                executeSearch={this.executeSearch}
+                change={this.executeSearch}
                 w={[11]}
                 placeholder="Search by keyword or phrase"
-                toggleSearch={this.toggleSearch}
-                requestState={requestState}
-                filters={filters}
                 more="no"
-                addon={(
+                addon={(DEV_FEATURE_ONLY
+                  && (
                   <Grid.Column width={5} textAlign="right">
                     <Button color="green" as={Link} floated="right" to="/app/payments">
                       Add New Repayment
                     </Button>
                   </Grid.Column>
+                  )
                 )}
               />
             </Grid.Row>
@@ -86,8 +79,8 @@ export default class AllRepayments extends Component {
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell
-                    sorted={sortOrder.column === 'keyTerms.shorthandBusinessName' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
-                    onClick={this.handleSort('keyTerms.shorthandBusinessName')}
+                    sorted={sortOrder.column === 'offering.keyTerms.shorthandBusinessName' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('offering.keyTerms.shorthandBusinessName')}
                   >Offering</Table.HeaderCell>
                   <Table.HeaderCell
                     sorted={sortOrder.column === 'offering.keyTerms.securities' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
@@ -102,7 +95,7 @@ export default class AllRepayments extends Component {
                     onClick={this.handleSort('offering.closureSummary.keyTerms.maturityDate')}
                   >Maturity</Table.HeaderCell>
                   <Table.HeaderCell
-                    sorted={sortOrder.column === 'offering.launch.expectedOpsDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    sorted={sortOrder.column === 'offering.offering.launch.expectedOpsDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
                     onClick={this.handleSort('offering.offering.launch.expectedOpsDate')}
                   >Expected Ops</Table.HeaderCell>
                   <Table.HeaderCell
@@ -110,12 +103,12 @@ export default class AllRepayments extends Component {
                     onClick={this.handleSort('offering.closureSummary.operationsDate')}
                   >Ops Date</Table.HeaderCell>
                   <Table.HeaderCell
-                    sorted={sortOrder.column === 'offering.closureSummary.keyTerms.anticipatedPaymentStartDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
-                    onClick={this.handleSort('offering.closureSummary.keyTerms.anticipatedPaymentStartDate')}
+                    sorted={sortOrder.column === 'offering.closureSummary.keyTerms.expectedPaymentDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('offering.closureSummary.keyTerms.expectedPaymentDate')}
                   >Expected Payment</Table.HeaderCell>
                   <Table.HeaderCell
-                    sorted={sortOrder.column === 'offering.closureSummary.repayment.startDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
-                    onClick={this.handleSort('offering.closureSummary.repayment.startDate')}
+                    sorted={sortOrder.column === 'offering.closureSummary.repayment.firstPaymentDate' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('offering.closureSummary.repayment.firstPaymentDate')}
                   >First Payment</Table.HeaderCell>
                   <Table.HeaderCell
                     sorted={sortOrder.column === 'sinkingFundBalance' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
@@ -136,12 +129,12 @@ export default class AllRepayments extends Component {
                     <Table.Row key={record.id}>
                       <Table.Cell onClick={() => this.handleAction(record.offering.id, record.offering.stage)}><b>{get(record, 'offering.keyTerms.shorthandBusinessName')}</b></Table.Cell>
                       <Table.Cell>{get(record, 'offering.keyTerms.securities') && CAMPAIGN_KEYTERMS_SECURITIES[get(record, 'offering.keyTerms.securities')]}</Table.Cell>
-                      <Table.Cell>{get(record, 'offering.closureSummary.hardCloseDate') && moment(get(record, 'offering.closureSummary.hardCloseDate'), 'MM/DD/YYYY', true).isValid() && moment(get(record, 'offering.closureSummary.hardCloseDate')).format('M/D/YY')}</Table.Cell>
-                      <Table.Cell>{get(record, 'offering.closureSummary.keyTerms.maturityDate') && moment(get(record, 'offering.closureSummary.keyTerms.maturityDate')).isValid() ? `${moment(get(record, 'offering.closureSummary.keyTerms.maturityDate')).format('M/D/YY')} (${moment(moment(get(record, 'offering.closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months')})` : ''}</Table.Cell>
-                      <Table.Cell>{get(record, 'offering.offering.launch.expectedOpsDate') && moment(get(record, 'offering.offering.launch.expectedOpsDate'), 'MM/DD/YYYY', true).isValid() && moment(get(record, 'offering.offering.launch.expectedOpsDate')).format('M/D/YY')}</Table.Cell>
-                      <Table.Cell>{get(record, 'offering.closureSummary.operationsDate') && moment(get(record, 'offering.closureSummary.operationsDate'), 'MM/DD/YYYY', true).isValid() && moment(get(record, 'offering.closureSummary.operationsDate')).format('M/D/YY')}</Table.Cell>
-                      <Table.Cell>{get(record, 'offering.closureSummary.keyTerms.anticipatedPaymentStartDate') && moment(get(record, 'offering.closureSummary.keyTerms.anticipatedPaymentStartDate'), 'MM/DD/YYYY', true).isValid() && moment(get(record, 'offering.closureSummary.keyTerms.anticipatedPaymentStartDate')).format('M/D/YY')}</Table.Cell>
-                      <Table.Cell>{get(record, 'offering.closureSummary.repayment.startDate') && moment(get(record, 'offering.closureSummary.repayment.startDate'), 'MM/DD/YYYY', true).isValid() && moment(get(record, 'offering.closureSummary.repayment.startDate')).format('M/D/YY')}</Table.Cell>
+                      <Table.Cell>{this.validDate(record, 'offering.closureSummary.hardCloseDate')}</Table.Cell>
+                      <Table.Cell>{this.validDate(record, 'offering.closureSummary.keyTerms.maturityDate') ? `${this.validDate(record, 'offering.closureSummary.keyTerms.maturityDate')} (${moment(moment(get(record, 'offering.closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months')})` : ''}</Table.Cell>
+                      <Table.Cell>{this.validDate(record, 'offering.offering.launch.expectedOpsDate')}</Table.Cell>
+                      <Table.Cell>{this.validDate(record, 'offering.closureSummary.operationsDate')}</Table.Cell>
+                      <Table.Cell>{this.validDate(record, 'offering.closureSummary.keyTerms.expectedPaymentDate')}</Table.Cell>
+                      <Table.Cell>{this.validDate(record, 'offering.closureSummary.repayment.firstPaymentDate')}</Table.Cell>
                       <Table.Cell textAlign="center">{Helper.CurrencyFormat(record.sinkingFundBalance)}</Table.Cell>
                       <Table.Cell textAlign="center">
                         <Button icon className="link-button">

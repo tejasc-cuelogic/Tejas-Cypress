@@ -163,6 +163,10 @@ h6{
 	margin-left: 0 !important;
 	margin-right: 0 !important;
 }
+.plr-0{
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
 .pull-left{
 	float:left !important;
 }
@@ -250,7 +254,7 @@ h6{
 	font-weight: @normal !important;
 }
 .more-info {
-	font-size: 12px;
+	font-size: 12px !important;
 }
 .underline-text {
 	text-decoration: underline !important;
@@ -260,6 +264,9 @@ h6{
 }
 .full-width{
 	width: 100%;
+}
+.show-top{
+	z-index: 99999 !important;
 }
 //	normal link styles
 a:not(.item), a:not(.ui.button){
@@ -319,7 +326,7 @@ a{
 	opacity:0 !important;
 }
 .bg-offwhite {
-	background-color: @neutral-offwhite;
+	background-color: @neutral-offwhite !important;
 	// padding:@14px @20px;       commented to resolve on public homepage
 }
 .bg-midwhite{
@@ -525,6 +532,16 @@ footer{
 	h5.ui.header {
 		color: @neutral-middark;
 		margin-bottom: @35px;
+	}
+	.campaign-subheader{
+		font-size: @28px;
+		line-height: 24px;
+		font-weight: @semiBold;
+		margin-bottom: 100px;
+		@media only screen and (max-width : @largestMobileScreen){
+			font-size: @15px;
+			margin-bottom: @20px;
+		}
 	}
 }
 .offer-filter {

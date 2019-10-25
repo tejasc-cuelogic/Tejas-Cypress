@@ -33,7 +33,7 @@ const FormDropDown = observer((props) => {
         </label>
         )
       }
-      <Dropdown {...props} value={value} className="readonly" disabled={displayMode} />
+      <Dropdown {...props} value={value} className={`${displayMode && 'readonly'}`} disabled={displayMode} />
       {!props.ishidelabel && label !== ''
         && <div className="dropdown-effect">{label}</div>
       }

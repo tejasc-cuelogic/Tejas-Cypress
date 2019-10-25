@@ -100,6 +100,7 @@ query getCrowdPayUsers($limit: Int, $page: Int, $search: String, $accountType: I
               key
               message
             }
+            expiration
           }
           legalDetails {
             verificationStartDate

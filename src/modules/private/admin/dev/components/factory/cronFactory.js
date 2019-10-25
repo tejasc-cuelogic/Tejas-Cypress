@@ -5,21 +5,24 @@ import { withRouter } from 'react-router-dom';
 import moment from 'moment';
 import Filters from './cronFilters';
 import { InlineLoader } from '../../../../../../theme/shared';
+import formHOC from '../../../../../../theme/form/formHOC';
 import { DataFormatter } from '../../../../../../helper';
 
-@inject('factoryStore', 'nsUiStore')
-@withRouter
-@observer
-export default class CronFactory extends Component {
+const metaInfo = {
+  store: 'factoryStore',
+  form: 'CRONFACTORY_FRM',
+};
+
+class CronFactory extends Component {
   constructor(props) {
     super(props);
     this.props.factoryStore.resetForm('CRONFACTORY_FRM');
     this.props.factoryStore.inProgress.cronFactory = false;
-    // this.props.factoryStore.initRequest();
   }
 
   componentWillUnmount() {
     this.props.factoryStore.resetFilters();
+    this.props.factoryStore.setFieldValue('cronLogList', []);
   }
 
   onSubmit = () => {
@@ -80,7 +83,7 @@ export default class CronFactory extends Component {
                 </Table.Header>
                 <Table.Body>
                   {!cronLogs || (cronLogs && cronLogs.length === 0) ? (
-                    <Table.Row><Table.Cell textAlign="center" colSpan="7">No Logs Fond.</Table.Cell></Table.Row>
+                    <Table.Row><Table.Cell textAlign="center" colSpan="7">No Logs Found.</Table.Cell></Table.Row>
                   ) : (
                     cronLogs && cronLogs.map(resp => (
                       <Table.Row verticalAlign="top">
@@ -109,3 +112,5 @@ export default class CronFactory extends Component {
     );
   }
 }
+
+export default inject('nsUiStore')(withRouter(formHOC(observer(CronFactory), metaInfo)));

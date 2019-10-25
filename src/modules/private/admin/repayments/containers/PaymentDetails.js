@@ -60,7 +60,7 @@ export default class PaymentDetails extends Component {
                     name={field}
                     placeHolder={PAYMENT_FRM.fields[field].placeHolder}
                     fielddata={PAYMENT_FRM.fields[field]}
-                    changed={(values, name) => maskChange(values, 'PAYMENT_FRM', name)}
+                    changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'formatted')}
                     dateOfBirth
                   />
                 ))
@@ -76,7 +76,7 @@ export default class PaymentDetails extends Component {
               />
               <div className="center-align">
                 <Button className="very relaxed red" content="Cancel" onClick={this.handleCloseModal} />
-                <Button primary className="very relaxed" loading={inProgress} content="Submit" onClick={() => this.handleUpdatePayment(get(this.props, 'match.params.id'))} />
+                <Button primary className="very relaxed" disabled={!PAYMENT_FRM.meta.isValid} loading={inProgress} content="Save" onClick={() => this.handleUpdatePayment(get(this.props, 'match.params.id'))} />
               </div>
             </Form>
         </Modal.Content>

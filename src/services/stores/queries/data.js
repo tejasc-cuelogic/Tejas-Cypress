@@ -64,22 +64,6 @@ query _encryptOrDecryptValue($userId: String!, $text: String!, $type: EncryptDec
    type: $type
  )
 }`;
-export const auditBoxFolder = gql`
-mutation _auditBox($role:UserRoleEnum!, $userId: String, $jobId: String, $waitingTime: Int, $concurrency: Int,$queueLimit: Int) {
-  auditBox(
-    role: $role,
-    userId: $userId
-    jobId: $jobId
-    waitingTime: $waitingTime
-    concurrency: $concurrency
-    queueLimit: $queueLimit
-  ){
-    activityType
-    subType
-    activityTitle
-    activity
-  }
-}`;
 
 export const getListOfPartialOrCIPProcessingAccount = gql`
 query getListOfPartialOrCIPProcessingAccount {
@@ -110,17 +94,6 @@ mutation syncEsDocument($documentId: String!, $targetIndex: String!, $userId: St
   syncEsDocument(documentId: $documentId, targetIndex: $targetIndex, userId: $userId, accountType: $accountType)
 }`;
 
-export const imageProcessignRequest = gql`
-mutation _imageProcessing($key: String, $waitingTime: Int, $concurrency: Int,$queueLimit: Int, $folderName: String) {
-  imageProcessing(
-    key: $key,
-    waitingTime: $waitingTime
-    concurrency: $concurrency
-    queueLimit: $queueLimit
-    folderName: $folderName
-  )
-}`;
-
 export const getPluginList = gql`
 query _listRequestPlugins {
   listRequestPlugins {
@@ -139,12 +112,18 @@ query _listRequestPlugins {
   }
   listCronPlugins
   {
-    plugins {
-      name
-      pluginInputs {
-        name
+    plugins{   
+      name   
+      plugin   
+      pluginInputs{   
+       label
+       type
+       key
+       value
+       rule
+       defaultValue
       }
-    }
+    }     
   }
   listProcessorPlugins
   {
@@ -165,7 +144,7 @@ query _listRequestPlugins {
 `;
 
 export const requestFactoryPluginTrigger = gql`
-mutation invokeRequest($method: RequestWorkerPluginsEnum!, $payload: String, $invocationType: RequestInvocationEnum) {
+mutation invokeRequest($method: String!, $payload: String, $invocationType: RequestInvocationEnum) {
   invokeRequest(
     method: $method,
     payload: $payload

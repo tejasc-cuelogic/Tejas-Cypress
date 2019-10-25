@@ -4,11 +4,15 @@ export const CAMPAIGN_KEYTERMS_SECURITIES = {
   TERM_NOTE: 'Term Note',
   REVENUE_SHARING_NOTE: 'Revenue Sharing Note',
   PREFERRED_EQUITY_506C: 'Preferred Equity',
+  CONVERTIBLE_NOTES: 'Convertible Notes',
+  SAFE: 'SAFE',
 };
 export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
   TERM_NOTE: 'TERM_NOTE',
   REVENUE_SHARING_NOTE: 'REVENUE_SHARING_NOTE',
   PREFERRED_EQUITY_506C: 'PREFERRED_EQUITY_506C',
+  CONVERTIBLE_NOTES: 'CONVERTIBLE_NOTES',
+  SAFE: 'SAFE',
 };
 export const ROUND_TYPES_ENUM = {
   SEED: 'Seed',
@@ -62,14 +66,23 @@ export const CAMPAIGN_OFFERING_STATUS = {
   IN_REPAYMENT: 'In repayment',
   IN_DEFAULT: 'In default',
 };
-export const CAMPAIGN_KEYTERMS_REGULATION = {
+const KEYTERMS_REGULATION_COMMON = {
   FP_TX: 'Rule 147, TX',
   FP_CF: 'Reg CF - US',
   BD_CF: 'Reg CF Offering',
   BD_506C: 'Reg D Offering',
   BD_506B: 'Reg B Offering',
+};
+export const CAMPAIGN_KEYTERMS_REGULATION = {
+  ...KEYTERMS_REGULATION_COMMON,
   BD_CF_506C: 'Parallel Offering (Reg CF & Reg D)',
 };
+
+export const CAMPAIGN_KEYTERMS_REGULATION_PARALLEL = {
+  ...KEYTERMS_REGULATION_COMMON,
+  BD_CF_506C: <>Parallel Offering<br />(Reg CF &amp; Reg D)</>,
+};
+
 export const CAMPAIGN_REGULATION_DETAILED = {
   REGULATION: {
     FP_TX: 'Texas Intrastate Crowdfunding',

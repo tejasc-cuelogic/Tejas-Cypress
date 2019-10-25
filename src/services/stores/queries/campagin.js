@@ -35,9 +35,25 @@ query getOfferingList($filters: OfferingFilterInputType, $userId: String){
         totalInvestorCount
         keyTerms {
           multiple
+          interestRate
+          unitPrice
+        }
+        hardCloseDate
+        repayment {
+          count
+          currentRepaidAmount
         }
       }
       keyTerms {
+        minInvestAmt
+        unitPrice
+        premoneyValuation
+        maturity
+        interestRate
+        investmentMultiple
+        valuationCap
+        equityUnitType
+        discount
         regulation
         minOfferingAmountCF
         maxOfferingAmountCF
@@ -86,7 +102,7 @@ query offeringWatchList($offeringId: String){
       email {
         address
       }
-    info { 
+    info {
       firstName
       lastName
     }
@@ -130,6 +146,11 @@ export const campaignDetailsQuery = gql`
         isPublic
       }
       unitPrice
+      discount
+      valuationCap
+      totalRoundSize
+      equityClass
+      equityUnitType
       roundType
       premoneyValuation
       additionalKeyterms {
@@ -292,6 +313,7 @@ export const campaignDetailsQuery = gql`
       }
       keyTerms {
         multiple
+        unitPrice
       }
     }
     earlyBirdsCount
@@ -407,6 +429,7 @@ query getOfferingById($id: ID) {
           }
         }
         multiple
+        unitPrice
         revSharePercentage
         interestRate
         businessOpenDate
@@ -419,6 +442,7 @@ query getOfferingById($id: ID) {
       legalBusinessName
       shorthandBusinessName
       maturity
+      equityUnitType
       frequencyOfPayments
       securities
       securityInterest

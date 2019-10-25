@@ -1,14 +1,6 @@
-import Validator from 'validatorjs';
 import React from 'react';
-
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
-Validator.register(
-  'maskedSSN', (value, attribute) => {
-    return value.toString().length === 9;
-  },
-  'The :attribute is not in the format XXX-XX-XXXX.',
-);
 
 export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement', 'closingBinder'];
 
@@ -382,10 +374,34 @@ export const KEY_TERMS = {
   },
   unitPrice: {
     value: null,
-    label: 'Unit Price',
+    label: 'Price (copy)',
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
+  },
+  totalRoundSize: {
+    value: null,
+    label: 'Total Round Size',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  equityClass: {
+    value: null,
+    label: 'Equity Class',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  equityUnitType: {
+    value: 'share',
+    values: [
+      { key: 'share', value: 'share', text: 'Shares' },
+      { key: 'unit', value: 'unit', text: 'Units' },
+    ],
+    label: 'Equity unit type',
+    error: undefined,
+    rule: 'optional',
   },
   premoneyValuation: {
     value: null,
@@ -729,6 +745,13 @@ export const CLOSURE_SUMMARY = {
     label: 'Investment Multiple (calculation)',
     error: undefined,
     rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  unitPrice: {
+    value: null,
+    label: 'Price (calculation)',
+    error: undefined,
+    rule: 'numeric',
     placeHolder: 'Enter here',
   },
   processingDate: {
@@ -1081,7 +1104,7 @@ export const LEADERSHIP = {
       label: 'Email address',
       error: undefined,
       rule: 'email',
-      customErrors: { email: 'Email is not valid' },
+      customErrors: { email: 'email is not valid' },
       placeHolder: 'john.doe@contact.com',
     },
     number: {
@@ -1141,7 +1164,7 @@ export const LEADERSHIP = {
       label: 'Start Date of Service',
       error: undefined,
       rule: 'date',
-      placeHolder: 'MM-DD-YYYY',
+      placeHolder: 'MM/DD/YYYY',
       customErrors: {
         date: 'Start Date of Service is not a valid date format.',
       },
@@ -1185,31 +1208,31 @@ export const LEADERSHIP = {
     },
     dlLicenseNumber: {
       value: '',
-      label: 'DL License Number',
+      label: 'Driver License Number',
       error: undefined,
-      rule: 'optional',
-      placeHolder: 'e.g. 123456789',
+      rule: 'numeric',
+      placeHolder: 'Enter here',
     },
     dlState: {
       value: '',
       label: 'DL State',
       error: undefined,
       rule: 'optional',
-      placeHolder: 'e.g. NY',
+      placeHolder: 'Texas',
     },
     dlIssuedDate: {
       value: '',
       label: 'DL Issued Date',
       error: undefined,
       rule: 'date',
-      placeHolder: 'e.g. 12-12-2019',
+      placeHolder: 'MM/DD/YYYY',
     },
     dlExpirationDate: {
       value: '',
       label: 'DL Expiration Date',
       error: undefined,
       rule: 'date',
-      placeHolder: 'e.g. 12-12-2019',
+      placeHolder: 'MM/DD/YYYY',
     },
     bio: {
       value: '',

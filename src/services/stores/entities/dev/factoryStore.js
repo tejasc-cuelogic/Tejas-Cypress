@@ -1,6 +1,5 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
-import { get, isEmpty, isArray, forEach, find, includes, keyBy } from 'lodash';
-import moment from 'moment';
+import { get, isEmpty, forEach, find, includes, keyBy } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger } from '../../queries/data';
 import Helper from '../../../../helper/utility';
@@ -44,16 +43,6 @@ export class FactoryStore extends DataModelStore {
   confirmModalName = null;
 
   removeIndex = null;
-
-  requestState = {
-    lek: { 'page-1': null },
-    skip: 0,
-    page: 1,
-    perPage: 25,
-    filters: false,
-    search: {
-    },
-  };
 
   initRequest = async (reqParams) => {
     try {
@@ -147,36 +136,6 @@ export class FactoryStore extends DataModelStore {
     }
   }
 
-  initiateSearch = (srchParams) => {
-    this.requestState.lek = { 'page-1': null };
-    this.requestState.page = 1;
-    this.requestState.search = srchParams;
-    this.initRequest();
-  }
-
-  setInitiateSrch = (name, value) => {
-    if (name === 'startDate' || name === 'endDate') {
-      this.requestState.search[name] = value ? name === 'startDate' ? moment(new Date(`${value.formattedValue} 00:00:00`)).toISOString() : moment(new Date(`${value.formattedValue} 23:59:59`)).toISOString() : '';
-      if ((this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '')
-        || (this.requestState.search.startDate === '' && this.requestState.search.endDate === '')
-      ) {
-        const srchParams = { ...this.requestState.search };
-        this.initiateSearch(srchParams);
-      }
-    } else {
-      const srchParams = { ...this.requestState.search };
-      const temp = { ...this.requestState };
-      temp.search[name] = { ...this.requestState.search };
-      this.requestState = temp;
-      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
-        srchParams[name] = value;
-      } else {
-        delete srchParams[name];
-      }
-      this.initiateSearch(srchParams);
-    }
-  }
-
   get cronLogs() {
     return (this.cronLogList && this.cronLogList.fetchCronLogs
       && toJS(this.cronLogList.fetchCronLogs.cronLog)
@@ -195,19 +154,6 @@ export class FactoryStore extends DataModelStore {
     return (this.cronLogList && this.cronLogList.fetchCronLogs
       && toJS(this.cronLogList.fetchCronLogs.resultCount)
     ) || 0;
-  }
-
-  resetFilters = () => {
-    this.requestState = {
-      lek: { 'page-1': null },
-      skip: 0,
-      page: 1,
-      perPage: 25,
-      filters: false,
-      search: {
-      },
-    };
-    this.setFieldValue('cronLogList', []);
   }
 
   requestFactoryPluginTrigger = () => new Promise(async (resolve, reject) => {
@@ -269,7 +215,7 @@ export class FactoryStore extends DataModelStore {
       const tempObj = {};
       tempObj.key = value.name;
       tempObj.text = value.name;
-      tempObj.value = includes(['listRequestPlugins', 'listProcessorPlugins'], pluginList) ? value.plugin : value.name;
+      tempObj.value = value.plugin;
       tempObj.pluginInput = [...value.pluginInputs];
       pluginArr.push(tempObj);
     });
@@ -351,14 +297,6 @@ export class FactoryStore extends DataModelStore {
     }
     return formElement;
   }
-
-  setFormData = (form, elemRef, elementValue, subForm = false) => {
-    if (subForm) {
-      this[form][subForm].fields[elemRef].value = elementValue;
-    } else {
-      this[form].fields[elemRef].value = elementValue;
-    }
-  }
 }
 
 decorate(FactoryStore, {
@@ -376,7 +314,6 @@ decorate(FactoryStore, {
   confirmModal: observable,
   confirmModalName: observable,
   removeIndex: observable,
-  requestState: observable,
   initRequest: action,
   formChangeForPlugin: action,
   formChangeForPayload: action,
@@ -387,12 +324,10 @@ decorate(FactoryStore, {
   toggleSearch: action,
   cronLogListLoading: computed,
   count: computed,
-  resetFilters: action,
   requestFactoryPluginTrigger: action,
   setPluginDropDown: action,
   processFactoryPluginTrigger: action,
   createDynamicFormFields: action,
-  setFormData: action,
 });
 
 export default new FactoryStore();

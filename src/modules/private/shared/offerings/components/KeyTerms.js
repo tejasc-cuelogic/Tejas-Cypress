@@ -49,7 +49,7 @@ export default class KeyTerms extends Component {
   }
 
   editorChange =
-  (field, value, form, index) => this.props.offeringCreationStore.rtEditorChange(field, value, form, 'additionalKeyterms', index);
+    (field, value, form, index) => this.props.offeringCreationStore.rtEditorChange(field, value, form, 'additionalKeyterms', index);
 
   render() {
     const {
@@ -126,7 +126,6 @@ export default class KeyTerms extends Component {
                 fielddata={KEY_TERMS_FRM.fields[field]}
                 changed={(values, name) => maskArrayChange(values, formName, name)}
                 currency
-                allowNegative={false}
                 prefix="$"
               />
             ))}
@@ -136,7 +135,6 @@ export default class KeyTerms extends Component {
               fielddata={KEY_TERMS_FRM.fields.minOfferingAmount506 && KEY_TERMS_FRM.fields.minOfferingAmount506.value && KEY_TERMS_FRM.fields.minOfferingAmount506.value !== '0.00' ? KEY_TERMS_FRM.fields.minOfferingAmount506 : KEY_TERMS_FRM.fields.minOfferingAmount506C}
               changed={(values, name) => maskArrayChange(values, formName, name)}
               currency
-              allowNegative={false}
               prefix="$"
             />
             <MaskedInput
@@ -145,7 +143,6 @@ export default class KeyTerms extends Component {
               fielddata={KEY_TERMS_FRM.fields.maxOfferingAmount506 && KEY_TERMS_FRM.fields.maxOfferingAmount506.value && KEY_TERMS_FRM.fields.maxOfferingAmount506.value !== '0.00' ? KEY_TERMS_FRM.fields.maxOfferingAmount506 : KEY_TERMS_FRM.fields.maxOfferingAmount506C}
               changed={(values, name) => maskArrayChange(values, formName, name)}
               currency
-              allowNegative={false}
               prefix="$"
             />
             <FormDropDown
@@ -208,7 +205,6 @@ export default class KeyTerms extends Component {
               name="interestRate"
               fielddata={KEY_TERMS_FRM.fields.interestRate}
               changed={(values, name) => maskArrayChange(values, formName, name)}
-              allowNegative={false}
               percentage
             />
             <MaskedInput
@@ -217,7 +213,6 @@ export default class KeyTerms extends Component {
               fielddata={KEY_TERMS_FRM.fields.minInvestAmt}
               changed={(values, name) => maskArrayChange(values, formName, name)}
               currency
-              allowNegative={false}
               prefix="$"
             />
             <FormInput
@@ -231,7 +226,6 @@ export default class KeyTerms extends Component {
               name="securitiesOwnershipPercentage"
               fielddata={KEY_TERMS_FRM.fields.securitiesOwnershipPercentage}
               changed={(values, name) => maskArrayChange(values, formName, name)}
-              allowNegative={false}
               percentage
             />
             <FormInput
@@ -252,17 +246,35 @@ export default class KeyTerms extends Component {
               options={ROUND_TYPE_VALUES}
               onChange={(e, result) => formArrayChange(e, result, formName)}
             /> */}
+            {
+              ['totalRoundSize', 'unitPrice'].map(field => (
+                <MaskedInput
+                  displayMode={isReadonly}
+                  name={field}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  changed={(values, name) => maskArrayChange(values, formName, name)}
+                  currency
+                  prefix="$"
+                />
+              ))
+            }
             <MaskedInput
               displayMode={isReadonly}
               name="unitPrice"
-              fielddata={KEY_TERMS_FRM.fields.unitPrice}
-              changed={(values, name) => maskArrayChange(values, formName, name)}
+              fielddata={CLOSURE_SUMMARY_FRM.fields.unitPrice}
+              changed={(values, name) => maskArrayChange(values, 'CLOSURE_SUMMARY_FRM', name)}
               currency
-              allowNegative={false}
+            />
+            <MaskedInput
+              displayMode={isReadonly}
+              name="premoneyValuation"
+              fielddata={KEY_TERMS_FRM.fields.premoneyValuation}
+              changed={(values, name) => maskArrayChange(values, 'KEY_TERMS_FRM', name)}
+              currency
               prefix="$"
             />
             {
-              ['valuationCap', 'discount'].map(field => (
+              ['valuationCap', 'discount', 'equityClass'].map(field => (
                 <FormInput
                   displayMode={isReadonly}
                   name={field}
@@ -271,6 +283,18 @@ export default class KeyTerms extends Component {
                 />
               ))
             }
+            <FormDropDown
+              containerclassname={isReadonly ? 'display-only' : ''}
+              className={isReadonly ? 'display-only' : ''}
+              disabled={isReadonly}
+              fielddata={KEY_TERMS_FRM.fields.equityUnitType}
+              selection
+              value={KEY_TERMS_FRM.fields.equityUnitType.value}
+              name="equityUnitType"
+              placeholder={isReadonly ? 'N/A' : 'Choose here'}
+              options={KEY_TERMS_FRM.fields.equityUnitType.values}
+              onChange={(e, result) => formArrayChange(e, result, formName)}
+            />
           </Form.Group>
           <Form.Group widths={2}>
             {['investmentMultipleSummary', 'offeringDisclaimer', 'revShareSummary', 'revSharePercentageDescription'].map(field => (
@@ -290,18 +314,18 @@ export default class KeyTerms extends Component {
           <Header as="h4">
             Additional Key Terms
             {!isReadonly
-            && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'additionalKeyterms')}><small>+ Add New Term</small></Link>
+              && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'additionalKeyterms')}><small>+ Add New Term</small></Link>
             }
           </Header>
           {KEY_TERMS_FRM.fields.additionalKeyterms.map((field, index) => (
             <>
               <Header as="h6">{`Term ${index + 1}`}
                 {KEY_TERMS_FRM.fields.additionalKeyterms.length > 1
-                && (
-<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'additionalKeyterms')}>
-                  <Icon className="ns-close-circle" color="grey" />
-                </Link>
-                )
+                  && (
+                    <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'additionalKeyterms')}>
+                      <Icon className="ns-close-circle" color="grey" />
+                    </Link>
+                  )
                 }
               </Header>
               <div className="featured-section">
@@ -350,7 +374,6 @@ export default class KeyTerms extends Component {
                 fielddata={KEY_TERMS_FRM.fields[field]}
                 changed={(values, name) => maskArrayChange(values, formName, name)}
                 currency
-                allowNegative={false}
                 prefix="$"
               />
             ))}
@@ -361,7 +384,6 @@ export default class KeyTerms extends Component {
                 fielddata={KEY_TERMS_FRM.fields[field]}
                 changed={(values, name) => maskArrayChange(values, formName, name)}
                 currency
-                allowNegative={false}
                 prefix="$"
               />
             ))}
@@ -415,7 +437,7 @@ export default class KeyTerms extends Component {
                 />
               </div>
             ))}
-             {['uploadProformas', 'revShareSummaryUpload'].map(field => (
+            {['uploadProformas', 'revShareSummaryUpload'].map(field => (
               <DropZone
                 disabled={isReadonly}
                 name={field}
@@ -425,7 +447,7 @@ export default class KeyTerms extends Component {
                 uploadtitle="Upload a file"
                 containerclassname={!isReadonly ? 'field' : 'field display-only'}
               />
-             ))
+            ))
             }
           </Form.Group>
           <Divider hidden />

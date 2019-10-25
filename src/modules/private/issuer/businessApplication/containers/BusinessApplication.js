@@ -72,6 +72,7 @@ export default class BusinessApplication extends Component {
         businessApplicationSubmitAction().then(() => {
           Helper.toast('Business application submitted successfully!', 'success');
           this.props.history.push('/app/dashboard');
+          window.location.reload();
         });
       } else if (isRedirect) {
         this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${applicationStep}`);
@@ -126,7 +127,7 @@ export default class BusinessApplication extends Component {
         appStepsStatus={appStepsStatus}
         {...this.props}
         P0={(
-<Link to="/app/dashboard">
+          <Link to="/app/dashboard">
             <Logo
               alt="NextSeed.com"
               dataSrc={logoUrl}
@@ -135,7 +136,7 @@ export default class BusinessApplication extends Component {
               size="small"
             />
           </Link>
-)}
+        )}
         buttonWidth={6}
         P4={(
 <HeaderButtons

@@ -77,17 +77,16 @@ export class CrowdpayStore {
   @action
   removeLoadingCrowdPayId = (id, accountStatus) => {
     if (accountStatus && accountStatus !== 'APPROVE') {
-      const crowdpayList = get(this.data, 'data.getCrowdPayUsers.crowdPayList');
-      const index = findIndex(crowdpayList, crowdPayAccount => crowdPayAccount.accountId === id);
-      const crowdPayAccount = find(crowdpayList, account => account.accountId === id);
+      const index = findIndex(this.allCrowdpayData, crowdPayAccount => crowdPayAccount.accountId === id);
+      const crowdPayAccount = find(this.allCrowdpayData, account => account.accountId === id);
       crowdPayAccount.accountStatus = accountStatus;
       if (accountStatus === CROWDPAY_ACCOUNTS_STATUS.FROZEN) {
         crowdPayAccount.declined = { by: 'ADMIN' };
       }
-      crowdpayList[index] = crowdPayAccount;
-      this.setcrowdPayData(crowdpayList);
+      this.allCrowdpayData[index] = crowdPayAccount;
+      this.setcrowdPayData(this.allCrowdpayData);
     } else if (accountStatus === 'APPROVE') {
-      const crowdpayList = lodashFilter(get(this.data, 'data.getCrowdPayUsers.crowdPayList'), corwdPayAccount => corwdPayAccount.accountId !== id);
+      const crowdpayList = lodashFilter(this.allCrowdpayData, corwdPayAccount => corwdPayAccount.accountId !== id);
       this.setcrowdPayData(crowdpayList);
     }
     this.loadingCrowdPayIds = lodashFilter(this.loadingCrowdPayIds, crowdPayId => crowdPayId !== id);
@@ -105,7 +104,7 @@ export class CrowdpayStore {
 
   @action
   appendCrowdPayData = () => {
-    this.allCrowdpayData.push(this.getCrowdPayData);
+    this.allCrowdpayData = [...this.allCrowdpayData, ...this.getCrowdPayData];
   }
 
   @action
@@ -132,8 +131,8 @@ export class CrowdpayStore {
     let params = {};
     const accountType = type.toLowerCase();
     if (accountType !== 'review' && initialState) {
-      params.accountStatus = CROWDPAY_FILTERS[accountType].initialStatus;
-      this.requestState.search.accountStatus = CROWDPAY_FILTERS[accountType].initialStatus;
+      params.accountStatus = CROWDPAY_FILTERS[accountType].initialFilters;
+      this.requestState.search.accountStatus = CROWDPAY_FILTERS[accountType].initialFilters;
     }
     if (CROWDPAY_FILTERS[accountType].accountType.length) {
       // eslint-disable-next-line prefer-destructuring

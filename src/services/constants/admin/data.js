@@ -114,102 +114,6 @@ export const ENCRYPTDECRYPTUTILITY_META = {
   userId: { ...common.userId },
   text: { ...common.text },
 };
-export const AUDITBOXFOLDER_META = {
-  waitingTime: {
-    key: 'waitingTime',
-    value: '',
-    label: 'Waiting Time',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  concurrency: {
-    key: 'concurrency',
-    value: '',
-    label: 'Concurrency',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  queueLimit: {
-    key: 'queueLimit',
-    value: '',
-    label: 'Queue Limit',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  jobId: {
-    key: 'jobId',
-    value: '',
-    label: 'Job Id',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  userId: {
-    key: 'userId',
-    value: '',
-    label: 'User Id',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  role: {
-    key: 'role',
-    value: '',
-    values: [
-      { key: 'Investor', text: 'Investor', value: 'INVESTOR' },
-      { key: 'Issuer', text: 'Issuer', value: 'ISSUER' },
-    ],
-    label: 'User Role',
-    error: undefined,
-    rule: 'required',
-  },
-};
-
-export const IMAGEPROCESSINGREQUES_META = {
-  waitingTime: {
-    key: 'waitingTime',
-    value: '',
-    label: 'Waiting Time',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  concurrency: {
-    key: 'concurrency',
-    value: '',
-    label: 'Concurrency',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  queueLimit: {
-    key: 'queueLimit',
-    value: '',
-    label: 'Queue Limit',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  key: {
-    key: 'key',
-    value: '',
-    label: 'Key',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  folderName: {
-    key: 'folderName',
-    value: '',
-    label: 'Folder Name',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-};
 
 export const REQUESTFACTORY_META = FormHelper.generateMeta([
   ['plugin', 'Plugin', '', 'required', '',
@@ -265,4 +169,26 @@ export const CRONFACTORY_META = FormHelper.generateMeta([
     },
   ],
   ['jobId', 'Job Id', '', '', 'Enter here'],
+]);
+
+export const EMAILLIST_META = FormHelper.generateMeta([
+  ['emailType', 'Email Type', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'DEV', text: 'DEV', value: 'DEV' },
+          { key: 'NOTIFICATIONS', text: 'NOTIFICATIONS', value: 'NOTIFICATIONS' },
+          { key: 'ACCOUNTS', text: 'ACCOUNTS', value: 'ACCOUNTS' },
+          { key: 'ACCREDITATION', text: 'ACCREDITATION', value: 'ACCREDITATION' },
+          { key: 'TRANSFERS', text: 'TRANSFERS', value: 'TRANSFERS' },
+          { key: 'SALES', text: 'SALES', value: 'SALES' },
+          { key: 'APPLY', text: 'APPLY', value: 'APPLY' },
+          { key: 'COMMENTS', text: 'COMMENTS', value: 'COMMENTS' },
+          { key: 'PAYMENTS', text: 'PAYMENTS', value: 'PAYMENTS' },
+          { key: 'SUPPORT_SERVICES', text: 'SUPPORT_SERVICES', value: 'SUPPORT_SERVICES' },
+        ],
+      },
+    },
+  ],
 ]);
