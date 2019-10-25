@@ -401,7 +401,7 @@ cipWrapper = async (payLoad) => {
           variables: {
             userId: userStore.currentUser.sub || authStore.userId,
             type: type || (mfaMethod.value !== '' ? mfaMethod.value : 'NEW'),
-            address: userAddress || '1111111111',
+            address: userAddress,
           },
         });
       const requestMode = type === 'EMAIL' ? `code sent to ${emailAddress}` : (type === 'CALL' ? `call to ${phone}` : `code texted to ${phone}`);
