@@ -66,6 +66,14 @@ export default class PaymentDetails extends Component {
                 ))
               }
               <MaskedInput
+                prefix="$ "
+                currency
+                type="text"
+                name="monthlyPayment"
+                changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM')}
+                fielddata={PAYMENT_FRM.fields.monthlyPayment}
+              />
+              <MaskedInput
                 readOnly
                 containerclassname="display-only"
                 prefix="$ "

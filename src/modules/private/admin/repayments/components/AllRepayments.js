@@ -111,6 +111,10 @@ export default class AllRepayments extends Component {
                     onClick={this.handleSort('offering.closureSummary.repayment.firstPaymentDate')}
                   >First Payment</Table.HeaderCell>
                   <Table.HeaderCell
+                    sorted={sortOrder.column === 'offering.closureSummary.keyTerms.monthlyPayment' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                    onClick={this.handleSort('offering.closureSummary.keyTerms.monthlyPayment')}
+                  >Monthly Payment</Table.HeaderCell>
+                  <Table.HeaderCell
                     sorted={sortOrder.column === 'sinkingFundBalance' && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
                     onClick={this.handleSort('sinkingFundBalance')}
                   >Sinking Fund Balance</Table.HeaderCell>
@@ -135,6 +139,7 @@ export default class AllRepayments extends Component {
                       <Table.Cell>{this.validDate(record, 'offering.closureSummary.operationsDate')}</Table.Cell>
                       <Table.Cell>{this.validDate(record, 'offering.closureSummary.keyTerms.expectedPaymentDate')}</Table.Cell>
                       <Table.Cell>{this.validDate(record, 'offering.closureSummary.repayment.firstPaymentDate')}</Table.Cell>
+                      <Table.Cell textAlign="center">{get(record, 'offering.closureSummary.keyTerms.monthlyPayment') ? Helper.CurrencyFormat(get(record, 'offering.closureSummary.keyTerms.monthlyPayment')) : ''}</Table.Cell>
                       <Table.Cell textAlign="center">{Helper.CurrencyFormat(record.sinkingFundBalance)}</Table.Cell>
                       <Table.Cell textAlign="center">
                         <Button icon className="link-button">
