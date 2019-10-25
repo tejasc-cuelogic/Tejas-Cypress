@@ -275,7 +275,7 @@ export default class NewUpdate extends Component {
                                 name="shouldSendInvestorNotifications"
                                 onChange={(e, result) => UpdateChange(e, result)}
                                 checked={PBUILDER_FRM.fields.shouldSendInvestorNotifications.value}
-                                label="Send Notifications"
+                                label="Email Notifications"
                               />
                             </Form.Field>
                             </Form>
