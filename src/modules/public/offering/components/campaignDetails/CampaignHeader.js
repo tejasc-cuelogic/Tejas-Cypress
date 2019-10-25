@@ -168,13 +168,15 @@ export default class CampaignHeader extends Component {
                       </p>
                     )
                   }
-                  {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
-                    ? (
+                  {(offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE || offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE)
+                    && (
                       <p className="mb-0">
                         Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
-                    </p>
+                      </p>
                     )
-                    : (
+                  }
+                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
+                    && (
                       <>
                         <p className="mb-0">
                           Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : '-'}
