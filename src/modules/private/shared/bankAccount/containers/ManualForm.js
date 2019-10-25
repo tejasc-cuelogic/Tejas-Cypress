@@ -29,7 +29,7 @@ export default class ManualForm extends Component {
     if (this.props.action === 'change') {
       this.props.uiStore.setProgress();
       this.props.bankAccountStore.validateManualAccount(investmentAccType).then(() => {
-        this.props.transactionStore.requestOtpForManageTransactions().then(() => {
+        this.props.transactionStore.requestOtpForManageTransactions(true).then(() => {
           const confirmUrl = `${this.props.refLink}/confirm`;
           this.props.history.push(confirmUrl);
         });
@@ -94,6 +94,7 @@ export default class ManualForm extends Component {
               changed={linkBankManuallyChange}
               value={isAccNumberEncrypted ? '' : formLinkBankManually.fields.accountNumber.value}
               accountNumber
+              className="fs-block"
               showerror
             />
             <MaskedInput
@@ -102,6 +103,7 @@ export default class ManualForm extends Component {
               changed={linkBankManuallyChange}
               value={isEncrypted(formLinkBankManually.fields.routingNumber.value) ? '' : formLinkBankManually.fields.routingNumber.value}
               routingNumber
+              className="fs-block"
               showerror
             />
             <Form.Field>

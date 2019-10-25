@@ -421,7 +421,7 @@ export class TransactionStore {
   }
 
   @action
-  requestOtpForManageTransactions = () => {
+  requestOtpForManageTransactions = (isLinkedBankChange = false) => {
     uiStore.setProgress();
     const { userDetails } = userDetailsStore;
     const otpType = userDetails.mfaMode === 'PHONE' ? userDetails.phone.type || 'TEXT' : 'EMAIL';
@@ -434,7 +434,8 @@ export class TransactionStore {
           variables: {
             userId: userStore.currentUser.sub,
             type: otpType,
-            address: otpType === 'EMAIL' ? address : '',
+            isLinkedBankChange,
+            address: otpType === 'EMAIL' ? address : number,
           },
         })
         .then((result) => {
