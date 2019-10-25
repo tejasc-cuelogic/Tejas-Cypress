@@ -3,7 +3,7 @@ import graphql from 'mobx-apollo';
 import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
-import { Calculator } from 'amortizejs';
+// import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
@@ -470,28 +470,29 @@ export class CampaignStore {
 
   @action
   calculateTotalPaymentData = (amt = 0) => {
-    const ranges = [100, 500, 1000, 5000, 10000, 25000, 50000];
-    this.principalAmt = ranges[amt];
-    const data = {
-      method: 'mortgage',
-      apr: parseFloat(get(this.campaign, 'keyTerms.interestRate')) || 0,
-      balance: this.principalAmt || 0,
-      loanTerm: parseFloat(get(this.campaign, 'keyTerms.maturity')) || 0,
-    };
-    const { totalPayment, schedule } = Calculator.calculate(data);
-    this.totalPayment = money.floatToAmount(totalPayment || '', 2);
-    const payChart = [];
-    let totalPaid = 0;
-    if (schedule && Array.isArray(schedule)) {
-      schedule.forEach((item, index) => {
-        totalPaid = totalPaid + item.interest + item.principal;
-        payChart.push({
-          month: index + 1,
-          'Projected total payment': parseFloat((totalPaid).toFixed(2)),
-        });
-      });
-    }
-    this.totalPaymentChart = payChart;
+    console.log(amt);
+    // const ranges = [100, 500, 1000, 5000, 10000, 25000, 50000];
+    // this.principalAmt = ranges[amt];
+    // const data = {
+    //   method: 'mortgage',
+    //   apr: parseFloat(get(this.campaign, 'keyTerms.interestRate')) || 0,
+    //   balance: this.principalAmt || 0,
+    //   loanTerm: parseFloat(get(this.campaign, 'keyTerms.maturity')) || 0,
+    // };
+    // const { totalPayment, schedule } = Calculator.calculate(data);
+    // this.totalPayment = money.floatToAmount(totalPayment || '', 2);
+    // const payChart = [];
+    // let totalPaid = 0;
+    // if (schedule && Array.isArray(schedule)) {
+    //   schedule.forEach((item, index) => {
+    //     totalPaid = totalPaid + item.interest + item.principal;
+    //     payChart.push({
+    //       month: index + 1,
+    //       'Projected total payment': parseFloat((totalPaid).toFixed(2)),
+    //     });
+    //   });
+    // }
+    // this.totalPaymentChart = payChart;
   }
 
   generateBanner = (offeringDetailsList, addObjectProps = false) => {

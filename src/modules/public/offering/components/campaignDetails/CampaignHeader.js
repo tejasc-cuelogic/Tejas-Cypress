@@ -186,6 +186,18 @@ export default class CampaignHeader extends Component {
                       </>
                     )
                   }
+                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
+                    && (
+                      <>
+                      <p className="mb-0">
+                        Preferred Return : {get(campaign, 'keyTerms.preferredReturn') ? `${get(campaign, 'keyTerms.preferredReturn')}%` : '-'}
+                      </p>
+                      <p className="mb-0">
+                        Targeted Investment Period : {get(campaign, 'keyTerms.targetInvestmentPeriod') || '-'} months
+                      </p>
+                      </>
+                    )
+                  }
                   <div className="mt-20">
                     {isCreation
                       ? <Button fluid secondary={diffForProcessing.value !== 0} content="Coming Soon" disabled />

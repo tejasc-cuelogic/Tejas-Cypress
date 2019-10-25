@@ -234,7 +234,7 @@ class CampaignLayout extends Component {
           ) : null
         }
         <>
-          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary newLayout {...this.props} />) : (<TotalPaymentCalculator newLayout {...this.props} />)
+          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary newLayout {...this.props} />) : campaignStatus.isTermNote && (<TotalPaymentCalculator newLayout {...this.props} />)
           }
           <Divider hidden section />
           <Comments refLink={this.props.match.url} newLayout showOnlyOne={!this.state.expandComments} />

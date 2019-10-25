@@ -53,6 +53,9 @@ query getOfferingList($filters: OfferingFilterInputType, $userId: String){
         investmentMultiple
         valuationCap
         discount
+        offeringSize
+        preferredReturn
+        targetInvestmentPeriod
         regulation
         minOfferingAmountCF
         maxOfferingAmountCF
@@ -151,6 +154,9 @@ export const campaignDetailsQuery = gql`
       equityClass
       equityUnitType
       roundType
+      offeringSize
+      preferredReturn
+      targetInvestmentPeriod
       premoneyValuation
       additionalKeyterms {
         label
