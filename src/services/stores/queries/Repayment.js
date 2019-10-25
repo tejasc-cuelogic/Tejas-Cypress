@@ -49,6 +49,7 @@ export const paymentsIssuerList = gql`
           keyTerms {
             maturityDate
             expectedPaymentDate: anticipatedPaymentStartDate
+            monthlyPayment
           }
           repayment {
             firstPaymentDate: startDate
@@ -81,6 +82,7 @@ export const updatePaymentIssuer = gql`
         keyTerms {
           maturityDate
           anticipatedPaymentStartDate
+          monthlyPayment
         }
         repayment {
           startDate
