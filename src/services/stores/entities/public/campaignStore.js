@@ -305,7 +305,7 @@ export class CampaignStore {
     campaignStatus.investmentHighlights = true;
     campaignStatus.isRevenueShare = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary;
     campaignStatus.isTermNote = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
-    campaignStatus.doneComputing = (this.details.data && this.details.data.getOfferingDetailsBySlug.length && this.details.data.getOfferingDetailsBySlug[0] && !isEmpty(this.details.data.getOfferingDetailsBySlug[0].keyTerms)) || false;
+    campaignStatus.doneComputing = (this.details && this.details.data && this.details.data.getOfferingDetailsBySlug && this.details.data.getOfferingDetailsBySlug.length && this.details.data.getOfferingDetailsBySlug[0] && !isEmpty(this.details.data.getOfferingDetailsBySlug[0].keyTerms)) || false;
     return campaignStatus;
   }
 
