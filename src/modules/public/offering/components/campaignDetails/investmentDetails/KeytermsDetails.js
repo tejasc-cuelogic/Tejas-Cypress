@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get, isNaN, toNumber } from 'lodash';
+import { get, isNaN, toNumber, capitalize } from 'lodash';
 import { inject, observer } from 'mobx-react';
 // import money from 'money-math';
 import { Table, Divider, Grid, Popup, Icon } from 'semantic-ui-react';
@@ -7,6 +7,7 @@ import {
   CAMPAIGN_KEYTERMS_SECURITIES,
   CAMPAIGN_OFFERED_BY,
   CAMPAIGN_REGULATION_DETAILED,
+  CAMPAIGN_KEYTERMS_REGULATION_PARALLEL,
   CAMPAIGN_KEYTERMS_SECURITIES_ENUM,
 } from '../../../../../../constants/offering';
 import Helper from '../../../../../../helper/utility';
@@ -77,7 +78,7 @@ class KeyTermsDetails extends Component {
                   ) : ''
               }
               <br />
-              {get(campaign, 'regulation') ? CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : 'NA'}
+              {get(campaign, 'regulation') ? get(campaign, 'regulation') === 'BD_CF_506C' ? CAMPAIGN_KEYTERMS_REGULATION_PARALLEL[campaign.regulation] : CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : 'NA'}
             </p>
           </Grid.Column>
           <Grid.Column>
@@ -289,7 +290,7 @@ class KeyTermsDetails extends Component {
             <KeyTermsFieldHoc
               data={keyTerms}
               field="unitPrice"
-              title="Share Price"
+              title={`${capitalize(keyTerms.equityUnitType)} Price`}
               content={(
                 <p>
                   {Helper.CurrencyFormat(keyTerms.unitPrice, 0)}

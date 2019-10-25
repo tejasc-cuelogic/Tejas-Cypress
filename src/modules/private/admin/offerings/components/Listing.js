@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { get, includes } from 'lodash';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
@@ -110,11 +110,13 @@ export default class Listing extends Component {
                 : offerings.map(offering => (
                   <Table.Row key={offering.id} className={this.props.uiStore.inProgressArray.length && offering.id === this.state.loadingOfferId ? 'disabled' : ''}>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
-                      <b>{((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
-                        ? offering.keyTerms.shorthandBusinessName : (
-                          (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
-                        ))}
-                      </b>
+                      <Link to={`${this.props.match.url}/edit/${offering.id}`}>
+                        <b>{((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
+                          ? offering.keyTerms.shorthandBusinessName : (
+                            (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
+                          ))}
+                        </b>
+                      </Link>
                     </Table.Cell>
                     <Table.Cell className="text-capitalize">
                       {offering && offering.stage

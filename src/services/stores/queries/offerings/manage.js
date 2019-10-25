@@ -986,7 +986,9 @@ export const getOfferingDetails = gql`
           date
           amount
         }
+        operationsDate
         keyTerms {
+          monthlyPayment
           supplementalAgreements {
             documents {
               name

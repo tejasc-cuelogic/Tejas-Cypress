@@ -48,7 +48,7 @@ mutation _deleteCdnS3File($key: String!){
 `;
 
 export const subscribeToNewsLetter = gql`
-mutation subscribeToNewsLetterNotifyAdmin($subscriberName: String!, $emailAddress: String!){ 
+mutation subscribeToNewsLetterNotifyAdmin($subscriberName: String, $emailAddress: String!){ 
   subscribeToNewsLetterNotifyAdmin(
     subscriberName: $subscriberName
     emailAddress: $emailAddress
