@@ -262,10 +262,12 @@ export class CampaignStore {
     const offeringRegulation = get(campaign, 'keyTerms.regulation');
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
     const minOfferingD = get(campaign, 'keyTerms.minOfferingAmount506') && get(campaign, 'keyTerms.minOfferingAmount506') !== '0.00' ? get(campaign, 'keyTerms.minOfferingAmount506') : get(campaign, 'keyTerms.minOfferingAmount506C') ? get(campaign, 'keyTerms.minOfferingAmount506C') : '0.00';
-    campaignStatus.minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(minOfferingD, minOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering;
+    // campaignStatus.minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(minOfferingD, minOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering;
+    campaignStatus.minOffering = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const maxOfferingD = get(campaign, 'keyTerms.maxOfferingAmount506') && get(campaign, 'keyTerms.maxOfferingAmount506') !== '0.00' ? get(campaign, 'keyTerms.maxOfferingAmount506') : get(campaign, 'keyTerms.maxOfferingAmount506C') ? get(campaign, 'keyTerms.maxOfferingAmount506C') : '0.00';
-    campaignStatus.maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(maxOfferingD, maxOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
+    // campaignStatus.maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(maxOfferingD, maxOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
+    campaignStatus.maxOffering = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
     campaignStatus.minFlagStatus = campaignStatus.collected >= campaignStatus.minOffering;
     campaignStatus.percentBefore = (campaignStatus.minOffering / campaignStatus.maxOffering) * 100;
     const formatedRaisedAmount = money.floatToAmount(campaignStatus.collected);
