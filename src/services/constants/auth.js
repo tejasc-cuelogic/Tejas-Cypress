@@ -131,12 +131,12 @@ export const RESET_PASS = {
 };
 
 export const NEWSLETTER = {
-  subscriberName: {
-    value: '',
-    error: undefined,
-    rule: 'optional',
-    label: 'Name',
-    placeHolder: 'Name',
-  },
+  // subscriberName: {
+  //   value: '',
+  //   error: undefined,
+  //   rule: 'optional',
+  //   label: 'Name',
+  //   placeHolder: 'Name',
+  // },
   emailAddress: { ...COMMON.email },
 };

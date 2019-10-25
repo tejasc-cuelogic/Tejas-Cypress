@@ -56,6 +56,7 @@ export default class SubscribeForNewsletter extends Component {
 
   componentWillUnmount() {
     this.setState({ dialog: false });
+    this.props.authStore.resetForm('NEWSLETTER_FRM');
   }
 
   closeModal = () => this.setState({ dialog: false });
@@ -63,7 +64,7 @@ export default class SubscribeForNewsletter extends Component {
   submit = () => {
     this.props.authStore.subscribeToNewsletter().then(() => {
       this.setState({ dialog: true });
-      document.getElementsByName('subscriberName')[0].value = '';
+      // document.getElementsByName('subscriberName')[0].value = '';
       document.getElementsByName('emailAddress')[0].value = '';
     }).catch(() => {
       // do nothing
