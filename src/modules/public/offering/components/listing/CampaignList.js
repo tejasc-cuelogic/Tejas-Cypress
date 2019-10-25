@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { get } from 'lodash';
+import { get, capitalize } from 'lodash';
 import { Container, Card, Grid, Label, Icon, Button, Divider, Table } from 'semantic-ui-react';
 // import { IonIcon } from '@ionic/react';
 // import { heart } from 'ionicons/icons';
@@ -24,7 +24,7 @@ const keyTermList = [
   { label: 'Multiple', forFunded: true, key: 'closureSummary.keyTerms.multiple', type: 'X', for: ['REVENUE_SHARING_NOTE'] },
   { label: 'Interest Rate', forFunded: true, key: 'closureSummary.keyTerms.interestRate', type: '%', for: ['TERM_NOTE'] },
   { label: 'Maturity', key: 'keyTerms.maturity', type: 'months', for: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
-  { label: 'Valuation', key: 'keyTerms.premoneyValuation', type: '$', for: ['PREFERRED_EQUITY_506C'] },
+  { label: 'Pre-Money Valuation', key: 'keyTerms.premoneyValuation', type: '$', for: ['PREFERRED_EQUITY_506C'] },
   { label: 'Share Price', key: 'keyTerms.unitPrice', type: '$', for: ['PREFERRED_EQUITY_506C'] },
   { label: 'Valuation Cap', key: 'keyTerms.valuationCap', type: '$', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
   { label: 'Discount', key: 'keyTerms.discount', type: '%', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
@@ -139,7 +139,7 @@ export default class CampaignList extends Component {
                                     {((isFunded || row.for.includes('ALL') || row.for.includes(offering.keyTerms.securities)) && (get(offering, row.key) === 0 || get(offering, row.key)))
                                     && (
                                     <Table.Row verticalAlign="top">
-                                      <Table.Cell collapsing>{row.label}</Table.Cell>
+                                      <Table.Cell collapsing>{(row.label === 'Share Price') ? `${capitalize(get(offering, 'keyTerms.equityUnitType'))} Price` : row.label}</Table.Cell>
                                       <Table.Cell className={`${!isFunded && !row.for.includes('ALL') ? 'highlight-text' : ''} right-align`}>
                                         <b>
                                         {(get(offering, row.key) !== undefined && get(offering, row.key) !== null)

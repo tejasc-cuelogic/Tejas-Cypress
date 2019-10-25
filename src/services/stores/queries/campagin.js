@@ -52,6 +52,7 @@ query getOfferingList($filters: OfferingFilterInputType, $userId: String){
         interestRate
         investmentMultiple
         valuationCap
+        equityUnitType
         discount
         offeringSize
         preferredReturn
