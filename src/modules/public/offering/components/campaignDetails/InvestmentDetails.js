@@ -13,7 +13,10 @@ const isMobile = document.documentElement.clientWidth < 992;
 class InvestmentDetails extends Component {
   constructor(props) {
     super(props);
-    this.props.campaignStore.calculateTotalPaymentData();
+    const { campaignStatus } = this.props.campaignStore;
+    if (campaignStatus.isTermNote) {
+      this.props.campaignStore.calculateTotalPaymentData();
+    }
     if (!this.props.newLayout) {
       window.addEventListener('scroll', this.handleOnScroll);
     }

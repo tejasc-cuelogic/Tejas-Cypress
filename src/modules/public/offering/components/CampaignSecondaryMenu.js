@@ -4,6 +4,7 @@ import { Container, Button, Visibility, List } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import Helper from '../../../../helper/utility';
+import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 992;
 
@@ -61,8 +62,8 @@ export default class CampaignSecondaryMenu extends Component {
                   {!isClosed && (get(campaign, 'keyTerms.securities') === 'TERM_NOTE' || maxFlagStatus || get(campaign, 'stage') === 'LIVE' || get(campaign, 'stage') === 'PROCESSING' || get(campaign, 'stage') === 'LOCK') ? ' raised' : ' invested'}
                 </List.Header>
               </List.Item>
-              {!isMobile && (get(campaign, 'keyTerms.interestRate') || get(campaign, 'keyTerms.investmentMultiple'))
-              && <List.Item>{get(campaign, 'keyTerms.securities') === 'TERM_NOTE' ? `${get(campaign, 'keyTerms.interestRate') || ''}% Interest Rate` : get(campaign, 'keyTerms.securities') === 'PREFERRED_EQUITY_506C' ? `${get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : ''} Pre-Money Valuation` : `${get(campaign, 'keyTerms.investmentMultiple') || ''} Investment Multiple`}</List.Item>
+              {!isMobile
+              && <List.Item>{get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE ? CAMPAIGN_KEYTERMS_SECURITIES.REAL_ESTATE : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? `${get(campaign, 'keyTerms.interestRate') || ''}% Interest Rate` : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ? `${get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : ''} Pre-Money Valuation` : `${get(campaign, 'keyTerms.investmentMultiple') || ''} Investment Multiple`}</List.Item>
             }
             </List>
           </Container>

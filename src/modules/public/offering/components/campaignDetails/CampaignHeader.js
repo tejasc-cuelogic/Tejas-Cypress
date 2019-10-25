@@ -168,13 +168,15 @@ export default class CampaignHeader extends Component {
                       </p>
                     )
                   }
-                  {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
-                    ? (
+                  {(offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE || offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE)
+                    && (
                       <p className="mb-0">
                         Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
-                    </p>
+                      </p>
                     )
-                    : (
+                  }
+                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
+                    && (
                       <>
                         <p className="mb-0">
                           Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : '-'}
@@ -183,6 +185,18 @@ export default class CampaignHeader extends Component {
                           {/* Share Price: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice'), 0) : '-'} */}
                           {`${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price:`} {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice'), 0) : '-'}
                         </p>
+                      </>
+                    )
+                  }
+                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
+                    && (
+                      <>
+                      <p className="mb-0">
+                        Preferred Return : {get(campaign, 'keyTerms.preferredReturn') ? `${get(campaign, 'keyTerms.preferredReturn')}%` : '-'}
+                      </p>
+                      <p className="mb-0">
+                        Targeted Investment Period : {get(campaign, 'keyTerms.targetInvestmentPeriod') || '-'} months
+                      </p>
                       </>
                     )
                   }
