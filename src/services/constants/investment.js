@@ -20,6 +20,21 @@ export const INVESTMENT_INFO = {
 
 };
 
+export const PREFERRED_EQUITY_INVESTMENT_INFO = {
+  shares: {
+    label: 'Shares',
+    key: 'shares',
+    value: '',
+    error: undefined,
+    customErrors: {
+      required: '* required.',
+    },
+    rule: 'required',
+    placeHolder: 'Enter here',
+    maxLength: 15,
+  },
+};
+
 export const TRANSFER_REQ_INFO = {
   investmentAmount: {
     label: 'investmentAmount',

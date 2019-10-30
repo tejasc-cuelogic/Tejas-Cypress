@@ -58,7 +58,9 @@ export default class IdentityVerification extends Component {
       this.props.uiStore.setFieldvalue('inProgressArray', []);
       const expiredAccountFromLocalStorage = window.sessionStorage.getItem('AccountCipExp');
       if (window.sessionStorage.getItem('cipErrorMessage') && !isUserVerified) {
-        url = await this.props.accountStore.accountProcessingWrapper(accountForWhichCipExpired || expiredAccountFromLocalStorage, this.props.match);
+        url = await this.props.accountStore.accountProcessingWrapper(
+          accountForWhichCipExpired || expiredAccountFromLocalStorage, { url: '/app/setup/account-creation/' },
+        );
       } else if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
         this.props.history.push(`/app/setup/account-creation/${accountForWhichCipExpired}`);
         this.props.identityStore.setFieldValue('signUpLoading', false);

@@ -48,7 +48,7 @@ export default class Plaid extends Component {
 
   handleBankSelect = (referenceLink) => {
     // const returnResult = bankAccountActions.bankSelect(institutionID, action);
-    this.props.transactionStore.requestOtpForManageTransactions().then(() => {
+    this.props.transactionStore.requestOtpForManageTransactions(true).then(() => {
       const confirmUrl = `${referenceLink}/confirm`;
       this.props.history.push(confirmUrl);
     });

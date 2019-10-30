@@ -143,6 +143,8 @@ export default class Agreement extends React.Component {
     const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : regulationCheck === 'BD_506B' ? 'Rule 506(b) of Regulation D' : 'Regulation Crowdfunding';
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
+    const offeringSecurityType = get(campaign, 'keyTerms.securities');
+    const agreementStatement = includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) ? 'Purchase Agreement' : 'Note Purchase Agreement';
     return (
       <>
         <Modal open={this.state.open} closeOnDimmerClick={false} size="mini">
@@ -211,7 +213,7 @@ export default class Agreement extends React.Component {
                           changed={setCheckbox}
                           customLabel={(
                             <>
-                              I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">Note Purchase Agreement</Link>.
+                              I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">{agreementStatement}</Link>.
                             </>
                           )}
                           conditionalCustomLabel={(
