@@ -8,7 +8,24 @@ import { STAGES } from '../../../../../../services/constants/admin/offerings';
 import { INDUSTRY_TYPES_ICONS, CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 
-const InvestmentCard = ({ data }) => {
+const INVESTMENT_CARD_META = [
+  { label: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', for: ['pending'] },
+  { label: 'Investment Type', key: 'offering.keyTerms.securities', getVal: value => CAMPAIGN_KEYTERMS_SECURITIES[value], for: ['pending'] },
+  { label: 'Invested Amount', key: 'investedAmount', for: ['pending'], getVal: value => Helper.CurrencyFormat(value) },
+  { label: 'Status', key: 'offering.stage', for: ['pending'], getVal: value => STAGES[value].label },
+  {
+    label: 'Days to close',
+    key: 'offering.closureSummary.processingDate',
+    for: ['pending'],
+    getVal: value => (DataFormatter.diffDays(value, false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value === 0 ? '' : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value < 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label}` : DataFormatter.diffInDaysHoursMin(value).diffText),
+  },
+  { label: 'Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active', 'completed'], getVal: value => `${value}%` },
+  { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active', 'completed'], getVal: value => `${value} months` },
+  { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], getVal: value => <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(value, false, false, false)} /> },
+  { label: 'Principal Remaining', key: '', for: ['active', 'completed'] }, // pending
+];
+
+const InvestmentCard = ({ data, listOf }) => {
   const [active, setActive] = useState(false);
   const toggleAccordion = () => setActive(!active);
   return (
@@ -24,7 +41,19 @@ const InvestmentCard = ({ data }) => {
     <Accordion.Content active={active}>
       <Table basic="very" unstackable className="no-border campaign-card">
         <Table.Body>
-          <Table.Row>
+          {INVESTMENT_CARD_META.filter(i => i.for.includes(listOf)).map(row => (
+            <Table.Row>
+              <Table.Cell>{row.label}</Table.Cell>
+              <Table.Cell className="grey-header right-align">
+                {typeof row.type === 'object' ? row.type[get(data, row.key)]
+                  : row.getVal ? get(data, row.key) ? row.getVal(get(data, row.key)) : 'N/A'
+                    : get(data, row.key) || 'N/A'
+                }
+              </Table.Cell>
+            </Table.Row>
+          ))
+          }
+          {/* <Table.Row>
             <Table.Cell>Interest Rate</Table.Cell>
             <Table.Cell className="grey-header right-align">xx.x%</Table.Cell>
           </Table.Row>
@@ -39,7 +68,7 @@ const InvestmentCard = ({ data }) => {
           <Table.Row>
             <Table.Cell>Principal Remaining</Table.Cell>
             <Table.Cell className="grey-header right-align">$100.00</Table.Cell>
-          </Table.Row>
+          </Table.Row> */}
         </Table.Body>
       </Table>
       <Button className="mt-30 mb-30" primary fluid content="Open Offering Details" />
@@ -64,10 +93,10 @@ const InvestmentList = (props) => {
           <Card.Header>{capitalize(props.listOf)}</Card.Header>
           <Card.Content>
             {investments.map(data => (
-              <InvestmentCard data={data} />
+              <InvestmentCard data={data} listOf={props.listOf} />
             ))
             }
-            <p className="right-align neutral-text">Total: <b>$1000</b></p>
+            <p className="right-align neutral-text">Total: <b>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0, 0)}</b></p>
           </Card.Content>
         </Card>
       </>
