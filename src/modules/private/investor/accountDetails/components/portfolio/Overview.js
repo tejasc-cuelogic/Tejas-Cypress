@@ -9,6 +9,7 @@ import PayOffChart from './PayOffChart';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { DataFormatter } from '../../../../../../helper';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('portfolioStore', 'campaignStore', 'userDetailsStore', 'transactionStore')
 @observer
 class Overview extends Component {
@@ -89,7 +90,7 @@ class Overview extends Component {
         </div>
         <div className="inner-content-spacer">
           <Grid>
-            <Grid.Column width={9}>
+            <Grid.Column width={isMobile ? 16 : 9}>
               <Header as="h4">Offering Summary</Header>
               <div className="table-wrapper">
                 <Table unstackable definition basic="very">

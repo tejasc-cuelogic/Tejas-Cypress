@@ -18,10 +18,20 @@
 				height: auto;
 				overflow: visible;
 			}
+			@media only screen and (max-width : @largestMobileScreen){
+				.ui.menu.issuer ~ .pusher .private-dropdown{
+					position: static;
+				}
+			}
 			.pusher{
 				@media only screen and (min-width: @computerBreakpoint) and (max-width : @largestSmallMonitor){
 					transform: translate3d(0,0,0)!important;
 					padding-left: 260px;
+				}
+				@media only screen and (max-width : @largestMobileScreen){
+					&.business-application .private-dropdown{
+						position: sticky;
+					}
 				}
 			}
 		}

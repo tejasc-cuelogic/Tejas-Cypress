@@ -817,7 +817,18 @@
             vertical-align:middle;
         }
     }
-    .ui.card .update-list{
-        border-bottom-left-radius:@6px;
+    .ui.card{
+        .private-dropdown{
+            @media only screen and (max-width : @largestMobileScreen ){
+                position: static;
+                .ui.menu.mobile-dropdown-menu{
+                    overflow: visible;
+                }
+            }
+        }
+        .update-list{
+            border-bottom-left-radius:@6px;
+        }
     }
+
 }
