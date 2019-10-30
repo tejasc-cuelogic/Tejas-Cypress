@@ -25,7 +25,7 @@ const INVESTMENT_CARD_META = [
   { label: 'Principal Remaining', key: '', for: ['active', 'completed'] }, // pending
 ];
 
-const InvestmentCard = ({ data, listOf }) => {
+const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleInvestNowClick, isAdmin, match }) => {
   const [active, setActive] = useState(false);
   const toggleAccordion = () => setActive(!active);
   return (
@@ -45,35 +45,31 @@ const InvestmentCard = ({ data, listOf }) => {
             <Table.Row>
               <Table.Cell>{row.label}</Table.Cell>
               <Table.Cell className="grey-header right-align">
-                {typeof row.type === 'object' ? row.type[get(data, row.key)]
-                  : row.getVal ? get(data, row.key) ? row.getVal(get(data, row.key)) : 'N/A'
-                    : get(data, row.key) || 'N/A'
+                {row.getVal ? get(data, row.key) ? row.getVal(get(data, row.key)) : 'N/A'
+                  : get(data, row.key) || 'N/A'
                 }
               </Table.Cell>
             </Table.Row>
           ))
           }
-          {/* <Table.Row>
-            <Table.Cell>Interest Rate</Table.Cell>
-            <Table.Cell className="grey-header right-align">xx.x%</Table.Cell>
-          </Table.Row>
-          <Table.Row>
-            <Table.Cell>Term</Table.Cell>
-            <Table.Cell className="grey-header right-align">xx months</Table.Cell>
-          </Table.Row>
-          <Table.Row>
-            <Table.Cell>Close Date</Table.Cell>
-            <Table.Cell className="grey-header right-align">01/24/2019</Table.Cell>
-          </Table.Row>
-          <Table.Row>
-            <Table.Cell>Principal Remaining</Table.Cell>
-            <Table.Cell className="grey-header right-align">$100.00</Table.Cell>
-          </Table.Row> */}
         </Table.Body>
       </Table>
-      <Button className="mt-30 mb-30 link-button" fluid content="View Agreement" />
-      <Button className="mt-30 mb-30" primary fluid content="Open Offering Details" />
-      <Button className="mt-30 mb-30" basic fluid content="Cancel" />
+      {viewAgreement && data.agreementId
+      && (
+        <Button className="mt-30 mb-30 link-button" fluid content="View Agreement" onClick={() => viewAgreement(data.agreementId)} />
+      )
+      }
+      {!isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0)))
+        && <Button className="mt-30 mb-30" primary fluid onClick={e => handleInvestNowClick(e, data.offering.id)} content="Change Investment Amount" />
+      }
+      {['active', 'completed'].includes(listOf)
+      && (
+        <Button className="mt-30 mb-30" primary fluid content="Open Offering Details" as={Link} to={`${match.url}/investment-details/${data.offering.id}`} />
+      )
+      }
+      {(isAdmin || (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod))))
+        && <Button className="mt-30 mb-30" basic fluid as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} content="Cancel" />
+      }
     </Accordion.Content>
   </Accordion>
   );
@@ -95,7 +91,7 @@ const InvestmentList = (props) => {
           <Card.Header>{capitalize(props.listOf)}</Card.Header>
           <Card.Content>
             {investments.map(data => (
-              <InvestmentCard data={data} listOf={props.listOf} />
+              <InvestmentCard data={data} {...props} />
             ))
             }
             <p className="right-align neutral-text">Total: <b>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0, 0)}</b></p>
