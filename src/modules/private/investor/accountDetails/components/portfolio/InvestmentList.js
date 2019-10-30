@@ -71,7 +71,9 @@ const InvestmentCard = ({ data, listOf }) => {
           </Table.Row> */}
         </Table.Body>
       </Table>
+      <Button className="mt-30 mb-30 link-button" fluid content="View Agreement" />
       <Button className="mt-30 mb-30" primary fluid content="Open Offering Details" />
+      <Button className="mt-30 mb-30" basic fluid content="Cancel" />
     </Accordion.Content>
   </Accordion>
   );
