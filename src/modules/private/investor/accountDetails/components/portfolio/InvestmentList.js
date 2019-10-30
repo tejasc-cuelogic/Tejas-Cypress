@@ -10,18 +10,18 @@ import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 
 const INVESTMENT_CARD_META = [
   { label: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', for: ['pending'] },
-  { label: 'Investment Type', key: 'offering.keyTerms.securities', getVal: value => CAMPAIGN_KEYTERMS_SECURITIES[value], for: ['pending'] },
-  { label: 'Invested Amount', key: 'investedAmount', for: ['pending'], getVal: value => Helper.CurrencyFormat(value) },
-  { label: 'Status', key: 'offering.stage', for: ['pending'], getVal: value => STAGES[value].label },
+  { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: value => CAMPAIGN_KEYTERMS_SECURITIES[value], for: ['pending'] },
+  { label: 'Invested Amount', key: 'investedAmount', for: ['pending'], getRowValue: value => Helper.CurrencyFormat(value) },
+  { label: 'Status', key: 'offering.stage', for: ['pending'], getRowValue: value => STAGES[value].label },
   {
     label: 'Days to close',
     key: 'offering.closureSummary.processingDate',
     for: ['pending'],
-    getVal: value => ((DataFormatter.diffDays(value, false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value === 0 ? '' : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value < 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label}` : DataFormatter.diffInDaysHoursMin(value).diffText)) || 'N/A',
+    getRowValue: value => ((DataFormatter.diffDays(value, false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value === 0 ? '' : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value < 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label}` : DataFormatter.diffInDaysHoursMin(value).diffText)) || 'N/A',
   },
-  { label: 'Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active', 'completed'], getVal: value => `${value}%` },
-  { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active', 'completed'], getVal: value => `${value} months` },
-  { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], getVal: value => <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(value, false, false, false)} /> },
+  { label: 'Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active', 'completed'], getRowValue: value => `${value}%` },
+  { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active', 'completed'], getRowValue: value => `${value} months` },
+  { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], getRowValue: value => <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(value, false, false, false)} /> },
   { label: 'Principal Remaining', key: '', for: ['active', 'completed'] }, // pending
 ];
 
@@ -45,7 +45,7 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
             <Table.Row>
               <Table.Cell>{row.label}</Table.Cell>
               <Table.Cell className="grey-header right-align">
-                {row.getVal ? get(data, row.key) ? row.getVal(get(data, row.key)) : 'N/A'
+                {row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key)) : 'N/A'
                   : get(data, row.key) || 'N/A'
                 }
               </Table.Cell>
@@ -54,6 +54,8 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
           }
         </Table.Body>
       </Table>
+      {listOf === 'pending' && (
+        <>
       {viewAgreement && data.agreementId
       && (
         <Button className="mt-30 mb-30 link-button" fluid content="View Agreement" onClick={() => viewAgreement(data.agreementId)} />
@@ -62,13 +64,15 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
       {!isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0)))
         && <Button className="mt-30 mb-30" primary fluid onClick={e => handleInvestNowClick(e, data.offering.id)} content="Change Investment Amount" />
       }
+      {(isAdmin || (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod))))
+        && <Button className="mt-30 mb-30" basic fluid as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} content="Cancel" />
+      }
+        </>
+      )}
       {['active', 'completed'].includes(listOf)
       && (
         <Button className="mt-30 mb-30" primary fluid content="Open Offering Details" as={Link} to={`${match.url}/investment-details/${data.offering.id}`} />
       )
-      }
-      {(isAdmin || (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod))))
-        && <Button className="mt-30 mb-30" basic fluid as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} content="Cancel" />
       }
     </Accordion.Content>
   </Accordion>
