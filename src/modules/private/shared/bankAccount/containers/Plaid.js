@@ -22,10 +22,14 @@ export default class Plaid extends Component {
     this.props.uiStore.clearErrors();
   }
 
-  componentWillUnmount() {
-    this.props.bankAccountStore.setBankListing();
-    this.props.bankAccountStore.resetFormData('formBankSearch');
+  componentDidUpdate() {
+    this.props.bankAccountStore.resetPlaidBankSearch();
   }
+
+  componentWillUnmount() {
+    this.props.bankAccountStore.resetPlaidBankSearch();
+  }
+
 
   setBankSummary = () => {
     const {
@@ -90,7 +94,7 @@ export default class Plaid extends Component {
       return (
         <Dimmer className="fullscreen" active={inProgress}>
           <Loader active={inProgress}>
-          Please wait...
+            Please wait...
           </Loader>
         </Dimmer>
       );
@@ -118,9 +122,9 @@ export default class Plaid extends Component {
             </Dimmer> */}
             {typeof bankListing !== 'undefined' && bankListing.length === 0
               && (
-<Grid column={1} textAlign="center">
-                <Grid.Column>No results found.</Grid.Column>
-              </Grid>
+                <Grid column={1} textAlign="center">
+                  <Grid.Column>No results found.</Grid.Column>
+                </Grid>
               )
             }
             {
@@ -170,9 +174,9 @@ export default class Plaid extends Component {
           </div>
           {errors
             && (
-<Message error>
-              <ListErrors errors={[errors.message]} />
-            </Message>
+              <Message error>
+                <ListErrors errors={[errors.message]} />
+              </Message>
             )
           }
           <Button color="green" className="link-button" content="Or enter it manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />

@@ -239,6 +239,16 @@ export class BankAccountStore {
     this.newPlaidAccDetails = objVal;
   }
 
+  @action
+  resetPlaidBankSearch = () => {
+    if (this.showAddFunds
+      || this.bankLinkInterface === 'form'
+      || this.linkbankSummary) {
+      this.setBankListing();
+      this.resetFormData('formBankSearch');
+    }
+  }
+
   /* eslint-disable camelcase */
   @computed
   get accountAttributes() {
