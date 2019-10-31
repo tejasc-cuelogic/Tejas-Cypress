@@ -119,7 +119,6 @@ export default class AccountCreation extends Component {
 
   renderAccType = () => {
     const { investmentAccType } = this.props.accountStore;
-    this.props.bankAccountStore.resetStoreData();
     this.props.history.push(`${this.props.match.url}/${investmentAccType}`);
   }
 

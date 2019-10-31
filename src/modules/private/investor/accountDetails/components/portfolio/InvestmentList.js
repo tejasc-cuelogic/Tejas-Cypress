@@ -132,7 +132,7 @@ const InvestmentList = (props) => {
                           <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />
                           <div className="offering-title">
                             {props.listOf === 'pending' && !isAdmin ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (props.listOf === 'active' && !isAdmin)
-                              ? (<p className="highlight-text">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</p>) : (
+                              ? (<p>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</p>) : (
                               <Link className={`${isMobile ? 'disable-click' : ''}`} to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
                               )}
                             <p className="date-stamp">

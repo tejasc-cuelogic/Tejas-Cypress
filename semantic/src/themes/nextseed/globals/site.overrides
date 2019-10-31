@@ -280,6 +280,9 @@ h6{
 .show-top{
 	z-index: 99999 !important;
 }
+.error{
+	font-style: normal;
+}
 //	normal link styles
 a:not(.item), a:not(.ui.button){
 	color:@link-color;

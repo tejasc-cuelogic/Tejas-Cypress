@@ -24,14 +24,18 @@ export default class Plaid extends Component {
     this.props.uiStore.clearErrors();
   }
 
+  componentDidUpdate() {
+    this.props.bankAccountStore.resetPlaidBankSearch();
+  }
+
   componentWillUnmount() {
-    this.props.bankAccountStore.setBankListing();
-    this.props.bankAccountStore.resetFormData('formBankSearch');
+    this.props.bankAccountStore.resetPlaidBankSearch();
     const modalEle = document.getElementById('multistep-modal');
     if (modalEle && isMobile) {
       modalEle.parentNode.scrollTo(0, 0);
     }
   }
+
 
   setBankSummary = () => {
     const {
@@ -96,7 +100,7 @@ export default class Plaid extends Component {
       return (
         <Dimmer className="fullscreen" active={inProgress}>
           <Loader active={inProgress}>
-          Please wait...
+            Please wait...
           </Loader>
         </Dimmer>
       );
@@ -125,9 +129,9 @@ export default class Plaid extends Component {
             </Dimmer> */}
             {typeof bankListing !== 'undefined' && bankListing.length === 0
               && (
-<Grid column={1} textAlign="center">
-                <Grid.Column>No results found.</Grid.Column>
-              </Grid>
+                <Grid column={1} textAlign="center">
+                  <Grid.Column>No results found.</Grid.Column>
+                </Grid>
               )
             }
             {
@@ -177,9 +181,9 @@ export default class Plaid extends Component {
           </div>
           {errors
             && (
-<Message error>
-              <ListErrors errors={[errors.message]} />
-            </Message>
+              <Message error>
+                <ListErrors errors={[errors.message]} />
+              </Message>
             )
           }
           <div className="center-align mt-30">

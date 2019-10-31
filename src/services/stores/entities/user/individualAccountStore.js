@@ -190,11 +190,11 @@ class IndividualAccountStore {
   @action
   populateData = (userData) => {
     if (Helper.matchRegexWithUrl([/\bindividual(?![-])\b/])) {
-      if (!isEmpty(userData) && !this.formStatus) {
+      if (!isEmpty(userData)) {
         const account = find(userData.roles, { name: 'individual' });
         if (account && account.details) {
           bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
-          if (account.details.linkedBank) {
+          if (account.details.linkedBank && isEmpty(bankAccountStore.plaidAccDetails)) {
             const plaidAccDetails = account.details.linkedBank;
             if (!bankAccountStore.isAccountPresent) {
               bankAccountStore.setPlaidAccDetails(plaidAccDetails);
