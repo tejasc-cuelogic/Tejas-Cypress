@@ -10,8 +10,13 @@ import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const InvestmentList = (props) => {
-  const investmentsMeta = props.listOf !== 'pending' ? ['Offering', 'Status', 'Investment Type', 'Invested Amount'] : ['Offering', 'Status', 'Investment Type', 'Invested Amount'];
-  const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['Days to close'] : ['Close Date'])];
+  const investmentsMeta = {
+    pending: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Days to close'],
+    active: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Close Date', 'Term', 'Net Payments Received'],
+    completed: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Close Date', 'Net Payments Received'],
+  };
+
+  const listHeader = [...investmentsMeta[props.listOf]];
   const {
     investments, match, viewAgreement, handleInvestNowClick, handleViewInvestment, isAdmin,
   } = props;
@@ -53,15 +58,7 @@ const InvestmentList = (props) => {
                             </p>
                           </div>
                         </Table.Cell>
-                        <Table.Cell>
-                          {
-                            data && data.offering && data.offering.stage
-                              ? props.listOf === 'active' ? 'Active' : data.offering.stage === 'LIVE'
-                                ? get(data.offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0 ? STAGES.PROCESSING.label
-                                  : get(data.offering, 'closureSummary.processingDate') && ((includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)
-                                    ? STAGES.LOCK.label : STAGES[data.offering.stage].label : STAGES[data.offering.stage].label : '-'
-                          }
-                        </Table.Cell>
+
                         <Table.Cell>
                           {
                             get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'
@@ -77,10 +74,37 @@ const InvestmentList = (props) => {
                             </>
                           }
                         </Table.Cell>
+
+                        <Table.Cell>
+                          {
+                            data && data.offering && data.offering.stage
+                              ? props.listOf === 'active' ? 'Active' : data.offering.stage === 'LIVE'
+                                ? get(data.offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0 ? STAGES.PROCESSING.label
+                                  : get(data.offering, 'closureSummary.processingDate') && ((includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)
+                                    ? STAGES.LOCK.label : STAGES[data.offering.stage].label : STAGES[data.offering.stage].label : '-'
+                          }
+                        </Table.Cell>
+
                         <Table.Cell collapsing>
                           {props.listOf === 'pending'
                             ? get(data, 'offering.closureSummary.processingDate') ? DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(get(data, 'offering.closureSummary.processingDate'), true, true).value === 0 ? '' : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(data, 'offering.closureSummary.processingDate'), true, true).value < 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(get(data, 'offering.closureSummary.processingDate'), true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(get(data, 'offering.closureSummary.processingDate'), true, true).label}` : DataFormatter.diffInDaysHoursMin(get(data, 'offering.closureSummary.processingDate')).diffText : 'N/A'
                             : get(data, 'offering.closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(data, 'offering.closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}
+                        </Table.Cell>
+
+                        {props.listOf === 'active'
+                          && (
+                            <Table.Cell>
+                              {
+                                `${get(data, 'offering.keyTerms.maturity')} months` || 'N/A'
+                              }
+                            </Table.Cell>
+                          )
+                        }
+
+                        <Table.Cell>
+                          {
+                            get(data, 'netPaymentsReceived') || 'N/A'
+                          }
                         </Table.Cell>
                         <Table.Cell collapsing>
                           {props.listOf === 'pending' && (
