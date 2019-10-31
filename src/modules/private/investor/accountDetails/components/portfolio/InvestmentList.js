@@ -10,13 +10,12 @@ import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const InvestmentList = (props) => {
-  const investmentsMeta = {
+  const listHeader = {
     pending: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Days to close'],
     active: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Close Date', 'Term', 'Net Payments Received'],
     completed: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Close Date', 'Net Payments Received'],
-  };
+  }[props.listOf];
 
-  const listHeader = [...investmentsMeta[props.listOf]];
   const {
     investments, match, viewAgreement, handleInvestNowClick, handleViewInvestment, isAdmin,
   } = props;
@@ -95,7 +94,7 @@ const InvestmentList = (props) => {
                           && (
                             <Table.Cell>
                               {
-                                `${get(data, 'offering.keyTerms.maturity')} months` || 'N/A'
+                               get(data, 'offering.keyTerms.maturity') ? `${data.offering.keyTerms.maturity} months` : 'N/A'
                               }
                             </Table.Cell>
                           )
