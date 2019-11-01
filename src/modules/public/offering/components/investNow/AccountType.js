@@ -37,8 +37,10 @@ class AccountType extends Component {
     const userStatus = userInfoDetails && userInfoDetails.status;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
     const { campaign } = this.props.campaignStore;
+    const { getInvestorAccountById } = this.props.portfolioStore;
     const offeringId = campaign && campaign.id ? campaign.id : this.props.match.params.offeringId;
-    const offeringReuglation = campaign && campaign.regulation;
+    // campaign && campaign.regulation;
+    const offeringReuglation = get(campaign, 'keyTerms.regulation') || get(getInvestorAccountById, 'offering.keyTerms.regulation');
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
     let isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availabilityForNPAInOffering');
@@ -50,6 +52,7 @@ class AccountType extends Component {
       userSelectedAccountStatus,
       setUserSelectedAccountStatus,
       userDetails,
+      userAccreditatedStatus,
     } = this.props.accreditationStore;
     const userStatusFound = userSelectedAccountStatus(investAccTypes.value);
     setUserSelectedAccountStatus(userStatusFound);
@@ -66,7 +69,7 @@ class AccountType extends Component {
     }
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if ((this.props.changeInvest && regulationType !== 'BD_CF_506C') || (accountToConsider
+    } else if ((this.props.changeInvest && regulationType && regulationType !== 'BD_CF_506C') || (accountToConsider
       && accountToConsider.length === 1 && isDocumentUpload === true)) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
@@ -76,7 +79,7 @@ class AccountType extends Component {
           }
         });
       } else if (this.props.changeInvest) {
-        const { getInvestorAccountById } = this.props.portfolioStore;
+        // const { getInvestorAccountById } = this.props.portfolioStore;
         const offeringRegulation = get(getInvestorAccountById, 'offering.keyTerms.regulation');
         const accreditationStatus = get(userDetails, 'accreditation.status');
         const isParallelOfferingModelToShow = !!((userAccredetiationState === 'EXPIRED') || (offeringRegulation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus)));
@@ -99,6 +102,7 @@ class AccountType extends Component {
     if (this.props.userStore.isInvestor && !this.props.accreditationStore.accreditationData.ira) {
       this.props.accreditationStore.getUserAccreditation().then(() => {
         initiateAccreditation();
+        userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
       });
     }
   }
@@ -177,6 +181,7 @@ class AccountType extends Component {
       userAccredetiationState,
       selectedAccountStatus,
       userDetails,
+      // isAccreditationExpired,
     } = this.props.accreditationStore;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
     const userInfoDetails = this.props.userDetailsStore.userDetails;
@@ -206,6 +211,15 @@ class AccountType extends Component {
         }
       }
     }
+    // else if (this.props.changeInvest && regulationType && regulationType === 'BD_CF_506C' && !isAccreditationExpired) {
+    //   const { activeAccounts } = this.props.userDetailsStore.signupStatus;
+    //   const accreditationStatus = get(userDetails, 'accreditation.status');
+    //   const isParallelOfferingModelToShow = !!((isAccreditationExpired) || (offeringReuglation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus)));
+    //   if (activeAccounts.length && this.props.investmentStore.getSelectedAccountTypeId
+    //     && !isParallelOfferingModelToShow && userStatus === 'FULL') {
+    //     setStepToBeRendered(1);
+    //   }
+    // }
   }
 
   radioChnaged = (e, res) => {

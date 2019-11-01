@@ -87,6 +87,8 @@ export class AccreditationStore {
 
   @observable filingStatus = null;
 
+  @observable isAccreditationExpired = false;
+
   @observable sortOrder = {
     column: null,
     direction: 'asc',
@@ -874,26 +876,37 @@ export class AccreditationStore {
       // if (accountStatus) {
       switch (accountStatus) {
         case 'REQUESTED':
-          this.userAccredetiationState = 'PENDING';
+          // this.userAccredetiationState = 'PENDING';
+          this.setFieldVal('userAccredetiationState', 'PENDING');
           break;
         case 'DECLINED':
-          this.userAccredetiationState = 'NOT_ELGIBLE';
+          // this.userAccredetiationState = 'NOT_ELGIBLE';
+          this.setFieldVal('userAccredetiationState', 'NOT_ELGIBLE');
           break;
         case 'CONFIRMED':
-          this.userAccredetiationState = 'ELGIBLE';
+          // this.userAccredetiationState = 'ELGIBLE';
+          this.setFieldVal('userAccredetiationState', 'ELGIBLE');
           break;
         case 'EXPIRED':
-          this.userAccredetiationState = 'EXPIRED';
+          // this.userAccredetiationState = 'EXPIRED';
+          this.setFieldVal('userAccredetiationState', 'EXPIRED');
+          this.setFieldVal('isAccreditationExpired', true);
           break;
         default:
-          this.userAccredetiationState = 'INACTIVE';
+          // this.userAccredetiationState = 'INACTIVE';
+          this.setFieldVal('userAccredetiationState', 'INACTIVE');
           break;
       }
       // }
     } else if (intialAccountStatus === 'FULL') {
-      this.userAccredetiationState = 'ELGIBLE';
+      // this.userAccredetiationState = 'ELGIBLE';
+      this.setFieldVal('userAccredetiationState', 'ELGIBLE');
     }
     this.setCurrentInvestmentStatus(investmentType);
+  }
+
+  @computed get currentUserAccreditedState() {
+    return this.userAccredetiationState;
   }
 
   @action
@@ -968,6 +981,7 @@ export class AccreditationStore {
     investmentStore.resetAccTypeChanged();
     investmentStore.setFieldValue('disableNextbtn', true);
     investmentStore.setFieldValue('isGetTransferRequestCall', false);
+    this.setFieldVal('isAccreditationExpired', false);
   }
 
   checkIsAccreditationExpired = (expirationDate) => {
