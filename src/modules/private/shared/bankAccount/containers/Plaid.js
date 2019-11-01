@@ -39,7 +39,8 @@ export default class Plaid extends Component {
     } = this.props.bankAccountStore;
     if (isAccountPresent
       && !showAddFunds
-      && !manualLinkBankSubmitted) {
+      && !manualLinkBankSubmitted
+      && this.props.action !== 'change') {
       this.props.bankAccountStore.setLinkBankSummary();
     }
   }

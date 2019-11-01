@@ -42,30 +42,23 @@ class Login extends Component {
     const { email, password } = this.props.authStore.LOGIN_FRM.fields;
     const lowerCasedEmail = email.value.toLowerCase();
     const userCredentials = { email: lowerCasedEmail, password: password.value };
-    this.props.authStore.checkMigrationByEmail(userCredentials).then((res) => {
-      if (res) {
-        authActions.login()
-          .then(() => {
-            if (this.props.authStore.newPasswordRequired) {
-              this.props.uiStore.removeOneFromProgressArray('login');
-              this.props.history.push('/change-password');
-            } else {
-              this.props.authStore.setCredentials(userCredentials);
-              this.props.authStore.resetForm('LOGIN_FRM');
-              const { pendingStep, userHasOneFullAccount } = this.props.userDetailsStore;
-              const roles = get(this.props.userStore.currentUser, 'roles');
-              const redirectUrl = (roles && roles.includes('investor'))
-                && !userHasOneFullAccount
-                ? pendingStep : this.props.uiStore.authRef;
-              this.props.uiStore.removeOneFromProgressArray('login');
-              this.props.history.push(redirectUrl || '/');
-            }
-          }).catch((err) => {
-            console.log(err);
-          });
-      }
-    })
-      .catch((err) => {
+    authActions.login()
+      .then(() => {
+        if (this.props.authStore.newPasswordRequired) {
+          this.props.uiStore.removeOneFromProgressArray('login');
+          this.props.history.push('/change-password');
+        } else {
+          this.props.authStore.setCredentials(userCredentials);
+          this.props.authStore.resetForm('LOGIN_FRM');
+          const { pendingStep, userHasOneFullAccount } = this.props.userDetailsStore;
+          const roles = get(this.props.userStore.currentUser, 'roles');
+          const redirectUrl = (roles && roles.includes('investor'))
+            && !userHasOneFullAccount
+            ? pendingStep : this.props.uiStore.authRef;
+          this.props.uiStore.removeOneFromProgressArray('login');
+          this.props.history.push(redirectUrl || '/');
+        }
+      }).catch((err) => {
         console.log(err);
       });
   };
@@ -92,13 +85,9 @@ class Login extends Component {
       LOGIN_FRM, LoginChange, togglePasswordType, pwdInputType,
     } = this.props.authStore;
 
-    let customError = errors && errors.message === 'User does not exist.'
+    const customError = errors && errors.message === 'User does not exist.'
       ? 'Incorrect username or password.' : errors && errors.message;
 
-    if (errors && errors.code === 'checkMigrationByEmailFailed') {
-      customError = `There was a problem with authentication. Please try again or contact
-        <a className="negative-text" href="mailto:support@nextseed.com">support@nextseed.com</a>`;
-    }
     if (errors && errors.code === 'UserNotConfirmedException') {
       const { email, password } = this.props.authStore.LOGIN_FRM.fields;
       this.props.authStore.setCredentials({ email: email.value, password: password.value });
