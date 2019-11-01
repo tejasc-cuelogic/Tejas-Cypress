@@ -45,7 +45,7 @@ export default class Listing extends Component {
     const { isIssuer, isAdmin } = this.props.userStore;
     const headerList = [...meta];
     const referralCode = get(offer, 'referralCode');
-    const isOfferingClose = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE'].includes(get(offer, 'stage'));
+    const isOfferingClose = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULTED'].includes(get(offer, 'stage'));
     let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Amount', value: 'amount' });
     computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'EB', value: 'earlyBirdEligibility' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
