@@ -33,7 +33,7 @@ export default class AllRepayments extends Component {
   }
 
   getLink = (offeringId, offeringStage) => {
-    const stage = ['CREATION'].includes(offeringStage) ? 'creation' : ['LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage) ? 'live' : ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULT'].includes(offeringStage) ? 'completed' : 'failed';
+    const stage = ['CREATION'].includes(offeringStage) ? 'creation' : ['LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage) ? 'live' : ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULTED'].includes(offeringStage) ? 'completed' : 'failed';
     return `/app/offerings/${stage}/edit/${offeringId}`;
   }
 

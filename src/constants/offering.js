@@ -143,7 +143,7 @@ export const CAMPAIGN_OFFERING_STAGE = {
   STARTUP_PERIOD: 'Startup Period',
   IN_REPAYMENT: 'Re Payment',
   COMPLETE: 'Completed',
-  DEFAULT: 'Default',
+  DEFAULTED: 'Default',
 };
 
 export const OFFERING_REGULATIONS = {
