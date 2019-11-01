@@ -26,8 +26,8 @@ export class OfferingInvestorStore {
   @observable db;
 
   @observable sortOrder = {
-    column: null,
-    direction: 'asc',
+    column: 'investmentDate',
+    direction: 'desc',
   }
 
   @action
