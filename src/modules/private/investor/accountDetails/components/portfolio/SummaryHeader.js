@@ -10,7 +10,7 @@ import Helper from '../../../../../../helper/utility';
   1: amount so prefix $ sign
   2: date representation
 */
-const isMobile = document.documentElement.clientWidth < 992;
+const isMobile = document.documentElement.clientWidth < 767;
 const showValue = props => ((props.type === 1) && (props.title !== 'TNAR')
   ? (Helper.MoneyMathDisplayCurrency(props.content)) : (props.type === 1) && (props.title === 'TNAR') ? (props.content !== 'N/A') ? `${props.content} %` : `${props.content}`
     : (((props.type === 2) ? `date ${props.content}` : props.content)));

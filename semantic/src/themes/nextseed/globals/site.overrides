@@ -2196,19 +2196,19 @@ svg:not(:root).recharts-surface{
 }
 .donut-chart, .portfolio-allocation{
 	.recharts-legend-wrapper .chartLegends{
-		@media only screen and (max-width : @largestMobileScreen){
-			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-			justify-content: space-between;		
-		}
 		li{
 			font-size:@22px;
 			line-height: 30px;
 			margin: 0 @10px 0 0;
+			@media only screen and (max-width : @largestMobileScreen){
+				line-height: 14px;
+			}
 			span{
 				font-size:@13px;
 				color:@fullBlack;
+				@media only screen and (max-width : @largestMobileScreen){
+					font-size: @10px;
+				}
 				i {
 					color: @neutral-offdark;
 				}
