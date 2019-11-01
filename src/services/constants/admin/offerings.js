@@ -26,7 +26,7 @@ export const STAGES = {
   COMPLETE: {
     ref: 'completed', publicRef: 'completed', accessKey: 4, label: 'Completed',
   },
-  DEFAULT: { ref: 'completed', accessKey: 4, label: 'Default' },
+  DEFAULTED: { ref: 'completed', accessKey: 4, label: 'Defaulted' },
 };
 
 export const KEY_TERMS = {
@@ -447,6 +447,27 @@ export const KEY_TERMS = {
     rule: 'optional',
     placeHolder: 'Please select a value',
   },
+  offeringSize: {
+    value: '',
+    label: 'Offering Size',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  preferredReturn: {
+    value: '',
+    label: 'Preferred Return',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  targetInvestmentPeriod: {
+    value: '',
+    label: 'Targeted Investment Period',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
 };
 
 export const BUSINESS_INDUSTRIES = [
@@ -476,6 +497,7 @@ export const SECURITIES_VALUES = [
   { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity' },
   { key: 'Convertible Notes', value: 'CONVERTIBLE_NOTES', text: 'Convertible Notes' },
   { key: 'SAFE', value: 'SAFE', text: 'SAFE' },
+  { key: 'Real Estate', value: 'REAL_ESTATE', text: 'Real Estate' },
 ];
 
 export const ROUND_TYPE_VALUES = [
@@ -1210,7 +1232,7 @@ export const LEADERSHIP = {
       value: '',
       label: 'Driver License Number',
       error: undefined,
-      rule: 'numeric',
+      rule: 'optional',
       placeHolder: 'Enter here',
     },
     dlState: {

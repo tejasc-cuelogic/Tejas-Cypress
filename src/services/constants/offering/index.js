@@ -41,9 +41,9 @@ export const UPDATES = {
 
 export const TEMPLATE = {
   type: {
-    label: 'Template Type',
+    label: 'Email Template',
     value: 'LIVE',
-    values: [{ label: 'Live', value: 'LIVE' }, { label: 'Full', value: 'FULL' }],
+    values: [{ label: 'Link', value: 'LIVE' }, { label: 'In Body', value: 'FULL' }],
     error: undefined,
     rule: 'required',
   },
