@@ -326,6 +326,39 @@ class KeyTermsDetails extends Component {
             />
             <KeyTermsFieldHoc
               data={keyTerms}
+              field="offeringSize"
+              title="Offering Size"
+              content={(
+                <p>
+                  {keyTerms && keyTerms.offeringSize ? Helper.CurrencyFormat(keyTerms.offeringSize, 0)
+                    : 'NA'}
+                </p>
+              )}
+            />
+            <KeyTermsFieldHoc
+              data={keyTerms}
+              field="preferredReturn"
+              title="Preferred Return"
+              content={(
+                <p>
+                  {keyTerms && keyTerms.preferredReturn ? `${keyTerms.preferredReturn}%`
+                    : 'NA'}
+                </p>
+              )}
+            />
+            <KeyTermsFieldHoc
+              data={keyTerms}
+              field="targetInvestmentPeriod"
+              title="Targeted Investment Period"
+              content={(
+                <p>
+                  {keyTerms && keyTerms.targetInvestmentPeriod ? `${keyTerms.targetInvestmentPeriod} months`
+                    : 'NA'}
+                </p>
+              )}
+            />
+            <KeyTermsFieldHoc
+              data={keyTerms}
               title="Ownership % Represented by Securities"
               content={keyTerms && keyTerms.securitiesOwnershipPercentage
                 ? (

@@ -295,6 +295,20 @@ export default class KeyTerms extends Component {
               options={KEY_TERMS_FRM.fields.equityUnitType.values}
               onChange={(e, result) => formArrayChange(e, result, formName)}
             />
+            {
+              ['offeringSize', 'preferredReturn', 'targetInvestmentPeriod'].map(field => (
+                <MaskedInput
+                  displayMode={isReadonly}
+                  name={field}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  changed={(values, name) => maskArrayChange(values, formName, name)}
+                  currency={field === 'offeringSize'}
+                  number={field === 'targetInvestmentPeriod'}
+                  percentage={field === 'preferredReturn'}
+                  prefix={field === 'offeringSize' ? '$' : ''}
+                />
+              ))
+            }
           </Form.Group>
           <Form.Group widths={2}>
             {['investmentMultipleSummary', 'offeringDisclaimer', 'revShareSummary', 'revSharePercentageDescription'].map(field => (
