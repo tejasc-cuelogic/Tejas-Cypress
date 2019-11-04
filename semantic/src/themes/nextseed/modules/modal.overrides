@@ -36,6 +36,9 @@
         // background: @white;
         padding: 0;
     }
+    .ui.modal.link-bank-modal>.icon:first-child+.dimmer{
+        border-radius: 0;
+    }
 }
 //  Public pages Starts
 .ui.modal{

@@ -2222,6 +2222,9 @@ svg:not(:root).recharts-surface{
 		.recharts-pie-sector .datavalue{
 			font-size:@20px;
 			font-weight:@fontMedium;
+			@media only screen and (max-width : @largestMobileScreen){
+				font-size: @10px;
+			}
 		}
 		tspan{
 			font-size:@18px;

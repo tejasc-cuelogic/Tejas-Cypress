@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { Header, Button, Image, Grid, Form, Input, Message, Dimmer, Loader } from 'semantic-ui-react';
+import { Header, Button, Image, Grid, Form, Input, Message } from 'semantic-ui-react';
 import { bankAccountActions } from '../../../../../services/actions';
 import ManualForm from './ManualForm';
 import { IND_BANK_LIST } from '../../../../../constants/account';
@@ -75,7 +75,7 @@ export default class Plaid extends Component {
       linkbankSummary,
       isAccountPresent,
     } = this.props.bankAccountStore;
-    const { errors, inProgress } = this.props.uiStore;
+    const { errors } = this.props.uiStore;
     const { action, refLink } = this.props;
     const headerText = 'Next, link your bank account';
     const subHeaderText = action && action === 'change'
@@ -97,15 +97,15 @@ export default class Plaid extends Component {
     if (bankLinkInterface === 'form') {
       return <ManualForm action={action} refLink={refLink} />;
     }
-    if (action === 'change' && inProgress) {
-      return (
-        <Dimmer className="fullscreen" active={inProgress}>
-          <Loader active={inProgress}>
-            Please wait...
-          </Loader>
-        </Dimmer>
-      );
-    }
+    // if (action === 'change' && inProgress) {
+    //   return (
+    //     <Dimmer className="fullscreen" active={inProgress}>
+    //       <Loader active={inProgress}>
+    //         Please wait...
+    //       </Loader>
+    //     </Dimmer>
+    //   );
+    // }
     return (
       <>
         <div className={isMobile ? '' : 'center-align'}>
