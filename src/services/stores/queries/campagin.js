@@ -36,7 +36,7 @@ query getOfferingList($filters: OfferingFilterInputType, $userId: String){
         keyTerms {
           multiple
           interestRate
-          unitPrice
+          priceCalcuation
         }
         hardCloseDate
         repayment {
@@ -46,7 +46,7 @@ query getOfferingList($filters: OfferingFilterInputType, $userId: String){
       }
       keyTerms {
         minInvestAmt
-        unitPrice
+        priceCopy
         premoneyValuation
         maturity
         interestRate
@@ -148,7 +148,7 @@ export const campaignDetailsQuery = gql`
         url
         isPublic
       }
-      unitPrice
+      priceCopy
       discount
       valuationCap
       totalRoundSize
@@ -319,7 +319,7 @@ export const campaignDetailsQuery = gql`
       }
       keyTerms {
         multiple
-        unitPrice
+        priceCalcuation
       }
     }
     earlyBirdsCount
@@ -435,7 +435,7 @@ query getOfferingById($id: ID) {
           }
         }
         multiple
-        unitPrice
+        priceCalcuation
         revSharePercentage
         interestRate
         businessOpenDate

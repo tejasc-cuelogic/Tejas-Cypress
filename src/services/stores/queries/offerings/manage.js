@@ -221,7 +221,7 @@ export const getOfferingDetails = gql`
         }
         discount
         valuationCap
-        unitPrice
+        priceCopy
         offeringSize
         preferredReturn
         targetInvestmentPeriod
@@ -1005,7 +1005,7 @@ export const getOfferingDetails = gql`
               }
             }
           }
-          unitPrice
+          priceCalcuation
           multiple
           revSharePercentage
           interestRate
