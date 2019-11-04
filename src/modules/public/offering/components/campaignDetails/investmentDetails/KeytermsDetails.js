@@ -289,11 +289,11 @@ class KeyTermsDetails extends Component {
             />
             <KeyTermsFieldHoc
               data={keyTerms}
-              field="unitPrice"
+              field="priceCopy"
               title={`${capitalize(keyTerms.equityUnitType)} Price`}
               content={(
                 <p>
-                  {Helper.CurrencyFormat(keyTerms.unitPrice, 0)}
+                  {keyTerms.priceCopy}
                 </p>
               )}
             />

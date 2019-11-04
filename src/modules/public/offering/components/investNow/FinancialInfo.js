@@ -78,7 +78,7 @@ class FinancialInfo extends Component {
     const accreditationStatus = get(userDetails, 'accreditation.status');
     const offeringSecurityType = get(campaign, 'keyTerms.securities');
     const prefferedEquityLabel = get(campaign, 'keyTerms.equityUnitType');
-    const prefferedEquityAmount = get(campaign, 'closureSummary.keyTerms.unitPrice') || '0';
+    const prefferedEquityAmount = get(campaign, 'closureSummary.keyTerms.priceCalcuation') || '0';
     const offeringReuglation = campaignRegulation || get(getInvestorAccountById, 'offering.keyTerms.regulation');
     const showLimitComponent = !((offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || (offeringReuglation === 'BD_CF_506C' && includes(['REQUESTED', 'CONFIRMED'], accreditationStatus))));
     const { getInvestorAmountInvestedLoading } = this.props.investmentLimitStore;

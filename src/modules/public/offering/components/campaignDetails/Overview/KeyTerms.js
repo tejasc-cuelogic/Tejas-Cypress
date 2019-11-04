@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { get } from 'lodash';
+import { get, capitalize } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Popup, Table, Header, Button } from 'semantic-ui-react';
-import Helper from '../../../../../../helper/utility';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_REGULATION_DETAILED } from '../../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -162,14 +161,14 @@ class KeyTerms extends Component {
                   </Table.Cell>
                 </Table.Row>
                 } */}
-                {get(campaign, 'keyTerms.unitPrice')
+                {get(campaign, 'keyTerms.priceCopy')
                 && (
 <Table.Row verticalAlign="top">
-                  <Table.Cell width={5} className="neutral-text"><b>Share Price{' '}</b>
+                  <Table.Cell width={5} className="neutral-text"><b>{`${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price`}{' '}</b>
                   </Table.Cell>
                   <Table.Cell>
                     <p>
-                      {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice')) : ' NA'}
+                      {get(campaign, 'keyTerms.priceCopy') || ' NA'}
                     </p>
                   </Table.Cell>
                 </Table.Row>

@@ -246,24 +246,27 @@ export default class KeyTerms extends Component {
               options={ROUND_TYPE_VALUES}
               onChange={(e, result) => formArrayChange(e, result, formName)}
             /> */}
-            {
-              ['totalRoundSize', 'unitPrice'].map(field => (
-                <MaskedInput
-                  displayMode={isReadonly}
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(values, name) => maskArrayChange(values, formName, name)}
-                  currency
-                  prefix="$"
-                />
-              ))
-            }
             <MaskedInput
               displayMode={isReadonly}
-              name="unitPrice"
-              fielddata={CLOSURE_SUMMARY_FRM.fields.unitPrice}
+              name="totalRoundSize"
+              fielddata={KEY_TERMS_FRM.fields.totalRoundSize}
+              changed={(values, name) => maskArrayChange(values, formName, name)}
+              currency
+              prefix="$"
+            />
+            <FormInput
+              displayMode={isReadonly}
+              name="priceCopy"
+              fielddata={KEY_TERMS_FRM.fields.priceCopy}
+              changed={(e, result) => formArrayChange(e, result, formName)}
+            />
+            <MaskedInput
+              displayMode={isReadonly}
+              name="priceCalcuation"
+              fielddata={CLOSURE_SUMMARY_FRM.fields.priceCalcuation}
               changed={(values, name) => maskArrayChange(values, 'CLOSURE_SUMMARY_FRM', name)}
               currency
+              prefix="$"
             />
             <MaskedInput
               displayMode={isReadonly}
