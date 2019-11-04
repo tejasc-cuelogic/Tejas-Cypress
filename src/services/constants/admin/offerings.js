@@ -26,7 +26,9 @@ export const STAGES = {
   COMPLETE: {
     ref: 'completed', publicRef: 'completed', accessKey: 4, label: 'Completed',
   },
-  DEFAULTED: { ref: 'completed', accessKey: 4, label: 'Defaulted' },
+  DEFAULTED: {
+    ref: 'completed', publicRef: 'completed', accessKey: 4, label: 'Defaulted',
+  },
 };
 
 export const KEY_TERMS = {
