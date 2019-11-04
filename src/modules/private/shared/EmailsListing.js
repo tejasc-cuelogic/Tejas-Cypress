@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Table, Popup, Item, Icon } from 'semantic-ui-react';
 import { DataFormatter } from '../../../helper';
 
-const EmailsListing = ({ emailList, displyNoEmails, handleModel }) => (
+const EmailsListing = ({ emailList, displyNoEmails, handleModel, loading }) => (
     <div className="table-wrapper">
       <Table unstackable striped className="application-list">
         <Table.Header>
@@ -15,10 +15,17 @@ const EmailsListing = ({ emailList, displyNoEmails, handleModel }) => (
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {!emailList || (emailList && emailList.length === 0) ? (
+          {loading
+          && (
+            <Table.Row>
+              <Table.Cell textAlign="center" colSpan="7">Loading...</Table.Cell>
+            </Table.Row>
+          )
+          }
+          {(!emailList || (emailList && emailList.length === 0)) && !loading ? (
             <Table.Row><Table.Cell textAlign="center" colSpan="7">{displyNoEmails && 'No emails to display.'}</Table.Cell></Table.Row>
           ) : (
-            emailList && emailList.map(resp => (
+            !loading && emailList && emailList.map(resp => (
                 <Table.Row>
                   <Table.Cell>
                     <Popup

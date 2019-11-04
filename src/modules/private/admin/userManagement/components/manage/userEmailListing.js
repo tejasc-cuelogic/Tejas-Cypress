@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, withRouter } from 'react-router-dom';
 import { Container, Header, Card } from 'semantic-ui-react';
-import { InlineLoader } from '../../../../../../theme/shared';
 import EmailContent from '../../../../shared/EmailContent';
 import EmailsListing from '../../../../shared/EmailsListing';
 
@@ -30,15 +29,12 @@ export default class UserEmailList extends Component {
           render={props => <EmailContent overrideTop refLink={match.url} {...props} />
           }
         />
-        {emailListOutputLoading ? <InlineLoader />
-          : (
-            <>
-              <Header as="h4">Email List</Header>
-              <Container as={!this.props.admin ? Card : false} fluid>
-              <EmailsListing emailList={userEmails} displyNoEmails handleModel={this.handleModel} />
-              </Container>
-            </>
-          )}
+        <>
+          <Header as="h4">Email List</Header>
+          <Container as={!this.props.admin ? Card : false} fluid>
+          <EmailsListing loading={emailListOutputLoading} emailList={userEmails} displyNoEmails handleModel={this.handleModel} />
+          </Container>
+        </>
       </>
     );
   }

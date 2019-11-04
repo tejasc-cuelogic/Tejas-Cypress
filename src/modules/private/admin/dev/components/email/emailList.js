@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import moment from 'moment';
 import Filters from './filter';
-import { InlineLoader } from '../../../../../../theme/shared';
 import formHOC from '../../../../../../theme/form/formHOC';
 import EmailContent from '../../../../shared/EmailContent';
 import EmailsListing from '../../../../shared/EmailsListing';
@@ -83,10 +82,7 @@ function EmailList(props) {
       />
       <Card fluid className="elastic-search">
         <Card.Description>
-          {loadingArray.includes('getEmailList') ? <InlineLoader />
-            : (
-              <EmailsListing emailList={emailList} displyNoEmails={displyNoEmails} handleModel={handleModel} />
-            )}
+          <EmailsListing loading={loadingArray.includes('getEmailList')} emailList={emailList} displyNoEmails={displyNoEmails} handleModel={handleModel} />
         </Card.Description>
       </Card>
     </>
