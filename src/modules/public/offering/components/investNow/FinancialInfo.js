@@ -71,7 +71,7 @@ class FinancialInfo extends Component {
       ? getCurrentInvestNowHealthCheck.previousAmountInvested : 0;
     // const investmentRegulation = get(getInvestorAccountById, 'regulation');
     const offeringId = get(this.props, 'match.params.offeringId') ? get(this.props, 'match.params.offeringId') : get(getInvestorAccountById, 'offering.id') ? get(getInvestorAccountById, 'offering.id') : offeringDetails && offeringDetails.id;
-    const { currentInvestmentStatus, userDetails } = this.props.accreditationStore;
+    const { currentInvestmentStatus, userDetails, userAccredetiationState } = this.props.accreditationStore;
     const { campaign } = this.props.campaignStore;
     const offerName = get(campaign, 'keyTerms.shorthandBusinessName') ? get(campaign, 'keyTerms.shorthandBusinessName') : get(getInvestorAccountById, 'offering.keyTerms.shorthandBusinessName') ? get(getInvestorAccountById, 'offering.keyTerms.shorthandBusinessName') : '-';
     const campaignRegulation = get(campaign, 'keyTerms.regulation');
@@ -80,7 +80,7 @@ class FinancialInfo extends Component {
     const prefferedEquityLabel = get(campaign, 'keyTerms.equityUnitType');
     const prefferedEquityAmount = get(campaign, 'closureSummary.keyTerms.priceCalcuation') || '0';
     const offeringReuglation = campaignRegulation || get(getInvestorAccountById, 'offering.keyTerms.regulation');
-    const showLimitComponent = !((offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || (offeringReuglation === 'BD_CF_506C' && includes(['REQUESTED', 'CONFIRMED'], accreditationStatus))));
+    const showLimitComponent = !((offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || (offeringReuglation === 'BD_CF_506C' && includes(['REQUESTED', 'CONFIRMED'], accreditationStatus) && userAccredetiationState !== 'EXPIRED')));
     const { getInvestorAmountInvestedLoading } = this.props.investmentLimitStore;
     if (!getCurrentInvestNowHealthCheck || getInvestorAmountInvestedLoading
       || this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
