@@ -16,7 +16,7 @@ const MessagesList = props => (
         >
           {(((props.threadUsersList(msg.threadComments).length === 0 || get(msg, `threadComments[${msg.threadComments.length - 1}].createdUserInfo.roles[0].scope`) !== 'admin') && !props.isIssuer) || props.threadMsgCount(msg.threadComments))
             ? (
-              <Item.Extra>
+              <Item.Extra className="offering-comment">
                 {(props.threadUsersList(msg.threadComments).length === 0 || get(msg, `threadComments[${msg.threadComments.length - 1}].createdUserInfo.roles[0].scope`) !== 'admin') && !props.isIssuer
                   ? (
                   <Label size="mini" color="red" horizontal circular>Response Needed</Label>
