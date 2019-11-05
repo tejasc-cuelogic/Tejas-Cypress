@@ -81,7 +81,7 @@ class SecondaryMenu extends Component {
       force2ary, navCustomClick, responsiveVars,
     } = this.props;
     let options = [];
-    const showMoreMenuLength = get(responsiveVars, 'isTabletLand') ? 5 : 8;
+    const showMoreMenuLength = (get(responsiveVars, 'isTabletLand') || get(responsiveVars, 'isSmallScreen')) ? 5 : 8;
     const showMoreMenu = this.props.offering && navItems && navItems.length > showMoreMenuLength;
     if (showMoreMenu) {
       const dropOptions = navItems.splice(showMoreMenuLength - 1, navItems.length - showMoreMenuLength);

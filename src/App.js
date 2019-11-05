@@ -158,6 +158,8 @@ class App extends Component {
       && document.documentElement.clientWidth < 992,
     isTabletLand: document.documentElement.clientWidth >= 768
     && document.documentElement.clientWidth < 1025,
+    isSmallScreen: document.documentElement.clientWidth >= 1024
+    && document.documentElement.clientWidth < 1200,
   });
 
   handleResize = () => {
