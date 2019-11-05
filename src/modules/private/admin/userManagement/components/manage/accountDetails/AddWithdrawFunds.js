@@ -15,7 +15,7 @@ export default class AddWithdrawFunds extends Component {
   }
 
   handleBack = () => {
-    this.props.history.push(`${this.props.refLink}`);
+    this.props.history.goBack();
   }
 
   handleAddWithdrawFundCta = (userId, accountId, actionType) => {
