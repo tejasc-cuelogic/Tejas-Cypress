@@ -516,7 +516,7 @@
             margin-top:@14px;
         }
     }
-    &.deletion{
+    &.deletion, &.approval{
         > .header{
             padding:1.25rem 1.5rem;
         }

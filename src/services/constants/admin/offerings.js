@@ -374,7 +374,7 @@ export const KEY_TERMS = {
     rule: 'optional',
     placeHolder: 'Enter here',
   },
-  unitPrice: {
+  priceCopy: {
     value: null,
     label: 'Price (copy)',
     error: undefined,
@@ -771,7 +771,7 @@ export const CLOSURE_SUMMARY = {
     rule: 'string',
     placeHolder: 'Enter here',
   },
-  unitPrice: {
+  priceCalcuation: {
     value: null,
     label: 'Price (calculation)',
     error: undefined,

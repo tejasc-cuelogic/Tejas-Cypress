@@ -25,7 +25,7 @@ const keyTermList = [
   { label: 'Interest Rate', forFunded: true, key: 'closureSummary.keyTerms.interestRate', type: '%', for: ['TERM_NOTE'] },
   { label: 'Maturity', key: 'keyTerms.maturity', type: 'months', for: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
   { label: 'Pre-Money Valuation', key: 'keyTerms.premoneyValuation', type: '$', for: ['PREFERRED_EQUITY_506C'] },
-  { label: 'Share Price', key: 'keyTerms.unitPrice', type: '$', for: ['PREFERRED_EQUITY_506C'] },
+  { label: 'Share Price', key: 'keyTerms.priceCopy', type: '', for: ['PREFERRED_EQUITY_506C'] },
   { label: 'Valuation Cap', key: 'keyTerms.valuationCap', type: '$', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
   { label: 'Discount', key: 'keyTerms.discount', type: '%', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
   // { label: 'Total Payments to investors', forFunded: true, key: 'closureSummary.repayment.count', type: '', for: [''] },
