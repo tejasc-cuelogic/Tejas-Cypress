@@ -923,7 +923,7 @@ export class UserDetailsStore {
     return this.emailListArr.loading;
   }
 
-  @computed get userEmals() {
+  @computed get userEmails() {
     return this.emailListArr && this.emailListArr.data.fetchEmails && this.emailListArr.data.fetchEmails.emails;
   }
 }
