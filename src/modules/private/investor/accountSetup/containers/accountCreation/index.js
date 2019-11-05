@@ -35,7 +35,7 @@ export default class AccountCreation extends Component {
       this.props.identityStore.setCipDetails();
       const { res, url } = await this.props.identityStore.verifyCip();
       const { cipStepUrlMapping } = this.props.identityStore;
-      const { step } = res.data.verifyCip;
+      const { step, status } = res.data.verifyCip;
       const isCipOffline = step === 'OFFLINE';
 
       if (!this.props.userDetailsStore.isUserVerified
@@ -44,6 +44,7 @@ export default class AccountCreation extends Component {
       } else if ((!this.props.userDetailsStore.isUserVerified
         || (step === 'userCIPHardFail'
         && cipStepUrlMapping.ciphardFail.url === url))
+        || !status
         || isCipOffline) {
         this.props.history.push(cipStepUrlMapping.ciphardFail.url);
       } else if (this.props.userDetailsStore.isLegalDocsPresent && isCipOffline) {
@@ -113,7 +114,6 @@ export default class AccountCreation extends Component {
 
   renderAccType = () => {
     const { investmentAccType } = this.props.accountStore;
-    this.props.bankAccountStore.resetStoreData();
     this.props.history.push(`${this.props.match.url}/${investmentAccType}`);
   }
 

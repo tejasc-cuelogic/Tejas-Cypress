@@ -8,6 +8,9 @@ const common = {
     shorthandBusinessName
     securities
     regulation
+    offeringSize
+    preferredReturn
+    targetInvestmentPeriod
   }
   leadDetails {
     email {
@@ -218,7 +221,10 @@ export const getOfferingDetails = gql`
         }
         discount
         valuationCap
-        unitPrice
+        priceCopy
+        offeringSize
+        preferredReturn
+        targetInvestmentPeriod
         totalRoundSize
         equityClass
         equityUnitType
@@ -986,7 +992,9 @@ export const getOfferingDetails = gql`
           date
           amount
         }
+        operationsDate
         keyTerms {
+          monthlyPayment
           supplementalAgreements {
             documents {
               name
@@ -997,7 +1005,7 @@ export const getOfferingDetails = gql`
               }
             }
           }
-          unitPrice
+          priceCalcuation
           multiple
           revSharePercentage
           interestRate

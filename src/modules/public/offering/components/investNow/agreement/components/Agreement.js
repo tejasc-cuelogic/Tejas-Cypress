@@ -122,6 +122,7 @@ export default class Agreement extends React.Component {
       investmentAmount,
       setCheckbox,
       agreementDetails,
+      // investAccTypes,
       investmentFlowErrorMessage,
     } = this.props.investmentStore;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
@@ -132,9 +133,10 @@ export default class Agreement extends React.Component {
     const { campaign } = this.props.campaignStore;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     const offeringRegulationType = get(campaign, 'keyTerms.regulation');
-    const { currentInvestmentStatus } = this.props.accreditationStore;
+    const { currentInvestmentStatus, userAccredetiationState } = this.props.accreditationStore;
     const investmentRegulation = get(getInvestorAccountById, 'regulation');
-    const regulationCheck = this.props.changeInvestment && investmentRegulation
+    // userAccreditatedStatus(investAccTypes.value, true, investmentRegulation);
+    const regulationCheck = this.props.changeInvestment && investmentRegulation && userAccredetiationState !== 'EXPIRED'
       ? investmentRegulation : currentInvestmentStatus;
     // regulationCheck === ('BD_506C' || 'BD_506B')
     // const regualtionTypeStatement =
@@ -143,6 +145,8 @@ export default class Agreement extends React.Component {
     const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : regulationCheck === 'BD_506B' ? 'Rule 506(b) of Regulation D' : 'Regulation Crowdfunding';
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
+    const offeringSecurityType = get(campaign, 'keyTerms.securities');
+    const agreementStatement = includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) ? 'Purchase Agreement' : 'Note Purchase Agreement';
     return (
       <>
         <Modal open={this.state.open} closeOnDimmerClick={false} size="mini">
@@ -211,7 +215,7 @@ export default class Agreement extends React.Component {
                           changed={setCheckbox}
                           customLabel={(
                             <>
-                              I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">Note Purchase Agreement</Link>.
+                              I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">{agreementStatement}</Link>.
                             </>
                           )}
                           conditionalCustomLabel={(

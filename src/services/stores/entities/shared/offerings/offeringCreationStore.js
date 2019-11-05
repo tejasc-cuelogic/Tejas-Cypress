@@ -1272,7 +1272,7 @@ export class OfferingCreationStore {
       payloadData.regulation = this.KEY_TERMS_FRM.fields.regulation.value;
       const closureSummary = { ...getOfferingById.closureSummary };
       const keyTerms = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
-      closureSummary.keyTerms = { ...closureSummary.keyTerms, unitPrice: keyTerms.unitPrice, multiple: keyTerms.multiple, interestRate: get(payloadData, 'keyTerms.interestRate') };
+      closureSummary.keyTerms = { ...closureSummary.keyTerms, priceCalcuation: keyTerms.priceCalcuation, multiple: keyTerms.multiple, interestRate: get(payloadData, 'keyTerms.interestRate') };
       payloadData.closureSummary = closureSummary;
       payloadData.closureSummary = mergeWith(
         toJS(getOfferingById.closureSummary),
@@ -1432,7 +1432,7 @@ export class OfferingCreationStore {
       query: getOfferingBac,
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac) {
+        if (res && res.getOfferingBac && !this.leaderShipOfferingBac.loading) {
           this.setBacFormData('LEADER_FRM', res || {}, false);
           const leadersCount = this.LEADERSHIP_FRM.fields.leadership.length;
           if (leadersCount
@@ -1457,6 +1457,7 @@ export class OfferingCreationStore {
     leaderNumber = undefined,
     afIssuerId,
     approvedObj,
+    index = undefined,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const issuerBacId = getOfferingById.legal && getOfferingById.legal.issuerBacId;
@@ -1498,7 +1499,7 @@ export class OfferingCreationStore {
       const { leadership } = getOfferingById;
       if (!afIssuerId) {
         mutation = createBac;
-        payload.email = leadership[leaderNumber].email;
+        payload.email = leadership[index].email;
         variables = {
           offeringBacDetails: payload,
         };
@@ -1563,6 +1564,7 @@ export class OfferingCreationStore {
         this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
         offeringsStore.getOne(getOfferingById.id);
         if (bacType === 'LEADERSHIP') {
+          this.initLoad.splice(this.initLoad.indexOf('LEADER_FRM'), 1);
           this.getLeadershipOfferingBac(this.currentOfferingId, 'LEADERSHIP');
         }
         Helper.toast('Offering has been saved successfully.', 'success');

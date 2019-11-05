@@ -52,6 +52,7 @@ export class PortfolioStore {
         PREFERRED_EQUITY_506C: { name: 'Preferred Equity', value: 0 },
         CONVERTIBLE_NOTES: { name: 'Convertible Notes', value: 0 },
         SAFE: { name: 'Safe', value: 0 },
+        REAL_ESTATE: { name: 'Real Estate', value: 0 },
       },
       industry: {
         FASHION_AND_MERCHANDISING: { name: 'Fashion and Merchandising', value: 0 },

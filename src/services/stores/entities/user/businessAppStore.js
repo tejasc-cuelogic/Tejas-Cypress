@@ -434,7 +434,7 @@ export class BusinessAppStore {
           this.addMoreForms(null, 'owners');
         }
       });
-      if (data.sources.length) {
+      if (data.sources && data.sources.length) {
         data.sources.forEach((ele, key) => {
           ['name', 'amount'].forEach((field) => {
             this.BUSINESS_DETAILS_FRM.fields.sources[key][field].value = ele[field];
@@ -444,7 +444,7 @@ export class BusinessAppStore {
       } else {
         this.BUSINESS_DETAILS_FRM.fields.sources = [];
       }
-      if (data.uses.length) {
+      if (data.uses && data.uses.length) {
         data.uses.forEach((ele, key) => {
           ['name', 'amount'].forEach((field) => {
             this.BUSINESS_DETAILS_FRM.fields.uses[key][field].value = ele[field];

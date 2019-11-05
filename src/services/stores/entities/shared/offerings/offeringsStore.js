@@ -51,7 +51,7 @@ export class OfferingsStore {
   @observable totalRaisedAmount = [];
 
   @action
-  initRequest = (props) => {
+  initRequest = (props, forceResetDb = false) => {
     const {
       stage,
     } = props;
@@ -62,9 +62,9 @@ export class OfferingsStore {
       query: stage === 'active' ? allOfferingsCompact : allOfferings,
       variables: stage !== 'active' ? { stage: reqStages }
         : { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
-      // fetchPolicy: 'network-only',
+      fetchPolicy: 'cache-and-network',
       onFetch: (res) => {
-        if (res && !this.data[stage].loading && !this.db[stage]) {
+        if (res && !this.data[stage].loading && (!this.db[stage] || forceResetDb)) {
           this.requestState.page = 1;
           this.requestState.skip = 0;
           this.setDb(res.getOfferings, stage);
