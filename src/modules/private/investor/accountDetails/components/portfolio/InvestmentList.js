@@ -36,7 +36,7 @@ const InvestmentList = (props) => {
                   <Table.Row>
                     {
                       listHeader.map(cell => (
-                        <Table.HeaderCell key={cell.split(' ')[0]}>{cell}</Table.HeaderCell>
+                        <Table.HeaderCell textAlign={['Invested Amount', 'Net Payments Received'].includes(cell) ? 'right' : ''} key={cell.split(' ')[0]}>{cell}</Table.HeaderCell>
                       ))
                     }
                     <Table.HeaderCell />
@@ -63,7 +63,7 @@ const InvestmentList = (props) => {
                             get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'
                           }
                         </Table.Cell>
-                        <Table.Cell className="text-capitalize">
+                        <Table.Cell className="text-capitalize" textAlign="right">
                           {
                             <>
                               {Helper.CurrencyFormat(data.investedAmount, 0)}
@@ -99,12 +99,13 @@ const InvestmentList = (props) => {
                             </Table.Cell>
                           )
                         }
-
-                        <Table.Cell>
-                          {
-                            get(data, 'netPaymentsReceived') || 'N/A'
-                          }
-                        </Table.Cell>
+                        {props.listOf !== 'pending'
+                          && (
+                            <Table.Cell textAlign="right">
+                              {Helper.MoneyMathDisplayCurrency(get(data, 'netPaymentsReceived') || 0)}
+                            </Table.Cell>
+                          )
+                        }
                         <Table.Cell collapsing>
                           {props.listOf === 'pending' && (
                             <Button.Group size="mini" compact>
@@ -136,10 +137,14 @@ const InvestmentList = (props) => {
                 </Table.Body>
                 <Table.Footer>
                   <Table.Row>
-                    <Table.HeaderCell colSpan="2" />
                     <Table.HeaderCell>Total:</Table.HeaderCell>
-                    <Table.HeaderCell>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0, 0)}</Table.HeaderCell>
-                    <Table.HeaderCell colSpan="3" />
+                    <Table.HeaderCell colSpan="1" />
+                    <Table.HeaderCell textAlign="right">{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0, 0)}</Table.HeaderCell>
+                    <Table.HeaderCell colSpan={props.listOf === 'active' ? '3' : '2'} />
+                    {props.listOf !== 'pending'
+                    && (
+                      <Table.HeaderCell textAlign="right">{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
+                    )}
                   </Table.Row>
                 </Table.Footer>
               </Table>

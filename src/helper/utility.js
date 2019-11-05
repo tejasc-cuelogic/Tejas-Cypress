@@ -56,9 +56,9 @@ export class Utility {
     return `${s4()}${s4()}-${s4()}${s4()}`;
   }
 
-  getTotal = (from, key) => {
+  getTotal = (from, key, isFloatToAmount = true) => {
     const total = '0.00';
-    return from.map(f => money.floatToAmount(f[key]))
+    return from.map(f => (isFloatToAmount ? money.floatToAmount(f[key] || 0) : f[key] || 0))
       .map(r => money.add(total, r))
       .reduce((sum, n) => money.add(sum, n));
   }
