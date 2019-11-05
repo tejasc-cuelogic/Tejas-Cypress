@@ -82,7 +82,7 @@ class SecondaryMenu extends Component {
     } = this.props;
     let options = [];
     const showMoreMenuLength = (get(responsiveVars, 'isTabletLand') || get(responsiveVars, 'isSmallScreen')) ? 5 : 8;
-    const showMoreMenu = this.props.offering && navItems && navItems.length > showMoreMenuLength;
+    const showMoreMenu = !get(responsiveVars, 'isMobile') && this.props.offering && navItems && navItems.length > showMoreMenuLength;
     if (showMoreMenu) {
       const dropOptions = navItems.splice(showMoreMenuLength - 1, navItems.length - showMoreMenuLength);
       options = dropOptions.map(o => ({ key: o.to, text: o.title, value: o.to }));
@@ -135,6 +135,8 @@ class SecondaryMenu extends Component {
                 navItems={navItems}
                 location={location}
                 useIsActive
+                isBonusReward={this.props.isBonusReward}
+                bonusRewards={this.props.bonusRewards}
               />
             )
           }

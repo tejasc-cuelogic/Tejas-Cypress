@@ -686,12 +686,12 @@ footer .ui.text.menu{
     }
     &.inverted{
         .ui.dropdown.more-items{
-            position: absolute;
-            right: 0;
-            top: 0;
-            &:before{
-                left: 0;
-            }
+            // position: absolute;
+            // right: 0;
+            // top: 0;
+            // &:before{
+            //     left: 0;
+            // }
         }
         &.secondary{
             position: relative;
@@ -703,17 +703,22 @@ footer .ui.text.menu{
         overflow: visible;
     }
     
-    .ui.inverted.menu .item{
-        padding:@16px @25px;
-        @media only screen and (max-width : @largestTabletScreen){
-            padding: @16px @20px;
+    .ui.inverted.menu{
+        &.offer-details{
+            overflow: visible;
         }
-        &:before{
-            background-color:@neutral-middark;
-        }
-        &:hover, &:focus, &.active{
-            background-color:@white;
-            color:@link-color !important;
+        .item{
+            padding:@16px @25px;
+            @media only screen and (max-width : @largestTabletScreen){
+                padding: @16px @20px;
+            }
+            &:before{
+                background-color:@neutral-middark;
+            }
+            &:hover, &:focus, &.active{
+                background-color:@white;
+                color:@link-color !important;
+            }
         }
     }
 }

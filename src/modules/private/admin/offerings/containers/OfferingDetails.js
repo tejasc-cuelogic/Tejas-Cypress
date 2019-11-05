@@ -66,11 +66,8 @@ export default class OfferingDetails extends Component {
       navItems,
       get(find(offeringsStore.phases, (s, i) => i === offer.stage), 'accessKey'),
     );
-    if (this.props.match.params.stage === 'live' && !isDev) {
-      navItems = navItems.filter(n => (!['Bonus Rewards'].includes(n.title)));
-      // navItems = navItems.filter(n => (!['Bonus Rewards', 'Close'].includes(n.title)));
-    }
-    if (this.props.match.params.stage !== 'creation' && !isDev) {
+    const hideBonusReward = ['live', 'creation'].includes(this.props.match.params.stage) && !isDev;
+    if (hideBonusReward) {
       navItems = navItems.filter(n => (!['Bonus Rewards'].includes(n.title)));
     }
     if (this.props.match.params.stage === 'engagement' && !isDev) {
@@ -101,7 +98,7 @@ export default class OfferingDetails extends Component {
             </Header>
             {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} offerStatus={offerStatus} />}
             <Card fluid>
-              <SecondaryMenu offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
+              <SecondaryMenu isBonusReward={!hideBonusReward} bonusRewards className="offer-details" offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
               <Switch>
                 <Route exact path={match.url} component={OfferingModule('overview')} />
                 {
