@@ -49,7 +49,7 @@ export default class OfferSigning extends Component {
         this.getPortalAgreementStatus('Button');
       // } else if (e.data === 'viewing_complete') {
       //   this.createOffer();
-      } else if (e && e.data && !e.data.includes('setImmediate') && !e.data.includes('__fs') && !this.state.isCreateOffer) {
+      } else if (e && e.data && typeof e.data === 'string' && !e.data.includes('setImmediate') && !e.data.includes('__fs') && !this.state.isCreateOffer) {
         this.props.history.push('/app/dashboard');
       }
     }, 2000);
