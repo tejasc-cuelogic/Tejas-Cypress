@@ -49,7 +49,7 @@ export default class KeyTerms extends Component {
   }
 
   editorChange =
-  (field, value, form, index) => this.props.offeringCreationStore.rtEditorChange(field, value, form, 'additionalKeyterms', index);
+    (field, value, form, index) => this.props.offeringCreationStore.rtEditorChange(field, value, form, 'additionalKeyterms', index);
 
   render() {
     const {
@@ -246,24 +246,27 @@ export default class KeyTerms extends Component {
               options={ROUND_TYPE_VALUES}
               onChange={(e, result) => formArrayChange(e, result, formName)}
             /> */}
-            {
-              ['totalRoundSize', 'unitPrice'].map(field => (
-                <MaskedInput
-                  displayMode={isReadonly}
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(values, name) => maskArrayChange(values, formName, name)}
-                  currency
-                  prefix="$"
-                />
-              ))
-            }
             <MaskedInput
               displayMode={isReadonly}
-              name="unitPrice"
-              fielddata={CLOSURE_SUMMARY_FRM.fields.unitPrice}
+              name="totalRoundSize"
+              fielddata={KEY_TERMS_FRM.fields.totalRoundSize}
+              changed={(values, name) => maskArrayChange(values, formName, name)}
+              currency
+              prefix="$"
+            />
+            <FormInput
+              displayMode={isReadonly}
+              name="priceCopy"
+              fielddata={KEY_TERMS_FRM.fields.priceCopy}
+              changed={(e, result) => formArrayChange(e, result, formName)}
+            />
+            <MaskedInput
+              displayMode={isReadonly}
+              name="priceCalcuation"
+              fielddata={CLOSURE_SUMMARY_FRM.fields.priceCalcuation}
               changed={(values, name) => maskArrayChange(values, 'CLOSURE_SUMMARY_FRM', name)}
               currency
+              prefix="$"
             />
             <MaskedInput
               displayMode={isReadonly}
@@ -274,12 +277,38 @@ export default class KeyTerms extends Component {
               prefix="$"
             />
             {
-              ['valuationCap', 'discount', 'equityClass', 'equityUnitType'].map(field => (
+              ['valuationCap', 'discount', 'equityClass'].map(field => (
                 <FormInput
                   displayMode={isReadonly}
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
                   changed={(e, result) => formArrayChange(e, result, formName)}
+                />
+              ))
+            }
+            <FormDropDown
+              containerclassname={isReadonly ? 'display-only' : ''}
+              className={isReadonly ? 'display-only' : ''}
+              disabled={isReadonly}
+              fielddata={KEY_TERMS_FRM.fields.equityUnitType}
+              selection
+              value={KEY_TERMS_FRM.fields.equityUnitType.value}
+              name="equityUnitType"
+              placeholder={isReadonly ? 'N/A' : 'Choose here'}
+              options={KEY_TERMS_FRM.fields.equityUnitType.values}
+              onChange={(e, result) => formArrayChange(e, result, formName)}
+            />
+            {
+              ['offeringSize', 'preferredReturn', 'targetInvestmentPeriod'].map(field => (
+                <MaskedInput
+                  displayMode={isReadonly}
+                  name={field}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  changed={(values, name) => maskArrayChange(values, formName, name)}
+                  currency={field === 'offeringSize'}
+                  number={field === 'targetInvestmentPeriod'}
+                  percentage={field === 'preferredReturn'}
+                  prefix={field === 'offeringSize' ? '$' : ''}
                 />
               ))
             }
@@ -302,18 +331,18 @@ export default class KeyTerms extends Component {
           <Header as="h4">
             Additional Key Terms
             {!isReadonly
-            && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'additionalKeyterms')}><small>+ Add New Term</small></Link>
+              && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'additionalKeyterms')}><small>+ Add New Term</small></Link>
             }
           </Header>
           {KEY_TERMS_FRM.fields.additionalKeyterms.map((field, index) => (
             <>
               <Header as="h6">{`Term ${index + 1}`}
                 {KEY_TERMS_FRM.fields.additionalKeyterms.length > 1
-                && (
-<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'additionalKeyterms')}>
-                  <Icon className="ns-close-circle" color="grey" />
-                </Link>
-                )
+                  && (
+                    <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'additionalKeyterms')}>
+                      <Icon className="ns-close-circle" color="grey" />
+                    </Link>
+                  )
                 }
               </Header>
               <div className="featured-section">
@@ -425,7 +454,7 @@ export default class KeyTerms extends Component {
                 />
               </div>
             ))}
-             {['uploadProformas', 'revShareSummaryUpload'].map(field => (
+            {['uploadProformas', 'revShareSummaryUpload'].map(field => (
               <DropZone
                 disabled={isReadonly}
                 name={field}
@@ -435,7 +464,7 @@ export default class KeyTerms extends Component {
                 uploadtitle="Upload a file"
                 containerclassname={!isReadonly ? 'field' : 'field display-only'}
               />
-             ))
+            ))
             }
           </Form.Group>
           <Divider hidden />

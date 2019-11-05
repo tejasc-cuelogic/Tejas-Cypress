@@ -43,34 +43,35 @@ export default class MaskedInput extends Component {
         className={fieldClass}
         width={props.containerwidth || false}
       >
+
         {!props.hidelabel
           && (
-<label>
-            {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
-            {tooltip
-              && (
-<Popup
-  hoverable={props.hoverable}
-  trigger={<Icon className="ns-help-circle" />}
-                // content={tooltip}
-  position="top center"
-  className={props.containerClassname}
-  wide
->
-                <Popup.Content>
-                  {tooltip}
-                </Popup.Content>
-              </Popup>
-              )
-            }
-            {props.removed
-              && (
-<Link to={props.linkto} onClick={e => props.removed(e)}>
-                <Icon className="ns-close-circle" color="grey" />
-              </Link>
-              )
-            }
-          </label>
+            <label>
+              {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
+              {tooltip
+                && (
+                  <Popup
+                    hoverable={props.hoverable}
+                    trigger={<Icon className="ns-help-circle" />}
+                    // content={tooltip}
+                    position="top center"
+                    className={props.containerClassname}
+                    wide
+                  >
+                    <Popup.Content>
+                      {tooltip}
+                    </Popup.Content>
+                  </Popup>
+                )
+              }
+              {props.removed
+                && (
+                  <Link to={props.linkto} onClick={e => props.removed(e)}>
+                    <Icon className="ns-close-circle" color="grey" />
+                  </Link>
+                )
+              }
+            </label>
           )
         }
         {props.action ? (
@@ -95,36 +96,36 @@ export default class MaskedInput extends Component {
             </Button>
           </div>
         ) : props.currency ? (
-            <NumberFormatWrapped {...commonProps} maxLength={props.maxlength || 15} thousandSeparator {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={props.onblur ? () => { props.onblur(); this.triggerError(true); } : () => this.triggerError(true)} onKeyUp={props.onkeyup ? () => { props.onkeyup(); this.triggerError(props.showerror || false); } : null} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" decimalScale={props.disableDecimal ? 0 : 2} />
+          <NumberFormatWrapped {...commonProps} maxLength={props.maxlength || 15} thousandSeparator {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={props.onblur ? () => { props.onblur(); this.triggerError(true); } : () => this.triggerError(true)} onKeyUp={props.onkeyup ? () => { props.onkeyup(); this.triggerError(props.showerror || false); } : null} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" decimalScale={props.disableDecimal ? 0 : 2} />
         ) : props.number ? (
-            <NumberFormat {...commonProps} maxLength={props.maxlength || 10} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" decimalScale={0} />
+          <NumberFormat {...commonProps} maxLength={props.maxlength || 10} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" decimalScale={0} />
         ) : props.percentage ? (
-            <NumberFormat {...commonProps} maxLength={props.maxlength || 6} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="%" suffix="%" />
+          <NumberFormat {...commonProps} maxLength={props.maxlength || 6} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="%" suffix="%" />
         ) : props.phoneNumber ? (
-            <NumberFormat {...commonProps} type="tel" format={props.format} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
+          <NumberFormat {...commonProps} type="tel" format={props.format} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
         ) : props.phoneNumberDisplayMode ? (
-            <div className="ui huge fluid input">
-              <NumberFormat {...commonProps} type="tel" format={props.format} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
-            </div>
+          <div className="ui huge fluid input">
+            <NumberFormat {...commonProps} type="tel" format={props.format} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
+          </div>
         ) : props.zipCode ? (
-            <NumberFormat {...commonProps} type="tel" format="#####" {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
+          <NumberFormat {...commonProps} type="tel" format="#####" {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
         ) : props.ssn ? (
-            <NumberFormat className="fs-block" {...commonProps} type="tel" format="###-##-####" {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
+          <NumberFormat className="fs-block" {...commonProps} type="tel" format="###-##-####" {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
         ) : props.dateOfBirth ? (
-            <div className="calender-i con">
-              <NumberFormat {...commonProps} type="text" format={props.format ? props.format : '##/##/####'} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
-            </div>
+          <div className="calender-i con">
+            <NumberFormat {...commonProps} type="text" format={props.format ? props.format : '##/##/####'} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
+          </div>
         ) : props.taxId ? (
-            <NumberFormat {...commonProps} type="tel" format="##-#######" {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
+          <NumberFormat {...commonProps} type="tel" format="##-#######" {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
         ) : props.accountNumber ? (
-            <NumberFormat {...commonProps} type="tel" format="#################" {...props} value={has(props, 'value') ? props.value : value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} />
+          <NumberFormat {...commonProps} type="tel" format="#################" {...props} value={has(props, 'value') ? props.value : value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} />
         ) : props.routingNumber ? (
-            <NumberFormat {...commonProps} type="tel" format="#########" {...props} value={has(props, 'value') ? props.value : value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} />
+          <NumberFormat {...commonProps} type="tel" format="#########" {...props} value={has(props, 'value') ? props.value : value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} />
         ) : <NumberFormat {...commonProps} format="(###) ###-####" {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
         }
         {((error && this.state.showError && !props.showErrorOnField)
-        || (error && props.showerror && !props.showErrorOnField))
-         && <FieldError error={error} />
+          || (error && props.showerror && !props.showErrorOnField))
+          && <FieldError error={error} />
         }
       </Form.Field>
     );

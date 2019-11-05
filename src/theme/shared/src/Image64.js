@@ -18,7 +18,7 @@ function Image64(props) {
     const emptyImage = props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1;
     setEmptyImg(emptyImage);
     if (props.srcUrl) {
-      const imgUrl = (props.srcUrl.includes('https://') || props.srcUrl.includes('http://')) ? props.srcUrl : `https://${UPLOADS_CONFIG.bucket}/${props.srcUrl}`;
+      const imgUrl = (props.srcUrl.includes('https://') || props.srcUrl.includes('http://')) ? props.srcUrl : `https://${UPLOADS_CONFIG.bucket}/${encodeURI(props.srcUrl)}`;
       try {
         const imgName = props.avatar ? imgUrl : Helper.processImageFileName(imgUrl, props.uiStore.responsiveVars);
         setOData(imgUrl || emptyImage);

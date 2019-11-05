@@ -235,8 +235,3 @@ export const checkEmailExistsPresignup = gql`
     }
   }
 `;
-
-export const checkMigrationByEmail = gql`
-  mutation checkMigrationByEmail($migrationByEmailData: CheckMigrationByEmailInput!) {
-    checkMigrationByEmail(migrationByEmailData: $migrationByEmailData)
- }`;

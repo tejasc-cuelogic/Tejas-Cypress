@@ -6,6 +6,7 @@ export const CAMPAIGN_KEYTERMS_SECURITIES = {
   PREFERRED_EQUITY_506C: 'Preferred Equity',
   CONVERTIBLE_NOTES: 'Convertible Notes',
   SAFE: 'SAFE',
+  REAL_ESTATE: 'Real Estate Fund',
 };
 export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
   TERM_NOTE: 'TERM_NOTE',
@@ -13,6 +14,7 @@ export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
   PREFERRED_EQUITY_506C: 'PREFERRED_EQUITY_506C',
   CONVERTIBLE_NOTES: 'CONVERTIBLE_NOTES',
   SAFE: 'SAFE',
+  REAL_ESTATE: 'REAL_ESTATE',
 };
 export const ROUND_TYPES_ENUM = {
   SEED: 'Seed',
@@ -141,7 +143,7 @@ export const CAMPAIGN_OFFERING_STAGE = {
   STARTUP_PERIOD: 'Startup Period',
   IN_REPAYMENT: 'Re Payment',
   COMPLETE: 'Completed',
-  DEFAULT: 'Default',
+  DEFAULTED: 'Default',
 };
 
 export const OFFERING_REGULATIONS = {

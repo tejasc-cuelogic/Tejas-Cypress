@@ -9,5 +9,6 @@ export const PAYMENT = FormHelper.generateMeta([
   ['expectedPaymentDate', 'Expected Payment Date', '', 'date', 'Expected Payment Date', { customErrors: { date: 'Target Expected Payment Date is not a valid date format.' }, props: { objRef: 'offering.closureSummary.keyTerms' }, asIn: true }],
   ['firstPaymentDate', 'First Payment Date', '', 'date', 'First Payment Date', { customErrors: { date: 'Target First Payment Date is not a valid date format.' }, props: { objRef: 'offering.closureSummary.repayment' }, asIn: true }],
   ['operationsDate', 'Operations Date', '', 'date', 'Operations Date', { customErrors: { date: 'Target Operations Date is not a valid date format.' }, props: { objRef: 'offering.closureSummary' }, asIn: true }],
+  ['monthlyPayment', 'Monthly Payment', 0, '', 'Monthly Payment', { customErrors: { date: 'Monthly Payment is not a valid amount.' }, props: { objRef: 'offering.closureSummary.keyTerms' }, asIn: true }],
   ['sinkingFundBalance', 'Sinking Fund Balance', 0, 'required', '', { customErrors: { required: 'required' }, props: { objRef: '', skipField: true }, asIn: true }],
 ]);
