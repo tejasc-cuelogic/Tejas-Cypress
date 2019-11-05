@@ -97,7 +97,7 @@ export default class AccountCreation extends React.Component {
         stepToBeRendered: 2,
       },
       {
-        name: 'Summary',
+        name: 'Confirmation',
         component: <Summary handleCreateAccount={this.props.handleCreateAccount} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
         disableNextButton: true,
         isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : stepToBeRendered > 2 ? 'error' : '',

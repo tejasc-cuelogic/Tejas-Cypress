@@ -144,7 +144,7 @@ export default class AccountCreation extends React.Component {
           bankSummary: false,
         },
         {
-          name: 'Summary',
+          name: 'Confirmation',
           isValid: isValidIraForm ? '' : stepToBeRendered > 5 ? 'error' : '',
           // validForm: isValidIraForm,
           disableNextButton: true,
@@ -202,7 +202,7 @@ export default class AccountCreation extends React.Component {
           bankSummary: false,
         },
         {
-          name: 'Summary',
+          name: 'Confirmation',
           component: <Summary handleCreateAccount={this.props.handleCreateAccount} />,
           disableNextButton: true,
           isValid: isValidIraForm ? '' : stepToBeRendered > 4 ? 'error' : '',

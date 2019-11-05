@@ -49,8 +49,8 @@ export default class FinancialInformation extends Component {
                 showerror
               />
             ))}
-            <Divider hidden />
-            <p className="grey-header">
+            {!isMobile && <Divider hidden />}
+            <p className={`${isMobile ? 'mt-20' : ''} grey-header`}>
               {isMobile ? <b>Your investment limit:</b> : 'Your investment limit:'}
               {isMobile && <br />}
               <span className={`${isMobile ? '' : 'large ml-10'} ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'highlight-text'}`}>

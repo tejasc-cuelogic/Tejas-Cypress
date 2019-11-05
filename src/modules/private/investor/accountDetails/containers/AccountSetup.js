@@ -35,7 +35,7 @@ export default class AccountSetup extends Component {
               <Statistic.Label>Once you finish setting up your {currentActiveAccount === 'ira' ? currentActiveAccount.toUpperCase() : capitalize(currentActiveAccount)} Account, you can begin investing on NextSeed.</Statistic.Label>
             </Statistic>
             <div className="center-align">
-              <Button onClick={() => this.renderAccType()} className={isMobile && 'mt-20'} compact color="green">Continue</Button>
+              <Button onClick={() => this.renderAccType()} className={isMobile && 'mt-20 ml-18'} compact color="green">Continue</Button>
             </div>
           </Card.Content>
         </Card>
