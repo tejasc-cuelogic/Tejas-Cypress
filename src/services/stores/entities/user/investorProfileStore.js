@@ -194,10 +194,11 @@ class InvestorProfileStore {
       let formPayload = '';
       if (currentStep.form === 'EMPLOYMENT_FORM') {
         formPayload = { employment: FormValidator.ExtractValues(this.EMPLOYMENT_FORM.fields) };
+        formPayload = formPayload.employment.status !== 'EMPLOYED' ? { ...formPayload, employment: { ...formPayload.employment, employer: null, position: null } } : formPayload;
       } else if (currentStep.form === 'BROKERAGE_EMPLOYMENT_FORM') {
         const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
         if (fields.brokerageEmployment.value === 'no') {
-          fields.brokerageFirmName.value = null;
+          fields.brokerageFirmName.value = 'false';
         } else {
           fields.brokerageFirmName.value = fields.brokerageFirmName.value;
         }
@@ -205,7 +206,7 @@ class InvestorProfileStore {
       } else if (currentStep.form === 'PUBLIC_COMPANY_REL_FORM') {
         const { fields } = this.PUBLIC_COMPANY_REL_FORM;
         if (fields.publicCompanyRel.value === 'no') {
-          fields.publicCompanyTicker.value = null;
+          fields.publicCompanyTicker.value = 'false';
         } else {
           fields.publicCompanyTicker.value = fields.publicCompanyTicker.value;
         }
@@ -255,6 +256,7 @@ class InvestorProfileStore {
     const { fields } = this.INVESTOR_PROFILE_FULL;
     let formData = FormValidator.evaluateFormData(fields);
     const YearsList = Helper.getLastThreeYearsLabel();
+    formData = formData.employment.status !== 'EMPLOYED' ? { ...formData, employment: { ...formData.employment, employer: null, position: null } } : formData;
     formData = {
       ...formData,
       brokerageFirmName: fields.brokerageEmployment.value === 'no' ? 'false' : formData.brokerageFirmName,
