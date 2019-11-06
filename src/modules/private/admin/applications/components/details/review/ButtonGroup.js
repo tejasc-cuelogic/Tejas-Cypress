@@ -1,11 +1,11 @@
 import React from 'react';
 import moment from 'moment';
 import { Button, Icon, Divider } from 'semantic-ui-react';
+import { observer, inject } from 'mobx-react';
 
-const isMobile = document.documentElement.clientWidth < 768;
 const ButtonGroup = ({
   formName, submitted, approved, isManager, submitWithApproval,
-  inProgress, isReadonly, showDeclinedBtn, updateApplicationStatus,
+  inProgress, isReadonly, showDeclinedBtn, updateApplicationStatus, uiStore,
 }) => (
   <>
     {((isManager && !submitted)
@@ -23,7 +23,7 @@ const ButtonGroup = ({
               </Button>
             </Button.Group>
             )}
-          <Button.Group size={isMobile ? 'mini' : ''} compact={isMobile} className={isMobile ? 'sticky-buttons' : ''}>
+          <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
             {((isManager && !submitted) || (!isManager && !submitted))
             && <Button secondary className="relaxed" content="Save" loading={inProgress === 'SAVE'} />
             }
@@ -50,4 +50,4 @@ const ButtonGroup = ({
   </>
 );
 
-export default ButtonGroup;
+export default inject('uiStore')(observer(ButtonGroup));

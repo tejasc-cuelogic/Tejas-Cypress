@@ -3,13 +3,12 @@ import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Button, Icon } from 'semantic-ui-react';
 
-const isMobile = document.documentElement.clientWidth < 768;
 @inject('uiStore')
 @observer
 export default class ButtonGroup extends Component {
   render() {
     const {
-      isManager, approved, updateOffer, isIssuer, submitted, issuerSubmitted, leaderFormInvalid, leaderFormErrorMsg,
+      isManager, approved, updateOffer, isIssuer, submitted, issuerSubmitted, leaderFormInvalid, leaderFormErrorMsg, uiStore,
     } = this.props;
     const { inProgress, htmlEditorImageLoading } = this.props.uiStore;
     return (
@@ -43,7 +42,7 @@ export default class ButtonGroup extends Component {
             )
           }
         </Button.Group>
-        <Button.Group size={isMobile ? 'mini' : ''} compact={isMobile} className={isMobile ? 'sticky-buttons' : ''}>
+        <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
           {isManager && submitted ? (
             <>
               <Button disabled={leaderFormInvalid || htmlEditorImageLoading} loading={inProgress === 'support_decline'} type="button" inverted onClick={() => updateOffer({ isApproved: true, status: 'support_decline' })} color="red" content="Decline to NS Support" />

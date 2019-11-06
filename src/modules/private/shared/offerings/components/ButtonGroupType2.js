@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Button, Icon, Checkbox, Divider } from 'semantic-ui-react';
 
-const isMobile = document.documentElement.clientWidth < 768;
 @inject('uiStore')
 @observer
 export default class ButtonGroupType2 extends Component {
@@ -12,7 +11,7 @@ export default class ButtonGroupType2 extends Component {
   render() {
     const {
       isManager, approved, updateOffer,
-      submitted, launch,
+      submitted, launch, uiStore,
     } = this.props;
     const { inProgress, htmlEditorImageLoading } = this.props.uiStore;
     const { canLaunch } = this.state;
@@ -48,7 +47,7 @@ export default class ButtonGroupType2 extends Component {
               )
             }
           </Button.Group>
-          <Button.Group size={isMobile ? 'mini' : ''} compact={isMobile} className={isMobile ? 'sticky-buttons' : ''}>
+          <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
             {isManager && submitted ? (
               <>
                 <Button disabled={htmlEditorImageLoading} loading={inProgress === 'support_decline'} type="button" inverted onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: 'support_decline' })} color="red" content="Decline" />
