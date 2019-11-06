@@ -100,6 +100,7 @@ export class NavItems extends Component {
     const investorAccounts = this.props.userDetailsStore.getAccountList;
     const hasMoreThanOneAcc = investorAccounts.length > 1;
     const hideSetupNav = signupStatus.investorProfileCompleted && (hasAnyAccount);
+    const isPrivateApp = location.pathname.includes('/app');
     return myNavItems.map((item, key) => (
       <>
         {item.subPanel === 1 && item.subNavigations && isMobile && !isApp ? (
@@ -211,7 +212,7 @@ export class NavItems extends Component {
                     >
                       {item.icon && <Icon className={item.icon} />}
                       {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
-                      {item.title !== 'Updates' ? <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span> : (item.title === 'Updates' && (item.to === 'updates' || item.to === '#updates') && this.props.countData ? <span>{item.title}</span> : '')}
+                      {(item.title !== 'Updates' || (item.title === 'Updates' && item.to.includes('updates') && this.props.countData) || isPrivateApp) ? <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span> : ''}
                       {((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) && this.props.countData
                         ? <Label circular color="blue" size="small">{this.props.countData[item.to === '#updates' ? 'updates' : item.to === '#comments' ? 'comments' : item.to]}</Label> : null
                       }

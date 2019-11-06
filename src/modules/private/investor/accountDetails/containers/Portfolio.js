@@ -117,7 +117,7 @@ export default class Portfolio extends Component {
   }
 
   render() {
-    const { match, portfolioStore, userDetailsStore } = this.props;
+    const { match, portfolioStore, userDetailsStore, refLink } = this.props;
     const {
       multipleUserAccounts,
     } = userDetailsStore;
@@ -210,7 +210,7 @@ export default class Portfolio extends Component {
           />
         )
         }
-        <SummaryHeader isAdmin={this.props.isAdmin} details={summaryDetails} />
+        <SummaryHeader refLink={refLink} isAdmin={this.props.isAdmin} details={summaryDetails} />
         {(getPieChartData.investmentType.length || getPieChartData.industry.length)
           ? <PortfolioAllocations isAdmin={this.props.isAdmin} pieChart={getPieChartData} /> : ''
         }

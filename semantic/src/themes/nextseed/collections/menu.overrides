@@ -686,26 +686,40 @@ footer .ui.text.menu{
     }
     &.inverted{
         .ui.dropdown.more-items{
-            position: absolute;
-            right: 0;
-            top: 0;
-            &:before{
-                left: 0;
-            }
+            // position: absolute;
+            // right: 0;
+            // top: 0;
+            // &:before{
+            //     left: 0;
+            // }
         }
         &.secondary{
             position: relative;
         }
     }
 }
-.transaction-details .ui.inverted.menu .item{
-    padding:@16px @25px;
-    &:before{
-        background-color:@neutral-middark;
+.transaction-details{
+    .ui.card .mobile-dropdown-menu.private-secondary-menu{
+        overflow: visible;
     }
-    &:hover, &:focus, &.active{
-        background-color:@white;
-        color:@link-color !important;
+    
+    .ui.inverted.menu{
+        &.offer-details{
+            overflow: visible;
+        }
+        .item{
+            padding:@16px @25px;
+            @media only screen and (max-width : @largestTabletScreen){
+                padding: @16px @20px;
+            }
+            &:before{
+                background-color:@neutral-middark;
+            }
+            &:hover, &:focus, &.active{
+                background-color:@white;
+                color:@link-color !important;
+            }
+        }
     }
 }
 
