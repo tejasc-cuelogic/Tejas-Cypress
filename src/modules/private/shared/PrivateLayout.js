@@ -33,7 +33,7 @@ class PrivateLayout extends Component {
             <Grid.Row>
               <Grid.Column verticalAlign="middle">
                 {!this.props.P0
-                  ? <Header as={isInvestor ? 'h3' : 'h1'}>{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
+                  ? <Header as={isInvestor ? (isMobile ? 'h5' : 'h3') : 'h1'}>{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
                   : this.props.P0
                 }
               </Grid.Column>

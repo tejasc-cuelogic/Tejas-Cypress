@@ -102,7 +102,7 @@ export default class Dashboard extends Component {
               ? <ProccessingAccountsScreen />
               : (
                 <>
-                  <Header as="h4">Portfolio Summary</Header>
+                  <Header as={isMobile ? 'h5' : 'h4'} className={isMobile ? 'mb-0 mt-10' : ''}>Portfolio Summary</Header>
                   <SummaryHeader details={summaryDetails(summary)} />
                   {cashMovementData && cashMovementData.length
                     ? (
@@ -111,7 +111,7 @@ export default class Dashboard extends Component {
                           ? (
                             <Card fluid>
                               <Card.Content>
-                                <Header as="h4">Investments and Payments</Header>
+                                <Header as={isMobile ? 'h5' : 'h4'}>Investments and Payments</Header>
                                 <CashMovement data={cashMovementData} />
                               </Card.Content>
                             </Card>
@@ -123,7 +123,7 @@ export default class Dashboard extends Component {
                       <>
                         <Card fluid={isMobile}>
                           <Card.Content>
-                            <Header as="h4" className="mt-10">Browse the latest investment opportunities.</Header>
+                            <Header as={isMobile ? 'h5' : 'h4'} className="mt-10">Browse the latest investment opportunities.</Header>
                             <Button fluid as={Link} target="_blank" compact to="/offerings" size="large" color="green" className="mb-10">Start investing now</Button>
                           </Card.Content>
                         </Card>

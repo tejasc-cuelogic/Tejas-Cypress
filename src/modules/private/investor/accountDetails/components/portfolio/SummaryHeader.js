@@ -16,7 +16,7 @@ const showValue = props => ((props.type === 1) && (props.title !== 'TNAR')
     : (((props.type === 2) ? `date ${props.content}` : props.content)));
 
 const SummaryTitle = props => ((props.details.businessName) ? (
-  <Header as="h3">
+  <Header as={isMobile ? 'h5' : 'h3'}>
     {props.details.businessName}
   </Header>
 ) : !props.isAdmin && (
@@ -33,7 +33,7 @@ const SummaryHeader = props => (
     {props.details.title !== false && props.details.businessName
       && <SummaryTitle {...props} />
     }
-    <Card fluid className={props.details.className || ''}>
+    <Card fluid className={`${isMobile ? 'investment-summary' : ''} ${props.details.className || ''}`}>
       {props.details.title !== false && !props.details.businessName
         && <SummaryTitle {...props} />
       }

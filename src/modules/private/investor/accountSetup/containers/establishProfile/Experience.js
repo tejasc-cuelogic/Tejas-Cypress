@@ -94,8 +94,8 @@ export default class Experience extends Component {
     );
     return (
       <>
-        <Header as="h4" textAlign={!isMobile ? 'center' : ''}>
-          {!isMobile ? 'Investment Experience' : isExperiencedTypeSelected ? 'Almost there!' : 'Please select the box that best describes your investment experience'
+        <Header as="h4" textAlign={!isMobile ? 'center' : 'mb-14'}>
+          {!isMobile ? 'Investment Experience' : isExperiencedTypeSelected ? 'Almost there!' : 'What is your investment experience?'
           }
         </Header>
         {!isMobile && (
