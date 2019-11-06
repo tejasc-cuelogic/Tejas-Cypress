@@ -169,7 +169,7 @@ export class FactoryStore extends DataModelStore {
       } else {
         this.setFieldValue('inProgress', true, 'requestFactory');
         const variables = {};
-        variables.method = formData.plugin;
+        variables.plugin = formData.plugin;
         variables.payload = TestformData;
         variables.invocationType = formData.invocationType;
 
@@ -227,7 +227,7 @@ export class FactoryStore extends DataModelStore {
       const { fields } = this.PROCESSFACTORY_FRM;
       const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY.fields;
       const formData = Validator.evaluateFormData(fields);
-      const formPayloadData = Validator.evaluateFormData(fieldsPayload);
+      const formPayloadData = Validator.evaluateFormData(fieldsPayload, true);
       const TestformData = this.ExtractToJSON(formPayloadData);
       if (!this.isValidJson(TestformData)) {
         this.PROCESSFACTORY_FRM.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
@@ -243,8 +243,8 @@ export class FactoryStore extends DataModelStore {
           setLoader: processFactoryPluginTrigger,
         });
         Helper.toast('Your request is processed.', 'success');
-        if (result.invokeProcessorDriver) {
-          resolve(result.invokeProcessorDriver);
+        if (result.data.invokeProcessorDriver) {
+          resolve(result.data.invokeProcessorDriver);
         }
       }
     } catch (error) {
@@ -289,7 +289,10 @@ export class FactoryStore extends DataModelStore {
         formElement = 'FormInput';
         this.setFormData(formObj.parentForm, fieldKey, formProps.defaultValue, formObj.childForm);
         break;
-
+      case 'select':
+        formElement = 'FormDropDown';
+        this.setFormData(formObj.parentForm, fieldKey, formProps.defaultValue, formObj.childForm);
+        break;
       default:
         formElement = 'FormInput';
         this.setFormData(formObj.parentForm, fieldKey, formProps.defaultValue, formObj.childForm);
