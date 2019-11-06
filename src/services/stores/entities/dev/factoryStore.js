@@ -274,21 +274,6 @@ export class FactoryStore extends DataModelStore {
   pullValuesForDynmicInput = (e, data) => {
     const pluginInputData = find(data.fielddata.values, o => o.value === data.value && o.pluginInput);
     const pluginInputObj = keyBy(pluginInputData.pluginInput, 'key');
-    // const testSelectObj = {
-    //   dataType: {
-    //     label: 'Data to Clean',
-    //     type: 'select',
-    //     key: 'dataType',
-    //     value: '',
-    //     rule: 'required',
-    //     defaultValue: 'share',
-    //     options: [
-    //       { key: 'share', value: 'share', text: 'Shares' },
-    //       { key: 'unit', value: 'unit', text: 'Units' },
-    //     ],
-    //   },
-    // };
-    // const finalObj = { ...pluginInputObj, ...testSelectObj };
     return pluginInputObj;
   };
 
