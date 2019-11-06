@@ -12,8 +12,8 @@ let FormTag = '';
 const DynamicFormInput = React.memo((props) => {
   function getFormInput(fieldKey, formProps) {
     const { formChangeForPlugin, getFormElement } = props.factoryStore;
-    const additionalProps = { containerclassname: 'secondary huge' };
-    const elementProps = formProps.type === 'textarea' && additionalProps;
+    const additionalProps = formProps.type === 'textarea' ? { containerclassname: 'secondary huge' } : formProps.type === 'select' ? { selection: 'selection', options: formProps.options, onChange: (e, result) => formChangeForPlugin(e, result, props.formObj, true), placeholder: formProps.placeHolder || '' } : {};
+    const elementProps = ['textarea', 'select'].includes(formProps.type) && additionalProps;
     const formInputData = getFormElement(fieldKey, formProps, props.formObj);
     const formElementType = formInputData;
     FormTag = getFields(formElementType);
