@@ -3,15 +3,16 @@ import { inject, observer } from 'mobx-react';
 import { Table, Button, Checkbox } from 'semantic-ui-react';
 import { capitalize, get } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
+import { DEV_FEATURE_ONLY } from '../../../../../constants/common';
 import { CROWDPAY_ACCOUNTS_STATUS } from '../../../../../services/constants/crowdpayAccounts';
 import Helper from '../../../../../helper/utility';
 @inject('crowdpayStore', 'identityStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class Actions extends Component {
- state = {
-   [`skip-cip-${this.props.account.accountId}`]: false,
- };
+  state = {
+    [`skip-cip-${this.props.account.accountId}`]: false,
+  };
 
   ctaHandler = (e, userId, accountId, action, msg) => {
     e.preventDefault();
@@ -126,13 +127,17 @@ export default class Actions extends Component {
                     && (
                       <>
                         <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
-                        <Checkbox
-                          name={`skip-cip-${accountId}`}
-                          onChange={(e, result) => this.skipCipChange(e, result)}
-                          checked={this.state[`skip-cip-${accountId}`]}
-                          className="mt-half"
-                          label="Skip CIP"
-                        />
+                        {
+                          DEV_FEATURE_ONLY && (
+                            <Checkbox
+                              name={`skip-cip-${accountId}`}
+                              onChange={(e, result) => this.skipCipChange(e, result)}
+                              checked={this.state[`skip-cip-${accountId}`]}
+                              className="mt-half"
+                              label="Skip CIP"
+                            />
+                          )}
+
                       </>
                     )
                   }

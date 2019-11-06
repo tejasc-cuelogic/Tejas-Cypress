@@ -7,7 +7,7 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { getCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountDecline, crowdPayAccountValidate, createIndividualAccount, getDecryptedGoldstarAccountNumber } from '../../queries/CrowdPay';
 import { crowdPayAccountNotifyGs } from '../../queries/account';
-import { FILTER_META, CROWDPAY_FILTERS, CONFIRM_CROWDPAY, CROWDPAY_ACCOUNTS_STATUSq } from '../../../constants/crowdpayAccounts';
+import { FILTER_META, CROWDPAY_FILTERS, CONFIRM_CROWDPAY, CROWDPAY_ACCOUNTS_STATUS } from '../../../constants/crowdpayAccounts';
 import Helper from '../../../../helper/utility';
 import { uiStore, individualAccountStore } from '../../index';
 
