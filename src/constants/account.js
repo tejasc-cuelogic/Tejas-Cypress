@@ -176,11 +176,11 @@ export const ENTITY_ADD_FUND = {
     value: '',
     key: 'value',
     error: undefined,
-    rule: 'optional|numeric|min:5000',
+    rule: 'optional|numeric|min:2200',
     label: 'Deposit Amount',
     maxLength: 15,
     customErrors: {
-      min: 'The deposit amount should be at least $5,000.',
+      min: 'The deposit amount should be at least $2,200.',
     },
   },
 };
@@ -190,11 +190,11 @@ export const IRA_ADD_FUND = {
     value: '',
     key: 'value',
     error: undefined,
-    rule: 'optional|numeric|min:5000|max:6000',
+    rule: 'optional|numeric|min:2200|max:6000',
     label: 'Deposit Amount',
     maxLength: 15,
     customErrors: {
-      min: 'The deposit amount should be at least $5,000.',
+      min: 'The deposit amount should be at least $2,200.',
       max: 'The deposit amount should not be more than $6,000.',
     },
   },
