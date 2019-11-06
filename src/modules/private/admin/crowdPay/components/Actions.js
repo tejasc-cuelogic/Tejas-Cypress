@@ -29,7 +29,7 @@ export default class Actions extends Component {
         this.checkCipBeforeSubmitInvestor(get(detailsOfUser, 'data.user'), attrObj);
       }
     } else if (availableActions.includes(action)) {
-      this.props.crowdPayCtaHandler(userId, accountId, action, msg, this.state.skipCip === accountId);
+      this.props.crowdPayCtaHandler(userId, accountId, action, msg, this.state.skipCip);
     } else {
       this.props.history.push(`${this.props.match.url}/${action}`);
     }
@@ -39,7 +39,7 @@ export default class Actions extends Component {
     const { res } = await this.props.identityStore.verifyCip(true);
     const { requestId, message } = res.data.verifyCip;
     if (requestId && !message) {
-      this.props.crowdPayCtaHandler(userId, accountId, action, msg, this.state.skipCip === accountId);
+      this.props.crowdPayCtaHandler(userId, accountId, action, msg, this.state.skipCip);
     } else {
       if (message) {
         Helper.toast(message, 'error');
@@ -55,13 +55,13 @@ export default class Actions extends Component {
       || userObj.legalDetails.status === 'OFFLINE') {
       this.handleVerifyUserIdentity(userId, accountId, action, msg);
     } else {
-      this.props.crowdPayCtaHandler(userId, accountId, action, msg, this.state.skipCip === accountId);
+      this.props.crowdPayCtaHandler(userId, accountId, action, msg, this.state.skipCip);
     }
   }
 
-  skipCipChange = (e, result, accountId) => {
+  skipCipChange = (e, result) => {
     e.preventDefault();
-    this.setState({ skipCip: result.checked ? accountId : false });
+    this.setState({ skipCip: result.checked });
   }
 
   isCipExpired = (userObj) => {
@@ -130,7 +130,7 @@ export default class Actions extends Component {
                           DEV_FEATURE_ONLY && (
                             <Checkbox
                               name="skip-cip"
-                              onChange={(e, result) => this.skipCipChange(e, result, accountId)}
+                              onChange={(e, result) => this.skipCipChange(e, result)}
                               className="mt-half"
                               label="Skip CIP"
                               disabled={isDisabled}
