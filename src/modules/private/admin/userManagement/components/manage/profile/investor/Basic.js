@@ -19,6 +19,7 @@ export default class Basic extends Component {
     this.state = { displayMode: true };
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false);
+    this.props.userDetailsStore.setFormData('USER_PROFILE_PREFERRED_INFO_FRM', false);
     this.props.userDetailsStore.setAddressCheck();
   }
 
@@ -26,6 +27,7 @@ export default class Basic extends Component {
     e.preventDefault();
     this.props.userDetailsStore.setFormData('USER_BASIC', false, undefined, true, this.state.displayMode);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false, undefined, true);
+    this.props.userDetailsStore.setFormData('USER_PROFILE_PREFERRED_INFO_FRM', false, undefined, true);
     this.setState({ displayMode: !val });
   }
 
@@ -53,7 +55,7 @@ export default class Basic extends Component {
 
   render() {
     const {
-      detailsOfUser, USER_BASIC, USER_PROFILE_ADD_ADMIN_FRM, setAddressFieldsForProfile,
+      detailsOfUser, USER_BASIC, USER_PROFILE_ADD_ADMIN_FRM, USER_PROFILE_PREFERRED_INFO_FRM, setAddressFieldsForProfile,
       formChange, maskChange, isAddressSkip, toggleAddressVerification,
     } = this.props.userDetailsStore;
     const { inProgress } = this.props.uiStore;
@@ -68,37 +70,37 @@ export default class Basic extends Component {
             {this.state.displayMode
               ? <Link to={this.props.match.url} onClick={e => this.updateMode(e, true)} className="link mr-10"><small><Icon className="ns-pencil" /> Edit profile data</small></Link>
               : (
-              <>
-                <Link to="/" className="link mr-10" onClick={e => this.updateMode(e, false)}><small>Cancel</small></Link>
-                {USER_BASIC.meta.isValid && USER_PROFILE_ADD_ADMIN_FRM.meta.isValid
-                  && <Link to="/" className="link mr-10" onClick={e => this.updateUserData(e)}><small><Icon name="save" />Update</small></Link>
-                }
-              </>
+                <>
+                  <Link to="/" className="link mr-10" onClick={e => this.updateMode(e, false)}><small>Cancel</small></Link>
+                  {USER_BASIC.meta.isValid && USER_PROFILE_ADD_ADMIN_FRM.meta.isValid
+                    && <Link to="/" className="link mr-10" onClick={e => this.updateUserData(e)}><small><Icon name="save" />Update</small></Link>
+                  }
+                </>
               )
             }
             <Button compact onClick={() => toggleAddressVerification()} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
           </Button.Group>
         </Header>
         {get(details, 'locked.lock') === 'LOCKED'
-        && (
-        <>
-          <LockedInformation details={details} />
-          <Divider />
-        </>
-        )
+          && (
+            <>
+              <LockedInformation details={details} />
+              <Divider />
+            </>
+          )
         }
         <Header as="h6">Personal Info</Header>
         <Form.Group widths={2}>
           {
-          ['firstName', 'lastName'].map(field => (
-            <FormInput
-              key={field}
-              name={field}
-              fielddata={USER_BASIC.fields[field]}
-              changed={(e, result) => formChange(e, result, formName)}
-              displayMode={displayMode}
-            />
-          ))
+            ['firstName', 'lastName'].map(field => (
+              <FormInput
+                key={field}
+                name={field}
+                fielddata={USER_BASIC.fields[field]}
+                changed={(e, result) => formChange(e, result, formName)}
+                displayMode={displayMode}
+              />
+            ))
           }
           <MaskedInput
             key="number"
@@ -119,35 +121,35 @@ export default class Basic extends Component {
         </Form.Group>
         <Form.Group widths={2}>
           {
-          ['firstLegalName', 'lastLegalName'].map(field => (
-            <FormInput
-              key={field}
-              name={field}
-              fielddata={USER_BASIC.fields[field]}
-              changed={(e, result) => formChange(e, result, formName)}
-              displayMode={displayMode}
-            />
-          ))
+            ['firstLegalName', 'lastLegalName'].map(field => (
+              <FormInput
+                key={field}
+                name={field}
+                fielddata={USER_BASIC.fields[field]}
+                changed={(e, result) => formChange(e, result, formName)}
+                displayMode={displayMode}
+              />
+            ))
           }
           {displayMode
             ? (
-<FormInput
-  key="ssn"
-  name="ssn"
-  fielddata={USER_BASIC.fields.ssn}
-  changed={(e, result) => formChange(e, result, formName)}
-  displayMode={displayMode}
-/>
+              <FormInput
+                key="ssn"
+                name="ssn"
+                fielddata={USER_BASIC.fields.ssn}
+                changed={(e, result) => formChange(e, result, formName)}
+                displayMode={displayMode}
+              />
             )
             : (
-<MaskedInput
-  name="ssn"
-  fielddata={USER_BASIC.fields.ssn}
-  ssn
-  changed={(values, field) => maskChange(values, formName, field)}
-  displayMode={displayMode}
-  showerror
-/>
+              <MaskedInput
+                name="ssn"
+                fielddata={USER_BASIC.fields.ssn}
+                ssn
+                changed={(values, field) => maskChange(values, formName, field)}
+                displayMode={displayMode}
+                showerror
+              />
             )
           }
           <MaskedInput
@@ -170,15 +172,15 @@ export default class Basic extends Component {
             changed={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
           />
           {
-          ['streetTwo', 'city', 'state'].map(field => (
-            <FormInput
-              key={field}
-              name={field}
-              fielddata={USER_PROFILE_ADD_ADMIN_FRM.fields[field]}
-              changed={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
-              displayMode={displayMode}
-            />
-          ))
+            ['streetTwo', 'city', 'state'].map(field => (
+              <FormInput
+                key={field}
+                name={field}
+                fielddata={USER_PROFILE_ADD_ADMIN_FRM.fields[field]}
+                changed={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
+                displayMode={displayMode}
+              />
+            ))
           }
           <MaskedInput
             displayMode={displayMode}
@@ -200,21 +202,58 @@ export default class Basic extends Component {
             changed={(e, result) => formChange(e, result, 'USER_BASIC')}
           />
           {
-          ['streetTwo', 'city', 'state'].map(field => (
-            <FormInput
-              key={field}
-              name={field}
-              fielddata={USER_BASIC.fields[field]}
-              changed={(e, result) => formChange(e, result, formName)}
-              displayMode={displayMode}
-            />
-          ))
+            ['streetTwo', 'city', 'state'].map(field => (
+              <FormInput
+                key={field}
+                name={field}
+                fielddata={USER_BASIC.fields[field]}
+                changed={(e, result) => formChange(e, result, formName)}
+                displayMode={displayMode}
+              />
+            ))
           }
           <MaskedInput
             displayMode={displayMode}
             name="zipCode"
             fielddata={USER_BASIC.fields.zipCode}
             changed={(values, field) => maskChange(values, formName, field)}
+            maxlength="5"
+            number
+          />
+        </Form.Group>
+        <Divider />
+        <Header as="h6">Preferred Info</Header>
+        <Form.Group widths={3}>
+          <FormInput
+            name="name"
+            fielddata={USER_PROFILE_PREFERRED_INFO_FRM.fields.name}
+            changed={(e, result) => formChange(e, result, 'USER_PROFILE_PREFERRED_INFO_FRM')}
+            displayMode={displayMode}
+          />
+          <AutoComplete
+            readOnly={displayMode}
+            displayMode={displayMode}
+            name="street"
+            fielddata={USER_PROFILE_PREFERRED_INFO_FRM.fields.street}
+            onplaceselected={places => setAddressFieldsForProfile(places, 'USER_PROFILE_PREFERRED_INFO_FRM')}
+            changed={(e, result) => formChange(e, result, 'USER_PROFILE_PREFERRED_INFO_FRM')}
+          />
+          {
+            ['streetTwo', 'city', 'state'].map(field => (
+              <FormInput
+                key={field}
+                name={field}
+                fielddata={USER_PROFILE_PREFERRED_INFO_FRM.fields[field]}
+                changed={(e, result) => formChange(e, result, 'USER_PROFILE_PREFERRED_INFO_FRM')}
+                displayMode={displayMode}
+              />
+            ))
+          }
+          <MaskedInput
+            displayMode={displayMode}
+            name="zipCode"
+            fielddata={USER_PROFILE_PREFERRED_INFO_FRM.fields.zipCode}
+            changed={(values, field) => maskChange(values, 'USER_PROFILE_PREFERRED_INFO_FRM', field)}
             maxlength="5"
             number
           />

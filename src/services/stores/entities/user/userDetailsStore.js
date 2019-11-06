@@ -6,7 +6,7 @@ import moment from 'moment';
 import { mapValues, map, concat, set, isEmpty, difference, pick, find, findKey, filter, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
-import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM } from '../../../constants/user';
+import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM, USER_PROFILE_PREFERRED_INFO } from '../../../constants/user';
 import {
   identityStore,
   accountStore,
@@ -53,6 +53,8 @@ export class UserDetailsStore {
   @observable DELETE_MESSAGE_FRM = Validator.prepareFormObject(DELETE_MESSAGE);
 
   @observable USER_PROFILE_ADD_ADMIN_FRM = Validator.prepareFormObject(USER_PROFILE_ADDRESS_ADMIN);
+
+  @observable USER_PROFILE_PREFERRED_INFO_FRM = Validator.prepareFormObject(USER_PROFILE_PREFERRED_INFO);
 
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
 
@@ -821,6 +823,7 @@ export class UserDetailsStore {
   updateUserProfileForSelectedUser = () => {
     const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
     const infoAdd = Validator.evaluateFormData(toJS(this.USER_PROFILE_ADD_ADMIN_FRM.fields));
+    const preferredInfo = Validator.evaluateFormData(toJS(this.USER_PROFILE_PREFERRED_INFO_FRM.fields));
     const profileDetails = {
       firstName: basicData.firstName,
       lastName: basicData.lastName,
@@ -846,6 +849,7 @@ export class UserDetailsStore {
           variables: {
             profileDetails,
             legalDetails,
+            preferredInfo,
             capabilities,
             targetUserId: get(this.getDetailsOfUser, 'id'),
           },

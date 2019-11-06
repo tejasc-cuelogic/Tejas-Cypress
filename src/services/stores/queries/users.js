@@ -310,6 +310,14 @@ export const selectedUserDetailsQuery = gql`
           name
           url
         }
+        preferred {
+          name
+          street
+          streetTwo
+          city
+          state
+          zipCode
+        }
       }
       email {
         address
