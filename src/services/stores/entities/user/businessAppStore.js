@@ -986,6 +986,7 @@ export class BusinessAppStore {
     let payload = Validator.ExtractValues(this.BUSINESS_APP_FRM_BASIC.fields);
     payload = { ...payload, applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE' };
     if (this.urlParameter) {
+      payload = has(this.urlParameter, 'CJEVENT') ? { ...payload, tags: { CJEVENT: this.urlParameter.CJEVENT } } : { ...payload };
       payload = has(this.urlParameter, 'signupCode') ? { ...payload, signupCode: this.urlParameter.signupCode } : { ...payload };
       payload = has(this.urlParameter, 'signupcode') ? { ...payload, signupCode: this.urlParameter.signupcode } : { ...payload };
       payload = has(this.urlParameter, 'sc') ? { ...payload, signupCode: this.urlParameter.sc } : { ...payload };
@@ -1026,6 +1027,7 @@ export class BusinessAppStore {
   businessPreQualificationFormSumbit = () => {
     let payload = this.getFormatedPreQualificationData;
     if (this.urlParameter) {
+      payload = has(this.urlParameter, 'CJEVENT') ? { ...payload, tags: { CJEVENT: this.urlParameter.CJEVENT } } : { ...payload };
       payload = has(this.urlParameter, 'signupCode') ? { ...payload, signupCode: this.urlParameter.signupCode } : { ...payload };
       payload = has(this.urlParameter, 'signupcode') ? { ...payload, signupCode: this.urlParameter.signupcode } : { ...payload };
       payload = has(this.urlParameter, 'sc') ? { ...payload, signupCode: this.urlParameter.sc } : { ...payload };

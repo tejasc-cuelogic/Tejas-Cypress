@@ -13,6 +13,8 @@ export class CommonStore {
 
   @observable inProgress = false;
 
+  @observable urlParameter = null;
+
   constructor() {
     reaction(
       () => this.token,

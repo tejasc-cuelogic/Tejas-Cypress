@@ -6,10 +6,11 @@ import cookie from 'react-cookies';
 import { Modal, Button, Header, Icon, Form, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
+import { DataFormatter } from '../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('authStore', 'uiStore', 'identityStore')
+@inject('authStore', 'uiStore', 'identityStore', 'commonStore')
 @withRouter
 @observer
 class InvestorSignup extends Component {
@@ -18,6 +19,8 @@ class InvestorSignup extends Component {
     this.props.authStore.setDefaultPwdType();
     const userRoleData = cookie.load('ROLE_VALUE');
     this.props.authStore.setUserRole(userRoleData || 'investor');
+    const urlParameter = DataFormatter.QueryStringToJSON(this.props.location.search);
+    this.props.commonStore.setFieldValue('urlParameter', urlParameter);
   }
 
   componentWillUnmount() {
