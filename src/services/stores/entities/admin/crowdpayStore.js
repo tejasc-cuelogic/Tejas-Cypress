@@ -76,7 +76,7 @@ export class CrowdpayStore {
 
   @action
   removeLoadingCrowdPayId = (id, accountStatus) => {
-    if (accountStatus && accountStatus !== 'APPROVE') {
+    if (accountStatus && !['APPROVE', 'FULL'].includes(accountStatus)) {
       const index = findIndex(this.allCrowdpayData, crowdPayAccount => crowdPayAccount.accountId === id);
       const crowdPayAccount = find(this.allCrowdpayData, account => account.accountId === id);
       crowdPayAccount.accountStatus = accountStatus;
@@ -85,7 +85,7 @@ export class CrowdpayStore {
       }
       this.allCrowdpayData[index] = crowdPayAccount;
       this.setcrowdPayData(this.allCrowdpayData);
-    } else if (accountStatus === 'APPROVE') {
+    } else if (accountStatus === 'APPROVE' || accountStatus === 'FULL') {
       const crowdpayList = lodashFilter(this.allCrowdpayData, corwdPayAccount => corwdPayAccount.accountId !== id);
       this.setcrowdPayData(crowdpayList);
     }
@@ -262,7 +262,7 @@ export class CrowdpayStore {
   };
 
   @action
-  crowdPayCtaHandler = (userId, accountId, ctaAction, sMsg) => {
+  crowdPayCtaHandler = (userId, accountId, ctaAction, sMsg, skipCip = false) => {
     const commentData = Validator.evaluateFormData(this.CONFIRM_CROWDPAY_FRM.fields);
     const mutation = this.getMutation[ctaAction];
     if (!mutation) {
@@ -284,6 +284,8 @@ export class CrowdpayStore {
       variables.accountType = types[this.requestState.type];
     } else if (ctaAction === 'ACCOUNT_DECLINE') {
       variables.reason = commentData.justifyDescription;
+    } else if (ctaAction === 'VALIDATE') {
+      variables.skipCip = skipCip;
     }
     const accountStatuses = {
       DECLINE: CROWDPAY_ACCOUNTS_STATUS.FROZEN,
