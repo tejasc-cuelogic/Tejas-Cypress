@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { forEach, includes, find, isEmpty, has, get } from 'lodash';
+import { forEach, includes, find, isEmpty, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { FormValidator as Validator } from '../../../../helper';
@@ -94,8 +94,6 @@ export class BusinessAppStore {
   @observable userExists = false;
 
   @observable userRoles = [];
-
-  @observable urlParameter = null;
 
   @observable businessAppDataById = null;
 
@@ -985,16 +983,9 @@ export class BusinessAppStore {
     uiStore.setProgress();
     let payload = Validator.ExtractValues(this.BUSINESS_APP_FRM_BASIC.fields);
     payload = { ...payload, applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE' };
-    if (this.urlParameter) {
-      payload = has(this.urlParameter, 'CJEVENT') ? { ...payload, tags: { CJEVENT: this.urlParameter.CJEVENT } } : { ...payload };
-      payload = has(this.urlParameter, 'signupCode') ? { ...payload, signupCode: this.urlParameter.signupCode } : { ...payload };
-      payload = has(this.urlParameter, 'signupcode') ? { ...payload, signupCode: this.urlParameter.signupcode } : { ...payload };
-      payload = has(this.urlParameter, 'sc') ? { ...payload, signupCode: this.urlParameter.sc } : { ...payload };
-      payload = has(this.urlParameter, 'utmSource') ? { ...payload, utmSource: this.urlParameter.utmSource } : { ...payload };
-      payload = has(this.urlParameter, 'utmsource') ? { ...payload, utmSource: this.urlParameter.utmsource } : { ...payload };
-      payload = has(this.urlParameter, 'utm_source') ? { ...payload, utmSource: this.urlParameter.utm_source } : { ...payload };
-      payload = has(this.urlParameter, 'adid') ? { ...payload, utmSource: `${payload.utmSource}&&adid=${this.urlParameter.adid}` } : { ...payload };
-    }
+    payload = window.localStorage.getItem('CJEVENT') ? { ...payload, tags: { CJEVENT: window.localStorage.getItem('CJEVENT') } } : { ...payload };
+    payload = window.localStorage.getItem('signupCode') ? { ...payload, signupCode: window.localStorage.getItem('signupCode') } : { ...payload };
+    payload = window.localStorage.getItem('utmSource') ? { ...payload, utmSource: window.localStorage.getItem('utmSource') } : { ...payload };
     payload.email = payload.email.toLowerCase();
     return new Promise((resolve, reject) => {
       clientPublic
@@ -1008,6 +999,8 @@ export class BusinessAppStore {
         .then((result) => {
           const { id } = result.data.upsertPreQualBasicInfo;
           this.setFieldvalue('applicationId', id);
+          window.localStorage.removeItem('signupCode');
+          window.localStorage.removeItem('utmSource');
           resolve(result);
         })
         .catch((error) => {
@@ -1026,16 +1019,9 @@ export class BusinessAppStore {
   @action
   businessPreQualificationFormSumbit = () => {
     let payload = this.getFormatedPreQualificationData;
-    if (this.urlParameter) {
-      payload = has(this.urlParameter, 'CJEVENT') ? { ...payload, tags: { CJEVENT: this.urlParameter.CJEVENT } } : { ...payload };
-      payload = has(this.urlParameter, 'signupCode') ? { ...payload, signupCode: this.urlParameter.signupCode } : { ...payload };
-      payload = has(this.urlParameter, 'signupcode') ? { ...payload, signupCode: this.urlParameter.signupcode } : { ...payload };
-      payload = has(this.urlParameter, 'sc') ? { ...payload, signupCode: this.urlParameter.sc } : { ...payload };
-      payload = has(this.urlParameter, 'utmSource') ? { ...payload, utmSource: this.urlParameter.utmSource } : { ...payload };
-      payload = has(this.urlParameter, 'utmsource') ? { ...payload, utmSource: this.urlParameter.utmsource } : { ...payload };
-      payload = has(this.urlParameter, 'utm_source') ? { ...payload, utmSource: this.urlParameter.utm_source } : { ...payload };
-      payload = has(this.urlParameter, 'adid') ? { ...payload, utmSource: `${payload.utmSource}&&adid=${this.urlParameter.adid}` } : { ...payload };
-    }
+    payload = window.localStorage.getItem('CJEVENT') ? { ...payload, tags: { CJEVENT: window.localStorage.getItem('CJEVENT') } } : { ...payload };
+    payload = window.localStorage.getItem('signupCode') ? { ...payload, signupCode: window.localStorage.getItem('signupCode') } : { ...payload };
+    payload = window.localStorage.getItem('utmSource') ? { ...payload, utmSource: window.localStorage.getItem('utmSource') } : { ...payload };
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       clientPublic
@@ -1058,6 +1044,8 @@ export class BusinessAppStore {
               },
             },
           } = result;
+          window.localStorage.removeItem('signupCode');
+          window.localStorage.removeItem('utmSource');
           this.setFieldvalue('BUSINESS_APP_STATUS', status);
           this.setFieldvalue('userExists', userExists);
           this.setFieldvalue('userRoles', userRoles);

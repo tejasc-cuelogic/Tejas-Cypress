@@ -1,11 +1,11 @@
 import graphql from 'mobx-apollo';
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
-import { mapValues, keyBy, find, flatMap, map, get, has } from 'lodash';
+import { mapValues, keyBy, find, flatMap, map, get } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
-import { uiStore, authStore, userStore, userDetailsStore, commonStore } from '../../index';
+import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
 import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isUniqueSSN, verifyCipSoftFail, verifyCip, verifyCipHardFail, verifyCIPAnswers, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
@@ -789,9 +789,7 @@ cipWrapper = async (payLoad) => {
       address: (email.value || emailInCookie).toLowerCase(),
       firstName: givenName.value || firstNameInCookie,
     };
-    if (commonStore.urlParameter) {
-      payload = has(commonStore.urlParameter, 'CJEVENT') ? { ...payload, tags: { CJEVENT: commonStore.urlParameter.CJEVENT } } : { ...payload };
-    }
+    payload = window.localStorage.getItem('CJEVENT') ? { ...payload, tags: { CJEVENT: window.localStorage.getItem('CJEVENT') } } : { ...payload };
     return new Promise((resolve, reject) => {
       publicClient
         .mutate({
@@ -803,7 +801,7 @@ cipWrapper = async (payLoad) => {
           if (!isMobile) {
             Helper.toast(`Verification code sent to ${email.value || emailInCookie}.`, 'success');
           }
-          commonStore.setFieldValue('urlParameter', null);
+          window.localStorage.removeItem('CJEVENT');
           resolve();
         })
         .catch((err) => {
