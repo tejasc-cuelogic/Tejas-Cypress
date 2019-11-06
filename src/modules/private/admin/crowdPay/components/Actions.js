@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Table, Button } from 'semantic-ui-react';
+import { Table, Button, Checkbox } from 'semantic-ui-react';
 import { capitalize, get } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { CROWDPAY_ACCOUNTS_STATUS } from '../../../../../services/constants/crowdpayAccounts';
@@ -9,6 +9,10 @@ import Helper from '../../../../../helper/utility';
 @withRouter
 @observer
 export default class Actions extends Component {
+ state = {
+   [`skip-cip-${this.props.account.accountId}`]: false,
+ };
+
   ctaHandler = (e, userId, accountId, action, msg) => {
     e.preventDefault();
     const availableActions = ['APPROVE', 'DECLINE', 'EMAIL', 'GSPROCESS', 'VALIDATE', 'CREATEACCOUNT'];
@@ -24,7 +28,7 @@ export default class Actions extends Component {
         this.checkCipBeforeSubmitInvestor(get(detailsOfUser, 'data.user'), attrObj);
       }
     } else if (availableActions.includes(action)) {
-      this.props.crowdPayCtaHandler(userId, accountId, action, msg);
+      this.props.crowdPayCtaHandler(userId, accountId, action, msg, this.state[`skip-cip-${accountId}`]);
     } else {
       this.props.history.push(`${this.props.match.url}/${action}`);
     }
@@ -34,12 +38,12 @@ export default class Actions extends Component {
     const { res } = await this.props.identityStore.verifyCip(true);
     const { requestId, message } = res.data.verifyCip;
     if (requestId && !message) {
-      this.props.crowdPayCtaHandler(userId, accountId, action, msg);
+      this.props.crowdPayCtaHandler(userId, accountId, action, msg, this.state[`skip-cip-${accountId}`]);
     } else {
       if (message) {
         Helper.toast(message, 'error');
       }
-      this.props.crowdpayStore.removeLoadingCrowdPayId(accountId, this.props.account.accountStatus);
+      this.props.crowdpayStore.removeLoadingCrowdPayId(accountId, this.props.account.accountStatus, this.state[`skip-cip-${accountId}`]);
     }
   }
 
@@ -47,11 +51,18 @@ export default class Actions extends Component {
     const { userId, accountId, action, msg } = attrObj;
 
     if (this.isCipExpired(userObj)
-    || userObj.legalDetails.status === 'OFFLINE') {
+      || userObj.legalDetails.status === 'OFFLINE') {
       this.handleVerifyUserIdentity(userId, accountId, action, msg);
     } else {
-      this.props.crowdPayCtaHandler(userId, accountId, action, msg);
+      this.props.crowdPayCtaHandler(userId, accountId, action, msg, this.state[`skip-cip-${accountId}`]);
     }
+  }
+
+  skipCipChange = (e, result) => {
+    e.preventDefault();
+    this.setState({
+      [`skip-cip-${this.props.account.accountId}`]: result.checked,
+    });
   }
 
   isCipExpired = (userObj) => {
@@ -112,7 +123,18 @@ export default class Actions extends Component {
                     )
                   }
                   {!isAccProcess && type === 'individual'
-                    && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
+                    && (
+                      <>
+                        <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
+                        <Checkbox
+                          name={`skip-cip-${accountId}`}
+                          onChange={(e, result) => this.skipCipChange(e, result)}
+                          checked={this.state[`skip-cip-${accountId}`]}
+                          className="mt-half"
+                          label="Skip CIP"
+                        />
+                      </>
+                    )
                   }
                   {isAccProcess
                     && <Button disabled={loadingCrowdPayIds.includes(accountId)} onClick={e => this.ctaHandler(e, userId, accountId, 'CREATEACCOUNT', `${capitalize(type)} account is Created successfully.`)} as={Link} to={`${urlPara}/CREATEACCOUNT`} className="inverted" color="blue">Create</Button>
