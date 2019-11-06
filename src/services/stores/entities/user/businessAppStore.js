@@ -999,7 +999,6 @@ export class BusinessAppStore {
         .then((result) => {
           const { id } = result.data.upsertPreQualBasicInfo;
           this.setFieldvalue('applicationId', id);
-          commonStore.removeLocalStorage(['CJEVENT', 'signupCode', 'utmSource']);
           resolve(result);
         })
         .catch((error) => {
