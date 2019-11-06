@@ -11,7 +11,7 @@ import { DataFormatter } from '../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('authStore', 'uiStore', 'identityStore', 'commonStore')
+@inject('authStore', 'uiStore', 'identityStore')
 @withRouter
 @observer
 class InvestorSignup extends Component {

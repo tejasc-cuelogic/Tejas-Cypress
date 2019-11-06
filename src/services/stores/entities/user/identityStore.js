@@ -15,6 +15,7 @@ import { fileUpload } from '../../../actions';
 import { INVESTOR_URLS } from '../../../constants/url';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
 import { US_STATES, FILE_UPLOAD_STEPS, US_STATES_FOR_INVESTOR } from '../../../../constants/account';
+import commonStore from '../commonStore';
 
 export class IdentityStore {
   @observable ID_VERIFICATION_FRM = FormValidator.prepareFormObject(USER_IDENTITY);
@@ -801,7 +802,7 @@ cipWrapper = async (payLoad) => {
           if (!isMobile) {
             Helper.toast(`Verification code sent to ${email.value || emailInCookie}.`, 'success');
           }
-          window.localStorage.removeItem('CJEVENT');
+          commonStore.removeLocalStorage(['CJEVENT']);
           resolve();
         })
         .catch((err) => {

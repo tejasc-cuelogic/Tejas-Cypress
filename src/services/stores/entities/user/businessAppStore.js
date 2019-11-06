@@ -38,7 +38,7 @@ import {
   submitApplication,
   helpAndQuestion,
 } from '../../queries/businessApplication';
-import { uiStore, navStore, userDetailsStore, businessAppLendioStore, businessAppAdminStore, offeringsStore } from '../../index';
+import { uiStore, navStore, userDetailsStore, businessAppLendioStore, businessAppAdminStore, offeringsStore, commonStore } from '../../index';
 import { fileUpload } from '../../../actions';
 
 export class BusinessAppStore {
@@ -999,8 +999,7 @@ export class BusinessAppStore {
         .then((result) => {
           const { id } = result.data.upsertPreQualBasicInfo;
           this.setFieldvalue('applicationId', id);
-          window.localStorage.removeItem('signupCode');
-          window.localStorage.removeItem('utmSource');
+          commonStore.removeLocalStorage(['CJEVENT', 'signupCode', 'utmSource']);
           resolve(result);
         })
         .catch((error) => {
@@ -1044,8 +1043,7 @@ export class BusinessAppStore {
               },
             },
           } = result;
-          window.localStorage.removeItem('signupCode');
-          window.localStorage.removeItem('utmSource');
+          commonStore.removeLocalStorage(['CJEVENT', 'signupCode', 'utmSource']);
           this.setFieldvalue('BUSINESS_APP_STATUS', status);
           this.setFieldvalue('userExists', userExists);
           this.setFieldvalue('userRoles', userRoles);
