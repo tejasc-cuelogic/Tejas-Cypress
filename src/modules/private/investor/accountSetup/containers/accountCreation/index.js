@@ -29,9 +29,9 @@ export default class AccountCreation extends Component {
   }
 
   handleCloseModal = () => {
-    const { getInvestorAccountsRoute } = this.props.userDetailsStore;
+    const { getInvestorAccountsRoute, hasAnyAccount } = this.props.userDetailsStore;
     const accountType = getInvestorAccountsRoute(this.props.accountStore.INVESTMENT_ACC_TYPES.fields.accType.value);
-    this.props.history.push(`/app/account-details/${accountType}/portfolio`);
+    this.props.history.push(hasAnyAccount ? `/app/account-details/${accountType}/portfolio` : '/app/setup');
   }
 
   handleUserIdentity = async (accountType) => {

@@ -101,7 +101,7 @@ export default class AccountCreation extends React.Component {
         disableKeyDown: true,
       },
       {
-        name: 'Investment Experience',
+        name: inProgressArray.includes('EXPERIENCED') ? 'RISKS' : 'Investment Experience',
         component: <Experience />,
         isValid: INVESTMENT_EXP_FORM.meta.isValid ? '' : stepToBeRendered > 5 ? 'error' : '',
         isDirty: INVESTMENT_EXP_FORM.meta.isDirty,
