@@ -186,7 +186,7 @@ class DataFormatter {
   createEligibleTagsObj = (urlParameter) => {
     const tags = {};
     forEach(urlParameter, (p, key) => {
-      if (ELIGIBLE_TAGS.includes(key.toUpperCase()) && p && p.length <= 25 && !Helper.isSpecialCharPresent(p)) {
+      if (ELIGIBLE_TAGS.includes(key.toUpperCase()) && p && p.length <= 128 && !Helper.isSpecialCharPresent(p)) {
         tags[key.toUpperCase()] = p;
       }
     });
