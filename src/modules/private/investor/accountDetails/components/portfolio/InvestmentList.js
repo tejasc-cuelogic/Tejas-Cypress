@@ -32,7 +32,7 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
 <Accordion fluid styled>
     <Accordion.Title className="text-capitalize">
       <Header as="h6" className="mt-0" onClick={toggleAccordion}>
-        <Icon className={`ns-chevron-${active ? 'up' : 'down'}`} color="green" />
+        <Icon className={`ns-chevron-${active ? 'up' : 'right'}`} color="green" />
         {get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}
         <Header.Subheader>{CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')] || 'N/A'}</Header.Subheader>
       </Header>
@@ -120,9 +120,10 @@ const InvestmentList = (props) => {
               <Table unstackable singleLine selectable className={`investment-details ${props.listOf !== 'pending' ? 'clickable' : ''}`}>
                 <Table.Header>
                   <Table.Row>
+                    <Table.HeaderCell collapsing />
                     {
                       listHeader.map(cell => (
-                        <Table.HeaderCell textAlign={['Invested Amount', 'Net Payments Received'].includes(cell) ? 'right' : ''} key={cell.split(' ')[0]}>{cell}</Table.HeaderCell>
+                        <Table.HeaderCell key={cell.split(' ')[0]}>{cell}</Table.HeaderCell>
                       ))
                     }
                     <Table.HeaderCell />
@@ -134,6 +135,8 @@ const InvestmentList = (props) => {
                       <Table.Row key={data.investmentDate} onClick={() => { if (!isMobile) { handleViewInvestment(!['active', 'pending'].includes(props.listOf) ? data.offering.id : ''); } }}>
                         <Table.Cell>
                           <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />
+                        </Table.Cell>
+                        <Table.Cell>
                           <div className="offering-title">
                             {props.listOf === 'pending' && !isAdmin ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (props.listOf === 'active' && !isAdmin)
                               ? (<p>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</p>) : (
@@ -150,7 +153,7 @@ const InvestmentList = (props) => {
                             CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')] || 'N/A'
                           }
                         </Table.Cell>
-                        <Table.Cell className="text-capitalize" textAlign="right">
+                        <Table.Cell className="text-capitalize">
                           {
                             <>
                               {Helper.CurrencyFormat(data.investedAmount, 0)}
@@ -160,7 +163,6 @@ const InvestmentList = (props) => {
                             </>
                           }
                         </Table.Cell>
-
                         <Table.Cell>
                           {
                             data && data.offering && data.offering.stage
@@ -170,13 +172,11 @@ const InvestmentList = (props) => {
                                     ? STAGES.LOCK.label : STAGES[data.offering.stage].label : STAGES[data.offering.stage].label : '-'
                           }
                         </Table.Cell>
-
                         <Table.Cell collapsing>
                           {props.listOf === 'pending'
                             ? get(data, 'offering.closureSummary.processingDate') ? DataFormatter.diffDays(get(data, 'offering.closureSummary.processingDate'), false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(get(data, 'offering.closureSummary.processingDate'), true, true).value === 0 ? '' : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(data, 'offering.closureSummary.processingDate'), true, true).value < 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(get(data, 'offering.closureSummary.processingDate'), true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(get(data, 'offering.closureSummary.processingDate'), true, true).label}` : DataFormatter.diffInDaysHoursMin(get(data, 'offering.closureSummary.processingDate')).diffText : 'N/A'
                             : get(data, 'offering.closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(data, 'offering.closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}
                         </Table.Cell>
-
                         {props.listOf === 'active'
                           && (
                             <Table.Cell>
@@ -188,7 +188,7 @@ const InvestmentList = (props) => {
                         }
                         {props.listOf !== 'pending'
                           && (
-                            <Table.Cell textAlign="right">
+                            <Table.Cell>
                               {Helper.MoneyMathDisplayCurrency(get(data, 'netPaymentsReceived') || 0)}
                             </Table.Cell>
                           )
@@ -224,14 +224,15 @@ const InvestmentList = (props) => {
                 </Table.Body>
                 <Table.Footer>
                   <Table.Row>
-                    <Table.HeaderCell>Total:</Table.HeaderCell>
-                    <Table.HeaderCell colSpan="1" />
-                    <Table.HeaderCell textAlign="right">{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0, 0)}</Table.HeaderCell>
+                    <Table.HeaderCell colSpan="2" />
+                    <Table.HeaderCell textAlign="right">Total:</Table.HeaderCell>
+                    <Table.HeaderCell className="neutral-text">{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0, 0)}</Table.HeaderCell>
                     <Table.HeaderCell colSpan={props.listOf === 'active' ? '3' : '2'} />
                     {props.listOf !== 'pending'
                     && (
-                      <Table.HeaderCell textAlign="right">{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
+                      <Table.HeaderCell>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
                     )}
+                    <Table.HeaderCell colSpan="1" />
                   </Table.Row>
                 </Table.Footer>
               </Table>

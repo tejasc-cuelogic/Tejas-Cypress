@@ -54,6 +54,7 @@ const SummaryHeader = props => (
                           position="top center"
                           wide
                           hoverable
+                          color="grey"
                         />
                         )
                       }
