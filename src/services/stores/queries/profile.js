@@ -101,9 +101,9 @@ export const checkUserPhoneVerificationCode = gql`
  }`;
 
 export const updateUserProfileData = gql`
-  mutation _updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: ProfileDataLegalInput, $capabilities: [String], $targetUserId: String) {
+  mutation _updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: ProfileDataLegalInput, $preferredInfo: PreferredInfoInput, $capabilities: [String], $targetUserId: String) {
   updateUserProfileData(
-  profileDetails: $profileDetails, targetUserId: $targetUserId, legalDetails: $legalDetails, capabilities: $capabilities
+  profileDetails: $profileDetails, targetUserId: $targetUserId, legalDetails: $legalDetails, preferredInfo: $preferredInfo, capabilities: $capabilities
   ) {
       id
       info {
