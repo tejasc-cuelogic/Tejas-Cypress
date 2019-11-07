@@ -2035,6 +2035,7 @@ ol.progtrckr{
 		font-weight:@fontMedium;
 		line-height:@16px;
 		text-align:center;
+		text-transform: capitalize;
 		cursor:pointer;
 		position:relative;
 		&:after{

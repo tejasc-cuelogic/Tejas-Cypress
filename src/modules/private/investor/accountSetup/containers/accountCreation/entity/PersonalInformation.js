@@ -42,7 +42,7 @@ export default class PersonalInformation extends Component {
     return (
       <>
       <Header as="h4" textAlign={isMobile ? '' : 'center'}>Authorized Signatory Information</Header>
-        <p className={`${isMobile ? 'mb-30 mt-0' : ''} account-type-tab`}>Please provide your title and a copy of your photo ID.</p>
+        <p className={`${isMobile ? 'mb-30 mt-0' : 'center-align'} account-type-tab`}>Please provide your title and a copy of your photo ID.</p>
         {isMobile && <p className="highlight-text"><b>Authorized Signatory</b></p>}
         <Form error>
           <div className={isMobile ? '' : 'field-wrap'}>

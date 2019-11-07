@@ -23,7 +23,7 @@ const AccountTypes = ({
   >
     <Modal.Header className={isMobile ? '' : 'center-align signup-header'}>
       {!isMobile && (
-      <Header as="h3">What type of Investment Account would you like to start?</Header>
+      <Header as="h3">Which type of investment account would you like to open?</Header>
       )}
       {isMobile && (
         <>
@@ -42,7 +42,7 @@ const AccountTypes = ({
     </Modal.Header>
     <Modal.Content className="signup-content">
       {isMobile && (
-      <Header as="h4">What type of Investment Account would you like to start?</Header>
+      <Header as="h4">Which type of investment account would you like to open?</Header>
       )}
       {!isMobile && (
         <Header as="h6" textAlign="center">Choose an account type</Header>

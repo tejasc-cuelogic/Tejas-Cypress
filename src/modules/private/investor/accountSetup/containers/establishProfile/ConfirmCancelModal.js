@@ -29,7 +29,7 @@ export default class ConfirmCancelModal extends React.Component {
             <div className="center-align mt-30">
               <Button fluid={isMobile} primary size="large" onClick={this.handleCloseModal} className="very relaxed" content="Go Back" />
             </div>
-            <div className={`${isMobile ? 'mb-30' : ''} center-align mt-30`}>
+            <div className={`${isMobile ? 'mb-30' : ''} center-align mt-14`}>
               <p><Link to="/app/setup" onClick={this.handleFinishLater}>Finish later</Link></p>
             </div>
           </Modal.Content>
