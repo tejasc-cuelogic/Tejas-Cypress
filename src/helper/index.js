@@ -8,3 +8,5 @@ export { default as ClientDb } from './utilities/ClientDb';
 export { default as MobxApollo } from './utilities/MobxApollo';
 export { default as Utilities } from './utility';
 export { default as FormHelper } from './utilities/FormHelper';
+export { default as LazyLoadBoundary } from './utilities/LazyLoadBoundary';
+export { default as LazyLoadRetry } from './utilities/LazyLoadRetry';
