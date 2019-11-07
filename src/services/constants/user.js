@@ -364,6 +364,22 @@ export const USER_PROFILE_ADDRESS_ADMIN = {
   zipCode: { ...USER_IDENTITY.zipCode, objRef: 'info.mailingAddress' },
 };
 
+export const USER_PROFILE_PREFERRED_INFO = {
+  name: {
+    value: '',
+    label: 'Preferred Name',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Preferred Name',
+    objRef: 'info.preferred',
+  },
+  street: { ...USER_IDENTITY.street, objRef: 'info.preferred', objRefOutput: '' },
+  streetTwo: { ...USER_IDENTITY.streetTwo, objRef: 'info.preferred', objRefOutput: '', skipField: false },
+  city: { ...USER_IDENTITY.city, objRef: 'info.preferred', objRefOutput: '' },
+  state: { ...USER_IDENTITY.state, objRef: 'info.preferred', objRefOutput: '' },
+  zipCode: { ...USER_IDENTITY.zipCode, objRef: 'info.preferred', objRefOutput: '' },
+};
+
 export const USER_PROFILE_FOR_ADMIN = {
   firstName: { ...UPDATE_PROFILE_INFO.firstName },
   lastName: { ...UPDATE_PROFILE_INFO.lastName },
