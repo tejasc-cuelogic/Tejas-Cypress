@@ -137,6 +137,11 @@ query _listRequestPlugins {
         key
         rule
         defaultValue
+        options{
+          key
+          value
+          text
+        }
       }
     }
   }
