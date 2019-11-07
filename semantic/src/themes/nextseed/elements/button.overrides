@@ -137,8 +137,20 @@
         }
     }
 }
-.sticky-actions .ui.buttons.time-stamp{
-    flex:1;
+.sticky-actions{
+    @media only screen and (max-width : @largestMobileScreen){
+        flex-direction: column;
+    }
+    .ui.buttons.time-stamp{
+        flex:1;
+    }
+    .sticky-buttons{
+        flex-wrap: wrap;
+        .ui.button:last-child{
+            margin-top: @10px;
+            margin-left: 0;
+        }
+    }
 }
 
 .ui.button, .ui.buttons .button{
