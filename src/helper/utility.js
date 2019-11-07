@@ -8,7 +8,7 @@ import { toJS } from 'mobx';
 import money from 'money-math';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
-import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS } from '../constants/common';
+import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS } from '../constants/common';
 import authStore from '../services/stores/entities/shared/authStore';
 import userStore from '../services/stores/entities/userStore';
 
@@ -325,7 +325,15 @@ export class Utility {
   validateImageExtension = (ext) => {
     const obj = {
       isInvalid: !IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()),
-      errorMsg: `Only ${IMAGE_UPLOAD_ALLOWED_EXTENSIONS.join(', ')}  extensions are allowed.`,
+      errorMsg: `Only ${IMAGE_UPLOAD_ALLOWED_EXTENSIONS.join(', ')} extensions are allowed.`,
+    };
+    return obj;
+  };
+
+  validateDocumentExtension = (ext) => {
+    const obj = {
+      isInvalid: !DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()),
+      errorMsg: `Only ${DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS.join(', ')} extensions are allowed.`,
     };
     return obj;
   };

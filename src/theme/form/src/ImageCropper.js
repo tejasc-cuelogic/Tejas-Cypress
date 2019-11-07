@@ -161,7 +161,7 @@ export default class ImageCropper extends Component {
                 <div className="file-uploader-inner">
                   <Icon className="ns-upload" /> Choose a file&nbsp;<span>or drag it here</span>
                 </div>
-                <input disabled={disabled} type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png" />
+                <input disabled={disabled} type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png, .tif, .tiff" />
               </div>
               {field.error
                 && <FieldError error={field.error} />
