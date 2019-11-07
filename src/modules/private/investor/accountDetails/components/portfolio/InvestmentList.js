@@ -32,7 +32,7 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
 <Accordion fluid styled>
     <Accordion.Title className="text-capitalize">
       <Header as="h6" className="mt-0" onClick={toggleAccordion}>
-        <Icon className={`ns-chevron-${active ? 'up' : 'right'}`} color="green" />
+        <Icon className={`ns-chevron-${active ? 'down' : 'right'}`} color="green" />
         {get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}
         <Header.Subheader>{CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')] || 'N/A'}</Header.Subheader>
       </Header>
