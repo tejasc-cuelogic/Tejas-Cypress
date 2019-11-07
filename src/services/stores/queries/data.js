@@ -144,9 +144,9 @@ query _listRequestPlugins {
 `;
 
 export const requestFactoryPluginTrigger = gql`
-mutation invokeRequest($method: String!, $payload: String, $invocationType: RequestInvocationEnum) {
+mutation invokeRequest($plugin: String!, $payload: String, $invocationType: RequestInvocationEnum) {
   invokeRequest(
-    method: $method,
+    plugin: $plugin,
     payload: $payload
     invocationType: $invocationType
   )
