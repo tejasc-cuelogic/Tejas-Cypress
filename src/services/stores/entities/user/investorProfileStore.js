@@ -194,7 +194,9 @@ class InvestorProfileStore {
       let formPayload = '';
       if (currentStep.form === 'EMPLOYMENT_FORM') {
         formPayload = { employment: FormValidator.ExtractValues(this.EMPLOYMENT_FORM.fields) };
-        formPayload = formPayload.employment.status !== 'EMPLOYED' ? { ...formPayload, employment: { ...formPayload.employment, employer: null, position: null } } : formPayload;
+        if (formPayload.employment.status !== 'EMPLOYED') {
+          formPayload.employment = { ...formPayload.employment, employer: null, position: null };
+        }
       } else if (currentStep.form === 'BROKERAGE_EMPLOYMENT_FORM') {
         const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
         if (fields.brokerageEmployment.value === 'no') {
@@ -256,7 +258,9 @@ class InvestorProfileStore {
     const { fields } = this.INVESTOR_PROFILE_FULL;
     let formData = FormValidator.evaluateFormData(fields);
     const YearsList = Helper.getLastThreeYearsLabel();
-    formData = formData.employment.status !== 'EMPLOYED' ? { ...formData, employment: { ...formData.employment, employer: null, position: null } } : formData;
+    if (formData.employment.status !== 'EMPLOYED') {
+      formData.employment = { ...formData.employment, employer: null, position: null };
+    }
     formData = {
       ...formData,
       brokerageFirmName: fields.brokerageEmployment.value === 'no' ? 'false' : formData.brokerageFirmName,
