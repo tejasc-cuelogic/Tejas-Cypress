@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { ELIGIBLE_TAGS } from '../../../constants/common';
 
 // queries, mutations and subscriptions , limit: "10"
 export const allUsersQuery = gql`
@@ -485,6 +486,7 @@ export const selectedUserDetailsQuery = gql`
         isComfortable
       }
       mfaMode
+      tags { ${ELIGIBLE_TAGS.join(' ')} }
     }
   }
 `;
@@ -723,7 +725,7 @@ query _fetchEmails ($recipientId: String!, $subject: String, $fromDate: String, 
       mergeVars {
         content
         name
-      }     
+      }
     }
     resultCount
     totalCount
