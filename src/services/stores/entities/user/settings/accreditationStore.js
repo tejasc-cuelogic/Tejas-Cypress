@@ -874,33 +874,25 @@ export class AccreditationStore {
         ? (currentAcitveObject.status === 'EXPIRED' || this.checkIsAccreditationExpired(currentAcitveObject.expiration)
       === 'EXPIRED') ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
       investmentType = regulationType && regulationType === 'BD_CF_506C' && accountStatus !== 'EXPIRED' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'BD_506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : regulationType && regulationType === 'BD_506B' ? 'BD_506B' : 'CF';
-      // if (accountStatus) {
       switch (accountStatus) {
         case 'REQUESTED':
-          // this.userAccredetiationState = 'PENDING';
           this.setFieldVal('userAccredetiationState', 'PENDING');
           break;
         case 'DECLINED':
-          // this.userAccredetiationState = 'NOT_ELGIBLE';
           this.setFieldVal('userAccredetiationState', 'NOT_ELGIBLE');
           break;
         case 'CONFIRMED':
-          // this.userAccredetiationState = 'ELGIBLE';
           this.setFieldVal('userAccredetiationState', 'ELGIBLE');
           break;
         case 'EXPIRED':
-          // this.userAccredetiationState = 'EXPIRED';
           this.setFieldVal('userAccredetiationState', 'EXPIRED');
           this.setFieldVal('isAccreditationExpired', true);
           break;
         default:
-          // this.userAccredetiationState = 'INACTIVE';
           this.setFieldVal('userAccredetiationState', 'INACTIVE');
           break;
       }
-      // }
     } else if (intialAccountStatus === 'FULL') {
-      // this.userAccredetiationState = 'ELGIBLE';
       this.setFieldVal('userAccredetiationState', 'ELGIBLE');
     }
     this.setCurrentInvestmentStatus(investmentType);
