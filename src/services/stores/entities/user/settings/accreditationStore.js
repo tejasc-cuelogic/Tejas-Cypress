@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 import { observable, action, toJS, computed } from 'mobx';
 import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes, get, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
@@ -831,7 +832,7 @@ export class AccreditationStore {
     const pendingResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'REQUESTED'));
     const notEligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'DECLINED'));
     const eligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'CONFIRMED'));
-    const expiredResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && this.checkIsAccreditationExpired(a.expiration) === 'EXPIRED'));
+    const expiredResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && (a.status === 'EXPIRED' || this.checkIsAccreditationExpired(a.expiration) === 'EXPIRED')));
     this.accreditationDetails.inactiveAccreditation = inactiveResult;
     this.accreditationDetails.pendingAccreditation = pendingResult;
     this.accreditationDetails.notEligibleAccreditation = notEligibalResult;
@@ -870,8 +871,8 @@ export class AccreditationStore {
       }
       const validAccreditationStatus = ['REQUESTED', 'INVALID'];
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration
-        ? this.checkIsAccreditationExpired(currentAcitveObject.expiration)
-      === 'EXPIRED' ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
+        ? (currentAcitveObject.status === 'EXPIRED' || this.checkIsAccreditationExpired(currentAcitveObject.expiration)
+      === 'EXPIRED') ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
       investmentType = regulationType && regulationType === 'BD_CF_506C' && accountStatus !== 'EXPIRED' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'BD_506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : regulationType && regulationType === 'BD_506B' ? 'BD_506B' : 'CF';
       // if (accountStatus) {
       switch (accountStatus) {
@@ -984,10 +985,11 @@ export class AccreditationStore {
     this.setFieldVal('isAccreditationExpired', false);
   }
 
-  checkIsAccreditationExpired = (expirationDate) => {
+  checkIsAccreditationExpired = (expirationDate, isUnix = false) => {
     let dateDiff = '';
     if (expirationDate) {
-      dateDiff = DataFormatter.diffDays(DataFormatter.formatedDate(expirationDate), false, true);
+      const date = (isUnix && typeof expirationDate === 'string') ? parseInt(expirationDate) : expirationDate;
+      dateDiff = DataFormatter.diffDays(DataFormatter.formatedDate(date, isUnix), false, true);
       return dateDiff < 0 ? 'EXPIRED' : 'ACTIVE';
     }
     return dateDiff;
