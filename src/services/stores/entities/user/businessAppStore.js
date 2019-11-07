@@ -983,7 +983,8 @@ export class BusinessAppStore {
     uiStore.setProgress();
     let payload = Validator.ExtractValues(this.BUSINESS_APP_FRM_BASIC.fields);
     payload = { ...payload, applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE' };
-    payload = window.localStorage.getItem('CJEVENT') ? { ...payload, tags: { CJEVENT: window.localStorage.getItem('CJEVENT') } } : { ...payload };
+    const tags = JSON.parse(window.localStorage.getItem('tags'));
+    payload = !isEmpty(tags) ? { ...payload, tags } : { ...payload };
     payload = window.localStorage.getItem('signupCode') ? { ...payload, signupCode: window.localStorage.getItem('signupCode') } : { ...payload };
     payload = window.localStorage.getItem('utmSource') ? { ...payload, utmSource: window.localStorage.getItem('utmSource') } : { ...payload };
     payload.email = payload.email.toLowerCase();
@@ -1017,7 +1018,8 @@ export class BusinessAppStore {
   @action
   businessPreQualificationFormSumbit = () => {
     let payload = this.getFormatedPreQualificationData;
-    payload = window.localStorage.getItem('CJEVENT') ? { ...payload, tags: { CJEVENT: window.localStorage.getItem('CJEVENT') } } : { ...payload };
+    const tags = JSON.parse(window.localStorage.getItem('tags'));
+    payload = !isEmpty(tags) ? { ...payload, tags } : { ...payload };
     payload = window.localStorage.getItem('signupCode') ? { ...payload, signupCode: window.localStorage.getItem('signupCode') } : { ...payload };
     payload = window.localStorage.getItem('utmSource') ? { ...payload, utmSource: window.localStorage.getItem('utmSource') } : { ...payload };
     uiStore.setProgress();
@@ -1042,7 +1044,7 @@ export class BusinessAppStore {
               },
             },
           } = result;
-          commonStore.removeLocalStorage(['CJEVENT', 'signupCode', 'utmSource']);
+          commonStore.removeLocalStorage(['tags', 'signupCode', 'utmSource']);
           this.setFieldvalue('BUSINESS_APP_STATUS', status);
           this.setFieldvalue('userExists', userExists);
           this.setFieldvalue('userRoles', userRoles);

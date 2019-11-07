@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get, has } from 'lodash';
+import { get, has, isEmpty } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Form, Button, Divider } from 'semantic-ui-react';
 import scrollIntoView from 'scroll-into-view';
@@ -23,15 +23,20 @@ export default class PreQualification extends Component {
     if (this.props.isPublic) {
       const { params } = this.props.match;
       const urlParameter = DataFormatter.QueryStringToJSON(this.props.location.search);
-      if (has(urlParameter, 'CJEVENT')) {
-        window.localStorage.setItem('CJEVENT', urlParameter.CJEVENT);
-      }
-      if (urlParameter.signupCode || urlParameter.signupcode || urlParameter.sc) {
-        window.localStorage.setItem('signupCode', urlParameter.signupCode || urlParameter.signupcode || urlParameter.sc);
-      }
-      if (urlParameter.utmSource || urlParameter.utmsource || urlParameter.utm_source) {
-        const utmSource = urlParameter.utmSource || urlParameter.utmsource || urlParameter.utm_source;
-        window.localStorage.setItem('utmSource', has(urlParameter, 'adid') ? `${utmSource}&&adid=${urlParameter.adid}` : utmSource);
+      if (urlParameter) {
+        let tags = DataFormatter.createEligibleTagsObj(urlParameter);
+        if (!isEmpty(tags)) {
+          const existingTags = JSON.parse(window.localStorage.getItem('tags'));
+          tags = !isEmpty(existingTags) ? { ...existingTags, ...tags } : tags;
+          window.localStorage.setItem('tags', JSON.stringify(tags));
+        }
+        if (get(urlParameter, 'signupCode') || get(urlParameter, 'signupcode') || get(urlParameter, 'sc')) {
+          window.localStorage.setItem('signupCode', get(urlParameter, 'signupCode') || get(urlParameter, 'signupcode') || get(urlParameter, 'sc'));
+        }
+        if (get(urlParameter, 'utmSource') || get(urlParameter, 'utmsource') || get(urlParameter, 'utm_source')) {
+          const utmSource = get(urlParameter, 'utmSource') || get(urlParameter, 'utmsource') || get(urlParameter, 'utm_source');
+          window.localStorage.setItem('utmSource', has(urlParameter, 'adid') ? `${utmSource}&&adid=${urlParameter.adid}` : utmSource);
+        }
       }
       this.props.businessAppStore.formReset(params.applicationType);
       this.props.businessAppStore.setFieldvalue('currentApplicationType', params.applicationType);

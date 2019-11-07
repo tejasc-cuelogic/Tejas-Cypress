@@ -1,7 +1,8 @@
-import { camelCase, upperFirst, reduce, assign, get } from 'lodash';
+import { camelCase, upperFirst, reduce, assign, get, forEach } from 'lodash';
 import moment from 'moment';
 import momentZone from 'moment-timezone';
-import { DEFAULT_TIME_ZONE_TO_DISPLAY } from '../../constants/common';
+import { DEFAULT_TIME_ZONE_TO_DISPLAY, ELIGIBLE_TAGS } from '../../constants/common';
+import Helper from '../utility';
 
 
 class DataFormatter {
@@ -170,13 +171,26 @@ class DataFormatter {
   convertDateType = (date, dateType = 'iso') => (dateType === 'iso' ? moment(date).toISOString() : moment(date).unix())
 
   QueryStringToJSON = (search) => {
-    const pairs = search.slice(1).split('&');
-    const result = {};
-    pairs.forEach((pair) => {
-      const pairVal = pair.split('=');
-      result[pairVal[0]] = decodeURIComponent(pairVal[1] || '');
+    if (search !== '') {
+      const pairs = search.slice(1).split('&');
+      const result = {};
+      pairs.forEach((pair) => {
+        const pairVal = pair.split('=');
+        result[pairVal[0]] = decodeURIComponent(pairVal[1] || '');
+      });
+      return JSON.parse(JSON.stringify(result));
+    }
+    return null;
+  }
+
+  createEligibleTagsObj = (urlParameter) => {
+    const tags = {};
+    forEach(urlParameter, (p, key) => {
+      if (ELIGIBLE_TAGS.includes(key.toUpperCase()) && p && p.length <= 25 && !Helper.isSpecialCharPresent(p)) {
+        tags[key.toUpperCase()] = p;
+      }
     });
-    return JSON.parse(JSON.stringify(result));
+    return tags;
   }
 
   replaceAll = (input, search, replacement) => input.replace(new RegExp(search, 'g'), replacement);

@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { has } from 'lodash';
 import cookie from 'react-cookies';
+import { isEmpty } from 'lodash';
 import { Modal, Button, Header, Icon, Form, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
@@ -21,8 +21,13 @@ class InvestorSignup extends Component {
     const userRoleData = cookie.load('ROLE_VALUE');
     this.props.authStore.setUserRole(userRoleData || 'investor');
     const urlParameter = DataFormatter.QueryStringToJSON(this.props.location.search);
-    if (has(urlParameter, 'CJEVENT')) {
-      window.localStorage.setItem('CJEVENT', urlParameter.CJEVENT);
+    if (urlParameter) {
+      let tags = DataFormatter.createEligibleTagsObj(urlParameter);
+      if (!isEmpty(tags)) {
+        const existingTags = JSON.parse(window.localStorage.getItem('tags'));
+        tags = !isEmpty(existingTags) ? { ...existingTags, ...tags } : tags;
+        window.localStorage.setItem('tags', JSON.stringify(tags));
+      }
     }
   }
 

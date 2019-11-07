@@ -1,7 +1,7 @@
 import graphql from 'mobx-apollo';
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
-import { mapValues, keyBy, find, flatMap, map, get } from 'lodash';
+import { mapValues, keyBy, find, flatMap, map, get, isEmpty } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
@@ -790,7 +790,8 @@ cipWrapper = async (payLoad) => {
       address: (email.value || emailInCookie).toLowerCase(),
       firstName: givenName.value || firstNameInCookie,
     };
-    payload = window.localStorage.getItem('CJEVENT') ? { ...payload, tags: { CJEVENT: window.localStorage.getItem('CJEVENT') } } : { ...payload };
+    const tags = JSON.parse(window.localStorage.getItem('tags'));
+    payload = !isEmpty(tags) ? { ...payload, tags } : { ...payload };
     return new Promise((resolve, reject) => {
       publicClient
         .mutate({
@@ -802,7 +803,7 @@ cipWrapper = async (payLoad) => {
           if (!isMobile) {
             Helper.toast(`Verification code sent to ${email.value || emailInCookie}.`, 'success');
           }
-          commonStore.removeLocalStorage(['CJEVENT']);
+          commonStore.removeLocalStorage(['tags']);
           resolve();
         })
         .catch((err) => {
