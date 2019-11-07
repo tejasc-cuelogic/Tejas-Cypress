@@ -184,3 +184,50 @@ mutation _invokeProcessorDriver($method: DevAuditTypeEnum, $payload: String) {
     payload: $payload
   )
 }`;
+
+export const fetchRequestFactoryLogs = gql`
+query _fetchRequestFactoryLogs($plugin: String!, $status: RequestRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+  fetchRequestFactoryLogs(
+    plugin: $plugin,
+    status: $status
+    fromDate: $fromDate
+    toDate: $toDate
+    lek: $lek
+    limit: $limit
+  )
+  {
+    requestLogs{
+      plugin
+      status
+      invocationType
+      triggeredDate
+    }
+    resultCount
+    totalCount
+    lek
+  }
+}`;
+
+export const fetchProcessLogs = gql`
+query _fetchProcessLogs($plugin: String!, $status: RequestRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+  fetchProcessLogs(
+    plugin: $plugin,
+    status: $status
+    fromDate: $fromDate
+    toDate: $toDate
+    lek: $lek
+    limit: $limit
+  )
+  {
+    devAudit{
+      jobId
+      resourceId
+      type
+      status
+      result
+    }
+    resultCount
+    totalCount
+    lek
+  }
+}`;

@@ -537,6 +537,9 @@ export const PRIVATE_NAV = [
         title: 'Request Factory', to: 'request-factory', component: 'RequestFactory', capability: 'REQUEST_FACTORY_ANY',
       },
       {
+        title: 'Process Factory', to: 'process-factory', component: 'ProcessFactory', capability: 'PROCESS_FACTORY_ANY',
+      },
+      {
         title: 'Email', to: 'email', component: 'Email', capability: 'EMAIL_ANY',
       },
     ],
