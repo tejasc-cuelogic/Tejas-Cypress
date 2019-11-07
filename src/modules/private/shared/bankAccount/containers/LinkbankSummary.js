@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'accountStore', 'iraAccountStore', 'entityAccountStore')
+@inject('bankAccountStore', 'uiStore', 'accountStore')
 @withRouter
 @observer
 export default class LinkbankSummary extends React.Component {
@@ -20,6 +20,17 @@ export default class LinkbankSummary extends React.Component {
   componentDidUpdate() {
     this.props.bankAccountStore.setLoaderForAccountBlank();
     this.props.bankAccountStore.fetchRoutingNumber();
+  }
+
+  handleContinueCta = () => {
+    const { ACC_TYPE_MAPPING, INVESTMENT_ACC_TYPES, investmentAccType } = this.props.accountStore;
+    const { store } = ACC_TYPE_MAPPING[INVESTMENT_ACC_TYPES.fields.accType.value];
+    const { stepToBeRendered, setStepToBeRendered } = store;
+    if (investmentAccType === 'individual') {
+      setStepToBeRendered(stepToBeRendered + 1);
+    } else {
+      this.props.bankAccountStore.setShowAddFunds();
+    }
   }
 
   render() {
@@ -77,6 +88,11 @@ export default class LinkbankSummary extends React.Component {
           content="Continue" onClick={() => this.handleSubmit()}
           disabled={errors || !bankAccountNumber} />
         </div> */}
+         {isMobile
+            && (
+              <Button onClick={this.handleContinueCta} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+            )
+          }
         <div className={`${isMobile ? 'mb-30' : ''} center-align mt-30`}>
           <Button color="green" className="link-button" content="Change link bank account" onClick={() => changeLinkbank()} />
         </div>
