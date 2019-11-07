@@ -829,14 +829,15 @@ export class UserDetailsStore {
       lastName: basicData.lastName,
       mailingAddress: { ...infoAdd.legalAddress },
     };
-    const { capabilities } = basicData;
+    let { capabilities } = basicData;
+    capabilities = capabilities.length ? capabilities : null;
     if (this.detailsOfUser.data.user.info.avatar) {
       profileDetails.avatar = pick(
         get(this.detailsOfUser, 'data.user.info.avatar'),
         ['name', 'url'],
       );
     }
-    const legalDetails = pick(get(basicData), ['dateOfBirth', 'legalAddress', 'legalName']);
+    const legalDetails = basicData ? pick(basicData, ['dateOfBirth', 'legalAddress', 'legalName']) : null;
     if (String(basicData.ssn).length === 9) {
       legalDetails.ssn = basicData.ssn;
     }
