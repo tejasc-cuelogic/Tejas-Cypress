@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { toJS } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
+import mime from 'mime-types';
 import { Icon, Responsive, Button, Popup, Dimmer, Loader, Confirm } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
 import { isArray } from 'lodash';
@@ -32,7 +33,8 @@ export default class DropZone extends Component {
   }
 
   ondrop = (files) => {
-    const validate = Helper.validateDocumentExtension(files[0].name.split('.')[1]);
+    const fileExt = mime.extension(files[0].type);
+    const validate = Helper.validateDocumentExtension(fileExt);
     if (!validate.isInvalid) {
       this.setState({ error: null });
       this.props.ondrop(files, this.props.name);
