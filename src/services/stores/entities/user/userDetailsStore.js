@@ -248,8 +248,8 @@ export class UserDetailsStore {
 
   @action
   setAddressOrPhoneCheck = () => {
-    this.isAddressSkip = get(this.detailsOfUser, 'skipAddressVerifyCheck') || false;
-    this.isPhoneSkip = get(this.detailsOfUser, 'skipPhoneVerifyCheck') || false;
+    this.isAddressSkip = get(this.getDetailsOfUser, 'skipAddressVerifyCheck') || false;
+    this.isPhoneSkip = get(this.getDetailsOfUser, 'skipPhoneVerifyCheck') || false;
   }
 
   @action

@@ -19,6 +19,7 @@ export default class Basic extends Component {
     addressCheckLoading: false,
     phoneCheckLoading: false,
   }
+
   constructor(props) {
     super(props);
     this.state = { displayMode: true };
