@@ -64,7 +64,7 @@ export default class GenerateDocs extends Component {
             && (
             <>
               <Header as="h4">Upload Final Signed Docs</Header>
-              {['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'promissoryNote', 'securityAgreement', 'disclosure', 'personalGuarantee'].map(field => (
+              {['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'purchaseAgreement', 'proxyAgreement', 'promissoryNote', 'securityAgreement', 'disclosure', 'personalGuarantee'].map(field => (
                 <DropZone
                   size="small"
                   name="term"
