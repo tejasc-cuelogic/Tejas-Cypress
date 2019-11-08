@@ -20,7 +20,7 @@ import {
   userListingStore,
   userStore,
 } from '../../index';
-import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount, getEmailList } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressOrPhoneValidationCheck, frozenEmailToAdmin, freezeAccount, getEmailList } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -37,6 +37,8 @@ export class UserDetailsStore {
   @observable accreditationData = {};
 
   @observable isAddressSkip = false;
+
+  @observable isPhoneSkip = false;
 
   @observable isFrozen = false;
 
@@ -245,22 +247,25 @@ export class UserDetailsStore {
   }
 
   @action
-  setAddressCheck = () => {
-    this.isAddressSkip = this.userDetails.skipAddressVerifyCheck || false;
+  setAddressOrPhoneCheck = () => {
+    this.isAddressSkip = get(this.getDetailsOfUser, 'skipAddressVerifyCheck') || false;
+    this.isPhoneSkip = get(this.getDetailsOfUser, 'skipPhoneVerifyCheck') || false;
   }
 
   @action
-  toggleAddressVerification = () => {
-    const payLoad = { userId: this.selectedUserId, shouldSkip: !this.isAddressSkip };
+  skipAddressOrPhoneValidationCheck = type => new Promise(async (resolve, reject) => {
+    const shouldSkip = type === 'PHONE' ? !this.isPhoneSkip : !this.isAddressSkip;
+    const payLoad = { userId: this.selectedUserId, shouldSkip, type };
     client
       .mutate({
-        mutation: skipAddressValidation,
+        mutation: skipAddressOrPhoneValidationCheck,
         variables: payLoad,
       })
       .then(action((res) => {
-        this.isAddressSkip = res.data.skipAddressValidationCheck;
-      }));
-  }
+        this.setFieldValue(type === 'PHONE' ? 'isPhoneSkip' : 'isAddressSkip', get(res, 'data.skipAddressOrPhoneValidationCheck'));
+        resolve();
+      })).catch(() => reject());
+  });
 
   @action
   deleteProfile = (isInvestor = false, isHardDelete = false) => new Promise(async (resolve, reject) => {
