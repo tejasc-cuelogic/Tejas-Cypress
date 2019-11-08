@@ -247,13 +247,13 @@ export class UserDetailsStore {
   }
 
   @action
-  setAddressCheck = () => {
-    this.isAddressSkip = this.detailsOfUser.skipAddressVerifyCheck || false;
-    this.isPhoneSkip = this.detailsOfUser.skipPhoneVerifyCheck || false;
+  setAddressOrPhoneCheck = () => {
+    this.isAddressSkip = get(this.detailsOfUser, 'skipAddressVerifyCheck') || false;
+    this.isPhoneSkip = get(this.detailsOfUser, 'skipPhoneVerifyCheck') || false;
   }
 
   @action
-  skipAddressOrPhoneValidationCheck = (type) => {
+  skipAddressOrPhoneValidationCheck = type => new Promise(async (resolve, reject) => {
     const shouldSkip = type === 'PHONE' ? !this.isPhoneSkip : !this.isAddressSkip;
     const payLoad = { userId: this.selectedUserId, shouldSkip, type };
     client
@@ -263,8 +263,9 @@ export class UserDetailsStore {
       })
       .then(action((res) => {
         this.setFieldValue(type === 'PHONE' ? 'isPhoneSkip' : 'isAddressSkip', get(res, 'data.skipAddressOrPhoneValidationCheck'));
-      }));
-  }
+        resolve();
+      })).catch(() => reject());
+  });
 
   @action
   deleteProfile = (isInvestor = false, isHardDelete = false) => new Promise(async (resolve, reject) => {

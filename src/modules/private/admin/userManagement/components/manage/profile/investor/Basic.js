@@ -14,6 +14,10 @@ import UserInvestorDetails from '../../../../../../investor/settings/components/
 @withRouter
 @observer
 export default class Basic extends Component {
+  state = {
+    addressCheckLoading: false,
+    phoneCheckLoading: false,
+  }
   constructor(props) {
     super(props);
     this.state = { displayMode: true };
@@ -53,10 +57,15 @@ export default class Basic extends Component {
       }).catch(() => { });
   }
 
+  skipAddressOrPhoneValidationCheck = (type) => {
+    this.setState({ [type === 'PHONE' ? 'phoneCheckLoading' : 'addressCheckLoading']: true });
+    this.props.userDetailsStore.skipAddressOrPhoneValidationCheck(type).then(() => this.setState({ [type === 'PHONE' ? 'phoneCheckLoading' : 'addressCheckLoading']: false })).catch(() => this.setState({ [type === 'PHONE' ? 'phoneCheckLoading' : 'addressCheckLoading']: false }));
+  }
+
   render() {
     const {
       detailsOfUser, USER_BASIC, USER_PROFILE_ADD_ADMIN_FRM, USER_PROFILE_PREFERRED_INFO_FRM, setAddressFieldsForProfile,
-      formChange, maskChange, isAddressSkip, isPhoneSkip, skipAddressOrPhoneValidationCheck,
+      formChange, maskChange, isAddressSkip, isPhoneSkip,
     } = this.props.userDetailsStore;
     const { inProgress } = this.props.uiStore;
     const formName = 'USER_BASIC';
@@ -78,8 +87,8 @@ export default class Basic extends Component {
                 </>
               )
             }
-            <Button compact onClick={() => skipAddressOrPhoneValidationCheck('ADDRESS')} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
-            <Button compact onClick={() => skipAddressOrPhoneValidationCheck('PHONE')} color={isPhoneSkip ? 'green' : 'blue'}>{isPhoneSkip ? 'Force VoIP Check' : 'Skip VoIP Check'}</Button>
+            <Button loading={this.state.addressCheckLoading} compact onClick={() => this.skipAddressOrPhoneValidationCheck('ADDRESS')} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
+            <Button loading={this.state.phoneCheckLoading} compact onClick={() => this.skipAddressOrPhoneValidationCheck('PHONE')} color={isPhoneSkip ? 'green' : 'blue'}>{isPhoneSkip ? 'Force VoIP Check' : 'Skip VoIP Check'}</Button>
           </Button.Group>
         </Header>
         {get(details, 'locked.lock') === 'LOCKED'
