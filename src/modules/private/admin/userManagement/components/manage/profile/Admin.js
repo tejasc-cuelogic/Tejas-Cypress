@@ -49,30 +49,30 @@ export default class Admin extends Component {
           {displayMode
             ? <Link to={`${this.props.match.url}`} className="link pull-right regular-text" onClick={() => this.toggleDisplayMode(false)}><small>Edit information</small></Link>
             : (
-<Button.Group floated="right" size="mini" compact>
-              <Button as={Link} content="Cancel" to={`${this.props.match.url}`} onClick={() => this.toggleDisplayMode(true)} />
-              <Button
-                primary
-                onClick={this.updateUserData}
+              <Button.Group floated="right" size="mini" compact>
+                <Button as={Link} content="Cancel" to={`${this.props.match.url}`} onClick={() => this.toggleDisplayMode(true)} />
+                <Button
+                  primary
+                  onClick={this.updateUserData}
                 // disabled={!USER_BASIC.meta.isValid} // temporary disabled
-              >
-                Update
+                >
+                  Update
               </Button>
-            </Button.Group>
+              </Button.Group>
             )
           }
         </Header>
         <Form.Group widths={2}>
           {
-          ['firstName', 'lastName'].map(field => (
-            <FormInput
-              key={field}
-              name={field}
-              fielddata={USER_BASIC.fields[field]}
-              changed={(e, result) => formChange(e, result, formName)}
-              displayMode={displayMode}
-            />
-          ))
+            ['firstName', 'lastName'].map(field => (
+              <FormInput
+                key={field}
+                name={field}
+                fielddata={USER_BASIC.fields[field]}
+                changed={(e, result) => formChange(e, result, formName)}
+                displayMode={displayMode}
+              />
+            ))
           }
           <MaskedInput
             key="number"
@@ -100,22 +100,22 @@ export default class Admin extends Component {
             <label>Capabilities</label>
             {displayMode
               ? (
-<div className="ui fluid input">
-                {USER_BASIC.fields.capabilities.value.join(', ')}
-              </div>
+                <div className="ui fluid input">
+                  {USER_BASIC.fields.capabilities.value.join(', ')}
+                </div>
               )
               : (
-<FormDropDown
-  name="capabilities"
-  fielddata={USER_BASIC.fields.capabilities}
-  options={capabilitiesMeta}
-  search
-  multiple
-  selection
-  fluid
-  containerclassname="dropdown-field"
-  onChange={(e, res) => userEleChange(e, res, 'dropdown')}
-/>
+                <FormDropDown
+                  name="capabilities"
+                  fielddata={USER_BASIC.fields.capabilities}
+                  options={capabilitiesMeta}
+                  search
+                  multiple
+                  selection
+                  fluid
+                  containerclassname="dropdown-field"
+                  onChange={(e, res) => userEleChange(e, res, 'dropdown')}
+                />
               )
             }
           </div>

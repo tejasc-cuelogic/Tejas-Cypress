@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { forEach, includes, find, isEmpty, has, get } from 'lodash';
+import { forEach, includes, find, isEmpty, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { FormValidator as Validator } from '../../../../helper';
@@ -38,7 +38,7 @@ import {
   submitApplication,
   helpAndQuestion,
 } from '../../queries/businessApplication';
-import { uiStore, navStore, userDetailsStore, businessAppLendioStore, businessAppAdminStore, offeringsStore } from '../../index';
+import { uiStore, navStore, userDetailsStore, businessAppLendioStore, businessAppAdminStore, offeringsStore, commonStore } from '../../index';
 import { fileUpload } from '../../../actions';
 
 export class BusinessAppStore {
@@ -94,8 +94,6 @@ export class BusinessAppStore {
   @observable userExists = false;
 
   @observable userRoles = [];
-
-  @observable urlParameter = null;
 
   @observable businessAppDataById = null;
 
@@ -985,15 +983,10 @@ export class BusinessAppStore {
     uiStore.setProgress();
     let payload = Validator.ExtractValues(this.BUSINESS_APP_FRM_BASIC.fields);
     payload = { ...payload, applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE' };
-    if (this.urlParameter) {
-      payload = has(this.urlParameter, 'signupCode') ? { ...payload, signupCode: this.urlParameter.signupCode } : { ...payload };
-      payload = has(this.urlParameter, 'signupcode') ? { ...payload, signupCode: this.urlParameter.signupcode } : { ...payload };
-      payload = has(this.urlParameter, 'sc') ? { ...payload, signupCode: this.urlParameter.sc } : { ...payload };
-      payload = has(this.urlParameter, 'utmSource') ? { ...payload, utmSource: this.urlParameter.utmSource } : { ...payload };
-      payload = has(this.urlParameter, 'utmsource') ? { ...payload, utmSource: this.urlParameter.utmsource } : { ...payload };
-      payload = has(this.urlParameter, 'utm_source') ? { ...payload, utmSource: this.urlParameter.utm_source } : { ...payload };
-      payload = has(this.urlParameter, 'adid') ? { ...payload, utmSource: `${payload.utmSource}&&adid=${this.urlParameter.adid}` } : { ...payload };
-    }
+    const tags = JSON.parse(window.localStorage.getItem('tags'));
+    payload = !isEmpty(tags) ? { ...payload, tags } : { ...payload };
+    payload = window.localStorage.getItem('signupCode') ? { ...payload, signupCode: window.localStorage.getItem('signupCode') } : { ...payload };
+    payload = window.localStorage.getItem('utmSource') ? { ...payload, utmSource: window.localStorage.getItem('utmSource') } : { ...payload };
     payload.email = payload.email.toLowerCase();
     return new Promise((resolve, reject) => {
       clientPublic
@@ -1025,15 +1018,10 @@ export class BusinessAppStore {
   @action
   businessPreQualificationFormSumbit = () => {
     let payload = this.getFormatedPreQualificationData;
-    if (this.urlParameter) {
-      payload = has(this.urlParameter, 'signupCode') ? { ...payload, signupCode: this.urlParameter.signupCode } : { ...payload };
-      payload = has(this.urlParameter, 'signupcode') ? { ...payload, signupCode: this.urlParameter.signupcode } : { ...payload };
-      payload = has(this.urlParameter, 'sc') ? { ...payload, signupCode: this.urlParameter.sc } : { ...payload };
-      payload = has(this.urlParameter, 'utmSource') ? { ...payload, utmSource: this.urlParameter.utmSource } : { ...payload };
-      payload = has(this.urlParameter, 'utmsource') ? { ...payload, utmSource: this.urlParameter.utmsource } : { ...payload };
-      payload = has(this.urlParameter, 'utm_source') ? { ...payload, utmSource: this.urlParameter.utm_source } : { ...payload };
-      payload = has(this.urlParameter, 'adid') ? { ...payload, utmSource: `${payload.utmSource}&&adid=${this.urlParameter.adid}` } : { ...payload };
-    }
+    const tags = JSON.parse(window.localStorage.getItem('tags'));
+    payload = !isEmpty(tags) ? { ...payload, tags } : { ...payload };
+    payload = window.localStorage.getItem('signupCode') ? { ...payload, signupCode: window.localStorage.getItem('signupCode') } : { ...payload };
+    payload = window.localStorage.getItem('utmSource') ? { ...payload, utmSource: window.localStorage.getItem('utmSource') } : { ...payload };
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       clientPublic
@@ -1056,6 +1044,7 @@ export class BusinessAppStore {
               },
             },
           } = result;
+          commonStore.removeLocalStorage(['tags', 'signupCode', 'utmSource']);
           this.setFieldvalue('BUSINESS_APP_STATUS', status);
           this.setFieldvalue('userExists', userExists);
           this.setFieldvalue('userRoles', userRoles);

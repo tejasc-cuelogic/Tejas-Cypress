@@ -1,7 +1,7 @@
 import graphql from 'mobx-apollo';
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
-import { mapValues, keyBy, find, flatMap, map, get } from 'lodash';
+import { mapValues, keyBy, find, flatMap, map, get, isEmpty } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
@@ -15,6 +15,7 @@ import { fileUpload } from '../../../actions';
 import { INVESTOR_URLS } from '../../../constants/url';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
 import { US_STATES, FILE_UPLOAD_STEPS, US_STATES_FOR_INVESTOR } from '../../../../constants/account';
+import commonStore from '../commonStore';
 
 export class IdentityStore {
   @observable ID_VERIFICATION_FRM = FormValidator.prepareFormObject(USER_IDENTITY);
@@ -785,20 +786,24 @@ cipWrapper = async (payLoad) => {
     const { email, givenName } = authStore.SIGNUP_FRM.fields;
     const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
     const firstNameInCookie = authStore.CONFIRM_FRM.fields.givenName.value;
+    let payload = {
+      address: (email.value || emailInCookie).toLowerCase(),
+      firstName: givenName.value || firstNameInCookie,
+    };
+    const tags = JSON.parse(window.localStorage.getItem('tags'));
+    payload = !isEmpty(tags) ? { ...payload, tags } : { ...payload };
     return new Promise((resolve, reject) => {
       publicClient
         .mutate({
           mutation: requestOtpWrapper,
-          variables: {
-            address: (email.value || emailInCookie).toLowerCase(),
-            firstName: givenName.value || firstNameInCookie,
-          },
+          variables: payload,
         })
         .then((result) => {
           this.setRequestOtpResponse(result.data.requestOTPWrapper);
           if (!isMobile) {
             Helper.toast(`Verification code sent to ${email.value || emailInCookie}.`, 'success');
           }
+          commonStore.removeLocalStorage(['tags']);
           resolve();
         })
         .catch((err) => {
