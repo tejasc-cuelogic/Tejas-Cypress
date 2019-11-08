@@ -199,18 +199,24 @@ class InvestorProfileStore {
           uiStore.setFieldvalue('inProgressArray', []);
         }
         formPayload = { employment: FormValidator.ExtractValues(this.EMPLOYMENT_FORM.fields) };
+        if (formPayload.employment.status !== 'EMPLOYED') {
+          formPayload.employment = { ...formPayload.employment, employer: null, position: null };
+        }
       } else if (currentStep.form === 'BROKERAGE_EMPLOYMENT_FORM') {
         const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
-        fields.brokerageFirmName.value = (uiStore.inProgressArray.includes('BROKERAGE_EMPLOYMENT') && fields.brokerageFirmName.value) || null;
+        if (fields.brokerageEmployment.value === 'no') {
+          fields.brokerageFirmName.value = 'false';
+        } else {
+          fields.brokerageFirmName.value = fields.brokerageFirmName.value;
+        }
         formPayload = { brokerageFirmName: fields.brokerageFirmName.value };
       } else if (currentStep.form === 'PUBLIC_COMPANY_REL_FORM') {
         const { fields } = this.PUBLIC_COMPANY_REL_FORM;
-        // if (fields.publicCompanyRel.value === 'no') {
-        //   fields.publicCompanyTicker.value = null;
-        // } else {
-        //   fields.publicCompanyTicker.value = fields.publicCompanyTicker.value;
-        // }
-        fields.publicCompanyTicker.value = (uiStore.inProgressArray.includes('PUBLIC_COMPANY_REL') && fields.publicCompanyTicker.value) || null;
+        if (fields.publicCompanyRel.value === 'no') {
+          fields.publicCompanyTicker.value = 'false';
+        } else {
+          fields.publicCompanyTicker.value = fields.publicCompanyTicker.value;
+        }
         formPayload = { publicCompanyTicker: fields.publicCompanyTicker.value };
       } else if (currentStep.form === 'FINANCES_FORM') {
         formPayload = {
@@ -257,6 +263,9 @@ class InvestorProfileStore {
     const { fields } = this.INVESTOR_PROFILE_FULL;
     let formData = FormValidator.evaluateFormData(fields);
     const YearsList = Helper.getLastThreeYearsLabel();
+    if (formData.employment.status !== 'EMPLOYED') {
+      formData.employment = { ...formData.employment, employer: null, position: null };
+    }
     formData = {
       ...formData,
       brokerageFirmName: fields.brokerageEmployment.value === 'no' ? 'false' : formData.brokerageFirmName,
