@@ -92,6 +92,10 @@ export class CommonStore {
     this.token = token;
   }
 
+  removeLocalStorage = (keys) => {
+    keys.map(k => window.localStorage.removeItem(k));
+  }
+
   @action
   setAppLoaded() {
     this.appLoaded = true;

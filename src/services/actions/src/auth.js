@@ -299,8 +299,10 @@ export class Auth {
     const { email } = Validator.ExtractValues(authStore.FORGOT_PASS_FRM.fields);
     try {
       await AmplifyAuth.forgotPassword(email.toLowerCase());
-      uiStore.setLoaderMessage('Password changed successfully');
     } catch (err) {
+      if (get(err, 'code') === 'UserNotFoundException') {
+        return true;
+      }
       uiStore.setErrors(this.simpleErr(err));
       throw err;
     } finally {
