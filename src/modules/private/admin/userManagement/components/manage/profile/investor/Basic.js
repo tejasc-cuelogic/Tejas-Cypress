@@ -4,12 +4,13 @@ import { isEmpty, get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
-import { FormInput, MaskedInput, AutoComplete } from '../../../../../../../../theme/form';
+import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../../../../../theme/form';
 import CIPInformation from './CIPInformation';
 import OtherInformation from '../OtherInformation';
 import TagsInformation from '../../../../../../shared/TagsInformation';
 import LockedInformation from '../LockedInformation';
 import UserInvestorDetails from '../../../../../../investor/settings/components/UserInvestorDetails';
+import { US_STATES } from '../../../../../../../../constants/account';
 
 @inject('userDetailsStore', 'uiStore', 'referralsStore', 'identityStore')
 @withRouter
@@ -174,7 +175,7 @@ export default class Basic extends Component {
             changed={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
           />
           {
-            ['streetTwo', 'city', 'state'].map(field => (
+            ['streetTwo', 'city'].map(field => (
               <FormInput
                 key={field}
                 name={field}
@@ -184,6 +185,17 @@ export default class Basic extends Component {
               />
             ))
           }
+          <FormDropDown
+            displayMode={displayMode}
+            name="state"
+            fielddata={USER_PROFILE_ADD_ADMIN_FRM.fields.state}
+            options={US_STATES}
+            checkStateCode
+            search
+            selection
+            placeholder="Select"
+            changed={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
+          />
           <MaskedInput
             displayMode={displayMode}
             name="zipCode"
@@ -204,7 +216,7 @@ export default class Basic extends Component {
             changed={(e, result) => formChange(e, result, 'USER_BASIC')}
           />
           {
-            ['streetTwo', 'city', 'state'].map(field => (
+            ['streetTwo', 'city'].map(field => (
               <FormInput
                 key={field}
                 name={field}
@@ -214,6 +226,17 @@ export default class Basic extends Component {
               />
             ))
           }
+          <FormDropDown
+            displayMode={displayMode}
+            name="state"
+            fielddata={USER_BASIC.fields.state}
+            options={US_STATES}
+            checkStateCode
+            search
+            selection
+            placeholder="Select"
+            changed={(e, result) => formChange(e, result, 'USER_BASIC')}
+          />
           <MaskedInput
             displayMode={displayMode}
             name="zipCode"
@@ -241,7 +264,7 @@ export default class Basic extends Component {
             changed={(e, result) => formChange(e, result, 'USER_PROFILE_PREFERRED_INFO_FRM')}
           />
           {
-            ['streetTwo', 'city', 'state'].map(field => (
+            ['streetTwo', 'city'].map(field => (
               <FormInput
                 key={field}
                 name={field}
@@ -251,6 +274,17 @@ export default class Basic extends Component {
               />
             ))
           }
+          <FormDropDown
+            displayMode={displayMode}
+            name="state"
+            fielddata={USER_PROFILE_PREFERRED_INFO_FRM.fields.state}
+            options={US_STATES}
+            checkStateCode
+            search
+            selection
+            placeholder="Select"
+            changed={(e, result) => formChange(e, result, 'USER_PROFILE_PREFERRED_INFO_FRM')}
+          />
           <MaskedInput
             displayMode={displayMode}
             name="zipCode"
