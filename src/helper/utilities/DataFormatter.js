@@ -143,7 +143,7 @@ class DataFormatter {
       : isUnix ? moment(new Date(formatedDate)).unix() : formatedDate;
   }
 
-  formatedDate = date => moment(new Date(date)).format('MM/DD/YYYY');
+  formatedDate = (date, isUnix = false) => (isUnix ? moment.unix(date).format('MM/DD/YYYY') : moment(new Date(date)).format('MM/DD/YYYY'));
 
   getCurrentCSTDateInFormat = (showTime = false) => (showTime ? momentZone.tz(DEFAULT_TIME_ZONE_TO_DISPLAY).format('MM/DD/YYYY HH:mm:ss') : momentZone.tz(DEFAULT_TIME_ZONE_TO_DISPLAY).format('MM/DD/YYYY'));
 
