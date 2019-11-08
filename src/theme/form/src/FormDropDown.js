@@ -15,7 +15,7 @@ const FormDropDown = observer((props) => {
     value,
   } = props.fielddata;
   const { displayMode, name, checkStateCode } = props;
-  if (name === 'state' && checkStateCode) {
+  if (name === 'state'&& value && checkStateCode) {
     const state = US_STATES.find(s => s.text === value.toUpperCase());
     value = state ? state.key : value;
   }
