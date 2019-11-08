@@ -22,7 +22,7 @@ export default class Offering extends Component {
     this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.id);
   }
 
-  componentWillUpdate() {
+  getSnapshotBeforeUpdate() {
     this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
   }
 
