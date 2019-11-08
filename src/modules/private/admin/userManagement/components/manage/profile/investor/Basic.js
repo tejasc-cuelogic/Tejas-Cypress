@@ -194,7 +194,7 @@ export default class Basic extends Component {
             search
             selection
             placeholder="Select"
-            changed={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
+            onChange={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
           />
           <MaskedInput
             displayMode={displayMode}
@@ -235,7 +235,7 @@ export default class Basic extends Component {
             search
             selection
             placeholder="Select"
-            changed={(e, result) => formChange(e, result, 'USER_BASIC')}
+            onChange={(e, result) => formChange(e, result, 'USER_BASIC')}
           />
           <MaskedInput
             displayMode={displayMode}
@@ -283,7 +283,7 @@ export default class Basic extends Component {
             search
             selection
             placeholder="Select"
-            changed={(e, result) => formChange(e, result, 'USER_PROFILE_PREFERRED_INFO_FRM')}
+            onChange={(e, result) => formChange(e, result, 'USER_PROFILE_PREFERRED_INFO_FRM')}
           />
           <MaskedInput
             displayMode={displayMode}
