@@ -151,7 +151,7 @@ export const REQUESTFACTORY_LOG__META = FormHelper.generateMeta([
       asIn: true,
       props: {
         values: [
-          { key: 'REQUESTED', text: 'REQUESTED', value: 'REQUESTED' },
+          { key: 'PROCESSING', text: 'PROCESSING', value: 'PROCESSING' },
           { key: 'FAILED', text: 'FAILED', value: 'FAILED' },
           { key: 'SUCCESS', text: 'SUCCESS', value: 'SUCCESS' },
         ],
@@ -185,9 +185,10 @@ export const PROCESSFACTORY_LOG__META = FormHelper.generateMeta([
       asIn: true,
       props: {
         values: [
-          { key: 'REQUESTED', text: 'REQUESTED', value: 'REQUESTED' },
+          { key: 'PROCESSING', text: 'PROCESSING', value: 'PROCESSING' },
           { key: 'FAILED', text: 'FAILED', value: 'FAILED' },
           { key: 'SUCCESS', text: 'SUCCESS', value: 'SUCCESS' },
+          { key: 'STARTED', text: 'STARTED', value: 'STARTED' },
         ],
       },
     },

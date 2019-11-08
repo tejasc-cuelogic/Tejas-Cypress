@@ -202,10 +202,22 @@ query _fetchRequestFactoryLogs($plugin: String!, $status: RequestRunLogStatusEnu
   )
   {
     requestLogs{
-      plugin
       status
       invocationType
       triggeredDate
+      payload{
+        params
+      }
+      created{
+        id
+        by
+        date
+      }
+      updated{
+        id
+        by
+        date
+      }
     }
     resultCount
     totalCount
@@ -214,7 +226,7 @@ query _fetchRequestFactoryLogs($plugin: String!, $status: RequestRunLogStatusEnu
 }`;
 
 export const fetchProcessLogs = gql`
-query _fetchProcessLogs($plugin: String!, $status: RequestRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+query _fetchProcessLogs($plugin: String!, $status: ProcessRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
   fetchProcessLogs(
     plugin: $plugin,
     status: $status
@@ -224,12 +236,12 @@ query _fetchProcessLogs($plugin: String!, $status: RequestRunLogStatusEnum, $fro
     limit: $limit
   )
   {
-    devAudit{
+    processLogs{
       jobId
-      resourceId
-      type
+      triggeredDate
       status
-      result
+      payload
+      completePayload
     }
     resultCount
     totalCount

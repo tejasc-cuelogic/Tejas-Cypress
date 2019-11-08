@@ -161,7 +161,7 @@ export class FactoryStore extends DataModelStore {
 
   get requestLogs() {
     const currentFactory = this.selectedFactory === 'REQUEST' ? 'fetchRequestFactoryLogs' : 'fetchProcessLogs';
-    const currentFactoryLog = this.selectedFactory === 'REQUEST' ? 'requestLogs' : 'devAudit';
+    const currentFactoryLog = this.selectedFactory === 'REQUEST' ? 'requestLogs' : 'processLogs';
     return (this.requestLogList && this.requestLogList[currentFactory]
       && toJS(this.requestLogList[currentFactory][currentFactoryLog])
     ) || [];
