@@ -22,7 +22,7 @@ import {
 } from '../../index';
 import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressOrPhoneValidationCheck, frozenEmailToAdmin, freezeAccount, getEmailList } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
-import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE } from '../../../../constants/account';
+import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE, US_STATES } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
@@ -126,6 +126,8 @@ export class UserDetailsStore {
   @action
   setAddressFieldsForProfile = (place, form) => {
     Validator.setAddressFields(place, this[form]);
+    const state = US_STATES.find(s => s.text === this[form].fields.state.value.toUpperCase());
+    this[form].fields.state.value = state ? state.key : '';
   }
 
   @action
