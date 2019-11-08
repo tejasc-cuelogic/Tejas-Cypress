@@ -193,7 +193,7 @@ class AccountType extends Component {
     const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availabilityForNPAInOffering');
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
-    const licationURL = this.props.location.pathname;
+    const locationURL = this.props.location.pathname;
     if (!byDefaultRender) {
       setStepToBeRendered(2);
     } else if (investAccTypes && investAccTypes.values.length === 1 && isDocumentUpload === true) {
@@ -203,7 +203,7 @@ class AccountType extends Component {
           const offeringRegulation = campaign && campaign.keyTerms ? get(campaign, 'keyTerms.regulation') : get(getInvestorAccountById, 'offering.keyTerms.regulation');
           const accreditationStatus = get(userDetails, 'accreditation.status');
           const isParallelOfferingModelToShow = !!((userAccredetiationState === 'EXPIRED') || (offeringRegulation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus)));
-          if (isUpdateLimitReflect || licationURL.includes('change-investment-limit')) {
+          if (isUpdateLimitReflect || locationURL.includes('change-investment-limit')) {
             this.props.investmentStore.setFieldValue('isUpdateLimitReflect', true);
             setFieldValue('disableNextbtn', false);
             setStepToBeRendered(1);
