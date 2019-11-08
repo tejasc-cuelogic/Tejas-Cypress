@@ -64,4 +64,6 @@ export const IMAGE_UPLOAD_ALLOWED_EXTENSIONS = ['jpeg', 'jpg', 'png'];
 
 export const DEV_FEATURE_ONLY = ['localhost', 'develop', 'dev', 'review'].includes(REACT_APP_DEPLOY_ENV);
 
+export const ELIGIBLE_TAGS = ['CJEVENT'];
+
 export const isProduction = ['production', 'prod'].includes(REACT_APP_DEPLOY_ENV);
