@@ -60,6 +60,7 @@ export default class Summary extends Component {
     const bankAccountNumber = !isEmpty(plaidAccDetails)
       ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
+    const { taxId, name, street, state, city, zipCode } = GEN_INFO_FRM.fields;
     return (
       <>
         <Header as="h4" textAlign={isMobile ? '' : 'center'}>Verify information and submit for review</Header>
@@ -81,15 +82,15 @@ export default class Summary extends Component {
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell className="grey-header">Entity{"'"}s Name</Table.Cell>
-                  <Table.Cell>{GEN_INFO_FRM.fields.name.value}</Table.Cell>
+                  <Table.Cell>{name.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell className="grey-header">Tax ID</Table.Cell>
-                  <Table.Cell>{GEN_INFO_FRM.fields.taxId.value}</Table.Cell>
+                  <Table.Cell>{taxId.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row verticalAlign="top">
                   <Table.Cell className="grey-header">Entity Address</Table.Cell>
-                  <Table.Cell>{GEN_INFO_FRM.fields.street.value}
+                  <Table.Cell>{`${street.value}, ${city.value}, ${state.value}, ${zipCode.value}`}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
