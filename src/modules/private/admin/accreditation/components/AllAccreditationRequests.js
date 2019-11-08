@@ -204,7 +204,7 @@ export default class AllAccreditationRequests extends Component {
                           <p className={checkIsAccreditationExpired(get(accreditation, 'expiration'), true) === 'EXPIRED' ? 'negative-text' : `${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}>
                             {checkIsAccreditationExpired(get(accreditation, 'expiration'), true) === 'EXPIRED'
                               ? (
-                                <b>EXPIRED</b>
+                                <b>Expired</b>
                               )
                               : (
                                 <>
