@@ -1,6 +1,7 @@
 export const ACCREDITATION_STATUS_LABEL = {
   REQUESTED: 'Requested',
   CONFIRMED: 'Approved',
+  EXPIRED: 'Expired',
   INVALID: 'Invalid',
 };
 
