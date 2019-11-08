@@ -791,6 +791,36 @@ export const getOfferingDetails = gql`
                 }
               }
             }
+            purchaseAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            proxyAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
             disclosure {
               fileId
               fileName
@@ -878,6 +908,14 @@ export const getOfferingDetails = gql`
               fileName
             }
             npa {
+              fileId
+              fileName
+            }
+            purchaseAgreement {
+              fileId
+              fileName
+            }
+            proxyAgreement {
               fileId
               fileName
             }
