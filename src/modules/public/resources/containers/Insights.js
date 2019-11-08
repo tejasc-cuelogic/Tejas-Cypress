@@ -26,9 +26,9 @@ export default class Insights extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.match.params && nextProps.match.params.id) {
-      const id = nextProps.match.params.id === 'all' ? null : nextProps.match.params.id;
+  getSnapshotBeforeUpdate(prevProps) {
+    if (this.props.match.params && this.props.match.params.id !== prevProps.match.params.id) {
+      const id = this.props.match.params.id === 'all' ? null : this.props.match.params.id;
       this.props.articleStore
         .requestAllArticles(true, this.state.sortAsc, id);
     }
