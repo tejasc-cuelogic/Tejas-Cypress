@@ -142,9 +142,11 @@ const InvestmentList = (props) => {
                               ? (<p>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</p>) : (
                               <Link className={`${isMobile ? 'disable-click' : ''}`} to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
                               )}
-                            <p className="date-stamp">
-                              {get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || ''}
-                            </p>
+                              {(get(data, 'offering.keyTerms.city') || get(data, 'offering.keyTerms.state')) && (
+                                <p className="date-stamp">
+                                  {get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || ''}
+                                </p>
+                              )}
                           </div>
                         </Table.Cell>
 

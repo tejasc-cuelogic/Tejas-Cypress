@@ -15,10 +15,22 @@ const AccTypeDescription = observer((props) => {
         && (
         <>
           <p>
-            An initial deposit can be quickly and securely completed by linking your checking account. You can easily connect your account by logging in through our secure system or by manually entering your account information. We safeguard your account information. NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which is interest-bearing and provides FDIC insurance for up to $250,000 for uninvested cash in NextSeed accounts.
+            An initial deposit can be quickly and securely completed by linking your checking account. You can easily connect your account by logging in through our secure system or by manually entering your account information. We safeguard your account information. NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which is interest-bearing and provides{' '}
+            <Popup
+              content={<span>NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for uninvested cash in NextSeed accounts.</span>}
+              trigger={<span className="highlight-text">FDIC insurance</span>}
+              position="top center"
+            />
+            {' '}for up to $250,000 for uninvested cash in NextSeed accounts.
           </p>
           <p>
-            NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for uninvested cash in NextSeed accounts.
+            NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides{' '}
+            <Popup
+              content={<span>NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for uninvested cash in NextSeed accounts.</span>}
+              trigger={<span className="highlight-text">FDIC insurance</span>}
+              position="top center"
+            />
+            {' '}for uninvested cash in NextSeed accounts.
           </p>
           <p className="grey-text">
             NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for uninvested cash in NextSeed accounts.
@@ -48,7 +60,7 @@ const AccTypeDescription = observer((props) => {
             The uninvested cash in your account is{' '}
             <Popup
               content={<span>NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for uninvested cash in NextSeed accounts.</span>}
-              trigger={<span>FDIC-insured</span>}
+              trigger={<span className="highlight-text">FDIC-insured</span>}
               position="top center"
             />
             {' '}up to $250,000 and is
@@ -79,7 +91,13 @@ const AccTypeDescription = observer((props) => {
             secure system or by manually entering your account information.
           </p>
           <p>
-            The uninvested cash in your account is FDIC-insured up to $250,000 and is
+            The uninvested cash in your account is{' '}
+            <Popup
+              content={<span>NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for uninvested cash in NextSeed accounts.</span>}
+              trigger={<span className="highlight-text">FDIC-insured</span>}
+              position="top center"
+            />
+            {' '}up to $250,000 and is
             interest-bearing. We safeguard your information with bank-level security measures.
           </p>
           <p className="grey-text">

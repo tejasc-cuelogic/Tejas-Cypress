@@ -212,6 +212,9 @@
 			a{
 				font-size: @13px;
 			}
+			i.icon{
+				color: @neutral-middark;
+			}
 		}
 		&.mini.horizontal > .value{
 			font-size: @15px !important;

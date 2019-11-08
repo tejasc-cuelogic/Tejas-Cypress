@@ -42,7 +42,7 @@ export default class Identity extends Component {
         {!isMobile && <Divider section hidden />}
         <Form className={!isMobile ? 'file-uploader-large' : ''}>
           <div className="field">
-            <label className={isMobile ? '' : 'center-align'}>Upload a Photo ID (Upload your Driver’s License, state-issued ID, or U.S. passport)</label>
+            <label className={isMobile ? 'mb-30' : 'center-align'}>Upload a Photo ID (Upload your Driver’s License, state-issued ID, or U.S. passport)</label>
           </div>
           {isMobile
             ? (

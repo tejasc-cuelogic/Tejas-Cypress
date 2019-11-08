@@ -2196,31 +2196,21 @@ svg:not(:root).recharts-surface{
 	}
 }
 .donut-chart, .portfolio-allocation{
-	.recharts-legend-wrapper{
+	.recharts-legend-wrapper .chartLegends li{
+		font-size:@22px;
+		line-height: 30px;
+		margin: 0 @10px 0 0;
 		@media only screen and (max-width : @largestMobileScreen){
-			height: 100% !important;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
+			line-height: 14px;
 		}
-		.chartLegends{
-			li{
-				font-size:@22px;
-				line-height: 30px;
-				margin: 0 @10px 0 0;
-				@media only screen and (max-width : @largestMobileScreen){
-					line-height: 14px;
-				}
-				span{
-					font-size:@13px;
-					color:@fullBlack;
-					@media only screen and (max-width : @largestMobileScreen){
-						font-size: @10px;
-					}
-					i {
-						color: @neutral-offdark;
-					}
-				}
+		span{
+			font-size:@13px;
+			color:@fullBlack;
+			@media only screen and (max-width : @largestMobileScreen){
+				font-size: @10px;
+			}
+			i {
+				color: @neutral-offdark;
 			}
 		}
 	}
