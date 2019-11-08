@@ -63,6 +63,8 @@ export class InvestmentStore {
 
   @observable investmentFlowEquityErrorMessage = null;
 
+  @observable isUpdateLimitReflect = false;
+
   @action
   setShowTransferRequestErr = (status) => {
     this.showTransferRequestErr = status;

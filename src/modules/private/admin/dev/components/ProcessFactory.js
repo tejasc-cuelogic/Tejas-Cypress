@@ -3,15 +3,17 @@ import { Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { InlineLoader } from '../../../../../theme/shared';
-import CronFactory from './factory/cronFactory';
+import TriggerProcessFactory from './factory/processFactory';
+import ProcessFactoryLogs from './factory/processFactoryLogs';
 
 @inject('factoryStore', 'nsUiStore')
 @withRouter
 @observer
-export default class Factory extends Component {
+export default class ProcessFactory extends Component {
   constructor(props) {
     super(props);
     this.props.factoryStore.fetchPlugins();
+    this.props.factoryStore.setFieldValue('selectedFactory', 'PROCESS');
   }
 
   componentDidMount() {
@@ -26,7 +28,8 @@ export default class Factory extends Component {
         : (
           <Grid>
             <Grid.Column>
-              <CronFactory />
+              <TriggerProcessFactory />
+              <ProcessFactoryLogs />
             </Grid.Column>
           </Grid>
         )
