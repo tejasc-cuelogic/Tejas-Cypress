@@ -20,7 +20,7 @@ export default class Basic extends Component {
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false);
     this.props.userDetailsStore.setFormData('USER_PROFILE_PREFERRED_INFO_FRM', false);
-    this.props.userDetailsStore.setAddressCheck();
+    this.props.userDetailsStore.setAddressOrPhoneCheck();
   }
 
   updateMode = (e, val) => {
@@ -56,7 +56,7 @@ export default class Basic extends Component {
   render() {
     const {
       detailsOfUser, USER_BASIC, USER_PROFILE_ADD_ADMIN_FRM, USER_PROFILE_PREFERRED_INFO_FRM, setAddressFieldsForProfile,
-      formChange, maskChange, isAddressSkip, toggleAddressVerification,
+      formChange, maskChange, isAddressSkip, isPhoneSkip, skipAddressOrPhoneValidationCheck,
     } = this.props.userDetailsStore;
     const { inProgress } = this.props.uiStore;
     const formName = 'USER_BASIC';
@@ -78,7 +78,8 @@ export default class Basic extends Component {
                 </>
               )
             }
-            <Button compact onClick={() => toggleAddressVerification()} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
+            <Button compact onClick={() => skipAddressOrPhoneValidationCheck('ADDRESS')} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
+            <Button compact onClick={() => skipAddressOrPhoneValidationCheck('PHONE')} color={isPhoneSkip ? 'green' : 'blue'}>{isPhoneSkip ? 'Force VoIP Check' : 'Skip VoIP Check'}</Button>
           </Button.Group>
         </Header>
         {get(details, 'locked.lock') === 'LOCKED'

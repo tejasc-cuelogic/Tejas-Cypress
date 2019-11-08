@@ -268,6 +268,8 @@ export const selectedUserDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
       id
+      skipAddressVerifyCheck
+      skipPhoneVerifyCheck
       userHash
       wpUserId
       status
@@ -638,11 +640,12 @@ export const adminAddUser = gql`
   }
 `;
 
-export const skipAddressValidation = gql`
-mutation skipAddressValidationCheck($userId: String!, $shouldSkip: Boolean!) {
-  skipAddressValidationCheck(
+export const skipAddressOrPhoneValidationCheck = gql`
+mutation skipAddressOrPhoneValidationCheck($userId: String!, $shouldSkip: Boolean!, $type : SkipValidationTypeEnum!) {
+  skipAddressOrPhoneValidationCheck(
      userId: $userId
      shouldSkip: $shouldSkip
+     type: $type
    )
  }`;
 
