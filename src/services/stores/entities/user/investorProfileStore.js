@@ -470,6 +470,12 @@ class InvestorProfileStore {
     }
   }
 
+  get isInvExperienceValid() {
+    const { isComfortable, isRiskTaker, experienceLevel } = FormValidator.ExtractValues(this.INVESTMENT_EXP_FORM.fields);
+    return isComfortable.length !== 0 && isRiskTaker.length !== 0 && experienceLevel !== 'NONE';
+  }
+
+
   @action
   experiencesEditChange = (e, result) => {
     this.formChange(e, result, 'INVESTOR_PROFILE_FULL');

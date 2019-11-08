@@ -18,14 +18,12 @@ export default class Experience extends Component {
 
   handleSubmitInvestmentExperience = () => {
     const {
-      validateInvestmentExperience,
       INVESTMENT_EXP_FORM,
       updateInvestorProfileData,
       isValidInvestorProfileForm,
     } = this.props.investorProfileStore;
-    validateInvestmentExperience();
     if (INVESTMENT_EXP_FORM.meta.isValid
-      && this.props.investorProfileStore.isInvestmentExperienceValid) {
+      && this.props.investorProfileStore.isInvExperienceValid) {
       if (isValidInvestorProfileForm) {
         this.props.uiStore.setErrors(undefined);
         const currentStep = {
@@ -67,12 +65,12 @@ export default class Experience extends Component {
   render() {
     const {
       INVESTMENT_EXP_FORM,
-      isInvestmentExperienceValid,
+      isInvExperienceValid,
       experiencesChange,
-      isValidInvestorProfileForm,
     } = this.props.investorProfileStore;
     const { inProgressArray } = this.props.uiStore;
     const { errorMessage } = this.state;
+    const noExperience = INVESTMENT_EXP_FORM.fields.experienceLevel.value === 'NONE';
     const isExperiencedTypeSelected = inProgressArray.includes('EXPERIENCED'); // only for mobile screen
     const CheckBoxes = () => (
       <>
@@ -110,7 +108,7 @@ export default class Experience extends Component {
           </p>
         )
         }
-        <Form error={!isInvestmentExperienceValid}>
+        <Form error={!isInvExperienceValid}>
           {isExperiencedTypeSelected ? (
             <CheckBoxes />
           )
@@ -154,7 +152,7 @@ export default class Experience extends Component {
           }
           {!isMobile ? (
             <div className="center-align mt-20">
-              {!isInvestmentExperienceValid
+              {!isInvExperienceValid && noExperience
                 && (
                   <p className="negative-text mb-20">
                     NextSeed investments are suitable for experienced investors who are comfortable
@@ -162,8 +160,8 @@ export default class Experience extends Component {
               </p>
                 )
               }
-              <Button fluid={isMobile} primary className="relaxed" content="Continue to Account" disabled={!isValidInvestorProfileForm} onClick={this.handleSubmitInvestmentExperience} />
-              {!isInvestmentExperienceValid
+              <Button fluid={isMobile} primary className="relaxed" content="Continue to Account" disabled={!isInvExperienceValid} onClick={this.handleSubmitInvestmentExperience} />
+              {!isInvExperienceValid && noExperience
                 && (<RequestMsg />)
               }
             </div>
@@ -171,10 +169,10 @@ export default class Experience extends Component {
               <>
                 {isExperiencedTypeSelected && (
                   <div className="center-align mt-20">
-                    <Button fluid={isMobile} primary className="relaxed" content="Create Account" disabled={!isValidInvestorProfileForm} onClick={this.handleSubmitInvestmentExperience} />
+                    <Button fluid={isMobile} primary className="relaxed" content="Create Account" disabled={!isInvExperienceValid} onClick={this.handleSubmitInvestmentExperience} />
                   </div>
                 )}
-                {isExperiencedTypeSelected && !isInvestmentExperienceValid
+                {isExperiencedTypeSelected && !isInvExperienceValid
                   && (<RequestMsg />)
                 }
               </>

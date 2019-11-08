@@ -16,37 +16,45 @@ export default class Overview extends Component {
   render() {
     const finraLink = <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>;
     const { signupStatus } = this.props.userDetailsStore;
-    let overviewInfo = (
+    const overviewInfo = (
       <>
-        <Header as={isMobile ? 'h4' : 'h3'}>Let’s get started</Header>
+        <Header as={isMobile ? 'h4' : 'h3'}>Please establish your investor profile</Header>
         {!isMobile && <Divider section className="small" />}
-        <p className="mb-50">
-          To begin making investments, you will need to complete your investor
-          profile by answering a few basic questions.
+        <p>{
+          signupStatus.isMigratedFullAccount
+            ? (
+              <>
+                We{"'"}re pleased to share that certain new investments will now be facilitated
+                by NextSeed Securities LLC (SEC-registered broker-dealer & member of{' '}
+                {finraLink}),
+                an affiliate of NextSeed US LLC (SEC-registered Funding Portal & member of {finraLink}).
+               </>
+            )
+            : (
+              <>
+                Investment offerings on <a href="https://www.nextseed.com/" target="_blank" rel="noopener noreferrer">nextseed.com</a>
+                {' '}are facilitated by NextSeed US LLC (SEC-registered Funding Portal & member of{' '}
+                {finraLink})
+                and NextSeed Securities LLC (SEC-registered broker-dealer & member of{' '}
+                {finraLink}).
+              </>
+            )
+        }
+        </p>
+        <Divider hidden />
+        <p>{signupStatus.isMigratedFullAccount
+          ? `As a registered broker-dealer, NextSeed Securities is required by SEC rules and
+          regulations to collect an investor profile. In order to gain full access to
+          investments, please answer the following questions to complete your investor
+          profile.`
+          : `To begin making investments on the platform, you will need to answer a few more
+          questions to complete your investor profile.`
+        }
+          To begin making investments on the platform, you will need to answer a few more
+          questions to complete your investor profile.
         </p>
       </>
     );
-    if (signupStatus.isMigratedFullAccount) {
-      overviewInfo = (
-        <>
-          <Header as={isMobile ? 'h4' : 'h3'}>Please establish your investor profile</Header>
-          {!isMobile && <Divider section className="small" />}
-          <p>
-            We{"'"}re pleased to share that certain new investments will now be facilitated
-            by NextSeed Securities LLC (SEC-registered broker-dealer & member of{' '}
-            {finraLink}),
-            an affiliate of NextSeed US LLC (SEC-registered Funding Portal & member of {finraLink}).
-          </p>
-          <Divider hidden />
-          <p className="mb-50">
-            As a registered broker-dealer, NextSeed Securities is required by SEC rules and
-            regulations to collect an investor profile. In order to gain full access to
-            investments, please answer the following questions to complete your investor
-            profile.
-          </p>
-        </>
-      );
-    }
     return (
       <div className={isMobile ? '' : 'center-align'}>
         {overviewInfo}
@@ -56,19 +64,19 @@ export default class Overview extends Component {
         </div>
         {!signupStatus.isMigratedFullAccount
           ? (
-<p className="mt-50 note">
+            <p className="mt-50 note">
               Investment offerings on
               {' '}
               <a href="https://www.nextseed.com/" target="_blank" rel="noopener noreferrer">nextseed.com</a>
               {' '}
-    are facilitated by NextSeed US LLC (SEC-registered Funding Portal & member of
+              are facilitated by NextSeed US LLC (SEC-registered Funding Portal & member of
               {' '}
               {finraLink}
-    )
-              and NextSeed Securities LLC (SEC-registered broker-dealer & member of
+              )
+                        and NextSeed Securities LLC (SEC-registered broker-dealer & member of
               {' '}
               {finraLink}
-    ).
+              ).
             </p>
           )
           : null
