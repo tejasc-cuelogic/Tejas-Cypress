@@ -1,17 +1,17 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import { Modal, Card, Header, Form, Rating, Button, Grid, List, Icon } from 'semantic-ui-react';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import { DataFormatter } from '../../../../../helper';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-import { InlineLoader } from '../../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry, InlineLoader } from '../../../../../theme/shared';
 import { FormInput } from '../../../../../theme/form';
 import { AppStatusLabel } from '../components/AppStatusLabel';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 import { ACTIVITY_HISTORY_TYPES } from '../../../../../constants/common';
 
-const getModule = component => lazy(() => import(`../components/details/${component}`));
+const getModule = component => lazyRetry(() => import(`../components/details/${component}`));
 
 @inject('businessAppStore', 'businessAppAdminStore', 'businessAppReviewStore')
 @observer
@@ -226,7 +226,7 @@ Update
           </Grid>
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
-            <Suspense fallback={<InlineLoader />}>
+            <SuspenseBoundary>
               <Switch>
                 <Route
                   exact
@@ -258,7 +258,7 @@ Update
                   })
                 }
               </Switch>
-            </Suspense>
+            </SuspenseBoundary>
           </Card>
         </Modal.Content>
       </Modal>

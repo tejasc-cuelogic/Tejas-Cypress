@@ -1,10 +1,10 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import PrivateLayout from '../../shared/PrivateLayout';
-import { InlineLoader } from '../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 
-const getModule = component => lazy(() => import(`./components/${component}`));
+const getModule = component => lazyRetry(() => import(`./components/${component}`));
 
 export default class Dev extends Component {
   constructor(props) {
@@ -22,7 +22,7 @@ export default class Dev extends Component {
       <PrivateLayout
         {...this.props}
       >
-        <Suspense fallback={<InlineLoader />}>
+        <SuspenseBoundary>
           <Switch>
             {
               navItems.map(item => (
@@ -30,7 +30,7 @@ export default class Dev extends Component {
               ))
             }
           </Switch>
-        </Suspense>
+        </SuspenseBoundary>
       </PrivateLayout>
     );
   }

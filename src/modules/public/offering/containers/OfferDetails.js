@@ -1,12 +1,11 @@
 /* eslint-disable no-lonely-if */
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { get, find, has, cloneDeep } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Responsive, Container, Grid, Visibility, Button, Icon } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
-import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
-import { LazyLoadBoundary, LazyLoadRetry } from '../../../../helper';
+import { Spinner, MobileDropDownNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import CampaignHeader from '../components/campaignDetails/CampaignHeader';
 import InvestNow from '../components/investNow/InvestNow';
@@ -23,7 +22,8 @@ import VideoModal from '../components/campaignDetails/Overview/VideoModal';
 import AboutPhotoGallery from '../components/campaignDetails/AboutPhotoGallery';
 import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit';
 
-const getModule = component => lazy(() => LazyLoadRetry(() => import(`../components/campaignDetails/${component}`)));
+const getModule = component => lazyRetry(() => import(`../components/campaignDetails/${component}`));
+
 const isMobile = document.documentElement.clientWidth < 992;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
 @inject('campaignStore', 'userStore', 'navStore', 'uiStore', 'userDetailsStore', 'authStore', 'watchListStore', 'nsUiStore')
@@ -271,28 +271,26 @@ class offerDetails extends Component {
                   )
                 }
                 <Grid.Column computer={newLayout ? 9 : 12} mobile={16} className={newLayout ? 'left-align offer-details-v2' : ''}>
-                  <LazyLoadBoundary>
-                    <Suspense fallback={<InlineLoader />}>
-                      <Switch>
-                        <Route exact path={match.url} render={props => <InitialComponent offeringName={offeringName} refLink={this.props.match.url} {...props} />} />
-                        {newLayout
-                          && (
-                            <Route path={`${this.props.match.url}/data-room`} component={DocumentModal} />
-                          )
-                        }
-                        <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
-                        <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
-                        <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}${newLayout ? '#comments' : '/comments'}`} {...props} />} />
-                        <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
-                        <Route path={`${match.url}/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={`${match.url}/agreement`} {...props} />} />
-                        <Route exact path={`${match.url}/congratulation`} render={() => <Congratulation refLink={this.props.match.url} />} />
-                        <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
-                        <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
-                        <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
-                        <Route component={NotFound} />
-                      </Switch>
-                    </Suspense>
-                  </LazyLoadBoundary>
+                  <SuspenseBoundary>
+                    <Switch>
+                      <Route exact path={match.url} render={props => <InitialComponent offeringName={offeringName} refLink={this.props.match.url} {...props} />} />
+                      {newLayout
+                        && (
+                          <Route path={`${this.props.match.url}/data-room`} component={DocumentModal} />
+                        )
+                      }
+                      <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
+                      <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
+                      <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}${newLayout ? '#comments' : '/comments'}`} {...props} />} />
+                      <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
+                      <Route path={`${match.url}/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={`${match.url}/agreement`} {...props} />} />
+                      <Route exact path={`${match.url}/congratulation`} render={() => <Congratulation refLink={this.props.match.url} />} />
+                      <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
+                      <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
+                      <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
+                      <Route component={NotFound} />
+                    </Switch>
+                  </SuspenseBoundary>
                 </Grid.Column>
               </Grid>
             </section>

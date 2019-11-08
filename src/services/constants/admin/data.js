@@ -3,7 +3,7 @@ import { FormHelper } from '../../../helper';
 export const common = {
   userId: {
     value: '',
-    label: 'User Id',
+    label: 'User ID',
     error: undefined,
     rule: 'required',
     placeHolder: 'Enter here',

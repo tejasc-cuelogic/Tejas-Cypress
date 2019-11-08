@@ -75,7 +75,7 @@ class CronFactory extends Component {
               <Table unstackable striped className="application-list">
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>JobId</Table.HeaderCell>
+                    <Table.HeaderCell>Job ID</Table.HeaderCell>
                     <Table.HeaderCell width={4}>Execute Status</Table.HeaderCell>
                     <Table.HeaderCell width={4}>Meta Type</Table.HeaderCell>
                     <Table.HeaderCell width={4}>Executed On</Table.HeaderCell>
