@@ -170,23 +170,10 @@ class DataFormatter {
 
   convertDateType = (date, dateType = 'iso') => (dateType === 'iso' ? moment(date).toISOString() : moment(date).unix())
 
-  QueryStringToJSON = (search) => {
-    if (search !== '') {
-      const pairs = search.slice(1).split('&');
-      const result = {};
-      pairs.forEach((pair) => {
-        const pairVal = pair.split('=');
-        result[pairVal[0]] = decodeURIComponent(pairVal[1] || '');
-      });
-      return JSON.parse(JSON.stringify(result));
-    }
-    return null;
-  }
-
   createEligibleTagsObj = (urlParameter) => {
     const tags = {};
     forEach(urlParameter, (p, key) => {
-      if (ELIGIBLE_TAGS.includes(key.toUpperCase()) && p && p.length <= 25 && !Helper.isSpecialCharPresent(p)) {
+      if (ELIGIBLE_TAGS.includes(key.toUpperCase()) && p && p.length <= 128 && !Helper.isSpecialCharPresent(p)) {
         tags[key.toUpperCase()] = p;
       }
     });

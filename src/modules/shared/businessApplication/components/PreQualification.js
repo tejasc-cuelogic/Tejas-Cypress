@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { get, has, isEmpty } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Form, Button, Divider } from 'semantic-ui-react';
+import queryString from 'query-string';
 import scrollIntoView from 'scroll-into-view';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../helper/utility';
@@ -22,7 +23,7 @@ export default class PreQualification extends Component {
     super(props);
     if (this.props.isPublic) {
       const { params } = this.props.match;
-      const urlParameter = DataFormatter.QueryStringToJSON(this.props.location.search);
+      const urlParameter = queryString.parse(this.props.location.search);
       if (urlParameter) {
         let tags = DataFormatter.createEligibleTagsObj(urlParameter);
         if (!isEmpty(tags)) {
