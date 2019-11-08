@@ -141,6 +141,8 @@ export class Utility {
     return fileData;
   }
 
+  isSpecialCharPresent = str => (str ? new RegExp(/[^a-z0-9._-]+/gi).test(str) : '');
+
   sanitize = name => (name ? name.replace(/[^a-z0-9._-]+/gi, '_') : '');
 
   putUploadedFile = urlArray => new Promise((resolve, reject) => {

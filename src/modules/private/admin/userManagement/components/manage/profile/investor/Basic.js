@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
-import { get } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
 import { FormInput, MaskedInput, AutoComplete } from '../../../../../../../../theme/form';
 import CIPInformation from './CIPInformation';
 import OtherInformation from '../OtherInformation';
+import TagsInformation from '../../../../../../shared/TagsInformation';
 import LockedInformation from '../LockedInformation';
 import UserInvestorDetails from '../../../../../../investor/settings/components/UserInvestorDetails';
 
@@ -71,6 +72,7 @@ export default class Basic extends Component {
     const formName = 'USER_BASIC';
     const details = toJS({ ...detailsOfUser.data.user });
     const { displayMode } = this.state;
+    const tags = toJS(get(details, 'tags'));
     return (
       <Form loading={inProgress}>
         <Header as="h4">
@@ -272,6 +274,11 @@ export default class Basic extends Component {
         <CIPInformation details={details} />
         <Divider />
         <OtherInformation details={details} />
+        {!isEmpty(tags)
+        && (
+          <TagsInformation tags={tags} />
+        )
+        }
         <Divider />
         <UserInvestorDetails isAdmin refLink={this.props.match.url} />
         <Divider />
