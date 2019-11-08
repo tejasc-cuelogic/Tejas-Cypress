@@ -1,21 +1,25 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
 import { get, isEmpty, forEach, find, includes, keyBy } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
-import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger } from '../../queries/data';
+import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger, fetchRequestFactoryLogs, fetchProcessLogs } from '../../queries/data';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { REQUESTFACTORY_META, CRONFACTORY_META, PROCESSFACTORY_META } from '../../../constants/admin/data';
+import { REQUESTFACTORY_META, CRONFACTORY_META, PROCESSFACTORY_META, REQUESTFACTORY_LOG__META, PROCESSFACTORY_LOG__META } from '../../../constants/admin/data';
 
 export class FactoryStore extends DataModelStore {
   constructor() {
-    super({ getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger });
+    super({ getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger, fetchRequestFactoryLogs, fetchProcessLogs });
   }
 
   REQUESTFACTORY_FRM = Validator.prepareFormObject(REQUESTFACTORY_META);
 
   CRONFACTORY_FRM = Validator.prepareFormObject(CRONFACTORY_META);
 
+  REQUESTFACTORY_LOG_FRM = Validator.prepareFormObject(REQUESTFACTORY_LOG__META);
+
   PROCESSFACTORY_FRM = Validator.prepareFormObject(PROCESSFACTORY_META);
+
+  PROCESSFACTORY_LOG_FRM = Validator.prepareFormObject(PROCESSFACTORY_LOG__META);
 
   DYNAMCI_PAYLOAD_FRM = {
     REQUESTFACTORY: {},
@@ -36,6 +40,8 @@ export class FactoryStore extends DataModelStore {
 
   cronLogList = [];
 
+  requestLogList = [];
+
   processFactoryResponse = {};
 
   confirmModal = false;
@@ -44,21 +50,31 @@ export class FactoryStore extends DataModelStore {
 
   removeIndex = null;
 
+  selectedFactory = 'CRON';
+
   initRequest = async (reqParams) => {
     try {
       const {
-        keyword, cron, cronMetaType, status, startDate, endDate, jobId,
+        keyword, cron, cronMetaType, status, plugin, startDate, endDate, jobId,
       } = this.requestState.search;
       const filters = toJS({ ...this.requestState.search });
       delete filters.keyword;
       this.requestState.page = (reqParams && reqParams.page) || this.requestState.page;
       this.requestState.perPage = (reqParams && reqParams.first) || this.requestState.perPage;
-      let params = {
+      let params = this.selectedFactory === 'CRON' ? {
         search: keyword,
         cron: cron || 'GOLDSTAR_HEALTHCHECK',
-        // cronMetaType: cronMetaType || 'LOG',
         cronMetaType,
-        // page: reqParams ? reqParams.page : 1,
+        limit: this.requestState.perPage,
+        jobId: jobId || '',
+      } : this.selectedFactory === 'REQUEST' ? {
+        search: keyword,
+        plugin: plugin || 'PROCESSOR_JOB_PROCESSOR',
+        limit: this.requestState.perPage,
+        jobId: jobId || '',
+      } : {
+        search: keyword,
+        plugin: plugin || 'BOX_AUDIT',
         limit: this.requestState.perPage,
         jobId: jobId || '',
       };
@@ -80,13 +96,14 @@ export class FactoryStore extends DataModelStore {
 
       const data = await this.executeQuery({
         client: 'PRIVATE',
-        query: 'fetchCronLogs',
+        query: this.selectedFactory === 'CRON' ? 'fetchCronLogs' : this.selectedFactory === 'REQUEST' ? 'fetchRequestFactoryLogs' : 'fetchProcessLogs',
         variables: params,
-        setLoader: 'fetchCronLogs',
+        setLoader: this.selectedFactory === 'CRON' ? 'fetchCronLogs' : this.selectedFactory === 'REQUEST' ? 'fetchRequestFactoryLogs' : 'fetchProcessLogs',
         fetchPolicy: 'network-only',
       });
-      this.setFieldValue('cronLogList', data);
-      const { lek } = data.fetchCronLogs;
+      const dataList = this.selectedFactory === 'CRON' ? 'cronLogList' : 'requestLogList';
+      this.setFieldValue(dataList, data);
+      const { lek } = this.selectedFactory === 'CRON' ? data.fetchCronLogs : this.selectedFactory === 'REQUEST' ? data.fetchRequestFactoryLogs : data.fetchProcessLogs;
       const requestStateObj = {
         ...this.requestState,
         lek: {
@@ -142,6 +159,14 @@ export class FactoryStore extends DataModelStore {
     ) || [];
   }
 
+  get requestLogs() {
+    const currentFactory = this.selectedFactory === 'REQUEST' ? 'fetchRequestFactoryLogs' : 'fetchProcessLogs';
+    const currentFactoryLog = this.selectedFactory === 'REQUEST' ? 'requestLogs' : 'processLogs';
+    return (this.requestLogList && this.requestLogList[currentFactory]
+      && toJS(this.requestLogList[currentFactory][currentFactoryLog])
+    ) || [];
+  }
+
   toggleSearch = () => {
     this.filters = !this.filters;
   }
@@ -150,9 +175,20 @@ export class FactoryStore extends DataModelStore {
     return this.cronLogList.loading;
   }
 
+  get requestLogListLoading() {
+    return this.requestLogList.loading;
+  }
+
   get count() {
     return (this.cronLogList && this.cronLogList.fetchCronLogs
       && toJS(this.cronLogList.fetchCronLogs.resultCount)
+    ) || 0;
+  }
+
+  get requestCount() {
+    const currentFactory = this.selectedFactory === 'REQUEST' ? 'fetchRequestFactoryLogs' : 'fetchProcessLogs';
+    return (this.requestLogList && this.requestLogList[currentFactory]
+      && toJS(this.requestLogList[currentFactory].resultCount)
     ) || 0;
   }
 
@@ -193,8 +229,10 @@ export class FactoryStore extends DataModelStore {
 
   setPluginDropDown = () => {
     this.REQUESTFACTORY_FRM.fields.plugin.values = this.dropDownValuesForPlugin('listRequestPlugins');
+    this.REQUESTFACTORY_LOG_FRM.fields.plugin.values = this.dropDownValuesForPlugin('listRequestPlugins');
     this.CRONFACTORY_FRM.fields.cron.values = this.dropDownValuesForPlugin('listCronPlugins');
     this.PROCESSFACTORY_FRM.fields.method.values = this.dropDownValuesForPlugin('listProcessorPlugins');
+    this.PROCESSFACTORY_LOG_FRM.fields.plugin.values = this.dropDownValuesForPlugin('listProcessorPlugins');
   }
 
   isValidJson = (json) => {
@@ -306,6 +344,8 @@ decorate(FactoryStore, {
   ...decorateDefault,
   REQUESTFACTORY_FRM: observable,
   CRONFACTORY_FRM: observable,
+  REQUESTFACTORY_LOG_FRM: observable,
+  PROCESSFACTORY_LOG_FRM: observable,
   PROCESSFACTORY_FRM: observable,
   DYNAMCI_PAYLOAD_FRM: observable,
   currentPluginSelected: observable,
@@ -313,6 +353,8 @@ decorate(FactoryStore, {
   pluginListArr: observable,
   filters: observable,
   cronLogList: observable,
+  requestLogList: observable,
+  selectedFactory: observable,
   processFactoryResponse: observable,
   confirmModal: observable,
   confirmModalName: observable,
@@ -324,9 +366,12 @@ decorate(FactoryStore, {
   initiateSearch: action,
   setInitiateSrch: action,
   cronLogs: computed,
+  requestLogs: computed,
   toggleSearch: action,
   cronLogListLoading: computed,
+  requestLogListLoading: computed,
   count: computed,
+  requestCount: computed,
   requestFactoryPluginTrigger: action,
   setPluginDropDown: action,
   processFactoryPluginTrigger: action,

@@ -176,6 +176,7 @@ class AccountType extends Component {
       setFieldValue,
       byDefaultRender,
       investAccTypes,
+      isUpdateLimitReflect,
     } = this.props.investmentStore;
     const {
       userAccredetiationState,
@@ -192,6 +193,7 @@ class AccountType extends Component {
     const isDocumentUpload = get(getCurrentInvestNowHealthCheck, 'availabilityForNPAInOffering');
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
+    const locationURL = this.props.location.pathname;
     if (!byDefaultRender) {
       setStepToBeRendered(2);
     } else if (investAccTypes && investAccTypes.values.length === 1 && isDocumentUpload === true) {
@@ -201,7 +203,11 @@ class AccountType extends Component {
           const offeringRegulation = campaign && campaign.keyTerms ? get(campaign, 'keyTerms.regulation') : get(getInvestorAccountById, 'offering.keyTerms.regulation');
           const accreditationStatus = get(userDetails, 'accreditation.status');
           const isParallelOfferingModelToShow = !!((userAccredetiationState === 'EXPIRED') || (offeringRegulation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus)));
-          if (!isParallelOfferingModelToShow) {
+          if (isUpdateLimitReflect || locationURL.includes('change-investment-limit')) {
+            this.props.investmentStore.setFieldValue('isUpdateLimitReflect', true);
+            setFieldValue('disableNextbtn', false);
+            setStepToBeRendered(1);
+          } else if (!isParallelOfferingModelToShow) {
             setFieldValue('disableNextbtn', false);
             setStepToBeRendered(1);
           }
@@ -211,15 +217,6 @@ class AccountType extends Component {
         }
       }
     }
-    // else if (this.props.changeInvest && regulationType && regulationType === 'BD_CF_506C' && !isAccreditationExpired) {
-    //   const { activeAccounts } = this.props.userDetailsStore.signupStatus;
-    //   const accreditationStatus = get(userDetails, 'accreditation.status');
-    //   const isParallelOfferingModelToShow = !!((isAccreditationExpired) || (offeringReuglation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus)));
-    //   if (activeAccounts.length && this.props.investmentStore.getSelectedAccountTypeId
-    //     && !isParallelOfferingModelToShow && userStatus === 'FULL') {
-    //     setStepToBeRendered(1);
-    //   }
-    // }
   }
 
   radioChnaged = (e, res) => {
