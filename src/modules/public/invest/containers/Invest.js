@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
+import queryString from 'query-string';
 import { Visibility, Responsive } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
@@ -39,7 +40,7 @@ const metaTagsData = [
 class Invest extends Component {
   constructor(props) {
     super(props);
-    const urlParameter = DataFormatter.QueryStringToJSON(props.location.search);
+    const urlParameter = queryString.parse(props.location.search);
     const utmCampaign = get(urlParameter, 'utm_campaign') || null;
     const rsCode = get(urlParameter, 'rsCode') || null;
     if (utmCampaign === 'saasquatch' && rsCode) {
