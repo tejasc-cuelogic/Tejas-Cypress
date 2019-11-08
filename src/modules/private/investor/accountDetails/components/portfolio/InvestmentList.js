@@ -144,7 +144,7 @@ const InvestmentList = (props) => {
                               )}
                               {(get(data, 'offering.keyTerms.city') || get(data, 'offering.keyTerms.state')) && (
                                 <p className="date-stamp">
-                                  {get(data, 'offering.keyTerms.city') || ''} {get(data, 'offering.keyTerms.state') || ''}
+                                  {get(data, 'offering.keyTerms.city')} {get(data, 'offering.keyTerms.state')}
                                 </p>
                               )}
                           </div>
