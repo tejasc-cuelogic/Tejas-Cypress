@@ -1,4 +1,5 @@
 import React, { Component, Suspense } from 'react';
+import { Icon } from 'semantic-ui-react';
 import InlineLoader from './InlineLoader';
 
 class SuspenseBoundary extends Component {
@@ -20,7 +21,17 @@ class SuspenseBoundary extends Component {
 
   render() {
     if (this.state.hasError) {
-      return <h2>Something went wrong!</h2>;
+      return (
+        <section className="center-align">
+          <Icon name="warning circle" size="huge" color="yellow" />
+          <h2>Oops! something went wrong.</h2>
+          <p>
+            Well, this is awkward. An error occurred loading content.
+            <br />
+            <a href={window.location.href}>Click here</a> to reload.
+          </p>
+        </section>
+      );
     }
 
     return (
