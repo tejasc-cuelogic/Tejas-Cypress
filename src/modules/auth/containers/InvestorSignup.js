@@ -4,6 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
 import { isEmpty } from 'lodash';
+import queryString from 'query-string';
 import { Modal, Button, Header, Icon, Form, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
@@ -20,7 +21,7 @@ class InvestorSignup extends Component {
     this.props.authStore.setDefaultPwdType();
     const userRoleData = cookie.load('ROLE_VALUE');
     this.props.authStore.setUserRole(userRoleData || 'investor');
-    const urlParameter = DataFormatter.QueryStringToJSON(this.props.location.search);
+    const urlParameter = queryString.parse(this.props.location.search);
     if (urlParameter) {
       let tags = DataFormatter.createEligibleTagsObj(urlParameter);
       if (!isEmpty(tags)) {
