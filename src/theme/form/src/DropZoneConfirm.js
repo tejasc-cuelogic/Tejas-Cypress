@@ -32,7 +32,7 @@ export default class DropZone extends Component {
   }
 
   ondrop = (files) => {
-    const validate = Helper.validateDocumentExtension(files[0].type.split('/')[1]);
+    const validate = Helper.validateDocumentExtension(files[0].name.split('.')[1]);
     if (!validate.isInvalid) {
       this.setState({ error: null });
       this.props.ondrop(files, this.props.name);

@@ -62,7 +62,7 @@ export const DEFAULT_TIME_ZONE_TO_DISPLAY = 'America/Chicago';
 
 export const IMAGE_UPLOAD_ALLOWED_EXTENSIONS = ['jpeg', 'jpg', 'png'];
 
-export const DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS = ['pdf', 'txt', 'doc', 'docx', 'xls', 'xlsx', 'odt', 'csv'];
+export const DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS = ['jpeg', 'jpg', 'png', 'pdf', 'txt', 'doc', 'docx', 'xls', 'xlsx', 'odt', 'csv'];
 
 export const DEV_FEATURE_ONLY = ['localhost', 'develop', 'dev', 'review'].includes(REACT_APP_DEPLOY_ENV);
 
