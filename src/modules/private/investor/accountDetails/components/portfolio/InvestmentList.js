@@ -152,7 +152,11 @@ const InvestmentList = (props) => {
 
                         <Table.Cell>
                           {
+<<<<<<< HEAD
                             CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')] || 'N/A'
+=======
+                            get(data, 'offering.keyTerms.securities') ? CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')] : '-'
+>>>>>>> bf8b3c82a5ab42c5430c543c2a3cfefa23c81001
                           }
                         </Table.Cell>
                         <Table.Cell className="text-capitalize">
