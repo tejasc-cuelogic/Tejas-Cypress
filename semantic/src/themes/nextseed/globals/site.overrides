@@ -2259,7 +2259,7 @@ svg:not(:root).recharts-surface{
 			font-size:@18px;
 			font-weight:@fontMedium;
 			@media only screen and (max-width : @largestMobileScreen){
-				font-size: @12px;
+				font-size: @14px;
 			}
 		}
 		.chartLegends li{
