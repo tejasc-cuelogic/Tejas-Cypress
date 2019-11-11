@@ -812,25 +812,26 @@ textarea{
             color:@primary-one !important;
         }
     }
-}
-.file-uploader-large .file-uploader{
-    width:250px;
-    height:140px;
-    margin:@5px auto;
-    display:table;
-    > div{
-        display:table-cell;
-        vertical-align:middle;
-    }
-    .icon{
-        display:block;
-        margin:0 auto;
-    }
-    input[type=file]{
-        height:138px;
-    }
-    &.attached{
-        display:block;
+    &.file-uploader-large{
+        width:250px;
+        height:140px;
+        margin:@5px auto;
+        display:table;
+        > .file-uploader-child{
+            display:table-cell;
+            vertical-align:middle;
+            color: @primary-one;
+        }
+        .icon{
+            display:block;
+            margin:0 auto;
+        }
+        input[type=file]{
+            height:138px;
+        }
+        &.attached{
+            display:block;
+        }
     }
 }
 
