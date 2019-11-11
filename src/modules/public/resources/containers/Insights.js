@@ -18,13 +18,13 @@ export default class Insights extends Component {
     super(props);
     if (!this.props.articleStore.InsightCategories.length) {
       this.props.articleStore.getCategoryList(true);
+      this.props.articleStore.featuredRequestArticles();
     }
     if (this.props.match.params && this.props.match.params.id) {
       const id = this.props.match.params.id === 'all' ? null : this.props.match.params.id;
       this.props.articleStore.requestAllArticles(true, false, id);
     } else {
       this.props.articleStore.requestAllArticles(true, false);
-      this.props.articleStore.featuredRequestArticles();
     }
   }
 
