@@ -172,7 +172,7 @@ class Comments extends Component {
         {comments && commentsMainThreadCount
           ? (
             <>
-              <Segment color="green" className={`${newLayout ? 'mt-30' : 'mt-50'} offering-comment`}>
+              <div color="green" className={`${newLayout ? 'mt-30' : 'mt-50'} offering-comment`}>
                 {comments
                   && comments.map(c => (((c.createdUserInfo && c.createdUserInfo.id === issuerId
                     && c.approved)
@@ -319,7 +319,7 @@ class Comments extends Component {
                       </Comment.Group>
                   )))
                 }
-              </Segment>
+              </div>
             </>
           )
           : (
