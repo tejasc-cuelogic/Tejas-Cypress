@@ -18,32 +18,32 @@ const DropZone = observer((props) => {
     <div className={`file-uploader-wrap ${props.containerclassname}`}>
       {label
         && (
-<label>
-          {label}
-          {props.tooltip
-          && (
-<Popup
-  trigger={<Icon className="ns-help-circle" />}
-  content={props.tooltip}
-  position="top center"
-  className="center-align"
-  wide
-/>
-          )
-          }
-        </label>
+          <label>
+            {label}
+            {props.tooltip
+              && (
+                <Popup
+                  trigger={<Icon className="ns-help-circle" />}
+                  content={props.tooltip}
+                  position="top center"
+                  className="center-align"
+                  wide
+                />
+              )
+            }
+          </label>
         )
       }
-      { !props.disabled && (!value || props.multiple)
+      {!props.disabled && (!value || props.multiple)
         ? (
-<div className="file-uploader">
-          <Dimmer active={showLoader}>
-            <Loader />
-          </Dimmer>
-          <Dropzone {...props} onDrop={files => props.ondrop(files, props.name)} className="test" style={{}}>
-            <Icon className="ns-upload" /> {props.uploadtitle ? <span>{props.uploadtitle}</span> : <span>Upload document{props.multiple ? 's' : ''}</span>}
-          </Dropzone>
-        </div>
+          <div className="file-uploader">
+            <Dimmer active={showLoader}>
+              <Loader />
+            </Dimmer>
+            <Dropzone {...props} onDrop={files => props.ondrop(files, props.name)} className="test" style={{}}>
+              <Icon className="ns-upload" /> {props.uploadtitle ? <span>{props.uploadtitle}</span> : <span>Upload document{props.multiple ? 's' : ''}</span>}
+            </Dropzone>
+          </div>
         ) : null
       }
       {(isArray(toJS(value)) && value.length)
@@ -51,57 +51,57 @@ const DropZone = observer((props) => {
           <div className="file-uploader attached">
             {!props.disabled
               && (
-              <>
-                <Responsive
-                  as={Button}
-                  minWidth={768}
-                  size="tiny"
-                  compact
-                  className="ghost-button remove pull-right"
-                  onClick={e => props.onremove(e, props.name, key)}
-                >
-                  Remove
+                <>
+                  <Responsive
+                    as={Button}
+                    minWidth={768}
+                    size="tiny"
+                    compact
+                    className="ghost-button remove pull-right"
+                    onClick={e => props.onremove(e, props.name, key)}
+                  >
+                    Remove
                 </Responsive>
-                <Responsive
-                  as={Icon}
-                  maxWidth={767}
-                  name="remove"
-                  className="pull-right"
-                  onClick={e => props.onremove(e, props.name, key)}
-                />
-              </>
+                  <Responsive
+                    as={Icon}
+                    maxWidth={767}
+                    name="remove"
+                    className="pull-right"
+                    onClick={e => props.onremove(e, props.name, key)}
+                  />
+                </>
               )
             }
             <span title={item}>{item}</span>
           </div>
         )) : !isArray(toJS(value)) && value
         && (
-<div className="file-uploader attached">
-          {!props.disabled
-            && (
-            <>
-              <Responsive
-                as={Button}
-                minWidth={768}
-                size="tiny"
-                compact
-                className="ghost-button remove pull-right"
-                onClick={e => props.onremove(e, props.name)}
-              >
-                Remove
+          <div className="file-uploader attached">
+            {!props.disabled
+              && (
+                <>
+                  <Responsive
+                    as={Button}
+                    minWidth={768}
+                    size="tiny"
+                    compact
+                    className="ghost-button remove pull-right"
+                    onClick={e => props.onremove(e, props.name)}
+                  >
+                    Remove
               </Responsive>
-              <Responsive
-                as={Icon}
-                maxWidth={767}
-                name="remove"
-                className="pull-right"
-                onClick={e => props.onremove(e, props.name)}
-              />
-            </>
-            )
-          }
-          <span title={value}>{value}</span>
-        </div>
+                  <Responsive
+                    as={Icon}
+                    maxWidth={767}
+                    name="remove"
+                    className="pull-right"
+                    onClick={e => props.onremove(e, props.name)}
+                  />
+                </>
+              )
+            }
+            <span title={value}>{value}</span>
+          </div>
         )
       }
       {error

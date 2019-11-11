@@ -2,7 +2,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { get, pick } from 'lodash';
 import ReactCodeInput from 'react-code-input';
-import { FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZone, FormRadioGroup, FormCheckbox, FormDropDown } from '.';
+import { FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown } from '.';
 import { FILE_UPLOAD_STEPS } from '../../constants/account';
 import Address from './src/Address';
 
@@ -77,7 +77,7 @@ function formHoc(WrappedComponent, metaInfo) {
       />
     )
 
-    Dropzone = name => (
+    Dropzone = (name, props) => (
       <DropZone
         name={name}
         label={this.props[metaInfo.store][metaInfo.form].fields[name].label}
@@ -85,6 +85,7 @@ function formHoc(WrappedComponent, metaInfo) {
         ondrop={files => this.props[metaInfo.store].setFileUploadData(metaInfo.form, name, FILE_UPLOAD_STEPS, files, metaInfo.userRole)}
         onremove={() => this.props[metaInfo.store].removeUploadedData(metaInfo.form, name)}
         containerclassname="fluid"
+        {...props}
       />
     )
 

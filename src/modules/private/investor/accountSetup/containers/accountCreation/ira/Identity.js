@@ -1,8 +1,8 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import { Header, Form, Divider, Message, Confirm } from 'semantic-ui-react';
+import { Header, Form, Divider, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { DropZoneLarge } from '../../../../../../../theme/form';
+import { DropZoneConfirm as DropZoneLarge } from '../../../../../../../theme/form';
 import { ListErrors } from '../../../../../../../theme/shared';
 
 @inject('uiStore', 'iraAccountStore')
@@ -17,17 +17,9 @@ export default class Identity extends Component {
     this.props.uiStore.setConfirmBox('');
   }
 
-  confirmRemoveDoc = (name) => {
-    this.props.uiStore.setConfirmBox(name);
-  }
-
-  handleDelCancel = () => {
-    this.props.uiStore.setConfirmBox('');
-  }
-
   render() {
     const { IDENTITY_FRM } = this.props.iraAccountStore;
-    const { errors, confirmBox } = this.props.uiStore;
+    const { errors } = this.props.uiStore;
     return (
       <>
         <Header as="h3" textAlign="center">Confirm your identity</Header>
@@ -40,27 +32,19 @@ export default class Identity extends Component {
             name="identityDoc"
             fielddata={IDENTITY_FRM.fields.identityDoc}
             ondrop={this.onIdentityDocDrop}
-            onremove={this.confirmRemoveDoc}
+            onremove={this.onIdentityDocRemove}
+            uploadtitle={<>Choose a file <span>or drag it here</span></>}
           />
         </Form>
         {errors
           && (
-<Message error className="mt-30">
-            <ListErrors errors={[errors.message]} />
-          </Message>
+            <Message error className="mt-30">
+              <ListErrors errors={[errors.message]} />
+            </Message>
           )
         }
         <Divider section hidden />
         <p className="center-align grey-header mt-30">NextSeed is a regulated financial services company operating in the US. To comply with KYC/AML regulations, we need to verify your identity in order to set up your account.</p>
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'identityDoc'}
-          onCancel={this.handleDelCancel}
-          onConfirm={this.onIdentityDocRemove}
-          size="mini"
-          className="deletion"
-        />
       </>
     );
   }
