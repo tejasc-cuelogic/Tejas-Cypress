@@ -63,7 +63,7 @@ class Overview extends Component {
     const isPreviewLinkShow = campaign && campaign.isAvailablePublicly;
     const security = get(campaign, 'keyTerms.securities');
     const isPreferredEquityOffering = !!['PREFERRED_EQUITY_506C'].includes(security);
-    const preferredEquityUnit =  get(campaign, 'keyTerms.equityUnitType') ? `${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price` : 'N/A';
+    const preferredEquityUnit = get(campaign, 'keyTerms.equityUnitType') ? `${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price` : 'N/A';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
