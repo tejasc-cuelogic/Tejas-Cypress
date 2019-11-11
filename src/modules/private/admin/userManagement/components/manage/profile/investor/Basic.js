@@ -1,26 +1,33 @@
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
-import { get } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
-import { FormInput, MaskedInput, AutoComplete } from '../../../../../../../../theme/form';
+import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../../../../../theme/form';
 import CIPInformation from './CIPInformation';
 import OtherInformation from '../OtherInformation';
+import TagsInformation from '../../../../../../shared/TagsInformation';
 import LockedInformation from '../LockedInformation';
 import UserInvestorDetails from '../../../../../../investor/settings/components/UserInvestorDetails';
+import { US_STATES } from '../../../../../../../../constants/account';
 
 @inject('userDetailsStore', 'uiStore', 'referralsStore', 'identityStore')
 @withRouter
 @observer
 export default class Basic extends Component {
+  state = {
+    addressCheckLoading: false,
+    phoneCheckLoading: false,
+  }
+
   constructor(props) {
     super(props);
     this.state = { displayMode: true };
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false);
     this.props.userDetailsStore.setFormData('USER_PROFILE_PREFERRED_INFO_FRM', false);
-    this.props.userDetailsStore.setAddressCheck();
+    this.props.userDetailsStore.setAddressOrPhoneCheck();
   }
 
   updateMode = (e, val) => {
@@ -53,15 +60,21 @@ export default class Basic extends Component {
       }).catch(() => { });
   }
 
+  skipAddressOrPhoneValidationCheck = (type) => {
+    this.setState({ [type === 'PHONE' ? 'phoneCheckLoading' : 'addressCheckLoading']: true });
+    this.props.userDetailsStore.skipAddressOrPhoneValidationCheck(type).then(() => this.setState({ [type === 'PHONE' ? 'phoneCheckLoading' : 'addressCheckLoading']: false })).catch(() => this.setState({ [type === 'PHONE' ? 'phoneCheckLoading' : 'addressCheckLoading']: false }));
+  }
+
   render() {
     const {
       detailsOfUser, USER_BASIC, USER_PROFILE_ADD_ADMIN_FRM, USER_PROFILE_PREFERRED_INFO_FRM, setAddressFieldsForProfile,
-      formChange, maskChange, isAddressSkip, toggleAddressVerification,
+      formChange, maskChange, isAddressSkip, isPhoneSkip,
     } = this.props.userDetailsStore;
     const { inProgress } = this.props.uiStore;
     const formName = 'USER_BASIC';
     const details = toJS({ ...detailsOfUser.data.user });
     const { displayMode } = this.state;
+    const tags = toJS(get(details, 'tags'));
     return (
       <Form loading={inProgress}>
         <Header as="h4">
@@ -78,7 +91,8 @@ export default class Basic extends Component {
                 </>
               )
             }
-            <Button compact onClick={() => toggleAddressVerification()} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
+            <Button loading={this.state.addressCheckLoading} compact onClick={() => this.skipAddressOrPhoneValidationCheck('ADDRESS')} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
+            <Button loading={this.state.phoneCheckLoading} compact onClick={() => this.skipAddressOrPhoneValidationCheck('PHONE')} color={isPhoneSkip ? 'green' : 'blue'}>{isPhoneSkip ? 'Force VoIP Check' : 'Skip VoIP Check'}</Button>
           </Button.Group>
         </Header>
         {get(details, 'locked.lock') === 'LOCKED'
@@ -172,7 +186,7 @@ export default class Basic extends Component {
             changed={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
           />
           {
-            ['streetTwo', 'city', 'state'].map(field => (
+            ['streetTwo', 'city'].map(field => (
               <FormInput
                 key={field}
                 name={field}
@@ -182,6 +196,17 @@ export default class Basic extends Component {
               />
             ))
           }
+          <FormDropDown
+            displayMode={displayMode}
+            name="state"
+            fielddata={USER_PROFILE_ADD_ADMIN_FRM.fields.state}
+            options={US_STATES}
+            checkStateCode
+            search
+            selection
+            placeholder="Select"
+            onChange={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
+          />
           <MaskedInput
             displayMode={displayMode}
             name="zipCode"
@@ -202,7 +227,7 @@ export default class Basic extends Component {
             changed={(e, result) => formChange(e, result, 'USER_BASIC')}
           />
           {
-            ['streetTwo', 'city', 'state'].map(field => (
+            ['streetTwo', 'city'].map(field => (
               <FormInput
                 key={field}
                 name={field}
@@ -212,6 +237,17 @@ export default class Basic extends Component {
               />
             ))
           }
+          <FormDropDown
+            displayMode={displayMode}
+            name="state"
+            fielddata={USER_BASIC.fields.state}
+            options={US_STATES}
+            checkStateCode
+            search
+            selection
+            placeholder="Select"
+            onChange={(e, result) => formChange(e, result, 'USER_BASIC')}
+          />
           <MaskedInput
             displayMode={displayMode}
             name="zipCode"
@@ -239,7 +275,7 @@ export default class Basic extends Component {
             changed={(e, result) => formChange(e, result, 'USER_PROFILE_PREFERRED_INFO_FRM')}
           />
           {
-            ['streetTwo', 'city', 'state'].map(field => (
+            ['streetTwo', 'city'].map(field => (
               <FormInput
                 key={field}
                 name={field}
@@ -249,6 +285,17 @@ export default class Basic extends Component {
               />
             ))
           }
+          <FormDropDown
+            displayMode={displayMode}
+            name="state"
+            fielddata={USER_PROFILE_PREFERRED_INFO_FRM.fields.state}
+            options={US_STATES}
+            checkStateCode
+            search
+            selection
+            placeholder="Select"
+            onChange={(e, result) => formChange(e, result, 'USER_PROFILE_PREFERRED_INFO_FRM')}
+          />
           <MaskedInput
             displayMode={displayMode}
             name="zipCode"
@@ -262,6 +309,11 @@ export default class Basic extends Component {
         <CIPInformation details={details} />
         <Divider />
         <OtherInformation details={details} />
+        {!isEmpty(tags)
+        && (
+          <TagsInformation tags={tags} />
+        )
+        }
         <Divider />
         <UserInvestorDetails isAdmin refLink={this.props.match.url} />
         <Divider />

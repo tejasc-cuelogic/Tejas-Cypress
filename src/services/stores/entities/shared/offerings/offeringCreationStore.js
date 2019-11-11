@@ -386,9 +386,8 @@ export class OfferingCreationStore {
         this.resetFormField(form, name, { fileName: fileObj.name, location: res });
         this.updateOffering(this.currentOfferingId, this[form].fields, 'media', false, false);
       })
-      .catch((err) => {
+      .catch(() => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        console.log(err);
       });
   }
 
