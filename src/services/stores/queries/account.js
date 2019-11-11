@@ -107,7 +107,6 @@ query getInvestorCloseAccounts($userId: String!) {
     userId
     accountId
     name
-    skipAddressVerifyCheck
     accountType
     accountStatus
     closed{
