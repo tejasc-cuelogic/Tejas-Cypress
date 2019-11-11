@@ -57,18 +57,18 @@ class UserListing extends Component {
                   <Table.Cell>
                     {!user.profilepic
                       && (
-<div className="user-image">
-                        <UserAvatar
-                          UserInfo={{
-                            firstName: user.info ? user.info.firstName : '',
-                            lastName: user.info ? user.info.lastName : '',
-                            avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
-                            roles: user.roles.map(r => r.scope),
-                          }}
-                          base64url
-                          size="mini"
-                        />
-                      </div>
+                        <div className="user-image">
+                          <UserAvatar
+                            UserInfo={{
+                              firstName: user.info ? user.info.firstName : '',
+                              lastName: user.info ? user.info.lastName : '',
+                              avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
+                              roles: user.roles.map(r => r.scope),
+                            }}
+                            base64url
+                            size="mini"
+                          />
+                        </div>
                       )
                     }
                   </Table.Cell>
@@ -95,7 +95,7 @@ class UserListing extends Component {
                     }
                   </Table.Cell>
                   {isManager
-                  && <Table.Cell><Link to={`/app/users/${user.id}/profile-data`} className="action">view profile</Link></Table.Cell>
+                    && <Table.Cell><Link to={`/app/users/${user.id}/profile-data`} className="action">view profile</Link></Table.Cell>
                   }
                 </Table.Row>
               ))}
