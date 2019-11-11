@@ -253,7 +253,7 @@ class Comments extends Component {
                                             {((get(tc, 'createdUserInfo.id') === issuerId) || get(tc, 'createdUserInfo.roles[0].name') === 'admin') && <Label color="blue" size="mini">{(get(tc, 'createdUserInfo.id') === issuerId) ? 'ISSUER' : 'ADMIN'}</Label>}
                                           </Comment.Author>
                                           <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date'), true, true)}</span></Comment.Metadata>
-                                          {isUserLoggedIn && !disablePostComment && !showOnlyOne
+                                          {/* {isUserLoggedIn && !disablePostComment && !showOnlyOne
                                             && (
                                               <Comment.Actions>
                                                 <Comment.Action
@@ -264,7 +264,7 @@ class Comments extends Component {
                                                 </Comment.Action>
                                               </Comment.Actions>
                                             )
-                                          }
+                                          } */}
                                           <Comment.Text className="mt-20">
                                             <HtmlEditor
                                               readOnly
@@ -289,10 +289,10 @@ class Comments extends Component {
                                                   changed={msgEleChange}
                                                   containerclassname="secondary"
                                                 />
-                                                <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(tc.id)}>
+                                                {/* <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(tc.id)}>
                                                   Cancel Reply
                                                 </Button>
-                                                <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
+                                                <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" /> */}
                                               </Form>
                                               <Divider hidden />
                                               <p>
