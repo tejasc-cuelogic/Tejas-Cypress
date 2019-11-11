@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { includes, get } from 'lodash';
+import { includes, get, capitalize } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Table, Grid, Statistic, Button, Divider, Popup, Icon } from 'semantic-ui-react';
@@ -8,6 +8,7 @@ import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from 
 import PayOffChart from './PayOffChart';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { DataFormatter } from '../../../../../../helper';
+import Helper from '../../../../../../helper/utility';
 
 @inject('portfolioStore', 'campaignStore', 'userDetailsStore', 'transactionStore')
 @observer
@@ -60,6 +61,9 @@ class Overview extends Component {
     const overviewToDisplay = campaign && campaign.keyTerms && campaign.keyTerms.securities
       && campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? 'REVENUE' : 'TERM';
     const isPreviewLinkShow = campaign && campaign.isAvailablePublicly;
+    const security = get(campaign, 'keyTerms.securities');
+    const isPreferredEquityOffering = !!['PREFERRED_EQUITY_506C'].includes(security);
+    const preferredEquityUnit =  get(campaign, 'keyTerms.equityUnitType') ? `${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price` : 'N/A';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
@@ -164,6 +168,30 @@ class Overview extends Component {
                         }
                       </Table.Row>
                       ) : ''
+                    }
+                    {isPreferredEquityOffering
+                       && (
+                       <>
+                        <Table.Row verticalAlign="top">
+                          <Table.Cell>{preferredEquityUnit}</Table.Cell>
+                          <Table.Cell>
+                            {get(campaign, 'closureSummary.keyTerms.priceCalcuation')
+                              ? Helper.CurrencyFormat(get(campaign, 'closureSummary.keyTerms.priceCalcuation'), 0)
+                              : 'N/A'
+                            }
+                          </Table.Cell>
+                        </Table.Row>
+                        <Table.Row verticalAlign="top">
+                        <Table.Cell>Pre-Money valuation</Table.Cell>
+                        <Table.Cell>
+                          {get(campaign, 'keyTerms.premoneyValuation')
+                            ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0)
+                            : 'N/A'
+                          }
+                        </Table.Cell>
+                      </Table.Row>
+                      </>
+                       )
                     }
                     {keyTerms && keyTerms.frequencyOfPayments
                       ? (
