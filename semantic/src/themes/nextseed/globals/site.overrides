@@ -2196,24 +2196,54 @@ svg:not(:root).recharts-surface{
 	}
 }
 .donut-chart, .portfolio-allocation{
-	.recharts-legend-wrapper .chartLegends li{
-		font-size:@22px;
-		line-height: 30px;
-		margin: 0 @10px 0 0;
+	.recharts-legend-wrapper{
 		@media only screen and (max-width : @largestMobileScreen){
-			line-height: 14px;
+			height: 100% !important;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
 		}
-		span{
-			font-size:@13px;
-			color:@fullBlack;
-			@media only screen and (max-width : @largestMobileScreen){
-				font-size: @10px;
-			}
-			i {
-				color: @neutral-offdark;
+		.chartLegends{
+			li{
+				font-size:@22px;
+				line-height: 30px;
+				margin: 0 @10px 0 0;
+				@media only screen and (max-width : @largestMobileScreen){
+					font-size: @14px;
+					line-height: 18px;
+				}
+				span{
+					font-size:@13px;
+					color:@fullBlack;
+					@media only screen and (max-width : @largestMobileScreen){
+						font-size: @10px;
+					}
+					i {
+						color: @neutral-offdark;
+					}
+				}
 			}
 		}
 	}
+
+	// .recharts-legend-wrapper .chartLegends li{
+	// 	font-size:@22px;
+	// 	line-height: 30px;
+	// 	margin: 0 @10px 0 0;
+	// 	@media only screen and (max-width : @largestMobileScreen){
+	// 		line-height: 14px;
+	// 	}
+	// 	span{
+	// 		font-size:@13px;
+	// 		color:@fullBlack;
+	// 		@media only screen and (max-width : @largestMobileScreen){
+	// 			font-size: @10px;
+	// 		}
+	// 		i {
+	// 			color: @neutral-offdark;
+	// 		}
+	// 	}
+	// }
 	.recharts-wrapper{
 		.recharts-legend-wrapper{
 			z-index:-1;
@@ -2228,6 +2258,9 @@ svg:not(:root).recharts-surface{
 		tspan{
 			font-size:@18px;
 			font-weight:@fontMedium;
+			@media only screen and (max-width : @largestMobileScreen){
+				font-size: @12px;
+			}
 		}
 		.chartLegends li{
 			font-size:@22px;
@@ -2255,7 +2288,7 @@ svg:not(:root).recharts-surface{
 	}
 }
 .boanusreward-chart .recharts-wrapper tspan{
-	font-size: 28px;
+	font-size: @28px;
 	line-height: 38px;
 	fill: @primary-one;
 	font-weight: @fontMedium;

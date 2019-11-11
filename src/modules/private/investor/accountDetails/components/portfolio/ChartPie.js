@@ -82,7 +82,7 @@ export default class ChartPie extends Component {
       <Legend
         wrapperStyle={{ position: 'absolute' }}
         layout="vertical"
-        verticalAlign="middle"
+        verticalAlign="top"
         align="right"
         width={isSmallDevice ? 160 : 180}
         data={data}
