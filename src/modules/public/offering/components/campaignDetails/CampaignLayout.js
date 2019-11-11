@@ -169,7 +169,7 @@ class CampaignLayout extends Component {
     updates = orderBy(updates, o => get(o, 'updatedDate') && moment(new Date(o.updatedDate)).unix(), ['asc']);
     return (
       <div className="campaign-content-wrapper v-2">
-        {campaignStatus.hasTopThingToKnow ? (
+        {campaignStatus.hasTopThingToKnow.aa ? (
           <>
             <AboutTheCompany newLayout refLink={this.props.refLink} campaign={campaign} />
             <Divider hidden section />
