@@ -326,7 +326,7 @@ export class Utility {
 
   validateImageExtension = (ext) => {
     const obj = {
-      isInvalid: !IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()),
+      isInvalid: ext ? !IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()) : true,
       errorMsg: `Only ${IMAGE_UPLOAD_ALLOWED_EXTENSIONS.join(', ')} extensions are allowed.`,
     };
     return obj;
@@ -334,7 +334,7 @@ export class Utility {
 
   validateDocumentExtension = (ext) => {
     const obj = {
-      isInvalid: !DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()),
+      isInvalid: ext ? !DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()) : true,
       errorMsg: `Only ${DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS.join(', ')} extensions are allowed.`,
     };
     return obj;

@@ -137,6 +137,29 @@ export const REQUESTFACTORY_META = FormHelper.generateMeta([
   ],
 ]);
 
+export const REQUESTFACTORY_LOG__META = FormHelper.generateMeta([
+  ['plugin', 'Plugin', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+  ['status', 'Status', '', '', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'PROCESSING', text: 'PROCESSING', value: 'PROCESSING' },
+          { key: 'FAILED', text: 'FAILED', value: 'FAILED' },
+          { key: 'SUCCESS', text: 'SUCCESS', value: 'SUCCESS' },
+        ],
+      },
+    },
+  ],
+]);
+
 export const PROCESSFACTORY_META = FormHelper.generateMeta([
   ['method', 'Method', '', 'required', '',
     {
@@ -147,6 +170,31 @@ export const PROCESSFACTORY_META = FormHelper.generateMeta([
     },
   ],
 ]);
+
+export const PROCESSFACTORY_LOG__META = FormHelper.generateMeta([
+  ['plugin', 'Plugin', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+  ['status', 'Status', '', '', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'PROCESSING', text: 'PROCESSING', value: 'PROCESSING' },
+          { key: 'FAILED', text: 'FAILED', value: 'FAILED' },
+          { key: 'SUCCESS', text: 'SUCCESS', value: 'SUCCESS' },
+          { key: 'STARTED', text: 'STARTED', value: 'STARTED' },
+        ],
+      },
+    },
+  ],
+]);
+
 
 export const CRONFACTORY_META = FormHelper.generateMeta([
   ['cron', 'Cron', '', 'required', '',
