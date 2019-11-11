@@ -18,6 +18,7 @@ export default class DropZone extends Component {
   state = { showConfirmModal: false, fileName: null, key: null, error: null };
 
   removeForm = () => {
+    this.setState({ error: null });
     this.setState({ showConfirmModal: !this.state.showConfirmModal });
     this.props.onremove(this.state.fileName, this.state.key);
   }
@@ -178,8 +179,11 @@ export default class DropZone extends Component {
               </div>
             )
         }
-        {(error || this.state.error)
-          && <FieldError className={textAlign || ''} error={(error || this.state.error)} />
+        {(error)
+          && <FieldError className={textAlign || ''} error={(error)} />
+        }
+        {(this.state.error)
+          && <FieldError className={textAlign || ''} error={(this.state.error)} />
         }
         <Confirm
           header="Confirm"

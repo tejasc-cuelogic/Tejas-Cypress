@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Header, Form, Divider, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { DropZoneConfirm as DropZoneLarge } from '../../../../../../../theme/form';
+import { DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 import { ListErrors } from '../../../../../../../theme/shared';
 
 @inject('uiStore', 'iraAccountStore')
@@ -28,7 +28,7 @@ export default class Identity extends Component {
           <div className="field">
             <label className="center-align">Upload a Photo ID (Upload your Driver’s License, state-issued ID, or U.S. passport)</label>
           </div>
-          <DropZoneLarge
+          <DropZone
             name="identityDoc"
             fielddata={IDENTITY_FRM.fields.identityDoc}
             ondrop={this.onIdentityDocDrop}
