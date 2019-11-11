@@ -450,6 +450,9 @@ query getOfferingById($id: ID) {
       maturity
       equityUnitType
       frequencyOfPayments
+      priceCopy
+      premoneyValuation
+      equityUnitType
       securities
       securityInterest
       securitiesOwnershipPercentage
