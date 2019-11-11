@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Table, Accordion, Button, Card, Header } from 'semantic-ui-react';
-import { get, includes, capitalize } from 'lodash';
+import { get, includes } from 'lodash';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
 import { STAGES } from '../../../../../../services/constants/admin/offerings';
@@ -96,7 +96,7 @@ const InvestmentList = (props) => {
     {isMobile ? (
       <>
         <Card className="investment-summary investment-card">
-          <Card.Header>{capitalize(props.listOf)}</Card.Header>
+          <Card.Header className="text-capitalize">{`${props.listOf} (${props.listOfCount})`}</Card.Header>
           <Card.Content>
             {investments.map(data => (
               <InvestmentCard data={data} {...props} />
