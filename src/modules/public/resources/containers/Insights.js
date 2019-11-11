@@ -26,7 +26,7 @@ export default class Insights extends Component {
     }
   }
 
-  getSnapshotBeforeUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     if (this.props.match.params && this.props.match.params.id !== prevProps.match.params.id) {
       const id = this.props.match.params.id === 'all' ? null : this.props.match.params.id;
       this.props.articleStore

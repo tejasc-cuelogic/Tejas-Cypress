@@ -22,7 +22,7 @@ export class SidebarNav extends Component {
     }
   }
 
-  getSnapshotBeforeUpdate() {
+  componentDidUpdate() {
     this.props.navStore.setAccessParams('currentNav', this.props.match.url);
   }
 

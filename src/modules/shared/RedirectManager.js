@@ -15,7 +15,7 @@ export default class RedirectManager extends React.PureComponent {
     this.processRedirection();
   }
 
-  getSnapshotBeforeUpdate() {
+  componentDidUpdate() {
     const { viaProtect } = this.state;
     if (viaProtect) {
       this.processRedirection(false);

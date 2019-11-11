@@ -11,8 +11,10 @@ export default class Details extends Component {
     this.props.educationStore.getOne(this.props.module, this.props.match.params.slug);
   }
 
-  getSnapshotBeforeUpdate() {
-    this.props.educationStore.getOne(this.props.module, this.props.match.params.slug);
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.slug !== this.props.match.params.slug) {
+      this.props.educationStore.getOne(this.props.module, this.props.match.params.slug);
+    }
   }
 
   search = (e) => {

@@ -42,7 +42,7 @@ class Business extends Component {
     }
   }
 
-  getSnapshotBeforeUpdate() {
+  componentDidUpdate() {
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/how-it-works`);
     }
