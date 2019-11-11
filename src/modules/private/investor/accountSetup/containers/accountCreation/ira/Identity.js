@@ -24,7 +24,7 @@ export default class Identity extends Component {
       <>
         <Header as="h3" textAlign="center">Confirm your identity</Header>
         <Divider section hidden />
-        <Form className="file-uploader-large">
+        <Form>
           <div className="field">
             <label className="center-align">Upload a Photo ID (Upload your Driver’s License, state-issued ID, or U.S. passport)</label>
           </div>
@@ -33,7 +33,9 @@ export default class Identity extends Component {
             fielddata={IDENTITY_FRM.fields.identityDoc}
             ondrop={this.onIdentityDocDrop}
             onremove={this.onIdentityDocRemove}
-            uploadtitle={<>Choose a file <span>or drag it here</span></>}
+            additionalClass="file-uploader-large"
+            textAlign="center-align"
+            uploadtitle={<span className="highlight-text">Choose a file <span>or drag it here</span></span>}
           />
         </Form>
         {errors

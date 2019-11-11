@@ -74,11 +74,11 @@ export default class DropZone extends Component {
       fileId,
     } = this.props.fielddata;
     const {
-      hideFields, size, commonStore, blockDownload,
+      hideFields, size, commonStore, blockDownload, textAlign,
     } = this.props;
     const { inProgress } = commonStore;
     return (
-      <div className={`file-uploader-wrap ${this.props.containerclassname}`}>
+      <div className={`file-uploader-wrap ${this.props.containerclassname} fluid`}>
         {label
           && (
             <label>
@@ -99,11 +99,11 @@ export default class DropZone extends Component {
         }
         {!this.props.disabled && (!value || this.props.multiple)
           ? (
-            <div className="file-uploader">
+            <div className={`file-uploader ${this.props.additionalClass}`}>
               <Dimmer active={showLoader}>
                 <Loader size={size} />
               </Dimmer>
-              <Dropzone {...this.props} multiple={this.props.multiple || false} onDrop={this.ondrop} className="test" style={{}}>
+              <Dropzone {...this.props} multiple={this.props.multiple || false} onDrop={this.ondrop} className="file-uploader-child" style={{}}>
                 <Icon className="ns-upload" /> {this.props.uploadtitle ? <span>{this.props.uploadtitle}</span> : <span>Upload document{this.props.multiple ? 's' : ''}</span>}
               </Dropzone>
             </div>
@@ -179,7 +179,7 @@ export default class DropZone extends Component {
             )
         }
         {(error || this.state.error)
-          && <FieldError error={(error || this.state.error)} />
+          && <FieldError className={textAlign || ''} error={(error || this.state.error)} />
         }
         <Confirm
           header="Confirm"
