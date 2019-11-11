@@ -1,4 +1,4 @@
-# 0.0.0 (2019-11-08)
+# 0.0.0 (2019-11-11)
 
 
 ### Bug Fixes
@@ -960,6 +960,12 @@
 * **Vimeo[Issue [1439](https://chaos.ns.team/nsv2/ns-ops/issues/1439) - vimeo-video]:** removed vimeo video npm ([4b1085a](https://chaos.ns.team/nsv2/ns-client/commits/4b1085a73c392a313f3807954aa010f66af70372))
 * **Vimeo[Issue [1439](https://chaos.ns.team/nsv2/ns-ops/issues/1439) - vimeo-video]:** vimeo video npm ([a159113](https://chaos.ns.team/nsv2/ns-client/commits/a15911371664e611ca0efa8ea9033bfd606d9cb5))
 * **Zip-code-validation[Issue [723](https://chaos.ns.team/nsv2/ns-ops/issues/723) - Zip-code-validation]:** Zip-code-validation & autocomplete restriction ([accb279](https://chaos.ns.team/nsv2/ns-client/commits/accb279dd5eafbfbc8c7ff8d6c67151ce51246c8))
+
+
+### Reverts
+
+* Revert "Revert "Merge branch 'demo' into 'master'"" ([b0a60cc](https://chaos.ns.team/nsv2/ns-client/commits/b0a60cc2613e53b86742407f0a813f20cd564d57))
+* Revert "done changes for state values - in payload" ([46a7a05](https://chaos.ns.team/nsv2/ns-client/commits/46a7a0546e90f1da8949709d71e8eb1ef0a686fc))
 
 
 
