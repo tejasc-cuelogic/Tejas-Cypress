@@ -34,7 +34,7 @@ export default class DropZone extends Component {
   }
 
   ondrop = (files) => {
-    const fileExt = mime.extension(files[0].type);
+    const fileExt = files[0].type ? mime.extension(files[0].type) : files[0].name.split('.')[1];
     const validate = Helper.validateDocumentExtension(fileExt);
     if (!validate.isInvalid) {
       this.setState({ error: null });
