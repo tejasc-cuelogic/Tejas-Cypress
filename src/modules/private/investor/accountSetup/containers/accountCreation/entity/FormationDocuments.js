@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Divider, Message, Confirm } from 'semantic-ui-react';
-import { DropZone } from '../../../../../../../theme/form';
+import { Header, Form, Divider, Message } from 'semantic-ui-react';
+import { DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 import { ListErrors } from '../../../../../../../theme/shared';
 
 @inject('uiStore', 'entityAccountStore')
@@ -19,14 +19,6 @@ export default class FormationDocumemts extends Component {
     this.props.entityAccountStore.setFileUploadData('FORM_DOCS_FRM', 'einVerificationDoc', files);
   }
 
-  handleDelCancel = () => {
-    this.props.uiStore.setConfirmBox('');
-  }
-
-  confirmRemoveDoc = (e, name) => {
-    this.props.uiStore.setConfirmBox(name);
-  }
-
   handleDelDoc = (field) => {
     this.props.entityAccountStore.removeUploadedData('FORM_DOCS_FRM', field, 'Formation doc');
     this.props.uiStore.setConfirmBox('');
@@ -34,7 +26,7 @@ export default class FormationDocumemts extends Component {
 
   render() {
     const { FORM_DOCS_FRM } = this.props.entityAccountStore;
-    const { errors, confirmBox } = this.props.uiStore;
+    const { errors } = this.props.uiStore;
     return (
       <>
         <Header as="h3" textAlign="center">Upload required documentation</Header>
@@ -44,7 +36,7 @@ export default class FormationDocumemts extends Component {
             name="formationDoc"
             fielddata={FORM_DOCS_FRM.fields.formationDoc}
             ondrop={this.onFormationDocDrop}
-            onremove={this.confirmRemoveDoc}
+            onremove={this.handleDelDoc}
             containerclassname="fluid"
             uploadtitle="Choose a file or drag it here"
           />
@@ -52,7 +44,7 @@ export default class FormationDocumemts extends Component {
             name="operatingAgreementDoc"
             fielddata={FORM_DOCS_FRM.fields.operatingAgreementDoc}
             ondrop={this.onOperatingAgreementDocDrop}
-            onremove={this.confirmRemoveDoc}
+            onremove={this.handleDelDoc}
             containerclassname="fluid"
             uploadtitle="Choose a file or drag it here"
           />
@@ -60,27 +52,18 @@ export default class FormationDocumemts extends Component {
             name="einVerificationDoc"
             fielddata={FORM_DOCS_FRM.fields.einVerificationDoc}
             ondrop={this.onEinVerificationDocDrop}
-            onremove={this.confirmRemoveDoc}
+            onremove={this.handleDelDoc}
             containerclassname="fluid"
             uploadtitle="Choose a file or drag it here"
           />
           {errors
             && (
-<Message error className="mt-30">
-              <ListErrors errors={[errors.message]} />
-            </Message>
+              <Message error className="mt-30">
+                <ListErrors errors={[errors.message]} />
+              </Message>
             )
           }
         </Form>
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'einVerificationDoc' || confirmBox.entity === 'operatingAgreementDoc' || confirmBox.entity === 'formationDoc'}
-          onCancel={this.handleDelCancel}
-          onConfirm={() => this.handleDelDoc(confirmBox.entity)}
-          size="mini"
-          className="deletion"
-        />
       </>
     );
   }

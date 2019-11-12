@@ -24,15 +24,6 @@ export default class IdentityVerification extends Component {
     this.props.identityStore.setFileUploadData('proofOfResidence', files);
   }
 
-  confirmRemoveDoc = (e, name) => {
-    e.preventDefault();
-    this.props.uiStore.setConfirmBox(name);
-  }
-
-  handleDelCancel = () => {
-    this.props.uiStore.setConfirmBox('');
-  }
-
   handleDelDoc = (field) => {
     this.props.identityStore.removeUploadedData(field);
     this.props.uiStore.setConfirmBox('');
@@ -145,9 +136,7 @@ export default class IdentityVerification extends Component {
                 close={this.handleCloseModal}
                 onPhotoIdDrop={this.onPhotoIdDrop}
                 onProofOfResidenceDrop={this.onProofOfResidenceDrop}
-                confirmRemoveDoc={this.confirmRemoveDoc}
-                handleDelCancel={this.handleDelCancel}
-                handleDelDoc={this.handleDelDoc}
+                confirmRemoveDoc={this.handleDelDoc}
                 submitVerificationsDocs={submitVerificationsDocs}
                 onSubmit={this.handleUploadDocuments}
                 errors={errors}
