@@ -13,9 +13,9 @@ const Actions = observer((props) => {
         <Button
           inverted
           color="red"
-          onClick={cancelUpdate}
+          onClick={isManager && id !== null ? () => save(id, 'DRAFT', true) : cancelUpdate}
           disabled={inProgress}
-          content={!meta.isDirty ? 'Close' : 'Cancel'}
+          content={isManager && id !== null ? 'Decline' : !meta.isDirty ? 'Close' : 'Cancel'}
         />
         {!isManager && !isPublished
           && (

@@ -23,10 +23,10 @@ const Extra = ({
     <span className="time-stamp">{date}</span>
     {scope === 'PUBLIC' && approved
       ? (
-<Label basic size="small" className="approve">
-        Approved
-        <Icon className="ns-check-circle" color="green" />
-      </Label>
+        <Label basic size="small" className="approve">
+          Approved
+          <Icon className="ns-check-circle" color="green" />
+        </Label>
       )
       : (scope === 'PUBLIC' && !approved) ? showApproval ? <Label circular basic size="mini" color="green">Approval Pending</Label> : null
         : <Label circular size="mini" color={OFFERING_COMMENTS_SCOPE[scope].color}>{scope === 'ISSUER' ? isIssuer ? direction === 'to' ? OFFERING_COMMENTS_SCOPE[scope].titleITo : OFFERING_COMMENTS_SCOPE[scope].titleIFrom : direction === 'to' ? OFFERING_COMMENTS_SCOPE[scope].titleTo : OFFERING_COMMENTS_SCOPE[scope].titleFrom : OFFERING_COMMENTS_SCOPE[scope].title}</Label>
@@ -69,69 +69,69 @@ const Body = props => (
                         scope={msg.scope}
                       />
                     </>
-)}
+                  )}
                   edit={(
-<div className="comment-actions">
+                    <div className="comment-actions">
                       {msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && !msg.approved
                         ? (
-<>
-                          <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
-                          <Link to="/" className="link" loading={props.buttonLoader === msg.id} onClick={e => props.approveComment(e, msg.id)}>Approve</Link>{' | '}
-                        </>
+                          <>
+                            <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
+                            <Link to="/" className="link" onClick={e => props.deleteCommentHandler(e, msg.id, 'APPROVE')}>Approve</Link>{' | '}
+                          </>
                         )
                         : msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && msg.approved
-                      && (
-<>
-                        <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
-                      </>
-                      )
+                        && (
+                          <>
+                            <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
+                          </>
+                        )
                       }
                       {!props.isIssuer
                         && <Link to="/" className="link negative-text" onClick={e => props.deleteCommentHandler(e, msg.id)}>Delete</Link>
                       }
                     </div>
-)}
+                  )}
                 />
               </Item>
             </>
           ) : (
-            <>
-              <Item className="sent">
-                <MsgContent
-                  classes={classes}
-                  body={Parser(msg.comment)}
-                  extra={(
-<>
-                      <Header as="h6">{userFullName}</Header>
-                      <Extra
-                        direction="to"
-                        showApproval={props.isIssuer}
-                        approved={msg.approved}
-                        isIssuer={props.isIssuer}
-                        date={msgDate}
-                        scope={msg.scope}
-                      />
-                    </>
-)}
-                  edit={
-                    ((msg.scope === 'PUBLIC' && props.isIssuer && !msg.approved) || props.isAdmin)
-                    && (
-<div className="comment-actions">
-                      <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>
-                      {!props.isIssuer
-                      && (
-<>{' | '}
-                        <Link to="/" className="link negative-text" onClick={e => props.deleteCommentHandler(e, msg.id)}>Delete</Link>
+              <>
+                <Item className="sent">
+                  <MsgContent
+                    classes={classes}
+                    body={Parser(msg.comment)}
+                    extra={(
+                      <>
+                        <Header as="h6">{userFullName}</Header>
+                        <Extra
+                          direction="to"
+                          showApproval={props.isIssuer}
+                          approved={msg.approved}
+                          isIssuer={props.isIssuer}
+                          date={msgDate}
+                          scope={msg.scope}
+                        />
                       </>
+                    )}
+                    edit={
+                      ((msg.scope === 'PUBLIC' && props.isIssuer && !msg.approved) || props.isAdmin)
+                      && (
+                        <div className="comment-actions">
+                          <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>
+                          {!props.isIssuer
+                            && (
+                              <>{' | '}
+                                <Link to="/" className="link negative-text" onClick={e => props.deleteCommentHandler(e, msg.id)}>Delete</Link>
+                              </>
+                            )
+                          }
+                        </div>
                       )
-                      }
-                    </div>
-                    )
-                  }
-                />
-                <UserAvatar size="mini" UserInfo={userInfo} />
-              </Item>
-            </>
+                    }
+                  />
+                  <UserAvatar size="mini" UserInfo={userInfo} />
+                </Item>
+              </>
           ));
         }) : <InlineLoader text="No data found." />
       }

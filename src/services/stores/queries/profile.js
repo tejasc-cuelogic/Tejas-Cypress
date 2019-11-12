@@ -100,25 +100,10 @@ export const checkUserPhoneVerificationCode = gql`
     }
  }`;
 
-export const updateUserCIPInfo = gql`
-mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!, $cip: UserCIPInformation, $userId: String) {
-    updateUserCIPInfo(user: $user, phoneDetails: $phoneDetails, cip: $cip, userId: $userId) {
-      email {
-        address
-      } info{
-        firstName
-        lastName
-      } lastLoginDate
-      accreditation {
-        status
-      }
-    }
-  }`;
-
 export const updateUserProfileData = gql`
-  mutation _updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: ProfileDataLegalInput, $capabilities: [String], $targetUserId: String) {
+  mutation _updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: ProfileDataLegalInput, $preferredInfo: PreferredInfoInput, $capabilities: [String], $targetUserId: String) {
   updateUserProfileData(
-  profileDetails: $profileDetails, targetUserId: $targetUserId, legalDetails: $legalDetails, capabilities: $capabilities
+  profileDetails: $profileDetails, targetUserId: $targetUserId, legalDetails: $legalDetails, preferredInfo: $preferredInfo, capabilities: $capabilities
   ) {
       id
       info {
@@ -176,6 +161,26 @@ export const isUniqueSSN = gql`
     }
   }`;
 
+export const verifyCip = gql`
+  mutation _verifyCip($userId: String!, $user: UserCIPInput, $phoneDetails: phoneInput!, $isCipOffline: Boolean){
+    verifyCip(userId: $userId, user: $user, phoneDetails: $phoneDetails, isCipOffline: $isCipOffline)
+  }`;
+
+export const verifyCipSoftFail = gql`
+  mutation verifyCipSoftFail($answers: [CIPAnswerInput]){
+    verifyCipSoftFail(answers: $answers)
+  }`;
+
+export const verifyCipHardFail = gql`
+mutation verifyCipHardFail($license: String!, $residence: String!, $userId: String) {
+    verifyCipHardFail(
+      license: $license
+      residence: $residence
+      userId: $userId
+    )
+  }`;
+
+
 export const portPrequalDataToApplication = gql`
   mutation portPrequalDataToApplication($prequalApplicationData: PrequalApplicationInput!) {
     portPrequalDataToApplication(
@@ -195,19 +200,22 @@ export const requestOtp = gql`
   }`;
 
 export const verifyOtp = gql`
-  mutation verifyOtp($resourceId: String! $verificationCode: String!){
+  mutation verifyOtp($resourceId: String! $verificationCode: String!, $isEmailVerify: Boolean, $isPhoneNumberUpdated: Boolean){
     verifyOtp(
       resourceId: $resourceId
       verificationCode: $verificationCode
+      isEmailVerify: $isEmailVerify
+      isPhoneNumberUpdated: $isPhoneNumberUpdated
     )
   }
 `;
 
 export const requestOtpWrapper = gql`
-  mutation requestOTPWrapper($address: String!, $firstName: String){
+  mutation requestOTPWrapper($address: String!, $firstName: String, $tags: tagsInput){
     requestOTPWrapper(
       address: $address
       firstName: $firstName
+      tags: $tags
     )
   }
 `;
@@ -225,26 +233,6 @@ export const checkEmailExistsPresignup = gql`
     checkEmailExistsPresignup(email: $email) {
       isEmailExits
       roles
-    }
-  }
-`;
-
-export const checkMigrationByEmail = gql`
-  mutation checkMigrationByEmail($migrationByEmailData: CheckMigrationByEmailInput!) {
-    checkMigrationByEmail(migrationByEmailData: $migrationByEmailData)
- }`;
-
-export const checkValidAddress = gql`
-  query checkValidInvestorAddress($street: String!, $city: String!, $state: String!, $zipCode: String!, $streetTwo: String!) {
-    checkValidInvestorAddress(
-      street: $street,
-      city: $city,
-      state: $state,
-      zipCode: $zipCode,
-      streetTwo: $streetTwo
-    ){
-      valid
-      message
     }
   }
 `;

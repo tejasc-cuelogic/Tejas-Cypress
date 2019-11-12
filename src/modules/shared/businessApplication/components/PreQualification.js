@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { get } from 'lodash';
+import { get, has, isEmpty } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Form, Button, Divider } from 'semantic-ui-react';
+import queryString from 'query-string';
 import scrollIntoView from 'scroll-into-view';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../helper/utility';
@@ -22,8 +23,22 @@ export default class PreQualification extends Component {
     super(props);
     if (this.props.isPublic) {
       const { params } = this.props.match;
-      const urlParameter = DataFormatter.QueryStringToJSON(this.props.location.search);
-      this.props.businessAppStore.setFieldvalue('urlParameter', urlParameter);
+      const urlParameter = queryString.parse(this.props.location.search);
+      if (urlParameter) {
+        let tags = DataFormatter.createEligibleTagsObj(urlParameter);
+        if (!isEmpty(tags)) {
+          const existingTags = JSON.parse(window.localStorage.getItem('tags'));
+          tags = !isEmpty(existingTags) ? { ...existingTags, ...tags } : tags;
+          window.localStorage.setItem('tags', JSON.stringify(tags));
+        }
+        if (get(urlParameter, 'signupCode') || get(urlParameter, 'signupcode') || get(urlParameter, 'sc')) {
+          window.localStorage.setItem('signupCode', get(urlParameter, 'signupCode') || get(urlParameter, 'signupcode') || get(urlParameter, 'sc'));
+        }
+        if (get(urlParameter, 'utmSource') || get(urlParameter, 'utmsource') || get(urlParameter, 'utm_source')) {
+          const utmSource = get(urlParameter, 'utmSource') || get(urlParameter, 'utmsource') || get(urlParameter, 'utm_source');
+          window.localStorage.setItem('utmSource', has(urlParameter, 'adid') ? `${utmSource}&&adid=${urlParameter.adid}` : utmSource);
+        }
+      }
       this.props.businessAppStore.formReset(params.applicationType);
       this.props.businessAppStore.setFieldvalue('currentApplicationType', params.applicationType);
     }
@@ -198,7 +213,7 @@ export default class PreQualification extends Component {
         </Form>
         {isPrequalQulify
         && (
-<Form onSubmit={this.submit} className="issuer-signup">
+          <Form onSubmit={this.submit} className="issuer-signup">
           {params.applicationType === 'commercial-real-estate' || currentApplicationType === 'commercial-real-estate'
             ? <PreQualRealEstate hideFields={hideFields} applicationType={params.applicationType} />
             : <PreQualBusiness hideFields={hideFields} applicationType={params.applicationType} />

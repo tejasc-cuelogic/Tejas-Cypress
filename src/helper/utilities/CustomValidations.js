@@ -17,6 +17,16 @@ class CustomValidations extends Component {
       ':attribute percentages must be greater than entered value.',
     );
 
+    ['taxId', 'maskedSSN'].map(field => Validator.register(
+      field, (value) => {
+        // eslint-disable-next-line no-useless-escape
+        const regexp = new RegExp(/^(?!\b(\d)\1+\b)(?!123456789|219099999|078051120)(?!666|000|9\d{2})\d{3}(?!00)\d{2}(?!0{4})\d{4}$/);
+        return regexp.test(value);
+      },
+      `The :attribute is not in the format ${field === 'taxId' ? 'XX-XXXXXXX' : 'XXX-XX-XXXX'}.`,
+    ));
+
+
     /* Beneficiary share percentage validation register */
     Validator.register('sharePercentage', (value, requirement) => {
       const total = sumBy(currentForm.fields.beneficiary, currentValue => parseInt(currentValue[requirement].value, 10));
@@ -51,11 +61,6 @@ class CustomValidations extends Component {
       const regex = /^[a-zA-Z ]*$/;
       return regex.test(value);
     }, 'Invalid ticker symbol, please verify and enter again.');
-
-    Validator.register('removeFrontAndTrailingSpaces', (value) => {
-      const regex = /^[a-zA-Z0-9!@#$&()\\-`.+,/"]+(?: +[a-zA-Z0-9!@#$&()\\-`.+,/"]+)*$/;
-      return regex.test(value);
-    }, 'Front or trailing spaces are not allowed.');
   }
 }
 

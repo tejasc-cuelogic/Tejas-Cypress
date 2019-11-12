@@ -62,7 +62,7 @@ export default class ConfirmEmailAddress extends Component {
       })
         .catch(() => { });
     } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === ''
-    && !this.props.userStore.currentUser) {
+      && !this.props.userStore.currentUser) {
       this.props.history.push('/register-investor');
     } else {
       const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
@@ -178,17 +178,17 @@ export default class ConfirmEmailAddress extends Component {
           </p>
           <Divider section />
           <p>
-          Please confirm the 6-digit verification code sent to your email
+            Please confirm the 6-digit verification code sent to your email
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          { (confirmProgress === 'confirm' && inProgress)
-          && (
-<Dimmer page active={inProgress}>
-            <Loader active={inProgress} />
-          </Dimmer>
-          )
-         }
+          {(confirmProgress === 'confirm' && inProgress)
+            && (
+              <Dimmer page active={inProgress}>
+                <Loader active={inProgress} />
+              </Dimmer>
+            )
+          }
           <FormInput
             ishidelabel
             type="email"
@@ -215,6 +215,7 @@ export default class ConfirmEmailAddress extends Component {
                 className="otp-field"
                 pattern="[0-9]*"
                 inputmode="numeric"
+                disabled={isEmpty(CONFIRM_FRM.fields.email.value)}
                 fielddata={CONFIRM_FRM.fields.code}
                 onChange={ConfirmChange}
               />
@@ -224,9 +225,9 @@ export default class ConfirmEmailAddress extends Component {
             </Form.Field>
             {errors
               && (
-<Message error className="mb-40">
-                <ListErrors errors={[errors.message]} />
-              </Message>
+                <Message error className="mb-40">
+                  <ListErrors errors={[errors.message]} />
+                </Message>
               )
             }
             <Button primary size="large" className="very relaxed" content="Confirm" disabled={!canSubmitConfirmEmail || (errors && errors.message) || inProgress} />

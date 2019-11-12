@@ -18,6 +18,8 @@ import { DataFormatter } from '../../../../helper';
 export class CampaignStore {
   @observable data = [];
 
+  @observable completedOfferings = [];
+
   @observable details = {};
 
   @observable additionalDetails = {};
@@ -72,7 +74,7 @@ export class CampaignStore {
   }
 
   @action
-  initRequest = (publicRef, referralCode = false) => {
+  initRequest = (publicRef, referralCode = false, field = 'data') => {
     const stage = Object.keys(pickBy(STAGES, s => publicRef.includes(s.publicRef)));
     const variables = { filters: { stage } };
     if (referralCode) {
@@ -82,12 +84,12 @@ export class CampaignStore {
       variables.userId = userStore.currentUser.sub;
     }
     return new Promise((resolve) => {
-      this.data = graphql({
+      this[field] = graphql({
         client: clientPublic,
         query: referralCode ? getOfferingsReferral : allOfferings,
         variables,
         onFetch: (data) => {
-          if (data && !this.data.loading) {
+          if (data && !this[field].loading) {
             const offering = data.getOfferingList.length && data.getOfferingList[0];
             resolve(offering);
           }
@@ -193,19 +195,24 @@ export class CampaignStore {
       && toJS(this.allData.data.getOfferingList)) || [];
   }
 
+  @computed get CompletedOfferingList() {
+    return (this.completedOfferings.data && this.completedOfferings.data.getOfferingList
+      && toJS(this.completedOfferings.data.getOfferingList)) || [];
+  }
+
   @computed get active() {
     const offeringList = this.orderedActiveList.slice();
     return offeringList.splice(0, this.activeToDisplay);
   }
 
   @computed get activeList() {
-    const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
-    return orderBy(activeListArr, o => (get(o, 'keyTerms.shorthandBusinessName') ? get(o, 'keyTerms.shorthandBusinessName').toLowerCase() : get(o, 'keyTerms.shorthandBusinessName')), ['asc']);
+    // const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
+    return orderBy(this.OfferingList, o => (get(o, 'keyTerms.shorthandBusinessName') ? get(o, 'keyTerms.shorthandBusinessName').toLowerCase() : get(o, 'keyTerms.shorthandBusinessName')), ['asc']);
   }
 
   @computed get orderedActiveList() {
-    const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
-    const orderedActiveListArr = this.generateBanner(activeListArr, true);
+    // const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
+    const orderedActiveListArr = this.generateBanner(this.OfferingList, true);
     return orderedActiveListArr;
   }
 
@@ -215,7 +222,8 @@ export class CampaignStore {
   }
 
   @computed get completedList() {
-    return sortBy(this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage)), ['order']);
+    // return sortBy(this.CompletedOfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage)), ['order']);
+    return sortBy(this.CompletedOfferingList, ['order']);
   }
 
   @action
@@ -254,10 +262,12 @@ export class CampaignStore {
     const offeringRegulation = get(campaign, 'keyTerms.regulation');
     const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
     const minOfferingD = get(campaign, 'keyTerms.minOfferingAmount506') && get(campaign, 'keyTerms.minOfferingAmount506') !== '0.00' ? get(campaign, 'keyTerms.minOfferingAmount506') : get(campaign, 'keyTerms.minOfferingAmount506C') ? get(campaign, 'keyTerms.minOfferingAmount506C') : '0.00';
-    campaignStatus.minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(minOfferingD, minOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering;
+    // campaignStatus.minOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(minOfferingD, minOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering;
+    campaignStatus.minOffering = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], offeringRegulation) ? minOfferingD : minOffering;
     const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const maxOfferingD = get(campaign, 'keyTerms.maxOfferingAmount506') && get(campaign, 'keyTerms.maxOfferingAmount506') !== '0.00' ? get(campaign, 'keyTerms.maxOfferingAmount506') : get(campaign, 'keyTerms.maxOfferingAmount506C') ? get(campaign, 'keyTerms.maxOfferingAmount506C') : '0.00';
-    campaignStatus.maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(maxOfferingD, maxOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
+    // campaignStatus.maxOffering = get(campaign, 'keyTerms.regulation') === 'BD_CF_506C' ? money.add(maxOfferingD, maxOffering) : includes(['BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
+    campaignStatus.maxOffering = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], offeringRegulation) ? maxOfferingD : maxOffering;
     campaignStatus.minFlagStatus = campaignStatus.collected >= campaignStatus.minOffering;
     campaignStatus.percentBefore = (campaignStatus.minOffering / campaignStatus.maxOffering) * 100;
     const formatedRaisedAmount = money.floatToAmount(campaignStatus.collected);
@@ -297,7 +307,7 @@ export class CampaignStore {
     campaignStatus.investmentHighlights = true;
     campaignStatus.isRevenueShare = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary;
     campaignStatus.isTermNote = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
-    campaignStatus.doneComputing = (this.details.data && this.details.data.getOfferingDetailsBySlug[0] && !isEmpty(this.details.data.getOfferingDetailsBySlug[0].keyTerms)) || false;
+    campaignStatus.doneComputing = (this.details && this.details.data && this.details.data.getOfferingDetailsBySlug && this.details.data.getOfferingDetailsBySlug.length && this.details.data.getOfferingDetailsBySlug[0] && !isEmpty(this.details.data.getOfferingDetailsBySlug[0].keyTerms)) || false;
     return campaignStatus;
   }
 
@@ -342,6 +352,10 @@ export class CampaignStore {
 
   @computed get loading() {
     return this.allData.loading || this.details.loading;
+  }
+
+  @computed get completedLoading() {
+    return this.completedOfferings.loading;
   }
 
   @action
@@ -496,12 +510,12 @@ export class CampaignStore {
       const maxOfferingAmountCF = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
       const maxOfferingAmountRegD = get(offeringKeyTermDetails, 'maxOfferingAmount506') && get(offeringKeyTermDetails, 'maxOfferingAmount506') !== '0.00' ? get(offeringKeyTermDetails, 'maxOfferingAmount506') : get(offeringKeyTermDetails, 'maxOfferingAmount506C') ? get(offeringKeyTermDetails, 'maxOfferingAmount506C') : '0.00';
       const regulation = get(offeringKeyTermDetails, 'regulation');
-      // regulation === ('BD_506C' || 'BD_506B')
-      const minimumOfferingAmount = regulation === 'BD_CF_506C' ? money.add(minimumOfferingAmountCF, minimumOfferingAmountRegD) : includes(['BD_506C', 'BD_506B'], regulation) ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
+      const minimumOfferingAmount = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], regulation) ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
+      // const minimumOfferingAmount = regulation === 'BD_CF_506C' ? money.add(minimumOfferingAmountCF, minimumOfferingAmountRegD) : includes(['BD_506C', 'BD_506B'], regulation) ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
       const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
       const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;
-      // const maxOfferingAmount = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
-      const maxOfferingAmount = regulation === 'BD_CF_506C' ? money.add(maxOfferingAmountCF, maxOfferingAmountRegD) : includes(['BD_506C', 'BD_506B'], regulation) ? maxOfferingAmountRegD : maxOfferingAmountCF;
+      const maxOfferingAmount = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], regulation) ? maxOfferingAmountRegD : maxOfferingAmountCF;
+      // const maxOfferingAmount = regulation === 'BD_CF_506C' ? money.add(maxOfferingAmountCF, maxOfferingAmountRegD) : includes(['BD_506C', 'BD_506B'], regulation) ? maxOfferingAmountRegD : maxOfferingAmountCF;
       const raisedAmount = get(offeringDetails, 'closureSummary.totalInvestmentAmount') ? money.floatToAmount(get(offeringDetails, 'closureSummary.totalInvestmentAmount')) : '0.00';
       const divResult = money.div(raisedAmount, minimumOfferingAmount);
       const percent = money.mul(divResult, '100.00');

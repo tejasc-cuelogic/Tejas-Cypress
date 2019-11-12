@@ -51,6 +51,11 @@ class CampaignLayout extends Component {
         ele.closest('.closest').classList.add('ui');
         ele.closest('.closest').classList.add('placeholder');
       });
+      e.querySelectorAll('iframe').forEach((ele) => {
+        if (!ele.getAttribute('title')) {
+          ele.setAttribute('title', this.props.offeringName || 'Offering');
+        }
+      });
     });
     if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
@@ -120,6 +125,9 @@ class CampaignLayout extends Component {
             img.setAttribute('src', img.getAttribute('data-src'));
             img.closest('.closest').classList.remove('ui');
             img.closest('.closest').classList.remove('placeholder');
+            if (!img.getAttribute('alt')) {
+              img.setAttribute('alt', 'Image not found!');
+            }
           }, 500);
         }
         if (i === lazyImages.length - 1) { setTimeout(() => { resolve(); }, 5000); }
@@ -226,7 +234,7 @@ class CampaignLayout extends Component {
           ) : null
         }
         <>
-          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary newLayout {...this.props} />) : (<TotalPaymentCalculator newLayout {...this.props} />)
+          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary newLayout {...this.props} />) : campaignStatus.isTermNote && (<TotalPaymentCalculator newLayout {...this.props} />)
           }
           <Divider hidden section />
           <Comments refLink={this.props.match.url} newLayout showOnlyOne={!this.state.expandComments} />

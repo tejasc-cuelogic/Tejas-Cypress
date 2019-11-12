@@ -75,6 +75,7 @@ export default class AccountDetails extends Component {
   }
 
   handleCloseModal = () => {
+    this.props.userDetailsStore.setFieldValue('selectedUserId', '');
     this.props.bankAccountStore.resetRoutingNum();
     this.props.history.push(this.props.refLink);
   }
@@ -82,11 +83,11 @@ export default class AccountDetails extends Component {
   render() {
     const { match } = this.props;
     const { inProgressArray } = this.props.uiStore;
-    const { sortedNavAccounts, closedAccounts } = this.props.accountStore;
+    const { sortedNavAccounts } = this.props.accountStore;
     const {
       getDetailsOfUserLoading, getDetailsOfUser,
     } = this.props.userDetailsStore;
-    if (getDetailsOfUserLoading || closedAccounts.loading) {
+    if (getDetailsOfUserLoading) {
       return <InlineLoader text="Loading User Details..." />;
     }
     const details = getDetailsOfUser;

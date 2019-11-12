@@ -15,7 +15,7 @@ export default class AddWithdrawFunds extends Component {
   }
 
   handleBack = () => {
-    this.props.history.push(`${this.props.refLink}`);
+    this.props.history.goBack();
   }
 
   handleAddWithdrawFundCta = (userId, accountId, actionType) => {
@@ -42,7 +42,6 @@ export default class AddWithdrawFunds extends Component {
               name="amount"
               // containerclassname="fund-amount"
               currency
-              allowNegative={false}
               fielddata={ADD_WITHDRAW_FUND_FRM.fields.amount}
               changed={(values, field) => formChange(values, field, 'ADD_WITHDRAW_FUND_FRM', true)}
             />

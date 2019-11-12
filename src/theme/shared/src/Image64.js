@@ -18,7 +18,7 @@ function Image64(props) {
     const emptyImage = props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1;
     setEmptyImg(emptyImage);
     if (props.srcUrl) {
-      const imgUrl = (props.srcUrl.includes('https://') || props.srcUrl.includes('http://')) ? props.srcUrl : `https://${UPLOADS_CONFIG.bucket}/${props.srcUrl}`;
+      const imgUrl = (props.srcUrl.includes('https://') || props.srcUrl.includes('http://')) ? props.srcUrl : `https://${UPLOADS_CONFIG.bucket}/${encodeURI(props.srcUrl)}`;
       try {
         const imgName = props.avatar ? imgUrl : Helper.processImageFileName(imgUrl, props.uiStore.responsiveVars);
         setOData(imgUrl || emptyImage);
@@ -62,7 +62,7 @@ function Image64(props) {
   return props.bg ? (
     <div {...props} style={{ backgroundImage: `url(${data})` }} />
   )
-    : <Image {...props} src={`${data}`} onError={handelOnError} />;
+    : <Image {...props} alt={props.alt || 'Image not found!'} src={`${data}`} onError={handelOnError} />;
 }
 
 export default inject('uiStore', 'authStore')(observer(Image64));

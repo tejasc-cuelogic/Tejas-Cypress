@@ -5,21 +5,25 @@ import { withRouter } from 'react-router-dom';
 import moment from 'moment';
 import Filters from './cronFilters';
 import { InlineLoader } from '../../../../../../theme/shared';
+import formHOC from '../../../../../../theme/form/formHOC';
 import { DataFormatter } from '../../../../../../helper';
 
-@inject('factoryStore')
-@withRouter
-@observer
-export default class CronFactory extends Component {
+const metaInfo = {
+  store: 'factoryStore',
+  form: 'CRONFACTORY_FRM',
+};
+
+class CronFactory extends Component {
   constructor(props) {
     super(props);
     this.props.factoryStore.resetForm('CRONFACTORY_FRM');
     this.props.factoryStore.inProgress.cronFactory = false;
-    // this.props.factoryStore.initRequest();
+    this.props.factoryStore.setFieldValue('selectedFactory', 'CRON');
   }
 
   componentWillUnmount() {
     this.props.factoryStore.resetFilters();
+    this.props.factoryStore.setFieldValue('cronLogList', []);
   }
 
   onSubmit = () => {
@@ -45,9 +49,10 @@ export default class CronFactory extends Component {
   paginate = params => this.props.factoryStore.initRequest(params);
 
   render() {
+    const { loadingArray } = this.props.nsUiStore;
     const { factoryStore } = this.props;
     const {
-      CRONFACTORY_FRM, requestState, filters, count, cronLogs, loading,
+      CRONFACTORY_FRM, requestState, filters, count, cronLogs,
     } = factoryStore;
     const totalRecords = count || 0;
     return (
@@ -65,7 +70,7 @@ export default class CronFactory extends Component {
               totalRecords={totalRecords}
               FILTER_FRM={CRONFACTORY_FRM}
             />
-            {loading ? <InlineLoader />
+            {loadingArray.includes('fetchCronLogs') ? <InlineLoader />
               : (
             <div className="table-wrapper">
               <Table unstackable striped className="application-list">
@@ -79,7 +84,7 @@ export default class CronFactory extends Component {
                 </Table.Header>
                 <Table.Body>
                   {!cronLogs || (cronLogs && cronLogs.length === 0) ? (
-                    <Table.Row><Table.Cell textAlign="center" colSpan="7">No Logs Fond.</Table.Cell></Table.Row>
+                    <Table.Row><Table.Cell textAlign="center" colSpan="7">No Logs Found.</Table.Cell></Table.Row>
                   ) : (
                     cronLogs && cronLogs.map(resp => (
                       <Table.Row verticalAlign="top">
@@ -108,3 +113,5 @@ export default class CronFactory extends Component {
     );
   }
 }
+
+export default inject('nsUiStore')(withRouter(formHOC(observer(CronFactory), metaInfo)));

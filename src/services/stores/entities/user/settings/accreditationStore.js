@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 import { observable, action, toJS, computed } from 'mobx';
 import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes, get, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
@@ -86,6 +87,8 @@ export class AccreditationStore {
   @observable docsToUpload = [];
 
   @observable filingStatus = null;
+
+  @observable isAccreditationExpired = false;
 
   @observable sortOrder = {
     column: null,
@@ -693,9 +696,11 @@ export class AccreditationStore {
   }
 
   @action
-  getUserAccreditation = (userId = false) => new Promise((res) => {
+  getUserAccreditation = (userId = false, setInProgressArray = true) => new Promise((res) => {
     uiStore.setProgress();
-    uiStore.addMoreInProgressArray('getUserAccreditation');
+    if (setInProgressArray) {
+      uiStore.addMoreInProgressArray('getUserAccreditation');
+    }
     if (userId || userDetailsStore.currentUserId) {
       this.userData = graphql({
         client,
@@ -704,14 +709,18 @@ export class AccreditationStore {
         variables: { userId: userId || userDetailsStore.currentUserId },
         onFetch: () => {
           if (!this.userData.loading) {
-            uiStore.removeOneFromProgressArray('getUserAccreditation');
+            if (setInProgressArray) {
+              uiStore.removeOneFromProgressArray('getUserAccreditation');
+            }
             uiStore.setProgress(false);
             res();
           }
         },
         onError: () => {
           uiStore.setProgress(false);
-          uiStore.removeOneFromProgressArray('getUserAccreditation');
+          if (setInProgressArray) {
+            uiStore.removeOneFromProgressArray('getUserAccreditation');
+          }
           Helper.toast('Something went wrong, please try again later.', 'error');
         },
       });
@@ -823,7 +832,7 @@ export class AccreditationStore {
     const pendingResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'REQUESTED'));
     const notEligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'DECLINED'));
     const eligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'CONFIRMED'));
-    const expiredResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && this.checkIsAccreditationExpired(a.expiration) === 'EXPIRED'));
+    const expiredResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && (a.status === 'EXPIRED' || this.checkIsAccreditationExpired(a.expiration) === 'EXPIRED')));
     this.accreditationDetails.inactiveAccreditation = inactiveResult;
     this.accreditationDetails.pendingAccreditation = pendingResult;
     this.accreditationDetails.notEligibleAccreditation = notEligibalResult;
@@ -860,34 +869,37 @@ export class AccreditationStore {
       if (aggreditationDetails) {
         currentAcitveObject = find(aggreditationDetails, (value, key) => key === currentSelectedAccount);
       }
-      investmentType = regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'BD_506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : regulationType && regulationType === 'BD_506B' ? 'BD_506B' : 'CF';
       const validAccreditationStatus = ['REQUESTED', 'INVALID'];
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration
-        ? this.checkIsAccreditationExpired(currentAcitveObject.expiration)
-          === 'EXPIRED' ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
-      // if (accountStatus) {
+        ? (currentAcitveObject.status === 'EXPIRED' || this.checkIsAccreditationExpired(currentAcitveObject.expiration)
+      === 'EXPIRED') ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
+      investmentType = regulationType && regulationType === 'BD_CF_506C' && accountStatus !== 'EXPIRED' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'BD_506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : regulationType && regulationType === 'BD_506B' ? 'BD_506B' : 'CF';
       switch (accountStatus) {
         case 'REQUESTED':
-          this.userAccredetiationState = 'PENDING';
+          this.setFieldVal('userAccredetiationState', 'PENDING');
           break;
         case 'DECLINED':
-          this.userAccredetiationState = 'NOT_ELGIBLE';
+          this.setFieldVal('userAccredetiationState', 'NOT_ELGIBLE');
           break;
         case 'CONFIRMED':
-          this.userAccredetiationState = 'ELGIBLE';
+          this.setFieldVal('userAccredetiationState', 'ELGIBLE');
           break;
         case 'EXPIRED':
-          this.userAccredetiationState = 'EXPIRED';
+          this.setFieldVal('userAccredetiationState', 'EXPIRED');
+          this.setFieldVal('isAccreditationExpired', true);
           break;
         default:
-          this.userAccredetiationState = 'INACTIVE';
+          this.setFieldVal('userAccredetiationState', 'INACTIVE');
           break;
       }
-      // }
     } else if (intialAccountStatus === 'FULL') {
-      this.userAccredetiationState = 'ELGIBLE';
+      this.setFieldVal('userAccredetiationState', 'ELGIBLE');
     }
     this.setCurrentInvestmentStatus(investmentType);
+  }
+
+  @computed get currentUserAccreditedState() {
+    return this.userAccredetiationState;
   }
 
   @action
@@ -962,21 +974,17 @@ export class AccreditationStore {
     investmentStore.resetAccTypeChanged();
     investmentStore.setFieldValue('disableNextbtn', true);
     investmentStore.setFieldValue('isGetTransferRequestCall', false);
+    this.setFieldVal('isAccreditationExpired', false);
   }
 
-  checkIsAccreditationExpired = (expirationDate) => {
+  checkIsAccreditationExpired = (expirationDate, isUnix = false) => {
     let dateDiff = '';
     if (expirationDate) {
-      const validDate = new Date(expirationDate);
-      dateDiff = DataFormatter.diffDays(validDate);
-      return dateDiff === 0 ? 'EXPIRED' : 'ACTIVE';
+      const date = (isUnix && typeof expirationDate === 'string') ? parseInt(expirationDate) : expirationDate;
+      dateDiff = DataFormatter.diffDays(DataFormatter.formatedDate(date, isUnix), false, true);
+      return dateDiff < 0 ? 'EXPIRED' : 'ACTIVE';
     }
     return dateDiff;
-  }
-
-  @action
-  updateAccreditationExpiray = () => {
-    console.log('going to update accreditation expiray date');
   }
 
   @action

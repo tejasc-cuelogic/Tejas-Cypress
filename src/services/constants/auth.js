@@ -68,7 +68,7 @@ export const SIGNUP = {
   givenName: {
     value: '',
     error: undefined,
-    rule: 'required|removeFrontAndTrailingSpaces',
+    rule: 'required',
     label: 'First Name',
     placeHolder: 'First Name',
     customErrors: {
@@ -78,7 +78,7 @@ export const SIGNUP = {
   familyName: {
     value: '',
     error: undefined,
-    rule: 'required|removeFrontAndTrailingSpaces',
+    rule: 'required',
     label: 'Last Name',
     placeHolder: 'Last Name',
     customErrors: {
@@ -131,12 +131,12 @@ export const RESET_PASS = {
 };
 
 export const NEWSLETTER = {
-  subscriberName: {
-    value: '',
-    error: undefined,
-    rule: 'required',
-    label: 'Name',
-    placeHolder: 'Name',
-  },
+  // subscriberName: {
+  //   value: '',
+  //   error: undefined,
+  //   rule: 'optional',
+  //   label: 'Name',
+  //   placeHolder: 'Name',
+  // },
   emailAddress: { ...COMMON.email },
 };

@@ -111,7 +111,6 @@ export default class AddFunds extends Component {
                 maxLength={addFundsByAccType.maxLength}
                 prefix="$ "
                 showerror
-                allowNegative={false}
               />
             </div>
             {errors

@@ -6,7 +6,7 @@ import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { UPDATES, TEMPLATE } from '../../../../constants/offering';
-import { offeringCreationStore, uiStore } from '../../../index';
+import { offeringCreationStore, uiStore, userDetailsStore } from '../../../index';
 import {
   allUpdates, newUpdate, getUpdate, editUpdate, deleteOfferingUpdate,
   sendOfferingUpdateTestEmail, offeringUpdatePublish,
@@ -40,6 +40,9 @@ export class UpdateStore {
     @action
     initRequest = () => {
       const variables = { offerId: offeringCreationStore.currentOfferingId };
+      if (userDetailsStore.selectedUserId) {
+        variables.userId = userDetailsStore.selectedUserId;
+      }
       this.data = graphql({
         client,
         query: allUpdates,
@@ -67,13 +70,12 @@ export class UpdateStore {
   initiateFilters = () => {
     const { keyword } = this.requestState.search;
     let resultArray = [];
+    this.setDb(this.data.data.offeringUpdatesByOfferId);
     if (keyword) {
       resultArray = ClientDb.filterData('title', keyword, 'likenocase');
       this.setDb(resultArray);
       this.requestState.page = 1;
       this.requestState.skip = 0;
-    } else {
-      this.setDb(this.data.data.offeringUpdatesByOfferId);
     }
   }
 

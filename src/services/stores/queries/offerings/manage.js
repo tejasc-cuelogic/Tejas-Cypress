@@ -8,6 +8,9 @@ const common = {
     shorthandBusinessName
     securities
     regulation
+    offeringSize
+    preferredReturn
+    targetInvestmentPeriod
   }
   leadDetails {
     email {
@@ -46,6 +49,7 @@ const common = {
   closureSummary {
     processingDate
     hardCloseDate
+    operationsDate
     launchDate
     repayment {
       currentRepaidAmount
@@ -217,7 +221,13 @@ export const getOfferingDetails = gql`
         }
         discount
         valuationCap
-        unitPrice
+        priceCopy
+        offeringSize
+        preferredReturn
+        targetInvestmentPeriod
+        totalRoundSize
+        equityClass
+        equityUnitType
         roundType
         premoneyValuation
         additionalKeyterms {
@@ -781,6 +791,36 @@ export const getOfferingDetails = gql`
                 }
               }
             }
+            purchaseAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            proxyAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
             disclosure {
               fileId
               fileName
@@ -868,6 +908,14 @@ export const getOfferingDetails = gql`
               fileName
             }
             npa {
+              fileId
+              fileName
+            }
+            purchaseAgreement {
+              fileId
+              fileName
+            }
+            proxyAgreement {
               fileId
               fileName
             }
@@ -982,7 +1030,9 @@ export const getOfferingDetails = gql`
           date
           amount
         }
+        operationsDate
         keyTerms {
+          monthlyPayment
           supplementalAgreements {
             documents {
               name
@@ -993,6 +1043,7 @@ export const getOfferingDetails = gql`
               }
             }
           }
+          priceCalcuation
           multiple
           revSharePercentage
           interestRate

@@ -8,7 +8,7 @@ import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS, NEWSLETTER,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
-import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup, checkMigrationByEmail } from '../../queries/profile';
+import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup } from '../../queries/profile';
 import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
@@ -32,6 +32,8 @@ export class AuthStore {
   @observable capabilities = [];
 
   @observable userId = null;
+
+  @observable emailList = [];
 
   @observable devAuth = {
     required: !['production', 'localhost', 'prod', 'master', 'infosec'].includes(REACT_APP_DEPLOY_ENV),
@@ -228,8 +230,9 @@ export class AuthStore {
     if (this.isUserLoggedIn) {
       const { password, email } = this.CONFIRM_FRM.fields;
       const userCredentials = {
-        email: email.value || localStorage.getItem('changedEmail')
-          || get(userDetailsStore, 'userDetails.email.address') || '',
+        email: email.value
+        || get(userDetailsStore, 'userDetails.email.address')
+        || sessionStorage.getItem('changedEmail') || '',
         password: password.value,
         givenName: get(userDetailsStore, 'userDetails.info.firstName') || '',
       };
@@ -378,9 +381,11 @@ export class AuthStore {
     this.capabilities = capabilities;
   }
 
+  isEmailExist = email => (this.emailList.find(e => e === email))
+
   @action
-  checkEmailExistsPresignup = (email, isBusinessApplication = false) => new Promise((res, rej) => {
-    if (DataFormatter.validateEmail(email)) {
+  checkEmailExistsPresignup = (email, isBusinessApplication = false) => new Promise((res) => {
+    if (DataFormatter.validateEmail(email) && !this.isEmailExist(email)) {
       if (isBusinessApplication) {
         uiStore.setProgress();
       }
@@ -397,17 +402,18 @@ export class AuthStore {
               businessAppStore.setFieldvalue('userRoles', get(data, 'checkEmailExistsPresignup.roles'));
               businessAppStore.setFieldvalue('userExists', true);
               businessAppStore.setBasicFormError(get(data, 'checkEmailExistsPresignup.roles') && get(data, 'checkEmailExistsPresignup.roles').includes('issuer') ? 'This email is already exists as an issuer. Please Log In' : `This email address is already exists as ${get(data, 'checkEmailExistsPresignup.roles').includes('admin') ? 'admin' : 'investor'}. Please try with differrent email.`);
-              res();
+              res(true);
             } else {
+              this.emailList.push(email);
               this.SIGNUP_FRM.fields.email.error = 'Email already exists, did you mean to log in?';
               this.SIGNUP_FRM.meta.isValid = false;
-              rej();
+              res(false);
             }
             uiStore.setProgress(false);
           } else if (!this.checkEmail.loading && !get(data, 'checkEmailExistsPresignup.isEmailExits')) {
             this.SIGNUP_FRM.fields.email.error = '';
             uiStore.setProgress(false);
-            res();
+            res(true);
           }
         },
         onError: (err) => {
@@ -416,37 +422,12 @@ export class AuthStore {
         },
         fetchPolicy: 'network-only',
       });
+    } else {
+      this.SIGNUP_FRM.fields.email.error = 'Email already exists, did you mean to log in?';
+      this.SIGNUP_FRM.meta.isValid = false;
+      uiStore.setProgress(false);
+      res(false);
     }
-  });
-
-  @action
-  checkMigrationByEmail = params => new Promise((res, rej) => {
-    uiStore.setProgress();
-    clientPublic.mutate({
-      mutation: checkMigrationByEmail,
-      variables: {
-        migrationByEmailData: params,
-      },
-    })
-      .then((data) => {
-        if (!data.data.checkMigrationByEmail) {
-          uiStore.setProgress(false);
-          uiStore.setErrors({
-            message: 'There was a problem with authentication',
-            code: 'checkMigrationByEmailFailed',
-          });
-        }
-        res(data.data.checkMigrationByEmail);
-      })
-      .catch((err) => {
-        uiStore.setProgress(false);
-        uiStore.setErrors({
-          message: 'There was a problem with authentication',
-          code: 'checkMigrationByEmailFailed',
-        });
-        rej(err);
-      })
-      .finally(() => { });
   });
 
   @action
@@ -471,8 +452,8 @@ export class AuthStore {
 
   @action
   subscribeToNewsletter = () => new Promise((res, rej) => {
+    this.NEWSLETTER_FRM = Validator.validateForm(this.NEWSLETTER_FRM, false, true);
     if (!this.NEWSLETTER_FRM.meta.isValid) {
-      this.resetForm('NEWSLETTER_FRM', null);
       rej();
     } else {
       uiStore.setProgress();

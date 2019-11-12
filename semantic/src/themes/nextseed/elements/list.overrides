@@ -240,8 +240,16 @@
             .extra{
                 font-size:@13px;
                 color:@neutral-offdark;
+            /* to get labels on top comment these 2 lines */
                 position:absolute;
                 right:12px;
+            /*********** end ***********/
+                &.offering-comment{
+                    position: static;
+                    margin-bottom: @7px;
+                    text-align: right;
+                    right: 0;
+                }
             }
             .comments& .ui.image{
                 position:relative;

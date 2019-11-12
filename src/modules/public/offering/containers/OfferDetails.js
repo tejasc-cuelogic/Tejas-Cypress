@@ -222,6 +222,7 @@ class offerDetails extends Component {
       return <NotFound />;
     }
     const offeringId = get(campaign, 'id');
+    const offeringName = get(campaign, 'keyTerms.shorthandBusinessName');
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const isBonusReward = bonusRewards && bonusRewards.length;
     const InitialComponent = getModule(!newLayout ? navItems[0].component : 'CampaignLayout');
@@ -275,13 +276,13 @@ class offerDetails extends Component {
                 <Grid.Column computer={newLayout ? 9 : 12} mobile={16} className={newLayout ? 'left-align offer-details-v2' : ''}>
                   <Suspense fallback={<InlineLoader />}>
                     <Switch>
-                      <Route exact path={match.url} render={props => <InitialComponent refLink={this.props.match.url} {...props} />} />
+                      <Route exact path={match.url} render={props => <InitialComponent offeringName={offeringName} refLink={this.props.match.url} {...props} />} />
                       {!newLayout
                         && (
                           navItems.map((item) => {
                             const CurrentComponent = getModule(item.component);
                             return (
-                              <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
+                              <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent offeringName={offeringName} refLink={this.props.match.url} {...props} />} />
                             );
                           })
                         )
@@ -296,7 +297,7 @@ class offerDetails extends Component {
                       <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}${newLayout ? '#comments' : '/comments'}`} {...props} />} />
                       <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
                       <Route path={`${match.url}/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={`${match.url}/agreement`} {...props} />} />
-                      <Route exact path={`${match.url}/congratulation`} component={Congratulation} />
+                      <Route exact path={`${match.url}/congratulation`} render={() => <Congratulation refLink={this.props.match.url} />} />
                       <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
                       <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
                       <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />

@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { forEach, includes, find, isEmpty, has, get } from 'lodash';
+import { forEach, includes, find, isEmpty, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { FormValidator as Validator } from '../../../../helper';
@@ -38,7 +38,7 @@ import {
   submitApplication,
   helpAndQuestion,
 } from '../../queries/businessApplication';
-import { uiStore, navStore, userDetailsStore, businessAppLendioStore, businessAppAdminStore, offeringsStore } from '../../index';
+import { uiStore, navStore, userDetailsStore, businessAppLendioStore, businessAppAdminStore, offeringsStore, commonStore } from '../../index';
 import { fileUpload } from '../../../actions';
 
 export class BusinessAppStore {
@@ -95,8 +95,6 @@ export class BusinessAppStore {
 
   @observable userRoles = [];
 
-  @observable urlParameter = null;
-
   @observable businessAppDataById = null;
 
   @observable applicationIssuerId = null;
@@ -104,6 +102,10 @@ export class BusinessAppStore {
   @observable enableSave = false;
 
   @observable showUserError = false;
+
+  @observable sourcesTotal = 0;
+
+  @observable usesTotal = 0;
 
   @action
   setFieldvalue = (field, value) => {
@@ -113,6 +115,15 @@ export class BusinessAppStore {
   @action
   setAppStepsStatus = (index, key, value) => {
     this.appStepsStatus[index][key] = value;
+  }
+
+  @action
+  totalChange = (fieldName, totalName) => {
+    let total = 0;
+    this.BUSINESS_DETAILS_FRM.fields[fieldName].forEach((field) => {
+      total = total + field.amount.value || 0;
+    });
+    this[totalName] = total;
   }
 
   @action
@@ -162,6 +173,7 @@ export class BusinessAppStore {
 
   @action
   fetchApplicationDataById = (applicationId, isPartialApp = false) => new Promise((resolve) => {
+    uiStore.setProgress(true);
     uiStore.setAppLoader(true);
     uiStore.setLoaderMessage('Getting application data');
     this.businessApplicationsDataById = graphql({
@@ -174,12 +186,14 @@ export class BusinessAppStore {
       onFetch: (data) => {
         if ((data && data.businessApplication && !this.businessApplicationsDataById.loading) || (data && data.getPreQualificationById && !this.businessApplicationsDataById.loading)) {
           this.setBusinessApplicationData(isPartialApp);
+          uiStore.setProgress(false);
           uiStore.setAppLoader(false);
           resolve();
         }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setProgress(false);
         uiStore.setAppLoader(false);
       },
     });
@@ -398,7 +412,7 @@ export class BusinessAppStore {
     if (data) {
       this.appStepsStatus[1].status = data.stepStatus;
       data.debts.forEach((ele, key) => {
-        ['amount', 'interestExpenses', 'remainingPrincipal', 'term'].forEach((field) => {
+        ['amount', 'interestExpenses', 'remainingPrincipal', 'term', 'maturityDate', 'termStartDate'].forEach((field) => {
           this.BUSINESS_DETAILS_FRM.fields.debts[key][field].value = ele[field];
         });
         if (key < data.debts.length - 1) {
@@ -418,6 +432,26 @@ export class BusinessAppStore {
           this.addMoreForms(null, 'owners');
         }
       });
+      if (data.sources && data.sources.length) {
+        data.sources.forEach((ele, key) => {
+          ['name', 'amount'].forEach((field) => {
+            this.BUSINESS_DETAILS_FRM.fields.sources[key][field].value = ele[field];
+          });
+        });
+        this.totalChange('sources', 'sourcesTotal');
+      } else {
+        this.BUSINESS_DETAILS_FRM.fields.sources = [];
+      }
+      if (data.uses && data.uses.length) {
+        data.uses.forEach((ele, key) => {
+          ['name', 'amount'].forEach((field) => {
+            this.BUSINESS_DETAILS_FRM.fields.uses[key][field].value = ele[field];
+          });
+        });
+        this.totalChange('uses', 'usesTotal');
+      } else {
+        this.BUSINESS_DETAILS_FRM.fields.uses = [];
+      }
       if (data.planDocs && data.planDocs.length) {
         this.setFileObjectToForm(data.planDocs, 'BUSINESS_DETAILS_FRM', 'businessPlan');
       }
@@ -566,11 +600,11 @@ export class BusinessAppStore {
   }
 
   @action
-  businessDetailsDateChange = (field, date, index = -1) => {
+  businessDetailsDateChange = (field, date, index = -1, subFormName = 'owners') => {
     this.BUSINESS_DETAILS_FRM = Validator.onArrayFieldChange(
       this.BUSINESS_DETAILS_FRM,
       { name: field, value: date },
-      'owners',
+      subFormName,
       index,
     );
   }
@@ -688,13 +722,27 @@ export class BusinessAppStore {
 
   @computed get getFormatedBusinessDetailsData() {
     const data = toJS(this.BUSINESS_DETAILS_FRM.fields);
+    const sourcesAndUses = {
+      sources: data.sources.map(item => ({
+        name: this.getValidDataForString(item.name),
+        amount: item.amount.value || 0.00,
+      })),
+      uses: data.uses.map(item => ({
+        name: this.getValidDataForString(item.name),
+        amount: item.amount.value || 0.00,
+      })),
+    };
+    sourcesAndUses.sources = sourcesAndUses.sources.filter(item => item.amount || item.name);
+    sourcesAndUses.uses = sourcesAndUses.uses.filter(item => item.amount || item.name);
     return {
       planDocs: this.getFilesArray(data.businessPlan.value, data.businessPlan),
       debts: data.debts.map(item => ({
-        amount: this.getValidDataForInt(item.amount),
-        interestExpenses: this.getValidDataForInt(item.interestExpenses),
-        remainingPrincipal: this.getValidDataForInt(item.remainingPrincipal),
+        amount: item.amount.value ? this.getValidDataForInt(item.amount) : null,
+        interestExpenses: item.interestExpenses.value ? this.getValidDataForInt(item.interestExpenses) : null,
+        remainingPrincipal: item.remainingPrincipal.value ? this.getValidDataForInt(item.remainingPrincipal) : null,
         term: this.getValidDataForInt(item.term),
+        termStartDate: item.termStartDate.value ? moment(item.termStartDate.value).format('MM/DD/YYYY') : null,
+        maturityDate: item.maturityDate.value ? moment(item.maturityDate.value).format('MM/DD/YYYY') : null,
       })),
       owners: data.owners.map(item => ({
         fullLegalName: this.getValidDataForString(item.fullLegalName),
@@ -712,6 +760,7 @@ export class BusinessAppStore {
           },
         ],
       })),
+      ...sourcesAndUses,
     };
   }
 
@@ -934,15 +983,10 @@ export class BusinessAppStore {
     uiStore.setProgress();
     let payload = Validator.ExtractValues(this.BUSINESS_APP_FRM_BASIC.fields);
     payload = { ...payload, applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE' };
-    if (this.urlParameter) {
-      payload = has(this.urlParameter, 'signupCode') ? { ...payload, signupCode: this.urlParameter.signupCode } : { ...payload };
-      payload = has(this.urlParameter, 'signupcode') ? { ...payload, signupCode: this.urlParameter.signupcode } : { ...payload };
-      payload = has(this.urlParameter, 'sc') ? { ...payload, signupCode: this.urlParameter.sc } : { ...payload };
-      payload = has(this.urlParameter, 'utmSource') ? { ...payload, utmSource: this.urlParameter.utmSource } : { ...payload };
-      payload = has(this.urlParameter, 'utmsource') ? { ...payload, utmSource: this.urlParameter.utmsource } : { ...payload };
-      payload = has(this.urlParameter, 'utm_source') ? { ...payload, utmSource: this.urlParameter.utm_source } : { ...payload };
-      payload = has(this.urlParameter, 'adid') ? { ...payload, utmSource: `${payload.utmSource}&&adid=${this.urlParameter.adid}` } : { ...payload };
-    }
+    const tags = JSON.parse(window.localStorage.getItem('tags'));
+    payload = !isEmpty(tags) ? { ...payload, tags } : { ...payload };
+    payload = window.localStorage.getItem('signupCode') ? { ...payload, signupCode: window.localStorage.getItem('signupCode') } : { ...payload };
+    payload = window.localStorage.getItem('utmSource') ? { ...payload, utmSource: window.localStorage.getItem('utmSource') } : { ...payload };
     payload.email = payload.email.toLowerCase();
     return new Promise((resolve, reject) => {
       clientPublic
@@ -973,14 +1017,18 @@ export class BusinessAppStore {
 
   @action
   businessPreQualificationFormSumbit = () => {
-    const data = this.getFormatedPreQualificationData;
+    let payload = this.getFormatedPreQualificationData;
+    const tags = JSON.parse(window.localStorage.getItem('tags'));
+    payload = !isEmpty(tags) ? { ...payload, tags } : { ...payload };
+    payload = window.localStorage.getItem('signupCode') ? { ...payload, signupCode: window.localStorage.getItem('signupCode') } : { ...payload };
+    payload = window.localStorage.getItem('utmSource') ? { ...payload, utmSource: window.localStorage.getItem('utmSource') } : { ...payload };
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       clientPublic
         .mutate({
           mutation: createBusinessApplicationPrequalificaiton,
           variables: {
-            preQualificationData: data,
+            preQualificationData: payload,
           },
           // refetchQueries: [{ query: getBusinessApplications }],
         })
@@ -996,6 +1044,7 @@ export class BusinessAppStore {
               },
             },
           } = result;
+          commonStore.removeLocalStorage(['tags', 'signupCode', 'utmSource']);
           this.setFieldvalue('BUSINESS_APP_STATUS', status);
           this.setFieldvalue('userExists', userExists);
           this.setFieldvalue('userRoles', userRoles);

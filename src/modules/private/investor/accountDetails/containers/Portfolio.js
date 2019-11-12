@@ -97,9 +97,9 @@ export default class Portfolio extends Component {
           path={`${match.url}/:offeringId/invest-now`}
           render={props => <InvestNow changeInvest refLink={match.url} {...props} />}
         />
-        <Route path={`${match.url}/:offeringId/agreement`} render={() => <Agreement changeInvestment refLink={match.url} />} />
-        <Route path={`${match.url}/:offeringId/congratulation`} render={() => <Congratulation changeInvestment />} />
+        <Route exact path={`${match.url}/:offeringId/agreement`} render={() => <Agreement changeInvestment refLink={match.url} />} />
         <Route path={`${match.url}/:offeringId/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={`${match.url}`} {...props} />} />
+        <Route path={`${match.url}/:offeringId/congratulation`} render={() => <Congratulation changeInvestment />} />
         <Route
           path={`${match.url}/cancel-investment/:id`}
           render={props => <CancelInvestment accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}
@@ -109,7 +109,7 @@ export default class Portfolio extends Component {
   }
 
   render() {
-    const { match, portfolioStore, userDetailsStore } = this.props;
+    const { match, portfolioStore, userDetailsStore, refLink } = this.props;
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
     const { referralData } = this.props.referralsStore;
     const { getActiveAccounts } = userDetailsStore;
@@ -175,7 +175,7 @@ export default class Portfolio extends Component {
         {this.props.isAdmin
           && <AccountHeader module="Investments" pathname={this.props.location.pathname} />
         }
-        <SummaryHeader isAdmin={this.props.isAdmin} details={summaryDetails} />
+        <SummaryHeader refLink={refLink} isAdmin={this.props.isAdmin} details={summaryDetails} />
         {(getPieChartData.investmentType.length || getPieChartData.industry.length)
           ? <PortfolioAllocations isAdmin={this.props.isAdmin} pieChart={getPieChartData} /> : ''
         }

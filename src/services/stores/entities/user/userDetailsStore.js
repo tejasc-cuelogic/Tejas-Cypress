@@ -3,10 +3,10 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
 import moment from 'moment';
-import { mapValues, map, concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get, findIndex } from 'lodash';
+import { mapValues, map, concat, set, isEmpty, difference, pick, find, findKey, filter, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
-import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM } from '../../../constants/user';
+import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM, USER_PROFILE_PREFERRED_INFO } from '../../../constants/user';
 import {
   identityStore,
   accountStore,
@@ -20,9 +20,9 @@ import {
   userListingStore,
   userStore,
 } from '../../index';
-import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount, getEmailList } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressOrPhoneValidationCheck, frozenEmailToAdmin, freezeAccount, getEmailList } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
-import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE } from '../../../../constants/account';
+import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE, US_STATES } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
@@ -34,7 +34,11 @@ export class UserDetailsStore {
 
   @observable currentActiveAccount = null;
 
+  @observable accreditationData = {};
+
   @observable isAddressSkip = false;
+
+  @observable isPhoneSkip = false;
 
   @observable isFrozen = false;
 
@@ -44,13 +48,15 @@ export class UserDetailsStore {
 
   @observable deleting = 0;
 
-  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING', 'OFFLINE'];
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
 
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
 
   @observable DELETE_MESSAGE_FRM = Validator.prepareFormObject(DELETE_MESSAGE);
 
   @observable USER_PROFILE_ADD_ADMIN_FRM = Validator.prepareFormObject(USER_PROFILE_ADDRESS_ADMIN);
+
+  @observable USER_PROFILE_PREFERRED_INFO_FRM = Validator.prepareFormObject(USER_PROFILE_PREFERRED_INFO);
 
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
 
@@ -67,8 +73,6 @@ export class UserDetailsStore {
   @observable displayMode = true;
 
   @observable emailListArr = [];
-
-  @observable emailListIndex = 0;
 
   @action
   setFieldValue = (field, value) => {
@@ -122,6 +126,22 @@ export class UserDetailsStore {
   @action
   setAddressFieldsForProfile = (place, form) => {
     Validator.setAddressFields(place, this[form]);
+    const state = US_STATES.find(s => s.text === this[form].fields.state.value.toUpperCase());
+    this[form].fields.state.value = state ? state.key : '';
+  }
+
+  @action
+  initiateAccreditation = () => {
+    const { userDetails } = this;
+    const entityAccreditation = userDetails && userDetails.roles
+      && userDetails.roles.find(role => role.name === 'entity');
+    const accData = {
+      individual: userDetails && userDetails.accreditation,
+      ira: userDetails && userDetails.accreditation,
+      entity: entityAccreditation && entityAccreditation.details
+        && entityAccreditation.details.accreditation,
+    };
+    this.accreditationData = accData;
   }
 
   @computed get getActiveAccounts() {
@@ -218,22 +238,36 @@ export class UserDetailsStore {
   }
 
   @action
-  setAddressCheck = () => {
-    this.isAddressSkip = this.userDetails.skipAddressVerifyCheck || false;
+  updateUserDetails = (key, payload, path) => {
+    const tempData = { ...this.currentUser };
+    if (path) {
+      tempData.data.user[key] = set({ ...tempData.data.user[key], ...payload }, path, payload);
+    } else {
+      tempData.data.user[key] = { ...tempData.data.user[key], ...payload };
+    }
+    this.currentUser = { ...tempData };
   }
 
   @action
-  toggleAddressVerification = () => {
-    const payLoad = { userId: this.selectedUserId, shouldSkip: !this.isAddressSkip };
+  setAddressOrPhoneCheck = () => {
+    this.isAddressSkip = get(this.getDetailsOfUser, 'skipAddressVerifyCheck') || false;
+    this.isPhoneSkip = get(this.getDetailsOfUser, 'skipPhoneVerifyCheck') || false;
+  }
+
+  @action
+  skipAddressOrPhoneValidationCheck = type => new Promise(async (resolve, reject) => {
+    const shouldSkip = type === 'PHONE' ? !this.isPhoneSkip : !this.isAddressSkip;
+    const payLoad = { userId: this.selectedUserId, shouldSkip, type };
     client
       .mutate({
-        mutation: skipAddressValidation,
+        mutation: skipAddressOrPhoneValidationCheck,
         variables: payLoad,
       })
       .then(action((res) => {
-        this.isAddressSkip = res.data.skipAddressValidationCheck;
-      }));
-  }
+        this.setFieldValue(type === 'PHONE' ? 'isPhoneSkip' : 'isAddressSkip', get(res, 'data.skipAddressOrPhoneValidationCheck'));
+        resolve();
+      })).catch(() => reject());
+  });
 
   @action
   deleteProfile = (isInvestor = false, isHardDelete = false) => new Promise(async (resolve, reject) => {
@@ -468,9 +502,10 @@ export class UserDetailsStore {
       details.frozenAccounts = map(filter(details.roles, a => a.status === 'FROZEN'), 'name');
       details.processingAccounts = map(filter(details.roles, a => (a.status ? a.status.endsWith('PROCESSING') : null)), 'name');
       details.inprogressAccounts = map(filter(details.roles, a => a.name !== 'investor' && a.status !== 'FULL'), 'name');
-      details.phoneVerification = (this.userDetails.phone
+      details.phoneVerification = this.userDetails.phone
         && this.userDetails.phone.number
-        && !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
+        && this.userDetails.phone.verified
+        ? 'DONE' : 'FAIL';
       details.isMigratedUser = (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
       details.isMigratedFullAccount = (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION')
         && this.userDetails.status === 'MIGRATION_FULL');
@@ -576,6 +611,7 @@ export class UserDetailsStore {
     } else if (this.isCipExpirationInProgress) {
       routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
+      && this.signupStatus.idVerification !== 'OFFLINE'
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
       routingUrl = '/app/summary/identity-verification/0';
@@ -794,48 +830,35 @@ export class UserDetailsStore {
   updateUserProfileForSelectedUser = () => {
     const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
     const infoAdd = Validator.evaluateFormData(toJS(this.USER_PROFILE_ADD_ADMIN_FRM.fields));
+    const preferredInfo = Validator.evaluateFormData(toJS(this.USER_PROFILE_PREFERRED_INFO_FRM.fields));
     const profileDetails = {
       firstName: basicData.firstName,
       lastName: basicData.lastName,
-      mailingAddress: {
-        street: infoAdd.street,
-        streetTwo: infoAdd.streetTwo,
-        city: infoAdd.city,
-        state: infoAdd.state,
-        zipCode: infoAdd.zipCode,
-      },
+      mailingAddress: { ...infoAdd.legalAddress },
     };
+    let { capabilities } = basicData;
+    capabilities = capabilities.length ? capabilities : null;
     if (this.detailsOfUser.data.user.info.avatar) {
-      profileDetails.avatar = {
-        name: this.detailsOfUser.data.user.info.avatar.name,
-        url: this.detailsOfUser.data.user.info.avatar.url,
-      };
+      profileDetails.avatar = pick(
+        get(this.detailsOfUser, 'data.user.info.avatar'),
+        ['name', 'url'],
+      );
     }
-    const legalDetails = {
-      dateOfBirth: basicData.dateOfBirth,
-      legalAddress: {
-        street: basicData.street,
-        streetTwo: basicData.streetTwo,
-        city: basicData.city,
-        state: basicData.state,
-        zipCode: basicData.zipCode,
-      },
-      legalName: {
-        firstLegalName: basicData.firstLegalName,
-        lastLegalName: basicData.lastLegalName,
-      },
-    };
+    const legalDetails = basicData ? pick(basicData, ['dateOfBirth', 'legalAddress', 'legalName']) : null;
     if (String(basicData.ssn).length === 9) {
       legalDetails.ssn = basicData.ssn;
     }
+
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: updateUserProfileData,
           variables: {
-            profileDetails: { ...profileDetails },
-            legalDetails: { ...legalDetails },
+            profileDetails,
+            legalDetails,
+            preferredInfo,
+            capabilities,
             targetUserId: get(this.getDetailsOfUser, 'id'),
           },
           refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id') } }],
@@ -912,7 +935,7 @@ export class UserDetailsStore {
     return this.emailListArr.loading;
   }
 
-  @computed get userEmals() {
+  @computed get userEmails() {
     return this.emailListArr && this.emailListArr.data.fetchEmails && this.emailListArr.data.fetchEmails.emails;
   }
 }

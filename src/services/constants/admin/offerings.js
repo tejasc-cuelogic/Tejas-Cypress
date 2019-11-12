@@ -1,14 +1,6 @@
-import Validator from 'validatorjs';
 import React from 'react';
-
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
-Validator.register(
-  'maskedSSN', (value, attribute) => {
-    return value.toString().length === 9;
-  },
-  'The :attribute is not in the format XXX-XX-XXXX.',
-);
 
 export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement', 'closingBinder'];
 
@@ -34,7 +26,9 @@ export const STAGES = {
   COMPLETE: {
     ref: 'completed', publicRef: 'completed', accessKey: 4, label: 'Completed',
   },
-  DEFAULT: { ref: 'completed', accessKey: 4, label: 'Default' },
+  DEFAULTED: {
+    ref: 'completed', publicRef: 'completed', accessKey: 4, label: 'Defaulted',
+  },
 };
 
 export const KEY_TERMS = {
@@ -380,12 +374,36 @@ export const KEY_TERMS = {
     rule: 'optional',
     placeHolder: 'Enter here',
   },
-  unitPrice: {
+  priceCopy: {
     value: null,
-    label: 'Unit Price',
+    label: 'Price (copy)',
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
+  },
+  totalRoundSize: {
+    value: null,
+    label: 'Total Round Size',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  equityClass: {
+    value: null,
+    label: 'Equity Class',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  equityUnitType: {
+    value: 'share',
+    values: [
+      { key: 'share', value: 'share', text: 'Shares' },
+      { key: 'unit', value: 'unit', text: 'Units' },
+    ],
+    label: 'Equity unit type',
+    error: undefined,
+    rule: 'optional',
   },
   premoneyValuation: {
     value: null,
@@ -431,6 +449,27 @@ export const KEY_TERMS = {
     rule: 'optional',
     placeHolder: 'Please select a value',
   },
+  offeringSize: {
+    value: '',
+    label: 'Offering Size',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  preferredReturn: {
+    value: '',
+    label: 'Preferred Return',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  targetInvestmentPeriod: {
+    value: '',
+    label: 'Targeted Investment Period',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
 };
 
 export const BUSINESS_INDUSTRIES = [
@@ -460,6 +499,7 @@ export const SECURITIES_VALUES = [
   { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity' },
   { key: 'Convertible Notes', value: 'CONVERTIBLE_NOTES', text: 'Convertible Notes' },
   { key: 'SAFE', value: 'SAFE', text: 'SAFE' },
+  { key: 'Real Estate', value: 'REAL_ESTATE', text: 'Real Estate' },
 ];
 
 export const ROUND_TYPE_VALUES = [
@@ -729,6 +769,13 @@ export const CLOSURE_SUMMARY = {
     label: 'Investment Multiple (calculation)',
     error: undefined,
     rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  priceCalcuation: {
+    value: null,
+    label: 'Price (calculation)',
+    error: undefined,
+    rule: 'numeric',
     placeHolder: 'Enter here',
   },
   processingDate: {
@@ -1081,7 +1128,7 @@ export const LEADERSHIP = {
       label: 'Email address',
       error: undefined,
       rule: 'email',
-      customErrors: { email: 'Email is not valid' },
+      customErrors: { email: 'email is not valid' },
       placeHolder: 'john.doe@contact.com',
     },
     number: {
@@ -1141,7 +1188,7 @@ export const LEADERSHIP = {
       label: 'Start Date of Service',
       error: undefined,
       rule: 'date',
-      placeHolder: 'MM-DD-YYYY',
+      placeHolder: 'MM/DD/YYYY',
       customErrors: {
         date: 'Start Date of Service is not a valid date format.',
       },
@@ -1185,31 +1232,31 @@ export const LEADERSHIP = {
     },
     dlLicenseNumber: {
       value: '',
-      label: 'DL License Number',
+      label: 'Driver License Number',
       error: undefined,
       rule: 'optional',
-      placeHolder: 'e.g. 123456789',
+      placeHolder: 'Enter here',
     },
     dlState: {
       value: '',
       label: 'DL State',
       error: undefined,
       rule: 'optional',
-      placeHolder: 'e.g. NY',
+      placeHolder: 'Texas',
     },
     dlIssuedDate: {
       value: '',
       label: 'DL Issued Date',
       error: undefined,
       rule: 'date',
-      placeHolder: 'e.g. 12-12-2019',
+      placeHolder: 'MM/DD/YYYY',
     },
     dlExpirationDate: {
       value: '',
       label: 'DL Expiration Date',
       error: undefined,
       rule: 'date',
-      placeHolder: 'e.g. 12-12-2019',
+      placeHolder: 'MM/DD/YYYY',
     },
     bio: {
       value: '',
@@ -2163,112 +2210,112 @@ export const COMMON = {
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   isTheIssuerSubjectTo: {
     label: '2. Is the Issuer subject to any order, judgment or decree of any court of competent jurisdiction, within 5 years before the filing that restrains or enjoins such person from engaging or continuing to engage in any conduct or practice: i) In connection with the purchase or sale of any security; ii) Involving the making of any false filing with the SEC; iii) Arising out of the conduct of the business of an underwriter, broker, dealer, municipal securities dealer, investment adviser, funding portal or paid solicitor of purchasers of securities',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   isAnyCoveredPersonSubjectToAnOrderThree: {
     label: '3. Is any covered person subject to a final order of a state securities commission (or an agency or officer of a state performing like functions); a state authority that supervises or examines banks, savings associations or credit unions, a state insurance commission (or an agency or officer of a state performing like functions); an appropriate federal banking agency; the U.S. Commodity Futures Trading Commission; or the National Credit Union Administration that: i) At the time of filing, bars the person from (A) Association with an entity regulated by such commission, authority, agency or officer (B) Engaging in the business of securities, insurance or banking; or (C) Engaging in savings association or credit union activities; or ii) Constitutes a final order based on a violation of any law or regulation that prohibits fraudulent, manipulative or deceptive conduct entered within ten years before such filing of the offering statement',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   isAnyCoveredPersonSubjectToAnOrderFour: {
     label: '4. Is any covered person subject to an order of the Commission entered pursuant to section 15(b) or 15B(c) of the Exchange Act or section 203(e) or (f) of the Investment Advisers Act of 1940 that at the time of filing: i) Suspends or revokes such person`s registration as a broker, dealer, municipal securities dealer, investment adviser or funding portal; ii) Places limitations on the activities, functions or operations of such person; iii) Bars such person from being associated with any entity or from participating in the offering of any penny stock',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   isAnyCoveredPersonSubjectToOrderFive: {
     label: '5. Is any covered person subject to any order of the Commission entered within 5 years before the filing that orders the person to cease and desist from committing or causing a violation or future violation of: i) any scienter-based anti-fraud provision of the federal securities laws or ii) Section 5 of the Securities Act',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   isAnyCoveredPersonSubjectToOrderSix: {
     label: '6. Is any covered person suspended or expelled from membership in, or suspended or barred from association with a member of, a registered national securities exchange or a registered national or affiliated securities association for any act or omission to act constituting conduct inconsistent with just and equitable principles of trade',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   isAnyCoveredPersonSubjectToOrderSeven: {
     label: '7. Has any covered person filed (as a registrant or user), or was named as an underwriter in, any registration statement or Reg A offering statement filed with the Commission that, within 5 years before this filing, was the subject of a refusal order, stop order, or order suspending the Reg A exemption, or is, at the time of such filing, the subject of an investigation or proceeding to determine whether a stop order or suspension order should be issued',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   isAnyCoveredPersonSubjectToOrderEight: {
     label: '8. Is any covered person subject to a U.S.P.S. false representation order entered within 5 years before the filing of the information required by section 4A(b) of the Securities Act, or is, at the time of such filing, subject to a temporary restraining order or preliminary injunction with respect to conduct alleged by the U.S.P.S. to constitute a scheme or device for obtaining money or property through the mail by means of false representations',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   certificateOfFormation: {
     label: 'Certificate of Formation',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   operatingAgreement: {
     label: 'Operating Agreement',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   evidenceOfGoodStanding: {
     label: 'Evidence of good standing',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   whoAreThesePeople: {
     label: 'Who are executive officers, directors, control persons, promoters, beneficial owners of 20 percent or more of the issuer’s outstanding voting equity securities, calculated on the basis of voting power?',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   sanctionsListSearch: {
     label: 'OFAC sanctions list search',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   pendingCivilLawsuits: {
     label: 'Pending civil lawsuits',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   pendingLiens: {
     label: 'Pending liens/bankruptcy judgments',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   generalOnlineReputationSearch: {
     label: 'General online reputation search',
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
 };
 
@@ -2278,7 +2325,7 @@ export const ISSUER = {
     value: '',
     error: undefined,
     rule: 'optional',
-    defaultValue: 'Type your text here...',
+    placeHolder: 'Type your text here...',
   },
   certificateFormation: { ...COMMON.certificateOfFormation },
   operatingAgreement: { ...COMMON.operatingAgreement },
@@ -2595,6 +2642,32 @@ export const ADMIN_DOCUMENTATION = {
     fileData: '',
     objType: 'FileObjectType',
     stepName: 'DOCUMENTS_LEGAL_NPA',
+    lastModifiedDate: '',
+  },
+  purchaseAgreement: {
+    value: '',
+    label: 'Purchase Agreement',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    stepName: 'DOCUMENTS_LEGAL_PURCHASE_AGREEMENT',
+    lastModifiedDate: '',
+  },
+  proxyAgreement: {
+    value: '',
+    label: 'Proxy Agreement',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    stepName: 'DOCUMENTS_LEGAL_PROXY_AGREEMENT',
     lastModifiedDate: '',
   },
   disclosure: {

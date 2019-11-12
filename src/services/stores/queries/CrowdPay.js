@@ -100,6 +100,7 @@ query getCrowdPayUsers($limit: Int, $page: Int, $search: String, $accountType: I
               key
               message
             }
+            expiration
           }
           legalDetails {
             verificationStartDate
@@ -185,10 +186,11 @@ mutation crowdPayAccountProcess($userId: String!, $accountId: String!, $reason:S
 `;
 
 export const crowdPayAccountValidate = gql`
-mutation _crowdPayAccountValidate($userId: String!, $accountId: String!) {
+mutation _crowdPayAccountValidate($userId: String!, $accountId: String!, $skipCip: Boolean) {
   crowdPayAccountValidate(
     userId: $userId
     accountId: $accountId
+    skipCip: $skipCip
   )
 }
 `;

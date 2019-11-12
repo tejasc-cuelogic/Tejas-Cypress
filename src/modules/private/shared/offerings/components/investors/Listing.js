@@ -16,9 +16,9 @@ const meta = [
   { label: 'Residence City', value: 'city' },
   { label: 'State', value: 'state' },
   { label: 'Account Type', value: 'accountType' },
-  { label: 'Early Bird Eligibility', value: 'earlyBirdEligibility' },
   { label: 'Regulation', value: 'regulation' },
-  { label: 'Investment Amount', value: 'amount' },
+  { label: 'Amount', value: 'amount' },
+  { label: 'EB', value: 'earlyBirdEligibility' },
   { label: 'Date', value: 'investmentDate' },
   { label: 'Referral Code', value: 'referralCode' },
 ];
@@ -45,9 +45,9 @@ export default class Listing extends Component {
     const { isIssuer, isAdmin } = this.props.userStore;
     const headerList = [...meta];
     const referralCode = get(offer, 'referralCode');
-    const isOfferingClose = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE'].includes(get(offer, 'stage'));
-    let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Investment Amount', value: 'amount' });
-    computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'Early Bird Eligibility', value: 'earlyBirdEligibility' });
+    const isOfferingClose = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULTED'].includes(get(offer, 'stage'));
+    let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Amount', value: 'amount' });
+    computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'EB', value: 'earlyBirdEligibility' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
     computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Regulation', value: 'regulation' });
     const listHeader = computedList;
@@ -110,13 +110,12 @@ export default class Listing extends Component {
                     </div>
                   </Table.Cell>
                   <Table.Cell>
-                  <div className="table-info-wrap">
-                    <p>
-                      {((isIssuer && isOfferingClose) || (isAdmin)) && <span>{`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}`}</span>}
-                      <span>{data.city || 'N/A'}</span>
-                    </p>
-                  </div>
-                    {/* {data.city || 'N/A'} */}
+                    <div className="table-info-wrap">
+                      <p>
+                        {((isIssuer && isOfferingClose) || (isAdmin)) && <span>{`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}`}</span>}
+                        <span>{data.city || 'N/A'}</span>
+                      </p>
+                    </div>
                   </Table.Cell>
                   <Table.Cell>{data.state || 'N/A'}</Table.Cell>
                   {isAdmin
@@ -126,19 +125,6 @@ export default class Listing extends Component {
                       </Table.Cell>
                     )
                   }
-                  <Table.Cell textAlign="center">
-                    {data.earlyBirdEligibility
-                      ? (
-                        <Popup
-                          trigger={<Label color="green" circular empty className="mr-10" />}
-                          content="Eligible for Early Bird Reward"
-                          hoverable
-                          position="top center"
-                        />
-                      )
-                      : ''
-                    }
-                  </Table.Cell>
                   {isAdmin
                     && (
                       <Table.Cell>
@@ -176,6 +162,22 @@ export default class Listing extends Component {
                         }
                       </Table.Cell>
                       </>
+                    )
+                  }
+                  {((isIssuer && isOfferingClose) || (isAdmin))
+                    && (
+                    <Table.Cell textAlign="center">
+                      {data.earlyBirdEligibility
+                        ? (
+                          <Popup
+                            trigger={<Label color="green" circular empty className="mr-10" />}
+                            content="Eligible for Early Bird Reward"
+                            hoverable
+                            position="top center"
+                          />
+                        )
+                        : ''}
+                      </Table.Cell>
                     )
                   }
                   <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>

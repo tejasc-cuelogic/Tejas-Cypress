@@ -9,6 +9,13 @@ import { FieldError } from '../../shared';
 export default class FormInput extends Component {
   state = { showError: false };
 
+  constructor(props) {
+    super(props);
+    if (props.triggerError && props.fielddata.value !== '') {
+      this.setState({ showError: props.fielddata.error !== undefined });
+    }
+  }
+
   triggerError = (val) => {
     this.setState({ showError: val });
   }
@@ -83,6 +90,8 @@ export default class FormInput extends Component {
             }}
           onBlur={
             (e) => {
+              e.target.value = e.target.value ? e.target.value.trim() : e.target.value;
+              this.change(e);
               this.triggerError(true);
               if (props.onblur) {
                 this.props.onblur(e.target.value);

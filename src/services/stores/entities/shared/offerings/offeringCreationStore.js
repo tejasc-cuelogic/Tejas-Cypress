@@ -386,9 +386,8 @@ export class OfferingCreationStore {
         this.resetFormField(form, name, { fileName: fileObj.name, location: res });
         this.updateOffering(this.currentOfferingId, this[form].fields, 'media', false, false);
       })
-      .catch((err) => {
+      .catch(() => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        console.log(err);
       });
   }
 
@@ -473,11 +472,13 @@ export class OfferingCreationStore {
   removeData = (formName, subForm = 'data', isApiDelete = false) => {
     const subArray = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : subForm;
     if (!isApiDelete) {
-      let removeFileIds = '';
-      const { fileId } = this[formName].fields[subArray][this.removeIndex].upload;
-      removeFileIds = fileId;
+      if (formName === 'CLOSING_BINDER_FRM' || formName === 'DATA_ROOM_FRM') {
+        let removeFileIds = '';
+        const { fileId } = this[formName].fields[subArray][this.removeIndex].upload;
+        removeFileIds = fileId;
+        this.removeFileIdsList = removeFileIds ? [...this.removeFileIdsList, removeFileIds] : [...this.removeFileIdsList];
+      }
       this[formName].fields[subArray].splice(this.removeIndex, 1);
-      this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     }
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
@@ -580,7 +581,7 @@ export class OfferingCreationStore {
 
   @action
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
-    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod'], field) ? Math.abs(values.floatValue) || '' : includes(['interestRate', 'ssn'], field) ? values.value : values.floatValue;
+    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService', 'dlExpirationDate', 'dlIssuedDate'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod'], field) ? Math.abs(values.floatValue) || '' : includes(['interestRate', 'ssn'], field) ? values.value : values.floatValue;
     if (form === 'KEY_TERMS_FRM' && includes(['minOfferingAmount506', 'maxOfferingAmount506'], field)) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
@@ -1270,7 +1271,7 @@ export class OfferingCreationStore {
       payloadData.regulation = this.KEY_TERMS_FRM.fields.regulation.value;
       const closureSummary = { ...getOfferingById.closureSummary };
       const keyTerms = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
-      closureSummary.keyTerms = { ...closureSummary.keyTerms, multiple: keyTerms.multiple, interestRate: get(payloadData, 'keyTerms.interestRate') };
+      closureSummary.keyTerms = { ...closureSummary.keyTerms, priceCalcuation: keyTerms.priceCalcuation, multiple: keyTerms.multiple, interestRate: get(payloadData, 'keyTerms.interestRate') };
       payloadData.closureSummary = closureSummary;
       payloadData.closureSummary = mergeWith(
         toJS(getOfferingById.closureSummary),
@@ -1430,7 +1431,7 @@ export class OfferingCreationStore {
       query: getOfferingBac,
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac) {
+        if (res && res.getOfferingBac && !this.leaderShipOfferingBac.loading) {
           this.setBacFormData('LEADER_FRM', res || {}, false);
           const leadersCount = this.LEADERSHIP_FRM.fields.leadership.length;
           if (leadersCount
@@ -1455,6 +1456,7 @@ export class OfferingCreationStore {
     leaderNumber = undefined,
     afIssuerId,
     approvedObj,
+    index = undefined,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const issuerBacId = getOfferingById.legal && getOfferingById.legal.issuerBacId;
@@ -1496,7 +1498,7 @@ export class OfferingCreationStore {
       const { leadership } = getOfferingById;
       if (!afIssuerId) {
         mutation = createBac;
-        payload.email = leadership[leaderNumber].email;
+        payload.email = leadership[index].email;
         variables = {
           offeringBacDetails: payload,
         };
@@ -1561,6 +1563,7 @@ export class OfferingCreationStore {
         this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
         offeringsStore.getOne(getOfferingById.id);
         if (bacType === 'LEADERSHIP') {
+          this.initLoad.splice(this.initLoad.indexOf('LEADER_FRM'), 1);
           this.getLeadershipOfferingBac(this.currentOfferingId, 'LEADERSHIP');
         }
         Helper.toast('Offering has been saved successfully.', 'success');
@@ -1918,6 +1921,17 @@ export class OfferingCreationStore {
       arrName,
       index,
     );
+  }
+
+  @action
+  validateLeadership = () => {
+    let isValid = false;
+    this.LEADERSHIP_FRM.fields.leadership.forEach((leader) => {
+      if (leader.email.value === '' && !this.LEADERSHIP_FRM.meta.error) {
+        isValid = true;
+      }
+    });
+    return isValid;
   }
 
   getClosureObject = (type) => {

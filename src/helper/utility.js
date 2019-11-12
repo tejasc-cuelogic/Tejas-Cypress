@@ -8,9 +8,9 @@ import { toJS } from 'mobx';
 import money from 'money-math';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
-import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS } from '../constants/common';
+import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS } from '../constants/common';
 import authStore from '../services/stores/entities/shared/authStore';
-// import userStore from './../services/stores/entities/userStore';
+import userStore from '../services/stores/entities/userStore';
 
 export class Utility {
   // Default options for the toast
@@ -26,14 +26,14 @@ export class Utility {
    * reference: https://fkhadra.github.io/react-toastify/
    */
   toast = (msg, alertType, optionsOverride) => {
-    // if (userStore.isAdmin) {
-    const cleanMsg = s => (s ? s.replace('GraphQL error: ', '') : '');
-    if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
-      toast[alertType](`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
-    } else {
-      toast(`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride));
+    if (!userStore.isInvestor) {
+      const cleanMsg = s => (s ? s.replace('GraphQL error: ', '') : '');
+      if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
+        toast[alertType](`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
+      } else {
+        toast(`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride));
+      }
     }
-    // }
   }
 
   unMaskInput = maskedInput => (
@@ -56,9 +56,9 @@ export class Utility {
     return `${s4()}${s4()}-${s4()}${s4()}`;
   }
 
-  getTotal = (from, key) => {
+  getTotal = (from, key, isFloatToAmount = true) => {
     const total = '0.00';
-    return from.map(f => money.floatToAmount(f[key]))
+    return from.map(f => (isFloatToAmount ? money.floatToAmount(f[key] || 0) : f[key] || 0))
       .map(r => money.add(total, r))
       .reduce((sum, n) => money.add(sum, n));
   }
@@ -140,6 +140,8 @@ export class Utility {
     }
     return fileData;
   }
+
+  isSpecialCharPresent = str => (str ? new RegExp(/[^a-z0-9._-]+/gi).test(str) : '');
 
   sanitize = name => (name ? name.replace(/[^a-z0-9._-]+/gi, '_') : '');
 
@@ -320,13 +322,28 @@ export class Utility {
     return IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(fileExt.toLowerCase()) ? isMobile ? prepName(640) : isTablet ? prepName(1024) : prepName(1920) : prepName();
   }
 
+  caseify = s => _.startCase(_.lowerCase(s));
+
   validateImageExtension = (ext) => {
     const obj = {
-      isInvalid: !IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()),
-      errorMsg: `Only ${IMAGE_UPLOAD_ALLOWED_EXTENSIONS.join(', ')}  extensions are allowed.`,
+      isInvalid: ext ? !IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()) : true,
+      errorMsg: `Only ${IMAGE_UPLOAD_ALLOWED_EXTENSIONS.join(', ')} extensions are allowed.`,
     };
     return obj;
   };
+
+  validateDocumentExtension = (ext) => {
+    const obj = {
+      isInvalid: ext ? !DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()) : true,
+      errorMsg: `Only ${DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS.join(', ')} extensions are allowed.`,
+    };
+    return obj;
+  };
+
+  modalCssUpdate = (searchClass, addClass) => {
+    const modal = document.querySelector(`.${searchClass}`).closest('.page');
+    modal.classList.add(addClass);
+  }
 }
 
 export default new Utility();

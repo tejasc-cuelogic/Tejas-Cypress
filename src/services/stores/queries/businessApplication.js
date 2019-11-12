@@ -48,6 +48,8 @@ export const createBusinessApplicationBasicInfo = gql`
 mutation createBasicInfo($basicInfo: BasicInfoInput!) {
   upsertPreQualBasicInfo(basicInfo: $basicInfo) {
     id
+    signupCode
+    utmSource
   }
 }
 `;
@@ -224,6 +226,8 @@ query _getBusinessApplicationById ($id: String!) {
         interestExpenses
         remainingPrincipal
         term
+        termStartDate
+        maturityDate
       }
       owners {
         fullLegalName
@@ -237,6 +241,14 @@ query _getBusinessApplicationById ($id: String!) {
           fileId
           fileName
         }
+      }
+      sources {
+        name
+        amount
+      }
+      uses {
+        name
+        amount
       }
       stepStatus
     }
@@ -398,6 +410,7 @@ mutation updateBusinessApplicationInformation(
   $businessName: String
   $signupCode: String
   $utmSource: String
+  $rating: Int
 ) {
   updateBusinessApplicationInformation(
     applicationId: $applicationId
@@ -405,10 +418,12 @@ mutation updateBusinessApplicationInformation(
     businessName: $businessName
     signupCode: $signupCode
     utmSource: $utmSource
+    rating: $rating
   ){
     applicationId
     signupCode
     utmSource
+    rating
   }
 }
 `;

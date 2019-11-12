@@ -1,3 +1,5 @@
+import { FormHelper } from '../../../helper';
+
 export const common = {
   userId: {
     value: '',
@@ -112,170 +114,129 @@ export const ENCRYPTDECRYPTUTILITY_META = {
   userId: { ...common.userId },
   text: { ...common.text },
 };
-export const AUDITBOXFOLDER_META = {
-  waitingTime: {
-    key: 'waitingTime',
-    value: '',
-    label: 'Waiting Time',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  concurrency: {
-    key: 'concurrency',
-    value: '',
-    label: 'Concurrency',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  queueLimit: {
-    key: 'queueLimit',
-    value: '',
-    label: 'Queue Limit',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  jobId: {
-    key: 'jobId',
-    value: '',
-    label: 'Job Id',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  userId: {
-    key: 'userId',
-    value: '',
-    label: 'User Id',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  role: {
-    key: 'role',
-    value: '',
-    values: [
-      { key: 'Investor', text: 'Investor', value: 'INVESTOR' },
-      { key: 'Issuer', text: 'Issuer', value: 'ISSUER' },
-    ],
-    label: 'User Role',
-    error: undefined,
-    rule: 'required',
-  },
-};
 
-export const IMAGEPROCESSINGREQUES_META = {
-  waitingTime: {
-    key: 'waitingTime',
-    value: '',
-    label: 'Waiting Time',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  concurrency: {
-    key: 'concurrency',
-    value: '',
-    label: 'Concurrency',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  queueLimit: {
-    key: 'queueLimit',
-    value: '',
-    label: 'Queue Limit',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  key: {
-    key: 'key',
-    value: '',
-    label: 'Key',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-  folderName: {
-    key: 'folderName',
-    value: '',
-    label: 'Folder Name',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-};
+export const REQUESTFACTORY_META = FormHelper.generateMeta([
+  ['plugin', 'Plugin', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+  ['invocationType', 'Invocation Type', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'Event', text: 'Event', value: 'Event' },
+          { key: 'RequestResponse', text: 'RequestResponse', value: 'RequestResponse' },
+        ],
+      },
+    },
+  ],
+]);
 
-export const REQUESTFACTORY_META = {
-  plugin: {
-    key: 'plugin',
-    value: '',
-    values: [],
-    label: 'Plugin',
-    error: undefined,
-    rule: 'required',
-  },
-  invocationType: {
-    key: 'invocationType',
-    value: '',
-    values: [
-      { key: 'Event', text: 'Event', value: 'Event' },
-      { key: 'RequestResponse', text: 'RequestResponse', value: 'RequestResponse' },
-    ],
-    label: 'Invocation Type',
-    error: undefined,
-    rule: 'required',
-  },
-};
+export const REQUESTFACTORY_LOG__META = FormHelper.generateMeta([
+  ['plugin', 'Plugin', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+  ['status', 'Status', '', '', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'PROCESSING', text: 'PROCESSING', value: 'PROCESSING' },
+          { key: 'FAILED', text: 'FAILED', value: 'FAILED' },
+          { key: 'SUCCESS', text: 'SUCCESS', value: 'SUCCESS' },
+        ],
+      },
+    },
+  ],
+]);
 
-export const CRONFACTORY_META = {
-  cron: {
-    key: 'cron',
-    value: '',
-    values: [],
-    label: 'cron',
-    error: undefined,
-    rule: 'required',
-  },
-  cronMetaType: {
-    key: 'cronMetaType',
-    value: '',
-    values: [
-      { key: 'PLUGIN', text: 'PLUGIN', value: 'PLUGIN' },
-      { key: 'LOG', text: 'LOG', value: 'LOG' },
-    ],
-    label: 'Cron Meta Type',
-    error: undefined,
-    rule: 'optional',
-  },
-  jobId: {
-    key: 'jobId',
-    value: '',
-    label: 'Job Id',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'Enter here',
-  },
-};
+export const PROCESSFACTORY_META = FormHelper.generateMeta([
+  ['method', 'Method', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+]);
 
-export const PROCESSFACTORY_META = {
-  method: {
-    key: 'method',
-    value: '',
-    values: [],
-    label: 'method',
-    error: undefined,
-    rule: 'required',
-  },
-  payload: {
-    key: 'payload',
-    value: '',
-    label: 'Payload',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Put your JSON ojbect here...',
-  },
-};
+export const PROCESSFACTORY_LOG__META = FormHelper.generateMeta([
+  ['plugin', 'Plugin', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+  ['status', 'Status', '', '', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'PROCESSING', text: 'PROCESSING', value: 'PROCESSING' },
+          { key: 'FAILED', text: 'FAILED', value: 'FAILED' },
+          { key: 'SUCCESS', text: 'SUCCESS', value: 'SUCCESS' },
+          { key: 'STARTED', text: 'STARTED', value: 'STARTED' },
+        ],
+      },
+    },
+  ],
+]);
+
+
+export const CRONFACTORY_META = FormHelper.generateMeta([
+  ['cron', 'Cron', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+  ['cronMetaType', 'Cron Meta Type', '', '', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'PLUGIN', text: 'PLUGIN', value: 'PLUGIN' },
+          { key: 'LOG', text: 'LOG', value: 'LOG' },
+        ],
+      },
+    },
+  ],
+  ['jobId', 'Job Id', '', '', 'Enter here'],
+]);
+
+export const EMAILLIST_META = FormHelper.generateMeta([
+  ['emailType', 'Email Type', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'DEV', text: 'DEV', value: 'DEV' },
+          { key: 'NOTIFICATIONS', text: 'NOTIFICATIONS', value: 'NOTIFICATIONS' },
+          { key: 'ACCOUNTS', text: 'ACCOUNTS', value: 'ACCOUNTS' },
+          { key: 'ACCREDITATION', text: 'ACCREDITATION', value: 'ACCREDITATION' },
+          { key: 'TRANSFERS', text: 'TRANSFERS', value: 'TRANSFERS' },
+          { key: 'SALES', text: 'SALES', value: 'SALES' },
+          { key: 'APPLY', text: 'APPLY', value: 'APPLY' },
+          { key: 'COMMENTS', text: 'COMMENTS', value: 'COMMENTS' },
+          { key: 'PAYMENTS', text: 'PAYMENTS', value: 'PAYMENTS' },
+          { key: 'SUPPORT_SERVICES', text: 'SUPPORT_SERVICES', value: 'SUPPORT_SERVICES' },
+        ],
+      },
+    },
+  ],
+]);

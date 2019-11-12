@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
+import { get } from 'lodash';
+import mime from 'mime-types';
 import ReactCrop, { makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Icon, Modal, Header, Button } from 'semantic-ui-react';
@@ -30,14 +32,15 @@ export default class ImageCropper extends Component {
     e.preventDefault();
     this.props.handelReset();
     const { files } = (e.dataTransfer) ? e.dataTransfer : e.target;
-
-    this.setState({ imageType: files[0].type });
+    const fileType = get(files, '[0].type');
+    const fileExt = fileType === '' ? get(files, '[0].name').split('.')[1] : mime.extension(fileType);
+    this.setState({ imageType: fileType });
     this.props.setData('fileName', files[0].name);
-    this.props.setData('meta', { type: files[0].type, ext: files[0].type.split('/')[1] });
+    this.props.setData('meta', { type: fileType, ext: fileExt });
     if (this.props.verifySize) {
       this.props.verifySize(files[0].size, this.props.name);
     }
-    this.props.verifyExtension(files[0].type.split('/')[1], this.props.name);
+    this.props.verifyExtension(fileExt, this.props.name);
     const reader = new FileReader();
     reader.onload = () => {
       this.props.setData('src', reader.result);

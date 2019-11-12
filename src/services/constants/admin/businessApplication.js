@@ -146,7 +146,7 @@ export const DOCUMENTATION = {
 export const PROJECTIONS = {
   reasonableHistoricals: {
     value: '',
-    label: 'If Existing Business, Compare Historical for Reasonabless',
+    label: 'If Existing Business, Compare Historical for Reasonableness',
     error: undefined,
     objRefOutput: 'projections',
     rule: 'optional',

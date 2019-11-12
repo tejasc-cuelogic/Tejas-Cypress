@@ -6,9 +6,11 @@ import { DateRangeFilter } from '../../../../../theme/form/Filters';
 
 @withRouter
 export default class Filters extends Component {
+  state = { error: '' };
+
   render() {
     const {
-      requestState, change, filters, FILTER_FRM, fChange,
+      requestState, filters, FILTER_FRM, fChange,
     } = this.props;
     const type = this.props.history.location.pathname === '/app/crowdpay' ? 'review' : this.props.history.location.pathname.includes('individual') ? 'individual' : this.props.history.location.pathname.includes('ira') ? 'ira' : this.props.history.location.pathname.includes('review') ? 'review' : 'entity';
     return (
@@ -17,7 +19,7 @@ export default class Filters extends Component {
           <Grid stackable>
             <Grid.Row>
               <Grid.Column width={4}>
-                <DateRangeFilter filters={requestState.search} label="Creation date" nameStart="accountCreateFromDate" nameEnd="accountCreateToDate" name="createdAt" change={change} />
+                <DateRangeFilter filters={requestState.search} label="Creation date" nameStart="accountCreateFromDate" nameEnd="accountCreateToDate" name="createdAt" change={this.props.change} />
               </Grid.Column>
               <Grid.Column width={9}>
                 <FormCheckbox
@@ -29,6 +31,7 @@ export default class Filters extends Component {
                 />
               </Grid.Column>
             </Grid.Row>
+            <p className="negative-text">{this.state.error || ''}</p>
           </Grid>
         </Form>
 

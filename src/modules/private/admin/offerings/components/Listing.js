@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { get, includes } from 'lodash';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
 import { DateTimeFormat, InlineLoader, NsPagination } from '../../../../../theme/shared';
-import { STAGES } from '../../../../../services/constants/admin/offerings';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
+import { STAGES, SECURITIES_VALUES } from '../../../../../services/constants/admin/offerings';
 import Helper from '../../../../../helper/utility';
 
 const actions = {
@@ -111,11 +110,13 @@ export default class Listing extends Component {
                 : offerings.map(offering => (
                   <Table.Row key={offering.id} className={this.props.uiStore.inProgressArray.length && offering.id === this.state.loadingOfferId ? 'disabled' : ''}>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
-                      <b>{((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
-                        ? offering.keyTerms.shorthandBusinessName : (
-                          (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
-                        ))}
-                      </b>
+                      <Link to={`${this.props.match.url}/edit/${offering.id}`}>
+                        <b>{((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
+                          ? offering.keyTerms.shorthandBusinessName : (
+                            (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
+                          ))}
+                        </b>
+                      </Link>
                     </Table.Cell>
                     <Table.Cell className="text-capitalize">
                       {offering && offering.stage
@@ -172,7 +173,10 @@ export default class Listing extends Component {
                       </p>
                     </Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
-                      {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
+                      {(() => {
+                        const security = SECURITIES_VALUES.find(s => s.value === get(offering, 'keyTerms.securities'));
+                        return security ? security.text : 'N/A';
+                      })()}
                     </Table.Cell>
                     {stage === 'engagement'
                       && <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering && get(offering, 'closureSummary.repayment.currentRepaidAmount') ? `${Helper.CurrencyFormat(get(offering, 'closureSummary.repayment.currentRepaidAmount'))} (${get(offering, 'closureSummary.repayment.count')})` : 'N/A'}</Table.Cell>

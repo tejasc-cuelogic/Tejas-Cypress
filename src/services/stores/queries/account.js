@@ -29,6 +29,7 @@ export const upsertInvestorAccount = gql`
         routingNumber
         bankName
         accountType
+        plaidAccountId
       }
       accountType
     }
@@ -92,7 +93,6 @@ query getInvestorCloseAccounts($userId: String!) {
     userId
     accountId
     name
-    skipAddressVerifyCheck
     accountType
     accountStatus
     closed{

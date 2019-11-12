@@ -3,8 +3,9 @@ import { inject, observer } from 'mobx-react';
 import isEmpty from 'lodash/isEmpty';
 import { withRouter } from 'react-router-dom';
 import { Header, Modal, Button, Form, Message } from 'semantic-ui-react';
-import { FieldError, ListErrors } from '../../../../../../theme/shared';
+import { ListErrors } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
+import { FormInput } from '../../../../../../theme/form';
 
 @inject('authStore', 'uiStore', 'identityStore')
 @withRouter
@@ -16,7 +17,7 @@ export default class NewEmailAddress extends Component {
       this.props.identityStore.setIsOptConfirmed(false);
       Helper.toast('Email Change request has been accepted', 'success');
       const { email, password } = this.props.authStore.CONFIRM_FRM.fields;
-      localStorage.setItem('changedEmail', email.value);
+      sessionStorage.setItem('changedEmail', email.value);
       this.props.authStore.setCredentials({
         email: email.value.toLowerCase(), password: password.value,
       });
@@ -46,16 +47,15 @@ export default class NewEmailAddress extends Component {
         </Modal.Header>
         <Modal.Content>
           <Form error onSubmit={this.handleChangeEmailAddress}>
-            <Form.Input
+            <FormInput
               fluid
               label="Email"
               placeholder="Email address"
               name="email"
-              value={CONFIRM_FRM.fields.email.value}
-              onChange={confirmFormChange}
-              error={!!CONFIRM_FRM.fields.email.error}
+              fielddata={CONFIRM_FRM.fields.email}
+              changed={confirmFormChange}
+              showerror
             />
-            <FieldError error={CONFIRM_FRM.fields.email.error} />
             {errors
               && (
 <Message error className="mt-30">
