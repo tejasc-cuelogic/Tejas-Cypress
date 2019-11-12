@@ -185,7 +185,7 @@ class Comments extends Component {
                               {((get(c, 'createdUserInfo.id') === issuerId) || get(c, 'createdUserInfo.roles[0].name') === 'admin') && <Label color="blue" size="mini">{(get(c, 'createdUserInfo.id') === issuerId) ? 'ISSUER' : 'ADMIN'}</Label>}
                             </Comment.Author>
                             <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date'), true, true)}</span></Comment.Metadata>
-                            {isUserLoggedIn && !disablePostComment && !showOnlyOne
+                            {isUserLoggedIn && !disablePostComment
                               && (
                                 <Comment.Actions>
                                   <Comment.Action onClick={() => this.toggleVisibility(c.id)}>
