@@ -20,13 +20,18 @@ export class PaymentStore extends DataModelStore {
 
     PAYMENT_FRM = Validator.prepareFormObject(PAYMENT);
 
-    sortOrder = {
+    sortOrderRP = {
       column: null,
       direction: 'asc',
     }
 
-    setSortingOrder = (column = null, direction = null) => {
-      this.sortOrder = {
+    sortOrderSP = {
+      column: null,
+      direction: 'asc',
+    }
+
+    setSortingOrder = (column = null, direction = null, key) => {
+      this[key] = {
         column,
         direction,
       };
@@ -48,7 +53,7 @@ export class PaymentStore extends DataModelStore {
     }
 
     getOfferingById = (id) => {
-      const res = this.repayments.find(payment => payment.offering.id === id);
+      const res = this.data.find(payment => payment.offering.id === id);
       this.PAYMENT_FRM = Validator.setFormData(this.PAYMENT_FRM, res);
       this.validateForm('PAYMENT_FRM');
     }
@@ -65,10 +70,7 @@ export class PaymentStore extends DataModelStore {
           this.updatePaymentList(id, res.updatePaymentIssuer);
           resolve();
         })
-        .catch((err) => {
-          reject();
-          console.log(err);
-        })
+        .catch(() => reject())
         .finally(() => {
           uiStore.setProgress(false);
         });
@@ -87,7 +89,7 @@ export class PaymentStore extends DataModelStore {
     }
 
     setInitiateSrch = (keyword) => {
-      this.setDb(this.initialData);
+      this.setDb([...this.initialData]);
       if (keyword) {
         ClientDb.filterFromNestedObjs('offering.keyTerms.shorthandBusinessName', keyword);
       }
@@ -95,14 +97,27 @@ export class PaymentStore extends DataModelStore {
     }
 
     get repayments() {
-      if (this.sortOrder.column && this.sortOrder.direction && this.data && toJS(this.data)) {
+      const data = (this.data && toJS(this.data) && toJS(this.data).filter(d => get(d, 'offering.closureSummary.repayment.firstPaymentDate'))) || [];
+      if (this.sortOrderRP.column && this.sortOrderRP.direction && this.data && toJS(this.data)) {
         return orderBy(
-          this.data,
-          [issuerList => (!['offering.keyTerms.shorthandBusinessName', 'offering.keyTerms.securities', 'offering.closureSummary.keyTerms.monthlyPayment'].includes(this.sortOrder.column) ? get(issuerList, this.sortOrder.column) && moment(get(issuerList, this.sortOrder.column), 'MM/DD/YYYY', true).isValid() ? moment(get(issuerList, this.sortOrder.column), 'MM/DD/YYYY', true).unix() : '' : get(issuerList, this.sortOrder.column) && get(issuerList, this.sortOrder.column).toString().toLowerCase())],
-          [this.sortOrder.direction],
+          data,
+          [issuerList => (!['offering.keyTerms.shorthandBusinessName', 'offering.keyTerms.securities', 'offering.closureSummary.keyTerms.monthlyPayment'].includes(this.sortOrderRP.column) ? get(issuerList, this.sortOrderRP.column) && moment(get(issuerList, this.sortOrderRP.column), 'MM/DD/YYYY', true).isValid() ? moment(get(issuerList, this.sortOrderRP.column), 'MM/DD/YYYY', true).unix() : '' : get(issuerList, this.sortOrderRP.column) && get(issuerList, this.sortOrderRP.column).toString().toLowerCase())],
+          [this.sortOrderRP.direction],
         );
       }
-      return this.data || [];
+      return data || [];
+    }
+
+    get startupPeriod() {
+      const data = (this.data && toJS(this.data) && toJS(this.data).filter(d => !get(d, 'offering.closureSummary.repayment.firstPaymentDate'))) || [];
+      if (this.sortOrderSP.column && this.sortOrderSP.direction && this.data && toJS(this.data)) {
+        return orderBy(
+          data,
+          [issuerList => (!['offering.keyTerms.shorthandBusinessName', 'offering.keyTerms.securities', 'offering.closureSummary.keyTerms.monthlyPayment'].includes(this.sortOrderSP.column) ? get(issuerList, this.sortOrderSP.column) && moment(get(issuerList, this.sortOrderSP.column), 'MM/DD/YYYY', true).isValid() ? moment(get(issuerList, this.sortOrderSP.column), 'MM/DD/YYYY', true).unix() : '' : get(issuerList, this.sortOrderSP.column) && get(issuerList, this.sortOrderSP.column).toString().toLowerCase())],
+          [this.sortOrderSP.direction],
+        );
+      }
+      return data || [];
     }
 }
 
@@ -111,7 +126,8 @@ decorate(PaymentStore, {
   data: observable,
   PAYMENT_FRM: observable,
   initialData: observable,
-  sortOrder: observable,
+  sortOrderSP: observable,
+  sortOrderRP: observable,
   setSortingOrder: action,
   initRequest: action,
   getOfferingById: action,
@@ -119,6 +135,7 @@ decorate(PaymentStore, {
   updatePaymentList: action,
   setInitiateSrch: action,
   setDb: action,
+  startupPeriod: computed,
   repayments: computed,
 });
 

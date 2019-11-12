@@ -395,6 +395,7 @@ export class FactoryStore extends DataModelStore {
         });
         Helper.toast('Your request is processed.', 'success');
         if (result.data.invokeProcessorDriver) {
+          this.setFieldValue('processFactoryResponse', result.data.invokeProcessorDriver);
           resolve(result.data.invokeProcessorDriver);
         }
       }
