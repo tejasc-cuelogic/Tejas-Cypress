@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Header, Form, Message, Confirm, Button } from 'semantic-ui-react';
+import { Header, Form, Message, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { ListErrors } from '../../../../../../../theme/shared';
-import { FormInput, DropZone } from '../../../../../../../theme/form';
+import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -13,16 +13,8 @@ export default class PersonalInformation extends Component {
     this.props.entityAccountStore.setFileUploadData('PERSONAL_INFO_FRM', 'legalDocUrl', files);
   }
 
-  confirmRemoveDoc = (e, name) => {
-    this.props.uiStore.setConfirmBox(name);
-  }
-
   handleDelLegalDocUrl = () => {
     this.props.entityAccountStore.removeUploadedData('PERSONAL_INFO_FRM', 'legalDocUrl', 'Personal info');
-    this.props.uiStore.setConfirmBox('');
-  }
-
-  handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
 
@@ -38,7 +30,7 @@ export default class PersonalInformation extends Component {
       personalInfoChange,
     } = this.props.entityAccountStore;
     const { currentUser } = this.props.userStore;
-    const { errors, confirmBox } = this.props.uiStore;
+    const { errors } = this.props.uiStore;
     return (
       <>
       <Header as="h4" textAlign={isMobile ? '' : 'center'}>Authorized Signatory Information</Header>
@@ -71,15 +63,15 @@ export default class PersonalInformation extends Component {
             name="legalDocUrl"
             fielddata={PERSONAL_INFO_FRM.fields.legalDocUrl}
             ondrop={this.onLegalDocUrlDrop}
-            onremove={this.confirmRemoveDoc}
+            onremove={this.handleDelLegalDocUrl}
             uploadtitle={isMobile ? 'Choose file' : 'Choose a file or drag it here'}
             containerclassname={`${isMobile ? 'mt-30 mb-30' : ''} fluid`}
           />
           {errors
             && (
-<Message error className="mt-30">
-              <ListErrors errors={[errors.message]} />
-            </Message>
+              <Message error className="mt-30">
+                <ListErrors errors={[errors.message]} />
+              </Message>
             )
           }
           {isMobile && (
@@ -87,15 +79,6 @@ export default class PersonalInformation extends Component {
           )
           }
         </Form>
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'legalDocUrl'}
-          onCancel={this.handleDelCancel}
-          onConfirm={this.handleDelLegalDocUrl}
-          size="mini"
-          className="deletion"
-        />
       </>
     );
   }

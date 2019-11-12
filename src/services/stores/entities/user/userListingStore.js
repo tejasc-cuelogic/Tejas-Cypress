@@ -68,6 +68,10 @@ export class UserListingStore {
         ];
       }
     }
+    const { sort } = this.requestState;
+    const sortBy = sort.by || null;
+    const sortType = sort.direction || null;
+
     let params = {
       search: keyword,
       accountType: !accountType && !accountStatus && !deletedAccountStatus.length ? allAccountTypes : accountType,
@@ -76,6 +80,8 @@ export class UserListingStore {
       limit: getAllUsers ? 500 : this.requestState.perPage,
     };
 
+    params = sortBy ? { ...params, sortBy: sortBy === 'createdDate' ? 'ACCOUNT_CREATION' : 'LAST_LOGIN' } : { ...params };
+    params = sortType ? { ...params, sortType: sortType.toUpperCase() } : { ...params };
     this.requestState.page = params.page;
     if (startDate && endDate) {
       params = {
