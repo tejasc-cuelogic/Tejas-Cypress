@@ -240,3 +240,14 @@ export const EMAILLIST_META = FormHelper.generateMeta([
     },
   ],
 ]);
+
+export const FILEFACTORY_META = FormHelper.generateMeta([
+  ['method', 'Method', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+]);

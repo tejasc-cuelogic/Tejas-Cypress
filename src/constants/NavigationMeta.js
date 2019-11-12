@@ -542,6 +542,9 @@ export const PRIVATE_NAV = [
       {
         title: 'Email', to: 'email', component: 'Email', capability: 'EMAIL_ANY',
       },
+      {
+        title: 'File Factory', to: 'file-factory', component: 'FileFactory', capability: 'FILE_FACTORY_ANY',
+      },
     ],
   },
 ];
