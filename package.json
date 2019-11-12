@@ -112,7 +112,7 @@
     "react-dev-utils": "^9.0.1",
     "react-diff-viewer": "^1.1.0",
     "react-dom": "^16.8.6",
-    "react-dropzone": "10.1.10",
+    "react-dropzone": "^4.2.11",
     "react-froala-wysiwyg": "2.8.4",
     "react-google-autocomplete": "^1.0.15",
     "react-helmet": "^5.2.0",
