@@ -423,8 +423,8 @@ export class FactoryStore extends DataModelStore {
           variables: { ...TestformData },
           setLoader: fileFactoryPluginTrigger,
         });
-        Helper.toast('Your request is processed.', 'success');
         if (result.data.generateFile) {
+          Helper.toast('Your request is processed.', 'success');
           resolve(result.data.generateFile);
         }
       } catch (error) {
