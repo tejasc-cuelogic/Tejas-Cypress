@@ -11,11 +11,6 @@ import TriggerFileFactory from './factory/fileFactory';
 export default class FileFactory extends Component {
   constructor(props) {
     super(props);
-    this.props.factoryStore.fetchPlugins();
-    this.props.factoryStore.setFieldValue('selectedFactory', 'PROCESS');
-  }
-
-  componentDidMount() {
     // this.props.factoryStore.fetchPlugins();
     this.props.factoryStore.fetchPluginsForFileFactory();
   }

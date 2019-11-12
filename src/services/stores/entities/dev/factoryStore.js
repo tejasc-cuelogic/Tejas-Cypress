@@ -411,10 +411,9 @@ export class FactoryStore extends DataModelStore {
     const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.FILEFACTORY.fields;
     const formPayloadData = Validator.evaluateFormData(fieldsPayload, true);
     const TestformData = this.ExtractToJSON(formPayloadData, true);
-    if (TestformData.payload && !this.isValidJson(TestformData.payload)) {
+    if (TestformData.payload && TestformData.payload !== '' && !this.isValidJson(TestformData.payload)) {
       this.DYNAMCI_PAYLOAD_FRM.FILEFACTORY.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
       this.DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid = false;
-      reject();
     } else {
       try {
         this.setFieldValue('inProgress', true, 'fileFactory');
