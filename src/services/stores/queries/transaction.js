@@ -25,22 +25,6 @@ export const allTransactions = gql`
   }
 `;
 
-export const CreateTransaction = gql`
-mutation CreateTransaction($transactionType: String!, $description: String!, $amount: Float!){
-    createTransaction(
-      transactionType: $transactionType,
-      description: $description,
-      amount:$amount
-    ) {
-      id
-      createdAt
-      amount,
-      description
-      transactionType
-    }
-  } 
-`;
-
 export const addFundMutation = gql`
   mutation _addFunds($userId: String, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int, $sendInvestorNotification: Boolean) {
     addFunds(userId: $userId, amount: $amount, accountId: $accountId, description: $description, agreementId: $agreementId, sendInvestorNotification: $sendInvestorNotification)

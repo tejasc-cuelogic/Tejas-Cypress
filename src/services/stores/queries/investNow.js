@@ -28,21 +28,6 @@ export const getInvestorAvailableCash = gql`
   }
 `;
 
-export const validateInvestmentAmountInOffering = gql`
-  query _validateInvestmentAmountInOffering($investmentAmount: Float!, $offeringId: String!, $userId: String!, $accountId: String!){
-    validateInvestmentAmountInOffering(
-      investmentAmount: $investmentAmount
-      offeringId: $offeringId
-      userId: $userId
-      accountId: $accountId
-    )
-    {
-      status
-      message
-    }
-  }
-`;
-
 export const validateInvestmentAmount = gql`
   query validateInvestmentAmount(
     $userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: Float!,
@@ -116,21 +101,6 @@ export const transferFundsForInvestment = gql`
       accountId: $accountId
       transferAmount: $transferAmount
     )
-  }
-`;
-
-export const updateInvestmentLimits = gql`
-  mutation _updateInvestmentLimits($userId: String, $accountId: String!, $annualIncome: Float, $netWorth: Float, $otherRegCfInvestments: Float){
-    updateInvestmentLimits(
-      userId: $userId
-      accountId: $accountId
-      annualIncome: $annualIncome
-      netWorth: $netWorth
-      otherRegCfInvestments: $otherRegCfInvestments
-    )
-    {
-      investmentLimit
-    }
   }
 `;
 

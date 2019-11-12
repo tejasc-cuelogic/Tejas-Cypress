@@ -156,15 +156,6 @@ export const cancelAgreement = gql`
   mutation cancelAgreement($agreementId: Int!, $userId: String, $voidReason: String, $voidType: AgreementVoidTypeEnum, $sendNotification: Boolean) {
     cancelAgreement(agreementId: $agreementId, userId: $userId, voidReason: $voidReason, voidType: $voidType, sendNotification: $sendNotification)
   }`;
-export const withdrawFunds = gql`
-  mutation withdrawFunds($amount:  Float!, $accountId: String! ) {
-    withdrawFunds(amount: $amount, accountId: $accountId)
-  }`;
-export const addFunds = gql`
-  mutation addFunds($amount:  Float!, $accountId: String! ) {
-    addFunds(amount: $amount, accountId: $accountId)
-  }
-`;
 
 export const getMonthlyPaymentsToInvestorByOffering = gql`
 query _getMonthlyPaymentsToInvestorByOffering($userId:String, $accountId:String!, $offeringId:String!) {
