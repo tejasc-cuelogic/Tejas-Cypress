@@ -9,7 +9,7 @@ import Overview from './overview';
 import Finances from './Finances';
 import Experience from './Experience';
 
-@inject('uiStore', 'investorProfileStore', 'userDetailsStore', 'userStore')
+@inject('uiStore', 'investorProfileStore', 'userDetailsStore', 'userStore', 'nsUiStore')
 @withRouter
 @observer
 export default class AccountCreation extends React.Component {
@@ -34,18 +34,18 @@ export default class AccountCreation extends React.Component {
 
   render() {
     const {
-      inProgress,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
     } = this.props.uiStore;
+    const { isLoading } = this.props.nsUiStore;
     const {
-      INVESTMENT_EXP_FORM,
-      EMPLOYMENT_FORM,
-      BROKERAGE_EMPLOYMENT_FORM,
-      FINANCES_FORM,
-      updateInvestorProfileData,
-      PUBLIC_COMPANY_REL_FORM,
+      INVESTMENT_EXP_FRM,
+      EMPLOYMENT_STATUS_FRM,
+      BROKERAGE_EMPLOYMENT_FRM,
+      FINANCIAL_INFO_FRM,
+      upsertInvestorProfile,
+      PUBLIC_COMPANY_REL_FRM,
       stepToBeRendered,
     } = this.props.investorProfileStore;
     const steps = [
@@ -62,50 +62,50 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Employment Status',
         component: <Employment />,
-        isValid: EMPLOYMENT_FORM.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
-        isDirty: EMPLOYMENT_FORM.meta.isDirty,
-        validForm: EMPLOYMENT_FORM.meta.isValid,
-        form: 'EMPLOYMENT_FORM',
+        isValid: EMPLOYMENT_STATUS_FRM.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
+        isDirty: EMPLOYMENT_STATUS_FRM.meta.isDirty,
+        validForm: EMPLOYMENT_STATUS_FRM.meta.isValid,
+        form: 'EMPLOYMENT_STATUS_FRM',
         stepToBeRendered: 2,
         disableKeyDown: true,
       },
       {
         name: 'Brokerage Employment',
         component: <BrokerageEmployment />,
-        isValid: BROKERAGE_EMPLOYMENT_FORM.meta.isValid ? '' : stepToBeRendered > 2 ? 'error' : '',
-        isDirty: BROKERAGE_EMPLOYMENT_FORM.meta.isDirty,
-        form: 'BROKERAGE_EMPLOYMENT_FORM',
-        validForm: BROKERAGE_EMPLOYMENT_FORM.meta.isValid,
+        isValid: BROKERAGE_EMPLOYMENT_FRM.meta.isValid ? '' : stepToBeRendered > 2 ? 'error' : '',
+        isDirty: BROKERAGE_EMPLOYMENT_FRM.meta.isDirty,
+        form: 'BROKERAGE_EMPLOYMENT_FRM',
+        validForm: BROKERAGE_EMPLOYMENT_FRM.meta.isValid,
         stepToBeRendered: 3,
         disableKeyDown: true,
       },
       {
         name: 'Public Company Relations',
         component: <PublicCompanyRelations />,
-        isValid: PUBLIC_COMPANY_REL_FORM.meta.isValid ? '' : stepToBeRendered > 3 ? 'error' : '',
-        isDirty: PUBLIC_COMPANY_REL_FORM.meta.isDirty,
-        form: 'PUBLIC_COMPANY_REL_FORM',
-        validForm: PUBLIC_COMPANY_REL_FORM.meta.isValid,
+        isValid: PUBLIC_COMPANY_REL_FRM.meta.isValid ? '' : stepToBeRendered > 3 ? 'error' : '',
+        isDirty: PUBLIC_COMPANY_REL_FRM.meta.isDirty,
+        form: 'PUBLIC_COMPANY_REL_FRM',
+        validForm: PUBLIC_COMPANY_REL_FRM.meta.isValid,
         stepToBeRendered: 4,
         disableKeyDown: true,
       },
       {
         name: 'Financial Information',
         component: <Finances />,
-        isValid: FINANCES_FORM.meta.isValid ? '' : stepToBeRendered > 4 ? 'error' : '',
-        isDirty: FINANCES_FORM.meta.isDirty,
-        form: 'FINANCES_FORM',
-        validForm: FINANCES_FORM.meta.isValid,
+        isValid: FINANCIAL_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 4 ? 'error' : '',
+        isDirty: FINANCIAL_INFO_FRM.meta.isDirty,
+        form: 'FINANCIAL_INFO_FRM',
+        validForm: FINANCIAL_INFO_FRM.meta.isValid,
         stepToBeRendered: 5,
         disableKeyDown: true,
       },
       {
         name: 'Investment Experience',
         component: <Experience />,
-        isValid: INVESTMENT_EXP_FORM.meta.isValid ? '' : stepToBeRendered > 5 ? 'error' : '',
-        isDirty: INVESTMENT_EXP_FORM.meta.isDirty,
-        form: 'INVESTMENT_EXP_FORM',
-        validForm: INVESTMENT_EXP_FORM.meta.isValid,
+        isValid: INVESTMENT_EXP_FRM.meta.isValid ? '' : stepToBeRendered > 5 ? 'error' : '',
+        isDirty: INVESTMENT_EXP_FRM.meta.isDirty,
+        form: 'INVESTMENT_EXP_FRM',
+        validForm: INVESTMENT_EXP_FRM.meta.isValid,
         stepToBeRendered: 6,
         disableNextButton: true,
         disableKeyDown: true,
@@ -113,9 +113,8 @@ export default class AccountCreation extends React.Component {
     ];
 
     return (
-
       <div className="step-progress">
-        <MultiStep isAccountCreation disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={updateInvestorProfileData} inProgress={inProgress} steps={steps} formTitle="Complete your investor profile" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={upsertInvestorProfile} inProgress={isLoading} steps={steps} formTitle="Complete your investor profile" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

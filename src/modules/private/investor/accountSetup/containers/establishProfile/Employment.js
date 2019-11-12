@@ -1,53 +1,53 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Message } from 'semantic-ui-react';
-import { FormRadioGroup, FormInput } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
+import formHOC from '../../../../../../theme/form/formHOC';
+
+const metaInfo = {
+  store: 'investorProfileStore',
+  form: 'EMPLOYMENT_STATUS_FRM',
+};
 
 @inject('investorProfileStore', 'uiStore')
 @observer
-export default class Employment extends Component {
+class Employment extends Component {
   render() {
-    const { EMPLOYMENT_FORM, employmentChange } = this.props.investorProfileStore;
-    const { errors } = this.props.uiStore;
+    const { smartElement, investorProfileStore, uiStore } = this.props;
+    const { EMPLOYMENT_STATUS_FRM } = investorProfileStore;
+    const { errors } = uiStore;
     return (
       <div className="center-align">
         <Header as="h3">What is your employment status?</Header>
         <p className="mb-40">Please indicate your current employment status</p>
         <Form error>
-          <FormRadioGroup
-            fielddata={EMPLOYMENT_FORM.fields.status}
-            name="status"
-            changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
-            containerclassname="three wide button-radio center-align"
-            showerror
-          />
-          {EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED'
+          {
+            smartElement.RadioGroup('status', {
+              containerclassname: 'three wide button-radio center-align',
+            })
+          }
+          {EMPLOYMENT_STATUS_FRM.fields.status.value === 'EMPLOYED'
           && (
-<div className="field-wrap left-align">
+          <div className="field-wrap left-align">
             <Form.Group widths="equal">{
               ['employer', 'position'].map(field => (
-                <FormInput
-                  key={field}
-                  fielddata={EMPLOYMENT_FORM.fields[field]}
-                  name={field}
-                  changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
-                  showerror
-                />
+                smartElement.Input(field)
               ))}
             </Form.Group>
           </div>
           )
           }
           {errors
-          && (
-<Message error className="mt-30">
-            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-          </Message>
-          )
+            && (
+              <Message error className="mt-30">
+                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+              </Message>
+            )
           }
         </Form>
       </div>
     );
   }
 }
+
+export default formHOC(Employment, metaInfo);

@@ -2,19 +2,21 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Message, Divider } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { MaskedInput, FormRadioGroup } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
+import formHOC from '../../../../../../theme/form/formHOC';
+
+const metaInfo = {
+  store: 'investorProfileStore',
+  form: 'FINANCIAL_INFO_FRM',
+};
+
 @inject('investorProfileStore', 'uiStore')
 @withRouter
 @observer
-export default class Finances extends Component {
+class Finances extends Component {
   render() {
-    const {
-      FINANCES_FORM,
-      financesChange,
-      investorProfileChange,
-    } = this.props.investorProfileStore;
     const { errors } = this.props.uiStore;
+    const { smartElement } = this.props;
     return (
       <div className="center-align">
         <Header as="h3">Financial Information</Header>
@@ -27,41 +29,30 @@ export default class Finances extends Component {
         </p>
         <Divider hidden />
         <Form error>
-          <FormRadioGroup
-            fielddata={FINANCES_FORM.fields.investorProfileType}
-            name="investorProfileType"
-            changed={investorProfileChange}
-            containerclassname="three wide button-radio center-align"
-            showerror
-          />
+          {
+            smartElement.RadioGroup('taxFilingAs', {
+              containerclassname: 'three wide button-radio center-align',
+            })
+          }
+
           <Divider hidden />
           <div className="field-wrap left-align">
             <Form.Group widths={2}>
               {['netWorth', 'annualIncomeCurrentYear'].map(field => (
-                <MaskedInput
-                  key={field}
-                  name={field}
-                  currency
-                  fielddata={FINANCES_FORM.fields[field]}
-                  changed={financesChange}
-                  prefix="$ "
-                  number
-                  showerror
-                  disableDecimal
-                  maxlength={13}
-                />
+                smartElement.Masked(field, { currency: true, prefix: '$ ', disableDecimal: true, maxlength: 13 })
               ))}
             </Form.Group>
           </div>
           {errors
-          && (
-<Message error className="mt-30">
-            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-          </Message>
-          )
+            && (
+              <Message error className="mt-30">
+                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+              </Message>
+            )
           }
         </Form>
       </div>
     );
   }
 }
+export default formHOC(Finances, metaInfo);

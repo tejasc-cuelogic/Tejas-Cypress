@@ -249,6 +249,18 @@ export class UserDetailsStore {
   }
 
   @action
+  mergeUserData = (key, payload, objName, path) => {
+    const oldData = { ...this[objName] };
+    if (objName === 'currentUser') {
+      oldData.data.user[key] = path ? set({ ...oldData.data.user[key], ...payload }, path, payload)
+        : { ...oldData.data.user[key], ...payload };
+    } else {
+      oldData[key] = path ? set({ ...oldData[key], ...payload }, path, payload) : { ...oldData[key], ...payload };
+    }
+    this[objName] = { ...oldData };
+  }
+
+  @action
   setAddressOrPhoneCheck = () => {
     this.isAddressSkip = get(this.getDetailsOfUser, 'skipAddressVerifyCheck') || false;
     this.isPhoneSkip = get(this.getDetailsOfUser, 'skipPhoneVerifyCheck') || false;
@@ -676,7 +688,7 @@ export class UserDetailsStore {
           return true;
         });
       }
-      this.USER_INVESTOR_PROFILE.fields.investorProfileType = get(details, 'investorProfileData.annualIncome') || '';
+      this.USER_INVESTOR_PROFILE.fields.taxFilingAs = get(details, 'investorProfileData.taxFilingAs') || '';
     }
     return false;
   }
