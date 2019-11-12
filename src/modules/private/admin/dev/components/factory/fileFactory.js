@@ -9,22 +9,22 @@ import DynamicFormInput from './dynamicFormInput';
 
 const metaInfo = {
   store: 'factoryStore',
-  form: 'PROCESSFACTORY_FRM',
+  form: 'FILEFACTORY_FRM',
 };
 
-function ProcessFactory(props) {
+function FileFactory(props) {
   const [prev, setPrev] = useState(false);
   const [visibleProp, setVisibleProp] = useState(false);
 
   useEffect(() => {
-    props.factoryStore.resetForm('PROCESSFACTORY_FRM');
-    props.factoryStore.setFieldValue('inProgress', false, 'processFactory');
-    props.factoryStore.setFieldValue('DYNAMCI_PAYLOAD_FRM', {}, 'PROCESSFACTORY');
-    props.factoryStore.setFieldValue('processFactoryResponse', {});
+    props.factoryStore.resetForm('FILEFACTORY_FRM');
+    props.factoryStore.setFieldValue('inProgress', false, 'fileFactory');
+    props.factoryStore.setFieldValue('DYNAMCI_PAYLOAD_FRM', {}, 'FILEFACTORY');
+    // props.factoryStore.setFieldValue('processFactoryResponse', {});
   }, []);
 
   function onSubmit() {
-    props.factoryStore.processFactoryPluginTrigger()
+    props.factoryStore.fileFactoryPluginTrigger()
       .then(() => {
         setVisibleProp(true);
       });
@@ -34,7 +34,7 @@ function ProcessFactory(props) {
     e.preventDefault();
     setPrev(val);
     setVisibleProp(false);
-    props.factoryStore.setFieldValue('processFactoryResponse', {});
+    // props.factoryStore.setFieldValue('processFactoryResponse', {});
   }
 
   function showModel(e, val) {
@@ -44,7 +44,7 @@ function ProcessFactory(props) {
 
   const { factoryStore, smartElement } = props;
   const {
-    PROCESSFACTORY_FRM, formChangeForPlugin, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
+    FILEFACTORY_FRM, formChangeForPlugin, inProgress, processFactoryResponse, DYNAMCI_PAYLOAD_FRM, currentPluginSelected,
   } = factoryStore;
 
   return (
@@ -67,27 +67,27 @@ function ProcessFactory(props) {
         </Modal.Content>
       </Modal>
       <Card fluid className="elastic-search">
-        <Card.Content header="Trigger Process Factory Plugin" />
+        <Card.Content header="Trigger File Factory" />
         <Card.Content>
           <Card.Description>
-            <Form onSubmit={PROCESSFACTORY_FRM.meta.isValid && onSubmit}>
+            <Form onSubmit={FILEFACTORY_FRM.meta.isValid && onSubmit}>
               <Form.Group>
                 <Grid className="full-width mlr-0" stackable>
                   <Grid.Column width={8}>
                     {smartElement.FormDropDown('method', {
-                      onChange: (e, result) => formChangeForPlugin(e, result, 'PROCESSFACTORY_FRM'),
+                      onChange: (e, result) => formChangeForPlugin(e, result, 'FILEFACTORY_FRM'),
                       containerclassname: 'dropdown-field mlr-0',
                       placeholder: 'Choose here',
-                      options: PROCESSFACTORY_FRM.fields.method.values,
+                      options: FILEFACTORY_FRM.fields.method.values,
                       className: 'mb-80',
                     })}
                     <Divider section hidden />
-                    <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.processFactory || !PROCESSFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY.meta.isValid} loading={inProgress.processFactory} />
+                    <Button className="mt-80 ml-10" primary content="Submit" disabled={inProgress.fileFactory || !FILEFACTORY_FRM.meta.isValid || !DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid} loading={inProgress.fileFactory} />
                     {visibleProp && <Link as={Button} className="mt-80 ml-10 ui button inverted green" to="/" onClick={e => showModel(e, true)} title="Show Response"> Show Response </Link>}
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <Header as="h5">Payload</Header>
-                    <DynamicFormInput {...props} formPayload={DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'PROCESSFACTORY' }} selectedPlugin={currentPluginSelected} />
+                    <DynamicFormInput {...props} formPayload={DYNAMCI_PAYLOAD_FRM.FILEFACTORY} formObj={{ parentForm: 'DYNAMCI_PAYLOAD_FRM', childForm: 'FILEFACTORY' }} selectedPlugin={currentPluginSelected} />
                   </Grid.Column>
                 </Grid>
               </Form.Group>
@@ -99,4 +99,4 @@ function ProcessFactory(props) {
   );
 }
 
-export default (withRouter(formHOC(observer(ProcessFactory), metaInfo)));
+export default (withRouter(formHOC(observer(FileFactory), metaInfo)));

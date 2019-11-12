@@ -1,14 +1,14 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
 import { get, isEmpty, forEach, find, includes, keyBy } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
-import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger, fetchRequestFactoryLogs, fetchProcessLogs } from '../../queries/data';
+import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger, fetchRequestFactoryLogs, fetchProcessLogs, fileFactoryPluginTrigger } from '../../queries/data';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { REQUESTFACTORY_META, CRONFACTORY_META, PROCESSFACTORY_META, REQUESTFACTORY_LOG__META, PROCESSFACTORY_LOG__META } from '../../../constants/admin/data';
+import { REQUESTFACTORY_META, CRONFACTORY_META, PROCESSFACTORY_META, REQUESTFACTORY_LOG__META, PROCESSFACTORY_LOG__META, FILEFACTORY_META } from '../../../constants/admin/data';
 
 export class FactoryStore extends DataModelStore {
   constructor() {
-    super({ getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger, fetchRequestFactoryLogs, fetchProcessLogs });
+    super({ getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger, fetchRequestFactoryLogs, fetchProcessLogs, fileFactoryPluginTrigger });
   }
 
   REQUESTFACTORY_FRM = Validator.prepareFormObject(REQUESTFACTORY_META);
@@ -21,9 +21,12 @@ export class FactoryStore extends DataModelStore {
 
   PROCESSFACTORY_LOG_FRM = Validator.prepareFormObject(PROCESSFACTORY_LOG__META);
 
+  FILEFACTORY_FRM = Validator.prepareFormObject(FILEFACTORY_META);
+
   DYNAMCI_PAYLOAD_FRM = {
     REQUESTFACTORY: {},
     PROCESSFACTORY: {},
+    FILEFACTORY: {},
   };
 
   currentPluginSelected = '';
@@ -32,6 +35,7 @@ export class FactoryStore extends DataModelStore {
     requestFactory: false,
     cronFactory: false,
     processFactory: false,
+    fileFactory: false,
   };
 
   pluginListArr = null;
@@ -120,12 +124,12 @@ export class FactoryStore extends DataModelStore {
   formChangeForPlugin = (e, res, form, subForm = false) => {
     if (subForm) {
       this[form.parentForm][form.childForm] = Validator.onChange(this[form.parentForm][form.childForm], Validator.pullValues(e, res));
-    } else if (includes(['REQUESTFACTORY_FRM', 'PROCESSFACTORY_FRM'], form) && includes(['plugin', 'method'], res.name)) {
+    } else if (includes(['REQUESTFACTORY_FRM', 'PROCESSFACTORY_FRM', 'FILEFACTORY_FRM'], form) && includes(['plugin', 'method'], res.name)) {
       const currentSelectedPlugin = Validator.pullValues(e, res).value;
       this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
       this.currentPluginSelected = currentSelectedPlugin;
       const plugnArr = this.pullValuesForDynmicInput(e, res);
-      const childForm = form === 'REQUESTFACTORY_FRM' ? 'REQUESTFACTORY' : 'PROCESSFACTORY';
+      const childForm = form === 'REQUESTFACTORY_FRM' ? 'REQUESTFACTORY' : form === 'PROCESSFACTORY_FRM' ? 'PROCESSFACTORY' : 'FILEFACTORY';
       this.createDynamicFormFields(plugnArr, childForm);
     } else {
       this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
@@ -151,6 +155,115 @@ export class FactoryStore extends DataModelStore {
     } catch (error) {
       Helper.toast('Something went wrong, please try again later1111.', 'error');
     }
+  }
+
+  fetchPluginsForFileFactory = () => {
+    const fileData = {
+      listFilePlugins: {
+        plugins: [
+          {
+            name: 'Investor Profile',
+            plugin: 'INVESTOR_PROFILE',
+            pluginInputs: [
+              {
+                defaultValue: 'PDF.Investor.Compliance.Profile',
+                key: 'identifier',
+                label: 'Identifier',
+                rule: 'required',
+                type: 'input',
+                value: '',
+              },
+              {
+                defaultValue: 'USER UUID',
+                key: 'resourceId',
+                label: 'Resource Id',
+                rule: 'required',
+                type: 'input',
+                value: '',
+              },
+              {
+                defaultValue: 'USER UUID',
+                key: 'ownerId',
+                label: 'Owner Id',
+                rule: 'required',
+                type: 'input',
+                value: '',
+              },
+            ],
+          },
+          {
+            name: 'Investor Account',
+            plugin: 'INVESTOR_ACCOUNT',
+            pluginInputs: [
+              {
+                defaultValue: 'PDF.Investor.Compliance.Account',
+                key: 'identifier',
+                label: 'Identifier',
+                rule: 'required',
+                type: 'input',
+                value: '',
+              },
+              {
+                defaultValue: 'ACCOUNT UUID',
+                key: 'resourceId',
+                label: 'Resource Id',
+                rule: 'required',
+                type: 'input',
+                value: '',
+              },
+              {
+                defaultValue: 'USER UUID',
+                key: 'ownerId',
+                label: 'Owner Id',
+                rule: 'required',
+                type: 'input',
+                value: '',
+              },
+            ],
+          },
+          {
+            name: 'Investment',
+            plugin: 'INVESTMENT',
+            pluginInputs: [
+              {
+                defaultValue: 'PDF.Investor.Compliance.Investment',
+                key: 'identifier',
+                label: 'Identifier',
+                rule: 'required',
+                type: 'input',
+                value: '',
+              },
+              {
+                defaultValue: 'Investor Account UUID',
+                key: 'resourceId',
+                label: 'Resource Id',
+                rule: 'required',
+                type: 'input',
+                value: '',
+              },
+              {
+                defaultValue: 'USER UUID',
+                key: 'ownerId',
+                label: 'Owner Id',
+                rule: 'required',
+                type: 'input',
+                value: '',
+              },
+              {
+                defaultValue: 'RDS Agreement Number',
+                key: 'payload',
+                label: 'Payload',
+                rule: 'optional',
+                type: 'textarea',
+                value: '',
+              },
+            ],
+          },
+        ],
+      },
+    };
+    this.setFieldValue('pluginListArr', fileData);
+    this.FILEFACTORY_FRM.fields.method.values = this.dropDownValuesForPlugin('listFilePlugins');
   }
 
   get cronLogs() {
@@ -293,7 +406,36 @@ export class FactoryStore extends DataModelStore {
     }
   });
 
-  ExtractToJSON = (param) => {
+  fileFactoryPluginTrigger = () => new Promise(async (resolve, reject) => {
+    const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.FILEFACTORY.fields;
+    const formPayloadData = Validator.evaluateFormData(fieldsPayload, true);
+    const TestformData = this.ExtractToJSON(formPayloadData, true);
+    if (TestformData.payload && !this.isValidJson(TestformData.payload)) {
+      this.DYNAMCI_PAYLOAD_FRM.FILEFACTORY.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
+      this.DYNAMCI_PAYLOAD_FRM.FILEFACTORY.meta.isValid = false;
+      reject();
+    } else {
+      try {
+        this.setFieldValue('inProgress', true, 'fileFactory');
+        const result = await this.executeMutation({
+          mutation: 'fileFactoryPluginTrigger',
+          variables: { ...TestformData },
+          setLoader: fileFactoryPluginTrigger,
+        });
+        Helper.toast('Your request is processed.', 'success');
+        if (result.data.generateFile) {
+          resolve(result.data.generateFile);
+        }
+      } catch (error) {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      } finally {
+        this.setFieldValue('inProgress', false, 'fileFactory');
+      }
+    }
+  });
+
+  ExtractToJSON = (param, isDisableStringify = false) => {
     let revampObj = {};
     if (typeof (param) === 'object') {
       revampObj = param;
@@ -302,7 +444,7 @@ export class FactoryStore extends DataModelStore {
         revampObj[val.key] = val.value;
       });
     }
-    return JSON.stringify(revampObj);
+    return !isDisableStringify ? JSON.stringify(revampObj) : revampObj;
   }
 
   createDynamicFormFields = (formFields, form) => {
@@ -347,6 +489,7 @@ decorate(FactoryStore, {
   REQUESTFACTORY_LOG_FRM: observable,
   PROCESSFACTORY_LOG_FRM: observable,
   PROCESSFACTORY_FRM: observable,
+  FILEFACTORY_FRM: observable,
   DYNAMCI_PAYLOAD_FRM: observable,
   currentPluginSelected: observable,
   inProgress: observable,
@@ -376,6 +519,7 @@ decorate(FactoryStore, {
   setPluginDropDown: action,
   processFactoryPluginTrigger: action,
   createDynamicFormFields: action,
+  fileFactoryPluginTrigger: action,
 });
 
 export default new FactoryStore();
