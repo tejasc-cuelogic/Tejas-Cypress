@@ -23,59 +23,63 @@ const repaymentMeta = [
   { title: 'Sinking Fund Balance', key: 'sinkingFundBalance', applicable: ['IN_REPAYMENT'], currency: true },
 ];
 
-const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, handleEditPayment, validDate, getLink, sortKey }) => (
+const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, handleEditPayment, validDate, getLink, sortKey, toggleVisibilityStatus, stateToggle }) => (
   <>
-  <Header as="h3">{headerTitle}</Header>
-  <Card fluid>
-    <div className="table-wrapper">
-      <Table sortable unstackable singleLine className="application-list clickable">
-        <Table.Header>
-          <Table.Row>
-          {repaymentMeta.map(h => h.applicable.includes(type) && (
-            <Table.HeaderCell
-              key={h.key}
-              sorted={sortOrder.column === h.key && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
-              onClick={() => handleSort(h.key, sortKey)}
-            >{h.title}</Table.HeaderCell>
-          ))}
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {
-            !repayments.length
-              ? (
-                <Table.Row>
-                  <Table.Cell textAlign="center" colspan="10">No records found</Table.Cell>
-                </Table.Row>
-              )
-              : repayments.map(record => (
-              <Table.Row key={record.id}>
-                {repaymentMeta.map(h => h.applicable.includes(type) && (
-                  <Table.Cell key={h.key}>
-                    {h.link
-                      ? (
-                      <Link to={getLink(record.offering.id, record.offering.stage)}>
-                        <b>{get(record, h.key)}</b>
-                      </Link>
-                      ) : h.enum ? get(record, h.key) && CAMPAIGN_KEYTERMS_SECURITIES[get(record, h.key)]
-                        : h.validate ? validDate(record, h.key)
-                          : h.maturity ? validDate(record, h.key) ? `${validDate(record, h.key)} (${moment(moment(get(record, h.key))).diff(moment(), 'months')})` : ''
-                            : h.currency ? Helper.CurrencyFormat(get(record, h.key) || 0) : 'N/A'
-                    }
+  <Header as="h3">{`${headerTitle} (${repayments.length}) `} <Icon onClick={() => toggleVisibilityStatus(type)} className={`ns-chevron-${stateToggle === true ? 'up' : 'down'}-compact right`} color="blue" /></Header>
+  {stateToggle
+  && (
+    <Card fluid>
+      <div className="table-wrapper">
+        <Table sortable unstackable singleLine className="application-list clickable">
+          <Table.Header>
+            <Table.Row>
+            {repaymentMeta.map(h => h.applicable.includes(type) && (
+              <Table.HeaderCell
+                key={h.key}
+                sorted={sortOrder.column === h.key && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                onClick={() => handleSort(h.key, sortKey)}
+              >{h.title}</Table.HeaderCell>
+            ))}
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {
+              !repayments.length
+                ? (
+                  <Table.Row>
+                    <Table.Cell textAlign="center" colspan="10">No records found</Table.Cell>
+                  </Table.Row>
+                )
+                : repayments.map(record => (
+                <Table.Row key={record.id}>
+                  {repaymentMeta.map(h => h.applicable.includes(type) && (
+                    <Table.Cell key={h.key}>
+                      {h.link
+                        ? (
+                        <Link to={getLink(record.offering.id, record.offering.stage)}>
+                          <b>{get(record, h.key)}</b>
+                        </Link>
+                        ) : h.enum ? get(record, h.key) && CAMPAIGN_KEYTERMS_SECURITIES[get(record, h.key)]
+                          : h.validate ? validDate(record, h.key)
+                            : h.maturity ? validDate(record, h.key) ? `${validDate(record, h.key)} (${moment(moment(get(record, h.key))).diff(moment(), 'months') >= 0 ? moment(moment(get(record, h.key))).diff(moment(), 'months') : '0'})` : ''
+                              : h.currency ? Helper.CurrencyFormat(get(record, h.key) || 0) : 'N/A'
+                      }
+                    </Table.Cell>
+                  ))}
+                  <Table.Cell textAlign="center">
+                    <Button icon className="link-button">
+                      <Icon className="ns-pencil" onClick={() => handleEditPayment(record.offering.id)} />
+                    </Button>
                   </Table.Cell>
-                ))}
-                <Table.Cell textAlign="center">
-                  <Button icon className="link-button">
-                    <Icon className="ns-pencil" onClick={() => handleEditPayment(record.offering.id)} />
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-              ))
-          }
-        </Table.Body>
-      </Table>
-    </div>
-  </Card>
+                </Table.Row>
+                ))
+            }
+          </Table.Body>
+        </Table>
+      </div>
+    </Card>
+  )
+  }
   </>
 );
 
@@ -84,6 +88,11 @@ const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, ha
 @withRouter
 @observer
 export default class AllRepayments extends PureComponent {
+  state = {
+    IN_REPAYMENT: true,
+    STARTUP_PERIOD: true,
+  }
+
   constructor(props) {
     super(props);
     if (this.props.match.params.paymentType === 'issuers') {
@@ -91,6 +100,10 @@ export default class AllRepayments extends PureComponent {
     } else {
       this.props.paymentStore.setFieldValue('data', []);
     }
+  }
+
+  toggleVisibilityStatus = (field) => {
+    this.setState({ [field]: !this.state[field] });
   }
 
   handleSort = (clickedColumn, key) => {
@@ -144,17 +157,6 @@ export default class AllRepayments extends PureComponent {
           </Grid>
         </Form>
         <PaymentsList
-          headerTitle="In Repayment"
-          type="IN_REPAYMENT"
-          repayments={repayments}
-          sortOrder={sortOrderRP}
-          handleSort={this.handleSort}
-          validDate={this.validDate}
-          handleEditPayment={this.handleEditPayment}
-          getLink={this.getLink}
-          sortKey="sortOrderRP"
-        />
-        <PaymentsList
           headerTitle="Startup Period"
           type="STARTUP_PERIOD"
           repayments={startupPeriod}
@@ -164,6 +166,21 @@ export default class AllRepayments extends PureComponent {
           handleEditPayment={this.handleEditPayment}
           getLink={this.getLink}
           sortKey="sortOrderSP"
+          toggleVisibilityStatus={this.toggleVisibilityStatus}
+          stateToggle={this.state.STARTUP_PERIOD}
+        />
+        <PaymentsList
+          headerTitle="In Repayment"
+          type="IN_REPAYMENT"
+          repayments={repayments}
+          sortOrder={sortOrderRP}
+          handleSort={this.handleSort}
+          validDate={this.validDate}
+          handleEditPayment={this.handleEditPayment}
+          getLink={this.getLink}
+          sortKey="sortOrderRP"
+          toggleVisibilityStatus={this.toggleVisibilityStatus}
+          stateToggle={this.state.IN_REPAYMENT}
         />
       </>
     );

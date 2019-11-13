@@ -56,7 +56,7 @@ export class AccreditationStore {
 
   @observable requestState = {
     skip: 0,
-    perPage: 25,
+    perPage: 100,
     filters: false,
     search: {
     },
@@ -117,7 +117,7 @@ export class AccreditationStore {
       method: method !== 'ALL' ? method : null,
       type: type !== 'ALL' ? type : null,
       page: reqParams ? reqParams.page : 1,
-      limit: reqParams ? reqParams.perPage : 25,
+      limit: (reqParams && reqParams.first) || this.requestState.perPage,
     };
     if (status && status !== '') {
       params = {
@@ -287,7 +287,6 @@ export class AccreditationStore {
     this.setFormFileArray(form, field, 'fileId', fileId);
     this.setFormFileArray(form, field, 'value', fileData.fileName);
     this.setFormFileArray(form, field, 'error', undefined);
-    this.checkFormValid(form, false, false);
   }
 
   @action
@@ -341,10 +340,8 @@ export class AccreditationStore {
         Helper.toast('Something went wrong, please try again later.', 'error');
       });
     }
-    // this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     this.setFormFileArray(form, field, 'error', undefined);
     this.setFormFileArray(form, field, 'showLoader', false);
-    this.checkFormValid(form, false, false);
   }
 
   @action
@@ -1109,7 +1106,7 @@ export class AccreditationStore {
   resetFilters = () => {
     this.requestState = {
       skip: 0,
-      perPage: 25,
+      perPage: 100,
       filters: false,
       search: {
       },
