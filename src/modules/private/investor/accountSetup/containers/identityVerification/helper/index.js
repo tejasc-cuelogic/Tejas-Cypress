@@ -1,3 +1,4 @@
+import { isNaN } from 'lodash';
 
 class Helper {
   setIdentityQuestions = (response) => {
@@ -56,6 +57,45 @@ class Helper {
       cipStatus = 'PASS';
     }
     return cipStatus;
+  }
+
+
+  isNumber = n => (!isNaN(parseFloat(n)))
+
+  // Check if character is a fraction, e.g. ¼
+  isFractionalChar = (n) => {
+    const c = n.charCodeAt();
+    return (c >= 188 && c <= 190) || (c >= 8531 && c <= 8542);
+  }
+
+  // return the first fractional character in a string
+  // return false if there is none
+  // Could easily return the index of the character, but this creates a parallelism with RegExp.exec
+  indexFractionalChar = (m) => {
+    const a = m.split(''); let
+      i;
+    // eslint-disable-next-line no-restricted-syntax
+    for (i in a) {
+      if (this.isFractionalChar(a[i])) { return i; }
+    }
+
+    return false;
+  }
+
+  splitAddress = (x) => {
+    const a = x.trim().split(' ');
+    let streetCode;
+    if (a.length <= 1) { return { streetCode: '', space: '', street: a.join('') }; }
+
+    if (this.isNumber(a[0].substr(0, 1)) || this.isFractionalChar(a[0].substr(0, 1))) {
+      streetCode = a.shift();
+    } else {
+      // If there isn't a leading streetCode, just return the trimmed input as the street
+      return { streetCode: '', space: '', street: x.trim() };
+    }
+    if (/[0-9]\/[0-9]/.exec(a[0]) || this.indexFractionalChar(a[0]) !== false) { streetCode += ` ${a.shift()}`; }
+
+    return { streetCode, space: ' ', street: a.join(' ') };
   }
 }
 
