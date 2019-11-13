@@ -1043,7 +1043,7 @@ export const getOfferingDetails = gql`
               }
             }
           }
-          priceCalcuation
+          priceCalculation
           multiple
           revSharePercentage
           interestRate

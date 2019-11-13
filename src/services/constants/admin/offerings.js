@@ -771,7 +771,7 @@ export const CLOSURE_SUMMARY = {
     rule: 'string',
     placeHolder: 'Enter here',
   },
-  priceCalcuation: {
+  priceCalculation: {
     value: null,
     label: 'Price (calculation)',
     error: undefined,
