@@ -61,7 +61,7 @@ const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, ha
                         </Link>
                         ) : h.enum ? get(record, h.key) && CAMPAIGN_KEYTERMS_SECURITIES[get(record, h.key)]
                           : h.validate ? validDate(record, h.key)
-                            : h.maturity ? validDate(record, h.key) ? `${validDate(record, h.key)} (${moment(moment(get(record, h.key))).diff(moment(), 'months')})` : ''
+                            : h.maturity ? validDate(record, h.key) ? `${validDate(record, h.key)} (${moment(moment(get(record, h.key))).diff(moment(), 'months') >= 0 ? moment(moment(get(record, h.key))).diff(moment(), 'months') : '0'})` : ''
                               : h.currency ? Helper.CurrencyFormat(get(record, h.key) || 0) : 'N/A'
                       }
                     </Table.Cell>
