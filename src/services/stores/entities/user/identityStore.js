@@ -144,15 +144,14 @@ export class IdentityStore {
 
   @action
   setAddressFieldsForUserVerification = (place) => {
-    const formAddress = identityHelper.splitAddress(this.ID_VERIFICATION_FRM.fields.street.value);
-    if (!formAddress.streetCode || this.isStreetCodeExistInAutoComplete(place)) {
+    if (this.isStreetCodeExistInAutoComplete(place)) {
       FormValidator.setAddressFields(place, this.ID_VERIFICATION_FRM);
       const state = US_STATES.find(s => s.text === this.ID_VERIFICATION_FRM.fields.state.value.toUpperCase());
       this.ID_VERIFICATION_FRM.fields.state.value = state ? state.key : '';
     } else {
       this.ID_VERIFICATION_FRM = FormValidator.onChange(
         this.ID_VERIFICATION_FRM,
-        { name: 'street', value: this.ID_VERIFICATION_FRM.fields.street.value },
+        { name: 'street', value: Helper.gAddressClean(place).residentalStreet },
       );
     }
   }
