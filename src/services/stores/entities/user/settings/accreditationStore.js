@@ -287,7 +287,6 @@ export class AccreditationStore {
     this.setFormFileArray(form, field, 'fileId', fileId);
     this.setFormFileArray(form, field, 'value', fileData.fileName);
     this.setFormFileArray(form, field, 'error', undefined);
-    this.checkFormValid(form, false, false);
   }
 
   @action
@@ -341,10 +340,8 @@ export class AccreditationStore {
         Helper.toast('Something went wrong, please try again later.', 'error');
       });
     }
-    // this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     this.setFormFileArray(form, field, 'error', undefined);
     this.setFormFileArray(form, field, 'showLoader', false);
-    this.checkFormValid(form, false, false);
   }
 
   @action
