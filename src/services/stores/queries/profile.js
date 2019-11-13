@@ -1,44 +1,5 @@
 import gql from 'graphql-tag';
 
-export const verifyCIPAnswers = gql`
-  mutation verifyCIPAnswers($cipAnswers: CIPAnswersInput){
-    verifyCIPAnswers(cipAnswers: $cipAnswers) {
-      ... on UserCIPSoftFail{
-        softFailId: id
-        key
-        message
-        qualifiers {
-          key
-          message
-        }
-        questions {
-          prompt
-          type
-          choices {
-            text
-          }
-        }
-      }
-
-      ... on UserCIPHardFail{
-        hardFailId: id
-        key
-        message
-        qualifiers {
-          key
-          message
-        }
-      }
-
-      ... on UserCIPPass {
-        passId: id
-        key
-        message
-        summary
-      }
-    }
-  }`;
-
 export const updateUserProfileData = gql`
   mutation _updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: ProfileDataLegalInput, $preferredInfo: PreferredInfoInput, $capabilities: [String], $targetUserId: String) {
   updateUserProfileData(

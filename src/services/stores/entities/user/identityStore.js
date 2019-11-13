@@ -6,7 +6,7 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
-import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isUniqueSSN, verifyCipSoftFail, verifyCip, verifyCipHardFail, verifyCIPAnswers, updateUserProfileData } from '../../queries/profile';
+import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isUniqueSSN, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
@@ -441,42 +441,6 @@ cipWrapper = async (payLoad) => {
     );
     this.ID_VERIFICATION_QUESTIONS.meta.isValid = validation.passes();
     changedAnswer.error = validation.errors.first(changedAnswer.key);
-  }
-
-  submitConfirmIdentityQuestions = () => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: verifyCIPAnswers,
-          variables: {
-            cipAnswers: {
-              id: this.ID_VERIFICATION_FRM.response.softFailId,
-              answers: this.formattedIdentityQuestionsAnswers,
-            },
-          },
-        })
-        .then((result) => {
-          /* eslint-disable no-underscore-dangle */
-          this.setVerifyIdentityResponse(result.data.verifyCIPAnswers);
-          // eslint-disable-next-line no-unused-expressions
-          result.data.verifyCIPAnswers.__typename === 'UserCIPPass'
-            ? this.setCipStatus('PASS') : this.setCipStatus('HARD_FAIL');
-          this.updateUserInfo();
-          uiStore.setProgress(false);
-          this.setFieldValue('signUpLoading', false);
-          resolve(result);
-        })
-        .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          uiStore.setProgress(false);
-          this.setFieldValue('signUpLoading', false);
-          reject();
-        });
-      // .finally(() => {
-      //   uiStore.setProgress(false);
-      // });
-    });
   }
 
   @computed
