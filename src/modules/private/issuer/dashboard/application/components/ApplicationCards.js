@@ -14,7 +14,7 @@ import { DataFormatter } from '../../../../../../helper';
 const { clientWidth } = document.documentElement;
 const isTablet = clientWidth >= 768 && clientWidth < 1300;
 const isMobile = clientWidth < 768;
-@inject('businessAppStore', 'activityHistoryStore')
+@inject('businessAppStore', 'activityHistoryStore', 'offeringsStore')
 @withRouter
 @observer
 export default class ApplicationCards extends Component {
@@ -42,7 +42,7 @@ export default class ApplicationCards extends Component {
   render() {
     const { fetchBusinessApplication, businessApplicationsList } = this.props.businessAppStore;
 
-    if (businessApplicationsList && businessApplicationsList.loading) {
+    if (businessApplicationsList.loading || this.props.offeringsStore.loading) {
       return <InlineLoader />;
     }
 

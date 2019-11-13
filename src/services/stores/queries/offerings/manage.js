@@ -62,6 +62,11 @@ export const allOfferingsCompact = gql`
   query _getOfferings($stage: [OfferingStageEnumType], $issuerId: String){
     getOfferings(filters: { stage: $stage, issuerId: $issuerId }){
       id
+      offeringSlug
+      closureSummary {
+        hardCloseDate
+        launchDate
+      }
       keyTerms {
         legalBusinessName
         shorthandBusinessName
