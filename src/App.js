@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { withRouter, Switch, Route, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
+import queryString from 'query-string';
 import IdleTimer from 'react-idle-timer';
 import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
@@ -14,6 +15,7 @@ import SecureGateway from './modules/public/shared/SecureGateway';
 import { authActions, activityActions } from './services/actions';
 import MetaTagGenerator from './modules/shared/MetaTagGenerator';
 import { userIdleTime, NEXTSEED_BOX_URL } from './constants/common';
+import { DataFormatter } from './helper';
 /**
  * Main App
  */
@@ -52,6 +54,15 @@ class App extends Component {
     super(props);
     window.addEventListener('resize', this.handleResize);
     this.props.uiStore.setFieldvalue('responsiveVars', this.getSizes());
+    const urlParameter = queryString.parse(this.props.location.search);
+    if (urlParameter) {
+      let tags = DataFormatter.createEligibleTagsObj(urlParameter);
+      if (!isEmpty(tags)) {
+        const existingTags = JSON.parse(window.localStorage.getItem('tags'));
+        tags = !isEmpty(existingTags) ? { ...existingTags, ...tags } : tags;
+        window.localStorage.setItem('tags', JSON.stringify(tags));
+      }
+    }
   }
 
   componentDidMount() {

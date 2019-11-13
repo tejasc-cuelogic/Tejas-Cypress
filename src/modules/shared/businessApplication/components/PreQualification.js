@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get, has, isEmpty } from 'lodash';
+import { get, has } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Form, Button, Divider } from 'semantic-ui-react';
 import queryString from 'query-string';
@@ -25,12 +25,6 @@ export default class PreQualification extends Component {
       const { params } = this.props.match;
       const urlParameter = queryString.parse(this.props.location.search);
       if (urlParameter) {
-        let tags = DataFormatter.createEligibleTagsObj(urlParameter);
-        if (!isEmpty(tags)) {
-          const existingTags = JSON.parse(window.localStorage.getItem('tags'));
-          tags = !isEmpty(existingTags) ? { ...existingTags, ...tags } : tags;
-          window.localStorage.setItem('tags', JSON.stringify(tags));
-        }
         if (get(urlParameter, 'signupCode') || get(urlParameter, 'signupcode') || get(urlParameter, 'sc')) {
           window.localStorage.setItem('signupCode', get(urlParameter, 'signupCode') || get(urlParameter, 'signupcode') || get(urlParameter, 'sc'));
         }
