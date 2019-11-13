@@ -95,7 +95,7 @@ const InvestmentList = (props) => {
                           && (
                             <Table.Cell>
                               {
-                               get(data, 'offering.closureSummary.keyTerms.maturityDate') ? `${moment(moment(get(data, 'offering.closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months')} months` : 'N/A'
+                               get(data, 'offering.closureSummary.keyTerms.maturityDate') ? `${moment(moment(get(data, 'offering.closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months') ? moment(moment(get(data, 'offering.closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months') : '0'} months` : 'N/A'
                               }
                             </Table.Cell>
                           )

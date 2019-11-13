@@ -66,7 +66,7 @@ class Overview extends Component {
     const isPreferredEquityOffering = !!['PREFERRED_EQUITY_506C'].includes(security);
     const preferredEquityUnit = get(campaign, 'keyTerms.equityUnitType') ? `${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price` : 'N/A';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
-    const maturityMonth = get(campaign, 'closureSummary.keyTerms.maturityDate') ? `${moment(moment(get(campaign, 'closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months')} months` : 'N/A';
+    const maturityMonth = get(campaign, 'closureSummary.keyTerms.maturityDate') ? `${moment(moment(get(campaign, 'closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months') >= 0 ? moment(moment(get(campaign, 'closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months') : '0'} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     const { agreementIds, loading } = this.props.transactionStore;
     let aggrementDocs = get(campaign, 'closureSummary.keyTerms.supplementalAgreements.documents') || [];
