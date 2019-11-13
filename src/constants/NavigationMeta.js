@@ -509,7 +509,8 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'payment',
-    title: 'Accreditation Requests',
+    title: 'Accredited Status',
+    heading: 'Accredited Status Request',
     capability: 'ACCREDITATION_ANY',
     to: 'accreditation',
     path: 'admin/accreditation',
