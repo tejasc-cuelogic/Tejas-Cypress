@@ -1,7 +1,7 @@
 import graphql from 'mobx-apollo';
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
-import { mapValues, keyBy, find, flatMap, map, get, isEmpty } from 'lodash';
+import { mapValues, keyBy, find, flatMap, map, get, isEmpty, intersection } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
@@ -97,6 +97,7 @@ export class IdentityStore {
       this.ID_VERIFICATION_FRM,
       FormValidator.pullValues(e, result),
     );
+    ['city', 'state', 'zipCode'].forEach((field) => { this.ID_VERIFICATION_FRM.fields[field].value = ''; });
   };
 
   @action
@@ -143,10 +144,19 @@ export class IdentityStore {
 
   @action
   setAddressFieldsForUserVerification = (place) => {
-    FormValidator.setAddressFields(place, this.ID_VERIFICATION_FRM);
-    const state = US_STATES.find(s => s.text === this.ID_VERIFICATION_FRM.fields.state.value.toUpperCase());
-    this.ID_VERIFICATION_FRM.fields.state.value = state ? state.key : '';
+    if (this.isStreetCodeExistInAutoComplete(place)) {
+      FormValidator.setAddressFields(place, this.ID_VERIFICATION_FRM);
+      const state = US_STATES.find(s => s.text === this.ID_VERIFICATION_FRM.fields.state.value.toUpperCase());
+      this.ID_VERIFICATION_FRM.fields.state.value = state ? state.key : '';
+    } else {
+      this.ID_VERIFICATION_FRM = FormValidator.onChange(
+        this.ID_VERIFICATION_FRM,
+        { name: 'street', value: Helper.gAddressClean(place).residentalStreet },
+      );
+    }
   }
+
+  isStreetCodeExistInAutoComplete = place => place.address_components.find(c => intersection(c.types, ['street_number']).length > 0)
 
   @action
   setAddressFieldsForProfile = (place) => {
@@ -268,69 +278,69 @@ export class IdentityStore {
   }
 
 
-@action
-verifyCipHardFail = async () => {
-  const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
-  const payLoad = {
-    mutation: verifyCipHardFail,
-    mutationName: 'verifyCipHardFail',
-    variables: {
-      license: photoId.fileId,
-      residence: proofOfResidence.fileId,
-    },
-    cipPassStatus: 'MANUAL_VERIFICATION_PENDING',
-  };
-  this.setFieldValue('userCipStatus', 'MANUAL_VERIFICATION_PENDING');
-  const { res, url } = await this.cipWrapper(payLoad);
-  userDetailsStore.updateUserDetails('legalDetails', { verificationDocs: this.verificationDocs() });
-
-  return { res, url };
-}
-
-cipWrapper = async (payLoad) => {
-  try {
-    let url;
-    this.setFieldValue('signUpLoading', true);
-    const res = await client
-      .mutate({
-        mutation: payLoad.mutation,
-        variables: payLoad.variables,
-      });
-    const stepName = Object.keys(this.cipStepUrlMapping).find((key => (
-      this.cipStepUrlMapping[key].steps.includes(get(res, `data.${payLoad.mutationName}.step`))
-    )));
-    // eslint-disable-next-line prefer-destructuring
-    url = get(this.cipStepUrlMapping[stepName], 'url');
-
-    if (stepName === 'cipPass') {
-      await this.updateUserDataAndSendOtp();
-    } else if (!get(res, `data.${payLoad.mutationName}.status`)
-    && res.data[`${payLoad.mutationName}`].message) {
-      url = undefined;
-      uiStore.setFieldvalue('errors',
-        DataFormatter.getSimpleErr({
-          message: res.data[`${payLoad.mutationName}`].message,
-        }));
-    }
-
-    if (stepName !== 'cip' && get(this.cipStepUrlMapping[stepName], 'status')) {
-      userDetailsStore.updateUserDetails('legalDetails', {
-        status: this.cipStepUrlMapping[stepName].status || payLoad.mutation.cipPassStatus,
-      });
-      userDetailsStore.updateUserDetails('cip', {
-        expiration: Helper.getDaysfromNow(21),
-      });
-    }
-
-    this.setFieldValue('signUpLoading', false);
+  @action
+  verifyCipHardFail = async () => {
+    const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
+    const payLoad = {
+      mutation: verifyCipHardFail,
+      mutationName: 'verifyCipHardFail',
+      variables: {
+        license: photoId.fileId,
+        residence: proofOfResidence.fileId,
+      },
+      cipPassStatus: 'MANUAL_VERIFICATION_PENDING',
+    };
+    this.setFieldValue('userCipStatus', 'MANUAL_VERIFICATION_PENDING');
+    const { res, url } = await this.cipWrapper(payLoad);
+    userDetailsStore.updateUserDetails('legalDetails', { verificationDocs: this.verificationDocs() });
 
     return { res, url };
-  } catch (err) {
-    uiStore.setFieldvalue('errors', DataFormatter.getSimpleErr(err));
-    this.setFieldValue('signUpLoading', false);
-    return Promise.reject(err);
   }
-}
+
+  cipWrapper = async (payLoad) => {
+    try {
+      let url;
+      this.setFieldValue('signUpLoading', true);
+      const res = await client
+        .mutate({
+          mutation: payLoad.mutation,
+          variables: payLoad.variables,
+        });
+      const stepName = Object.keys(this.cipStepUrlMapping).find((key => (
+        this.cipStepUrlMapping[key].steps.includes(get(res, `data.${payLoad.mutationName}.step`))
+      )));
+      // eslint-disable-next-line prefer-destructuring
+      url = get(this.cipStepUrlMapping[stepName], 'url');
+
+      if (stepName === 'cipPass') {
+        await this.updateUserDataAndSendOtp();
+      } else if (!get(res, `data.${payLoad.mutationName}.status`)
+        && res.data[`${payLoad.mutationName}`].message) {
+        url = undefined;
+        uiStore.setFieldvalue('errors',
+          DataFormatter.getSimpleErr({
+            message: res.data[`${payLoad.mutationName}`].message,
+          }));
+      }
+
+      if (stepName !== 'cip' && get(this.cipStepUrlMapping[stepName], 'status')) {
+        userDetailsStore.updateUserDetails('legalDetails', {
+          status: this.cipStepUrlMapping[stepName].status || payLoad.mutation.cipPassStatus,
+        });
+        userDetailsStore.updateUserDetails('cip', {
+          expiration: Helper.getDaysfromNow(21),
+        });
+      }
+
+      this.setFieldValue('signUpLoading', false);
+
+      return { res, url };
+    } catch (err) {
+      uiStore.setFieldvalue('errors', DataFormatter.getSimpleErr(err));
+      this.setFieldValue('signUpLoading', false);
+      return Promise.reject(err);
+    }
+  }
 
   @action
   setCipStatusWithUserDetails = () => {
