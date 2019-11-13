@@ -1,3 +1,4 @@
+
 class Helper {
   setIdentityQuestions = (response) => {
     const questionsObj = {};
