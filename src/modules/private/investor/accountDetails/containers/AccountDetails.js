@@ -1,16 +1,16 @@
 /* eslint-disable react/jsx-closing-tag-location */
 /* eslint-disable react/jsx-indent */
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import { includes } from 'lodash';
 import PrivateLayout from '../../../shared/PrivateLayout';
-import { InlineLoader } from '../../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import AccountSetup from './AccountSetup';
 
-const getModule = component => lazy(() => import(`./${component}`));
+const getModule = component => lazyRetry(() => import(`./${component}`));
 
 const processingMsg = `We are currently processing your account creation request. Please contact
   <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any questions.`;
@@ -52,7 +52,7 @@ export default class AccountDetails extends Component {
     return (
       <PrivateLayout {...this.props}>
         { isAccPartial ? <AccountSetup /> : isAccProcessing ? processing : (
-          <Suspense fallback={<InlineLoader />}>
+          <SuspenseBoundary>
             <Switch>
               <Route exact path={match.url} component={getModule(navItems[0].component)} />
               {
@@ -61,7 +61,7 @@ export default class AccountDetails extends Component {
                 ))
               }
             </Switch>
-          </Suspense>
+          </SuspenseBoundary>
         )}
       </PrivateLayout>
     );

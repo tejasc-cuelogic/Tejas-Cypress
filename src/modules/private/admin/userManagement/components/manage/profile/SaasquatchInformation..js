@@ -10,7 +10,7 @@ const SaasquatchInformation = ({ details }) => (
         <Table unstackable basic="very" fixed>
           <Table.Body>
             <Table.Row>
-              <Table.Cell>User Id: </Table.Cell>
+              <Table.Cell>User ID: </Table.Cell>
               <Table.Cell>{get(details, 'saasquatch.userId') || 'N/A'}</Table.Cell>
             </Table.Row>
             <Table.Row>
