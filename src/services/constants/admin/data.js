@@ -3,7 +3,7 @@ import { FormHelper } from '../../../helper';
 export const common = {
   userId: {
     value: '',
-    label: 'User Id',
+    label: 'User ID',
     error: undefined,
     rule: 'required',
     placeHolder: 'Enter here',
@@ -229,6 +229,7 @@ export const EMAILLIST_META = FormHelper.generateMeta([
           { key: 'NOTIFICATIONS', text: 'NOTIFICATIONS', value: 'NOTIFICATIONS' },
           { key: 'ACCOUNTS', text: 'ACCOUNTS', value: 'ACCOUNTS' },
           { key: 'ACCREDITATION', text: 'ACCREDITATION', value: 'ACCREDITATION' },
+          { key: 'GOLDSTAR', text: 'GOLDSTAR', value: 'GOLDSTAR' },
           { key: 'TRANSFERS', text: 'TRANSFERS', value: 'TRANSFERS' },
           { key: 'SALES', text: 'SALES', value: 'SALES' },
           { key: 'APPLY', text: 'APPLY', value: 'APPLY' },

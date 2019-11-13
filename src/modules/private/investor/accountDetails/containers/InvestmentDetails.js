@@ -1,17 +1,17 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Card } from 'semantic-ui-react';
 import moment from 'moment';
 import { includes, get } from 'lodash';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
-import { InlineLoader } from '../../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import NotFound from '../../../../shared/NotFound';
 import { DataFormatter } from '../../../../../helper';
 
 
-const getModule = component => lazy(() => import(`../components/portfolio/${component}`));
+const getModule = component => lazyRetry(() => import(`../components/portfolio/${component}`));
 const navItems = [
   { title: 'Overview', to: 'overview', component: 'Overview' },
   { title: 'Transactions', to: 'transactions', component: 'Transactions' },
@@ -80,7 +80,7 @@ class InvestmentDetails extends Component {
           <SummaryHeader details={summaryDetails} />
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
-            <Suspense fallback={<InlineLoader />}>
+            <SuspenseBoundary>
               <Switch>
                 <Route
                   exact
@@ -107,7 +107,7 @@ class InvestmentDetails extends Component {
                   })
                 }
               </Switch>
-            </Suspense>
+            </SuspenseBoundary>
           </Card>
         </Modal.Content>
       </Modal>
