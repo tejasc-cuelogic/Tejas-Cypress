@@ -19,44 +19,40 @@ class SuspenseBoundary extends Component {
   }
 
   componentDidCatch(error, info) {
-    const redirectToHome = () => {
-      window.location = window.location.origin;
-    };
-    // if (sessionStorage.getItem('crashed') && sessionStorage.getItem('crashed') === window.location.href) {
-    //   let emailContent = {
-    //     graphqlError: { operationName: 'Lazy loading' },
-    //     urlLocation: window.location.href,
-    //     message: error.stack,
-    //   };
-    //   if (window.FS && window.FS.getCurrentSessionURL) {
-    //     const fullStorySession = window.FS.getCurrentSessionURL(true);
-    //     emailContent = {
-    //       ...emailContent,
-    //       fullStoryUrl: fullStorySession,
-    //     };
-    //   }
-    //   sessionStorage.removeItem('crashed');
-    //   if (catchErrorBoundry) {
-    //     try {
-    //       const params = {
-    //         emailContent: JSON.stringify(emailContent),
-    //       };
-    //       this.props.authStore.notifyApplicationError(params).then(() => {
-    //         redirectToHome();
-    //       }).catch(() => {
-    //         redirectToHome();
-    //       });
-    //     } catch (e) {
-    //       redirectToHome();
-    //     }
-    //   } else {
-    //     console.log(`Error logging for ${REACT_APP_DEPLOY_ENV}, it will trigger notifyApplicationError otherwise`, error, info);
-    //   }
-    // } else {
-    //   console.log('SuspenseBoundary crashed 1st');
-    //   sessionStorage.setItem('crashed', window.location.href);
-    //   window.location.reload();
-    // }
+    if (sessionStorage.getItem('crashed') && sessionStorage.getItem('crashed') === window.location.href) {
+      let emailContent = {
+        graphqlError: { operationName: 'Lazy loading' },
+        urlLocation: window.location.href,
+        message: error.stack,
+      };
+      if (window.FS && window.FS.getCurrentSessionURL) {
+        const fullStorySession = window.FS.getCurrentSessionURL(true);
+        emailContent = {
+          ...emailContent,
+          fullStoryUrl: fullStorySession,
+        };
+      }
+      sessionStorage.removeItem('crashed');
+      if (catchErrorBoundry) {
+        try {
+          const params = {
+            emailContent: JSON.stringify(emailContent),
+          };
+          this.props.authStore.notifyApplicationError(params).then(() => {
+            console.log('Error logging');
+          }).catch(() => {
+            console.log('Error logging');
+          });
+        } catch (e) {
+          console.log('Error logging', e);
+        }
+      } else {
+        console.log(`Error logging for ${REACT_APP_DEPLOY_ENV}, it would have triggered notifyApplicationError otherwise`, error, info);
+      }
+    } else {
+      console.log('SuspenseBoundary crashed once, no error reported via email');
+      sessionStorage.setItem('crashed', window.location.href);
+    }
   }
 
   render() {
