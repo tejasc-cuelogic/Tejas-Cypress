@@ -36,7 +36,7 @@ query getOfferingList($filters: OfferingFilterInputType, $userId: String){
         keyTerms {
           multiple
           interestRate
-          priceCalcuation
+          priceCalculation
         }
         hardCloseDate
         repayment {
@@ -319,7 +319,7 @@ export const campaignDetailsQuery = gql`
       }
       keyTerms {
         multiple
-        priceCalcuation
+        priceCalculation
       }
     }
     earlyBirdsCount
@@ -436,7 +436,7 @@ query getOfferingById($id: ID) {
           }
         }
         multiple
-        priceCalcuation
+        priceCalculation
         revSharePercentage
         interestRate
         businessOpenDate
