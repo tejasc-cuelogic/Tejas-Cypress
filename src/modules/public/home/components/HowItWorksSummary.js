@@ -1,43 +1,100 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Container, Button, Grid } from 'semantic-ui-react';
+import { Header, Container, Button, Grid, Item, Responsive } from 'semantic-ui-react';
+import { inject, observer } from 'mobx-react';
 import NSImage from '../../../shared/NSImage';
 
-const HowItWorksSummary = props => (
+const highlights = [
+  {
+    title: 'Businesses you understand',
+    icon: 'icons/businesses.svg',
+    meta: `Investments in Main Street businesses and local properties 
+      generating real cash flow.`,
+  },
+  {
+    title: 'Impactful investments',
+    icon: 'icons/entrepreneurs.svg',
+    meta: `Local business owners, local jobs and local growth.
+    Create real impact in local communities nationwide`,
+  },
+  {
+    title: 'Pre-vetted opportunities',
+    icon: 'icons/prevetted.svg',
+    meta: (
+      <>
+      Only the top 3% of businesses meet our
+    proprietary financial criteria.<sup>1</sup>
+      </>),
+  },
+  {
+    title: 'Flexible amounts',
+    icon: 'icons/investments.svg',
+    meta: 'Never invest more than you can risk. Investments may start as low as $100.',
+  },
+  {
+    title: 'Exclusive deals',
+    icon: 'icons/ventures.svg',
+    meta: `Uncover opportunities that were once privately reserved for wealthy
+      and well-connected investors.`,
+  },
+  {
+    title: 'Returns processed for you',
+    icon: 'icons/returns.svg',
+    meta: `No need to chase payments from business owners. NextSeed facilitates
+     payment processing from your investments automatically.`,
+  },
+];
+
+const HowItWorksSummary = ({ uiStore, authStore }) => (
+  <>
   <section>
-    <Container textAlign={props.isMobile ? 'left' : 'center'}>
-      <Header as="h2" className="mb-30">A new way to invest in local businesses.</Header>
-      <p className="mb-80">
-        Local entrepreneurs and investors are reshaping the face of Main Street.
-        NextSeed offers the opportunity <br /> to invest in restaurants, fitness studios,
-        craft breweries and a variety of growing concepts.
-      </p>
-    </Container>
-    <Container>
-      <Grid centered relaxed="very">
-        <Grid.Column textAlign="center" computer={6} tablet={6} mobile={16} className={`info-card home-summary ${props.isMobile && 'mb-50'}`}>
-          <NSImage path="icons/bizowner.svg" centered />
-          <Header as="h5">Business Owners</Header>
-          <p>
-            Raise capital to expand or open a new concept.
-            We make it easy to accept investments from friends and fans,
-            and put your story in front of thousands of local investors.
-          </p>
-          <Button as={Link} to="/business/how-it-works" primary content="SMB Fundraising" className="mt-20" />
-        </Grid.Column>
-        <Grid.Column textAlign="center" computer={6} tablet={6} mobile={16} className="info-card home-summary">
-          <NSImage path="icons/investors.svg" centered />
-          <Header as="h5">Investors</Header>
-          <p>
-            Access unique, pre-vetted investment opportunities.
-            Put your money to work in businesses you understand and
-            projects that create jobs.
-          </p>
-          <Button as={Link} to="/invest/why-nextseed" primary content="Investing" className="mt-20" />
+    <Container className="mt-50 mb-50" textAlign={uiStore.responsiveVars.isMobile ? 'left' : 'center'}>
+      <Header as={uiStore.responsiveVars.isMobile ? 'h3' : 'h2'} className="mb-30">Small business investing, made easy</Header>
+      <Grid stackable centered className={!uiStore.responsiveVars.isMobile && 'mt-50'}>
+        <Grid.Column width={14}>
+          <Item.Group className="horizontal-items home-page">
+            {
+            highlights.map(h => (
+              <Item>
+                <div className="ui mini image">
+                  <NSImage path={h.icon} />
+                </div>
+                <Item.Content>
+                  <Item.Header as="h6">{h.title}</Item.Header>
+                  <Item.Meta>{h.meta}</Item.Meta>
+                </Item.Content>
+              </Item>
+            ))
+          }
+          </Item.Group>
         </Grid.Column>
       </Grid>
+      <div className="center-align mb-50">
+        { !authStore.isUserLoggedIn
+          && <Button className={!uiStore.responsiveVars.isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/register-investor" primary>Create a  Free Account</Button>
+        }
+      </div>
+      <p className="note center-align mb-50">
+        <sup>1</sup>This represents the percent of businesses that began the application
+        process, passed NextSeed&apos;s objective diligence<Responsive minWidth={992} as="br" /> criteria, and launched an offering on the platform since NextSeed&apos;s inception.
+      </p>
     </Container>
   </section>
+  <section className={`${uiStore.responsiveVars.isMobile ? '' : 'center-align'} bg-offwhite`}>
+    <Container className="mt-50 mb-50">
+      <Header as={uiStore.responsiveVars.isMobile ? 'h3' : 'h2'} className="mb-30">Our technology makes it possible</Header>
+      <p className="mb-40">We’ve built an alternative investment platform from the ground up.</p>
+      <NSImage className={uiStore.responsiveVars.isMobile ? '' : 'm-auto'} path="mockup.png" />
+      <p className="mt-30">Browse highly vetted companies and invest in just a few clicks, on any device.</p>
+      <div className="center-align">
+        { !authStore.isUserLoggedIn
+          && <Button fluid={uiStore.responsiveVars.isMobile} className={!uiStore.responsiveVars.isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/register-investor" primary>Create a  Free Account</Button>
+        }
+      </div>
+    </Container>
+  </section>
+  </>
 );
 
-export default HowItWorksSummary;
+// export default HowItWorksSummary;
+export default inject('uiStore', 'authStore')(observer(HowItWorksSummary));

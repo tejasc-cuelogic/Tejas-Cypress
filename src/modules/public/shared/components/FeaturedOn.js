@@ -11,7 +11,7 @@ const FeaturedOn = () => (
   <section className="bg-offwhite">
     <Container>
       <Header as="h3" textAlign="center" className="mb-50 grey-header">As seen on</Header>
-      <Grid columns={5} doubling verticalAlign="middle" className="vertical-gutter">
+      <Grid relaxed="very" columns={5} doubling verticalAlign="middle" className="vertical-gutter">
         <Responsive minWidth="768" as={React.Fragment}>
           {/* {featuredOn.map(row => (
             <Grid.Row> */}

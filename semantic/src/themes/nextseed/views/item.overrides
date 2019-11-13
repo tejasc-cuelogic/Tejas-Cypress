@@ -272,36 +272,40 @@
     &.update-items > .item{
         display: block;
     }
-}
-.horizontal-items.ui.items{
-    display:flex;
-    flex-wrap:wrap;
-    margin-left:-@14px;
-    margin-right:-@14px;
-    >.item{
-        width:43%;
-        @media only screen and (max-width :@largestMobileScreen){
-            width:100%;
-        }
-        margin:0 auto @30px;
-        padding-left:@14px;
-        padding-right:@14px;
-        .ui.mini.image{
-            width:45px;
+    &.horizontal-items{
+        display:flex;
+        flex-wrap:wrap;
+        margin-left:-@14px;
+        margin-right:-@14px;
+        >.item{
+            width:45%;
             @media only screen and (max-width :@largestMobileScreen){
-                padding-left:0;
-                margin:0;
+                width:100%;
             }
-            +.content{
-                padding-left:@10px;
+            margin:0 auto @30px;
+            padding-left:@14px;
+            padding-right:@14px;
+            .ui.mini.image{
+                width:45px;
+                margin-right: @20px;
                 @media only screen and (max-width :@largestMobileScreen){
-                    padding:14px 0 0;
+                    padding-left:0;
+                    margin:0;
+                }
+                +.content{
+                    padding-left:@10px;
+                    @media only screen and (max-width :@largestMobileScreen){
+                        padding:14px 0 0;
+                    }
                 }
             }
+            .meta{
+                line-height:24px;
+                margin:0;
+            }
         }
-        .meta{
-            line-height:24px;
-            margin:0;
+        &.home-page>.item>.content>.header:not(.ui){
+            font-size: @16px;
         }
     }
 }
