@@ -229,6 +229,7 @@ export const EMAILLIST_META = FormHelper.generateMeta([
           { key: 'NOTIFICATIONS', text: 'NOTIFICATIONS', value: 'NOTIFICATIONS' },
           { key: 'ACCOUNTS', text: 'ACCOUNTS', value: 'ACCOUNTS' },
           { key: 'ACCREDITATION', text: 'ACCREDITATION', value: 'ACCREDITATION' },
+          { key: 'GOLDSTAR', text: 'GOLDSTAR', value: 'GOLDSTAR' },
           { key: 'TRANSFERS', text: 'TRANSFERS', value: 'TRANSFERS' },
           { key: 'SALES', text: 'SALES', value: 'SALES' },
           { key: 'APPLY', text: 'APPLY', value: 'APPLY' },
@@ -236,6 +237,17 @@ export const EMAILLIST_META = FormHelper.generateMeta([
           { key: 'PAYMENTS', text: 'PAYMENTS', value: 'PAYMENTS' },
           { key: 'SUPPORT_SERVICES', text: 'SUPPORT_SERVICES', value: 'SUPPORT_SERVICES' },
         ],
+      },
+    },
+  ],
+]);
+
+export const FILEFACTORY_META = FormHelper.generateMeta([
+  ['method', 'Method', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
       },
     },
   ],

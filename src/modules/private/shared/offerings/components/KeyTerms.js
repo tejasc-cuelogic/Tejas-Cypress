@@ -262,8 +262,8 @@ export default class KeyTerms extends Component {
             />
             <MaskedInput
               displayMode={isReadonly}
-              name="priceCalcuation"
-              fielddata={CLOSURE_SUMMARY_FRM.fields.priceCalcuation}
+              name="priceCalculation"
+              fielddata={CLOSURE_SUMMARY_FRM.fields.priceCalculation}
               changed={(values, name) => maskArrayChange(values, 'CLOSURE_SUMMARY_FRM', name)}
               currency
               prefix="$"
