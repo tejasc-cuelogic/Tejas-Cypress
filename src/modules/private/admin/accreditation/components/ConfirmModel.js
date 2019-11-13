@@ -58,6 +58,7 @@ export default class ConfirmModel extends Component {
   format="##/##/####"
   changed={(values, field) => maskChange(values, 'CONFIRM_ACCREDITATION_FRM', field)}
   dateOfBirth
+  showerror
 />
               )
               : (

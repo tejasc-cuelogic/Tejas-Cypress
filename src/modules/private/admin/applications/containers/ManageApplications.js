@@ -1,14 +1,14 @@
 /* eslint-disable */
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { mapValues } from 'lodash';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import StatusChangeAppModal from '../components/StatusChangeAppModal';
-import { InlineLoader } from '../../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 import ApplicationDetails from './ApplicationDetails';
 
-const getModule = component => lazy(() => import(`../components/${component}`));
+const getModule = component => lazyRetry(() => import(`../components/${component}`));
 
 @inject('businessAppAdminStore')
 @observer
@@ -37,13 +37,13 @@ export default class ManageApplications extends Component {
         {...this.props}
         subNav
       >
-        <Suspense fallback={<InlineLoader />}>
+        <SuspenseBoundary>
           <Switch>
             <Route path={`${match.url}/:id/view/:appId/:userId`} render={props => <ApplicationDetails refLink={match.url} {...props} />} />
             <Route exact path={`${match.url}/:applicationType`} component={getModule('ApplicationsList')} />
             <Route exact path={`${match.url}/:id/:appId/:userId/:appStatus/:action/confirm`} component={StatusChangeAppModal} />
           </Switch>
-        </Suspense>
+        </SuspenseBoundary>
       </PrivateLayout>
     );
   }

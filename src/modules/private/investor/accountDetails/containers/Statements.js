@@ -1,12 +1,12 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
-import { InlineLoader } from '../../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import MonthlyStatements from '../components/statements/MonthlyStatements';
 import TaxForms from '../components/statements/TaxForms';
 
-const getModule = component => lazy(() => import(`../components/statements/${component}`));
+const getModule = component => lazyRetry(() => import(`../components/statements/${component}`));
 
 const navItems = [
   { title: 'Monthly Statements', to: 'monthly-statements', component: MonthlyStatements },
@@ -33,7 +33,7 @@ export default class Statements extends Component {
             <SecondaryMenu secondary vertical match={match} navItems={navigationItems} />
           </Grid.Column>
           <Grid.Column floated="right" widescreen={12} largeScreen={11} computer={12} tablet={12} mobile={16}>
-            <Suspense fallback={<InlineLoader />}>
+            <SuspenseBoundary>
               <Switch>
                 <Route
                   exact
@@ -49,7 +49,7 @@ export default class Statements extends Component {
                   })
                 }
               </Switch>
-            </Suspense>
+            </SuspenseBoundary>
           </Grid.Column>
         </Grid>
       </div>

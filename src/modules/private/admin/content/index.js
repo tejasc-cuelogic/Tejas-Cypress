@@ -1,9 +1,9 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { InlineLoader } from '../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 
-const getModule = component => lazy(() => import(`../${component}`));
+const getModule = component => lazyRetry(() => import(`../${component}`));
 
 export default class Content extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ export default class Content extends Component {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url, [], false).subNavigations;
     return (
-      <Suspense fallback={<InlineLoader />}>
+      <SuspenseBoundary>
         <Switch>
           {
             navItems.map((item) => {
@@ -29,7 +29,7 @@ export default class Content extends Component {
             })
           }
         </Switch>
-      </Suspense>
+      </SuspenseBoundary>
     );
   }
 }

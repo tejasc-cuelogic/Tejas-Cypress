@@ -1,13 +1,13 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Modal, Header, Card, Menu, Button, Statistic } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
-import { InlineLoader } from '../../../../../theme/shared';
+import { InlineLoader, SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 import OffersPanel from '../../../shared/offerings/components/shared/OffersPanel';
 
-const getModule = component => lazy(() => import(`./tabs/${component}`));
+const getModule = component => lazyRetry(() => import(`./tabs/${component}`));
 
 @inject('businessAppReviewStore', 'uiStore', 'userStore')
 @withRouter
@@ -117,7 +117,7 @@ Offer
 )}
                 />
                 <div className="inner-content-spacer">
-                  <Suspense fallback={<InlineLoader />}>
+                  <SuspenseBoundary>
                     <Switch>
                       <Route
                         exact
@@ -130,7 +130,7 @@ Offer
                       ))
                     }
                     </Switch>
-                  </Suspense>
+                  </SuspenseBoundary>
                 </div>
                 <Card.Content extra className="center-align">
                   { fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL' ? ''
