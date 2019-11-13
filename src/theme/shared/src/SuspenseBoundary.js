@@ -22,41 +22,41 @@ class SuspenseBoundary extends Component {
     const redirectToHome = () => {
       window.location = window.location.origin;
     };
-    if (sessionStorage.getItem('crashed') && sessionStorage.getItem('crashed') === window.location.href) {
-      let emailContent = {
-        graphqlError: { operationName: 'Lazy loading' },
-        urlLocation: window.location.href,
-        message: error.stack,
-      };
-      if (window.FS && window.FS.getCurrentSessionURL) {
-        const fullStorySession = window.FS.getCurrentSessionURL(true);
-        emailContent = {
-          ...emailContent,
-          fullStoryUrl: fullStorySession,
-        };
-      }
-      sessionStorage.removeItem('crashed');
-      if (catchErrorBoundry) {
-        try {
-          const params = {
-            emailContent: JSON.stringify(emailContent),
-          };
-          this.props.authStore.notifyApplicationError(params).then(() => {
-            redirectToHome();
-          }).catch(() => {
-            redirectToHome();
-          });
-        } catch (e) {
-          redirectToHome();
-        }
-      } else {
-        console.log(`Error logging for ${REACT_APP_DEPLOY_ENV}, it will trigger notifyApplicationError otherwise`, error, info);
-      }
-    } else {
-      console.log('SuspenseBoundary crashed 1st');
-      sessionStorage.setItem('crashed', window.location.href);
-      window.location.reload();
-    }
+    // if (sessionStorage.getItem('crashed') && sessionStorage.getItem('crashed') === window.location.href) {
+    //   let emailContent = {
+    //     graphqlError: { operationName: 'Lazy loading' },
+    //     urlLocation: window.location.href,
+    //     message: error.stack,
+    //   };
+    //   if (window.FS && window.FS.getCurrentSessionURL) {
+    //     const fullStorySession = window.FS.getCurrentSessionURL(true);
+    //     emailContent = {
+    //       ...emailContent,
+    //       fullStoryUrl: fullStorySession,
+    //     };
+    //   }
+    //   sessionStorage.removeItem('crashed');
+    //   if (catchErrorBoundry) {
+    //     try {
+    //       const params = {
+    //         emailContent: JSON.stringify(emailContent),
+    //       };
+    //       this.props.authStore.notifyApplicationError(params).then(() => {
+    //         redirectToHome();
+    //       }).catch(() => {
+    //         redirectToHome();
+    //       });
+    //     } catch (e) {
+    //       redirectToHome();
+    //     }
+    //   } else {
+    //     console.log(`Error logging for ${REACT_APP_DEPLOY_ENV}, it will trigger notifyApplicationError otherwise`, error, info);
+    //   }
+    // } else {
+    //   console.log('SuspenseBoundary crashed 1st');
+    //   sessionStorage.setItem('crashed', window.location.href);
+    //   window.location.reload();
+    // }
   }
 
   render() {
@@ -64,11 +64,11 @@ class SuspenseBoundary extends Component {
       return (
         <section className="center-align">
           <Icon name="warning circle" size="huge" color="yellow" />
-          <h2>Oops! something went wrong.</h2>
+          <h2>Oops! Something went wrong.</h2>
           <p>
-            Well, this is awkward. An error occurred loading content.
+            Well, this is awkward. An error occurred while content was loading.
             <br />
-            <a href={window.location.href}>Click here</a> to reload.
+            <a href={window.location.href}>Click here</a> to reload or go to the <a href={window.location.origin}>homepage</a>.
           </p>
         </section>
       );
