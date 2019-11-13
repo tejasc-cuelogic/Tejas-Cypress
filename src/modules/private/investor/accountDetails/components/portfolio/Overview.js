@@ -175,8 +175,8 @@ class Overview extends Component {
                         <Table.Row verticalAlign="top">
                           <Table.Cell>{preferredEquityUnit}</Table.Cell>
                           <Table.Cell>
-                            {get(campaign, 'closureSummary.keyTerms.priceCalcuation')
-                              ? Helper.CurrencyFormat(get(campaign, 'closureSummary.keyTerms.priceCalcuation'), 0)
+                            {get(campaign, 'closureSummary.keyTerms.priceCalculation')
+                              ? Helper.CurrencyFormat(get(campaign, 'closureSummary.keyTerms.priceCalculation'), 0)
                               : 'N/A'
                             }
                           </Table.Cell>
