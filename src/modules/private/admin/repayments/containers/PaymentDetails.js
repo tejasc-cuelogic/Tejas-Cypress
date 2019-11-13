@@ -36,7 +36,8 @@ export default class PaymentDetails extends Component {
           <Header as="h3">Edit Payment</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-            <Form>
+          <Form>
+            <Form.Group widths="2">
               <FormInput
                 displayMode
                 fluid
@@ -82,11 +83,12 @@ export default class PaymentDetails extends Component {
                 name="sinkingFundBalance"
                 fielddata={PAYMENT_FRM.fields.sinkingFundBalance}
               />
-              <div className="center-align">
-                <Button className="very relaxed red" content="Cancel" onClick={this.handleCloseModal} />
-                <Button primary className="very relaxed" disabled={!PAYMENT_FRM.meta.isValid} loading={inProgress} content="Save" onClick={() => this.handleUpdatePayment(get(this.props, 'match.params.id'))} />
-              </div>
-            </Form>
+            </Form.Group>
+            <div className="center-align mt-20">
+              <Button className="very relaxed red" content="Cancel" onClick={this.handleCloseModal} />
+              <Button primary className="very relaxed" disabled={!PAYMENT_FRM.meta.isValid} loading={inProgress} content="Save" onClick={() => this.handleUpdatePayment(get(this.props, 'match.params.id'))} />
+            </div>
+          </Form>
         </Modal.Content>
       </Modal>
     );

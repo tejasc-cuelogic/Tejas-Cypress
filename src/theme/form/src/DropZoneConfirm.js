@@ -18,6 +18,7 @@ export default class DropZone extends Component {
   state = { showConfirmModal: false, fileName: null, key: null, error: null };
 
   removeForm = () => {
+    this.setState({ error: null });
     this.setState({ showConfirmModal: !this.state.showConfirmModal });
     this.props.onremove(this.state.fileName, this.state.key);
   }
@@ -33,7 +34,7 @@ export default class DropZone extends Component {
   }
 
   ondrop = (files) => {
-    const fileExt = mime.extension(files[0].type);
+    const fileExt = files[0].type ? mime.extension(files[0].type) : files[0].name.split('.')[1];
     const validate = Helper.validateDocumentExtension(fileExt);
     if (!validate.isInvalid) {
       this.setState({ error: null });
@@ -74,11 +75,11 @@ export default class DropZone extends Component {
       fileId,
     } = this.props.fielddata;
     const {
-      hideFields, size, commonStore, blockDownload,
+      hideFields, size, commonStore, blockDownload, textAlign,
     } = this.props;
     const { inProgress } = commonStore;
     return (
-      <div className={`file-uploader-wrap ${this.props.containerclassname}`}>
+      <div className={`file-uploader-wrap ${this.props.containerclassname} fluid`}>
         {label
           && (
             <label>
@@ -99,11 +100,11 @@ export default class DropZone extends Component {
         }
         {!this.props.disabled && (!value || this.props.multiple)
           ? (
-            <div className="file-uploader">
+            <div className={`file-uploader ${this.props.additionalClass}`}>
               <Dimmer active={showLoader}>
                 <Loader size={size} />
               </Dimmer>
-              <Dropzone {...this.props} multiple={this.props.multiple || false} onDrop={this.ondrop} className="test" style={{}}>
+              <Dropzone {...this.props} multiple={this.props.multiple || false} onDrop={this.ondrop} className="file-uploader-child" style={{}}>
                 <Icon className="ns-upload" /> {this.props.uploadtitle ? <span>{this.props.uploadtitle}</span> : <span>Upload document{this.props.multiple ? 's' : ''}</span>}
               </Dropzone>
             </div>
@@ -178,8 +179,11 @@ export default class DropZone extends Component {
               </div>
             )
         }
-        {(error || this.state.error)
-          && <FieldError error={(error || this.state.error)} />
+        {(error)
+          && <FieldError className={textAlign || ''} error={(error)} />
+        }
+        {(this.state.error)
+          && <FieldError className={textAlign || ''} error={(this.state.error)} />
         }
         <Confirm
           header="Confirm"

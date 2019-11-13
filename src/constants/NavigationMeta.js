@@ -509,7 +509,8 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'payment',
-    title: 'Accreditation Requests',
+    title: 'Accredited Status',
+    heading: 'Accredited Status Request',
     capability: 'ACCREDITATION_ANY',
     to: 'accreditation',
     path: 'admin/accreditation',
@@ -541,6 +542,9 @@ export const PRIVATE_NAV = [
       },
       {
         title: 'Email', to: 'email', component: 'Email', capability: 'EMAIL_ANY',
+      },
+      {
+        title: 'File Factory', to: 'file-factory', component: 'FileFactory', capability: 'FILE_FACTORY_ANY',
       },
     ],
   },
