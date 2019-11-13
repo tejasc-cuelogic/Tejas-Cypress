@@ -2,8 +2,13 @@
          Theme Overrides
 *******************************/
 .ui.comments {
+    border: 1px solid @neutral-darkwhite;
+    margin-bottom: @36px;
+    @media only screen and (max-width : @largestMobileScreen){
+        margin-bottom: @23px;
+    }
     .comment {
-        border-bottom: 1px solid @neutral-darkwhite;
+        border-bottom: 0;
         border-top: 0;
         padding: @30px;
         @media only screen and (max-width : @mobileBreakpoint){
@@ -56,6 +61,7 @@
             margin: 0;
             &.reply-comments {
                 margin: @30px 0 0;
+                border: 0;
                 .comment {
                     background: transparent;
                     border-top: 1px solid fade(@primary-two-darken, 8%);
