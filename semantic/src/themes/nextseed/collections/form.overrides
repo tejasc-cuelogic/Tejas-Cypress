@@ -522,6 +522,32 @@
     }
     &.comment-input {
         padding: @10px 0 0;
+        &.history{
+            display: flex;
+            .field{
+                flex: 1;
+                input{
+                    padding: @11px @20px;
+                }
+                .field-error{
+                    margin-left: @20px;
+                }
+            }
+            .attachment{
+                height: @40px;
+                i.icon{
+                    line-height: 40px;
+                    position: static;
+                }
+            }
+            .ui.button{
+                padding: 0 @14px;
+                height: @40px;
+                border-radius: 0 !important;
+                border: 0;
+                border-bottom: @border-color 1px solid;
+            }
+        }
         .ui.action.input>input {
             padding: @14px @20px;
         }

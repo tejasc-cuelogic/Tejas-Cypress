@@ -4,7 +4,7 @@ import { Form, Button, Icon } from 'semantic-ui-react';
 // import { FormInput } from '../../../../../theme/form';
 
 const AddActivity = observer(props => (
-  <Form onSubmit={props.submit} className="comment-input">
+  <Form onSubmit={props.submit} className="comment-input history">
     {props.smartElement.Input('comment')}
     {/* <FormInput
       name="comment"
