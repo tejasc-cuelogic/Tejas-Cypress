@@ -1,8 +1,8 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { InlineLoader } from '../../../../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../../../../theme/shared';
 
-const getModule = component => lazy(() => import(`./${component}`));
+const getModule = component => lazyRetry(() => import(`./${component}`));
 
 @withRouter
 export default class Model extends Component {
@@ -15,7 +15,7 @@ export default class Model extends Component {
     ];
     return (
       <div>
-        <Suspense fallback={<InlineLoader />}>
+        <SuspenseBoundary>
           <Switch>
             <Route exact path={match.url} component={getModule(navItems[0].component)} />
             {
@@ -24,7 +24,7 @@ export default class Model extends Component {
               ))
             }
           </Switch>
-        </Suspense>
+        </SuspenseBoundary>
       </div>
     );
   }
