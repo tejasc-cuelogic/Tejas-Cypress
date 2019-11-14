@@ -13,7 +13,6 @@ const AddActivity = observer(props => (
     /> */}
     <div className="attachment">
       <Icon className="ns-attachment" color="grey" size="large" />
-      <input type="file" />
     </div>
     <Button disabled={!props.form.meta.isValid} icon type="submit" basic>
       <Icon className="ns-send-right" color="blue" size="large" />

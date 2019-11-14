@@ -62,6 +62,7 @@ export default class DataModelStore {
       result = await apolloClient.mutate({
         mutation: this.gqlRef[payLoad.mutation],
         variables: payLoad.variables,
+        refetchQueries: payLoad.refetchQueries || [],
       });
       nsUiStore.filterLoaderByOperation(payLoad.setLoader);
       if (payLoad.message && payLoad.message !== false && payLoad.message && payLoad.message.success) {

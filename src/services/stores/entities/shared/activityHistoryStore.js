@@ -88,26 +88,24 @@ export class ActivityHistoryStore extends DataModelStore {
     this.createActivityHistory(data);
   }
 
-  createActivityHistory = (payload, isInternal = false) => {
-    client
-      .mutate({
-        mutation: addActivity,
-        variables: {
-          activityHistoryDetails: payload,
-        },
+  createActivityHistory = async (payload, isInternal = false) => {
+    try {
+      await this.executeMutation({
+        mutation: 'addActivity',
+        variables: { activityHistoryDetails: payload },
         refetchQueries: [{
           query: allActivities,
           variables: { resourceId: payload.resourceId, orderBy: { field: 'activityDate', sort: 'desc' } },
           fetchPolicy: 'network-only',
         }],
-      })
-      .then(() => {
-        if (isInternal) {
-          Helper.toast('Activity history added successfully.', 'success');
-        }
-        this.resetForm('ACTIVITY_FRM');
-      })
-      .catch(() => Helper.toast('Something went wrong, please try again later.', 'error'));
+      });
+      if (isInternal) {
+        Helper.toast('Activity history added successfully.', 'success');
+      }
+      this.resetForm('ACTIVITY_FRM');
+    } catch (error) {
+      Helper.toast('Something went wrong. Please try again in some time.', 'error');
+    }
   }
 
   get allData() {
