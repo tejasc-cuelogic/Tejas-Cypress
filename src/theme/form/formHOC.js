@@ -3,7 +3,6 @@ import { observer, inject } from 'mobx-react';
 import { get, pick } from 'lodash';
 import ReactCodeInput from 'react-code-input';
 import { FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown } from '.';
-import { FILE_UPLOAD_STEPS } from '../../constants/account';
 import Address from './src/Address';
 
 function formHoc(WrappedComponent, metaInfo) {
@@ -25,6 +24,7 @@ function formHoc(WrappedComponent, metaInfo) {
           fielddata={fieldData}
           onblur={get(props, 'handleBlur') || false}
           changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
+          label={get(props, 'label') || false}
           {...props}
         />
       );
@@ -71,12 +71,12 @@ function formHoc(WrappedComponent, metaInfo) {
       />
     )
 
-    Dropzone = (name, props) => (
+    DropZone = (name, props) => (
       <DropZone
         name={name}
         label={this.props[metaInfo.store][metaInfo.form].fields[name].label}
         fielddata={this.props[metaInfo.store][metaInfo.form].fields[name]}
-        ondrop={files => this.props[metaInfo.store].setFileUploadData(metaInfo.form, name, FILE_UPLOAD_STEPS, files, metaInfo.userRole)}
+        ondrop={files => this.props[metaInfo.store].setFileUploadData(metaInfo.form, name, this.props[metaInfo.store][metaInfo.form].fields[name].stepName, files, metaInfo.userRole)}
         onremove={() => this.props[metaInfo.store].removeUploadedData(metaInfo.form, name)}
         containerclassname="fluid"
         {...props}
@@ -205,7 +205,7 @@ function formHoc(WrappedComponent, metaInfo) {
         FormPasswordStrength: this.FormPasswordStrength,
         CodeInput: this.CodeInput,
         FormSelect: this.FormSelect,
-        Dropzone: this.Dropzone,
+        DropZone: this.DropZone,
         RadioGroup: this.RadioGroup,
         FormCheckBox: this.FormCheckBox,
         FormDropDown: this.FormDropDown,

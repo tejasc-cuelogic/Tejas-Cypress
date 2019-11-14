@@ -1,23 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { Form, Button, Icon } from 'semantic-ui-react';
+import { Form, Button, Icon, Modal } from 'semantic-ui-react';
+import Helper from '../../../../../helper/utility';
 // import { FormInput } from '../../../../../theme/form';
 
-const AddActivity = observer(props => (
-  <Form onSubmit={props.submit} className="comment-input">
-    {props.smartElement.Input('comment')}
-    {/* <FormInput
-      name="comment"
-      fielddata={props.form.fields.comment}
-      changed={(e, result) => props.change(e, result, 'ACTIVITY_FRM')}
-    /> */}
-    <div className="attachment">
-      <Icon className="ns-attachment" color="grey" size="large" />
-    </div>
-    <Button disabled={!props.form.meta.isValid} icon type="submit" basic>
-      <Icon className="ns-send-right" color="blue" size="large" />
-    </Button>
-  </Form>
-));
+const AddActivity = observer((props) => {
+  const [showModal, setShowModal] = useState(false);
+  useEffect(() => {
+    if (showModal) {
+      Helper.modalCssUpdate('show-top', 'show-top');
+    }
+  }, [showModal]);
+  return (
+    <>
+      <Form onSubmit={props.submit} className="comment-input">
+        {props.smartElement.Input('comment')}
+        <div className="attachment">
+          <Icon className="ns-attachment" color="grey" size="large" onClick={() => setShowModal(!showModal)} />
+        </div>
+        <Button disabled={!props.form.meta.isValid} icon type="submit" basic>
+          <Icon className="ns-send-right" color="blue" size="large" />
+        </Button>
+      </Form>
+      <Modal open={showModal} closeOnDimmerClick={false} size="small" className="show-top" closeIcon onClose={() => setShowModal(!showModal)}>
+        <Modal.Header>Add Activity</Modal.Header>
+        <Modal.Content>
+          {props.smartElement.Input('comment', { label: 'Comment' })}
+          <Form.Field className="mt-30">
+            {props.smartElement.DropZone('files')}
+          </Form.Field>
+        </Modal.Content>
+        <Modal.Actions textAlign="right">
+            <Button className="relaxed" disabled={!props.form.meta.isValid} onClick={() => { props.submit(); setShowModal(false); }} icon type="submit" content="submit" primary />
+        </Modal.Actions>
+      </Modal>
+    </>
+  );
+});
 
 export default AddActivity;

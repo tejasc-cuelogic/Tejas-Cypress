@@ -19,7 +19,6 @@ class ActivityHistory extends Component {
   state = { defaultFilter: true }
 
   componentDidMount() {
-    // this.props.activityHistoryStore.reset();
     if (this.props.resourceId) {
       this.props.activityHistoryStore.initRequest(this.props.resourceId, this.state.defaultFilter);
     }
@@ -29,7 +28,7 @@ class ActivityHistory extends Component {
   componentWillUnmount() {
     this.props.activityHistoryStore.setFieldValue('activityTypes', []);
     this.props.activityHistoryStore.setFieldValue('requestState', { filters: {} });
-    this.props.activityHistoryStore.reset();
+    this.props.activityHistoryStore.resetForm('ACTIVITY_FRM');
   }
 
   setSearchParam = (e, { name, value }) => this.props.activityHistoryStore.setInitiateSrch(name, value, this.props.resourceId);
