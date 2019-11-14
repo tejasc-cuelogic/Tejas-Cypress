@@ -6,7 +6,6 @@ import { Modal, Header, Button, Grid, Form, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../../theme/shared';
-// import ChangeInvestmentLimit from '../../ChangeInvestmentLimit';
 
 @inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore', 'agreementsStore', 'investmentLimitStore')
 @withRouter
@@ -92,9 +91,6 @@ export default class Agreement extends React.Component {
   }
 
   handleConfirm = () => {
-    // const { agreementDetails } = this.props.investmentStore;
-    // const { cancelAgreement } = this.props.portfolioStore;
-    // cancelAgreement(agreementDetails.agreementId);
     this.props.investmentStore.resetData();
     this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push(`${this.props.refLink}/invest-now`);
@@ -122,7 +118,6 @@ export default class Agreement extends React.Component {
       investmentAmount,
       setCheckbox,
       agreementDetails,
-      // investAccTypes,
       investmentFlowErrorMessage,
     } = this.props.investmentStore;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
@@ -135,14 +130,7 @@ export default class Agreement extends React.Component {
     const offeringRegulationType = get(campaign, 'keyTerms.regulation');
     const { currentInvestmentStatus } = this.props.accreditationStore;
     const investmentRegulation = get(getInvestorAccountById, 'regulation');
-    // userAccreditatedStatus(investAccTypes.value, true, investmentRegulation);
-    // const regulationCheck = this.props.changeInvestment && investmentRegulation && !['EXPIRED', 'INACTIVE'].includes(userAccredetiationState)
-    //   ? investmentRegulation : currentInvestmentStatus;
     const regulationCheck = currentInvestmentStatus || investmentRegulation;
-    // regulationCheck === ('BD_506C' || 'BD_506B')
-    // const regualtionTypeStatement =
-    // regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck) ?
-    // 'Regulation D 506C' : 'Regulation Crowdfunding';
     const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : regulationCheck === 'BD_506B' ? 'Rule 506(b) of Regulation D' : 'Regulation Crowdfunding';
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
