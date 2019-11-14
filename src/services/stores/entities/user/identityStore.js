@@ -97,7 +97,6 @@ export class IdentityStore {
       this.ID_VERIFICATION_FRM,
       FormValidator.pullValues(e, result),
     );
-    ['city', 'state', 'zipCode'].forEach((field) => { this.ID_VERIFICATION_FRM.fields[field].value = ''; });
   };
 
   @action
@@ -153,6 +152,7 @@ export class IdentityStore {
         this.ID_VERIFICATION_FRM,
         { name: 'street', value: Helper.gAddressClean(place).residentalStreet },
       );
+      ['city', 'state', 'zipCode'].forEach((field) => { this.ID_VERIFICATION_FRM.fields[field].value = ''; });
     }
   }
 

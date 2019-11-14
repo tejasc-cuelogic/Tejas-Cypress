@@ -79,7 +79,6 @@ class LegalDetails extends React.Component {
               fielddata={form.fields.street}
               onplaceselected={autoComplete}
               changed={change}
-              onBlur={change}
               placeHolder="Street Address, City, State, Zip"
               showerror
             />
