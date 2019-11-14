@@ -570,19 +570,19 @@ export const PUBLIC_NAV = [
     ],
   },
   {
-    title: 'Explore Campaigns',
+    title: 'Investment opportunities',
     to: 'offerings-v2/',
     header: false,
     headerMobile: false,
     subNavigations: NEW_OFFERING_LAYOUT,
   },
   {
-    title: 'Explore Campaigns',
+    title: 'Investment opportunities',
     to: 'offerings/',
     subNavigations: NEW_OFFERING_LAYOUT,
   },
   {
-    title: 'Explore Campaigns',
+    title: 'Investment opportunities',
     to: 'offerings-v1',
     header: false,
     headerMobile: false,
