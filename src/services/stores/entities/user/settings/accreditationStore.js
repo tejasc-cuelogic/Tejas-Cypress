@@ -56,7 +56,7 @@ export class AccreditationStore {
 
   @observable requestState = {
     skip: 0,
-    perPage: 100,
+    perPage: 25,
     filters: false,
     search: {
     },
@@ -1106,7 +1106,7 @@ export class AccreditationStore {
   resetFilters = () => {
     this.requestState = {
       skip: 0,
-      perPage: 100,
+      perPage: 25,
       filters: false,
       search: {
       },
