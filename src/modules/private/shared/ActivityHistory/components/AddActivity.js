@@ -14,7 +14,7 @@ const AddActivity = observer((props) => {
   return (
     <>
       <Form error onSubmit={props.submit} className="comment-input history">
-        {props.smartElement.Input('comment')}
+        {props.smartElement.Input('comment', { ishidelabel: 'true' })}
         <div className="attachment">
           <Icon className="ns-attachment" color="grey" size="large" onClick={() => setShowModal(!showModal)} />
         </div>
