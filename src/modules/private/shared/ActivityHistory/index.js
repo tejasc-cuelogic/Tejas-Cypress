@@ -11,6 +11,7 @@ import ActivityFeed from './components/ActivityFeed';
 const metaInfo = {
   store: 'activityHistoryStore',
   form: 'ACTIVITY_FRM',
+  userRole: 'ADMIN',
 };
 
 @inject('activityHistoryStore')
@@ -19,7 +20,6 @@ class ActivityHistory extends Component {
   state = { defaultFilter: true }
 
   componentDidMount() {
-    // this.props.activityHistoryStore.reset();
     if (this.props.resourceId) {
       this.props.activityHistoryStore.initRequest(this.props.resourceId, this.state.defaultFilter);
     }
@@ -29,7 +29,7 @@ class ActivityHistory extends Component {
   componentWillUnmount() {
     this.props.activityHistoryStore.setFieldValue('activityTypes', []);
     this.props.activityHistoryStore.setFieldValue('requestState', { filters: {} });
-    this.props.activityHistoryStore.reset();
+    this.props.activityHistoryStore.resetForm('ACTIVITY_FRM');
   }
 
   setSearchParam = (e, { name, value }) => this.props.activityHistoryStore.setInitiateSrch(name, value, this.props.resourceId);
@@ -83,7 +83,7 @@ class ActivityHistory extends Component {
             </Grid>
           </Form>
         </div>
-        <AddActivity submit={this.logActivity} form={ACTIVITY_FRM} smartElement={smartElement} />
+        <AddActivity submit={this.logActivity} form={ACTIVITY_FRM} offeringId={this.props.offeringId || ''} applicationId={this.props.applicationId || ''} applicationIssuerId={this.props.applicationIssuerId || ''} smartElement={smartElement} />
         <ActivityFeed loading={loader} activities={activities} />
       </div>
     );

@@ -10,4 +10,16 @@ export const LOG_ACTIVITY = {
       max: 'This is too long. Max length is :max.',
     },
   },
+  files: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    stepName: 'APPN_ACTIVITY_HISTORY',
+  },
 };
