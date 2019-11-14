@@ -526,6 +526,7 @@
             display: flex;
             .field{
                 flex: 1;
+                margin-bottom: 0;
                 input{
                     padding-left:@20px;
                     padding-right:@20px;
@@ -535,10 +536,11 @@
                 }
             }
             .attachment{
-                // height: @40px;
+                height: @40px;
                 i.icon{
-                    // line-height: 40px;
+                    line-height: 40px;
                     position: static;
+                    height: 40px;
                 }
             }
             .ui.button{
