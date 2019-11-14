@@ -149,27 +149,31 @@ export default class DataModelStore {
     FormValidator.setAddressFields(place, this[form]);
   }
 
-  setFileUploadData = (form, field, steps, files, userRole) => {
+  setFileUploadData = (form, field, stepName, files, { userRole, applicationId, offeringId, applicationIssuerId, tags }) => {
     const file = files[0];
-    const stepName = steps[field];
     const fileData = Helper.getFormattedFileData(file);
-    fileUpload.setFileUploadData('', fileData, stepName, userRole).then(action((result) => {
+    this[form].fields[field].showLoader = true;
+    fileUpload.setFileUploadData(applicationId, fileData, stepName, userRole, applicationIssuerId, offeringId, tags).then(action((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
-      this[form].fields[field].fileId = fileId;
-      this[form].fields[field].preSignedUrl = preSignedUrl;
-      this[form].fields[field].fileData = file;
-      this[form] = FormValidator.onChange(
-        this[form],
-        { name: field, value: fileData.fileName },
-      );
       fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType })
-        .then(() => { })
-        .catch(() => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
+        .then(() => {
+          this[form].fields[field].fileId = fileId;
+          this[form].fields[field].preSignedUrl = preSignedUrl;
+          this[form].fields[field].fileData = file;
+          this[form].fields[field].fileData = undefined;
+          this[form].fields[field].showLoader = false;
+          this[form] = FormValidator.onChange(
+            this[form],
+            { name: field, value: fileData.fileName },
+          );
         })
-        .finally(() => {
+        .catch(() => {
+          this[form].fields[field].showLoader = false;
+          Helper.toast('Something went wrong, please try again later.', 'error');
         });
-    }));
+    })).catch(() => {
+      this[form].fields[field].showLoader = false;
+    });
   }
 
   maskChange = (values, field, form, type) => {
@@ -266,6 +270,7 @@ export const decorateDefault = {
   passwordChange: action,
   eventFormChange: action,
   setAddressFields: action,
+  setFileUploadData: action,
   setLoader: action,
   auStatus: observable.ref,
   loading: observable.ref,

@@ -20,6 +20,6 @@ export const LOG_ACTIVITY = {
     fileId: '',
     fileData: '',
     objType: 'FileObjectType',
-    stepName: 'DOCUMENTS_LEGAL_NPA',
+    stepName: 'APPN_ACTIVITY_HISTORY',
   },
 };

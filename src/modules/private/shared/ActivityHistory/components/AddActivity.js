@@ -13,7 +13,7 @@ const AddActivity = observer((props) => {
   }, [showModal]);
   return (
     <>
-      <Form onSubmit={props.submit} className="comment-input history">
+      <Form error onSubmit={props.submit} className="comment-input history">
         {props.smartElement.Input('comment')}
         <div className="attachment">
           <Icon className="ns-attachment" color="grey" size="large" onClick={() => setShowModal(!showModal)} />
@@ -27,7 +27,7 @@ const AddActivity = observer((props) => {
         <Modal.Content>
           {props.smartElement.Input('comment', { label: 'Comment' })}
           <Form.Field className="mt-30">
-            {props.smartElement.DropZone('files')}
+            {props.smartElement.DropZone('files', { stepName: 'APPN_ACTIVITY_HISTORY', offeringId: props.offeringId, applicationIssuerId: props.applicationIssuerId, applicationId: props.applicationId })}
           </Form.Field>
         </Modal.Content>
         <Modal.Actions textAlign="right">

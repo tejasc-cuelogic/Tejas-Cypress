@@ -11,6 +11,7 @@ import ActivityFeed from './components/ActivityFeed';
 const metaInfo = {
   store: 'activityHistoryStore',
   form: 'ACTIVITY_FRM',
+  userRole: 'ADMIN',
 };
 
 @inject('activityHistoryStore')
@@ -82,7 +83,7 @@ class ActivityHistory extends Component {
             </Grid>
           </Form>
         </div>
-        <AddActivity submit={this.logActivity} form={ACTIVITY_FRM} smartElement={smartElement} />
+        <AddActivity submit={this.logActivity} form={ACTIVITY_FRM} offeringId={this.props.offeringId || ''} applicationId={this.props.applicationId || ''} applicationIssuerId={this.props.applicationIssuerId || ''} smartElement={smartElement} />
         <ActivityFeed loading={loader} activities={activities} />
       </div>
     );
