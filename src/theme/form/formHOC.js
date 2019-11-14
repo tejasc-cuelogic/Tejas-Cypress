@@ -78,7 +78,7 @@ function formHoc(WrappedComponent, metaInfo) {
         label={this.props[metaInfo.store][metaInfo.form].fields[name].label}
         fielddata={this.props[metaInfo.store][metaInfo.form].fields[name]}
         ondrop={files => this.props[metaInfo.store].setFileUploadData(metaInfo.form, name, get(props, 'stepName') || this.props[metaInfo.store][metaInfo.form].fields[name].stepName, files, { userRole: metaInfo.userRole || get(props, 'userRole'), offeringId: get(props, 'offeringId') || '', applicationId: get(props, 'applicationId') || '', applicationIssuerId: get(props, 'applicationIssuerId') || '', tags: get(props, 'tags') || '' })}
-        onremove={() => this.props[metaInfo.store].removeUploadedData(metaInfo.form, name)}
+        onremove={(field, index) => this.props[metaInfo.store].removeUploadedData(metaInfo.form, field, index)}
         containerclassname="fluid"
         {...props}
       />

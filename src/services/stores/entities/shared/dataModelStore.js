@@ -24,6 +24,8 @@ export default class DataModelStore {
 
   currentScore = 0;
 
+  removeFileIdsList = [];
+
   requestState = {
     lek: { 'page-1': null },
     skip: 0,
@@ -157,23 +159,44 @@ export default class DataModelStore {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType })
         .then(() => {
-          this[form].fields[field].fileId = fileId;
-          this[form].fields[field].preSignedUrl = preSignedUrl;
-          this[form].fields[field].fileData = file;
-          this[form].fields[field].fileData = undefined;
-          this[form].fields[field].showLoader = false;
-          this[form] = FormValidator.onChange(
-            this[form],
-            { name: field, value: fileData.fileName },
-          );
+          this.setFieldValue(form, fileId, `fields.${field}.fileId`);
+          this.setFieldValue(form, preSignedUrl, `fields.${field}.preSignedUrl`);
+          this.setFieldValue(form, file, `fields.${field}.fileData`);
+          this.setFieldValue(form, undefined, `fields.${field}.error`);
+          this.setFieldValue(form, false, `fields.${field}.showLoader`);
+          this.setFieldValue(form, fileData.fileName, `fields.${field}.value`);
         })
-        .catch(() => {
-          this[form].fields[field].showLoader = false;
+        .catch((e) => {
+          window.logger(e);
+          this.setFieldValue(form, false, `fields.${field}.showLoader`);
           Helper.toast('Something went wrong, please try again later.', 'error');
         });
-    })).catch(() => {
-      this[form].fields[field].showLoader = false;
+    })).catch((e) => {
+      window.logger(e);
+      this.setFieldValue(form, false, `fields.${field}.showLoader`);
+      Helper.toast('Something went wrong, please try again later.', 'error');
     });
+  }
+
+  removeUploadedData = (form, field, index = null, arrayName) => {
+    let removeFileIds = '';
+    if (index !== null && arrayName) {
+      const { fileId } = this[form].fields[arrayName][index][field];
+      removeFileIds = fileId;
+    } else if (index !== null) {
+      const filesId = this[form].fields[field].fileId;
+      removeFileIds = filesId[index];
+    } else {
+      const { fileId } = this[form].fields[field];
+      removeFileIds = fileId;
+    }
+    this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
+    this.setFieldValue(form, '', `fields.${field}.fileId`);
+    this.setFieldValue(form, '', `fields.${field}.fileData`);
+    this.setFieldValue(form, '', `fields.${field}.value`);
+    this.setFieldValue(form, undefined, `fields.${field}.error`);
+    this.setFieldValue(form, false, `fields.${field}.showLoader`);
+    this.setFieldValue(form, '', `fields.${field}.preSignedUrl`);
   }
 
   maskChange = (values, field, form, type) => {
@@ -257,6 +280,7 @@ export default class DataModelStore {
 
 export const decorateDefault = {
   result: observable,
+  removeFileIdsList: observable,
   currTime: observable,
   currentScore: observable,
   setFieldValue: action,

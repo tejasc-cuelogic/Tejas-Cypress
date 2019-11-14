@@ -90,4 +90,4 @@ class ActivityHistory extends Component {
   }
 }
 
-export default formHOC(ActivityHistory, metaInfo);
+export default formHOC(observer(ActivityHistory), metaInfo);
