@@ -11,12 +11,6 @@ function formHoc(WrappedComponent, metaInfo) {
   return inject(metaInfo.store, 'nsUiStore')(observer((class extends React.Component {
     constructor(props) {
       super(props);
-      if (this.props.nsUiStore.errors !== undefined) {
-        if (!metaInfo.unSetForm) {
-          this.props[metaInfo.store].resetForm(metaInfo.form);
-        }
-      }
-      // this.props.nsUiStore.setFieldValue('errors', undefined);
       this.fieldsData = this.props[metaInfo.store][metaInfo.form].fields;
     }
 
