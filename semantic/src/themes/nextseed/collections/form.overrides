@@ -527,16 +527,17 @@
             .field{
                 flex: 1;
                 input{
-                    padding: @11px @20px;
+                    padding-left:@20px;
+                    padding-right:@20px;
                 }
                 .field-error{
                     margin-left: @20px;
                 }
             }
             .attachment{
-                height: @40px;
+                // height: @40px;
                 i.icon{
-                    line-height: 40px;
+                    // line-height: 40px;
                     position: static;
                 }
             }
