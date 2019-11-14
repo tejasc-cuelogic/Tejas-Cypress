@@ -36,7 +36,6 @@ export default class AutoComplete extends Component {
         error={(!!error && this.state.showError) || (!!error && props.showerror)}
         className={classes}
         id="addressField"
-        {...props}
       >
         <label>{(props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}</label>
         <Autocomplete
