@@ -12,7 +12,7 @@ import { uiStore, userDetailsStore, investmentStore } from '../../../index';
 import { updateAccreditation, listAccreditation, approveOrDeclineForAccreditationRequest, notifyVerifierForAccreditationRequestByEmail } from '../../../queries/accreditation';
 import { userAccreditationQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
-import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS } from '../../../../constants/accreditation';
+import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS, ACCREDITATION_SORT_ENUMS } from '../../../../constants/accreditation';
 import { FILTER_META, CONFIRM_ACCREDITATION } from '../../../../constants/accreditationRequests';
 
 export class AccreditationStore {
@@ -128,7 +128,8 @@ export class AccreditationStore {
     if (this.sortOrder.column) {
       params = {
         ...params,
-        ...this.sortOrder,
+        sortBy: ACCREDITATION_SORT_ENUMS[this.sortOrder.column],
+        sortType: this.sortOrder.direction.toUpperCase(),
       };
     }
     this.requestState.page = params.page;
@@ -438,13 +439,6 @@ export class AccreditationStore {
   }
 
   @computed get accreditations() {
-    // if (this.sortOrder.column && this.sortOrder.direction && get(this.data, 'data.listAccreditation.accreditation')) {
-    //   return orderBy(
-    //     this.data.data.listAccreditation.accreditation,
-    //     [accreditation => ((this.sortOrder.column === 'requestDate' || this.sortOrder.column === 'reviewed.date') ? moment(get(accreditation, `${this.sortOrder.column}`)).unix() : accreditation[this.sortOrder.column] && get(accreditation, `${this.sortOrder.column}`).toString().toLowerCase())],
-    //     [this.sortOrder.direction],
-    //   );
-    // }
     return (this.data && get(this.data, 'data.listAccreditation.accreditation')) || [];
   }
 
