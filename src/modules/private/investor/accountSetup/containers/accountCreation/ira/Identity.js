@@ -34,6 +34,7 @@ export default class Identity extends Component {
             ondrop={this.onIdentityDocDrop}
             onremove={this.onIdentityDocRemove}
             additionalClass="file-uploader-large"
+            containerclassname="fluid"
             textAlign="center-align"
             uploadtitle={<span className="highlight-text">Choose a file <span>or drag it here</span></span>}
             containerclassname="fluid"
