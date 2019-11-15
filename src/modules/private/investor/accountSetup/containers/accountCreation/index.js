@@ -7,6 +7,7 @@ import IndividualAccCreation from './individual/AccountCreation';
 import EntityAccCreation from './entity/AccountCreation';
 import ConfirmModal from '../../components/confirmModal';
 import Helper from '../../../../../../helper/utility';
+import AgreementsPdfLoader from '../../../settings/components/agreements/AgreementsPdfLoader';
 
 const successMessage = 'Check out some of the investment opportunities now available to you as a member of the NextSeed community.';
 const processingMessage = 'While we set up your account, check out some of the investment opportunities now available to you as a member of the NextSeed community.';
@@ -139,6 +140,7 @@ export default class AccountCreation extends Component {
           <Route exact path={`${this.props.match.url}/ira`} render={props => <IraAccCreation {...props} handleCreateAccount={this.handleCreateAccount} />} />
           <Route exact path={`${this.props.match.url}/entity`} render={props => <EntityAccCreation {...props} handleCreateAccount={this.handleCreateAccount} />} />
           <Route exact path={`${this.props.match.url}/individual/success`} render={props => <ConfirmModal {...props} open content={successMessage} handleCloseModal={this.handleCloseModal} HandleModalCta={this.HandleModalCta} />} />;
+          <Route exact path={`${this.props.match.url}/individual/legal-docs/:agreementKey`} render={props => <AgreementsPdfLoader iframeModal refLink={`${this.props.match.url}/individual/`} {...props} />} />
           {
             ['individual', 'ira', 'entity'].map(accType => <Route exact path={`${this.props.match.url}/${accType}/processing`} render={props => <ConfirmModal {...props} open content={processingMessage} handleCloseModal={this.handleCloseModal} HandleModalCta={this.HandleModalCta} />} />)
           }
