@@ -293,7 +293,7 @@ class KeyTermsDetails extends Component {
               title={`${capitalize(keyTerms.equityUnitType)} Price`}
               content={(
                 <p>
-                  {Helper.CurrencyFormat(keyTerms.priceCopy || 0)}
+                  {keyTerms.priceCopy }
                 </p>
               )}
             />

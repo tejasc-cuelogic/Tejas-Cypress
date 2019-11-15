@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Popup, Table, Header, Button } from 'semantic-ui-react';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_REGULATION_DETAILED } from '../../../../../../constants/offering';
-import Helper from '../../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -169,7 +168,7 @@ class KeyTerms extends Component {
                   </Table.Cell>
                   <Table.Cell>
                     <p>
-                      {Helper.CurrencyFormat(get(campaign, 'keyTerms.priceCopy') || 0) || ' NA'}
+                      {get(campaign, 'keyTerms.priceCopy') || ' NA'}
                     </p>
                   </Table.Cell>
                 </Table.Row>

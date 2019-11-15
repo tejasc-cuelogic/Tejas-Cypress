@@ -182,7 +182,7 @@ export default class CampaignHeader extends Component {
                           Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : '-'}
                         </p>
                         <p className="mb-0">
-                          {`${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price:`} {Helper.CurrencyFormat(get(campaign, 'keyTerms.priceCopy') || 0) || '-'}
+                          {`${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price:`} {get(campaign, 'keyTerms.priceCopy') || '-'}
                         </p>
                       </>
                     )
