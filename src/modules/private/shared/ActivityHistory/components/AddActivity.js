@@ -16,7 +16,7 @@ const AddActivity = observer((props) => {
       <Form error onSubmit={props.submit} className="comment-input history">
         {props.smartElement.Input('comment', { ishidelabel: 'true' })}
         <div className="attachment">
-          <Icon className="ns-attachment" color="grey" size="large" onClick={() => setShowModal(!showModal)} />
+          <Icon className="ns-attachment" color="grey" size="large" disabled={!props.stepName} onClick={() => setShowModal(!showModal)} />
         </div>
         <Button disabled={!props.form.meta.isValid} icon type="submit" basic>
           <Icon className="ns-send-right" color="blue" size="large" />
@@ -28,7 +28,7 @@ const AddActivity = observer((props) => {
           <Form>
             {props.smartElement.Input('comment', { label: 'Comment' })}
             <Form.Field className="mt-30">
-              {props.smartElement.DropZone('files', { stepName: 'APPN_ACTIVITY_HISTORY', offeringId: props.offeringId, applicationIssuerId: props.applicationIssuerId, applicationId: props.applicationId })}
+              {props.smartElement.DropZone('documents', { stepName: props.stepName, investorId: props.investorId, offeringId: props.offeringId, applicationIssuerId: props.applicationIssuerId, applicationId: props.applicationId })}
             </Form.Field>
           </Form>
         </Modal.Content>

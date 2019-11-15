@@ -151,12 +151,12 @@ export default class DataModelStore {
     FormValidator.setAddressFields(place, this[form]);
   }
 
-  setFileUploadData = (form, field, multiple = false, index = null, arrayName = null, stepName, files, { userRole, applicationId, offeringId, applicationIssuerId, tags }) => {
+  setFileUploadData = (form, field, multiple = false, index = null, arrayName = null, stepName, files, { userRole, investorId, applicationId, offeringId, applicationIssuerId, tags }) => {
     const path = (arrayName && index !== null) ? `fields.${arrayName}[${index}].${field}` : `fields.${field}`;
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
     this[form].fields[field].showLoader = true;
-    fileUpload.setFileUploadData(applicationId, fileData, stepName, userRole, applicationIssuerId, offeringId, tags).then(action((result) => {
+    fileUpload.setFileUploadData(applicationId, fileData, stepName, userRole, applicationIssuerId, offeringId, tags, { investorId }).then(action((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType })
         .then(() => {
