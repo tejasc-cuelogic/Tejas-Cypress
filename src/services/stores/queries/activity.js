@@ -20,7 +20,6 @@ export const allActivities = gql`
       documents {
         fileId
         fileName
-        fileHandle
       }
       createdUserInfo {
         id
