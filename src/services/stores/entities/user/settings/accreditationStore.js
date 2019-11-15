@@ -1,5 +1,6 @@
+/* eslint-disable radix */
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes, get, orderBy } from 'lodash';
+import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
@@ -11,7 +12,7 @@ import { uiStore, userDetailsStore, investmentStore } from '../../../index';
 import { updateAccreditation, listAccreditation, approveOrDeclineForAccreditationRequest, notifyVerifierForAccreditationRequestByEmail } from '../../../queries/accreditation';
 import { userAccreditationQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
-import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS } from '../../../../constants/accreditation';
+import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS, ACCREDITATION_SORT_ENUMS } from '../../../../constants/accreditation';
 import { FILTER_META, CONFIRM_ACCREDITATION } from '../../../../constants/accreditationRequests';
 
 export class AccreditationStore {
@@ -116,12 +117,19 @@ export class AccreditationStore {
       method: method !== 'ALL' ? method : null,
       type: type !== 'ALL' ? type : null,
       page: reqParams ? reqParams.page : 1,
-      limit: reqParams ? reqParams.perPage : 25,
+      limit: (reqParams && reqParams.first) || this.requestState.perPage,
     };
     if (status && status !== '') {
       params = {
         ...params,
         status,
+      };
+    }
+    if (this.sortOrder.column) {
+      params = {
+        ...params,
+        sortBy: ACCREDITATION_SORT_ENUMS[this.sortOrder.column],
+        sortType: this.sortOrder.direction.toUpperCase(),
       };
     }
     this.requestState.page = params.page;
@@ -286,7 +294,6 @@ export class AccreditationStore {
     this.setFormFileArray(form, field, 'fileId', fileId);
     this.setFormFileArray(form, field, 'value', fileData.fileName);
     this.setFormFileArray(form, field, 'error', undefined);
-    this.checkFormValid(form, false, false);
   }
 
   @action
@@ -340,10 +347,8 @@ export class AccreditationStore {
         Helper.toast('Something went wrong, please try again later.', 'error');
       });
     }
-    // this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     this.setFormFileArray(form, field, 'error', undefined);
     this.setFormFileArray(form, field, 'showLoader', false);
-    this.checkFormValid(form, false, false);
   }
 
   @action
@@ -434,13 +439,6 @@ export class AccreditationStore {
   }
 
   @computed get accreditations() {
-    if (this.sortOrder.column && this.sortOrder.direction && get(this.data, 'data.listAccreditation.accreditation')) {
-      return orderBy(
-        this.data.data.listAccreditation.accreditation,
-        [accreditation => ((this.sortOrder.column === 'requestDate' || this.sortOrder.column === 'reviewed.date') ? moment(get(accreditation, `${this.sortOrder.column}`)).unix() : accreditation[this.sortOrder.column] && get(accreditation, `${this.sortOrder.column}`).toString().toLowerCase())],
-        [this.sortOrder.direction],
-      );
-    }
     return (this.data && get(this.data, 'data.listAccreditation.accreditation')) || [];
   }
 
@@ -831,7 +829,7 @@ export class AccreditationStore {
     const pendingResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'REQUESTED'));
     const notEligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'DECLINED'));
     const eligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'CONFIRMED'));
-    const expiredResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && this.checkIsAccreditationExpired(a.expiration) === 'EXPIRED'));
+    const expiredResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && (a.status === 'EXPIRED' || this.checkIsAccreditationExpired(a.expiration) === 'EXPIRED')));
     this.accreditationDetails.inactiveAccreditation = inactiveResult;
     this.accreditationDetails.pendingAccreditation = pendingResult;
     this.accreditationDetails.notEligibleAccreditation = notEligibalResult;
@@ -870,36 +868,28 @@ export class AccreditationStore {
       }
       const validAccreditationStatus = ['REQUESTED', 'INVALID'];
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration
-        ? this.checkIsAccreditationExpired(currentAcitveObject.expiration)
-      === 'EXPIRED' ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
+        ? (currentAcitveObject.status === 'EXPIRED' || this.checkIsAccreditationExpired(currentAcitveObject.expiration)
+      === 'EXPIRED') ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
       investmentType = regulationType && regulationType === 'BD_CF_506C' && accountStatus !== 'EXPIRED' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'BD_506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : regulationType && regulationType === 'BD_506B' ? 'BD_506B' : 'CF';
-      // if (accountStatus) {
       switch (accountStatus) {
         case 'REQUESTED':
-          // this.userAccredetiationState = 'PENDING';
           this.setFieldVal('userAccredetiationState', 'PENDING');
           break;
         case 'DECLINED':
-          // this.userAccredetiationState = 'NOT_ELGIBLE';
           this.setFieldVal('userAccredetiationState', 'NOT_ELGIBLE');
           break;
         case 'CONFIRMED':
-          // this.userAccredetiationState = 'ELGIBLE';
           this.setFieldVal('userAccredetiationState', 'ELGIBLE');
           break;
         case 'EXPIRED':
-          // this.userAccredetiationState = 'EXPIRED';
           this.setFieldVal('userAccredetiationState', 'EXPIRED');
           this.setFieldVal('isAccreditationExpired', true);
           break;
         default:
-          // this.userAccredetiationState = 'INACTIVE';
           this.setFieldVal('userAccredetiationState', 'INACTIVE');
           break;
       }
-      // }
     } else if (intialAccountStatus === 'FULL') {
-      // this.userAccredetiationState = 'ELGIBLE';
       this.setFieldVal('userAccredetiationState', 'ELGIBLE');
     }
     this.setCurrentInvestmentStatus(investmentType);
@@ -984,10 +974,11 @@ export class AccreditationStore {
     this.setFieldVal('isAccreditationExpired', false);
   }
 
-  checkIsAccreditationExpired = (expirationDate) => {
+  checkIsAccreditationExpired = (expirationDate, isUnix = false) => {
     let dateDiff = '';
     if (expirationDate) {
-      dateDiff = DataFormatter.diffDays(DataFormatter.formatedDate(expirationDate), false, true);
+      const date = (isUnix && typeof expirationDate === 'string') ? parseInt(expirationDate) : expirationDate;
+      dateDiff = DataFormatter.diffDays(DataFormatter.formatedDate(date, isUnix), false, true);
       return dateDiff < 0 ? 'EXPIRED' : 'ACTIVE';
     }
     return dateDiff;
@@ -1126,6 +1117,7 @@ export class AccreditationStore {
   setSortingOrder = (column = null, direction = null) => {
     this.sortOrder.column = column;
     this.sortOrder.direction = direction;
+    this.initRequest();
   }
 }
 export default new AccreditationStore();

@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Table, Button, Checkbox } from 'semantic-ui-react';
 import { capitalize, get } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
-import { DEV_FEATURE_ONLY } from '../../../../../constants/common';
+import { isProduction } from '../../../../../constants/common';
 import { CROWDPAY_ACCOUNTS_STATUS } from '../../../../../services/constants/crowdpayAccounts';
 import Helper from '../../../../../helper/utility';
 @inject('crowdpayStore', 'identityStore', 'userDetailsStore')
@@ -127,7 +127,7 @@ export default class Actions extends Component {
                       <>
                         <Button disabled={isDisabled} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
                         {
-                          DEV_FEATURE_ONLY && (
+                          !isProduction && (
                             <Checkbox
                               name="skip-cip"
                               onChange={(e, result) => this.skipCipChange(e, result)}

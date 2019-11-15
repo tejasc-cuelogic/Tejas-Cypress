@@ -63,6 +63,8 @@ export class InvestmentStore {
 
   @observable investmentFlowEquityErrorMessage = null;
 
+  @observable isUpdateLimitReflect = false;
+
   @action
   setShowTransferRequestErr = (status) => {
     this.showTransferRequestErr = status;
@@ -722,8 +724,8 @@ export class InvestmentStore {
     const { campaign } = campaignStore;
     this.setFieldValue('investmentFlowEquityErrorMessage', null);
     const pricePerShare = money.floatToAmount(this.PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares.value || 0);
-    const priceCalcuation = get(campaign, 'closureSummary.keyTerms.priceCalcuation') || '0';
-    const sharePrice = money.floatToAmount(priceCalcuation || 0);
+    const priceCalculation = get(campaign, 'closureSummary.keyTerms.priceCalculation') || '0';
+    const sharePrice = money.floatToAmount(priceCalculation || 0);
     const resultAmount = money.mul(sharePrice, pricePerShare);
     const investedAmount = money.isZero(resultAmount) ? '0' : resultAmount;
     this.investMoneyChange({ floatValue: investedAmount }, 'investmentAmount', true);
@@ -750,9 +752,9 @@ export class InvestmentStore {
     const { campaign } = campaignStore;
     const prefferedEquityLabel = get(campaign, 'keyTerms.equityUnitType');
     const offeringMinInvestmentAmount = Helper.CurrencyFormat((get(campaign, 'keyTerms.minInvestAmt') || '0'), 0);
-    const priceCalcuation = get(campaign, 'closureSummary.keyTerms.priceCalcuation') || '0';
+    const priceCalculation = get(campaign, 'closureSummary.keyTerms.priceCalculation') || '0';
     const offeringMinInvestment = get(campaign, 'keyTerms.minInvestAmt') || '0';
-    const formatedUnitPrice = money.floatToAmount(priceCalcuation || 0);
+    const formatedUnitPrice = money.floatToAmount(priceCalculation || 0);
     const formatedMinInvestment = money.floatToAmount(offeringMinInvestment || 0);
     const result = Math.ceil(money.div(formatedMinInvestment, formatedUnitPrice));
     const dynamicLabel = result <= 1 ? `${prefferedEquityLabel}` : `${prefferedEquityLabel}s`;

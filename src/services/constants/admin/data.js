@@ -3,7 +3,7 @@ import { FormHelper } from '../../../helper';
 export const common = {
   userId: {
     value: '',
-    label: 'User Id',
+    label: 'User ID',
     error: undefined,
     rule: 'required',
     placeHolder: 'Enter here',
@@ -137,6 +137,29 @@ export const REQUESTFACTORY_META = FormHelper.generateMeta([
   ],
 ]);
 
+export const REQUESTFACTORY_LOG__META = FormHelper.generateMeta([
+  ['plugin', 'Plugin', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+  ['status', 'Status', '', '', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'PROCESSING', text: 'PROCESSING', value: 'PROCESSING' },
+          { key: 'FAILED', text: 'FAILED', value: 'FAILED' },
+          { key: 'SUCCESS', text: 'SUCCESS', value: 'SUCCESS' },
+        ],
+      },
+    },
+  ],
+]);
+
 export const PROCESSFACTORY_META = FormHelper.generateMeta([
   ['method', 'Method', '', 'required', '',
     {
@@ -147,6 +170,31 @@ export const PROCESSFACTORY_META = FormHelper.generateMeta([
     },
   ],
 ]);
+
+export const PROCESSFACTORY_LOG__META = FormHelper.generateMeta([
+  ['plugin', 'Plugin', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
+      },
+    },
+  ],
+  ['status', 'Status', '', '', '',
+    {
+      asIn: true,
+      props: {
+        values: [
+          { key: 'PROCESSING', text: 'PROCESSING', value: 'PROCESSING' },
+          { key: 'FAILED', text: 'FAILED', value: 'FAILED' },
+          { key: 'SUCCESS', text: 'SUCCESS', value: 'SUCCESS' },
+          { key: 'STARTED', text: 'STARTED', value: 'STARTED' },
+        ],
+      },
+    },
+  ],
+]);
+
 
 export const CRONFACTORY_META = FormHelper.generateMeta([
   ['cron', 'Cron', '', 'required', '',
@@ -181,6 +229,7 @@ export const EMAILLIST_META = FormHelper.generateMeta([
           { key: 'NOTIFICATIONS', text: 'NOTIFICATIONS', value: 'NOTIFICATIONS' },
           { key: 'ACCOUNTS', text: 'ACCOUNTS', value: 'ACCOUNTS' },
           { key: 'ACCREDITATION', text: 'ACCREDITATION', value: 'ACCREDITATION' },
+          { key: 'GOLDSTAR', text: 'GOLDSTAR', value: 'GOLDSTAR' },
           { key: 'TRANSFERS', text: 'TRANSFERS', value: 'TRANSFERS' },
           { key: 'SALES', text: 'SALES', value: 'SALES' },
           { key: 'APPLY', text: 'APPLY', value: 'APPLY' },
@@ -188,6 +237,17 @@ export const EMAILLIST_META = FormHelper.generateMeta([
           { key: 'PAYMENTS', text: 'PAYMENTS', value: 'PAYMENTS' },
           { key: 'SUPPORT_SERVICES', text: 'SUPPORT_SERVICES', value: 'SUPPORT_SERVICES' },
         ],
+      },
+    },
+  ],
+]);
+
+export const FILEFACTORY_META = FormHelper.generateMeta([
+  ['method', 'Method', '', 'required', '',
+    {
+      asIn: true,
+      props: {
+        values: [],
       },
     },
   ],

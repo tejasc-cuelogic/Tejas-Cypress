@@ -1,13 +1,13 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Visibility } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
-import { PublicSubNav, InlineLoader } from '../../../../theme/shared';
+import { PublicSubNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 
-const getModule = component => lazy(() => import(`../components/${component}`));
+const getModule = component => lazyRetry(() => import(`../components/${component}`));
 
 @inject('navStore', 'userStore')
 @observer
@@ -37,7 +37,7 @@ class About extends Component {
             navItems={navItems}
             title="About Us"
           />
-            <Suspense fallback={<InlineLoader />}>
+            <SuspenseBoundary>
               <Switch>
                 <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
                 {
@@ -50,7 +50,7 @@ class About extends Component {
                   ))
                 }
               </Switch>
-            </Suspense>
+            </SuspenseBoundary>
         </Visibility>
       </>
     );

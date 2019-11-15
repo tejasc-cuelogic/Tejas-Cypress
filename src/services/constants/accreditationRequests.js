@@ -58,9 +58,10 @@ export const CONFIRM_ACCREDITATION = {
     label: 'Expiration Date',
     placeHolder: 'Enter here',
     error: undefined,
-    rule: 'required|date',
+    rule: 'futureDate|required|date',
     customErrors: {
       date: 'Date format is invalid.',
+      futureDate: "You've entered a past Expiration Date",
     },
   },
   adminJustificationDocs: {

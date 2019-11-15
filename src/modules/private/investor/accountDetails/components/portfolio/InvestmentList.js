@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import { Icon, Table, Accordion, Button } from 'semantic-ui-react';
 import { get, includes } from 'lodash';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
 import { STAGES } from '../../../../../../services/constants/admin/offerings';
-import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
+import { INDUSTRY_TYPES_ICONS, CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -60,7 +61,7 @@ const InvestmentList = (props) => {
 
                         <Table.Cell>
                           {
-                            get(data, 'offering.keyTerms.securities') === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'
+                            get(data, 'offering.keyTerms.securities') ? CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')] : '-'
                           }
                         </Table.Cell>
                         <Table.Cell className="text-capitalize" textAlign="right">
@@ -94,7 +95,7 @@ const InvestmentList = (props) => {
                           && (
                             <Table.Cell>
                               {
-                               get(data, 'offering.keyTerms.maturity') ? `${data.offering.keyTerms.maturity} months` : 'N/A'
+                               get(data, 'offering.closureSummary.keyTerms.maturityDate') ? `${moment(moment(get(data, 'offering.closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months') ? moment(moment(get(data, 'offering.closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months') : '0'} months` : 'N/A'
                               }
                             </Table.Cell>
                           )
