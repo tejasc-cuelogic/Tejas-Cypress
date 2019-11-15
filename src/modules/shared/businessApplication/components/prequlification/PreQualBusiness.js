@@ -186,6 +186,7 @@ export default class PreQualBusiness extends Component {
                       readOnly={preQualFormDisabled}
                       key={field}
                       name={field}
+                      allowNegative={field === 'nextYearNetIncome'}
                       prefix="$ "
                       currency
                       asterisk="true"
