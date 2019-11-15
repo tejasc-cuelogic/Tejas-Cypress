@@ -67,7 +67,7 @@ const InvestmentList = (props) => {
                         <Table.Cell className="text-capitalize" textAlign="right">
                           {
                             <>
-                              {get(data, 'offering.keyTerms.securities') === 'PREFERRED_EQUITY_506C' ? Helper.CurrencyFormat(data.investedAmount) : Helper.CurrencyFormat(data.investedAmount, 0)}
+                              {Helper.CurrencyFormat(data.investedAmount, 0)}
                               <p className="date-stamp">
                                 <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} />
                               </p>
