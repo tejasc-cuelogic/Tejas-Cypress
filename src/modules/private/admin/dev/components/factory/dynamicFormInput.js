@@ -1,11 +1,11 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { isEmpty } from 'lodash';
 import { Form, Header } from 'semantic-ui-react';
 import { inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { InlineLoader } from '../../../../../../theme/shared';
+import { InlineLoader, SuspenseBoundary, lazyRetry } from '../../../../../../theme/shared';
 
-const getFields = component => lazy(() => import(`../../../../../../theme/form/src/${component}`));
+const getFields = component => lazyRetry(() => import(`../../../../../../theme/form/src/${component}`));
 
 let FormTag = '';
 
@@ -47,12 +47,12 @@ const DynamicFormInput = React.memo((props) => {
       {
         tempFormPAyload && tempFormPAyload.fields && !isEmpty(tempFormPAyload.fields) ? (
           <div className="featured-section">
-            <Suspense fallback={<InlineLoader />}>
+            <SuspenseBoundary>
               <Header as="h6">Note: Below field(s) are prefilled with dummy values.</Header>
               <Form>
                 {loadFormElements(tempFormPAyload)}
               </Form>
-            </Suspense>
+            </SuspenseBoundary>
           </div>
         )
           : <InlineLoader text="No payload found..." />

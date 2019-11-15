@@ -1,14 +1,14 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Grid, Container } from 'semantic-ui-react';
 import { observer, inject } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import SecondaryMenu from '../../../../theme/layout/SecondaryMenu';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
-import { InlineLoader } from '../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import { DataFormatter } from '../../../../helper';
 import NotFound from '../../../shared/NotFound';
 
-const getModule = component => lazy(() => import(`../components/${component}`));
+const getModule = component => lazyRetry(() => import(`../components/${component}`));
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('navStore')
@@ -56,7 +56,7 @@ export default class TermsOfUse extends Component {
                 )
               }
               <Grid.Column widescreen={13} computer={13} tablet={12} mobile={16}>
-                <Suspense fallback={<InlineLoader />}>
+                <SuspenseBoundary>
                   <Switch>
                     {navItems[0] && (
                       <Route
@@ -72,7 +72,7 @@ export default class TermsOfUse extends Component {
                     }
                     <Route component={NotFound} />
                   </Switch>
-                </Suspense>
+                </SuspenseBoundary>
               </Grid.Column>
             </Grid>
           </Container>

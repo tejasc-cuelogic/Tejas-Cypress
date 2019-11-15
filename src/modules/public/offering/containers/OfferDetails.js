@@ -1,11 +1,11 @@
 /* eslint-disable no-lonely-if */
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { get, find, has, cloneDeep } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Responsive, Container, Grid, Visibility, Button, Icon } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
-import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
+import { Spinner, MobileDropDownNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import CampaignHeader from '../components/campaignDetails/CampaignHeader';
 import InvestNow from '../components/investNow/InvestNow';
@@ -16,14 +16,14 @@ import Agreement from '../components/investNow/agreement/components/Agreement';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
-// import Footer from './../../../../theme/layout/Footer';
 import DocumentModal from '../components/campaignDetails/DataRoom/DocumentModal';
 import OfferingMetaTags from '../components/OfferingMetaTags';
 import VideoModal from '../components/campaignDetails/Overview/VideoModal';
 import AboutPhotoGallery from '../components/campaignDetails/AboutPhotoGallery';
 import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit';
 
-const getModule = component => lazy(() => import(`../components/campaignDetails/${component}`));
+const getModule = component => lazyRetry(() => import(`../components/campaignDetails/${component}`));
+
 const isMobile = document.documentElement.clientWidth < 992;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
 @inject('campaignStore', 'userStore', 'navStore', 'uiStore', 'userDetailsStore', 'authStore', 'watchListStore', 'nsUiStore')
@@ -241,9 +241,6 @@ class offerDetails extends Component {
         {!isMobile
           && <CampaignHeader followBtn={followBtn} {...this.props} />
         }
-        {/* {campaignStore && campaignStore.showFireworkAnimation &&
-        <Firework />
-        } */}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <SecondaryMenu newLayout={newLayout} {...this.props} />
           <Responsive maxWidth={991} as={React.Fragment}>
@@ -274,19 +271,9 @@ class offerDetails extends Component {
                   )
                 }
                 <Grid.Column computer={newLayout ? 9 : 12} mobile={16} className={newLayout ? 'left-align offer-details-v2' : ''}>
-                  <Suspense fallback={<InlineLoader />}>
+                  <SuspenseBoundary>
                     <Switch>
                       <Route exact path={match.url} render={props => <InitialComponent offeringName={offeringName} refLink={this.props.match.url} {...props} />} />
-                      {!newLayout
-                        && (
-                          navItems.map((item) => {
-                            const CurrentComponent = getModule(item.component);
-                            return (
-                              <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent offeringName={offeringName} refLink={this.props.match.url} {...props} />} />
-                            );
-                          })
-                        )
-                      }
                       {newLayout
                         && (
                           <Route path={`${this.props.match.url}/data-room`} component={DocumentModal} />
@@ -303,15 +290,12 @@ class offerDetails extends Component {
                       <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
                       <Route component={NotFound} />
                     </Switch>
-                  </Suspense>
+                  </SuspenseBoundary>
                 </Grid.Column>
               </Grid>
             </section>
           </Container>
         </div>
-        {/* <Responsive minWidth={768} as={React.Fragment}>
-          <Footer path={location.pathname} campaign={campaign} />
-        </Responsive> */}
       </>
     );
   }
