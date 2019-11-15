@@ -53,6 +53,7 @@ export class ActivityHistoryStore extends DataModelStore {
     });
   }
 
+  @action
   setInitiateSrch = (name, value, resourceId) => {
     if (name === 'startDate' || name === 'endDate') {
       this.requestState.filters[name] = value && moment(value.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(value.formattedValue, true, name, true) : undefined;
@@ -145,7 +146,6 @@ decorate(ActivityHistoryStore, {
   message: observable,
   activityTypes: observable,
   initRequest: action,
-  setInitiateSrch: action,
   send: action,
   createActivityHistory: action,
   getActivityTypes: action,
