@@ -131,6 +131,7 @@
     "react-vertical-timeline-component": "^2.1.3",
     "recharts": "^1.6.0",
     "resolve": "1.10.0",
+    "sanitize-html": "^1.20.1",
     "sass-loader": "7.1.0",
     "scroll-into-view": "^1.9.7",
     "semantic-ui-css": "^2.4.0",

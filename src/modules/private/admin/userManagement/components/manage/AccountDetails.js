@@ -59,7 +59,7 @@ export default class AccountDetails extends Component {
   }
 
   render() {
-    const { match } = this.props;
+    const { match, investorId } = this.props;
     const { inProgress } = this.props.uiStore;
     const { currentActiveAccountDetailsOfSelectedUsers } = this.props.userDetailsStore;
     const { selectedClosedAccount } = this.props.accountStore;
@@ -73,7 +73,7 @@ export default class AccountDetails extends Component {
         </Grid.Column>
         <Grid.Column widescreen={13} largeScreen={12} computer={12} tablet={12} mobile={16}>
           <Switch>
-            <Route exact path={`${match.url}/activity`} render={props => <ActivityHistory resourceId={get(account, 'details.accountId')} module="userDetails" showFilters={['activityType', 'activityUserType']} {...props} />} />
+            <Route exact path={`${match.url}/activity`} render={props => <ActivityHistory stepName="INVESTOR_ACTIVITY_HISTORY" investorId={investorId} resourceId={get(account, 'details.accountId')} module="userDetails" showFilters={['activityType', 'activityUserType']} {...props} />} />
             <Route path={`${match.url}/statements`} render={props => <Statements isAdmin {...props} />} />
             <Route exact path={`${match.url}/investments`} render={props => <Portfolio refLink={match.url} isAdmin {...props} />} />
             <Route
