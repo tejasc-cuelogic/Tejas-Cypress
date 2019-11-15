@@ -3,7 +3,6 @@ import { observer, inject } from 'mobx-react';
 import { get, pick } from 'lodash';
 import ReactCodeInput from 'react-code-input';
 import { FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown } from '.';
-import { FILE_UPLOAD_STEPS } from '../../constants/account';
 import Address from './src/Address';
 
 function formHoc(WrappedComponent, metaInfo) {
@@ -11,12 +10,6 @@ function formHoc(WrappedComponent, metaInfo) {
   return inject(metaInfo.store, 'nsUiStore')(observer((class extends React.Component {
     constructor(props) {
       super(props);
-      if (this.props.nsUiStore.errors !== undefined) {
-        if (!metaInfo.unSetForm) {
-          this.props[metaInfo.store].resetForm(metaInfo.form);
-        }
-      }
-      // this.props.nsUiStore.setFieldValue('errors', undefined);
       this.fieldsData = this.props[metaInfo.store][metaInfo.form].fields;
     }
 
@@ -31,6 +24,7 @@ function formHoc(WrappedComponent, metaInfo) {
           fielddata={fieldData}
           onblur={get(props, 'handleBlur') || false}
           changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
+          label={get(props, 'label') || false}
           {...props}
         />
       );
@@ -77,13 +71,14 @@ function formHoc(WrappedComponent, metaInfo) {
       />
     )
 
-    Dropzone = (name, props) => (
+    DropZone = (name, props) => (
       <DropZone
         name={name}
+        multiple={this.props[metaInfo.store][metaInfo.form].fields[name].multiple || get(props, 'multiple')}
         label={this.props[metaInfo.store][metaInfo.form].fields[name].label}
         fielddata={this.props[metaInfo.store][metaInfo.form].fields[name]}
-        ondrop={files => this.props[metaInfo.store].setFileUploadData(metaInfo.form, name, FILE_UPLOAD_STEPS, files, metaInfo.userRole)}
-        onremove={() => this.props[metaInfo.store].removeUploadedData(metaInfo.form, name)}
+        ondrop={files => this.props[metaInfo.store].setFileUploadData(metaInfo.form, name, this.props[metaInfo.store][metaInfo.form].fields[name].multiple || get(props, 'multiple'), get(props, 'index'), get(props, 'arrayName'), get(props, 'stepName') || this.props[metaInfo.store][metaInfo.form].fields[name].stepName, files, { userRole: metaInfo.userRole || get(props, 'userRole'), investorId: get(props, 'investorId') || '', offeringId: get(props, 'offeringId') || '', applicationId: get(props, 'applicationId') || '', applicationIssuerId: get(props, 'applicationIssuerId') || '', tags: get(props, 'tags') || '' })}
+        onremove={(field, index) => this.props[metaInfo.store].removeUploadedData(metaInfo.form, field, index)}
         containerclassname="fluid"
         {...props}
       />
@@ -211,7 +206,7 @@ function formHoc(WrappedComponent, metaInfo) {
         FormPasswordStrength: this.FormPasswordStrength,
         CodeInput: this.CodeInput,
         FormSelect: this.FormSelect,
-        Dropzone: this.Dropzone,
+        DropZone: this.DropZone,
         RadioGroup: this.RadioGroup,
         FormCheckBox: this.FormCheckBox,
         FormDropDown: this.FormDropDown,

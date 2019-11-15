@@ -121,7 +121,7 @@ export class BusinessAppStore {
   totalChange = (fieldName, totalName) => {
     let total = 0;
     this.BUSINESS_DETAILS_FRM.fields[fieldName].forEach((field) => {
-      total = total + field.amount.value || 0;
+      total += (field.amount.value && Number.isInteger(field.amount.value) ? field.amount.value : 0);
     });
     this[totalName] = total;
   }
