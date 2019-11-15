@@ -255,7 +255,7 @@ export default class ApplicationDetails extends Component {
                             resourceId={params.appId}
                             applicationId={id || applicationId}
                             applicationIssuerId={userId}
-                            stepName="APPN_ACTIVITY_HISTORY"
+                            stepName={appStepStatus !== 'Failed' ? 'APPN_ACTIVITY_HISTORY' : ''}
                             appType={params.id}
                             activityTitle="Comment"
                             activityType={ACTIVITY_HISTORY_TYPES.COMMENT}
