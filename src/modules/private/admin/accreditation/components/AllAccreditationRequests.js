@@ -80,8 +80,8 @@ export default class AllAccreditationRequests extends Component {
                   Account Type
                 </Table.HeaderCell>
                 <Table.HeaderCell
-                  onClick={this.handleSort('method')}
-                  sorted={sortOrder.column === 'method' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                  onClick={this.handleSort('type')}
+                  sorted={sortOrder.column === 'type' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
                 >
                   Type
                 </Table.HeaderCell>
@@ -92,8 +92,8 @@ export default class AllAccreditationRequests extends Component {
                   ? <Table.HeaderCell textAlign="center" />
                   : (
                   <Table.HeaderCell
-                    onClick={this.handleSort('reviewed.date')}
-                    sorted={sortOrder.column === 'reviewed.date' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
+                    onClick={this.handleSort('status')}
+                    sorted={sortOrder.column === 'status' ? sortOrder.direction === 'asc' ? 'ascending' : 'descending' : null}
                   >
                     Status
                   </Table.HeaderCell>
@@ -204,7 +204,7 @@ export default class AllAccreditationRequests extends Component {
                           <p className={checkIsAccreditationExpired(get(accreditation, 'expiration'), true) === 'EXPIRED' ? 'negative-text' : `${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}>
                             {checkIsAccreditationExpired(get(accreditation, 'expiration'), true) === 'EXPIRED'
                               ? (
-                                <b>Expired</b>
+                                <b>Expired on {get(accreditation, 'expiration') ? DataFormatter.getDateAsPerTimeZone(moment.unix(get(accreditation, 'expiration')), false, false, false, false) : '-'}</b>
                               )
                               : (
                                 <>
