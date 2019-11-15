@@ -1,31 +1,40 @@
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
-import { get } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
-import { FormInput, MaskedInput, AutoComplete } from '../../../../../../../../theme/form';
+import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../../../../../theme/form';
 import CIPInformation from './CIPInformation';
 import OtherInformation from '../OtherInformation';
+import TagsInformation from '../../../../../../shared/TagsInformation';
 import LockedInformation from '../LockedInformation';
 import UserInvestorDetails from '../../../../../../investor/settings/components/UserInvestorDetails';
+import { US_STATES } from '../../../../../../../../constants/account';
 
 @inject('userDetailsStore', 'uiStore', 'referralsStore', 'identityStore')
 @withRouter
 @observer
 export default class Basic extends Component {
+  state = {
+    addressCheckLoading: false,
+    phoneCheckLoading: false,
+  }
+
   constructor(props) {
     super(props);
     this.state = { displayMode: true };
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false);
-    this.props.userDetailsStore.setAddressCheck();
+    this.props.userDetailsStore.setFormData('USER_PROFILE_PREFERRED_INFO_FRM', false);
+    this.props.userDetailsStore.setAddressOrPhoneCheck();
   }
 
   updateMode = (e, val) => {
     e.preventDefault();
     this.props.userDetailsStore.setFormData('USER_BASIC', false, undefined, true, this.state.displayMode);
     this.props.userDetailsStore.setFormData('USER_PROFILE_ADD_ADMIN_FRM', false, undefined, true);
+    this.props.userDetailsStore.setFormData('USER_PROFILE_PREFERRED_INFO_FRM', false, undefined, true);
     this.setState({ displayMode: !val });
   }
 
@@ -51,15 +60,21 @@ export default class Basic extends Component {
       }).catch(() => { });
   }
 
+  skipAddressOrPhoneValidationCheck = (type) => {
+    this.setState({ [type === 'PHONE' ? 'phoneCheckLoading' : 'addressCheckLoading']: true });
+    this.props.userDetailsStore.skipAddressOrPhoneValidationCheck(type).then(() => this.setState({ [type === 'PHONE' ? 'phoneCheckLoading' : 'addressCheckLoading']: false })).catch(() => this.setState({ [type === 'PHONE' ? 'phoneCheckLoading' : 'addressCheckLoading']: false }));
+  }
+
   render() {
     const {
-      detailsOfUser, USER_BASIC, USER_PROFILE_ADD_ADMIN_FRM, setAddressFieldsForProfile,
-      formChange, maskChange, isAddressSkip, toggleAddressVerification,
+      detailsOfUser, USER_BASIC, USER_PROFILE_ADD_ADMIN_FRM, USER_PROFILE_PREFERRED_INFO_FRM, setAddressFieldsForProfile,
+      formChange, maskChange, isAddressSkip, isPhoneSkip,
     } = this.props.userDetailsStore;
     const { inProgress } = this.props.uiStore;
     const formName = 'USER_BASIC';
     const details = toJS({ ...detailsOfUser.data.user });
     const { displayMode } = this.state;
+    const tags = toJS(get(details, 'tags'));
     return (
       <Form loading={inProgress}>
         <Header as="h4">
@@ -68,37 +83,38 @@ export default class Basic extends Component {
             {this.state.displayMode
               ? <Link to={this.props.match.url} onClick={e => this.updateMode(e, true)} className="link mr-10"><small><Icon className="ns-pencil" /> Edit profile data</small></Link>
               : (
-              <>
-                <Link to="/" className="link mr-10" onClick={e => this.updateMode(e, false)}><small>Cancel</small></Link>
-                {USER_BASIC.meta.isValid && USER_PROFILE_ADD_ADMIN_FRM.meta.isValid
-                  && <Link to="/" className="link mr-10" onClick={e => this.updateUserData(e)}><small><Icon name="save" />Update</small></Link>
-                }
-              </>
+                <>
+                  <Link to="/" className="link mr-10" onClick={e => this.updateMode(e, false)}><small>Cancel</small></Link>
+                  {USER_BASIC.meta.isValid && USER_PROFILE_ADD_ADMIN_FRM.meta.isValid
+                    && <Link to="/" className="link mr-10" onClick={e => this.updateUserData(e)}><small><Icon name="save" />Update</small></Link>
+                  }
+                </>
               )
             }
-            <Button compact onClick={() => toggleAddressVerification()} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
+            <Button loading={this.state.addressCheckLoading} compact onClick={() => this.skipAddressOrPhoneValidationCheck('ADDRESS')} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
+            <Button loading={this.state.phoneCheckLoading} compact onClick={() => this.skipAddressOrPhoneValidationCheck('PHONE')} color={isPhoneSkip ? 'green' : 'blue'}>{isPhoneSkip ? 'Force VoIP Check' : 'Skip VoIP Check'}</Button>
           </Button.Group>
         </Header>
         {get(details, 'locked.lock') === 'LOCKED'
-        && (
-        <>
-          <LockedInformation details={details} />
-          <Divider />
-        </>
-        )
+          && (
+            <>
+              <LockedInformation details={details} />
+              <Divider />
+            </>
+          )
         }
         <Header as="h6">Personal Info</Header>
         <Form.Group widths={2}>
           {
-          ['firstName', 'lastName'].map(field => (
-            <FormInput
-              key={field}
-              name={field}
-              fielddata={USER_BASIC.fields[field]}
-              changed={(e, result) => formChange(e, result, formName)}
-              displayMode={displayMode}
-            />
-          ))
+            ['firstName', 'lastName'].map(field => (
+              <FormInput
+                key={field}
+                name={field}
+                fielddata={USER_BASIC.fields[field]}
+                changed={(e, result) => formChange(e, result, formName)}
+                displayMode={displayMode}
+              />
+            ))
           }
           <MaskedInput
             key="number"
@@ -119,35 +135,35 @@ export default class Basic extends Component {
         </Form.Group>
         <Form.Group widths={2}>
           {
-          ['firstLegalName', 'lastLegalName'].map(field => (
-            <FormInput
-              key={field}
-              name={field}
-              fielddata={USER_BASIC.fields[field]}
-              changed={(e, result) => formChange(e, result, formName)}
-              displayMode={displayMode}
-            />
-          ))
+            ['firstLegalName', 'lastLegalName'].map(field => (
+              <FormInput
+                key={field}
+                name={field}
+                fielddata={USER_BASIC.fields[field]}
+                changed={(e, result) => formChange(e, result, formName)}
+                displayMode={displayMode}
+              />
+            ))
           }
           {displayMode
             ? (
-<FormInput
-  key="ssn"
-  name="ssn"
-  fielddata={USER_BASIC.fields.ssn}
-  changed={(e, result) => formChange(e, result, formName)}
-  displayMode={displayMode}
-/>
+              <FormInput
+                key="ssn"
+                name="ssn"
+                fielddata={USER_BASIC.fields.ssn}
+                changed={(e, result) => formChange(e, result, formName)}
+                displayMode={displayMode}
+              />
             )
             : (
-<MaskedInput
-  name="ssn"
-  fielddata={USER_BASIC.fields.ssn}
-  ssn
-  changed={(values, field) => maskChange(values, formName, field)}
-  displayMode={displayMode}
-  showerror
-/>
+              <MaskedInput
+                name="ssn"
+                fielddata={USER_BASIC.fields.ssn}
+                ssn
+                changed={(values, field) => maskChange(values, formName, field)}
+                displayMode={displayMode}
+                showerror
+              />
             )
           }
           <MaskedInput
@@ -170,16 +186,27 @@ export default class Basic extends Component {
             changed={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
           />
           {
-          ['streetTwo', 'city', 'state'].map(field => (
-            <FormInput
-              key={field}
-              name={field}
-              fielddata={USER_PROFILE_ADD_ADMIN_FRM.fields[field]}
-              changed={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
-              displayMode={displayMode}
-            />
-          ))
+            ['streetTwo', 'city'].map(field => (
+              <FormInput
+                key={field}
+                name={field}
+                fielddata={USER_PROFILE_ADD_ADMIN_FRM.fields[field]}
+                changed={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
+                displayMode={displayMode}
+              />
+            ))
           }
+          <FormDropDown
+            displayMode={displayMode}
+            name="state"
+            fielddata={USER_PROFILE_ADD_ADMIN_FRM.fields.state}
+            options={US_STATES}
+            checkStateCode
+            search
+            selection
+            placeholder="Select"
+            onChange={(e, result) => formChange(e, result, 'USER_PROFILE_ADD_ADMIN_FRM')}
+          />
           <MaskedInput
             displayMode={displayMode}
             name="zipCode"
@@ -200,16 +227,27 @@ export default class Basic extends Component {
             changed={(e, result) => formChange(e, result, 'USER_BASIC')}
           />
           {
-          ['streetTwo', 'city', 'state'].map(field => (
-            <FormInput
-              key={field}
-              name={field}
-              fielddata={USER_BASIC.fields[field]}
-              changed={(e, result) => formChange(e, result, formName)}
-              displayMode={displayMode}
-            />
-          ))
+            ['streetTwo', 'city'].map(field => (
+              <FormInput
+                key={field}
+                name={field}
+                fielddata={USER_BASIC.fields[field]}
+                changed={(e, result) => formChange(e, result, formName)}
+                displayMode={displayMode}
+              />
+            ))
           }
+          <FormDropDown
+            displayMode={displayMode}
+            name="state"
+            fielddata={USER_BASIC.fields.state}
+            options={US_STATES}
+            checkStateCode
+            search
+            selection
+            placeholder="Select"
+            onChange={(e, result) => formChange(e, result, 'USER_BASIC')}
+          />
           <MaskedInput
             displayMode={displayMode}
             name="zipCode"
@@ -220,9 +258,62 @@ export default class Basic extends Component {
           />
         </Form.Group>
         <Divider />
+        <Header as="h6">Preferred Info</Header>
+        <Form.Group widths={3}>
+          <FormInput
+            name="name"
+            fielddata={USER_PROFILE_PREFERRED_INFO_FRM.fields.name}
+            changed={(e, result) => formChange(e, result, 'USER_PROFILE_PREFERRED_INFO_FRM')}
+            displayMode={displayMode}
+          />
+          <AutoComplete
+            readOnly={displayMode}
+            displayMode={displayMode}
+            name="street"
+            fielddata={USER_PROFILE_PREFERRED_INFO_FRM.fields.street}
+            onplaceselected={places => setAddressFieldsForProfile(places, 'USER_PROFILE_PREFERRED_INFO_FRM')}
+            changed={(e, result) => formChange(e, result, 'USER_PROFILE_PREFERRED_INFO_FRM')}
+          />
+          {
+            ['streetTwo', 'city'].map(field => (
+              <FormInput
+                key={field}
+                name={field}
+                fielddata={USER_PROFILE_PREFERRED_INFO_FRM.fields[field]}
+                changed={(e, result) => formChange(e, result, 'USER_PROFILE_PREFERRED_INFO_FRM')}
+                displayMode={displayMode}
+              />
+            ))
+          }
+          <FormDropDown
+            displayMode={displayMode}
+            name="state"
+            fielddata={USER_PROFILE_PREFERRED_INFO_FRM.fields.state}
+            options={US_STATES}
+            checkStateCode
+            search
+            selection
+            placeholder="Select"
+            onChange={(e, result) => formChange(e, result, 'USER_PROFILE_PREFERRED_INFO_FRM')}
+          />
+          <MaskedInput
+            displayMode={displayMode}
+            name="zipCode"
+            fielddata={USER_PROFILE_PREFERRED_INFO_FRM.fields.zipCode}
+            changed={(values, field) => maskChange(values, 'USER_PROFILE_PREFERRED_INFO_FRM', field)}
+            maxlength="5"
+            number
+          />
+        </Form.Group>
+        <Divider />
         <CIPInformation details={details} />
         <Divider />
         <OtherInformation details={details} />
+        {!isEmpty(tags)
+        && (
+          <TagsInformation tags={tags} />
+        )
+        }
         <Divider />
         <UserInvestorDetails isAdmin refLink={this.props.match.url} />
         <Divider />

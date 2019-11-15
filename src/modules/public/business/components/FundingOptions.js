@@ -1,11 +1,11 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { Header, Container, Menu, Segment, Grid, Responsive, Divider, List } from 'semantic-ui-react';
-import { InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry, MobileDropDownNav } from '../../../../theme/shared';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../helper';
 
-const getModule = component => lazy(() => import(`./fundingOptions/${component}`));
+const getModule = component => lazyRetry(() => import(`./fundingOptions/${component}`));
 
 const navItems = [
   { title: 'Term Notes', to: 'term-notes' },
@@ -55,7 +55,7 @@ export default class FundingOption extends Component {
               slideUpNot
             />
             <Segment attached="bottom" padded>
-              <Suspense fallback={<InlineLoader />}>
+              <SuspenseBoundary>
                 <Switch>
                   <Route
                     exact
@@ -72,7 +72,7 @@ export default class FundingOption extends Component {
                     ))
                   }
                 </Switch>
-              </Suspense>
+              </SuspenseBoundary>
             </Segment>
             <Divider />
             <List className="learn-more-list">

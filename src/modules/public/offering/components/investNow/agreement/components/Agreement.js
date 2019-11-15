@@ -6,7 +6,6 @@ import { Modal, Header, Button, Grid, Form, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../../theme/shared';
-// import ChangeInvestmentLimit from '../../ChangeInvestmentLimit';
 
 @inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore', 'agreementsStore', 'investmentLimitStore')
 @withRouter
@@ -92,9 +91,6 @@ export default class Agreement extends React.Component {
   }
 
   handleConfirm = () => {
-    // const { agreementDetails } = this.props.investmentStore;
-    // const { cancelAgreement } = this.props.portfolioStore;
-    // cancelAgreement(agreementDetails.agreementId);
     this.props.investmentStore.resetData();
     this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push(`${this.props.refLink}/invest-now`);
@@ -122,7 +118,6 @@ export default class Agreement extends React.Component {
       investmentAmount,
       setCheckbox,
       agreementDetails,
-      // investAccTypes,
       investmentFlowErrorMessage,
     } = this.props.investmentStore;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
@@ -133,15 +128,9 @@ export default class Agreement extends React.Component {
     const { campaign } = this.props.campaignStore;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     const offeringRegulationType = get(campaign, 'keyTerms.regulation');
-    const { currentInvestmentStatus, userAccredetiationState } = this.props.accreditationStore;
+    const { currentInvestmentStatus } = this.props.accreditationStore;
     const investmentRegulation = get(getInvestorAccountById, 'regulation');
-    // userAccreditatedStatus(investAccTypes.value, true, investmentRegulation);
-    const regulationCheck = this.props.changeInvestment && investmentRegulation && userAccredetiationState !== 'EXPIRED'
-      ? investmentRegulation : currentInvestmentStatus;
-    // regulationCheck === ('BD_506C' || 'BD_506B')
-    // const regualtionTypeStatement =
-    // regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck) ?
-    // 'Regulation D 506C' : 'Regulation Crowdfunding';
+    const regulationCheck = currentInvestmentStatus || investmentRegulation;
     const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : regulationCheck === 'BD_506B' ? 'Rule 506(b) of Regulation D' : 'Regulation Crowdfunding';
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
@@ -179,13 +168,13 @@ export default class Agreement extends React.Component {
               <div className="pdf-viewer">
                 {(docLoading || !embedUrl) ? <InlineLoader />
                   : (
-<iframe
-  width="100%"
-  height="100%"
-  title="agreement"
-  src={embedUrl}
-  ref={(c) => { this.iframeComponent = c; }}
-/>
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      title="agreement"
+                      src={embedUrl}
+                      ref={(c) => { this.iframeComponent = c; }}
+                    />
                   )
                 }
               </div>
@@ -221,16 +210,16 @@ export default class Agreement extends React.Component {
                           conditionalCustomLabel={(
                             startsWith(offeringRegulationType, 'BD_')
                               ? (
-<>
-                                I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
-                                the entire amount of my investment may be lost,
-                                and confirm that I am in a
-                                financial condition to bear the loss.
-                                I have read and agree to the terms of
+                                <>
+                                  I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
+                                  the entire amount of my investment may be lost,
+                                  and confirm that I am in a
+                                  financial condition to bear the loss.
+                                  I have read and agree to the terms of
                                 the <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>,
                                 the <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>,
                                 and <Link onClick={e => this.agreementPDFLoader(e, true, 'bDIAgreemnt', 'SERVICES')} to="/">NextSeed Securities LLC Investor Agreement</Link>
-                              </>
+                                </>
                               )
                               : (
                                 <>
@@ -248,17 +237,17 @@ export default class Agreement extends React.Component {
                           customUpdateLimitLabel={(
                             regulationCheck && includes(['BD_506C', 'BD_506B'], regulationCheck)
                               ? (
-<>
-                                I hereby certify that I have a reasonable expectation that I will
-                                 continue to meet or exceed the requirements to be considered an
-                                  accredited investor.
+                                <>
+                                  I hereby certify that I have a reasonable expectation that I will
+                                   continue to meet or exceed the requirements to be considered an
+                                    accredited investor.
                               </>
                               )
                               : (
-<>
-                                I confirm that I am complying with my <b>annual investment limit</b> {' '}
-                                {regulationCheck && !includes(['BD_506C', 'BD_506B'], regulationCheck) && (<Link to={`${match.url}/change-investment-limit`}>update</Link>)}
-                              </>
+                                <>
+                                  I confirm that I am complying with my <b>annual investment limit</b> {' '}
+                                  {regulationCheck && !includes(['BD_506C', 'BD_506B'], regulationCheck) && (<Link to={`${match.url}/change-investment-limit`}>update</Link>)}
+                                </>
                               )
                           )}
                           customRegulationLabel={(

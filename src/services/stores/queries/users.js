@@ -1,9 +1,10 @@
 import gql from 'graphql-tag';
+import { ELIGIBLE_TAGS } from '../../../constants/common';
 
 // queries, mutations and subscriptions , limit: "10"
 export const allUsersQuery = gql`
-  query listUsers($accountType: [UserFilterTypeEnum], $accountStatus: [UserFilterStatusEnum], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int, $limit: Int) {
-    listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page, limit: $limit) {
+  query listUsers($accountType: [UserFilterTypeEnum], $accountStatus: [UserFilterStatusEnum], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int, $limit: Int, $sortBy: UserFilterSortByEnum, $sortType: UserFilterSortTypeEnum) {
+    listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page, limit: $limit, sortBy: $sortBy, sortType: $sortType) {
       resultCount
       users {
         id
@@ -268,6 +269,8 @@ export const selectedUserDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
       id
+      skipAddressVerifyCheck
+      skipPhoneVerifyCheck
       userHash
       wpUserId
       status
@@ -309,6 +312,14 @@ export const selectedUserDetailsQuery = gql`
         avatar {
           name
           url
+        }
+        preferred {
+          name
+          street
+          streetTwo
+          city
+          state
+          zipCode
         }
       }
       email {
@@ -477,6 +488,7 @@ export const selectedUserDetailsQuery = gql`
         isComfortable
       }
       mfaMode
+      tags { ${ELIGIBLE_TAGS.join(' ')} }
     }
   }
 `;
@@ -630,11 +642,12 @@ export const adminAddUser = gql`
   }
 `;
 
-export const skipAddressValidation = gql`
-mutation skipAddressValidationCheck($userId: String!, $shouldSkip: Boolean!) {
-  skipAddressValidationCheck(
+export const skipAddressOrPhoneValidationCheck = gql`
+mutation skipAddressOrPhoneValidationCheck($userId: String!, $shouldSkip: Boolean!, $type : SkipValidationTypeEnum!) {
+  skipAddressOrPhoneValidationCheck(
      userId: $userId
      shouldSkip: $shouldSkip
+     type: $type
    )
  }`;
 
@@ -715,7 +728,7 @@ query _fetchEmails ($recipientId: String!, $subject: String, $fromDate: String, 
       mergeVars {
         content
         name
-      }     
+      }
     }
     resultCount
     totalCount

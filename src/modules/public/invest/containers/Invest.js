@@ -1,16 +1,17 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
+import queryString from 'query-string';
 import { Visibility, Responsive } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
-import { PublicSubNav, InlineLoader } from '../../../../theme/shared';
+import { PublicSubNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 import { REDIRECT_META } from '../../../../constants/redirect';
 
-const getModule = component => lazy(() => import(`../components/${component}`));
+const getModule = component => lazyRetry(() => import(`../components/${component}`));
 
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses.' },
@@ -39,7 +40,7 @@ const metaTagsData = [
 class Invest extends Component {
   constructor(props) {
     super(props);
-    const urlParameter = DataFormatter.QueryStringToJSON(props.location.search);
+    const urlParameter = queryString.parse(props.location.search);
     const utmCampaign = get(urlParameter, 'utm_campaign') || null;
     const rsCode = get(urlParameter, 'rsCode') || null;
     if (utmCampaign === 'saasquatch' && rsCode) {
@@ -87,7 +88,7 @@ class Invest extends Component {
             navItems={navItems}
             title="Investing"
           />
-          <Suspense fallback={<InlineLoader />}>
+          <SuspenseBoundary>
             <Switch>
               <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
               {
@@ -100,7 +101,7 @@ class Invest extends Component {
                 ))
               }
             </Switch>
-          </Suspense>
+          </SuspenseBoundary>
         </Visibility>
       </>
     );

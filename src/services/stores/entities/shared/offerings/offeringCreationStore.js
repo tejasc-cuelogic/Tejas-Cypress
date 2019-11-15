@@ -386,9 +386,8 @@ export class OfferingCreationStore {
         this.resetFormField(form, name, { fileName: fileObj.name, location: res });
         this.updateOffering(this.currentOfferingId, this[form].fields, 'media', false, false);
       })
-      .catch((err) => {
+      .catch(() => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        console.log(err);
       });
   }
 
@@ -1272,7 +1271,7 @@ export class OfferingCreationStore {
       payloadData.regulation = this.KEY_TERMS_FRM.fields.regulation.value;
       const closureSummary = { ...getOfferingById.closureSummary };
       const keyTerms = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
-      closureSummary.keyTerms = { ...closureSummary.keyTerms, priceCalcuation: keyTerms.priceCalcuation, multiple: keyTerms.multiple, interestRate: get(payloadData, 'keyTerms.interestRate') };
+      closureSummary.keyTerms = { ...closureSummary.keyTerms, priceCalculation: keyTerms.priceCalculation, multiple: keyTerms.multiple, interestRate: get(payloadData, 'keyTerms.interestRate') };
       payloadData.closureSummary = closureSummary;
       payloadData.closureSummary = mergeWith(
         toJS(getOfferingById.closureSummary),

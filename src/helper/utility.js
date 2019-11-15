@@ -8,7 +8,7 @@ import { toJS } from 'mobx';
 import money from 'money-math';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
-import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS } from '../constants/common';
+import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS } from '../constants/common';
 import authStore from '../services/stores/entities/shared/authStore';
 import userStore from '../services/stores/entities/userStore';
 
@@ -140,6 +140,8 @@ export class Utility {
     }
     return fileData;
   }
+
+  isSpecialCharPresent = str => (str ? new RegExp(/[^a-z0-9._-]+/gi).test(str) : '');
 
   sanitize = name => (name ? name.replace(/[^a-z0-9._-]+/gi, '_') : '');
 
@@ -324,8 +326,16 @@ export class Utility {
 
   validateImageExtension = (ext) => {
     const obj = {
-      isInvalid: !IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()),
-      errorMsg: `Only ${IMAGE_UPLOAD_ALLOWED_EXTENSIONS.join(', ')}  extensions are allowed.`,
+      isInvalid: ext ? !IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()) : true,
+      errorMsg: `Only ${IMAGE_UPLOAD_ALLOWED_EXTENSIONS.join(', ')} extensions are allowed.`,
+    };
+    return obj;
+  };
+
+  validateDocumentExtension = (ext) => {
+    const obj = {
+      isInvalid: ext ? !DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()) : true,
+      errorMsg: `Only ${DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS.join(', ')} extensions are allowed.`,
     };
     return obj;
   };

@@ -1,12 +1,12 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { InlineLoader } from '../../../../../theme/shared';
+import { InlineLoader, SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
 
-const getModule = component => lazy(() => import(`./legal/${component}`));
+const getModule = component => lazyRetry(() => import(`./legal/${component}`));
 
 @inject('userStore', 'offeringsStore', 'offeringCreationStore')
 @withRouter
@@ -66,7 +66,7 @@ export default class Legal extends Component {
             </div>
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
-            <Suspense fallback={<InlineLoader />}>
+            <SuspenseBoundary>
               <Switch>
                 <Route
                   exact
@@ -84,7 +84,7 @@ export default class Legal extends Component {
                   ))
                 }
               </Switch>
-            </Suspense>
+            </SuspenseBoundary>
           </Grid.Column>
         </Grid>
       </div>

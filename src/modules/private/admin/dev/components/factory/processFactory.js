@@ -77,7 +77,7 @@ function ProcessFactory(props) {
                     {smartElement.FormDropDown('method', {
                       onChange: (e, result) => formChangeForPlugin(e, result, 'PROCESSFACTORY_FRM'),
                       containerclassname: 'dropdown-field mlr-0',
-                      placeholder: 'Choose here 12345',
+                      placeholder: 'Choose here',
                       options: PROCESSFACTORY_FRM.fields.method.values,
                       className: 'mb-80',
                     })}

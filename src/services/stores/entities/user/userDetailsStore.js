@@ -6,7 +6,7 @@ import moment from 'moment';
 import { mapValues, map, concat, set, isEmpty, difference, pick, find, findKey, filter, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
-import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM } from '../../../constants/user';
+import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM, USER_PROFILE_PREFERRED_INFO } from '../../../constants/user';
 import {
   identityStore,
   accountStore,
@@ -20,9 +20,9 @@ import {
   userListingStore,
   userStore,
 } from '../../index';
-import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount, getEmailList } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressOrPhoneValidationCheck, frozenEmailToAdmin, freezeAccount, getEmailList } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
-import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE } from '../../../../constants/account';
+import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE, US_STATES } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
@@ -37,6 +37,8 @@ export class UserDetailsStore {
   @observable accreditationData = {};
 
   @observable isAddressSkip = false;
+
+  @observable isPhoneSkip = false;
 
   @observable isFrozen = false;
 
@@ -53,6 +55,8 @@ export class UserDetailsStore {
   @observable DELETE_MESSAGE_FRM = Validator.prepareFormObject(DELETE_MESSAGE);
 
   @observable USER_PROFILE_ADD_ADMIN_FRM = Validator.prepareFormObject(USER_PROFILE_ADDRESS_ADMIN);
+
+  @observable USER_PROFILE_PREFERRED_INFO_FRM = Validator.prepareFormObject(USER_PROFILE_PREFERRED_INFO);
 
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
 
@@ -122,6 +126,8 @@ export class UserDetailsStore {
   @action
   setAddressFieldsForProfile = (place, form) => {
     Validator.setAddressFields(place, this[form]);
+    const state = US_STATES.find(s => s.text === this[form].fields.state.value.toUpperCase());
+    this[form].fields.state.value = state ? state.key : '';
   }
 
   @action
@@ -243,22 +249,25 @@ export class UserDetailsStore {
   }
 
   @action
-  setAddressCheck = () => {
-    this.isAddressSkip = this.userDetails.skipAddressVerifyCheck || false;
+  setAddressOrPhoneCheck = () => {
+    this.isAddressSkip = get(this.getDetailsOfUser, 'skipAddressVerifyCheck') || false;
+    this.isPhoneSkip = get(this.getDetailsOfUser, 'skipPhoneVerifyCheck') || false;
   }
 
   @action
-  toggleAddressVerification = () => {
-    const payLoad = { userId: this.selectedUserId, shouldSkip: !this.isAddressSkip };
+  skipAddressOrPhoneValidationCheck = type => new Promise(async (resolve, reject) => {
+    const shouldSkip = type === 'PHONE' ? !this.isPhoneSkip : !this.isAddressSkip;
+    const payLoad = { userId: this.selectedUserId, shouldSkip, type };
     client
       .mutate({
-        mutation: skipAddressValidation,
+        mutation: skipAddressOrPhoneValidationCheck,
         variables: payLoad,
       })
       .then(action((res) => {
-        this.isAddressSkip = res.data.skipAddressValidationCheck;
-      }));
-  }
+        this.setFieldValue(type === 'PHONE' ? 'isPhoneSkip' : 'isAddressSkip', get(res, 'data.skipAddressOrPhoneValidationCheck'));
+        resolve();
+      })).catch(() => reject());
+  });
 
   @action
   deleteProfile = (isInvestor = false, isHardDelete = false) => new Promise(async (resolve, reject) => {
@@ -821,19 +830,21 @@ export class UserDetailsStore {
   updateUserProfileForSelectedUser = () => {
     const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
     const infoAdd = Validator.evaluateFormData(toJS(this.USER_PROFILE_ADD_ADMIN_FRM.fields));
+    const preferredInfo = Validator.evaluateFormData(toJS(this.USER_PROFILE_PREFERRED_INFO_FRM.fields));
     const profileDetails = {
       firstName: basicData.firstName,
       lastName: basicData.lastName,
       mailingAddress: { ...infoAdd.legalAddress },
     };
-    const { capabilities } = basicData;
+    let { capabilities } = basicData;
+    capabilities = capabilities.length ? capabilities : null;
     if (this.detailsOfUser.data.user.info.avatar) {
       profileDetails.avatar = pick(
         get(this.detailsOfUser, 'data.user.info.avatar'),
         ['name', 'url'],
       );
     }
-    const legalDetails = pick(get(basicData), ['dateOfBirth', 'legalAddress', 'legalName']);
+    const legalDetails = basicData ? pick(basicData, ['dateOfBirth', 'legalAddress', 'legalName']) : null;
     if (String(basicData.ssn).length === 9) {
       legalDetails.ssn = basicData.ssn;
     }
@@ -846,6 +857,7 @@ export class UserDetailsStore {
           variables: {
             profileDetails,
             legalDetails,
+            preferredInfo,
             capabilities,
             targetUserId: get(this.getDetailsOfUser, 'id'),
           },
