@@ -169,7 +169,9 @@ export default class AccountDetails extends Component {
                                 {...props}
                                 adminActivity={item.title === 'Activity' ? 'adminActivity' : false}
                                 resourceId={details.id}
+                                stepName={details.roles.find(obj => obj.name === 'investor') ? 'INVESTOR_ACTIVITY_HISTORY' : ''}
                                 copied={this.state.copied}
+                                investorId={details.id}
                               />
                             )
                                   }

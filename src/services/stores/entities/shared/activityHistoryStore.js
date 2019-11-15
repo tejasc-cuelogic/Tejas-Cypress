@@ -4,7 +4,7 @@ import { isArray, capitalize, uniqWith, isEqual } from 'lodash';
 import moment from 'moment';
 import DataModelStore, { decorateDefault } from './dataModelStore';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allActivities, addActivity } from '../../queries/activity';
+import { allActivities, createActivityHistory } from '../../queries/activity';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { LOG_ACTIVITY } from '../../../constants/activity';
@@ -12,7 +12,7 @@ import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../cons
 
 export class ActivityHistoryStore extends DataModelStore {
   constructor() {
-    super({ allActivities, addActivity });
+    super({ allActivities, createActivityHistory });
   }
 
   ACTIVITY_FRM = Validator.prepareFormObject(LOG_ACTIVITY);
@@ -71,18 +71,19 @@ export class ActivityHistoryStore extends DataModelStore {
       } else {
         delete srchParams[name];
       }
-      this.requestState.filters = srchParams;
+      this.setFieldValue('requestState', srchParams, 'filters');
       this.initRequest(resourceId);
     }
   }
 
   send = (resourceId, activityTitle = 'Posted new comment', activityType = ACTIVITY_HISTORY_TYPES.ADMIN_ACTIVITY) => {
-    const formData = Validator.ExtractValues(this.ACTIVITY_FRM.fields);
+    const formData = Validator.evaluateFormData(this.ACTIVITY_FRM.fields);
     const data = {
       resourceId,
       activityType,
       activityTitle,
       activity: formData.comment,
+      documents: formData.documents,
       scope: ACTIVITY_HISTORY_SCOPE.ADMIN,
     };
     this.createActivityHistory(data);
@@ -91,7 +92,7 @@ export class ActivityHistoryStore extends DataModelStore {
   createActivityHistory = async (payload, isInternal = false) => {
     try {
       await this.executeMutation({
-        mutation: 'addActivity',
+        mutation: 'createActivityHistory',
         variables: { activityHistoryDetails: payload },
         refetchQueries: [{
           query: allActivities,
