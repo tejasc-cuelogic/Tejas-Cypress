@@ -166,7 +166,7 @@ class FinancialInfo extends Component {
                     </Table.Row>
                     <Table.Row>
                       <Table.Cell className="grey-header plr-0">{`Price per ${prefferedEquityLabel}:`}</Table.Cell>
-                      <Table.Cell className="plr-0 grey-header right-align">{Helper.CurrencyFormat(prefferedEquityAmount, 0)}</Table.Cell>
+                      <Table.Cell className="plr-0 grey-header right-align">{Helper.CurrencyFormat(prefferedEquityAmount)}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                       <Table.Cell className="plr-0 grey-header"><b>Your investment:</b></Table.Cell>

@@ -25,7 +25,7 @@ const keyTermList = [
   { label: 'Interest Rate', forFunded: true, key: 'closureSummary.keyTerms.interestRate', type: '%', for: ['TERM_NOTE'] },
   { label: 'Maturity', key: 'keyTerms.maturity', type: 'months', for: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
   { label: 'Pre-Money Valuation', key: 'keyTerms.premoneyValuation', type: '$', for: ['PREFERRED_EQUITY_506C'] },
-  { label: 'Share Price', key: 'keyTerms.priceCopy', type: '', for: ['PREFERRED_EQUITY_506C'] },
+  { label: 'Share Price', key: 'keyTerms.priceCopy', type: '$', for: ['PREFERRED_EQUITY_506C'], allowCents: true },
   { label: 'Valuation Cap', key: 'keyTerms.valuationCap', type: '$', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
   { label: 'Discount', key: 'keyTerms.discount', type: '%', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
   // { label: 'Total Payments to investors', forFunded: true, key: 'closureSummary.repayment.count', type: '', for: [''] },
@@ -147,7 +147,7 @@ export default class CampaignList extends Component {
                                         <>
                                           {typeof row.type === 'object' ? (
                                             row.type[get(offering, row.key)] || '-'
-                                          ) : row.type === '$' ? row.key ? Helper.CurrencyFormat(get(offering, row.key), 0) : row.value
+                                          ) : row.type === '$' ? row.key ? row.allowCents ? Helper.CurrencyFormat(get(offering, row.key)) : Helper.CurrencyFormat(get(offering, row.key), 0) : row.value
                                             : row.type === '%' ? row.key ? `${get(offering, row.key)}%` : row.value
                                               : row.type === 'X' ? row.key ? `${get(offering, row.key)}x` : row.value
                                                 : row.type === 'months' ? row.key ? `${get(offering, row.key)} months` : row.value
