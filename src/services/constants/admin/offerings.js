@@ -1,4 +1,3 @@
-import React from 'react';
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
 
@@ -1609,7 +1608,6 @@ export const GENERAL = {
       error: undefined,
       rule: 'string',
       placeHolder: 'Type your text here...',
-      tooltip: (<span>See this link <a href="https://www.sec.gov/smallbusiness/exemptofferings" target="_blank" rel="noopener noreferrer">https://www.sec.gov/smallbusiness/exemptofferings</a> for more information from the SEC</span>),
     },
     securitiesOffered: {
       label: 'Securities Offered',
@@ -2466,7 +2464,7 @@ export const ADD_NEW_TIER = {
     value: '',
     error: undefined,
     rule: 'numeric|required_if:isEarlyBirds,EARLY_BIRDS',
-    placeHolder: 'e.g. Invitation to the Launch Party',
+    placeHolder: '$ amount',
   },
   earlyBirdQuantity: {
     label: 'Quantity of Early Birds available',
