@@ -33,6 +33,7 @@ const AddActivity = observer((props) => {
           </Form>
         </Modal.Content>
         <Modal.Actions textAlign="right">
+          <Button className="relaxed red" content="Cancel" onClick={() => setShowModal(!showModal)} />
           <Button className="relaxed" disabled={!props.form.meta.isValid} onClick={() => { props.submit(); setShowModal(false); }} icon type="submit" content="Submit" primary />
         </Modal.Actions>
       </Modal>
