@@ -866,7 +866,7 @@ export class AccreditationStore {
       if (aggreditationDetails) {
         currentAcitveObject = find(aggreditationDetails, (value, key) => key === currentSelectedAccount);
       }
-      const validAccreditationStatus = ['REQUESTED', 'INVALID'];
+      const validAccreditationStatus = ['REQUESTED'];
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration
         ? (currentAcitveObject.status === 'EXPIRED' || this.checkIsAccreditationExpired(currentAcitveObject.expiration)
       === 'EXPIRED') ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
@@ -1036,15 +1036,15 @@ export class AccreditationStore {
         const accountType = investmentStore.investAccTypes.value === 'ira' ? 'IRA' : capitalize(investmentStore.investAccTypes.value);
         switch (userCurrentState) {
           case 'PENDING':
-            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'This investment is only available to accredited investors.';
-            headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'Please confirm your accredited investor status to invest in this offering.';
+            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'This investment is only available for accredited investors.';
+            headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'Your request is currently in review, please check back to make an investment.';
             break;
           case 'NOT_ELGIBLE':
-            headerSubheaderTextObj.header = 'This investment is only available to accredited investors.';
+            headerSubheaderTextObj.header = 'This investment is only available for accredited investors.';
             headerSubheaderTextObj.subHeader = 'Please confirm your accredited investor status to invest in this offering.';
             break;
           case 'INACTIVE':
-            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? 'Are you an accredited investor?' : 'This investment is only available to accredited investors.';
+            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? 'Are you an accredited investor?' : 'This investment is only available for accredited investors.';
             headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'Please confirm your accredited investor status to invest in this offering.';
             break;
           case 'EXPIRED':
