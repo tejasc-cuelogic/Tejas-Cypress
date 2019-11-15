@@ -6,6 +6,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import { toJS } from 'mobx';
 import money from 'money-math';
+import sanitizeHtml from 'sanitize-html';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
 import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS } from '../constants/common';
@@ -323,6 +324,15 @@ export class Utility {
   }
 
   caseify = s => _.startCase(_.lowerCase(s));
+
+  sanitizeContent = (c) => {
+    try {
+      return sanitizeHtml(c);
+    } catch (e) {
+      console.log(e);
+      return '';
+    }
+  };
 
   validateImageExtension = (ext) => {
     const obj = {
