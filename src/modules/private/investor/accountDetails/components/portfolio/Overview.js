@@ -177,7 +177,7 @@ class Overview extends Component {
                           <Table.Cell>{preferredEquityUnit}</Table.Cell>
                           <Table.Cell>
                             {get(campaign, 'closureSummary.keyTerms.priceCalculation')
-                              ? Helper.CurrencyFormat(get(campaign, 'closureSummary.keyTerms.priceCalculation'), 0)
+                              ? Helper.CurrencyFormat(get(campaign, 'closureSummary.keyTerms.priceCalculation'))
                               : 'N/A'
                             }
                           </Table.Cell>

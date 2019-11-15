@@ -164,7 +164,7 @@ Cypress.Commands.add('getOffering', (offeirId) => {
             cy.log('Move for Read More...');
             cy.get('body').then(($body) => {
               if ($body.find('div[data-cy=activeToDisplay]').length) {
-                cy.get('div[data-cy=activeToDisplay]').find('button').contains('Load More')
+                cy.get('div[data-cy=activeToDisplay]').find('button').contains('View More')
                   .click();
                 return searchForOffering();
               } else {

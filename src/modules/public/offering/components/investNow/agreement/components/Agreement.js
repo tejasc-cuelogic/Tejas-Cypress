@@ -136,6 +136,8 @@ export default class Agreement extends React.Component {
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
     const offeringSecurityType = get(campaign, 'keyTerms.securities');
     const agreementStatement = includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) ? 'Purchase Agreement' : 'Note Purchase Agreement';
+    const isOfferingPreferredEquity = !!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType);
+
     return (
       <>
         <Modal open={this.state.open} closeOnDimmerClick={false} size="mini">
@@ -185,7 +187,7 @@ export default class Agreement extends React.Component {
             <div style={{ display: this.state.showDocuSign || this.state.showAgreementPdf ? 'none' : 'block' }}>
               <Header as="h3" className="mb-40">
                 Let&#39;s confirm your investment.<br />You are investing
-                <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
+                <span className="positive-text"> {isOfferingPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
               </Header>
               <Form
                 error={(this.state.showError
