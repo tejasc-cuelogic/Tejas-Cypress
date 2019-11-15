@@ -11,10 +11,8 @@
 		margin: auto;
 		&.private-pushable{
 			transform: translate3d(0,0,0);
-			&.investor{
-				height: calc(100vh - 72px);
-				overflow: hidden;
-			}
+			height: calc(100vh - 72px);
+			overflow: hidden;
 			@media only screen and (max-width : @largestTabletScreen){
 				transform: none;
 				height: auto;
@@ -24,6 +22,9 @@
 				.ui.menu.issuer ~ .pusher .private-dropdown{
 					position: static;
 				}
+			}
+			&.business-app{
+				overflow-y: visible;
 			}
 			.pusher{
 				@media only screen and (min-width: @computerBreakpoint) and (max-width : @largestSmallMonitor){
@@ -52,6 +53,9 @@
 		.ui.vertical.segment.content{
 			padding:0;
 			min-height:~"calc(100vh - 58px)";
+		}
+		&.business-app{
+			overflow: hidden;
 		}
 		&.banner{
 			height:~"calc(100vh - 34px)";
