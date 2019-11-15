@@ -1,11 +1,11 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import PrivateLayout from '../../PrivateLayout';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
-import { InlineLoader } from '../../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 
-const getModule = component => lazy(() => import(`../components/${component}`));
+const getModule = component => lazyRetry(() => import(`../components/${component}`));
 
 @inject('userStore')
 @observer
@@ -26,7 +26,7 @@ export default class Education extends Component {
     const navItems = GetNavMeta(match.url).subNavigations;
     return (
       <PrivateLayout {...this.props}>
-        <Suspense fallback={<InlineLoader />}>
+        <SuspenseBoundary>
           <Switch>
             <Route exact path={match.url} component={getModule(navItems[0].component)} />
             {
@@ -35,7 +35,7 @@ export default class Education extends Component {
               ))
             }
           </Switch>
-        </Suspense>
+        </SuspenseBoundary>
       </PrivateLayout>
     );
   }

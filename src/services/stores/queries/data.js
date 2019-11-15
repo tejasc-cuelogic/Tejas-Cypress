@@ -248,3 +248,14 @@ query _fetchProcessLogs($plugin: String!, $status: ProcessRunLogStatusEnum, $fro
     lek
   }
 }`;
+
+export const fileFactoryPluginTrigger = gql`
+mutation _generateFile($identifier: String!, $ownerId: String!, $resourceId: String!, $account: String, $payload: String) {
+  generateFile(
+    identifier: $identifier,
+    ownerId: $ownerId,
+    resourceId: $resourceId,
+    account: $account,
+    payload: $payload
+  )
+}`;

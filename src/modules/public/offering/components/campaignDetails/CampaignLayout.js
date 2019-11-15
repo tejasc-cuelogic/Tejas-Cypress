@@ -142,15 +142,15 @@ class CampaignLayout extends Component {
     if (navs && Array.isArray(navs)) {
       navs.forEach((item) => {
         if (document.getElementById(item.to.slice(1))
-        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
-        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
+          && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
+          && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
           if (isTablet && (this.props.navStore.currentActiveHash !== item.to) && this.props.navStore.campaignHeaderStatus) {
             scrollIntoView(document.getElementById(`${item.to.slice(1)}-mob-nav`), { align: { top: 1, topOffset: -(window.innerHeight - 92) }, isScrollable: this.onScrollCallBack });
-          // document.getElementsByClassName('campaign-mobile-menu-v2')[0].getElementsByClassName('active')[0].scrollIntoView({
-          //   // inline: 'center',
-          //   behavior: 'smooth',
-          //   // block: 'start',
-          // });
+            // document.getElementsByClassName('campaign-mobile-menu-v2')[0].getElementsByClassName('active')[0].scrollIntoView({
+            //   // inline: 'center',
+            //   behavior: 'smooth',
+            //   // block: 'start',
+            // });
           }
           this.props.navStore.setFieldValue('currentActiveHash', item.to);
         }
@@ -167,6 +167,7 @@ class CampaignLayout extends Component {
     const { campaign, campaignStatus, dataRoomDocs } = this.props.campaignStore;
     let updates = campaign && campaign.updates;
     updates = orderBy(updates, o => get(o, 'updatedDate') && moment(new Date(o.updatedDate)).unix(), ['asc']);
+    const postedComments = get(campaign, 'comments') || [];
     return (
       <div className="campaign-content-wrapper v-2">
         {campaignStatus.hasTopThingToKnow ? (
@@ -195,10 +196,10 @@ class CampaignLayout extends Component {
                 )
               }
               {campaign && campaign.updates && campaign.updates.length > 1 ? (
-              <Button onClick={() => this.handleCollapseExpand('expandUpdate', '#updates')} className={`${!isTablet ? 'mt-20' : ''} link-button highlight-text`}>
-                {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Updates
+                <Button onClick={() => this.handleCollapseExpand('expandUpdate', '#updates')} className={`${!isTablet ? 'mt-20' : ''} link-button highlight-text`}>
+                  {this.state.expandUpdate ? 'Collapse' : 'Expand'} All Updates
                 <Icon className={`ns-caret-${this.state.expandUpdate ? 'up' : 'down'} right`} />
-              </Button>
+                </Button>
               ) : null
               }
               <Divider hidden section />
@@ -238,15 +239,19 @@ class CampaignLayout extends Component {
           }
           <Divider hidden section />
           <Comments refLink={this.props.match.url} newLayout showOnlyOne={!this.state.expandComments} />
-          <Button onClick={() => this.handleCollapseExpand('expandComments', '#comments')} className="link-button highlight-text mt-40">
-            {this.state.expandComments ? 'Collapse' : 'Expand'} All Comments
+          {postedComments.length > 1
+            && (
+              <Button onClick={() => this.handleCollapseExpand('expandComments', '#comments')} className="link-button highlight-text mt-40">
+                {this.state.expandComments ? 'Collapse' : 'Expand'} All Comments
             <Icon className={`ns-caret-${this.state.expandComments ? 'up' : 'down'} right`} />
-          </Button>
+              </Button>
+            )
+          }
         </>
         {campaignStatus.issuerStatement ? (
           <>
-          <Divider hidden section />
-          <IssuerStatement newLayout campaign={campaign} />
+            <Divider hidden section />
+            <IssuerStatement newLayout campaign={campaign} />
           </>
         ) : null
         }

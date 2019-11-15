@@ -16,14 +16,13 @@ class PrivateHOC extends Component {
     }
     return (
       <>
-        <div className={`${isInvestor ? 'investor' : ''} page-header-section`}>
+        <div className={`${isInvestor ? 'investor' : ''} ${!this.props.hideHeader && 'page-header-section'}`}>
           <Grid columns="equal" stackable>
             <Grid.Row>
               <Grid.Column verticalAlign="middle">
-                {!this.props.P0
-                  ? <Header as={isInvestor ? 'h3' : 'h1'}>{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
-                  : this.props.P0
-                }
+              {!this.props.hideHeader
+                && <Header as={isInvestor ? 'h3' : 'h1'}>{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
+              }
               </Grid.Column>
               {this.props.P1}
               {this.props.P2}

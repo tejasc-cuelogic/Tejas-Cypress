@@ -172,7 +172,7 @@ class Comments extends Component {
         {comments && commentsMainThreadCount
           ? (
             <>
-              <Segment color="green" className={`${newLayout ? 'mt-30' : 'mt-50'} offering-comment`}>
+              <div color="green" className={`${newLayout ? 'mt-30' : 'mt-50'} offering-comment`}>
                 {comments
                   && comments.map(c => (((c.createdUserInfo && c.createdUserInfo.id === issuerId
                     && c.approved)
@@ -184,8 +184,8 @@ class Comments extends Component {
                               {(get(c, 'createdUserInfo.id') === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(c, 'createdUserInfo.roles[0].name') === 'admin' ? 'NextSeed' : get(c, 'createdUserInfo.info.firstName')}
                               {((get(c, 'createdUserInfo.id') === issuerId) || get(c, 'createdUserInfo.roles[0].name') === 'admin') && <Label color="blue" size="mini">{(get(c, 'createdUserInfo.id') === issuerId) ? 'ISSUER' : 'ADMIN'}</Label>}
                             </Comment.Author>
-                            <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date'), true, true)}</span></Comment.Metadata>
-                            {isUserLoggedIn && !disablePostComment && !showOnlyOne
+                            <Comment.Metadata><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date'), true, true)}</span></Comment.Metadata>
+                            {isUserLoggedIn && !disablePostComment
                               && (
                                 <Comment.Actions>
                                   <Comment.Action onClick={() => this.toggleVisibility(c.id)}>
@@ -252,8 +252,8 @@ class Comments extends Component {
                                             {(get(tc, 'createdUserInfo.id') === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(tc, 'createdUserInfo.roles[0].name') === 'admin' ? 'NextSeed' : get(tc, 'createdUserInfo.info.firstName')}
                                             {((get(tc, 'createdUserInfo.id') === issuerId) || get(tc, 'createdUserInfo.roles[0].name') === 'admin') && <Label color="blue" size="mini">{(get(tc, 'createdUserInfo.id') === issuerId) ? 'ISSUER' : 'ADMIN'}</Label>}
                                           </Comment.Author>
-                                          <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date'), true, true)}</span></Comment.Metadata>
-                                          {isUserLoggedIn && !disablePostComment && !showOnlyOne
+                                          <Comment.Metadata><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date'), true, true)}</span></Comment.Metadata>
+                                          {/* {isUserLoggedIn && !disablePostComment && !showOnlyOne
                                             && (
                                               <Comment.Actions>
                                                 <Comment.Action
@@ -264,7 +264,7 @@ class Comments extends Component {
                                                 </Comment.Action>
                                               </Comment.Actions>
                                             )
-                                          }
+                                          } */}
                                           <Comment.Text className="mt-20">
                                             <HtmlEditor
                                               readOnly
@@ -289,10 +289,10 @@ class Comments extends Component {
                                                   changed={msgEleChange}
                                                   containerclassname="secondary"
                                                 />
-                                                <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(tc.id)}>
+                                                {/* <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(tc.id)}>
                                                   Cancel Reply
                                                 </Button>
-                                                <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
+                                                <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" /> */}
                                               </Form>
                                               <Divider hidden />
                                               <p>
@@ -319,7 +319,7 @@ class Comments extends Component {
                       </Comment.Group>
                   )))
                 }
-              </Segment>
+              </div>
             </>
           )
           : (

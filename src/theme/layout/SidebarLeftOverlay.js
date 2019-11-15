@@ -61,7 +61,7 @@ class SidebarLeftPush extends Component {
 export default SidebarLeftPush;
 
 const MySidebar = observer(props => (
-  <Sidebar.Pushable className="private-pushable">
+  <Sidebar.Pushable className={`${props.userStore.isInvestor ? 'investor' : ''} private-pushable`}>
     {!props.match.url.includes('/business-application') ? (
       <>
         <Sidebar

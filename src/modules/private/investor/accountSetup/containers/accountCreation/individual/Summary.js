@@ -34,7 +34,8 @@ export default class Summary extends React.Component {
     this.props.uiStore.setProgress(get(userDetails, 'info.firstName') === null ? false : !get(userDetails, 'info.firstName'));
   }
 
-  openModal = (type) => {
+  openModal = (e, type) => {
+    e.preventDefault();
     const { getBoxEmbedLink } = this.props.agreementsStore;
     getBoxEmbedLink(type);
     this.setState({
@@ -117,19 +118,11 @@ export default class Summary extends React.Component {
           )
         }
         <p className={`${isMobile ? '' : 'center-align'} grey-header mt-30`}>
-          By continuing, I acknowledge that I have read and agree to the terms of the
-          {' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>CrowdPay Custodial Account Agreement</span>
-,
-          {' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>NextSeed US LLC Member Agreement</span>
-,
-          {' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>NextSeed Securities LLC Investor Agreement</span>
-, and
-          {' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>Substitute IRS Form W-9 Certification</span>
-.
+          By continuing, I acknowledge that I have read and agree to the terms of the{' '}
+          <a className="highlight-text" style={{ cursor: 'pointer' }} href={`${this.props.match.url}/legal-docs/cCAgreement`} onClick={e => this.openModal(e, 'cCAgreement')}>CrowdPay Custodial Account Agreement</a>,{' '}
+          <a className="highlight-text" style={{ cursor: 'pointer' }} href={`${this.props.match.url}/legal-docs/fPAgreemnt`} onClick={e => this.openModal(e, 'fPAgreemnt')}>NextSeed US LLC Member Agreement</a>,{' '}
+          <a className="highlight-text" style={{ cursor: 'pointer' }} href={`${this.props.match.url}/legal-docs/bDIAgreemnt`} onClick={e => this.openModal(e, 'bDIAgreemnt')}>NextSeed Securities LLC Investor Agreement</a>, and {' '}
+          <a className="highlight-text" style={{ cursor: 'pointer' }} href={`${this.props.match.url}/legal-docs/irsCertification`} onClick={e => this.openModal(e, 'irsCertification')}>Substitute IRS Form W-9 Certification</a>.
           <IframeModal
             open={this.state.open}
             close={this.closeModal}

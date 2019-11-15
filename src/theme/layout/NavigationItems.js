@@ -121,26 +121,26 @@ export class NavItems extends Component {
                   || (this.isActive(item.to, location, app, item.subNavigations))
                 }
                 content={(
-<Menu.Menu>
+                  <Menu.Menu>
                     {item.subNavigations.map(sn => (
                       sn.external ? (
                         <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
                       ) : (
-                        <Menu.Item
-                          key={sn.to}
-                          className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
-                          as={NavLink}
-                          onClick={
-                            isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)
-                          }
-                          to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
-                        >
-                          {sn.title}
-                        </Menu.Item>
+                          <Menu.Item
+                            key={sn.to}
+                            className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
+                            as={NavLink}
+                            onClick={
+                              isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)
+                            }
+                            to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
+                          >
+                            {sn.title}
+                          </Menu.Item>
                       )
                     ))}
                   </Menu.Menu>
-)}
+                )}
               />
             </Menu.Item>
           </Accordion>
@@ -160,71 +160,71 @@ export class NavItems extends Component {
                   {item.icon && <Icon className={item.icon} />}
                   <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span>
                 </>
-)}
+              )}
             >
               <Dropdown.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible' : ''}`}>
                 {item.subNavigations.map(sn => (
                   sn.external ? (
                     <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
                   ) : (
-                    <Dropdown.Item
-                      key={sn.to}
-                      className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
-                      as={NavLink}
-                      onClick={sn.title === 'Log out' ? this.handleLogOut : isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
-                      to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
-                    >
-                      {sn.title}
-                    </Dropdown.Item>
+                      <Dropdown.Item
+                        key={sn.to}
+                        className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
+                        as={NavLink}
+                        onClick={sn.title === 'Log out' ? this.handleLogOut : isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
+                        to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
+                      >
+                        {sn.title}
+                      </Dropdown.Item>
                   )
                 ))}
               </Dropdown.Menu>
             </Dropdown>
           ) : (item.isMenuHeader)
             ? (
-            <Menu.Item className="menu-header">
-              <Menu.Header>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</Menu.Header>
-            </Menu.Item>
+                <Menu.Item className="menu-header">
+                  <Menu.Header>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</Menu.Header>
+                </Menu.Item>
             )
             : (item.title === 'Bonus Rewards' && !this.props.bonusRewards) || (item.isMenuHeader) || (item.title === 'Setup' && hideSetupNav)
               ? null
               : (((item.to === 'updates' || item.to === '#updates') && this.props.countData && this.props.countData[item.to])
-              || (item.to !== 'updates' || item.to !== '#updates')
+                  || (item.to !== 'updates' || item.to !== '#updates')
                 ? (item.title === 'Bonus Rewards' && this.props.isBonusReward)
-              || (item.title !== 'Bonus Rewards') ? (
-                <>
-                {(item.title === 'Account Settings' && this.props.userStore.isInvestor && investorAccounts.length !== 0)
-                && (
-                <Divider />)
-                }
-                {item.external
-                  ? (<a className="item" href={item.to} rel="noopener noreferrer" target="_blank">{item.title}</a>)
-                  : (
-                    <>
-                    <Menu.Item
-                      key={item.to}
-                      name={item.to}
-                      id={(newLayout && isTablet) ? `${item.to.slice(1)}-mob-nav` : ''}
-                      className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : `${((item.defaultActive && this.isActiveSubMenu(`${item.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(item.to, location) ? 'active' : ''}`} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''} ${(newLayout && ((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) ? 'hasLabel' : '')}`}
-                      as={NavLink}
-                      onClick={isMobile ? this.mobileMenuClick : this.doNothing}
-                      to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}${item.useRefLink ? '' : '/'}${item.to}`}
-                    >
-                      {item.icon && <Icon className={item.icon} />}
-                      {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
-                      {(item.title !== 'Updates' || (item.title === 'Updates' && item.to.includes('updates') && this.props.countData) || isPrivateApp) ? <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span> : ''}
-                      {((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) && this.props.countData
-                        ? <Label circular color="blue" size="small">{this.props.countData[item.to === '#updates' ? 'updates' : item.to === '#comments' ? 'comments' : item.to]}</Label> : null
-                      }
-                    </Menu.Item>
-                    {this.props.userStore.isInvestor && item.title === 'Setup' && !investorAccounts.length
-                    && (
-                      <Divider />
-                    )
-                    }
-                    </>
-                  )}
-                </>
+                    || (item.title !== 'Bonus Rewards') ? (
+                      <>
+                        {(item.title === 'Account Settings' && this.props.userStore.isInvestor && investorAccounts.length !== 0)
+                          && (
+                            <Divider />)
+                        }
+                        {item.external
+                          ? (<a className="item" href={item.to} rel="noopener noreferrer" target="_blank">{item.title}</a>)
+                          : (
+                            <>
+                              <Menu.Item
+                                key={item.to}
+                                name={item.to}
+                                id={(newLayout && isTablet) ? `${item.to.slice(1)}-mob-nav` : ''}
+                                className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : `${((item.defaultActive && this.isActiveSubMenu(`${item.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(item.to, location) ? 'active' : ''}`} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''} ${(newLayout && ((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) ? 'hasLabel' : '')}`}
+                                as={NavLink}
+                                onClick={isMobile ? this.mobileMenuClick : this.doNothing}
+                                to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}${item.useRefLink ? '' : '/'}${item.to}`}
+                              >
+                                {item.icon && <Icon className={item.icon} />}
+                                {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
+                                {(item.title !== 'Updates' || (item.title === 'Updates' && item.to.includes('updates') && this.props.countData) || isPrivateApp) ? <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span> : ''}
+                                {((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) && this.props.countData
+                                  ? <Label circular color="blue" size="small">{this.props.countData[item.to === '#updates' ? 'updates' : item.to === '#comments' ? 'comments' : item.to]}</Label> : null
+                                }
+                              </Menu.Item>
+                              {this.props.userStore.isInvestor && item.title === 'Setup' && !investorAccounts.length
+                                && (
+                                  <Divider />
+                                )
+                              }
+                            </>
+                          )}
+                      </>
                   ) : '' : ''
               )}
       </>
@@ -286,46 +286,42 @@ export class NavigationItems extends Component {
         <Container fluid>
           {!isMobBussinessApp
             && (
-<Menu.Item as={Link} to="/" header>
-              <Logo
-                alt="NextSeed.com"
-                dataSrc={getLogo(location.pathname)}
-                style={getLogoStyle(location.pathname)}
-                size={isTablet && 'small'}
-              />
-            </Menu.Item>
+              <Menu.Item as={Link} to="/" header>
+                <Logo
+                  alt="NextSeed.com"
+                  dataSrc={getLogo(location.pathname)}
+                  style={getLogoStyle(location.pathname)}
+                  size={isTablet && 'small'}
+                />
+              </Menu.Item>
             )
           }
           <Menu.Menu position="right">
-            {!location.pathname.includes('/business-application')
-              && (
-<NavItems
-  refLoc="public"
-  currentUser={currentUser}
-  location={location}
-  navItems={
-                  isMobile ? PUBLIC_NAV.filter(nav => nav.header !== false)
-                    : PUBLIC_NAV.filter(nav => nav.header !== false && nav.title !== 'Legal')
-                  }
-/>
-              )
-            }
+            <NavItems
+              refLoc="public"
+              currentUser={currentUser}
+              location={location}
+              navItems={
+                isMobile ? PUBLIC_NAV.filter(nav => nav.header !== false)
+                  : PUBLIC_NAV.filter(nav => nav.header !== false && nav.title !== 'Legal')
+              }
+            />
           </Menu.Menu>
-          {location.pathname.includes('/business-application') && !location.pathname.includes('business/') && !location.pathname.includes('commercial-real-estate/')
+          {location.pathname.includes('/business-application') && !location.pathname.includes('commercial-real-estate/')
             ? (
-<Menu.Item position={isMobBussinessApp ? 'right' : ''}>
-              <Button.Group>
-                <Button as={Link} to="/business/how-it-works" loading={loading} inverted color="red">Cancel</Button>
-                {isPrequalQulify
-                  && (
-<SubmitButton
-  canSubmitApp={canSubmitApp}
-  click={preQualSubmit}
-  loading={loading}
-/>
-                  )}
-              </Button.Group>
-            </Menu.Item>
+              <Menu.Item position={isMobBussinessApp ? 'right' : ''}>
+                <Button.Group>
+                  <Button as={Link} to="/business/how-it-works" loading={loading} inverted color="red">Cancel</Button>
+                  {(isPrequalQulify || location.pathname.endsWith('/pre-qualification'))
+                    && (
+                      <SubmitButton
+                        canSubmitApp={canSubmitApp}
+                        click={preQualSubmit}
+                        loading={loading}
+                      />
+                    )}
+                </Button.Group>
+              </Menu.Item>
             )
             : !location.pathname.includes('/business-application') && (!matchPath(location.pathname, { path: '/app' }))
             && (
@@ -338,17 +334,17 @@ export class NavigationItems extends Component {
                   ))}
                 </>
               ) : (
-                <Menu.Item
-                  className="menu-button"
-                  onClick={this.handleDashboardBtn}
-                >
-                  <Button
-                    loading={this.props.userDetailsStore.currentUser.loading}
-                    disabled={this.props.userDetailsStore.currentUser.loading}
-                    secondary
-                  >Dashboard
+                  <Menu.Item
+                    className="menu-button"
+                    onClick={this.handleDashboardBtn}
+                  >
+                    <Button
+                      loading={this.props.userDetailsStore.currentUser.loading}
+                      disabled={this.props.userDetailsStore.currentUser.loading}
+                      secondary
+                    >Dashboard
                   </Button>
-                </Menu.Item>
+                  </Menu.Item>
               ))}
         </Container>
       </Menu>

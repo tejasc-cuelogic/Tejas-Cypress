@@ -3,12 +3,9 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
-import { isEmpty } from 'lodash';
-import queryString from 'query-string';
 import { Modal, Button, Header, Icon, Form, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
-import { DataFormatter } from '../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -21,15 +18,6 @@ class InvestorSignup extends Component {
     this.props.authStore.setDefaultPwdType();
     const userRoleData = cookie.load('ROLE_VALUE');
     this.props.authStore.setUserRole(userRoleData || 'investor');
-    const urlParameter = queryString.parse(this.props.location.search);
-    if (urlParameter) {
-      let tags = DataFormatter.createEligibleTagsObj(urlParameter);
-      if (!isEmpty(tags)) {
-        const existingTags = JSON.parse(window.localStorage.getItem('tags'));
-        tags = !isEmpty(existingTags) ? { ...existingTags, ...tags } : tags;
-        window.localStorage.setItem('tags', JSON.stringify(tags));
-      }
-    }
   }
 
   componentWillUnmount() {
