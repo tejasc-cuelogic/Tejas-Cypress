@@ -25,13 +25,15 @@ const AddActivity = observer((props) => {
       <Modal open={showModal} closeOnDimmerClick={false} size="small" className="show-top" closeIcon onClose={() => setShowModal(!showModal)}>
         <Modal.Header>Add Activity</Modal.Header>
         <Modal.Content>
-          {props.smartElement.Input('comment', { label: 'Comment' })}
-          <Form.Field className="mt-30">
-            {props.smartElement.DropZone('files', { stepName: 'APPN_ACTIVITY_HISTORY', offeringId: props.offeringId, applicationIssuerId: props.applicationIssuerId, applicationId: props.applicationId })}
-          </Form.Field>
+          <Form>
+            {props.smartElement.Input('comment', { label: 'Comment' })}
+            <Form.Field className="mt-30">
+              {props.smartElement.DropZone('files', { stepName: 'APPN_ACTIVITY_HISTORY', offeringId: props.offeringId, applicationIssuerId: props.applicationIssuerId, applicationId: props.applicationId })}
+            </Form.Field>
+          </Form>
         </Modal.Content>
         <Modal.Actions textAlign="right">
-            <Button className="relaxed" disabled={!props.form.meta.isValid} onClick={() => { props.submit(); setShowModal(false); }} icon type="submit" content="submit" primary />
+          <Button className="relaxed" disabled={!props.form.meta.isValid} onClick={() => { props.submit(); setShowModal(false); }} icon type="submit" content="Submit" primary />
         </Modal.Actions>
       </Modal>
     </>
