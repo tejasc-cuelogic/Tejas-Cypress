@@ -1,5 +1,5 @@
-import { observable, action } from 'mobx';
-import { set } from 'lodash';
+import { observable, action, toJS } from 'mobx';
+import { set, forEach } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
@@ -50,6 +50,16 @@ export default class DataModelStore {
       this[field] = tempRef;
     } else {
       this[field] = value;
+    }
+  }
+
+  removeUploadedFiles = () => {
+    const fileList = toJS(this.removeFileIdsList);
+    if (fileList.length) {
+      forEach(fileList, (fileId) => {
+        fileUpload.removeUploadedData(fileId);
+      });
+      this.setFieldValue('removeFileIdsList', []);
     }
   }
 
@@ -294,6 +304,7 @@ export const decorateDefault = {
   removeFileIdsList: observable,
   currTime: observable,
   currentScore: observable,
+  removeUploadedFiles: action,
   setFieldValue: action,
   formChange: action,
   maskChange: action,

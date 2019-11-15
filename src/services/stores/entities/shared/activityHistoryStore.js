@@ -104,6 +104,7 @@ export class ActivityHistoryStore extends DataModelStore {
         Helper.toast('Activity history added successfully.', 'success');
       }
       this.resetForm('ACTIVITY_FRM');
+      this.removeUploadedFiles();
     } catch (error) {
       Helper.toast('Something went wrong. Please try again in some time.', 'error');
     }
