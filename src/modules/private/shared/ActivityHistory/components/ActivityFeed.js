@@ -43,8 +43,8 @@ const ActivityFeed = ({ loading, activities }) => (
               {a.documents && a.documents.length
                 ? a.documents.map(d => get(d, 'fileHandle.boxFileId') && (
                   <List horizontal>
-                    <List.Item>
-                      <List.Content>
+                    <List.Item className="mr-10">
+                      <List.Content className="mr-10">
                          <Link to="/" onClick={(e) => { e.preventDefault(); window.open(`${NEXTSEED_BOX_URL}file/${get(d, 'fileHandle.boxFileId')}`, '_blank'); }}>{get(d, 'fileName')}</Link>
                       </List.Content>
                     </List.Item>
