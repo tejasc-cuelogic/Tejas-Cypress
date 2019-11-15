@@ -79,7 +79,7 @@ export default class DropZone extends Component {
     } = this.props;
     const { inProgress } = commonStore;
     return (
-      <div className={`file-uploader-wrap ${this.props.containerclassname} fluid`}>
+      <div className={`file-uploader-wrap ${this.props.containerclassname}`}>
         {label
           && (
             <label>

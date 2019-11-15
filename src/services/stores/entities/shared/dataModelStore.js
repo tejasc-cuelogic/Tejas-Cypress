@@ -151,7 +151,8 @@ export default class DataModelStore {
     FormValidator.setAddressFields(place, this[form]);
   }
 
-  setFileUploadData = (form, field, stepName, files, { userRole, applicationId, offeringId, applicationIssuerId, tags }) => {
+  setFileUploadData = (form, field, multiple = false, index = null, arrayName = null, stepName, files, { userRole, applicationId, offeringId, applicationIssuerId, tags }) => {
+    const path = (arrayName && index !== null) ? `fields.${arrayName}[${index}].${field}` : `fields.${field}`;
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
     this[form].fields[field].showLoader = true;
@@ -159,26 +160,27 @@ export default class DataModelStore {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType })
         .then(() => {
-          this.setFieldValue(form, fileId, `fields.${field}.fileId`);
-          this.setFieldValue(form, preSignedUrl, `fields.${field}.preSignedUrl`);
-          this.setFieldValue(form, file, `fields.${field}.fileData`);
-          this.setFieldValue(form, undefined, `fields.${field}.error`);
-          this.setFieldValue(form, false, `fields.${field}.showLoader`);
-          this.setFieldValue(form, fileData.fileName, `fields.${field}.value`);
+          this.setFieldValue(form, multiple ? [...this[form].fields[field].fileId, fileId] : fileId, `${path}.fileId`);
+          this.setFieldValue(form, multiple ? [...this[form].fields[field].preSignedUrl, preSignedUrl] : preSignedUrl, `${path}.preSignedUrl`);
+          this.setFieldValue(form, multiple ? [...this[form].fields[field].fileData, file] : file, `${path}.fileData`);
+          this.setFieldValue(form, undefined, `${path}.error`);
+          this.setFieldValue(form, false, `${path}.showLoader`);
+          this.setFieldValue(form, multiple ? [...this[form].fields[field].value, fileData.fileName] : fileData.fileName, `${path}.value`);
         })
         .catch((e) => {
           window.logger(e);
-          this.setFieldValue(form, false, `fields.${field}.showLoader`);
+          this.setFieldValue(form, false, `${path}.showLoader`);
           Helper.toast('Something went wrong, please try again later.', 'error');
         });
     })).catch((e) => {
       window.logger(e);
-      this.setFieldValue(form, false, `fields.${field}.showLoader`);
+      this.setFieldValue(form, false, `${path}.showLoader`);
       Helper.toast('Something went wrong, please try again later.', 'error');
     });
   }
 
-  removeUploadedData = (form, field, index = null, arrayName) => {
+  removeUploadedData = (form, field, index = null, arrayName = null) => {
+    const path = (arrayName && index !== null) ? `fields.${arrayName}[${index}].${field}` : `fields.${field}`;
     let removeFileIds = '';
     if (index !== null && arrayName) {
       const { fileId } = this[form].fields[arrayName][index][field];
@@ -190,13 +192,22 @@ export default class DataModelStore {
       const { fileId } = this[form].fields[field];
       removeFileIds = fileId;
     }
-    this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
-    this.setFieldValue(form, '', `fields.${field}.fileId`);
-    this.setFieldValue(form, '', `fields.${field}.fileData`);
-    this.setFieldValue(form, '', `fields.${field}.value`);
-    this.setFieldValue(form, undefined, `fields.${field}.error`);
-    this.setFieldValue(form, false, `fields.${field}.showLoader`);
-    this.setFieldValue(form, '', `fields.${field}.preSignedUrl`);
+    if (index !== null && !arrayName) {
+      const sField = JSON.parse(JSON.stringify({ ...this[form].fields[field] }));
+      sField.fileId.splice(index, 1);
+      sField.fileData.splice(index, 1);
+      sField.value.splice(index, 1);
+      sField.preSignedUrl.splice(index, 1);
+      this.setFieldValue(form, sField, `${path}`);
+    } else {
+      this.setFieldValue(form, '', `${path}.fileId`);
+      this.setFieldValue(form, '', `${path}.fileData`);
+      this.setFieldValue(form, '', `${path}.value`);
+      this.setFieldValue(form, '', `${path}.preSignedUrl`);
+    }
+    this.setFieldValue(form, undefined, `${path}.error`);
+    this.setFieldValue(form, false, `${path}.showLoader`);
+    this.setFieldValue('removeFileIdsList', [...this.removeFileIdsList, removeFileIds]);
   }
 
   maskChange = (values, field, form, type) => {

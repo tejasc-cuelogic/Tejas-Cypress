@@ -36,6 +36,7 @@ export default class Identity extends Component {
             additionalClass="file-uploader-large"
             textAlign="center-align"
             uploadtitle={<span className="highlight-text">Choose a file <span>or drag it here</span></span>}
+            containerclassname="fluid"
           />
         </Form>
         {errors

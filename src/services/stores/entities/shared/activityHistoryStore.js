@@ -71,7 +71,7 @@ export class ActivityHistoryStore extends DataModelStore {
       } else {
         delete srchParams[name];
       }
-      this.requestState.filters = srchParams;
+      this.setFieldValue('requestState', srchParams, 'filters');
       this.initRequest(resourceId);
     }
   }
