@@ -253,6 +253,9 @@ export default class ApplicationDetails extends Component {
                             module={item.title === 'Activity History' ? 'applicationDetails' : false}
                             showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
                             resourceId={params.appId}
+                            applicationId={id || applicationId}
+                            applicationIssuerId={userId}
+                            stepName={appStepStatus !== 'Failed' ? 'APPN_ACTIVITY_HISTORY' : ''}
                             appType={params.id}
                             activityTitle="Comment"
                             activityType={ACTIVITY_HISTORY_TYPES.COMMENT}
