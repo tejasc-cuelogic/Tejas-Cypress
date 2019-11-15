@@ -92,7 +92,7 @@ export default class Performance extends Component {
                               key={field}
                               name={field}
                               prefix="$ "
-                              allowNegative={field === 'previousYearNetIncome'}
+                              allowNegative={field === 'pyNetIncome'}
                               currency
                               asterisk="true"
                               value={fields[field].value}
@@ -109,14 +109,14 @@ export default class Performance extends Component {
                     <Header as={hideFields ? 'h6' : 'h5'} content="Future Year" />
                     <div className="field-wrap">
                       {
-                        ['nyGrossSales', 'nyCogs', 'nyOperatingExpenses', 'nyNetIncome'].map(field => (
+                        ['nyGrossSales', 'nyCogs', 'nyOperatingExpenses', 'pyNetIncome'].map(field => (
                           <MaskedInput
                             readOnly={formReadOnlyMode}
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
                             key={field}
                             name={field}
                             prefix="$ "
-                            allowNegative={field === 'nextYearNetIncome'}
+                            allowNegative={field === 'pyNetIncome'}
                             currency
                             asterisk="true"
                             value={fields[field].value}
