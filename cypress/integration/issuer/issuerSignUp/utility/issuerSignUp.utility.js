@@ -76,7 +76,7 @@ export const fillPreQaulificationDetails = (issuerPreQual) => {
     cy.get('input[name="password"]').type('nextseedTest');
     btnClickAndWaitByButtonName('Continue');
   }
-  // cy.get('input[value="B2C"]').click();
+  cy.get('input[value="B2C"]').click();
   fillGeneralInfo(issuerPreQual.generalInfo);
   cy.get('input[name="industryTypes"]').click({ force: true, multiple: true });
   if (issuerPreQual.previousYearProjection) {

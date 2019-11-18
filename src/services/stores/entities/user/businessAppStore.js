@@ -365,8 +365,7 @@ export class BusinessAppStore {
             this.BUSINESS_APP_FRM.fields.businessSecurities.value.push(ele);
           });
         }
-        // removed 'businessModel',
-        ['businessGoal', 'businessEntityStructure', 'franchiseHolder'].forEach((ele) => {
+        ['businessModel', 'businessGoal', 'businessEntityStructure', 'franchiseHolder'].forEach((ele) => {
           this.BUSINESS_APP_FRM.fields[ele].value = data[ele];
         });
         ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
@@ -955,7 +954,7 @@ export class BusinessAppStore {
       preQualData = {
         ...preQualData,
         businessGoal: data.businessGoal.value,
-        // businessModel: data.businessModel.value,
+        businessModel: data.businessModel.value,
         businessSecurities: data.businessSecurities.value,
         legalConfirmations: [...preQualData.legalConfirmations,
           {

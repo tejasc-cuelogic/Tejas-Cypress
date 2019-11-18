@@ -22,7 +22,7 @@ export default class PreQualBusiness extends Component {
     return (
       <>
         <span className="application-scroll" />
-        {/* <FormElementWrap
+        <FormElementWrap
           hideFields={hideFields}
           header="What is your Business Model?*"
           subHeader="Only Business to Consumer models are accepted at this time."
@@ -35,7 +35,7 @@ export default class PreQualBusiness extends Component {
             changed={businessAppEleChange}
             containerclassname="button-radio"
           />
-        </FormElementWrap> */}
+        </FormElementWrap>
         <GeneralInformation
           hideFields={hideFields}
           fields={fields}
