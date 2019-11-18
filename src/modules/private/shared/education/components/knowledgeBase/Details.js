@@ -12,7 +12,7 @@ export default class Details extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.match.params.slug !== this.props.match.params.slug) {
+    if (!this.props.match.url.includes('/app/') && prevProps.match.params.slug !== this.props.match.params.slug) {
       this.props.educationStore.getOne(this.props.module, this.props.match.params.slug);
     }
   }

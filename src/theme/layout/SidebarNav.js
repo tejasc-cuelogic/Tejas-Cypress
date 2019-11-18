@@ -22,10 +22,6 @@ export class SidebarNav extends Component {
     }
   }
 
-  componentDidUpdate() {
-    this.props.navStore.setAccessParams('currentNav', this.props.match.url);
-  }
-
   toggleMobile = () => this.props.uiStore.updateLayoutState('leftPanelMobile');
 
   render() {

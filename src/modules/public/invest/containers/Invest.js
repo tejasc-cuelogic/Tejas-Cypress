@@ -57,12 +57,6 @@ class Invest extends Component {
     }
   }
 
-  componentDidUpdate() {
-    if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/why-nextseed`);
-    }
-  }
-
   module = name => DataFormatter.upperCamelCase(name);
 
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
