@@ -1,50 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Grid, Button, Container, List, Item, Responsive, Divider } from 'semantic-ui-react';
+import { Header, Grid, Container, Button, Divider, Responsive, Icon } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
 import NSImage from '../../../shared/NSImage';
 
-const highlights = [
-  {
-    title: 'Businesses you understand',
-    icon: 'icons/businesses.svg',
-    meta: `Investments in Main Street businesses and local properties 
-      generating real cash flow.`,
-  },
-  {
-    title: 'Impactful investments',
-    icon: 'icons/entrepreneurs.svg',
-    meta: `Local business owners, local jobs and local growth.
-    Create real impact in local communities nationwide`,
-  },
-  {
-    title: 'Pre-vetted opportunities',
-    icon: 'icons/prevetted.svg',
-    meta: (
-      <>
-      Only the top 3% of businesses meet our
-    proprietary financial criteria.<sup>1</sup>
-      </>),
-  },
-  {
-    title: 'Flexible amounts',
-    icon: 'icons/investments.svg',
-    meta: 'Never invest more than you can risk. Investments may start as low as $100.',
-  },
-  {
-    title: 'Exclusive deals',
-    icon: 'icons/ventures.svg',
-    meta: `Uncover opportunities that were once privately reserved for wealthy
-      and well-connected investors.`,
-  },
-  {
-    title: 'Returns processed for you',
-    icon: 'icons/returns.svg',
-    meta: `No need to chase payments from business owners. NextSeed facilitates
-     payment processing from your investments automatically.`,
-  },
-];
 const settings = {
   slidesToShow: 1,
   slidesToScroll: 1,
@@ -64,115 +24,101 @@ const businesses = [
       description: 'Fair Isle Brewing raised $327,800 from 292 investors',
     },
     {
-      title: 'Austin, TX',
+      title: 'Denver, CO',
       image: 'investors/img-1.png',
-      description: 'The Brewer’s Table raised $300,000 from 190 investors',
-    },
-  ],
-  [
-    {
-      title: 'San Diego, CA',
-      image: 'investors/img-5.png',
-      description: '619 Distillery & Tasting Room raised $191,600 from 238 investors',
-    },
-    {
-      title: 'Brooklyn, NY',
-      image: 'investors/img-3.png',
-      description: 'Oxalis raised $141,500 from 214 investors',
-    },
-    {
-      title: 'Salt Lake City, UT',
-      image: 'investors/img-4.png',
-      description: 'MOB Cycle raised $117,400 from 132 investors',
+      description: 'Urban Putt raised $300,000 from XXX investors',
     },
   ],
 ];
-const isMobile = document.documentElement.clientWidth < 768;
-@inject('authStore')
+@inject('uiStore', 'authStore')
 @observer
 export default class WhyNextseed extends Component {
   render() {
+    const { responsiveVars } = this.props.uiStore;
     const { authStore } = this.props;
     return (
       <>
-        <section className="why-nextseed-section">
-          <Container>
-            <Responsive maxWidth={767} as={React.Fragment}>
-              <Header as="h2">
-               Get access to<br />pre-vetted, local<br />investments.
-              </Header>
-              <Button as={Link} to="/offerings" secondary>Explore Campaigns</Button>
-              <Divider section />
-            </Responsive>
-            <Header as="h2" className="mb-30" textAlign={isMobile ? 'left' : 'center'}>
-            Small business investing, made easy.
+        <Container className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
+          <section>
+            <Header as="h2" className="mb-30" textAlign={responsiveVars.isMobile ? 'left' : 'center'}>
+              Alternative investments, made simple
             </Header>
-            <Responsive as={Divider} hidden maxWidth={767} />
-            <Grid stackable centered className={!isMobile && 'mt-50'}>
-              <Grid.Column width={14}>
-                <Item.Group className="horizontal-items">
-                  {
-                  highlights.map(h => (
-                    <Item>
-                      <div className="ui mini image">
-                        <NSImage path={h.icon} />
-                      </div>
-                      <Item.Content>
-                        <Item.Header as="h5">{h.title}</Item.Header>
-                        <Item.Meta>{h.meta}</Item.Meta>
-                      </Item.Content>
-                    </Item>
-                  ))
-                }
-                </Item.Group>
+            <p className={responsiveVars.isMobile ? 'mb-20' : 'center-align mb-60'}>We{"'"}re using technology and expertise in private investments in order to harness the power<Responsive minWidth={992} as="br" />of community to build vibrant communities around the country.</p>
+            <div className="how-it-works-steps">
+              <Grid stackable centered columns={3}>
+                <Grid.Column>
+                  <p>We source unique investment opportunities in local businesses around the country</p>
+                </Grid.Column>
+                <Grid.Column>
+                  <p>Our network of thousands of investors discover deals that matter to them</p>
+                </Grid.Column>
+                <Grid.Column>
+                  <p>Our intuitive platform makes it easy to invest in local growth, monitor portfolio performance, and enjoy the rewards!</p>
+                </Grid.Column>
+              </Grid>
+            </div>
+            <Header as={responsiveVars.isMobile ? 'h2' : 'h3'} textAlign="center">
+              Watch our video
+              <a href="">
+                <Icon size="large" className="ns-play play-icon" />
+              </a>
+            </Header>
+          </section>
+          <Divider fitted as={Container} />
+          <section>
+            <Header as="h2" className="mb-30" textAlign={responsiveVars.isMobile ? 'left' : 'center'}>
+              Investing is a breeze
+            </Header>
+            <p className={responsiveVars.isMobile ? '' : 'center-align'}>You find the investment that{"'"}s right for you, our dedicated team and cutting-edge technology will do all the work.</p>
+            <Grid stackable centered columns={3}>
+              <Grid.Column>
+                <Header as="h5">Explore</Header>
+                <p>Browse a curated selection of pre-vetted businesses that have passed our strict screening process.</p>
+                <Link to="">Read more about our vetting process</Link>
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h5">Invest</Header>
+                <p>Invest with an Individual account, an Investment Entity, or a new Self-Directed IRA. </p>
+                <Link to="">Read more about the types of accounts and types of securities offered</Link>
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h5">Receive</Header>
+                <p>NextSeed collects and processes payments directly into your investment account.</p>
+                <Link to="">Read more about our vetting process</Link>
               </Grid.Column>
             </Grid>
-            <div className="center-align mb-50">
-              { !authStore.isUserLoggedIn
-                && <Button className={!isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/register-investor" secondary>Sign Up Free</Button>
-              }
-            </div>
-            <p className="note center-align mb-50">
-              <sup>1</sup>This represents the percent of businesses that began the application
-              process, passed NextSeed&apos;s objective diligence<Responsive minWidth={992} as="br" /> criteria, and launched an offering
-              on the platform since NextSeed&apos;s inception.
-            </p>
-            <Divider fitted as={Container} />
-            <section>
-              <Container textAlign={isMobile ? 'left' : 'center'}>
-                <Header as="h2" className="mb-30">
-                Don’t just invest through Wall Street and Silicon Valley.{' '}
-                  <Responsive as={React.Fragment} minWidth={1199}><br /></Responsive>
-                Be invested in the growth of local communities.
-                </Header>
-                <p className={isMobile ? 'mb-40' : 'mb-50'}>
-                NextSeed works with Main Street businesses like breweries, fitness studios,
-                restaurants and more.
-                </p>
-              </Container>
-              {!isMobile
-                ? (
-<Container>
+          </section>
+          <Divider fitted as={Container} />
+          <section>
+            <Container textAlign={responsiveVars.isMobile ? 'left' : 'center'}>
+              <Header as="h2" className="mb-30">Invest in the growth of local communities </Header>
+              <p className={responsiveVars.isMobile ? 'mb-40' : 'mb-50'}>
+                Don{"'"}t just invest through Wall Street and Silicon Valley - put your capital to work<Responsive minWidth={992} as="br" />with Main Streen businesses, growing startups, experiential real estate, and more.
+              </p>
+            </Container>
+            {!responsiveVars.isMobile
+              ? (
+                <Container>
                   <Grid centered stackable className="vertical-gutter">
                     {businesses.map((row, index) => (
                       <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
                         {
-                        row.map(b => (
-                          <Grid.Column textAlign="center" width={4}>
-                            <NSImage path={b.image} centered />
-                            <Header as="h5">{b.title}</Header>
-                            <p>{b.description}</p>
-                          </Grid.Column>
-                        ))
-                      }
+                          row.map(b => (
+                            <Grid.Column textAlign="center" width={4}>
+                              <NSImage path={b.image} centered />
+                              <Header as="h5">{b.title}</Header>
+                              <p>{b.description}</p>
+                            </Grid.Column>
+                          ))
+                        }
                       </Grid.Row>
                     ))
-                  }
+                    }
                   </Grid>
                 </Container>
-                )
-                : (
-<>
+              )
+              : (
+                <>
                   <Container>
                     <NsCarousel {...settings}>
                       {businesses.map(row => (
@@ -186,24 +132,37 @@ export default class WhyNextseed extends Component {
                           </Grid.Row>
                         ))
                       ))
-                    }
+                      }
                     </NsCarousel>
                   </Container>
                 </>
-                )
+              )
             }
-            </section>
-            <Divider />
-            <List className="learn-more-list">
-              <List.Item>
-                <List.Content as={Link} to="/invest/how-it-works" className="text-uppercase" floated="right">
-                  <b>How it Works</b>
-                  <List.Icon className="ns-arrow-right" color="green" />
-                </List.Content>
-              </List.Item>
-            </List>
-          </Container>
-        </section>
+          </section>
+          <Divider fitted as={Container} />
+          <section>
+            <Grid padded="vertically">
+              <Grid.Row>
+                <Grid.Column widescreen={7} computer={7} tablet={16} mobile={16} verticalAlign="middle">
+                  <div>
+                    <Header as="h2">Your portfolio at your fingertips</Header>
+                    <p className="mb-30">
+                      See how your investments are performing and reinvest<Responsive as={React.Fragment} minWidth={992}><br /></Responsive>any earnings effortlessly with our easy-to-use dashboard.</p>
+                    {!authStore.isUserLoggedIn
+                      && (
+                        <Button as={Link} to="/auth/register-investor" primary>Create a  Free Account</Button>
+                      )
+                    }
+                  </div>
+                </Grid.Column>
+                <Grid.Column widescreen={9} computer={9} tablet={16} mobile={16} verticalAlign="middle">
+                  <NSImage path="investors/laptop.png" />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </section>
+          <Divider fitted as={Container} />
+        </Container>
       </>
     );
   }
