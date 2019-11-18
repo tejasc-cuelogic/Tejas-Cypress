@@ -238,17 +238,6 @@ export class UserDetailsStore {
   }
 
   @action
-  updateUserDetails = (key, payload, path) => {
-    const tempData = { ...this.currentUser };
-    if (path) {
-      tempData.data.user[key] = set({ ...tempData.data.user[key], ...payload }, path, payload);
-    } else {
-      tempData.data.user[key] = { ...tempData.data.user[key], ...payload };
-    }
-    this.currentUser = { ...tempData };
-  }
-
-  @action
   mergeUserData = (key, payload, objName, path) => {
     const oldData = { ...this[objName] };
     if (objName === 'currentUser') {

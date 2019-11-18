@@ -247,7 +247,7 @@ export class IdentityStore {
     }
 
     if (res.data.verifyCip.step === 'OFFLINE') {
-      userDetailsStore.updateUserDetails('legalDetails', { status: 'OFFLINE' });
+      userDetailsStore.mergeUserData('legalDetails', { status: 'OFFLINE' }, 'currentUser');
       window.sessionStorage.setItem('cipErrorMessage',
         JSON.stringify(res.data.verifyCip.errorMessage));
     }
@@ -260,8 +260,8 @@ export class IdentityStore {
     if (userDetailsStore.signupStatus.phoneVerification !== 'DONE') {
       await this.startPhoneVerification();
     }
-    userDetailsStore.updateUserDetails('legalDetails', this.formattedUserInfoForCip.user);
-    userDetailsStore.updateUserDetails('phone', this.formattedUserInfoForCip.phoneDetails);
+    userDetailsStore.mergeUserData('legalDetails', this.formattedUserInfoForCip.user, 'currentUser');
+    userDetailsStore.mergeUserData('phone', this.formattedUserInfoForCip.phoneDetails, 'currentUser');
   }
 
   @action
@@ -292,7 +292,7 @@ export class IdentityStore {
     };
     this.setFieldValue('userCipStatus', 'MANUAL_VERIFICATION_PENDING');
     const { res, url } = await this.cipWrapper(payLoad);
-    userDetailsStore.updateUserDetails('legalDetails', { verificationDocs: this.verificationDocs() });
+    userDetailsStore.mergeUserData('legalDetails', { verificationDocs: this.verificationDocs() }, 'currentUser');
 
     return { res, url };
   }
@@ -324,12 +324,12 @@ export class IdentityStore {
       }
 
       if (stepName !== 'cip' && get(this.cipStepUrlMapping[stepName], 'status')) {
-        userDetailsStore.updateUserDetails('legalDetails', {
+        userDetailsStore.mergeUserData('legalDetails', {
           status: this.cipStepUrlMapping[stepName].status || payLoad.mutation.cipPassStatus,
-        });
-        userDetailsStore.updateUserDetails('cip', {
+        }, 'currentUser');
+        userDetailsStore.mergeUserData('cip', {
           expiration: Helper.getDaysfromNow(21),
-        });
+        }, 'currentUser');
       }
 
       this.setFieldValue('signUpLoading', false);
@@ -426,7 +426,7 @@ export class IdentityStore {
       if (!isMobile && !userStore.isInvestor) {
         Helper.toast(`Verification ${requestMode}.`, 'success');
       }
-      userDetailsStore.updateUserDetails('phone', this.formattedUserInfoForCip.phoneDetails);
+      userDetailsStore.mergeUserData('phone', this.formattedUserInfoForCip.phoneDetails, 'currentUser');
       this.setFieldValue('signUpLoading', false);
     } catch (err) {
       this.setFieldValue('signUpLoading', false);
@@ -543,10 +543,10 @@ export class IdentityStore {
         })
         .then((result) => {
           if (result.data.verifyOtp) {
-            userDetailsStore.updateUserDetails('phone', {
+            userDetailsStore.mergeUserData('phone', {
               ...this.formattedUserInfoForCip.phoneDetails,
               verified: moment().tz('America/Chicago').toISOString(),
-            });
+            }, 'currentUser');
             resolve();
           } else {
             const error = {
