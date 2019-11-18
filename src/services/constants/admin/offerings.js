@@ -1412,7 +1412,6 @@ export const GENERAL = {
     error: undefined,
     rule: 'optional',
     placeHolder: 'e.g. http://simplebits.com',
-    tooltip: 'Enter Issuer’s Website',
   },
   monthLaunch: {
     label: 'Month of Offering Launch',

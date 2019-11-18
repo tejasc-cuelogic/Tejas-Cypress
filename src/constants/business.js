@@ -111,6 +111,7 @@ export const FILER_INFORMATION = {
     error: undefined,
     rule: 'required|url',
     placeHolder: 'Website URL',
+    tooltip: 'Please enter URL of page, for which screenshot will be generated',
     customErrors: {
       required: 'The Website URL field is required.',
       url: 'Provide valid Website URL',
