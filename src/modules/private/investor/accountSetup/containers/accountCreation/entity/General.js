@@ -11,6 +11,7 @@ export default class General extends Component {
   constructor(props) {
     super(props);
     this.props.uiStore.setErrors(null);
+    this.props.entityAccountStore.setFieldValue('GEN_INFO_FRM', 'required|taxId', 'fields.taxId.rule');
   }
 
   render() {
