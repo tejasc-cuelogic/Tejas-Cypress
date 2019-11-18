@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import { get, includes } from 'lodash';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Button, Icon, Confirm } from 'semantic-ui-react';
 import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'react-sortable-hoc';
@@ -17,12 +17,12 @@ const actions = {
 };
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({
-  offering, handleAction, stage,
+  offering, handleAction, stage, refUrl,
 }) => (
   <div className="row-wrap striped-table">
     <div className="balance first-column">
       <DragHandle />
-      <a onClick={() => handleAction('Edit', offering.id)}>
+      <Link to={`${refUrl}/edit/${offering.id}`}>
         <b>
           {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
             ? offering.keyTerms.shorthandBusinessName : (
@@ -31,7 +31,7 @@ const SortableItem = SortableElement(({
         </b>
         <br />
         {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`} {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
-      </a>
+      </Link>
     </div>
     <div className="balance width-130">
       {offering && offering.stage
@@ -78,7 +78,7 @@ const SortableItem = SortableElement(({
   </div>
 ));
 const SortableList = SortableContainer(({
-  allOfferingsList, handleAction, stage,
+  allOfferingsList, handleAction, stage, refUrl,
 }) => (
   <div className="tbody">
     {allOfferingsList.map((offering, index) => (
@@ -90,6 +90,7 @@ const SortableList = SortableContainer(({
         handleAction={handleAction}
         index={index}
         stage={stage}
+        refUrl={refUrl}
       />
     ))}
   </div>
@@ -171,6 +172,7 @@ export default class DraggableListing extends Component {
               onSortEnd={e => this.onSortEnd(e)}
               stage={stage}
               lockAxis="y"
+              refUrl={this.props.match.url}
               useDragHandle
             />
           </div>
