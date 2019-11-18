@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find, get, map, isNull } from 'lodash';
+import { isEmpty, find, get, map, isNull, set } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import {
@@ -53,6 +53,16 @@ class EntityAccountStore {
       this[form],
       FormValidator.pullValues(e, result),
     );
+  }
+
+  @action
+  setFieldValue = (field, value, objRef = false) => {
+    if (objRef) {
+      const tempRef = this[field];
+      this[field] = set(tempRef, objRef, value);
+    } else {
+      this[field] = value;
+    }
   }
 
   @action
@@ -162,11 +172,6 @@ class EntityAccountStore {
           reject();
         });
     });
-  }
-
-  @action
-  setFieldValue = (field, val) => {
-    this[field] = val;
   }
 
   @action
@@ -516,6 +521,9 @@ class EntityAccountStore {
         }
       } else if (form === 'GEN_INFO_FRM') {
         if ((f === 'taxId' || f === 'name' || f === 'entityType') && accountDetails && accountDetails[f]) {
+          if (f === 'taxId') {
+            this.GEN_INFO_FRM.fields[f].rule = 'optional';
+          }
           this.GEN_INFO_FRM.fields[f].value = accountDetails[f];
         } else if (f === 'state' && accountDetails && accountDetails.address && accountDetails.address.state) {
           this.GEN_INFO_FRM.fields[f].value = find(US_STATES_FOR_INVESTOR, { key: accountDetails.address.state }).value;
