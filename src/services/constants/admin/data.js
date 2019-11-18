@@ -89,6 +89,7 @@ export const PROCESS_FULL_ACCOUNT_META = {
       { label: 'Create RS Account', value: 'createRSAccount' },
       { label: 'Create Initial Deposit', value: 'createInitialDeposit' },
       { label: 'Send Email To Investor', value: 'sendEmailToInvestor' },
+      { label: 'Skip full account validation', value: 'skipFullAccountValidation' },
     ],
     error: undefined,
     rule: 'optional',

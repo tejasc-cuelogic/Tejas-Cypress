@@ -84,7 +84,7 @@ class ActivityHistory extends Component {
           </Form>
         </div>
         <AddActivity submit={this.logActivity} stepName={this.props.stepName} form={ACTIVITY_FRM} investorId={this.props.investorId} offeringId={this.props.offeringId || ''} applicationId={this.props.applicationId || ''} applicationIssuerId={this.props.applicationIssuerId || ''} smartElement={smartElement} />
-        <ActivityFeed loading={loader} activities={activities} />
+        <ActivityFeed classes={this.props.classes} loading={loader} activities={activities} />
       </div>
     );
   }
