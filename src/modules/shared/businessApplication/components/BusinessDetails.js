@@ -188,7 +188,7 @@ export default class BusinessDetails extends Component {
                             Total
                           </Table.HeaderCell>
                           <Table.HeaderCell>
-                            ${sourcesTotal}
+                            {Helper.CurrencyFormat(sourcesTotal, 0)}
                             </Table.HeaderCell>
                           <Table.HeaderCell />
                         </Table.Row>
@@ -255,7 +255,7 @@ export default class BusinessDetails extends Component {
                             Total
                           </Table.HeaderCell>
                           <Table.HeaderCell>
-                            ${usesTotal}
+                            {Helper.CurrencyFormat(usesTotal, 0)}
                             </Table.HeaderCell>
                           <Table.HeaderCell />
                         </Table.Row>

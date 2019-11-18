@@ -432,7 +432,7 @@ export class IdentityStore {
       this.setFieldValue('signUpLoading', false);
       uiStore.setProgress(false);
       uiStore.setErrors(toJS(DataFormatter.getSimpleErr(err)));
-      Promise.reject(err);
+      throw new Error(err);
     }
   }
 

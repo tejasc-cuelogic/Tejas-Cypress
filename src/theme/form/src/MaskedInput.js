@@ -30,10 +30,10 @@ export default class MaskedInput extends Component {
       tooltip,
       placeHolder,
     } = props.fielddata;
-    const { displayMode, readOnly } = props;
+    const { displayMode, readOnly, allowNegative } = props;
     const commonProps = {
       readOnly: displayMode,
-      allowNegative: false,
+      allowNegative: allowNegative || false,
       placeholder: (displayMode || readOnly) ? 'N/A' : placeHolder,
     };
     const fieldClass = `${props.containerclassname || ''} ${displayMode ? 'display-only' : ''}`;
