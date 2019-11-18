@@ -184,7 +184,7 @@ query _getBusinessApplicationById ($id: String!) {
       date
     }
     prequalDetails {
-      # businessModel
+      businessModel
       businessGoal
       businessGeneralInfo {
         businessName
@@ -520,7 +520,7 @@ query _getBusinessApplicationById ($id: String!) {
       date
     }
     prequalDetails {
-      # businessModel
+      businessModel
       businessGoal
       businessGeneralInfo {
         businessName
