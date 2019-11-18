@@ -24,6 +24,8 @@ export default class DataModelStore {
 
   currentScore = 0;
 
+  stepToBeRendered = 0;
+
   removeFileIdsList = [];
 
   requestState = {
@@ -316,6 +318,7 @@ export const decorateDefault = {
   removeFileIdsList: observable,
   currTime: observable,
   currentScore: observable,
+  stepToBeRendered: observable,
   removeUploadedFiles: action,
   setFieldValue: action,
   formChange: action,

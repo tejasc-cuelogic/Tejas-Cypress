@@ -17,7 +17,11 @@ class Experience extends Component {
   state = { errorMessage: '' };
 
   handleContinue = async () => {
-    await this.props.stepMethods.next();
+    const currentStep = {
+      form: 'INVESTMENT_EXP_FRM',
+      stepToBeRendered: 6,
+    };
+    await this.props.investorProfileStore.upsertInvestorProfile(currentStep);
     const { signupStatus, userStatus } = this.props.userDetailsStore;
     if (signupStatus.isMigratedFullAccount
       || (userStatus && userStatus.includes('FULL'))) {

@@ -667,6 +667,11 @@ export const INVESTMENT_EXPERIENCE = {
     showError: true,
     rule: 'required',
   },
+  isPartialProfile: {
+    value: false,
+    error: undefined,
+    rule: 'optional',
+  },
   isComfortable: {
     value: [],
     values: [

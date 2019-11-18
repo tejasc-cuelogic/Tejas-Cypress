@@ -48,7 +48,10 @@ export class InvestorProfileStore extends DataModelStore {
           userDetailsStore.setUserStatus(res.data.createInvestorProfile.status);
           userDetailsStore.mergeUserData('investorProfileData', payLoad, 'userPayLoad');
           if (currentStep.form === 'INVESTMENT_EXP_FRM') {
-            userDetailsStore.mergeUserData('investorProfileData', userDetailsStore.userPayLoad.investorProfileData, 'currentUser');
+            userDetailsStore.mergeUserData(
+              'investorProfileData',
+              userDetailsStore.userPayLoad.investorProfileData, 'currentUser',
+            );
           }
           this.setStepToBeRendered(currentStep.stepToBeRendered);
         });
@@ -62,7 +65,7 @@ export class InvestorProfileStore extends DataModelStore {
     let payLoad = Validator.evaluateFormData(fields);
     payLoad.isPartialProfile = !!isUndefined(payLoad.isPartialProfile);
 
-    if (intersection(['brokerageFirmName', 'publicCompanyTicker'], Object.keys(fields))) {
+    if (intersection(['brokerageFirmName', 'publicCompanyTicker'], Object.keys(fields)).length > 0) {
       const { textField, radioField } = this.textRadioFieldData(fields);
       payLoad[textField] = fields[radioField].value === 'no' ? 'false' : fields[textField].value;
     }
@@ -118,6 +121,7 @@ export class InvestorProfileStore extends DataModelStore {
       }
       return false;
     });
+    Validator.onChange(this.INVESTOR_PROFILE_FULL, '', '', false);
   }
 
   updateInvestorEditProfileData = async () => {

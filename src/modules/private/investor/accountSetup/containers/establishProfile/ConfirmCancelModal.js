@@ -12,7 +12,7 @@ export default class ConfirmCancelModal extends React.Component {
     }
 
     handleFinishLater = () => {
-      this.props.investorProfileStore.setFinishInvestorProfileLater(true);
+      this.props.history.push('/app/summary/');
     }
 
     render() {
