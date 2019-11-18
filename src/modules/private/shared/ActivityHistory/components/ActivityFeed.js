@@ -8,8 +8,8 @@ import NSImage from '../../../../shared/NSImage';
 import { DataFormatter } from '../../../../../helper';
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 
-const ActivityFeed = ({ loading, activities }) => (
-  <Transition.Group animation="glow" className="activities" as={Feed} duration={900}>
+const ActivityFeed = ({ loading, activities, classes }) => (
+  <Transition.Group animation="glow" className={`activities ${classes}`} as={Feed} duration={900}>
     {loading ? <InlineLoader /> : (
       activities.length === 0 ? <InlineLoader text="No activity to display" />
         : activities.map(a => (

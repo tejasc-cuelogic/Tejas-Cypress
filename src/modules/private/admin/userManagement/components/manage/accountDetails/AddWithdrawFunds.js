@@ -12,6 +12,7 @@ export default class AddWithdrawFunds extends Component {
   constructor(props) {
     super(props);
     this.props.transactionStore.resetAddWithdrawFunds();
+    this.props.transactionStore.setFieldValue('isAdmin', this.props.isAdmin);
   }
 
   handleBack = () => {
