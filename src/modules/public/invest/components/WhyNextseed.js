@@ -141,9 +141,9 @@ export default class WhyNextseed extends Component {
           </section>
           <Divider fitted as={Container} />
           <section>
-            <Grid padded="vertically">
+            <Grid>
               <Grid.Row>
-                <Grid.Column widescreen={7} computer={7} tablet={16} mobile={16} verticalAlign="middle">
+                <Grid.Column widescreen={7} computer={7} tablet={16} mobile={16}>
                   <div>
                     <Header as="h2">Your portfolio at your fingertips</Header>
                     <p className="mb-30">
@@ -155,13 +155,44 @@ export default class WhyNextseed extends Component {
                     }
                   </div>
                 </Grid.Column>
-                <Grid.Column widescreen={9} computer={9} tablet={16} mobile={16} verticalAlign="middle">
+                <Grid.Column widescreen={9} computer={9} tablet={16} mobile={16}>
                   <NSImage path="investors/laptop.png" />
                 </Grid.Column>
               </Grid.Row>
             </Grid>
           </section>
           <Divider fitted as={Container} />
+          <section>
+            <Grid>
+              <Grid.Row>
+                <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
+                  <NSImage path="investors/laptop.png" />
+                </Grid.Column>
+                <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
+                  <div>
+                    <Header as="h2">Your security is our top priority</Header>
+                    <Header as="h5">Your funds stay safe and sound.</Header>
+                    <p>
+                      The uninvested cash  in your account <sup>1</sup> is FDIC-insured up
+                      to $250,000.
+                    </p>
+                    <Header as="h5">Keep your information protected.</Header>
+                    <p>We safeguard your information with bank-level security measures</p>
+                    <NSImage path="secure-horizontal.png" />
+                    <p className={`note mt-50 ${responsiveVars.isMobile ? '' : 'mb-50'}`}>
+                      <sup>1</sup> NextSeed accounts are provided and held at our partner bank, Happy
+                      State Bank DBA GoldStar Trust Company (&quot;GoldStar&quot;), which provides FDIC
+                      insurance for uninvested cash in NextSeed accounts.
+                    </p>
+                  </div>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </section>
+          <Divider fitted as={Container} />
+          {/* <section>
+            <Header as="h2" className="center-align">Every investment comes with risk and opportunity</Header>
+          </section> */}
         </Container>
       </>
     );
