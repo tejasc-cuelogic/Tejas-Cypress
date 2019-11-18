@@ -1,15 +1,15 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import { Responsive, Visibility } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
-import { PublicSubNav, InlineLoader } from '../../../../theme/shared';
+import { PublicSubNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 
-const getModule = component => lazy(() => import(`../components/${component}`));
+const getModule = component => lazyRetry(() => import(`../components/${component}`));
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Learn how small business entrepreneurs are using debt crowdfunding on NextSeed to retain ownership in their breweries, restaurants, bars, fitness studios, and more.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
@@ -72,7 +72,7 @@ class Business extends Component {
             navItems={navItems}
             title="Fundraising"
           />
-          <Suspense fallback={<InlineLoader />}>
+          <SuspenseBoundary>
             <Switch>
               <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
               {
@@ -86,7 +86,7 @@ class Business extends Component {
               }
               <Route path={`${this.props.match.url}/confirm-login`} render={() => <ConfirmLoginModal refLink={`${this.props.match.url}/how-it-works`} />} />
             </Switch>
-          </Suspense>
+          </SuspenseBoundary>
         </Visibility>
       </>
     );

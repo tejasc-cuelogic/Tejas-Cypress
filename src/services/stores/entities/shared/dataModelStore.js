@@ -1,5 +1,5 @@
-import { observable, action } from 'mobx';
-import { set } from 'lodash';
+import { observable, action, toJS } from 'mobx';
+import { set, forEach } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
@@ -23,6 +23,8 @@ export default class DataModelStore {
   client = publicClient;
 
   currentScore = 0;
+
+  removeFileIdsList = [];
 
   requestState = {
     lek: { 'page-1': null },
@@ -51,6 +53,16 @@ export default class DataModelStore {
     }
   }
 
+  removeUploadedFiles = () => {
+    const fileList = toJS(this.removeFileIdsList);
+    if (fileList.length) {
+      forEach(fileList, (fileId) => {
+        fileUpload.removeUploadedData(fileId);
+      });
+      this.setFieldValue('removeFileIdsList', []);
+    }
+  }
+
   executeMutation = async (params) => {
     const payLoad = { message: false, clientType: false, setLoader: undefined, respBack: false, ...params };
     const apolloClient = payLoad.clientType === 'PUBLIC' ? publicClient : client;
@@ -62,6 +74,7 @@ export default class DataModelStore {
       result = await apolloClient.mutate({
         mutation: this.gqlRef[payLoad.mutation],
         variables: payLoad.variables,
+        refetchQueries: payLoad.refetchQueries || [],
       });
       nsUiStore.filterLoaderByOperation(payLoad.setLoader);
       if (payLoad.message && payLoad.message !== false && payLoad.message && payLoad.message.success) {
@@ -148,27 +161,63 @@ export default class DataModelStore {
     FormValidator.setAddressFields(place, this[form]);
   }
 
-  setFileUploadData = (form, field, steps, files, userRole) => {
+  setFileUploadData = (form, field, multiple = false, index = null, arrayName = null, stepName, files, { userRole, investorId, applicationId, offeringId, applicationIssuerId, tags }) => {
+    const path = (arrayName && index !== null) ? `fields.${arrayName}[${index}].${field}` : `fields.${field}`;
     const file = files[0];
-    const stepName = steps[field];
     const fileData = Helper.getFormattedFileData(file);
-    fileUpload.setFileUploadData('', fileData, stepName, userRole).then(action((result) => {
+    this[form].fields[field].showLoader = true;
+    fileUpload.setFileUploadData(applicationId, fileData, stepName, userRole, applicationIssuerId, offeringId, tags, { investorId }).then(action((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
-      this[form].fields[field].fileId = fileId;
-      this[form].fields[field].preSignedUrl = preSignedUrl;
-      this[form].fields[field].fileData = file;
-      this[form] = FormValidator.onChange(
-        this[form],
-        { name: field, value: fileData.fileName },
-      );
       fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType })
-        .then(() => { })
-        .catch(() => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
+        .then(() => {
+          this.setFieldValue(form, multiple ? [...this[form].fields[field].fileId, fileId] : fileId, `${path}.fileId`);
+          this.setFieldValue(form, multiple ? [...this[form].fields[field].preSignedUrl, preSignedUrl] : preSignedUrl, `${path}.preSignedUrl`);
+          this.setFieldValue(form, multiple ? [...this[form].fields[field].fileData, file] : file, `${path}.fileData`);
+          this.setFieldValue(form, undefined, `${path}.error`);
+          this.setFieldValue(form, false, `${path}.showLoader`);
+          this.setFieldValue(form, multiple ? [...this[form].fields[field].value, fileData.fileName] : fileData.fileName, `${path}.value`);
         })
-        .finally(() => {
+        .catch((e) => {
+          window.logger(e);
+          this.setFieldValue(form, false, `${path}.showLoader`);
+          Helper.toast('Something went wrong, please try again later.', 'error');
         });
-    }));
+    })).catch((e) => {
+      window.logger(e);
+      this.setFieldValue(form, false, `${path}.showLoader`);
+      Helper.toast('Something went wrong, please try again later.', 'error');
+    });
+  }
+
+  removeUploadedData = (form, field, index = null, arrayName = null) => {
+    const path = (arrayName && index !== null) ? `fields.${arrayName}[${index}].${field}` : `fields.${field}`;
+    let removeFileIds = '';
+    if (index !== null && arrayName) {
+      const { fileId } = this[form].fields[arrayName][index][field];
+      removeFileIds = fileId;
+    } else if (index !== null) {
+      const filesId = this[form].fields[field].fileId;
+      removeFileIds = filesId[index];
+    } else {
+      const { fileId } = this[form].fields[field];
+      removeFileIds = fileId;
+    }
+    if (index !== null && !arrayName) {
+      const sField = JSON.parse(JSON.stringify({ ...this[form].fields[field] }));
+      sField.fileId.splice(index, 1);
+      sField.fileData.splice(index, 1);
+      sField.value.splice(index, 1);
+      sField.preSignedUrl.splice(index, 1);
+      this.setFieldValue(form, sField, `${path}`);
+    } else {
+      this.setFieldValue(form, '', `${path}.fileId`);
+      this.setFieldValue(form, '', `${path}.fileData`);
+      this.setFieldValue(form, '', `${path}.value`);
+      this.setFieldValue(form, '', `${path}.preSignedUrl`);
+    }
+    this.setFieldValue(form, undefined, `${path}.error`);
+    this.setFieldValue(form, false, `${path}.showLoader`);
+    this.setFieldValue('removeFileIdsList', [...this.removeFileIdsList, removeFileIds]);
   }
 
   maskChange = (values, field, form, type) => {
@@ -252,8 +301,10 @@ export default class DataModelStore {
 
 export const decorateDefault = {
   result: observable,
+  removeFileIdsList: observable,
   currTime: observable,
   currentScore: observable,
+  removeUploadedFiles: action,
   setFieldValue: action,
   formChange: action,
   maskChange: action,
@@ -265,6 +316,7 @@ export const decorateDefault = {
   passwordChange: action,
   eventFormChange: action,
   setAddressFields: action,
+  setFileUploadData: action,
   setLoader: action,
   auStatus: observable.ref,
   loading: observable.ref,

@@ -1,6 +1,6 @@
 /* eslint-disable radix */
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes, get, orderBy } from 'lodash';
+import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
@@ -12,7 +12,7 @@ import { uiStore, userDetailsStore, investmentStore } from '../../../index';
 import { updateAccreditation, listAccreditation, approveOrDeclineForAccreditationRequest, notifyVerifierForAccreditationRequestByEmail } from '../../../queries/accreditation';
 import { userAccreditationQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
-import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS } from '../../../../constants/accreditation';
+import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS, ACCREDITATION_SORT_ENUMS } from '../../../../constants/accreditation';
 import { FILTER_META, CONFIRM_ACCREDITATION } from '../../../../constants/accreditationRequests';
 
 export class AccreditationStore {
@@ -117,12 +117,19 @@ export class AccreditationStore {
       method: method !== 'ALL' ? method : null,
       type: type !== 'ALL' ? type : null,
       page: reqParams ? reqParams.page : 1,
-      limit: reqParams ? reqParams.perPage : 25,
+      limit: (reqParams && reqParams.first) || this.requestState.perPage,
     };
     if (status && status !== '') {
       params = {
         ...params,
         status,
+      };
+    }
+    if (this.sortOrder.column) {
+      params = {
+        ...params,
+        sortBy: ACCREDITATION_SORT_ENUMS[this.sortOrder.column],
+        sortType: this.sortOrder.direction.toUpperCase(),
       };
     }
     this.requestState.page = params.page;
@@ -287,7 +294,6 @@ export class AccreditationStore {
     this.setFormFileArray(form, field, 'fileId', fileId);
     this.setFormFileArray(form, field, 'value', fileData.fileName);
     this.setFormFileArray(form, field, 'error', undefined);
-    this.checkFormValid(form, false, false);
   }
 
   @action
@@ -341,10 +347,8 @@ export class AccreditationStore {
         Helper.toast('Something went wrong, please try again later.', 'error');
       });
     }
-    // this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     this.setFormFileArray(form, field, 'error', undefined);
     this.setFormFileArray(form, field, 'showLoader', false);
-    this.checkFormValid(form, false, false);
   }
 
   @action
@@ -435,13 +439,6 @@ export class AccreditationStore {
   }
 
   @computed get accreditations() {
-    if (this.sortOrder.column && this.sortOrder.direction && get(this.data, 'data.listAccreditation.accreditation')) {
-      return orderBy(
-        this.data.data.listAccreditation.accreditation,
-        [accreditation => ((this.sortOrder.column === 'requestDate' || this.sortOrder.column === 'reviewed.date') ? moment(get(accreditation, `${this.sortOrder.column}`)).unix() : accreditation[this.sortOrder.column] && get(accreditation, `${this.sortOrder.column}`).toString().toLowerCase())],
-        [this.sortOrder.direction],
-      );
-    }
     return (this.data && get(this.data, 'data.listAccreditation.accreditation')) || [];
   }
 
@@ -869,7 +866,7 @@ export class AccreditationStore {
       if (aggreditationDetails) {
         currentAcitveObject = find(aggreditationDetails, (value, key) => key === currentSelectedAccount);
       }
-      const validAccreditationStatus = ['REQUESTED', 'INVALID'];
+      const validAccreditationStatus = ['REQUESTED'];
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration
         ? (currentAcitveObject.status === 'EXPIRED' || this.checkIsAccreditationExpired(currentAcitveObject.expiration)
       === 'EXPIRED') ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
@@ -1039,15 +1036,15 @@ export class AccreditationStore {
         const accountType = investmentStore.investAccTypes.value === 'ira' ? 'IRA' : capitalize(investmentStore.investAccTypes.value);
         switch (userCurrentState) {
           case 'PENDING':
-            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'This investment is only available to accredited investors.';
-            headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'Please confirm your accredited investor status to invest in this offering.';
+            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'This investment is only available for accredited investors.';
+            headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'Your request is currently in review, please check back to make an investment.';
             break;
           case 'NOT_ELGIBLE':
-            headerSubheaderTextObj.header = 'This investment is only available to accredited investors.';
+            headerSubheaderTextObj.header = 'This investment is only available for accredited investors.';
             headerSubheaderTextObj.subHeader = 'Please confirm your accredited investor status to invest in this offering.';
             break;
           case 'INACTIVE':
-            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? 'Are you an accredited investor?' : 'This investment is only available to accredited investors.';
+            headerSubheaderTextObj.header = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? 'Are you an accredited investor?' : 'This investment is only available for accredited investors.';
             headerSubheaderTextObj.subHeader = isRegulationCheck && offeringReuglation && offeringReuglation === 'BD_CF_506C' ? '' : 'Please confirm your accredited investor status to invest in this offering.';
             break;
           case 'EXPIRED':
@@ -1120,6 +1117,7 @@ export class AccreditationStore {
   setSortingOrder = (column = null, direction = null) => {
     this.sortOrder.column = column;
     this.sortOrder.direction = direction;
+    this.initRequest();
   }
 }
 export default new AccreditationStore();

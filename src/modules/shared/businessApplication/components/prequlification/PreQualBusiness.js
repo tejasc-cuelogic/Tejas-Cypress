@@ -159,6 +159,7 @@ export default class PreQualBusiness extends Component {
                         name={field}
                         asterisk="true"
                         prefix="$ "
+                        allowNegative={field === 'previousYearNetIncome'}
                         currency
                         value={fields[field].value}
                         fielddata={fields[field]}
@@ -186,6 +187,7 @@ export default class PreQualBusiness extends Component {
                       readOnly={preQualFormDisabled}
                       key={field}
                       name={field}
+                      allowNegative={field === 'nextYearNetIncome'}
                       prefix="$ "
                       currency
                       asterisk="true"

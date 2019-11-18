@@ -11,8 +11,8 @@ export const validInvestorLoginAction = async () => {
     .get('button')
     .should('contain', 'Dashboard');
   cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
-    .find('.center-align')
-    .get('small')
+    .find('.center-align').find('.mt-10')
+    // .get('small')
     .invoke('text')
     .then((text1) => {
       const splitArr = text1.split(' ');

@@ -1,9 +1,9 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { DataFormatter } from '../../../../../../helper';
-import { InlineLoader } from '../../../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../../../theme/shared';
 
-const getModule = component => lazy(() => import(`./badActorCheck/${component}`));
+const getModule = component => lazyRetry(() => import(`./badActorCheck/${component}`));
 
 export default class BadActorCheck extends Component {
   module = name => DataFormatter.upperCamelCase(name);
@@ -17,7 +17,7 @@ export default class BadActorCheck extends Component {
     const { match } = this.props;
 
     return (
-      <Suspense fallback={<InlineLoader />}>
+      <SuspenseBoundary>
         <Switch>
           <Route
             exact
@@ -30,7 +30,7 @@ export default class BadActorCheck extends Component {
             ))
           }
         </Switch>
-      </Suspense>
+      </SuspenseBoundary>
     );
   }
 }

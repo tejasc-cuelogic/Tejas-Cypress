@@ -1,5 +1,5 @@
 /*  eslint-disable jsx-a11y/label-has-for */
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { toJS } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
@@ -11,11 +11,36 @@ import { FieldError } from '../../shared';
 import { NEXTSEED_BOX_URL } from '../../../constants/common';
 import Helper from '../../../helper/utility';
 
+const ConfirmModal = (props) => {
+  useEffect(() => {
+    if (props.showConfirmModal) {
+      Helper.modalCssUpdate('show-top.deletion', 'show-top');
+    }
+  });
+  return (
+    <Confirm
+      header="Confirm"
+      content="Are you sure you want to remove this file?"
+      open={props.showConfirmModal}
+      onCancel={props.toggleConfirm}
+      onConfirm={props.removeForm}
+      size="mini"
+      className="show-top deletion"
+    />
+  );
+};
+
 
 @inject('commonStore')
 @observer
 export default class DropZone extends Component {
   state = { showConfirmModal: false, fileName: null, key: null, error: null };
+
+  componentDidUpdate() {
+    if (this.state.showConfirmModal) {
+      Helper.modalCssUpdate('show-top', 'show-top');
+    }
+  }
 
   removeForm = () => {
     this.setState({ error: null });
@@ -34,7 +59,7 @@ export default class DropZone extends Component {
   }
 
   ondrop = (files) => {
-    const fileExt = mime.extension(files[0].type);
+    const fileExt = files[0].type ? mime.extension(files[0].type) : files[0].name.split('.')[1];
     const validate = Helper.validateDocumentExtension(fileExt);
     if (!validate.isInvalid) {
       this.setState({ error: null });
@@ -79,7 +104,7 @@ export default class DropZone extends Component {
     } = this.props;
     const { inProgress } = commonStore;
     return (
-      <div className={`file-uploader-wrap ${this.props.containerclassname} fluid`}>
+      <div className={`file-uploader-wrap ${this.props.containerclassname}`}>
         {label
           && (
             <label>
@@ -185,14 +210,10 @@ export default class DropZone extends Component {
         {(this.state.error)
           && <FieldError className={textAlign || ''} error={(this.state.error)} />
         }
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this file?"
-          open={this.state.showConfirmModal}
-          onCancel={this.toggleConfirm}
-          onConfirm={this.removeForm}
-          size="mini"
-          className="deletion"
+        <ConfirmModal
+          showConfirmModal={this.state.showConfirmModal}
+          toggleConfirm={this.toggleConfirm}
+          removeForm={this.removeForm}
         />
       </div>
     );

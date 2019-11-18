@@ -107,7 +107,7 @@ export class OfferingInvestorStore {
       const investorObj = cloneDeep(toJS({ ...i }));
       // eslint-disable-next-line no-param-reassign
       ['street', 'streetTwo'].forEach((el) => { investorObj[el] = !isEmpty(investorObj[el]) ? investorObj[el].split(',').join(' ') : null; });
-      const matchReferral = find(investorObj.referralCode, r => r.code === referralCode);
+      const matchReferral = investorObj.referralCode && investorObj.referralCode.length ? find(investorObj.referralCode, r => r.code === referralCode) : null;
       const iReferralCode = (matchReferral && get(matchReferral, 'isValid')) ? get(matchReferral, 'code') : '';
       const regulation = i.regulation ? OFFERING_AGREEMENT_REGULATIONS[i.regulation] : '';
       return { ...investorObj, referralCode: iReferralCode, regulation };

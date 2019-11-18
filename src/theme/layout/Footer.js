@@ -40,14 +40,13 @@ class Footer extends Component {
                   <Menu.Item as={Link} to="/agreements/legal/privacy-policy">Privacy Policy</Menu.Item>
                   <Menu.Item as={Link} to="/agreements/legal/legal-documents">Legal Documents</Menu.Item>
                 </Menu>
-                <React.Fragment path={path}>
+                <>
                   <div className={isTablet && 'mt-20 center-align'}>
                     <a href="https://www.aoiplatforms.org/" target="_blank" rel="noopener noreferrer">
                       <NSImage path="aoip.png" />
                     </a>
                   </div>
-                </React.Fragment>
-                {/* } */}
+                </>
               </div>
               <div className="footer-social">
                 <SocialLinks />
