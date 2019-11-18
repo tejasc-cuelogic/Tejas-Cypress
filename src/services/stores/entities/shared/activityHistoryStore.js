@@ -1,26 +1,30 @@
-import { toJS, observable, computed, action } from 'mobx';
+import { toJS, observable, computed, action, decorate } from 'mobx';
 import graphql from 'mobx-apollo';
 import { isArray, capitalize, uniqWith, isEqual } from 'lodash';
 import moment from 'moment';
+import DataModelStore, { decorateDefault } from './dataModelStore';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allActivities, addActivity } from '../../queries/activity';
+import { allActivities, createActivityHistory } from '../../queries/activity';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { LOG_ACTIVITY } from '../../../constants/activity';
 import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../constants/common';
 
-export class ActivityHistoryStore {
-  @observable ACTIVITY_FRM = Validator.prepareFormObject(LOG_ACTIVITY);
+export class ActivityHistoryStore extends DataModelStore {
+  constructor() {
+    super({ allActivities, createActivityHistory });
+  }
 
-  @observable requestState = { filters: {} };
+  ACTIVITY_FRM = Validator.prepareFormObject(LOG_ACTIVITY);
 
-  @observable data = [];
+  requestState = { filters: {} };
 
-  @observable message = {};
+  data = [];
 
-  @observable activityTypes = [];
+  message = {};
 
-  @action
+  activityTypes = [];
+
   initRequest = (resourceId, defaultFilter = false) => {
     if (defaultFilter && resourceId === 'ELASTIC_SEARCH') {
       this.requestState.filters.startDate = DataFormatter.getDate(moment().subtract(2, 'day').format('MM-DD-YYYY'), true, 'startDate', true);
@@ -49,7 +53,6 @@ export class ActivityHistoryStore {
     });
   }
 
-  @action
   setInitiateSrch = (name, value, resourceId) => {
     if (name === 'startDate' || name === 'endDate') {
       this.requestState.filters[name] = value && moment(value.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(value.formattedValue, true, name, true) : undefined;
@@ -68,52 +71,49 @@ export class ActivityHistoryStore {
       } else {
         delete srchParams[name];
       }
-      this.requestState.filters = srchParams;
+      this.setFieldValue('requestState', srchParams, 'filters');
       this.initRequest(resourceId);
     }
   }
 
-  @action
   send = (resourceId, activityTitle = 'Posted new comment', activityType = ACTIVITY_HISTORY_TYPES.ADMIN_ACTIVITY) => {
-    const formData = Validator.ExtractValues(this.ACTIVITY_FRM.fields);
+    const formData = Validator.evaluateFormData(this.ACTIVITY_FRM.fields);
     const data = {
       resourceId,
       activityType,
       activityTitle,
       activity: formData.comment,
+      documents: formData.documents,
       scope: ACTIVITY_HISTORY_SCOPE.ADMIN,
     };
     this.createActivityHistory(data);
   }
 
-  @action
-  createActivityHistory = (payload, isInternal = false) => {
-    client
-      .mutate({
-        mutation: addActivity,
-        variables: {
-          activityHistoryDetails: payload,
-        },
+  createActivityHistory = async (payload, isInternal = false) => {
+    try {
+      await this.executeMutation({
+        mutation: 'createActivityHistory',
+        variables: { activityHistoryDetails: payload },
         refetchQueries: [{
           query: allActivities,
           variables: { resourceId: payload.resourceId, orderBy: { field: 'activityDate', sort: 'desc' } },
           fetchPolicy: 'network-only',
         }],
-      })
-      .then(() => {
-        if (isInternal) {
-          Helper.toast('Activity history added successfully.', 'success');
-        }
-        this.reset();
-      })
-      .catch(() => Helper.toast('Something went wrong, please try again later.', 'error'));
+      });
+      if (isInternal) {
+        Helper.toast('Activity history added successfully.', 'success');
+      }
+      this.resetForm('ACTIVITY_FRM');
+      this.removeUploadedFiles();
+    } catch (error) {
+      Helper.toast('Something went wrong. Please try again in some time.', 'error');
+    }
   }
 
-  @computed get allData() {
+  get allData() {
     return this.data;
   }
 
-  @action
   getActivityTypes = () => {
     if (!this.activityTypes.length) {
       const tempArr = [{ text: 'None', value: null }];
@@ -124,34 +124,37 @@ export class ActivityHistoryStore {
     }
   }
 
-  @action
-  setFieldValue = (field, val) => {
-    this[field] = val;
-  }
-
-  @computed get activities() {
+  get activities() {
     return (this.allData.data && this.allData.data.filterActivityHistories
       && this.allData.data.filterActivityHistories.activityHistory.length
       && toJS(this.allData.data.filterActivityHistories.activityHistory)) || [];
   }
 
-  @computed get error() {
+  get error() {
     return (this.allData.error && this.allData.error.message) || null;
   }
 
-  @computed get loading() {
+  get loader() {
     return this.allData.loading;
   }
-
-  @action
-  reset = () => {
-    this.ACTIVITY_FRM = Validator.prepareFormObject(LOG_ACTIVITY);
-  };
-
-  @action
-  msgEleChange = (e, result) => {
-    this.ACTIVITY_FRM = Validator.onChange(this.ACTIVITY_FRM, Validator.pullValues(e, result));
-  };
 }
+
+decorate(ActivityHistoryStore, {
+  ...decorateDefault,
+  ACTIVITY_FRM: observable,
+  requestState: observable,
+  data: observable,
+  message: observable,
+  activityTypes: observable,
+  initRequest: action,
+  setInitiateSrch: action,
+  send: action,
+  createActivityHistory: action,
+  getActivityTypes: action,
+  allData: computed,
+  activities: computed,
+  error: computed,
+  loader: computed,
+});
 
 export default new ActivityHistoryStore();
