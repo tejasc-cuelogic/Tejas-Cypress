@@ -225,14 +225,14 @@ const BUSINESS_PREQUAL_COMMON = {
 
 export const BUSINESS_PRE_QUALIFICATION = {
   businessModel: {
-    value: '',
+    value: 'B2C',
     values: [
       { label: 'Business to Consumer', value: 'B2C' },
       { label: 'Business to Business', value: 'B2B' },
     ],
     error: undefined,
-    rule: 'required',
-    customErrors: { required: 'required' },
+    rule: 'optional',
+    // customErrors: { required: 'required' },
   },
   ...BUSINESS_PREQUAL_COMMON,
   businessAgeYears: {
