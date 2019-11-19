@@ -421,6 +421,7 @@ query getOfferingById($id: ID) {
         completeDate
       }
       keyTerms {
+        maturityDate
         supplementalAgreements {
           documents {
             name

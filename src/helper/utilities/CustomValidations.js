@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import Validator from 'validatorjs';
+import moment from 'moment';
 import { sumBy, forEach } from 'lodash';
 import { TARGETED_INVESTOR_IRR } from '../../constants/business';
 
@@ -61,6 +62,9 @@ class CustomValidations extends Component {
       const regex = /^[a-zA-Z ]*$/;
       return regex.test(value);
     }, 'Invalid ticker symbol, please verify and enter again.');
+
+    Validator.register('futureDate', value => moment(value, 'MM/DD/YYYY').isSameOrAfter(moment().format('MM/DD/YYYY')),
+      "The :attribute should not be less than today's date.");
   }
 }
 
