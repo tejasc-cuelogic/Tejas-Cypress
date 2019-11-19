@@ -7,7 +7,7 @@ import Helper from '../../../../../helper/utility';
 import { MaskedInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 
-@inject('investmentStore', 'userDetailsStore', 'rewardStore', 'uiStore')
+@inject('investmentStore', 'userDetailsStore', 'uiStore')
 @withRouter
 @observer
 class ChangeInvestmentLimit extends Component {
