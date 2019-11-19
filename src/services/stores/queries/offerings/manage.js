@@ -66,10 +66,17 @@ export const allOfferingsCompact = gql`
       closureSummary {
         hardCloseDate
         launchDate
+        processingDate
       }
       keyTerms {
         legalBusinessName
         shorthandBusinessName
+      }
+      offering {
+        launch {
+          targetDate
+          terminationDate
+        }
       }
       stage
       created {

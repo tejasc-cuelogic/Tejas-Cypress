@@ -25,37 +25,49 @@ const CampaignCards = (props) => {
         {offeringsStore.offerings.map(campaign => (
           <Card fluid key={campaign.id}>
             <Card.Content style={{ cursor: 'pointer' }} onClick={() => handleHeaderClick(campaign.id)}>
-            <Header as="h4">
-              <Icon color="green" name="ns-reload-circle-line" />
-            {getCampaignName(campaign)}</Header>
+              <Header as="h4">
+                <Icon color="green" name="ns-reload-circle-line" />
+                {getCampaignName(campaign)}</Header>
             </Card.Content>
             <Card.Content>
-            <dl className="dl-horizontal">
-              <dt>Campaign status</dt>
-              <dd>{CAMPAIGN_OFFERING_STAGE[campaign.stage]}</dd>
-              <dt>Started on</dt>
-              <dd> {campaign.created ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(campaign.created.date, true, false, false)} /> : '--'} </dd>
-              {campaign.stage === 'CREATION'
-                ? (
-                <>
-                  {get(campaign, 'closureSummary.launchDate')
-                  && (
-                  <>
-                    <dt>Target Launch Date</dt>
-                  <dd>{get(campaign, 'closureSummary.launchDate') || '--'}</dd>
-                  </>
+              <dl className="dl-horizontal">
+                <dt>Campaign status</dt>
+                <dd>{CAMPAIGN_OFFERING_STAGE[campaign.stage]}</dd>
+                {['FAILED', 'LIVE', 'COMPLETE'].includes(campaign.stage)
+                  ? (
+                    <>
+                      <dt>Offering Launch Date</dt>
+                      <dd> {get(campaign, 'offering.launch.targetDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'offering.launch.targetDate'), true, false, false)} /> : '--'} </dd>
+                    </>
                   )
-                  }
-                </>
-                ) : (
-                <>
-                <dt>Offering Close Date</dt>
-                <dd>{get(campaign, 'closureSummary.hardCloseDate') || get(campaign, 'closureSummary.launchDate') || '--'}</dd>
-                </>
-                )
-              }
-            </dl>
-            <Button inverted color="green" as={Link} to={`/offerings/${campaign.offeringSlug}`}>View Campaign</Button>
+                  : (
+                    <>
+                      <dt>Started on</dt>
+                      <dd> {campaign.created ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(campaign.created.date, true, false, false)} /> : '--'} </dd>
+                    </>
+                  )
+                }
+                {campaign.stage === 'CREATION'
+                  ? (
+                    <>
+                      {get(campaign, 'offering.launch.targetDate')
+                        && (
+                          <>
+                            <dt>Target Launch Date</dt>
+                            <dd>{get(campaign, 'offering.launch.targetDate') || '--'}</dd>
+                          </>
+                        )
+                      }
+                    </>
+                  ) : (
+                    <>
+                      <dt>Offering Close Date</dt>
+                      <dd>{campaign.stage === 'LIVE' && get(campaign, 'closureSummary.processingDate') ? get(campaign, 'closureSummary.processingDate') : get(campaign, 'closureSummary.hardCloseDate') ? get(campaign, 'closureSummary.hardCloseDate') : '--'}</dd>
+                    </>
+                  )
+                }
+              </dl>
+              <Button inverted color="green" as={Link} to={`/offerings/${campaign.offeringSlug}`}>View Campaign</Button>
             </Card.Content>
           </Card>
         ))
