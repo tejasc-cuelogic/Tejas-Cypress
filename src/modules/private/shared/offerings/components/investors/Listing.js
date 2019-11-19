@@ -37,7 +37,7 @@ export default class Listing extends Component {
 
   showReferralCode = (referralCode, investorReferralCodes) => {
     const matchReferral = find(investorReferralCodes, r => r.code === referralCode);
-    return (matchReferral && get(matchReferral, 'isValid')) ? get(matchReferral, 'code') : '';
+    return (matchReferral && get(matchReferral, 'isValid')) ? get(matchReferral, 'code') : 'N/A';
   }
 
   render() {
