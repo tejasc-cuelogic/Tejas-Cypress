@@ -2919,6 +2919,9 @@ input[type='range']::-webkit-slider-thumb {
 		font-weight: @bold;
 	}
 }
+.offering-comment .fr-view iframe{
+	height: auto;
+}
 .plaid-link-iframe {
 	@media only screen and (max-width : @largestMobileScreen){
 		position: absolute;
