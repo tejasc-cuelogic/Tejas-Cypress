@@ -153,7 +153,7 @@ export class FactoryStore extends DataModelStore {
         this.setPluginDropDown();
       }
     } catch (error) {
-      Helper.toast('Something went wrong, please try again later1111.', 'error');
+      Helper.toast('Something went wrong, please try again later.', 'error');
     }
   }
 
@@ -310,18 +310,22 @@ export class FactoryStore extends DataModelStore {
       const { fields } = this.REQUESTFACTORY_FRM;
       const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.REQUESTFACTORY.fields;
       const formData = Validator.evaluateFormData(fields);
-      const formPayloadData = Validator.evaluateFormData(fieldsPayload);
-      const TestformData = this.ExtractToJSON(formPayloadData);
-      if (!this.isValidJson(TestformData)) {
+      let TestformData = '';
+      if (!isEmpty(fieldsPayload)) {
+        const formPayloadData = Validator.evaluateFormData(fieldsPayload);
+        TestformData = this.ExtractToJSON(formPayloadData);
+      }
+      if (TestformData !== '' && !this.isValidJson(TestformData)) {
         this.REQUESTFACTORY_FRM.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
         this.REQUESTFACTORY_FRM.meta.isValid = false;
       } else {
         this.setFieldValue('inProgress', true, 'requestFactory');
         const variables = {};
         variables.plugin = formData.plugin;
-        variables.payload = TestformData;
         variables.invocationType = formData.invocationType;
-
+        if (TestformData !== '') {
+          variables.payload = TestformData;
+        }
         const result = await this.executeMutation({
           mutation: 'requestFactoryPluginTrigger',
           variables: { ...variables },
@@ -333,7 +337,7 @@ export class FactoryStore extends DataModelStore {
         }
       }
     } catch (error) {
-      Helper.toast('Something went wrong, please try again later1111.', 'error');
+      Helper.toast('Something went wrong, please try again later.', 'error');
       reject();
     } finally {
       this.setFieldValue('inProgress', false, 'requestFactory');
@@ -378,16 +382,21 @@ export class FactoryStore extends DataModelStore {
       const { fields } = this.PROCESSFACTORY_FRM;
       const fieldsPayload = this.DYNAMCI_PAYLOAD_FRM.PROCESSFACTORY.fields;
       const formData = Validator.evaluateFormData(fields);
-      const formPayloadData = Validator.evaluateFormData(fieldsPayload, true);
-      const TestformData = this.ExtractToJSON(formPayloadData);
-      if (!this.isValidJson(TestformData)) {
+      let TestformData = '';
+      if (!isEmpty(fieldsPayload)) {
+        const formPayloadData = Validator.evaluateFormData(fieldsPayload, true);
+        TestformData = this.ExtractToJSON(formPayloadData);
+      }
+      if (TestformData !== '' && !this.isValidJson(TestformData)) {
         this.PROCESSFACTORY_FRM.fields.payload.error = 'Invalid JSON object. Please enter valid JSON object.';
         this.PROCESSFACTORY_FRM.meta.isValid = false;
       } else {
         this.setFieldValue('inProgress', true, 'processFactory');
         const variables = {};
         variables.method = formData.method;
-        variables.payload = TestformData;
+        if (TestformData !== '') {
+          variables.payload = TestformData;
+        }
         const result = await this.executeMutation({
           mutation: 'processFactoryPluginTrigger',
           variables: { ...variables },
@@ -400,7 +409,7 @@ export class FactoryStore extends DataModelStore {
         }
       }
     } catch (error) {
-      Helper.toast('Something went wrong, please try again later1111.', 'error');
+      Helper.toast('Something went wrong, please try again later.', 'error');
       reject();
     } finally {
       this.setFieldValue('inProgress', false, 'processFactory');
