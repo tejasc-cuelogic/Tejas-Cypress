@@ -280,7 +280,7 @@ class KeyTermsDetails extends Component {
             <KeyTermsFieldHoc
               data={keyTerms}
               field="premoneyValuation"
-              title="Pre-Money valuation"
+              title="Pre-Money Valuation"
               content={(
                 <p>
                   {Helper.CurrencyFormat(keyTerms.premoneyValuation, 0)}
