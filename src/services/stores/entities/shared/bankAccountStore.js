@@ -463,9 +463,8 @@ export class BankAccountStore {
     map(this.addFundsByAccType.fields, (value) => {
       const { key } = value;
       const fundValue = value;
-      fundValue.value = parseFloat(value.value, 0) === -1 || value.value === ''
-        // eslint-disable-next-line no-restricted-globals
-        || isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
+      // eslint-disable-next-line no-restricted-globals
+      fundValue.value = isNaN(parseFloat(value.value, 0)) ? '' : value.value;
       const { errors } = validationService.validate(value);
       Validator.setFormError(
         this.addFundsByAccType,
