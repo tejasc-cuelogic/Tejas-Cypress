@@ -165,6 +165,7 @@ export const IND_ADD_FUND = {
     rule: 'optional|numeric|min:100',
     label: 'Deposit Amount',
     maxLength: 15,
+    fieldType: 'string',
     customErrors: {
       min: 'The deposit amount should be at least $100.',
     },
@@ -178,6 +179,7 @@ export const ENTITY_ADD_FUND = {
     error: undefined,
     rule: 'optional|numeric|min:2200',
     label: 'Deposit Amount',
+    fieldType: 'string',
     maxLength: 15,
     customErrors: {
       min: 'The deposit amount should be at least $2,200.',
@@ -192,6 +194,7 @@ export const IRA_ADD_FUND = {
     error: undefined,
     rule: 'optional|numeric|min:2200|max:6000',
     label: 'Deposit Amount',
+    fieldType: 'string',
     maxLength: 15,
     customErrors: {
       min: 'The deposit amount should be at least $2,200.',

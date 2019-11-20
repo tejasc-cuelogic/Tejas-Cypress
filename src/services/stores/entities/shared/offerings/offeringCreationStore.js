@@ -583,7 +583,7 @@ export class OfferingCreationStore {
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
     const isDateField = includes(['maturityDate', 'dob', 'dateOfService', 'dlExpirationDate', 'dlIssuedDate'], field);
     const isAbsField = includes(['startupPeriod'], field);
-    const isStringField = includes(['interestRate', 'ssn'], field) || this[form].fields[field].fieldType === 'String';
+    const isStringField = includes(['interestRate', 'ssn'], field);
     const fieldValue = isDateField ? values.formattedValue : isAbsField ? Math.abs(values.floatValue) || '' : isStringField ? values.value : values.floatValue;
     if (form === 'KEY_TERMS_FRM' && includes(['minOfferingAmount506', 'maxOfferingAmount506'], field)) {
       this[form] = Validator.onArrayFieldChange(

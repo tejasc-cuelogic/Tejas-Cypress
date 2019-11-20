@@ -39,8 +39,12 @@ class FormValidator {
   });
 
   onChange = (form, element, type, isDirty = true, checked = undefined) => {
-    CustomValidations.loadCustomValidations(form);
     const currentForm = form;
+    if (element && element.name) {
+      // eslint-disable-next-line no-param-reassign
+      element.value = currentForm.fields[element.name].fieldType === 'string' ? element.value.toString() : element.value;
+    }
+    CustomValidations.loadCustomValidations(form);
     let customErrMsg = {};
     if (element && element.name) {
       if (type === 'checkbox' || (Array.isArray(toJS(currentForm.fields[element.name].value)) && type !== 'dropdown')) {
@@ -203,7 +207,7 @@ class FormValidator {
   resetFormData = (form, targetedFields) => {
     const currentForm = form;
     const fieldsToReset = (targetedFields && targetedFields.length && targetedFields)
-    || Object.keys(currentForm.fields);
+      || Object.keys(currentForm.fields);
     fieldsToReset.map((field) => {
       if (Array.isArray(toJS(currentForm.fields[field].value))) {
         currentForm.fields[field].value = [];
