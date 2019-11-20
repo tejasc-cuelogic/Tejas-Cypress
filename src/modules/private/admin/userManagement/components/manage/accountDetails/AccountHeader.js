@@ -28,7 +28,8 @@ export default class AccountHeader extends Component {
     } = this.props.userDetailsStore;
     const userId = get(getDetailsOfUser, 'id');
     const accountId = get(currentActiveAccountDetailsOfSelectedUsers, 'details.accountId');
-    const freeze = get(currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus') === 'FROZEN';
+    const accountStatus = get(currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus');
+    const freeze = accountStatus === 'FROZEN';
     const accountType = includes(this.props.pathname, 'individual') ? 'individual' : includes(this.props.pathname, 'ira') ? 'ira' : 'entity';
     const access = this.props.userStore.myAccessForModule('USERS');
     const isFullAccessUser = access.level === 'FULL';
@@ -42,14 +43,28 @@ export default class AccountHeader extends Component {
           </span>
           {this.props.showFreezeCTA
             && (
-              <span className="pull-right">
-                <Button.Group compact size="tiny">
-                  <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, freeze ? 'unfreeze' : 'freeze')}><Icon className="ns-freeze" />{freeze ? 'Unfreeze' : 'Freeze'} account</Button>
-                  {(isFullAccessUser)
-                    && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'close-account')}>Close account</Button>
-                  }
-                </Button.Group>
-              </span>
+              <>
+                <span className="pull-right">
+                  <Button.Group compact size="tiny">
+                    {accountStatus !== 'SOFT_FREEZE'
+                      && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'SOFT_FREEZE')}><Icon className="ns-freeze" />Soft Freeze</Button>
+                    }
+
+                    {accountStatus !== 'HARD_FREEZE'
+                      && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'HARD_FREEZE')}><Icon className="ns-freeze" />Hard Freeze</Button>
+                    }
+                  </Button.Group>
+                </span>
+                <span className="pull-right">
+                  <Button.Group compact size="tiny">
+                    <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'UNFREEZE')}><Icon className="ns-freeze" />Unfreeze</Button>
+
+                    {(isFullAccessUser)
+                      && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'close-account')}>Close account</Button>
+                    }
+                  </Button.Group>
+                </span>
+              </>
             )
           }
           {this.props.showAddWithdrawFundCta
