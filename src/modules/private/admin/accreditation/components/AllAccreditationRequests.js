@@ -220,7 +220,7 @@ export default class AllAccreditationRequests extends Component {
                     {accreditation.accreditationStatus === 'CONFIRMED'
                       && (
                       <>
-                        <Table.Cell>{get(accreditation, 'expiration') ? DataFormatter.getDateAsPerTimeZone(moment.unix(get(accreditation, 'expiration')), false, false, false, false) : '-'}</Table.Cell>
+                        <Table.Cell>{get(accreditation, 'expiration') ? DataFormatter.getDateAsPerTimeZone(moment.unix(get(accreditation, 'expiration')), false, false, false, false, 'CST', true) : '-'}</Table.Cell>
                         <Table.Cell>{get(accreditation, 'promotionCredits')}</Table.Cell>
                       </>
                       )
