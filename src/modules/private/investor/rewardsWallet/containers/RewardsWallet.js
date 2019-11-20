@@ -39,12 +39,12 @@ export default class RewardsWallet extends Component {
     showActive: false };
   }
 
-  activeOnly = () => this.setState(prevState => ({ showActive: !prevState.showActive }));
+  activeOnly = () => this.setState({ showActive: !this.state.showActive });
 
   render() {
     const { showActive, rewards } = this.state;
-    const filteredRewards = (showActive) ? rewards.map((o) => {
-      const filtered = o;
+    const filteredRewards = showActive ? rewards.map((o) => {
+      const filtered = JSON.parse(JSON.stringify(o));
       filtered.rewards = o.rewards.filter(r => !r.redeemDate && moment().diff(r.expiry) < 0);
       return filtered;
     }) : this.state.rewards;
