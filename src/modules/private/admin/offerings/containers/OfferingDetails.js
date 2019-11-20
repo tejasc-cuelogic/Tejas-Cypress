@@ -66,10 +66,7 @@ export default class OfferingDetails extends Component {
       navItems,
       get(find(offeringsStore.phases, (s, i) => i === offer.stage), 'accessKey'),
     );
-    const hideBonusReward = ['live', 'creation'].includes(this.props.match.params.stage) && !isDev;
-    if (hideBonusReward) {
-      navItems = navItems.filter(n => (!['Bonus Rewards'].includes(n.title)));
-    }
+
     if (this.props.match.params.stage === 'engagement' && !isDev) {
       navItems = navItems.filter(n => (n.title !== 'Transactions'));
     }
@@ -98,7 +95,7 @@ export default class OfferingDetails extends Component {
             </Header>
             {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} offerStatus={offerStatus} />}
             <Card fluid>
-              <SecondaryMenu isBonusReward={!hideBonusReward} bonusRewards className="offer-details" offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
+              <SecondaryMenu isBonusReward bonusRewards className="offer-details" offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
               <Switch>
                 <Route exact path={match.url} component={OfferingModule('overview')} />
                 {
@@ -109,7 +106,7 @@ export default class OfferingDetails extends Component {
                         <Route
                           key={item.to}
                           path={`${match.url}/${item.to}`}
-                          render={props => <CurrentModule module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} stepName="OFFERING_ACTIVITY_HISTORY" resourceId={offeringid} offeringId={offeringid} />}
+                          render={props => <CurrentModule classes={item.title === 'Activity History' ? 'offering-activity' : ''} module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} stepName="OFFERING_ACTIVITY_HISTORY" resourceId={offeringid} offeringId={offeringid} />}
                         />
                     );
                   })

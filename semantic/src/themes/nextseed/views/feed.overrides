@@ -3,8 +3,22 @@
 *******************************/
 .ui.feed.activities{
     margin:0;
-    max-height: calc(100vh - 483px); /* Calculated to fit the height of feeds to screen */
     overflow: auto;
+    &.offering-activity{
+        max-height: calc(100vh - 483px); /* Calculated to fit the height of feeds to screen */
+    }
+    &.elastic-search-activity{
+        max-height: calc(100vh - 250px) !important; /* Calculated to fit the height of feeds to screen */
+    }
+    &.account-detail-activity{
+        max-height: calc(100vh - 364px); /* Calculated to fit the height of feeds to screen */
+    }
+    &.user-detail-activity{
+        max-height: calc(100vh - 344px); /* Calculated to fit the height of feeds to screen */
+    }
+    &.application-activity{
+        max-height: calc(100vh - 521px); /* Calculated to fit the height of feeds to screen */
+    }
     >.event{
         padding:@14px @20px;
         border-top:@border-light 1px solid;

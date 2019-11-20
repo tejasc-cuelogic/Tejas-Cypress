@@ -3,7 +3,6 @@ import ReferralProgramTerms from './public/agreements/ReferralProgramTerms';
 import AccreditedIncentiveTerms from './public/agreements/AccreditedIncentiveTerms';
 import IraPromotionTerms from './public/agreements/IraPromotionTerms';
 import Agreements from './public/agreements/containers/Agreements';
-import Blog from './public/blog/containers/Blog';
 import Home from './public/home/containers/Home';
 import Invest from './public/invest/containers/Invest';
 import Offering from './public/offering/containers/Offering';
@@ -63,15 +62,6 @@ export const publicRoutes = [
   {
     path: '/about',
     component: About,
-  },
-  // {
-  //   path: '/blog/:postId',
-  //   component: Blog,
-  // },
-  {
-    path: '/blog',
-    component: Blog,
-    exact: true,
   },
   {
     path: '/invest/get-started',
