@@ -36,8 +36,8 @@ const CampaignCards = (props) => {
                 {['FAILED', 'LIVE', 'COMPLETE'].includes(campaign.stage)
                   ? (
                     <>
-                      <dt>Offering Launch Date</dt>
-                      <dd> {get(campaign, 'offering.launch.targetDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'offering.launch.targetDate'), true, false, false)} /> : '--'} </dd>
+                      <dt>Launch Date</dt>
+                      <dd> {get(campaign, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'closureSummary.launchDate'), true, false, false)} /> : get(campaign, 'offering.launch.targetDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'offering.launch.targetDate'), true, false, false)} /> : '--'} </dd>
                     </>
                   )
                   : (
@@ -61,8 +61,18 @@ const CampaignCards = (props) => {
                     </>
                   ) : (
                     <>
-                      <dt>Offering Close Date</dt>
-                      <dd>{campaign.stage === 'LIVE' && get(campaign, 'closureSummary.processingDate') ? get(campaign, 'closureSummary.processingDate') : get(campaign, 'closureSummary.hardCloseDate') ? get(campaign, 'closureSummary.hardCloseDate') : '--'}</dd>
+                      <dt>Close Date</dt>
+                      <dd>
+                        {campaign.stage === 'LIVE'
+                          ? get(campaign, 'closureSummary.processingDate')
+                            ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'closureSummary.processingDate'), true, false, false)} />
+                            : get(campaign, 'offering.launch.terminationDate')
+                              ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'offering.launch.terminationDate'), true, false, false)} />
+                              : ['FAILED', 'COMPLETE'].includes(campaign.stage) && get(campaign, 'closureSummary.hardCloseDate')
+                                ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'closureSummary.hardCloseDate'), true, false, false)} />
+                                : '--' : '--'
+                        }
+                      </dd>
                     </>
                   )
                 }
