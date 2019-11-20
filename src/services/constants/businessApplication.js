@@ -224,7 +224,7 @@ const BUSINESS_PREQUAL_COMMON = {
   companyTaxed: {
     value: '',
     values: [
-      { label: 'As a corporations', value: 'CORPORATION' },
+      { label: 'As a corporation', value: 'CORPORATION' },
       { label: 'As a partnership', value: 'PARTNERSHIP' },
     ],
     error: undefined,
