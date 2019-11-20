@@ -95,7 +95,7 @@ export default class ElasticSearch extends Component {
             <div className="sticky-sidebar">
               <Card fluid>
                 <SecondaryMenu match={match} navItems={navItems} />
-                <ActivityHistory module="elasticSearch" showFilters={['activityType', 'activityUserType', 'ActivityDate', 'subType']} resourceId="ELASTIC_SEARCH" />
+                <ActivityHistory classes="elastic-search-activity" module="elasticSearch" showFilters={['activityType', 'activityUserType', 'ActivityDate', 'subType']} resourceId="ELASTIC_SEARCH" />
               </Card>
             </div>
           </Grid.Column>

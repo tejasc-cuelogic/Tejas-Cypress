@@ -73,7 +73,7 @@ export default class AccountDetails extends Component {
         </Grid.Column>
         <Grid.Column widescreen={13} largeScreen={12} computer={12} tablet={12} mobile={16}>
           <Switch>
-            <Route exact path={`${match.url}/activity`} render={props => <ActivityHistory stepName="INVESTOR_ACTIVITY_HISTORY" investorId={investorId} resourceId={get(account, 'details.accountId')} module="userDetails" showFilters={['activityType', 'activityUserType']} {...props} />} />
+            <Route exact path={`${match.url}/activity`} render={props => <ActivityHistory classes="account-detail-activity" stepName="INVESTOR_ACTIVITY_HISTORY" investorId={investorId} resourceId={get(account, 'details.accountId')} module="userDetails" showFilters={['activityType', 'activityUserType']} {...props} />} />
             <Route path={`${match.url}/statements`} render={props => <Statements isAdmin {...props} />} />
             <Route exact path={`${match.url}/investments`} render={props => <Portfolio refLink={match.url} isAdmin {...props} />} />
             <Route
@@ -83,7 +83,7 @@ export default class AccountDetails extends Component {
             />
             <Route path={`${match.url}/investments/investment-details/:id`} render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} />
             <Route exact path={`${match.url}/transactions`} render={props => <Transactions isAdmin {...props} />} />
-            <Route exact path={`${match.url}/transactions/:action`} render={props => <AddWithdrawFunds {...props} userId={get(this.props.userDetailsStore.getDetailsOfUser, 'id')} accountId={get(account, 'details.accountId')} />} />
+            <Route exact path={`${match.url}/transactions/:action`} render={props => <AddWithdrawFunds {...props} isAdmin userId={get(this.props.userDetailsStore.getDetailsOfUser, 'id')} accountId={get(account, 'details.accountId')} />} />
             <Route exact path={`${match.url}/overview`} render={props => <Overview isAdmin copied={this.props.copied} {...props} />} />
             <Route exact path={`${match.url}/overview/:action`} render={props => <ConfirmModel {...props} userId={get(this.props.userDetailsStore.getDetailsOfUser, 'id')} refLink={`${match.url}/overview`} accountId={get(account, 'details.accountId')} />} />
           </Switch>

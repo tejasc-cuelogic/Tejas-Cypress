@@ -120,6 +120,7 @@ export class DataStore {
             createGsContactAccount: (toJS(processData.options)).includes('createGsContactAccount'),
             createAccountPdf: (toJS(processData.options)).includes('createAccountPdf'),
             sendCrowdPayEmailToGS: (toJS(processData.options)).includes('sendCrowdPayEmailToGS'),
+            skipFullAccountValidation: (toJS(processData.options)).includes('skipFullAccountValidation'),
           },
         })
         .then(action((result) => {
