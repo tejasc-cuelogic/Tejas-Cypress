@@ -22,7 +22,7 @@ export default class PreQualBusiness extends Component {
     return (
       <>
         <span className="application-scroll" />
-        <FormElementWrap
+        {/* <FormElementWrap
           hideFields={hideFields}
           header="What is your Business Model?*"
           subHeader="Only Business to Consumer models are accepted at this time."
@@ -35,7 +35,7 @@ export default class PreQualBusiness extends Component {
             changed={businessAppEleChange}
             containerclassname="button-radio"
           />
-        </FormElementWrap>
+        </FormElementWrap> */}
         <GeneralInformation
           hideFields={hideFields}
           fields={fields}
@@ -159,6 +159,7 @@ export default class PreQualBusiness extends Component {
                         name={field}
                         asterisk="true"
                         prefix="$ "
+                        allowNegative={field === 'previousYearNetIncome'}
                         currency
                         value={fields[field].value}
                         fielddata={fields[field]}
@@ -186,6 +187,7 @@ export default class PreQualBusiness extends Component {
                       readOnly={preQualFormDisabled}
                       key={field}
                       name={field}
+                      allowNegative={field === 'nextYearNetIncome'}
                       prefix="$ "
                       currency
                       asterisk="true"

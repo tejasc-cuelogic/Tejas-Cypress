@@ -1,17 +1,17 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { Item, Header, Button, Icon, Modal, Card, Confirm } from 'semantic-ui-react';
 import { intersection, isEmpty, includes, get } from 'lodash';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
+import { SuspenseBoundary, InlineLoader, lazyRetry, UserAvatar } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import UserTypeIcon from '../components/manage/UserTypeIcon';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import UserEmailList from '../components/manage/userEmailListing';
 import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
-const getModule = component => lazy(() => import(`../components/manage/${component}`));
+const getModule = component => lazyRetry(() => import(`../components/manage/${component}`));
 
 const navMeta = [
   {
@@ -152,7 +152,7 @@ export default class AccountDetails extends Component {
             <Card fluid>
               <SecondaryMenu match={match} navItems={navItems} />
               <div className="inner-content-spacer">
-                <Suspense fallback={<InlineLoader />}>
+                <SuspenseBoundary>
                   <Switch>
                     {
                       navItems.map((item) => {
@@ -169,7 +169,10 @@ export default class AccountDetails extends Component {
                                 {...props}
                                 adminActivity={item.title === 'Activity' ? 'adminActivity' : false}
                                 resourceId={details.id}
+                                stepName={details.roles.find(obj => obj.name === 'investor') ? 'INVESTOR_ACTIVITY_HISTORY' : ''}
                                 copied={this.state.copied}
+                                investorId={details.id}
+                                classes={item.title === 'Activity' ? 'user-detail-activity' : ''}
                               />
                             )
                                   }
@@ -178,7 +181,7 @@ export default class AccountDetails extends Component {
                       })
                     }
                   </Switch>
-                </Suspense>
+                </SuspenseBoundary>
               </div>
             </Card>
           </Modal.Content>

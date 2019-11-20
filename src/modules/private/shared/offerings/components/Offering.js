@@ -1,11 +1,11 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Grid } from 'semantic-ui-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { InlineLoader } from '../../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
-const getModule = component => lazy(() => import(`./offering/${component}`));
+const getModule = component => lazyRetry(() => import(`./offering/${component}`));
 
 @inject('userStore', 'uiStore', 'offeringCreationStore')
 @withRouter
@@ -48,7 +48,7 @@ export default class Offering extends Component {
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
             <div className={isIssuer && !match.url.includes('offering-creation') ? 'ui card fluid form-card' : ''}>
-            <Suspense fallback={<InlineLoader />}>
+            <SuspenseBoundary>
               <Switch>
                   <Route exact path={match.url} component={getModule(navItems[0].component)} />
                   {
@@ -57,7 +57,7 @@ export default class Offering extends Component {
                     ))
                   }
                 </Switch>
-              </Suspense>
+              </SuspenseBoundary>
             </div>
           </Grid.Column>
         </Grid>

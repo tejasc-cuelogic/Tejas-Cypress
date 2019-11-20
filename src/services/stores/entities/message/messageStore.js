@@ -92,11 +92,12 @@ export class NewMessage {
     this.setDataValue('buttonLoader', scope);
     this.currentMessageId = currentMessageId;
     const data = Validator.ExtractValues(this.MESSAGE_FRM.fields);
+
     const payload = {
       commentInput: {
         offeringId: campaignId || (offeringCreationStore.currentOfferingId || this.currentOfferingId),
         scope,
-        comment: data.comment,
+        comment: Helper.sanitizeContent(data.comment),
       },
     };
     if (this.editMessageId) {

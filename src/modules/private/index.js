@@ -1,12 +1,13 @@
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
 import { toJS } from 'mobx';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { authActions } from '../../services/actions';
 import { privateRoutes } from '../routes';
-import { InlineLoader } from '../../theme/shared';
+import { InlineLoader, SuspenseBoundary, lazyRetry } from '../../theme/shared';
 import SidebarLeftOverlay from '../../theme/layout/SidebarLeftOverlay';
+import AgreementsPdfLoader from './investor/settings/components/agreements/AgreementsPdfLoader';
 import NotFound from '../shared/NotFound';
 
 @inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'accountStore', 'referralsStore')
@@ -34,7 +35,7 @@ export default class Private extends React.Component {
         routes[`${item.path}_${item.to}`] = (
           <Route
             path={`/app/${item.to}`}
-            component={lazy(() => import(`./${typeof item.path === 'object' && roles ? item.path[roles[0]]
+            component={lazyRetry(() => import(`./${typeof item.path === 'object' && roles ? item.path[roles[0]]
               : item.path}`))}
             key={item.path}
           />
@@ -77,7 +78,7 @@ export default class Private extends React.Component {
           signupStatus={signupStatus}
           accForm={INVESTMENT_ACC_TYPES}
         >
-          <Suspense fallback={<InlineLoader styledAs={{ marginTop: '100px' }} />}>
+          <SuspenseBoundary fallback={<InlineLoader styledAs={{ marginTop: '100px' }} />}>
             <Switch>
               {privateRoutes.map(route => (
                 <Route
@@ -88,11 +89,12 @@ export default class Private extends React.Component {
                   key={route.path}
                 />
               ))}
+              <Route exact path="/app/legal-docs/:agreementKey" render={props => <AgreementsPdfLoader isNewTab {...props} />} />
               {Object.keys(routes).map(route => routes[route])}
               {myRoutes.length > 0 ? <Route component={NotFound} />
                 : <Route component={InlineLoader} />}
             </Switch>
-          </Suspense>
+          </SuspenseBoundary>
         </SidebarLeftOverlay>
       );
     }

@@ -1,11 +1,11 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch, Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Menu } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import Helper from '../../../../../helper/utility';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
-import { Logo, InlineLoader } from '../../../../../theme/shared';
+import { Logo, SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 import Failure from '../../../../shared/businessApplication/components/Failure';
 import Success from '../../../../shared/businessApplication/components/Success';
 import Application from '../../../../shared/businessApplication/components/lendio/Application';
@@ -14,7 +14,7 @@ import NeedHelpModal from '../../../../shared/businessApplication/components/Nee
 import LendioSuccess from '../../../../shared/businessApplication/components/lendio/LendioSuccess';
 import { HeaderButtons } from '../../../../shared/businessApplication/components/HeaderButtons';
 
-const getModule = component => lazy(() => import(`../../../../shared/businessApplication/components/${component}`));
+const getModule = component => lazyRetry(() => import(`../../../../shared/businessApplication/components/${component}`));
 
 @inject('businessAppStore', 'uiStore', 'navStore')
 @withRouter
@@ -154,7 +154,7 @@ export default class BusinessApplication extends Component {
 />
 )}
       >
-        <Suspense fallback={<InlineLoader />}>
+        <SuspenseBoundary>
           <Switch>
             <Route exact path={match.url} component={getModule(navItems[0].component)} />
             <Route exact path={`${match.url}/failed/:reason?`} component={Failure} />
@@ -167,7 +167,7 @@ export default class BusinessApplication extends Component {
               ))
             }
           </Switch>
-        </Suspense>
+        </SuspenseBoundary>
         <Route exact path={`${match.url}/confirm`} render={() => <ConfirmModal partialSave={this.submitSaveContinue} stepLink={pathname} refLink={match.url} />} />
         <Route exact path={`${match.url}/need-help`} render={() => <NeedHelpModal />} />
       </PrivateLayout>
