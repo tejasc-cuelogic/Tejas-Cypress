@@ -1,13 +1,17 @@
 export const DATE_FORMAT = 'MM/DD/YYYY';
 export const DATE_ONLY = 'MMM DD, YYYY hh:mm a';
-export const API_ROOT = process.env.REACT_APP_API_URL;
+export const API_ROOT = 'https://predev-api-us-east-1.nextseed.qa/predev';
+
+export const REACT_APP_DEPLOY_ENV = 'predev';
+
+export const REACT_APP_PROTECTION_API = 'https://xwb5gjatlc.execute-api.us-east-1.amazonaws.com/dev';
+
+export const REACT_APP_PUBLIC_API = 'https://predev-appsync-us-east-1.nextseed.qa';
+
+export const REACT_APP_PUBLIC_API_KEY = 'da2-6tv7jz23wnfdjf7lhbqpwh2xg4';
 
 export const {
-  REACT_APP_DEPLOY_ENV, REACT_APP_DEPLOY_TIME, REACT_APP_DEPLOY_BRANCH, REACT_APP_PROTECTION_API,
-} = process.env;
-
-export const {
-  REACT_APP_PUBLIC_API, REACT_APP_PUBLIC_API_KEY,
+  REACT_APP_DEPLOY_TIME, REACT_APP_DEPLOY_BRANCH,
 } = process.env;
 
 export const SOCIAL_URLS = {
@@ -50,9 +54,9 @@ export const ACTIVITY_HISTORY_SCOPE = {
   DEV: 'DEV',
 };
 
-export const SAASQUATCH_TENANT_ALIAS = process.env.REACT_APP_SAASQUATCH_TENANT_ALIAS;
+export const SAASQUATCH_TENANT_ALIAS = 'test_abcvl6vhwmkrk';
 
-export const FROALA_EDITOR_LICENSE = process.env.REACT_APP_FROALA_API_KEY_NEW;
+export const FROALA_EDITOR_LICENSE = 'FC1D2F2A1uB5A2B1B1A5F1A4E1A3A15hD-17soljC-7I-7xB5oD-13==';
 
 export const userIdleTime = ['production', 'prod', 'master', 'infosec'].includes(process.env.REACT_APP_DEPLOY_ENV) ? (1000 * 60 * 60 * 1) : (1000 * 60 * 60 * 12);
 

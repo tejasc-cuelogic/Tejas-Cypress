@@ -11,11 +11,11 @@ Validator.register('minAcnum', (value, requirement, attribute) => {
   return value.toString().length > 3 && value.toString().length < 18;
 }, 'The :attribute should be at least 4 digits and at most 17 digits');
 
-export const PLAID_URL = process.env.REACT_APP_PLAID_URL;
+export const PLAID_URL = 'https://sandbox.plaid.com/institutions/search';
 
-export const PLAID_PUBLIC_KEY = process.env.REACT_APP_PLAID_PUBLIC_KEY;
+export const PLAID_PUBLIC_KEY = 'f961dd052914ebd404f5e92ecc260a';
 
-export const PLAID_ENV = process.env.REACT_APP_PLAID_ENV;
+export const PLAID_ENV = 'sandbox';
 
 export const INVESTMENT_ACCOUNT_TYPES = {
   0: 'individual',
