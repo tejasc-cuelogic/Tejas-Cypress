@@ -438,6 +438,9 @@ export class BusinessAppStore {
           ['name', 'amount'].forEach((field) => {
             this.BUSINESS_DETAILS_FRM.fields.sources[key][field].value = ele[field];
           });
+          if (key < data.sources.length - 1) {
+            this.addMoreForms(null, 'sources');
+          }
         });
         this.totalChange('sources', 'sourcesTotal');
       } else {
@@ -448,6 +451,9 @@ export class BusinessAppStore {
           ['name', 'amount'].forEach((field) => {
             this.BUSINESS_DETAILS_FRM.fields.uses[key][field].value = ele[field];
           });
+          if (key < data.uses.length - 1) {
+            this.addMoreForms(null, 'uses');
+          }
         });
         this.totalChange('uses', 'usesTotal');
       } else {
