@@ -984,6 +984,16 @@ export class AccreditationStore {
     return dateDiff;
   }
 
+  checkIsAccreditationExpiredAsperTimeZone = (expirationDate, isUnix = false) => {
+    let dateDiff = '';
+    if (expirationDate) {
+      const date = (isUnix && typeof expirationDate === 'string') ? parseInt(expirationDate) : expirationDate;
+      dateDiff = DataFormatter.getDateDifferenceInHoursOrMinutes(DataFormatter.formatedDate(date, isUnix), true);
+      return dateDiff < 0 ? 'EXPIRED' : 'ACTIVE';
+    }
+    return dateDiff;
+  }
+
   @action
   expirationChange = (e, result) => {
     this.formChange(e, result, 'ACCREDITATION_EXPIRY_FORM');
