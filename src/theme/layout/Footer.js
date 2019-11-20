@@ -50,7 +50,7 @@ class Footer extends Component {
                 <Menu
                   text
                   vertical
-                  className={isTablet ? 'center-align' : ''}
+                  className={isTablet ? 'center-align m-auto' : ''}
                 >
                   <Menu.Item header>Legal</Menu.Item>
                   <Menu.Item as={Link} to="/agreements/legal/terms-of-use">Terms of Use</Menu.Item>

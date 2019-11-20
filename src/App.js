@@ -165,6 +165,7 @@ class App extends Component {
 
   getSizes = () => ({
     isMobile: document.documentElement.clientWidth < 768,
+    uptoTablet: document.documentElement.clientWidth < 992,
     isTablet: document.documentElement.clientWidth >= 768
       && document.documentElement.clientWidth < 992,
     isTabletLand: document.documentElement.clientWidth >= 768
