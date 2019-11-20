@@ -183,7 +183,7 @@ class Overview extends Component {
                           </Table.Cell>
                         </Table.Row>
                         <Table.Row verticalAlign="top">
-                        <Table.Cell>Pre-Money valuation</Table.Cell>
+                        <Table.Cell>Pre-Money Valuation</Table.Cell>
                         <Table.Cell>
                           {get(campaign, 'keyTerms.premoneyValuation')
                             ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0)

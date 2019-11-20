@@ -365,7 +365,8 @@ export class BusinessAppStore {
             this.BUSINESS_APP_FRM.fields.businessSecurities.value.push(ele);
           });
         }
-        ['businessModel', 'businessGoal', 'businessEntityStructure', 'franchiseHolder'].forEach((ele) => {
+        // removed 'businessModel',
+        ['businessGoal', 'businessEntityStructure', 'franchiseHolder'].forEach((ele) => {
           this.BUSINESS_APP_FRM.fields[ele].value = data[ele];
         });
         ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
@@ -437,6 +438,9 @@ export class BusinessAppStore {
           ['name', 'amount'].forEach((field) => {
             this.BUSINESS_DETAILS_FRM.fields.sources[key][field].value = ele[field];
           });
+          if (key < data.sources.length - 1) {
+            this.addMoreForms(null, 'sources');
+          }
         });
         this.totalChange('sources', 'sourcesTotal');
       } else {
@@ -447,6 +451,9 @@ export class BusinessAppStore {
           ['name', 'amount'].forEach((field) => {
             this.BUSINESS_DETAILS_FRM.fields.uses[key][field].value = ele[field];
           });
+          if (key < data.uses.length - 1) {
+            this.addMoreForms(null, 'uses');
+          }
         });
         this.totalChange('uses', 'usesTotal');
       } else {
@@ -954,7 +961,7 @@ export class BusinessAppStore {
       preQualData = {
         ...preQualData,
         businessGoal: data.businessGoal.value,
-        businessModel: data.businessModel.value,
+        // businessModel: data.businessModel.value,
         businessSecurities: data.businessSecurities.value,
         legalConfirmations: [...preQualData.legalConfirmations,
           {

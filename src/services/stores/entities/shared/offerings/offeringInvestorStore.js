@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { orderBy, get, find, map, cloneDeep, isEmpty } from 'lodash';
+import { orderBy, get, find, map, isEmpty } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { getInvestorListForOffering } from '../../../queries/offering/investor';
@@ -104,7 +104,7 @@ export class OfferingInvestorStore {
     const { offer } = offeringsStore;
     const referralCode = get(offer, 'referralCode');
     const investorList = map(toJS(this.investorLists), (i) => {
-      const investorObj = cloneDeep(toJS({ ...i }));
+      const investorObj = JSON.parse(JSON.stringify({ ...i }));
       // eslint-disable-next-line no-param-reassign
       ['street', 'streetTwo'].forEach((el) => { investorObj[el] = !isEmpty(investorObj[el]) ? investorObj[el].split(',').join(' ') : null; });
       const matchReferral = investorObj.referralCode && investorObj.referralCode.length ? find(investorObj.referralCode, r => r.code === referralCode) : null;
