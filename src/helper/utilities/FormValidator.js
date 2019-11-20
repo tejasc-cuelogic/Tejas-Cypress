@@ -42,7 +42,7 @@ class FormValidator {
     const currentForm = form;
     if (element && element.name) {
       // eslint-disable-next-line no-param-reassign
-      element.value = currentForm.fields[element.name].fieldType === 'string' ? element.value.toString() : element.value;
+      element.value = currentForm.fields[element.name].fieldType === 'string' && get(element, 'value') ? element.value.toString() : get(element, 'value');
     }
     CustomValidations.loadCustomValidations(form);
     let customErrMsg = {};

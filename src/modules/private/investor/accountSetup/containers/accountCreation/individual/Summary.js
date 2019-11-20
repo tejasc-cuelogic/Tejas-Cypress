@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 import { Header, Button, Message, Table } from 'semantic-ui-react';
 import { isEmpty, get } from 'lodash';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
-import Helper from '../../../../../../../helper/utility';
 @inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'identityStore', 'accountStore')
 @withRouter
 @observer
@@ -53,7 +52,7 @@ export default class Summary extends React.Component {
       formLinkBankManually,
       routingNum,
       isAccountPresent,
-      accountAttributes,
+      depositAmount,
     } = this.props.bankAccountStore;
     const { userDetails } = this.props.userDetailsStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails)
@@ -95,9 +94,7 @@ export default class Summary extends React.Component {
                 <Table.Row>
                   <Table.Cell>Your Initial Deposit</Table.Cell>
                   <Table.Cell>
-                    {[-1, ''].includes(accountAttributes.initialDepositAmount)
-                      ? Helper.CurrencyFormat(0)
-                      : Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
+                    {depositAmount}
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>

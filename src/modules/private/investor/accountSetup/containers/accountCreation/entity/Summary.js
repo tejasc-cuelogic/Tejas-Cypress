@@ -52,7 +52,7 @@ export default class Summary extends Component {
     const { errors } = this.props.uiStore;
     const {
       plaidAccDetails, formLinkBankManually,
-      accountAttributes,
+      depositAmount,
       isAccountPresent,
       routingNum,
     } = this.props.bankAccountStore;
@@ -134,9 +134,7 @@ export default class Summary extends Component {
                 <Table.Row>
                   <Table.Cell>Your Initial Deposit</Table.Cell>
                   <Table.Cell>
-                    {[-1, ''].includes(accountAttributes.initialDepositAmount)
-                      ? Helper.CurrencyFormat(0)
-                      : Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
+                    {depositAmount}
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
