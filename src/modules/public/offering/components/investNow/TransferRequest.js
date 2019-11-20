@@ -53,7 +53,6 @@ class TransferRequest extends Component {
     const { investmentStore, investmentLimitStore, changeInvest } = this.props;
     const {
       getTransferRequestAmount,
-      // getCurrCashAvailable,
       showTransferRequestErr,
       investmentAmount,
       investmentFlowErrorMessage,
