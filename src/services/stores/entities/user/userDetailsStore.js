@@ -149,7 +149,8 @@ export class UserDetailsStore {
     if (this.userDetails) {
       accDetails = filter(this.userDetails.roles, account => account.name !== 'investor'
         && account.details
-        && (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
+        && (account.details.accountStatus === 'FULL'
+        || accountStore.isAccFrozen(account.details.accountStatus)));
     }
     return accDetails;
   }
@@ -499,7 +500,7 @@ export class UserDetailsStore {
       details.inActiveAccounts = difference(validAccTypes, accTypes);
       details.partialAccounts = map(filter(details.roles, a => a.status === 'PARTIAL'), 'name');
       details.activeAccounts = map(filter(details.roles, a => a.status === 'FULL'), 'name');
-      details.frozenAccounts = map(filter(details.roles, a => a.status === 'FROZEN'), 'name');
+      details.frozenAccounts = map(filter(details.roles, a => accountStore.isAccFrozen(a.status)), 'name');
       details.processingAccounts = map(filter(details.roles, a => (a.status ? a.status.endsWith('PROCESSING') : null)), 'name');
       details.inprogressAccounts = map(filter(details.roles, a => a.name !== 'investor' && a.status !== 'FULL'), 'name');
       details.phoneVerification = this.userDetails.phone
