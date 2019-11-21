@@ -32,7 +32,16 @@ export class InvestorProfileStore extends DataModelStore {
 
   INVESTMENT_EXP_FRM = Validator.prepareFormObject(INVESTMENT_EXPERIENCE, true);
 
-  // eslint-disable-next-line func-names
+  resetFields = (form) => {
+    const { fields } = this[form];
+    if (intersection(['brokerageFirmName', 'publicCompanyTicker'], Object.keys(fields)).length > 0) {
+      const { textField, radioField } = this.textRadioFieldData(fields);
+      if (fields[radioField].value === 'no') {
+        fields[textField].value = '';
+      }
+    }
+  }
+
   @action
   upsertInvestorProfile = async (currentStep) => {
     const { fields } = this[currentStep.form];
@@ -47,6 +56,9 @@ export class InvestorProfileStore extends DataModelStore {
           Validator.setIsDirty(this[currentStep.form], false);
           userDetailsStore.setUserStatus(res.data.createInvestorProfile.status);
           userDetailsStore.mergeUserData('investorProfileData', payLoad, 'userPayLoad');
+          if (['BROKERAGE_EMPLOYMENT_FRM', 'PUBLIC_COMPANY_REL_FRM'].includes(currentStep.form)) {
+            this.resetFields(currentStep.form);
+          }
           if (currentStep.form === 'INVESTMENT_EXP_FRM') {
             userDetailsStore.mergeUserData(
               'investorProfileData',

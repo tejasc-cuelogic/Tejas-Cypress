@@ -8,12 +8,6 @@ import Address from './src/Address';
 function formHoc(WrappedComponent, metaInfo) {
   // eslint-disable-next-line no-unused-expressions
   return inject(metaInfo.store, 'nsUiStore')(observer((class extends React.Component {
-    constructor(props) {
-      super(props);
-      // this.props.nsUiStore.setFieldValue('errors', undefined);
-      console.log('props', this.props);
-    }
-
     Input = (name, props) => {
       const fieldData = this.props[metaInfo.store][metaInfo.form].fields[name];
       return (
