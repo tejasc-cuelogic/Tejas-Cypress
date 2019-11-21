@@ -45,7 +45,7 @@ export default class AccountHeader extends Component {
             && (
               <>
                 <span className="pull-right">
-                  <Button.Group compact size="tiny">
+                  <Button.Group compact size="tiny" className="d-flex">
                     {accountStatus !== 'SOFT_FREEZE'
                       && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'SOFT_FREEZE')}><Icon className="ns-freeze" />Soft Freeze</Button>
                     }
@@ -54,9 +54,7 @@ export default class AccountHeader extends Component {
                       && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'HARD_FREEZE')}><Icon className="ns-freeze" />Hard Freeze</Button>
                     }
                   </Button.Group>
-                </span>
-                <span className="pull-right">
-                  <Button.Group compact size="tiny">
+                  <Button.Group compact size="tiny" className="d-flex">
                     <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'UNFREEZE')}><Icon className="ns-freeze" />Unfreeze</Button>
 
                     {(isFullAccessUser)
