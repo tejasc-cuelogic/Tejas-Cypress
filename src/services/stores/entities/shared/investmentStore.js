@@ -524,12 +524,14 @@ export class InvestmentStore {
     const offeringIdToUpdate = campaignStore.getOfferingId
       ? campaignStore.getOfferingId : portfolioStore.currentOfferingId;
     if (this.agreementDetails && offeringIdToUpdate) {
+      const { agreementId } = this.agreementDetails;
       const varObj = {
         userId: userDetailsStore.currentUserId,
         accountId: this.getSelectedAccountTypeId,
         offeringId: offeringIdToUpdate,
         investmentAmount: this.investmentAmount.toString(),
-        agreementId: this.agreementDetails.agreementId,
+        agreementId: typeof (agreementId) === 'string'
+        && agreementId !== '' ? parseInt(agreementId, 10) : null,
         // transferAmount: this.getTransferRequestAmount,
         transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
       };
