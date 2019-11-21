@@ -4,7 +4,7 @@ import { includes, startCase, get } from 'lodash';
 import { Header, Icon, Button, Divider } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
 
-@inject('userDetailsStore', 'uiStore', 'userStore')
+@inject('userDetailsStore', 'uiStore', 'userStore', 'accountStore')
 @withRouter
 @observer
 export default class AccountHeader extends Component {
@@ -27,6 +27,7 @@ export default class AccountHeader extends Component {
     const accountType = includes(this.props.pathname, 'individual') ? 'individual' : includes(this.props.pathname, 'ira') ? 'ira' : 'entity';
     const access = this.props.userStore.myAccessForModule('USERS');
     const isFullAccessUser = access.level === 'FULL';
+    const { isAccFrozen } = this.props.accountStore;
     return (
       <>
         <div className="clearfix">
@@ -40,16 +41,18 @@ export default class AccountHeader extends Component {
               <>
                 <span className="pull-right">
                   <Button.Group compact size="tiny" className="d-flex">
-                    {accountStatus !== 'SOFT_FREEZE'
+                    {(!isAccFrozen(accountStatus) || accountStatus === 'HARD_FREEZE')
                       && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'SOFT_FREEZE')}><Icon className="ns-freeze" />Soft Freeze</Button>
                     }
 
-                    {accountStatus !== 'HARD_FREEZE'
+                    {(!isAccFrozen(accountStatus) || accountStatus === 'SOFT_FREEZE')
                       && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'HARD_FREEZE')}><Icon className="ns-freeze" />Hard Freeze</Button>
                     }
                   </Button.Group>
                   <Button.Group compact size="tiny" className="d-flex">
-                    <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'UNFREEZE')}><Icon className="ns-freeze" />Unfreeze</Button>
+                    {isAccFrozen(accountStatus)
+                      && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'UNFREEZE')}><Icon className="ns-freeze" />Unfreeze</Button>
+                    }
 
                     {(isFullAccessUser)
                       && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'close-account')}>Close account</Button>
