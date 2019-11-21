@@ -16,7 +16,7 @@ const statusDetails = {
   PARTIAL: 'Partial',
   FULL: 'Full',
   HARD_FREEZE: 'Frozen',
-  SOFT_FROZEN: 'Frozen',
+  SOFT_FREEZE: 'Frozen',
   CIP_PROCESSING: 'CIP Processing',
   NS_PROCESSING: 'Processing',
   GS_PROCESSING: 'Processing',
