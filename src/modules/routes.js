@@ -31,6 +31,7 @@ export const publicRoutes = [
   {
     path: '/',
     component: Home,
+    title: 'Home',
     exact: true,
   },
   {
