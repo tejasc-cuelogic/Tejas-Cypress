@@ -94,6 +94,7 @@ class AccountType extends Component {
     }
     setPartialInvestmenSession();
     if (frozenAccounts.length && this.props.accountStore.isAccFrozen(selectedAccountStatus)) {
+      this.props.userDetailsStore.setFieldValue('currentActiveAccount', frozenAccounts[0]);
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
         // send email to admin
         sendAdminEmailOfFrozenAccount('INVESTMENT', offeringId);
@@ -335,6 +336,7 @@ class AccountType extends Component {
       offeringReuglation, offeringDetailsObj,
     );
     if (frozenAccounts.length && isAccFrozen(selectedAccountStatus)) {
+      this.props.userDetailsStore.setFieldValue('currentActiveAccount', frozenAccounts[0]);
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
         // send email to admin:
         sendAdminEmailOfFrozenAccount('INVESTMENT', offeringId);

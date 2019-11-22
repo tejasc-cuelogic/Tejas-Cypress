@@ -320,13 +320,13 @@ class Comments extends Component {
                                           ) : ''}
                                         </Comment.Content>
                                       </Comment>
-                                    ))}
+                                  ))}
                               </Comment.Group>
                             )
                           }
                         </Comment>
                       </Comment.Group>
-                    )))
+                  )))
                 }
               </div>
             </>
