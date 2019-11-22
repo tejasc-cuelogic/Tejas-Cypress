@@ -41,12 +41,11 @@ export default class AccountHeader extends Component {
             && (
               <>
                 <span className="pull-right">
-                  <Button.Group compact size="tiny" className="d-flex">
+                  <Button.Group compact size="tiny">
                     {(!isAccFrozen(accountStatus))
                       && Object.keys(freezeAccObj).map(accStatus => <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, accStatus)}><Icon className="ns-freeze" />{freezeAccObj[accStatus].btnText}</Button>)
                     }
-                  </Button.Group>
-                  <Button.Group compact size="tiny" className="d-flex">
+
                     {isAccFrozen(accountStatus)
                       && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'UNFREEZE')}><Icon className="ns-freeze" />Unfreeze</Button>
                     }
