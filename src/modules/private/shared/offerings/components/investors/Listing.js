@@ -49,7 +49,7 @@ export default class Listing extends Component {
     const isOfferingClose = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULTED'].includes(get(offer, 'stage'));
     let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Amount', value: 'amount' });
     computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'EB', value: 'earlyBirdEligibility' });
-    computedList = isAdmin ? [...computedList] : [...computedList].filter(o => !['accountType', 'regulation', 'avatar', ''].includes(o.value));
+    computedList = isAdmin ? [...computedList] : [...computedList].filter(o => !['Account Type', 'Regulation', ''].includes(o.label));
     computedList = (isIssuer && isOfferingClose) ? [...computedList] : reject(computedList, { label: 'Email', value: 'userEmail' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
