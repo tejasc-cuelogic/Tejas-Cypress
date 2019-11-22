@@ -1075,7 +1075,13 @@ export class AccreditationStore {
             headerSubheaderTextObj.header = 'Finish setting up your account to begin investing.';
             headerSubheaderTextObj.subHeader = '';
             break;
-          case 'HARD_FREEZE' || 'SOFT_FREEZE':
+          case 'HARD_FREEZE':
+            // headerSubheaderTextObj.header =
+            // `Your ${accountType} Account Is Frozen For Investments.`;
+            headerSubheaderTextObj.header = 'This investment account is frozen.';
+            headerSubheaderTextObj.subHeader = '';
+            break;
+          case 'SOFT_FREEZE':
             // headerSubheaderTextObj.header =
             // `Your ${accountType} Account Is Frozen For Investments.`;
             headerSubheaderTextObj.header = 'This investment account is frozen.';
