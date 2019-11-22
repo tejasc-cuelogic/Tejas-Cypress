@@ -62,25 +62,6 @@ export default class Overview extends Component {
           <Button fluid={isMobile} primary size="large" className="very relaxed" content="Continue" onClick={this.handleChangeStep} />
           <p className="mt-30"><Link to={`${this.props.match.url}/confirm`}>I’ll do it later</Link></p>
         </div>
-        {!signupStatus.isMigratedFullAccount
-          ? (
-            <p className="mt-50 note">
-              Investment offerings on
-              {' '}
-              <a href="https://www.nextseed.com/" target="_blank" rel="noopener noreferrer">nextseed.com</a>
-              {' '}
-              are facilitated by NextSeed US LLC (SEC-registered Funding Portal & member of
-              {' '}
-              {finraLink}
-              )
-                        and NextSeed Securities LLC (SEC-registered broker-dealer & member of
-              {' '}
-              {finraLink}
-              ).
-            </p>
-          )
-          : null
-        }
       </div>
     );
   }
