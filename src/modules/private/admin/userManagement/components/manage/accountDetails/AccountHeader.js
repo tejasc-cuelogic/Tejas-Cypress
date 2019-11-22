@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { includes, startCase, get } from 'lodash';
-import { Header, Icon, Button, Divider } from 'semantic-ui-react';
+import { Header, Icon, Button, Divider, Popup } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
 
 @inject('userDetailsStore', 'uiStore', 'userStore', 'accountStore')
@@ -43,8 +43,27 @@ export default class AccountHeader extends Component {
                 <span className="pull-right">
                   <Button.Group compact size="tiny">
                     {(!isAccFrozen(accountStatus))
-                      && Object.keys(freezeAccObj).map(accStatus => <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, accStatus)}><Icon className="ns-freeze" />{freezeAccObj[accStatus].btnText}</Button>)
+                      && Object.keys(freezeAccObj).map(accStatus => (
+                        <Popup
+                          position="top center"
+                          content={(
+                            <ul>
+                              <li>Cannot make comments on an offering <b>(NEW) </b></li>
+                              <li>Cannot make investments</li>
+                              <li>Cannot updates to investments</li>
+                              <li>Cannot make deposits</li>
+                              <li> {accStatus === 'HARD_FREEZE' ? 'Cannot' : 'Can make'} withdraw (this is the ONLY difference between soft/hard freeze)</li>
+                              <li>Can cancel a reservation</li>
+                              <li>Can make change linked bank account requests</li>
+                            </ul>
+                          )}
+                          trigger={
+                            <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, accStatus)}><Icon className="ns-freeze" />{freezeAccObj[accStatus].btnText}</Button>
+                          }
+                        />
+                      ))
                     }
+
 
                     {isAccFrozen(accountStatus)
                       && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'UNFREEZE')}><Icon className="ns-freeze" />Unfreeze</Button>
