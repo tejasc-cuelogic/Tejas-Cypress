@@ -14,6 +14,15 @@ const EntityAndLegal = props => (
         containerclassname="iconic-radio"
       />
     </FormElementWrap>
+    <FormElementWrap hideFields={props.hideFields} header="How is your company taxed?">
+      <FormRadioGroup
+        disabled={props.preQualFormDisabled}
+        fielddata={props.fields.companyTaxed}
+        name="companyTaxed"
+        changed={props.businessAppEleChange}
+        containerclassname="button-radio"
+      />
+    </FormElementWrap>
     <FormElementWrap
       hideFields={props.hideFields}
       noDivider

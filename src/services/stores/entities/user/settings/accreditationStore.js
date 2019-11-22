@@ -410,7 +410,7 @@ export class AccreditationStore {
       // this.requestState.search[name] = dateObtained;
       this.requestState.search[name] = value ? name === 'startDate' ? moment(new Date(`${value.formattedValue} 00:00:00`)).toISOString() : moment(new Date(`${value.formattedValue} 23:59:59`)).toISOString() : '';
       if ((this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '')
-      || (this.requestState.search.startDate === '' && this.requestState.search.endDate === '')
+        || (this.requestState.search.startDate === '' && this.requestState.search.endDate === '')
       ) {
         const srchParams = { ...this.requestState.search };
         this.initiateSearch(srchParams);
@@ -869,7 +869,7 @@ export class AccreditationStore {
       const validAccreditationStatus = ['REQUESTED'];
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration
         ? (currentAcitveObject.status === 'EXPIRED' || this.checkIsAccreditationExpired(currentAcitveObject.expiration)
-      === 'EXPIRED') ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
+          === 'EXPIRED') ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
       investmentType = regulationType && regulationType === 'BD_CF_506C' && accountStatus !== 'EXPIRED' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'BD_506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : regulationType && regulationType === 'BD_506B' ? 'BD_506B' : 'CF';
       switch (accountStatus) {
         case 'REQUESTED':
@@ -913,6 +913,7 @@ export class AccreditationStore {
       partialAccounts,
       processingAccounts,
     } = userDetailsStore.signupStatus;
+    const { details } = userDetailsStore.userDetails.roles.find(r => r.name === selectedAccount);
     let accountStatusFound = '';
     if (selectedAccount) {
       const activeArr = activeAccounts.length
@@ -928,7 +929,7 @@ export class AccreditationStore {
       } else if (ProcessingArr.length) {
         accountStatusFound = 'PROCESSING';
       } else if (frozenArr.length) {
-        accountStatusFound = 'FROZEN';
+        accountStatusFound = details.accountStatus;
       } else if (PartialArr.length) {
         accountStatusFound = 'PARTIAL';
       } else {
@@ -979,6 +980,16 @@ export class AccreditationStore {
     if (expirationDate) {
       const date = (isUnix && typeof expirationDate === 'string') ? parseInt(expirationDate) : expirationDate;
       dateDiff = DataFormatter.diffDays(DataFormatter.formatedDate(date, isUnix), false, true);
+      return dateDiff < 0 ? 'EXPIRED' : 'ACTIVE';
+    }
+    return dateDiff;
+  }
+
+  checkIsAccreditationExpiredAsperTimeZone = (expirationDate, isUnix = false) => {
+    let dateDiff = '';
+    if (expirationDate) {
+      const date = (isUnix && typeof expirationDate === 'string') ? parseInt(expirationDate) : expirationDate;
+      dateDiff = DataFormatter.getDateDifferenceInHoursOrMinutes(DataFormatter.formatedDate(date, isUnix), true);
       return dateDiff < 0 ? 'EXPIRED' : 'ACTIVE';
     }
     return dateDiff;
@@ -1064,7 +1075,7 @@ export class AccreditationStore {
             headerSubheaderTextObj.header = 'Finish setting up your account to begin investing.';
             headerSubheaderTextObj.subHeader = '';
             break;
-          case 'FROZEN':
+          case 'HARD_FREEZE' || 'SOFT_FREEZE':
             // headerSubheaderTextObj.header =
             // `Your ${accountType} Account Is Frozen For Investments.`;
             headerSubheaderTextObj.header = 'This investment account is frozen.';

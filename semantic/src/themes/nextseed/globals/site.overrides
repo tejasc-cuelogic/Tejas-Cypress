@@ -268,6 +268,9 @@ h6{
 .show-top{
 	z-index: 99999 !important;
 }
+.d-flex{
+	display: flex !important;
+}
 //	normal link styles
 a:not(.item), a:not(.ui.button){
 	color:@link-color;

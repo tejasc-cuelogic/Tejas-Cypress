@@ -55,7 +55,7 @@ class KeyTermsDetails extends Component {
     // const maxOfferingAmountD = get(keyTerms, 'maxOfferingAmount506') ? get(keyTerms, 'maxOfferingAmount506') : get(keyTerms, 'maxOfferingAmount506C');
     return (
       <>
-        <Grid columns={3} divided stackable className="vertical-gutter neutral-text">
+        <Grid columns={3} divided stackable className="key-terms vertical-gutter neutral-text">
           <Grid.Column>
             <p><b className={newLayout ? 'neutral-text' : ''}>Issuer</b><br />{get(keyTerms, 'legalBusinessName') || 'NA'}</p>
           </Grid.Column>
@@ -280,7 +280,7 @@ class KeyTermsDetails extends Component {
             <KeyTermsFieldHoc
               data={keyTerms}
               field="premoneyValuation"
-              title="Pre-Money valuation"
+              title="Pre-Money Valuation"
               content={(
                 <p>
                   {Helper.CurrencyFormat(keyTerms.premoneyValuation, 0)}
