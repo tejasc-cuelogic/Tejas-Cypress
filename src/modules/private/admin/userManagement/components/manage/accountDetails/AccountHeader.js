@@ -28,6 +28,7 @@ export default class AccountHeader extends Component {
     const access = this.props.userStore.myAccessForModule('USERS');
     const isFullAccessUser = access.level === 'FULL';
     const { isAccFrozen } = this.props.accountStore;
+    const freezeAccObj = { HARD_FREEZE: { btnText: 'Hard Freeze' }, SOFT_FREEZE: { btnText: 'Soft Freeze' } };
     return (
       <>
         <div className="clearfix">
@@ -41,12 +42,8 @@ export default class AccountHeader extends Component {
               <>
                 <span className="pull-right">
                   <Button.Group compact size="tiny" className="d-flex">
-                    {(!isAccFrozen(accountStatus) || accountStatus === 'HARD_FREEZE')
-                      && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'SOFT_FREEZE')}><Icon className="ns-freeze" />Soft Freeze</Button>
-                    }
-
-                    {(!isAccFrozen(accountStatus) || accountStatus === 'SOFT_FREEZE')
-                      && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'HARD_FREEZE')}><Icon className="ns-freeze" />Hard Freeze</Button>
+                    {(!isAccFrozen(accountStatus))
+                      && Object.keys(freezeAccObj).map(accStatus => <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, accStatus)}><Icon className="ns-freeze" />{freezeAccObj[accStatus].btnText}</Button>)
                     }
                   </Button.Group>
                   <Button.Group compact size="tiny" className="d-flex">
