@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import InlineLoader from './InlineLoader';
 import { REACT_APP_DEPLOY_ENV } from '../../../constants/common';
 
-const catchErrorBoundry = !['localhosst'].includes(REACT_APP_DEPLOY_ENV);
+const catchErrorBoundry = !['localhost'].includes(REACT_APP_DEPLOY_ENV);
 
 @inject('authStore')
 @observer
