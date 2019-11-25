@@ -2078,6 +2078,15 @@ i.icon[class*="ns-"]{
 .ns-offering:before{
     content:@ns-offering;
 }
+.ns-offer-declined:before {
+    content: @ns-offer-declined; 
+}
+.ns-offer-extended:before {
+    content: @ns-offer-extended; 
+}
+.ns-offer-pending:before {
+    content: @ns-offer-pending; 
+}
 .ns-other:before {
     content:@ns-other; 
 }
