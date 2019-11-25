@@ -14,7 +14,6 @@ const meta = [
   { label: 'Date', value: 'investmentDate' },
   { label: 'Investor\'s Name', value: 'firstName' },
   { label: 'Amount', value: 'amount' },
-  { label: 'Address', value: 'address'},  
   { label: 'Residence City', value: 'city' },
   { label: 'State', value: 'state' },
   { label: 'Account Type', value: 'accountType' },
@@ -51,7 +50,6 @@ export default class Listing extends Component {
     let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Amount', value: 'amount' });
     computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'EB', value: 'earlyBirdEligibility' });
     computedList = isAdmin ? [...computedList] : [...computedList].filter(o => !['Account Type', 'Regulation', ''].includes(o.label));
-    computedList = isAdmin ? reject(headerList, {label: 'Residence City', value: 'city' }) : reject(headerList, {label: 'Address', value: 'address' });
     computedList = (isIssuer && isOfferingClose) ? [...computedList] : reject(computedList, { label: 'Email', value: 'userEmail' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
