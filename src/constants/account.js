@@ -252,14 +252,14 @@ export const IRA_ACC_TYPES = {
     values: [
       {
         label: 'Traditional',
-        labelDescription: 'Investments are made with pre-tax dollars, and earnings grow tax-deferred',
+        labelDescription: 'Investments are made with pre-tax dollars; earnings grow tax-deferred',
         value: 0,
         description: 'Earnings from investments on a Traditional Indiviudal Retirement Account grow tax-deferred.',
         rawValue: 'traditional',
       },
       {
         label: 'Roth',
-        labelDescription: 'Investments are made with after-tax dollars, and earnings grow tax-free',
+        labelDescription: 'Investments are made with after-tax dollars; earnings grow tax-free',
         value: 1,
         description: 'Earnings from investments in a Roth Retirement Account grow tax free.',
         rawValue: 'roth',
