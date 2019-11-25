@@ -132,8 +132,8 @@ export const isValidInvestorInOffering = gql`
 `;
 
 export const campaignDetailsQuery = gql`
-  query getOfferingDetailsBySlug($id: String) {
-    getOfferingDetailsBySlug (offeringSlug: $id) {
+  query getOfferingDetailsBySlug($id: String, $isValid: Boolean) {
+    getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
     stage
     offeringSlug

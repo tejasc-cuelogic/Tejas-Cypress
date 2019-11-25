@@ -102,19 +102,21 @@ export class CampaignStore {
   }
 
   @action
-  getCampaignDetails = (id, queryType) => new Promise((resolve, reject) => {
+  getCampaignDetails = (id, queryType = false, isValid = false) => new Promise((resolve, reject) => {
     const gqlClient = authStore.isUserLoggedIn ? client : clientPublic;
     watchListStore.setFieldValue('isWatching', false);
     this.details = graphql({
       client: gqlClient,
       query: queryType ? campaignDetailsForInvestmentQuery : campaignDetailsQuery,
-      variables: { id },
+      variables: { id, isValid },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data && data.getOfferingDetailsBySlug && !this.details.loading) {
           this.getCampaignAdditionalDetails(id);
           watchListStore.setOfferingWatch();
-          resolve();
+          resolve(data.getOfferingDetailsBySlug);
+        } else {
+          resolve(false);
         }
       },
       onError: (err) => {

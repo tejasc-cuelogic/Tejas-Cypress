@@ -32,7 +32,7 @@ const offsetValue = document.getElementsByClassName('offering-side-menu mobile-c
 class offerDetails extends Component {
   state = {
     showPassDialog: false,
-    preLoading: true,
+    preLoading: false,
     found: 0,
   }
 
@@ -98,50 +98,37 @@ class offerDetails extends Component {
   componentDidMount() {
     const { location, match, newLayout } = this.props;
     const { isUserLoggedIn } = this.props.authStore;
-    // const { currentUser, isAdmin } = this.props.userStore;
-    this.props.campaignStore.getCampaignDetails(this.props.match.params.id).then(() => {
-      // const oMinData = data || null;
-      // if (['TERMINATED', 'FAILED'].includes(oMinData.stage) && !isAdmin) {
-      //   this.props.history.push('/offerings');
-      // }
-      // if ((currentUser && currentUser.roles.includes('admin'))
-      //   || oMinData.isAvailablePublicly
-      //   || oMinData.stage === 'LIVE'
-      //   || (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId === currentUser.sub)) {
-      //   this.setState({ preLoading: false, showPassDialog: false });
-      //   this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
-      // } else if (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId !== currentUser.sub) {
-      //   if (oMinData.stage === 'CREATION') {
-      //     this.setState({ showPassDialog: true, preLoading: false });
-      //   } else {
-      //     this.props.history.push('/offerings');
-      //   }
-      // } else if (currentUser && currentUser.roles.includes('investor')) {
-      //   const params = {
-      //     userId: currentUser.sub,
-      //     offeringId: data.id,
-      //     offeringStage: oMinData.stage,
-      //   };
-      //   this.props.campaignStore.isValidInvestorInOffering(params).then((res) => {
-      //     if (res) {
-      //       this.setState({ preLoading: false, showPassDialog: false });
-      //       this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
-      //     } else {
-      //       this.props.history.push('/offerings');
-      //     }
-      //   });
-      // } else {
-      //   if (oMinData.stage === 'CREATION') {
-      //     this.setState({ showPassDialog: true, preLoading: false });
-      //   } else if (oMinData.stage !== 'CREATION' && oMinData.isAvailablePublicly !== true) {
-      //     this.setState({ showPassDialog: false, preLoading: false });
-      //     this.props.uiStore.setAuthRef(this.props.location.pathname);
-      //     this.props.history.push('/login');
-      //   }
-      // }
+    const { currentUser, isAdmin } = this.props.userStore;
+    this.props.campaignStore.getCampaignDetails(this.props.match.params.id).then((data) => {
+      if (!data) {
+        this.props.history.push('/offerings');
+      }
     }).catch((err) => {
       console.log(err);
-      this.props.history.push('/offerings');
+      if (get(err, 'extensions.exception.code') === 'OFFERING_EXCEPTION') {
+        if (['TERMINATED', 'FAILED'].includes(get(err, 'extensions.exception.stage')) && !isAdmin) {
+          this.props.history.push('/offerings');
+        } else if (['CREATION'].includes(get(err, 'extensions.exception.stage'))) {
+          this.setState({ showPassDialog: true, preLoading: false });
+        } else if (get(err, 'extensions.exception.promptPassword') && ['LIVE'].includes(get(err, 'extensions.exception.stage'))) {
+          this.setState({ showPassDialog: true, preLoading: false });
+        } else if (!get(err, 'extensions.exception.promptPassword')) {
+          this.props.history.push('/offerings');
+        } else if (!['CREATION'].includes(get(err, 'extensions.exception.stage')) && !get(err, 'extensions.exception.isAvailablePublicly')) {
+          this.setState({ showPassDialog: false, preLoading: false });
+          this.props.uiStore.setAuthRef(this.props.location.pathname);
+          this.props.history.push('/login');
+        } else {
+          this.props.history.push('/offerings');
+        }
+      } else {
+        this.props.history.push('/offerings');
+      }
+      if ((currentUser && currentUser.roles.includes('admin'))
+        || (currentUser && currentUser.roles.includes('issuer') && get(err, 'extensions.exception.issuerId') === currentUser.sub)) {
+        this.setState({ preLoading: false, showPassDialog: false });
+        this.props.campaignStore.getCampaignDetails(this.props.match.params.id, false, true);
+      }
     });
 
     if (location.pathname !== match.url) {
@@ -172,7 +159,7 @@ class offerDetails extends Component {
   authPreviewOffer = (isAuthenticated) => {
     if (isAuthenticated) {
       this.setState({ showPassDialog: false });
-      this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
+      this.props.campaignStore.getCampaignDetails(this.props.match.params.id, false, true);
     }
   }
 
