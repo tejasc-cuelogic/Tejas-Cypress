@@ -493,8 +493,8 @@ export const selectedUserDetailsQuery = gql`
   }
 `;
 
-export const  = gql`
-  query ($userId: ID!) {
+export const userAccreditationQuery = gql`
+  query userAccreditationQuery($userId: ID!) {
     user(id: $userId) {
       id
       roles {
