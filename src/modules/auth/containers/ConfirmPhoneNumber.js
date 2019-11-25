@@ -125,7 +125,7 @@ export default class ConfirmPhoneNumber extends Component {
       personalInfoChange,
       isOptConfirmed,
     } = this.props.identityStore;
-    const { errors, editMode } = this.props.uiStore;
+    const { errors, editMode, responsiveVars } = this.props.uiStore;
     const { signupStatus } = this.props.userDetailsStore;
     const dataLoading = !reSendVerificationCode && this.props.uiStore.inProgress;
     if (signupStatus.isMigratedFullAccount && !confirmMigratedUserPhoneNumber) {
@@ -136,13 +136,13 @@ export default class ConfirmPhoneNumber extends Component {
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">Confirm your phone number</Header>
-          <p>
+          <Header as="h3" className={responsiveVars.isMobile ? 'mb-10' : ''}>Confirm your phone number</Header>
+          <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
             We use Multi-Factor Authentication (MFA) to increase the security of your NextSeed
             investment account.
           </p>
-          <Divider section />
-          <p>
+          <Divider section={!responsiveVars.isMobile} />
+          <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
             {editMode ? 'Please update your number for MFA' : 'Please confirm the 6-digit verification code sent to your phone'
             }
           </p>
