@@ -4,7 +4,7 @@ import { Header, Form, Button, Icon, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import cookie from 'react-cookies';
-import { FormRadioGroup, FormCheckbox, FormArrowButton } from '../../../../../theme/form';
+import { FormRadioGroup, FormArrowButton } from '../../../../../theme/form';
 import { Spinner } from '../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -295,8 +295,6 @@ class AccountType extends Component {
     const {
       accreditationData,
       userAccredetiationState,
-      ACCREDITATION_EXPIRY_FORM,
-      expirationChange,
       showAccountList,
       selectedAccountStatus,
       userAccreditatedStatus,
@@ -438,7 +436,7 @@ class AccountType extends Component {
                                           to={redirectURL}
                                           primary
                                           className="relaxed"
-                                          content="Confirm Status"
+                                          content={userAccredetiationState === 'PENDING' ? 'OK' : 'Confirm Status'}
                                         />
                                       </div>
                                     </>
@@ -446,14 +444,14 @@ class AccountType extends Component {
                                 : (userAccredetiationState === 'EXPIRED' && ['BD_506C', 'BD_506B'].includes(offeringReuglation))
                                   ? (
                                     <Form error>
-                                      <FormCheckbox
+                                      {/* <FormCheckbox
                                         fielddata={ACCREDITATION_EXPIRY_FORM.fields.financialStatus}
                                         name="financialStatus"
                                         changed={expirationChange}
                                         defaults
                                         containerclassname="ui relaxed list"
-                                      />
-                                      <Button onClick={() => this.handlUpdateExpiration(redirectURL)} primary className="relaxed" content="Re-verify status" disabled={!(ACCREDITATION_EXPIRY_FORM.meta.isValid)} />
+                                      /> */}
+                                      <Button onClick={() => this.handlUpdateExpiration(redirectURL)} primary className="relaxed" content="Confirm Status" />
                                       <Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" />
                                     </Form>
                                   )

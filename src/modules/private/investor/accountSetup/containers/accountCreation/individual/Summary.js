@@ -119,10 +119,10 @@ export default class Summary extends React.Component {
         }
         <p className={`${isMobile ? '' : 'center-align'} grey-header mt-30`}>
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
-          <a className="highlight-text" style={{ cursor: 'pointer' }} href={`${this.props.match.url}/legal-docs/cCAgreement`} onClick={e => this.openModal(e, 'cCAgreement')}>CrowdPay Custodial Account Agreement</a>,{' '}
-          <a className="highlight-text" style={{ cursor: 'pointer' }} href={`${this.props.match.url}/legal-docs/fPAgreemnt`} onClick={e => this.openModal(e, 'fPAgreemnt')}>NextSeed US LLC Member Agreement</a>,{' '}
-          <a className="highlight-text" style={{ cursor: 'pointer' }} href={`${this.props.match.url}/legal-docs/bDIAgreemnt`} onClick={e => this.openModal(e, 'bDIAgreemnt')}>NextSeed Securities LLC Investor Agreement</a>, and {' '}
-          <a className="highlight-text" style={{ cursor: 'pointer' }} href={`${this.props.match.url}/legal-docs/irsCertification`} onClick={e => this.openModal(e, 'irsCertification')}>Substitute IRS Form W-9 Certification</a>.
+          <a className="highlight-text" style={{ cursor: 'pointer' }} href="/app/legal-docs/cCAgreement" onClick={e => this.openModal(e, 'cCAgreement')}>CrowdPay Custodial Account Agreement</a>,{' '}
+          <a className="highlight-text" style={{ cursor: 'pointer' }} href="/app/legal-docs/fPAgreemnt" onClick={e => this.openModal(e, 'fPAgreemnt')}>NextSeed US LLC Member Agreement</a>,{' '}
+          <a className="highlight-text" style={{ cursor: 'pointer' }} href="/app/legal-docs/bDIAgreemnt" onClick={e => this.openModal(e, 'bDIAgreemnt')}>NextSeed Securities LLC Investor Agreement</a>, and {' '}
+          <a className="highlight-text" style={{ cursor: 'pointer' }} href="/app/legal-docs/irsCertification" onClick={e => this.openModal(e, 'irsCertification')}>Substitute IRS Form W-9 Certification</a>.
           <IframeModal
             open={this.state.open}
             close={this.closeModal}

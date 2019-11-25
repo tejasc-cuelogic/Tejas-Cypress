@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { get } from 'lodash';
 import { createUploadEntry, removeUploadedFile, createUploadEntryAccreditationAdmin } from '../../stores/queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';
 import { DataFormatter } from '../../../helper';
@@ -7,7 +8,8 @@ import { uiStore, commonStore } from '../../stores';
 import apiService from '../../../api/restApi';
 
 export class FileUpload {
-  setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '', tags = '') => new Promise((resolve, reject) => {
+  setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '', tags = '', params) => new Promise((resolve, reject) => {
+    const investorId = get(params, 'investorId');
     client
       .mutate({
         mutation: createUploadEntry,
@@ -19,6 +21,7 @@ export class FileUpload {
           fileData,
           offeringId,
           tags,
+          investorId,
         },
       })
       .then((result) => {

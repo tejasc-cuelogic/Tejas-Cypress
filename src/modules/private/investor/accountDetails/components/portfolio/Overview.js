@@ -178,13 +178,13 @@ class Overview extends Component {
                           <Table.Cell>{preferredEquityUnit}</Table.Cell>
                           <Table.Cell>
                             {get(campaign, 'closureSummary.keyTerms.priceCalculation')
-                              ? Helper.CurrencyFormat(get(campaign, 'closureSummary.keyTerms.priceCalculation'), 0)
+                              ? Helper.CurrencyFormat(get(campaign, 'closureSummary.keyTerms.priceCalculation'))
                               : 'N/A'
                             }
                           </Table.Cell>
                         </Table.Row>
                         <Table.Row verticalAlign="top">
-                        <Table.Cell>Pre-Money valuation</Table.Cell>
+                        <Table.Cell>Pre-Money Valuation</Table.Cell>
                         <Table.Cell>
                           {get(campaign, 'keyTerms.premoneyValuation')
                             ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0)

@@ -50,12 +50,12 @@ class KeyTermsDetails extends Component {
       { key: 'maxOfferingAmountCF', label: 'Offering Max', popupContent: 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.' },
       { key: 'minInvestAmt', label: 'Min Individual Investment', popupContent: 'This is the minimum individual investment amount to participate in this offering.' },
     ];
-
+    const isPreferredEquityOffering = !!(get(campaign, 'keyTerms.securities') && ['PREFERRED_EQUITY_506C'].includes(get(campaign, 'keyTerms.securities')));
     // const minOfferingAmountD = get(keyTerms, 'minOfferingAmount506') ? get(keyTerms, 'minOfferingAmount506') : get(keyTerms, 'minOfferingAmount506C');
     // const maxOfferingAmountD = get(keyTerms, 'maxOfferingAmount506') ? get(keyTerms, 'maxOfferingAmount506') : get(keyTerms, 'maxOfferingAmount506C');
     return (
       <>
-        <Grid columns={3} divided stackable className="vertical-gutter neutral-text">
+        <Grid columns={3} divided stackable className="key-terms vertical-gutter neutral-text">
           <Grid.Column>
             <p><b className={newLayout ? 'neutral-text' : ''}>Issuer</b><br />{get(keyTerms, 'legalBusinessName') || 'NA'}</p>
           </Grid.Column>
@@ -140,16 +140,16 @@ class KeyTermsDetails extends Component {
                     {Helper.CurrencyFormat(totalInvestmentAmount, 0)}
                   </p>
                   {get(keyTerms, 'regulation') === 'BD_CF_506C'
-                  && (
-                  <>
-                    <p>
-                      <i>{`${Helper.CurrencyFormat(totalInvestmentAmountCf, 0)} (under Regulation Crowdfunding)`}</i>
-                    </p>
-                    <p>
-                      <i>{`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}</i>
-                    </p>
-                  </>
-                  )
+                    && (
+                      <>
+                        <p>
+                          <i>{`${Helper.CurrencyFormat(totalInvestmentAmountCf, 0)} (under Regulation Crowdfunding)`}</i>
+                        </p>
+                        <p>
+                          <i>{`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}</i>
+                        </p>
+                      </>
+                    )
                   }
                 </>
               )}
@@ -280,7 +280,7 @@ class KeyTermsDetails extends Component {
             <KeyTermsFieldHoc
               data={keyTerms}
               field="premoneyValuation"
-              title="Pre-Money valuation"
+              title="Pre-Money Valuation"
               content={(
                 <p>
                   {Helper.CurrencyFormat(keyTerms.premoneyValuation, 0)}
@@ -293,7 +293,7 @@ class KeyTermsDetails extends Component {
               title={`${capitalize(keyTerms.equityUnitType)} Price`}
               content={(
                 <p>
-                  {keyTerms.priceCopy}
+                  {keyTerms.priceCopy }
                 </p>
               )}
             />
@@ -324,17 +324,21 @@ class KeyTermsDetails extends Component {
                 )
               }
             />
-            <KeyTermsFieldHoc
-              data={keyTerms}
-              field="offeringSize"
-              title="Offering Size"
-              content={(
-                <p>
-                  {keyTerms && keyTerms.offeringSize ? Helper.CurrencyFormat(keyTerms.offeringSize, 0)
-                    : 'NA'}
-                </p>
-              )}
-            />
+            {!isPreferredEquityOffering
+              && (
+                <KeyTermsFieldHoc
+                  data={keyTerms}
+                  field="offeringSize"
+                  title="Offering Size"
+                  content={(
+                    <p>
+                      {keyTerms && keyTerms.offeringSize ? Helper.CurrencyFormat(keyTerms.offeringSize, 0)
+                        : 'NA'}
+                    </p>
+                  )}
+                />
+              )
+            }
             <KeyTermsFieldHoc
               data={keyTerms}
               field="preferredReturn"

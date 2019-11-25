@@ -30,10 +30,10 @@ export default class MessagesWrap extends Component {
 
   render() {
     const {
-      uiStore, messageStore, userDetailsStore, isIssuer, passedProcessingDate, isAdmin,
+      uiStore, messageStore, userDetailsStore, isIssuer, passedProcessingDate, isAdmin, currentOfferingIssuerId,
     } = this.props;
     const {
-      thread, buttonLoader, currentOfferingIssuerId, threadMainMessage,
+      thread, buttonLoader, threadMainMessage,
     } = messageStore;
     const threadMessages = threadMainMessage.concat(thread);
     const { currentUserId } = userDetailsStore;
@@ -54,7 +54,7 @@ export default class MessagesWrap extends Component {
         }
         <Confirm
           header="Confirm"
-          content={`${uiStore.confirmBox.entity === 'message' ? 'Are you sure you want to delete this message?' : 'Are you sure this is going to be live/email sent to investors?'}`}
+          content={`${uiStore.confirmBox.entity === 'message' ? 'Are you sure you want to delete this message?' : 'This comment will be immediately posted to the public campaign page and sent via email to any participants in this comment thread.'}`}
           open={uiStore.confirmBox.entity === 'message' || uiStore.confirmBox.entity === 'APPROVE'}
           onCancel={() => uiStore.setConfirmBox('', '', '', false)}
           // eslint-disable-next-line no-unused-expressions

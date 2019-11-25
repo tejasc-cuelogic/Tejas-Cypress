@@ -369,8 +369,19 @@
             }
         }
         &:not(.sortable){
+            tr{
+                @media only screen and (max-width : @largestMobileScreen){
+                    margin-left: -@14px;
+                    margin-right: -@14px;
+                    padding-left: @14px;
+                    padding-right: @14px;
+                }
+            }
             td:first-child{
                 padding-left: @18px !important;
+                @media only screen and (max-width : @largestMobileScreen){
+                    padding-left: 0 !important;
+                }
             }
 
         }

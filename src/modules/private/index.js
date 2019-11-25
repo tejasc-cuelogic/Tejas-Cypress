@@ -8,6 +8,7 @@ import { privateRoutes } from '../routes';
 import { InlineLoader, SuspenseBoundary, lazyRetry, Spinner } from '../../theme/shared';
 import SidebarLeftOverlay from '../../theme/layout/SidebarLeftOverlay';
 import NsHeader from '../../theme/layout/Header';
+import AgreementsPdfLoader from './investor/settings/components/agreements/AgreementsPdfLoader';
 import NotFound from '../shared/NotFound';
 
 const isMobile = document.documentElement.clientWidth < 992;
@@ -114,6 +115,7 @@ export default class Private extends React.Component {
                   key={route.path}
                 />
               ))}
+              <Route exact path="/app/legal-docs/:agreementKey" render={props => <AgreementsPdfLoader isNewTab {...props} />} />
               {Object.keys(routes).map(route => routes[route])}
               {myRoutes.length > 0 ? <Route component={NotFound} />
                 : <Route component={InlineLoader} />}

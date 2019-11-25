@@ -2,7 +2,6 @@
          Theme Overrides
 *******************************/
 .ui.comments {
-    border: 1px solid @neutral-darkwhite;
     margin-bottom: @36px;
     @media only screen and (max-width : @largestMobileScreen){
         margin-bottom: @23px;
@@ -98,5 +97,6 @@
         }
     }
 } 
-
-
+.offering-comment .ui.comments{
+    border: 1px solid @neutral-darkwhite;
+}

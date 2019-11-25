@@ -221,18 +221,27 @@ const BUSINESS_PREQUAL_COMMON = {
     rule: 'required',
     customErrors: { required: 'required' },
   },
+  companyTaxed: {
+    value: '',
+    values: [
+      { label: 'As a corporation', value: 'CORPORATION' },
+      { label: 'As a partnership', value: 'PARTNERSHIP' },
+    ],
+    error: undefined,
+    rule: 'optional',
+  },
 };
 
 export const BUSINESS_PRE_QUALIFICATION = {
   businessModel: {
-    value: '',
+    value: 'B2C',
     values: [
       { label: 'Business to Consumer', value: 'B2C' },
       { label: 'Business to Business', value: 'B2B' },
     ],
     error: undefined,
-    rule: 'required',
-    customErrors: { required: 'required' },
+    rule: 'optional',
+    // customErrors: { required: 'required' },
   },
   ...BUSINESS_PREQUAL_COMMON,
   businessAgeYears: {

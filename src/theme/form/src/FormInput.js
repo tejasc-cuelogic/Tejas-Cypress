@@ -49,42 +49,42 @@ export default class FormInput extends Component {
         className={fieldClass}
         error={(!!error && this.state.showError) || (!!error && props.showerror)}
       >
-        {!props.ishidelabel && label !== ''
+        {!props.ishidelabel && (label !== '' || props.label !== '')
           && (
-<label>
-            {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
-            {tooltip
-              && (
-              <>
-              {isMobile ? (
-                  <Modal size="tiny" trigger={<Icon className="ns-help-circle" />} closeIcon>
-                    <h5>
-                      {label}
-                    </h5>
-                    {tooltip}
-                  </Modal>
-              ) : (
-<Popup
-  hoverable={props.hoverable}
-  trigger={<Icon className="ns-help-circle" />}
-  content={tooltip}
-  position="top center"
-  className={props.name === 'securitiesExemption' ? 'left-align' : 'center-align'}
-  wide
-/>
-              )
+            <label>
+              {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
+              {tooltip
+                && (
+                  <>
+                    {isMobile ? (
+                      <Modal size="tiny" trigger={<Icon className="ns-help-circle" />} closeIcon>
+                        <h5>
+                          {label}
+                        </h5>
+                        {tooltip}
+                      </Modal>
+                    ) : (
+                        <Popup
+                          hoverable={props.hoverable}
+                          trigger={<Icon className="ns-help-circle" />}
+                          content={tooltip}
+                          position="top center"
+                          className={props.name === 'securitiesExemption' ? 'left-align' : 'center-align'}
+                          wide
+                        />
+                    )
+                    }
+                  </>
+                )
               }
-              </>
-              )
-            }
-            {props.removed
-              && (
-<Link to={props.linkto || '/'} onClick={e => props.removed(e)}>
-                <Icon className="ns-close-circle" color="grey" />
-              </Link>
-              )
-            }
-          </label>
+              {props.removed
+                && (
+                  <Link to={props.linkto || '/'} onClick={e => props.removed(e)}>
+                    <Icon className="ns-close-circle" color="grey" />
+                  </Link>
+                )
+              }
+            </label>
           )
         }
         {props.type === 'password'

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import { Icon, Table, Accordion, Button, Card, Header } from 'semantic-ui-react';
 import { get, includes } from 'lodash';
 import Helper from '../../../../../../helper/utility';
@@ -184,7 +183,7 @@ const InvestmentList = (props) => {
                           && (
                             <Table.Cell>
                               {
-                               get(data, 'offering.closureSummary.keyTerms.maturityDate') ? `${moment(moment(get(data, 'offering.closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months') ? moment(moment(get(data, 'offering.closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months') : '0'} months` : 'N/A'
+                               get(data, 'offering.keyTerms.maturity') ? `${data.offering.keyTerms.maturity} months` : 'N/A'
                               }
                             </Table.Cell>
                           )

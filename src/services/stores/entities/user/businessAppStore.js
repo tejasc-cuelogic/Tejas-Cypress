@@ -121,7 +121,7 @@ export class BusinessAppStore {
   totalChange = (fieldName, totalName) => {
     let total = 0;
     this.BUSINESS_DETAILS_FRM.fields[fieldName].forEach((field) => {
-      total = total + field.amount.value || 0;
+      total += (field.amount.value && Number.isInteger(field.amount.value) ? field.amount.value : 0);
     });
     this[totalName] = total;
   }
@@ -365,7 +365,8 @@ export class BusinessAppStore {
             this.BUSINESS_APP_FRM.fields.businessSecurities.value.push(ele);
           });
         }
-        ['businessModel', 'businessGoal', 'businessEntityStructure', 'franchiseHolder'].forEach((ele) => {
+        // removed 'businessModel',
+        ['businessGoal', 'businessEntityStructure', 'franchiseHolder', 'companyTaxed'].forEach((ele) => {
           this.BUSINESS_APP_FRM.fields[ele].value = data[ele];
         });
         ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
@@ -386,7 +387,7 @@ export class BusinessAppStore {
         data.realEstateTypes.forEach((ele) => {
           this.BUSINESS_APP_FRM.fields.realEstateType.value.push(ele);
         });
-        ['investmentType', 'ownOrOperateProperty', 'businessEntityStructure'].forEach((ele) => {
+        ['investmentType', 'ownOrOperateProperty', 'businessEntityStructure', 'companyTaxed'].forEach((ele) => {
           this.BUSINESS_APP_FRM.fields[ele].value = data[ele];
         });
         ['investorIRR', 'annualInvestorRoi', 'holdTimeInYears'].forEach((ele) => {
@@ -437,6 +438,9 @@ export class BusinessAppStore {
           ['name', 'amount'].forEach((field) => {
             this.BUSINESS_DETAILS_FRM.fields.sources[key][field].value = ele[field];
           });
+          if (key < data.sources.length - 1) {
+            this.addMoreForms(null, 'sources');
+          }
         });
         this.totalChange('sources', 'sourcesTotal');
       } else {
@@ -447,6 +451,9 @@ export class BusinessAppStore {
           ['name', 'amount'].forEach((field) => {
             this.BUSINESS_DETAILS_FRM.fields.uses[key][field].value = ele[field];
           });
+          if (key < data.uses.length - 1) {
+            this.addMoreForms(null, 'uses');
+          }
         });
         this.totalChange('uses', 'usesTotal');
       } else {
@@ -929,6 +936,9 @@ export class BusinessAppStore {
         value: includes(data.legalConfirmation.value, 'IS_NOT_INVESTMENT_COMPANY'),
       }],
     };
+    if (data.companyTaxed.value) {
+      preQualData = { ...preQualData, companyTaxed: data.companyTaxed.value };
+    }
     if (this.getFranchiseCondition) {
       preQualData = { ...preQualData, franchiseHolder: data.franchiseHolder.value };
     }
@@ -954,7 +964,7 @@ export class BusinessAppStore {
       preQualData = {
         ...preQualData,
         businessGoal: data.businessGoal.value,
-        businessModel: data.businessModel.value,
+        // businessModel: data.businessModel.value,
         businessSecurities: data.businessSecurities.value,
         legalConfirmations: [...preQualData.legalConfirmations,
           {

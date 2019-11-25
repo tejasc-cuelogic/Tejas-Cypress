@@ -15,7 +15,7 @@ export default class TrustEntityAccreditationMethod extends Component {
     } = this.props.accreditationStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">Is your trust an entity an accredited investor?</Header>
+        <Header as="h3" textAlign="center">Does your trust qualify as an accredited investor?</Header>
         <p className="center-align">To invest in Reg D offerings on the NextSeed platform, we are required to verify your trust`s status as an accredited investor. </p>
         <p className="center-align"><b>Please confirm which of the following is applicable to your trust.</b></p>
         <Form error className="account-type-tab">
