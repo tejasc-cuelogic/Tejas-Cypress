@@ -115,7 +115,7 @@ export class CampaignStore {
           this.getCampaignAdditionalDetails(id);
           watchListStore.setOfferingWatch();
           resolve(data.getOfferingDetailsBySlug);
-        } else {
+        } else if (!this.details.loading) {
           resolve(false);
         }
       },
@@ -131,7 +131,7 @@ export class CampaignStore {
     this.additionalDetails = graphql({
       client: gqlClient,
       query: campaignDetailsAdditionalQuery,
-      variables: { id },
+      variables: { id, isValid: true },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data && data.getOfferingDetailsBySlug && !this.additionalDetails.loading) {
