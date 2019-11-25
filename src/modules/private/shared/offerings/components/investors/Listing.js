@@ -90,6 +90,7 @@ export default class Listing extends Component {
                         ? <Link to={`/app/users/${data.userId}/profile-data`}><p><b>{`${data.firstName} ${data.lastName}`}</b></p></Link>
                         : `${data.firstName} ${data.lastName}`
                       }
+                      {isAdmin && get(data, 'userEmail')}
                     </div>
                   </Table.Cell>
                   {((isIssuer && isOfferingClose) || (isAdmin))
