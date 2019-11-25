@@ -11,10 +11,10 @@ import { DataFormatter } from '../../../../../../helper';
 import { OFFERING_AGREEMENT_REGULATIONS } from '../../../../../../constants/offering';
 
 const meta = [
-  { label: '', value: 'avatar' },
   { label: 'Date', value: 'investmentDate' },
   { label: 'Investor\'s Name', value: 'firstName' },
   { label: 'Amount', value: 'amount' },
+  { label: 'Address', value: 'address'},  
   { label: 'Residence City', value: 'city' },
   { label: 'State', value: 'state' },
   { label: 'Account Type', value: 'accountType' },
@@ -38,7 +38,7 @@ export default class Listing extends Component {
   showReferralCode = (referralCode, investorReferralCodes, isIssuer) => {
     const matchReferral = find(investorReferralCodes, r => r.code === referralCode);
     return (matchReferral && get(matchReferral, 'isValid')) ? (
-      isIssuer ? 'Yes' : get(matchReferral, 'code')
+      (isIssuer || isAdmin) ? 'Yes' : get(matchReferral, 'code')
     ) : '';
   }
 
@@ -51,6 +51,7 @@ export default class Listing extends Component {
     let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Amount', value: 'amount' });
     computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'EB', value: 'earlyBirdEligibility' });
     computedList = isAdmin ? [...computedList] : [...computedList].filter(o => !['Account Type', 'Regulation', ''].includes(o.label));
+    computedList = isAdmin ? reject(headerList, {label: 'Residence City', value: 'city' }) : reject(headerList, {label: 'Address', value: 'address' });
     computedList = (isIssuer && isOfferingClose) ? [...computedList] : reject(computedList, { label: 'Email', value: 'userEmail' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
@@ -150,6 +151,7 @@ export default class Listing extends Component {
                   <Table.Cell>
                     <div className="table-info-wrap">
                       <p>
+                        {(isAdmin) && <span>{`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}`}</span>}
                         {<span>{data.city || 'N/A'}</span>}
                       </p>
                     </div>
