@@ -60,10 +60,8 @@ const AccTypeDescription = observer((props) => {
             <Link to="/resources/education-center/investor/faq" target="_blank" className="link">FAQs on IRAs</Link>.
           </p>
           <p className="grey-text">
-            NextSeed is not a tax, investment or legal advisor and does not provide any tax,
-            investment, or legal advice; please consult your own advisors or IRS guidelines to
-            determine whether investing in NextSeed offerings through a self-directed IRA is
-            right for you.
+            NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company 
+            ("GoldStar"), which provides FDIC insurance for up to $250,000 of uninvested cash in NextSeed accounts.
           </p>
         </>
         )
