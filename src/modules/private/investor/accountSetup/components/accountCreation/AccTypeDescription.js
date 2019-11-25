@@ -42,15 +42,6 @@ const AccTypeDescription = observer((props) => {
       {isAccExist && value === 1
         && (
         <>
-          <div className={`${isMobile ? '' : 'center-align'} promitional-offer-block mb-20 bg-offwhite`}>
-            <Header as="h5">Promotional Offer</Header>
-            <p>
-              NextSeed will cover the one-time setup fee and
-              annual account fees for four years. See the{' '}
-              <Link to="/agreements/legal" target="_blank" className="link">Terms and Conditions</Link>
-              {' '}for details.
-            </p>
-          </div>
           <p>
             Open a self-directed NextSeed IRA to begin investing in local businesses.
             Get the benefits of investing with either a Traditional or Roth IRA.

@@ -78,15 +78,6 @@ const AccountTypes = ({
           {isMobile
             ? (
               <>
-                <div className="promitional-offer-block mb-20 bg-offwhite mt-10">
-                  <Header as="h5" className="highlight-text mb-10">Promotional Offer</Header>
-                  <p>
-                    NextSeed will cover the one-time setup fee and
-                    annual account fees for four years. See the{' '}
-                    <Link to="/agreements/legal" target="_blank" className="link">Terms and Conditions</Link>
-                    {' '}for details.
-                  </p>
-                </div>
                 <p className="grey-header">
                   NextSeed accounts are provided and held at our partner bank, Happy State Bank
                   DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for up
