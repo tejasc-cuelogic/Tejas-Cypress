@@ -171,7 +171,7 @@ export default class Listing extends Component {
                   }
                   {((isIssuer && isOfferingClose) || (isAdmin))
                     && (
-                    <Table.Cell textAlign="center">
+                    <Table.Cell>
                       {data.earlyBirdEligibility
                         ? (
                           <Popup
