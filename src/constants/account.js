@@ -510,7 +510,7 @@ export const BROKERAGE_EMPLOYMENT = {
   brokerageFirmName: {
     key: 'brokerageFirmName',
     value: '',
-    label: 'Member Firm Name',
+    label: 'Firm Name',
     error: undefined,
     // rule: 'alphaBrokerage|required_if:brokerageEmployment,yes',
     rule: 'optional',
