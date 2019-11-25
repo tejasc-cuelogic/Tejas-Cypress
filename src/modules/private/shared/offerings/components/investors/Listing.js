@@ -50,7 +50,6 @@ export default class Listing extends Component {
     let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Amount', value: 'amount' });
     computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'EB', value: 'earlyBirdEligibility' });
     computedList = isAdmin ? [...computedList] : [...computedList].filter(o => !['Account Type', 'Regulation', ''].includes(o.label));
-    computedList = (isIssuer && isOfferingClose) ? [...computedList] : reject(computedList, { label: 'Email', value: 'userEmail' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
     const isUsersCapablities = this.props.userStore.myAccessForModule('USERS');
@@ -85,32 +84,11 @@ export default class Listing extends Component {
               {investorLists.map((data, index) => (
                 <Table.Row key={`${index}${data.userId}${Math.random()}`}>
                   <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
-                  {isAdmin
-                  && (
-                  <Table.Cell>
-                    <UserAvatar
-                      size="mini"
-                      UserInfo={{
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        avatarUrl: data.avatar,
-                        roles: [],
-                      }}
-                    />
-                  </Table.Cell>
-                  )}
                   <Table.Cell>
                     <div>
                       {get(isUsersCapablities, 'level') && get(isUsersCapablities, 'level') !== 'SUPPORT'
                         ? <Link to={`/app/users/${data.userId}/profile-data`}><p><b>{`${data.firstName} ${data.lastName}`}</b></p></Link>
                         : `${data.firstName} ${data.lastName}`
-                      }
-                      {isAdmin && get(data, 'userEmail')
-                        && (
-                          <>
-                            <p>{`${get(data, 'userEmail')}`}</p>
-                          </>
-                        )
                       }
                     </div>
                   </Table.Cell>
