@@ -32,11 +32,9 @@ export default class Overview extends Component {
             )
             : (
               <>
-                Investment offerings on <a href="https://www.nextseed.com/" target="_blank" rel="noopener noreferrer">nextseed.com</a>
-                {' '}are facilitated by NextSeed US LLC (SEC-registered Funding Portal & member of{' '}
-                {finraLink})
-                and NextSeed Securities LLC (SEC-registered broker-dealer & member of{' '}
-                {finraLink}).
+                Investments are facilitated by NextSeed Securities LLC (SEC-registered 
+                broker-dealer & member of {finraLink}) and NextSeed US LLC (SEC-registered Funding 
+                Portal & member of {finraLink}).
               </>
             )
         }
@@ -47,11 +45,11 @@ export default class Overview extends Component {
           regulations to collect an investor profile. In order to gain full access to
           investments, please answer the following questions to complete your investor
           profile.`
-          : `To begin making investments on the platform, you will need to answer a few more
-          questions to complete your investor profile.`
+          : `As a registered broker-dealer, NextSeed Securities is required by SEC rules and 
+          regulations to collect an investor profile. In order to gain full access to 
+          investments, please answer the following questions to complete your investor 
+          profile.`
         }
-          To begin making investments on the platform, you will need to answer a few more
-          questions to complete your investor profile.
         </p>
       </>
     );
@@ -62,25 +60,6 @@ export default class Overview extends Component {
           <Button fluid={isMobile} primary size="large" className="very relaxed" content="Continue" onClick={this.handleChangeStep} />
           <p className="mt-30"><Link to={`${this.props.match.url}/confirm`}>I’ll do it later</Link></p>
         </div>
-        {!signupStatus.isMigratedFullAccount
-          ? (
-            <p className="mt-50 note">
-              Investment offerings on
-              {' '}
-              <a href="https://www.nextseed.com/" target="_blank" rel="noopener noreferrer">nextseed.com</a>
-              {' '}
-              are facilitated by NextSeed US LLC (SEC-registered Funding Portal & member of
-              {' '}
-              {finraLink}
-              )
-                        and NextSeed Securities LLC (SEC-registered broker-dealer & member of
-              {' '}
-              {finraLink}
-              ).
-            </p>
-          )
-          : null
-        }
       </div>
     );
   }
