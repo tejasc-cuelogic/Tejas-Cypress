@@ -22,7 +22,6 @@ export { default as paymentStore } from './entities/admin/paymentStore';
 export { default as transactionsStore } from './entities/admin/transactionsStore';
 
 export { default as educationStore } from './entities/education/educationStore';
-export { default as rewardStore } from './entities/rewardWallet/rewardStore';
 export { default as businessAppStore } from './entities/user/businessAppStore';
 export { default as navStore } from './entities/shared/navStore';
 
