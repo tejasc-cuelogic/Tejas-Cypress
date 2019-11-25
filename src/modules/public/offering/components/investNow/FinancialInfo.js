@@ -186,7 +186,7 @@ class FinancialInfo extends Component {
                 }
                 {validBonusRewards && validBonusRewards.length > 0
                   && (
-                    <Message className="bg-offwhite no-shadow">
+                    <Message className="bg-offwhite no-shadow no-wrap">
                       <Message.Header>Bonus Rewards to be Received:</Message.Header>
                       {validBonusRewards.map(reward => (
                         <p>+ {reward.title}</p>

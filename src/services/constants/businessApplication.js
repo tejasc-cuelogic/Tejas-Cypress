@@ -221,6 +221,15 @@ const BUSINESS_PREQUAL_COMMON = {
     rule: 'required',
     customErrors: { required: 'required' },
   },
+  companyTaxed: {
+    value: '',
+    values: [
+      { label: 'As a corporation', value: 'CORPORATION' },
+      { label: 'As a partnership', value: 'PARTNERSHIP' },
+    ],
+    error: undefined,
+    rule: 'optional',
+  },
 };
 
 export const BUSINESS_PRE_QUALIFICATION = {

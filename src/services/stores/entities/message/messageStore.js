@@ -10,7 +10,7 @@ import {
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { DRAFT_NEW } from '../../../constants/messages';
-import { offeringCreationStore, campaignStore, offeringsStore, userDetailsStore } from '../../index';
+import { offeringCreationStore, campaignStore, userDetailsStore } from '../../index';
 
 export class NewMessage {
   @observable MESSAGE_FRM = Validator.prepareFormObject(DRAFT_NEW);
@@ -22,8 +22,6 @@ export class NewMessage {
   @observable currentMessageId = null;
 
   @observable currentOfferingId = null;
-
-  @observable currentOfferingIssuerId = get(offeringsStore.offerData, 'data.getOfferingById.issuerId');
 
   @observable editMessageId = null;
 
