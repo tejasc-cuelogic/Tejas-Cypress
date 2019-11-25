@@ -86,6 +86,7 @@ export default class Listing extends Component {
             <Table.Body>
               {investorLists.map((data, index) => (
                 <Table.Row key={`${index}${data.userId}${Math.random()}`}>
+                  <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
                   {isAdmin
                   && (
                   <Table.Cell>
@@ -100,7 +101,6 @@ export default class Listing extends Component {
                     />
                   </Table.Cell>
                   )}
-                  <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
                   <Table.Cell>
                     <div>
                       {get(isUsersCapablities, 'level') && get(isUsersCapablities, 'level') !== 'SUPPORT'
@@ -116,36 +116,6 @@ export default class Listing extends Component {
                       }
                     </div>
                   </Table.Cell>
-                  {isIssuer && isOfferingClose
-                  && (
-                  <Table.Cell>
-                    {data.userEmail || 'N/A'}
-                  </Table.Cell>
-                  )
-                  }
-                  <Table.Cell>
-                    <div className="table-info-wrap">
-                      <p>
-                        {((isIssuer && isOfferingClose) || (isAdmin)) && <span>{`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}`}</span>}
-                        <span>{data.city || 'N/A'}</span>
-                      </p>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>{data.state || 'N/A'}</Table.Cell>
-                  {isAdmin
-                    && (
-                      <Table.Cell>
-                        {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
-                      </Table.Cell>
-                    )
-                  }
-                  {isAdmin
-                    && (
-                      <Table.Cell>
-                        {data.regulation ? OFFERING_AGREEMENT_REGULATIONS[data.regulation] : ''}
-                      </Table.Cell>
-                    )
-                  }
                   {((isIssuer && isOfferingClose) || (isAdmin))
                     && (
                       <>
@@ -176,6 +146,28 @@ export default class Listing extends Component {
                         }
                       </Table.Cell>
                       </>
+                    )
+                  }
+                  <Table.Cell>
+                    <div className="table-info-wrap">
+                      <p>
+                        {((isIssuer && isOfferingClose) || (isAdmin)) && <span>{data.city || 'N/A'}</span>}
+                      </p>
+                    </div>
+                  </Table.Cell>
+                  <Table.Cell>{data.state || 'N/A'}</Table.Cell>
+                  {isAdmin
+                    && (
+                      <Table.Cell>
+                        {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
+                      </Table.Cell>
+                    )
+                  }
+                  {isAdmin
+                    && (
+                      <Table.Cell>
+                        {data.regulation ? OFFERING_AGREEMENT_REGULATIONS[data.regulation] : ''}
+                      </Table.Cell>
                     )
                   }
                   {((isIssuer && isOfferingClose) || (isAdmin))
