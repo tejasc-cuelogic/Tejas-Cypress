@@ -14,12 +14,11 @@ const meta = [
   { label: '', value: 'avatar' },
   { label: 'Date', value: 'investmentDate' },
   { label: 'Investor\'s Name', value: 'firstName' },
-  { label: 'Email', value: 'userEmail' },
+  { label: 'Amount', value: 'amount' },
   { label: 'Residence City', value: 'city' },
   { label: 'State', value: 'state' },
   { label: 'Account Type', value: 'accountType' },
   { label: 'Regulation', value: 'regulation' },
-  { label: 'Amount', value: 'amount' },
   { label: 'EB', value: 'earlyBirdEligibility' },
   { label: 'Referral Code', value: 'referralCode' },
 ];
