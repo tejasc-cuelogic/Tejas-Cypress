@@ -150,7 +150,7 @@ export default class Listing extends Component {
                   <Table.Cell>
                     <div className="table-info-wrap">
                       <p>
-                        {((isIssuer && isOfferingClose) || (isAdmin)) && <span>{data.city || 'N/A'}</span>}
+                        {<span>{data.city || 'N/A'}</span>}
                       </p>
                     </div>
                   </Table.Cell>
