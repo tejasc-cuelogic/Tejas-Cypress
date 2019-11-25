@@ -31,4 +31,8 @@ export const TITLES = {
   '/business-application/business': 'Join the NextSeed community | Pre-Qualification Application Process',
   '/business-application/commercial-real-estate': 'Join the NextSeed community | Pre-Qualification Application Process',
   '/business-application/questions/need-help': 'Join the NextSeed community | Pre-Qualification Application Process | Need Help',
+  '/app/account-settings/profile-data': 'Account Settings | Profile - NextSeed',
+  '/app/account-settings/investment-limits': 'Account Settings | Investment limits - NextSeed',
+  '/app/account-settings/security': 'Account Settings | Security - NextSeed',
+  '/app/account-settings/agreements': 'Account Settings | Agreements - NextSeed',
 };
