@@ -10,7 +10,7 @@ import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, get
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
-import { userDetailsStore, watchListStore, userStore } from '../../index';
+import { userDetailsStore, watchListStore, userStore, authStore } from '../../index';
 // import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
@@ -102,10 +102,11 @@ export class CampaignStore {
   }
 
   @action
-  getCampaignDetails = (id, queryType) => {
+  getCampaignDetails = (id, queryType) => new Promise((resolve, reject) => {
+    const gqlClient = authStore.isUserLoggedIn ? client : clientPublic;
     watchListStore.setFieldValue('isWatching', false);
     this.details = graphql({
-      client: clientPublic,
+      client: gqlClient,
       query: queryType ? campaignDetailsForInvestmentQuery : campaignDetailsQuery,
       variables: { id },
       fetchPolicy: 'network-only',
@@ -113,15 +114,20 @@ export class CampaignStore {
         if (data && data.getOfferingDetailsBySlug && !this.details.loading) {
           this.getCampaignAdditionalDetails(id);
           watchListStore.setOfferingWatch();
+          resolve();
         }
       },
+      onError: (err) => {
+        reject(err);
+      },
     });
-  }
+  });
 
   @action
   getCampaignAdditionalDetails = (id) => {
+    const gqlClient = authStore.isUserLoggedIn ? client : clientPublic;
     this.additionalDetails = graphql({
-      client: clientPublic,
+      client: gqlClient,
       query: campaignDetailsAdditionalQuery,
       variables: { id },
       fetchPolicy: 'network-only',
