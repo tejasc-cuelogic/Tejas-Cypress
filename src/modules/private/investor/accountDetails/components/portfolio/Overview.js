@@ -132,7 +132,7 @@ class Overview extends Component {
                         <Table.Cell>
                           {offering && offering.launch
                             && offering.launch.expectedOpsDate
-                            ? DataFormatter.getDateAsPerTimeZone(offering.launch.expectedOpsDate, false, true, false)
+                            ? DataFormatter.getDateAsPerTimeZone(offering.launch.expectedOpsDate, false, true, false, undefined, 'CST', true)
                             : 'N/A'
                           }
                         </Table.Cell>
