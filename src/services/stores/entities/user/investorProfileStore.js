@@ -263,6 +263,8 @@ class InvestorProfileStore {
     }
     formData = {
       ...formData,
+      isComfortable: fields.isComfortable.value.includes('checked'),
+      isRiskTaker: fields.isRiskTaker.value.includes('checked'),
       brokerageFirmName: fields.brokerageEmployment.value === 'no' ? 'false' : formData.brokerageFirmName,
       publicCompanyTicker: fields.publicCompanyRel.value === 'no' ? 'false' : formData.publicCompanyTicker,
       annualIncome: map(formData.annualIncome, (income, key) => ({ year: YearsList[key], income })),
