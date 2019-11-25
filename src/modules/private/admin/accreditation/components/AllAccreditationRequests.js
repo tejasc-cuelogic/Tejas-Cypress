@@ -46,7 +46,7 @@ export default class AllAccreditationRequests extends Component {
     const { match, accreditationStore, commonStore } = this.props;
     const { inProgress } = commonStore;
     const {
-      accreditations, loading, count, requestState, emailVerifier, sortOrder, checkIsAccreditationExpired,
+      accreditations, loading, count, requestState, emailVerifier, sortOrder, checkIsAccreditationExpiredAsperTimeZone,
     } = accreditationStore;
 
     const access = this.props.userStore.myAccessForModule('ACCREDITATION');
@@ -201,8 +201,8 @@ export default class AllAccreditationRequests extends Component {
                       )
                       : (
                         <Table.Cell>
-                          <p className={checkIsAccreditationExpired(get(accreditation, 'expiration'), true) === 'EXPIRED' ? 'negative-text' : `${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}>
-                            {checkIsAccreditationExpired(get(accreditation, 'expiration'), true) === 'EXPIRED'
+                          <p className={checkIsAccreditationExpiredAsperTimeZone(get(accreditation, 'expiration'), true) === 'EXPIRED' ? 'negative-text' : `${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}>
+                            {checkIsAccreditationExpiredAsperTimeZone(get(accreditation, 'expiration'), true) === 'EXPIRED'
                               ? (
                                 <b>Expired on {get(accreditation, 'expiration') ? DataFormatter.getDateAsPerTimeZone(moment.unix(get(accreditation, 'expiration')), false, false, false, false) : '-'}</b>
                               )
@@ -220,7 +220,7 @@ export default class AllAccreditationRequests extends Component {
                     {accreditation.accreditationStatus === 'CONFIRMED'
                       && (
                       <>
-                        <Table.Cell>{get(accreditation, 'expiration') ? DataFormatter.getDateAsPerTimeZone(moment.unix(get(accreditation, 'expiration')), false, false, false, false) : '-'}</Table.Cell>
+                        <Table.Cell>{get(accreditation, 'expiration') ? DataFormatter.getDateAsPerTimeZone(moment.unix(get(accreditation, 'expiration')), false, false, false, false, 'CST', true) : '-'}</Table.Cell>
                         <Table.Cell>{get(accreditation, 'promotionCredits')}</Table.Cell>
                       </>
                       )

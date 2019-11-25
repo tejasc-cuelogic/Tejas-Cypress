@@ -82,10 +82,11 @@ export default class StatusChangeAppModal extends Component {
                   userDetails.TemporaryPassword,
                 ).then(() => {
                   this.props.uiStore.setErrors(null);
+                  this.props.uiStore.setProgress(false);
                   this.props.history.push('/app/applications/in-progress');
                 });
             } else {
-              adminActions.createNewUser(userDetails, 'SUPPRESS').then(() => {
+              adminActions.createNewUser(userDetails, 'SUPPRESS', false).then(() => {
                 // This timeout is added intentionally beacause of parellel mutation executes. Don't delete this
                 setTimeout(() => {
                   this.props.businessAppReviewStore
@@ -99,10 +100,12 @@ export default class StatusChangeAppModal extends Component {
                       userDetails.TemporaryPassword,
                     ).then(() => {
                       this.props.uiStore.setErrors(null);
+                      this.props.uiStore.setProgress(false);
                       this.props.history.push('/app/applications/in-progress');
                     });
                 }, 5000);
               }).catch(() => {
+                this.props.uiStore.setProgress(false);
                 Helper.toast('Something went wrong. Please try again after sometime', 'error');
               });
             }
