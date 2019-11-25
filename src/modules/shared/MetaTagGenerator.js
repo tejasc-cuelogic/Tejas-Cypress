@@ -5,9 +5,9 @@ import { TITLES } from '../../constants/titleMeta';
 
 const MetaTagGenerator = ({ metaTagsData, pathName }) => {
   let title = false;
-  console.log(pathName, TITLES, 'pathNamepathName');
-  if (TITLES[pathName]) {
-    title = TITLES[pathName];
+  const matchingKey = Object.keys(TITLES).find(t => pathName.startsWith(t));
+  if (matchingKey) {
+    title = TITLES[matchingKey];
   }
   return (
     <Helmet>

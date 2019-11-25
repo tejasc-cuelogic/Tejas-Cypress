@@ -1,5 +1,13 @@
+import { PRIVATE_NAV } from './NavigationMeta';
+
+const ADMIN_MODULES = PRIVATE_NAV.filter(n => n.accessibleTo && n.accessibleTo.includes('admin'));
+const ADMIN_TITLE_META = {};
+ADMIN_MODULES.forEach((n) => {
+  ADMIN_TITLE_META[`/app/${n.to}`] = `${n.title} - NextSeed`;
+});
+
+
 export const TITLES = {
-  '/': 'Home - NextSeed',
   '/offerings/': 'Browser - NextSeed Investment Opportunities',
   '/business/how-it-works': 'Business | How it works - NextSeed',
   '/business/funding-options/term-notes': 'Business | Funding Options | Term Notes - NextSeed',
@@ -35,4 +43,27 @@ export const TITLES = {
   '/app/account-settings/investment-limits': 'Account Settings | Investment limits - NextSeed',
   '/app/account-settings/security': 'Account Settings | Security - NextSeed',
   '/app/account-settings/agreements': 'Account Settings | Agreements - NextSeed',
+  '/app/resources/welcome-packet': 'Education Center | Welcome Packet - NextSeed',
+  '/app/resources/knowledge-base': 'Education Center | Knowledge Base - NextSeed',
+  '/app/resources/faq': 'Education Center | FAQ - NextSeed',
+  '/app/summary': 'Portfolio Summary - NextSeed',
+  '/app/account-details/individual/portfolio': 'Individual Account Details | Portfolio - NextSeed',
+  '/app/account-details/individual/transfer-funds': 'Individual Account Details | Transfer Funds - NextSeed',
+  '/app/account-details/individual/bank-accounts': 'Individual Account Details | Bank Accounts - NextSeed',
+  '/app/account-details/individual/transactions': 'Individual Account Details | Transactions - NextSeed',
+  '/app/account-details/individual/statements': 'Individual Account Details | Statements - NextSeed',
+  '/app/account-details/ira/portfolio': 'IRA Account Details | Portfolio - NextSeed',
+  '/app/account-details/ira/transfer-funds': 'IRA Account Details | Transfer Funds - NextSeed',
+  '/app/account-details/ira/bank-accounts': 'IRA Account Details | Bank Accounts - NextSeed',
+  '/app/account-details/ira/transactions': 'IRA Account Details | Transactions - NextSeed',
+  '/app/account-details/ira/statements': 'IRA Account Details | Statements - NextSeed',
+  '/app/account-details/entity/portfolio': 'Entity Account Details | Portfolio - NextSeed',
+  '/app/account-details/entity/transfer-funds': 'Entity Account Details | Transfer Funds - NextSeed',
+  '/app/account-details/entity/bank-accounts': 'Entity Account Details | Bank Accounts - NextSeed',
+  '/app/account-details/entity/transactions': 'Entity Account Details | Transactions - NextSeed',
+  '/app/account-details/entity/statements': 'Entity Account Details | Statements - NextSeed',
+  ...ADMIN_TITLE_META,
+  '/': 'Home - NextSeed',
 };
+
+console.log(TITLES);
