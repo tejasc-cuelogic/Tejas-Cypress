@@ -30,10 +30,10 @@ export default class MessagesWrap extends Component {
 
   render() {
     const {
-      uiStore, messageStore, userDetailsStore, isIssuer, passedProcessingDate, isAdmin,
+      uiStore, messageStore, userDetailsStore, isIssuer, passedProcessingDate, isAdmin, currentOfferingIssuerId,
     } = this.props;
     const {
-      thread, buttonLoader, currentOfferingIssuerId, threadMainMessage,
+      thread, buttonLoader, threadMainMessage,
     } = messageStore;
     const threadMessages = threadMainMessage.concat(thread);
     const { currentUserId } = userDetailsStore;

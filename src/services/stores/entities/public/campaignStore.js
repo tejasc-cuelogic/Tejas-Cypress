@@ -110,7 +110,7 @@ export class CampaignStore {
       variables: { id },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data && data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length && !this.details.loading) {
+        if (data && data.getOfferingDetailsBySlug && !this.details.loading) {
           this.getCampaignAdditionalDetails(id);
           watchListStore.setOfferingWatch();
         }
@@ -126,8 +126,8 @@ export class CampaignStore {
       variables: { id },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data && data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length && !this.additionalDetails.loading) {
-          this.concatOfferingDetails(get(data, 'getOfferingDetailsBySlug[0]'));
+        if (data && data.getOfferingDetailsBySlug && !this.additionalDetails.loading) {
+          this.concatOfferingDetails(get(data, 'getOfferingDetailsBySlug'));
         }
       },
     });
@@ -137,8 +137,8 @@ export class CampaignStore {
   concatOfferingDetails = (newData) => {
     if (newData && this.campaign && get(this.campaign, 'id') === get(newData, 'id')) {
       const campaignData = toJS(this.details);
-      campaignData.data.getOfferingDetailsBySlug[0].updates = get(newData, 'updates');
-      campaignData.data.getOfferingDetailsBySlug[0].comments = get(newData, 'comments');
+      campaignData.data.getOfferingDetailsBySlug.updates = get(newData, 'updates');
+      campaignData.data.getOfferingDetailsBySlug.comments = get(newData, 'comments');
       this.details = campaignData;
     }
   }
@@ -151,7 +151,7 @@ export class CampaignStore {
       variables: { id },
       onFetch: (data) => {
         if (data && !this.details.loading) {
-          if (data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length) {
+          if (data.getOfferingDetailsBySlug) {
             resolve(data.getOfferingDetailsBySlug);
           } else {
             reject();
@@ -241,9 +241,8 @@ export class CampaignStore {
   }
 
   @computed get campaign() {
-    if (this.details.data && this.details.data.getOfferingDetailsBySlug
-      && this.details.data.getOfferingDetailsBySlug[0]) {
-      return toJS(this.details.data.getOfferingDetailsBySlug[0]);
+    if (this.details.data && this.details.data.getOfferingDetailsBySlug) {
+      return toJS(this.details.data.getOfferingDetailsBySlug);
     } if (this.details.data && this.details.data.getOfferingDetailsById) {
       return toJS(this.details.data.getOfferingDetailsById);
     }
@@ -307,7 +306,7 @@ export class CampaignStore {
     campaignStatus.investmentHighlights = true;
     campaignStatus.isRevenueShare = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary;
     campaignStatus.isTermNote = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
-    campaignStatus.doneComputing = (this.details && this.details.data && this.details.data.getOfferingDetailsBySlug && this.details.data.getOfferingDetailsBySlug.length && this.details.data.getOfferingDetailsBySlug[0] && !isEmpty(this.details.data.getOfferingDetailsBySlug[0].keyTerms)) || false;
+    campaignStatus.doneComputing = (this.details && this.details.data && this.details.data.getOfferingDetailsBySlug && this.details.data.getOfferingDetailsBySlug && !isEmpty(this.details.data.getOfferingDetailsBySlug.keyTerms)) || false;
     return campaignStatus;
   }
 
