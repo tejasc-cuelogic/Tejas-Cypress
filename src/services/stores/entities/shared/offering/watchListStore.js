@@ -53,22 +53,22 @@ export class WatchListStore extends DataModelStore {
     };
   }
 
-  setOfferingWatch = () => {
-    if (!campaignStore.getOfferingId || !userDetailsStore.currentUserId) {
-      return;
-    }
-    const variables = {
-      userId: userDetailsStore.currentUserId,
-      offeringId: campaignStore.getOfferingId,
-    };
-    this.setFieldValue('isWatching', 'loading');
-    this.executeQuery({
-      client: 'PRIVATE',
-      query: 'isWatchingOffering',
-      variables: { ...variables },
-      setLoader: 'offeringWatchList',
-    }).then((res) => { this.setFieldValue('isWatching', get(res, 'isWatchingOffering')); });
-  }
+  // setOfferingWatch = () => {
+  //   if (!campaignStore.getOfferingId || !userDetailsStore.currentUserId) {
+  //     return;
+  //   }
+  //   const variables = {
+  //     userId: userDetailsStore.currentUserId,
+  //     offeringId: campaignStore.getOfferingId,
+  //   };
+  //   this.setFieldValue('isWatching', 'loading');
+  //   this.executeQuery({
+  //     client: 'PRIVATE',
+  //     query: 'isWatchingOffering',
+  //     variables: { ...variables },
+  //     setLoader: 'offeringWatchList',
+  //   }).then((res) => { this.setFieldValue('isWatching', get(res, 'isWatchingOffering')); });
+  // }
 
   updateWatchList = (params) => {
     const user = this.watchList[params.status].find(i => i.userId === params.userId);
@@ -107,7 +107,7 @@ decorate(WatchListStore, {
   offeringWatchList: action,
   addRemoveWatchList: action,
   updateWatchList: action,
-  setOfferingWatch: action,
+  // setOfferingWatch: action,
   setWatchListData: action,
   resetWatchList: action,
   allWatchList: computed,

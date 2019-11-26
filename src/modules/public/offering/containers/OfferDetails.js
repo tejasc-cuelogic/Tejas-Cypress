@@ -99,7 +99,7 @@ class offerDetails extends Component {
   componentDidMount() {
     const { location, match, newLayout } = this.props;
     const { isUserLoggedIn } = this.props.authStore;
-    const { currentUser, isAdmin } = this.props.userStore;
+    const { isAdmin } = this.props.userStore;
     this.props.campaignStore.getCampaignDetails(this.props.match.params.id).then((data) => {
       if (!data) {
         this.props.history.push('/offerings');
@@ -114,26 +114,19 @@ class offerDetails extends Component {
       if (get(exception, 'code') === 'OFFERING_EXCEPTION') {
         if (['TERMINATED', 'FAILED'].includes(get(exception, 'stage')) && !isAdmin) {
           this.props.history.push('/offerings');
-        } else if (['CREATION'].includes(get(exception, 'stage'))) {
-          this.setState({ offeringId: get(exception, 'id'), showPassDialog: true, preLoading: false });
-        } else if (get(exception, 'promptPassword') && ['LIVE'].includes(get(exception, 'stage'))) {
-          this.setState({ offeringId: get(exception, 'id'), showPassDialog: true, preLoading: false });
-        } else if (!get(exception, 'promptPassword')) {
-          this.props.history.push('/offerings');
-        } else if (!['CREATION'].includes(get(exception, 'stage')) && !get(exception, 'isAvailablePublicly')) {
+        } else if (['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
+          this.setState({ offeringId: get(exception, 'id'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
+        } else if (!['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
+          this.setState({ offeringId: get(exception, 'id'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
+        } else if (!['CREATION'].includes(get(exception, 'stage')) && !get(exception, 'isAvailablePublicly') && !isUserLoggedIn) {
           this.setState({ showPassDialog: false, preLoading: false });
           this.props.uiStore.setAuthRef(this.props.location.pathname);
           this.props.history.push('/login');
         } else {
-          this.props.history.push('/offerings');
+          this.props.campaignStore.getCampaignDetails(this.props.match.params.id, false, true);
         }
       } else {
         this.props.history.push('/offerings');
-      }
-      if ((currentUser && currentUser.roles.includes('admin'))
-        || (currentUser && currentUser.roles.includes('issuer') && get(exception, 'issuerId') === currentUser.sub)) {
-        this.setState({ preLoading: false, showPassDialog: false });
-        this.props.campaignStore.getCampaignDetails(this.props.match.params.id, false, true);
       }
     });
 

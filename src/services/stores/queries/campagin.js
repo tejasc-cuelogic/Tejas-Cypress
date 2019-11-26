@@ -135,6 +135,7 @@ export const campaignDetailsQuery = gql`
   query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
+    watchListStatus
     stage
     offeringSlug
     issuerId
@@ -354,7 +355,7 @@ export const campaignDetailsAdditionalQuery = gql`
           name
         }
       }
-      threadComment {
+      threadComments {
         id
         scope
         comment

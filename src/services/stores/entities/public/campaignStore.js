@@ -112,8 +112,8 @@ export class CampaignStore {
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data && data.getOfferingDetailsBySlug && !this.details.loading) {
+          watchListStore.setFieldValue('isWatching', ['WATCHING', 'INVESTOR'].includes(get(data.getOfferingDetailsBySlug, 'watchListStatus')));
           this.getCampaignAdditionalDetails(id);
-          watchListStore.setOfferingWatch();
           resolve(data.getOfferingDetailsBySlug);
         } else if (!this.details.loading) {
           resolve(false);
@@ -462,7 +462,7 @@ export class CampaignStore {
           if (c.scope === 'PUBLIC'
             && ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor')
               || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
-            const cnt = reduce(get(c, 'threadComment'), (tcSum, tc) => (tc.scope === 'PUBLIC' && ((get(tc, 'createdUserInfo.roles[0].name') === 'admin' || get(tc, 'createdUserInfo.roles[0].name') === 'investor') || (get(tc, 'createdUserInfo.roles[0].name') === 'issuer' && tc.approved)) ? (tcSum + 1) : tcSum), 0);
+            const cnt = reduce(get(c, 'threadComments'), (tcSum, tc) => (tc.scope === 'PUBLIC' && ((get(tc, 'createdUserInfo.roles[0].name') === 'admin' || get(tc, 'createdUserInfo.roles[0].name') === 'investor') || (get(tc, 'createdUserInfo.roles[0].name') === 'issuer' && tc.approved)) ? (tcSum + 1) : tcSum), 0);
             sum = sum + 1 + (cnt || 0);
           }
           return null;
