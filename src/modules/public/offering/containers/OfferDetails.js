@@ -41,7 +41,7 @@ class offerDetails extends Component {
     const { isUserLoggedIn } = this.props.authStore;
     const { currentUser, isAdmin } = this.props.userStore;
     this.props.campaignStore.getIssuerIdForOffering(this.props.match.params.id).then((data) => {
-      const oMinData = data.length ? data[0] : null;
+      const oMinData = data || null;
       if (['TERMINATED', 'FAILED'].includes(oMinData.stage) && !isAdmin) {
         this.props.history.push('/offerings');
       }
@@ -60,7 +60,7 @@ class offerDetails extends Component {
       } else if (currentUser && currentUser.roles.includes('investor')) {
         const params = {
           userId: currentUser.sub,
-          offeringId: data[0].id,
+          offeringId: data.id,
           offeringStage: oMinData.stage,
         };
         this.props.campaignStore.isValidInvestorInOffering(params).then((res) => {
@@ -216,8 +216,7 @@ class offerDetails extends Component {
       navItems = modifySubNavs(navItems, newLayout);
       navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
     }
-    if ((details && details.data
-      && details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0])
+    if ((details && details.data && !details.data.getOfferingDetailsBySlug)
       || this.state.found === 2) {
       return <NotFound />;
     }
