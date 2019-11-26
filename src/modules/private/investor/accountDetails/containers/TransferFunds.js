@@ -48,7 +48,7 @@ export default class TransferFunds extends Component {
     });
     return (
       <div>
-        { !isEmpty(linkedBank) && accountType !== 'ira'
+        {!isEmpty(linkedBank) && accountType !== 'ira'
           ? (
             <>
               <Header as="h4">Transfer funds</Header>
@@ -68,18 +68,18 @@ export default class TransferFunds extends Component {
             </>
           ) : accountType === 'ira'
             ? (
-<section className="center-align">
-              <h4 style={{ color: '#31333d7d' }}>
-                <HtmlEditor readOnly content={NO_PERMISSION_MSG} />
-              </h4>
-            </section>
+              <section className="center-align">
+                <h4 style={{ color: '#31333d7d' }}>
+                  <HtmlEditor readOnly content={NO_PERMISSION_MSG} />
+                </h4>
+              </section>
             )
             : (
-<section className="center-align">
-              <h4 style={{ color: '#31333d7d' }}>
-                <HtmlEditor readOnly content={NO_LINKED_BANK_MSG} />
-              </h4>
-            </section>
+              <section className="center-align">
+                <h4 style={{ color: '#31333d7d' }}>
+                  <HtmlEditor readOnly content={NO_LINKED_BANK_MSG} />
+                </h4>
+              </section>
             )
         }
       </div>
