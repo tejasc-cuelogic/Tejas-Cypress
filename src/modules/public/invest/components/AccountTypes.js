@@ -35,18 +35,11 @@ const AccountTypes = () => (
                   <p>Minimum opening deposit of $5,000. Please note{' '}
                     <Link to="/resources/education-center/investor/self-directed-ira-investment-account">investment limits may apply</Link>.
                   </p>
-                  <p>
-                    Promotional Offer: For new NextSeed IRA Accounts, NextSeed will cover
-                    the one-time setup fee and annual account fees for four years! For
-                    full details, go to the <Link to="/agreements/legal">Terms of Use</Link>.
-                  </p>
                 </Grid.Column>
               </Grid>
               <p className={`note mt-30 ${isMobile ? '' : 'mb-50'}`}>
-                NextSeed is not a tax, investment or legal advisor and does not provide any tax,
-                investment, or legal advice; please consult your own advisors or IRS guidelines
-                to determine whether investing in NextSeed offerings through a self-directed IRA
-                is right for you.
+              NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company 
+              ("GoldStar"), which provides FDIC insurance for up to $250,000 of uninvested cash in NextSeed accounts.
               </p>
               <Divider />
               <List className="learn-more-list">
