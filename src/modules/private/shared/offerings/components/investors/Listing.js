@@ -36,11 +36,9 @@ export default class Listing extends Component {
 
   showReferralCode = (referralCode, investorReferralCodes, isIssuer, isAdmin) => {
     const matchReferral = find(investorReferralCodes, r => r.code === referralCode);
-    return (matchReferral && get(matchReferral, 'isValid')) ? (
-      (isIssuer || isAdmin) ? 'Yes' : get(matchReferral, 'code')
-    ) : '';
+    return (matchReferral && get(matchReferral, 'isValid')) ? ('Yes') : '';
   }
-ß
+
   render() {
     const { offer } = this.props.offeringsStore;
     const { isIssuer, isAdmin } = this.props.userStore;
