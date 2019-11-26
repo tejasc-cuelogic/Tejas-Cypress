@@ -226,5 +226,11 @@ export class AccountStore {
   closeAccountForm = () => {
     this.CLOSE_ACCOUNT_FRM = FormValidator.prepareFormObject(CLOSE_INVESTOR_ACCOUNT);
   }
+
+  isAccFrozen = status => ['HARD_FREEZE', 'SOFT_FREEZE'].includes(status)
+
+  isAccHardFrozen = status => ['HARD_FREEZE'].includes(status)
+
+  isAccSoftFrozen = status => ['SOFT_FREEZE'].includes(status)
 }
 export default new AccountStore();

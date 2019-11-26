@@ -159,7 +159,7 @@ export default class ConfirmEmailAddress extends Component {
       confirmProgress,
       canSubmitConfirmEmail,
     } = this.props.authStore;
-    const { errors, inProgress } = this.props.uiStore;
+    const { errors, inProgress, responsiveVars } = this.props.uiStore;
     const { isOptConfirmed } = this.props.identityStore;
     const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
     if (errors && errors.code === 'NotAuthorizedException') {
@@ -171,13 +171,13 @@ export default class ConfirmEmailAddress extends Component {
       <Modal closeOnDimmerClick={false} size="tiny" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Route exact path={`${this.props.match.url}/create-or-cancel`} render={() => <ConfirmCreateOrCancel refLink={this.props.match.url} />} />
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">Confirm your e-mail address</Header>
-          <p>
+          <Header as="h3" className={responsiveVars.isMobile ? 'mb-10' : ''}>Confirm your e-mail address</Header>
+          <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
             We use Multi-Factor Authentication (MFA) to increase the security of your
             NextSeed investment account.
           </p>
-          <Divider section />
-          <p>
+          <Divider section={!responsiveVars.isMobile} />
+          <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
             Please confirm the 6-digit verification code sent to your email
           </p>
         </Modal.Header>

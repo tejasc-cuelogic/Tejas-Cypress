@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Button, Comment, Form, Segment, Header, Label, Divider } from 'semantic-ui-react';
+import { Button, Comment, Form, Segment, Header, Label, Divider, Message } from 'semantic-ui-react';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
 import { FormTextarea } from '../../../../../theme/form';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+import { ListErrors } from '../../../../../theme/shared';
 import { DataFormatter } from '../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -89,16 +90,17 @@ class Comments extends Component {
     const { isUserLoggedIn } = this.props.authStore;
     const loginOrSignup = this.props.navStore.stepInRoute;
     const { currentUser } = this.props.userStore;
-    const { idVerification, activeAccounts } = this.props.userDetailsStore.signupStatus;
+    const { errors } = this.props.uiStore;
+    const { idVerification, activeAccounts, frozenAccounts } = this.props.userDetailsStore.signupStatus;
     const loggedInAsInvestor = isUserLoggedIn && currentUser.roles.includes('investor');
-    const accountStatusFull = idVerification === 'PASS' || activeAccounts.length;
+    const accountStatusFull = idVerification === 'PASS' && activeAccounts.length;
     const isRightToPostComment = isUserLoggedIn && (currentUser.roles.includes('investor') && accountStatusFull);
     const readMoreLength = 250;
     const { campaign, commentsMainThreadCount } = this.props.campaignStore;
     const campaignStage = get(campaign, 'stage');
     // const passedProcessingDate = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true) <= 0;
     const passedProcessingDate = DataFormatter.getDateDifferenceInHoursOrMinutes(get(campaign, 'closureSummary.processingDate'), true, true).value <= 0;
-    const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull;
+    const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull || frozenAccounts.length;
     let comments = campaign && campaign.comments;
     const campaignId = campaign && campaign.id;
     const campaignSlug = campaign && campaign.offeringSlug;
@@ -135,7 +137,7 @@ class Comments extends Component {
         </p>
             </>
           )}
-        {!isRightToPostComment
+        {!isRightToPostComment && !frozenAccounts.length
           ? (
             <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
               {loggedInAsInvestor && !accountStatusFull
@@ -167,6 +169,13 @@ class Comments extends Component {
                 ) : ''
               }
             </>
+          )
+        }
+        {errors
+          && (
+            <Message error className="mt-30">
+              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+            </Message>
           )
         }
         {comments && commentsMainThreadCount
