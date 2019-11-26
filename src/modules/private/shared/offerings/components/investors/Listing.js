@@ -12,11 +12,11 @@ import { OFFERING_AGREEMENT_REGULATIONS } from '../../../../../../constants/offe
 
 const meta = [
   { label: '', value: 'avatar' },
-  { label: 'Investor\'s Name', value: 'firstName' },
   { label: 'Date', value: 'investmentDate' },
+  { label: 'Investor\'s Name', value: 'firstName' },
+  { label: 'Email', value: 'userEmail' },
   { label: 'Residence City', value: 'city' },
   { label: 'State', value: 'state' },
-  { label: 'Email', value: 'userEmail' },
   { label: 'Account Type', value: 'accountType' },
   { label: 'Regulation', value: 'regulation' },
   { label: 'Amount', value: 'amount' },
@@ -36,9 +36,11 @@ export default class Listing extends Component {
     setSortingOrder(clickedColumn, sortOrder.direction === 'asc' ? 'desc' : 'asc');
   }
 
-  showReferralCode = (referralCode, investorReferralCodes) => {
+  showReferralCode = (referralCode, investorReferralCodes, isIssuer) => {
     const matchReferral = find(investorReferralCodes, r => r.code === referralCode);
-    return (matchReferral && get(matchReferral, 'isValid')) ? get(matchReferral, 'code') : 'N/A';
+    return (matchReferral && get(matchReferral, 'isValid')) ? (
+      isIssuer ? 'Yes' : get(matchReferral, 'code')
+    ) : '';
   }
 
   render() {
@@ -98,6 +100,7 @@ export default class Listing extends Component {
                     />
                   </Table.Cell>
                   )}
+                  <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
                   <Table.Cell>
                     <div>
                       {get(isUsersCapablities, 'level') && get(isUsersCapablities, 'level') !== 'SUPPORT'
@@ -113,7 +116,13 @@ export default class Listing extends Component {
                       }
                     </div>
                   </Table.Cell>
-                  <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
+                  {isIssuer && isOfferingClose
+                  && (
+                  <Table.Cell>
+                    {data.userEmail || 'N/A'}
+                  </Table.Cell>
+                  )
+                  }
                   <Table.Cell>
                     <div className="table-info-wrap">
                       <p>
@@ -123,13 +132,6 @@ export default class Listing extends Component {
                     </div>
                   </Table.Cell>
                   <Table.Cell>{data.state || 'N/A'}</Table.Cell>
-                  {isIssuer && isOfferingClose
-                  && (
-                  <Table.Cell>
-                    {data.userEmail || 'N/A'}
-                  </Table.Cell>
-                  )
-                  }
                   {isAdmin
                     && (
                       <Table.Cell>
@@ -192,7 +194,7 @@ export default class Listing extends Component {
                       </Table.Cell>
                     )
                   }
-                  <Table.Cell textAlign="right">{data.referralCode ? this.showReferralCode(referralCode, data.referralCode) : 'N/A'}</Table.Cell>
+                  <Table.Cell textAlign="right">{data.referralCode ? this.showReferralCode(referralCode, data.referralCode, isIssuer) : ''}</Table.Cell>
                 </Table.Row>
               ))
               }
