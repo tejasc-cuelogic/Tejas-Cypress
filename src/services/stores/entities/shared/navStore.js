@@ -156,6 +156,9 @@ export class NavStore {
           _.find(offeringsStore.phases, (s, i) => i === b.stage).accessKey,
         );
         sNav = sNav.filter(n => (!n.filterKey || _.get(offer, n.filterKey)));
+        if (userStore.isIssuer && b.stage === 'COMPLETE') {
+          sNav = sNav.filter(s => s.title !== 'Overview' && s.title !== 'Bonus Rewards');
+        }
         filteredNavs.splice(
           bIndex,
           0,
