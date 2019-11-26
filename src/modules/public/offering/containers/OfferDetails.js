@@ -34,6 +34,7 @@ class offerDetails extends Component {
     showPassDialog: false,
     preLoading: false,
     found: 0,
+    offeringId: null,
   }
 
   // componentDidMount() {
@@ -104,17 +105,22 @@ class offerDetails extends Component {
         this.props.history.push('/offerings');
       }
     }).catch((err) => {
-      console.log(err);
-      if (get(err, 'extensions.exception.code') === 'OFFERING_EXCEPTION') {
-        if (['TERMINATED', 'FAILED'].includes(get(err, 'extensions.exception.stage')) && !isAdmin) {
+      let exception = null;
+      try {
+        exception = JSON.parse(get(err, 'graphQLErrors[0].message'));
+      } catch {
+        this.props.history.push('/offerings');
+      }
+      if (get(exception, 'code') === 'OFFERING_EXCEPTION') {
+        if (['TERMINATED', 'FAILED'].includes(get(exception, 'stage')) && !isAdmin) {
           this.props.history.push('/offerings');
-        } else if (['CREATION'].includes(get(err, 'extensions.exception.stage'))) {
-          this.setState({ showPassDialog: true, preLoading: false });
-        } else if (get(err, 'extensions.exception.promptPassword') && ['LIVE'].includes(get(err, 'extensions.exception.stage'))) {
-          this.setState({ showPassDialog: true, preLoading: false });
-        } else if (!get(err, 'extensions.exception.promptPassword')) {
+        } else if (['CREATION'].includes(get(exception, 'stage'))) {
+          this.setState({ offeringId: get(exception, 'id'), showPassDialog: true, preLoading: false });
+        } else if (get(exception, 'promptPassword') && ['LIVE'].includes(get(exception, 'stage'))) {
+          this.setState({ offeringId: get(exception, 'id'), showPassDialog: true, preLoading: false });
+        } else if (!get(exception, 'promptPassword')) {
           this.props.history.push('/offerings');
-        } else if (!['CREATION'].includes(get(err, 'extensions.exception.stage')) && !get(err, 'extensions.exception.isAvailablePublicly')) {
+        } else if (!['CREATION'].includes(get(exception, 'stage')) && !get(exception, 'isAvailablePublicly')) {
           this.setState({ showPassDialog: false, preLoading: false });
           this.props.uiStore.setAuthRef(this.props.location.pathname);
           this.props.history.push('/login');
@@ -125,7 +131,7 @@ class offerDetails extends Component {
         this.props.history.push('/offerings');
       }
       if ((currentUser && currentUser.roles.includes('admin'))
-        || (currentUser && currentUser.roles.includes('issuer') && get(err, 'extensions.exception.issuerId') === currentUser.sub)) {
+        || (currentUser && currentUser.roles.includes('issuer') && get(exception, 'issuerId') === currentUser.sub)) {
         this.setState({ preLoading: false, showPassDialog: false });
         this.props.campaignStore.getCampaignDetails(this.props.match.params.id, false, true);
       }
@@ -242,7 +248,7 @@ class offerDetails extends Component {
         <DevPassProtected
           offerPreview
           authPreviewOffer={this.authPreviewOffer}
-          offeringId={campaignStore.campaign && campaignStore.campaign.id}
+          offeringId={(campaignStore.campaign && campaignStore.campaign.id) || this.state.offeringId}
         />
       );
     }
