@@ -8,7 +8,7 @@ import { FormRadioGroup, FormArrowButton } from '../../../../../theme/form';
 import { Spinner } from '../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
-@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'userStore', 'campaignStore', 'accreditationStore', 'portfolioStore')
+@inject('investmentStore', 'userDetailsStore', 'accountStore', 'investmentLimitStore', 'userStore', 'campaignStore', 'accreditationStore', 'portfolioStore')
 @withRouter
 @observer
 class AccountType extends Component {
@@ -93,7 +93,8 @@ class AccountType extends Component {
       }
     }
     setPartialInvestmenSession();
-    if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
+    if (frozenAccounts.length && this.props.accountStore.isAccFrozen(selectedAccountStatus)) {
+      this.props.userDetailsStore.setFieldValue('currentActiveAccount', frozenAccounts[0]);
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
         // send email to admin
         sendAdminEmailOfFrozenAccount('INVESTMENT', offeringId);
@@ -302,6 +303,7 @@ class AccountType extends Component {
       offeringAccreditatoinStatusMessage,
       // setHeaderAndSubHeader,
     } = this.props.accreditationStore;
+    const { isAccFrozen } = this.props.accountStore;
     if (investNowError) {
       this.props.cancel();
     }
@@ -334,7 +336,8 @@ class AccountType extends Component {
       isRegulationCheck, investAccTypes, showAccountList, isDocumentUpload,
       offeringReuglation, offeringDetailsObj,
     );
-    if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
+    if (frozenAccounts.length && isAccFrozen(selectedAccountStatus)) {
+      this.props.userDetailsStore.setFieldValue('currentActiveAccount', frozenAccounts[0]);
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
         // send email to admin:
         sendAdminEmailOfFrozenAccount('INVESTMENT', offeringId);
@@ -461,7 +464,7 @@ class AccountType extends Component {
                           )
                           : (
                             <div className="center-align">
-                              {selectedAccountStatus && selectedAccountStatus === 'FROZEN'
+                              {selectedAccountStatus && isAccFrozen(selectedAccountStatus)
                                 ? (
                                   <>
                                     <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.</p>
@@ -498,7 +501,7 @@ class AccountType extends Component {
             )
             : (
               <div className="center-align">
-                {selectedAccountStatus && selectedAccountStatus === 'FROZEN'
+                {selectedAccountStatus && isAccFrozen(selectedAccountStatus)
                   ? (
                     <>
                       <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.</p>

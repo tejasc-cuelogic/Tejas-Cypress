@@ -289,7 +289,10 @@ h6{
 .mobile-bottom-notes{
 	position: absolute;
     bottom: 30px;
-    width: calc(100% - 30px);
+	width: calc(100% - 30px);
+}
+.d-flex{
+	display: flex !important;
 }
 //	normal link styles
 a:not(.item), a:not(.ui.button){
