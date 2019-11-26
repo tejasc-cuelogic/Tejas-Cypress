@@ -31,7 +31,7 @@ export default class TransferFunds extends Component {
   }
 
   render() {
-    const { userDetails, isAccountFrozen } = this.props.userDetailsStore;
+    const { userDetails, isAccountFrozen, isAccountHardFrozen } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { cash, cashAvailable } = this.props.transactionStore;
     const { setFieldValue, showAccountFrozenModal } = this.props.accountStore;
@@ -58,6 +58,7 @@ export default class TransferFunds extends Component {
                     <AvailableCashTransfer
                       match={this.props.match}
                       isAccountFrozen={isAccountFrozen}
+                      isAccountHardFrozen={isAccountHardFrozen}
                       cash={cashAmount || '0.00'}
                       setFieldValue={setFieldValue}
                       showAccountFrozenModal={showAccountFrozenModal}
