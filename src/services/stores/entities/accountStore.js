@@ -228,5 +228,9 @@ export class AccountStore {
   }
 
   isAccFrozen = status => ['HARD_FREEZE', 'SOFT_FREEZE'].includes(status)
+
+  isAccHardFrozen = status => ['HARD_FREEZE'].includes(status)
+
+  isAccSoftFrozen = status => ['SOFT_FREEZE'].includes(status)
 }
 export default new AccountStore();

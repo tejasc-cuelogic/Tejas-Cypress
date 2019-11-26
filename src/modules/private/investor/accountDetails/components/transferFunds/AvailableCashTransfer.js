@@ -21,7 +21,7 @@ class AvailableCashTransfer extends Component {
   ]);
 
   handleTransferFunds = (transInfo) => {
-    if (this.props.isAccountFrozen && transInfo.content === 'Add funds') {
+    if ((this.props.isAccountFrozen && transInfo.content === 'Add funds') || (this.props.isAccountHardFrozen && transInfo.content === 'Withdraw funds')) {
       this.props.setFieldValue('showAccountFrozenModal', true);
     } else {
       this.props.history.push(transInfo.url);
