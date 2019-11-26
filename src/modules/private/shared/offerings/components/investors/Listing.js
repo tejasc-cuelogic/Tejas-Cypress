@@ -34,13 +34,13 @@ export default class Listing extends Component {
     setSortingOrder(clickedColumn, sortOrder.direction === 'asc' ? 'desc' : 'asc');
   }
 
-  showReferralCode = (referralCode, investorReferralCodes, isIssuer) => {
+  showReferralCode = (referralCode, investorReferralCodes, isIssuer, isAdmin) => {
     const matchReferral = find(investorReferralCodes, r => r.code === referralCode);
     return (matchReferral && get(matchReferral, 'isValid')) ? (
       (isIssuer || isAdmin) ? 'Yes' : get(matchReferral, 'code')
     ) : '';
   }
-
+ß
   render() {
     const { offer } = this.props.offeringsStore;
     const { isIssuer, isAdmin } = this.props.userStore;
