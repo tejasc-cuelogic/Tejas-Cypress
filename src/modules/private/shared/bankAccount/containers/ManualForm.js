@@ -90,12 +90,23 @@ export default class ManualForm extends Component {
     const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
     return (
       <div className={isMobile ? '' : 'center-align'}>
-        <Header as="h4">
-        Enter your bank
-          {"'"}
-s account and routing number
+        <Header as="h3">
+        Enter your bank account and routing number
         </Header>
         <Form error={!!errors} onSubmit={this.handleSubmitForm}>
+          <Form.Field className={isMobile ? 'mb-40' : 'mb-50'}>
+            <>
+              {
+                <FormRadioGroup
+                  fielddata={formLinkBankManually.fields.accountType}
+                  changed={accountTypeChange}
+                  name="accountType"
+                  value={formLinkBankManually.fields.value}
+                  containerclassname={`${isMobile ? 'horizontal' : ''} button-radio center-align`}
+                />
+              }
+            </>
+          </Form.Field>
           <div className={`${isMobile ? '' : 'field-wrap'} left-align`}>
             <MaskedInput
               name="accountNumber"
@@ -115,18 +126,6 @@ s account and routing number
               className="fs-block"
               showerror
             />
-            <Form.Field>
-              <>
-                {
-                  <FormRadioGroup
-                    fielddata={formLinkBankManually.fields.accountType}
-                    changed={accountTypeChange}
-                    name="accountType"
-                    value={formLinkBankManually.fields.value}
-                  />
-                }
-              </>
-            </Form.Field>
           </div>
           {errors
             && (

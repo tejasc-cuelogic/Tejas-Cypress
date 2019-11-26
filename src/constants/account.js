@@ -137,18 +137,18 @@ export const IND_LINK_BANK_MANUALLY = {
     key: 'accountType',
     values: [
       {
-        label: 'Savings',
-        name: 'savings',
-        value: 'SAVINGS',
-        description: 'Earnings from investments on a Traditional Indiviudal Retirement Account grow tax-deferred.',
-        rawValue: 'savings',
-      },
-      {
         label: 'Checking',
         name: 'checking',
         value: 'CHECKING',
         description: 'Earnings from investments in a Roth Retirement Account grow tax free.',
         rawValue: 'checking',
+      },
+      {
+        label: 'Savings',
+        name: 'savings',
+        value: 'SAVINGS',
+        description: 'Earnings from investments on a Traditional Indiviudal Retirement Account grow tax-deferred.',
+        rawValue: 'savings',
       },
     ],
     error: undefined,

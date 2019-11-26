@@ -114,6 +114,14 @@
 		color:@neutral !important;
 		border-color:@highlight-primary;
 	}
+	&.horizontal{
+		.field{
+			padding-right: @7px !important;
+		}
+		.ui.radio.checkbox label{
+			min-width: 150px;
+		}
+	}
 }
 .ui.form .fields.radio-basic{
 	.field{
