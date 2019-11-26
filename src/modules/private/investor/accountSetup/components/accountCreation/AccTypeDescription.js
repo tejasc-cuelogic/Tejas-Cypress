@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Popup } from 'semantic-ui-react';
+import { Popup } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import find from 'lodash/find';
@@ -13,66 +13,39 @@ const AccTypeDescription = observer((props) => {
       { /* Individual */ }
       {isAccExist && value === 0
         && (
-        <>
-          <p>
-            An initial deposit can be quickly and securely completed by linking your checking account. You can easily connect your account by logging in through our secure system or by manually entering your account information. We safeguard your account information. NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which is interest-bearing and provides{' '}
-            <Popup
-              content={<span>NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for uninvested cash in NextSeed accounts.</span>}
-              trigger={<span className="highlight-text">FDIC insurance</span>}
-              position="top center"
-            />
-            {' '}for up to $250,000 for uninvested cash in NextSeed accounts.
+          <p className="mt-80 grey-header">
+            NextSeed accounts are provided by and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance.
           </p>
-          <p>
-            NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides{' '}
-            <Popup
-              content={<span>NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for uninvested cash in NextSeed accounts.</span>}
-              trigger={<span className="highlight-text">FDIC insurance</span>}
-              position="top center"
-            />
-            {' '}for uninvested cash in NextSeed accounts.
-          </p>
-          <p className="grey-text">
-            NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for uninvested cash in NextSeed accounts.
-          </p>
-        </>
         )
       }
       { /* IRA */ }
       {isAccExist && value === 1
         && (
         <>
-          <div className={`${isMobile ? '' : 'center-align'} promitional-offer-block mb-20 bg-offwhite`}>
-            <Header as="h5">Promotional Offer</Header>
-            <p>
-              NextSeed will cover the one-time setup fee and
-              annual account fees for four years. See the{' '}
-              <Link to="/agreements/legal" target="_blank" className="link">Terms and Conditions</Link>
-              {' '}for details.
-            </p>
-          </div>
-          <p>
+          <p className="grey-header">
             Open a self-directed NextSeed IRA to begin investing in local businesses.
+            <br />
             Get the benefits of investing with either a Traditional or Roth IRA.
-            Minimum opening deposit: $5,000.   Investment limits apply.
+            <br />
+            Minimum opening deposit: $5,000. Investment limits apply.
           </p>
-          <p>
+          <p className="grey-header">
             The uninvested cash in your account is{' '}
             <Popup
               content={<span>NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for uninvested cash in NextSeed accounts.</span>}
               trigger={<span className="highlight-text">FDIC-insured</span>}
               position="top center"
             />
-            {' '}up to $250,000 and is
-            interest-bearing. We safeguard your information with bank-level security measures.
+            {' '}up to $250,000 and is interest-bearing.
+            <br />
+            We safeguard your information with bank-level security measures.
             <br />Questions? Please see our{' '}
             <Link to="/resources/education-center/investor/faq" target="_blank" className="link">FAQs on IRAs</Link>.
           </p>
           <p className="grey-text">
-            NextSeed is not a tax, investment or legal advisor and does not provide any tax,
-            investment, or legal advice; please consult your own advisors or IRS guidelines to
-            determine whether investing in NextSeed offerings through a self-directed IRA is
-            right for you.
+            NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA
+            GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for
+            up to $250,000 of uninvested cash in NextSeed accounts.
           </p>
         </>
         )
@@ -81,29 +54,28 @@ const AccTypeDescription = observer((props) => {
       {isAccExist && value === 2
         && (
         <>
-          <p>
+          <p className="grey-header">
             Invest in businesses through an Entity investment account. (Note: Investment limits
             for Entity accounts are treated separately from Individual investment accounts)
           </p>
-          <p>
+          <p className="grey-header">
             An initial deposit can be quickly and securely completed by linking your entity
             checking account. You can easily connect your account by logging in through our
             secure system or by manually entering your account information.
           </p>
-          <p>
+          <p className="grey-header">
             The uninvested cash in your account is{' '}
             <Popup
               content={<span>NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for uninvested cash in NextSeed accounts.</span>}
               trigger={<span className="highlight-text">FDIC-insured</span>}
               position="top center"
             />
-            {' '}up to $250,000 and is
-            interest-bearing. We safeguard your information with bank-level security measures.
+            {' '}up to $250,000 and is interest-bearing. We safeguard your information with bank-level security measures.
           </p>
           <p className="grey-text">
-            NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA
+            NextSeed accounts are provided by and held at our partner bank, Happy State Bank DBA
             GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for
-            uninvested cash in NextSeed accounts.
+            up to $250,000 of uninvested cash in NextSeed accounts.
           </p>
         </>
         )

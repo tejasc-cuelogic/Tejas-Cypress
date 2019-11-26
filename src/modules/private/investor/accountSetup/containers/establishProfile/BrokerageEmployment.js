@@ -36,8 +36,8 @@ export default class BrokerageEmployment extends Component {
             </Form.Group>
           </Form>
           <Divider section hidden className="mb-60" />
-          <p className="note">
-          You will not be able to make investments on NextSeed until we receive a 407 letter from your firm approving the opening of your account. Please ask your firm to send the letter to <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
+          <p className="note mobile-bottom-notes">
+            You will not be able to make investments on NextSeed until we receive a 407 letter from your firm approving the opening of your account. Please ask your firm to send the letter to <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
           </p>
         </>
       );

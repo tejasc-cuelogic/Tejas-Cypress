@@ -286,6 +286,11 @@ h6{
 .error{
 	font-style: normal;
 }
+.mobile-bottom-notes{
+	position: absolute;
+    bottom: 30px;
+    width: calc(100% - 30px);
+}
 //	normal link styles
 a:not(.item), a:not(.ui.button){
 	color:@link-color;
