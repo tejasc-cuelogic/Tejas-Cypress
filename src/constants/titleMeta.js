@@ -64,5 +64,6 @@ export const TITLES = {
   ...INVESTOR_INVESTMENT_ACC_META,
   '/app/summary/account-creation': 'Create Investment Account - NextSeed',
   '/app/summary': 'Investor Dashboard - NextSeed',
+  '/app/referrals': 'Referrals - NextSeed',
   '/': 'Alternative Investments Made Simple - NextSeed',
 };
