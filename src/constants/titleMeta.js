@@ -8,11 +8,13 @@ ADMIN_MODULES.forEach((n) => {
 });
 
 const INVESTOR_ACC_META = {};
+const INVESTOR_INVESTMENT_ACC_META = {};
 
 ['individual', 'ira', 'entity'].forEach((acc) => {
   ['portfolio', 'transfer-funds', 'bank-accounts', 'transactions', 'statements'].forEach((subtab) => {
-    INVESTOR_ACC_META[`/app/account-details/${acc}/${subtab}`] = `${startCase(acc)} Account | ${startCase(subtab)} - NextSeed`;
+    INVESTOR_ACC_META[`/app/account-details/${acc}/${subtab}`] = `${acc === 'ira' ? 'IRA' : startCase(acc)} Account | ${startCase(subtab)} - NextSeed`;
   });
+  INVESTOR_INVESTMENT_ACC_META[`/app/summary/account-creation/${acc}`] = `Create Investment Account | ${acc === 'ira' ? 'IRA' : startCase(acc)} - NextSeed`;
 });
 
 export const TITLES = {
@@ -45,6 +47,9 @@ export const TITLES = {
   '/forgot-password': 'Reset Your Password - NextSeed',
   '/register-investor': 'Sign Up For Free - NextSeed',
   '/business-application/business': 'Apply - NextSeed',
+  '/app/dashboard/select-application-type': 'Apply - NextSeed',
+  '/app/business-application/commercial-real-estate': 'Apply - NextSeed',
+  '/app/business-application/business': 'Apply - NextSeed',
   '/business-application/commercial-real-estate': 'Apply | CRE - NextSeed',
   '/business-application/questions/need-help': 'Apply | Need Help - NextSeed',
   '/app/account-settings/profile-data': 'Settings | Investor Profile - NextSeed',
@@ -54,10 +59,10 @@ export const TITLES = {
   '/app/resources/welcome-packet': 'Education Center | Welcome Packet - NextSeed',
   '/app/resources/knowledge-base': 'Education Center | Knowledge Base - NextSeed',
   '/app/resources/faq': 'Education Center | FAQ - NextSeed',
-  '/app/summary': 'Investor Dashboard - NextSeed',
   ...INVESTOR_ACC_META,
   ...ADMIN_TITLE_META,
+  ...INVESTOR_INVESTMENT_ACC_META,
+  '/app/summary/account-creation': 'Create Investment Account - NextSeed',
+  '/app/summary': 'Investor Dashboard - NextSeed',
   '/': 'Alternative Investments Made Simple - NextSeed',
 };
-
-console.log(TITLES);
