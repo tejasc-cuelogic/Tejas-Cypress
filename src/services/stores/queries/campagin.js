@@ -115,7 +115,7 @@ query offeringWatchList($offeringId: String){
 `;
 
 export const getOfferingById = gql`
-  query getOfferingDetailsBySlug($id: String) {
+  query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
       id
@@ -132,7 +132,7 @@ export const isValidInvestorInOffering = gql`
 `;
 
 export const campaignDetailsQuery = gql`
-  query getOfferingDetailsBySlug($id: String) {
+  query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
     id
     stage
@@ -328,7 +328,7 @@ export const campaignDetailsQuery = gql`
 `;
 
 export const campaignDetailsAdditionalQuery = gql`
-  query getOfferingDetailsBySlug($id: String) {
+  query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
     id
     comments {
