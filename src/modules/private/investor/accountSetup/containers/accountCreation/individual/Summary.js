@@ -82,6 +82,10 @@ export default class Summary extends React.Component {
                   )
                 }
                 <Table.Row>
+                  <Table.Cell className="grey-header">Account Type: </Table.Cell>
+                  <Table.Cell>{Helper.caseify(plaidAccDetails.accountType || '')}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
                   <Table.Cell className="grey-header">Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
@@ -131,7 +135,7 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" fluid={isMobile} className="relaxed" content="Create your account" onClick={() => this.props.handleCreateAccount('individual')} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid || isEmpty(routingNum)} />
+          <Button primary size="large" fluid={isMobile} className="relaxed" content="Create account" onClick={() => this.props.handleCreateAccount('individual')} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid || isEmpty(routingNum)} />
         </div>
       </>
     );

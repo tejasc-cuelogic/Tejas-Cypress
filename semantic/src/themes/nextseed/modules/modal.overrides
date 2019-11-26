@@ -687,7 +687,7 @@
                 }
             }
             .table-wrapper table{
-                color:@neutral-middark;
+                color:@neutral;
                 td > b{
                     color:@fullBlack;
                 }
