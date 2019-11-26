@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-prototype-builtins */
 import { toJS } from 'mobx';
@@ -41,7 +42,6 @@ class FormValidator {
   onChange = (form, element, type, isDirty = true, checked = undefined) => {
     const currentForm = form;
     if (element && element.name) {
-      // eslint-disable-next-line no-param-reassign
       element.value = currentForm.fields[element.name].fieldType === 'string' && get(element, 'value') ? element.value.toString() : get(element, 'value');
     }
     CustomValidations.loadCustomValidations(form);
@@ -150,8 +150,13 @@ class FormValidator {
 
   onArrayFieldChange =
     (form, element, formName = null, formIndex = -1, type, checked = undefined) => {
-      CustomValidations.loadCustomValidations(form);
       const currentForm = form;
+      if (element && element.name && formIndex > -1 && formName) {
+        element.value = currentForm.fields[formName][formIndex][element.name].fieldType === 'string' && get(element, 'value') ? element.value.toString() : get(element, 'value');
+      } else {
+        element.value = currentForm.fields[element.name].fieldType === 'string' && get(element, 'value') ? element.value.toString() : get(element, 'value');
+      }
+      CustomValidations.loadCustomValidations(form);
       let currentFormRelative;
       let fieldName = element.name;
       let customErrMsg = {};
