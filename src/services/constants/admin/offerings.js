@@ -2790,19 +2790,30 @@ export const POC_DETAILS = {
   },
 };
 
-const LIMIT = {
-  value: '',
-  label: 'Limit',
-  error: undefined,
-  rule: 'required',
+const OFFERING_CLOSE_COMMON = {
+  LIMIT: {
+    value: '',
+    label: 'Limit',
+    error: undefined,
+    rule: 'required',
+  },
+  SERVICE: {
+    value: 'PROCESS_FACTORY',
+    label: 'Service',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Choose here',
+  },
 };
 
 export const OFFERING_CLOSE_2 = {
-  queueLimit: { ...LIMIT },
+  queueLimit: { ...OFFERING_CLOSE_COMMON.LIMIT },
+  service: { ...OFFERING_CLOSE_COMMON.SERVICE },
 };
 
 export const OFFERING_CLOSE_3 = {
-  queueLimit: { ...LIMIT },
+  queueLimit: { ...OFFERING_CLOSE_COMMON.LIMIT },
+  service: { ...OFFERING_CLOSE_COMMON.SERVICE },
   notePurchaseDate: {
     value: '',
     label: 'Note Purchase Date',
@@ -2968,5 +2979,11 @@ export const OFFERING_CLOSE_1 = {
 };
 
 export const OFFERING_CLOSE_4 = {
-  queueLimit: { ...LIMIT },
+  queueLimit: { ...OFFERING_CLOSE_COMMON.LIMIT },
+  service: { ...OFFERING_CLOSE_COMMON.SERVICE },
 };
+
+export const OFFERING_CLOSE_SERVICE_OPTIONS = [
+  { key: 'PROCESS_FACTORY', value: 'PROCESS_FACTORY', text: 'Process Factory' },
+  { key: 'CLOSE_PROCESSOR', value: 'CLOSE_PROCESSOR', text: 'Close Processor' },
+];
