@@ -88,7 +88,6 @@ export default class Listing extends Component {
                         ? <Link to={`/app/users/${data.userId}/profile-data`}><p><b>{`${data.firstName} ${data.lastName}`}</b></p></Link>
                         : `${data.firstName} ${data.lastName}`
                       }
-                      {isAdmin && get(data, 'userEmail')}
                     </div>
                   </Table.Cell>
                   {((isIssuer && isOfferingClose) || (isAdmin))
@@ -126,7 +125,6 @@ export default class Listing extends Component {
                   <Table.Cell>
                     <div className="table-info-wrap">
                       <p>
-                        {(isAdmin) && <span>{`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}`}</span>}
                         {<span>{data.city || 'N/A'}</span>}
                       </p>
                     </div>
