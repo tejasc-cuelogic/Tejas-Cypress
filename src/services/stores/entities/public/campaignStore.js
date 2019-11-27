@@ -329,25 +329,17 @@ export class CampaignStore {
   @action
   isEarlyBirdExist(accountType, isAdmin = false) {
     const offeringId = this.getOfferingId;
-    // uiStore.setProgress();
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
     const accountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     const account = isAdmin ? accountDetails : userDetailsStore.currentActiveAccountDetails;
     const accountId = get(account, 'details.accountId') || null;
-    this.earlyBirdCheck = graphql({
-      client,
-      query: checkIfEarlyBirdExist,
-      variables: { offeringId, accountId },
-      // onFetch: (data) => {
-      //   if (data && !this.earlyBirdCheck.loading) {
-      //     uiStore.setProgress(false);
-      //   }
-      // },
-      // onError: (err) => {
-      //   console.log(err);
-      //   uiStore.setProgress(false);
-      // },
-    });
+    if (offeringId && accountId) {
+      this.earlyBirdCheck = graphql({
+        client,
+        query: checkIfEarlyBirdExist,
+        variables: { offeringId, accountId },
+      });
+    }
   }
 
   @computed

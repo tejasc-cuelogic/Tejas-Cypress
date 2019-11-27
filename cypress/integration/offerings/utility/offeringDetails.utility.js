@@ -4,7 +4,7 @@ export const goToCFOfferingDetailScreen = () => {
   cy.fixture('investor/offeringForInvestment.json').then((offerings) => {
     cy.get('div.public-pages').find('.campaign-list-wrapper').find('.container').get('svg')
       .should('not.exist');
-    cy.getOffering(offerings.offeringCF.id);
+    cy.getOffering(offerings.offeringCF.slug);
     cy.wait('@getOfferingDetailsBySlug');
   });
 };
@@ -13,7 +13,7 @@ export const goTo506COfferingDetailScreen = () => {
   cy.fixture('investor/offeringForInvestment.json').then((offerings) => {
     cy.get('div.public-pages').find('.campaign-list-wrapper').find('.container').get('svg')
       .should('not.exist');
-    cy.getOffering(offerings.offering506C.id);
+    cy.getOffering(offerings.offering506C.slug);
     cy.wait('@getOfferingDetailsBySlug');
   });
 };
