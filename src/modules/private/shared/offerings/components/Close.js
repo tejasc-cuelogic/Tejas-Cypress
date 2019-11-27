@@ -7,13 +7,14 @@ import beautify from 'json-beautify';
 import { Form, Card, Header, Divider, Step, Label, Button, Icon, Confirm, Modal, Grid, Table } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
 // import { SCOPE_VALUES } from '../../../../../services/constants/admin/offerings';
-import { MaskedInput, FormInput } from '../../../../../theme/form';
+import { MaskedInput, FormInput, FormDropDown } from '../../../../../theme/form';
 import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { FieldError } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 import SupplementalAgreements from './SupplementalAgreements';
 import ClosingBinder from './ClosingBinder';
+import { OFFERING_CLOSE_SERVICE_ENUM } from '../../../../../services/constants/admin/offerings';
 
 const closingActions = {
   ENUM1: { label: 'save', ref: 1, enum: 'update' },
@@ -237,6 +238,16 @@ export default class Close extends Component {
     const hoursToClose = DataFormatter.diffDays(closeDate, true) + 24;
     const dynamicFields = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? ['interestRate'] : ['revSharePercentage', 'multiple'];
     const modalHeader = find(closingActions, a => a.enum === this.state.action) ? find(closingActions, a => a.enum === this.state.action).label : '';
+    const ServiceDropDown = props => (
+              <FormDropDown
+                fielddata={props.form.fields.service}
+                selection
+                value={props.form.fields.service.value}
+                name="service"
+                options={OFFERING_CLOSE_SERVICE_ENUM}
+                onChange={(e, result) => formChange(e, result, props.formName)}
+              />
+    );
     return (
       <Form>
         <div className="inner-content-spacer">
@@ -366,6 +377,7 @@ export default class Close extends Component {
                           changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_2', name)}
                           number
                         />
+                        <ServiceDropDown form={OFFERING_CLOSE_2} formName="OFFERING_CLOSE_2" />
                       </Form.Group>
                       {outputMsg && outputMsg.data
                         && (
@@ -407,6 +419,7 @@ export default class Close extends Component {
                           />
                         ))
                         }
+                        <ServiceDropDown form={OFFERING_CLOSE_3} formName="OFFERING_CLOSE_3" />
                       </Form.Group>
                       {outputMsg && outputMsg.data
                         && (
@@ -441,9 +454,10 @@ export default class Close extends Component {
                           name="queueLimit"
                           containerwidth="4"
                           fielddata={OFFERING_CLOSE_4.fields.queueLimit}
-                          changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_2', name)}
+                          changed={(values, name) => maskChange(values, 'OFFERING_CLOSE_4', name)}
                           number
                         />
+                        <ServiceDropDown form={OFFERING_CLOSE_4} formName="OFFERING_CLOSE_4" />
                       </Form.Group>
                       {outputMsg && outputMsg.data
                         && (
