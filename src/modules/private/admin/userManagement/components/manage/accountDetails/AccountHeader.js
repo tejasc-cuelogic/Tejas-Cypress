@@ -28,7 +28,7 @@ export default class AccountHeader extends Component {
     const access = this.props.userStore.myAccessForModule('USERS');
     const isFullAccessUser = access.level === 'FULL';
     const { isAccFrozen } = this.props.accountStore;
-    const freezeAccObj = { HARD_FREEZE: { btnText: 'Hard Freeze' }, SOFT_FREEZE: { btnText: 'Soft Freeze' } };
+    const freezeAccObj = { SOFT_FREEZE: { btnText: 'Soft Freeze' }, HARD_FREEZE: { btnText: 'Hard Freeze' } };
     return (
       <>
         <div className="clearfix">
@@ -48,13 +48,27 @@ export default class AccountHeader extends Component {
                           position="top center"
                           content={(
                             <ul>
-                              <li>Cannot make comments on an offering <b>(NEW) </b></li>
-                              <li>Cannot make investments</li>
-                              <li>Cannot updates to investments</li>
-                              <li>Cannot make deposits</li>
-                              <li> {accStatus === 'HARD_FREEZE' ? 'Cannot' : 'Can make'} withdraw (this is the ONLY difference between soft/hard freeze)</li>
-                              <li>Can cancel a reservation</li>
-                              <li>Can make change linked bank account requests</li>
+                              {accStatus === 'HARD_FREEZE'
+                                ? (
+                                  <>
+                                    <span>Hard Frozen Account</span>
+                                    <li>Can NOT make comments on an offering <b>(NEW) </b></li>
+                                    <li>Can NOT make investments || updates to investments</li>
+                                    <li>Can NOT make deposits</li>
+                                    <li>Can NOT make withdraw</li>
+                                    <li>Can cancel a reservation</li>
+                                    <li>Can cancel a reservation</li>
+                                    <li>Can make change linked bank account requests</li>
+                                  </>
+                                )
+                                : (
+                                  <>
+                                    <span>Hard Frozen Account</span>
+                                    <li>Same as Hard Freeze except for:</li>
+                                    <li>Can make withdraw</li>
+                                  </>
+                                )
+                              }
                             </ul>
                           )}
                           trigger={
