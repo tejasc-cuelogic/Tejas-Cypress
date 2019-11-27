@@ -34,7 +34,7 @@ class offerDetails extends Component {
     showPassDialog: false,
     preLoading: false,
     found: 0,
-    offeringId: null,
+    offeringSlug: null,
   }
 
   // componentDidMount() {
@@ -115,9 +115,9 @@ class offerDetails extends Component {
         if (['TERMINATED', 'FAILED'].includes(get(exception, 'stage')) && !isAdmin) {
           this.props.history.push('/offerings');
         } else if (['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
-          this.setState({ offeringId: get(exception, 'id'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
+          this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
         } else if (!['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
-          this.setState({ offeringId: get(exception, 'id'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
+          this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
         } else if (!['CREATION'].includes(get(exception, 'stage')) && !get(exception, 'isAvailablePublicly') && !isUserLoggedIn) {
           this.setState({ showPassDialog: false, preLoading: false });
           this.props.uiStore.setAuthRef(this.props.location.pathname);
@@ -241,7 +241,7 @@ class offerDetails extends Component {
         <DevPassProtected
           offerPreview
           authPreviewOffer={this.authPreviewOffer}
-          offeringId={(campaignStore.campaign && campaignStore.campaign.id) || this.state.offeringId}
+          offeringSlug={(campaignStore.campaign && campaignStore.campaign.offeringSlug) || this.state.offeringSlug}
         />
       );
     }

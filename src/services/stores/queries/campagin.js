@@ -555,8 +555,8 @@ query getOfferingById($id: ID) {
 `;
 
 export const validateOfferingPreviewPassword = gql`
-query _validateOfferingPreviewPassword($offeringId: String!, $previewPassword: String!) {
-  validateOfferingPreviewPassword (offeringId: $offeringId, previewPassword: $previewPassword)
+query validateOfferingPreviewPassword($offeringSlug: String!, $previewPassword: String!) {
+  validateOfferingPreviewPassword (offeringSlug: $offeringSlug, previewPassword: $previewPassword)
 }`;
 
 export const addUserToOfferingWatchlist = gql`
@@ -570,8 +570,3 @@ export const removeUserFromOfferingWatchlist = gql`
     removeUserFromOfferingWatchlist(userId: $userId, offeringId: $offeringId)
   }
 `;
-
-export const isWatchingOffering = gql`
-query isWatchingOffering($userId: String, $offeringId: String){
-  isWatchingOffering(userId: $userId, offeringId: $offeringId)
-}`;
