@@ -14,7 +14,7 @@ import { FieldError } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 import SupplementalAgreements from './SupplementalAgreements';
 import ClosingBinder from './ClosingBinder';
-import { OFFERING_CLOSE_SERVICE_ENUM } from '../../../../../services/constants/admin/offerings';
+import { OFFERING_CLOSE_SERVICE_OPTIONS } from '../../../../../services/constants/admin/offerings';
 
 const closingActions = {
   ENUM1: { label: 'save', ref: 1, enum: 'update' },
@@ -59,6 +59,10 @@ export default class Close extends Component {
     };
     this.props.offeringCreationStore.setFormData('OFFERING_CLOSE_FRM', 'closureSummary');
     this.props.offeringCreationStore.setFormData('OFFERING_CLOSE_1');
+    [2, 3, 4].forEach((i) => {
+      this.props.offeringCreationStore.resetForm(`OFFERING_CLOSE_${i}`);
+      this.props.offeringCreationStore.setFieldValue(`OFFERING_CLOSE_${i}`, 'PROCESS_FACTORY', false, 'fields.service.value');
+    });
   }
 
   submitStep = () => {
@@ -244,7 +248,7 @@ export default class Close extends Component {
                 selection
                 value={props.form.fields.service.value}
                 name="service"
-                options={OFFERING_CLOSE_SERVICE_ENUM}
+                options={OFFERING_CLOSE_SERVICE_OPTIONS}
                 onChange={(e, result) => formChange(e, result, props.formName)}
               />
     );

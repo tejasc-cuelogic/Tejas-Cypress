@@ -2983,7 +2983,7 @@ export const OFFERING_CLOSE_4 = {
   service: { ...OFFERING_CLOSE_COMMON.SERVICE },
 };
 
-export const OFFERING_CLOSE_SERVICE_ENUM = [
-  { key: 'PROCESS_FACTORY', value: 'PROCESS_FACTORY', text: 'PROCESS FACTORY' },
-  { key: 'CLOSE_PROCESSOR', value: 'CLOSE_PROCESSOR', text: 'CLOSE_PROCESSOR' },
+export const OFFERING_CLOSE_SERVICE_OPTIONS = [
+  { key: 'PROCESS_FACTORY', value: 'PROCESS_FACTORY', text: 'Process Factory' },
+  { key: 'CLOSE_PROCESSOR', value: 'CLOSE_PROCESSOR', text: 'Close Processor' },
 ];
