@@ -10,7 +10,7 @@ import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, get
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
-import { userDetailsStore, watchListStore, userStore } from '../../index';
+import { userDetailsStore, watchListStore, userStore, authStore } from '../../index';
 // import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
@@ -102,28 +102,36 @@ export class CampaignStore {
   }
 
   @action
-  getCampaignDetails = (id, queryType) => {
+  getCampaignDetails = (id, queryType = false, isValid = false) => new Promise((resolve, reject) => {
+    const gqlClient = authStore.isUserLoggedIn ? client : clientPublic;
     watchListStore.setFieldValue('isWatching', false);
     this.details = graphql({
-      client: clientPublic,
+      client: gqlClient,
       query: queryType ? campaignDetailsForInvestmentQuery : campaignDetailsQuery,
-      variables: { id },
+      variables: { id, isValid },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data && data.getOfferingDetailsBySlug && !this.details.loading) {
+          watchListStore.setFieldValue('isWatching', ['WATCHING', 'INVESTOR'].includes(get(data.getOfferingDetailsBySlug, 'watchListStatus')));
           this.getCampaignAdditionalDetails(id);
-          watchListStore.setOfferingWatch();
+          resolve(data.getOfferingDetailsBySlug);
+        } else if (!this.details.loading) {
+          resolve(false);
         }
       },
+      onError: (err) => {
+        reject(err);
+      },
     });
-  }
+  });
 
   @action
   getCampaignAdditionalDetails = (id) => {
+    const gqlClient = authStore.isUserLoggedIn ? client : clientPublic;
     this.additionalDetails = graphql({
-      client: clientPublic,
+      client: gqlClient,
       query: campaignDetailsAdditionalQuery,
-      variables: { id },
+      variables: { id, isValid: true },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data && data.getOfferingDetailsBySlug && !this.additionalDetails.loading) {
@@ -454,7 +462,7 @@ export class CampaignStore {
           if (c.scope === 'PUBLIC'
             && ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor')
               || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
-            const cnt = reduce(get(c, 'threadComment'), (tcSum, tc) => (tc.scope === 'PUBLIC' && ((get(tc, 'createdUserInfo.roles[0].name') === 'admin' || get(tc, 'createdUserInfo.roles[0].name') === 'investor') || (get(tc, 'createdUserInfo.roles[0].name') === 'issuer' && tc.approved)) ? (tcSum + 1) : tcSum), 0);
+            const cnt = reduce(get(c, 'threadComments'), (tcSum, tc) => (tc.scope === 'PUBLIC' && ((get(tc, 'createdUserInfo.roles[0].name') === 'admin' || get(tc, 'createdUserInfo.roles[0].name') === 'investor') || (get(tc, 'createdUserInfo.roles[0].name') === 'issuer' && tc.approved)) ? (tcSum + 1) : tcSum), 0);
             sum = sum + 1 + (cnt || 0);
           }
           return null;

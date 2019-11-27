@@ -190,6 +190,16 @@ export class UserDetailsStore {
     return isFrozonAccountExists >= 0;
   }
 
+  @computed get isAccountSoftFrozen() {
+    const isFrozonAccountExists = findIndex(this.signupStatus.softFrozenAccounts, o => o === this.currentActiveAccount);
+    return isFrozonAccountExists >= 0;
+  }
+
+  @computed get isAccountHardFrozen() {
+    const isFrozonAccountExists = findIndex(this.signupStatus.hardFrozenAccounts, o => o === this.currentActiveAccount);
+    return isFrozonAccountExists >= 0;
+  }
+
   @action
   setProfilePhoto(url, name) {
     if (this.currentUser && this.currentUser.data.user.info.avatar) {
@@ -501,6 +511,8 @@ export class UserDetailsStore {
       details.partialAccounts = map(filter(details.roles, a => a.status === 'PARTIAL'), 'name');
       details.activeAccounts = map(filter(details.roles, a => a.status === 'FULL'), 'name');
       details.frozenAccounts = map(filter(details.roles, a => accountStore.isAccFrozen(a.status)), 'name');
+      details.softFrozenAccounts = map(filter(details.roles, a => accountStore.isAccSoftFrozen(a.status)), 'name');
+      details.hardFrozenAccounts = map(filter(details.roles, a => accountStore.isAccHardFrozen(a.status)), 'name');
       details.processingAccounts = map(filter(details.roles, a => (a.status ? a.status.endsWith('PROCESSING') : null)), 'name');
       details.inprogressAccounts = map(filter(details.roles, a => a.name !== 'investor' && a.status !== 'FULL'), 'name');
       details.phoneVerification = this.userDetails.phone

@@ -262,6 +262,9 @@ h6{
 .break-text {
 	word-break: break-all;
 }
+.no-wrap{
+	word-break: normal !important;
+}
 .full-width{
 	width: 100%;
 }
