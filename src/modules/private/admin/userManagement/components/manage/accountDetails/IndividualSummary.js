@@ -1,5 +1,5 @@
 import React from 'react';
-import { get } from 'lodash';
+import { get, startCase, capitalize } from 'lodash';
 import { Table, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../../helper';
@@ -22,7 +22,7 @@ const IndividualSummary = ({
     </Table.Row>
     <Table.Row>
       <Table.Cell>Account Status: </Table.Cell>
-      <Table.Cell>{get(account, 'details.accountStatus') || 'N/A'}</Table.Cell>
+      <Table.Cell>{get(account, 'details.accountStatus') ? capitalize(startCase(get(account, 'details.accountStatus'))) : 'N/A'}</Table.Cell>
     </Table.Row>
     <Table.Row>
       <Table.Cell>Investor: </Table.Cell>

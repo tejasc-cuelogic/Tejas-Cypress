@@ -150,16 +150,16 @@ Cypress.Commands.add('clearFormField', (dataSet, parentSelector = false) => {
   }
 });
 
-Cypress.Commands.add('getOffering', (offeirId) => {
+Cypress.Commands.add('getOffering', (offeringSlug) => {
   let retries = -1
   function searchForOffering() {
     retries++;
     cy.get('.campaign-list-wrapper').find('.container').find('.stackable')
       .then(($parent) => {
         try {
-          if ($parent.find(`div[data-cy=${offeirId}]`).length) {
+          if ($parent.find(`div[data-cy=${offeringSlug}]`).length) {
             cy.log('Find offering...');
-            cy.wrap($parent.find(`div[data-cy=${offeirId}]`)).click();
+            cy.wrap($parent.find(`div[data-cy=${offeringSlug}]`)).click();
           } else {
             cy.log('Move for Read More...');
             cy.get('body').then(($body) => {
