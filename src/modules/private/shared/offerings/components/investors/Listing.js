@@ -47,7 +47,7 @@ export default class Listing extends Component {
     const isParallel = ['BD_CF_506C'].includes(get(offer, 'regulation'));
     const isOfferingClose = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULTED'].includes(get(offer, 'stage'));
     let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Amount', value: 'amount' });
-    computedList = (isAdmin && isParallel) ? [...meta] : reject(headerList, { label: 'Regulation', value: 'regulation' });
+    computedList = (isAdmin && isParallel) ? [...meta] : reject(computedList, { label: 'Regulation', value: 'regulation' });
     computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'EB', value: 'earlyBirdEligibility' });
     computedList = isAdmin ? [...computedList] : [...computedList].filter(o => !['Account Type', 'Regulation', ''].includes(o.label));
     const listHeader = computedList;
