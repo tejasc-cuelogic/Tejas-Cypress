@@ -2799,7 +2799,7 @@ const OFFERING_CLOSE_COMMON = {
   },
   SERVICE: {
     value: 'PROCESS_FACTORY',
-    label: 'service',
+    label: 'Service',
     error: undefined,
     rule: 'string',
     placeHolder: 'Choose here',
