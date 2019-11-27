@@ -51,7 +51,7 @@ export default class AccountHeader extends Component {
                               {accStatus === 'HARD_FREEZE'
                                 ? (
                                   <>
-                                    <span>Hard Frozen Account</span>
+                                    <span><b>Hard Frozen Account</b></span>
                                     <li>Can NOT make comments on an offering <b>(NEW) </b></li>
                                     <li>Can NOT make investments || updates to investments</li>
                                     <li>Can NOT make deposits</li>
@@ -63,7 +63,7 @@ export default class AccountHeader extends Component {
                                 )
                                 : (
                                   <>
-                                    <span>Hard Frozen Account</span>
+                                    <span><b>Hard Frozen Account</b></span>
                                     <li>Same as Hard Freeze except for:</li>
                                     <li>Can make withdraw</li>
                                   </>
