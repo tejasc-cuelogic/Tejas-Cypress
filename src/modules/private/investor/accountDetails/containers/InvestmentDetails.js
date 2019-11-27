@@ -71,6 +71,10 @@ class InvestmentDetails extends Component {
         },
       ],
     };
+    if (details.loading) {
+      return null;
+    }
+
     if (details && details.data && !details.data.getOfferingDetailsById) {
       return <NotFound />;
     }
