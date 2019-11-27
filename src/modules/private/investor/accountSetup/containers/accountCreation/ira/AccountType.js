@@ -24,16 +24,8 @@ export default class AccountType extends Component {
     const { ACC_TYPES_FRM, accTypesChange } = this.props.iraAccountStore;
     return (
       <div>
-        <Header as="h4" textAlign={isMobile ? '' : 'center'}>What type of IRA account do you want to create?</Header>
-        {!isMobile
-          && (
-            <>
-              <Divider hidden />
-              <p className="center-align tertiary-text">Choose an account type</p>
-              <Divider section hidden />
-            </>
-          )
-        }
+        <Header as="h3" textAlign={isMobile ? 'mb-20' : 'center'}>Which type of IRA account would you like to open?</Header>
+        {!isMobile && <Divider section hidden />}
         <Form error className={isMobile ? '' : 'account-type-tab'}>
           {isMobile
             ? (
@@ -52,11 +44,10 @@ export default class AccountType extends Component {
                   changed={accTypesChange}
                   containerclassname={`${isMobile ? 'two wide' : ''} button-radio center-align`}
                 />
-                <Divider section hidden />
+                {!isMobile && <Divider section hidden />}
                 <div className={`${isMobile ? '' : 'option-details'} grey-header`}>
                   {this.getOptionDetails()}
                 </div>
-                <Divider section hidden />
               </>
             )
           }

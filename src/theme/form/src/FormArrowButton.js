@@ -35,7 +35,7 @@ const FormArrowButton = observer((props) => {
       {field.label && field.labelDescription
         ? (
         <>
-      {field.label && <Header as="h5">{field.label}</Header>}
+      {field.label && <Header as="h5" className="mb-0">{field.label}</Header>}
       {field.labelDescription && field.labelDescription}
         </>
         ) : (field.label && <span>{field.label}</span>)

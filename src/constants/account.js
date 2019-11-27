@@ -254,14 +254,14 @@ export const IRA_ACC_TYPES = {
         label: 'Traditional',
         labelDescription: 'Investments are made with pre-tax dollars; earnings grow tax-deferred',
         value: 0,
-        description: 'Earnings from investments on a Traditional Indiviudal Retirement Account grow tax-deferred.',
+        description: 'Investments are made with pre-tax dollars; earnings grow tax-deferred',
         rawValue: 'traditional',
       },
       {
         label: 'Roth',
         labelDescription: 'Investments are made with after-tax dollars; earnings grow tax-free',
         value: 1,
-        description: 'Earnings from investments in a Roth Retirement Account grow tax free.',
+        description: 'Investments are made with after-tax dollars; earnings grow tax-free',
         rawValue: 'roth',
       },
     ],
@@ -277,14 +277,14 @@ export const IRA_FUNDING = {
     values: [
       {
         label: 'Checking Account',
-        labelDescription: 'Make an initial deposit by linking an external checking account',
+        labelDescription: <>Link an external checking account;<br />annual contribution limits apply</>,
         value: 0,
         description: 'Fund IRA by Check',
         rawValue: 'check',
       },
       {
         label: 'IRA Transfer',
-        labelDescription: 'Transfer funds from an existing IRA Account',
+        labelDescription: 'Transfer funds from an existing like-type IRA account',
         value: 1,
         description: 'Fund IRA by Transfer',
         rawValue: 'iraTransfer',

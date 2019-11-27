@@ -185,7 +185,7 @@ export default class Summary extends Component {
         </p>
         )}
         <div className="center-align mt-30">
-          <Button primary size="large" fluid={isMobile} className="relaxed" content="Submit" onClick={() => this.props.handleCreateAccount('ira')} disabled={!this.props.iraAccountStore.isValidIraForm} />
+          <Button primary size="large" fluid={isMobile} className="relaxed" content="Create Account" onClick={() => this.props.handleCreateAccount('ira')} disabled={!this.props.iraAccountStore.isValidIraForm} />
         </div>
         {!isMobile && (
 <p className="center-align mt-30 grey-header">
