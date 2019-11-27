@@ -147,7 +147,6 @@ export default class BusinessDetails extends Component {
                               readOnly={formReadOnlyMode}
                               containerclassname={formReadOnlyMode ? 'display-only' : ''}
                               type="text"
-                              asterisk="true"
                               name="name"
                               fielddata={source.name}
                               changed={(e, res) => businessDetailsChange(e, res, 'sources', index)}
@@ -214,7 +213,6 @@ export default class BusinessDetails extends Component {
                               readOnly={formReadOnlyMode}
                               containerclassname={formReadOnlyMode ? 'display-only' : ''}
                               type="text"
-                              asterisk="true"
                               name="name"
                               fielddata={use.name}
                               changed={(e, res) => businessDetailsChange(e, res, 'uses', index)}
