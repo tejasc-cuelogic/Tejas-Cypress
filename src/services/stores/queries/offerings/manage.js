@@ -818,6 +818,36 @@ export const getOfferingDetails = gql`
                 }
               }
             }
+            llcAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            subscriptionAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
             proxyAgreement {
               fileId
               fileName
@@ -928,6 +958,14 @@ export const getOfferingDetails = gql`
               fileName
             }
             proxyAgreement {
+              fileId
+              fileName
+            }
+            llcAgreement {
+              fileId
+              fileName
+            }
+            subscriptionAgreement {
               fileId
               fileName
             }
