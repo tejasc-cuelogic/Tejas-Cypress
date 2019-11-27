@@ -44,10 +44,10 @@ export default class Listing extends Component {
     const { isIssuer, isAdmin } = this.props.userStore;
     const headerList = [...meta];
     const referralCode = get(offer, 'referralCode');
-    const regulation = get(offer, 'regulation');
+    const isParallel = ['BD_CF_506C'].includes(get(offer, 'regulation'));
     const isOfferingClose = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULTED'].includes(get(offer, 'stage'));
     let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Amount', value: 'amount' });
-    computedList = (isAdmin && (regulation == "BD_CF_506C")) ? [...meta] : reject(headerList, { label: 'Regulation', value: 'regulation' });
+    computedList = (isAdmin && isParallel) ? [...meta] : reject(headerList, { label: 'Regulation', value: 'regulation' });
     computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'EB', value: 'earlyBirdEligibility' });
     computedList = isAdmin ? [...computedList] : [...computedList].filter(o => !['Account Type', 'Regulation', ''].includes(o.label));
     const listHeader = computedList;
@@ -139,8 +139,8 @@ export default class Listing extends Component {
                       </Table.Cell>
                     )
                   }
-                  {isAdmin
-                    && (
+                  {isAdmin && isParallel 
+                  && (
                       <Table.Cell>
                         {data.regulation ? OFFERING_AGREEMENT_REGULATIONS[data.regulation] : ''}
                       </Table.Cell>
