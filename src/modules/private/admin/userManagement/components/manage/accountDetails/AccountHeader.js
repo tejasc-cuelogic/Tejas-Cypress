@@ -63,7 +63,7 @@ export default class AccountHeader extends Component {
                                 )
                                 : (
                                   <>
-                                    <span><b>Hard Frozen Account</b></span>
+                                    <span><b>Soft Frozen Account</b></span>
                                     <li>Same as Hard Freeze except for:</li>
                                     <li>Can make withdraw</li>
                                   </>
