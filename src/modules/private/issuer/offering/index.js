@@ -8,13 +8,13 @@ import OfferingModule from '../../shared/offerings/components';
 import { DataFormatter } from '../../../../helper';
 import { InlineLoader } from '../../../../theme/shared';
 
-@inject('uiStore', 'navStore', 'offeringsStore', 'offeringCreationStore')
+@inject('uiStore', 'navStore', 'offeringsStore', 'offeringCreationStore', 'userStore')
 @observer
 export default class Offering extends Component {
   constructor(props) {
     super(props);
     if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/overview`);
+      this.props.history.replace(`${this.props.match.url}/${this.props.navStore.navMeta.subNavigations[0].to}`);
     }
     if (!(this.props.offeringsStore.initLoad.includes('getOne') && this.props.offeringsStore.currentId === this.props.match.params.id)) {
       this.props.offeringsStore.getOne(this.props.match.params.id);
