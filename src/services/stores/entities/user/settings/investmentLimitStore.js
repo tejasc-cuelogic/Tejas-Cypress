@@ -277,6 +277,7 @@ export class InvestmentLimitStore {
               query: userDetailsQuery,
               variables: {
                 userId: userId || userDetailsStore.currentUserId,
+                includePrefInfo: false,
               },
             }],
         })

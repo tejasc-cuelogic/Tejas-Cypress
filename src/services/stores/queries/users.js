@@ -53,7 +53,7 @@ export const userDetailsQueryForBoxFolder = gql`
 `;
 
 export const userDetailsQuery = gql`
-  query getUserDetails($userId: ID!) {
+  query getUserDetails($userId: ID!, $includePrefInfo: Boolean!) {
     user(id: $userId) {
       id
       userHash
@@ -97,6 +97,14 @@ export const userDetailsQuery = gql`
         avatar {
           name
           url
+        }
+        preferred @include(if: $includePrefInfo) {
+            name
+            street
+            streetTwo
+            city
+            state
+            zipCode
         }
       }
       email {

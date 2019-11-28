@@ -311,7 +311,7 @@ export class UserDetailsStore {
       client,
       query: userDetailsQuery,
       fetchPolicy: 'network-only',
-      variables: { userId },
+      variables: { userId, includePrefInfo: false },
       onFetch: (result) => {
         if (!this.currentUser.loading) {
           identityStore.setProfileInfo(this.userDetails);
@@ -458,7 +458,7 @@ export class UserDetailsStore {
             freeze,
             reason: message,
           },
-          refetchQueries: [{ query: userDetailsQuery, variables: { userId } }],
+          refetchQueries: [{ query: userDetailsQuery, variables: { userId, includePrefInfo: false } }],
         })
         .then(() => {
           resolve();
@@ -875,7 +875,7 @@ export class UserDetailsStore {
             capabilities,
             targetUserId: get(this.getDetailsOfUser, 'id'),
           },
-          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id') } }],
+          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id'), includePrefInfo: true } }],
         })
         .then(() => {
           Helper.toast('Profile has been updated.', 'success');
@@ -909,7 +909,7 @@ export class UserDetailsStore {
             capabilities: [...capabilities],
             targetUserId: get(this.getDetailsOfUser, 'id'),
           },
-          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id') } }],
+          refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id'), includePrefInfo: false } }],
         })
         .then(() => {
           Helper.toast('Profile has been updated.', 'success');

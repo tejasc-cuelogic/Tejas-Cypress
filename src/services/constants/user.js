@@ -373,11 +373,11 @@ export const USER_PROFILE_PREFERRED_INFO = {
     placeHolder: 'Preferred Name',
     objRef: 'info.preferred',
   },
-  street: { ...USER_IDENTITY.street, objRef: 'info.preferred', objRefOutput: '' },
-  streetTwo: { ...USER_IDENTITY.streetTwo, objRef: 'info.preferred', objRefOutput: '', skipField: false },
-  city: { ...USER_IDENTITY.city, objRef: 'info.preferred', objRefOutput: '' },
-  state: { ...USER_IDENTITY.state, objRef: 'info.preferred', objRefOutput: '' },
-  zipCode: { ...USER_IDENTITY.zipCode, objRef: 'info.preferred', objRefOutput: '' },
+  street: { ...USER_IDENTITY.street, rule: 'optional', objRef: 'info.preferred', objRefOutput: '' },
+  streetTwo: { ...USER_IDENTITY.streetTwo, rule: 'optional', objRef: 'info.preferred', objRefOutput: '', skipField: false },
+  city: { ...USER_IDENTITY.city, rule: 'optional', objRef: 'info.preferred', objRefOutput: '' },
+  state: { ...USER_IDENTITY.state, rule: 'optional', objRef: 'info.preferred', objRefOutput: '' },
+  zipCode: { ...USER_IDENTITY.zipCode, rule: 'optional', objRef: 'info.preferred', objRefOutput: '' },
 };
 
 export const USER_PROFILE_FOR_ADMIN = {
