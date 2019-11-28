@@ -37,65 +37,6 @@ class offerDetails extends Component {
     offeringSlug: null,
   }
 
-  // componentDidMount() {
-  //   const { location, match, newLayout } = this.props;
-  //   const { isUserLoggedIn } = this.props.authStore;
-  //   const { currentUser, isAdmin } = this.props.userStore;
-  //   this.props.campaignStore.getIssuerIdForOffering(this.props.match.params.id).then((data) => {
-  //     const oMinData = data || null;
-  //     if (['TERMINATED', 'FAILED'].includes(oMinData.stage) && !isAdmin) {
-  //       this.props.history.push('/offerings');
-  //     }
-  //     if ((currentUser && currentUser.roles.includes('admin'))
-  //       || oMinData.isAvailablePublicly
-  //       || oMinData.stage === 'LIVE'
-  //       || (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId === currentUser.sub)) {
-  //       this.setState({ preLoading: false, showPassDialog: false });
-  //       this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
-  //     } else if (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId !== currentUser.sub) {
-  //       if (oMinData.stage === 'CREATION') {
-  //         this.setState({ showPassDialog: true, preLoading: false });
-  //       } else {
-  //         this.props.history.push('/offerings');
-  //       }
-  //     } else if (currentUser && currentUser.roles.includes('investor')) {
-  //       const params = {
-  //         userId: currentUser.sub,
-  //         offeringId: data.id,
-  //         offeringStage: oMinData.stage,
-  //       };
-  //       this.props.campaignStore.isValidInvestorInOffering(params).then((res) => {
-  //         if (res) {
-  //           this.setState({ preLoading: false, showPassDialog: false });
-  //           this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
-  //         } else {
-  //           this.props.history.push('/offerings');
-  //         }
-  //       });
-  //     } else {
-  //       if (oMinData.stage === 'CREATION') {
-  //         this.setState({ showPassDialog: true, preLoading: false });
-  //       } else if (oMinData.stage !== 'CREATION' && oMinData.isAvailablePublicly !== true) {
-  //         this.setState({ showPassDialog: false, preLoading: false });
-  //         this.props.uiStore.setAuthRef(this.props.location.pathname);
-  //         this.props.history.push('/login');
-  //       }
-  //     }
-  //   }).catch(() => this.props.history.push('/offerings'));
-
-  //   if (location.pathname !== match.url) {
-  //     const splittedArr = location.pathname.split('/');
-  //     if ((newLayout && splittedArr.includes('data-room')) || (!newLayout && ['overview', 'about', 'investment-details', 'data-room', 'comments', 'bonus-rewards', 'updates'].includes(splittedArr[splittedArr.length - 1]))) {
-  //       // this.props.history.push(location.pathname); do nothing
-  //     } else {
-  //       this.props.history.push(`${match.url}${!newLayout ? '/overview' : ''}`);
-  //     }
-  //   }
-  //   if (isUserLoggedIn) {
-  //     this.props.uiStore.clearRedirectURL();
-  //   }
-  //   window.scrollTo(0, 0);
-  // }
   componentDidMount() {
     const { location, match, newLayout } = this.props;
     const { isUserLoggedIn } = this.props.authStore;

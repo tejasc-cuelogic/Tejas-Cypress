@@ -90,7 +90,6 @@ decorate(WatchListStore, {
   offeringWatchList: action,
   addRemoveWatchList: action,
   updateWatchList: action,
-  // setOfferingWatch: action,
   setWatchListData: action,
   resetWatchList: action,
   allWatchList: computed,
