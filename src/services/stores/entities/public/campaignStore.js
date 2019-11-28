@@ -112,8 +112,10 @@ export class CampaignStore {
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data && data.getOfferingDetailsBySlug && !this.details.loading) {
-          watchListStore.setFieldValue('isWatching', ['WATCHING', 'INVESTOR'].includes(get(data.getOfferingDetailsBySlug, 'watchListStatus')));
-          this.getCampaignAdditionalDetails(id);
+          if (!queryType) {
+            watchListStore.setFieldValue('isWatching', ['WATCHING', 'INVESTOR'].includes(get(data.getOfferingDetailsBySlug, 'watchListStatus')));
+            this.getCampaignAdditionalDetails(id);
+          }
           resolve(data.getOfferingDetailsBySlug);
         } else if (!this.details.loading) {
           resolve(false);
