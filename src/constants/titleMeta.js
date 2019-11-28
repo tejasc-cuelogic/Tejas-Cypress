@@ -14,7 +14,7 @@ const INVESTOR_INVESTMENT_ACC_META = {};
   ['portfolio', 'transfer-funds', 'bank-accounts', 'transactions', 'statements'].forEach((subtab) => {
     INVESTOR_ACC_META[`/app/account-details/${acc}/${subtab}`] = `${acc === 'ira' ? 'IRA' : startCase(acc)} Account | ${startCase(subtab)} - NextSeed`;
   });
-  INVESTOR_INVESTMENT_ACC_META[`/app/summary/account-creation/${acc}`] = `Create Investment Account | ${acc === 'ira' ? 'IRA' : startCase(acc)} - NextSeed`;
+  INVESTOR_INVESTMENT_ACC_META[`/app/summary/account-creation/${acc}`] = `Create ${acc === 'ira' ? 'IRA' : startCase(acc)} Investment Account - NextSeed`;
 });
 
 export const TITLES = {
