@@ -3,7 +3,7 @@ import graphql from 'mobx-apollo';
 import { get } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { getJwtReferralEmbeddedWidget, getUserRewardBalance, getUserReferralDetails, getReferralCreditsInformation, userPartialSignupWithReferralCode, userFullSignupWithReferralCode, upsertUserReferralCredits } from '../../queries/referrals';
+import { getJwtReferralEmbeddedWidget, getUserReferralDetails, getReferralCreditsInformation, userPartialSignupWithReferralCode, userFullSignupWithReferralCode, upsertUserReferralCredits } from '../../queries/referrals';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore } from '../../index';
 
@@ -53,29 +53,11 @@ export class ReferralStore {
     });
   });
 
-  @action
-  getUserRewardBalance = () => new Promise((resolve) => {
-    const { userDetails } = userDetailsStore;
-    graphql({
-      client,
-      query: getUserRewardBalance,
-      variables: { userId: userDetails.id },
-      fetchPolicy: 'network-only',
-      onFetch: (data) => {
-        if (data) {
-          resolve(data);
-        }
-      },
-      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
-    });
-  });
-
-  getUserReferralDetails = (id = false, showToast = true) => new Promise((resolve, reject) => {
-    const { userDetails } = userDetailsStore;
+  getUserReferralDetails = (userId = false, showToast = true) => new Promise((resolve, reject) => {
     graphql({
       client,
       query: getUserReferralDetails,
-      variables: { userId: id || userDetails.id },
+      variables: userId ? { userId } : { },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data) {

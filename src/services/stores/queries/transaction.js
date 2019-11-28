@@ -26,7 +26,7 @@ export const allTransactions = gql`
 `;
 
 export const addFundMutation = gql`
-  mutation _addFunds($userId: String, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int, $sendInvestorNotification: Boolean) {
+  mutation addFunds($userId: String, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int, $sendInvestorNotification: Boolean) {
     addFunds(userId: $userId, amount: $amount, accountId: $accountId, description: $description, agreementId: $agreementId, sendInvestorNotification: $sendInvestorNotification)
   }
 `;
@@ -41,13 +41,13 @@ export const requestOptForTransaction = gql`
 `;
 
 export const withdrawFundMutation = gql`
-  mutation _withdrawFunds($userId: String, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int, $sendInvestorNotification: Boolean) {
+  mutation withdrawFunds($userId: String, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int, $sendInvestorNotification: Boolean) {
     withdrawFunds(userId: $userId, amount: $amount, accountId: $accountId, description: $description, agreementId: $agreementId, sendInvestorNotification: $sendInvestorNotification)
   }
 `;
 
 export const paymentHistory = gql`
-  query _getPaymentHistory($investmentId: Int!, $offeringId: String!){
+  query getPaymentHistory($investmentId: Int!, $offeringId: String!){
     getPaymentHistory(
       investmentId: $investmentId,
       offeringId: $offeringId
@@ -80,7 +80,7 @@ export const getInvestmentsByUserIdAndOfferingId = gql`
 `;
 
 export const getTransactions = gql`
-query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $direction: TransactionDirectionEnum, $limit: Int, $minAmount: Int, $maxAmount: Int, $dateFilterStart: String, $dateFilterStop: String) {
+query getTransactions($status: [TransactionStatusEnum], $offset: Int, $direction: TransactionDirectionEnum, $limit: Int, $minAmount: Int, $maxAmount: Int, $dateFilterStart: String, $dateFilterStop: String) {
   getTransactions(
     status: $status, 
     offset: $offset, 

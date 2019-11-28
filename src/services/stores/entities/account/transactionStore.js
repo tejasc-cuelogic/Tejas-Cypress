@@ -334,20 +334,18 @@ export class TransactionStore {
   addFunds = (amount, description) => {
     uiStore.setProgress(true);
     const account = userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: addFundMutation,
           variables: {
-            userId: userDetails.id,
             amount,
             accountId: account.details.accountId,
             description,
           },
           refetchQueries: [{
             query: getInvestorAccountPortfolio,
-            variables: { userId: userDetails.id, accountId: account.details.accountId },
+            variables: { accountId: account.details.accountId },
           }],
         })
         .then(() => {
@@ -506,20 +504,18 @@ export class TransactionStore {
   withdrawFunds = (amount, description) => {
     uiStore.setProgress(true);
     const account = userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: withdrawFundMutation,
           variables: {
-            userId: userDetails.id,
             amount,
             accountId: account.details.accountId,
             description,
           },
           refetchQueries: [{
             query: getInvestorAccountPortfolio,
-            variables: { userId: userDetails.id, accountId: account.details.accountId },
+            variables: { accountId: account.details.accountId },
           }],
         })
         .then(() => {

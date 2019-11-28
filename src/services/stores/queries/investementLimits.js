@@ -1,9 +1,8 @@
 import gql from 'graphql-tag';
 
 export const updateInvestmentLimits = gql`
-  mutation _updateInvestmentLimits($userId: String, $accountId: String!, $annualIncome: Float, $netWorth: Float, $otherRegCfInvestments: Float){
+  mutation updateInvestmentLimits($accountId: String!, $annualIncome: Float, $netWorth: Float, $otherRegCfInvestments: Float){
     updateInvestmentLimits(
-      userId: $userId
       accountId: $accountId
       annualIncome: $annualIncome
       netWorth: $netWorth

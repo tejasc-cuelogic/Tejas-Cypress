@@ -1,15 +1,5 @@
 import gql from 'graphql-tag';
 
-export const getAmountInvestedInCampaign = gql`
-  query _getAmountInvestedInCampaign($offeringId: String, $userId: String, $accountId: String){
-    getAmountInvestedInCampaign(
-      offeringId: $offeringId
-      userId: $userId
-      accountId: $accountId
-    )
-  }
-`;
-
 export const getInvestorAvailableCash = gql`
   query _getInvestorAvailableCash(
     $userId: String!, $accountId: String!, $includeInFlight: Boolean,
@@ -45,16 +35,6 @@ export const validateInvestmentAmount = gql`
       status
       message
     }
-  }
-`;
-
-export const getInvestorInFlightCash = gql`
-  query _getInvestorInFlightCash($userId: String, $accountId: String, $isAutoDraft: String){
-    getInvestorInFlightCash(
-      userId: $userId
-      accountId: $accountId
-      isAutoDraft: $isAutoDraft
-    )
   }
 `;
 

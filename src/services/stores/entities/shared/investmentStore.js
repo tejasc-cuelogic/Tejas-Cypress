@@ -9,8 +9,7 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore, campaignStore, portfolioStore, investmentLimitStore } from '../../index';
 import {
-  getAmountInvestedInCampaign,
-  validateInvestmentAmount, getInvestorInFlightCash,
+  validateInvestmentAmount,
   generateAgreement, finishInvestment,
   investNowGeneratePurchaseAgreement,
 } from '../../queries/investNow';
@@ -285,23 +284,6 @@ export class InvestmentStore {
   }
 
   @action
-  getAmountInvestedInCampaign = () => {
-    this.details = graphql({
-      client,
-      query: getAmountInvestedInCampaign,
-      variables: {
-        // offeringId,
-        userId: userDetailsStore.currentUserId,
-        // accountId,
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-      },
-      fetchPolicy: 'network-only',
-    });
-  }
-
-  @action
   validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {
     uiStore.setProgress();
     if (this.investmentAmount) {
@@ -427,23 +409,6 @@ export class InvestmentStore {
       fetchPolicy: 'network-only',
     });
   });
-
-  @action
-  getInvestorInFlightCash = () => {
-    this.details = graphql({
-      client,
-      query: getInvestorInFlightCash,
-      variables: {
-        userId: userDetailsStore.currentUserId,
-        // accountId,
-        // isAutoDraft,
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-      },
-      fetchPolicy: 'network-only',
-    });
-  }
 
   @action
   generateAgreement = () => {
@@ -575,8 +540,7 @@ export class InvestmentStore {
     const data = mapValues(this.INVESTMENT_LIMITS_FORM.fields, f => parseInt(f.value, 10));
     investmentLimitStore
       .updateInvestmentLimits(
-        data, this.getSelectedAccountTypeId,
-        userDetailsStore.currentUserId, true, offeringId,
+        data, this.getSelectedAccountTypeId, true, offeringId,
       )
       .then(() => resolve());
   })

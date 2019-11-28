@@ -81,12 +81,12 @@ export class PortfolioStore {
   @action
   getSummary = (isAdmin = false) => {
     const { getDetailsOfUser } = userDetailsStore;
-    const userId = isAdmin ? getDetailsOfUser.id : userStore.currentUser.sub;
+    const userId = isAdmin ? getDetailsOfUser.id : null;
     this.accSummary = graphql({
       client,
       fetchPolicy: 'network-only',
       query: getUserAccountSummary,
-      variables: { userId },
+      variables: userId ? { userId } : { },
     });
   }
 

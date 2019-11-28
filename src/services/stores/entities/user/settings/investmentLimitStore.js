@@ -245,8 +245,7 @@ export class InvestmentLimitStore {
 
   @action
   updateInvestmentLimits = (
-    data, accountId, userId = null,
-    resetProgress = true, offeringId = undefined,
+    data, accountId, resetProgress = true, offeringId = undefined,
   ) => {
     uiStore.setProgress();
     const { campaign } = campaignStore;
@@ -256,7 +255,6 @@ export class InvestmentLimitStore {
         .mutate({
           mutation: updateInvestmentLimits,
           variables: {
-            userId: userId || userDetailsStore.currentUserId,
             accountId,
             annualIncome: data.annualIncome,
             netWorth: data.netWorth,
@@ -274,7 +272,7 @@ export class InvestmentLimitStore {
             {
               query: userDetailsQuery,
               variables: {
-                userId: userId || userDetailsStore.currentUserId,
+                userId: userDetailsStore.currentUserId,
               },
             }],
         })

@@ -319,29 +319,23 @@ export class BankAccountStore {
   }
 
   @action
-  hasPendingTransfersWithPendingBankChange = () => {
-    const data = {
-      userId: userDetailsStore.userDetails.id,
-      accountId: this.CurrentAccountId,
-    };
-    return new Promise((resolve) => {
-      client
-        .mutate({
-          mutation: hasPendingTransfersWithPendingBankChange,
-          variables: { ...data },
-        })
-        .then((res) => {
-          this.setFieldValue('hasPendingRequest', get(res, 'data.hasPendingTransfersWithPendingBankChange'));
-          resolve();
-        })
-        .catch((error) => {
-          uiStore.setErrors(error.message);
-          Helper.toast(error.message, 'error');
-        }).finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
-  }
+  hasPendingTransfersWithPendingBankChange = () => new Promise((resolve) => {
+    client
+      .mutate({
+        mutation: hasPendingTransfersWithPendingBankChange,
+        variables: { accountId: this.CurrentAccountId },
+      })
+      .then((res) => {
+        this.setFieldValue('hasPendingRequest', get(res, 'data.hasPendingTransfersWithPendingBankChange'));
+        resolve();
+      })
+      .catch((error) => {
+        uiStore.setErrors(error.message);
+        Helper.toast(error.message, 'error');
+      }).finally(() => {
+        uiStore.setProgress(false);
+      });
+  });
 
   @action
   setLinkBankSummary = (showbank = true) => {
