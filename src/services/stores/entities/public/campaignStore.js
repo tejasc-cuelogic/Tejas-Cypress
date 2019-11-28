@@ -316,7 +316,7 @@ export class CampaignStore {
     campaignStatus.investmentHighlights = true;
     campaignStatus.isRevenueShare = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary;
     campaignStatus.isTermNote = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
-    campaignStatus.doneComputing = (this.details && this.details.data && this.details.data.getOfferingDetailsBySlug && this.details.data.getOfferingDetailsBySlug && !isEmpty(this.details.data.getOfferingDetailsBySlug.keyTerms)) || false;
+    campaignStatus.doneComputing = (get(this.details, 'data.getOfferingDetailsBySlug') && !isEmpty(this.details.data.getOfferingDetailsBySlug.keyTerms)) || false;
     return campaignStatus;
   }
 
@@ -454,9 +454,9 @@ export class CampaignStore {
       if (comments) {
         comments.map((c) => {
           if (c.scope === 'PUBLIC'
-            && ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor')
+            && ((['admin', 'investor'].includes(get(c, 'createdUserInfo.roles[0].name')))
               || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
-            const cnt = reduce(get(c, 'threadComments'), (tcSum, tc) => (tc.scope === 'PUBLIC' && ((get(tc, 'createdUserInfo.roles[0].name') === 'admin' || get(tc, 'createdUserInfo.roles[0].name') === 'investor') || (get(tc, 'createdUserInfo.roles[0].name') === 'issuer' && tc.approved)) ? (tcSum + 1) : tcSum), 0);
+            const cnt = reduce(get(c, 'threadComments'), (tcSum, tc) => (tc.scope === 'PUBLIC' && (((['admin', 'investor'].includes(get(tc, 'createdUserInfo.roles[0].name')))) || (get(tc, 'createdUserInfo.roles[0].name') === 'issuer' && tc.approved)) ? (tcSum + 1) : tcSum), 0);
             sum = sum + 1 + (cnt || 0);
           }
           return null;
