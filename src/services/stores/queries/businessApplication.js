@@ -460,24 +460,6 @@ mutation updateApplicationData(
 }
 `;
 
-export const updateBusinessApplicationInformationData = gql`
-mutation updateBusinessApplicationInformation(
-  $applicationId: String!
-  $issuerId: String!
-  $review: BusinessApplicationReviewInput
-  $offers: OffersReviewInput
-) {
-  updateBusinessApplicationInformation(
-    applicationId: $applicationId
-    issuerId: $issuerId
-    review: $review
-    offers: $offers
-  ){
-    applicationStatus
-  }
-}
-`;
-
 export const getBusinessApplicationOffers = gql`
 query _getBusinessApplicationById ($id: String!) {
   businessApplication(
