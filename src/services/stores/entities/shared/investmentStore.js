@@ -11,7 +11,7 @@ import { uiStore, userDetailsStore, rewardStore, campaignStore, portfolioStore, 
 import {
   getAmountInvestedInCampaign, getInvestorAvailableCash,
   validateInvestmentAmount, getInvestorInFlightCash,
-  generateAgreement, finishInvestment, transferFundsForInvestment,
+  generateAgreement, finishInvestment,
   investNowGeneratePurchaseAgreement,
 } from '../../queries/investNow';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
@@ -568,32 +568,6 @@ export class InvestmentStore {
       });
     }
     return false;
-  }
-
-  @action
-  transferFundsForInvestment = () => {
-    uiStore.setProgress();
-    return new Promise((resolve) => {
-      client
-        .mutate({
-          mutation: transferFundsForInvestment,
-          variables: {
-            userId: userDetailsStore.currentUserId,
-            accountId: this.getSelectedAccountTypeId,
-            transferAmount: this.getSpendCreditValue,
-          },
-        })
-        .then((data) => {
-          resolve(data.data.transferFundsForInvestment);
-        })
-        .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(error.message);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
   }
 
   @computed get validBonusRewards() {

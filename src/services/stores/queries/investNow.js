@@ -94,16 +94,6 @@ export const finishInvestment = gql`
   }
 `;
 
-export const transferFundsForInvestment = gql`
-  mutation _transferFundsForInvestment($userId: String!, $accountId: String!, $transferAmount: Float!){
-    transferFundsForInvestment(
-      userId: $userId
-      accountId: $accountId
-      transferAmount: $transferAmount
-    )
-  }
-`;
-
 export const investNowGeneratePurchaseAgreement = gql`
 mutation investNowGeneratePurchaseAgreement($userId: String!,
   $accountId: String!,
