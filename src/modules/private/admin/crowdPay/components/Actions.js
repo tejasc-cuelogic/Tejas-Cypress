@@ -144,8 +144,21 @@ export default class Actions extends Component {
                     && <Button disabled={isDisabled} onClick={e => this.ctaHandler(e, userId, accountId, 'CREATEACCOUNT', `${capitalize(type)} account is Created successfully.`)} as={Link} to={`${urlPara}/CREATEACCOUNT`} className="inverted" color="blue">Create</Button>
                   }
                   {type !== 'review' && isGsProcess
-                    && <Button disabled={isDisabled} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
-                  }
+                    && (
+                      <>
+                        <Button disabled={isDisabled} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
+                        {
+                          !isProduction && (
+                            <Checkbox
+                              name="skip-cip"
+                              onChange={(e, result) => this.skipCipChange(e, result)}
+                              className="mt-half"
+                              label="Skip CIP"
+                              disabled={isDisabled}
+                            />
+                          )}
+                      </>
+                    )}
                 </>
               )
               : (
