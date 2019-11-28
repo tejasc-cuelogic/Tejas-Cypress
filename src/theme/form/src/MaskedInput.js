@@ -43,7 +43,7 @@ export default class MaskedInput extends Component {
     const CustomToolTip = ({ trigger }) => (
       <>
       {isMobile ? (
-        <Modal style={{ top: '50%', transform: 'translate(0, -50%)' }} size="tiny" trigger={trigger} closeIcon>
+        <Modal style={{ top: '50%', transform: 'translate(0, -50%)' }} className="mobile-tooltip" size="tiny" trigger={trigger} closeIcon>
           <Modal.Content>
             <Header as="h5">
               {label}
