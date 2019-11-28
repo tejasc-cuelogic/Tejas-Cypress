@@ -30,7 +30,7 @@ export default class FinancialInformation extends Component {
     const isValidInvLimit = FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '';
     return (
       <>
-      <Header as="h4" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
+      <Header as="h3" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
         <p className={isMobile ? '' : 'center-align'}>
           Your entity{"'"}s net assets and annual revenue are used to determine your 12-month investment limit under Regulation Crowdfunding.
         </p>

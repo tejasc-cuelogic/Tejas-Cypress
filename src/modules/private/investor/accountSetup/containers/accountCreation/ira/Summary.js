@@ -70,7 +70,7 @@ export default class Summary extends Component {
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
       <>
-        <Header as="h4" textAlign={isMobile ? '' : 'center'}>Confirm your account to start investing!</Header>
+        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Confirm your account to start investing!</Header>
         <div className={isMobile ? '' : 'field-wrap'}>
           <div className="table-wrapper">
             <Table unstackable basic="very">

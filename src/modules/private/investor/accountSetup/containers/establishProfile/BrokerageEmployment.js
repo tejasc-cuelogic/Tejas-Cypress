@@ -45,7 +45,7 @@ export default class BrokerageEmployment extends Component {
     return (
       <div className={isMobile ? '' : 'center-align'}>
         {/* <Header as="h3">Brokerage employment</Header> */}
-        <Header as="h4">Do you (or an immediate family member) work for a US-based securities brokerage firm?</Header>
+        <Header as="h3">Do you (or an immediate family member) work for a US-based securities brokerage firm?</Header>
         {!isMobile && <Divider hidden />}
         {/* <p>
           Do you (or an immediate family member) work for a US-based

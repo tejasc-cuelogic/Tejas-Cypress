@@ -98,7 +98,7 @@ export default class AddFunds extends Component {
     return (
       <>
         <div className={isMobile ? '' : 'center-align'}>
-          <Header as="h4">How much would you like to deposit?</Header>
+          <Header as="h3">How much would you like to deposit?</Header>
           <p>
             We
           {"'"}

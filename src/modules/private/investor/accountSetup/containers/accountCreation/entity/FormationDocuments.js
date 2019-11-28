@@ -38,7 +38,7 @@ export default class FormationDocumemts extends Component {
     const { errors } = this.props.uiStore;
     return (
       <>
-      <Header as="h4" textAlign={isMobile ? '' : 'center'}>Upload required documentation</Header>
+      <Header as="h3" textAlign={isMobile ? '' : 'center'}>Upload required documentation</Header>
         <Divider hidden />
         <Form error className={isMobile ? 'mb-30' : ''}>
           <DropZone

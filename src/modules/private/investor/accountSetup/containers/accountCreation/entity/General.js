@@ -32,7 +32,7 @@ export default class General extends Component {
     const { errors } = this.props.uiStore;
     return (
       <>
-        <Header as="h4" textAlign={isMobile ? '' : 'center'}>General information</Header>
+        <Header as="h3" textAlign={isMobile ? '' : 'center'}>General information</Header>
         <p className={isMobile ? '' : 'center-align'}>
           Let
           {"'"}
