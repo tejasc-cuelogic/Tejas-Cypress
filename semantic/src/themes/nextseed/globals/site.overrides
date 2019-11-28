@@ -2869,7 +2869,7 @@ input[type='range']::-webkit-slider-thumb {
 	}
 }
 //	IRA account creation
-.highlight-text, .negative-text {
+.highlight-text, .negative-text, .grey-header {
 	&.large {
 		font-size: @20px;
 		font-weight: @fontMedium;

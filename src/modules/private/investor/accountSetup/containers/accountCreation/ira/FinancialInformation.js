@@ -56,7 +56,7 @@ Your net worth and annual income are used to determine your 12-month investment 
               {isMobile ? <b>Your investment limit:</b> : 'Your investment limit:'}
               {isMobile && <br />}
               <b>
-                <span className={`${isMobile ? '' : 'large ml-10'} ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : ''}`}>
+                <span className={`${isMobile ? '' : 'large ml-10'} ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'grey-header'}`}>
                   {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
                 </span>
               </b>

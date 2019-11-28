@@ -348,7 +348,7 @@ export const ENTITY_FIN_INFO = {
   netAssets: {
     key: 'netAssets',
     value: '',
-    label: 'Entity Net Assets',
+    label: 'Net Assets',
     error: undefined,
     rule: 'required|numeric',
     maxLength: 15,
@@ -356,7 +356,7 @@ export const ENTITY_FIN_INFO = {
   annualIncome: {
     key: 'annualIncome',
     value: '',
-    label: 'Entity Annual Revenue',
+    label: 'Annual Revenue',
     error: undefined,
     rule: 'required|numeric',
     maxLength: 15,
