@@ -62,7 +62,6 @@ export class InvestmentLimitStore {
       client,
       query: getInvestorInvestmentLimit,
       variables: {
-        userId: userDetailsStore.currentUserId,
         accountId,
       },
       onFetch: (data) => {

@@ -16,8 +16,6 @@ import {
 } from '../../queries/investNow';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 
-// import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
-
 export class InvestmentStore {
   @observable INVESTMONEY_FORM = Validator.prepareFormObject(INVESTMENT_INFO);
 

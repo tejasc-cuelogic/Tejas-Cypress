@@ -16,8 +16,8 @@ export const updateInvestmentLimits = gql`
 `;
 
 export const getInvestorInvestmentLimit = gql`
-  query getInvestorInvestmentLimit($userId: String!, $accountId: String!) {
-    getInvestorInvestmentLimit(userId: $userId, accountId: $accountId)
+  query getInvestorInvestmentLimit($accountId: String!) {
+    getInvestorInvestmentLimit(accountId: $accountId)
   }
 `;
 

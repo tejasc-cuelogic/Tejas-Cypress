@@ -182,7 +182,7 @@ query _getMonthlyPaymentsToInvestorByOffering($userId:String, $accountId:String!
 `;
 
 export const getUserAccountSummary = gql`
-  query _getUserAccountSummary($userId: String!) {
+  query getUserAccountSummary($userId: String!) {
     getUserAccountSummary (userId: $userId) {
       totalInvested
       pendingInvestments
