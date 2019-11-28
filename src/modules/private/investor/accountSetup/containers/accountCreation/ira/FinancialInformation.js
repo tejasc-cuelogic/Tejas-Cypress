@@ -27,6 +27,8 @@ export default class FinancialInformation extends React.Component {
 
   render() {
     const { FIN_INFO_FRM, finInfoChange } = this.props.iraAccountStore;
+    const isValidInvLimit = FIN_INFO_FRM.fields.investmentLimit.value < 5000
+    && FIN_INFO_FRM.fields.investmentLimit.value !== '';
     return (
       <>
         <Header as="h4" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
@@ -49,6 +51,7 @@ Your net worth and annual income are used to determine your 12-month investment 
                   currency
                   showerror
                   toolTipOnLabel
+                  forceError={isValidInvLimit}
                 />
               ))
             }
@@ -57,15 +60,14 @@ Your net worth and annual income are used to determine your 12-month investment 
               {isMobile ? <b>Your investment limit:</b> : 'Your investment limit:'}
               {isMobile && <br />}
               <b>
-                <span className={`${isMobile ? '' : 'large ml-10'} ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'grey-header'}`}>
+                <span className={`${isMobile ? '' : 'large ml-10'} ${isValidInvLimit ? 'negative-text' : 'grey-header'}`}>
                   {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
                 </span>
               </b>
             </p>
             <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20' : ''} link`}>How is this calculated?</a>
           </div>
-          {(FIN_INFO_FRM.fields.investmentLimit.value < 5000
-            && FIN_INFO_FRM.fields.investmentLimit.value !== '')
+          {isValidInvLimit
             && (
             <p className={`${isMobile ? '' : 'center-align'} error`}>
               Based on your reported Net Worth and Annual Income, your 12-month investment limit
