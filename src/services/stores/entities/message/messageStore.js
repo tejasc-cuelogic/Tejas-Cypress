@@ -11,6 +11,7 @@ import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { DRAFT_NEW } from '../../../constants/messages';
 import { offeringCreationStore, campaignStore, userDetailsStore } from '../../index';
+import uiStore from '../shared/uiStore';
 
 export class NewMessage {
   @observable MESSAGE_FRM = Validator.prepareFormObject(DRAFT_NEW);
@@ -118,7 +119,10 @@ export class NewMessage {
         this.resetMessageForm();
         Helper.toast('Message sent.', 'success');
       })
-      .catch(() => Helper.toast('Something went wrong please try again after sometime.', 'error'))
+      .catch((error) => {
+        Helper.toast('Something went wrong please try again after sometime.', 'error');
+        uiStore.setErrors(error.message);
+      })
       .finally(() => this.setDataValue('buttonLoader', false));
   }
 

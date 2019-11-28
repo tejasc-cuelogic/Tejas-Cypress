@@ -305,7 +305,9 @@ export class BusinessAppStore {
         if (((data.applicationStatus || data.prequalStatus)
           === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED)
           || ((data.applicationStatus || data.prequalStatus)
-          === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)) {
+          === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)
+          || ((data.applicationStatus || data.prequalStatus)
+          === BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED)) {
           this.formReadOnlyMode = true;
         } else if ((data.applicationStatus || data.prequalStatus)
           === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {

@@ -133,7 +133,7 @@ const Body = props => (
                 </Item>
               </>
           ));
-        }) : <InlineLoader text="No data found." />
+        }) : <InlineLoader text="No comments yet." />
       }
     </Item.Group>
   </div>

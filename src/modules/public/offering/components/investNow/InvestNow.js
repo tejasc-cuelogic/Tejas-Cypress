@@ -10,7 +10,7 @@ import FinancialInfo from './FinancialInfo';
 // import Helper from '../../../../../helper/utility';
 
 @withRouter
-@inject('uiStore', 'portfolioStore', 'campaignStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
+@inject('uiStore', 'portfolioStore', 'campaignStore', 'accountStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
 @observer
 export default class InvestNow extends React.Component {
   state = { submitLoading: false, isInvestmentUpdate: false };
@@ -36,7 +36,7 @@ export default class InvestNow extends React.Component {
       const { offeringId } = this.props.match.params;
       const matchURL = this.props.match.url;
       this.props.portfolioStore.setFieldValue('currentOfferingId', offeringId);
-      this.props.campaignStore.getCampaignDetails(offeringId, true);
+      this.props.campaignStore.getCampaignDetails(offeringId, true, true);
 
       if (matchURL.includes('portfolio')) {
         this.setState({ isInvestmentUpdate: true });
@@ -171,7 +171,7 @@ export default class InvestNow extends React.Component {
         selectedAccountStatus,
       } = this.props.accreditationStore;
       changeShowAccountListFlag(false);
-      if (selectedAccountStatus !== 'FROZEN' && userStatus === 'FULL' && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck)) {
+      if (!this.props.accountStore.isAccFrozen(selectedAccountStatus) && userStatus === 'FULL' && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck)) {
         this.props.investmentLimitStore
           .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
           .then((resp) => {
@@ -198,6 +198,7 @@ export default class InvestNow extends React.Component {
     const { investAccTypes, stepToBeRendered } = this.props.investmentStore;
     const multipleAccountExsists = !!(investAccTypes && investAccTypes.values.length >= 2);
     const { campaign } = this.props.campaignStore;
+    const securityType = get(campaign, 'keyTerms.securities');
     const {
       getCurrentInvestNowHealthCheck, investNowHealthCheckDetails,
     } = this.props.investmentLimitStore;
@@ -241,6 +242,7 @@ export default class InvestNow extends React.Component {
         name: 'TransferRequest',
         component: <TransferRequest
           changeInvest={changeInvest || this.state.isInvestmentUpdate}
+          offeringSecurityType={securityType}
           confirm={this.handleConfirm}
           cancel={this.handleCancel}
         />,
