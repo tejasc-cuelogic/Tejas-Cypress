@@ -82,7 +82,7 @@ export default class MaskedInput extends Component {
         || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label);
     return (
       <Form.Field
-        error={(!!error && this.state.showError) || (!!error && props.showerror)}
+        error={this.props.forceError || (!!error && this.state.showError) || (!!error && props.showerror)}
         className={fieldClass}
         width={props.containerwidth || false}
       >
