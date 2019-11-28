@@ -513,12 +513,12 @@ export class AuthStore {
   }
 
   @action
-  validateOfferingPreviewPassword = (offeringId, previewPassword) => new Promise((res, rej) => {
+  validateOfferingPreviewPassword = (offeringSlug, previewPassword) => new Promise((res, rej) => {
     graphql({
       client: clientPublic,
       query: validateOfferingPreviewPassword,
       variables: {
-        offeringId,
+        offeringSlug,
         previewPassword,
       },
       onFetch: (data) => {

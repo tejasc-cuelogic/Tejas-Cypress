@@ -19,30 +19,43 @@ export default class ConfirmModel extends Component {
   }
 
   confirmForm = () => ({
-    freeze: { headerTitle: 'Freeze',
-      btntext: 'Freeze',
+    HARD_FREEZE: {
+      headerTitle: 'Hard Freeze',
+      btntext: 'Hard Freeze',
       form: this.props.userDetailsStore.FRM_FREEZE,
       formKey: 'FRM_FREEZE',
-      formChange: this.props.userDetailsStore.formChange },
-    'close-account': { headerTitle: 'Closed',
+      formChange: this.props.userDetailsStore.formChange,
+    },
+    'close-account': {
+      headerTitle: 'Closed',
       btntext: 'Close',
       form: this.props.accountStore.CLOSE_ACCOUNT_FRM,
       formKey: 'CLOSE_ACCOUNT_FRM',
-      formChange: this.props.accountStore.formChange },
-    unfreeze: { headerTitle: 'Unfreeze',
+      formChange: this.props.accountStore.formChange,
+    },
+    UNFREEZE: {
+      headerTitle: 'Unfreeze',
       btntext: 'Unfreeze',
       form: this.props.userDetailsStore.FRM_FREEZE,
       formKey: 'FRM_FREEZE',
-      formChange: this.props.userDetailsStore.formChange },
+      formChange: this.props.userDetailsStore.formChange,
+    },
+    SOFT_FREEZE: {
+      headerTitle: 'Soft Freeze',
+      btntext: 'Soft Freeze',
+      form: this.props.userDetailsStore.FRM_FREEZE,
+      formKey: 'FRM_FREEZE',
+      formChange: this.props.userDetailsStore.formChange,
+    },
   })
 
   handleConfirm = (userId, accountId, actionValue) => {
-    if (['freeze', 'unfreeze'].includes(actionValue)) {
+    if (['SOFT_FREEZE', 'HARD_FREEZE', 'UNFREEZE'].includes(actionValue)) {
       const { FRM_FREEZE } = this.props.userDetailsStore;
       this.props.userDetailsStore.freezeAccountToggle(
         userId,
         accountId,
-        actionValue !== 'unfreeze',
+        actionValue,
         FRM_FREEZE.fields.reason.value,
       );
       this.handleBack();

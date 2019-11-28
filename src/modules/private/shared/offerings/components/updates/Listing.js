@@ -42,7 +42,7 @@ export default class Listing extends Component {
             <Table.Body>
               {this.props.data.length === 0 ? (
                 <Table.Row>
-                  <Table.Cell textAlign="center" colSpan={5}>No update to display !</Table.Cell>
+                  <Table.Cell textAlign="center" colSpan={5}>No updates yet, please create a new update!</Table.Cell>
                 </Table.Row>
               )
                 : this.props.data.map(record => (

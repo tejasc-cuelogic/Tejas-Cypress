@@ -15,9 +15,11 @@ export class Admin {
   /**
    * @desc Creates New user from parameters that have been stored in store
    */
-  createNewUser = (userDetails = null, messageAction = '') => {
-    uiStore.reset();
-    uiStore.setProgress();
+  createNewUser = (userDetails = null, messageAction = '', resetLoader = true) => {
+    if (resetLoader) {
+      uiStore.reset();
+      uiStore.setProgress();
+    }
     uiStore.setLoaderMessage('Creating new user');
 
     const user = userDetails || mapValues(userStore.USR_FRM.fields, f => f.value);
@@ -75,8 +77,10 @@ export class Admin {
           throw err;
         })
         .finally(() => {
-          uiStore.setProgress(false);
-          uiStore.clearLoaderMessage();
+          if (resetLoader) {
+            uiStore.setProgress(false);
+            uiStore.clearLoaderMessage();
+          }
         })
     );
   }

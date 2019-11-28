@@ -188,6 +188,7 @@ query _getBusinessApplicationById ($id: String!) {
         ageMonths
       }
       businessEntityStructure
+      companyTaxed
       legalConfirmations {
         label
         value

@@ -305,7 +305,9 @@ export class BusinessAppStore {
         if (((data.applicationStatus || data.prequalStatus)
           === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED)
           || ((data.applicationStatus || data.prequalStatus)
-          === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)) {
+          === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)
+          || ((data.applicationStatus || data.prequalStatus)
+          === BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED)) {
           this.formReadOnlyMode = true;
         } else if ((data.applicationStatus || data.prequalStatus)
           === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
@@ -366,7 +368,7 @@ export class BusinessAppStore {
           });
         }
         // removed 'businessModel',
-        ['businessGoal', 'businessEntityStructure', 'franchiseHolder'].forEach((ele) => {
+        ['businessGoal', 'businessEntityStructure', 'franchiseHolder', 'companyTaxed'].forEach((ele) => {
           this.BUSINESS_APP_FRM.fields[ele].value = data[ele];
         });
         ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
@@ -387,7 +389,7 @@ export class BusinessAppStore {
         data.realEstateTypes.forEach((ele) => {
           this.BUSINESS_APP_FRM.fields.realEstateType.value.push(ele);
         });
-        ['investmentType', 'ownOrOperateProperty', 'businessEntityStructure'].forEach((ele) => {
+        ['investmentType', 'ownOrOperateProperty', 'businessEntityStructure', 'companyTaxed'].forEach((ele) => {
           this.BUSINESS_APP_FRM.fields[ele].value = data[ele];
         });
         ['investorIRR', 'annualInvestorRoi', 'holdTimeInYears'].forEach((ele) => {
@@ -936,6 +938,9 @@ export class BusinessAppStore {
         value: includes(data.legalConfirmation.value, 'IS_NOT_INVESTMENT_COMPANY'),
       }],
     };
+    if (data.companyTaxed.value) {
+      preQualData = { ...preQualData, companyTaxed: data.companyTaxed.value };
+    }
     if (this.getFranchiseCondition) {
       preQualData = { ...preQualData, franchiseHolder: data.franchiseHolder.value };
     }

@@ -7,9 +7,9 @@ import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
-import { uiStore, userDetailsStore, rewardStore, campaignStore, portfolioStore, investmentLimitStore } from '../../index';
+import { uiStore, userDetailsStore, campaignStore, portfolioStore, investmentLimitStore } from '../../index';
 import {
-  getAmountInvestedInCampaign, getInvestorAvailableCash,
+  getAmountInvestedInCampaign,
   validateInvestmentAmount, getInvestorInFlightCash,
   generateAgreement, finishInvestment,
   investNowGeneratePurchaseAgreement,
@@ -28,8 +28,6 @@ export class InvestmentStore {
   @observable INVESTMENT_LIMITS_FORM = Validator.prepareFormObject(INVESTMENT_LIMITS);
 
   @observable PREFERRED_EQUITY_INVESTMONEY_FORM = Validator.prepareFormObject(PREFERRED_EQUITY_INVESTMENT_INFO);
-
-  @observable cashAvailable = 0;
 
   @observable agreementDetails = null;
 
@@ -112,12 +110,6 @@ export class InvestmentStore {
       ? selectedAccount.details.accountId : null;
   }
 
-  @computed get getCurrCashAvailable() {
-    return (this.cashAvailable
-      && this.cashAvailable.data.getInvestorAvailableCash)
-      || 0;
-  }
-
   @computed get getTransferRequestAmount() {
     const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
     const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || '0';
@@ -130,7 +122,6 @@ export class InvestmentStore {
     const getPreviousInvestedAmount = (userAmountDetails && userAmountDetails.previousAmountInvested) || '0';
     const transferAmount = money.subtract(
       this.investmentAmount,
-      // money.add(this.getCurrCashAvailable, rewardStore.getCurrCreditAvailable),
       money.add(cashAndCreditBalance, getPreviousInvestedAmount),
     );
     return money.isNegative(transferAmount) || money.isZero(transferAmount) ? '0' : transferAmount;
@@ -142,12 +133,6 @@ export class InvestmentStore {
     const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || '0';
     const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || '0';
     let spendAmount = 0;
-    // if (this.getCurrCashAvailable < this.investmentAmount) {
-    //   const lowValue = money.subtract(this.investmentAmount, this.getCurrCashAvailable);
-    //   if (rewardStore.getCurrCreditAvailable < lowValue) {
-    //     spendAmount = money.subtract(lowValue, rewardStore.getCurrCreditAvailable);
-    //   }
-    // }
     if (getCurrCashAvailable < this.investmentAmount) {
       const lowValue = money.subtract(this.investmentAmount, getCurrCashAvailable);
       if (getCurrCreditAvailable < lowValue) {
@@ -317,30 +302,6 @@ export class InvestmentStore {
       fetchPolicy: 'network-only',
     });
   }
-
-  @action
-  getInvestorAvailableCash = () => new Promise((resolve) => {
-    this.cashAvailable = graphql({
-      client,
-      query: getInvestorAvailableCash,
-      variables: {
-        userId: userDetailsStore.currentUserId,
-        accountId: this.getSelectedAccountTypeId,
-        includeInFlight: true,
-      },
-      onFetch: (data) => {
-        if (data && !this.cashAvailable.loading) {
-          rewardStore.getUserRewardBalance().then(() => {
-            resolve(data);
-          });
-        }
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-      },
-      fetchPolicy: 'network-only',
-    });
-  });
 
   @action
   validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {
@@ -556,7 +517,7 @@ export class InvestmentStore {
               this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             }
             resolve(status);
-            campaignStore.getCampaignDetails(campaignStore.getOfferingSlug);
+            campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
           })
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');

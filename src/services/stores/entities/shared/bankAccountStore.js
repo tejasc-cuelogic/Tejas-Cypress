@@ -324,7 +324,7 @@ export class BankAccountStore {
       userId: userDetailsStore.userDetails.id,
       accountId: this.CurrentAccountId,
     };
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       client
         .mutate({
           mutation: hasPendingTransfersWithPendingBankChange,
@@ -337,7 +337,6 @@ export class BankAccountStore {
         .catch((error) => {
           uiStore.setErrors(error.message);
           Helper.toast(error.message, 'error');
-          reject(error.message);
         }).finally(() => {
           uiStore.setProgress(false);
         });

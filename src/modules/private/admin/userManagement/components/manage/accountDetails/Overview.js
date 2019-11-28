@@ -74,7 +74,7 @@ export default class Overview extends Component {
         {this.props.isAdmin
           && <AccountHeader showFreezeCTA={!isClosedAccount} pathname={this.props.location.pathname} />
         }
-        {get(account, 'details.accountStatus') === 'FROZEN'
+        {this.props.accountStore.isAccFrozen(get(account, 'details.accountStatus'))
           && (
             <>
               <LockedInformation account details={account} />

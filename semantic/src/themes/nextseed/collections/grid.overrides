@@ -131,6 +131,14 @@
                 margin-right: 0 !important;
                 border-bottom: 1px solid @neutral-darkwhite;
                 margin-bottom: 0;
+                &.key-terms{
+                    margin-left: -@14px !important;
+                    margin-right: -@14px !important;
+                    width: calc(100% + @28px) !important;
+                    >.column:not(.row){
+                        padding: @14px @14px!important;
+                    }
+                }
             }
         }
     }

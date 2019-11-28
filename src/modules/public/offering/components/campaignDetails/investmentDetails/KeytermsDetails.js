@@ -55,7 +55,7 @@ class KeyTermsDetails extends Component {
     // const maxOfferingAmountD = get(keyTerms, 'maxOfferingAmount506') ? get(keyTerms, 'maxOfferingAmount506') : get(keyTerms, 'maxOfferingAmount506C');
     return (
       <>
-        <Grid columns={3} divided stackable className="vertical-gutter neutral-text">
+        <Grid columns={3} divided stackable className="key-terms vertical-gutter neutral-text">
           <Grid.Column>
             <p><b className={newLayout ? 'neutral-text' : ''}>Issuer</b><br />{get(keyTerms, 'legalBusinessName') || 'NA'}</p>
           </Grid.Column>

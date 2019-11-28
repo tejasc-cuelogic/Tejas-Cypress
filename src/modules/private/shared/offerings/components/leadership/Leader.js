@@ -178,16 +178,18 @@ export default class Leader extends Component {
               )
             } */}
           </Header>
-          {['isPublic', 'isBeneficialOwnerDocGeneration'].map(field => (
-            <FormCheckbox
-              disabled={isReadonly}
-              fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
-              name={field}
-              changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
-              defaults
-              containerclassname="ui relaxed list"
-            />
-          ))}
+          {!isIssuer
+          && ['isPublic', 'isBeneficialOwnerDocGeneration'].map(field => (
+              <FormCheckbox
+                disabled={isReadonly}
+                fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
+                name={field}
+                changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
+                defaults
+                containerclassname="ui relaxed list"
+              />
+          ))
+          }
           <Header as="h4">Personal Info</Header>
           <Form.Group widths={2}>
             {
@@ -265,32 +267,6 @@ export default class Leader extends Component {
                   changed={(values, name) => this.maskArrayChange(values, formName, name, 'leadership', index)}
                 />
               )
-            }
-            <FormInput
-              displayMode={isReadonly}
-              name="dlLicenseNumber"
-              fielddata={LEADERSHIP_FRM.fields.leadership[index].dlLicenseNumber}
-              changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
-            />
-            <FormDropDown
-              name="dlState"
-              fielddata={LEADERSHIP_FRM.fields.leadership[index].dlState}
-              value={LEADERSHIP_FRM.fields.leadership[index].dlState}
-              options={US_STATES_FOR_INVESTOR}
-              selection
-              onChange={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
-              placeholder="Texas"
-            />
-            {['dlIssuedDate', 'dlExpirationDate'].map(field => (
-              <MaskedInput
-                displayMode={isReadonly}
-                name={field}
-                fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
-                format="##/##/####"
-                changed={(values, name) => this.maskArrayChange(values, formName, name, 'leadership', index)}
-                dateOfBirth
-              />
-            ))
             }
           </Form.Group>
           <Header as="h4">Address</Header>
@@ -426,6 +402,32 @@ export default class Leader extends Component {
                 containerclassname="field"
               />
             ))}
+            <FormInput
+              displayMode={isReadonly}
+              name="dlLicenseNumber"
+              fielddata={LEADERSHIP_FRM.fields.leadership[index].dlLicenseNumber}
+              changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
+            />
+            <FormDropDown
+              name="dlState"
+              fielddata={LEADERSHIP_FRM.fields.leadership[index].dlState}
+              value={LEADERSHIP_FRM.fields.leadership[index].dlState}
+              options={US_STATES_FOR_INVESTOR}
+              selection
+              onChange={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
+              placeholder="Texas"
+            />
+            {['dlIssuedDate', 'dlExpirationDate'].map(field => (
+              <MaskedInput
+                displayMode={isReadonly}
+                name={field}
+                fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
+                format="##/##/####"
+                changed={(values, name) => this.maskArrayChange(values, formName, name, 'leadership', index)}
+                dateOfBirth
+              />
+            ))
+            }
           </Form.Group>
           <Divider section />
           <Header as="h4">
