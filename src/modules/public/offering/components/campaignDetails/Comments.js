@@ -248,11 +248,11 @@ class Comments extends Component {
                               </>
                             ) : ''}
                           </Comment.Content>
-                          {c.threadComment.length !== 0
+                          {(c.threadComments && c.threadComments.length !== 0)
                             && (
                               <Comment.Group className="reply-comments">
-                                {c.threadComment
-                                  && c.threadComment.map(tc => ((tc.createdUserInfo && tc.createdUserInfo.id === issuerId
+                                {c.threadComments
+                                  && c.threadComments.map(tc => ((tc.createdUserInfo && tc.createdUserInfo.id === issuerId
                                     && tc.approved)
                                     || (tc.createdUserInfo && tc.createdUserInfo.id !== issuerId)) && tc.scope === 'PUBLIC' && (
                                       <Comment key={tc.id} className={`${((get(tc, 'createdUserInfo.id') === issuerId) || get(tc, 'createdUserInfo.roles[0].name') === 'admin') ? 'issuer-comment' : ''}`}>
