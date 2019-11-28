@@ -35,6 +35,7 @@ export default class ChooseOffer extends Component {
   module = name => DataFormatter.upperCamelCase(name);
 
   handleCloseModal = () => {
+    this.props.businessAppReviewStore.setFieldvalue('selectedOfferIndex', null);
     this.props.history.push('/app/dashboard');
   }
 

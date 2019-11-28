@@ -517,7 +517,7 @@ export class InvestmentStore {
               this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             }
             resolve(status);
-            campaignStore.getCampaignDetails(campaignStore.getOfferingSlug);
+            campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
           })
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
