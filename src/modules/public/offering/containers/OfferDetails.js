@@ -32,55 +32,44 @@ const offsetValue = document.getElementsByClassName('offering-side-menu mobile-c
 class offerDetails extends Component {
   state = {
     showPassDialog: false,
-    preLoading: true,
+    preLoading: false,
     found: 0,
+    offeringSlug: null,
   }
 
   componentDidMount() {
     const { location, match, newLayout } = this.props;
     const { isUserLoggedIn } = this.props.authStore;
-    const { currentUser, isAdmin } = this.props.userStore;
-    this.props.campaignStore.getIssuerIdForOffering(this.props.match.params.id).then((data) => {
-      const oMinData = data.length ? data[0] : null;
-      if (['TERMINATED', 'FAILED'].includes(oMinData.stage) && !isAdmin) {
+    const { isAdmin } = this.props.userStore;
+    this.props.campaignStore.getCampaignDetails(this.props.match.params.id).then((data) => {
+      if (!data) {
         this.props.history.push('/offerings');
       }
-      if ((currentUser && currentUser.roles.includes('admin'))
-        || oMinData.isAvailablePublicly
-        || oMinData.stage === 'LIVE'
-        || (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId === currentUser.sub)) {
-        this.setState({ preLoading: false, showPassDialog: false });
-        this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
-      } else if (currentUser && currentUser.roles.includes('issuer') && oMinData.issuerId !== currentUser.sub) {
-        if (oMinData.stage === 'CREATION') {
-          this.setState({ showPassDialog: true, preLoading: false });
-        } else {
+    }).catch((err) => {
+      let exception = null;
+      try {
+        exception = JSON.parse(get(err, 'graphQLErrors[0].message'));
+      } catch {
+        this.props.history.push('/offerings');
+      }
+      if (get(exception, 'code') === 'OFFERING_EXCEPTION') {
+        if (['TERMINATED', 'FAILED'].includes(get(exception, 'stage')) && !isAdmin) {
           this.props.history.push('/offerings');
-        }
-      } else if (currentUser && currentUser.roles.includes('investor')) {
-        const params = {
-          userId: currentUser.sub,
-          offeringId: data[0].id,
-          offeringStage: oMinData.stage,
-        };
-        this.props.campaignStore.isValidInvestorInOffering(params).then((res) => {
-          if (res) {
-            this.setState({ preLoading: false, showPassDialog: false });
-            this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
-          } else {
-            this.props.history.push('/offerings');
-          }
-        });
-      } else {
-        if (oMinData.stage === 'CREATION') {
-          this.setState({ showPassDialog: true, preLoading: false });
-        } else if (oMinData.stage !== 'CREATION' && oMinData.isAvailablePublicly !== true) {
+        } else if (['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
+          this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
+        } else if (!['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
+          this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
+        } else if (!['CREATION'].includes(get(exception, 'stage')) && !get(exception, 'isAvailablePublicly') && !isUserLoggedIn) {
           this.setState({ showPassDialog: false, preLoading: false });
           this.props.uiStore.setAuthRef(this.props.location.pathname);
           this.props.history.push('/login');
+        } else {
+          this.props.campaignStore.getCampaignDetails(this.props.match.params.id, false, true);
         }
+      } else {
+        this.props.history.push('/offerings');
       }
-    }).catch(() => this.props.history.push('/offerings'));
+    });
 
     if (location.pathname !== match.url) {
       const splittedArr = location.pathname.split('/');
@@ -110,7 +99,7 @@ class offerDetails extends Component {
   authPreviewOffer = (isAuthenticated) => {
     if (isAuthenticated) {
       this.setState({ showPassDialog: false });
-      this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
+      this.props.campaignStore.getCampaignDetails(this.props.match.params.id, false, true);
     }
   }
 
@@ -193,7 +182,7 @@ class offerDetails extends Component {
         <DevPassProtected
           offerPreview
           authPreviewOffer={this.authPreviewOffer}
-          offeringId={campaignStore.campaign && campaignStore.campaign.id}
+          offeringSlug={(campaignStore.campaign && campaignStore.campaign.offeringSlug) || this.state.offeringSlug}
         />
       );
     }
@@ -216,8 +205,7 @@ class offerDetails extends Component {
       navItems = modifySubNavs(navItems, newLayout);
       navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
     }
-    if ((details && details.data
-      && details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0])
+    if ((details && details.data && !details.data.getOfferingDetailsBySlug)
       || this.state.found === 2) {
       return <NotFound />;
     }

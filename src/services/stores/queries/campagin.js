@@ -115,7 +115,7 @@ query offeringWatchList($offeringId: String){
 `;
 
 export const getOfferingById = gql`
-  query getOfferingDetailsBySlug($id: String) {
+  query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
       id
@@ -132,9 +132,10 @@ export const isValidInvestorInOffering = gql`
 `;
 
 export const campaignDetailsQuery = gql`
-  query getOfferingDetailsBySlug($id: String) {
-    getOfferingDetailsBySlug (offeringSlug: $id) {
+  query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
+    getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
+    watchListStatus
     stage
     offeringSlug
     issuerId
@@ -328,8 +329,8 @@ export const campaignDetailsQuery = gql`
 `;
 
 export const campaignDetailsAdditionalQuery = gql`
-  query getOfferingDetailsBySlug($id: String) {
-    getOfferingDetailsBySlug (offeringSlug: $id) {
+  query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
+    getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
     comments {
       id
@@ -354,7 +355,7 @@ export const campaignDetailsAdditionalQuery = gql`
           name
         }
       }
-      threadComment {
+      threadComments {
         id
         scope
         comment
@@ -405,8 +406,8 @@ export const campaignDetailsAdditionalQuery = gql`
 `;
 
 export const campaignDetailsForInvestmentQuery = gql`
-query getOfferingById($id: ID) {
-  getOfferingDetailsById (id: $id) {
+query getOfferingById($id: String!) {
+  getOfferingById (id: $id) {
     id
     offeringSlug
     isAvailablePublicly
@@ -421,7 +422,6 @@ query getOfferingById($id: ID) {
         completeDate
       }
       keyTerms {
-        maturityDate
         supplementalAgreements {
           documents {
             name
@@ -554,8 +554,8 @@ query getOfferingById($id: ID) {
 `;
 
 export const validateOfferingPreviewPassword = gql`
-query _validateOfferingPreviewPassword($offeringId: String!, $previewPassword: String!) {
-  validateOfferingPreviewPassword (offeringId: $offeringId, previewPassword: $previewPassword)
+query validateOfferingPreviewPassword($offeringSlug: String!, $previewPassword: String!) {
+  validateOfferingPreviewPassword (offeringSlug: $offeringSlug, previewPassword: $previewPassword)
 }`;
 
 export const addUserToOfferingWatchlist = gql`
@@ -569,8 +569,3 @@ export const removeUserFromOfferingWatchlist = gql`
     removeUserFromOfferingWatchlist(userId: $userId, offeringId: $offeringId)
   }
 `;
-
-export const isWatchingOffering = gql`
-query isWatchingOffering($userId: String, $offeringId: String){
-  isWatchingOffering(userId: $userId, offeringId: $offeringId)
-}`;
