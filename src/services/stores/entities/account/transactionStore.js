@@ -4,7 +4,7 @@ import graphql from 'mobx-apollo';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
 import money from 'money-math';
-import { get, includes, orderBy, isArray, filter, forEach } from 'lodash';
+import { get, orderBy, isArray, filter, forEach } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { ClientDb, FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
@@ -356,11 +356,7 @@ export class TransactionStore {
           resolve();
         })
         .catch((error) => {
-          if (includes(error.message, 'at least $1')) {
-            uiStore.setErrors(error.message);
-          } else {
-            Helper.toast('Something went wrong, please try again later.', 'error');
-          }
+          uiStore.setErrors(error.message);
           this.setInitialLinkValue(false);
           reject();
         })
@@ -532,11 +528,6 @@ export class TransactionStore {
           resolve();
         })
         .catch((error) => {
-          if (includes(error.message, 'at least $0.01')) {
-            uiStore.setErrors(error.message);
-          } else {
-            Helper.toast('Something went wrong, please try again later.', 'error');
-          }
           uiStore.setErrors(error.message);
           this.setInitialLinkValue(false);
           reject();

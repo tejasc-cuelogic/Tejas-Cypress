@@ -266,7 +266,7 @@ class App extends Component {
             />
           )
         }
-        <MetaTagGenerator isTablet={isTablet} metaTagsData={metaTagsData} />
+        <MetaTagGenerator pathName={location.pathname} isTablet={isTablet} metaTagsData={metaTagsData} />
         {this.props.authStore.devPasswdProtection
           ? <Route exact path="/password-protected" component={DevPassProtected} /> : (
             <Layout>

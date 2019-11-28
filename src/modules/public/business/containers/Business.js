@@ -55,7 +55,7 @@ class Business extends Component {
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <>
-        <MetaTagGenerator metaTagsData={metaTagsData} />
+        <MetaTagGenerator pathName={location.pathname} metaTagsData={metaTagsData} />
         {location.pathname === '/business/how-it-works'
           || location.pathname === '/business' ? <Banner />
           : <Responsive as="section" maxWidth={991} className={`banner ${location.pathname.split('/')[2]}`} />

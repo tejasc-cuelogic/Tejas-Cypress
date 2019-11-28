@@ -1,5 +1,5 @@
 import React from 'react';
-import { get, startCase } from 'lodash';
+import { get, startCase, capitalize } from 'lodash';
 import { Table } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../../helper';
@@ -13,7 +13,7 @@ const IndividualSummary = ({ account, investor, CopyToClipboardAccountId, isClos
     </Table.Row>
     <Table.Row>
       <Table.Cell>Account Status: </Table.Cell>
-      <Table.Cell>{get(account, 'details.accountStatus') || 'N/A'}</Table.Cell>
+      <Table.Cell>{get(account, 'details.accountStatus') ? capitalize(startCase(get(account, 'details.accountStatus'))) : 'N/A'}</Table.Cell>
     </Table.Row>
     <Table.Row>
       <Table.Cell>Account ID: </Table.Cell>

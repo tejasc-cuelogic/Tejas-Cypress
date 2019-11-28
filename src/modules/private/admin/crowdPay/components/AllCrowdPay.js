@@ -15,7 +15,8 @@ import { DataFormatter } from '../../../../../helper';
 const statusDetails = {
   PARTIAL: 'Partial',
   FULL: 'Full',
-  FROZEN: 'Frozen',
+  HARD_FREEZE: 'Frozen',
+  SOFT_FREEZE: 'Frozen',
   CIP_PROCESSING: 'CIP Processing',
   NS_PROCESSING: 'Processing',
   GS_PROCESSING: 'Processing',
