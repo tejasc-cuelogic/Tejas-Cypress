@@ -3,7 +3,7 @@ import graphql from 'mobx-apollo';
 import { get } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { getJwtReferralEmbeddedWidget, getUserRewardBalance, getUserReferralDetails, getReferralCreditsInformation, userPartialSignupWithReferralCode, userFullSignupWithReferralCode, upsertUserReferralCredits } from '../../queries/referrals';
+import { getUserReferralDetails, getReferralCreditsInformation, userPartialSignupWithReferralCode, userFullSignupWithReferralCode, upsertUserReferralCredits } from '../../queries/referrals';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore } from '../../index';
 
@@ -24,51 +24,6 @@ export class ReferralStore {
     messengerMobileShareLink: '',
     loading: false,
   }
-
-  @action
-  getJwtReferralEmbeddedWidget = () => new Promise((resolve, reject) => {
-    const { userDetails } = userDetailsStore;
-    const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
-    const userId = saasQuatchUserId || userDetails.id;
-    const payLoad = {
-      id: userId,
-      accountId: userId,
-    };
-    if (!saasQuatchUserId) {
-      payLoad.email = get(userDetails, 'email.address');
-      payLoad.firstName = get(userDetails, 'info.firstName');
-      payLoad.lastName = get(userDetails, 'info.lastName');
-    }
-    graphql({
-      client,
-      query: getJwtReferralEmbeddedWidget,
-      variables: payLoad,
-      fetchPolicy: 'network-only',
-      onFetch: (data) => {
-        if (data) {
-          resolve(data);
-        }
-      },
-      onError: () => { Helper.toast('Something went wrong, please try again later.', 'error'); reject(); },
-    });
-  });
-
-  @action
-  getUserRewardBalance = () => new Promise((resolve) => {
-    const { userDetails } = userDetailsStore;
-    graphql({
-      client,
-      query: getUserRewardBalance,
-      variables: { userId: userDetails.id },
-      fetchPolicy: 'network-only',
-      onFetch: (data) => {
-        if (data) {
-          resolve(data);
-        }
-      },
-      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
-    });
-  });
 
   getUserReferralDetails = (id = false, showToast = true) => new Promise((resolve, reject) => {
     const { userDetails } = userDetailsStore;

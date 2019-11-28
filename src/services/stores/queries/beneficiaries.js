@@ -1,22 +1,5 @@
 import gql from 'graphql-tag';
 
-export const allBeneficiaries = gql`
-  query allBeneficiaries {
-    allBeneficiaries{
-      id
-      firstName
-      lastName
-      relationship
-      residentalStreet
-      city
-      state
-      zipCode
-      dob
-      status
-    }
-  }
-`;
-
 export const getBeneficiaries = gql`
   query getBeneficiaries {
     beneficiaries {   
@@ -81,14 +64,6 @@ mutation _createBeneficiaries($requestId: String!, $verificationCode: String!, $
     }
   }
 }
-`;
-
-export const deleteBeneficiary = gql`
-  mutation deleteBeneficiary($id:  ID! ) {
-    deleteBeneficiary(id: $id) {
-      id
-    }
-  }
 `;
 
 export const requestOptForBeneficiaries = gql`

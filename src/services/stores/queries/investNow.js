@@ -48,35 +48,6 @@ export const validateInvestmentAmount = gql`
   }
 `;
 
-export const getInvestorInFlightCash = gql`
-  query _getInvestorInFlightCash($userId: String, $accountId: String, $isAutoDraft: String){
-    getInvestorInFlightCash(
-      userId: $userId
-      accountId: $accountId
-      isAutoDraft: $isAutoDraft
-    )
-  }
-`;
-
-export const generateAgreement = gql`
-  mutation _generateAgreement($callbackUrl: String, $userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: Float!, $transferAmount: Float){
-    generateAgreement(
-      callbackUrl: $callbackUrl
-      userId: $userId
-      accountId: $accountId
-      offeringId: $offeringId
-      investmentAmount: $investmentAmount
-      transferAmount: $transferAmount
-    )
-    {
-      agreementId
-      envelopeId
-      docuSignViewURL
-      npaViewUrl
-    }
-  }
-`;
-
 export const finishInvestment = gql`
   mutation _investNowSubmit($userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: String!, $agreementId: Int!, $transferAmount: String){
     investNowSubmit(
@@ -91,16 +62,6 @@ export const finishInvestment = gql`
       status
       message
     }
-  }
-`;
-
-export const transferFundsForInvestment = gql`
-  mutation _transferFundsForInvestment($userId: String!, $accountId: String!, $transferAmount: Float!){
-    transferFundsForInvestment(
-      userId: $userId
-      accountId: $accountId
-      transferAmount: $transferAmount
-    )
   }
 `;
 

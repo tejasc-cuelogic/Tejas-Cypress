@@ -119,16 +119,6 @@ export const deleteKBById = gql`
   }
 `;
 
-export const updateKnowledgeBaseItem = gql`mutation updateKnowledgeBaseStatus($id: [ID], $status:ArticleStatusEnum!){
-  updateKnowledgeBaseStatus(id: $id, status:$status)
-}  
-`;
-
-export const deleteKnowledgeBaseItem = gql`mutation deleteKnowledgeBaseItems($id: [ID]){
-  deleteKnowledgeBaseItems(id: $id)
-}  
-`;
-
 export const setOrderForKnowledgeBase = gql`mutation setOrderForKnowledgeBase($knowledgeBaseItemsList: [KnowledgeBaseOrderInput]) {
   setOrderForKnowledgeBase(knowledgeBaseItemsList: $knowledgeBaseItemsList)
 }
