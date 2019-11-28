@@ -456,7 +456,7 @@ export class CampaignStore {
           if (c.scope === 'PUBLIC'
             && ((['admin', 'investor'].includes(get(c, 'createdUserInfo.roles[0].name')))
               || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
-            const cnt = reduce(get(c, 'threadComments'), (tcSum, tc) => (tc.scope === 'PUBLIC' && (((['admin', 'investor'].includes(get(tc, 'createdUserInfo.roles[0].name')))) || (get(tc, 'createdUserInfo.roles[0].name') === 'issuer' && tc.approved)) ? (tcSum + 1) : tcSum), 0);
+            const cnt = reduce(get(c, 'threadComments'), (tcSum, tc) => (tc.scope === 'PUBLIC' && ((['admin', 'investor'].includes(get(tc, 'createdUserInfo.roles[0].name'))) || (get(tc, 'createdUserInfo.roles[0].name') === 'issuer' && tc.approved)) ? (tcSum + 1) : tcSum), 0);
             sum = sum + 1 + (cnt || 0);
           }
           return null;
