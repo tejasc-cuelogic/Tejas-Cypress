@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { isArray, get, filter as lodashFilter, findIndex, find, omit, has } from 'lodash';
+import { isArray, get, filter as lodashFilter, findIndex, find, omit, has, intersection } from 'lodash';
 import cleanDeep from 'clean-deep';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -80,7 +80,7 @@ export class CrowdpayStore {
       const index = findIndex(this.allCrowdpayData, crowdPayAccount => crowdPayAccount.accountId === id);
       const crowdPayAccount = find(this.allCrowdpayData, account => account.accountId === id);
       crowdPayAccount.accountStatus = accountStatus;
-      if (accountStatus === CROWDPAY_ACCOUNTS_STATUS.FROZEN) {
+      if (Array.isArray(accountStatus)) {
         crowdPayAccount.declined = { by: 'ADMIN' };
       }
       this.allCrowdpayData[index] = crowdPayAccount;
@@ -206,8 +206,8 @@ export class CrowdpayStore {
     } = this.requestState.search;
     const accountStatus2 = this.requestState.type === 'review' && !accountStatus ? ['FULL'] : accountStatus;
     if (accountStatus2) {
-      if (this.requestState.type === 'review' && accountStatus2.includes(CROWDPAY_ACCOUNTS_STATUS.DECLINED)) {
-        ClientDb.filterData('accountStatus', [CROWDPAY_ACCOUNTS_STATUS.FROZEN], 'like');
+      if (this.requestState.type === 'review' && intersection(accountStatus2, CROWDPAY_ACCOUNTS_STATUS.DECLINED).length > 0) {
+        ClientDb.filterData('accountStatus', CROWDPAY_ACCOUNTS_STATUS.FROZEN, 'like');
         ClientDb.filterByObjExist('declined');
       } else {
         ClientDb.filterData('accountStatus', accountStatus2, 'like');

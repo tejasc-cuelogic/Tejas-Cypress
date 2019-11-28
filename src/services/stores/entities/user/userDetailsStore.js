@@ -149,7 +149,8 @@ export class UserDetailsStore {
     if (this.userDetails) {
       accDetails = filter(this.userDetails.roles, account => account.name !== 'investor'
         && account.details
-        && (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
+        && (account.details.accountStatus === 'FULL'
+        || accountStore.isAccFrozen(account.details.accountStatus)));
     }
     return accDetails;
   }
@@ -186,6 +187,16 @@ export class UserDetailsStore {
 
   @computed get isAccountFrozen() {
     const isFrozonAccountExists = findIndex(this.signupStatus.frozenAccounts, o => o === this.currentActiveAccount);
+    return isFrozonAccountExists >= 0;
+  }
+
+  @computed get isAccountSoftFrozen() {
+    const isFrozonAccountExists = findIndex(this.signupStatus.softFrozenAccounts, o => o === this.currentActiveAccount);
+    return isFrozonAccountExists >= 0;
+  }
+
+  @computed get isAccountHardFrozen() {
+    const isFrozonAccountExists = findIndex(this.signupStatus.hardFrozenAccounts, o => o === this.currentActiveAccount);
     return isFrozonAccountExists >= 0;
   }
 
@@ -500,7 +511,9 @@ export class UserDetailsStore {
       details.inActiveAccounts = difference(validAccTypes, accTypes);
       details.partialAccounts = map(filter(details.roles, a => a.status === 'PARTIAL'), 'name');
       details.activeAccounts = map(filter(details.roles, a => a.status === 'FULL'), 'name');
-      details.frozenAccounts = map(filter(details.roles, a => a.status === 'FROZEN'), 'name');
+      details.frozenAccounts = map(filter(details.roles, a => accountStore.isAccFrozen(a.status)), 'name');
+      details.softFrozenAccounts = map(filter(details.roles, a => accountStore.isAccSoftFrozen(a.status)), 'name');
+      details.hardFrozenAccounts = map(filter(details.roles, a => accountStore.isAccHardFrozen(a.status)), 'name');
       details.processingAccounts = map(filter(details.roles, a => (a.status ? a.status.endsWith('PROCESSING') : null)), 'name');
       details.inprogressAccounts = map(filter(details.roles, a => a.name !== 'investor' && a.status !== 'FULL'), 'name');
       details.phoneVerification = this.userDetails.phone

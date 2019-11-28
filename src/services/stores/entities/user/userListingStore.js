@@ -52,7 +52,7 @@ export class UserListingStore {
     delete filters.keyword;
     let deletedAccountStatus = [];
     const allAccountTypes = ['ADMIN', 'ISSUER', 'INVESTOR', 'IRA', 'INDIVIDUAL', 'ENTITY'];
-    const allAccountStatus = ['PARTIAL', 'BASIC', 'FULL', 'MIGRATION_PARTIAL', 'MIGRATION_FULL', 'FROZEN', 'LOCKED', 'UNLOCKED'];
+    const allAccountStatus = ['PARTIAL', 'BASIC', 'FULL', 'MIGRATION_PARTIAL', 'MIGRATION_FULL', 'LOCKED', 'UNLOCKED'];
     if (isDeleted) {
       if (accountType && accountType.length && !accountStatus) {
         accountType.forEach((s) => {
@@ -179,7 +179,7 @@ export class UserListingStore {
         srchParams[name] = value;
       } else if (type === 'checkbox') {
         srchParams[name] = value;
-        if (name === 'isDeleted' && ['FROZEN', 'LOCKED', 'UNLOCKED'].includes(srchParams.accountStatus)) {
+        if (name === 'isDeleted' && ['HARD_FREEZE', 'SOFT_FREEZE', 'LOCKED', 'UNLOCKED'].includes(srchParams.accountStatus)) {
           delete srchParams.accountStatus;
         }
       } else {
