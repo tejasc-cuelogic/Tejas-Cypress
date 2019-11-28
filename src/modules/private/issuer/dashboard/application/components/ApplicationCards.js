@@ -52,7 +52,7 @@ export default class ApplicationCards extends Component {
         <Card.Group stackable itemsPerRow={isTablet ? '2' : '3'} className="application-cards">
           <Card fluid>
             <Card.Content>
-              <Header as="h4"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
+              <Header as="h4"><Icon className="ns-paper-plane" color="green" /> Apply</Header>
             </Card.Content>
             <Card.Content>
               <p>Want to launch a new campaign?<br />
