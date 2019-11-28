@@ -125,14 +125,14 @@ class Overview extends Component {
                       </Table.Row>
                       ) : ''
                     }
-                    { offering && offering.launch && offering.launch.targetDate
+                    { offering && offering.launch && offering.launch.expectedOpsDate
                       ? (
                       <Table.Row verticalAlign="top">
                         <Table.Cell>{overviewToDisplay && overviewToDisplay === 'REVENUE' ? 'Anticipated Opening' : 'Original Anticipated Opening Date'}</Table.Cell>
                         <Table.Cell>
                           {offering && offering.launch
-                            && offering.launch.targetDate
-                            ? DataFormatter.getDateAsPerTimeZone(offering.launch.targetDate, false, true, false)
+                            && offering.launch.expectedOpsDate
+                            ? DataFormatter.getDateAsPerTimeZone(offering.launch.expectedOpsDate, false, true, false, undefined, 'CST', true)
                             : 'N/A'
                           }
                         </Table.Cell>
@@ -183,7 +183,7 @@ class Overview extends Component {
                           </Table.Cell>
                         </Table.Row>
                         <Table.Row verticalAlign="top">
-                        <Table.Cell>Pre-Money valuation</Table.Cell>
+                        <Table.Cell>Pre-Money Valuation</Table.Cell>
                         <Table.Cell>
                           {get(campaign, 'keyTerms.premoneyValuation')
                             ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0)

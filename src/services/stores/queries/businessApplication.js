@@ -184,7 +184,7 @@ query _getBusinessApplicationById ($id: String!) {
       date
     }
     prequalDetails {
-      businessModel
+      # businessModel
       businessGoal
       businessGeneralInfo {
         businessName
@@ -215,6 +215,7 @@ query _getBusinessApplicationById ($id: String!) {
         ageMonths
       }
       businessEntityStructure
+      companyTaxed
       legalConfirmations {
         label
         value
@@ -520,7 +521,7 @@ query _getBusinessApplicationById ($id: String!) {
       date
     }
     prequalDetails {
-      businessModel
+      # businessModel
       businessGoal
       businessGeneralInfo {
         businessName

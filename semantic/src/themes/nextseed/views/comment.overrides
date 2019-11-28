@@ -2,7 +2,6 @@
          Theme Overrides
 *******************************/
 .ui.comments {
-    border: 1px solid @neutral-darkwhite;
     margin-bottom: @36px;
     @media only screen and (max-width : @largestMobileScreen){
         margin-bottom: @23px;
@@ -40,8 +39,10 @@
         }
         .ui.blue.label {
             margin: 0 0 0 @10px;
-            vertical-align: top;
-            padding-top: @6px;
+            vertical-align: middle;
+            height: @20px;
+            line-height: 20px;
+            padding-top: 0;
         }
         &.issuer-comment {
             background: fade(@primary-two-darken, 8%);
@@ -98,5 +99,6 @@
         }
     }
 } 
-
-
+.offering-comment .ui.comments{
+    border: 1px solid @neutral-darkwhite;
+}

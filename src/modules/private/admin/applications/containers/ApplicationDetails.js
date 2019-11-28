@@ -260,6 +260,7 @@ export default class ApplicationDetails extends Component {
                             activityTitle="Comment"
                             activityType={ACTIVITY_HISTORY_TYPES.COMMENT}
                             {...props}
+                            classes={item.title === 'Activity History' ? 'application-activity' : ''}
                           />
                         )
                         }

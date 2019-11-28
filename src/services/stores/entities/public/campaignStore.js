@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty } from 'lodash';
+import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Calculator } from 'amortizejs';
@@ -322,25 +322,17 @@ export class CampaignStore {
   @action
   isEarlyBirdExist(accountType, isAdmin = false) {
     const offeringId = this.getOfferingId;
-    // uiStore.setProgress();
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
     const accountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     const account = isAdmin ? accountDetails : userDetailsStore.currentActiveAccountDetails;
     const accountId = get(account, 'details.accountId') || null;
-    this.earlyBirdCheck = graphql({
-      client,
-      query: checkIfEarlyBirdExist,
-      variables: { offeringId, accountId },
-      // onFetch: (data) => {
-      //   if (data && !this.earlyBirdCheck.loading) {
-      //     uiStore.setProgress(false);
-      //   }
-      // },
-      // onError: (err) => {
-      //   console.log(err);
-      //   uiStore.setProgress(false);
-      // },
-    });
+    if (offeringId && accountId) {
+      this.earlyBirdCheck = graphql({
+        client,
+        query: checkIfEarlyBirdExist,
+        variables: { offeringId, accountId },
+      });
+    }
   }
 
   @computed
@@ -450,13 +442,13 @@ export class CampaignStore {
     if (this.campaign) {
       const { updates, comments } = this.campaign;
       res.updates = updates && updates.length ? updates.length : 0;
-      // eslint-disable-next-line arrow-body-style
       if (comments) {
         comments.map((c) => {
           if (c.scope === 'PUBLIC'
             && ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor')
               || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
-            sum = sum + 1 + (get(c, 'threadComment.length') || 0);
+            const cnt = reduce(get(c, 'threadComment'), (tcSum, tc) => (tc.scope === 'PUBLIC' && ((get(tc, 'createdUserInfo.roles[0].name') === 'admin' || get(tc, 'createdUserInfo.roles[0].name') === 'investor') || (get(tc, 'createdUserInfo.roles[0].name') === 'issuer' && tc.approved)) ? (tcSum + 1) : tcSum), 0);
+            sum = sum + 1 + (cnt || 0);
           }
           return null;
         });

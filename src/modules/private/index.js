@@ -7,6 +7,7 @@ import { authActions } from '../../services/actions';
 import { privateRoutes } from '../routes';
 import { InlineLoader, SuspenseBoundary, lazyRetry } from '../../theme/shared';
 import SidebarLeftOverlay from '../../theme/layout/SidebarLeftOverlay';
+import AgreementsPdfLoader from './investor/settings/components/agreements/AgreementsPdfLoader';
 import NotFound from '../shared/NotFound';
 
 @inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'accountStore', 'referralsStore')
@@ -88,6 +89,7 @@ export default class Private extends React.Component {
                   key={route.path}
                 />
               ))}
+              <Route exact path="/app/legal-docs/:agreementKey" render={props => <AgreementsPdfLoader isNewTab {...props} />} />
               {Object.keys(routes).map(route => routes[route])}
               {myRoutes.length > 0 ? <Route component={NotFound} />
                 : <Route component={InlineLoader} />}

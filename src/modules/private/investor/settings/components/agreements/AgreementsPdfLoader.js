@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../../../theme/shared';
-import IframeModal from '../../../../../../theme/shared/src/IframeModal';
-@inject('agreementsStore')
+@inject('agreementsStore', 'userDetailsStore')
 @observer
 export default class AgreementsPdfLoader extends Component {
   constructor(props) {
@@ -16,12 +15,23 @@ export default class AgreementsPdfLoader extends Component {
     const { agreementKey } = this.props.match.params;
     const doc = agreementKey ? getNavItems.find(ele => ele.to.toString() === agreementKey)
       : getNavItems[0];
+    this.setInlineLoader(false);
     if (!alreadySet) {
       getLegalDocsFileIds().then(() => {
-        getBoxEmbedLink(doc.to, doc.id);
+        getBoxEmbedLink(doc.to, doc.id).then(() => {
+          this.setInlineLoader(true);
+        });
       });
-    } else {
-      getBoxEmbedLink(doc.to, doc.id);
+    } else if (!this.props.isNewTab) {
+      getBoxEmbedLink(doc.to, doc.id).then(() => {
+        this.setInlineLoader(true);
+      });
+    }
+  }
+
+  setInlineLoader = (val) => {
+    if (this.props.isNewTab) {
+      this.props.userDetailsStore.setFieldValue('userFirstLoad', val);
     }
   }
 
@@ -32,20 +42,21 @@ export default class AgreementsPdfLoader extends Component {
   render() {
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
-      this.props.iframeModal ? (
-        <IframeModal
-          open
-          close={this.closeModal}
-          srcUrl={embedUrl}
-          loading={docLoading}
-        />
+      this.props.isNewTab ? (
+        <>
+          {(docLoading || !embedUrl) ? <InlineLoader styledAs={{ marginTop: '100px' }} />
+            : (
+              window.open(embedUrl, '_self')
+            )
+          }
+        </>
       ) : (
           <div>
             <Grid>
               <Grid.Row>
                 <Grid.Column className="welcome-packet">
                   <div className="pdf-viewer">
-                    {(docLoading || !embedUrl) ? <InlineLoader />
+                    {(docLoading || !embedUrl) ? <InlineLoader styledAs={{ marginTop: '100px' }} />
                       : (
                         <iframe
                           width="100%"

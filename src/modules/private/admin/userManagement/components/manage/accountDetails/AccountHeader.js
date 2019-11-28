@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { includes, startCase, get } from 'lodash';
-import { Header, Icon, Button, Divider, Confirm } from 'semantic-ui-react';
+import { Header, Icon, Button, Divider, Popup } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
 
-@inject('userDetailsStore', 'uiStore', 'userStore')
+@inject('userDetailsStore', 'uiStore', 'userStore', 'accountStore')
 @withRouter
 @observer
 export default class AccountHeader extends Component {
-  state = { showModal: false };
-
   toggleConfirmModal = (e, action) => {
     e.preventDefault();
     this.props.history.push(`${this.props.pathname}/${action}`);
@@ -17,21 +15,20 @@ export default class AccountHeader extends Component {
 
   freezeAccountToggle = (userId, accountId, freeze) => {
     this.props.userDetailsStore.freezeAccountToggle(userId, accountId, freeze);
-    this.setState({ showModal: false });
   }
 
   render() {
     const { inProgress } = this.props.uiStore;
     const loadingVal = Boolean(inProgress);
     const {
-      currentActiveAccountDetailsOfSelectedUsers, getDetailsOfUser,
+      currentActiveAccountDetailsOfSelectedUsers,
     } = this.props.userDetailsStore;
-    const userId = get(getDetailsOfUser, 'id');
-    const accountId = get(currentActiveAccountDetailsOfSelectedUsers, 'details.accountId');
-    const freeze = get(currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus') === 'FROZEN';
+    const accountStatus = get(currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus');
     const accountType = includes(this.props.pathname, 'individual') ? 'individual' : includes(this.props.pathname, 'ira') ? 'ira' : 'entity';
     const access = this.props.userStore.myAccessForModule('USERS');
     const isFullAccessUser = access.level === 'FULL';
+    const { isAccFrozen } = this.props.accountStore;
+    const freezeAccObj = { SOFT_FREEZE: { btnText: 'Soft Freeze' }, HARD_FREEZE: { btnText: 'Hard Freeze' } };
     return (
       <>
         <div className="clearfix">
@@ -42,14 +39,56 @@ export default class AccountHeader extends Component {
           </span>
           {this.props.showFreezeCTA
             && (
-              <span className="pull-right">
-                <Button.Group compact size="tiny">
-                  <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, freeze ? 'unfreeze' : 'freeze')}><Icon className="ns-freeze" />{freeze ? 'Unfreeze' : 'Freeze'} account</Button>
-                  {(isFullAccessUser)
-                    && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'close-account')}>Close account</Button>
-                  }
-                </Button.Group>
-              </span>
+              <>
+                <span className="pull-right">
+                  <Button.Group compact size="tiny">
+                    {(!isAccFrozen(accountStatus))
+                      && Object.keys(freezeAccObj).map(accStatus => (
+                        <Popup
+                          position="top center"
+                          content={(
+                            <ul>
+                              {accStatus === 'HARD_FREEZE'
+                                ? (
+                                  <>
+                                    <span><b>Hard Frozen Account</b></span>
+                                    <li>Can NOT make comments on an offering <b>(NEW) </b></li>
+                                    <li>Can NOT make investments || updates to investments</li>
+                                    <li>Can NOT make deposits</li>
+                                    <li>Can NOT make withdraw</li>
+                                    <li>Can cancel a reservation</li>
+                                    <li>Can cancel a reservation</li>
+                                    <li>Can make change linked bank account requests</li>
+                                  </>
+                                )
+                                : (
+                                  <>
+                                    <span><b>Soft Frozen Account</b></span>
+                                    <li>Same as Hard Freeze except for:</li>
+                                    <li>Can make withdraw</li>
+                                  </>
+                                )
+                              }
+                            </ul>
+                          )}
+                          trigger={
+                            <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, accStatus)}><Icon className="ns-freeze" />{freezeAccObj[accStatus].btnText}</Button>
+                          }
+                        />
+                      ))
+                    }
+
+
+                    {isAccFrozen(accountStatus)
+                      && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'UNFREEZE')}><Icon className="ns-freeze" />Unfreeze</Button>
+                    }
+
+                    {(isFullAccessUser)
+                      && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'close-account')}>Close account</Button>
+                    }
+                  </Button.Group>
+                </span>
+              </>
             )
           }
           {this.props.showAddWithdrawFundCta
@@ -64,15 +103,6 @@ export default class AccountHeader extends Component {
           }
         </div>
         <Divider hidden />
-        <Confirm
-          header="Confirm"
-          content={`Are you sure you want to ${freeze ? 'unfreeze' : 'freeze'} this account`}
-          open={this.state.showModal}
-          onCancel={e => this.toggleConfirmModal(e, false)}
-          onConfirm={() => this.freezeAccountToggle(userId, accountId, !freeze)}
-          size="mini"
-          className="deletion"
-        />
       </>
     );
   }

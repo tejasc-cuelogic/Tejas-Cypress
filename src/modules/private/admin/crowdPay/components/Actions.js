@@ -91,7 +91,7 @@ export default class Actions extends Component {
     const isGsProcess = accountStatus === CROWDPAY_ACCOUNTS_STATUS.GS_PROCESSING;
     const isAccProcess = accountStatus === CROWDPAY_ACCOUNTS_STATUS.ACCOUNT_PROCESSING;
     const isDeclined = accountStatus === CROWDPAY_ACCOUNTS_STATUS.DECLINED
-      || (accountStatus === CROWDPAY_ACCOUNTS_STATUS.FROZEN && declined);
+      || (CROWDPAY_ACCOUNTS_STATUS.FROZEN.includes(accountStatus) && declined);
     const urlPara = `${refLink}/${userId}/${accountId}`;
     const isDisabled = loadingCrowdPayIds.includes(accountId);
     return (

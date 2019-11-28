@@ -262,11 +262,17 @@ h6{
 .break-text {
 	word-break: break-all;
 }
+.no-wrap{
+	word-break: normal !important;
+}
 .full-width{
 	width: 100%;
 }
 .show-top{
 	z-index: 99999 !important;
+}
+.d-flex{
+	display: flex !important;
 }
 //	normal link styles
 a:not(.item), a:not(.ui.button){
@@ -2918,6 +2924,9 @@ input[type='range']::-webkit-slider-thumb {
 	.json-key {
 		font-weight: @bold;
 	}
+}
+.offering-comment .fr-view iframe{
+	height: auto;
 }
 .plaid-link-iframe {
 	@media only screen and (max-width : @largestMobileScreen){

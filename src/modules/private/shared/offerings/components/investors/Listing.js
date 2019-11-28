@@ -12,14 +12,15 @@ import { OFFERING_AGREEMENT_REGULATIONS } from '../../../../../../constants/offe
 
 const meta = [
   { label: '', value: 'avatar' },
+  { label: 'Date', value: 'investmentDate' },
   { label: 'Investor\'s Name', value: 'firstName' },
+  { label: 'Email', value: 'userEmail' },
   { label: 'Residence City', value: 'city' },
   { label: 'State', value: 'state' },
   { label: 'Account Type', value: 'accountType' },
   { label: 'Regulation', value: 'regulation' },
   { label: 'Amount', value: 'amount' },
   { label: 'EB', value: 'earlyBirdEligibility' },
-  { label: 'Date', value: 'investmentDate' },
   { label: 'Referral Code', value: 'referralCode' },
 ];
 
@@ -35,9 +36,11 @@ export default class Listing extends Component {
     setSortingOrder(clickedColumn, sortOrder.direction === 'asc' ? 'desc' : 'asc');
   }
 
-  showReferralCode = (referralCode, investorReferralCodes) => {
+  showReferralCode = (referralCode, investorReferralCodes, isIssuer) => {
     const matchReferral = find(investorReferralCodes, r => r.code === referralCode);
-    return (matchReferral && get(matchReferral, 'isValid')) ? get(matchReferral, 'code') : '';
+    return (matchReferral && get(matchReferral, 'isValid')) ? (
+      isIssuer ? 'Yes' : get(matchReferral, 'code')
+    ) : '';
   }
 
   render() {
@@ -48,8 +51,8 @@ export default class Listing extends Component {
     const isOfferingClose = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULTED'].includes(get(offer, 'stage'));
     let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Amount', value: 'amount' });
     computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'EB', value: 'earlyBirdEligibility' });
-    computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Account Type', value: 'accountType' });
-    computedList = (isAdmin) ? [...computedList] : reject(computedList, { label: 'Regulation', value: 'regulation' });
+    computedList = isAdmin ? [...computedList] : [...computedList].filter(o => !['Account Type', 'Regulation', ''].includes(o.label));
+    computedList = (isIssuer && isOfferingClose) ? [...computedList] : reject(computedList, { label: 'Email', value: 'userEmail' });
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
     const isUsersCapablities = this.props.userStore.myAccessForModule('USERS');
@@ -83,6 +86,8 @@ export default class Listing extends Component {
             <Table.Body>
               {investorLists.map((data, index) => (
                 <Table.Row key={`${index}${data.userId}${Math.random()}`}>
+                  {isAdmin
+                  && (
                   <Table.Cell>
                     <UserAvatar
                       size="mini"
@@ -94,6 +99,8 @@ export default class Listing extends Component {
                       }}
                     />
                   </Table.Cell>
+                  )}
+                  <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
                   <Table.Cell>
                     <div>
                       {get(isUsersCapablities, 'level') && get(isUsersCapablities, 'level') !== 'SUPPORT'
@@ -109,6 +116,13 @@ export default class Listing extends Component {
                       }
                     </div>
                   </Table.Cell>
+                  {isIssuer && isOfferingClose
+                  && (
+                  <Table.Cell>
+                    {data.userEmail || 'N/A'}
+                  </Table.Cell>
+                  )
+                  }
                   <Table.Cell>
                     <div className="table-info-wrap">
                       <p>
@@ -180,8 +194,7 @@ export default class Listing extends Component {
                       </Table.Cell>
                     )
                   }
-                  <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
-                  <Table.Cell textAlign="right">{data.referralCode ? this.showReferralCode(referralCode, data.referralCode) : 'N/A'}</Table.Cell>
+                  <Table.Cell textAlign="right">{data.referralCode ? this.showReferralCode(referralCode, data.referralCode, isIssuer) : ''}</Table.Cell>
                 </Table.Row>
               ))
               }
