@@ -862,6 +862,33 @@ export const COMPANY_LAUNCH = {
     objRef: 'goldstar',
     placeHolder: 'Enter here',
   },
+  esAccountNumberRegD: {
+    value: '',
+    label: 'Reg D GoldStar Escrow Account Number',
+    error: undefined,
+    rule: 'optional',
+    objRefOutput: 'goldstar',
+    objRef: 'goldstar',
+    placeHolder: 'Enter here',
+  },
+  isinRegD: {
+    value: '',
+    label: 'Reg D GoldStar ISIN',
+    error: undefined,
+    rule: 'optional',
+    objRefOutput: 'goldstar',
+    objRef: 'goldstar',
+    placeHolder: 'Enter here',
+  },
+  sfAccountNumberRegD: {
+    value: '',
+    label: 'Reg D GoldStar Sink Account Number',
+    error: undefined,
+    rule: 'optional',
+    objRefOutput: 'goldstar',
+    objRef: 'goldstar',
+    placeHolder: 'Enter here',
+  },
 };
 
 export const OFFER_CLOSE = {
@@ -2667,6 +2694,32 @@ export const ADMIN_DOCUMENTATION = {
     stepName: 'DOCUMENTS_LEGAL_PROXY_AGREEMENT',
     lastModifiedDate: '',
   },
+  llcAgreement: {
+    value: '',
+    label: 'LLC Agreement',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    stepName: 'DOCUMENTS_LEGAL_LLC_AGREEMENT',
+    lastModifiedDate: '',
+  },
+  subscriptionAgreement: {
+    value: '',
+    label: 'Subscription Agreement',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    stepName: 'DOCUMENTS_LEGAL_SUBSCRIPTION_AGREEMENT',
+    lastModifiedDate: '',
+  },
   disclosure: {
     value: '',
     label: 'Disclosure Statement',
@@ -2790,19 +2843,30 @@ export const POC_DETAILS = {
   },
 };
 
-const LIMIT = {
-  value: '',
-  label: 'Limit',
-  error: undefined,
-  rule: 'required',
+const OFFERING_CLOSE_COMMON = {
+  LIMIT: {
+    value: '',
+    label: 'Limit',
+    error: undefined,
+    rule: 'required',
+  },
+  SERVICE: {
+    value: 'PROCESS_FACTORY',
+    label: 'Service',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Choose here',
+  },
 };
 
 export const OFFERING_CLOSE_2 = {
-  queueLimit: { ...LIMIT },
+  queueLimit: { ...OFFERING_CLOSE_COMMON.LIMIT },
+  service: { ...OFFERING_CLOSE_COMMON.SERVICE },
 };
 
 export const OFFERING_CLOSE_3 = {
-  queueLimit: { ...LIMIT },
+  queueLimit: { ...OFFERING_CLOSE_COMMON.LIMIT },
+  service: { ...OFFERING_CLOSE_COMMON.SERVICE },
   notePurchaseDate: {
     value: '',
     label: 'Note Purchase Date',
@@ -2968,5 +3032,11 @@ export const OFFERING_CLOSE_1 = {
 };
 
 export const OFFERING_CLOSE_4 = {
-  queueLimit: { ...LIMIT },
+  queueLimit: { ...OFFERING_CLOSE_COMMON.LIMIT },
+  service: { ...OFFERING_CLOSE_COMMON.SERVICE },
 };
+
+export const OFFERING_CLOSE_SERVICE_OPTIONS = [
+  { key: 'PROCESS_FACTORY', value: 'PROCESS_FACTORY', text: 'Process Factory' },
+  { key: 'CLOSE_PROCESSOR', value: 'CLOSE_PROCESSOR', text: 'Close Processor' },
+];

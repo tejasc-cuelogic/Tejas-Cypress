@@ -52,7 +52,7 @@ export default class ApplicationCards extends Component {
         <Card.Group stackable itemsPerRow={isTablet ? '2' : '3'} className="application-cards">
           <Card fluid>
             <Card.Content>
-              <Header as="h4"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
+              <Header as="h4"><Icon className="ns-paper-plane" color="green" /> Apply</Header>
             </Card.Content>
             <Card.Content>
               <p>Want to launch a new campaign?<br />
@@ -93,8 +93,7 @@ export default class ApplicationCards extends Component {
                     === BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED)
                       && <Button inverted color="green" as={Link} to={`/app/business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
                     }
-                    {(application.applicationStatus
-                      === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)
+                    {([BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL, BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED].includes(application.applicationStatus))
                       && (
 <Button inverted color="green" onClick={e => this.signPortalAgreementHandler(e, `/app/dashboard/${application.applicationId}/offers`, application.applicationId)}>
                         { application.applicationStatus
