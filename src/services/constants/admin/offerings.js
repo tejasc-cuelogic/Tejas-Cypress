@@ -862,6 +862,33 @@ export const COMPANY_LAUNCH = {
     objRef: 'goldstar',
     placeHolder: 'Enter here',
   },
+  esAccountNumberRegD: {
+    value: '',
+    label: 'Reg D GoldStar Escrow Account Number',
+    error: undefined,
+    rule: 'optional',
+    objRefOutput: 'goldstar',
+    objRef: 'goldstar',
+    placeHolder: 'Enter here',
+  },
+  isinRegD: {
+    value: '',
+    label: 'Reg D GoldStar ISIN',
+    error: undefined,
+    rule: 'optional',
+    objRefOutput: 'goldstar',
+    objRef: 'goldstar',
+    placeHolder: 'Enter here',
+  },
+  sfAccountNumberRegD: {
+    value: '',
+    label: 'Reg D GoldStar Sink Account Number',
+    error: undefined,
+    rule: 'optional',
+    objRefOutput: 'goldstar',
+    objRef: 'goldstar',
+    placeHolder: 'Enter here',
+  },
 };
 
 export const OFFER_CLOSE = {

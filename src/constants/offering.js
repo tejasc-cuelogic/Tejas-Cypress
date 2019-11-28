@@ -85,6 +85,15 @@ export const CAMPAIGN_KEYTERMS_REGULATION_PARALLEL = {
   BD_CF_506C: <>Parallel Offering<br />(Reg CF &amp; Reg D)</>,
 };
 
+export const CAMPAIGN_KEYTERMS_REGULATION_ENUM = {
+  FP_TX: 'FP_TX',
+  FP_CF: 'FP_CF',
+  BD_CF: 'BD_CF',
+  BD_506C: 'BD_506C',
+  BD_506B: 'BD_506B',
+  BD_CF_506C: 'BD_CF_506C',
+};
+
 export const CAMPAIGN_REGULATION_DETAILED = {
   REGULATION: {
     FP_TX: 'Texas Intrastate Crowdfunding',
