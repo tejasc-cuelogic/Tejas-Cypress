@@ -66,7 +66,7 @@ export const paymentHistory = gql`
 `;
 
 export const getInvestmentsByUserIdAndOfferingId = gql`
-  query getInvestmentsByUserIdAndOfferingId($offeringId: String!, $userId: String!) {
+  query getInvestmentsByUserIdAndOfferingId($offeringId: String!, $userId: String) {
     getInvestmentsByUserIdAndOfferingId(offeringId: $offeringId, userId: $userId) {
       investmentId
       accountId

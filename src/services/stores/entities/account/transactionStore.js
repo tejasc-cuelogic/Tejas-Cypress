@@ -604,15 +604,16 @@ export class TransactionStore {
   @action
   getInvestmentsByOfferingId = isAdmin => new Promise((resolve, reject) => {
     const investorDetail = userDetailsStore.getDetailsOfUser;
-    const userDetailId = isAdmin ? investorDetail.id : get(userDetailsStore, 'userDetails.id');
+    const userDetailId = isAdmin ? investorDetail.id : null;
+    let params = {
+      offeringId: offeringCreationStore.currentOfferingId,
+    };
+    params = userDetailId ? { ...params, userId: userDetailId } : { ...params };
     this.agreementIds = [];
     this.investmentsByOffering = graphql({
       client,
       query: getInvestmentsByUserIdAndOfferingId,
-      variables: {
-        offeringId: offeringCreationStore.currentOfferingId,
-        userId: userDetailId,
-      },
+      variables: params,
       onFetch: (data) => {
         if (data && !this.investmentsByOffering.loading) {
           const account = !isAdmin ? userDetailsStore.currentActiveAccountDetails

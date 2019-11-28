@@ -35,7 +35,7 @@ export const getInvestorTotalAmountInvested = gql`
 `;
 
 export const getInvestNowHealthCheck = gql`
-  query investNowHealthCheck($userId: String!, $accountId: String!, $offeringId: String!) {
+  query investNowHealthCheck($userId: String, $accountId: String!, $offeringId: String!) {
     investNowHealthCheck(userId: $userId, accountId: $accountId, offeringId: $offeringId)
     {
       investmentLimit
