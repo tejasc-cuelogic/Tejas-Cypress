@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Button, Item, Grid, Card } from 'semantic-ui-react';
-import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import { LINKED_ACCOUND_STATUS } from '../../../../../../constants/account';
 import { bankAccountActions } from '../../../../../../services/actions';
@@ -63,7 +62,7 @@ export default class AccountDetailsView extends Component {
         ? LINKED_ACCOUND_STATUS[accountDetails.status] : null;
     }
     if (loadingState) {
-      return <InlineLoader />;
+      return null;
     }
 
     if (accountStore.showAccountFrozenModal) {
