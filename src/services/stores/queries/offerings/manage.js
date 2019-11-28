@@ -119,6 +119,9 @@ export const getOfferingDetails = gql`
         contactId
         esAccountNumber
         sfAccountNumber
+        esAccountNumberRegD
+        isinRegD
+        sfAccountNumberRegD
       }
       closureProcess {
         checkBalance {
