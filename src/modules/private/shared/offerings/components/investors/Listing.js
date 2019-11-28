@@ -5,7 +5,7 @@ import { Table, Popup, Icon, Label } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
 import { reject, get, find } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { DateTimeFormat, InlineLoader, UserAvatar } from '../../../../../../theme/shared';
+import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
 import { OFFERING_AGREEMENT_REGULATIONS } from '../../../../../../constants/offering';
@@ -34,7 +34,7 @@ export default class Listing extends Component {
     setSortingOrder(clickedColumn, sortOrder.direction === 'asc' ? 'desc' : 'asc');
   }
 
-  showReferralCode = (referralCode, investorReferralCodes, isIssuer, isAdmin) => {
+  showReferralCode = (referralCode, investorReferralCodes) => {
     const matchReferral = find(investorReferralCodes, r => r.code === referralCode);
     return (matchReferral && get(matchReferral, 'isValid')) ? ('Yes') : '';
   }
@@ -49,7 +49,7 @@ export default class Listing extends Component {
     let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Amount', value: 'amount' });
     computedList = (isAdmin && isParallel) ? [...meta] : reject(computedList, { label: 'Regulation', value: 'regulation' });
     computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'EB', value: 'earlyBirdEligibility' });
-    computedList = isAdmin ? [...computedList] : [...computedList].filter(o => !['Account Type', 'Regulation', ''].includes(o.label));
+    computedList = isAdmin ? [...computedList] : [...computedList].filter(o => !['Account Type', 'Regulation'].includes(o.label));
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
     const isUsersCapablities = this.props.userStore.myAccessForModule('USERS');
@@ -139,12 +139,12 @@ export default class Listing extends Component {
                       </Table.Cell>
                     )
                   }
-                  {isAdmin && isParallel 
+                  {isAdmin && isParallel
                   && (
                       <Table.Cell>
                         {data.regulation ? OFFERING_AGREEMENT_REGULATIONS[data.regulation] : ''}
                       </Table.Cell>
-                    )
+                  )
                   }
                   {((isIssuer && isOfferingClose) || (isAdmin))
                     && (
