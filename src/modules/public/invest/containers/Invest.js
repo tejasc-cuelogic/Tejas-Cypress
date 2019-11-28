@@ -72,7 +72,7 @@ class Invest extends Component {
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <>
-        <MetaTagGenerator metaTagsData={metaTagsData} />
+        <MetaTagGenerator pathName={location.pathname} metaTagsData={metaTagsData} />
         {location.pathname === '/invest/why-nextseed' || location.pathname === '/invest' ? <Banner />
           : <Responsive as="section" maxWidth={767} className={`banner ${location.pathname.split('/')[2]}`} />
         }

@@ -10,7 +10,7 @@ import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, get
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
-import { userDetailsStore, watchListStore, userStore } from '../../index';
+import { userDetailsStore, watchListStore, userStore, authStore } from '../../index';
 // import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
@@ -102,32 +102,42 @@ export class CampaignStore {
   }
 
   @action
-  getCampaignDetails = (id, queryType) => {
+  getCampaignDetails = (id, queryType = false, isValid = false) => new Promise((resolve, reject) => {
+    const gqlClient = authStore.isUserLoggedIn ? client : clientPublic;
     watchListStore.setFieldValue('isWatching', false);
     this.details = graphql({
-      client: clientPublic,
+      client: gqlClient,
       query: queryType ? campaignDetailsForInvestmentQuery : campaignDetailsQuery,
-      variables: { id },
+      variables: { id, isValid },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data && data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length && !this.details.loading) {
-          this.getCampaignAdditionalDetails(id);
-          watchListStore.setOfferingWatch();
+        if (data && data.getOfferingDetailsBySlug && !this.details.loading) {
+          if (!queryType) {
+            watchListStore.setFieldValue('isWatching', ['WATCHING', 'INVESTOR'].includes(get(data.getOfferingDetailsBySlug, 'watchListStatus')));
+            this.getCampaignAdditionalDetails(id);
+          }
+          resolve(data.getOfferingDetailsBySlug);
+        } else if (!this.details.loading) {
+          resolve(false);
         }
       },
+      onError: (err) => {
+        reject(err);
+      },
     });
-  }
+  });
 
   @action
   getCampaignAdditionalDetails = (id) => {
+    const gqlClient = authStore.isUserLoggedIn ? client : clientPublic;
     this.additionalDetails = graphql({
-      client: clientPublic,
+      client: gqlClient,
       query: campaignDetailsAdditionalQuery,
-      variables: { id },
+      variables: { id, isValid: true },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data && data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length && !this.additionalDetails.loading) {
-          this.concatOfferingDetails(get(data, 'getOfferingDetailsBySlug[0]'));
+        if (data && data.getOfferingDetailsBySlug && !this.additionalDetails.loading) {
+          this.concatOfferingDetails(get(data, 'getOfferingDetailsBySlug'));
         }
       },
     });
@@ -137,8 +147,8 @@ export class CampaignStore {
   concatOfferingDetails = (newData) => {
     if (newData && this.campaign && get(this.campaign, 'id') === get(newData, 'id')) {
       const campaignData = toJS(this.details);
-      campaignData.data.getOfferingDetailsBySlug[0].updates = get(newData, 'updates');
-      campaignData.data.getOfferingDetailsBySlug[0].comments = get(newData, 'comments');
+      campaignData.data.getOfferingDetailsBySlug.updates = get(newData, 'updates');
+      campaignData.data.getOfferingDetailsBySlug.comments = get(newData, 'comments');
       this.details = campaignData;
     }
   }
@@ -151,7 +161,7 @@ export class CampaignStore {
       variables: { id },
       onFetch: (data) => {
         if (data && !this.details.loading) {
-          if (data.getOfferingDetailsBySlug && data.getOfferingDetailsBySlug.length) {
+          if (data.getOfferingDetailsBySlug) {
             resolve(data.getOfferingDetailsBySlug);
           } else {
             reject();
@@ -241,9 +251,8 @@ export class CampaignStore {
   }
 
   @computed get campaign() {
-    if (this.details.data && this.details.data.getOfferingDetailsBySlug
-      && this.details.data.getOfferingDetailsBySlug[0]) {
-      return toJS(this.details.data.getOfferingDetailsBySlug[0]);
+    if (this.details.data && this.details.data.getOfferingDetailsBySlug) {
+      return toJS(this.details.data.getOfferingDetailsBySlug);
     } if (this.details.data && this.details.data.getOfferingDetailsById) {
       return toJS(this.details.data.getOfferingDetailsById);
     }
@@ -307,7 +316,7 @@ export class CampaignStore {
     campaignStatus.investmentHighlights = true;
     campaignStatus.isRevenueShare = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary;
     campaignStatus.isTermNote = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
-    campaignStatus.doneComputing = (this.details && this.details.data && this.details.data.getOfferingDetailsBySlug && this.details.data.getOfferingDetailsBySlug.length && this.details.data.getOfferingDetailsBySlug[0] && !isEmpty(this.details.data.getOfferingDetailsBySlug[0].keyTerms)) || false;
+    campaignStatus.doneComputing = (get(this.details, 'data.getOfferingDetailsBySlug') && !isEmpty(this.details.data.getOfferingDetailsBySlug.keyTerms)) || false;
     return campaignStatus;
   }
 
@@ -322,25 +331,17 @@ export class CampaignStore {
   @action
   isEarlyBirdExist(accountType, isAdmin = false) {
     const offeringId = this.getOfferingId;
-    // uiStore.setProgress();
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
     const accountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     const account = isAdmin ? accountDetails : userDetailsStore.currentActiveAccountDetails;
     const accountId = get(account, 'details.accountId') || null;
-    this.earlyBirdCheck = graphql({
-      client,
-      query: checkIfEarlyBirdExist,
-      variables: { offeringId, accountId },
-      // onFetch: (data) => {
-      //   if (data && !this.earlyBirdCheck.loading) {
-      //     uiStore.setProgress(false);
-      //   }
-      // },
-      // onError: (err) => {
-      //   console.log(err);
-      //   uiStore.setProgress(false);
-      // },
-    });
+    if (offeringId && accountId) {
+      this.earlyBirdCheck = graphql({
+        client,
+        query: checkIfEarlyBirdExist,
+        variables: { offeringId, accountId },
+      });
+    }
   }
 
   @computed
@@ -453,9 +454,9 @@ export class CampaignStore {
       if (comments) {
         comments.map((c) => {
           if (c.scope === 'PUBLIC'
-            && ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor')
+            && ((['admin', 'investor'].includes(get(c, 'createdUserInfo.roles[0].name')))
               || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved))) {
-            const cnt = reduce(get(c, 'threadComment'), (tcSum, tc) => (tc.scope === 'PUBLIC' && ((get(tc, 'createdUserInfo.roles[0].name') === 'admin' || get(tc, 'createdUserInfo.roles[0].name') === 'investor') || (get(tc, 'createdUserInfo.roles[0].name') === 'issuer' && tc.approved)) ? (tcSum + 1) : tcSum), 0);
+            const cnt = reduce(get(c, 'threadComments'), (tcSum, tc) => (tc.scope === 'PUBLIC' && ((['admin', 'investor'].includes(get(tc, 'createdUserInfo.roles[0].name'))) || (get(tc, 'createdUserInfo.roles[0].name') === 'issuer' && tc.approved)) ? (tcSum + 1) : tcSum), 0);
             sum = sum + 1 + (cnt || 0);
           }
           return null;

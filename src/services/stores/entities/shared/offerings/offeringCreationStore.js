@@ -163,8 +163,10 @@ export class OfferingCreationStore {
   @observable outputMsg = null;
 
   @action
-  setFieldValue = (field, value, field2 = false) => {
-    if (field2) {
+  setFieldValue = (field, value, field2 = false, objRef = false) => {
+    if (objRef) {
+      set(this[field], objRef, value);
+    } else if (field2) {
       this[field][field2] = value;
     } else {
       this[field] = value;

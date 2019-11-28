@@ -93,8 +93,7 @@ export default class ApplicationCards extends Component {
                     === BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED)
                       && <Button inverted color="green" as={Link} to={`/app/business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
                     }
-                    {(application.applicationStatus
-                      === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)
+                    {([BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL, BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED].includes(application.applicationStatus))
                       && (
 <Button inverted color="green" onClick={e => this.signPortalAgreementHandler(e, `/app/dashboard/${application.applicationId}/offers`, application.applicationId)}>
                         { application.applicationStatus
