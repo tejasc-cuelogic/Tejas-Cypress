@@ -34,7 +34,7 @@ class InvestmentDetails extends Component {
         this.props.uiStore.setProgress('portfolioDirect');
       }
       portfolioStore.getInvestorDetails(accountType, this.props.match.params.id, isAdmin).then(() => this.props.uiStore.setProgress(false));
-      this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
+      this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true, true);
       this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.id);
       portfolioStore.currentAccoutType(accountType);
     }
