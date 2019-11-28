@@ -87,6 +87,7 @@ class FinancialInfo extends Component {
       return <Spinner loaderMessage="Loading.." />;
     }
     const isCenterAlignedCls = includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) ? 'center-align' : '';
+    const isOfferingPreferredEquity = !!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType);
     return (
       <>
         <Route exact path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
@@ -94,7 +95,7 @@ class FinancialInfo extends Component {
         {this.props.changeInvest
           && (
             <>
-              <Header as="h4" textAlign="center" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
+              <Header as="h4" textAlign="center" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{isOfferingPreferredEquity ? Helper.CurrencyFormat(currentInvestedAmount) : Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
               <Divider section className="small" />
               {!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)
                 && (<Header as="h4" className={`mb-half ${isCenterAlignedCls}`}>Enter new investment amount. </Header>)
@@ -166,7 +167,7 @@ class FinancialInfo extends Component {
                     </Table.Row>
                     <Table.Row>
                       <Table.Cell className="grey-header plr-0">{`Price per ${prefferedEquityLabel}:`}</Table.Cell>
-                      <Table.Cell className="plr-0 grey-header right-align">{Helper.CurrencyFormat(prefferedEquityAmount, 0)}</Table.Cell>
+                      <Table.Cell className="plr-0 grey-header right-align">{Helper.CurrencyFormat(prefferedEquityAmount)}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                       <Table.Cell className="plr-0 grey-header"><b>Your investment:</b></Table.Cell>
@@ -178,7 +179,7 @@ class FinancialInfo extends Component {
                 </Table>
                 {this.props.changeInvest && getDiffInvestmentLimitAmount
                   && INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00'
-                  ? <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
+                  ? <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{isOfferingPreferredEquity ? Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0) : Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
                 }
                 {investmentFlowEquityErrorMessage
                   && (<FieldError error={investmentFlowEquityErrorMessage} />)

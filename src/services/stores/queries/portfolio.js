@@ -50,6 +50,9 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             disbursement {
               date
             }
+            keyTerms {
+              maturityDate
+            }
           }
         }
       }
@@ -89,6 +92,9 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             disbursement {
               date
             }
+            keyTerms {
+              maturityDate
+            }
           }
         }
       }
@@ -127,6 +133,9 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             hardCloseDate
             disbursement {
               date
+            }
+            keyTerms {
+              maturityDate
             }
           }
         }

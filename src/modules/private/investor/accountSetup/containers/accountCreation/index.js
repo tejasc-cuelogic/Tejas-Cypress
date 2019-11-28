@@ -7,6 +7,7 @@ import IndividualAccCreation from './individual/AccountCreation';
 import EntityAccCreation from './entity/AccountCreation';
 import ConfirmModal from '../../components/confirmModal';
 import Helper from '../../../../../../helper/utility';
+// import AgreementsPdfLoader from '../../../settings/components/agreements/AgreementsPdfLoader';
 
 const successMessage = 'Check out some of the investment opportunities now available to you as a member of the NextSeed community.';
 const processingMessage = 'While we set up your account, check out some of the investment opportunities now available to you as a member of the NextSeed community.';

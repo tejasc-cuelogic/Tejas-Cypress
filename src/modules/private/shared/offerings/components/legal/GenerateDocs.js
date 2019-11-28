@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { Form, Header, Button, Divider } from 'semantic-ui-react';
 import EdgarFilingList from './EdgarFilingList';
 import { DropZoneConfirm as DropZone } from '../../../../../../theme/form';
+import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 
 @inject('offeringCreationStore', 'uiStore', 'userStore', 'offeringsStore')
 @observer
@@ -43,6 +44,9 @@ export default class GenerateDocs extends Component {
     const { isIssuer } = this.props.userStore;
     const { offer } = this.props.offeringsStore;
     const { match } = this.props;
+    const securities = get(offer, 'keyTerms.securities');
+    let documentLists = ['escrow', 'resolutionOfBorrowing', 'formC', 'promissoryNote', 'securityAgreement', 'disclosure', 'personalGuarantee'];
+    documentLists = [CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE, CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE].includes(securities) ? [...documentLists, 'npa'] : securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ? [...documentLists, 'purchaseAgreement', 'proxyAgreement'] : [...documentLists];
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
         <Form>
@@ -64,7 +68,8 @@ export default class GenerateDocs extends Component {
             && (
             <>
               <Header as="h4">Upload Final Signed Docs</Header>
-              {['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'purchaseAgreement', 'proxyAgreement', 'promissoryNote', 'securityAgreement', 'disclosure', 'personalGuarantee'].map(field => (
+              <Form.Group widths={2}>
+              {documentLists.map(field => (
                 <DropZone
                   size="small"
                   name="term"
@@ -72,11 +77,11 @@ export default class GenerateDocs extends Component {
                   ondrop={files => this.onFileDrop(files, field, ADMIN_DOCUMENTATION_FRM.fields[field].stepName)}
                   onremove={() => this.handleDelDoc(field, ADMIN_DOCUMENTATION_FRM.fields[field].stepName)}
                   uploadtitle="Upload"
+                  containerclassname="field"
                 />
-                // <div className="field-wrap">
-                // </div>
               ))
               }
+              </Form.Group>
             </>
             )
           }

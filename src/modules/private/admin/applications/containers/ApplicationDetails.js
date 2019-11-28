@@ -1,4 +1,4 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import { isEmpty, get } from 'lodash';
@@ -6,14 +6,14 @@ import { Modal, Card, Header, Form, Rating, Button, Grid, List, Icon } from 'sem
 import ActivityHistory from '../../../shared/ActivityHistory';
 import { DataFormatter } from '../../../../../helper';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-import { InlineLoader } from '../../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry, InlineLoader } from '../../../../../theme/shared';
 import { FormInput } from '../../../../../theme/form';
 import { AppStatusLabel } from '../components/AppStatusLabel';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 import { ACTIVITY_HISTORY_TYPES } from '../../../../../constants/common';
 import TagsInformation from '../../../shared/TagsInformation';
 
-const getModule = component => lazy(() => import(`../components/details/${component}`));
+const getModule = component => lazyRetry(() => import(`../components/details/${component}`));
 
 @inject('businessAppStore', 'businessAppAdminStore', 'businessAppReviewStore')
 @observer
@@ -233,7 +233,7 @@ export default class ApplicationDetails extends Component {
           </Grid>
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
-            <Suspense fallback={<InlineLoader />}>
+            <SuspenseBoundary>
               <Switch>
                 <Route
                   exact
@@ -253,10 +253,14 @@ export default class ApplicationDetails extends Component {
                             module={item.title === 'Activity History' ? 'applicationDetails' : false}
                             showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
                             resourceId={params.appId}
+                            applicationId={id || applicationId}
+                            applicationIssuerId={userId}
+                            stepName={appStepStatus !== 'Failed' ? 'APPN_ACTIVITY_HISTORY' : ''}
                             appType={params.id}
                             activityTitle="Comment"
                             activityType={ACTIVITY_HISTORY_TYPES.COMMENT}
                             {...props}
+                            classes={item.title === 'Activity History' ? 'application-activity' : ''}
                           />
                         )
                         }
@@ -265,7 +269,7 @@ export default class ApplicationDetails extends Component {
                   })
                 }
               </Switch>
-            </Suspense>
+            </SuspenseBoundary>
           </Card>
         </Modal.Content>
       </Modal>

@@ -150,7 +150,7 @@ class KeyTerms extends Component {
                 </Table.Row> */}
                 {/* {get(campaign, 'keyTerms.premoneyValuation') &&
                 <Table.Row verticalAlign="top">
-                  <Table.Cell width={5} className="neutral-text"><b>Pre-Money valuation{' '}</b>
+                  <Table.Cell width={5} className="neutral-text"><b>Pre-Money Valuation{' '}</b>
                   </Table.Cell>
                   <Table.Cell>
                     <p>
