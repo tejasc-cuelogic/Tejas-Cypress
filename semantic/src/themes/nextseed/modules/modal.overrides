@@ -751,6 +751,15 @@
     margin:@30px auto;
     padding:@25px @60px;
     background:@neutral-offwhite;
+    &.no-bg{
+        background: transparent;
+    }
+    &.small{
+        padding:@15px @28px;
+    }
+    .field.readonly input{
+        color: @neutral-offdark !important;
+    }
     @media only screen and (max-width:@largestMobileScreen){
         padding:@25px;
     }

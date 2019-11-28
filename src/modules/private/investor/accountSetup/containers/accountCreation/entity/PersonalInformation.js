@@ -35,23 +35,23 @@ export default class PersonalInformation extends Component {
       <>
       <Header as="h4" textAlign={isMobile ? '' : 'center'}>Authorized Signatory Information</Header>
         <p className={`${isMobile ? 'mb-30 mt-0' : 'center-align'} account-type-tab`}>Please provide your title and a copy of your photo ID.</p>
-        {isMobile && <p className="highlight-text"><b>Authorized Signatory</b></p>}
+        <p className="grey-header"><b>Authorized Signatory’s</b></p>
         <Form error>
-          <div className={isMobile ? '' : 'field-wrap'}>
-            <Form.Group widths="equal">
-              <Form.Input
-                label="First Name (Legal)"
-                value={currentUser.givenName}
-                className="readonly"
-                readOnly
-              />
-              <Form.Input
-                label="Last Name (Legal)"
-                value={currentUser.familyName}
-                className="readonly"
-                readOnly
-              />
-            </Form.Group>
+          <Form.Group widths="equal" className={isMobile ? '' : 'field-wrap no-bg small'}>
+            <Form.Input
+              label="First Name (Legal)"
+              value={currentUser.givenName}
+              className="readonly"
+              readOnly
+            />
+            <Form.Input
+              label="Last Name (Legal)"
+              value={currentUser.familyName}
+              className="readonly"
+              readOnly
+            />
+          </Form.Group>
+          <div className={isMobile ? '' : 'field-wrap small'}>
             <FormInput
               name="title"
               fielddata={PERSONAL_INFO_FRM.fields.title}
