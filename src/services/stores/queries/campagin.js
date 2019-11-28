@@ -406,8 +406,8 @@ export const campaignDetailsAdditionalQuery = gql`
 `;
 
 export const campaignDetailsForInvestmentQuery = gql`
-query getOfferingById($id: ID) {
-  getOfferingDetailsById (id: $id) {
+query getOfferingById($id: String!) {
+  getOfferingById (id: $id) {
     id
     offeringSlug
     isAvailablePublicly
@@ -422,7 +422,6 @@ query getOfferingById($id: ID) {
         completeDate
       }
       keyTerms {
-        maturityDate
         supplementalAgreements {
           documents {
             name
