@@ -75,7 +75,7 @@ class InvestmentDetails extends Component {
       return null;
     }
 
-    if (details && details.data && !details.data.getOfferingDetailsById) {
+    if (details && details.data && !details.data.getOfferingById) {
       return <NotFound />;
     }
     return (
