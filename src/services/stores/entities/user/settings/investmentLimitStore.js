@@ -81,7 +81,6 @@ export class InvestmentLimitStore {
       client,
       query: getInvestNowHealthCheck,
       variables: {
-        userId: userDetailsStore.currentUserId,
         accountId,
         offeringId,
       },
