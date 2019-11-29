@@ -226,6 +226,9 @@ class IraAccountStore {
     let isValidCurrentStep = true;
     const accountAttributes = {};
     switch (currentStep.name) {
+      case 'About Ira':
+        this.setStepToBeRendered(currentStep.stepToBeRendered);
+        break;
       case 'Financial info':
         currentStep.validate('FIN_INFO_FRM');
         isValidCurrentStep = this.FIN_INFO_FRM.meta.isValid;
@@ -459,12 +462,12 @@ class IraAccountStore {
             this.setStepToBeRendered(getIraStep.LINK_BANK);
           } else if (!this.IDENTITY_FRM.meta.isValid || this.stepToBeRendered === 4) {
             if (this.FUNDING_FRM.fields.fundingType.value === 0) {
-              this.setStepToBeRendered(4);
+              this.setStepToBeRendered(5);
             } else {
               this.setStepToBeRendered(getIraStep.IDENTITY_FRM);
             }
           } else if (this.FUNDING_FRM.fields.fundingType.value === 0) {
-            this.setStepToBeRendered(5);
+            this.setStepToBeRendered(6);
           } else {
             this.setStepToBeRendered(getIraStep.summary);
           }
