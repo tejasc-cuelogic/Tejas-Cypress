@@ -1,17 +1,5 @@
 import gql from 'graphql-tag';
 
-export const getJwtReferralEmbeddedWidget = gql`
-  query getJwtReferralEmbeddedWidget($id: String!, $accountId: String!, $email: String, $firstName: String, $lastName: String) {
-    getJwtReferralEmbeddedWidget(
-      id: $id,
-      accountId: $accountId,
-      email: $email,
-      firstName: $firstName,
-      lastName: $lastName
-    )
-  }
-`;
-
 export const getUserReferralDetails = gql`
   query getUserReferralDetails($userId: String) {
     getUserReferralDetails(userId: $userId) {

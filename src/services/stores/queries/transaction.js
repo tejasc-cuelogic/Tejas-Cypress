@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const allTransactions = gql`
-  query getAccountTransactions($userId: String!, $accountId: String!, $transactionDirection: [TransactionDirectionEnum], $dateFilterStart: String, $dateFilterStop: String, $offset: Int, $orderBy: OrderStatusEnum, $limit: Int) {
+  query getAccountTransactions($userId: String, $accountId: String!, $transactionDirection: [TransactionDirectionEnum], $dateFilterStart: String, $dateFilterStop: String, $offset: Int, $orderBy: OrderStatusEnum, $limit: Int) {
     getAccountTransactions(
       userId: $userId,
       accountId: $accountId,

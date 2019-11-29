@@ -5,8 +5,8 @@ import { forEach, sortBy, get, times } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { CANCEL_INVESTMENT } from '../../../constants/investment';
-import { getInvestorAccountPortfolio, getInvestorDetailsById, cancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
-import { userDetailsStore, userStore, uiStore, offeringCreationStore } from '../../index';
+import { getInvestorAccountPortfolio, getInvestmentDetails, cancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
+import { userDetailsStore, uiStore, offeringCreationStore } from '../../index';
 import Helper from '../../../../helper/utility';
 
 export class PortfolioStore {
@@ -115,15 +115,15 @@ export class PortfolioStore {
     const accountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     const investorUserDetails = userDetailsStore.getDetailsOfUser;
     const account = isAdmin ? accountDetails : userDetailsStore.currentActiveAccountDetails;
-    const userDetailsId = isAdmin ? investorUserDetails.id : userStore.currentUser.sub;
+    let variables = {
+      accountId: account.details.accountId,
+      offeringId: offeringCreationStore.currentOfferingId,
+    };
+    variables = isAdmin ? { ...variables, userId: investorUserDetails.id } : { ...variables };
     this.PayOffData = graphql({
       client,
       query: getMonthlyPaymentsToInvestorByOffering,
-      variables: {
-        userId: userDetailsId,
-        accountId: account.details.accountId,
-        offeringId: offeringCreationStore.currentOfferingId,
-      },
+      variables,
     });
   }
 
@@ -217,14 +217,15 @@ export class PortfolioStore {
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
     const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers
       : userDetailsStore.currentActiveAccountDetails;
-    const { userDetails, getDetailsOfUser } = userDetailsStore;
+    const { getDetailsOfUser } = userDetailsStore;
+    let variables = {
+      accountId: (account && account.details) ? account.details.accountId : null,
+    };
+    variables = this.isAdmin ? { ...variables, userId: getDetailsOfUser.id } : { ...variables };
     this.investmentLists = graphql({
       client,
       query: getInvestorAccountPortfolio,
-      variables: {
-        userId: this.isAdmin ? getDetailsOfUser.id : userDetails.id,
-        accountId: (account && account.details) ? account.details.accountId : null,
-      },
+      variables,
       // fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data && this.investmentLists && !this.investmentLists.loading) {
@@ -269,20 +270,18 @@ export class PortfolioStore {
     const investorAccountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     const investorDetails = userDetailsStore.getDetailsOfUser;
     const account = isAdmin ? investorAccountDetails : userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
-    const investorUserId = isAdmin ? investorDetails.id : userDetails.id;
+    let variables = {
+      accountId: account.details.accountId,
+      offeringId,
+    };
+    variables = isAdmin ? { ...variables, userId: investorDetails.id } : { ...variables };
     if (uiStore.inProgress !== 'portfolioDirect') {
       uiStore.setProgress('portfolio');
     }
     this.investmentDetails = graphql({
       client,
-      query: getInvestorDetailsById,
-      variables: {
-        // userId: userDetails.id,
-        userId: investorUserId,
-        accountId: account.details.accountId,
-        offeringId,
-      },
+      query: getInvestmentDetails,
+      variables,
       onFetch: () => {
         if (!this.investmentDetails.loading) {
           uiStore.setProgress(false);
@@ -311,8 +310,7 @@ export class PortfolioStore {
     const investorAccountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     const investorDetails = userDetailsStore.getDetailsOfUser;
     const account = isAdmin ? investorAccountDetails : userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
-    const investorUserId = isAdmin ? investorDetails.id : userDetails.id;
+    const investorUserId = isAdmin ? investorDetails.id : null;
     let variables = {
       agreementId,
     };
@@ -326,6 +324,10 @@ export class PortfolioStore {
         sendNotification: cancelAgreementData.sendNotification,
       };
     }
+    let reetchVariable = {
+      accountId: account.details.accountId,
+    };
+    reetchVariable = investorUserId ? { ...reetchVariable, userId: investorUserId } : { ...reetchVariable };
     uiStore.setProgress(true);
     return new Promise((resolve, reject) => {
       client
@@ -334,10 +336,7 @@ export class PortfolioStore {
           variables,
           refetchQueries: [{
             query: getInvestorAccountPortfolio,
-            variables: {
-              userId: investorUserId,
-              accountId: account.details.accountId,
-            },
+            variables: reetchVariable,
           }],
         })
         .then(() => {

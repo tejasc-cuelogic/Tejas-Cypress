@@ -18,49 +18,9 @@ export const getInvestorAvailableCash = gql`
   }
 `;
 
-export const validateInvestmentAmount = gql`
-  query validateInvestmentAmount(
-    $userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: Float!,
-    $autoDraftDeposit: Float, $creditToSpend: Float,
-    ){
-    validateInvestmentAmount(
-      userId: $userId
-      accountId: $accountId
-      offeringId: $offeringId
-      investmentAmount: $investmentAmount
-      autoDraftDeposit: $autoDraftDeposit
-      creditToSpend: $creditToSpend
-    )
-    {
-      status
-      message
-    }
-  }
-`;
-
-export const generateAgreement = gql`
-  mutation _generateAgreement($callbackUrl: String, $userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: Float!, $transferAmount: Float){
-    generateAgreement(
-      callbackUrl: $callbackUrl
-      userId: $userId
-      accountId: $accountId
-      offeringId: $offeringId
-      investmentAmount: $investmentAmount
-      transferAmount: $transferAmount
-    )
-    {
-      agreementId
-      envelopeId
-      docuSignViewURL
-      npaViewUrl
-    }
-  }
-`;
-
-export const finishInvestment = gql`
-  mutation _investNowSubmit($userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: String!, $agreementId: Int!, $transferAmount: String){
+export const investNowSubmit = gql`
+  mutation investNowSubmit($accountId: String!, $offeringId: String!, $investmentAmount: String!, $agreementId: Int!, $transferAmount: String){
     investNowSubmit(
-      userId: $userId
       accountId: $accountId
       offeringId: $offeringId
       investmentAmount: $investmentAmount
@@ -75,7 +35,7 @@ export const finishInvestment = gql`
 `;
 
 export const investNowGeneratePurchaseAgreement = gql`
-mutation investNowGeneratePurchaseAgreement($userId: String!,
+mutation investNowGeneratePurchaseAgreement(
   $accountId: String!,
   $offeringId: String!,
   $investmentAmount: String!,
@@ -83,7 +43,6 @@ mutation investNowGeneratePurchaseAgreement($userId: String!,
   $callbackUrl: String
 ) {
   investNowGeneratePurchaseAgreement(
-    userId: $userId,
     accountId: $accountId,
     offeringId: $offeringId,
     investmentAmount: $investmentAmount,

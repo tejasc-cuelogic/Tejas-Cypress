@@ -97,16 +97,16 @@ export class TransactionStore {
     this.resetData();
     const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers
       : userDetailsStore.currentActiveAccountDetails;
-    const { userDetails, getDetailsOfUser } = userDetailsStore;
-
+    const { getDetailsOfUser } = userDetailsStore;
+    let variables = {
+      accountId: account.details.accountId,
+      orderBy: (props && props.order) || 'DESC',
+    };
+    variables = this.isAdmin ? { ...variables, userId: getDetailsOfUser.id } : { ...variables };
     this.data = graphql({
       client,
       query: allTransactions,
-      variables: {
-        accountId: account.details.accountId,
-        userId: this.isAdmin ? getDetailsOfUser.id : userDetails.id,
-        orderBy: (props && props.order) || 'DESC',
-      },
+      variables,
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (props && props.statement && !this.data.loading) {

@@ -297,17 +297,12 @@ export class InvestmentLimitStore {
   @action
   getInvestedAmount = () => {
     const { accountList, isIndAccExist } = this.getActiveAccountList;
-    // const dateFilterStart = moment().subtract(1, 'y').toISOString();
-    // const dateFilterStop = moment().toISOString();
-    // const closeDateFilter = moment().subtract(1, 'y').toISOString();
     const closeDateinCST = DataFormatter.getCurrentCSTMoment().subtract(1, 'y');
     const closeDateinCSTFilter = moment(closeDateinCST).format('YYYY-MM-DD HH:mm:ss');
     accountList.forEach((account) => {
       if (account.name === this.currentAccountType) {
         this.getInvestorTotalAmountInvested(
           account.details.accountId,
-          // dateFilterStart,
-          // dateFilterStop,
           closeDateinCSTFilter,
         ).then((data) => {
           this.setFieldValue('investedAmount', parseFloat(data.getInvestorTotalAmountInvested.replace(/,/g, '') || 0));
@@ -318,8 +313,6 @@ export class InvestmentLimitStore {
       const individualAccount = find(this.activeAccounts, acc => acc.name === 'individual');
       this.getInvestorTotalAmountInvested(
         individualAccount.details.accountId,
-        // dateFilterStart,
-        // dateFilterStop,
         closeDateinCSTFilter,
       ).then((data) => {
         const investedAmount = parseFloat(data.getInvestorTotalAmountInvested.replace(/,/g, '') || 0)
@@ -336,10 +329,7 @@ export class InvestmentLimitStore {
         client,
         query: getInvestorTotalAmountInvested,
         variables: {
-          userId: userDetailsStore.currentUserId,
           accountId,
-          // dateFilterStart,
-          // dateFilterStop,
           closeDateFilter,
           includeTx: false,
         },

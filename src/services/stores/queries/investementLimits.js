@@ -21,9 +21,8 @@ export const getInvestorInvestmentLimit = gql`
 `;
 
 export const getInvestorTotalAmountInvested = gql`
-  query getInvestorTotalAmountInvested($userId: String, $accountId: String, $dateFilterStart: String, $dateFilterStop: String, $closeDateFilter: String, $includeTx: Boolean) {
+  query getInvestorTotalAmountInvested($accountId: String, $dateFilterStart: String, $dateFilterStop: String, $closeDateFilter: String, $includeTx: Boolean) {
     getInvestorTotalAmountInvested(
-      userId: $userId
       accountId: $accountId
       dateFilterStart: $dateFilterStart
       dateFilterStop: $dateFilterStop

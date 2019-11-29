@@ -45,7 +45,7 @@ export const allUsersQuery = gql`
 
 export const userDetailsQueryForBoxFolder = gql`
   query getUserDetails($userId: ID!) {
-    user(id: $userId) {
+    user(userId: $userId) {
       id
       storageDetails
     }
@@ -54,7 +54,7 @@ export const userDetailsQueryForBoxFolder = gql`
 
 export const userDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
-    user(id: $userId) {
+    user(userId: $userId) {
       id
       userHash
       wpUserId
@@ -267,7 +267,7 @@ export const userDetailsQuery = gql`
 
 export const selectedUserDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
-    user(id: $userId) {
+    user(userId: $userId) {
       id
       skipAddressVerifyCheck
       skipPhoneVerifyCheck
@@ -495,7 +495,7 @@ export const selectedUserDetailsQuery = gql`
 
 export const userAccreditationQuery = gql`
   query userAccreditationQuery($userId: ID!) {
-    user(id: $userId) {
+    user(userId: $userId) {
       id
       roles {
         name

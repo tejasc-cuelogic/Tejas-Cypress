@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const getInvestorAccountPortfolio = gql`
-query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlight: Boolean, $includeInterest: Boolean) {
+query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFlight: Boolean, $includeInterest: Boolean) {
   getInvestorAccountPortfolio(
     userId: $userId,
     accountId: $accountId,
@@ -145,8 +145,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
 }
 `;
 
-export const getInvestorDetailsById = gql`
-query getInvestmentDetails($userId: String!, $accountId: String!, $offeringId: String!) {
+export const getInvestmentDetails = gql`
+query getInvestmentDetails($userId: String, $accountId: String!, $offeringId: String!) {
   getInvestmentDetails(
     userId: $userId,
     accountId: $accountId,
