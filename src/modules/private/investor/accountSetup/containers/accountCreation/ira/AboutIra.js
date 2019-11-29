@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Divider, Button } from 'semantic-ui-react';
 
@@ -25,12 +25,15 @@ export default class AboutIra extends Component {
         </p>
         <Divider section hidden />
         <p>
-        Special Offer: For new NextSeed IRA accounts, NextSeed will cover the one-time setup fee and annual account fees for four years. For full details, go to the Terms and Conditions.
+        <b>Special Offer</b>: For new NextSeed IRA accounts, NextSeed will cover the one-time setup fee and annual account fees for four years. For full details, go to the <Link to="/agreements/legal/terms-of-use">Terms and Conditions </Link>.
         </p>
         <Divider section hidden />
         <p>
-        Questions? Please see our FAQs on IRAs.
+        Questions? Please see our <Link to="/">FAQs</Link> on IRAs.
         </p>
+        <small>
+        NextSeed is not a tax, investment or legal advisor and does not provide any tax, investment, or legal advice; please consult your own advisors or IRS guidelines to determine whether investing in NextSeed offerings through a self-directed IRA is right for you.
+        </small>
         <Divider section hidden />
           <Button fluid={isMobile} primary className="relaxed" content="Continue" onClick={this.handleChangeStep} />
         <Divider section hidden />
