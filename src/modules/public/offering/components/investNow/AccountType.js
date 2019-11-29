@@ -69,7 +69,7 @@ class AccountType extends Component {
     }
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if ((this.props.changeInvest && regulationType && regulationType !== 'BD_CF_506C') || (accountToConsider
+    } else if ((this.props.changeInvest && regulationType) || (accountToConsider
       && accountToConsider.length === 1 && isDocumentUpload === true)) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
@@ -131,6 +131,7 @@ class AccountType extends Component {
     const { activeAccounts, inprogressAccounts } = this.props.userDetailsStore.signupStatus;
     const userInfoDetails = this.props.userDetailsStore.userDetails;
     const userStatus = userInfoDetails && userInfoDetails.status;
+
     const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0)
       ? [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0)
         ? activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
