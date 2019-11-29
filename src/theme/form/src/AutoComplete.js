@@ -14,7 +14,7 @@ export default class AutoComplete extends Component {
     }
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     if (document.getElementsByClassName('pac-container')[0]) {
       document.getElementById('addressField').appendChild(document.getElementsByClassName('pac-container')[0]);
     }
