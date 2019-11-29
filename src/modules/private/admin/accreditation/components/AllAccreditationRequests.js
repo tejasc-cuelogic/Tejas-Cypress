@@ -204,7 +204,7 @@ export default class AllAccreditationRequests extends Component {
                           <p className={checkIsAccreditationExpiredAsperTimeZone(get(accreditation, 'expiration'), true) === 'EXPIRED' ? 'negative-text' : `${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}>
                             {checkIsAccreditationExpiredAsperTimeZone(get(accreditation, 'expiration'), true) === 'EXPIRED'
                               ? (
-                                <b>Expired on {get(accreditation, 'expiration') ? DataFormatter.getDateAsPerTimeZone(moment.unix(get(accreditation, 'expiration')), false, false, false, false) : '-'}</b>
+                                <b>Expired on {get(accreditation, 'expiration') ? DataFormatter.getDateAsPerTimeZone(moment.unix(get(accreditation, 'expiration')), false, false, false, false, 'CST', true) : '-'}</b>
                               )
                               : (
                                 <>

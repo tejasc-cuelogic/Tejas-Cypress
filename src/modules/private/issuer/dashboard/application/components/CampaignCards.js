@@ -78,6 +78,9 @@ const CampaignCards = (props) => {
                 }
               </dl>
               <Button inverted color="green" as={Link} to={`/offerings/${campaign.offeringSlug}`}>View Campaign</Button>
+              {['CREATION', 'STARTUP_PERIOD', 'LIVE', 'COMPLETE'].includes(campaign.stage)
+              && <Button inverted color="green" as={Link} to={`/app/offering/${campaign.id}/overview`}>Manage</Button>
+              }
             </Card.Content>
           </Card>
         ))
