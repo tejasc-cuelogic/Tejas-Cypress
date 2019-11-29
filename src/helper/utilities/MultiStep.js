@@ -53,16 +53,37 @@ export default class MultiStep extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps) {
+    const stateObj = {};
     if (typeof nextProps.stepToBeRendered !== 'undefined' && nextProps.stepToBeRendered !== '') {
-      this.setNavState(nextProps.stepToBeRendered);
+      stateObj.navState = getNavStates(
+        nextProps.stepToBeRendered, nextProps.steps.length,
+        nextProps.steps,
+      );
+      if (nextProps.stepToBeRendered < nextProps.steps.length) {
+        stateObj.compState = nextProps.stepToBeRendered;
+      }
+      if (nextProps.stepToBeRendered > 0 && nextProps.stepToBeRendered < nextProps.steps.length - 1) {
+        stateObj.showPreviousBtn = true;
+        stateObj.showNextBtn = true;
+      } else if (nextProps.stepToBeRendered === 0) {
+        stateObj.showPreviousBtn = !nextProps.disablePrevBtn;
+        stateObj.showNextBtn = true;
+      } else {
+        stateObj.showPreviousBtn = true;
+        stateObj.showNextBtn = false;
+      }
     }
     if (nextProps.stepToBeRendered > -1 && _.has(nextProps.steps[nextProps.stepToBeRendered], 'disableNxtBtn')) {
-      this.setState({ showNextBtn: !nextProps.steps[nextProps.stepToBeRendered].disableNxtBtn });
+      stateObj.showNextBtn = !nextProps.steps[nextProps.stepToBeRendered].disableNxtBtn;
     }
     if (typeof nextProps.disableNxtbtn !== 'undefined') {
-      this.setState({ showNextBtn: nextProps.disableNxtbtn });
+      stateObj.showNextBtn = nextProps.disableNxtbtn;
     }
+    if (!_.isEmpty(stateObj)) {
+      return stateObj;
+    }
+    return null;
   }
 
   getClassName(className, i) {

@@ -16,19 +16,21 @@ export default class Insights extends Component {
 
   constructor(props) {
     super(props);
+    if (!this.props.articleStore.InsightCategories.length) {
+      this.props.articleStore.getCategoryList(true);
+      this.props.articleStore.featuredRequestArticles();
+    }
     if (this.props.match.params && this.props.match.params.id) {
       const id = this.props.match.params.id === 'all' ? null : this.props.match.params.id;
       this.props.articleStore.requestAllArticles(true, false, id);
     } else {
       this.props.articleStore.requestAllArticles(true, false);
-      this.props.articleStore.featuredRequestArticles();
-      this.props.articleStore.getCategoryList(true);
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.match.params && nextProps.match.params.id) {
-      const id = nextProps.match.params.id === 'all' ? null : nextProps.match.params.id;
+  componentDidUpdate(prevProps) {
+    if (this.props.match.params && this.props.match.params.id !== prevProps.match.params.id) {
+      const id = this.props.match.params.id === 'all' ? null : this.props.match.params.id;
       this.props.articleStore
         .requestAllArticles(true, this.state.sortAsc, id);
     }
