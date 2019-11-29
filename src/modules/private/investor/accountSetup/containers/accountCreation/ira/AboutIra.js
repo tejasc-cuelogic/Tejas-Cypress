@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Divider, Button } from 'semantic-ui-react';
+import { Header, Divider, Button, Responsive } from 'semantic-ui-react';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -15,29 +15,28 @@ export default class AboutIra extends Component {
 
   render() {
     return (
-      <div className={isMobile ? '' : 'center-align'}>
-        <Header as={isMobile ? 'h4' : 'h3'}>
-        About Self-Directed IRAs on NextSeed
+      <>
+        <Header as="h3" className={isMobile ? '' : 'center-align'}>
+        About Self-Directed IRAs<Responsive minWidth={992} as={React.Fragment}><br /></Responsive>on NextSeed
         </Header>
-        {!isMobile && <Divider section className="small" hidden />}
         <p>
         A NextSeed self-directed IRA offers you the benefits of investing with a retirement account (Traditional and Roth IRA options available) while investing in a new asset class. Minimum opening deposit is $2,200 and Regulation Crowdfunding investment limits apply.
         </p>
-        <Divider section hidden />
+        <Divider hidden />
         <p>
         <b>Special Offer</b>: For new NextSeed IRA accounts, NextSeed will cover the one-time setup fee and annual account fees for four years. For full details, go to the <Link to="/agreements/legal/terms-of-use">Terms and Conditions </Link>.
         </p>
-        <Divider section hidden />
-        <p>
-        Questions? Please see our <Link to="/">FAQs</Link> on IRAs.
-        </p>
-        <small>
+        <Divider hidden />
+        <p>Questions? Please see our <Link to="/">FAQs</Link> on IRAs.</p>
+        <Divider hidden />
+        <p className={`${isMobile ? '' : 'center-align'} note grey-text`}>
         NextSeed is not a tax, investment or legal advisor and does not provide any tax, investment, or legal advice; please consult your own advisors or IRS guidelines to determine whether investing in NextSeed offerings through a self-directed IRA is right for you.
-        </small>
-        <Divider section hidden />
+        </p>
+        <Divider hidden />
+        <div className="center-align">
           <Button fluid={isMobile} primary className="relaxed" content="Continue" onClick={this.handleChangeStep} />
-        <Divider section hidden />
-      </div>
+        </div>
+      </>
     );
   }
 }
