@@ -82,24 +82,6 @@ export const editTeamMember = gql`
   }
 `;
 
-export const filteredTeamMembers = gql`
-  query filterTeamMemberByMemberName ($memberName: String){
-    filterTeamMemberByMemberName (memberName: $memberName){
-      id
-      memberName
-      avatar
-      story
-      title
-      heroImage
-      social {
-        type
-        url
-      }
-      order
-    }
-  }
-`;
-
 export const setMemberOrderInTeam = gql`
 mutation setMemberOrderInTeam($teamDetails: [TeamOrderInput]) {
   setMemberOrderInTeam(teamDetails: $teamDetails)

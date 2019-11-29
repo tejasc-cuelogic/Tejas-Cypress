@@ -31,15 +31,6 @@ export const addFundMutation = gql`
   }
 `;
 
-export const requestOptForTransaction = gql`
-  mutation _requestOtp($scopeType: mfaEnum!, $method: PhoneVerificationMethodsEnum!) {
-    requestOtp(scopeType: $scopeType, method: $method) {
-      requestId
-      phoneNumber
-    }
-  }
-`;
-
 export const withdrawFundMutation = gql`
   mutation withdrawFunds($userId: String, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int, $sendInvestorNotification: Boolean) {
     withdrawFunds(userId: $userId, amount: $amount, accountId: $accountId, description: $description, agreementId: $agreementId, sendInvestorNotification: $sendInvestorNotification)

@@ -7,7 +7,7 @@ import money from 'money-math';
 import { get, orderBy, isArray, filter, forEach } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { ClientDb, FormValidator as Validator, DataFormatter } from '../../../../helper';
-import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
+import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
 import { getInvestorAvailableCash } from '../../queries/investNow';
 import { requestOtp, verifyOtp } from '../../queries/profile';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
@@ -385,33 +385,6 @@ export class TransactionStore {
   @action
   setReSendVerificationCode(value) {
     this.reSendVerificationCode = value;
-  }
-
-  @action
-  requestOtpForManageAddWithdrawTransactions = () => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: requestOptForTransaction,
-          variables: {
-            scopeType: 'TRANSFER',
-            method: 'sms',
-          },
-        })
-        .then((result) => {
-          this.transactionOtpRequestId = result.data.requestOtp.requestId;
-          this.setPhoneNumber(result.data.requestOtp.phoneNumber);
-          resolve();
-        })
-        .catch((error) => {
-          uiStore.setErrors(error.message);
-          reject(error);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
   }
 
   @action
