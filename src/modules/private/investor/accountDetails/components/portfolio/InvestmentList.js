@@ -145,6 +145,7 @@ const InvestmentList = (props) => {
                     && (
                       <Table.HeaderCell textAlign="right">{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
                     )}
+                    <Table.HeaderCell colSpan="1" />
                   </Table.Row>
                 </Table.Footer>
               </Table>
