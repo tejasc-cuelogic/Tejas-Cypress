@@ -8,6 +8,7 @@ import Identity from './Identity';
 import Summary from './Summary';
 import { validationActions } from '../../../../../../../services/actions';
 import { Plaid } from '../../../../../shared/bankAccount';
+import AboutIra from './AboutIra';
 
 @inject('uiStore', 'accountStore', 'iraAccountStore', 'userDetailsStore', 'userStore', 'bankAccountStore')
 @observer
@@ -84,6 +85,14 @@ export default class AccountCreation extends React.Component {
     if (FUNDING_FRM.fields.fundingType.value === 0) {
       steps = [
         {
+          name: '',
+          component: <AboutIra />,
+          isValid: false,
+          isDirty: false,
+          form: '',
+          stepToBeRendered: 1,
+        },
+        {
           name: 'Financial info',
           component: <FinancialInformation />,
           isValid: FIN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 0 ? 'error' : FIN_INFO_FRM.meta.isDirty ? 'error' : '',
@@ -91,7 +100,7 @@ export default class AccountCreation extends React.Component {
           validate: validationActions.validateIRAForm,
           form: 'FIN_INFO_FRM',
           validForm: FIN_INFO_FRM.meta.isValid,
-          stepToBeRendered: 1,
+          stepToBeRendered: 2,
           disableKeyDown: true,
           bankSummary: false,
         },
@@ -102,7 +111,7 @@ export default class AccountCreation extends React.Component {
           validate: validationActions.validateIRAForm,
           isDirty: ACC_TYPES_FRM.meta.isDirty,
           form: 'ACC_TYPES_FRM',
-          stepToBeRendered: 2,
+          stepToBeRendered: 3,
           validForm: ACC_TYPES_FRM.meta.isValid,
           disableKeyDown: true,
           bankSummary: false,
@@ -114,7 +123,7 @@ export default class AccountCreation extends React.Component {
           isValid: FUNDING_FRM.meta.isValid ? '' : stepToBeRendered > 2 ? 'error' : '',
           isDirty: FUNDING_FRM.meta.isDirty,
           form: 'FUNDING_FRM',
-          stepToBeRendered: 3,
+          stepToBeRendered: 4,
           disableKeyDown: true,
           validForm: FUNDING_FRM.meta.isValid,
           bankSummary: false,
@@ -126,7 +135,7 @@ export default class AccountCreation extends React.Component {
           isDirty: isPlaidDirty,
           disableNextButton: !linkbankSummary,
           validate: validationActions.validateLinkBankForm,
-          stepToBeRendered: 4,
+          stepToBeRendered: 5,
           disableKeyDown: true,
           validForm: isAccountPresent,
           bankSummary: linkbankSummary,
@@ -140,7 +149,7 @@ export default class AccountCreation extends React.Component {
           form: 'IDENTITY_FRM',
           disableKeyDown: true,
           validForm: IDENTITY_FRM.meta.isValid,
-          stepToBeRendered: 5,
+          stepToBeRendered: 6,
           bankSummary: false,
         },
         {
@@ -154,13 +163,21 @@ export default class AccountCreation extends React.Component {
     } else {
       steps = [
         {
+          name: '',
+          component: <AboutIra />,
+          isValid: false,
+          isDirty: false,
+          form: '',
+          stepToBeRendered: 1,
+        },
+        {
           name: 'Financial info',
           component: <FinancialInformation />,
           isValid: FIN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 0 ? 'error' : FIN_INFO_FRM.meta.isDirty ? 'error' : '',
           isDirty: FIN_INFO_FRM.meta.isDirty,
           validate: validationActions.validateIRAForm,
           form: 'FIN_INFO_FRM',
-          stepToBeRendered: 1,
+          stepToBeRendered: 2,
           disableKeyDown: true,
           validForm: FIN_INFO_FRM.meta.isValid,
           bankSummary: false,
@@ -172,7 +189,7 @@ export default class AccountCreation extends React.Component {
           isValid: ACC_TYPES_FRM.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
           isDirty: ACC_TYPES_FRM.meta.isDirty,
           form: 'ACC_TYPES_FRM',
-          stepToBeRendered: 2,
+          stepToBeRendered: 3,
           disableKeyDown: true,
           validForm: ACC_TYPES_FRM.meta.isValid,
           bankSummary: false,
@@ -184,7 +201,7 @@ export default class AccountCreation extends React.Component {
           isValid: FUNDING_FRM.meta.isValid ? '' : stepToBeRendered > 2 ? 'error' : '',
           isDirty: FUNDING_FRM.meta.isDirty,
           form: 'FUNDING_FRM',
-          stepToBeRendered: 3,
+          stepToBeRendered: 4,
           disableKeyDown: true,
           validForm: FUNDING_FRM.meta.isValid,
           bankSummary: false,
@@ -196,7 +213,7 @@ export default class AccountCreation extends React.Component {
           isDirty: IDENTITY_FRM.meta.isDirty,
           validate: validationActions.validateIRAForm,
           form: 'IDENTITY_FRM',
-          stepToBeRendered: 4,
+          stepToBeRendered: 5,
           disableKeyDown: true,
           validForm: IDENTITY_FRM.meta.isValid,
           bankSummary: false,
