@@ -109,7 +109,7 @@ export default class Plaid extends Component {
     return (
       <>
         <div className={isMobile ? '' : 'center-align'}>
-          <Header as="h4">{headerText}</Header>
+          <Header as="h3">{headerText}</Header>
           <p className="mb-30">{subHeaderText}</p>
           <Form>
             <Input

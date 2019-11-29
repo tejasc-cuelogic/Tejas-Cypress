@@ -63,7 +63,7 @@ export default class Summary extends Component {
     const { taxId, name, street, state, city, zipCode } = GEN_INFO_FRM.fields;
     return (
       <>
-        <Header as="h4" textAlign={isMobile ? '' : 'center'}>Verify information and submit for review</Header>
+        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Verify information and submit for review</Header>
         <div className={isMobile ? '' : 'field-wrap'}>
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>

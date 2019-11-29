@@ -65,6 +65,11 @@
         }
         >label{
             line-height:@18px;
+            &.dotted-tooltip {
+                border-bottom: 1px dotted;
+                display: inline-block;
+                cursor: pointer;
+            }
         }
         > .ui.label{
             background:transparent;

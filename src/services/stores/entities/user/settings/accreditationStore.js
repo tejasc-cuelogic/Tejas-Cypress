@@ -990,7 +990,7 @@ export class AccreditationStore {
     if (expirationDate) {
       const date = (isUnix && typeof expirationDate === 'string') ? parseInt(expirationDate) : expirationDate;
       dateDiff = DataFormatter.getDateDifferenceInHoursOrMinutes(DataFormatter.formatedDate(date, isUnix), true);
-      return dateDiff < 0 ? 'EXPIRED' : 'ACTIVE';
+      return dateDiff <= 0 ? 'EXPIRED' : 'ACTIVE';
     }
     return dateDiff;
   }

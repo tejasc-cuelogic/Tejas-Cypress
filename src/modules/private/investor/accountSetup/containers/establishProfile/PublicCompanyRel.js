@@ -39,7 +39,7 @@ export default class PublicCompanyRel extends Component {
     return (
       <div className={isMobile ? '' : 'center-align'}>
         {/* <Header as="h3">Public Company Relations</Header> */}
-        <Header as="h4">
+        <Header as="h3">
 Are you (or an immediate family member) a 10% shareholder,
           director or senior officer at a publicly traded U.S. company?
         </Header>

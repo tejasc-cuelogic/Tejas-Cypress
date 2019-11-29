@@ -33,7 +33,7 @@ export default class PersonalInformation extends Component {
     const { errors } = this.props.uiStore;
     return (
       <>
-      <Header as="h4" textAlign={isMobile ? '' : 'center'}>Authorized Signatory Information</Header>
+      <Header as="h3" textAlign={isMobile ? '' : 'center'}>Authorized Signatory Informaiton</Header>
         <p className={`${isMobile ? 'mb-30 mt-0' : 'center-align'} account-type-tab`}>Please provide your title and a copy of your photo ID.</p>
         <p className="grey-header"><b>Authorized Signatory’s</b></p>
         <Form error>

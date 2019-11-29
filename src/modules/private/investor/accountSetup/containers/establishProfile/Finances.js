@@ -20,7 +20,7 @@ export default class Finances extends Component {
     const { errors, multiSteps } = this.props.uiStore;
     return (
       <div className={isMobile ? '' : 'center-align'}>
-        <Header as="h4">
+        <Header as="h3">
           What is your household
             {"'"}
           s annual income and net worth?

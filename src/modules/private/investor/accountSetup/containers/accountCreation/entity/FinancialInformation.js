@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Divider, Button } from 'semantic-ui-react';
+import { Header, Form, Divider, Button, Responsive } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
@@ -30,7 +30,7 @@ export default class FinancialInformation extends Component {
     const isValidInvLimit = FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '';
     return (
       <>
-      <Header as="h4" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
+      <Header as="h3" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
         <p className={isMobile ? '' : 'center-align'}>
           Your entity{"'"}s net assets and annual revenue are used to determine your 12-month investment limit under Regulation Crowdfunding.
         </p>
@@ -62,18 +62,25 @@ export default class FinancialInformation extends Component {
             </p>
             {/* <p className="grey-header">Your investment limit:<span className="highlight-text
           large ml-10">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}</span></p>
-          */}
+        */}
+            {isValidInvLimit && isMobile
+            && (
+            <p className="negative-text">
+              Based on your entity{"'"}s net assets and annual income, your 12-month investment limit is $[XXX].<Responsive minWidth={992}><br /></Responsive>
+              This is below the $5,000 minimum opening deposit.
+            </p>
+            )
+            }
             <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20' : ''} link`}>How is this calculated?</a>
           </div>
-          {isValidInvLimit
-          && (
-          <p className={`${isMobile ? '' : 'center-align'} negative-text`}>
-            Based on your entity&apos;s net assets and annual income, your 12-month investment
-            limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}.
-            This is below the $5,000 minimum opening deposit.
-          </p>
-          )
-          }
+          {isValidInvLimit && !isMobile
+            && (
+            <p className="center-align negative-text">
+              Based on your entity{"'"}s net assets and annual income, your 12-month investment limit is $[XXX].<Responsive minWidth={992}><br /></Responsive>
+              This is below the $5,000 minimum opening deposit.
+            </p>
+            )
+            }
           {isMobile && (
               <Button fluid primary className="relaxed mt-20" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
           )

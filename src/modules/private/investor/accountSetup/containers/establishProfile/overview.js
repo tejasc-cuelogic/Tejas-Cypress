@@ -18,7 +18,7 @@ export default class Overview extends Component {
     const { signupStatus } = this.props.userDetailsStore;
     const overviewInfo = (
       <>
-        <Header as={isMobile ? 'h4' : 'h3'}>
+        <Header as="h3">
           {signupStatus.isMigratedFullAccount
             ? <>Please establish your<Responsive minWidth={992}><br /></Responsive>investor profile</>
             : <>Let{"'"}s get started</>

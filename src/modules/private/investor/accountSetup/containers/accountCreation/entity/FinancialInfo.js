@@ -42,7 +42,7 @@ export default class AccountType extends Component {
     return (
       <div>
         {!isTrustSelected && (
-        <Header as="h4" textAlign={isMobile ? 'mb-20' : 'center'}>Is this entity a trust?</Header>)
+        <Header as="h3" textAlign={isMobile ? 'mb-20' : 'center'}>Is this entity a trust?</Header>)
         }
         <Form error className={`${isMobile ? 'mb-30 mt-0' : ''} account-type-tab`}>
           <>

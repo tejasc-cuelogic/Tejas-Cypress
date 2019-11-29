@@ -253,8 +253,8 @@ export class CampaignStore {
   @computed get campaign() {
     if (this.details.data && this.details.data.getOfferingDetailsBySlug) {
       return toJS(this.details.data.getOfferingDetailsBySlug);
-    } if (this.details.data && this.details.data.getOfferingDetailsById) {
-      return toJS(this.details.data.getOfferingDetailsById);
+    } if (this.details.data && this.details.data.getOfferingById) {
+      return toJS(this.details.data.getOfferingById);
     }
     return {};
   }
