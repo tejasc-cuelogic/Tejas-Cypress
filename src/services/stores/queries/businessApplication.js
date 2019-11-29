@@ -1,32 +1,5 @@
 import gql from 'graphql-tag';
 
-export const allBusinessApplicationses = gql`
-query allBusinessApplicationses($filters: BusinessApplicationsFilter){
-  allBusinessApplicationses(filter: $filters){
-    id
-    applicationStatus
-    businessDetailsStatus
-    businessDocumentationStatus
-    businessName
-    businessPerformanceStatus
-    commentContent
-    commentDate
-    commentUser
-    createdDate
-    email
-    name
-    phone
-    ratings
-    updatedDate
-    failedReasons
-    status
-  }
-  _allBusinessApplicationsesMeta(filter: $filters){
-    count
-  }
-}
-`;
-
 export const getBusinessApplicationAdmin = gql`
 query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String, $lek: String){
   businessApplicationsAdmin(
@@ -485,24 +458,6 @@ mutation updateApplicationData(
     approvedStatus: $approvedStatus
     temporaryPassword: $temporaryPassword
   )
-}
-`;
-
-export const updateBusinessApplicationInformationData = gql`
-mutation updateBusinessApplicationInformation(
-  $applicationId: String!
-  $issuerId: String!
-  $review: BusinessApplicationReviewInput
-  $offers: OffersReviewInput
-) {
-  updateBusinessApplicationInformation(
-    applicationId: $applicationId
-    issuerId: $issuerId
-    review: $review
-    offers: $offers
-  ){
-    applicationStatus
-  }
 }
 `;
 

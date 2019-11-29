@@ -1,9 +1,8 @@
 import gql from 'graphql-tag';
 
 export const updateInvestmentLimits = gql`
-  mutation _updateInvestmentLimits($userId: String, $accountId: String!, $annualIncome: Float, $netWorth: Float, $otherRegCfInvestments: Float){
+  mutation updateInvestmentLimits($accountId: String!, $annualIncome: Float, $netWorth: Float, $otherRegCfInvestments: Float){
     updateInvestmentLimits(
-      userId: $userId
       accountId: $accountId
       annualIncome: $annualIncome
       netWorth: $netWorth
@@ -16,15 +15,14 @@ export const updateInvestmentLimits = gql`
 `;
 
 export const getInvestorInvestmentLimit = gql`
-  query getInvestorInvestmentLimit($userId: String!, $accountId: String!) {
-    getInvestorInvestmentLimit(userId: $userId, accountId: $accountId)
+  query getInvestorInvestmentLimit($accountId: String!) {
+    getInvestorInvestmentLimit(accountId: $accountId)
   }
 `;
 
 export const getInvestorTotalAmountInvested = gql`
-  query getInvestorTotalAmountInvested($userId: String, $accountId: String, $dateFilterStart: String, $dateFilterStop: String, $closeDateFilter: String, $includeTx: Boolean) {
+  query getInvestorTotalAmountInvested($accountId: String, $dateFilterStart: String, $dateFilterStop: String, $closeDateFilter: String, $includeTx: Boolean) {
     getInvestorTotalAmountInvested(
-      userId: $userId
       accountId: $accountId
       dateFilterStart: $dateFilterStart
       dateFilterStop: $dateFilterStop
@@ -35,8 +33,8 @@ export const getInvestorTotalAmountInvested = gql`
 `;
 
 export const getInvestNowHealthCheck = gql`
-  query investNowHealthCheck($userId: String!, $accountId: String!, $offeringId: String!) {
-    investNowHealthCheck(userId: $userId, accountId: $accountId, offeringId: $offeringId)
+  query investNowHealthCheck($accountId: String!, $offeringId: String!) {
+    investNowHealthCheck(accountId: $accountId, offeringId: $offeringId)
     {
       investmentLimit
       availableCash

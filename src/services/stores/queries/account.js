@@ -1,21 +1,5 @@
 import gql from 'graphql-tag';
 
-export const createAccount = gql`
-  mutation _createAccount($accountAttributes: AccountInputType! $accountStatus: InvestorAccountStatusEnum! $accountType: UserAccountTypeEnum!) {
-    createInvestorAccount(
-      accountAttributes: $accountAttributes
-      accountStatus: $accountStatus
-      accountType: $accountType
-    ) {
-      accountId
-      accountType
-      accountStatus
-      startedDate
-      finishedDate
-      accountDetails
-    }
-  }`;
-
 export const upsertInvestorAccount = gql`
   mutation _upsertInvestorAccount($accountId: String $accountAttributes: AccountInputType! $accountType: InvestorAccountTypeEnum!) {
     upsertInvestorAccount(
@@ -68,20 +52,6 @@ query isUniqueTaxId($taxId: String!) {
     alreadyExists
   }
 }`;
-
-export const createIndividual = gql`
-  mutation createIndividiaul($accountAttributes: AccountInputType!, $accountStatus: InvestorAccountStatusEnum!, $accountType: InvestorAccountTypeEnum!){
-    createInvestorAccount(accountAttributes: $accountAttributes, accountStatus: $accountStatus, accountType: $accountType){
-      userId
-      accountId
-      linkedBank {
-        accountNumber
-        routingNumber
-        bankName
-      }
-      accountType
-    }
-  }`;
 
 export const crowdPayAccountNotifyGs = gql`
   mutation _crowdPayAccountNotifyGS($userId: String, $accountId: String!) {

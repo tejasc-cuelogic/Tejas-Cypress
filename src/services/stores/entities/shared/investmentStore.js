@@ -1,22 +1,14 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { capitalize, orderBy, mapValues, get, includes } from 'lodash';
 import { Calculator } from 'amortizejs';
-import graphql from 'mobx-apollo';
 import money from 'money-math';
 import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO, PREFERRED_EQUITY_INVESTMENT_INFO } from '../../../constants/investment';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore, campaignStore, portfolioStore, investmentLimitStore } from '../../index';
-import {
-  getAmountInvestedInCampaign,
-  validateInvestmentAmount, getInvestorInFlightCash,
-  generateAgreement, finishInvestment, transferFundsForInvestment,
-  investNowGeneratePurchaseAgreement,
-} from '../../queries/investNow';
+import { investNowSubmit, investNowGeneratePurchaseAgreement } from '../../queries/investNow';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
-
-// import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
 
 export class InvestmentStore {
   @observable INVESTMONEY_FORM = Validator.prepareFormObject(INVESTMENT_INFO);
@@ -287,23 +279,6 @@ export class InvestmentStore {
   }
 
   @action
-  getAmountInvestedInCampaign = () => {
-    this.details = graphql({
-      client,
-      query: getAmountInvestedInCampaign,
-      variables: {
-        // offeringId,
-        userId: userDetailsStore.currentUserId,
-        // accountId,
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-      },
-      fetchPolicy: 'network-only',
-    });
-  }
-
-  @action
   validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {
     uiStore.setProgress();
     if (this.investmentAmount) {
@@ -331,7 +306,6 @@ export class InvestmentStore {
             variables: {
               investmentAmount: this.investmentAmount.toString(),
               offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
-              userId: userDetailsStore.currentUserId,
               accountId: this.getSelectedAccountTypeId,
               transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
               // creditToSpend: this.getSpendCreditValue,
@@ -398,112 +372,26 @@ export class InvestmentStore {
   }
 
   @action
-  validateInvestmentAmount = () => new Promise((resolve, reject) => {
-    graphql({
-      client,
-      query: validateInvestmentAmount,
-      variables: {
-        userId: userDetailsStore.currentUserId,
-        accountId: this.getSelectedAccountTypeId,
-        offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
-        investmentAmount: this.investmentAmount,
-        autoDraftDeposit: this.getTransferRequestAmount,
-        creditToSpend: this.getSpendCreditValue,
-      },
-      onFetch: (data) => {
-        if (data) {
-          const { status, message } = data.validateInvestmentAmount;
-          const errorMessage = !status ? message : null;
-          this.setFieldValue('investmentFlowErrorMessage', errorMessage);
-          resolve(status);
-        }
-        if (!data.validateInvestmentAmount) {
-          this.setShowTransferRequestErr(true);
-        }
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-        this.setShowTransferRequestErr(true);
-        reject();
-      },
-      fetchPolicy: 'network-only',
-    });
-  });
-
-  @action
-  getInvestorInFlightCash = () => {
-    this.details = graphql({
-      client,
-      query: getInvestorInFlightCash,
-      variables: {
-        userId: userDetailsStore.currentUserId,
-        // accountId,
-        // isAutoDraft,
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-      },
-      fetchPolicy: 'network-only',
-    });
-  }
-
-  @action
-  generateAgreement = () => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: generateAgreement,
-          variables: {
-            userId: userDetailsStore.currentUserId,
-            accountId: this.getSelectedAccountTypeId,
-            offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
-            investmentAmount: this.investmentAmount,
-            creditToSpend: this.getSpendCreditValue,
-            callbackUrl: `${window.location.origin}/secure-gateway`,
-          },
-          // refetchQueries: [{ query: getBusinessApplications }],
-        })
-        .then((data) => {
-          this.setFieldValue('agreementDetails', data.data.generateAgreement);
-          resolve(data.data.generateAgreement);
-        })
-        .catch((error) => {
-          Helper.toast(error.message, 'error');
-          this.setShowTransferRequestErr(true);
-          uiStore.setErrors(error.message);
-          reject();
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
-  }
-
-  @action
-  finishInvestment = () => {
+  investNowSubmit = () => {
     const offeringIdToUpdate = campaignStore.getOfferingId
       ? campaignStore.getOfferingId : portfolioStore.currentOfferingId;
     if (this.agreementDetails && offeringIdToUpdate) {
-      const varObj = {
-        userId: userDetailsStore.currentUserId,
+      const variables = {
         accountId: this.getSelectedAccountTypeId,
         offeringId: offeringIdToUpdate,
         investmentAmount: this.investmentAmount.toString(),
         agreementId: this.agreementDetails.agreementId,
-        // transferAmount: this.getTransferRequestAmount,
         transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount.toString() : '0',
       };
       uiStore.setProgress();
       return new Promise((resolve) => {
         client
           .mutate({
-            mutation: finishInvestment,
-            variables: varObj,
+            mutation: investNowSubmit,
+            variables,
             refetchQueries: [{
               query: getInvestorAccountPortfolio,
               variables: {
-                userId: userDetailsStore.currentUserId,
                 accountId: this.getSelectedAccountTypeId,
               },
             }],
@@ -529,32 +417,6 @@ export class InvestmentStore {
       });
     }
     return false;
-  }
-
-  @action
-  transferFundsForInvestment = () => {
-    uiStore.setProgress();
-    return new Promise((resolve) => {
-      client
-        .mutate({
-          mutation: transferFundsForInvestment,
-          variables: {
-            userId: userDetailsStore.currentUserId,
-            accountId: this.getSelectedAccountTypeId,
-            transferAmount: this.getSpendCreditValue,
-          },
-        })
-        .then((data) => {
-          resolve(data.data.transferFundsForInvestment);
-        })
-        .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(error.message);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
   }
 
   @computed get validBonusRewards() {
@@ -603,8 +465,7 @@ export class InvestmentStore {
     const data = mapValues(this.INVESTMENT_LIMITS_FORM.fields, f => parseInt(f.value, 10));
     investmentLimitStore
       .updateInvestmentLimits(
-        data, this.getSelectedAccountTypeId,
-        userDetailsStore.currentUserId, true, offeringId,
+        data, this.getSelectedAccountTypeId, true, offeringId,
       )
       .then(() => resolve());
   })

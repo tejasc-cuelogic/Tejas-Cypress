@@ -68,7 +68,7 @@ export default class Agreement extends React.Component {
     if (this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid) {
       this.setState({ showError: false });
       this.props.investmentStore.setFieldValue('investmentFlowErrorMessage', null);
-      this.props.investmentStore.finishInvestment().then((investmentStatus) => {
+      this.props.investmentStore.investNowSubmit().then((investmentStatus) => {
         if (investmentStatus) {
           console.log(this.props);
           this.props.history.push('congratulation');

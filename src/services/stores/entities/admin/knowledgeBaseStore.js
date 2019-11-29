@@ -7,7 +7,7 @@ import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { KNOWLEDGE_BASE, CATEGORY_TYPES } from '../../../constants/admin/knowledgeBase';
-import { getKnowledgeBaseDetails, getKnowledgeBaseById, createKnowledgeBase, updateKnowledgeBase, deleteKBById, getAllKnowledgeBaseByFilters, updateKnowledgeBaseItem, deleteKnowledgeBaseItem, setOrderForKnowledgeBase } from '../../queries/knowledgeBase';
+import { getKnowledgeBaseDetails, getKnowledgeBaseById, createKnowledgeBase, updateKnowledgeBase, deleteKBById, getAllKnowledgeBaseByFilters, setOrderForKnowledgeBase } from '../../queries/knowledgeBase';
 import { getCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
 import { uiStore } from '../../index';
@@ -437,55 +437,10 @@ export class KnowledgeBaseStore {
   }
 
   @action
-  applyGlobalAction = () => {
-    const idArr = this.selectedRecords;
-    const status = this.globalAction;
-    this.data.loading = true;
-    if (status === 'delete') {
-      this.deleteRecords(idArr);
-    } else {
-      this.updateRecordStatus(idArr, status);
-    }
-  }
-
-  @action
   resetSelectedRecords = () => {
     this.selectedRecords = [];
     this.isReadOnly = true;
     this.globalAction = '';
-  }
-
-  updateRecordStatus = (id, status) => {
-    client.mutate({
-      mutation: updateKnowledgeBaseItem,
-      variables: {
-        id,
-        status,
-      },
-      refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
-    }).then(() => {
-      this.resetSelectedRecords();
-      Helper.toast('Status updated successfully.', 'success');
-    }).catch(() => {
-      this.resetSelectedRecords();
-      Helper.toast('Error while updating status.', 'error');
-    });
-  }
-
-  deleteRecords = (id) => {
-    client.mutate({
-      mutation: deleteKnowledgeBaseItem,
-      variables: {
-        id,
-      },
-      refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
-    }).then(() => {
-      this.resetSelectedRecords();
-      Helper.toast('Records deleted successfully.', 'success');
-    }).catch(() => {
-      this.resetSelectedRecords();
-      Helper.toast('Error while deleting records.', 'error');
-    });
   }
 
   @action

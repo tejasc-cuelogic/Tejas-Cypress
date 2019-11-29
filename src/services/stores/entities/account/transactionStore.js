@@ -7,7 +7,7 @@ import money from 'money-math';
 import { get, orderBy, isArray, filter, forEach } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { ClientDb, FormValidator as Validator, DataFormatter } from '../../../../helper';
-import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
+import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
 import { getInvestorAvailableCash } from '../../queries/investNow';
 import { requestOtp, verifyOtp } from '../../queries/profile';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
@@ -97,16 +97,16 @@ export class TransactionStore {
     this.resetData();
     const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers
       : userDetailsStore.currentActiveAccountDetails;
-    const { userDetails, getDetailsOfUser } = userDetailsStore;
-
+    const { getDetailsOfUser } = userDetailsStore;
+    let variables = {
+      accountId: account.details.accountId,
+      orderBy: (props && props.order) || 'DESC',
+    };
+    variables = this.isAdmin ? { ...variables, userId: getDetailsOfUser.id } : { ...variables };
     this.data = graphql({
       client,
       query: allTransactions,
-      variables: {
-        accountId: account.details.accountId,
-        userId: this.isAdmin ? getDetailsOfUser.id : userDetails.id,
-        orderBy: (props && props.order) || 'DESC',
-      },
+      variables,
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (props && props.statement && !this.data.loading) {
@@ -334,20 +334,18 @@ export class TransactionStore {
   addFunds = (amount, description) => {
     uiStore.setProgress(true);
     const account = userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: addFundMutation,
           variables: {
-            userId: userDetails.id,
             amount,
             accountId: account.details.accountId,
             description,
           },
           refetchQueries: [{
             query: getInvestorAccountPortfolio,
-            variables: { userId: userDetails.id, accountId: account.details.accountId },
+            variables: { accountId: account.details.accountId },
           }],
         })
         .then(() => {
@@ -387,33 +385,6 @@ export class TransactionStore {
   @action
   setReSendVerificationCode(value) {
     this.reSendVerificationCode = value;
-  }
-
-  @action
-  requestOtpForManageAddWithdrawTransactions = () => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: requestOptForTransaction,
-          variables: {
-            scopeType: 'TRANSFER',
-            method: 'sms',
-          },
-        })
-        .then((result) => {
-          this.transactionOtpRequestId = result.data.requestOtp.requestId;
-          this.setPhoneNumber(result.data.requestOtp.phoneNumber);
-          resolve();
-        })
-        .catch((error) => {
-          uiStore.setErrors(error.message);
-          reject(error);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
   }
 
   @action
@@ -506,20 +477,18 @@ export class TransactionStore {
   withdrawFunds = (amount, description) => {
     uiStore.setProgress(true);
     const account = userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: withdrawFundMutation,
           variables: {
-            userId: userDetails.id,
             amount,
             accountId: account.details.accountId,
             description,
           },
           refetchQueries: [{
             query: getInvestorAccountPortfolio,
-            variables: { userId: userDetails.id, accountId: account.details.accountId },
+            variables: { accountId: account.details.accountId },
           }],
         })
         .then(() => {
@@ -595,15 +564,16 @@ export class TransactionStore {
   @action
   getInvestmentsByOfferingId = isAdmin => new Promise((resolve, reject) => {
     const investorDetail = userDetailsStore.getDetailsOfUser;
-    const userDetailId = isAdmin ? investorDetail.id : get(userDetailsStore, 'userDetails.id');
+    const userDetailId = isAdmin ? investorDetail.id : null;
+    let params = {
+      offeringId: offeringCreationStore.currentOfferingId,
+    };
+    params = userDetailId ? { ...params, userId: userDetailId } : { ...params };
     this.agreementIds = [];
     this.investmentsByOffering = graphql({
       client,
       query: getInvestmentsByUserIdAndOfferingId,
-      variables: {
-        offeringId: offeringCreationStore.currentOfferingId,
-        userId: userDetailId,
-      },
+      variables: params,
       onFetch: (data) => {
         if (data && !this.investmentsByOffering.loading) {
           const account = !isAdmin ? userDetailsStore.currentActiveAccountDetails
