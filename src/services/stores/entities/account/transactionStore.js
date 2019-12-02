@@ -511,16 +511,17 @@ export class TransactionStore {
   getInvestorAvailableCash = (includeInFlight = true, isAdmin = false) => {
     const account = !isAdmin ? userDetailsStore.currentActiveAccountDetails
       : userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
-    const { userDetails, getDetailsOfUser } = userDetailsStore;
+    const { getDetailsOfUser } = userDetailsStore;
+    let variables = {
+      accountId: account.details.accountId,
+      includeInFlight,
+    };
+    variables = isAdmin ? { ...variables, userId: getDetailsOfUser.id } : { ...variables };
     return new Promise((resolve, reject) => {
       this.cashAvailable = graphql({
         client,
         query: getInvestorAvailableCash,
-        variables: {
-          userId: !isAdmin ? userDetails.id : getDetailsOfUser.id,
-          accountId: account.details.accountId,
-          includeInFlight,
-        },
+        variables,
         onFetch: (data) => {
           if (data && !this.cashAvailable.loading) {
             if (!isAdmin) {

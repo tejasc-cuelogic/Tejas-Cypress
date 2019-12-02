@@ -54,7 +54,7 @@ query isUniqueTaxId($taxId: String!) {
 }`;
 
 export const crowdPayAccountNotifyGs = gql`
-  mutation _crowdPayAccountNotifyGS($userId: String, $accountId: String!) {
+  mutation crowdPayAccountNotifyGS($userId: String!, $accountId: String!) {
     crowdPayAccountNotifyGS(
       userId: $userId
       accountId: $accountId

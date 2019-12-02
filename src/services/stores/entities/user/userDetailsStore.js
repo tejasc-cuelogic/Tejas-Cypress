@@ -793,10 +793,8 @@ export class UserDetailsStore {
   @action sendAdminEmailOfFrozenAccount = (activity, offeringId) => {
     const selectedAccount = this.currentActiveAccountDetails;
     const forzenAccountId = get(selectedAccount, 'details.accountId');
-    // selectedAccount && selectedAccount.details && selectedAccount.details.accountId ?
-    //  selectedAccount.details.accountId : '537fd0c0-1fc3-11e9-9cfb-1b268dcc26c4';
     const payLoad = {
-      userId: this.currentUserId, accountId: forzenAccountId, activity, offeringId,
+      accountId: forzenAccountId, activity, offeringId,
     };
     client
       .mutate({
@@ -936,8 +934,7 @@ export class UserDetailsStore {
           resolve();
         }
       },
-      onError: (error) => {
-        console.log(error);
+      onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
         reject();
       },

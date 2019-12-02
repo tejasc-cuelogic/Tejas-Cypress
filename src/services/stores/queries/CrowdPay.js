@@ -83,7 +83,7 @@ query getCrowdPayUsers($limit: Int, $page: Int, $search: String, $accountType: I
 `;
 
 export const crowdPayAccountReview = gql`
-mutation _crowdPayAccountReview($userId: String!, $accountId: String!, $action: ActionTypeEnum!, $comment: String!) {
+mutation crowdPayAccountReview($userId: String!, $accountId: String!, $action: ActionTypeEnum!, $comment: String!) {
   crowdPayAccountReview(
     userId: $userId
     accountId: $accountId
@@ -106,7 +106,7 @@ mutation crowdPayAccountProcess($userId: String!, $accountId: String!, $reason:S
 `;
 
 export const crowdPayAccountValidate = gql`
-mutation _crowdPayAccountValidate($userId: String!, $accountId: String!, $skipCip: Boolean) {
+mutation crowdPayAccountValidate($userId: String!, $accountId: String!, $skipCip: Boolean) {
   crowdPayAccountValidate(
     userId: $userId
     accountId: $accountId

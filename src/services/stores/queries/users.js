@@ -635,9 +635,8 @@ mutation adminHardDeleteUser($userId: String!, $reason: String) {
  }`;
 
 export const frozenEmailToAdmin = gql`
-mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
+mutation notifyAdminFrozenAccountActivity($accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
   notifyAdminFrozenAccountActivity(
-     userId: $userId
      accountId: $accountId
      activity: $activity
      offeringId: $offeringId

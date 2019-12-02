@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
@@ -166,21 +166,6 @@ export class CampaignStore {
           } else {
             reject();
           }
-        }
-      },
-      fetchPolicy: 'network-only',
-    });
-  });
-
-  @action
-  isValidInvestorInOffering = params => new Promise((resolve) => {
-    const response = graphql({
-      client,
-      query: isValidInvestorInOffering,
-      variables: { ...params },
-      onFetch: (data) => {
-        if (data && !response.loading) {
-          resolve(data.isValidInvestorInOffering);
         }
       },
       fetchPolicy: 'network-only',
