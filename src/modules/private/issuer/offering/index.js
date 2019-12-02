@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, Link } from 'react-router-dom';
+import { get } from 'lodash';
 import { Menu, Icon } from 'semantic-ui-react';
 import { Helmet } from 'react-helmet';
 import PrivateLayout from '../../shared/PrivateLayout';
@@ -35,7 +36,7 @@ export default class Offering extends Component {
     return (
       <>
         <Helmet>
-          <title>{offer.offeringSlug} - NextSeed</title>
+          <title>{`${get(offer, 'keyTerms.shorthandBusinessName' || 'Alternative Investments Made Simple')} - NextSeed`}</title>
         </Helmet>
         <PrivateLayout
           {...this.props}
