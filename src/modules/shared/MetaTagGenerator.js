@@ -11,7 +11,7 @@ const MetaTagGenerator = ({ metaTagsData, pathName }) => {
   }
   return (
     <Helmet>
-      <title>{title || 'NextSeed'}</title>
+      <title>{`${title || 'Alternative Investments Made Simple - NextSeed'}`}</title>
       <link rel="canonical" href={window.location.href} />
       {map(metaTagsData, d => (
         d.type === 'meta'

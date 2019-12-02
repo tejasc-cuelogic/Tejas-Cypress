@@ -26,7 +26,7 @@ export default class InsightsDetails extends Component {
     return (
       <>
         <Helmet>
-          <title>{ArticlesDetails.title} - NextSeed</title>
+          <title>{`${ArticlesDetails.title} - NextSeed`}</title>
         </Helmet>
         <Container>
           <section className="insight-post">
