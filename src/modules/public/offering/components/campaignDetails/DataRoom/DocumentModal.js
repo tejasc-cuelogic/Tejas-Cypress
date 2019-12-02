@@ -71,7 +71,7 @@ export default class DocumentModal extends Component {
           </Header>
           {
             !this.props.userStore.currentUser
-              ? <p>Please log in to verify accredited investor status to access this Document.</p>
+              ? <p>Please log in to verify accredited investor status.</p>
               : <p>Please confirm your accredited investor status to access this Document.</p>
           }
           {
