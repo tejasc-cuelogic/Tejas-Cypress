@@ -315,7 +315,7 @@
         padding-left:@14px;
     }
     h2.header:not(.ui){
-        font-size:@40px;
+        font-size:@28px;
         margin:0;
         @media only screen and (max-width :@largestMobileScreen){
             font-size:@20px;
@@ -323,8 +323,8 @@
         }
     }
     .description{
-        font-size:@28px;
-        line-height:38px;
+        font-size:@20px;
+        line-height:31px;
         @media only screen and (max-width :@largestMobileScreen){
             font-size:@15px;
             line-height:24px;

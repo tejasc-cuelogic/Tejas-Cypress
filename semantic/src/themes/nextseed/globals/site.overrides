@@ -878,68 +878,45 @@ footer{
 		}
 	}
 }
-.content-spacer {
-	.column.side-section {
-		background-color:@invertedMutedTextColor;
-		padding-bottom: @40px;
-		padding-top: @40px;
-		@media only screen and (min-width: @tabletBreakpoint) {
-			min-height:~"calc(100vh - 424px)";
-		}
-		@media only screen and (max-width : @largestMobileScreen){
-			padding-bottom: @30px;
-			padding-top: @30px;
-		}
-		.ui.header{
-			margin-bottom:@4px;
-		}
-		p {
-			line-height: 24px;
-			margin-bottom:@24px;
-			&.note{
-				font-size:@12px;
-				line-height:@18px;
-			}
-		}
-		&.process-right-section {
-			counter-reset: section;
-			.ui.card {
-				border: 0;
-				background-color: transparent;
-				box-shadow: none;
-				@media only screen and (max-width : @largestMobileScreen){
-					padding:0 0 30px !important;
-				}
-				&:hover {
-					box-shadow: none;
-				}
-				>.content {
-					text-align: left;
-					padding: 0 0 0 40px;
-					position: relative;
-					&:before {
-						counter-increment: section;
-						content: counter(section);
-						position: absolute;
-						left: 0;
-						top: 5px;
-						font-weight: 500;
-						line-height: 24px;
-						font-size: @40px;
-						color: @primary-one;
-					}
-				}
-			}
-		}
-		&.track-left-section {
-			display: flex !important;
-			justify-content: center;
+.column.side-section {
+	&.process-right-section {
+		counter-reset: section;
+		.ui.list {
+			border: 0;
+			background-color: transparent;
+			box-shadow: none;
 			@media only screen and (max-width : @largestMobileScreen){
-				justify-content: flex-start;
+				padding:0 0 30px !important;
 			}
-			@media only screen and (max-width : @largestTabletScreen){
-				min-height: auto;
+			&:hover {
+				box-shadow: none;
 			}
+			>.item {
+				text-align: left;
+				padding: 0 0 0 40px;
+				position: relative;
+				&:before {
+					counter-increment: section;
+					content: counter(section);
+					position: absolute;
+					left: 0;
+					top: 5px;
+					font-weight: 500;
+					line-height: 24px;
+					font-size: @40px;
+					color: @primary-one;
+				}
+			}
+		}
+	}
+	&.track-left-section {
+		display: flex !important;
+		justify-content: center;
+		@media only screen and (max-width : @largestMobileScreen){
+			justify-content: flex-start;
+		}
+		@media only screen and (max-width : @largestTabletScreen){
+			min-height: auto;
 		}
 	}
 }
