@@ -48,10 +48,10 @@ export default class AddFunds extends Component {
       validate: validationActions.validateLinkBankForm,
       linkBankStepValue: 6,
     } : name === 'ira' ? {
-      name: 'Link bank',
+      name: 'Add funds',
       validate: validationActions.validateLinkBankForm,
-      stepToBeRendered: 4,
-      linkBankStepValue: 3,
+      stepToBeRendered: 6,
+      linkBankStepValue: 5,
     } : {
       name: 'Add funds',
       stepToBeRendered: 2,

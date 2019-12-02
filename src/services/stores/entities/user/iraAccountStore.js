@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find, omit, get, isNull } from 'lodash';
+import { isEmpty, find, omit, get } from 'lodash';
 import { DataFormatter, FormValidator } from '../../../../helper';
 import {
   IRA_ACC_TYPES,
@@ -39,7 +39,7 @@ class IraAccountStore {
   @observable accountNotSet = '';
 
   @action
-  setStepToBeRendered(step) {
+  setStepToBeRendered = (step) => {
     this.stepToBeRendered = step;
   }
 
@@ -86,12 +86,12 @@ class IraAccountStore {
   get isValidIraForm() {
     if (this.FUNDING_FRM.fields.fundingType.value === 0) {
       return this.FIN_INFO_FRM.meta.isValid && this.ACC_TYPES_FRM.meta.isValid
-      && this.FUNDING_FRM.meta.isValid && this.IDENTITY_FRM.meta.isValid
-      && bankAccountStore.formIraAddFunds.meta.isValid
-      && (bankAccountStore.formLinkBankManually.meta.isValid || bankAccountStore.isAccountPresent);
+        && this.FUNDING_FRM.meta.isValid && this.IDENTITY_FRM.meta.isValid
+        && bankAccountStore.formIraAddFunds.meta.isValid
+        && (bankAccountStore.formLinkBankManually.meta.isValid || bankAccountStore.isAccountPresent);
     }
     return this.FIN_INFO_FRM.meta.isValid && this.ACC_TYPES_FRM.meta.isValid
-    && this.FUNDING_FRM.meta.isValid && this.IDENTITY_FRM.meta.isValid;
+      && this.FUNDING_FRM.meta.isValid && this.IDENTITY_FRM.meta.isValid;
   }
 
   @computed
@@ -222,118 +222,55 @@ class IraAccountStore {
 
   @action
   validateAndSubmitStep =
-  (currentStep, removeUploadedData) => new Promise((res, rej) => {
-    let isValidCurrentStep = true;
-    const accountAttributes = {};
-    switch (currentStep.name) {
-      case 'About Ira':
-        this.setStepToBeRendered(currentStep.stepToBeRendered);
-        break;
-      case 'Financial info':
-        currentStep.validate('FIN_INFO_FRM');
-        isValidCurrentStep = this.FIN_INFO_FRM.meta.isValid;
-        if (isValidCurrentStep) {
-          let limitValues = FormValidator.ExtractValues(this.FIN_INFO_FRM.fields);
-          limitValues = omit(limitValues, ['investmentLimit']);
-          accountAttributes.limits = limitValues;
-          this.submitForm(currentStep, accountAttributes).then(() => {
-            res();
-          })
-            .catch(() => {
-              rej();
-            });
-        } else {
-          rej();
-        }
-        break;
-      case 'Account type':
-        currentStep.validate('ACC_TYPES_FRM');
-        accountAttributes.iraAccountType = this.accountType ? this.accountType.rawValue : '';
-        isValidCurrentStep = this.ACC_TYPES_FRM.meta.isValid;
-        if (isValidCurrentStep) {
-          this.submitForm(currentStep, accountAttributes).then(() => {
-            res();
-          })
-            .catch(() => {
-              rej();
-            });
-        } else {
-          rej();
-        }
-        break;
-      case 'Funding':
-        currentStep.validate('FUNDING_FRM');
-        accountAttributes.fundingType = this.fundingOption ? this.fundingOption.rawValue : '';
-        isValidCurrentStep = this.FUNDING_FRM.meta.isValid;
-        if (accountAttributes.fundingType !== 'check') {
-          bankAccountStore.setPlaidAccDetails({});
-          bankAccountStore.resetRoutingNum();
-          bankAccountStore.setLinkBankSummary(false);
-        }
-        if (isValidCurrentStep) {
-          this.submitForm(currentStep, accountAttributes).then(() => {
-            res();
-          })
-            .catch((err) => {
-              uiStore.setErrors(DataFormatter.getSimpleErr(err));
-              uiStore.setProgress(false);
-              rej();
-            });
-        } else {
-          rej();
-        }
-        break;
-      case 'Link bank':
-        if (parseFloat(bankAccountStore.formIraAddFunds.fields.value.value, 0) !== 0) {
-          bankAccountStore.validateAddFunds();
-        }
-        if (bankAccountStore.manualLinkBankSubmitted) {
-          currentStep.validate();
-        }
-        isValidCurrentStep = bankAccountStore.isAccountPresent
-          || bankAccountStore.formLinkBankManually.meta.isValid
-          || bankAccountStore.formIraAddFunds.meta.isValid;
-        if (isValidCurrentStep) {
-          uiStore.setProgress();
-          accountAttributes.linkedBank = bankAccountStore.accountAttributes.linkedBank;
-          accountAttributes.initialDepositAmount = bankAccountStore.accountAttributes.initialDepositAmount;
-          bankAccountStore.isValidOpeningDepositAmount().then(() => {
+    (currentStep, removeUploadedData) => new Promise((res, rej) => {
+      let isValidCurrentStep = true;
+      const accountAttributes = {};
+      switch (currentStep.name) {
+        case 'About Ira':
+          this.setStepToBeRendered(currentStep.stepToBeRendered);
+          break;
+        case 'Financial info':
+          currentStep.validate('FIN_INFO_FRM');
+          isValidCurrentStep = this.FIN_INFO_FRM.meta.isValid;
+          if (isValidCurrentStep) {
+            let limitValues = FormValidator.ExtractValues(this.FIN_INFO_FRM.fields);
+            limitValues = omit(limitValues, ['investmentLimit']);
+            accountAttributes.limits = limitValues;
             this.submitForm(currentStep, accountAttributes).then(() => {
               res();
             })
               .catch(() => {
-                uiStore.setProgress(false);
                 rej();
               });
-          })
-            .catch(() => {
-              rej();
-            });
-        } else {
-          rej();
-        }
-        break;
-      case 'Identity':
-        if (removeUploadedData) {
-          accountAttributes.identityDoc = {
-            fileId: '',
-            fileName: '',
-          };
-          this.submitForm(currentStep, accountAttributes, removeUploadedData)
-            .then(() => {
+          } else {
+            rej();
+          }
+          break;
+        case 'Account type':
+          currentStep.validate('ACC_TYPES_FRM');
+          accountAttributes.iraAccountType = this.accountType ? this.accountType.rawValue : '';
+          isValidCurrentStep = this.ACC_TYPES_FRM.meta.isValid;
+          if (isValidCurrentStep) {
+            this.submitForm(currentStep, accountAttributes).then(() => {
               res();
             })
-            .catch(() => {
-              rej();
-            });
-        } else {
-          currentStep.validate('IDENTITY_FRM');
-          isValidCurrentStep = this.IDENTITY_FRM.meta.isValid;
+              .catch(() => {
+                rej();
+              });
+          } else {
+            rej();
+          }
+          break;
+        case 'Funding':
+          currentStep.validate('FUNDING_FRM');
+          accountAttributes.fundingType = this.fundingOption ? this.fundingOption.rawValue : '';
+          isValidCurrentStep = this.FUNDING_FRM.meta.isValid;
+          if (accountAttributes.fundingType !== 'check') {
+            bankAccountStore.setPlaidAccDetails({});
+            bankAccountStore.resetRoutingNum();
+            bankAccountStore.setLinkBankSummary(false);
+          }
           if (isValidCurrentStep) {
-            uiStore.setProgress();
-            accountAttributes.identityDoc = {};
-            accountAttributes.identityDoc.fileId = this.IDENTITY_FRM.fields.identityDoc.fileId;
-            accountAttributes.identityDoc.fileName = this.IDENTITY_FRM.fields.identityDoc.value;
             this.submitForm(currentStep, accountAttributes).then(() => {
               res();
             })
@@ -345,13 +282,71 @@ class IraAccountStore {
           } else {
             rej();
           }
-        }
-        break;
-      default:
-        break;
-    }
-    return true;
-  })
+          break;
+        case 'Link bank':
+          if (bankAccountStore.manualLinkBankSubmitted) {
+            currentStep.validate();
+          }
+          accountAttributes.linkedBank = bankAccountStore.accountAttributes.linkedBank;
+          this.submitForm(currentStep, accountAttributes)
+            .then(() => res()).catch(() => rej());
+          break;
+        case 'Add funds':
+          if (parseFloat(bankAccountStore.formIraAddFunds.fields.value.value, 0) !== 0) {
+            bankAccountStore.validateAddFunds();
+          }
+          isValidCurrentStep = bankAccountStore.formIraAddFunds.meta.isValid
+            || bankAccountStore.isAccountPresent;
+          if (isValidCurrentStep) {
+            accountAttributes.initialDepositAmount = bankAccountStore.accountAttributes.initialDepositAmount;
+            bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
+              this.submitForm(currentStep, accountAttributes)
+                .then(() => res()).catch(() => rej());
+            })
+              .catch(() => {
+                rej();
+              });
+          }
+          break;
+        case 'Identity':
+          if (removeUploadedData) {
+            accountAttributes.identityDoc = {
+              fileId: '',
+              fileName: '',
+            };
+            this.submitForm(currentStep, accountAttributes, removeUploadedData)
+              .then(() => {
+                res();
+              })
+              .catch(() => {
+                rej();
+              });
+          } else {
+            currentStep.validate('IDENTITY_FRM');
+            isValidCurrentStep = this.IDENTITY_FRM.meta.isValid;
+            if (isValidCurrentStep) {
+              uiStore.setProgress();
+              accountAttributes.identityDoc = {};
+              accountAttributes.identityDoc.fileId = this.IDENTITY_FRM.fields.identityDoc.fileId;
+              accountAttributes.identityDoc.fileName = this.IDENTITY_FRM.fields.identityDoc.value;
+              this.submitForm(currentStep, accountAttributes).then(() => {
+                res();
+              })
+                .catch((err) => {
+                  uiStore.setErrors(DataFormatter.getSimpleErr(err));
+                  uiStore.setProgress(false);
+                  rej();
+                });
+            } else {
+              rej();
+            }
+          }
+          break;
+        default:
+          break;
+      }
+      return true;
+    })
 
   @action
   submitForm = (currentStep, accountAttributes, removeUploadedData = false) => {
@@ -382,11 +377,11 @@ class IraAccountStore {
           if (!isMobile) {
             accountStore.accountToastMessage(currentStep, actionPerformed, 'formIraAddFunds');
           }
-          if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
+          const isBankSteps = ['Link bank', 'Add funds'].includes(currentStep.name);
+
+          if (result.data.upsertInvestorAccount && isBankSteps) {
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
-            FormValidator.setIsDirty(bankAccountStore.formIraAddFunds, false);
-            FormValidator.setIsDirty(bankAccountStore.formLinkBankManually, false);
           }
           if (currentStep.name === 'Identity') {
             if (removeUploadedData) {
@@ -394,7 +389,7 @@ class IraAccountStore {
             } else {
               FormValidator.setIsDirty(this[currentStep.form], false);
             }
-          } else if (currentStep.name !== 'Link bank') {
+          } else if (!isBankSteps) {
             FormValidator.setIsDirty(this[currentStep.form], false);
           }
           this.setStepToBeRendered(currentStep.stepToBeRendered);
@@ -441,33 +436,29 @@ class IraAccountStore {
               return null;
             });
             if (account.details.linkedBank && account.details.linkedBank.routingNumber !== ''
-            && account.details.linkedBank.accountNumber !== '') {
+              && account.details.linkedBank.accountNumber !== '') {
               bankAccountStore.linkBankFormChange();
             }
             bankAccountStore.formIraAddFunds.fields.value.value = account.details.initialDepositAmount;
           }
           bankAccountStore.validateAddFunds();
-          if (bankAccountStore.isAccountPresent && isNull(account.details.initialDepositAmount)) {
-            bankAccountStore.setShowAddFunds();
-          }
-          const getIraStep = AccCreationHelper.iraSteps();
+          const { fundingType } = this.FUNDING_FRM.fields;
+          const getIraStep = AccCreationHelper.iraSteps(fundingType.value);
           if (!this.FIN_INFO_FRM.meta.isValid) {
             this.setStepToBeRendered(getIraStep.FIN_INFO_FRM);
           } else if (!this.ACC_TYPES_FRM.meta.isValid) {
             this.setStepToBeRendered(getIraStep.ACC_TYPES_FRM);
           } else if (!this.FUNDING_FRM.meta.isValid) {
             this.setStepToBeRendered(getIraStep.FUNDING_FRM);
-          } else if (this.FUNDING_FRM.fields.fundingType.value === 0
+          } else if (fundingType.value === 0
             && (bankAccountStore.isLinkbankInComplete)) {
             this.setStepToBeRendered(getIraStep.LINK_BANK);
-          } else if (!this.IDENTITY_FRM.meta.isValid || this.stepToBeRendered === 4) {
-            if (this.FUNDING_FRM.fields.fundingType.value === 0) {
-              this.setStepToBeRendered(5);
-            } else {
-              this.setStepToBeRendered(getIraStep.IDENTITY_FRM);
-            }
-          } else if (this.FUNDING_FRM.fields.fundingType.value === 0) {
-            this.setStepToBeRendered(6);
+          } else if (fundingType.value === 0
+            && bankAccountStore.isAccountPresent
+            && isEmpty(bankAccountStore.formIraAddFunds.fields.value.value.toString())) {
+            this.setStepToBeRendered(getIraStep.ADD_FUNDS);
+          } else if (!this.IDENTITY_FRM.meta.isValid) {
+            this.setStepToBeRendered(getIraStep.IDENTITY_FRM);
           } else {
             this.setStepToBeRendered(getIraStep.summary);
           }

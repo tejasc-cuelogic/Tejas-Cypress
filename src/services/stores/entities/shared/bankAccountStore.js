@@ -496,13 +496,10 @@ export class BankAccountStore {
   }
 
   @computed get isLinkbankInComplete() {
-    const isAddFundsDirty = this.addFundsByAccType.meta.isDirty;
     return this.manualLinkBankSubmitted
-    || isAddFundsDirty
     || this.formLinkBankManually.meta.isDirty
     || this.linkbankSummary
-    || !this.isAccountPresent
-    || this.showAddFunds;
+    || !this.isAccountPresent;
   }
 
   @action

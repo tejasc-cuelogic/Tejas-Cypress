@@ -7,7 +7,7 @@ import Funding from './Funding';
 import Identity from './Identity';
 import Summary from './Summary';
 import { validationActions } from '../../../../../../../services/actions';
-import { Plaid } from '../../../../../shared/bankAccount';
+import { Plaid, AddFunds } from '../../../../../shared/bankAccount';
 import AboutIra from './AboutIra';
 
 @inject('uiStore', 'accountStore', 'iraAccountStore', 'userDetailsStore', 'userStore', 'bankAccountStore')
@@ -78,8 +78,7 @@ export default class AccountCreation extends React.Component {
     const {
       formIraAddFunds, isAccountPresent,
       formLinkBankManually, isPlaidDirty,
-      linkbankSummary, bankSummarySubmit,
-      stepbankSummary, showAddFunds,
+      linkbankSummary, showAddFunds,
       setLinkBankSummary,
     } = this.props.bankAccountStore;
     if (FUNDING_FRM.fields.fundingType.value === 0) {
@@ -103,7 +102,6 @@ export default class AccountCreation extends React.Component {
           validForm: FIN_INFO_FRM.meta.isValid,
           stepToBeRendered: 2,
           disableKeyDown: true,
-          bankSummary: false,
         },
         {
           name: 'Account type',
@@ -115,7 +113,6 @@ export default class AccountCreation extends React.Component {
           stepToBeRendered: 3,
           validForm: ACC_TYPES_FRM.meta.isValid,
           disableKeyDown: true,
-          bankSummary: false,
         },
         {
           name: 'Funding',
@@ -127,35 +124,43 @@ export default class AccountCreation extends React.Component {
           stepToBeRendered: 4,
           disableKeyDown: true,
           validForm: FUNDING_FRM.meta.isValid,
-          bankSummary: false,
         },
         {
           name: 'Link bank',
           component: <Plaid />,
-          isValid: (formIraAddFunds.meta.isValid && (isAccountPresent || formLinkBankManually.meta.isValid)) ? '' : stepToBeRendered > 3 ? 'error' : '',
+          isValid: isAccountPresent || formLinkBankManually.meta.isValid ? '' : stepToBeRendered > 4 ? 'error' : '',
           isDirty: isPlaidDirty,
           disableNextButton: !linkbankSummary,
           validate: validationActions.validateLinkBankForm,
           stepToBeRendered: 5,
           disableKeyDown: true,
           validForm: isAccountPresent,
-          bankSummary: linkbankSummary,
+        },
+        {
+          name: 'Add funds',
+          component: <AddFunds />,
+          isValid: formIraAddFunds.meta.isValid && isAccountPresent ? '' : stepToBeRendered > 5 ? 'error' : '',
+          isDirty: isPlaidDirty,
+          disableNextButton: !linkbankSummary,
+          validate: validationActions.validateLinkBankForm,
+          stepToBeRendered: 6,
+          disableKeyDown: true,
+          validForm: isAccountPresent,
         },
         {
           name: 'Identity',
           component: <Identity />,
-          isValid: IDENTITY_FRM.meta.isValid ? '' : stepToBeRendered > 5 ? 'error' : '',
+          isValid: IDENTITY_FRM.meta.isValid ? '' : stepToBeRendered > 6 ? 'error' : '',
           isDirty: IDENTITY_FRM.meta.isDirty && isPlaidDirty,
           validate: validationActions.validateIRAForm,
           form: 'IDENTITY_FRM',
           disableKeyDown: true,
           validForm: IDENTITY_FRM.meta.isValid,
-          stepToBeRendered: 6,
-          bankSummary: false,
+          stepToBeRendered: 7,
         },
         {
           name: 'Confirmation',
-          isValid: isValidIraForm ? '' : stepToBeRendered > 6 ? 'error' : '',
+          isValid: isValidIraForm ? '' : stepToBeRendered > 7 ? 'error' : '',
           // validForm: isValidIraForm,
           disableNextButton: true,
           component: <Summary handleCreateAccount={this.props.handleCreateAccount} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
@@ -182,7 +187,6 @@ export default class AccountCreation extends React.Component {
           stepToBeRendered: 2,
           disableKeyDown: true,
           validForm: FIN_INFO_FRM.meta.isValid,
-          bankSummary: false,
         },
         {
           name: 'Account type',
@@ -194,7 +198,6 @@ export default class AccountCreation extends React.Component {
           stepToBeRendered: 3,
           disableKeyDown: true,
           validForm: ACC_TYPES_FRM.meta.isValid,
-          bankSummary: false,
         },
         {
           name: 'Funding',
@@ -206,7 +209,6 @@ export default class AccountCreation extends React.Component {
           stepToBeRendered: 4,
           disableKeyDown: true,
           validForm: FUNDING_FRM.meta.isValid,
-          bankSummary: false,
         },
         {
           name: 'Identity',
@@ -218,7 +220,6 @@ export default class AccountCreation extends React.Component {
           stepToBeRendered: 5,
           disableKeyDown: true,
           validForm: IDENTITY_FRM.meta.isValid,
-          bankSummary: false,
         },
         {
           name: 'Confirmation',
@@ -226,13 +227,12 @@ export default class AccountCreation extends React.Component {
           disableNextButton: true,
           isValid: isValidIraForm ? '' : stepToBeRendered > 5 ? 'error' : '',
           validForm: isValidIraForm,
-          bankSummary: false,
         },
       ];
     }
     return (
       <div className="step-progress">
-        <MultiStep hideHeader={stepToBeRendered === 0} isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep hideHeader={stepToBeRendered === 0} isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

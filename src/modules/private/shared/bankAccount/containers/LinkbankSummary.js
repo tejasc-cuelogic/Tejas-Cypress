@@ -23,14 +23,10 @@ export default class LinkbankSummary extends React.Component {
   }
 
   handleContinueCta = () => {
-    const { ACC_TYPE_MAPPING, INVESTMENT_ACC_TYPES, investmentAccType } = this.props.accountStore;
+    const { ACC_TYPE_MAPPING, INVESTMENT_ACC_TYPES } = this.props.accountStore;
     const { store } = ACC_TYPE_MAPPING[INVESTMENT_ACC_TYPES.fields.accType.value];
     const { stepToBeRendered, setStepToBeRendered } = store;
-    if (investmentAccType !== 'ira') {
-      setStepToBeRendered(stepToBeRendered + 1);
-    } else {
-      this.props.bankAccountStore.setShowAddFunds();
-    }
+    setStepToBeRendered(stepToBeRendered + 1);
   }
 
   render() {

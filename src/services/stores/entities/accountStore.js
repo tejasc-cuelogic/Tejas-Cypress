@@ -37,10 +37,10 @@ export class AccountStore {
     },
     1: {
       store: iraAccountStore,
-      location: 3,
+      location: 5,
       accountId: 'iraAccountId',
       name: 'ira',
-      linkbankValue: 3,
+      linkbankValue: 4,
     },
     2: {
       store: entityAccountStore,

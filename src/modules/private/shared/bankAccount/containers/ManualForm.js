@@ -31,7 +31,7 @@ export default class ManualForm extends Component {
     this.props.bankAccountStore.setIsManualLinkBankSubmitted();
     const { investmentAccType, ACC_TYPE_MAPPING, INVESTMENT_ACC_TYPES } = this.props.accountStore;
     const { store } = ACC_TYPE_MAPPING[INVESTMENT_ACC_TYPES.fields.accType.value];
-    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 6, linkBankStepValue: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3, linkBankStepValue: 3 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1, linkBankStepValue: 0 };
+    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 6, linkBankStepValue: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5, linkBankStepValue: 4 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1, linkBankStepValue: 0 };
     if (this.props.action === 'change') {
       this.props.uiStore.setProgress();
       this.props.bankAccountStore.validateManualAccount(investmentAccType).then(() => {

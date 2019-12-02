@@ -32,13 +32,20 @@ class Helper {
     summary: 7,
   });
 
-  iraSteps = () => ({
+  iraSteps = fundingType => (fundingType !== 0 ? {
     FIN_INFO_FRM: 1,
     ACC_TYPES_FRM: 2,
     FUNDING_FRM: 3,
     IDENTITY_FRM: 4,
-    LINK_BANK: 5,
-    summary: 6,
+    summary: 5,
+  } : {
+    FIN_INFO_FRM: 1,
+    ACC_TYPES_FRM: 2,
+    FUNDING_FRM: 3,
+    LINK_BANK: 4,
+    ADD_FUNDS: 5,
+    IDENTITY_FRM: 6,
+    summary: 7,
   });
 
   individualSteps = () => ({
