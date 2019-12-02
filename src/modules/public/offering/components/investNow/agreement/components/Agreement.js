@@ -135,7 +135,7 @@ export default class Agreement extends React.Component {
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
     const offeringSecurityType = get(campaign, 'keyTerms.securities');
-    const agreementStatement = includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) ? 'Purchase Agreement and Investor Proxy Agreement' : includes(['REAL_ESTATE'], offeringSecurityType) ? 'Subscription Agreement and LLC Agreement' : 'Note Purchase Agreement';
+    const agreementStatement = includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) ? 'Purchase Agreement and Investor Proxy Agreement' : includes(['REAL_ESTATE'], offeringSecurityType) ? 'LLC Agreement and Subscription Agreement' : 'Note Purchase Agreement';
     const isOfferingPreferredEquity = !!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType);
 
     return (
