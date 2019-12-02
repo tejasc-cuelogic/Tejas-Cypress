@@ -15,7 +15,7 @@ export default class Offering extends Component {
   constructor(props) {
     super(props);
     if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/${this.props.navStore.navMeta.subNavigations[0].to}`);
+      this.props.history.replace(`${this.props.match.url}/${get(this.props.navStore, 'navMeta.subNavigations[0].to') || 'overview'}`);
     }
     if (!(this.props.offeringsStore.initLoad.includes('getOne') && this.props.offeringsStore.currentId === this.props.match.params.id)) {
       this.props.offeringsStore.getOne(this.props.match.params.id);
