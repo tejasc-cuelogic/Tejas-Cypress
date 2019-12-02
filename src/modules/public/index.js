@@ -26,7 +26,7 @@ export default class Public extends React.Component {
     this.props.navStore.setNavStatus({}, 'main');
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     this.props.navStore.setNavStatus({}, 'main');
   }
 

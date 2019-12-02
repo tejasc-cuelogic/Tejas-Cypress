@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, Link } from 'react-router-dom';
+import { get } from 'lodash';
 import { Menu, Icon } from 'semantic-ui-react';
 import { Helmet } from 'react-helmet';
 import PrivateLayout from '../../shared/PrivateLayout';
 import OfferingModule from '../../shared/offerings/components';
 import { DataFormatter } from '../../../../helper';
+import Helper from '../../../../helper/utility';
 import { InlineLoader } from '../../../../theme/shared';
 
 @inject('uiStore', 'navStore', 'offeringsStore', 'offeringCreationStore', 'userStore')
@@ -14,17 +16,13 @@ export default class Offering extends Component {
   constructor(props) {
     super(props);
     if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/${this.props.navStore.navMeta.subNavigations[0].to}`);
+      this.props.history.replace(`${this.props.match.url}/${get(this.props.navStore, 'navMeta.subNavigations[0].to') || 'overview'}`);
     }
     if (!(this.props.offeringsStore.initLoad.includes('getOne') && this.props.offeringsStore.currentId === this.props.match.params.id)) {
       this.props.offeringsStore.getOne(this.props.match.params.id);
     }
     this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
     this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.id);
-  }
-
-  componentWillUpdate() {
-    this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
   }
 
   module = name => DataFormatter.upperCamelCase(name);
@@ -39,7 +37,7 @@ export default class Offering extends Component {
     return (
       <>
         <Helmet>
-          <title>{offer.offeringSlug} - NextSeed</title>
+          <title>{Helper.pageTitle(`${get(offer, 'keyTerms.shorthandBusinessName' || 'Alternative Investments Made Simple')} - NextSeed`)}</title>
         </Helmet>
         <PrivateLayout
           {...this.props}
