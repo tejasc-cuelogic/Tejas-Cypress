@@ -697,3 +697,10 @@ query _fetchEmails ($recipientId: String!, $subject: String, $fromDate: String, 
   }
 }
 `;
+
+export const createAdminUser = gql`
+  mutation createAdminUser($email: String!){
+  createAdminUser(
+    email: $email
+  )
+}`;

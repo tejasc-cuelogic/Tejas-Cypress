@@ -19,7 +19,7 @@ import ChangeInvestmentLimit from '../../../../public/offering/components/invest
 import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
-@inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore', 'referralsStore')
+@inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore', 'referralsStore', 'investmentStore', 'accreditationStore')
 @observer
 export default class Portfolio extends Component {
   state = {
@@ -33,6 +33,8 @@ export default class Portfolio extends Component {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { setFieldValue } = this.props.userDetailsStore;
     setFieldValue('currentActiveAccount', accountType);
+    this.props.investmentStore.accTypeChanged(null, { value: accountType });
+    this.props.accreditationStore.changeShowAccountListFlag(false);
     this.props.portfolioStore.setFieldValue('isAdmin', this.props.isAdmin);
     if (!this.props.isAdmin
     || (this.props.isAdmin && !this.props.portfolioStore.apiCall)) {
