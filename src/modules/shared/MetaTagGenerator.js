@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { map } from 'lodash';
 import { TITLES } from '../../constants/titleMeta';
+import Helper from '../../helper/utility';
 
 const MetaTagGenerator = ({ metaTagsData, pathName }) => {
   let title = false;
@@ -11,7 +12,7 @@ const MetaTagGenerator = ({ metaTagsData, pathName }) => {
   }
   return (
     <Helmet>
-      <title>{`${title || 'Alternative Investments Made Simple - NextSeed'}`}</title>
+      <title>{Helper.pageTitle(`${title || 'Alternative Investments Made Simple - NextSeed'}`)}</title>
       <link rel="canonical" href={window.location.href} />
       {map(metaTagsData, d => (
         d.type === 'meta'
