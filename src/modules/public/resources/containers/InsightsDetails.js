@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import { Helmet } from 'react-helmet';
 import { Header, Container, Grid, Breadcrumb } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../theme/shared';
+import Helper from '../../../../helper/utility';
 import HtmlEditor from '../../../shared/HtmlEditor';
 
 @inject('articleStore')
@@ -23,30 +25,31 @@ export default class InsightsDetails extends Component {
       return <InlineLoader text="Not found" />;
     }
     return (
-      <Container>
-        <section className="insight-post">
-          <Breadcrumb className="mb-30">
-            <Breadcrumb.Section as={Link} to="/resources/insights">Insights</Breadcrumb.Section>
-            <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
-            <Breadcrumb.Section active>{ArticlesDetails.title}</Breadcrumb.Section>
-          </Breadcrumb>
-          <Grid>
-            <Grid.Column computer={12} tablet={16} mobile={16}>
-              <Header as="h2">{ArticlesDetails.title}</Header>
-              {/* <Image64
-                srcUrl={ArticlesDetails.featuredImage}
-                className="mb-30 mt-30"
-              /> */}
-              <pre className="migrated-content justify-text">
-                <HtmlEditor
-                  readOnly
-                  content={(ArticlesDetails.content || '')}
-                />
-              </pre>
-            </Grid.Column>
-          </Grid>
-        </section>
-      </Container>
+      <>
+        <Helmet>
+          <title>{Helper.pageTitle(`${ArticlesDetails.title} - NextSeed`)}</title>
+        </Helmet>
+        <Container>
+          <section className="insight-post">
+            <Breadcrumb className="mb-30">
+              <Breadcrumb.Section as={Link} to="/resources/insights">Insights</Breadcrumb.Section>
+              <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
+              <Breadcrumb.Section active>{ArticlesDetails.title}</Breadcrumb.Section>
+            </Breadcrumb>
+            <Grid>
+              <Grid.Column computer={12} tablet={16} mobile={16}>
+                <Header as="h2">{ArticlesDetails.title}</Header>
+                <pre className="migrated-content justify-text">
+                  <HtmlEditor
+                    readOnly
+                    content={(ArticlesDetails.content || '')}
+                  />
+                </pre>
+              </Grid.Column>
+            </Grid>
+          </section>
+        </Container>
+      </>
     );
   }
 }

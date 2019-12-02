@@ -5,21 +5,19 @@ import { Table, Popup, Icon, Label } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
 import { reject, get, find } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { DateTimeFormat, InlineLoader, UserAvatar } from '../../../../../../theme/shared';
+import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
 import { OFFERING_AGREEMENT_REGULATIONS } from '../../../../../../constants/offering';
 
 const meta = [
-  { label: '', value: 'avatar' },
   { label: 'Date', value: 'investmentDate' },
   { label: 'Investor\'s Name', value: 'firstName' },
-  { label: 'Email', value: 'userEmail' },
+  { label: 'Amount', value: 'amount' },
   { label: 'Residence City', value: 'city' },
   { label: 'State', value: 'state' },
   { label: 'Account Type', value: 'accountType' },
   { label: 'Regulation', value: 'regulation' },
-  { label: 'Amount', value: 'amount' },
   { label: 'EB', value: 'earlyBirdEligibility' },
   { label: 'Referral Code', value: 'referralCode' },
 ];
@@ -36,11 +34,9 @@ export default class Listing extends Component {
     setSortingOrder(clickedColumn, sortOrder.direction === 'asc' ? 'desc' : 'asc');
   }
 
-  showReferralCode = (referralCode, investorReferralCodes, isIssuer) => {
+  showReferralCode = (referralCode, investorReferralCodes) => {
     const matchReferral = find(investorReferralCodes, r => r.code === referralCode);
-    return (matchReferral && get(matchReferral, 'isValid')) ? (
-      isIssuer ? 'Yes' : get(matchReferral, 'code')
-    ) : '';
+    return (matchReferral && get(matchReferral, 'isValid')) ? ('Yes') : '';
   }
 
   render() {
@@ -48,11 +44,12 @@ export default class Listing extends Component {
     const { isIssuer, isAdmin } = this.props.userStore;
     const headerList = [...meta];
     const referralCode = get(offer, 'referralCode');
+    const isParallel = ['BD_CF_506C'].includes(get(offer, 'regulation'));
     const isOfferingClose = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULTED'].includes(get(offer, 'stage'));
     let computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...meta] : reject(headerList, { label: 'Amount', value: 'amount' });
+    computedList = (isAdmin && isParallel) ? [...meta] : reject(computedList, { label: 'Regulation', value: 'regulation' });
     computedList = (isIssuer && isOfferingClose) || (isAdmin) ? [...computedList] : reject(computedList, { label: 'EB', value: 'earlyBirdEligibility' });
-    computedList = isAdmin ? [...computedList] : [...computedList].filter(o => !['Account Type', 'Regulation', ''].includes(o.label));
-    computedList = (isIssuer && isOfferingClose) ? [...computedList] : reject(computedList, { label: 'Email', value: 'userEmail' });
+    computedList = isAdmin ? [...computedList] : [...computedList].filter(o => !['Account Type', 'Regulation'].includes(o.label));
     const listHeader = computedList;
     const { investorLists, loading } = this.props.offeringInvestorStore;
     const isUsersCapablities = this.props.userStore.myAccessForModule('USERS');
@@ -86,20 +83,6 @@ export default class Listing extends Component {
             <Table.Body>
               {investorLists.map((data, index) => (
                 <Table.Row key={`${index}${data.userId}${Math.random()}`}>
-                  {isAdmin
-                  && (
-                  <Table.Cell>
-                    <UserAvatar
-                      size="mini"
-                      UserInfo={{
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        avatarUrl: data.avatar,
-                        roles: [],
-                      }}
-                    />
-                  </Table.Cell>
-                  )}
                   <Table.Cell>{data.investmentDate ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} /> : 'N/A'}</Table.Cell>
                   <Table.Cell>
                     <div>
@@ -107,45 +90,8 @@ export default class Listing extends Component {
                         ? <Link to={`/app/users/${data.userId}/profile-data`}><p><b>{`${data.firstName} ${data.lastName}`}</b></p></Link>
                         : `${data.firstName} ${data.lastName}`
                       }
-                      {isAdmin && get(data, 'userEmail')
-                        && (
-                          <>
-                            <p>{`${get(data, 'userEmail')}`}</p>
-                          </>
-                        )
-                      }
                     </div>
                   </Table.Cell>
-                  {isIssuer && isOfferingClose
-                  && (
-                  <Table.Cell>
-                    {data.userEmail || 'N/A'}
-                  </Table.Cell>
-                  )
-                  }
-                  <Table.Cell>
-                    <div className="table-info-wrap">
-                      <p>
-                        {((isIssuer && isOfferingClose) || (isAdmin)) && <span>{`${data.street}\n${data.streetTwo ? `${data.streetTwo}\n` : ''}`}</span>}
-                        <span>{data.city || 'N/A'}</span>
-                      </p>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>{data.state || 'N/A'}</Table.Cell>
-                  {isAdmin
-                    && (
-                      <Table.Cell>
-                        {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
-                      </Table.Cell>
-                    )
-                  }
-                  {isAdmin
-                    && (
-                      <Table.Cell>
-                        {data.regulation ? OFFERING_AGREEMENT_REGULATIONS[data.regulation] : ''}
-                      </Table.Cell>
-                    )
-                  }
                   {((isIssuer && isOfferingClose) || (isAdmin))
                     && (
                       <>
@@ -178,9 +124,31 @@ export default class Listing extends Component {
                       </>
                     )
                   }
+                  <Table.Cell>
+                    <div className="table-info-wrap">
+                      <p>
+                        {<span>{data.city || 'N/A'}</span>}
+                      </p>
+                    </div>
+                  </Table.Cell>
+                  <Table.Cell>{data.state || 'N/A'}</Table.Cell>
+                  {isAdmin
+                    && (
+                      <Table.Cell>
+                        {data.accountType && <Icon size="large" className={`${data.accountType.includes('entity') ? 'ns-entity-line' : data.accountType.includes('ira') ? 'ns-ira-line' : 'ns-individual-line'} `} color="green" />}
+                      </Table.Cell>
+                    )
+                  }
+                  {isAdmin && isParallel
+                  && (
+                      <Table.Cell>
+                        {data.regulation ? OFFERING_AGREEMENT_REGULATIONS[data.regulation] : ''}
+                      </Table.Cell>
+                  )
+                  }
                   {((isIssuer && isOfferingClose) || (isAdmin))
                     && (
-                    <Table.Cell textAlign="center">
+                    <Table.Cell>
                       {data.earlyBirdEligibility
                         ? (
                           <Popup

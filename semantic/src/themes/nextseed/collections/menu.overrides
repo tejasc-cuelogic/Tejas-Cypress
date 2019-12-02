@@ -313,6 +313,9 @@ footer .ui.text.menu{
         @media only screen and (max-width : @largestMobileScreen){
             padding: 0;
         }
+        @media only screen and (max-width : @largestTabletScreen){
+            align-self: center;
+        }
         .item{
             color: @neutral-middark;
             padding: @3px 0;

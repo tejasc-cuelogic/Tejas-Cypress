@@ -13,15 +13,15 @@ export default class NsPagination extends Component {
     stateOptions: [5, 10, 15].map(n => ({ key: n, value: n, text: n })),
   };
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
+  static getDerivedStateFromProps(nextProps) {
+    return {
       skip: nextProps.meta.requestState.skip || 0,
       first: nextProps.meta.requestState.perPage || 10,
       currentPageNo: nextProps.meta.requestState.page || 1,
       totalPages: nextProps.meta.totalRecords > nextProps.meta.requestState.perPage
         ? Math.ceil(nextProps.meta.totalRecords / nextProps.meta.requestState.perPage) : 1,
       stateOptions: [5, 10, 15].map(n => ({ key: n, value: n, text: n })),
-    });
+    };
   }
 
   pageChangeHandler = (e) => {

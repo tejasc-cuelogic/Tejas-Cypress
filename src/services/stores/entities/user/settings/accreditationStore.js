@@ -70,6 +70,8 @@ export class AccreditationStore {
 
   @observable userAccredetiationState = null;
 
+  @observable accountAccreditationStatus = null;
+
   @observable selectedAccountStatus = undefined;
 
   @observable showAccountList = true;
@@ -871,6 +873,7 @@ export class AccreditationStore {
         ? (currentAcitveObject.status === 'EXPIRED' || this.checkIsAccreditationExpired(currentAcitveObject.expiration)
           === 'EXPIRED') ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
       investmentType = regulationType && regulationType === 'BD_CF_506C' && accountStatus !== 'EXPIRED' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'BD_506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : regulationType && regulationType === 'BD_506B' ? 'BD_506B' : 'CF';
+      this.setFieldVal('accountAccreditationStatus', accountStatus);
       switch (accountStatus) {
         case 'REQUESTED':
           this.setFieldVal('userAccredetiationState', 'PENDING');
@@ -990,7 +993,7 @@ export class AccreditationStore {
     if (expirationDate) {
       const date = (isUnix && typeof expirationDate === 'string') ? parseInt(expirationDate) : expirationDate;
       dateDiff = DataFormatter.getDateDifferenceInHoursOrMinutes(DataFormatter.formatedDate(date, isUnix), true);
-      return dateDiff < 0 ? 'EXPIRED' : 'ACTIVE';
+      return dateDiff <= 0 ? 'EXPIRED' : 'ACTIVE';
     }
     return dateDiff;
   }

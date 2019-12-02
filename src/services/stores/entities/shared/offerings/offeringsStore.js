@@ -2,7 +2,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
-import { pickBy, mapValues, values, map, sortBy, remove, findIndex, get, includes } from 'lodash';
+import { pickBy, mapValues, values, map, sortBy, remove, findIndex, get, includes, orderBy } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../../api/publicApi';
 import { STAGES } from '../../../../constants/admin/offerings';
@@ -273,7 +273,6 @@ export class OfferingsStore {
         setFormData('OFFERING_DETAILS_FRM', false);
         setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
         setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
-        // offeringCreationStore.resetInitLoad();
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -324,12 +323,12 @@ export class OfferingsStore {
 
   @computed get allOfferingsSorted() {
     return this.db[this.requestState.stage]
-    && this.db[this.requestState.stage].length ? toJS(sortBy(this.db[this.requestState.stage], ['order'])) : [];
+      && this.db[this.requestState.stage].length ? toJS(sortBy(this.db[this.requestState.stage], ['order'])) : [];
   }
 
   @computed get allOfferings() {
     return this.db[this.requestState.stage]
-    && this.db[this.requestState.stage].length ? this.db[this.requestState.stage] : [];
+      && this.db[this.requestState.stage].length ? this.db[this.requestState.stage] : [];
   }
 
   @computed get offerings() {
@@ -337,6 +336,13 @@ export class OfferingsStore {
     return (list && list.length
       && list
         .slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+  }
+
+  @computed get issuerOfferings() {
+    const list = toJS(this.db[this.requestState.stage]);
+    const offeringList = list && list.length ? list : [];
+    const offeringListResult = this.orderedOfferingList(offeringList);
+    return offeringListResult;
   }
 
   @action
@@ -397,6 +403,42 @@ export class OfferingsStore {
     offerStatus.offeringLiveTitle = offerStatus.diff < 0 || offerStatus.diffForProcessing.value === 0 ? 'Close Date' : offerStatus.diffForProcessing.value < 48 ? `${offerStatus.diffForProcessing.label} Till Close` : 'Days Till Close';
     offerStatus.offeringLiveContent = closeDate ? offerStatus.diff < 0 || offerStatus.diffForProcessing.value === 0 ? closeDate : offerStatus.diffForProcessing.value < 48 ? `${offerStatus.diffForProcessing.value} ${offerStatus.diffForProcessing.label}` : DataFormatter.diffInDaysHoursMin(closeDate).diffText : 'N/A';
     return offerStatus;
+  }
+
+  orderedOfferingList = (offeringDetailsList) => {
+    let offeringCreationArr = [];
+    let offeringLiveArr = [];
+    let offeringStartupArr = [];
+    let offeringCompletedArr = [];
+    let offeringFaildArr = [];
+
+    offeringDetailsList.map((offeringDetails) => {
+      if (offeringDetails.stage === 'CREATION') {
+        return offeringCreationArr.push(offeringDetails);
+      } if (offeringDetails.stage === 'LIVE') {
+        return offeringLiveArr.push(offeringDetails);
+      } if (offeringDetails.stage === 'STARTUP_PERIOD') {
+        return offeringStartupArr.push(offeringDetails);
+      } if (offeringDetails.stage === 'COMPLETE') {
+        return offeringCompletedArr.push(offeringDetails);
+      }
+      return offeringFaildArr.push(offeringDetails);
+    });
+
+    offeringCreationArr = orderBy(offeringCreationArr, ['keyTerms.shorthandBusinessName'], ['asc']);
+    offeringLiveArr = orderBy(offeringLiveArr, ['keyTerms.shorthandBusinessName'], ['asc']);
+    offeringStartupArr = orderBy(offeringStartupArr, ['keyTerms.shorthandBusinessName'], ['asc']);
+    offeringCompletedArr = orderBy(offeringCompletedArr, ['keyTerms.shorthandBusinessName'], ['asc']);
+    offeringFaildArr = orderBy(offeringFaildArr, ['keyTerms.shorthandBusinessName'], ['asc']);
+
+    const sortedResultObject = [
+      ...offeringCreationArr,
+      ...offeringLiveArr,
+      ...offeringStartupArr,
+      ...offeringCompletedArr,
+      ...offeringFaildArr,
+    ];
+    return sortedResultObject;
   }
 }
 

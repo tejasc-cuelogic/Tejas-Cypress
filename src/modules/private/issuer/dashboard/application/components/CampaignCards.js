@@ -13,16 +13,16 @@ const isMobile = clientWidth < 768;
 
 const CampaignCards = (props) => {
   const { offeringsStore, businessAppStore } = props;
-  const handleHeaderClick = id => props.history.push(`/app/offering/${id}/overview`);
+  const handleHeaderClick = id => props.history.push(`/app/offering/${id}`);
   const getCampaignName = b => (get(b, 'keyTerms.shorthandBusinessName') || get(b, 'keyTerms.legalBusinessName') || 'N/A');
-  if (!offeringsStore.offerings.length || businessAppStore.businessApplicationsList.loading) {
+  if (!offeringsStore.issuerOfferings.length || businessAppStore.businessApplicationsList.loading) {
     return (null);
   }
   return (
     <>
       <Header as="h3" className={isMobile ? 'mb-30' : ''}>Campaigns</Header>
       <Card.Group stackable itemsPerRow={isTablet ? '2' : '3'} className="application-cards">
-        {offeringsStore.offerings.map(campaign => (
+        {offeringsStore.issuerOfferings.map(campaign => (
           <Card fluid key={campaign.id}>
             <Card.Content style={{ cursor: 'pointer' }} onClick={() => handleHeaderClick(campaign.id)}>
               <Header as="h4">
@@ -78,6 +78,9 @@ const CampaignCards = (props) => {
                 }
               </dl>
               <Button inverted color="green" as={Link} to={`/offerings/${campaign.offeringSlug}`}>View Campaign</Button>
+              {['CREATION', 'STARTUP_PERIOD', 'LIVE', 'COMPLETE'].includes(campaign.stage)
+              && <Button inverted color="green" onClick={() => handleHeaderClick(campaign.id)}>Manage</Button>
+              }
             </Card.Content>
           </Card>
         ))

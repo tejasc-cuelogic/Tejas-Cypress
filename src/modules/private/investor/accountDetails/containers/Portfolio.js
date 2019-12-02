@@ -19,7 +19,7 @@ import ChangeInvestmentLimit from '../../../../public/offering/components/invest
 import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
-@inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore', 'referralsStore')
+@inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore', 'referralsStore', 'investmentStore', 'accreditationStore')
 @observer
 export default class Portfolio extends Component {
   state = {
@@ -33,9 +33,16 @@ export default class Portfolio extends Component {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { setFieldValue } = this.props.userDetailsStore;
     setFieldValue('currentActiveAccount', accountType);
+    this.props.investmentStore.accTypeChanged(null, { value: accountType });
+    this.props.accreditationStore.changeShowAccountListFlag(false);
+    if (!this.props.accreditationStore.accreditationData.ira) {
+      this.props.accreditationStore.getUserAccreditation().then(() => {
+        this.props.accreditationStore.initiateAccreditation();
+      });
+    }
     this.props.portfolioStore.setFieldValue('isAdmin', this.props.isAdmin);
     if (!this.props.isAdmin
-    || (this.props.isAdmin && !this.props.portfolioStore.apiCall)) {
+      || (this.props.isAdmin && !this.props.portfolioStore.apiCall)) {
       this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
     }
     this.props.portfolioStore.calculateInvestmentType();
@@ -190,8 +197,8 @@ export default class Portfolio extends Component {
           ? <InvestmentList isAdmin={this.props.isAdmin} handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={completedSorted.length} match={match} /> : null
         }
         {getInvestorAccounts && !getInvestorAccounts.investments.pending.length
-        && !getInvestorAccounts.investments.active.length
-        && !getInvestorAccounts.investments.completed.length
+          && !getInvestorAccounts.investments.active.length
+          && !getInvestorAccounts.investments.completed.length
           ? (
             <>
               <p>No investments or reservations pending.</p>
