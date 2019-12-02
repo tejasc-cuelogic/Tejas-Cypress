@@ -9,14 +9,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
 class Footer extends Component {
-  state = { fShowHide: false };
-
   componentDidMount() {
-    if (this.props.path === '/') {
-      this.setState({ fShowHide: true });
-    } else {
-      this.setState({ fShowHide: false });
-    }
     setTimeout(() => {
       if (this.props.location.hash === '#site-footer') {
         document.querySelector(`${this.props.location.hash}`).scrollIntoView({
@@ -25,16 +18,6 @@ class Footer extends Component {
       }
     }, 500);
   }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.path === '/') {
-      this.setState({ fShowHide: true });
-    } else {
-      this.setState({ fShowHide: false });
-    }
-  }
-
-  toggleShowHide = () => this.setState({ fShowHide: !this.state.fShowHide });
 
   render() {
     const { path } = this.props;

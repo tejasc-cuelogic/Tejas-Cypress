@@ -18,10 +18,6 @@ class Home extends Component {
     props.campaignStore.initRequest(['active']);
   }
 
-  componentWillReceiveProps() {
-    this.props.campaignStore.initRequest(['active']);
-  }
-
   handleExploreBtn = () => {
     this.props.history.push('/offerings');
     window.scrollTo(0, 0);

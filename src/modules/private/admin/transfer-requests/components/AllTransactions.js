@@ -10,7 +10,7 @@ import { NoR } from '../../../../../theme/table/NSTable';
 import Helper from '../../../../../helper/utility';
 import { DataFormatter } from '../../../../../helper';
 
-@inject('transactionsStore', 'crowdpayStore')
+@inject('transactionsStore', 'crowdpayStore', 'accountStore')
 @withRouter
 @observer
 export default class AllTransactions extends Component {
@@ -56,7 +56,8 @@ export default class AllTransactions extends Component {
   paginate = params => this.props.transactionsStore.pageRequest(params);
 
   render() {
-    const { transactionsStore, match } = this.props;
+    const { transactionsStore, match, accountStore } = this.props;
+    const { isAccFrozen } = accountStore;
     const { statusType } = this.props.match.params;
     const {
       allRecords, loading, btnLoader,
@@ -148,7 +149,7 @@ export default class AllTransactions extends Component {
                               )
                               : has(STATUS_MAPPING[statusType], 'affirmativeCta')
                               && (
-                              <Button loading={btnLoader.includes(row.requestId)} color={`${statusType === 'pending' && ['FROZEN'].includes(get(row, 'investorAccountInfo.accountStatus')) ? 'gray' : 'blue'}`} disabled={(statusType === 'pending' && ['FROZEN'].includes(get(row, 'investorAccountInfo.accountStatus'))) || row.failDesc || DataFormatter.getCurrentCSTMoment().isBefore(moment(row.estDateAvailable * 1000))} onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action, row.direction)}>
+                              <Button loading={btnLoader.includes(row.requestId)} color={`${statusType === 'pending' && isAccFrozen(get(row, 'investorAccountInfo.accountStatus')) ? 'gray' : 'blue'}`} disabled={(statusType === 'pending' && isAccFrozen(get(row, 'investorAccountInfo.accountStatus'))) || row.failDesc || DataFormatter.getCurrentCSTMoment().isBefore(moment(row.estDateAvailable * 1000))} onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action, row.direction)}>
                                 {STATUS_MAPPING[statusType].affirmativeCta.title}
                               </Button>
                               )

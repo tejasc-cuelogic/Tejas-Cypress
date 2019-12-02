@@ -62,9 +62,21 @@ export const allOfferingsCompact = gql`
   query _getOfferings($stage: [OfferingStageEnumType], $issuerId: String){
     getOfferings(filters: { stage: $stage, issuerId: $issuerId }){
       id
+      offeringSlug
+      closureSummary {
+        hardCloseDate
+        launchDate
+        processingDate
+      }
       keyTerms {
         legalBusinessName
         shorthandBusinessName
+      }
+      offering {
+        launch {
+          targetDate
+          terminationDate
+        }
       }
       stage
       created {
@@ -107,6 +119,9 @@ export const getOfferingDetails = gql`
         contactId
         esAccountNumber
         sfAccountNumber
+        esAccountNumberRegD
+        isinRegD
+        sfAccountNumberRegD
       }
       closureProcess {
         checkBalance {
@@ -806,6 +821,36 @@ export const getOfferingDetails = gql`
                 }
               }
             }
+            llcAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            subscriptionAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
             proxyAgreement {
               fileId
               fileName
@@ -916,6 +961,14 @@ export const getOfferingDetails = gql`
               fileName
             }
             proxyAgreement {
+              fileId
+              fileName
+            }
+            llcAgreement {
+              fileId
+              fileName
+            }
+            subscriptionAgreement {
               fileId
               fileName
             }
@@ -1320,8 +1373,8 @@ query getTotalAmount{
   `;
 
 export const offerClose = gql`
-  mutation _offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType) {
-    offeringClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload)
+  mutation _offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType, $service: OfferingCloseServiceEnum ) {
+    offeringClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload, service: $service)
   }
 `;
 

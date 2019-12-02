@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { includes, get, capitalize } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
 import { Header, Table, Grid, Statistic, Button, Divider, Popup, Icon } from 'semantic-ui-react';
 import { AccTypeTitle, InlineLoader, IframeModal } from '../../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
@@ -66,7 +65,7 @@ class Overview extends Component {
     const isPreferredEquityOffering = !!['PREFERRED_EQUITY_506C'].includes(security);
     const preferredEquityUnit = get(campaign, 'keyTerms.equityUnitType') ? `${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price` : 'N/A';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
-    const maturityMonth = get(campaign, 'closureSummary.keyTerms.maturityDate') ? `${moment(moment(get(campaign, 'closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months') >= 0 ? moment(moment(get(campaign, 'closureSummary.keyTerms.maturityDate'))).diff(moment(), 'months') : '0'} months` : 'N/A';
+    const maturityMonth = get(campaign, 'keyTerms.maturity') ? `${get(campaign, 'keyTerms.maturity')} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     const { agreementIds, loading } = this.props.transactionStore;
     let aggrementDocs = get(campaign, 'closureSummary.keyTerms.supplementalAgreements.documents') || [];
@@ -125,14 +124,14 @@ class Overview extends Component {
                       </Table.Row>
                       ) : ''
                     }
-                    { offering && offering.launch && offering.launch.targetDate
+                    { offering && offering.launch && offering.launch.expectedOpsDate
                       ? (
                       <Table.Row verticalAlign="top">
                         <Table.Cell>{overviewToDisplay && overviewToDisplay === 'REVENUE' ? 'Anticipated Opening' : 'Original Anticipated Opening Date'}</Table.Cell>
                         <Table.Cell>
                           {offering && offering.launch
-                            && offering.launch.targetDate
-                            ? DataFormatter.getDateAsPerTimeZone(offering.launch.targetDate, false, true, false)
+                            && offering.launch.expectedOpsDate
+                            ? DataFormatter.getDateAsPerTimeZone(offering.launch.expectedOpsDate, false, true, false, undefined, 'CST', true)
                             : 'N/A'
                           }
                         </Table.Cell>

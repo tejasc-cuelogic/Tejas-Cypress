@@ -77,14 +77,8 @@ export class NavStore {
           permitted,
         };
         sessionStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
-      } else {
-        const pInvestorInfo = {
-          signupStatus: userDetailsStore.signupStatus,
-          permitted,
-        };
-        sessionStorage.setItem(`${uKey}_pInfo`, JSON.stringify(pInvestorInfo));
       }
-      const pInvestorInfo = sessionStorage.getItem(`${uKey}_pInfo`);
+      const pInvestorInfo = uKey ? sessionStorage.getItem(`${uKey}_pInfo`) : false;
       if (userDetailsStore.userFirstLoad !== true
         && (!this.params.roles.length || !userDetailsStore.signupStatus.roles[0])) {
         if (pInvestorInfo) {
@@ -96,6 +90,7 @@ export class NavStore {
       if (pInvestorInfo && permitted.includes('investor')) {
         permitted = JSON.parse(pInvestorInfo).permitted || permitted;
       }
+
       let routes = _.filter(
         navigationItems,
         n => ((!n.accessibleTo || n.accessibleTo.length === 0
@@ -156,6 +151,9 @@ export class NavStore {
           _.find(offeringsStore.phases, (s, i) => i === b.stage).accessKey,
         );
         sNav = sNav.filter(n => (!n.filterKey || _.get(offer, n.filterKey)));
+        if (userStore.isIssuer && b.stage === 'COMPLETE') {
+          sNav = sNav.filter(s => s.title !== 'Overview' && s.title !== 'Bonus Rewards');
+        }
         filteredNavs.splice(
           bIndex,
           0,

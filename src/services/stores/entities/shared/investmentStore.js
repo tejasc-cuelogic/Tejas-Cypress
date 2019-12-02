@@ -194,7 +194,7 @@ export class InvestmentStore {
         return null;
       });
       const val = this.investAccTypes.values[0].value;
-      this.investAccTypes.value = val;
+      this.investAccTypes.value = this.investAccTypes.value || val;
     }
     if (this.investAccTypes.values.length === 0) {
       this.setFieldValue('disableNextbtn', false);
@@ -517,7 +517,7 @@ export class InvestmentStore {
               this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             }
             resolve(status);
-            campaignStore.getCampaignDetails(campaignStore.getOfferingSlug);
+            campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
           })
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
