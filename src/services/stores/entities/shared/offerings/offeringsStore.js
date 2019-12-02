@@ -273,7 +273,6 @@ export class OfferingsStore {
         setFormData('OFFERING_DETAILS_FRM', false);
         setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
         setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
-        // offeringCreationStore.resetInitLoad();
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -334,9 +333,14 @@ export class OfferingsStore {
 
   @computed get offerings() {
     const list = toJS(this.db[this.requestState.stage]);
-    const offeringList = (list && list.length
+    return (list && list.length
       && list
         .slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+  }
+
+  @computed get issuerOfferings() {
+    const list = toJS(this.db[this.requestState.stage]);
+    const offeringList = list && list.length ? list : [];
     const offeringListResult = this.orderedOfferingList(offeringList);
     return offeringListResult;
   }

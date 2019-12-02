@@ -3,7 +3,7 @@ import { toJS } from 'mobx';
 import mapValues from 'lodash/mapValues';
 import snakeCase from 'lodash/snakeCase';
 import { API_VERSION, USER_POOL_ID, STATUSES } from '../../../constants/aws';
-import { adminStore, userStore, uiStore } from '../../stores';
+import { adminStore, userStore, uiStore, authStore } from '../../stores';
 import Helper from '../../../helper/utility';
 
 /**
@@ -26,63 +26,74 @@ export class Admin {
     if (user.email) {
       user.email = user.email.toLowerCase();
     }
-    const attributes = [];
-    const mapKey = { role: 'custom:roles', capabilities: 'custom:user_capabilities' };
-    Object.keys(user).map((item) => {
-      if (!['capabilities', 'TemporaryPassword', 'verifyPassword'].includes(item)) {
-        attributes.push({
-          Name: (mapKey[item] || snakeCase(item)),
-          Value: (mapKey[item] ? JSON.stringify(toJS(user[item])) : toJS(user[item])),
-        });
+    return authStore.createAdminUser(user.email).then(() => {
+      const attributes = [];
+      const mapKey = { role: 'custom:roles', capabilities: 'custom:user_capabilities' };
+      Object.keys(user).map((item) => {
+        if (!['capabilities', 'TemporaryPassword', 'verifyPassword'].includes(item)) {
+          attributes.push({
+            Name: (mapKey[item] || snakeCase(item)),
+            Value: (mapKey[item] ? JSON.stringify(toJS(user[item])) : toJS(user[item])),
+          });
+        }
+        return true;
+      });
+      attributes.push({ Name: 'email_verified', Value: 'true' });
+      const params = {
+        UserPoolId: USER_POOL_ID,
+        TemporaryPassword: user.TemporaryPassword,
+        Username: user.email.toLowerCase(),
+        UserAttributes: attributes,
+        MessageAction: messageAction,
+      };
+      this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+      const dbPushParams = {
+        firstName: user.givenName,
+        lastName: user.familyName,
+        email: user.email.toLowerCase(),
+        isEmailVerified: true,
+        roles: toJS(user.role).map(r => r.toUpperCase()),
+        capabilities: toJS(user.capabilities),
+      };
+      if (params.MessageAction === '') {
+        delete params.MessageAction;
       }
-      return true;
+      return (
+        new Promise((res, rej) => {
+          this.awsCognitoISP.adminCreateUser(params, (err, data) => {
+            if (err) {
+              rej(err);
+            }
+            res(data);
+          });
+        })
+          .then((res) => {
+            adminStore.setFieldvalue('userId', res.User.Username);
+            adminStore.pushToDb({ ...dbPushParams, ...{ userId: res.User.Username } });
+          })
+          .catch((err) => {
+            if (err && err.message) {
+              userStore.applyFormError('USR_FRM', err);
+            }
+            throw err;
+          })
+          .finally(() => {
+            if (resetLoader) {
+              uiStore.setProgress(false);
+              uiStore.clearLoaderMessage();
+            }
+          })
+      );
+    }).catch((err) => {
+      if (err && err.message) {
+        userStore.applyFormError('USR_FRM', err);
+      }
+      if (resetLoader) {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      }
+      throw err;
     });
-    attributes.push({ Name: 'email_verified', Value: 'true' });
-    const params = {
-      UserPoolId: USER_POOL_ID,
-      TemporaryPassword: user.TemporaryPassword,
-      Username: user.email.toLowerCase(),
-      UserAttributes: attributes,
-      MessageAction: messageAction,
-    };
-    this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
-    const dbPushParams = {
-      firstName: user.givenName,
-      lastName: user.familyName,
-      email: user.email.toLowerCase(),
-      isEmailVerified: true,
-      roles: toJS(user.role).map(r => r.toUpperCase()),
-      capabilities: toJS(user.capabilities),
-    };
-    if (params.MessageAction === '') {
-      delete params.MessageAction;
-    }
-    return (
-      new Promise((res, rej) => {
-        this.awsCognitoISP.adminCreateUser(params, (err, data) => {
-          if (err) {
-            rej(err);
-          }
-          res(data);
-        });
-      })
-        .then((res) => {
-          adminStore.setFieldvalue('userId', res.User.Username);
-          adminStore.pushToDb({ ...dbPushParams, ...{ userId: res.User.Username } });
-        })
-        .catch((err) => {
-          if (err && err.message) {
-            userStore.applyFormError('USR_FRM', err);
-          }
-          throw err;
-        })
-        .finally(() => {
-          if (resetLoader) {
-            uiStore.setProgress(false);
-            uiStore.clearLoaderMessage();
-          }
-        })
-    );
   }
 
   deleteUser = (username) => {

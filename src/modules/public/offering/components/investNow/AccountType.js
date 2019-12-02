@@ -57,6 +57,7 @@ class AccountType extends Component {
     const userStatusFound = userSelectedAccountStatus(investAccTypes.value);
     setUserSelectedAccountStatus(userStatusFound);
     resetAccreditationExpirayForm('ACCREDITATION_EXPIRY_FORM');
+    userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
     if ((activeAccounts.length && (investAccTypes.values.length === 1 || this.props.changeInvest))
       || (investAccTypes.values.length > 1 && !getCurrentInvestNowHealthCheck)) {
       if (this.props.investmentStore.getSelectedAccountTypeId && !getCurrentInvestNowHealthCheck) {
@@ -120,8 +121,8 @@ class AccountType extends Component {
       userAccredetiationState,
       selectedAccountStatus,
       userAccreditatedStatus,
-      userDetails,
-      // showAccountList,
+      // userDetails,
+      accountAccreditationStatus,
     } = this.props.accreditationStore;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
     // if (!showAccountList && !getCurrentInvestNowHealthCheck) {
@@ -153,12 +154,11 @@ class AccountType extends Component {
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if (accountToConsider && accountToConsider.length === 1 && isDocumentUpload === true) {
+    } else if ((accountToConsider && accountToConsider.length === 1 && isDocumentUpload === true) || (this.props.changeInvest && regulationType)) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         if (this.props.changeInvest) {
-          // const { getInvestorAccountById } = this.props.portfolioStore;
-          // const offeringRegulation = get(getInvestorAccountById, 'offering.keyTerms.regulation');
-          const accreditationStatus = get(userDetails, 'accreditation.status');
+          // const accreditationStatus = get(userDetails, 'accreditation.status');
+          const accreditationStatus = accountAccreditationStatus;
           const isParallelOfferingModelToShow = !!((userAccredetiationState === 'EXPIRED') || (offeringReuglation && offeringReuglation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus)));
           if (!isParallelOfferingModelToShow) {
             setFieldValue('disableNextbtn', false);
