@@ -92,7 +92,7 @@ export default class CreateNew extends Component {
               )}
               <div className="center-align mt-30">
                 <Button primary className="relaxed" content="Submit" loading={inProgress} disabled={!USR_FRM.meta.isValid} />
-                <p className="field-error">{USR_FRM.meta.error}</p>
+                <p className="field-error mt-10">{USR_FRM.meta.error}</p>
               </div>
             </Form>
           </Card>
