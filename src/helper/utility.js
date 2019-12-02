@@ -355,7 +355,13 @@ export class Utility {
     modal.classList.add(addClass);
   }
 
-  pageTitle = (t = '') => (!['production', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV) ? `[${REACT_APP_DEPLOY_ENV}] | ${t}` : t);
+  pageTitle = (t = '') => {
+    try {
+      return (!['production', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV) ? `[${REACT_APP_DEPLOY_ENV}] | ${t}` : t);
+    } catch (e) {
+      return 'Alternative Investments Made Simple - NextSeed';
+    }
+  };
 }
 
 export default new Utility();
