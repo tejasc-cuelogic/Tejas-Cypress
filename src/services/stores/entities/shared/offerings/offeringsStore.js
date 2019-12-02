@@ -334,9 +334,14 @@ export class OfferingsStore {
 
   @computed get offerings() {
     const list = toJS(this.db[this.requestState.stage]);
-    const offeringList = (list && list.length
+    return (list && list.length
       && list
         .slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+  }
+
+  @computed get issuerOfferings() {
+    const list = toJS(this.db[this.requestState.stage]);
+    const offeringList = list && list.length ? list : [];
     const offeringListResult = this.orderedOfferingList(offeringList);
     return offeringListResult;
   }
