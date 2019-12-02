@@ -29,9 +29,9 @@ export default class ManualForm extends Component {
     e.preventDefault();
     this.props.bankAccountStore.resetAddFundsForm();
     this.props.bankAccountStore.setIsManualLinkBankSubmitted();
-    const { investmentAccType } = this.props.accountStore;
-    const accTypeStore = investmentAccType === 'individual' ? 'individualAccountStore' : investmentAccType === 'entity' ? 'entityAccountStore' : investmentAccType === 'ira' ? 'iraAccountStore' : 'individualAccountStore';
-    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5, linkBankStepValue: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3, linkBankStepValue: 3 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1, linkBankStepValue: 0 };
+    const { investmentAccType, ACC_TYPE_MAPPING, INVESTMENT_ACC_TYPES } = this.props.accountStore;
+    const { store } = ACC_TYPE_MAPPING[INVESTMENT_ACC_TYPES.fields.accType.value];
+    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 6, linkBankStepValue: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3, linkBankStepValue: 3 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1, linkBankStepValue: 0 };
     if (this.props.action === 'change') {
       this.props.uiStore.setProgress();
       this.props.bankAccountStore.validateManualAccount(investmentAccType).then(() => {
@@ -41,18 +41,15 @@ export default class ManualForm extends Component {
         });
       });
     } else {
-      this.props[accTypeStore].createAccount(currentStep).then(() => {
+      store.createAccount(currentStep).then(() => {
         if (this.props.bankAccountStore.isAccountPresent) {
           this.props.bankAccountStore.resetRoutingNum();
           this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
           this.props.bankAccountStore.setBankLinkInterface('list');
-          if (investmentAccType !== 'individual') {
-            this.props.bankAccountStore.setShowAddFunds();
-          }
         }
-        this.props[accTypeStore].setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
+        store.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
       }).catch(() => {
-        this.props[accTypeStore].setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
+        store.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
       });
     }
   }

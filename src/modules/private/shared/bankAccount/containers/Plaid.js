@@ -6,7 +6,6 @@ import { bankAccountActions } from '../../../../../services/actions';
 import ManualForm from './ManualForm';
 import { IND_BANK_LIST } from '../../../../../constants/account';
 import { ListErrors } from '../../../../../theme/shared';
-import AddFunds from './AddFunds';
 import LinkbankSummary from './LinkbankSummary';
 import NSImage from '../../../../shared/NSImage';
 
@@ -70,7 +69,6 @@ export default class Plaid extends Component {
       formBankSearch,
       bankSearchChange,
       bankListing,
-      showAddFunds,
       isPlaidBankVerified,
       linkbankSummary,
       isAccountPresent,
@@ -85,10 +83,6 @@ export default class Plaid extends Component {
     if (isPlaidBankVerified) {
       this.handleBankSelect(refLink);
       this.props.bankAccountStore.setPlaidBankVerificationStatus(false);
-    }
-
-    if (showAddFunds) {
-      return <AddFunds />;
     }
 
     if (action !== 'change' && linkbankSummary) {

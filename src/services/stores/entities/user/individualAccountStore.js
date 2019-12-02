@@ -166,6 +166,7 @@ class IndividualAccountStore {
               bankAccountStore.setPlaidAccDetails(linkedBank);
               this.setFieldValue('apiCall', false);
             }
+            this.setStepToBeRendered(currentStep.stepToBeRendered);
             uiStore.setErrors(null);
             uiStore.setProgress(false);
             resolve(result);

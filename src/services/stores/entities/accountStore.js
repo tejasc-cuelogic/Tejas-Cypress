@@ -36,12 +36,15 @@ export class AccountStore {
       linkbankValue: 0,
     },
     1: {
-      store: iraAccountStore, location: 3, accountId: 'iraAccountId', name: 'ira', linkbankValue: 3,
-
+      store: iraAccountStore,
+      location: 3,
+      accountId: 'iraAccountId',
+      name: 'ira',
+      linkbankValue: 3,
     },
     2: {
       store: entityAccountStore,
-      location: 5,
+      location: 6,
       accountId: 'entityAccountId',
       name: 'entity',
       linkbankValue: 5,

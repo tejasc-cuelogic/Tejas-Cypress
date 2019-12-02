@@ -26,7 +26,7 @@ export default class LinkbankSummary extends React.Component {
     const { ACC_TYPE_MAPPING, INVESTMENT_ACC_TYPES, investmentAccType } = this.props.accountStore;
     const { store } = ACC_TYPE_MAPPING[INVESTMENT_ACC_TYPES.fields.accType.value];
     const { stepToBeRendered, setStepToBeRendered } = store;
-    if (investmentAccType === 'individual') {
+    if (investmentAccType !== 'ira') {
       setStepToBeRendered(stepToBeRendered + 1);
     } else {
       this.props.bankAccountStore.setShowAddFunds();
@@ -52,10 +52,10 @@ export default class LinkbankSummary extends React.Component {
               <Table.Body>
                 {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
                   && (
-<Table.Row>
-                    <Table.Cell className="grey-header">Bank: </Table.Cell>
-                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
-                  </Table.Row>
+                    <Table.Row>
+                      <Table.Cell className="grey-header">Bank: </Table.Cell>
+                      <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                    </Table.Row>
                   )
                 }
                 <Table.Row>
@@ -66,14 +66,14 @@ export default class LinkbankSummary extends React.Component {
                   <Table.Cell className="grey-header">Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                { !isEmpty(routingNum)
+                {!isEmpty(routingNum)
                   && (
-<Table.Row>
-                    <Table.Cell className="grey-header">Bank Routing Number: </Table.Cell>
-                    <Table.Cell>
-                      { routingNum || '' }
-                    </Table.Cell>
-                  </Table.Row>
+                    <Table.Row>
+                      <Table.Cell className="grey-header">Bank Routing Number: </Table.Cell>
+                      <Table.Cell>
+                        {routingNum || ''}
+                      </Table.Cell>
+                    </Table.Row>
                   )
                 }
               </Table.Body>

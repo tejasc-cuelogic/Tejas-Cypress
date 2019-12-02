@@ -28,7 +28,8 @@ class Helper {
     PERSONAL_INFO_FRM: 3,
     FORM_DOCS_FRM: 4,
     formLinkBankManually: 5,
-    summary: 6,
+    addFunds: 6,
+    summary: 7,
   });
 
   iraSteps = () => ({

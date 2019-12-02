@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find, get, map, isNull, set } from 'lodash';
+import { isEmpty, find, get, map, set } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import {
@@ -45,7 +45,7 @@ class EntityAccountStore {
   @observable isFormSubmitted = false;
 
   @action
-  setStepToBeRendered(step) {
+  setStepToBeRendered = (step) => {
     this.stepToBeRendered = step;
   }
 
@@ -309,7 +309,7 @@ class EntityAccountStore {
       },
     };
     if (!isEmpty(bankAccountStore.plaidAccDetails)
-        && !bankAccountStore.manualLinkBankSubmitted) {
+      && !bankAccountStore.manualLinkBankSubmitted) {
       const plaidBankDetails = {};
       const {
         account_id,
@@ -367,84 +367,85 @@ class EntityAccountStore {
 
   @action
   validateAndSubmitStep =
-  (currentStep, removeUploadedData, field) => new Promise((res, rej) => {
-    let isValidCurrentStep = true;
-    let accountAttributes = {};
-    const array1 = ['Financial info', 'General', 'Trust Status'];
-    const array2 = ['Personal info', 'Formation doc'];
-    if (array1.includes(currentStep.name)) {
-      currentStep.validate(currentStep.form);
-      isValidCurrentStep = this[currentStep.form].meta.isValid;
-      if (isValidCurrentStep) {
-        uiStore.setProgress();
-        if (currentStep.name === 'Financial info') {
-          accountAttributes.limits = {
-            netWorth: this.FIN_INFO_FRM.fields.netAssets.value,
-            income: this.FIN_INFO_FRM.fields.annualIncome.value,
-          };
-        } else if (currentStep.name === 'General' || currentStep.name === 'Trust Status') {
-          accountAttributes = this.setEntityAttributes(currentStep.name);
-        }
-        if (currentStep.name === 'General') {
-          this.checkTaxIdCollision().then((alreadyExists) => {
-            if (alreadyExists) {
-              rej();
-            } else {
-              uiStore.setErrors(null);
-              this.submitForm(currentStep, accountAttributes)
-                .then(() => res()).catch(() => rej());
-            }
-          }).catch((e) => {
-            console.log(e);
-          });
-        } else {
-          this.submitForm(currentStep, accountAttributes)
-            .then(() => res()).catch(() => rej());
-        }
-      } else {
-        rej();
-      }
-    } else if (array2.includes(currentStep.name)) {
-      if (removeUploadedData) {
-        accountAttributes = this.setEntityAttributes(currentStep.name, removeUploadedData, field);
-        this.submitForm(currentStep, accountAttributes, removeUploadedData)
-          .then(() => res()).catch(() => rej());
-      } else {
+    (currentStep, removeUploadedData, field) => new Promise((res, rej) => {
+      let isValidCurrentStep = true;
+      let accountAttributes = {};
+      const array1 = ['Financial info', 'General', 'Trust Status'];
+      const array2 = ['Personal info', 'Formation doc'];
+      if (array1.includes(currentStep.name)) {
         currentStep.validate(currentStep.form);
         isValidCurrentStep = this[currentStep.form].meta.isValid;
         if (isValidCurrentStep) {
-          accountAttributes = this.setEntityAttributes(currentStep.name);
-          this.submitForm(currentStep, accountAttributes)
-            .then(() => res()).catch(() => rej());
+          uiStore.setProgress();
+          if (currentStep.name === 'Financial info') {
+            accountAttributes.limits = {
+              netWorth: this.FIN_INFO_FRM.fields.netAssets.value,
+              income: this.FIN_INFO_FRM.fields.annualIncome.value,
+            };
+          } else if (currentStep.name === 'General' || currentStep.name === 'Trust Status') {
+            accountAttributes = this.setEntityAttributes(currentStep.name);
+          }
+          if (currentStep.name === 'General') {
+            this.checkTaxIdCollision().then((alreadyExists) => {
+              if (alreadyExists) {
+                rej();
+              } else {
+                uiStore.setErrors(null);
+                this.submitForm(currentStep, accountAttributes)
+                  .then(() => res()).catch(() => rej());
+              }
+            }).catch((e) => {
+              console.log(e);
+            });
+          } else {
+            this.submitForm(currentStep, accountAttributes)
+              .then(() => res()).catch(() => rej());
+          }
         } else {
           rej();
         }
-      }
-    } else if (currentStep.name === 'Link bank') {
-      if (parseFloat(bankAccountStore.formEntityAddFunds.fields.value.value, 0) !== 0) {
-        bankAccountStore.validateAddFunds();
-      }
-      if (bankAccountStore.manualLinkBankSubmitted) {
-        currentStep.validate();
-      }
-      isValidCurrentStep = bankAccountStore.formEntityAddFunds.meta.isValid
-      || bankAccountStore.isAccountPresent
-      || bankAccountStore.formLinkBankManually.meta.isValid;
-      if (isValidCurrentStep) {
-        uiStore.setProgress();
-        accountAttributes.linkedBank = bankAccountStore.accountAttributes.linkedBank;
-        accountAttributes.initialDepositAmount = bankAccountStore.accountAttributes.initialDepositAmount;
-        bankAccountStore.isValidOpeningDepositAmount().then(() => {
-          this.submitForm(currentStep, accountAttributes)
+      } else if (array2.includes(currentStep.name)) {
+        if (removeUploadedData) {
+          accountAttributes = this.setEntityAttributes(currentStep.name, removeUploadedData, field);
+          this.submitForm(currentStep, accountAttributes, removeUploadedData)
             .then(() => res()).catch(() => rej());
-        })
-          .catch(() => {
+        } else {
+          currentStep.validate(currentStep.form);
+          isValidCurrentStep = this[currentStep.form].meta.isValid;
+          if (isValidCurrentStep) {
+            accountAttributes = this.setEntityAttributes(currentStep.name);
+            this.submitForm(currentStep, accountAttributes)
+              .then(() => res()).catch(() => rej());
+          } else {
             rej();
-          });
+          }
+        }
+      } else if (currentStep.name === 'Link bank') {
+        if (bankAccountStore.manualLinkBankSubmitted) {
+          currentStep.validate();
+        }
+        accountAttributes.linkedBank = bankAccountStore.accountAttributes.linkedBank;
+        this.submitForm(currentStep, accountAttributes)
+          .then(() => res()).catch(() => rej());
+      } else if (currentStep.name === 'Add funds') {
+        if (parseFloat(bankAccountStore.formEntityAddFunds.fields.value.value, 0) !== 0) {
+          bankAccountStore.validateAddFunds();
+        }
+        isValidCurrentStep = bankAccountStore.formEntityAddFunds.meta.isValid
+          || bankAccountStore.isAccountPresent;
+        if (isValidCurrentStep) {
+          accountAttributes.initialDepositAmount = bankAccountStore.accountAttributes.initialDepositAmount;
+          bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
+            this.submitForm(currentStep, accountAttributes)
+              .then(() => res()).catch(() => rej());
+          })
+            .catch(() => {
+              rej();
+            });
+        }
       }
-    }
-    return true;
-  })
+      return true;
+    })
 
   @action
   submitForm = (currentStep, accountAttributes, removeUploadedData = false) => {
@@ -475,11 +476,10 @@ class EntityAccountStore {
           if (!isMobile) {
             accountStore.accountToastMessage(currentStep, actionPerformed, 'formEntityAddFunds');
           }
-          if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
+          const isBankSteps = ['Link bank', 'Add funds'].includes(currentStep.name);
+          if (result.data.upsertInvestorAccount && isBankSteps) {
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
-            FormValidator.setIsDirty(bankAccountStore.formEntityAddFunds, false);
-            FormValidator.setIsDirty(bankAccountStore.formLinkBankManually, false);
           }
           if (currentStep.name === 'Personal info' || currentStep.name === 'Formation doc') {
             if (removeUploadedData) {
@@ -491,7 +491,7 @@ class EntityAccountStore {
             } else {
               FormValidator.setIsDirty(this[currentStep.form], false);
             }
-          } else if (currentStep.name !== 'Link bank') {
+          } else if (!isBankSteps) {
             FormValidator.setIsDirty(this[currentStep.form], false);
           }
           this.setStepToBeRendered(currentStep.stepToBeRendered);
@@ -572,7 +572,7 @@ class EntityAccountStore {
     if (Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) && !bankAccountStore.bankSelect) {
       if (!isEmpty(userData)) {
         const account = find(userData.roles, { name: 'entity' });
-        if (account) {
+        if (get(account, 'details')) {
           this.setFormData('FIN_INFO_FRM', account.details);
           this.setFormData('GEN_INFO_FRM', account.details);
           if (account.details && account.details.address) {
@@ -593,6 +593,9 @@ class EntityAccountStore {
           bankAccountStore.validateAddFunds();
           if (account.details.linkedBank) {
             const plaidAccDetails = account.details.linkedBank;
+            if (!isEmpty(account.details.initialDepositAmount)) {
+              bankAccountStore.formEntityAddFunds.fields.value.value = account.details.initialDepositAmount;
+            }
             if (!bankAccountStore.isAccountPresent) {
               bankAccountStore.setPlaidAccDetails(plaidAccDetails);
             }
@@ -607,15 +610,11 @@ class EntityAccountStore {
               return null;
             });
             if (account.details.linkedBank.routingNumber !== ''
-            && account.details.linkedBank.accountNumber !== '') {
+              && account.details.linkedBank.accountNumber !== '') {
               bankAccountStore.linkBankFormChange();
             }
-            bankAccountStore.formEntityAddFunds.fields.value.value = account.details.initialDepositAmount;
           }
           bankAccountStore.validateAddFunds();
-          if (bankAccountStore.isAccountPresent && isNull(account.details.initialDepositAmount)) {
-            bankAccountStore.setShowAddFunds();
-          }
           this.renderAfterPopulate();
         }
       }
@@ -635,8 +634,11 @@ class EntityAccountStore {
       this.setStepToBeRendered(getEntityStep.PERSONAL_INFO_FRM);
     } else if (!this.FORM_DOCS_FRM.meta.isValid) {
       this.setStepToBeRendered(getEntityStep.FORM_DOCS_FRM);
-    } else if (bankAccountStore.isLinkbankInComplete) {
+    } else if (!bankAccountStore.isAccountPresent) {
       this.setStepToBeRendered(getEntityStep.formLinkBankManually);
+    } else if (bankAccountStore.isAccountPresent
+      && isEmpty(bankAccountStore.formEntityAddFunds.fields.value.value.toString())) {
+      this.setStepToBeRendered(getEntityStep.addFunds);
     } else {
       this.setStepToBeRendered(getEntityStep.summary);
     }

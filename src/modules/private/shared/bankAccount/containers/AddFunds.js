@@ -40,50 +40,32 @@ export default class AddFunds extends Component {
   isValidFund = fundObj => !fundObj.meta.isValid || fundObj.fields.value.value === '';
 
   renderStep = () => {
-    if (this.props.accountStore.investmentAccType === 'individual') {
-      const currentStep = {
-        name: 'Add funds',
-        stepToBeRendered: 2,
-        linkBankStepValue: 0,
-      };
-      this.props.individualAccountStore.createAccount(currentStep).then(() => {
+    const { ACC_TYPE_MAPPING, INVESTMENT_ACC_TYPES } = this.props.accountStore;
+    const { store, name } = ACC_TYPE_MAPPING[INVESTMENT_ACC_TYPES.fields.accType.value];
+    const currentStep = name === 'entity' ? {
+      name: 'Add funds',
+      stepToBeRendered: 7,
+      validate: validationActions.validateLinkBankForm,
+      linkBankStepValue: 6,
+    } : name === 'ira' ? {
+      name: 'Link bank',
+      validate: validationActions.validateLinkBankForm,
+      stepToBeRendered: 4,
+      linkBankStepValue: 3,
+    } : {
+      name: 'Add funds',
+      stepToBeRendered: 2,
+      linkBankStepValue: 0,
+    };
+    store.createAccount(currentStep).then(() => {
+      if (this.props.bankAccountStore.isAccountPresent) {
         this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
         this.props.individualAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
-      }).catch(() => {
-        this.props.individualAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
-      });
-    }
-    if (this.props.accountStore.investmentAccType === 'entity') {
-      const currentStep = {
-        name: 'Link bank',
-        stepToBeRendered: 6,
-        validate: validationActions.validateLinkBankForm,
-        linkBankStepValue: 5,
-      };
-      this.props.entityAccountStore.createAccount(currentStep).then(() => {
-        this.props.bankAccountStore.resetShowAddFunds();
-        this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
-        this.props.entityAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
-      }).catch(() => {
-        this.props.entityAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
-      });
-    }
-    if (this.props.accountStore.investmentAccType === 'ira') {
-      const currentStep = {
-        name: 'Link bank',
-        validate: validationActions.validateLinkBankForm,
-        stepToBeRendered: 4,
-        linkBankStepValue: 3,
-      };
-      this.props.iraAccountStore.createAccount(currentStep).then(() => {
-        // this.props.bankAccountStore.resetAddFundsForm();
-        this.props.bankAccountStore.resetShowAddFunds();
-        this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
-        this.props.iraAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
-      }).catch(() => {
-        this.props.iraAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
-      });
-    }
+      }
+      store.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
+    }).catch(() => {
+      store.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
+    });
   }
 
 
@@ -102,7 +84,7 @@ export default class AddFunds extends Component {
           <p>
             We
           {"'"}
-          ll transfer funds directly from the bank account you just linked.
+            ll transfer funds directly from the bank account you just linked.
           </p>
           <Form error onSubmit={this.handleSubmitForm}>
             <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
@@ -120,9 +102,9 @@ export default class AddFunds extends Component {
             </div>
             {errors
               && (
-<Message error className="mb-30">
-                <ListErrors errors={[errors.message]} />
-              </Message>
+                <Message error className="mb-30">
+                  <ListErrors errors={[errors.message]} />
+                </Message>
               )
             }
             <Button primary size="large" fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Confirm" disabled={isInValid || !isAccountPresent || inProgress} />

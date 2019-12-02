@@ -7,7 +7,7 @@ import General from './General';
 import FinancilInfo from './FinancialInfo';
 import PersonalInformation from './PersonalInformation';
 import FormationDocuments from './FormationDocuments';
-import { Plaid } from '../../../../../shared/bankAccount';
+import { Plaid, AddFunds } from '../../../../../shared/bankAccount';
 import Summary from './Summary';
 
 @inject('uiStore', 'accountStore', 'bankAccountStore', 'entityAccountStore', 'userDetailsStore', 'userStore', 'investmentLimitStore')
@@ -78,8 +78,8 @@ export default class AccountCreation extends React.Component {
     } = this.props.entityAccountStore;
     const {
       formEntityAddFunds, isAccountPresent, formLinkBankManually,
-      isPlaidDirty, linkbankSummary, bankSummarySubmit,
-      stepbankSummary, setLinkBankSummary, showAddFunds,
+      isPlaidDirty, linkbankSummary,
+      setLinkBankSummary, showAddFunds,
     } = this.props.bankAccountStore;
     const steps = [
       {
@@ -92,7 +92,6 @@ export default class AccountCreation extends React.Component {
         stepToBeRendered: 1,
         validForm: FIN_INFO_FRM.meta.isValid,
         disableKeyDown: true,
-        bankSummary: false,
       },
       {
         name: 'General',
@@ -104,7 +103,6 @@ export default class AccountCreation extends React.Component {
         stepToBeRendered: 2,
         disableKeyDown: true,
         validForm: GEN_INFO_FRM.meta.isValid,
-        bankSummary: false,
       },
       {
         name: 'Trust Status',
@@ -116,7 +114,6 @@ export default class AccountCreation extends React.Component {
         stepToBeRendered: 3,
         disableKeyDown: true,
         validForm: TRUST_INFO_FRM.meta.isValid,
-        bankSummary: false,
       },
       {
         name: 'Personal info',
@@ -128,7 +125,6 @@ export default class AccountCreation extends React.Component {
         validForm: PERSONAL_INFO_FRM.meta.isValid,
         disableKeyDown: true,
         stepToBeRendered: 4,
-        bankSummary: false,
       },
       {
         name: 'Formation doc',
@@ -140,32 +136,40 @@ export default class AccountCreation extends React.Component {
         validForm: FORM_DOCS_FRM.meta.isValid,
         stepToBeRendered: 5,
         disableKeyDown: true,
-        bankSummary: false,
       },
       {
         name: 'Link bank',
         component: <Plaid />,
-        isValid: (formEntityAddFunds.meta.isValid && (isAccountPresent || formLinkBankManually.meta.isValid)) ? '' : stepToBeRendered > 5 ? 'error' : '',
+        isValid: isAccountPresent || formLinkBankManually.meta.isValid ? '' : stepToBeRendered > 5 ? 'error' : '',
         isDirty: isPlaidDirty,
         validate: validationActions.validateLinkBankForm,
         disableNextButton: !linkbankSummary,
         validForm: isAccountPresent,
         disableKeyDown: true,
-        bankSummary: linkbankSummary,
         stepToBeRendered: 6,
+      },
+      {
+        name: 'Add funds',
+        component: <AddFunds />,
+        isValid: formEntityAddFunds.meta.isValid && isAccountPresent ? '' : stepToBeRendered > 6 ? 'error' : '',
+        isDirty: isPlaidDirty,
+        validate: validationActions.validateLinkBankForm,
+        disableNextButton: !linkbankSummary,
+        validForm: isAccountPresent,
+        disableKeyDown: true,
+        stepToBeRendered: 7,
       },
       {
         name: 'Confirmation',
         component: <Summary handleCreateAccount={this.props.handleCreateAccount} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
-        isValid: isValidEntityForm ? '' : stepToBeRendered > 6 ? 'error' : '',
+        isValid: isValidEntityForm ? '' : stepToBeRendered > 8 ? 'error' : '',
         // validForm: isValidEntityForm,
         disableNextButton: true,
-        bankSummary: false,
       },
     ];
     return (
       <div className="step-progress">
-        <MultiStep isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} page disablePrevBtn bankSummary={stepbankSummary} bankSummarySubmit={bankSummarySubmit} setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} setLinkbankSummary={setLinkBankSummary} isAddFundsScreen={showAddFunds} loaderMsg={createAccountMessage} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

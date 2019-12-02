@@ -92,7 +92,7 @@ export default class Experience extends Component {
     );
     return (
       <>
-        <Header as="h3 " textAlign={!isMobile ? 'center' : 'mb-14'}>
+        <Header as="h3" textAlign={!isMobile ? 'center' : 'mb-14'}>
           {!isMobile ? 'Investment Experience' : isExperiencedTypeSelected ? 'Almost there!' : 'What is your investment experience?'
           }
         </Header>
