@@ -7,6 +7,7 @@ import { Helmet } from 'react-helmet';
 import PrivateLayout from '../../shared/PrivateLayout';
 import OfferingModule from '../../shared/offerings/components';
 import { DataFormatter } from '../../../../helper';
+import Helper from '../../../../helper/utility';
 import { InlineLoader } from '../../../../theme/shared';
 
 @inject('uiStore', 'navStore', 'offeringsStore', 'offeringCreationStore', 'userStore')
@@ -36,7 +37,7 @@ export default class Offering extends Component {
     return (
       <>
         <Helmet>
-          <title>{`${get(offer, 'keyTerms.shorthandBusinessName' || 'Alternative Investments Made Simple')} - NextSeed`}</title>
+          <title>{Helper.pageTitle(`${get(offer, 'keyTerms.shorthandBusinessName' || 'Alternative Investments Made Simple')} - NextSeed`)}</title>
         </Helmet>
         <PrivateLayout
           {...this.props}
