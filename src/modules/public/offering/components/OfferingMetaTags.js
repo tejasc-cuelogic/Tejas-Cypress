@@ -7,7 +7,7 @@ const OfferingMetaTags = ({ campaign, getOgDataFromSocial }) => (
   <Helmet>
     <meta name="description" content={getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'blurb')} />
     <link rel="canonical" href={window.location.href} />
-    <title>{get(campaign, 'keyTerms.shorthandBusinessName')} Campaign - NextSeed</title>
+    <title>{`${get(campaign, 'keyTerms.shorthandBusinessName')} Campaign - NextSeed`}</title>
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content={`${get(campaign, 'keyTerms.shorthandBusinessName')} | NextSeed`} />
