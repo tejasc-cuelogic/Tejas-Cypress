@@ -101,18 +101,9 @@ class HowItWorks extends Component {
       <>
       <Container>
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-          <Responsive maxWidth={767} as={React.Fragment}>
-            <Header as="h2">Accelerate your growth with the power of the crowd.</Header>
-            <div className={`${isMobile ? 'left-align' : 'center-align'}`}>
-              <Button.Group size={isMobile && 'tiny'}>
-                <Button as={Link} to="/business-application/business" secondary content="Business Application" />
-                <Button as={Link} to="/business-application/commercial-real-estate" secondary content="CRE Application" />
-              </Button.Group>
-            </div>
-            <Divider section />
-          </Responsive>
           <Header as="h2" className={isMobile ? 'mb-50' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>
-            Get flexible financing that doesn’t <Responsive minWidth={768} as="br" />cost you everything.
+            Get flexible financing that doesn’t<Responsive minWidth={768} as="br" />
+             cost you everything
           </Header>
           <Grid stackable columns={3} doubling>
             <Grid.Column className="info-grid">
@@ -120,8 +111,7 @@ class HowItWorks extends Component {
               <div>
                 <Header as="h5">New, community-driven approach</Header>
                 <p>
-              Don’t be limited by your network. With NextSeed, everyone is now a potential
-              source of capital – and a potential customer and advocate.
+                  Don’t be limited by your network. With NextSeed, everyone is now a potential source of capital – and a potential customer and advocate.
                 </p>
               </div>
             </Grid.Column>
@@ -148,13 +138,13 @@ class HowItWorks extends Component {
             </Grid.Column>
           </Grid>
         </section>
-        <Divider fitted as={Container} />
-        <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'} center-align`}>
-          <Header as="h2" textAlign="center">Raise exactly the type of capital you need</Header>
-          <p className="mb-60 center-align">
+        <Divider fitted />
+        <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100 center-align'}>
+          <Header as="h2">Raise exactly the type of capital you need</Header>
+          <p className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-60 center-align'}>
             Whether you{"'"}re raising capital for an expansion, a new venture, or to improve your current capacity, our<Responsive minWidth={768} as="br" />investment banking team will find the right capital solution to keep you in control of your business.
           </p>
-          <List horizontal relaxed className="mb-80">
+          <List horizontal relaxed className={responsiveVars.uptoTablet ? 'mb-40' : 'mb-80'}>
             <List.Item>
               <NSImage path="3.png" />
               <List.Content>
@@ -181,13 +171,15 @@ class HowItWorks extends Component {
             </List.Item>
           </List>
           <div className="center-align">
-            <Button as={Link} to="/" primary className="mb-14 relaxed">Apply Online</Button>
+            <Button fluid={responsiveVars.isMobile} as={Link} to="/" primary className={responsiveVars.isMobile ? '' : 'mb-14 relaxed'}>Apply Online</Button>
           </div>
-          <Header as="h5" textAlign="center">It only takes 5 minutes to complete our pre-qualification application</Header>
+          {!responsiveVars.isMobile
+            && <Header as="h5" textAlign="center">It only takes 5 minutes to complete our pre-qualification application</Header>
+          }
         </section>
-        <Divider fitted as={Container} />
+        <Divider fitted />
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-          <Header as="h2" className={`${isMobile ? 'mb-40' : 'mb-80'} center-align`}>We work with Main Street businesses.</Header>
+          <Header as="h2" className={isMobile ? 'mb-40' : 'mb-80 center-align'}>We work with Main Street businesses.</Header>
           {!isMobile
             ? (
               <Grid centered stackable relaxed={isTablet ? '' : 'very'} className="mt-20">
@@ -227,7 +219,7 @@ class HowItWorks extends Component {
             )
       }
         </section>
-        <Divider fitted as={Container} />
+        <Divider fitted />
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
           <Header as="h2" textAlign="center">From approved to funded in 71<sup>*</sup> days</Header>
           <p className="mb-50 center-align">
@@ -269,7 +261,7 @@ class HowItWorks extends Component {
             </Grid.Row>
           </Grid>
         </section>
-        <Divider fitted as={Container} />
+        <Divider fitted />
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
           <Header as="h2" textAlign="center">Reach your goals with full-service support</Header>
           <p className="mb-60 center-align">
@@ -357,7 +349,7 @@ class HowItWorks extends Component {
             </Grid.Row>
           </Grid>
         </section>
-        <Divider fitted as={Container} />
+        <Divider fitted />
         <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}  testimonial`}>
           <NsCarousel {...settings}>
             {testimonial.map(t => (
@@ -382,7 +374,7 @@ class HowItWorks extends Component {
         }
           </NsCarousel>
         </section>
-        <Divider fitted as={Container} />
+        <Divider fitted />
         <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'} proven-result-section`}>
           <Grid columns={2} stackable relaxed={!isTablet && 'very'}>
             <Grid.Column>
@@ -444,7 +436,7 @@ class HowItWorks extends Component {
             </Grid.Column>
           </Grid>
         </section>
-        <Divider fitted as={Container} />
+        <Divider fitted />
         <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'} center-align`}>
           <Header as="h2" textAlign="center">Let us know how we can help</Header>
           <p className="mb-40 center-align">
