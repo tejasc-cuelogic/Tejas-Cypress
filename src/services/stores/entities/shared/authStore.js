@@ -477,7 +477,7 @@ export class AuthStore {
     }
   });
 
-  IsOfferingException = (res) => {
+  IsInvalidException = (res) => {
     if (get(res, 'graphQLErrors[0].message')) {
       try {
         const parsedError = JSON.parse(get(res, 'graphQLErrors[0].message'));
@@ -497,7 +497,7 @@ export class AuthStore {
     const errors = {};
     const gqlErr = {};
 
-    if (this.IsOfferingException(res)) {
+    if (this.IsInvalidException(res)) {
       return;
     }
 
