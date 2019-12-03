@@ -821,6 +821,21 @@ export const getOfferingDetails = gql`
                 }
               }
             }
+            specialPurposeEntityAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
             llcAgreement {
               fileId
               fileName
@@ -961,6 +976,10 @@ export const getOfferingDetails = gql`
               fileName
             }
             proxyAgreement {
+              fileId
+              fileName
+            }
+            specialPurposeEntityAgreement {
               fileId
               fileName
             }
