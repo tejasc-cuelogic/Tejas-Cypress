@@ -161,7 +161,7 @@ export class NavStore {
     if (bIndex !== -1) {
       const subNavigations = [...filteredNavs[bIndex].subNavigations];
       const { offer } = offeringsStore;
-      offeringsStore.offerings.forEach((b) => {
+      offeringsStore.issuerOfferings.forEach((b) => {
         let sNav = this.filterByAccess(
           subNavigations,
           _.find(offeringsStore.phases, (s, i) => i === b.stage).accessKey,

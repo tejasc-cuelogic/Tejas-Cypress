@@ -11,13 +11,13 @@ export default class NsPaginationType2 extends Component {
     stateOptions: [5, 10, 15].map(n => ({ key: n, value: n, text: n })),
   };
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
+  static getDerivedStateFromProps(nextProps) {
+    return {
       lek: nextProps.meta.requestState.lek,
       first: nextProps.meta.requestState.perPage || 10,
       currentPageNo: nextProps.meta.requestState.page || 1,
       stateOptions: [5, 10, 15].map(n => ({ key: n, value: n, text: n })),
-    });
+    };
   }
 
   pageChangeHandler = (e) => {

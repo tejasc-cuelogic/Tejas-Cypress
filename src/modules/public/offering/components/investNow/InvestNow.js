@@ -91,6 +91,9 @@ export default class InvestNow extends React.Component {
       this.props.investmentStore.resetData();
       this.props.investmentStore.setByDefaultRender(true);
       this.props.accreditationStore.resetUserAccreditatedStatus();
+      this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
+      this.setState({ isInvestmentUpdate: false });
+      this.props.investmentStore.accTypeChanged(null, { value: this.props.userDetailsStore.currentActiveAccount });
       this.handleStepChnageOnPreviousForAlert();
     }
     this.props.investmentStore.setFieldValue('isGetTransferRequestCall', false);
@@ -173,12 +176,14 @@ export default class InvestNow extends React.Component {
         selectedAccountStatus,
       } = this.props.accreditationStore;
       changeShowAccountListFlag(false);
-      if (!this.props.accountStore.isAccFrozen(selectedAccountStatus) && userStatus === 'FULL' && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck)) {
+      if (!this.props.accountStore.isAccFrozen(selectedAccountStatus) && userStatus === 'FULL' && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && (['PENDING', 'INACTIVE', 'EXPIRED'].includes(userAccredetiationState))) || userAccredetiationState === undefined || !isRegulationCheck)) {
         this.props.investmentLimitStore
           .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
           .then((resp) => {
             const isDocumentUpload = get(resp, 'investNowHealthCheck.availabilityForNPAInOffering');
             if (!isDocumentUpload) {
+              this.handleStepChangeForPartialAccounts(0);
+            } else if (['INACTIVE', 'EXPIRED'].includes(userAccredetiationState)) {
               this.handleStepChangeForPartialAccounts(0);
             } else {
               this.handleStepChange(step.stepToBeRendered);
@@ -231,6 +236,7 @@ export default class InvestNow extends React.Component {
           inProgress={inProgress}
           submitStep={this.handleSubmitStep}
           disableContinueButton={!this.props.investmentStore.disableNextbtn}
+          isFromPublicPage={this.state.isInvestmentUpdate}
         />,
         isValid: '',
         stepToBeRendered: 1,

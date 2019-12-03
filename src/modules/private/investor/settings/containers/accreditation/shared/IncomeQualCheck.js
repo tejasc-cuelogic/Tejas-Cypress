@@ -9,7 +9,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('accreditationStore')
 @observer
 export default class IncomeQualificationCheck extends Component {
-  componentWillUpdate() {
+  componentDidUpdate() {
     const {
       INCOME_UPLOAD_DOC_FORM, ASSETS_UPLOAD_DOC_FORM,
     } = this.props.accreditationStore;
