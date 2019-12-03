@@ -8,7 +8,7 @@ import { GqlClient as clientPublic } from '../../../api/publicApi';
 import { GqlClient as client } from '../../../api/gqlApi';
 import { NEW_USER } from '../../../constants/user';
 import { PRIVATE_NAV } from '../../../constants/NavigationMeta';
-import { authStore } from '../index';
+import { authStore, userDetailsStore } from '../index';
 import { resetPasswordExpirationForCognitoUser, investorAccountDeleteProcess } from '../queries/users';
 
 export class UserStore {
@@ -30,7 +30,7 @@ export class UserStore {
   userEleChange = (e, res, type, isDeleteUser) => {
     this.USR_FRM = Validator.onChange(this.USR_FRM, Validator.pullValues(e, res), type);
     if (isDeleteUser) {
-      this.deleteUser = this.currentUser.email === this.USR_FRM.fields.email.value;
+      this.deleteUser = get(userDetailsStore.userDetails, 'email.address') === this.USR_FRM.fields.email.value;
     }
   };
 
