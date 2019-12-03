@@ -101,9 +101,9 @@ class HowItWorks extends Component {
       <>
       <Container>
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-          <Header as="h2" className={isMobile ? 'mb-50' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>
+          <Header as="h2" className={isMobile ? 'mb-30' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>
             Get flexible financing that doesn’t<Responsive minWidth={768} as="br" />
-             cost you everything
+            {' '}cost you everything
           </Header>
           <Grid stackable columns={3} doubling>
             <Grid.Column className="info-grid">
@@ -139,37 +139,33 @@ class HowItWorks extends Component {
           </Grid>
         </section>
         <Divider fitted />
-        <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100 center-align'}>
-          <Header as="h2">Raise exactly the type of capital you need</Header>
-          <p className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-60 center-align'}>
+        <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+          <Header as="h2" textAlign={isMobile ? 'left' : 'center'}>Raise exactly the type of capital you need</Header>
+          <p className={responsiveVars.isMobile ? 'mb-30' : 'mb-60 center-align'}>
             Whether you{"'"}re raising capital for an expansion, a new venture, or to improve your current capacity, our<Responsive minWidth={768} as="br" />investment banking team will find the right capital solution to keep you in control of your business.
           </p>
-          <List horizontal relaxed className={responsiveVars.uptoTablet ? 'mb-40' : 'mb-80'}>
-            <List.Item>
-              <NSImage path="3.png" />
-              <List.Content>
-                <List.Header>Debt</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <NSImage path="3.png" />
-              <List.Content>
-                <List.Header>Convertible Notes</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <NSImage path="3.png" />
-              <List.Content>
-                <List.Header>Equity</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <NSImage path="3.png" />
-              <List.Content>
-                <List.Header>SAFEs</List.Header>
-              </List.Content>
-            </List.Item>
-          </List>
+          <Grid className={responsiveVars.isMobile ? 'mb-40' : 'mb-80'} centered={!responsiveVars.isMobile}>
+            <Grid.Column computer={2} tablet={2} mobile={6}>
+              <Header as="h5">
+                <NSImage circular path="3.png" /> Debt
+              </Header>
+            </Grid.Column>
+            <Grid.Column computer={3} tablet={3} mobile={10}>
+              <Header as="h5">
+                <NSImage circular path="3.png" /> Convertible Notes
+              </Header>
+            </Grid.Column>
+            <Grid.Column computer={2} tablet={2} mobile={6}>
+              <Header as="h5">
+                <NSImage circular path="3.png" /> Equity
+              </Header>
+            </Grid.Column>
+            <Grid.Column computer={2} tablet={2} mobile={10}>
+              <Header as="h5">
+                <NSImage circular path="3.png" /> SAFEs
+              </Header>
+            </Grid.Column>
+          </Grid>
           <div className="center-align">
             <Button fluid={responsiveVars.isMobile} as={Link} to="/" primary className={responsiveVars.isMobile ? '' : 'mb-14 relaxed'}>Apply Online</Button>
           </div>
@@ -179,8 +175,8 @@ class HowItWorks extends Component {
         </section>
         <Divider fitted />
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-          <Header as="h2" className={isMobile ? 'mb-40' : 'mb-80 center-align'}>We work with Main Street businesses.</Header>
-          {!isMobile
+          <Header as="h2" className={responsiveVars.isMobile ? 'mb-40' : 'mb-80 center-align'}>We work with Main Street businesses.</Header>
+          {!responsiveVars.isMobile
             ? (
               <Grid centered stackable relaxed={isTablet ? '' : 'very'} className="mt-20">
                 {businesses.map((row, index) => (
@@ -221,14 +217,14 @@ class HowItWorks extends Component {
         </section>
         <Divider fitted />
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-          <Header as="h2" textAlign="center">From approved to funded in 71<sup>*</sup> days</Header>
-          <p className="mb-50 center-align">
+          <Header as="h2" textAlign={responsiveVars.isMobile ? 'mb-30' : 'center'}>From approved to funded in 71<sup>*</sup> days</Header>
+          <p className={responsiveVars.isMobile ? 'mb-50' : 'mb-50 center-align'}>
           We give you the platform, tools, and support to locate new investors<Responsive minWidth={768} as="br" /> as well as activate and engage your fans and customers.
           </p>
           <Grid padded="vertically">
-            <Grid.Row centered>
+            <Grid.Row centered={!responsiveVars.isMobile}>
               <Grid.Column computer={9} tablet={16} mobile={16} verticalAlign="middle" className="side-section process-right-section">
-                <List itemsPerRow={2} stackable className={`${isMobile ? 'mb-10' : 'mb-30'} left-align`}>
+                <List itemsPerRow={2} stackable className={`${isMobile ? 'mb-40' : 'mb-30'} left-align`}>
                   <List.Item className="mb-30">
                     <Header as="h5">Save time with our online application.</Header>
                     <p>
@@ -254,7 +250,7 @@ class HowItWorks extends Component {
                     </p>
                   </List.Item>
                 </List>
-                <p className="center-align note">
+                <p className={`${responsiveVars.isMobile ? '' : 'center-align'} note`}>
                   *Average time to complete an offering. Data accurate as of 10/29/19
                 </p>
               </Grid.Column>
@@ -263,8 +259,8 @@ class HowItWorks extends Component {
         </section>
         <Divider fitted />
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-          <Header as="h2" textAlign="center">Reach your goals with full-service support</Header>
-          <p className="mb-60 center-align">
+          <Header as="h2" textAlign={responsiveVars.isMobile ? 'mb-30' : 'center'}>Reach your goals with full-service support</Header>
+          <p className={responsiveVars.isMobile ? 'mb-40' : 'mb-60 center-align'}>
           Our one-time fee comes with everything you need to launch, promote and service
           your<Responsive minWidth={768} as="br" />campaign. Best of all, we only charge you if your offering is successful.
           </p>
@@ -437,12 +433,14 @@ class HowItWorks extends Component {
           </Grid>
         </section>
         <Divider fitted />
-        <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'} center-align`}>
-          <Header as="h2" textAlign="center">Let us know how we can help</Header>
-          <p className="mb-40 center-align">
+        <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+          <Header as="h2" textAlign={isMobile ? 'left' : 'center'}>Let us know how we can help</Header>
+          <p className={responsiveVars.isMobile ? 'mb-40' : 'mb-40 center-align'}>
       Have questions about how we can help your business achieve your goals? We{"'"}re here to help.
           </p>
-          <Button primary>Contact Us</Button>
+          <div className={responsiveVars.isMobile ? '' : 'center-align'}>
+            <Button primary fluid={responsiveVars.isMobile}>Contact Us</Button>
+          </div>
         </section>
       </Container>
         <Route path="/business/how-it-works/video" render={props => <VideoModal {...props} videoDetails={nsvideos} />} />

@@ -101,6 +101,9 @@
 		text-align: left;
 		font-size: @40px !important;
 		font-weight: @fontMedium;
+		@media only screen and (max-width : @largestMobileScreen){
+			font-size: @28px !important;
+		}
 	}
 	>.label {
 		font-size: @15px;
