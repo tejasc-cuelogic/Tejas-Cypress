@@ -13,6 +13,8 @@ export class CommonStore {
 
   @observable inProgress = false;
 
+  @observable appUpdated = false;
+
   constructor() {
     reaction(
       () => this.token,
@@ -99,6 +101,12 @@ export class CommonStore {
   @action
   setAppLoaded() {
     this.appLoaded = true;
+  }
+
+  @action
+  setAppUpdated() {
+    Helper.toast('The app has been updated! Hooray! Refresh your browser to enjoy the latest and greatest', 'info');
+    this.appUpdated = true;
   }
 
   @action
