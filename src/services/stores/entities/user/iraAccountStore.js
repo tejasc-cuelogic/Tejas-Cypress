@@ -10,7 +10,7 @@ import {
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 import { uiStore, bankAccountStore, userDetailsStore, investmentLimitStore, accountStore } from '../../index';
-import { upsertInvestorAccount, submitinvestorAccount } from '../../queries/account';
+import { upsertInvestorAccount, submitInvestorAccount } from '../../queries/account';
 import { validationActions, fileUpload } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
@@ -177,7 +177,7 @@ class IraAccountStore {
     };
     client
       .mutate({
-        mutation: submitinvestorAccount,
+        mutation: submitInvestorAccount,
         variables: payLoad,
       })
       .then((res) => {

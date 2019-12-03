@@ -4,7 +4,7 @@ import { bankAccountStore, uiStore, userDetailsStore, userStore } from '../../in
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { submitinvestorAccount, upsertInvestorAccount, createIndividualGoldStarInvestor } from '../../queries/account';
+import { submitInvestorAccount, upsertInvestorAccount, createIndividualGoldStarInvestor } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 // import userStore from '../userStore';
@@ -63,7 +63,7 @@ class IndividualAccountStore {
       uiStore.setProgress();
       client
         .mutate({
-          mutation: submitinvestorAccount,
+          mutation: submitInvestorAccount,
           variables: payLoad,
         })
         .then((res1) => {
@@ -108,7 +108,6 @@ class IndividualAccountStore {
       }
       resolve();
     }).catch((err) => {
-      console.log('Error', err);
       if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
         if (this.retryGoldStar < 1) {
           this.retryGoldStar += 1;

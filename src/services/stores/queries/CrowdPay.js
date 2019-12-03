@@ -115,17 +115,8 @@ mutation crowdPayAccountValidate($userId: String!, $accountId: String!, $skipCip
 }
 `;
 
-export const createIndividualAccount = gql`
-mutation _submitInvestorAccount($userId: String,$accountId: String!, $accountType: InvestorAccountTypeEnum!){
-  submitInvestorAccount(
-    userId: $userId,
-    accountId: $accountId,
-    accountType: $accountType
-  )
-}`;
-
 export const getDecryptedGoldstarAccountNumber = gql`
-mutation _getDecryptedGoldstarAccountNumber($userId:String!, $accountId: String!){
+mutation getDecryptedGoldstarAccountNumber($userId:String!, $accountId: String!){
   getDecryptedGoldstarAccountNumber(userId: $userId , accountId: $accountId )
 }`;
 

@@ -12,7 +12,7 @@ import {
   US_STATES_FOR_INVESTOR,
 } from '../../../../constants/account';
 import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore, accountStore } from '../../index';
-import { upsertInvestorAccount, submitinvestorAccount, isUniqueTaxId } from '../../queries/account';
+import { upsertInvestorAccount, submitInvestorAccount, isUniqueTaxId } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { validationActions, fileUpload } from '../../../actions';
@@ -146,7 +146,7 @@ class EntityAccountStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: submitinvestorAccount,
+          mutation: submitInvestorAccount,
           variables: payLoad,
         })
         .then((res) => {
