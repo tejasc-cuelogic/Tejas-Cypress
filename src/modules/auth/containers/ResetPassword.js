@@ -56,7 +56,7 @@ export default class ResetPassword extends Component {
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Password Reset</Header>
-          <p>If an account is associated with this email address, an email has been sent with a 6-digit verification code. Please confirm your verification code and update your password.</p>
+          <p>If an account is associated with this email address, an email has been sent with a 6-digit verification code. Please enter your verification code here to update your password.</p>
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.onSubmit}>

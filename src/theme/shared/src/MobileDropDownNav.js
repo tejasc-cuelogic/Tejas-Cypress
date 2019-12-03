@@ -1,5 +1,6 @@
 import React from 'react';
 import { Menu, Responsive, Dropdown, Icon, Visibility } from 'semantic-ui-react';
+import { get } from 'lodash';
 import { matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { NavItems } from '../../layout/NavigationItems';
@@ -17,7 +18,7 @@ export default class MobileDropDownNav extends React.Component {
       const path = `${refMatch.url}/${i.to}`;
       return matchPath(location.pathname, { path });
     });
-    const title = active ? active.title : this.props.navItems[0].title;
+    const title = active ? active.title : get(this.props, 'navItems[0].title');
     if (title !== this.state.title) {
       if (document.querySelector('.anchor')) {
         document.querySelector('.anchor').scrollIntoView({
@@ -56,16 +57,16 @@ export default class MobileDropDownNav extends React.Component {
             </Menu>
           )
             : (
-<Menu id={id} inverted={this.props.inverted} className={`mobile-dropdown-menu ${className} ${campaignHeaderStatus ? 'active' : (!useIsActive && navStatus === 'sub' && !slideUpNot ? 'active' : '')}`}>
-            <Dropdown item text={this.activeText()}>
-              <Dropdown.Menu>
-              {navItemsComponent}
-              </Dropdown.Menu>
-            </Dropdown>
-            {location.pathname.startsWith('/offerings/')
-              && <Icon onClick={this.toggleCampaignSideBar} color="white" className="open-campaign-menu ns-campaign-dashboard" />
-            }
-          </Menu>
+              <Menu id={id} inverted={this.props.inverted} className={`mobile-dropdown-menu ${className} ${campaignHeaderStatus ? 'active' : (!useIsActive && navStatus === 'sub' && !slideUpNot ? 'active' : '')}`}>
+                <Dropdown item text={this.activeText()}>
+                  <Dropdown.Menu>
+                    {navItemsComponent}
+                  </Dropdown.Menu>
+                </Dropdown>
+                {location.pathname.startsWith('/offerings/')
+                  && <Icon onClick={this.toggleCampaignSideBar} color="white" className="open-campaign-menu ns-campaign-dashboard" />
+                }
+              </Menu>
             )}
           <div className="animate-placeholder" />
         </Visibility>
