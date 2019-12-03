@@ -821,7 +821,7 @@ export const getOfferingDetails = gql`
                 }
               }
             }
-            llcSpecialPurposeEntityAgreement {
+            specialPurposeEntityAgreement {
               fileId
               fileName
               fileHandle {
@@ -979,7 +979,7 @@ export const getOfferingDetails = gql`
               fileId
               fileName
             }
-            llcSpecialPurposeEntityAgreement {
+            specialPurposeEntityAgreement {
               fileId
               fileName
             }

@@ -2694,7 +2694,7 @@ export const ADMIN_DOCUMENTATION = {
     stepName: 'DOCUMENTS_LEGAL_PROXY_AGREEMENT',
     lastModifiedDate: '',
   },
-  llcSpecialPurposeEntityAgreement: {
+  specialPurposeEntityAgreement: {
     value: '',
     label: 'LLC Agreement - Special Purpose Entity Agreement',
     error: undefined,
@@ -2704,7 +2704,7 @@ export const ADMIN_DOCUMENTATION = {
     fileId: '',
     fileData: '',
     objType: 'FileObjectType',
-    stepName: 'DOCUMENTS_LEGAL_LLC_SPECIAL_PURPOSE_ENTITY_AGREEMENT',
+    stepName: 'DOCUMENTS_LEGAL_SPECIAL_PURPOSE_ENTITY_AGREEMENT',
     lastModifiedDate: '',
   },
   llcAgreement: {
