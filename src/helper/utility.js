@@ -9,7 +9,7 @@ import money from 'money-math';
 import sanitizeHtml from 'sanitize-html';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
-import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS } from '../constants/common';
+import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS, REACT_APP_DEPLOY_ENV } from '../constants/common';
 import authStore from '../services/stores/entities/shared/authStore';
 import userStore from '../services/stores/entities/userStore';
 
@@ -354,6 +354,14 @@ export class Utility {
     const modal = document.querySelector(`.${searchClass}`).closest('.page');
     modal.classList.add(addClass);
   }
+
+  pageTitle = (t = '') => {
+    try {
+      return (!['production', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV) ? `[${REACT_APP_DEPLOY_ENV}] | ${t}` : t);
+    } catch (e) {
+      return 'Alternative Investments Made Simple - NextSeed';
+    }
+  };
 }
 
 export default new Utility();

@@ -67,9 +67,13 @@ export default class DocumentModal extends Component {
         <Modal.Content>
         <section className="no-updates center-align bg-offwhite padded">
           <Header as="h3" className="mb-20 mt-50">
-            This investment is only available to accredited investors.
+            This document is only available to accredited investors.
           </Header>
-          <p>Please confirm your accredited investor status to access this Document.</p>
+          {
+            !this.props.userStore.currentUser
+              ? <p>Please log in to verify accredited investor status.</p>
+              : <p>Please confirm your accredited investor status to access this Document.</p>
+          }
           {
             !this.props.userStore.currentUser
               ? <Button as={Link} to={`/${stepInRoute.to}`} primary content={stepInRoute.title} className="mt-20 mb-50" />
