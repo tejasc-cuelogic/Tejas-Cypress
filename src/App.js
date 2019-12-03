@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import { get, isEmpty } from 'lodash';
 import queryString from 'query-string';
 import IdleTimer from 'react-idle-timer';
+import { Modal, Button } from 'semantic-ui-react';
 import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
 import { DevBanner, Spinner } from './theme/shared';
@@ -233,17 +234,17 @@ class App extends Component {
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
 
   render() {
-    const { location } = this.props;
+    const { location, uiStore } = this.props;
     const { authChecked } = this.state;
-    const { isTablet } = this.props.uiStore.responsiveVars;
+    const { isTablet } = uiStore.responsiveVars;
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {
       return (
         <Route path="/secure-gateway" component={SecureGateway} />
       );
     }
-    if (this.props.uiStore.appLoader || !authChecked) {
+    if (uiStore.appLoader || !authChecked) {
       return (
-        <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
+        <Spinner loaderMessage={uiStore.loaderMessage} />
       );
     }
     return (
@@ -278,7 +279,28 @@ class App extends Component {
           )
         }
         <ToastContainer className="toast-message" />
-        {this.props.uiStore.devBanner
+        {(uiStore.appUpdated) && (
+          <Modal dimmer open>
+            <Modal.Header>The app has been updated!</Modal.Header>
+            <Modal.Content>
+              <Modal.Description>
+                <p>Hooray! Refresh your browser to enjoy the latest and greatest</p>
+              </Modal.Description>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button
+                positive
+                icon="checkmark"
+                labelPosition="right"
+                content="Refresh !"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              />
+            </Modal.Actions>
+          </Modal>
+        )}
+        {uiStore.devBanner
           && <DevBanner toggle={this.playDevBanner} />
         }
       </div>

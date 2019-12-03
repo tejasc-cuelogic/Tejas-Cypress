@@ -48,7 +48,7 @@ promiseFinally.shim();
 configure({ enforceActions: true });
 
 const onAppUpdated = () => {
-  stores.commonStore.setAppUpdated();
+  stores.uiStore.setAppUpdated();
 };
 
 ReactDOM.render(
