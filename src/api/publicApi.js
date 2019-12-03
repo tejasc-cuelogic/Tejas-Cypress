@@ -1,6 +1,7 @@
 /* eslint-disable arrow-body-style  */
 import fetch from 'isomorphic-fetch';
 import ApolloClient from 'apollo-boost';
+import { RetryLink } from 'apollo-link-retry';
 import { get } from 'lodash';
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import { authStore } from '../services/stores';
@@ -30,6 +31,7 @@ export const GqlClient = new ApolloClient({
       authStore.sendErrorMail(res);
     }
   },
+  link: new RetryLink(),
   cache: new InMemoryCache({ fragmentMatcher }),
   // connectToDevTools: REACT_APP_DEPLOY_ENV === 'localhost',
 });
