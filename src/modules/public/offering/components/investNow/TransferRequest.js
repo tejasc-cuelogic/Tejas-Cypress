@@ -4,13 +4,12 @@ import { Header, Button, Table, Popup, Icon, Message } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import Helper from '../../../../../helper/utility';
 
-@inject('investmentStore', 'investmentLimitStore')
+@inject('investmentStore', 'investmentLimitStore', 'uiStore')
 @withRouter
 @observer
 class TransferRequest extends Component {
   constructor(props) {
     // eslint-disable-next-line no-debugger
-    debugger;
     super(props);
     const {
       getTransferRequestAmount,
@@ -41,6 +40,8 @@ class TransferRequest extends Component {
     if (stepToBeRendered === 2) {
       setStepToBeRendered(0);
     }
+    this.props.uiStore.clearErrors();
+    setFieldValue('investmentFlowEquityErrorMessage', null);
     setFieldValue('investmentFlowErrorMessage', null);
     resetFormErrors('INVESTMONEY_FORM');
   }
