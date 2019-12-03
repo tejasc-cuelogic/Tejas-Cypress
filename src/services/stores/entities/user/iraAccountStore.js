@@ -419,7 +419,6 @@ class IraAccountStore {
           this.setFormData('FUNDING_FRM', account.details);
           this.setFormData('ACC_TYPES_FRM', account.details);
           this.setFormData('IDENTITY_FRM', account.details);
-          bankAccountStore.validateAddFunds();
           if (account.details.linkedBank) {
             const plaidAccDetails = account.details.linkedBank;
             if (!bankAccountStore.isAccountPresent) {
@@ -442,6 +441,7 @@ class IraAccountStore {
             bankAccountStore.formIraAddFunds.fields.value.value = account.details.initialDepositAmount;
           }
           bankAccountStore.validateAddFunds();
+          bankAccountStore.validateAddfundsAmount();
           const { fundingType } = this.FUNDING_FRM.fields;
           const getIraStep = AccCreationHelper.iraSteps(fundingType.value);
           if (!this.FIN_INFO_FRM.meta.isValid) {
@@ -455,7 +455,7 @@ class IraAccountStore {
             this.setStepToBeRendered(getIraStep.LINK_BANK);
           } else if (fundingType.value === 0
             && bankAccountStore.isAccountPresent
-            && isEmpty(bankAccountStore.formIraAddFunds.fields.value.value.toString())) {
+            && !bankAccountStore.formIraAddFunds.meta.isValid) {
             this.setStepToBeRendered(getIraStep.ADD_FUNDS);
           } else if (!this.IDENTITY_FRM.meta.isValid) {
             this.setStepToBeRendered(getIraStep.IDENTITY_FRM);

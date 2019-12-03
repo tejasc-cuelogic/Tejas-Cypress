@@ -590,7 +590,6 @@ class EntityAccountStore {
           if (account.details && account.details.legalDocs) {
             this.setEntityAttributes('Formation doc');
           }
-          bankAccountStore.validateAddFunds();
           if (account.details.linkedBank) {
             const plaidAccDetails = account.details.linkedBank;
             if (!isEmpty(account.details.initialDepositAmount)) {
@@ -637,7 +636,7 @@ class EntityAccountStore {
     } else if (!bankAccountStore.isAccountPresent) {
       this.setStepToBeRendered(getEntityStep.formLinkBankManually);
     } else if (bankAccountStore.isAccountPresent
-      && isEmpty(bankAccountStore.formEntityAddFunds.fields.value.value.toString())) {
+      && !bankAccountStore.formEntityAddFunds.meta.isValid) {
       this.setStepToBeRendered(getEntityStep.addFunds);
     } else {
       this.setStepToBeRendered(getEntityStep.summary);

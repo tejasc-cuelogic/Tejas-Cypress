@@ -24,6 +24,7 @@ export default class AddFunds extends Component {
   }
 
   doNotDepositMoneyNow = () => {
+    this.props.bankAccountStore.resetAddFundsForm();
     this.props.bankAccountStore.validateAddFunds();
     this.props.bankAccountStore.setDepositMoneyNow(false);
     this.renderStep();
