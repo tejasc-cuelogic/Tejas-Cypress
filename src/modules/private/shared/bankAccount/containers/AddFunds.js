@@ -61,7 +61,6 @@ export default class AddFunds extends Component {
     store.createAccount(currentStep).then(() => {
       if (this.props.bankAccountStore.isAccountPresent) {
         this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
-        this.props.individualAccountStore.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
       }
       store.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
     }).catch(() => {
