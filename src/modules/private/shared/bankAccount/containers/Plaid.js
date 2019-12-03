@@ -28,7 +28,7 @@ export default class Plaid extends Component {
   }
 
   componentWillUnmount() {
-    this.props.bankAccountStore.resetPlaidBankSearch();
+    this.props.bankAccountStore.resetPlaidBankSearch(true);
     const modalEle = document.getElementById('multistep-modal');
     if (modalEle && isMobile) {
       modalEle.parentNode.scrollTo(0, 0);

@@ -240,10 +240,10 @@ export class BankAccountStore {
   }
 
   @action
-  resetPlaidBankSearch = () => {
-    if (this.showAddFunds
-      || this.bankLinkInterface === 'form'
-      || this.linkbankSummary) {
+  resetPlaidBankSearch = (forceReset = false) => {
+    if (this.bankLinkInterface === 'form'
+      || this.linkbankSummary
+      || forceReset) {
       this.setBankListing();
       this.resetFormData('formBankSearch');
     }
