@@ -8,6 +8,8 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import { UserAvatar } from '../../../../theme/shared';
 import { allUsersQuery } from '../../queries/users';
 import { DELETED_ACCOUNT_STATUS } from '../../../../constants/user';
+import Helper from '../../../../helper/utility';
+
 
 export class UserListingStore {
   @observable usersData = [];
@@ -94,6 +96,7 @@ export class UserListingStore {
       query: allUsersQuery,
       variables: params,
       fetchPolicy: 'network-only',
+      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
     });
   }
 
