@@ -1,6 +1,7 @@
 /* eslint-disable space-unary-ops */
 import { action, observable, computed } from 'mobx';
 import { REACT_APP_DEPLOY_ENV, NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
+import Helper from '../../../../helper/utility';
 
 export class UiStore {
   @observable
@@ -71,6 +72,14 @@ export class UiStore {
   @observable defaultNavExpandedVal = + new Date();
 
   @observable isFromBusinessApplication = false;
+
+  @observable appUpdated = false;
+
+  @action
+  setAppUpdated() {
+    Helper.toast('The app has been updated! Hooray! Refresh your browser to enjoy the latest and greatest', 'info');
+    this.appUpdated = true;
+  }
 
   @action
   setFieldvalue = (field, value) => {

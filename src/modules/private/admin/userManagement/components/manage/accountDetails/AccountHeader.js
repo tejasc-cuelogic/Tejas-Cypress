@@ -57,7 +57,6 @@ export default class AccountHeader extends Component {
                                     <li>Can NOT make deposits</li>
                                     <li>Can NOT make withdraw</li>
                                     <li>Can cancel a reservation</li>
-                                    <li>Can cancel a reservation</li>
                                     <li>Can make change linked bank account requests</li>
                                   </>
                                 )

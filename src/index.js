@@ -11,6 +11,7 @@ import App from './App';
 import * as stores from './services/stores';
 import { ErrorBoundry as CustomErrorBoundry, Utilities as Utils } from './helper';
 import { REACT_APP_DEPLOY_ENV } from './constants/common';
+import * as serviceWorker from './serviceWorker';
 
 // Set the default error boundry to the customErrorBoundry
 // and reassign it if one from Bugsnag is present
@@ -46,6 +47,10 @@ if (['localhost', 'develop', 'dev', 'predev', 'review'].includes(REACT_APP_DEPLO
 promiseFinally.shim();
 configure({ enforceActions: true });
 
+const onAppUpdated = () => {
+  stores.uiStore.setAppUpdated();
+};
+
 ReactDOM.render(
   <Provider {...stores}>
     <BrowserRouter>
@@ -56,3 +61,10 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root'),
 );
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: http://bit.ly/CRA-PWA
+serviceWorker.register({
+  onUpdate: onAppUpdated,
+});
