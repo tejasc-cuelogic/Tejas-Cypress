@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { orderBy, get } from 'lodash';
+import { orderBy, get, isArray } from 'lodash';
 import moment from 'moment';
 import { Route } from 'react-router-dom';
 import { toJS } from 'mobx';
@@ -43,20 +43,29 @@ class CampaignLayout extends Component {
   }
 
   componentDidMount() {
-    document.querySelectorAll('.fr-view').forEach((e) => {
-      e.querySelectorAll('img').forEach((ele) => {
-        this.pWrapper(ele);
-        ele.setAttribute('data-src', ele.getAttribute('src'));
-        ele.removeAttribute('src');
-        ele.closest('.closest').classList.add('ui');
-        ele.closest('.closest').classList.add('placeholder');
-      });
-      e.querySelectorAll('iframe').forEach((ele) => {
-        if (!ele.getAttribute('title')) {
-          ele.setAttribute('title', this.props.offeringName || 'Offering');
+    const frViews = document.querySelectorAll('.fr-view');
+    if (isArray(frViews)) {
+      frViews.forEach((e) => {
+        const eImages = e.querySelectorAll('img');
+        if (isArray(eImages)) {
+          eImages.forEach((ele) => {
+            this.pWrapper(ele);
+            ele.setAttribute('data-src', ele.getAttribute('src'));
+            ele.removeAttribute('src');
+            ele.closest('.closest').classList.add('ui');
+            ele.closest('.closest').classList.add('placeholder');
+          });
+        }
+        const eIframe = e.querySelectorAll('iframe');
+        if (isArray(eIframe)) {
+          eIframe.forEach((ele) => {
+            if (!ele.getAttribute('title')) {
+              ele.setAttribute('title', this.props.offeringName || 'Offering');
+            }
+          });
         }
       });
-    });
+    }
     if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
       document.querySelector(`${this.props.location.hash}`).scrollIntoView({
@@ -69,15 +78,21 @@ class CampaignLayout extends Component {
   }
 
   componentDidUpdate() {
-    document.querySelectorAll('.fr-view').forEach((e) => {
-      e.querySelectorAll('img').forEach((ele) => {
-        this.pWrapper(ele);
-        ele.setAttribute('data-src', ele.getAttribute('src'));
-        ele.removeAttribute('src');
-        ele.closest('.closest').classList.add('ui');
-        ele.closest('.closest').classList.add('placeholder');
+    const frViews = document.querySelectorAll('.fr-view');
+    if (isArray(frViews)) {
+      frViews.forEach((e) => {
+        const eImages = e.querySelectorAll('img');
+        if (isArray(eImages)) {
+          eImages.forEach((ele) => {
+            this.pWrapper(ele);
+            ele.setAttribute('data-src', ele.getAttribute('src'));
+            ele.removeAttribute('src');
+            ele.closest('.closest').classList.add('ui');
+            ele.closest('.closest').classList.add('placeholder');
+          });
+        }
       });
-    });
+    }
     this.processLazyLoadImages();
   }
 
