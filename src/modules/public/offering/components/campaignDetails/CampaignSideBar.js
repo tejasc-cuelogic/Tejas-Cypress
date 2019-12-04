@@ -28,7 +28,7 @@ export default class CampaignSideBar extends Component {
     const {
       isClosed, isCreation, isInProcessing, collected, minFlagStatus, isBonusReward,
       minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, diffForProcessing,
-      earlyBird, isEarlyBirdRewards, bonusRewards, countDown,
+      earlyBird, isEarlyBirdRewards, bonusRewards, countDown, isInvestedInOffering,
     } = campaignStatus;
     const isCampaignLayout = newLayout;
     return (
@@ -184,7 +184,7 @@ export default class CampaignSideBar extends Component {
                         onClick={this.handleInvestNowClick}
                         fluid
                       >
-                        {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                        {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : isInvestedInOffering ? 'Change Investment' : 'Invest Now'}`}
                       </Button>
                       <p className="mt-10">
                         {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
