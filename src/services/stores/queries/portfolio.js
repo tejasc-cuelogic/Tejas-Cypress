@@ -167,7 +167,7 @@ export const cancelAgreement = gql`
   }`;
 
 export const getMonthlyPaymentsToInvestorByOffering = gql`
-query _getMonthlyPaymentsToInvestorByOffering($userId:String, $accountId:String!, $offeringId:String!) {
+query getMonthlyPaymentsToInvestorByOffering($userId:String, $accountId:String!, $offeringId:String!) {
   getMonthlyPaymentsToInvestorByOffering (
     userId: $userId
     accountId: $accountId

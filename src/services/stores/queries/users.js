@@ -582,7 +582,7 @@ export const userAccreditationQuery = gql`
 `;
 
 export const resetPasswordExpirationForCognitoUser = gql`
-  mutation _resetPasswordExpirationDurationForCognitoUser($emailAddress: String!) {
+  mutation resetPasswordExpirationDurationForCognitoUser($emailAddress: String!) {
     resetPasswordExpirationDurationForCognitoUser (emailAddress: $emailAddress)
   }
 `;
@@ -596,7 +596,7 @@ export const toggleUserAccount = gql`
 `;
 
 export const adminAddUser = gql`
-  mutation _createUser($userDetails: UserInputObjectType! ){
+  mutation createUser($userDetails: UserInputObjectType! ){
     createUser(userDetails: $userDetails) {
         id
       }
@@ -663,7 +663,7 @@ query investorAccountDeleteProcess {
 `;
 
 export const getEmailList = gql`
-query _fetchEmails ($recipientId: String!, $subject: String, $fromDate: String, $toDate: String, $limit: Int, $lek: String){
+query fetchEmails ($recipientId: String!, $subject: String, $fromDate: String, $toDate: String, $limit: Int, $lek: String){
   fetchEmails(
     recipientId: $recipientId
     subject: $subject

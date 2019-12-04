@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const offeringCommentsByOfferId = gql`
-  query _offeringCommentsByOfferId($offerId: String!) {
+  query offeringCommentsByOfferId($offerId: String!) {
   offeringCommentsByOfferId (offerId: $offerId) {
     id
     offeringId
@@ -74,13 +74,13 @@ export const offeringCommentsByOfferId = gql`
 `;
 
 export const deleteMessage = gql`
-  mutation _deleteOfferingComments($id: [String]) {
+  mutation deleteOfferingComments($id: [String]) {
     deleteOfferingComments(id: $id)
   }
 `;
 
 export const createOfferingComments = gql`
-  mutation _createOfferingComments($commentInput: OfferingCommentsInput!) {
+  mutation createOfferingComments($commentInput: OfferingCommentsInput!) {
   createOfferingComments (
     commentInput: $commentInput
   ) {
@@ -90,7 +90,7 @@ export const createOfferingComments = gql`
 `;
 
 export const offeringCommentsApprovedByInfo = gql`
-  mutation _offeringCommentsApprovedByInfo($id: String!) {
+  mutation offeringCommentsApprovedByInfo($id: String!) {
     offeringCommentsApprovedByInfo (
     id: $id
   ) {
@@ -100,7 +100,7 @@ export const offeringCommentsApprovedByInfo = gql`
 `;
 
 export const updateOfferingCommentsInfo = gql`
-  mutation _updateOfferingCommentsInfo($id: String!, $commentInput: OfferingCommentsInput!) {
+  mutation updateOfferingCommentsInfo($id: String!, $commentInput: OfferingCommentsInput!) {
     updateOfferingCommentsInfo (
       id: $id
       commentInput: $commentInput

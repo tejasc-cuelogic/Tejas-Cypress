@@ -17,7 +17,7 @@ export const removeUploadedFile = gql`
   }`;
 
 export const updateUserReferralCode = gql`
-mutation _updateUserReferralCode($referralCode: String!) {
+mutation updateUserReferralCode($referralCode: String!) {
   updateUserReferralCode (
     referralCode: $referralCode
   )
@@ -32,14 +32,14 @@ export const getBoxFileDetails = gql`
 `;
 
 export const createCdnSignedUrl = gql`
-  mutation _createCdnSignedUrl($key: String!){
+  mutation createCdnSignedUrl($key: String!){
     createCdnSignedUrl(
       key: $key
     )
   }
 `;
 export const deleteCdnS3File = gql`
-mutation _deleteCdnS3File($key: String!){ 
+mutation deleteCdnS3File($key: String!){ 
   deleteCdnS3File(
     key: $key
   )
