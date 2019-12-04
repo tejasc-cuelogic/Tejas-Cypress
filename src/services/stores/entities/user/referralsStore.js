@@ -67,24 +67,23 @@ export class ReferralStore {
   });
 
   @action
-  userPartialFullSignupWithReferralCode = (val) => {
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: userPartialSignupWithReferralCode,
-          variables: { code: val },
-        })
-        .then((result) => {
-          if (result) {
-            resolve(result);
-          }
-        })
-        .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(error.message);
-          reject(error);
-        });
-    });
-  };
+  userPartialFullSignupWithReferralCode = val => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: userPartialSignupWithReferralCode,
+        variables: { code: val },
+      })
+      .then((result) => {
+        if (result) {
+          resolve(result);
+        }
+      })
+      .catch((error) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setErrors(error.message);
+        reject(error);
+      });
+  });
+}
 
 export default new ReferralStore();

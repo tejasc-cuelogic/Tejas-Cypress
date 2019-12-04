@@ -700,7 +700,7 @@ export class AccreditationStore {
       client,
       query: userAccreditationQuery,
       fetchPolicy: 'network-only',
-      variables: userId ? { userId: userId } : { },
+      variables: userId ? { userId } : { },
       onFetch: () => {
         if (!this.userData.loading) {
           if (setInProgressArray) {
