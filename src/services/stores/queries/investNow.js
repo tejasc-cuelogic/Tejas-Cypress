@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const getInvestorAvailableCash = gql`
-  query _getInvestorAvailableCash(
-    $userId: String!, $accountId: String!, $includeInFlight: Boolean,
+  query getInvestorAvailableCash(
+    $userId: String, $accountId: String!, $includeInFlight: Boolean,
     $includeInterest: Boolean, $dateFilterStart: String
     $dateFilterStop: String, $txOnly: Boolean,
     ){

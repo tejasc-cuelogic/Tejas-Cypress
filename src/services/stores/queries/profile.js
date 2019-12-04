@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
 
 export const updateUserProfileData = gql`
-  mutation _updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: ProfileDataLegalInput, $preferredInfo: PreferredInfoInput, $capabilities: [String], $targetUserId: String) {
+  mutation updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: ProfileDataLegalInput, $preferredInfo: PreferredInfoInput, $capabilities: [String], $targetUserId: String) {
   updateUserProfileData(
-  profileDetails: $profileDetails, targetUserId: $targetUserId, legalDetails: $legalDetails, preferredInfo: $preferredInfo, capabilities: $capabilities
+  profileDetails: $profileDetails, userId: $targetUserId, legalDetails: $legalDetails, preferredInfo: $preferredInfo, capabilities: $capabilities
   ) {
       id
       info {
@@ -20,14 +20,14 @@ export const updateUserProfileData = gql`
   }`;
 
 export const requestEmailChnage = gql`
-  mutation _requestEmailChange($newEmail: String!) {
+  mutation requestEmailChange($newEmail: String!) {
     requestEmailChange(
       newEmail: $newEmail
     )
   }`;
 
 export const verifyAndUpdateEmail = gql`
-  mutation _verifyAndUpdateEmail($confirmationCode: String! $resourceId: String!) {
+  mutation verifyAndUpdateEmail($confirmationCode: String! $resourceId: String!) {
     verifyAndUpdateEmail(
       confirmationCode: $confirmationCode
       resourceId: $resourceId
@@ -46,7 +46,7 @@ export const isUniqueSSN = gql`
   }`;
 
 export const verifyCip = gql`
-  mutation _verifyCip($userId: String!, $user: UserCIPInput, $phoneDetails: phoneInput!, $isCipOffline: Boolean){
+  mutation verifyCip($userId: String!, $user: UserCIPInput, $phoneDetails: phoneInput!, $isCipOffline: Boolean){
     verifyCip(userId: $userId, user: $user, phoneDetails: $phoneDetails, isCipOffline: $isCipOffline)
   }`;
 
@@ -56,11 +56,10 @@ export const verifyCipSoftFail = gql`
   }`;
 
 export const verifyCipHardFail = gql`
-mutation verifyCipHardFail($license: String!, $residence: String!, $userId: String) {
+mutation verifyCipHardFail($license: String!, $residence: String!) {
     verifyCipHardFail(
       license: $license
       residence: $residence
-      userId: $userId
     )
   }`;
 
@@ -75,9 +74,8 @@ export const portPrequalDataToApplication = gql`
   }`;
 
 export const requestOtp = gql`
-  mutation requestOtp($userId: String $type: MFAModeEnum, $address: String){
+  mutation requestOtp($type: MFAModeEnum, $address: String){
     requestOtp(
-      userId: $userId
       type: $type
       address: $address
     )

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const allUpdates = gql`
-  query _fetchUpdatesByOfferId ($offerId: String!, $userId: String) {
+  query fetchUpdatesByOfferId ($offerId: String!, $userId: String) {
     offeringUpdatesByOfferId (
       offerId: $offerId
       userId: $userId
@@ -26,7 +26,7 @@ export const allUpdates = gql`
 `;
 
 export const newUpdate = gql`
-  mutation _createOfferingUpdates ($updatesInput: OfferingUpdatesInput! ) {
+  mutation createOfferingUpdates ($updatesInput: OfferingUpdatesInput! ) {
     createOfferingUpdates (updatesInput: $updatesInput) {
       id
       title
@@ -48,7 +48,7 @@ export const newUpdate = gql`
 `;
 
 export const getUpdate = gql`
-  query _fetchOfferingUpdatesById ($id: ID!) {
+  query fetchOfferingUpdatesById ($id: ID!) {
     offeringUpdatesById (
       id: $id
     ) {
@@ -72,7 +72,7 @@ export const getUpdate = gql`
 `;
 
 export const editUpdate = gql`
-  mutation _updateOfferingUpdates ($id: ID!, $updatesInput: OfferingUpdatesInput!) {
+  mutation updateOfferingUpdates ($id: ID!, $updatesInput: OfferingUpdatesInput!) {
     updateOfferingUpdatesInfo (
       id: $id,
       updatesInput: $updatesInput

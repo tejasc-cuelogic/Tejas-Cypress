@@ -19,9 +19,10 @@ export const upsertInvestorAccount = gql`
     }
   }`;
 
-export const submitinvestorAccount = gql`
-  mutation _submitInvestorAccount($accountId: String!, $accountType: InvestorAccountTypeEnum!){
+export const submitInvestorAccount = gql`
+  mutation submitInvestorAccount($userId: String, $accountId: String!, $accountType: InvestorAccountTypeEnum!){
     submitInvestorAccount(
+      userId: $userId,
       accountId: $accountId,
       accountType: $accountType
     )
@@ -54,7 +55,7 @@ query isUniqueTaxId($taxId: String!) {
 }`;
 
 export const crowdPayAccountNotifyGs = gql`
-  mutation _crowdPayAccountNotifyGS($userId: String, $accountId: String!) {
+  mutation crowdPayAccountNotifyGS($userId: String!, $accountId: String!) {
     crowdPayAccountNotifyGS(
       userId: $userId
       accountId: $accountId
@@ -107,7 +108,7 @@ query getInvestorCloseAccounts($userId: String!) {
 }`;
 
 export const closeInvestorAccount = gql`
-mutation _closeInvestorAccount($userId: String!, $accountId: String!, $accountType: InvestorAccountTypeEnum!, $reason: String) {
+mutation closeInvestorAccount($userId: String!, $accountId: String!, $accountType: InvestorAccountTypeEnum!, $reason: String) {
   closeInvestorAccount (
     userId: $userId
     accountId: $accountId
@@ -121,7 +122,7 @@ mutation _closeInvestorAccount($userId: String!, $accountId: String!, $accountTy
 }`;
 
 export const updateToAccountProcessing = gql`
-mutation _updateToAccountProcessing ($accountId: String!, $error: String!){
+mutation updateToAccountProcessing ($accountId: String!, $error: String!){
   updateToAccountProcessing (
     accountId: $accountId
     error: $error

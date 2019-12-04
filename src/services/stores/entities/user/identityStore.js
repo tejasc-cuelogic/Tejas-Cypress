@@ -410,7 +410,6 @@ export class IdentityStore {
         .mutate({
           mutation: requestOtp,
           variables: {
-            userId: userStore.currentUser.sub || authStore.userId,
             type: type || (mfaMethod.value !== '' ? mfaMethod.value : 'NEW'),
             address: userAddress,
           },

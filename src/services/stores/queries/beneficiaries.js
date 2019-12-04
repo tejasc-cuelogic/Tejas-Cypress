@@ -67,7 +67,7 @@ mutation _createBeneficiaries($requestId: String!, $verificationCode: String!, $
 `;
 
 export const requestOptForBeneficiaries = gql`
-  mutation _requestOtp($scopeType: mfaEnum!, $method: PhoneVerificationMethodsEnum!) {
+  mutation requestOtp($scopeType: mfaEnum!, $method: PhoneVerificationMethodsEnum!) {
     requestOtp(scopeType: $scopeType, method: $method) {
       requestId
       phoneNumber

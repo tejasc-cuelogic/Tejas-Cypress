@@ -1,6 +1,6 @@
 /* eslint-disable radix */
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes, get } from 'lodash';
+import { forEach, isArray, find, forOwn, filter, capitalize, findKey, includes, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
@@ -567,7 +567,6 @@ export class AccreditationStore {
       userAccreditationDetails.isPartialProfile = true;
     }
     const payLoad = {
-      id: userDetailsStore.currentUserId,
       accountId,
       accountType,
       userAccreditationDetails,
@@ -577,9 +576,6 @@ export class AccreditationStore {
     }
     const refetchQueries = formType ? [{
       query: userAccreditationQuery,
-      variables: {
-        userId: userDetailsStore.currentUserId,
-      },
     }] : [];
     return new Promise((resolve, reject) => {
       client
@@ -700,30 +696,28 @@ export class AccreditationStore {
     if (setInProgressArray) {
       uiStore.addMoreInProgressArray('getUserAccreditation');
     }
-    if (userId || userDetailsStore.currentUserId) {
-      this.userData = graphql({
-        client,
-        query: userAccreditationQuery,
-        fetchPolicy: 'network-only',
-        variables: { userId: userId || userDetailsStore.currentUserId },
-        onFetch: () => {
-          if (!this.userData.loading) {
-            if (setInProgressArray) {
-              uiStore.removeOneFromProgressArray('getUserAccreditation');
-            }
-            uiStore.setProgress(false);
-            res();
-          }
-        },
-        onError: () => {
-          uiStore.setProgress(false);
+    this.userData = graphql({
+      client,
+      query: userAccreditationQuery,
+      fetchPolicy: 'network-only',
+      variables: userId ? { userId } : { },
+      onFetch: () => {
+        if (!this.userData.loading) {
           if (setInProgressArray) {
             uiStore.removeOneFromProgressArray('getUserAccreditation');
           }
-          Helper.toast('Something went wrong, please try again later.', 'error');
-        },
-      });
-    }
+          uiStore.setProgress(false);
+          res();
+        }
+      },
+      onError: () => {
+        uiStore.setProgress(false);
+        if (setInProgressArray) {
+          uiStore.removeOneFromProgressArray('getUserAccreditation');
+        }
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
   })
 
   @action
@@ -737,9 +731,6 @@ export class AccreditationStore {
           variables: payLoad,
           refetchQueries: [{
             query: userAccreditationQuery,
-            variables: {
-              userId: userDetailsStore.currentUserId,
-            },
           }],
         })
         .then(() => {
@@ -823,22 +814,6 @@ export class AccreditationStore {
     return false;
   }
 
-  // Not usable below function, check and remove
-  @action
-  accreditatedAccounts = () => {
-    const aggreditationDetails = this.accreditationData;
-    const inactiveResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === null));
-    const pendingResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'REQUESTED'));
-    const notEligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'DECLINED'));
-    const eligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'CONFIRMED'));
-    const expiredResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && (a.status === 'EXPIRED' || this.checkIsAccreditationExpired(a.expiration) === 'EXPIRED')));
-    this.accreditationDetails.inactiveAccreditation = inactiveResult;
-    this.accreditationDetails.pendingAccreditation = pendingResult;
-    this.accreditationDetails.notEligibleAccreditation = notEligibalResult;
-    this.accreditationDetails.eligibleAccreditation = eligibalResult;
-    this.accreditationDetails.expiredAccreditation = expiredResult;
-  }
-
   getKeyResult = (dataObj) => {
     const resultArr = [];
     if (dataObj) {
@@ -916,6 +891,9 @@ export class AccreditationStore {
       partialAccounts,
       processingAccounts,
     } = userDetailsStore.signupStatus;
+    if (!userDetailsStore.userDetails.roles) {
+      return '';
+    }
     const { details } = userDetailsStore.userDetails.roles.find(r => r.name === selectedAccount);
     let accountStatusFound = '';
     if (selectedAccount) {
@@ -942,29 +920,6 @@ export class AccreditationStore {
       accountStatusFound = 'PARTIAL';
     }
     return accountStatusFound;
-  }
-
-  // Not usable below function, check and remove
-  @action
-  validInvestmentAccounts = () => {
-    const { eligibleAccreditation, pendingAccreditation } = this.accreditationDetails;
-    let validAccreditedArr = [];
-    const investAccountArr = investmentStore.investAccTypes.values;
-    let resultArr = [];
-    if (this.userAccredetiationState === 'ELGIBLE' && eligibleAccreditation.length) {
-      validAccreditedArr = [...eligibleAccreditation];
-    } else if (this.userAccredetiationState === 'PENDING' && pendingAccreditation.length) {
-      validAccreditedArr = [...pendingAccreditation];
-    }
-    if (validAccreditedArr
-      && validAccreditedArr.length
-      && investmentStore.investAccTypes.values.length) {
-      forEach(validAccreditedArr, (account) => {
-        const tempArr = remove(investAccountArr, { value: account });
-        resultArr = [...resultArr, ...tempArr];
-      });
-      investmentStore.investAccTypes.values = resultArr;
-    }
   }
 
   @action

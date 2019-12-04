@@ -41,7 +41,7 @@ export default class ConfirmPhoneNumber extends Component {
     if (this.props.refLink) {
       this.props.identityStore.verifyAndUpdatePhoneNumber().then(() => {
         if (setMfaMode) {
-          this.props.multiFactorAuthStore.updateMfaModeType();
+          this.props.multiFactorAuthStore.updateUserMFA();
         }
         Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.identityStore.setIsOptConfirmed(true);

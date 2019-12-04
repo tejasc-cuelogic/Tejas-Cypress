@@ -821,6 +821,21 @@ export const getOfferingDetails = gql`
                 }
               }
             }
+            specialPurposeEntityAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
             llcAgreement {
               fileId
               fileName
@@ -961,6 +976,10 @@ export const getOfferingDetails = gql`
               fileName
             }
             proxyAgreement {
+              fileId
+              fileName
+            }
+            specialPurposeEntityAgreement {
               fileId
               fileName
             }
@@ -1178,7 +1197,7 @@ export const getOfferingDetails = gql`
 `;
 
 export const updateOffering = gql`
-mutation _updateOffering($id: String!, $issuerId: String, $adminId: String, $offeringDetails: OfferingInputType!) {
+mutation updateOffering($id: String!, $issuerId: String, $adminId: String, $offeringDetails: OfferingInputType!) {
   updateOffering(id: $id, issuerId: $issuerId, adminId: $adminId, offeringDetails: $offeringDetails) {
     aliasId: id
     ${common.offeringBasics}
@@ -1196,7 +1215,7 @@ mutation upsertOffering($id: String, $offeringDetails: OfferingInputType!) {
 `;
 
 export const getOfferingBac = gql`
-query _getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
+query getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
   getOfferingBac(
     offeringId: $offeringId
     filters: {
@@ -1365,8 +1384,8 @@ query getTotalAmount{
   `;
 
 export const offerClose = gql`
-  mutation _offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType, $service: OfferingCloseServiceEnum ) {
-    offeringClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload, service: $service)
+  mutation _offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType, $service: OfferingCloseServiceEnum, $concurrency: Int) {
+    offeringClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload, service: $service, concurrency: $concurrency)
   }
 `;
 

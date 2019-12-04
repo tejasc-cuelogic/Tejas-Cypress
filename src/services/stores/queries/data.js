@@ -58,7 +58,7 @@ mutation processTransferRequest($transferId: Int!) {
   )
 }`;
 export const encryptOrDecryptUtility = gql`
-query _encryptOrDecryptValue($userId: String!, $text: String!, $type: EncryptDecryptEnum!){
+query encryptOrDecryptValue($userId: String!, $text: String!, $type: EncryptDecryptEnum!){
   encryptOrDecryptValue(
    userId: $userId
    text: $text

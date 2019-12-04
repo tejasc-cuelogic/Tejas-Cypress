@@ -12,7 +12,7 @@ import { getInvestorAvailableCash } from '../../queries/investNow';
 import { requestOtp, verifyOtp } from '../../queries/profile';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 import { TRANSFER_FUND, VERIFY_OTP, ADD_WITHDRAW_FUND } from '../../../constants/transaction';
-import { uiStore, userDetailsStore, userStore, offeringCreationStore } from '../../index';
+import { uiStore, userDetailsStore, offeringCreationStore } from '../../index';
 import Helper from '../../../../helper/utility';
 
 export class TransactionStore {
@@ -399,7 +399,6 @@ export class TransactionStore {
         .mutate({
           mutation: requestOtp,
           variables: {
-            userId: userStore.currentUser.sub,
             type: otpType,
             isLinkedBankChange,
             address: otpType === 'EMAIL' ? address : number,
@@ -511,16 +510,17 @@ export class TransactionStore {
   getInvestorAvailableCash = (includeInFlight = true, isAdmin = false) => {
     const account = !isAdmin ? userDetailsStore.currentActiveAccountDetails
       : userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
-    const { userDetails, getDetailsOfUser } = userDetailsStore;
+    const { getDetailsOfUser } = userDetailsStore;
+    let variables = {
+      accountId: account.details.accountId,
+      includeInFlight,
+    };
+    variables = isAdmin ? { ...variables, userId: getDetailsOfUser.id } : { ...variables };
     return new Promise((resolve, reject) => {
       this.cashAvailable = graphql({
         client,
         query: getInvestorAvailableCash,
-        variables: {
-          userId: !isAdmin ? userDetails.id : getDetailsOfUser.id,
-          accountId: account.details.accountId,
-          includeInFlight,
-        },
+        variables,
         onFetch: (data) => {
           if (data && !this.cashAvailable.loading) {
             if (!isAdmin) {

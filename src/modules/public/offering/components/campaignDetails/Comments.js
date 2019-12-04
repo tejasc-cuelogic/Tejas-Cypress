@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Button, Comment, Form, Segment, Header, Label, Divider, Message } from 'semantic-ui-react';
+import { Button, Comment, Form, Segment, Header, Label, Divider, Message, Modal } from 'semantic-ui-react';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
@@ -18,7 +18,7 @@ const isTablet = document.documentElement.clientWidth < 992;
 @observer
 class Comments extends Component {
   state = {
-    readMore: false, readMoreInner: false, visible: false, commentId: null, visiblePost: true,
+    readMore: false, readMoreInner: false, visible: false, commentId: null, visiblePost: true, accreditationModel: false,
   }
 
   constructor(props) {
@@ -85,6 +85,13 @@ class Comments extends Component {
 
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }
 
+  handleAccreditatonModel = (e, stateValue) => {
+    e.preventDefault();
+    this.setState({ accreditationModel: stateValue });
+  }
+
+  closeAccreditationModel = () => this.setState({ accreditationModel: false });
+
   render() {
     const { visible, visiblePost } = this.state;
     const { isUserLoggedIn } = this.props.authStore;
@@ -93,7 +100,7 @@ class Comments extends Component {
     const { errors } = this.props.uiStore;
     const { idVerification, activeAccounts, frozenAccounts } = this.props.userDetailsStore.signupStatus;
     const loggedInAsInvestor = isUserLoggedIn && currentUser.roles.includes('investor');
-    const accountStatusFull = idVerification === 'PASS' && activeAccounts.length;
+    const accountStatusFull = ['PASS', 'MANUAL_VERIFICATION_PENDING'].includes(idVerification) && activeAccounts.length;
     const isRightToPostComment = isUserLoggedIn && (currentUser.roles.includes('investor') && accountStatusFull);
     const readMoreLength = 250;
     const { campaign, commentsMainThreadCount } = this.props.campaignStore;
@@ -111,8 +118,21 @@ class Comments extends Component {
     const { showOnlyOne, newLayout } = this.props;
     comments = showOnlyOne ? [get(comments, '[0]')] : comments;
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
+    const { isInvestorAccreditated } = this.props.userDetailsStore;
+    const offeringRegulation = get(campaign, 'keyTerms.regulation');
     return (
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
+        <Modal open={this.state.accreditationModel} closeIcon onClose={this.closeAccreditationModel}>
+          <Modal.Content>
+            <section className="no-updates center-align bg-offwhite padded">
+              <Header as="h3" className="mb-20 mt-50">
+                Post comment is only available to accredited investors.
+              </Header>
+              <p>Please confirm your accredited investor status to post comment.</p>
+              <Button as={Link} to="/app/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
+            </section>
+          </Modal.Content>
+        </Modal>
         <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
           Comments
           <span className="anchor" id="comments" />
@@ -152,7 +172,16 @@ class Comments extends Component {
               </Form>
             </section>
           )
-          : (!disablePostComment)
+          : (['BD_506C'].includes(offeringRegulation) && !isInvestorAccreditated)
+            ? (
+            <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
+              <p>In order to leave comments, please confirm your accredited investor status.</p>
+              <Form reply className="public-form clearfix">
+              <Link to="/" onClick={e => this.handleAccreditatonModel(e, true)} className="ui button secondary">Confirm Status</Link>
+              </Form>
+            </section>
+            )
+            : (!disablePostComment)
           && (
             <>
               {visiblePost

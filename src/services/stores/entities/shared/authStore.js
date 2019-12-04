@@ -477,9 +477,29 @@ export class AuthStore {
     }
   });
 
+  IsInvalidException = (res) => {
+    if (get(res, 'graphQLErrors[0].message')) {
+      try {
+        const parsedError = JSON.parse(get(res, 'graphQLErrors[0].message'));
+        if (parsedError.code === 'OFFERING_EXCEPTION') {
+          return true;
+        }
+      } catch {
+        if (get(res, 'graphQLErrors[0].message').includes('OFFERING_EXCEPTION')) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   sendErrorMail = (res) => {
     const errors = {};
     const gqlErr = {};
+
+    if (this.IsInvalidException(res)) {
+      return;
+    }
 
     if (this.isUserLoggedIn) {
       errors.userEmailId = userStore.getUserEmailAddress();
