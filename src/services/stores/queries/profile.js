@@ -46,7 +46,7 @@ export const isUniqueSSN = gql`
   }`;
 
 export const verifyCip = gql`
-  mutation verifyCip($userId: String!, $user: UserCIPInput, $phoneDetails: phoneInput!, $isCipOffline: Boolean){
+  mutation verifyCip($userId: String, $user: UserCIPInput, $phoneDetails: phoneInput!, $isCipOffline: Boolean){
     verifyCip(userId: $userId, user: $user, phoneDetails: $phoneDetails, isCipOffline: $isCipOffline)
   }`;
 

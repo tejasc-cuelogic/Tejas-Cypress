@@ -235,10 +235,12 @@ export class IdentityStore {
   verifyCip = async (isAdmin = false) => {
     this.setFieldValue('isAdmin', isAdmin);
     this.setCipDetails();
+    let variables = { isCipOffline: false, ...this.formattedUserInfoForCip };
+    variables = isAdmin ? { ...variables, userId: userDetailsStore.selectedUserId } : { ...variables };
     const payLoad = {
       mutation: verifyCip,
       mutationName: 'verifyCip',
-      variables: { isCipOffline: false, userId: userDetailsStore.selectedUserId, ...this.formattedUserInfoForCip },
+      variables,
     };
     const { res, url } = await this.cipWrapper(payLoad);
 
