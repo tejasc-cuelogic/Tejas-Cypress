@@ -75,7 +75,7 @@ export class BankAccount {
         const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
         if (accountValue === 0) {
           accountStore.ACC_TYPE_MAPPING[accountValue].store
-            .setStepToBeRendered(renderStep);
+            .setStepToBeRendered(accountValue);
         }
       },
       onSuccess: (publicToken, metadata) => {
