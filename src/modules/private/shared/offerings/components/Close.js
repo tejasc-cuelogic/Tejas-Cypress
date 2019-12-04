@@ -14,7 +14,7 @@ import { FieldError } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 import SupplementalAgreements from './SupplementalAgreements';
 import ClosingBinder from './ClosingBinder';
-import { OFFERING_CLOSE_SERVICE_OPTIONS } from '../../../../../services/constants/admin/offerings';
+import { OFFERING_CLOSE_SERVICE_OPTIONS, OFFERING_CLOSE_COUNCURRENCY_OPTIONS } from '../../../../../services/constants/admin/offerings';
 
 const closingActions = {
   ENUM1: { label: 'save', ref: 1, enum: 'update' },
@@ -62,6 +62,7 @@ export default class Close extends Component {
     [2, 3, 4].forEach((i) => {
       this.props.offeringCreationStore.resetForm(`OFFERING_CLOSE_${i}`);
       this.props.offeringCreationStore.setFieldValue(`OFFERING_CLOSE_${i}`, 'PROCESS_FACTORY', false, 'fields.service.value');
+      this.props.offeringCreationStore.setFieldValue(`OFFERING_CLOSE_${i}`, 1, false, 'fields.concurrency.value');
     });
   }
 
@@ -243,6 +244,7 @@ export default class Close extends Component {
     const dynamicFields = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? ['interestRate'] : ['revSharePercentage', 'multiple'];
     const modalHeader = find(closingActions, a => a.enum === this.state.action) ? find(closingActions, a => a.enum === this.state.action).label : '';
     const ServiceDropDown = props => (
+            <>
               <FormDropDown
                 fielddata={props.form.fields.service}
                 selection
@@ -251,6 +253,15 @@ export default class Close extends Component {
                 options={OFFERING_CLOSE_SERVICE_OPTIONS}
                 onChange={(e, result) => formChange(e, result, props.formName)}
               />
+              <FormDropDown
+                fielddata={props.form.fields.concurrency}
+                selection
+                value={props.form.fields.concurrency.value}
+                name="concurrency"
+                options={OFFERING_CLOSE_COUNCURRENCY_OPTIONS}
+                onChange={(e, result) => formChange(e, result, props.formName)}
+              />
+            </>
     );
     return (
       <Form>
