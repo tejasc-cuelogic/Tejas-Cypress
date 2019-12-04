@@ -210,6 +210,7 @@ class FinancialInfo extends Component {
               </>
             )
             : (
+              <>
               <MaskedInput
                 data-cy="investmentAmount"
                 hidelabel
@@ -223,6 +224,12 @@ class FinancialInfo extends Component {
                 autoFocus
                 allowNegative={false}
               />
+              {isMobile
+                && (
+                  <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+                )
+              }
+              </>
             )}
         </Form>
         {this.props.changeInvest && !includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) && getDiffInvestmentLimitAmount
