@@ -4,8 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Visibility } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
-import Banner from '../components/Banner';
-import { PublicSubNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 
 const getModule = component => lazyRetry(() => import(`../components/${component}`));
 
@@ -24,19 +23,19 @@ class About extends Component {
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
 
   render() {
-    const { match, location, navStore } = this.props;
+    const { match } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <>
-        {location.pathname === '/about/mission' && <Banner />}
+        {/* {location.pathname === '/about/mission' && <Banner />} */}
         <Visibility onUpdate={this.handleUpdate} continuous className="slide-down">
-          <PublicSubNav
+          {/* <PublicSubNav
             stepInRoute={navStore.stepInRoute}
             location={location}
             currentUser={this.props.userStore.currentUser}
             navItems={navItems}
             title="About Us"
-          />
+          /> */}
             <SuspenseBoundary>
               <Switch>
                 <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />

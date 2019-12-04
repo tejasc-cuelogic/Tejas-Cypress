@@ -1,52 +1,46 @@
 import React from 'react';
 import { Header, Container, Grid, Statistic, Responsive, Divider } from 'semantic-ui-react';
+import NSImage from '../../../shared/NSImage';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const Mission = () => (
   <>
     <section>
       <Container>
-        <Responsive maxWidth={767} as={React.Fragment}>
+        {/* <Responsive maxWidth={767} as={React.Fragment}>
           <Header as="h2">Invest in each other.<br /> Grow together.</Header>
           <Divider section />
-        </Responsive>
+        </Responsive> */}
         <Grid centered stackable>
           <Grid.Row>
             <Grid.Column textAlign={isMobile ? 'left' : 'center'}>
               <Header as="h2">
-              Our mission is to connect businesses and <Responsive minWidth={992} as="br" />
-              individuals to build vibrant communities.
+                Invest in each other. Grow together
               </Header>
+              <p className="mb-40">Our mission is to connect businesses and individuals to build vibrant communities.</p>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
+            <Grid.Column width={8}>
+              <NSImage path="4.png" />
+            </Grid.Column>
             <Grid.Column width={8}>
               <p>
                 By using the latest crowdfunding laws and technology, NextSeed is empowering
                 business owners and everyday people to invest in one another and grow together.
               </p>
               <p>
-                Through NextSeed, local entrepreneurs are building places people love, creating
-                jobs, and making a tangible impact in their neighborhoods. Investors are getting
-                access to private investment opportunities once reserved for the well-connected and
-                engaging with the businesses that matter most to them.
+                Through NextSeed, local entrepreneurs are building places people love, creating jobs, and making a tangible impact in their neighborhoods. Investors are getting access to private investment opportunities once reserved for the well-connected and engaging with the businesses that matter most to them.
               </p>
-            </Grid.Column>
-            <Grid.Column width={8}>
               <p>
                 The team behind NextSeed created the first registered funding portal with the
                 Securities & Exchange Commission (SEC) and became a member of the Financial
                 Industry Regulatory Authority{' '}
                 (<a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>).
-                {' '}The portal closed the first-ever regulation crowdfunding offering in the country.
-                Beginning in October 2018, NextSeed Securities LLC operates as an SEC-registered
-                broker-dealer and FINRA member.
+                {' '}The portal closed the first-ever regulation crowdfunding offering in the country. Beginning in October 2018, NextSeed Securities LLC operates as an SEC-registered broker-dealer and FINRA member.
               </p>
               <p>
-                Anyone in the US, regardless of income or net worth, can now invest in innovative
-                local business concepts that are defining the new landscape of Main Street.
-                Everyday people have an opportunity to start building a portfolio of impactful,
-                local and community-driven investments.
+                Anyone in the US, regardless of income or net worth, can now invest in innovative local business concepts that are defining the new landscape of Main Street. Everyday people have an opportunity to start building a portfolio of impactful, local and community-driven investments.
               </p>
             </Grid.Column>
           </Grid.Row>
