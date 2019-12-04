@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormRadioGroup, FormCheckbox, FormArrowButton } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
@@ -154,16 +154,22 @@ export default class Experience extends Component {
             <div className="center-align mt-20">
               {!isInvExperienceValid && noExperience
                 && (
-                  <p className="negative-text mb-20">
-                    NextSeed investments are suitable for experienced investors who are comfortable
-                    with long-term risk.
-              </p>
+                  <>
+                    <p className="negative-text mb-40">
+                      NextSeed investments are suitable for experienced investors who are comfortable
+                      with long-term risk. {RequestMsg}
+                    </p>
+                  </>
                 )
               }
               <Button fluid={isMobile} primary className="relaxed" content="Continue to Account" disabled={!isInvExperienceValid} onClick={this.handleSubmitInvestmentExperience} />
               {!isInvExperienceValid && noExperience
-                && (<RequestMsg />)
-              }
+                && (
+                <p className="negative-text mt-20">
+                  Otherwise, please reference our{' '}
+                  <Link to="/resources/education-center/investor">Education Center </Link> to learn more about investing on NextSeed.
+                </p>
+                )}
             </div>
           ) : (
               <>
