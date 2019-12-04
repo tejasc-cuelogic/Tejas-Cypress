@@ -10,6 +10,10 @@ Validator.register('minAcnum', (value, requirement, attribute) => {
   return value.toString().length > 3 && value.toString().length < 18;
 }, 'The :attribute should be at least 4 digits and at most 17 digits');
 
+
+Validator.register('dateFormat', value => moment(value, 'MM/DD/YYYY').isValid(),
+  'Invalid Date');
+
 export const PLAID_URL = process.env.REACT_APP_PLAID_URL;
 
 export const PLAID_PUBLIC_KEY = process.env.REACT_APP_PLAID_PUBLIC_KEY;
@@ -415,7 +419,7 @@ export const ENTITY_TRUST_INFO = {
     rule: 'required',
   },
   trustDate: {
-    key: 'trustDate', value: moment(`${new Date().getFullYear()}-01-01`).format('MM-DD-YYYY'), error: undefined, rule: 'required', label: 'Date Trust Established',
+    key: 'trustDate', value: moment(`${new Date().getFullYear()}-01-01`).format('MM-DD-YYYY'), error: undefined, rule: 'required|dateFormat', label: 'Date Trust Established',
   },
 };
 
