@@ -290,6 +290,8 @@ h6{
 	position: absolute;
     bottom: 30px;
 	width: calc(100% - 30px);
+	left: 50%;
+    transform: translate(-50%, 0);
 }
 .d-flex{
 	display: flex !important;

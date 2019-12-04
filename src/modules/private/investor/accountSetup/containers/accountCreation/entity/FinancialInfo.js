@@ -36,6 +36,7 @@ export default class AccountType extends Component {
           changed={values => entityInfoDateChange(values.formattedValue)}
           dateOfBirth
           showerror
+          placeHolder="MM/DD/YYYY"
         />
       </div>
     );

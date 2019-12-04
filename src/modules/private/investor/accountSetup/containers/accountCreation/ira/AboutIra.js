@@ -17,7 +17,7 @@ export default class AboutIra extends Component {
     return (
       <>
         <Header as="h3" className={isMobile ? '' : 'center-align'}>
-        About Self-Directed IRAs<Responsive minWidth={992} as={React.Fragment}><br /></Responsive>on NextSeed
+          About Self-Directed IRAs<Responsive minWidth={992} as={React.Fragment}><br /></Responsive>{' '}on NextSeed
         </Header>
         <p>
         A NextSeed self-directed IRA offers you the benefits of investing with a retirement account (Traditional and Roth IRA options available) while investing in a new asset class. Minimum opening deposit is $2,200 and Regulation Crowdfunding investment limits apply.
