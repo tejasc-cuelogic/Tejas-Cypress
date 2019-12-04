@@ -4,8 +4,8 @@ import { Modal, Header, Divider, Button } from 'semantic-ui-react';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const ConfirmModal = props => (
-  <Modal open={props.open} onClose={props.handleCloseModal} size="mini" closeIcon>
-    <Modal.Content className={`${isMobile ? '' : 'center-align'} mt-30`}>
+  <Modal open={props.open} onClose={props.handleCloseModal} size={isMobile ? 'fullscreen' : 'mini'} className={isMobile && 'full-screen-modal'}>
+    <Modal.Content className={isMobile ? 'mt-60' : 'mt-30 center-align'}>
       <Header as="h3">Thank you for creating a NextSeed account</Header>
       <p className="mt-30 mb-30">
         {props.content}
