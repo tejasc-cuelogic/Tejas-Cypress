@@ -59,7 +59,7 @@ const common = {
   order`,
 };
 export const allOfferingsCompact = gql`
-  query _getOfferings($stage: [OfferingStageEnumType], $issuerId: String){
+  query getOfferings($stage: [OfferingStageEnumType], $issuerId: String){
     getOfferings(filters: { stage: $stage, issuerId: $issuerId }){
       id
       offeringSlug
@@ -89,7 +89,7 @@ export const allOfferingsCompact = gql`
 `;
 
 export const allOfferings = gql`
-  query _getOfferings($stage: [OfferingStageEnumType]){
+  query getOfferings($stage: [OfferingStageEnumType]){
     getOfferings(filters: { stage: $stage }){
       id
       ${common.offeringBasics}
@@ -106,7 +106,7 @@ export const deleteOffering = gql`
 `;
 
 export const getOfferingDetails = gql`
-  query _getOfferingById($id: String!) {
+  query getOfferingById($id: String!) {
     getOfferingById(id: $id) {
       id
       offeringSlug
@@ -1280,7 +1280,7 @@ query getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
 `;
 
 export const createBac = gql`
-mutation _createBAC($offeringBacDetails: OfferingBacInputType!) {
+mutation createBAC($offeringBacDetails: OfferingBacInputType!) {
   createOfferingBac(offeringBacDetails: $offeringBacDetails) {
     id
   }
@@ -1288,7 +1288,7 @@ mutation _createBAC($offeringBacDetails: OfferingBacInputType!) {
 `;
 
 export const updateBac = gql`
-mutation _updateBac($id: String! $offeringBacDetails: OfferingBacInputType!) {
+mutation updateBac($id: String! $offeringBacDetails: OfferingBacInputType!) {
   updateOfferingBac(id: $id offeringBacDetails: $offeringBacDetails) {
     id
   }
@@ -1296,14 +1296,14 @@ mutation _updateBac($id: String! $offeringBacDetails: OfferingBacInputType!) {
 `;
 
 export const deleteBac = gql`
-mutation _deleteBac($id: String! $offeringId: String!){
+mutation deleteBac($id: String! $offeringId: String!){
   deleteOfferingBac(id: $id  offeringId: $offeringId) {
     id
   }
 }`;
 
 export const getOfferingFilingList = gql`
-  query _getOfferingFilingList($offeringId: ID! $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) {
+  query getOfferingFilingList($offeringId: ID! $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) {
     businessFilings(offeringId: $offeringId ) {
       offeringId
       filingId
@@ -1324,7 +1324,7 @@ export const getOfferingFilingList = gql`
 `;
 
 export const generateBusinessFiling = gql`
-  mutation _createBusinessFiling ($offeringId: String!) {
+  mutation createBusinessFiling ($offeringId: String!) {
     createBusinessFiling(offeringId: $offeringId) {
       filingId
       offeringId
@@ -1333,7 +1333,7 @@ export const generateBusinessFiling = gql`
 `;
 
 export const upsertBonusReward = gql`
-mutation _upsertBonusReward($id: String, $bonusRewardDetails: BonusRewardInputType!){
+mutation upsertBonusReward($id: String, $bonusRewardDetails: BonusRewardInputType!){
   upsertBonusReward(id: $id, bonusRewardDetails: $bonusRewardDetails){
     id
   }
@@ -1341,7 +1341,7 @@ mutation _upsertBonusReward($id: String, $bonusRewardDetails: BonusRewardInputTy
 `;
 
 export const getBonusRewards = gql`
-query _getBonusRewards($offeringId: String!){
+query getBonusRewards($offeringId: String!){
   getBonusRewards(offeringId: $offeringId){
     id
     offeringId
@@ -1364,7 +1364,7 @@ query _getBonusRewards($offeringId: String!){
 `;
 
 export const deleteBonusReward = gql`
-mutation _deleteBonusReward($id: String! $offeringId: String!){
+mutation deleteBonusReward($id: String! $offeringId: String!){
   deleteBonusReward(id: $id offeringId: $offeringId
   ){
     id
@@ -1384,7 +1384,7 @@ query getTotalAmount{
   `;
 
 export const offerClose = gql`
-  mutation _offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType, $service: OfferingCloseServiceEnum, $concurrency: Int) {
+  mutation offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType, $service: OfferingCloseServiceEnum, $concurrency: Int) {
     offeringClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload, service: $service, concurrency: $concurrency)
   }
 `;

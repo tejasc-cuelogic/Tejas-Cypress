@@ -28,7 +28,7 @@ export const userInfo = `
     cashInterestUS,
   }`;
 
-export const seedTestUsers = `mutation _seedTestUsers {
+export const seedTestUsers = `mutation seedTestUsers {
     seedTestUsers {
         created {
           id
@@ -42,7 +42,7 @@ export const seedTestUsers = `mutation _seedTestUsers {
     }`;
 
 export const getMigratedUserAuditInfo = (userId, accountType) => {
-  return `query _getMigratedUserAuditInfo {
+  return `query getMigratedUserAuditInfo {
         getMigratedUserAuditInfo (
         userId: "${userId}"
         accountType: ${accountType}
@@ -54,7 +54,7 @@ export const getMigratedUserAuditInfo = (userId, accountType) => {
 };
 
 export const cleanUpTestUsers = (userId) => {
-  return `mutation _cleanUpTestUsers {
+  return `mutation cleanUpTestUsers {
         cleanUpTestUsers(userId:"${userId}")
     }`;
 };

@@ -406,7 +406,7 @@ mutation updateBusinessApplicationInformation(
 export const updateApplicationStatusAndReview = gql`
 mutation updateApplicationData(
   $applicationId: ID!
-  $userId: ID
+  $userId: String
   $actionType: AdminApplicationActionTypeEnum!
   $applicationFlag: BusinessApplicationUpdateStatusEnum
   $applicationStatus: ApplicationStatusEnum

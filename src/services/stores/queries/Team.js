@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const allTeamMembers = gql`
-  query _getMembers {
+  query getMembers {
     teamMembers {
       id
       memberName

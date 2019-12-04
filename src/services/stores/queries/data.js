@@ -96,7 +96,7 @@ mutation syncEsDocument($documentId: String!, $targetIndex: String!, $userId: St
 }`;
 
 export const getPluginList = gql`
-query _listRequestPlugins {
+query listRequestPlugins {
   listRequestPlugins {
     plugins{
       name
@@ -159,7 +159,7 @@ mutation invokeRequest($plugin: String!, $payload: String, $invocationType: Requ
 }`;
 
 export const fetchCronLogs = gql`
-query _fetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaTypeEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+query fetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaTypeEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
   fetchCronLogs(
     cron: $cron,
     jobId: $jobId
@@ -184,7 +184,7 @@ query _fetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaType
 }`;
 
 export const processFactoryPluginTrigger = gql`
-mutation _invokeProcessorDriver($method: DevAuditTypeEnum, $payload: String) {
+mutation invokeProcessorDriver($method: DevAuditTypeEnum, $payload: String) {
   invokeProcessorDriver(
     method: $method,
     payload: $payload
@@ -192,7 +192,7 @@ mutation _invokeProcessorDriver($method: DevAuditTypeEnum, $payload: String) {
 }`;
 
 export const fetchRequestFactoryLogs = gql`
-query _fetchRequestFactoryLogs($plugin: String!, $status: RequestRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+query fetchRequestFactoryLogs($plugin: String!, $status: RequestRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
   fetchRequestFactoryLogs(
     plugin: $plugin,
     status: $status
@@ -227,7 +227,7 @@ query _fetchRequestFactoryLogs($plugin: String!, $status: RequestRunLogStatusEnu
 }`;
 
 export const fetchProcessLogs = gql`
-query _fetchProcessLogs($plugin: String!, $status: ProcessRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+query fetchProcessLogs($plugin: String!, $status: ProcessRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
   fetchProcessLogs(
     plugin: $plugin,
     status: $status
@@ -251,7 +251,7 @@ query _fetchProcessLogs($plugin: String!, $status: ProcessRunLogStatusEnum, $fro
 }`;
 
 export const fileFactoryPluginTrigger = gql`
-mutation _generateFile($identifier: String!, $ownerId: String!, $resourceId: String!, $account: String, $payload: String) {
+mutation generateFile($identifier: String!, $ownerId: String!, $resourceId: String!, $account: String, $payload: String) {
   generateFile(
     identifier: $identifier,
     ownerId: $ownerId,
