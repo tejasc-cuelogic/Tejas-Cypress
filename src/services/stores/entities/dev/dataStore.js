@@ -223,16 +223,13 @@ export class DataStore {
         fetchPolicy: 'network-only',
         onFetch: (res) => {
           if (res && res.encryptOrDecryptValue && !this.data.loading) {
-            console.log('Success---');
             this.setFieldValue('inProgress', false, 'encryptOrDecryptValue');
             Helper.toast('Your request is processed.', 'success');
             resolve(res.encryptOrDecryptValue);
           }
         },
-        onError: (error) => {
+        onError: () => {
           this.setFieldValue('inProgress', false, 'encryptOrDecryptValue');
-          // if (get(error, 'Network error')) {
-          console.log('Error========', error);
           Helper.toast('Something went wrong, please try again later.', 'error');
           // }
           reject();

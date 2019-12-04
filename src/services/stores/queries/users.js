@@ -44,7 +44,7 @@ export const allUsersQuery = gql`
 `;
 
 export const userDetailsQueryForBoxFolder = gql`
-  query getUserDetails($userId: ID!) {
+  query getUserDetails($userId: String) {
     user(userId: $userId) {
       id
       storageDetails
@@ -53,7 +53,7 @@ export const userDetailsQueryForBoxFolder = gql`
 `;
 
 export const userDetailsQuery = gql`
-  query getUserDetails($userId: ID!) {
+  query getUserDetails($userId: String) {
     user(userId: $userId) {
       id
       userHash
@@ -266,7 +266,7 @@ export const userDetailsQuery = gql`
 `;
 
 export const selectedUserDetailsQuery = gql`
-  query getUserDetails($userId: ID!) {
+  query getUserDetails($userId: String) {
     user(userId: $userId) {
       id
       skipAddressVerifyCheck
@@ -494,7 +494,7 @@ export const selectedUserDetailsQuery = gql`
 `;
 
 export const userAccreditationQuery = gql`
-  query userAccreditationQuery($userId: ID!) {
+  query userAccreditationQuery($userId: String) {
     user(userId: $userId) {
       id
       roles {
@@ -615,7 +615,7 @@ mutation skipAddressOrPhoneValidationCheck($userId: String!, $shouldSkip: Boolea
 export const deleteProfile = gql`
 mutation adminDeleteInvestorOrIssuerUser($userId: String, $reason: String) {
   adminDeleteInvestorOrIssuerUser(
-     cognitoUUId: $userId
+     userId: $userId
      reason: $reason
   ) {
     status
@@ -626,7 +626,7 @@ mutation adminDeleteInvestorOrIssuerUser($userId: String, $reason: String) {
 export const adminHardDeleteUser = gql`
 mutation adminHardDeleteUser($userId: String!, $reason: String) {
   adminHardDeleteUser(
-     cognitoUUId: $userId
+     userId: $userId
      reason: $reason
   ) {
     status

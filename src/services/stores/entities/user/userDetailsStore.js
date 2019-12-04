@@ -305,12 +305,11 @@ export class UserDetailsStore {
   });
 
   @action
-  getUser = userId => new Promise((res) => {
+  getUser = () => new Promise((res) => {
     this.currentUser = graphql({
       client,
       query: userDetailsQuery,
       fetchPolicy: 'network-only',
-      variables: { userId },
       onFetch: (result) => {
         if (!this.currentUser.loading) {
           identityStore.setProfileInfo(this.userDetails);

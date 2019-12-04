@@ -17,7 +17,7 @@ export default class ManageMultiFactorAuth extends Component {
 
   submit = (e) => {
     e.preventDefault();
-    this.props.multiFactorAuthStore.updateMfaModeType().then(() => {
+    this.props.multiFactorAuthStore.updateUserMFA().then(() => {
       this.props.history.push(this.props.refLink);
     });
   }

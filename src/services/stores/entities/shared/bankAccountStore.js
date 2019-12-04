@@ -608,7 +608,7 @@ export class BankAccountStore {
           variables: canceldData,
         })
         .then(() => {
-          userDetailsStore.getUser(userStore.currentUser.sub);
+          userDetailsStore.getUser();
           resolve();
         })
         .catch((error) => {

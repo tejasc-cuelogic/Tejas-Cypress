@@ -49,9 +49,9 @@ export class CommonStore {
   });
 
   @action
-  updateUserReferralCode = (cognitoUserId, referralCode) => new Promise((resolve, reject) => {
+  updateUserReferralCode = referralCode => new Promise((resolve, reject) => {
     client
-      .mutate({ mutation: updateUserReferralCode, variables: { cognitoUserId, referralCode } })
+      .mutate({ mutation: updateUserReferralCode, variables: { referralCode } })
       .then(() => resolve())
       .catch(() => {
         Helper.toast('Something went wrong, please try again later.', 'error');

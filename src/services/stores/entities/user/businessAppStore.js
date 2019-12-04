@@ -32,9 +32,7 @@ import {
   getBusinessApplications,
   createBusinessApplicationPrequalificaiton,
   createBusinessApplicationBasicInfo,
-  upsertBusinessApplicationInformationPerformance,
-  upsertBusinessApplicationInformationBusinessDetails,
-  upsertBusinessApplicationInformationDocumentation,
+  upsertBusinessApplicationInformation,
   submitApplication,
   helpAndQuestion,
 } from '../../queries/businessApplication';
@@ -1172,7 +1170,6 @@ export class BusinessAppStore {
       key = 3;
     }
     stepStatus = isPartialDataFlag ? 'IN_PROGRESS' : 'COMPLETE';
-    let mutationQuery = upsertBusinessApplicationInformationBusinessDetails;
     let variableData = {
       applicationId: isApplicationManager ? this.applicationId : this.currentApplicationId,
       applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE',
@@ -1196,14 +1193,12 @@ export class BusinessAppStore {
         ...variableData,
         businessPerformance: data,
       };
-      mutationQuery = upsertBusinessApplicationInformationPerformance;
     } else if (stepName === 'DOCUMENTATION') {
       data = this.getFormatedDocumentationData;
       variableData = {
         ...variableData,
         businessDocumentation: data,
       };
-      mutationQuery = upsertBusinessApplicationInformationDocumentation;
     }
     if (isApplicationManager) {
       variableData.targetIssuerId = this.businessApplicationDetailsAdmin.userId;
@@ -1212,7 +1207,7 @@ export class BusinessAppStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: mutationQuery,
+          mutation: upsertBusinessApplicationInformation,
           variables: variableData,
           refetchQueries: [
             {

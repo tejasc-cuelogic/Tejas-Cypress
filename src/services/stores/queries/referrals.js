@@ -27,20 +27,8 @@ export const getReferralCreditsInformation = gql`
   }
 `;
 
-export const upsertUserReferralCredits = gql`
-mutation upsertUserReferralCredits($userId: String!){
-  upsertUserReferralCredits(userId: $userId)
-  } 
-`;
-
 export const userPartialSignupWithReferralCode = gql`
 mutation userPartialSignupWithReferralCode($code: String!){
   userPartialSignupWithReferralCode(code: $code)
-  } 
-`;
-
-export const userFullSignupWithReferralCode = gql`
-mutation userFullSignupWithReferralCode($userId: String!){
-  userFullSignupWithReferralCode(userId: $userId)
   } 
 `;

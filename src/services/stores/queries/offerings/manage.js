@@ -1197,7 +1197,7 @@ export const getOfferingDetails = gql`
 `;
 
 export const updateOffering = gql`
-mutation _updateOffering($id: String!, $issuerId: String, $adminId: String, $offeringDetails: OfferingInputType!) {
+mutation updateOffering($id: String!, $issuerId: String, $adminId: String, $offeringDetails: OfferingInputType!) {
   updateOffering(id: $id, issuerId: $issuerId, adminId: $adminId, offeringDetails: $offeringDetails) {
     aliasId: id
     ${common.offeringBasics}
@@ -1215,7 +1215,7 @@ mutation upsertOffering($id: String, $offeringDetails: OfferingInputType!) {
 `;
 
 export const getOfferingBac = gql`
-query _getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
+query getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
   getOfferingBac(
     offeringId: $offeringId
     filters: {

@@ -12,7 +12,7 @@ import { getInvestorAvailableCash } from '../../queries/investNow';
 import { requestOtp, verifyOtp } from '../../queries/profile';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 import { TRANSFER_FUND, VERIFY_OTP, ADD_WITHDRAW_FUND } from '../../../constants/transaction';
-import { uiStore, userDetailsStore, userStore, offeringCreationStore } from '../../index';
+import { uiStore, userDetailsStore, offeringCreationStore } from '../../index';
 import Helper from '../../../../helper/utility';
 
 export class TransactionStore {
@@ -399,7 +399,6 @@ export class TransactionStore {
         .mutate({
           mutation: requestOtp,
           variables: {
-            userId: userStore.currentUser.sub,
             type: otpType,
             isLinkedBankChange,
             address: otpType === 'EMAIL' ? address : number,
