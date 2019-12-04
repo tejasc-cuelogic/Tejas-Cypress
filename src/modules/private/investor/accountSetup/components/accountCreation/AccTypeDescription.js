@@ -14,7 +14,8 @@ const AccTypeDescription = observer((props) => {
       {isAccExist && value === 0
         && (
           <p className="mt-80 grey-header">
-            NextSeed accounts are provided by and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance.
+            NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), 
+            which provides FDIC insurance for up to $250,000 of uninvested cash in NextSeed accounts.
           </p>
         )
       }

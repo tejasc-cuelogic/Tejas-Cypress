@@ -43,9 +43,6 @@ const AccountTypes = ({
       {isMobile && (
       <Header as="h3">Which type of investment account would you like to open?</Header>
       )}
-      {!isMobile && (
-        <Header as="h6" textAlign="center">Choose an account type</Header>
-      )}
       <Grid
         textAlign="center"
         onKeyPress={(e) => {
@@ -78,7 +75,8 @@ const AccountTypes = ({
         {isMobile
           ? (
             <p className="grey-header mobile-bottom-notes">
-              NextSeed accounts are provided by and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance.
+              NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), 
+              which provides FDIC insurance for up to $250,000 of uninvested cash in NextSeed accounts.
             </p>
           )
           : (

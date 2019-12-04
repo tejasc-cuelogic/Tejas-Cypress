@@ -157,7 +157,7 @@ export default class Experience extends Component {
                   <>
                     <p className="negative-text mb-40">
                       NextSeed investments are suitable for experienced investors who are comfortable
-                      with long-term risk. {RequestMsg}
+                      with long-term risk. Please confirm that you fit this profile in order to proceed. {RequestMsg}
                     </p>
                   </>
                 )
