@@ -24,10 +24,10 @@ export default class AboutIra extends Component {
         </p>
         <Divider hidden />
         <p>
-        <b>Special Offer</b>: For new NextSeed IRA accounts, NextSeed will cover the one-time setup fee and annual account fees for four years. For full details, go to the <Link to="/agreements/legal/terms-of-use">Terms and Conditions </Link>.
+        <b>Special Offer</b>: For new NextSeed IRA accounts, NextSeed will cover the one-time setup fee and annual account fees for four years. For full details, go to the <Link target="_blank" to="/agreements/legal/terms-of-use">Terms and Conditions </Link>.
         </p>
         <Divider hidden />
-        <p>Questions? Please see our <Link to="/">FAQs</Link> on IRAs.</p>
+        <p>Questions? Please see our <Link target="_blank" to="/resources/education-center/investor/faq">FAQs</Link> on IRAs.</p>
         <Divider hidden />
         <p className={`${isMobile ? '' : 'center-align'} note grey-text`}>
         NextSeed is not a tax, investment or legal advisor and does not provide any tax, investment, or legal advice; please consult your own advisors or IRS guidelines to determine whether investing in NextSeed offerings through a self-directed IRA is right for you.
