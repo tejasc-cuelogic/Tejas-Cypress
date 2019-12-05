@@ -165,14 +165,12 @@ export default class WhyNextseed extends Component {
             </Grid>
           </section>
           <Divider fitted as={!responsiveVars.uptoTablet && Container} />
-          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'investor-priority-section pt-100'}>
             <Grid>
               <Grid.Row>
                 {!responsiveVars.isMobile
                   && (
-                    <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-                       <NSImage path="investors/left-phone-mockup.png" />
-                    </Grid.Column>
+                    <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} />
                   )
                 }
                 <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
@@ -202,7 +200,10 @@ export default class WhyNextseed extends Component {
           <Divider fitted as={!responsiveVars.uptoTablet && Container} />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
             <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-40' : 'center-align mb-70'}>Every investment comes with<Responsive as={React.Fragment} minWidth={992}><br /></Responsive>risk and opportunity</Header>
-            <Grid centered stackable>
+            <Grid centered stackable reversed="mobile">
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 5}>
+                <NSImage path="investors/couple-pitch.jpg" />
+              </Grid.Column>
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 5}>
                 <p>
                   Remember, returns and bonus rewards are not guaranteed. Investments can be lost entirely.
@@ -215,9 +216,6 @@ export default class WhyNextseed extends Component {
                 <p>
                   Businesses may fail, but those that succeed can make a lasting impact in your city.
                 </p>
-              </Grid.Column>
-              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 5}>
-                <NSImage path="investors/couple-pitch.jpg" />
               </Grid.Column>
             </Grid>
           </section>

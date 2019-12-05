@@ -327,3 +327,7 @@ section{
         }
     } 
 }
+.investor-priority-section{
+    background:url(../../assets/images/investors/left-phone-mockup.png) no-repeat;
+    background-position: -40%;
+}
