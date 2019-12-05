@@ -49,7 +49,7 @@ export default class Summary extends Component {
       GEN_INFO_FRM,
       TRUST_INFO_FRM,
     } = this.props.entityAccountStore;
-    const { errors } = this.props.uiStore;
+    const { errors, inProgressArray } = this.props.uiStore;
     const {
       plaidAccDetails, formLinkBankManually,
       accountAttributes,
@@ -151,7 +151,7 @@ export default class Summary extends Component {
           )
         }
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.props.handleCreateAccount('entity')} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent} />
+          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.props.handleCreateAccount('entity')} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent || inProgressArray.includes('submitAccountLoader')} />
         </div>
         <p className="center-align grey-header mt-30 mb-0">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
