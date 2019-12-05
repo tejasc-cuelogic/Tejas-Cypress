@@ -43,15 +43,15 @@ class CampaignLayout extends Component {
   }
 
   componentDidMount() {
-    document.querySelectorAll('.fr-view').forEach((e) => {
-      e.querySelectorAll('img').forEach((ele) => {
+    [...document.querySelectorAll('.fr-view')].forEach((e) => {
+      [...e.querySelectorAll('img')].forEach((ele) => {
         this.pWrapper(ele);
         ele.setAttribute('data-src', ele.getAttribute('src'));
         ele.removeAttribute('src');
         ele.closest('.closest').classList.add('ui');
         ele.closest('.closest').classList.add('placeholder');
       });
-      e.querySelectorAll('iframe').forEach((ele) => {
+      [...e.querySelectorAll('iframe')].forEach((ele) => {
         if (!ele.getAttribute('title')) {
           ele.setAttribute('title', this.props.offeringName || 'Offering');
         }
@@ -69,8 +69,8 @@ class CampaignLayout extends Component {
   }
 
   componentDidUpdate() {
-    document.querySelectorAll('.fr-view').forEach((e) => {
-      e.querySelectorAll('img').forEach((ele) => {
+    [...document.querySelectorAll('.fr-view')].forEach((e) => {
+      [...e.querySelectorAll('img')].forEach((ele) => {
         this.pWrapper(ele);
         ele.setAttribute('data-src', ele.getAttribute('src'));
         ele.removeAttribute('src');
@@ -118,7 +118,7 @@ class CampaignLayout extends Component {
   processLazyLoadImages = () => new Promise((resolve) => {
     const ele = [...document.querySelectorAll('.fr-view')];
     ele.forEach((e) => {
-      const lazyImages = e.querySelectorAll('img');
+      const lazyImages = [...e.querySelectorAll('img')];
       lazyImages.forEach((img, i) => {
         if (this.isScrolledIntoView(img)) {
           setTimeout(() => {
