@@ -119,6 +119,7 @@ export const getOfferingById = gql`
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
       id
+      isInvestedInOffering
       isAvailablePublicly
       stage
     }
@@ -129,6 +130,7 @@ export const campaignDetailsQuery = gql`
   query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
+    isInvestedInOffering
     watchListStatus
     stage
     offeringSlug
@@ -326,6 +328,7 @@ export const campaignDetailsAdditionalQuery = gql`
   query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
+    isInvestedInOffering
     comments {
       id
       scope

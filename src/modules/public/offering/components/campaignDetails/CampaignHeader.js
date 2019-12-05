@@ -23,7 +23,7 @@ export default class CampaignHeader extends Component {
     const {
       isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
-      percentBefore, diffForProcessing, countDown,
+      percentBefore, diffForProcessing, countDown, isInvestedInOffering,
     } = campaignStatus;
     return (
       <>
@@ -215,7 +215,7 @@ export default class CampaignHeader extends Component {
                                 onClick={this.handleInvestNowClick}
                                 fluid
                               >
-                                {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                                {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : isInvestedInOffering ? 'Change Investment' : 'Invest Now'}`}
                               </Button>
                               <p className="mt-10">
                                 {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
