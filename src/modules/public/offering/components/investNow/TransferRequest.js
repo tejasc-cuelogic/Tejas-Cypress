@@ -4,13 +4,12 @@ import { Header, Button, Table, Popup, Icon, Message } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import Helper from '../../../../../helper/utility';
 
-@inject('investmentStore', 'investmentLimitStore')
+@inject('investmentStore', 'investmentLimitStore', 'uiStore')
 @withRouter
 @observer
 class TransferRequest extends Component {
   constructor(props) {
     // eslint-disable-next-line no-debugger
-    debugger;
     super(props);
     const {
       getTransferRequestAmount,
@@ -41,6 +40,8 @@ class TransferRequest extends Component {
     if (stepToBeRendered === 2) {
       setStepToBeRendered(0);
     }
+    this.props.uiStore.clearErrors();
+    setFieldValue('investmentFlowEquityErrorMessage', null);
     setFieldValue('investmentFlowErrorMessage', null);
     resetFormErrors('INVESTMONEY_FORM');
   }
@@ -82,7 +83,7 @@ class TransferRequest extends Component {
           <Table.Body>
             <Table.Row>
               <Table.Cell>Investment Amount:</Table.Cell>
-              <Table.Cell collapsing>
+              <Table.Cell collapsing className="right-align">
                 {isPreferredEquityOffering ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}
               </Table.Cell>
             </Table.Row>
@@ -90,7 +91,7 @@ class TransferRequest extends Component {
               && (
 <Table.Row>
                 <Table.Cell>Previous Investment:</Table.Cell>
-                <Table.Cell collapsing>
+                <Table.Cell collapsing className="right-align">
                   {isPreferredEquityOffering ? Helper.CurrencyFormat(getPreviousInvestedAmount) : Helper.CurrencyFormat(getPreviousInvestedAmount, 0)}
                 </Table.Cell>
               </Table.Row>
@@ -106,13 +107,13 @@ class TransferRequest extends Component {
                   position="top center"
                 />
               </Table.Cell>
-              <Table.Cell collapsing>
+              <Table.Cell collapsing className="right-align">
                 {isPreferredEquityOffering ? Helper.CurrencyFormat(getCurrCashAvailable) : Helper.CurrencyFormat(getCurrCashAvailable, 0)}
               </Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>Available Credit: </Table.Cell>
-              <Table.Cell collapsing>
+              <Table.Cell collapsing className="right-align">
                 {isPreferredEquityOffering ? Helper.CurrencyFormat(getCurrCreditAvailable) : Helper.CurrencyFormat(getCurrCreditAvailable, 0)}
               </Table.Cell>
             </Table.Row>
@@ -120,7 +121,7 @@ class TransferRequest extends Component {
           <Table.Footer>
             <Table.Row>
               <Table.HeaderCell>Transfer Request: </Table.HeaderCell>
-              <Table.HeaderCell className="positive-text" collapsing>{isPreferredEquityOffering ? Helper.CurrencyFormat(getTransferRequestAmount) : Helper.CurrencyFormat(getTransferRequestAmount, 0)}</Table.HeaderCell>
+              <Table.HeaderCell className="positive-text right-align" collapsing>{isPreferredEquityOffering ? Helper.CurrencyFormat(getTransferRequestAmount) : Helper.CurrencyFormat(getTransferRequestAmount, 0)}</Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
         </Table>
