@@ -58,8 +58,9 @@ class CampaignLayout extends Component {
           }
         });
       });
-    } catch {
-      console.log('soft failed for lazyload image');
+    } catch (err) {
+      console.log(err);
+      window.logger('soft failed for lazyload image', 'warn', true, err);
     }
     if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
@@ -83,8 +84,8 @@ class CampaignLayout extends Component {
           ele.closest('.closest').classList.add('placeholder');
         });
       });
-    } catch {
-      console.log('soft failed for lazyload image');
+    } catch (err) {
+      window.logger('soft failed for lazyload image', 'warn', true, err);
     }
     this.processLazyLoadImages();
   }
@@ -142,8 +143,8 @@ class CampaignLayout extends Component {
           if (i === lazyImages.length - 1) { setTimeout(() => { resolve(); }, 5000); }
         });
       });
-    } catch {
-      console.log('soft failed for lazyload image');
+    } catch (err) {
+      window.logger('soft failed for lazyload image', 'warn', true, err);
     }
   })
 
