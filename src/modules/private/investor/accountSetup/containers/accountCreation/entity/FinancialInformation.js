@@ -29,7 +29,7 @@ export default class FinancialInformation extends Component {
     const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
     return (
       <>
-      <Header as="h3" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
+        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
         <p className={isMobile ? '' : 'center-align'}>
           Your entity{"'"}s net assets and annual revenue are used to determine your 12-month investment limit under Regulation Crowdfunding.
         </p>
@@ -66,7 +66,7 @@ export default class FinancialInformation extends Component {
           </div>
 
           {isMobile && (
-              <Button fluid primary className="relaxed mt-20" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
+            <Button fluid primary className="relaxed mt-20" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
           )
           }
         </Form>
