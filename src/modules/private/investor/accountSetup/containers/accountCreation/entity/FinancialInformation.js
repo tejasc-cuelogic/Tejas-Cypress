@@ -66,8 +66,8 @@ export default class FinancialInformation extends Component {
             {isValidInvLimit && isMobile
             && (
             <p className="negative-text">
-              Based on your entity{"'"}s net assets and annual income, your 12-month investment limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}.<Responsive minWidth={992}><br /></Responsive>
-              This is below the $2,200 minimum opening deposit.
+              Based on your entity's net assets and annual income, your 12-month investment limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}.
+              This is below the $5,000 minimum opening deposit.
             </p>
             )
             }
@@ -76,8 +76,7 @@ export default class FinancialInformation extends Component {
           {isValidInvLimit && !isMobile
             && (
             <p className="center-align negative-text">
-              Based on your entity{"'"}s net assets and annual income, your 12-month investment limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}.<Responsive minWidth={992}><br /></Responsive>
-              This is below the $2,200 minimum opening deposit.
+              Based on your entity's net assets and annual income, your 12-month investment limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}. This is below the $5,000 minimum opening deposit.
             </p>
             )
             }
