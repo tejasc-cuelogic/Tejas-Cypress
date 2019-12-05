@@ -2,7 +2,6 @@ import { observable, computed, action, decorate, toJS } from 'mobx';
 import { get, remove } from 'lodash';
 import DataModelStore, { decorateDefault } from '../dataModelStore';
 import { offeringWatchList, removeUserFromOfferingWatchlist, addUserToOfferingWatchlist } from '../../../queries/campagin';
-import { userDetailsStore } from '../../..';
 import campaignStore from '../../public/campaignStore';
 import Helper from '../../../../../helper/utility';
 
@@ -61,10 +60,10 @@ export class WatchListStore extends DataModelStore {
   }
 
   addRemoveWatchList = async (params, forceRemove = undefined) => {
-    const variables = {
-      userId: (params && params.userId) || userDetailsStore.currentUserId,
+    let variables = {
       offeringId: (params && params.offeringId) || campaignStore.getOfferingId,
     };
+    variables = (params && params.userId) ? { ...variables, userId: params.userId } : { ...variables };
     try {
       await this.executeMutation({
         mutation: (this.isWatching || forceRemove) ? 'removeUserFromOfferingWatchlist' : 'addUserToOfferingWatchlist',
