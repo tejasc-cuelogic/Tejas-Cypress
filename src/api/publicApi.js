@@ -1,37 +1,46 @@
-/* eslint-disable arrow-body-style  */
+/* eslint-disable */
 import fetch from 'isomorphic-fetch';
-import ApolloClient from 'apollo-boost';
-import { RetryLink } from 'apollo-link-retry';
+import ApolloClient from 'apollo-client';
 import { get } from 'lodash';
-import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { RetryLink } from 'apollo-link-retry';
+import { HttpLink } from 'apollo-link-http';
+import { onError } from 'apollo-link-error';
+import { ApolloLink } from 'apollo-link';
 import { authStore } from '../services/stores';
 import { REACT_APP_PUBLIC_API, REACT_APP_PUBLIC_API_KEY, REACT_APP_DEPLOY_ENV } from '../constants/common';
-import introspectionQueryResultData from '../constants/graphQLFragmentTypes.json';
 
 global.fetch = fetch;
 
 const uri = `${REACT_APP_PUBLIC_API}/graphql`;
 
-// For unions and interfaces
-const fragmentMatcher = new IntrospectionFragmentMatcher({
-  introspectionQueryResultData,
-});
-
 export const GqlClient = new ApolloClient({
-  uri,
-  request: async (operation) => {
-    operation.setContext({
+  link: ApolloLink.from([
+    onError((res) => {
+      // if (graphQLErrors) {
+      //   graphQLErrors.forEach(({ message, locations, path }) =>
+      //     console.log(
+      //       `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+      //     ),
+      //   );
+      // }
+      // if (networkError) console.log(`[Network error]: ${networkError}`);
+      if (['production', 'prod', 'master', 'demo'].includes(REACT_APP_DEPLOY_ENV) && get(res, 'graphQLErrors[0]')) {
+        authStore.sendErrorMail(res);
+      }
+    }),
+    new RetryLink({
+      delay: {
+        initial: 100, max: 3000, jitter: false,
+      },
+      attempts: { max: 25 },
+    }),
+    new HttpLink({
+      uri,
       headers: {
         'x-api-key': REACT_APP_PUBLIC_API_KEY,
       },
-    });
-  },
-  onError: (res) => {
-    if (['production', 'prod', 'master', 'demo'].includes(REACT_APP_DEPLOY_ENV) && get(res, 'graphQLErrors[0]')) {
-      authStore.sendErrorMail(res);
-    }
-  },
-  link: new RetryLink(),
-  cache: new InMemoryCache({ fragmentMatcher }),
-  // connectToDevTools: REACT_APP_DEPLOY_ENV === 'localhost',
+    })
+  ]),
+  cache: new InMemoryCache()
 });
