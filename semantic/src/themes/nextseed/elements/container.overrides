@@ -79,7 +79,7 @@ section{
             }
         }
         &.business-banner{
-            background:url(../../assets/images/banners/how-it-works-banner.jpg) top center no-repeat;
+            background:url(../../assets/images/banners/how-it-works-banner.png) top center no-repeat;
             @media only screen and (max-width : @largestMobileScreen){
                 background:url(../../assets/images/banners/how-it-works-banner-mobile.jpg) center center no-repeat;
                 background-size: cover;

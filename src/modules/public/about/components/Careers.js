@@ -50,14 +50,6 @@ class Careers extends Component {
               a self-starter and love working in a dynamic environment, NextSeed may be
               the place for you.
             </p>
-            {/* <div className="center-align mt-30 mb-50">
-              <Button
-                onClick={() => window.open('https://nextseed.workable.com/', '_blank')}
-                primary
-              >
-              See Job Listings
-              </Button>
-            </div> */}
             <NSImage path="collage.jpg" className="careers-banner mt-40 mb-50" />
             <Divider hidden section />
             <Header as="h4">About NextSeed</Header>

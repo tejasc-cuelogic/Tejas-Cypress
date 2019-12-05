@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Container, Button, Grid, Item, Responsive } from 'semantic-ui-react';
+import { Header, Container, Button, Grid, Item, Responsive, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import NSImage from '../../../shared/NSImage';
 
@@ -80,19 +80,43 @@ const HowItWorksSummary = ({ uiStore, authStore }) => (
       </p>
     </Container>
   </section>
-  <section className={`${uiStore.responsiveVars.isMobile ? '' : 'center-align'} bg-offwhite`}>
+  <Divider as={Container} fitted />
+  <section>
     <Container className={uiStore.responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
-      <Header as="h2" className="mb-30">Our technology makes it possible</Header>
-      <p className="mb-40">We’ve built an alternative investment platform from the ground up.</p>
-      <NSImage className={uiStore.responsiveVars.isMobile ? '' : 'm-auto'} path="mockup.png" />
-      <p className="mt-30">Browse highly vetted companies and invest in just a few clicks, on any device.</p>
-      <div className="center-align">
-        { !authStore.isUserLoggedIn
-          && <Button fluid={uiStore.responsiveVars.isMobile} className={!uiStore.responsiveVars.isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/register-investor" primary>Create a  Free Account</Button>
-        }
-      </div>
+      <Grid>
+        <Grid.Row>
+          <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
+            <Header as="h2" className={uiStore.responsiveVars.uptoTablet ? 'mb-30' : 'mb-40'}>Our technology makes it possible</Header>
+            <p className={uiStore.responsiveVars.uptoTablet ? 'mb-14' : 'mb-50'}>
+              We’ve built an alternative investment platform from the ground up.
+            </p>
+            {!authStore.isUserLoggedIn && !uiStore.responsiveVars.isMobile
+              && (
+                <Button as={Link} to="/auth/register-investor" primary className="mb-30">Create a  Free Account</Button>
+              )
+            }
+            {uiStore.responsiveVars.isMobile
+             && <NSImage path="phones-mockup.png" className="mb-20" />
+            }
+            <p className={`${uiStore.responsiveVars.isMobile ? 'mt-14 mb-30' : 'mt-80'} note`}>
+              Browse highly vetted companies and invest in just a few clicks, on any device.
+            </p>
+          </Grid.Column>
+          <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
+            {!uiStore.responsiveVars.isMobile
+             && <NSImage path="phones-mockup.png" className="mb-20" />
+            }
+            {!authStore.isUserLoggedIn && uiStore.responsiveVars.isMobile
+              && (
+                <Button fluid as={Link} to="/auth/register-investor" primary>Create a  Free Account</Button>
+              )
+            }
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </Container>
   </section>
+  <Divider as={Container} fitted />
   </>
 );
 

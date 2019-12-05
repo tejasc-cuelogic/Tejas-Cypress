@@ -154,7 +154,7 @@ export default class WhyNextseed extends Component {
                   </div>
                 </Grid.Column>
                 <Grid.Column widescreen={9} computer={9} tablet={16} mobile={16}>
-                  <NSImage path="investors/laptop.png" />
+                  <NSImage path="investors/mackbook-mockup.png" />
                   {!authStore.isUserLoggedIn && responsiveVars.isMobile
                     && (
                       <Button fluid as={Link} to="/auth/register-investor" primary className="mt-30">Create a  Free Account</Button>
@@ -168,10 +168,10 @@ export default class WhyNextseed extends Component {
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
             <Grid>
               <Grid.Row>
-                {!responsiveVars.uptoTablet
+                {!responsiveVars.isMobile
                   && (
                     <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-                      <NSImage path="2.png" />
+                       <NSImage path="investors/left-phone-mockup.png" />
                     </Grid.Column>
                   )
                 }
@@ -185,8 +185,8 @@ export default class WhyNextseed extends Component {
                     </p>
                     <Header as="h5" className="mb-10">Keep your information protected.</Header>
                     <p className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-50'}>We safeguard your information with bank-level security measures</p>
-                    {responsiveVars.uptoTablet
-                      && <NSImage path="2.png" className="mb-20" />
+                    {responsiveVars.isMobile
+                      && <NSImage path="investors/left-phone-mockup-mobile.png" className="mb-20" />
                     }
                     <NSImage path="ssl.jpg" />
                     <p className={`note ${responsiveVars.uptoTablet ? 'mt-30' : 'mt-50 mb-50'}`}>
@@ -217,7 +217,7 @@ export default class WhyNextseed extends Component {
                 </p>
               </Grid.Column>
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 5}>
-                <NSImage path="1.png" />
+                <NSImage path="investors/couple-pitch.jpg" />
               </Grid.Column>
             </Grid>
           </section>
