@@ -27,8 +27,6 @@ export default class FinancialInformation extends React.Component {
 
   render() {
     const { FIN_INFO_FRM, finInfoChange } = this.props.iraAccountStore;
-    const isInValidInvLimit = FIN_INFO_FRM.fields.investmentLimit.value < 2200
-      && FIN_INFO_FRM.fields.investmentLimit.value !== '';
     return (
       <>
         <Header as="h3" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
@@ -51,7 +49,6 @@ export default class FinancialInformation extends React.Component {
                   currency
                   showerror
                   toolTipOnLabel
-                  forceError={isInValidInvLimit}
                 />
               ))
             }
@@ -60,22 +57,14 @@ export default class FinancialInformation extends React.Component {
               {isMobile ? <b>Your investment limit:</b> : 'Your investment limit:'}
               {isMobile && <br />}
               <b>
-                <span className={`${isMobile ? '' : 'large ml-10'} ${isInValidInvLimit ? 'negative-text' : 'grey-header'}`}>
+                <span className={`${isMobile ? '' : 'large ml-10'} grey-header`}>
                   {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
                 </span>
               </b>
             </p>
             <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20' : ''} link`}>How is this calculated?</a>
           </div>
-          {isInValidInvLimit
-            && (
-              <p className={`${isMobile ? '' : 'center-align'} error`}>
-                Based on your reported Net Worth and Annual Income, your 12-month investment limit
-                under Regulation Crowdfunding is below the $5,000 minimum opening
-                deposit for IRA accounts.
-            </p>
-            )
-          }
+
           {isMobile && (
             <Button fluid primary className="relaxed mt-20" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
           )
