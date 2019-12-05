@@ -541,24 +541,26 @@ export class TransactionStore {
 
   @action
   getPaymentHistory = () => new Promise((resolve, reject) => {
-    this.paymentHistoryData = graphql({
-      client,
-      query: paymentHistory,
-      variables: {
-        investmentId: this.selectedInvestment,
-        offeringId: offeringCreationStore.currentOfferingId,
-      },
-      onFetch: (data) => {
-        if (data && !this.paymentHistoryData.loading) {
-          resolve();
-        }
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-        reject();
-      },
-      fetchPolicy: 'network-only',
-    });
+    if (this.selectedInvestment && offeringCreationStore.currentOfferingId) {
+      this.paymentHistoryData = graphql({
+        client,
+        query: paymentHistory,
+        variables: {
+          investmentId: this.selectedInvestment,
+          offeringId: offeringCreationStore.currentOfferingId,
+        },
+        onFetch: (data) => {
+          if (data && !this.paymentHistoryData.loading) {
+            resolve();
+          }
+        },
+        onError: () => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          reject();
+        },
+        fetchPolicy: 'network-only',
+      });
+    }
   })
 
   @action

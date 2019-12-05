@@ -768,11 +768,10 @@ export class BankAccountStore {
   @action
   fetchRoutingNumber = (requestType = 'LINKED_BANK') => {
     const { getAccountIdByType } = accountStore;
-    const { currentUserId } = userDetailsStore;
     const accountId = getAccountIdByType();
-    if (currentUserId && accountId && get(this.plaidAccDetails, 'accountNumber')) {
+    if (accountId && get(this.plaidAccDetails, 'accountNumber')) {
       uiStore.setProgress();
-      this.getDecryptedRoutingNum(accountId, currentUserId, requestType)
+      this.getDecryptedRoutingNum(accountId, false, requestType)
         .then(action((res) => {
           if (this.routingNum !== res) {
             this.routingNum = res;
@@ -783,25 +782,28 @@ export class BankAccountStore {
   }
 
   @action
-  getDecryptedRoutingNum = (accountId, userId, requestType = 'CHANGE_REQUEST') => new Promise((resolve, reject) => {
-    client
-      .mutate({
-        mutation: getDecryptedRoutingNumber,
-        variables: {
-          userId,
-          accountId,
-          requestType,
-        },
-      })
-      .then(res => resolve(res.data.getDecryptedRoutingNumber))
-      .catch(() => {
-        if (requestType === 'CHANGE_REQUEST') {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-        }
-        uiStore.setProgress(false);
-        reject();
-      });
-  });
+  getDecryptedRoutingNum = (accountId, userId, requestType = 'CHANGE_REQUEST') => {
+    let variables = {
+      accountId,
+      requestType,
+    };
+    variables = userId ? { ...variables, userId } : { ...variables };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: getDecryptedRoutingNumber,
+          variables,
+        })
+        .then(res => resolve(res.data.getDecryptedRoutingNumber))
+        .catch(() => {
+          if (requestType === 'CHANGE_REQUEST') {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+          }
+          uiStore.setProgress(false);
+          reject();
+        });
+    });
+  }
 }
 
 export default new BankAccountStore();

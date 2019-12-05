@@ -23,9 +23,17 @@ export const validInvestorLoginAction = async () => {
     });
   cy.wait(2000);
   cy.get('.public-pages').find('.campaign-banner').find('.banner .container .stackable').find('.six.wide')
-    .find('.center-align')
-    .contains('Invest Now')
-    .click();
+    .find('.center-align').find('.secondary.button')
+    .invoke('text')
+    .then((innerText) => {
+      if (['Invest Now', 'Change Investment'].includes(innerText)) {
+        cy.log('investment :: innerText===>', innerText);
+        cy.contains(innerText)
+        .click({force:true})
+      }
+    });
+    // .contains('Invest Now')
+    // .click();
   cy.wait('@investNowHealthCheck');
 };
 
