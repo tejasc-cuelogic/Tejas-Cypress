@@ -331,7 +331,7 @@ export const IRA_FIN_INFO = {
     key: 'investmentLimit',
     value: '',
     error: undefined,
-    rule: 'numeric|min:5000',
+    rule: 'numeric|min:2200',
   },
 };
 
@@ -369,7 +369,7 @@ export const ENTITY_FIN_INFO = {
     key: 'investmentLimit',
     value: '',
     error: undefined,
-    rule: 'numeric|min:5000',
+    rule: 'numeric|min:2200',
   },
 };
 

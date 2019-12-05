@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Divider, Button, Responsive } from 'semantic-ui-react';
+import { Header, Form, Divider, Button } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
@@ -27,7 +27,7 @@ export default class FinancialInformation extends Component {
 
   render() {
     const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
-    const isValidInvLimit = FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '';
+    const isInValidInvLimit = FIN_INFO_FRM.fields.investmentLimit.value < 2200 && FIN_INFO_FRM.fields.investmentLimit.value !== '';
     return (
       <>
       <Header as="h3" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
@@ -47,7 +47,7 @@ export default class FinancialInformation extends Component {
                 currency
                 prefix="$"
                 showerror
-                forceError={isValidInvLimit}
+                forceError={isInValidInvLimit}
               />
             ))}
             {!isMobile && <Divider hidden />}
@@ -55,7 +55,7 @@ export default class FinancialInformation extends Component {
               {isMobile ? <b>Your investment limit:</b> : 'Your investment limit:'}
               {isMobile && <br />}
               <b>
-                <span className={`${isMobile ? '' : 'large ml-10'} ${isValidInvLimit ? 'negative-text' : 'grey-header'}`}>
+                <span className={`${isMobile ? '' : 'large ml-10'} ${isInValidInvLimit ? 'negative-text' : 'grey-header'}`}>
                   {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
                 </span>
               </b>
@@ -63,20 +63,20 @@ export default class FinancialInformation extends Component {
             {/* <p className="grey-header">Your investment limit:<span className="highlight-text
           large ml-10">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}</span></p>
         */}
-            {isValidInvLimit && isMobile
+            {isInValidInvLimit && isMobile
             && (
             <p className="negative-text">
-              Based on your entity's net assets and annual income, your 12-month investment limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}.
+              Based on your entity&apos;s net assets and annual income, your 12-month investment limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}.
               This is below the $5,000 minimum opening deposit.
             </p>
             )
             }
             <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20' : ''} link`}>How is this calculated?</a>
           </div>
-          {isValidInvLimit && !isMobile
+          {isInValidInvLimit && !isMobile
             && (
             <p className="center-align negative-text">
-              Based on your entity's net assets and annual income, your 12-month investment limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}. This is below the $5,000 minimum opening deposit.
+              Based on your entity&apos;s net assets and annual income, your 12-month investment limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}. This is below the $5,000 minimum opening deposit.
             </p>
             )
             }
