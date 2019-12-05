@@ -31,10 +31,6 @@ export default class ProfileData extends Component {
     this.props.uiStore.setProgress(false);
   }
 
-  navigateToNewPhoneNumber = () => {
-    this.props.history.replace(`${this.props.match.url}/new-phone-number`);
-  }
-
   handleUpdateProfileInfo = (e) => {
     e.preventDefault();
     const userRole = capitalize(this.props.userStore.currentUser.roles[0]);
