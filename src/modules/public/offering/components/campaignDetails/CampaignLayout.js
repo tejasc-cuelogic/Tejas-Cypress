@@ -43,20 +43,24 @@ class CampaignLayout extends Component {
   }
 
   componentDidMount() {
-    [...document.querySelectorAll('.fr-view')].forEach((e) => {
-      [...e.querySelectorAll('img')].forEach((ele) => {
-        this.pWrapper(ele);
-        ele.setAttribute('data-src', ele.getAttribute('src'));
-        ele.removeAttribute('src');
-        ele.closest('.closest').classList.add('ui');
-        ele.closest('.closest').classList.add('placeholder');
+    try {
+      [...document.querySelectorAll('.fr-view')].forEach((e) => {
+        [...e.querySelectorAll('img')].forEach((ele) => {
+          this.pWrapper(ele);
+          ele.setAttribute('data-src', ele.getAttribute('src'));
+          ele.removeAttribute('src');
+          ele.closest('.closest').classList.add('ui');
+          ele.closest('.closest').classList.add('placeholder');
+        });
+        [...e.querySelectorAll('iframe')].forEach((ele) => {
+          if (!ele.getAttribute('title')) {
+            ele.setAttribute('title', this.props.offeringName || 'Offering');
+          }
+        });
       });
-      [...e.querySelectorAll('iframe')].forEach((ele) => {
-        if (!ele.getAttribute('title')) {
-          ele.setAttribute('title', this.props.offeringName || 'Offering');
-        }
-      });
-    });
+    } catch {
+      console.log('soft failed for lazyload image');
+    }
     if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
       document.querySelector(`${this.props.location.hash}`).scrollIntoView({
@@ -69,15 +73,19 @@ class CampaignLayout extends Component {
   }
 
   componentDidUpdate() {
-    [...document.querySelectorAll('.fr-view')].forEach((e) => {
-      [...e.querySelectorAll('img')].forEach((ele) => {
-        this.pWrapper(ele);
-        ele.setAttribute('data-src', ele.getAttribute('src'));
-        ele.removeAttribute('src');
-        ele.closest('.closest').classList.add('ui');
-        ele.closest('.closest').classList.add('placeholder');
+    try {
+      [...document.querySelectorAll('.fr-view')].forEach((e) => {
+        [...e.querySelectorAll('img')].forEach((ele) => {
+          this.pWrapper(ele);
+          ele.setAttribute('data-src', ele.getAttribute('src'));
+          ele.removeAttribute('src');
+          ele.closest('.closest').classList.add('ui');
+          ele.closest('.closest').classList.add('placeholder');
+        });
       });
-    });
+    } catch {
+      console.log('soft failed for lazyload image');
+    }
     this.processLazyLoadImages();
   }
 
@@ -116,23 +124,27 @@ class CampaignLayout extends Component {
   }
 
   processLazyLoadImages = () => new Promise((resolve) => {
-    const ele = [...document.querySelectorAll('.fr-view')];
-    ele.forEach((e) => {
-      const lazyImages = [...e.querySelectorAll('img')];
-      lazyImages.forEach((img, i) => {
-        if (this.isScrolledIntoView(img)) {
-          setTimeout(() => {
-            img.setAttribute('src', img.getAttribute('data-src'));
-            img.closest('.closest').classList.remove('ui');
-            img.closest('.closest').classList.remove('placeholder');
-            if (!img.getAttribute('alt')) {
-              img.setAttribute('alt', 'Image not found!');
-            }
-          }, 500);
-        }
-        if (i === lazyImages.length - 1) { setTimeout(() => { resolve(); }, 5000); }
+    try {
+      const ele = [...document.querySelectorAll('.fr-view')];
+      ele.forEach((e) => {
+        const lazyImages = [...e.querySelectorAll('img')];
+        lazyImages.forEach((img, i) => {
+          if (this.isScrolledIntoView(img)) {
+            setTimeout(() => {
+              img.setAttribute('src', img.getAttribute('data-src'));
+              img.closest('.closest').classList.remove('ui');
+              img.closest('.closest').classList.remove('placeholder');
+              if (!img.getAttribute('alt')) {
+                img.setAttribute('alt', 'Image not found!');
+              }
+            }, 500);
+          }
+          if (i === lazyImages.length - 1) { setTimeout(() => { resolve(); }, 5000); }
+        });
       });
-    });
+    } catch {
+      console.log('soft failed for lazyload image');
+    }
   })
 
   handleOnScroll = () => {
