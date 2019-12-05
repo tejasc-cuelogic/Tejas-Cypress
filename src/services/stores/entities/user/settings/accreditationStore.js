@@ -1,6 +1,6 @@
 /* eslint-disable radix */
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes, get } from 'lodash';
+import { forEach, isArray, find, forOwn, filter, capitalize, findKey, includes, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
@@ -69,6 +69,8 @@ export class AccreditationStore {
   @observable accreditationDetails = {};
 
   @observable userAccredetiationState = null;
+
+  @observable accountAccreditationStatus = null;
 
   @observable selectedAccountStatus = undefined;
 
@@ -821,22 +823,6 @@ export class AccreditationStore {
     return false;
   }
 
-  // Not usable below function, check and remove
-  @action
-  accreditatedAccounts = () => {
-    const aggreditationDetails = this.accreditationData;
-    const inactiveResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === null));
-    const pendingResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'REQUESTED'));
-    const notEligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'DECLINED'));
-    const eligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'CONFIRMED'));
-    const expiredResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && (a.status === 'EXPIRED' || this.checkIsAccreditationExpired(a.expiration) === 'EXPIRED')));
-    this.accreditationDetails.inactiveAccreditation = inactiveResult;
-    this.accreditationDetails.pendingAccreditation = pendingResult;
-    this.accreditationDetails.notEligibleAccreditation = notEligibalResult;
-    this.accreditationDetails.eligibleAccreditation = eligibalResult;
-    this.accreditationDetails.expiredAccreditation = expiredResult;
-  }
-
   getKeyResult = (dataObj) => {
     const resultArr = [];
     if (dataObj) {
@@ -871,6 +857,7 @@ export class AccreditationStore {
         ? (currentAcitveObject.status === 'EXPIRED' || this.checkIsAccreditationExpired(currentAcitveObject.expiration)
           === 'EXPIRED') ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
       investmentType = regulationType && regulationType === 'BD_CF_506C' && accountStatus !== 'EXPIRED' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'BD_506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : regulationType && regulationType === 'BD_506B' ? 'BD_506B' : 'CF';
+      this.setFieldVal('accountAccreditationStatus', accountStatus);
       switch (accountStatus) {
         case 'REQUESTED':
           this.setFieldVal('userAccredetiationState', 'PENDING');
@@ -913,6 +900,9 @@ export class AccreditationStore {
       partialAccounts,
       processingAccounts,
     } = userDetailsStore.signupStatus;
+    if (!userDetailsStore.userDetails.roles) {
+      return '';
+    }
     const { details } = userDetailsStore.userDetails.roles.find(r => r.name === selectedAccount);
     let accountStatusFound = '';
     if (selectedAccount) {
@@ -939,29 +929,6 @@ export class AccreditationStore {
       accountStatusFound = 'PARTIAL';
     }
     return accountStatusFound;
-  }
-
-  // Not usable below function, check and remove
-  @action
-  validInvestmentAccounts = () => {
-    const { eligibleAccreditation, pendingAccreditation } = this.accreditationDetails;
-    let validAccreditedArr = [];
-    const investAccountArr = investmentStore.investAccTypes.values;
-    let resultArr = [];
-    if (this.userAccredetiationState === 'ELGIBLE' && eligibleAccreditation.length) {
-      validAccreditedArr = [...eligibleAccreditation];
-    } else if (this.userAccredetiationState === 'PENDING' && pendingAccreditation.length) {
-      validAccreditedArr = [...pendingAccreditation];
-    }
-    if (validAccreditedArr
-      && validAccreditedArr.length
-      && investmentStore.investAccTypes.values.length) {
-      forEach(validAccreditedArr, (account) => {
-        const tempArr = remove(investAccountArr, { value: account });
-        resultArr = [...resultArr, ...tempArr];
-      });
-      investmentStore.investAccTypes.values = resultArr;
-    }
   }
 
   @action
