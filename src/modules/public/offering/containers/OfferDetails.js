@@ -63,6 +63,8 @@ class offerDetails extends Component {
           this.setState({ showPassDialog: false, preLoading: false });
           this.props.uiStore.setAuthRef(this.props.location.pathname);
           this.props.history.push('/login');
+        } else if (`Offering ${this.props.match.params.id} not found.` === get(exception, 'message')) {
+          this.props.history.push('/offerings');
         } else {
           this.props.campaignStore.getCampaignDetails(this.props.match.params.id, false, true);
         }

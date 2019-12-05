@@ -28,7 +28,7 @@ export default class CampaignSideBar extends Component {
     const {
       isClosed, isCreation, isInProcessing, collected, minFlagStatus, isBonusReward,
       minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, diffForProcessing,
-      earlyBird, isEarlyBirdRewards, bonusRewards, countDown,
+      earlyBird, isEarlyBirdRewards, bonusRewards, countDown, isInvestedInOffering,
     } = campaignStatus;
     const isCampaignLayout = newLayout;
     return (
@@ -123,7 +123,7 @@ export default class CampaignSideBar extends Component {
               {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                 && (
                   <p className="raise-type mt-20 mb-0">
-                    <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
+                    {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
                     {isMobile
                       ? (<PopUpModal label={CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} content={(<span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)} />)
                       : (
@@ -152,13 +152,13 @@ export default class CampaignSideBar extends Component {
                   </p>
                 )
               }
-              {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
+              {![CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C, CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE].includes(offerStructure)
                 ? (
                   <p className="mb-0">
                     Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
                 </p>
                 )
-                : (
+                : offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE ? (
                   <>
                     <p className="mb-0">
                       Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : '-'}
@@ -168,6 +168,7 @@ export default class CampaignSideBar extends Component {
                     </p>
                   </>
                 )
+                  : null
               }
               <Divider hidden />
               {isCreation
@@ -184,7 +185,7 @@ export default class CampaignSideBar extends Component {
                         onClick={this.handleInvestNowClick}
                         fluid
                       >
-                        {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                        {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : isInvestedInOffering ? 'Change Investment' : 'Invest Now'}`}
                       </Button>
                       <p className="mt-10">
                         {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
