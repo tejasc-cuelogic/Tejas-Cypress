@@ -15,8 +15,8 @@ export default class FinancialInfo extends Component {
   constructor(props) {
     super(props);
     if (this.props.match.isExact) {
-      this.props.investmentLimitStore.getInvestedAmount();
       this.props.investmentLimitStore.setAccountsLimits();
+      this.props.investmentLimitStore.getInvestedAmount();
       this.props.accreditationStore.getUserAccreditation().then(() => {
         this.props.accreditationStore.initiateAccreditation();
       });

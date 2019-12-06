@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { mapValues, filter, find, map } from 'lodash';
+import { mapValues, filter, find } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -57,7 +57,7 @@ export class InvestmentLimitStore {
   }
 
   @action
-  getInvestorInvestmentLimit = accountId => new Promise((resolve) => {
+  getInvestorInvestmentLimit = (accountId, isLoaderConsider = true) => new Promise((resolve) => {
     this.investorInvestmentLimit = graphql({
       client,
       query: getInvestorInvestmentLimit,
@@ -66,7 +66,9 @@ export class InvestmentLimitStore {
         accountId,
       },
       onFetch: (data) => {
-        if (data && !this.investorInvestmentLimit.loading) {
+        if (data && !isLoaderConsider) {
+          resolve(data);
+        } else if (data && !this.investorInvestmentLimit.loading) {
           resolve(data);
         }
       },
@@ -186,9 +188,9 @@ export class InvestmentLimitStore {
   @action
   setAccountsLimits = () => {
     const { accountList } = this.getActiveAccountList;
+    const isLoaderConsider = !(accountList.length > 1);
     accountList.forEach((account) => {
-      console.log('AccountIds==>', account.details.accountId);
-      this.getInvestorInvestmentLimit(account.details.accountId).then((data) => {
+      this.getInvestorInvestmentLimit(account.details.accountId, isLoaderConsider).then((data) => {
         if (data.getInvestorInvestmentLimit === '0.00') {
           this.setInvestmentLimitInfo(account.name, account.details.accountId);
         }
@@ -242,10 +244,10 @@ export class InvestmentLimitStore {
   @action
   initiateInvestmentLimit = () => {
     this.activeAccounts = userDetailsStore.getActiveAccounts;
-    const activeAccountList = this.getActiveAccountList;
-    map(activeAccountList.accountList, (account) => {
-      this.setInvestmentLimitInfo(account.name);
-    });
+    // const activeAccountList = this.getActiveAccountList;
+    // map(activeAccountList.accountList, (account) => {
+    //   this.setInvestmentLimitInfo(account.name);
+    // });
   }
 
   @action
