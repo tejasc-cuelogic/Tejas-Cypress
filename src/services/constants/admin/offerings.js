@@ -826,6 +826,13 @@ export const COMPANY_LAUNCH = {
     rule: 'optional',
     placeHolder: 'Enter here',
   },
+  investmentConfirmationTemplateName: {
+    value: '',
+    label: 'Investment Confirmation Template',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
   isin: {
     value: '',
     label: 'GoldStar ISIN',
