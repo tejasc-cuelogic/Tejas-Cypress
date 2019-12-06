@@ -16,17 +16,17 @@ const businesses = [
     {
       title: 'Houston, TX',
       image: 'investors/img-2.png',
-      description: 'Bravery Chef Hall raised $1,000,000 from 539 investors ',
+      description: '539 members invested $1,000,000 to open Bravery Chef Hall',
     },
     {
       title: 'Seattle, WA',
       image: 'investors/img.png',
-      description: 'Fair Isle Brewing raised $327,800 from 292 investors',
+      description: '292 members invested $327,800 to launch Fair Isle Brewing',
     },
     {
       title: 'Denver, CO',
       image: 'investors/img-1.png',
-      description: 'Urban Putt raised $300,000 from XXX investors',
+      description: '289 members invested $300,000 in Urban Putt’s second location',
     },
   ],
 ];
@@ -43,19 +43,25 @@ export default class WhyNextseed extends Component {
             <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-30'} textAlign={responsiveVars.uptoTablet ? 'left' : 'center'}>
               Alternative investments, made simple
             </Header>
-            <p className={responsiveVars.uptoTablet ? 'mb-30' : 'center-align mb-70'}>We{"'"}re using technology and expertise in private investments in order to harness the power<Responsive minWidth={992} as="br" />of community to build vibrant communities around the country.</p>
+            <p className={responsiveVars.uptoTablet ? 'mb-30' : 'center-align mb-70'}>You can harness our cutting-edge technology and expertise in private investments to build your portfolio.</p>
             <div className="how-it-works-steps">
-              <Grid stackable centered columns={3} relaxed={responsiveVars.uptoTablet ? '' : 'very'}>
-                <Grid.Column>
-                  <p>We source unique investment opportunities in local businesses around the country</p>
-                </Grid.Column>
-                <Grid.Column>
-                  <p>Our network of thousands of investors discover deals that matter to them</p>
-                </Grid.Column>
-                <Grid.Column>
-                  <p>Our intuitive platform makes it easy to invest in local growth, monitor portfolio performance, and enjoy the rewards!</p>
-                </Grid.Column>
-              </Grid>
+            <Grid stackable centered columns={3} relaxed={responsiveVars.uptoTablet ? '' : 'very'}>
+              <Grid.Column>
+                <Header as="h5" className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Explore</Header>
+                <p className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Browse a curated selection of pre-vetted businesses that have passed our strict screening process.</p>
+                <Link to="">Our vetting process</Link>
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h5" className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Invest</Header>
+                <p className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Invest with an Individual account, an Investment Entity, or a new Self-Directed IRA. </p>
+                <Link to="">Our types of accounts offered</Link>
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h5" className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Receive</Header>
+                <p className={responsiveVars.uptoTablet ? 'mb-10' : ''}>NextSeed collects and processes any payments directly into your investment account.</p>
+                <Link to="">Our payments process</Link>
+              </Grid.Column>
+            </Grid>
             </div>
             <Header as={responsiveVars.uptoTablet ? 'h2' : 'h3'} textAlign="center" className={responsiveVars.uptoTablet ? 'mt-30' : 'mt-70'}>
               Watch our video
@@ -66,33 +72,9 @@ export default class WhyNextseed extends Component {
           </section>
           <Divider fitted as={!responsiveVars.uptoTablet && Container} />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-            <Header as="h2" className="mb-20" textAlign={responsiveVars.uptoTablet ? 'left' : 'center'}>
-              Investing is a breeze
-            </Header>
-            <p className={responsiveVars.uptoTablet ? 'mb-30' : 'center-align mb-70'}>You find the investment that{"'"}s right for you, our dedicated team and cutting-edge technology will do all the work.</p>
-            <Grid stackable centered columns={3} relaxed={responsiveVars.uptoTablet ? '' : 'very'}>
-              <Grid.Column>
-                <Header as="h5" className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Explore</Header>
-                <p className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Browse a curated selection of pre-vetted businesses that have passed our strict screening process.</p>
-                <Link to="">Read more about our vetting process</Link>
-              </Grid.Column>
-              <Grid.Column>
-                <Header as="h5" className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Invest</Header>
-                <p className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Invest with an Individual account, an Investment Entity, or a new Self-Directed IRA. </p>
-                <Link to="">Read more about the types of accounts and types of securities offered</Link>
-              </Grid.Column>
-              <Grid.Column>
-                <Header as="h5" className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Receive</Header>
-                <p className={responsiveVars.uptoTablet ? 'mb-10' : ''}>NextSeed collects and processes payments directly into your investment account.</p>
-                <Link to="">Read more about our vetting process</Link>
-              </Grid.Column>
-            </Grid>
-          </section>
-          <Divider fitted as={!responsiveVars.uptoTablet && Container} />
-          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
             <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-30 center-align'}>Invest in the growth of local communities </Header>
             <p className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-70 center-align'}>
-              Don{"'"}t just invest through Wall Street and Silicon Valley - put your capital to work<Responsive minWidth={992} as="br" />with Main Streen businesses, growing startups, experiential real estate, and more.
+              Don{"'"}t just invest through Wall Street and Silicon Valley - put your capital to work with<Responsive minWidth={992} as="br" /> main street businesses, growing startups, experiential real estate, and more.
             </p>
             {!responsiveVars.uptoTablet
               ? (
@@ -199,18 +181,16 @@ export default class WhyNextseed extends Component {
           </section>
           <Divider fitted as={!responsiveVars.uptoTablet && Container} />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-            <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-40' : 'center-align mb-70'}>Every investment comes with<Responsive as={React.Fragment} minWidth={992}><br /></Responsive>risk and opportunity</Header>
+            <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-40' : 'center-align mb-70'}>Every investment comes with <Responsive as={React.Fragment} minWidth={992}><br /></Responsive>risk and opportunity</Header>
             <Grid centered stackable reversed="mobile">
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 5}>
                 <NSImage path="investors/couple-pitch.jpg" />
               </Grid.Column>
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 5}>
                 <p>
-                  Remember, returns and bonus rewards are not guaranteed. Investments can be lost entirely.
-                </p>
-                <Divider hidden />
-                <p>
-                  Be sure to do your own due diligence, review all offering documents carefully, and never invest more than you can afford to lose.
+                  Remember, returns and bonus rewards are not guaranteed. Investments can be lost entirely. 
+                  Be sure to do your own due diligence, review all offering documents carefully, 
+                  and never invest more than you can afford to lose.
                 </p>
                 <Divider hidden />
                 <p>

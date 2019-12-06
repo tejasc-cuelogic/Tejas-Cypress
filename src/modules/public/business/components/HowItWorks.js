@@ -72,21 +72,21 @@ class HowItWorks extends Component {
     ];
     const testimonial = [
       {
-        title: 'Real Success Stories.',
+        title: 'Real Success Stories',
         description: 'The NextSeed process was extremely smooth and allowed me to focus on getting Pitch 25 up and running. The amount of community buzz that we got through this process gave our business a huge boost.',
         name: 'Brian Ching | Pitch 25',
         investment: '$549,900 from 392 investors',
         image: 'business/lian.png',
       },
       {
-        title: 'Real Success Stories.',
+        title: 'Real Success Stories',
         description: 'The all-in-one platform allowed us to expand quickly and build a new customer base. Our partnership with NextSeed is a win-win.',
         name: 'Jess Hughes | Citizen Pilates',
         investment: '$100,000 from 75 investors',
         image: 'business/jess.png',
       },
       {
-        title: 'Real Success Stories.',
+        title: 'Real Success Stories',
         description: 'Your patrons get to be part of what you’re creating. It’s the best way to access this many investors while retaining 100% ownership.',
         name: 'Michael Dickson, Native Hostel',
         investment: '$396,500 from 227 investors',
@@ -169,13 +169,10 @@ class HowItWorks extends Component {
           <div className="center-align">
             <Button fluid={responsiveVars.isMobile} as={Link} to="/" primary className={responsiveVars.isMobile ? '' : 'mb-14 relaxed'}>Apply Online</Button>
           </div>
-          {!responsiveVars.isMobile
-            && <Header as="h5" textAlign="center">It only takes 5 minutes to complete our pre-qualification application</Header>
-          }
         </section>
         <Divider fitted />
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-          <Header as="h2" className={responsiveVars.isMobile ? 'mb-40' : 'mb-80 center-align'}>We work with Main Street businesses.</Header>
+          <Header as="h2" className={responsiveVars.isMobile ? 'mb-40' : 'mb-80 center-align'}>We work with growing businesses of all types</Header>
           {!responsiveVars.isMobile
             ? (
               <Grid centered stackable relaxed={isTablet ? '' : 'very'} className="mt-20">
@@ -217,7 +214,7 @@ class HowItWorks extends Component {
         </section>
         <Divider fitted />
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-          <Header as="h2" textAlign={responsiveVars.isMobile ? 'mb-30' : 'center'}>From approved to funded in 71<sup>*</sup> days</Header>
+          <Header as="h2" textAlign={responsiveVars.isMobile ? 'mb-30' : 'center'}>From launched to funded in 71<sup>*</sup> days</Header>
           <p className={responsiveVars.isMobile ? 'mb-50' : 'mb-50 center-align'}>
           We give you the platform, tools, and support to locate new investors<Responsive minWidth={768} as="br" /> as well as activate and engage your fans and customers.
           </p>
@@ -261,8 +258,9 @@ class HowItWorks extends Component {
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
           <Header as="h2" textAlign={responsiveVars.isMobile ? 'mb-30' : 'center'}>Reach your goals with full-service support</Header>
           <p className={responsiveVars.isMobile ? 'mb-40' : 'mb-60 center-align'}>
-          Our one-time fee comes with everything you need to launch, promote and service
-          your<Responsive minWidth={768} as="br" />campaign. Best of all, we only charge you if your offering is successful.
+          Our success fee comes with everything you need to <Responsive minWidth={768} as="br" />
+          launch, promote and service your campaign. Best of all, <Responsive minWidth={768} as="br" />
+          we only charge you if your offering is funded.
           </p>
           <Grid relaxed padded="vertically">
             <Grid.Row centered>
@@ -374,7 +372,7 @@ class HowItWorks extends Component {
         <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'} proven-result-section`}>
           <Grid columns={2} stackable relaxed={!isTablet && 'very'}>
             <Grid.Column>
-              <Header as="h2">Data so far.</Header>
+              <Header as="h2">Data so far</Header>
               <p className="mb-30">
             Every day, entrepreneurs like you are raising capital on
             NextSeed to bring their concepts to life.

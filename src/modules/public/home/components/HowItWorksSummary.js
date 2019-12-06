@@ -17,13 +17,13 @@ const highlights = [
   {
     title: 'Impactful investments',
     icon: 'icons/entrepreneurs.svg',
-    meta: `Local business owners, local jobs and local growth.
-    Create real impact in local communities nationwide`,
+    meta: `Growing businesses that create jobs and drive growth.
+    Create real impact in local communities.`,
   },
   {
     title: 'Exclusive deals',
     icon: 'icons/ventures.svg',
-    meta: `Uncover opportunities that were once privately reserved for wealthy
+    meta: `Opportunities that were once privately reserved for wealthy
       and well-connected investors.`,
   },
   {
@@ -34,14 +34,14 @@ const highlights = [
   {
     title: 'Businesses you understand',
     icon: 'icons/businesses.svg',
-    meta: `Investments in Main Street businesses and local properties 
-      generating real cash flow.`,
+    meta: `Investments in growing businesses across industries. Access the right
+      ones for you.`,
   },
   {
     title: 'Returns processed for you',
     icon: 'icons/returns.svg',
     meta: `No need to chase payments from business owners. NextSeed facilitates
-     payment processing from your investments automatically.`,
+      any payments from your investments automatically.`,
   },
 ];
 
@@ -86,9 +86,9 @@ const HowItWorksSummary = ({ uiStore, authStore }) => (
       <Grid>
         <Grid.Row>
           <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-            <Header as="h2" className={uiStore.responsiveVars.uptoTablet ? 'mb-30' : 'mb-40'}>Our technology makes it possible</Header>
+            <Header as="h2" className={uiStore.responsiveVars.uptoTablet ? 'mb-30' : 'mb-40'}>We’ve built an alternative investment platfrom from the ground up.</Header>
             <p className={uiStore.responsiveVars.uptoTablet ? 'mb-14' : 'mb-50'}>
-              We’ve built an alternative investment platform from the ground up.
+            Browse highly vetted companies and invest in just a few clicks, on any device.
             </p>
             {!authStore.isUserLoggedIn && !uiStore.responsiveVars.isMobile
               && (
@@ -98,9 +98,6 @@ const HowItWorksSummary = ({ uiStore, authStore }) => (
             {uiStore.responsiveVars.isMobile
              && <NSImage path="phones-mockup.png" className="mb-20" />
             }
-            <p className={`${uiStore.responsiveVars.isMobile ? 'mt-14 mb-30' : 'mt-80'} note`}>
-              Browse highly vetted companies and invest in just a few clicks, on any device.
-            </p>
           </Grid.Column>
           <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
             {!uiStore.responsiveVars.isMobile
