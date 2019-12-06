@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Button, Table, Popup, Icon, Message } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
+import money from 'money-math';
 import Helper from '../../../../../helper/utility';
 
-@inject('investmentStore', 'investmentLimitStore', 'uiStore')
+@inject('investmentStore', 'investmentLimitStore', 'uiStore', 'accreditationStore')
 @withRouter
 @observer
 class TransferRequest extends Component {
@@ -48,6 +49,9 @@ class TransferRequest extends Component {
 
   handleShowTransferErrRequest = () => {
     this.props.investmentStore.setShowTransferRequestErr(false);
+    this.props.investmentStore.resetData();
+    this.props.accreditationStore.resetUserAccreditatedStatus();
+    this.props.history.push(this.props.refLink);
   }
 
   render() {
@@ -89,17 +93,17 @@ class TransferRequest extends Component {
             </Table.Row>
             {changeInvest
               && (
-<Table.Row>
-                <Table.Cell>Previous Investment:</Table.Cell>
-                <Table.Cell collapsing className="right-align">
-                  {isPreferredEquityOffering ? Helper.CurrencyFormat(getPreviousInvestedAmount) : Helper.CurrencyFormat(getPreviousInvestedAmount, 0)}
-                </Table.Cell>
-              </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Previous Investment:</Table.Cell>
+                  <Table.Cell collapsing className="right-align">
+                    {isPreferredEquityOffering ? Helper.CurrencyFormat(getPreviousInvestedAmount) : Helper.CurrencyFormat(getPreviousInvestedAmount, 0)}
+                  </Table.Cell>
+                </Table.Row>
               )
             }
             <Table.Row>
               <Table.Cell>
-                Cash Available:
+                Available Cash:
                 <Popup
                   wide
                   trigger={<Icon name="help circle" color="green" />}
@@ -111,12 +115,16 @@ class TransferRequest extends Component {
                 {isPreferredEquityOffering ? Helper.CurrencyFormat(getCurrCashAvailable) : Helper.CurrencyFormat(getCurrCashAvailable, 0)}
               </Table.Cell>
             </Table.Row>
-            <Table.Row>
-              <Table.Cell>Available Credit: </Table.Cell>
-              <Table.Cell collapsing className="right-align">
-                {isPreferredEquityOffering ? Helper.CurrencyFormat(getCurrCreditAvailable) : Helper.CurrencyFormat(getCurrCreditAvailable, 0)}
-              </Table.Cell>
-            </Table.Row>
+            {!money.isZero(getCurrCreditAvailable)
+              && (
+                <Table.Row>
+                  <Table.Cell>Available Credit: </Table.Cell>
+                  <Table.Cell collapsing className="right-align">
+                    {isPreferredEquityOffering ? Helper.CurrencyFormat(getCurrCreditAvailable) : Helper.CurrencyFormat(getCurrCreditAvailable, 0)}
+                  </Table.Cell>
+                </Table.Row>
+              )
+            }
           </Table.Body>
           <Table.Footer>
             <Table.Row>
@@ -127,9 +135,9 @@ class TransferRequest extends Component {
         </Table>
         {investmentFlowErrorMessage
           && (
-<Message error className="mt-30">
-            {investmentFlowErrorMessage}
-          </Message>
+            <Message error className="mt-30">
+              {investmentFlowErrorMessage}
+            </Message>
           )
         }
         <Button.Group widths="2" className="inline mt-30">

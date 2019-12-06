@@ -51,7 +51,7 @@ export default class Summary extends Component {
       FUNDING_FRM,
       IDENTITY_FRM,
     } = this.props.iraAccountStore;
-    const { errors } = this.props.uiStore;
+    const { errors, inProgressArray } = this.props.uiStore;
     const accountType = find(
       ACC_TYPES_FRM.fields.iraAccountType.values,
       { value: ACC_TYPES_FRM.fields.iraAccountType.value },
@@ -149,7 +149,7 @@ export default class Summary extends Component {
           )
         }
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.props.handleCreateAccount('ira')} disabled={!this.props.iraAccountStore.isValidIraForm} />
+          <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.props.handleCreateAccount('ira')} disabled={!this.props.iraAccountStore.isValidIraForm || inProgressArray.includes('submitAccountLoader')} />
         </div>
         <p className="center-align mt-30 grey-header">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
