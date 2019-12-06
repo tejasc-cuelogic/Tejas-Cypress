@@ -64,8 +64,6 @@ class Home extends Component {
             <div className={`${responsiveVars.isMobile ? 'mb-50' : 'center-align mb-40'} mt-30`}>
               <Button fluid={responsiveVars.isMobile} className="relaxed" primary content="Apply Online" />
             </div>
-            {!responsiveVars.isMobile && <Header as="h3" className="mb-80">It only takes 5 minutes!</Header>
-            }
             <Divider section />
             <Header as="h2" className={responsiveVars.isMobile ? 'mt-40' : 'mt-80'}>Join our newsletter</Header>
             <p className="mb-30">

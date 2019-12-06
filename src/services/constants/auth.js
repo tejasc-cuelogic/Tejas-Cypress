@@ -2,7 +2,7 @@ export const COMMON = {
   email: {
     value: '',
     error: undefined,
-    placeHolder: 'Type email address',
+    placeHolder: 'Email',
     label: 'Email Address',
     rule: 'required|email',
     customErrors: {

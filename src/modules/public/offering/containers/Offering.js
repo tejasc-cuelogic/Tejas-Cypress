@@ -61,7 +61,7 @@ class Offering extends Component {
               loading={completedLoading}
               campaigns={completed}
               locked={3}
-              heading={<Header as={responsiveVars.isMobile ? 'h3' : 'h2'} textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-60'}>Successfully Funded on NextSeed</Header>}
+              heading={<Header as={responsiveVars.isMobile ? 'h3' : 'h2'} textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-60'}>Successfully Funded Campaigns</Header>}
               loadMoreButton={(
                 <>
                 {!loading && completedList && completedList.length > RECORDS_TO_DISPLAY
