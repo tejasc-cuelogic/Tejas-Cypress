@@ -10,7 +10,7 @@ import { HttpLink } from 'apollo-link-http';
 import Auth from '@aws-amplify/auth';
 import { get } from 'lodash';
 import { authStore } from '../services/stores';
-import { API_ROOT, REACT_APP_DEPLOY_ENV } from '../constants/common';
+import { API_ROOT, REACT_APP_DEPLOY_ENV, RETRY_CONFIG } from '../constants/common';
 import { GRAPHQL } from '../constants/business';
 import introspectionQueryResultData from '../constants/graphQLFragmentTypes.json';
 import { authActions } from '../services/actions';
@@ -26,18 +26,7 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 
 authStore.resetIdelTimer();
 
-// const getHeaders = async () => {
-//   const session = await Auth.currentSession();
-//   console.log('token', session);
-//   const jwtToken = get(session, 'idToken.jwtToken');
-//   return {
-//     headers: {
-//       authorization: jwtToken ? `Bearer ${jwtToken}` : '',
-//     },
-//   };
-// };
-
-const http = new HttpLink({
+const httpLink = new HttpLink({
   uri,
 });
 
@@ -54,22 +43,9 @@ const authLink = setContext(async (_, { headers }) => {
   };
 });
 
-// const AuthLink = async (operation, forward) => {
-//   const session = await Auth.currentSession();
-//   console.log('token', session);
-//   const jwtToken = get(session, 'idToken.jwtToken');
-//   operation.setContext(context => ({
-//     ...context,
-//     headers: {
-//       ...context.headers,
-//       authorization: jwtToken ? `Bearer ${jwtToken}` : '',
-//     },
-//   }));
-//   return forward(operation);
-// };
-
 export const GqlClient = new ApolloClient({
   link: ApolloLink.from([
+    new RetryLink(RETRY_CONFIG),
     authLink,
     onError((res) => {
       // if (graphQLErrors) {
@@ -90,14 +66,7 @@ export const GqlClient = new ApolloClient({
         });
       }
     }),
-    new RetryLink({
-      delay: {
-        initial: 100, max: 3000, jitter: false,
-      },
-      attempts: { max: 25 },
-    }),
-    http,
-
+    httpLink,
   ]),
   cache: new InMemoryCache({ fragmentMatcher }),
   // connectToDevTools: REACT_APP_DEPLOY_ENV === 'localhost',
