@@ -523,6 +523,7 @@ export const getOfferingDetails = gql`
           expectedOpsDate
           issuerApprovedDate
           edgarLink
+          investmentConfirmationTemplateName
           submitted {
             aliasId: id
             by

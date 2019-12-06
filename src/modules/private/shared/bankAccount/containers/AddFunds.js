@@ -105,19 +105,19 @@ export default class AddFunds extends Component {
                 name="value"
                 type="tel"
                 currency
-                placeholder="$ 5,000"
+                placeholder="$2,200"
                 fielddata={addFundsByAccType.fields.value}
                 changed={values => addFundChange(values, 'value')}
-                maxLength={addFundsByAccType.maxLength}
+                maxLength={addFundsByAccType.fields.value.maxLength}
                 prefix="$ "
                 showerror
               />
             </div>
             {errors
               && (
-<Message error className="mb-30">
-                <ListErrors errors={[errors.message]} />
-              </Message>
+                <Message error className="mb-30">
+                  <ListErrors errors={[errors.message]} />
+                </Message>
               )
             }
             <Button primary size="large" className="relaxed" content="Confirm" disabled={isInValid || !isAccountPresent || inProgress} />
