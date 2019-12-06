@@ -201,7 +201,6 @@ export class NavStore {
   setAccessParams(key, value) {
     this.params[key] = value;
     const { roles, currentNav, appStatus } = this.params;
-    console.log(key, value, currentNav);
     if (roles && currentNav) {
       // hack for root so if /app i.e /dashboard
       const nav = toJS(this.allNavItems.find((i) => {

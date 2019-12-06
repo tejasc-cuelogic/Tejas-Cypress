@@ -227,7 +227,8 @@ export class NavigationItems extends Component {
   }
 
   handleDashboardBtn = () => {
-    this.props.history.push('/dashboard');
+    const { isInvestor } = this.props.userStore;
+    this.props.history.push(isInvestor ? '/dashboard/summary' : '/dashboard');
   }
 
   render() {
