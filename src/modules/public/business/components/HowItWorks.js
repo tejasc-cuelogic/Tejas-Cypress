@@ -167,7 +167,7 @@ class HowItWorks extends Component {
             </Grid.Column>
           </Grid>
           <div className="center-align">
-            <Button fluid={responsiveVars.isMobile} as={Link} to="/" primary className={responsiveVars.isMobile ? '' : 'mb-14 relaxed'}>Apply Online</Button>
+            <Button fluid={responsiveVars.isMobile} as={Link} to="/business-application/business" primary className={responsiveVars.isMobile ? '' : 'mb-14 relaxed'}>Apply Online</Button>
           </div>
         </section>
         <Divider fitted />
