@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Divider, Button } from 'semantic-ui-react';
+import { Header, Form, Divider } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
@@ -48,15 +48,11 @@ export default class FinancialInformation extends Component {
                 showerror
               />
             ))}
-            {!isMobile && <Divider hidden />}
-            <p className={`${isMobile ? 'mt-20' : ''} grey-header`}>
-              {isMobile ? <b>Your investment limit:</b> : 'Your investment limit:'}
-              {isMobile && <br />}
-              <b>
-                <span className={`${isMobile ? '' : 'large ml-10'} grey-header`}>
-                  {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
-                </span>
-              </b>
+            <Divider hidden />
+            <p className="grey-header">Your investment limit:
+              <span className="large ml-10 highlight-text">
+                {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
+              </span>
             </p>
             {/* <p className="grey-header">Your investment limit:<span className="highlight-text
           large ml-10">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}</span></p>
@@ -64,11 +60,6 @@ export default class FinancialInformation extends Component {
 
             <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20' : ''} link`}>How is this calculated?</a>
           </div>
-
-          {isMobile && (
-            <Button fluid primary className="relaxed mt-20" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
-          )
-          }
         </Form>
       </>
     );
