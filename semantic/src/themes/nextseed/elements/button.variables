@@ -254,7 +254,7 @@
 
 /* Colors */
 @coloredBackgroundImage: none;
-@coloredBoxShadow: @boxShadow;
+@coloredBoxShadow: none; // @boxShadow;
 
 /* Colored */
 @brownTextColor: @invertedTextColor;

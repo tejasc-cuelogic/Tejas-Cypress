@@ -188,8 +188,8 @@ export default class WhyNextseed extends Component {
               </Grid.Column>
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 5}>
                 <p>
-                  Remember, returns and bonus rewards are not guaranteed. Investments can be lost entirely. 
-                  Be sure to do your own due diligence, review all offering documents carefully, 
+                  Remember, returns and bonus rewards are not guaranteed. Investments can be lost entirely.
+                  Be sure to do your own due diligence, review all offering documents carefully,
                   and never invest more than you can afford to lose.
                 </p>
                 <Divider hidden />

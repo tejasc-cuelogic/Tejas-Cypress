@@ -698,7 +698,7 @@ export const PUBLIC_NAV = [
     ],
   },
   {
-    title: 'How NextSeed Works',
+    title: 'How It Works',
     to: '',
     subPanel: 1,
     exact: true,

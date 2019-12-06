@@ -14,7 +14,7 @@ const AllInclusive = () => (
             <Grid.Column computer={10} tablet={16} mobile={16} verticalAlign="middle" className="side-section">
               <Header as="h2">Reach your goals with full-service support included.</Header>
               <p className="mb-60">
-              Our success fee comes with everything you need to launch, promote and service your campaign. 
+              Our success fee comes with everything you need to launch, promote and service your campaign.
               Best of all, we only charge you if your offering is funded.
               </p>
               <Item.Group className="horizontal-items">

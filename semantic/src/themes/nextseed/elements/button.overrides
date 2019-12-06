@@ -3,8 +3,9 @@
 *******************************/
 //  Public page Starts
 .ui.button{
+    box-shadow: none;
     &:hover{
-        box-shadow:@buttonHoverShadow;
+        box-shadow:none;
     }
     &.basic {
         border: 1px solid @thumbBackground;
