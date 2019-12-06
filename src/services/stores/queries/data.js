@@ -149,6 +149,22 @@ query _listRequestPlugins {
 }
 `;
 
+export const listFilePlugins = gql`
+query listFilePlugins {
+  listFilePlugins {
+    name
+    plugin
+    pluginInputs {
+      label
+      type
+      value
+      rule
+      defaultValue
+    }
+  }
+} 
+`;
+
 export const requestFactoryPluginTrigger = gql`
 mutation invokeRequest($plugin: String!, $payload: String, $invocationType: RequestInvocationEnum) {
   invokeRequest(

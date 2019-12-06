@@ -1,14 +1,14 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
 import { get, isEmpty, forEach, find, includes, keyBy } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
-import { getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger, fetchRequestFactoryLogs, fetchProcessLogs, fileFactoryPluginTrigger } from '../../queries/data';
+import { listFilePlugins, getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger, fetchRequestFactoryLogs, fetchProcessLogs, fileFactoryPluginTrigger } from '../../queries/data';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { REQUESTFACTORY_META, CRONFACTORY_META, PROCESSFACTORY_META, REQUESTFACTORY_LOG__META, PROCESSFACTORY_LOG__META, FILEFACTORY_META } from '../../../constants/admin/data';
 
 export class FactoryStore extends DataModelStore {
   constructor() {
-    super({ getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger, fetchRequestFactoryLogs, fetchProcessLogs, fileFactoryPluginTrigger });
+    super({ listFilePlugins, getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger, fetchRequestFactoryLogs, fetchProcessLogs, fileFactoryPluginTrigger });
   }
 
   REQUESTFACTORY_FRM = Validator.prepareFormObject(REQUESTFACTORY_META);
@@ -157,114 +157,24 @@ export class FactoryStore extends DataModelStore {
     }
   }
 
-  fetchPluginsForFileFactory = () => {
-    const fileData = {
-      listFilePlugins: {
-        plugins: [
-          {
-            name: 'Investor Profile',
-            plugin: 'INVESTOR_PROFILE',
-            pluginInputs: [
-              {
-                defaultValue: 'PDF.Investor.Compliance.Profile',
-                key: 'identifier',
-                label: 'Identifier',
-                rule: 'required',
-                type: 'input',
-                value: '',
-              },
-              {
-                defaultValue: 'USER UUID',
-                key: 'resourceId',
-                label: 'Resource Id',
-                rule: 'required',
-                type: 'input',
-                value: '',
-              },
-              {
-                defaultValue: 'USER UUID',
-                key: 'ownerId',
-                label: 'Owner Id',
-                rule: 'required',
-                type: 'input',
-                value: '',
-              },
-            ],
-          },
-          {
-            name: 'Investor Account',
-            plugin: 'INVESTOR_ACCOUNT',
-            pluginInputs: [
-              {
-                defaultValue: 'PDF.Investor.Compliance.Account',
-                key: 'identifier',
-                label: 'Identifier',
-                rule: 'required',
-                type: 'input',
-                value: '',
-              },
-              {
-                defaultValue: 'ACCOUNT UUID',
-                key: 'resourceId',
-                label: 'Resource Id',
-                rule: 'required',
-                type: 'input',
-                value: '',
-              },
-              {
-                defaultValue: 'USER UUID',
-                key: 'ownerId',
-                label: 'Owner Id',
-                rule: 'required',
-                type: 'input',
-                value: '',
-              },
-            ],
-          },
-          {
-            name: 'Investment',
-            plugin: 'INVESTMENT',
-            pluginInputs: [
-              {
-                defaultValue: 'PDF.Investor.Compliance.Investment',
-                key: 'identifier',
-                label: 'Identifier',
-                rule: 'required',
-                type: 'input',
-                value: '',
-              },
-              {
-                defaultValue: 'Investor Account UUID',
-                key: 'resourceId',
-                label: 'Resource Id',
-                rule: 'required',
-                type: 'input',
-                value: '',
-              },
-              {
-                defaultValue: 'USER UUID',
-                key: 'ownerId',
-                label: 'Owner Id',
-                rule: 'required',
-                type: 'input',
-                value: '',
-              },
-              {
-                defaultValue: 'RDS Agreement Number',
-                key: 'payload',
-                label: 'Payload',
-                rule: 'optional',
-                type: 'textarea',
-                value: '',
-              },
-            ],
-          },
-        ],
-      },
-    };
-    this.setFieldValue('pluginListArr', fileData);
-    this.FILEFACTORY_FRM.fields.method.values = this.dropDownValuesForPlugin('listFilePlugins');
+  fetchPluginsForFileFactory = async () => {
+    try {
+      const res = await this.executeQuery({
+        client: 'PRIVATE',
+        query: 'listFilePlugins',
+        setLoader: 'listFilePlugins',
+        fetchPolicy: 'cache-first',
+      });
+      if (get(res, 'listFilePlugins')) {
+        const fileData = { listFilePlugins: { plugins: get(res, 'listFilePlugins') } };
+        this.setFieldValue('pluginListArr', fileData);
+        this.setFieldValue('FILEFACTORY_FRM', this.dropDownValuesForPlugin('listFilePlugins'), 'fields.method.values');
+      }
+    } catch (error) {
+      Helper.toast('Something went wrong, please try again later.', 'error');
+    }
   }
+
 
   get cronLogs() {
     return (this.cronLogList && this.cronLogList.fetchCronLogs
@@ -529,6 +439,7 @@ decorate(FactoryStore, {
   processFactoryPluginTrigger: action,
   createDynamicFormFields: action,
   fileFactoryPluginTrigger: action,
+  fetchPluginsForFileFactory: action,
 });
 
 export default new FactoryStore();
