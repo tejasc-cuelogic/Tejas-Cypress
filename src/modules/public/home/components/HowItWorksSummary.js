@@ -88,7 +88,8 @@ const HowItWorksSummary = ({ uiStore, authStore }) => (
           <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
             <Header as="h2" className={uiStore.responsiveVars.uptoTablet ? 'mb-30' : 'mb-40'}>We’ve built an alternative<Responsive minWidth={768} as="br" /> investment platfrom<Responsive minWidth={768} as="br" /> from the ground up.</Header>
             <p className={uiStore.responsiveVars.uptoTablet ? 'mb-14' : 'mb-50'}>
-            Browse highly vetted companies and invest in just a few clicks, on any device.
+            Browse highly vetted companies and invest <Responsive minWidth={768} as="br" />
+            in just a few clicks, on any device.
             </p>
             {!authStore.isUserLoggedIn && !uiStore.responsiveVars.isMobile
               && (

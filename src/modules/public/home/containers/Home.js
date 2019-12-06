@@ -62,9 +62,10 @@ class Home extends Component {
           <Container className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
             <Grid columns={2} stackable>
               <Grid.Column>
-                <Header as="h2" className={responsiveVars.isMobile ? 'mb-20' : 'mb-30'}>Looking to raise capital for your business?</Header>
+                <Header as="h2" className={responsiveVars.isMobile ? 'mb-20' : 'mb-30'}>Looking to raise capital <Responsive minWidth={768} as="br" />for your business?</Header>
                 <p className={responsiveVars.isMobile ? 'mb-30' : 'mb-60'}>
-                  Whether expanding or opening a brand-new concept, we make it<Responsive minWidth={992} as="br" />easy to raise money from thousands of local investors.
+                  Whether expanding or opening a brand-new concept, <Responsive minWidth={992} as="br" />
+                  we make it easy to raise money from thousands of local investors.
                 </p>
                 {!responsiveVars.isMobile
                   && <Button fluid={responsiveVars.isMobile} className="relaxed" primary content="Apply Online" />}
