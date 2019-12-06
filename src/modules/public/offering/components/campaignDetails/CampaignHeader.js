@@ -23,7 +23,7 @@ export default class CampaignHeader extends Component {
     const {
       isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
-      percentBefore, diffForProcessing, countDown,
+      percentBefore, diffForProcessing, countDown, isInvestedInOffering,
     } = campaignStatus;
     return (
       <>
@@ -142,7 +142,7 @@ export default class CampaignHeader extends Component {
                   {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                     && (
                       <p className="raise-type mb-0">
-                        <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
+                        {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
                         <Popup
                           hoverable
                           trigger={<Icon name="help circle" color="green" />}
@@ -187,7 +187,7 @@ export default class CampaignHeader extends Component {
                       </>
                     )
                   }
-                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
+                  {/* {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
                     && (
                       <>
                       <p className="mb-0">
@@ -198,7 +198,7 @@ export default class CampaignHeader extends Component {
                       </p>
                       </>
                     )
-                  }
+                  } */}
                   <div className="mt-20">
                     {isCreation
                       ? <Button fluid secondary={diffForProcessing.value !== 0} content="Coming Soon" disabled />
@@ -215,7 +215,7 @@ export default class CampaignHeader extends Component {
                                 onClick={this.handleInvestNowClick}
                                 fluid
                               >
-                                {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                                {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : isInvestedInOffering ? 'Change Investment' : 'Invest Now'}`}
                               </Button>
                               <p className="mt-10">
                                 {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment

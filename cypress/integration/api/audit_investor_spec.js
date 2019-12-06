@@ -47,7 +47,6 @@ describe('Audit Investor', () => {
               const authToken = user.signInUserSession.idToken.jwtToken;
               requestHeaders.authorization = `Bearer ${authToken}`;
               requestBody.query = seedTestUsers;
-              
               cy.request(
                 prepRequest(cleanUpTestUsers(null), authToken)
                 ).then(res => {

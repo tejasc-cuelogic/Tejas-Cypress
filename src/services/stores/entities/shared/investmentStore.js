@@ -254,7 +254,7 @@ export class InvestmentStore {
       loanTerm = parseFloat(get(getInvestorAccountById, 'offering.keyTerms.maturity'));
     }
     const investAmt = this.investmentAmount;
-    if (investAmt >= 100) {
+    if (investAmt >= 100 && !['REAL_ESTATE'].includes(offeringSecurityType)) {
       if (offeringSecurityType === 'TERM_NOTE') {
         const data = {
           method: 'mortgage',

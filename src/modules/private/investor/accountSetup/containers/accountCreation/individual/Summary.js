@@ -46,7 +46,7 @@ export default class Summary extends React.Component {
   }
 
   render() {
-    const { errors } = this.props.uiStore;
+    const { errors, inProgressArray } = this.props.uiStore;
     const {
       formAddFunds,
       plaidAccDetails,
@@ -125,7 +125,7 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.props.handleCreateAccount('individual')} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid || isEmpty(routingNum)} />
+          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.props.handleCreateAccount('individual')} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid || isEmpty(routingNum) || inProgressArray.includes('submitAccountLoader')} />
         </div>
       </>
     );

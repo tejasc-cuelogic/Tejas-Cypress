@@ -293,25 +293,32 @@ export class Utility {
     }
   };
 
-  logger = (params, type = 'log') => {
+  logger = (params, type = 'log', email = false, error = '') => {
     if (isLoggingEnabled) {
       // eslint-disable-next-line no-unused-expressions
       type === 'info' ? console.info(params)
         : type === 'warn' ? console.warn(params)
           : type === 'clear' ? console.clear()
             : console.log(params);
+      if (email) {
+        this.sendAlertEmail(params, type, error);
+      }
     } else if (!isLoggingEnabled && (type === 'warn' || type === 'info')) {
       // Send an email for these two type;
-      const email = {
-        graphqlError: { operationName: `Logging ${type === 'warn' ? 'Warning' : type === 'info' ? 'Information' : ''}` },
-        urlLocation: window.location.href,
-        message: { ...params },
-      };
-      const emailParams = {
-        emailContent: JSON.stringify(email),
-      };
-      authStore.notifyApplicationError(emailParams);
+      this.sendAlertEmail(params, type, error);
     }
+  }
+
+  sendAlertEmail = (params, type, error) => {
+    const emailP = {
+      graphqlError: { operationName: `Logging ${type === 'warn' ? 'Warning' : type === 'info' ? 'Information' : 'error'} - ${params}` },
+      urlLocation: window.location.href,
+      message: _.get(error, 'stack'),
+    };
+    const emailParams = {
+      emailContent: JSON.stringify(emailP),
+    };
+    authStore.notifyApplicationError(emailParams);
   }
 
   processImageFileName = (originalFileName, deviceInfo) => {
