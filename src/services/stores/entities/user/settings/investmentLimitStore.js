@@ -144,7 +144,7 @@ export class InvestmentLimitStore {
     // }
     limit = Math.min(limit, maxLimit);
     const remainingAmount = limit
-    - ((data.cfInvestments || 0) + investedAmtFloat);
+      - ((data.cfInvestments || 0) + investedAmtFloat);
     let remaining = Math.max(0, remainingAmount);
     if ((investedAmtFloat + data.cfInvestments || 0) >= maxLimit) {
       remaining = 0;
@@ -164,20 +164,38 @@ export class InvestmentLimitStore {
     );
   }
 
+  // @action
+  // setAccountsLimits = () => {
+  //   const { accountList } = this.getActiveAccountList;
+  //   accountList.forEach((account) => {
+  //     this.getInvestorInvestmentLimit(account.details.accountId).then((data) => {
+  //       if (data.getInvestorInvestmentLimit === '0.00') {
+  //         this.setInvestmentLimitInfo(account.name, account.details.accountId);
+  //       } else {
+  //         this.setFieldValue('currentLimit', data.getInvestorInvestmentLimit);
+  //       }
+  //       if (account.name === 'entity') {
+  //         this.setFieldValue('entityCurrentLimit', this.currentLimit);
+  //       } else {
+  //         this.setFieldValue('individualIRACurrentLimit', this.currentLimit);
+  //       }
+  //     });
+  //   });
+  // }
+
   @action
   setAccountsLimits = () => {
     const { accountList } = this.getActiveAccountList;
     accountList.forEach((account) => {
+      console.log('AccountIds==>', account.details.accountId);
       this.getInvestorInvestmentLimit(account.details.accountId).then((data) => {
         if (data.getInvestorInvestmentLimit === '0.00') {
           this.setInvestmentLimitInfo(account.name, account.details.accountId);
-        } else {
-          this.setFieldValue('currentLimit', data.getInvestorInvestmentLimit);
         }
         if (account.name === 'entity') {
-          this.setFieldValue('entityCurrentLimit', this.currentLimit);
+          this.setFieldValue('entityCurrentLimit', data.getInvestorInvestmentLimit);
         } else {
-          this.setFieldValue('individualIRACurrentLimit', this.currentLimit);
+          this.setFieldValue('individualIRACurrentLimit', data.getInvestorInvestmentLimit);
         }
       });
     });
