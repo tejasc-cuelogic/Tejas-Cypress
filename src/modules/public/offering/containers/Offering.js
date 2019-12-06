@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Container, Button } from 'semantic-ui-react';
+import { Header, Container, Button, Grid, Responsive } from 'semantic-ui-react';
 // import Banner from '../components/Banner';
 import CampaignList from '../components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
@@ -46,12 +46,18 @@ class Offering extends Component {
           )}
         />
         <section className="bg-offwhite">
-          <Container textAlign={responsiveVars.isMobile ? '' : 'center'} className="mb-20 mt-20">
-            <Header as="h2">Never miss an opportunity</Header>
-            <p className="mb-30">
-              Sign up to stay informed about new investment opportunities, updates and events.
-            </p>
-            <SubscribeForNewsletter className="public-form" />
+          <Container className="mb-20 mt-20">
+            <Grid columns={2} stackable>
+              <Grid.Column>
+                <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-10' : 'mt-80 mb-20'}>Never miss an opportunity</Header>
+                <p className={responsiveVars.isMobile ? 'mb-10' : ''}>
+                  Sign up to stay informed about new investment<Responsive minWidth={768} as="br" /> opportunities, updates and events.
+                </p>
+              </Grid.Column>
+              <Grid.Column verticalAlign="middle">
+                <SubscribeForNewsletter className={`${responsiveVars.isMobile ? 'mt-0' : 'mt-80'} public-form`} />
+              </Grid.Column>
+            </Grid>
           </Container>
         </section>
         {!loading
