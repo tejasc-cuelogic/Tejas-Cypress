@@ -29,22 +29,22 @@ class Banner extends Component {
               </Header>
               { showButton
                 ? (
-<Button
-  className={`${!isTablet && 'mt-30'} relaxed`}
-  primary
-  content="Get Started"
-  as={Link}
-  to={redirectUrl}
-/>
+                  <Button
+                    className={`${!isTablet && 'mt-30'} relaxed`}
+                    primary
+                    content="Get Started"
+                    as={Link}
+                    to={redirectUrl}
+                  />
                 ) : ''
               }
             </div>
           </Responsive>
-          <div className="banner-meta">
+          {/* <div className="banner-meta">
             <p>
               <b>Jessica Hughes | Citizen Pilates</b><br />Raised $100,000 from 75 investors
             </p>
-          </div>
+          </div> */}
         </Container>
         {this.props.withDimmer && (
           <Dimmer active className="fullscreen">

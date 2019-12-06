@@ -253,10 +253,10 @@ export class NavigationItems extends Component {
     } = this.props;
     const { navStatus, subNavStatus } = navStore;
     const logInSignUp = stepInRoute.to !== 'login' ? [
-      { to: 'login', title: 'Log In', className: 'basic' },
-      { to: 'register', title: 'Sign Up', className: 'secondary' },
+      { to: 'login', title: 'Log In', className: 'basic primary' },
+      { to: 'register', title: 'Sign Up', className: 'primary' },
     ]
-      : [{ ...stepInRoute, className: 'secondary' }];
+      : [{ ...stepInRoute, className: 'primary basic' }];
     return (
       <Menu
         stackable={!isMobBussinessApp}

@@ -703,9 +703,9 @@ export const PUBLIC_NAV = [
     subPanel: 1,
     exact: true,
     subNavigations: [
-      { title: 'Fundraising', to: 'business' },
-      { title: 'Investing', to: 'invest' },
-      { title: 'Education Center', to: 'resources/education-center' },
+      { title: 'For Investors', to: 'business' },
+      { title: 'For Businesses', to: 'invest' },
+      { title: 'Education', to: 'resources/education-center' },
     ],
   },
   {
@@ -714,9 +714,9 @@ export const PUBLIC_NAV = [
     subPanel: 1,
     exact: true,
     subNavigations: [
-      { title: 'Mission', to: 'about/mission' },
-      { title: 'Team & Culture', to: 'about/team' },
-      { title: 'Careers', to: 'about/careers' },
+      { title: 'Who We Are', to: 'about/mission' },
+      // { title: 'Team & Culture', to: 'about/team' },
+      // { title: 'Careers', to: 'about/careers' },
       { title: 'Insights', to: 'resources/insights' },
       { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
     ],

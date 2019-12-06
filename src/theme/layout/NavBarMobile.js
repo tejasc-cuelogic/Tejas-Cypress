@@ -35,11 +35,11 @@ export default class NavBarMobile extends Component {
     ]
       : [{ ...stepInRoute, className: 'secondary' }];
     if (location.pathname.startsWith('/invest')) {
-      navTitle = 'Investing';
+      navTitle = 'For Investors';
     } else if (location.pathname.startsWith('/business') && !location.pathname.startsWith('/business-application/')) {
-      navTitle = 'Fundraising';
+      navTitle = 'For Businesses';
     } else if (location.pathname.startsWith('/resources/education-center')) {
-      navTitle = 'Education Center';
+      navTitle = 'Education';
     } else if (location.pathname.startsWith('/resources/insights')) {
       navTitle = 'Insights';
     } else if (location.pathname.startsWith('/offerings')) {
