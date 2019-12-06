@@ -16,9 +16,9 @@ class Dashboard extends Component {
     return (
       <Switch>
         <Route path={`${match.url}/select-application-type`} component={ApplicationTypeModal} />
-        <Route path={`${match.url}/:applicationId/offers`} component={ChooseOffer} />
         <Route path={`${match.url}/:applicationId/offers/decline`} component={DeclineApplication} />
         <Route path={`${match.url}/:applicationId/offers/offersSigning`} component={OfferSigning} />
+        <Route path={`${match.url}/:applicationId/offers`} component={ChooseOffer} />
         <Route path={`${match.url}/:applicationId/gettingStarted`} component={GettingStarted} />
       </Switch>
     );
