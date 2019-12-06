@@ -157,6 +157,7 @@ query listFilePlugins {
     pluginInputs {
       label
       type
+      key
       value
       rule
       defaultValue

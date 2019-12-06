@@ -340,8 +340,9 @@ export class FactoryStore extends DataModelStore {
           mutation: 'fileFactoryPluginTrigger',
           variables: { ...TestformData },
           setLoader: fileFactoryPluginTrigger,
+          message: { error: 'Something went wrong, please try again later.' },
         });
-        if (result.data.generateFile) {
+        if (get(result, 'data.generateFile')) {
           Helper.toast('Your request is processed.', 'success');
           resolve(result.data.generateFile);
         }
