@@ -15,7 +15,7 @@ export default class GettingStarted extends Component {
 
   handleCloseModal = () => {
     this.props.offeringsStore.initRequest({ stage: 'active' }, true);
-    this.props.history.push('/app/dashboard');
+    this.props.history.push('/app');
   }
 
   module = name => DataFormatter.upperCamelCase(name);

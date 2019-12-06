@@ -1231,7 +1231,7 @@ export class BusinessAppStore {
             if (this.canSubmitApp && this.businessApplicationDetailsAdmin.applicationStage === 'IN_PROGRESS') {
               this.businessApplicationSubmitAction().then(() => {
                 Helper.toast('Business application submitted successfully!', 'success');
-                this.props.history.push('/app/dashboard');
+                this.props.history.push('/app');
                 resolve(result);
               });
             } else {

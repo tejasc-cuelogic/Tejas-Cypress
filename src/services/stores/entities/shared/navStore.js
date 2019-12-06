@@ -201,8 +201,15 @@ export class NavStore {
   setAccessParams(key, value) {
     this.params[key] = value;
     const { roles, currentNav, appStatus } = this.params;
+    console.log(key, value, currentNav);
     if (roles && currentNav) {
-      const nav = toJS(this.allNavItems.find(i => matchPath(currentNav, { path: `/app/${i.to}` })));
+      // hack for root so if /app
+      const nav = toJS(this.allNavItems.find((i) => {
+        if (value === '/app' && currentNav === '/app' && i.to === 'dashboard') {
+          return true;
+        }
+        return matchPath(currentNav, { path: `/app/${i.to}` });
+      }));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
         nav.subNavigations = nav.subNavigations.filter(n => ((!n.accessibleTo

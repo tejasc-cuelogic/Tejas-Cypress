@@ -28,7 +28,7 @@ class Login extends Component {
       const { authRef } = this.props.uiStore;
       const roles = get(this.props.userStore.currentUser, 'roles');
       this.props.history.push(authRef || (roles && roles.includes('investor')
-        ? `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
+        ? `${this.props.userDetailsStore.pendingStep}` : '/app'));
     }
   }
 

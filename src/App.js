@@ -272,6 +272,7 @@ class App extends Component {
             <Layout>
               <Switch>
                 <Route exact path="/app/*" component={Private} />
+                <Route exact path="/app" component={Private} />
                 <Route path="/" component={Public} />
               </Switch>
             </Layout>

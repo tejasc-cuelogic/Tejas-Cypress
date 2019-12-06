@@ -8,7 +8,7 @@ import { Grid, Icon, Header, Button, Divider } from 'semantic-ui-react';
 export default class LendioSuccess extends Component {
   proceedHandler = (lendioUrl) => {
     window.open(`${lendioUrl}`, '_blank');
-    this.props.history.push('/app/dashboard');
+    this.props.history.push('/app');
   }
 
   render() {

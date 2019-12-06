@@ -12,7 +12,7 @@ export default class DashboardCta extends React.Component {
       const { redirectURL } = this.props.uiStore;
       const { roles } = this.props.userStore.currentUser;
       const invLogsIn = roles && roles.includes('investor') ? this.props.userDetailsStore.pendingStep
-        : '/app/dashboard';
+        : '/app';
       if (invLogsIn === '/app/summary') {
         const hasExpanded = this.props.navStore.sidebarItems.find(i => i.to.includes('account-details/'));
         if (hasExpanded) {
@@ -20,7 +20,7 @@ export default class DashboardCta extends React.Component {
         }
       }
       this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor')
-        ? `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
+        ? `${this.props.userDetailsStore.pendingStep}` : '/app'));
     } else {
       this.props.history.push('/login');
     }

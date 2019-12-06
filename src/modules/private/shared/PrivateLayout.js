@@ -45,7 +45,7 @@ class PrivateLayout extends Component {
         }
         {this.props.P1
           && (
-<div className="search-filters">
+          <div className="search-filters">
             <Form>
               <Grid stackable>
                 <Grid.Row>

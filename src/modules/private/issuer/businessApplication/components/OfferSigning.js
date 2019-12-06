@@ -30,7 +30,7 @@ export default class OfferSigning extends Component {
       } else if (funType === 'Button') {
         this.setState({ showConfirmModal: true });
       } else {
-        this.props.history.push('/app/dashboard');
+        this.props.history.push('/app');
       }
     }).finally(() => this.props.uiStore.setProgress(false));
   }
@@ -50,7 +50,7 @@ export default class OfferSigning extends Component {
       // } else if (e.data === 'viewing_complete') {
       //   this.createOffer();
       } else if (e && e.data && typeof e.data === 'string' && !e.data.includes('setImmediate') && !e.data.includes('__fs') && !this.state.isCreateOffer) {
-        this.props.history.push('/app/dashboard');
+        this.props.history.push('/app');
       }
     }, 2000);
   };
@@ -61,7 +61,7 @@ export default class OfferSigning extends Component {
 
   doItLater = () => {
     this.setState({ showConfirmModal: false });
-    this.props.history.push('/app/dashboard');
+    this.props.history.push('/app');
   }
 
   module = name => DataFormatter.upperCamelCase(name);

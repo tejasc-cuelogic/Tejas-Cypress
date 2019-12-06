@@ -20,7 +20,6 @@ const isMobile = clientWidth < 768;
 export default class ApplicationCards extends Component {
   constructor(props) {
     super(props);
-    // getting all application list of user
     if (this.props.match.isExact) {
       this.props.businessAppStore.getBusinessApplications();
       this.props.businessAppStore.setFieldvalue('isFetchedData', null);
@@ -59,7 +58,7 @@ export default class ApplicationCards extends Component {
                 Let&#39;s get started with an application for your project.
               </p>
               <Divider hidden />
-              <Button primary as={Link} to="/app/dashboard/select-application-type">Start application</Button>
+              <Button primary as={Link} to="/app/select-application-type">Start application</Button>
             </Card.Content>
           </Card>
           {fetchBusinessApplication.length
@@ -108,7 +107,7 @@ export default class ApplicationCards extends Component {
             )) : null
           }
         </Card.Group>
-        <Route exact path="/app/dashboard/select-application-type" component={ApplicationTypeModal} />
+        <Route exact path="/app/select-application-type" component={ApplicationTypeModal} />
       </>
     );
   }

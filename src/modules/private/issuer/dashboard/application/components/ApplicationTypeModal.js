@@ -18,7 +18,7 @@ class ApplicationTypeModal extends Component {
   render() {
     const { setFieldvalue, currentApplicationType } = this.props.businessAppStore;
     return (
-      <Modal size="tiny" open onClose={() => this.props.history.push('/app/dashboard')}>
+      <Modal size="tiny" open onClose={() => this.props.history.push('/app')}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Select Business Type</Header>
         </Modal.Header>

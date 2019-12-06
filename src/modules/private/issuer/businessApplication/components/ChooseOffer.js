@@ -36,7 +36,7 @@ export default class ChooseOffer extends Component {
 
   handleCloseModal = () => {
     this.props.businessAppReviewStore.setFieldvalue('selectedOfferIndex', null);
-    this.props.history.push('/app/dashboard');
+    this.props.history.push('/app');
   }
 
   handleSetField = (field, value, location = null) => {

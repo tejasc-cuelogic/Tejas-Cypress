@@ -16,7 +16,7 @@ const Initialise = ({ match, isPublic }) => (
     <Divider section hidden />
     <Button.Group>
       <Button as={Link} to={`/business-application/${match.params.applicationType}/${match.params.id}/lendio`} color="green" className="relaxed">I’m interested in Lendio</Button>
-      <Button as={Link} to={isPublic ? '/' : '/app/dashboard'} inverted color="green" className="relaxed">Return to Home Page</Button>
+      <Button as={Link} to={isPublic ? '/' : '/app'} inverted color="green" className="relaxed">Return to Home Page</Button>
     </Button.Group>
   </>
 );

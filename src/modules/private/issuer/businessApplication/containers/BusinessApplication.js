@@ -53,7 +53,7 @@ export default class BusinessApplication extends Component {
     e.preventDefault();
     this.props.businessAppStore.businessAppParitalSubmit().then(() => {
       Helper.toast('Business application saved!', 'success');
-      this.props.history.push('/app/dashboard');
+      this.props.history.push('/app');
     });
   }
 
@@ -71,7 +71,7 @@ export default class BusinessApplication extends Component {
       if (isRedirect && result && this.props.businessAppStore.canSubmitApp) {
         businessApplicationSubmitAction().then(() => {
           Helper.toast('Business application submitted successfully!', 'success');
-          this.props.history.push('/app/dashboard');
+          this.props.history.push('/app');
           window.location.reload();
         });
       } else if (isRedirect) {
@@ -127,7 +127,7 @@ export default class BusinessApplication extends Component {
         appStepsStatus={appStepsStatus}
         {...this.props}
         P0={(
-          <Link to="/app/dashboard">
+          <Link to="/app">
             <Logo
               alt="NextSeed.com"
               dataSrc={logoUrl}

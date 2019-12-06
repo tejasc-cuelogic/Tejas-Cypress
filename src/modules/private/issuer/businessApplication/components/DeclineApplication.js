@@ -22,7 +22,7 @@ export default class DeclineApplication extends Component {
   declineApplicationHandler = () => {
     const { match, businessAppReviewStore } = this.props;
     const { applicationId } = match.params;
-    businessAppReviewStore.applicationDeclineByIssuer(applicationId).then(() => this.props.history.push('/app/dashboard'));
+    businessAppReviewStore.applicationDeclineByIssuer(applicationId).then(() => this.props.history.push('/app'));
   }
 
   render() {

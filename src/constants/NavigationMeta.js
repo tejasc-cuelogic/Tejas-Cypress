@@ -79,6 +79,8 @@ export const PRIVATE_NAV = [
       admin: 'admin/dashboard/Dashboard',
     },
     accessibleTo: ['issuer', 'admin'],
+    asRoot: true,
+    exact: true,
     subPanel: 0,
   },
   {

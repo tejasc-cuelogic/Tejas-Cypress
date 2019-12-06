@@ -47,7 +47,7 @@ export const TITLES = {
   '/forgot-password': 'Reset Your Password - NextSeed',
   '/register-investor': 'Sign Up For Free - NextSeed',
   '/business-application/business': 'Apply - NextSeed',
-  '/app/dashboard/select-application-type': 'Apply - NextSeed',
+  '/app/select-application-type': 'Apply - NextSeed',
   '/app/business-application/commercial-real-estate': 'Apply - NextSeed',
   '/app/business-application/business': 'Apply - NextSeed',
   '/business-application/commercial-real-estate': 'Apply | CRE - NextSeed',

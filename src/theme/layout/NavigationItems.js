@@ -197,7 +197,7 @@ export class NavItems extends Component {
                   className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : `${((item.defaultActive && this.isActiveSubMenu(`${item.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(item.to, location) ? 'active' : ''}`} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''} ${(newLayout && ((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) ? 'hasLabel' : '')}`}
                   as={NavLink}
                   onClick={isMobile ? this.mobileMenuClick : this.doNothing}
-                  to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}${item.useRefLink ? '' : '/'}${item.to}`}
+                  to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}${item.useRefLink ? '' : item.asRoot ? '' : `/${item.to}`}`}
                 >
                   {item.icon && <Icon className={item.icon} />}
                   {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
@@ -227,22 +227,7 @@ export class NavigationItems extends Component {
   }
 
   handleDashboardBtn = () => {
-    // const { redirectURL } = this.props.uiStore;
-    // const { roles } = this.props.userStore.currentUser;
-    // if (this.props.userDetailsStore.currentUser.loading) {
-    //   return;
-    // }
-    // const invLogsIn = roles && roles.includes('investor') ? this.props.userDetailsStore.pendingStep
-    //   : '/app/dashboard';
-    // if (invLogsIn === '/app/summary') {
-    //   const hasExpanded = this.props.navStore.sidebarItems.find(i => i.to.includes('account-details/'));
-    //   if (hasExpanded) {
-    //     this.props.uiStore.setNavExpanded(hasExpanded.to);
-    //   }
-    // }
-    // this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor')
-    //   ? `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
-    this.props.history.push('/dashboard');
+    this.props.history.push('/app');
   }
 
   render() {

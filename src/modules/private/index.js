@@ -34,7 +34,8 @@ export default class Private extends React.Component {
       if (item.path) {
         routes[`${item.path}_${item.to}`] = (
           <Route
-            path={`/app/${item.to}`}
+            exact={!!item.exact}
+            path={item.asRoot ? '/app' : `/app/${item.to}`}
             component={lazyRetry(() => import(`./${typeof item.path === 'object' && roles ? item.path[roles[0]]
               : item.path}`))}
             key={item.path}
@@ -69,6 +70,7 @@ export default class Private extends React.Component {
     if (userFirstLoad === false) {
       return <InlineLoader />;
     }
+    console.log('im here...');
     if (this.props.authStore.isUserLoggedIn) {
       return (
         <SidebarLeftOverlay
