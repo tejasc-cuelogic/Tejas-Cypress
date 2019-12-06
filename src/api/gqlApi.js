@@ -1,8 +1,12 @@
 /* eslint-disable arrow-body-style  */
 import fetch from 'isomorphic-fetch';
-import ApolloClient from 'apollo-boost';
-import { RetryLink } from 'apollo-link-retry';
+import ApolloClient from 'apollo-client';
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
+import { RetryLink } from 'apollo-link-retry';
+import { onError } from 'apollo-link-error';
+import { ApolloLink } from 'apollo-link';
+import { setContext } from 'apollo-link-context';
+import { HttpLink } from 'apollo-link-http';
 import Auth from '@aws-amplify/auth';
 import { get } from 'lodash';
 import { authStore } from '../services/stores';
@@ -22,29 +26,79 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 
 authStore.resetIdelTimer();
 
-export const GqlClient = new ApolloClient({
+// const getHeaders = async () => {
+//   const session = await Auth.currentSession();
+//   console.log('token', session);
+//   const jwtToken = get(session, 'idToken.jwtToken');
+//   return {
+//     headers: {
+//       authorization: jwtToken ? `Bearer ${jwtToken}` : '',
+//     },
+//   };
+// };
+
+const http = new HttpLink({
   uri,
-  request: async (operation) => {
-    const session = await Auth.currentSession();
-    const jwtToken = get(session, 'idToken.jwtToken');
-    operation.setContext({
-      headers: {
-        authorization: jwtToken ? `Bearer ${jwtToken}` : '',
+});
+
+const authLink = setContext(async (_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const session = await Auth.currentSession();
+  console.log('token', session);
+  const jwtToken = get(session, 'idToken.jwtToken');
+  return {
+    headers: {
+      ...headers,
+      authorization: jwtToken ? `Bearer ${jwtToken}` : '',
+    },
+  };
+});
+
+// const AuthLink = async (operation, forward) => {
+//   const session = await Auth.currentSession();
+//   console.log('token', session);
+//   const jwtToken = get(session, 'idToken.jwtToken');
+//   operation.setContext(context => ({
+//     ...context,
+//     headers: {
+//       ...context.headers,
+//       authorization: jwtToken ? `Bearer ${jwtToken}` : '',
+//     },
+//   }));
+//   return forward(operation);
+// };
+
+export const GqlClient = new ApolloClient({
+  link: ApolloLink.from([
+    authLink,
+    onError((res) => {
+      // if (graphQLErrors) {
+      //   graphQLErrors.forEach(({ message, locations, path }) =>
+      //     console.log(
+      //       `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+      //     ),
+      //   );
+      // }
+      // if (networkError) console.log(`[Network error]: ${networkError}`);
+      if (['production', 'prod', 'master', 'demo'].includes(REACT_APP_DEPLOY_ENV) && get(res, 'graphQLErrors[0]')) {
+        authStore.sendErrorMail(res);
+      }
+      if (get(res, 'networkError.statusCode') === 401 || get(res, 'networkError.result.message') === 'The incoming token has expired') {
+        console.log(res);
+        authActions.logout('timeout').then(() => {
+          window.location = '/login';
+        });
+      }
+    }),
+    new RetryLink({
+      delay: {
+        initial: 100, max: 3000, jitter: false,
       },
-    });
-  },
-  onError: (res) => {
-    if (['production', 'prod', 'master', 'demo'].includes(REACT_APP_DEPLOY_ENV) && get(res, 'graphQLErrors[0]')) {
-      authStore.sendErrorMail(res);
-    }
-    if (get(res, 'networkError.statusCode') === 401 || get(res, 'networkError.result.message') === 'The incoming token has expired') {
-      console.log(res);
-      authActions.logout('timeout').then(() => {
-        window.location = '/login';
-      });
-    }
-  },
-  link: new RetryLink(),
+      attempts: { max: 25 },
+    }),
+    http,
+
+  ]),
   cache: new InMemoryCache({ fragmentMatcher }),
   // connectToDevTools: REACT_APP_DEPLOY_ENV === 'localhost',
   // defaultOptions,
