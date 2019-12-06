@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter, Switch, Route, matchPath } from 'react-router-dom';
+import { withRouter, Switch, Route, matchPath, Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
 import { get, isEmpty } from 'lodash';
@@ -41,7 +41,7 @@ const metaTagsData = [
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
 const isMobile = document.documentElement.clientWidth < 768;
-const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/', '/resources/insights/category/', '/app/resources/knowledge-base/'];
+const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/', '/resources/insights/category/', '/dashboard/resources/knowledge-base/'];
 @inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
@@ -192,7 +192,7 @@ class App extends Component {
   onIdle = () => {
     if (this.props.authStore.isUserLoggedIn) {
       authActions.logout('timeout').then(() => {
-        if (this.props.location.pathname.includes('/app/')) {
+        if (this.props.location.pathname.includes('/dashboard/')) {
           this.props.history.push('/login');
         }
       });
@@ -247,7 +247,7 @@ class App extends Component {
       );
     }
     return (
-      <div className={(!matchPath(location.pathname, { path: '/app' })) ? 'public-pages' : ''}>
+      <div className={(!matchPath(location.pathname, { path: '/dashboard' })) ? 'public-pages' : ''}>
         {this.props.authStore.isUserLoggedIn
           && (
             <IdleTimer
@@ -271,8 +271,9 @@ class App extends Component {
           ? <Route exact path="/password-protected" component={DevPassProtected} /> : (
             <Layout>
               <Switch>
-                <Route exact path="/app/*" component={Private} />
-                <Route exact path="/app" component={Private} />
+                <Redirect from="/app/*" to="/dashboard/*" />
+                <Route exact path="/dashboard/*" component={Private} />
+                <Route exact path="/dashboard" component={Private} />
                 <Route path="/" component={Public} />
               </Switch>
             </Layout>

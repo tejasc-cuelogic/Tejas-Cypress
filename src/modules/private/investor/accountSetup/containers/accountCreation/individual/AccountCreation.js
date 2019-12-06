@@ -19,13 +19,13 @@ export default class AccountCreation extends React.Component {
 
   checkIfAccountIsAlreadyPresent = (accountType) => {
     if (this.props.userDetailsStore.checkIfAccountIsAlreadyPresent(accountType)) {
-      this.props.history.push('/app/summary');
+      this.props.history.push('/dashboard/summary');
     }
   }
 
   handleMultiStepModalclose = () => {
     this.updateUser();
-    this.props.history.push('/app/summary');
+    this.props.history.push('/dashboard/summary');
     this.props.bankAccountStore.setBankLinkInterface('list');
     this.props.bankAccountStore.resetStoreData();
     this.props.uiStore.setProgress(false);

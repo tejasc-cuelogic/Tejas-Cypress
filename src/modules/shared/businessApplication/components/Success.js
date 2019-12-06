@@ -81,7 +81,7 @@ class Success extends Component {
         const roles = get(this.props.userStore, 'currentUser.roles');
         this.props.authStore.resetForm('LOGIN_FRM');
         if (roles && roles.includes('issuer')) {
-          const redirectUrl = `/app/business-application/${currentApplicationType}/${applicationId}/business-details`;
+          const redirectUrl = `/dashboard/business-application/${currentApplicationType}/${applicationId}/business-details`;
           this.props.history.push(redirectUrl);
         } else {
           this.props.businessAppStore.setFieldvalue('showUserError', true);

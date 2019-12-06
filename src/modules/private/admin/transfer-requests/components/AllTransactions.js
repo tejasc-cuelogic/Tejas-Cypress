@@ -46,7 +46,7 @@ export default class AllTransactions extends Component {
     <span className="user-name">
       {userId !== undefined
         ? (
-        <Link to={`/app/users/${userId}/profile-data`}>
+        <Link to={`/dashboard/users/${userId}/profile-data`}>
           {`${info ? info.firstName : ''} ${info ? info.lastName : ''}`}
         </Link>
         ) : ''}

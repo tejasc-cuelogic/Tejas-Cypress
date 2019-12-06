@@ -87,7 +87,7 @@ export default class Listing extends Component {
                   <Table.Cell>
                     <div>
                       {get(isUsersCapablities, 'level') && get(isUsersCapablities, 'level') !== 'SUPPORT'
-                        ? <Link to={`/app/users/${data.userId}/profile-data`}><p><b>{`${data.firstName} ${data.lastName}`}</b></p></Link>
+                        ? <Link to={`/dashboard/users/${data.userId}/profile-data`}><p><b>{`${data.firstName} ${data.lastName}`}</b></p></Link>
                         : `${data.firstName} ${data.lastName}`
                       }
                     </div>

@@ -17,7 +17,7 @@ export const P2 = props => (
 
 export const P3 = () => (
   <Grid.Column width={5} textAlign="right">
-    <Button color="green" as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
+    <Button color="green" as={Link} floated="right" to="/dashboard/users/new">+ Add new user</Button>
   </Grid.Column>
 );
 

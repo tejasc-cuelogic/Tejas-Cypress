@@ -8,7 +8,7 @@ import { inject, observer } from 'mobx-react';
 @withRouter
 export default class ConfirmCancelModal extends React.Component {
     handleCloseModal = () => {
-      this.props.history.push('/app/summary/establish-profile');
+      this.props.history.push('/dashboard/summary/establish-profile');
     }
 
     handleFinishLater = () => {
@@ -28,7 +28,7 @@ export default class ConfirmCancelModal extends React.Component {
               <Button primary size="large" onClick={this.handleCloseModal} className="very relaxed" content="Go Back" />
             </div>
             <div className="center-align mt-30">
-              <p><Link to="/app/summary" onClick={this.handleFinishLater}>Finish later</Link></p>
+              <p><Link to="/dashboard/summary" onClick={this.handleFinishLater}>Finish later</Link></p>
             </div>
           </Modal.Content>
         </Modal>

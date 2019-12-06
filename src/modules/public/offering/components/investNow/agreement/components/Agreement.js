@@ -213,7 +213,7 @@ export default class Agreement extends React.Component {
                             startsWith(offeringRegulationType, 'BD_')
                               ? (
                                 <>
-                                  I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
+                                  I have reviewed NextSeed’s <Link target="_blank" to="/dashboard/resources/welcome-packet">educational materials</Link>, understand that
                                   the entire amount of my investment may be lost,
                                   and confirm that I am in a
                                   financial condition to bear the loss.
@@ -225,7 +225,7 @@ export default class Agreement extends React.Component {
                               )
                               : (
                                 <>
-                                  I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
+                                  I have reviewed NextSeed’s <Link target="_blank" to="/dashboard/resources/welcome-packet">educational materials</Link>, understand that
                                   the entire amount of my investment may be lost,
                                   and confirm that I am in a
                                   financial condition to bear the loss.

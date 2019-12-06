@@ -1,6 +1,6 @@
 export const INVESTOR_URLS = {
-  cipForm: '/app/summary/identity-verification/0',
-  cipHardFail: '/app/summary/identity-verification/1',
-  cipSoftFail: '/app/summary/identity-verification/2',
-  phoneVerification: '/app/summary/identity-verification/3',
+  cipForm: '/dashboard/summary/identity-verification/0',
+  cipHardFail: '/dashboard/summary/identity-verification/1',
+  cipSoftFail: '/dashboard/summary/identity-verification/2',
+  phoneVerification: '/dashboard/summary/identity-verification/3',
 };

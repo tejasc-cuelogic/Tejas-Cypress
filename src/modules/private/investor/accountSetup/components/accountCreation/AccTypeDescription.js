@@ -51,7 +51,7 @@ const AccTypeDescription = observer((props) => {
             The uninvested cash in your account is FDIC-insured up to $250,000 and is
             interest-bearing. We safeguard your information with bank-level security measures.
             <br />Questions? Please see our{' '}
-            <Link to="/app/resources/faq" target="_blank" className="link">FAQs on IRAs</Link>.
+            <Link to="/dashboard/resources/faq" target="_blank" className="link">FAQs on IRAs</Link>.
           </p>
           <p className="grey-text">
             NextSeed is not a tax, investment or legal advisor and does not provide any tax,

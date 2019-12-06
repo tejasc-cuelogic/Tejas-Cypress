@@ -33,7 +33,7 @@ export default class Congratulation extends React.Component {
     e.preventDefault();
     this.props.investmentStore.resetData();
     this.props.accreditationStore.resetUserAccreditatedStatus();
-    this.props.history.push('/app/referrals');
+    this.props.history.push('/dashboard/referrals');
   }
 
   render() {
@@ -41,7 +41,7 @@ export default class Congratulation extends React.Component {
     const { investmentAmount, investAccTypes } = this.props.investmentStore;
     const { campaign } = this.props.campaignStore;
     const accountType = investAccTypes && investAccTypes.value ? investAccTypes.value : '-';
-    const accountRedirectURL = accountType && accountType !== '-' ? `/app/account-details/${accountType}/portfolio` : '/app/summary';
+    const accountRedirectURL = accountType && accountType !== '-' ? `/dashboard/account-details/${accountType}/portfolio` : '/dashboard/summary';
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
     const offeringSecurityType = get(offeringDetailsObj, 'keyTerms.securities');

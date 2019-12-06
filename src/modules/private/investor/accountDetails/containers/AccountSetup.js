@@ -19,7 +19,7 @@ export default class AccountSetup extends Component {
 
   renderAccType = () => {
     const { currentActiveAccount } = this.props.userDetailsStore;
-    this.props.history.push(`/app/summary/account-creation/${currentActiveAccount}`);
+    this.props.history.push(`/dashboard/summary/account-creation/${currentActiveAccount}`);
   }
 
   render() {

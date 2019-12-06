@@ -11,7 +11,7 @@ export default class ConfirmModal extends Component {
   handleCloseModal = (e) => {
     e.preventDefault();
     this.props.uiStore.setErrors(null);
-    this.props.history.push('/app');
+    this.props.history.push('/dashboard');
   }
 
   render() {

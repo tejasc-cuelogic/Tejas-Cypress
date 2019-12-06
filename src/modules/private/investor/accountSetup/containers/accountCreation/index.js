@@ -27,7 +27,7 @@ export default class AccountCreation extends Component {
   }
 
   handleCloseModal = () => {
-    this.props.history.push('/app/summary');
+    this.props.history.push('/dashboard/summary');
   }
 
   handleUserIdentity = async (accountType) => {

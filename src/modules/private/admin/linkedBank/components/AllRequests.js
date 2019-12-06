@@ -74,7 +74,7 @@ export default class AllRequests extends Component {
                 : changeRequests.map((req, index) => (
                   <Table.Row key={`${req.userId}_${index}`}>
                     <Table.Cell>
-                      <Link to={`/app/users/${req.userId}/profile-data`}><p><b>{req.firstName} {req.lastName}</b></p></Link>
+                      <Link to={`/dashboard/users/${req.userId}/profile-data`}><p><b>{req.firstName} {req.lastName}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
                       {get(req, 'linkedBank.changeRequest.dateRequested') ? DataFormatter.getDateAsPerTimeZone(moment.unix(get(req, 'linkedBank.changeRequest.dateRequested')), false, false, false) : 'N/A'}

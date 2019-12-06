@@ -58,7 +58,7 @@ class ChangeInvestmentLimit extends Component {
           <p>
             Ensure that your 12-month Investment Limit for Regulation Crowdfunding is up to date
             by providing your most recent Annual Income and Net Worth.&nbsp;
-            <Link target="_blank" to="/app/resources/faq">See FAQ on how your investment limit is calculated</Link>
+            <Link target="_blank" to="/dashboard/resources/faq">See FAQ on how your investment limit is calculated</Link>
           </p>
         </Modal.Header>
         <Modal.Content>

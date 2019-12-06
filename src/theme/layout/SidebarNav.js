@@ -58,7 +58,7 @@ export class SidebarNav extends Component {
           && props.signupStatus.inActiveAccounts.length > 0
             && (
 <Menu.Item className="btn-item mt-30">
-              <Button fluid basic compact as={Link} to="/app/summary/account-creation" content="Open New Account" />
+              <Button fluid basic compact as={Link} to="/dashboard/summary/account-creation" content="Open New Account" />
             </Menu.Item>
             )
         }
@@ -69,7 +69,7 @@ export class SidebarNav extends Component {
 
 export const GetNavItem = (item, roles) => {
   const result = _.find(PRIVATE_NAV, i => i.to === item);
-  const link = <h3><Link to={`/app/${result.to}`}>{result.title}</Link></h3>;
+  const link = <h3><Link to={`/dashboard/${result.to}`}>{result.title}</Link></h3>;
   return (result && (!result.accessibleTo || result.accessibleTo.length === 0
     || _.intersection(result.accessibleTo, roles).length > 0)
     && (!result.env || result.env.length === 0
@@ -78,7 +78,7 @@ export const GetNavItem = (item, roles) => {
 
 export const GetNavMeta = (item, roles, nonprivate) => {
   const ALL_PUBLIC = [...PUBLIC_NAV, ...FOOTER_NAV];
-  const navMeta = !nonprivate ? _.find(PRIVATE_NAV, i => matchPath(item, { path: `/app/${i.to}` }))
+  const navMeta = !nonprivate ? _.find(PRIVATE_NAV, i => matchPath(item, { path: `/dashboard/${i.to}` }))
     : _.find(ALL_PUBLIC, i => matchPath(item, { path: `/${i.to}`, exact: i.exact || false }));
   if (navMeta) {
     navMeta.title = typeof navMeta.title === 'object' && roles ? navMeta.title[roles[0]]

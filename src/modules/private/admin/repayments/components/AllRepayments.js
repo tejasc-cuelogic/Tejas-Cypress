@@ -118,7 +118,7 @@ export default class AllRepayments extends PureComponent {
 
   getLink = (offeringId, offeringStage) => {
     const stage = ['CREATION'].includes(offeringStage) ? 'creation' : ['LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage) ? 'live' : ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULTED'].includes(offeringStage) ? 'completed' : 'failed';
-    return `/app/offerings/${stage}/edit/${offeringId}`;
+    return `/dashboard/offerings/${stage}/edit/${offeringId}`;
   }
 
   handleEditPayment = (id) => {
@@ -146,7 +146,7 @@ export default class AllRepayments extends PureComponent {
                 addon={(DEV_FEATURE_ONLY
                   && (
                   <Grid.Column width={5} textAlign="right">
-                    <Button color="green" as={Link} floated="right" to="/app/payments">
+                    <Button color="green" as={Link} floated="right" to="/dashboard/payments">
                       Add New Repayment
                     </Button>
                   </Grid.Column>

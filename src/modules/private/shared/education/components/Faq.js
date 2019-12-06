@@ -16,8 +16,8 @@ export default class KnowledgeBase extends Component {
 
   search = (e) => {
     this.props.educationStore.setSrchParam(e.target.value);
-    if (this.props.location.pathname !== '/app/resources/faq') {
-      this.props.history.replace('/app/resources/faq');
+    if (this.props.location.pathname !== '/dashboard/resources/faq') {
+      this.props.history.replace('/dashboard/resources/faq');
     }
   }
 

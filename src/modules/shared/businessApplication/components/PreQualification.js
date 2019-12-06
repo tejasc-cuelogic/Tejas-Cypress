@@ -57,7 +57,7 @@ export default class PreQualification extends Component {
             .then((isPublicUrl) => {
               const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
               Helper.toast('Business pre-qualification request submitted!', 'success');
-              this.props.history.push(`${isPublicUrl ? '' : '/app'}/business-application/${url}`);
+              this.props.history.push(`${isPublicUrl ? '' : '/dashboard'}/business-application/${url}`);
             });
         });
     }
@@ -97,7 +97,7 @@ export default class PreQualification extends Component {
       .then(() => {
         this.props.authStore.resetForm('LOGIN_FRM');
         const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
-        const redirectUrl = `/app/business-application/${currentApplicationType}/${url}`;
+        const redirectUrl = `/dashboard/business-application/${currentApplicationType}/${url}`;
         this.props.history.push(redirectUrl);
         this.props.uiStore.setProgress(false);
       })

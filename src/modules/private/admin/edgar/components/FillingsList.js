@@ -30,7 +30,7 @@ const FillingsList = observer((props) => {
                   >
                     Documents
                   </Link>
-                  <Link to={`/app/edgar/${props.businessId}/edgar/${filing.filingId}`}>
+                  <Link to={`/dashboard/edgar/${props.businessId}/edgar/${filing.filingId}`}>
                     View
                   </Link>
                   <Button

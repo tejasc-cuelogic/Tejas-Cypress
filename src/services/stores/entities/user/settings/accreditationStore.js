@@ -981,7 +981,7 @@ export class AccreditationStore {
     const userCreatedAccountList = userDetailsStore.userDetails.roles;
     const selectedAccountDetails = find(userCreatedAccountList, { name: selectedAccountName });
     const selectedAccountId = selectedAccountDetails.details.accountId;
-    const urlToReturn = selectedAccountName === 'entity' ? `/app/account-settings/investment-limits/verify-entity-accreditation/${selectedAccountId}/entity` : `/app/account-settings/investment-limits/verify-accreditation/${selectedAccountId}/${selectedAccountName}`;
+    const urlToReturn = selectedAccountName === 'entity' ? `/dashboard/account-settings/investment-limits/verify-entity-accreditation/${selectedAccountId}/entity` : `/dashboard/account-settings/investment-limits/verify-accreditation/${selectedAccountId}/${selectedAccountName}`;
     return urlToReturn;
   }
 

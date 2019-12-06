@@ -129,7 +129,7 @@ class Comments extends Component {
                 Post comment is only available to accredited investors.
               </Header>
               <p>Please confirm your accredited investor status to post comment.</p>
-              <Button as={Link} to="/app/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
+              <Button as={Link} to="/dashboard/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
             </section>
           </Modal.Content>
         </Modal>
@@ -166,7 +166,7 @@ class Comments extends Component {
               }
               <Form reply className="public-form clearfix">
                 {loggedInAsInvestor && !accountStatusFull
-                  ? <Link to="/app/summary" className="ui button secondary">Finish Account Setup</Link>
+                  ? <Link to="/dashboard/summary" className="ui button secondary">Finish Account Setup</Link>
                   : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
                 }
               </Form>

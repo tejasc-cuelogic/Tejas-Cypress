@@ -12,7 +12,7 @@ export default class Filters extends Component {
     const {
       requestState, filters, FILTER_FRM, fChange,
     } = this.props;
-    const type = this.props.history.location.pathname === '/app/crowdpay' ? 'review' : this.props.history.location.pathname.includes('individual') ? 'individual' : this.props.history.location.pathname.includes('ira') ? 'ira' : this.props.history.location.pathname.includes('review') ? 'review' : 'entity';
+    const type = this.props.history.location.pathname === '/dashboard/crowdpay' ? 'review' : this.props.history.location.pathname.includes('individual') ? 'individual' : this.props.history.location.pathname.includes('ira') ? 'ira' : this.props.history.location.pathname.includes('review') ? 'review' : 'entity';
     return (
       <div className={`search-filters more ${!filters ? 'collapsed' : ''}`}>
         <Form>

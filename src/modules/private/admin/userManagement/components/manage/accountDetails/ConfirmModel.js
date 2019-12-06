@@ -70,7 +70,7 @@ export default class ConfirmModel extends Component {
       ).then((res) => {
         if (!get(res, 'data.closeInvestorAccount.errorMessage')) {
           this.props.userDetailsStore.getUserProfileDetails(this.props.userId);
-          this.props.history.push(`/app/users/${this.props.userId}/profile-data/basic`);
+          this.props.history.push(`/dashboard/users/${this.props.userId}/profile-data/basic`);
         } else {
           this.handleBack();
         }

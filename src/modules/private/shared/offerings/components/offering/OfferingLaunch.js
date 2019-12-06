@@ -50,7 +50,7 @@ export default class OfferingLaunch extends Component {
       );
     })
       .then(() => {
-        this.props.history.push(`/app/offerings/live/edit/${currentOfferingId}/offering-creation/offering/launch`);
+        this.props.history.push(`/dashboard/offerings/live/edit/${currentOfferingId}/offering-creation/offering/launch`);
       });
   }
 

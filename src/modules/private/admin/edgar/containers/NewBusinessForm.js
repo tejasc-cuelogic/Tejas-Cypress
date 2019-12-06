@@ -77,7 +77,7 @@ export default class NewBusinessForm extends React.Component {
   handleSubmitForm = () => {
     businessActions.createBusiness()
       .then((data) => {
-        this.props.history.push(`/app/edgar/${data.body.data.createBusiness.id}`);
+        this.props.history.push(`/dashboard/edgar/${data.body.data.createBusiness.id}`);
         this.props.uiStore.setModalStatus(false);
         Helper.toast(`New business ${data.body.data.createBusiness.name} has been created successfully`, 'success');
       })

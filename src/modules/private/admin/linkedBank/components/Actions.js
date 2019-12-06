@@ -14,7 +14,7 @@ const actions = {
 @observer
 export default class Actions extends Component {
   handleOnClickAction(action) {
-    this.props.history.push(`/app/change-linked-bank-requests/${this.props.accountId}/${action}`);
+    this.props.history.push(`/dashboard/change-linked-bank-requests/${this.props.accountId}/${action}`);
   }
 
   render() {

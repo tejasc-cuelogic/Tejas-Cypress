@@ -53,7 +53,7 @@ export default class BusinessApplication extends Component {
     e.preventDefault();
     this.props.businessAppStore.businessAppParitalSubmit().then(() => {
       Helper.toast('Business application saved!', 'success');
-      this.props.history.push('/app');
+      this.props.history.push('/dashboard');
     });
   }
 
@@ -71,11 +71,11 @@ export default class BusinessApplication extends Component {
       if (isRedirect && result && this.props.businessAppStore.canSubmitApp) {
         businessApplicationSubmitAction().then(() => {
           Helper.toast('Business application submitted successfully!', 'success');
-          this.props.history.push('/app');
+          this.props.history.push('/dashboard');
           window.location.reload();
         });
       } else if (isRedirect) {
-        this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${applicationStep}`);
+        this.props.history.push(`/dashboard/business-application/${currentApplicationType}/${currentApplicationId}/${applicationStep}`);
       }
     });
     // }
@@ -96,7 +96,7 @@ export default class BusinessApplication extends Component {
           .then(() => {
             const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
             Helper.toast('Business pre-qualification request submitted!', 'success');
-            this.props.history.push(`/app/business-application/${url}`);
+            this.props.history.push(`/dashboard/business-application/${url}`);
           });
       });
   }
@@ -127,7 +127,7 @@ export default class BusinessApplication extends Component {
         appStepsStatus={appStepsStatus}
         {...this.props}
         P0={(
-          <Link to="/app">
+          <Link to="/dashboard">
             <Logo
               alt="NextSeed.com"
               dataSrc={logoUrl}

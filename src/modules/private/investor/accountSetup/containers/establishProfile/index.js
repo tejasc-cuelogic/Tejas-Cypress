@@ -13,17 +13,17 @@ export default class EstablishProfile extends Component {
     if (this.props.refUrl) {
       this.props.history.push(this.props.refUrl);
     } else {
-      this.props.history.push('/app/summary');
+      this.props.history.push('/dashboard/summary');
     }
   }
 
   handleCloseNestedModal = () => {
-    this.props.history.push('/app/summary/establish-profile');
+    this.props.history.push('/dashboard/summary/establish-profile');
   }
 
   handleFormSubmit = () => {
     this.props.investorProfileStore.submitFieldsForm();
-    this.props.history.push('/app/summary/establish-profile');
+    this.props.history.push('/dashboard/summary/establish-profile');
   }
 
   render() {

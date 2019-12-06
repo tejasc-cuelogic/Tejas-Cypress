@@ -13,7 +13,7 @@ const NO_PERMISSION_MSG = `Please contact
   to request a transfer of your IRA funds.`;
 
 const NO_LINKED_BANK_MSG = `No Linked Bank available to Transfer Fund, go to
-  <a href='/app/account-details/ira/bank-accounts'>Bank Accounts<a>`;
+  <a href='/dashboard/account-details/ira/bank-accounts'>Bank Accounts<a>`;
 
 @inject('educationStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'accountStore')
 @withRouter

@@ -185,7 +185,7 @@ export class NavStore {
     const { roles, specificNav } = this.params;
     let nav = [];
     if (roles && specificNav) {
-      nav = toJS(this.NAV_ITEMS.find(i => matchPath(specificNav, { path: `/app/${i.to}` })));
+      nav = toJS(this.NAV_ITEMS.find(i => matchPath(specificNav, { path: `/dashboard/${i.to}` })));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
         nav.subNavigations = nav.subNavigations.filter(n => ((!n.accessibleTo
@@ -203,12 +203,12 @@ export class NavStore {
     const { roles, currentNav, appStatus } = this.params;
     console.log(key, value, currentNav);
     if (roles && currentNav) {
-      // hack for root so if /app
+      // hack for root so if /app i.e /dashboard
       const nav = toJS(this.allNavItems.find((i) => {
-        if (value === '/app' && currentNav === '/app' && i.to === 'dashboard') {
+        if (value === '/dashboard' && currentNav === '/dashboard' && i.to === 'dashboard') {
           return true;
         }
-        return matchPath(currentNav, { path: `/app/${i.to}` });
+        return matchPath(currentNav, { path: `/dashboard/${i.to}` });
       }));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;

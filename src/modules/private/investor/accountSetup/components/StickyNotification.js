@@ -22,12 +22,12 @@ const checkStatus = (signupStatus, userDetailsStore) => {
     stepinfo.title = 'Get full access';
     stepinfo.label = 'To continue investing on Nextseed`s new Broker-Dealer platform, you`ll need to answer a few questions';
     stepinfo.btnText = 'Access';
-    stepinfo.url = '/app/summary/establish-profile';
+    stepinfo.url = '/dashboard/summary/establish-profile';
   } else {
     stepinfo.title = 'Complete your account setup';
     stepinfo.label = 'Finish setting up your account to start investing in local businesses';
     stepinfo.btnText = 'Continue';
-    stepinfo.url = '/app/summary/account-creation';
+    stepinfo.url = '/dashboard/summary/account-creation';
   }
 };
 

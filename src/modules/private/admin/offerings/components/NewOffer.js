@@ -13,7 +13,7 @@ export default class NewOffer extends Component {
   }
 
   handleCloseModal = () => {
-    this.props.history.push('/app/offerings/creation');
+    this.props.history.push('/dashboard/offerings/creation');
   }
 
   handleSubmit = () => {

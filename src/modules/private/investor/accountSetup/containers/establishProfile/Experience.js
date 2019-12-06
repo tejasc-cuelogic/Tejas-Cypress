@@ -32,10 +32,10 @@ export default class Experience extends Component {
           const { signupStatus, userStatus } = this.props.userDetailsStore;
           if (signupStatus.isMigratedFullAccount
             || (userStatus && userStatus.includes('FULL'))) {
-            this.props.history.push('/app/summary');
+            this.props.history.push('/dashboard/summary');
             setTimeout(() => this.props.uiStore.setProgress(false), 2000);
           } else {
-            this.props.history.push('/app/summary/account-creation');
+            this.props.history.push('/dashboard/summary/account-creation');
           }
         });
       } else {

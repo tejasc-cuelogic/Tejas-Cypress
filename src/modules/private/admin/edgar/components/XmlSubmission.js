@@ -16,12 +16,12 @@ import {
 @observer
 class XmlSubmission extends Component {
   createNewSubmission = () => {
-    this.props.history.push(`/app/edgar/${this.props.offeringId}/filing/${this.props.filingId}/xml`);
+    this.props.history.push(`/dashboard/edgar/${this.props.offeringId}/filing/${this.props.filingId}/xml`);
   }
 
   render() {
     const { offeringId, filingId } = this.props;
-    const xmlUrl = `/app/edgar/${offeringId}/filing/${filingId}/xml`;
+    const xmlUrl = `/dashboard/edgar/${offeringId}/filing/${filingId}/xml`;
     if (!_.isEmpty(this.props.xmlSubmissions)) {
       return (
         <Table.Body active={this.props.active} key={this.props.filingId}>

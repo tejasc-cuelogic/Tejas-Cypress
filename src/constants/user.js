@@ -187,4 +187,4 @@ export const NEW_USER = {
 
 export const BENEFICIARY_STATUS = { PENDING: 'PENDING', APPROVED: 'APPROVED' };
 
-export const SIGNUP_REDIRECT_ROLEWISE = [{ role: 'admin', path: '/app' }, { role: 'issuer', path: '/app/business-application/new/pre-qualification' }, { role: 'investor', path: '/app/summary/identity-verification/0' }];
+export const SIGNUP_REDIRECT_ROLEWISE = [{ role: 'admin', path: '/dashboard' }, { role: 'issuer', path: '/dashboard/business-application/new/pre-qualification' }, { role: 'investor', path: '/dashboard/summary/identity-verification/0' }];

@@ -114,7 +114,7 @@ export default class AllCrowdPay extends Component {
                     <Table.Row key={account.accountId} className={loadingCrowdPayIds.includes(account.accountId) ? 'disabled' : ''}>
                       <Table.Cell>
                         <p>
-                          <Link to={`/app/users/${account.userId}/profile-data`}>
+                          <Link to={`/dashboard/users/${account.userId}/profile-data`}>
                             <b>{account.firstName} {account.lastName}</b>
                           </Link>
                           <br />{account.email}<br />{account.phone ? Helper.phoneNumberFormatter(account.phone) : ''}

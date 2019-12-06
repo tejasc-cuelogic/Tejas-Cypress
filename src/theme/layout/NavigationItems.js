@@ -46,7 +46,7 @@ export class NavItems extends Component {
       setNavExpanded(false); // reset defaultNavExpanded
     }
     if (this.props.refLoc !== 'public' && e.target.getAttribute('role') !== 'option') {
-      this.props.history.replace(`/app/${name}`);
+      this.props.history.replace(`/dashboard/${name}`);
     }
   };
 
@@ -94,11 +94,11 @@ export class NavItems extends Component {
     const {
       location, isApp, roles, match, isMobile, onToggle, refLink, newLayout,
     } = this.props;
-    const app = (isApp) ? 'app' : '';
+    const app = (isApp) ? 'dashboard' : '';
     const myNavItems = this.props.navItems.filter(n => n.headerMobile !== false && n.noNav !== true);
     const investorAccounts = this.props.userDetailsStore.getAccountList;
     const hasMoreThanOneAcc = investorAccounts.length > 1;
-    const isPrivateApp = location.pathname.includes('/app');
+    const isPrivateApp = location.pathname.includes('/dashboard');
     return myNavItems.map((item, key) => (
       <>
         {item.subPanel === 1 && item.subNavigations && isMobile && !isApp ? (
@@ -131,7 +131,7 @@ export class NavItems extends Component {
                           onClick={
                             isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)
                           }
-                          to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
+                          to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/dashboard' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
                         >
                           {sn.title}
                         </Menu.Item>
@@ -170,7 +170,7 @@ export class NavItems extends Component {
                       className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
                       as={NavLink}
                       onClick={isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
-                      to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
+                      to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/dashboard' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
                     >
                       {sn.title}
                     </Dropdown.Item>
@@ -197,7 +197,7 @@ export class NavItems extends Component {
                   className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : `${((item.defaultActive && this.isActiveSubMenu(`${item.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(item.to, location) ? 'active' : ''}`} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''} ${(newLayout && ((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) ? 'hasLabel' : '')}`}
                   as={NavLink}
                   onClick={isMobile ? this.mobileMenuClick : this.doNothing}
-                  to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}${item.useRefLink ? '' : item.asRoot ? '' : `/${item.to}`}`}
+                  to={`${(isApp) ? '/dashboard' : (this.props.sub ? match.url : '')}${item.useRefLink ? '' : item.asRoot ? '' : `/${item.to}`}`}
                 >
                   {item.icon && <Icon className={item.icon} />}
                   {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
@@ -227,7 +227,7 @@ export class NavigationItems extends Component {
   }
 
   handleDashboardBtn = () => {
-    this.props.history.push('/app');
+    this.props.history.push('/dashboard');
   }
 
   render() {

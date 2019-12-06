@@ -12,7 +12,7 @@ export default class Details extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!this.props.match.url.includes('/app/') && prevProps.match.params.slug !== this.props.match.params.slug) {
+    if (!this.props.match.url.includes('/dashboard/') && prevProps.match.params.slug !== this.props.match.params.slug) {
       this.props.educationStore.getOne(this.props.module, this.props.match.params.slug);
     }
   }
@@ -25,7 +25,7 @@ export default class Details extends Component {
     const { selected, searchParam } = this.props.educationStore;
     const details = (selected ? (
       <>
-        {this.props.match.params && this.props.match.params.slug !== 'faq' && !this.props.location.pathname.includes('/app/')
+        {this.props.match.params && this.props.match.params.slug !== 'faq' && !this.props.location.pathname.includes('/dashboard/')
         && (
 <Form>
           <Input

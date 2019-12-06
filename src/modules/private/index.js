@@ -35,7 +35,7 @@ export default class Private extends React.Component {
         routes[`${item.path}_${item.to}`] = (
           <Route
             exact={!!item.exact}
-            path={item.asRoot ? '/app' : `/app/${item.to}`}
+            path={item.asRoot ? '/dashboard' : `/dashboard/${item.to}`}
             component={lazyRetry(() => import(`./${typeof item.path === 'object' && roles ? item.path[roles[0]]
               : item.path}`))}
             key={item.path}
@@ -91,7 +91,7 @@ export default class Private extends React.Component {
                   key={route.path}
                 />
               ))}
-              <Route exact path="/app/legal-docs/:agreementKey" render={props => <AgreementsPdfLoader isNewTab {...props} />} />
+              <Route exact path="/dashboard/legal-docs/:agreementKey" render={props => <AgreementsPdfLoader isNewTab {...props} />} />
               {Object.keys(routes).map(route => routes[route])}
               {myRoutes.length > 0 ? <Route component={NotFound} />
                 : <Route component={InlineLoader} />}

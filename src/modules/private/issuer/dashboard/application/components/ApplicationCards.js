@@ -57,7 +57,7 @@ export default class ApplicationCards extends Component {
                 Let&#39;s get started with an application for your project.
               </p>
               <Divider hidden />
-              <Button primary as={Link} to="/app/application/select-application-type">Start application</Button>
+              <Button primary as={Link} to="/dashboard/application/select-application-type">Start application</Button>
             </Card.Content>
           </Card>
           {fetchBusinessApplication.length
@@ -79,7 +79,7 @@ export default class ApplicationCards extends Component {
                     </dl>
                     {application.applicationStatus
                     === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED
-                      && <Button className="mb-half" inverted color="green" as={Link} to={`/app/business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>Continue application</Button>
+                      && <Button className="mb-half" inverted color="green" as={Link} to={`/dashboard/business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>Continue application</Button>
                     }
                     {(application.applicationStatus
                     === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED
@@ -89,11 +89,11 @@ export default class ApplicationCards extends Component {
                     === BUSINESS_APPLICATION_STATUS.REVIEW_FAILED
                     || application.applicationStatus
                     === BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED)
-                      && <Button className="mb-half" inverted color="green" as={Link} to={`/app/business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
+                      && <Button className="mb-half" inverted color="green" as={Link} to={`/dashboard/business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
                     }
                     {([BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL, BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED].includes(application.applicationStatus))
                       && (
-                        <Button className="mb-half" inverted color="green" onClick={e => this.signPortalAgreementHandler(e, `/app/application/${application.applicationId}/offers`, application.applicationId)}>
+                        <Button className="mb-half" inverted color="green" onClick={e => this.signPortalAgreementHandler(e, `/dashboard/application/${application.applicationId}/offers`, application.applicationId)}>
                         { application.applicationStatus
                         === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL ? 'View Offer' : 'Sign agreement'
                       }

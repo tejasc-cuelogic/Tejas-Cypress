@@ -26,12 +26,12 @@ export default class DeleteUser extends Component {
     if (!get(this.props.userDetailsStore.getDetailsOfUser, 'id')) {
       this.props.userDetailsStore.setFieldValue('selectedUserId', null);
     }
-    this.props.history.push(`/app/users/${params.userId}/profile-data`);
+    this.props.history.push(`/dashboard/users/${params.userId}/profile-data`);
   }
 
   handleDeleteProfile = () => {
     const isHardDelete = this.props.match.params.action === 'Hard';
-    const redirectURL = isHardDelete ? '/app/users' : `/app/users/${this.props.match.params.userId}/profile-data`;
+    const redirectURL = isHardDelete ? '/dashboard/users' : `/dashboard/users/${this.props.match.params.userId}/profile-data`;
     this.props.userDetailsStore.deleteProfile(false, isHardDelete).then(() => {
       this.props.userDetailsStore.setFieldValue('selectedUserId', null);
       this.props.history.push(redirectURL);

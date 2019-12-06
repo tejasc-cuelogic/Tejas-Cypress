@@ -40,7 +40,7 @@ export default class ManageFaqs extends Component {
                 <Button color="basic" as={Link} to={`${match.url}/new/DRAFT`}>
                   Add FAQ
                 </Button>
-                <Button color="green" as={Link} to={this.props.refMatch ? '/app/content/categories' : '/app/categories'}>
+                <Button color="green" as={Link} to={this.props.refMatch ? '/dashboard/content/categories' : '/dashboard/categories'}>
                   Manage categories
                 </Button>
               </Grid.Column>

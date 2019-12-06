@@ -26,10 +26,10 @@ export default class AppNavigation extends Component {
     if (where >= 0) {
       // if (checkFormisValid(`${this.state.navItems[this.state.step].to}`, true)) {
       this.submitSaveContinue();
-      this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
+      this.props.history.push(`/dashboard/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
       // }
     } else {
-      this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
+      this.props.history.push(`/dashboard/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
     }
   }
 
@@ -49,10 +49,10 @@ export default class AppNavigation extends Component {
       if (result && this.props.businessAppStore.canSubmitApp) {
         businessApplicationSubmitAction().then(() => {
           Helper.toast('Business application submitted successfully!', 'success');
-          this.props.history.push('/app');
+          this.props.history.push('/dashboard');
         });
       } else {
-        this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step].to}`);
+        this.props.history.push(`/dashboard/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step].to}`);
       }
     });
     // }

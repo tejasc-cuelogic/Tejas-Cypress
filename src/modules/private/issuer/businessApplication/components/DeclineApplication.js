@@ -16,13 +16,13 @@ export default class DeclineApplication extends Component {
   }
 
   handleCloseModal = () => {
-    this.props.history.push(`/app/application/${this.props.match.params.applicationId}/offers`);
+    this.props.history.push(`/dashboard/application/${this.props.match.params.applicationId}/offers`);
   }
 
   declineApplicationHandler = () => {
     const { match, businessAppReviewStore } = this.props;
     const { applicationId } = match.params;
-    businessAppReviewStore.applicationDeclineByIssuer(applicationId).then(() => this.props.history.push('/app'));
+    businessAppReviewStore.applicationDeclineByIssuer(applicationId).then(() => this.props.history.push('/dashboard'));
   }
 
   render() {
