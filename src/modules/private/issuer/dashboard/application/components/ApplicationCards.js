@@ -93,7 +93,7 @@ export default class ApplicationCards extends Component {
                     }
                     {([BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL, BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED].includes(application.applicationStatus))
                       && (
-                        <Button className="mb-half" inverted color="green" onClick={e => this.signPortalAgreementHandler(e, `/app/dashboard/${application.applicationId}/offers`, application.applicationId)}>
+                        <Button className="mb-half" inverted color="green" onClick={e => this.signPortalAgreementHandler(e, `/app/application/${application.applicationId}/offers`, application.applicationId)}>
                         { application.applicationStatus
                         === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL ? 'View Offer' : 'Sign agreement'
                       }
