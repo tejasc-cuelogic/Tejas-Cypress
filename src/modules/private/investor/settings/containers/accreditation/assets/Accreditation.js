@@ -25,6 +25,12 @@ export default class Accreditation extends React.Component {
     this.props.accreditationStore.setStepToBeRendered(step);
   }
 
+  handleSubmitStep = () => { // only for mobile screens
+    const { stepToBeRendered } = this.props.accreditationStore;
+    const { multiSteps } = this.props.uiStore;
+    this.multiClickHandler(multiSteps[stepToBeRendered]);
+  }
+
   render() {
     const {
       NET_WORTH_FORM,
@@ -35,7 +41,7 @@ export default class Accreditation extends React.Component {
     const steps = [
       {
         name: 'Net worth',
-        component: <NetWorth />,
+        component: <NetWorth submitStep={this.handleSubmitStep} />,
         isValid: NET_WORTH_FORM.meta.isFieldValid ? '' : 'error',
       },
       {
@@ -50,7 +56,7 @@ export default class Accreditation extends React.Component {
       },
     ];
     const {
-      inProgress,
+      inProgress, setFieldvalue,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
@@ -67,6 +73,7 @@ export default class Accreditation extends React.Component {
           inProgress={inProgress}
           handleMultiStepModalclose={this.handleMultiStepModalclose}
           setStepTobeRendered={this.handleStepChange}
+          setUiStorevalue={setFieldvalue}
         />
       </div>
     );

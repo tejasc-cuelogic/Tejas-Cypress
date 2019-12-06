@@ -60,7 +60,7 @@ export default class CancelInvestment extends Component {
   }
 
   render() {
-    const { inProgress, errors } = this.props.uiStore;
+    const { inProgress, errors, responsiveVars } = this.props.uiStore;
     const {
       isCancelShowLink,
       getInvestorAccounts,
@@ -83,7 +83,7 @@ export default class CancelInvestment extends Component {
           />
           {!isCancelShowLink
             ? (
-              <Form error={errors && errors.length} onSubmit={this.submit}>
+              <Form error={errors && errors.length} onSubmit={this.submit} className="center-align">
                 {this.props.isAdmin
                   ? (
                       <>
@@ -122,10 +122,10 @@ export default class CancelInvestment extends Component {
                     </Message>
                   )
                 }
-                <div className="center-align mt-30">
+                <Button.Group className="center-align mt-30" vertical={responsiveVars.isMobile}>
                   <Button color="green" id="btnNotCancel" onClick={() => { this.handleClick('btnNotCancel'); }}>No, keep investment</Button>
                   <Button loading={inProgress} color="red" id="btnCancel" onClick={() => { this.handleClick('btnCancel'); }}>Yes, cancel investment</Button>
-                </div>
+                </Button.Group>
               </Form>
             )
             : (

@@ -135,6 +135,9 @@
             text-align:left;
             margin:0 !important;
         }
+        .button.arrow-button + .button{
+            margin:@12px 0 0 0 !important;
+        }
     }
 }
 .sticky-actions{
@@ -160,6 +163,59 @@
         &.very{
             padding-left:@64px;
             padding-right:@64px;
+        }
+    }
+    &.arrow-button.labeled:not(.icon){
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: @14px @21px !important;
+        border: 1px solid @border-color !important;
+        text-align: left;
+        width: 100%;
+        &:focus{
+            background: @primary-one !important;
+            color: @neutral-offdark !important;
+            border-color: @white !important;
+            .details{
+                color: @white;
+                .ui.header,span{
+                    color: @white;
+                }
+            }
+        }
+        &.active{
+            background: @primary-one !important;
+            color: @white !important;
+            border-color: @primary-one !important;
+            .details{
+                color: @white !important;
+                .ui.header,span{
+                    color: @white;
+                }
+            }
+            &.error{
+                background: transparent !important;
+                border-color: @highlight-primary !important;
+                color: @neutral-offdark !important;
+                border-width: 2px !important;
+                .details{
+                    .ui.header,span{
+                        color: @neutral !important;
+                    }
+                }
+            }
+        }
+        .details{
+            color: @neutral-middark;
+            line-height: 20px;
+            font-size: @13px;
+            padding-right: @20px;
+            .ui.header,span{
+                font-size: @15px;
+                line-height: 24px;
+                color: @neutral;
+            }
         }
     }
 }
@@ -198,10 +254,18 @@
     margin:0;
     position:absolute;
     top:50%;
+    @media only screen and (max-width:@largestMobileScreen){
+        box-shadow: none !important;
+        background: transparent;
+    }
     &.disabled{
         background:@border-light;
         color:@border-color;
         opacity:1 !important;
+        @media only screen and (max-width:@largestMobileScreen){
+            box-shadow: none !important;
+            background: transparent;
+        }
     }
     >.icon{
         width:auto;
@@ -209,6 +273,13 @@
     &.prev{
         left:0;
         transform:translate(-50%, -50%);
+        @media only screen and (max-width:@largestMobileScreen){
+            left: @20px;
+            color: @neutral-middark;
+            &.disabled{
+                color: @neutral-offdark;
+            }
+        }
     }
     &.next{
         right:0;

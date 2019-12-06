@@ -32,7 +32,7 @@ export default class IdentityVerification extends Component {
   handleCloseModal = () => {
     this.props.uiStore.setErrors(null);
     this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
-    this.props.history.push('/app/summary');
+    this.props.history.push('/app/setup');
   }
 
   redirectTo = (url) => {
@@ -50,13 +50,13 @@ export default class IdentityVerification extends Component {
       const expiredAccountFromLocalStorage = window.sessionStorage.getItem('AccountCipExp');
       if (window.sessionStorage.getItem('cipErrorMessage') && !isUserVerified) {
         url = await this.props.accountStore.accountProcessingWrapper(
-          accountForWhichCipExpired || expiredAccountFromLocalStorage, { url: '/app/summary/account-creation/' },
+          accountForWhichCipExpired || expiredAccountFromLocalStorage, { url: '/app/setup/account-creation/' },
         );
       } else if (accountForWhichCipExpired || expiredAccountFromLocalStorage) {
-        this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
+        this.props.history.push(`/app/setup/account-creation/${accountForWhichCipExpired}`);
         this.props.identityStore.setFieldValue('signUpLoading', false);
       } else {
-        this.props.history.push('/app/summary');
+        this.props.history.push('/app/setup');
         this.props.identityStore.setFieldValue('signUpLoading', false);
       }
     }

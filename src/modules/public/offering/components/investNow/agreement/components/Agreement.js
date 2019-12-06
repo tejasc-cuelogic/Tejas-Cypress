@@ -212,12 +212,12 @@ export default class Agreement extends React.Component {
                           conditionalCustomLabel={(
                             startsWith(offeringRegulationType, 'BD_')
                               ? (
-                                <>
-                                  I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
-                                  the entire amount of my investment may be lost,
-                                  and confirm that I am in a
-                                  financial condition to bear the loss.
-                                  I have read and agree to the terms of
+<>
+                                I have reviewed NextSeed’s <Link target="_blank" to="/resources/education-center/investor">educational materials</Link>, understand that
+                                the entire amount of my investment may be lost,
+                                and confirm that I am in a
+                                financial condition to bear the loss.
+                                I have read and agree to the terms of
                                 the <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>,
                                 the <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>,
                                 and <Link onClick={e => this.agreementPDFLoader(e, true, 'bDIAgreemnt', 'SERVICES')} to="/">NextSeed Securities LLC Investor Agreement</Link>
@@ -225,7 +225,7 @@ export default class Agreement extends React.Component {
                               )
                               : (
                                 <>
-                                  I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
+                                  I have reviewed NextSeed’s <Link target="_blank" to="/resources/education-center/investor">educational materials</Link>, understand that
                                   the entire amount of my investment may be lost,
                                   and confirm that I am in a
                                   financial condition to bear the loss.
