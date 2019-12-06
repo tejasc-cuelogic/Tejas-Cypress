@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Link, Route, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Header, Card, Button, Icon, Divider } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared/index';
 import { BUSINESS_APP_USER_STATUS, BUSINESS_APPLICATION_STATUS } from '../../../../../../services/constants/businessApplication';
-import ApplicationTypeModal from './ApplicationTypeModal';
 import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../../../constants/common';
 import DateTimeFormat from '../../../../../../theme/shared/src/DateTimeFormat';
 import { DataFormatter } from '../../../../../../helper';
@@ -58,7 +57,7 @@ export default class ApplicationCards extends Component {
                 Let&#39;s get started with an application for your project.
               </p>
               <Divider hidden />
-              <Button primary as={Link} to="/app/select-application-type">Start application</Button>
+              <Button primary as={Link} to="/app/application/select-application-type">Start application</Button>
             </Card.Content>
           </Card>
           {fetchBusinessApplication.length
@@ -107,7 +106,6 @@ export default class ApplicationCards extends Component {
             )) : null
           }
         </Card.Group>
-        <Route exact path="/app/select-application-type" component={ApplicationTypeModal} />
       </>
     );
   }

@@ -101,6 +101,14 @@ export const PRIVATE_NAV = [
     ],
   },
   {
+    title: 'Application',
+    to: 'application',
+    noNav: true,
+    path: 'issuer/dashboard/init',
+    accessibleTo: ['issuer'],
+    subPanel: 0,
+  },
+  {
     icon: 'ns-dashboard',
     title: 'Summary',
     to: 'summary',
@@ -290,13 +298,6 @@ export const PRIVATE_NAV = [
       },
     ],
   },
-  // {
-  //   icon: 'calendar',
-  //   title: 'Events',
-  //   to: 'events',
-  //   path: 'issuer/events',
-  //   accessibleTo: ['issuer'],
-  // },
   {
     icon: 'legal',
     title: 'Edgar',

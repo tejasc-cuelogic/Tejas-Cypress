@@ -16,7 +16,7 @@ export default class DeclineApplication extends Component {
   }
 
   handleCloseModal = () => {
-    this.props.history.push(`/app/dashboard/${this.props.match.params.applicationId}/offers`);
+    this.props.history.push(`/app/application/${this.props.match.params.applicationId}/offers`);
   }
 
   declineApplicationHandler = () => {

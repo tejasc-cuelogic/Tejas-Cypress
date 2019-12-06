@@ -39,7 +39,7 @@ export default class OfferSigning extends Component {
     this.setState({ isCreateOffer: true });
     const { match, businessAppReviewStore } = this.props;
     businessAppReviewStore.createOffering(match.params.applicationId).then(() => {
-      this.props.history.push(`/app/dashboard/${match.params.applicationId}/gettingStarted`);
+      this.props.history.push(`/app/application/${match.params.applicationId}/gettingStarted`);
     });
   }
 
