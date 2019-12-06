@@ -139,7 +139,7 @@ export default class CampaignHeader extends Component {
                       position="top center"
                     />
                   </p>
-                  {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
+                  {/* {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                     && (
                       <p className="raise-type mb-0">
                         {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
@@ -153,7 +153,7 @@ export default class CampaignHeader extends Component {
                         />
                       </p>
                     )
-                  }
+                  } */}
                   {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
                     && (
                       <p className="mb-0">

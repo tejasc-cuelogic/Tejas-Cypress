@@ -5,7 +5,9 @@ import { Header, Form, Divider } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('iraAccountStore', 'investmentLimitStore')
+const isMobile = document.documentElement.clientWidth < 768;
+
+@inject('iraAccountStore', 'investmentLimitStore', 'uiStore')
 @observer
 export default class FinancialInformation extends React.Component {
   constructor(props) {
@@ -17,16 +19,22 @@ export default class FinancialInformation extends React.Component {
     this.props.investmentLimitStore.setFieldValue('investedAmount', 0);
   }
 
+  handleContinueButton = () => {
+    const { createAccount, stepToBeRendered } = this.props.iraAccountStore;
+    const { multiSteps } = this.props.uiStore;
+    createAccount(multiSteps[stepToBeRendered]);
+  }
+
   render() {
     const { FIN_INFO_FRM, finInfoChange } = this.props.iraAccountStore;
     return (
       <>
-        <Header as="h3" textAlign="center">Calculating your investment limit</Header>
-        <p className="center-align">Your net worth and annual income are used to determine your 12-month investment limit under Regulation Crowdfunding.{' '}
-          <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className="link">How is this calculated?</a>
+        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
+        <p className={isMobile ? '' : 'center-align'}>
+          Your net worth and annual income are used to determine your 12-month investment limit under Regulation Crowdfunding.
         </p>
         <Form error>
-          <div className="field-wrap">
+          <div className={isMobile ? '' : 'field-wrap'}>
             {
               ['netWorth', 'income'].map(field => (
                 <MaskedInput
@@ -40,6 +48,7 @@ export default class FinancialInformation extends React.Component {
                   maxLength={FIN_INFO_FRM.fields[field].maxLength}
                   currency
                   showerror
+                  toolTipOnLabel
                 />
               ))
             }
@@ -49,6 +58,7 @@ export default class FinancialInformation extends React.Component {
                 {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
               </span>
             </p>
+            <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20' : ''} link`}>How is this calculated?</a>
           </div>
         </Form>
       </>

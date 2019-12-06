@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Header, Form, Grid } from 'semantic-ui-react';
+import { Header, Form, Grid, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { INCOME_EVIDENCE_META } from '../../../../../../../services/constants/investmentLimit';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('accreditationStore')
 @withRouter
 @observer
@@ -45,6 +46,11 @@ export default class IncomeEvidence extends Component {
               </Grid.Column>
             ))}
           </Grid>
+          {isMobile
+          && (
+            <Button onClick={this.props.submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+          )
+          }
         </Form>
         {ACCREDITATION_FORM.fields.method.value === false
           && (

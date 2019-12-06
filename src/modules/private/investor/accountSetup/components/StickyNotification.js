@@ -22,37 +22,40 @@ const checkStatus = (signupStatus, userDetailsStore) => {
     stepinfo.title = 'Get full access';
     stepinfo.label = 'To continue investing on Nextseed`s new Broker-Dealer platform, you`ll need to answer a few questions';
     stepinfo.btnText = 'Access';
-    stepinfo.url = '/app/summary/establish-profile';
+    stepinfo.url = '/app/setup/establish-profile';
   } else {
     stepinfo.title = 'Complete your account setup';
     stepinfo.label = 'Finish setting up your account to start investing in local businesses';
     stepinfo.btnText = 'Continue';
-    stepinfo.url = '/app/summary/account-creation';
+    stepinfo.url = '/app/setup/account-creation';
   }
 };
 
-const StickyNotification = observer(({ signupStatus, userDetailsStore }) => {
+const StickyNotification = observer(({ signupStatus, userDetailsStore, isInvestor }) => {
   checkStatus(signupStatus, userDetailsStore);
   return (
-    <div className="top-cta-section">
-      <div className="sticky-notification">
+    <div className={!isInvestor && 'top-cta-section'}>
+      <div className={isInvestor ? 'closable-card' : 'sticky-notification'}>
         <Card fluid raised>
           <Card.Content>
-            <Card.Meta>{stepinfo.group}</Card.Meta>
-            <Statistic size="mini" className="cta acc-verify-status">
+            {!isInvestor && <Card.Meta>{stepinfo.group}</Card.Meta>}
+            <Statistic size="mini" className="cta  acc-verify-status">
+              {/* {isInvestor && <p className="intro-text text-uppercase"><b>{stepinfo.group}</b></p>} */}
               <Statistic.Value>{stepinfo.title}</Statistic.Value>
               <Statistic.Label>{stepinfo.label}</Statistic.Label>
             </Statistic>
             {stepinfo.btnText
             && (
-              <Button
-                as={Link}
-                to={stepinfo.url}
-                color="green"
-                floated={!isMobile && 'right'}
-              >
-                {stepinfo.btnText}
-              </Button>
+              <div className={`${isMobile ? 'ml-18' : ''} center-align`}>
+                <Button
+                  as={Link}
+                  to={stepinfo.url}
+                  color="green"
+                  className={isMobile && 'mt-20'}
+                >
+                  {stepinfo.btnText}
+                </Button>
+              </div>
             )
             }
           </Card.Content>
