@@ -182,9 +182,6 @@ export default class Summary extends Component {
             loading={docLoading}
           />
         </p>
-        <div className="center-align mt-30">
-          <Button fluid={isMobile} primary size="large" className="relaxed" content="Submit for Review" onClick={() => this.props.handleCreateAccount('entity')} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent} />
-        </div>
       </>
     );
   }

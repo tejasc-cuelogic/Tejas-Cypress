@@ -518,7 +518,7 @@ class IraAccountStore {
             name: 'Identity',
             validate: validationActions.validateIRAForm,
             form: 'IDENTITY_FRM',
-            stepToBeRendered: this.FUNDING_FRM.fields.fundingType.value === 0 ? 5 : 4,
+            stepToBeRendered: this.FUNDING_FRM.fields.fundingType.value === 0 ? 7 : 5,
           };
           if (callApi) {
             this.createAccount(currentStep, false);
