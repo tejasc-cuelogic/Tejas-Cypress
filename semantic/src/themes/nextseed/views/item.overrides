@@ -304,8 +304,23 @@
                 margin:0;
             }
         }
-        &.home-page>.item>.content>.header:not(.ui){
-            font-size: @16px;
+        &.home-page>.item{
+            width: 33%;
+            @media only screen and (max-width :@largestMobileScreen){
+                width:100%;
+            }
+            .ui.mini.image{
+                width: @31px !important;
+                margin-right: @15px;
+            }
+            >.content{
+                >.header:not(.ui){
+                    font-size: @17px;
+                }
+                .meta{
+                    font-size: @17px;
+                }
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ const featuredOn = [
 ];
 
 const FeaturedOn = ({ uiStore }) => (
-  <section className="bg-offwhite">
+  <section>
     <Container className={uiStore.responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
       <Header as={uiStore.responsiveVars.isMobile ? 'h2' : 'h3'} textAlign="center" className="mb-50 grey-header">As seen on</Header>
       <Grid relaxed={uiStore.responsiveVars.isMobile && 'very'} columns={5} doubling verticalAlign="middle" className={uiStore.responsiveVars.isMobile ? '' : 'vertical-gutter'}>

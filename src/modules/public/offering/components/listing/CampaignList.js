@@ -166,7 +166,7 @@ export default class CampaignList extends Component {
                                 </Table.Body>
                               </Table>
                             </div>
-                            <Button className="mt-30" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
+                            <Button basic className="mt-30" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
                           </Card.Content>
                         </div>
                         <Card.Content extra>

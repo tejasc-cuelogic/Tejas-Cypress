@@ -50,11 +50,13 @@ class Home extends Component {
           )}
           loadMoreButton={(
             <div className={`${responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'} center-align`}>
-              <Button fluid={responsiveVars.isMobile} primary content="View All Investment Opportunities" onClick={this.handleExploreBtn} />
+              <Button fluid={responsiveVars.isMobile} primary basic content="View All Investment Opportunities" onClick={this.handleExploreBtn} />
             </div>
           )}
         />
+        <Divider as={Container} fitted />
         <FeaturedOn />
+        <Divider as={Container} fitted />
         <section>
           <Container textAlign={responsiveVars.isMobile ? '' : 'center'} className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
             <Header as="h2">Looking to raise capital for your business?</Header>

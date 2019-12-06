@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Container, Button, Grid, Item, Responsive, Divider } from 'semantic-ui-react';
+import { Header, Container, Button, Grid, Item, Divider, Responsive } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import NSImage from '../../../shared/NSImage';
 
 const highlights = [
   {
     title: 'Pre-vetted opportunities',
-    icon: 'icons/prevetted.svg',
+    icon: 'icons/compass.svg',
     meta: (
       <>
       Only the top 3% of businesses meet our
@@ -15,31 +15,31 @@ const highlights = [
       </>),
   },
   {
-    title: 'Impactful investments',
-    icon: 'icons/entrepreneurs.svg',
-    meta: `Growing businesses that create jobs and drive growth.
-    Create real impact in local communities.`,
-  },
-  {
-    title: 'Exclusive deals',
-    icon: 'icons/ventures.svg',
-    meta: `Opportunities that were once privately reserved for wealthy
-      and well-connected investors.`,
-  },
-  {
-    title: 'Flexible amounts',
-    icon: 'icons/investments.svg',
-    meta: 'Never invest more than you can risk. Investments may start as low as $100.',
-  },
-  {
     title: 'Businesses you understand',
-    icon: 'icons/businesses.svg',
+    icon: 'icons/checked.svg',
     meta: `Investments in growing businesses across industries. Access the right
       ones for you.`,
   },
   {
+    title: 'Flexible amounts',
+    icon: 'icons/graph.svg',
+    meta: 'Never invest more than you can risk. Investments may start as low as $100.',
+  },
+  {
+    title: 'Exclusive deals',
+    icon: 'icons/deals.svg',
+    meta: `Opportunities that were once privately reserved for wealthy
+    and well-connected investors.`,
+  },
+  {
+    title: 'Impactful investments',
+    icon: 'icons/heart.svg',
+    meta: `Growing businesses that create jobs and drive growth.
+    Create real impact in local communities.`,
+  },
+  {
     title: 'Returns processed for you',
-    icon: 'icons/returns.svg',
+    icon: 'icons/return.svg',
     meta: `No need to chase payments from business owners. NextSeed facilitates
       any payments from your investments automatically.`,
   },
@@ -76,7 +76,7 @@ const HowItWorksSummary = ({ uiStore, authStore }) => (
       </div>
       <p className={`${uiStore.responsiveVars.isMobile ? '' : 'center-align'} note`}>
         <sup>1</sup>This represents the percent of businesses that began the application
-        process, passed NextSeed&apos;s objective diligence<Responsive minWidth={992} as="br" /> criteria, and launched an offering on the platform since NextSeed&apos;s inception.
+        process, passed NextSeed&apos;s objective diligence criteria, and launched an offering on the platform since NextSeed&apos;s inception.
       </p>
     </Container>
   </section>
@@ -86,7 +86,7 @@ const HowItWorksSummary = ({ uiStore, authStore }) => (
       <Grid>
         <Grid.Row>
           <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-            <Header as="h2" className={uiStore.responsiveVars.uptoTablet ? 'mb-30' : 'mb-40'}>We’ve built an alternative investment platfrom from the ground up.</Header>
+            <Header as="h2" className={uiStore.responsiveVars.uptoTablet ? 'mb-30' : 'mb-40'}>We’ve built an alternative<Responsive minWidth={768} as="br" /> investment platfrom<Responsive minWidth={768} as="br" /> from the ground up.</Header>
             <p className={uiStore.responsiveVars.uptoTablet ? 'mb-14' : 'mb-50'}>
             Browse highly vetted companies and invest in just a few clicks, on any device.
             </p>
