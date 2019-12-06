@@ -263,6 +263,7 @@ export default class InvestNow extends React.Component {
           offeringSecurityType={securityType}
           confirm={this.handleConfirm}
           cancel={this.handleCancel}
+          refLink={this.props.refLink}
         />,
         isValid: '',
         onlyDisableNextButton: true,
@@ -270,6 +271,7 @@ export default class InvestNow extends React.Component {
     ];
     const isMultiStepButtonsVisible = !!showAccountList && multipleAccountExsists;
     const closeOnDimmerClickAction = false;
+    this.props.investmentStore.setFieldValue('disablePrevButton', true);
     return (
       <div className="step-progress">
         {

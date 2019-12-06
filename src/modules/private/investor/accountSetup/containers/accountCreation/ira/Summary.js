@@ -52,7 +52,7 @@ export default class Summary extends Component {
       FUNDING_FRM,
       IDENTITY_FRM,
     } = this.props.iraAccountStore;
-    const { errors } = this.props.uiStore;
+    const { errors, inProgressArray } = this.props.uiStore;
     const accountType = find(
       ACC_TYPES_FRM.fields.iraAccountType.values,
       { value: ACC_TYPES_FRM.fields.iraAccountType.value },
@@ -185,7 +185,7 @@ export default class Summary extends Component {
         </p>
         )}
         <div className="center-align mt-30">
-          <Button primary size="large" fluid={isMobile} className="relaxed" content="Create Account" onClick={() => this.props.handleCreateAccount('ira')} disabled={!this.props.iraAccountStore.isValidIraForm} />
+          <Button primary size="large" fluid={isMobile} className="relaxed" content="Submit for review" onClick={() => this.props.handleCreateAccount('ira')} disabled={!this.props.iraAccountStore.isValidIraForm || inProgressArray.includes('submitAccountLoader')} />
         </div>
         {!isMobile && (
 <p className="center-align mt-30 grey-header">

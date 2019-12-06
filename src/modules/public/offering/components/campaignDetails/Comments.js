@@ -172,7 +172,7 @@ class Comments extends Component {
               </Form>
             </section>
           )
-          : (['BD_506C'].includes(offeringRegulation) && !isInvestorAccreditated)
+          : (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated)
             ? (
             <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
               <p>In order to leave comments, please confirm your accredited investor status.</p>
