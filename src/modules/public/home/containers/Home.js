@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Container, Divider, Header, Button, Responsive } from 'semantic-ui-react';
+import { Container, Divider, Header, Button, Responsive, Grid } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import HowItWorksSummary from '../components/HowItWorksSummary';
 // import HowItWorks from '../components/HowItWorks';
@@ -9,6 +9,7 @@ import FeaturedOn from '../../shared/components/FeaturedOn';
 import CampaignList from '../../offering/components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 import NewsLetter from '../components/NewsLetter';
+import NSImage from '../../../shared/NSImage';
 
 @inject('campaignStore', 'uiStore')
 @observer
@@ -58,20 +59,35 @@ class Home extends Component {
         <FeaturedOn />
         <Divider as={Container} fitted />
         <section>
-          <Container textAlign={responsiveVars.isMobile ? '' : 'center'} className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
-            <Header as="h2">Looking to raise capital for your business?</Header>
-            <p>
-              Whether expanding or opening a brand-new concept, we make it<Responsive minWidth={992} as="br" />easy to raise money from thousands of local investors.
-            </p>
-            <div className={`${responsiveVars.isMobile ? 'mb-50' : 'center-align mb-40'} mt-30`}>
-              <Button fluid={responsiveVars.isMobile} className="relaxed" primary content="Apply Online" />
-            </div>
+          <Container className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
+            <Grid columns={2} stackable>
+              <Grid.Column>
+                <Header as="h2" className={responsiveVars.isMobile ? 'mb-20' : 'mb-30'}>Looking to raise capital for your business?</Header>
+                <p className={responsiveVars.isMobile ? 'mb-30' : 'mb-60'}>
+                  Whether expanding or opening a brand-new concept, we make it<Responsive minWidth={992} as="br" />easy to raise money from thousands of local investors.
+                </p>
+                {!responsiveVars.isMobile
+                  && <Button fluid={responsiveVars.isMobile} className="relaxed" primary content="Apply Online" />}
+                {responsiveVars.isMobile && <NSImage path="home.jpg" />}
+              </Grid.Column>
+              <Grid.Column>
+                {!responsiveVars.isMobile && <NSImage path="home.jpg" />}
+                {responsiveVars.isMobile
+                && <Button fluid={responsiveVars.isMobile} className="relaxed mb-14" primary content="Apply Online" />}
+              </Grid.Column>
+            </Grid>
             <Divider section />
-            <Header as="h2" className={responsiveVars.isMobile ? 'mt-40' : 'mt-80'}>Join our newsletter</Header>
-            <p className="mb-30">
-              Sign up to stay informed about new investment opportunities, updates and events.
-            </p>
-            <SubscribeForNewsletter className="public-form" />
+            <Grid columns={2} stackable>
+              <Grid.Column>
+                <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-10' : 'mt-80 mb-20'}>Join our newsletter</Header>
+                <p className={responsiveVars.isMobile ? 'mb-10' : ''}>
+                  Sign up to stay informed about new investment<Responsive minWidth={768} as="br" /> opportunities, updates and events.
+                </p>
+              </Grid.Column>
+              <Grid.Column verticalAlign="middle">
+                <SubscribeForNewsletter className={`${responsiveVars.isMobile ? 'mt-0' : 'mt-80'} public-form`} />
+              </Grid.Column>
+            </Grid>
           </Container>
         </section>
         <Route path="/subscribe/newsletter" component={NewsLetter} />
