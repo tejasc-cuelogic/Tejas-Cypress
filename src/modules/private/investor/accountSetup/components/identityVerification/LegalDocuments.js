@@ -88,7 +88,7 @@ const LegalDocuments = observer(({
         </Form>
       </Modal.Content>
       <Modal.Actions className="signup-actions">
-        <p><Link to="/app/summary">I’ll finish this later</Link></p>
+        <p><Link to="/app/setup">I’ll finish this later</Link></p>
       </Modal.Actions>
     </Modal>
 ));

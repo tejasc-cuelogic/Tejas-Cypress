@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import moment from 'moment';
 import React from 'react';
-import { Icon } from 'semantic-ui-react';
 import Validator from 'validatorjs';
 import Helper from '../helper/utility';
 
@@ -10,6 +9,10 @@ import Helper from '../helper/utility';
 Validator.register('minAcnum', (value, requirement, attribute) => {
   return value.toString().length > 3 && value.toString().length < 18;
 }, 'The :attribute should be at least 4 digits and at most 17 digits');
+
+
+Validator.register('dateFormat', value => moment(value, 'MM/DD/YYYY').isValid(),
+  'Invalid Date');
 
 export const PLAID_URL = process.env.REACT_APP_PLAID_URL;
 
@@ -138,18 +141,18 @@ export const IND_LINK_BANK_MANUALLY = {
     key: 'accountType',
     values: [
       {
-        label: 'Savings',
-        name: 'savings',
-        value: 'SAVINGS',
-        description: 'Earnings from investments on a Traditional Indiviudal Retirement Account grow tax-deferred.',
-        rawValue: 'savings',
-      },
-      {
         label: 'Checking',
         name: 'checking',
         value: 'CHECKING',
         description: 'Earnings from investments in a Roth Retirement Account grow tax free.',
         rawValue: 'checking',
+      },
+      {
+        label: 'Savings',
+        name: 'savings',
+        value: 'SAVINGS',
+        description: 'Earnings from investments on a Traditional Indiviudal Retirement Account grow tax-deferred.',
+        rawValue: 'savings',
       },
     ],
     error: undefined,
@@ -252,14 +255,16 @@ export const IRA_ACC_TYPES = {
     values: [
       {
         label: 'Traditional',
+        labelDescription: 'Investments are made with pre-tax dollars; earnings grow tax-deferred',
         value: 0,
-        description: 'Earnings from investments on a Traditional Indiviudal Retirement Account grow tax-deferred.',
+        description: 'Investments are made with pre-tax dollars; earnings grow tax-deferred',
         rawValue: 'traditional',
       },
       {
         label: 'Roth',
+        labelDescription: 'Investments are made with after-tax dollars; earnings grow tax-free',
         value: 1,
-        description: 'Earnings from investments in a Roth Retirement Account grow tax free.',
+        description: 'Investments are made with after-tax dollars; earnings grow tax-free',
         rawValue: 'roth',
       },
     ],
@@ -274,19 +279,22 @@ export const IRA_FUNDING = {
     key: 'fundingType',
     values: [
       {
-        label: 'Check',
+        label: 'Checking Account',
+        labelDescription: <>Link an external checking account;<br />annual contribution limits apply</>,
         value: 0,
         description: 'Fund IRA by Check',
         rawValue: 'check',
       },
       {
         label: 'IRA Transfer',
+        labelDescription: 'Transfer funds from an existing like-type IRA account',
         value: 1,
         description: 'Fund IRA by Transfer',
         rawValue: 'iraTransfer',
       },
       {
-        label: 'Direct Rollover',
+        label: 'Rollover',
+        labelDescription: 'Roll over funds from your 401(k), 403(b), or other qualified account',
         value: 2,
         description: 'Fund IRA by Direct Rollover',
         rawValue: 'directRollOver',
@@ -303,7 +311,7 @@ export const IRA_FIN_INFO = {
     value: '',
     error: undefined,
     rule: 'required|numeric',
-    tooltip: (<span>Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the <a target="_blank" rel="noopener noreferrer" href="https://www.sec.gov/oiea/investor-alerts-bulletins/ib_crowdfunding-.html">SEC`s Investor Bulletin</a> for the latest information</span>),
+    tooltip: (<>Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the <a target="_blank" rel="noopener noreferrer" href="https://www.sec.gov/oiea/investor-alerts-bulletins/ib_crowdfunding-.html">SEC`s Investor Bulletin</a> for the latest information</>),
     label: 'Net worth',
     placeHolder: 'Your networth',
     maxLength: 15,
@@ -343,7 +351,7 @@ export const ENTITY_FIN_INFO = {
   netAssets: {
     key: 'netAssets',
     value: '',
-    label: 'Entity Net Assets',
+    label: 'Net Assets',
     error: undefined,
     rule: 'required|numeric',
     maxLength: 15,
@@ -351,7 +359,7 @@ export const ENTITY_FIN_INFO = {
   annualIncome: {
     key: 'annualIncome',
     value: '',
-    label: 'Entity Annual Revenue',
+    label: 'Annual Revenue',
     error: undefined,
     rule: 'required|numeric',
     maxLength: 15,
@@ -410,7 +418,7 @@ export const ENTITY_TRUST_INFO = {
     rule: 'required',
   },
   trustDate: {
-    key: 'trustDate', value: moment(`${new Date().getFullYear()}-01-01`).format('MM-DD-YYYY'), error: undefined, rule: 'required', label: 'Date of Trust',
+    key: 'trustDate', value: moment(`${new Date().getFullYear()}-01-01`).format('MM-DD-YYYY'), error: undefined, rule: 'required|dateFormat', label: 'Date Trust Established',
   },
 };
 
@@ -449,18 +457,20 @@ export const ACC_TYPE = {
     value: 0,
     values: [
       {
-        label: (<label><Icon className="ns-individual-line" />Individual</label>),
+        label: 'Individual Account',
+        labelDescription: 'Get started with a personal investment account',
         value: 0,
         description: `Open a NextSeed investment account to begin investing in local businesses.
         An initial deposit can be quickly and securely completed by linking your checking account.
         You can easily connect your account by logging in through our secure system or by
         manually entering your account information. The uninvested cash in your account is
-        [FDIC-insured][note: hover over with footnote] up to $250,000 and is interest-bearing.
+        [FDIC-insured] up to $250,000 and is interest-bearing.
         We safeguard your information with bank-level security measures.`,
         accType: 'individual',
       },
       {
-        label: (<label><Icon className="ns-ira-line" />IRA</label>),
+        label: 'Self-Directed IRA',
+        labelDescription: 'Open a traditional or Roth IRA (setup & annual fees on us)',
         value: 1,
         description: `Open a self-directed NextSeed IRA to begin investing in local businesses. (Traditional and Roth IRA options available.)
         Minimum opening deposit: $5,000. Investment limits apply.
@@ -469,11 +479,12 @@ export const ACC_TYPE = {
         accType: 'ira',
       },
       {
-        label: (<label><Icon className="ns-entity-line" />Entity</label>),
+        label: 'Entity Account',
+        labelDescription: 'Invest using your corporation, LLC, LP, or trust',
         value: 2,
         description: `Invest in local businesses through an Entity investment account. (Note: Investment limits for Entity accounts are treated separately from Individual investment accounts)
         An initial deposit can be quickly and securely completed by linking your entity checking account. You can easily connect your account by logging in through our secure system or by manually entering your account information.
-        The uninvested cash in your account is [FDIC-insured][note: hover over with footnote] up to $250,000 and is interest-bearing.   We safeguard your information with bank-level security measures.  `,
+        The uninvested cash in your account is [FDIC-insured] up to $250,000 and is interest-bearing.   We safeguard your information with bank-level security measures.  `,
         accType: 'entity',
       },
     ],
@@ -497,14 +508,15 @@ export const BROKERAGE_EMPLOYMENT = {
       ],
     skipField: true,
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
   },
   brokerageFirmName: {
     key: 'brokerageFirmName',
     value: '',
-    label: 'Member Firm Name',
+    label: 'Firm Name',
     error: undefined,
-    rule: 'alphaBrokerage|required_if:brokerageEmployment,yes',
+    // rule: 'alphaBrokerage|required_if:brokerageEmployment,yes',
+    rule: 'optional',
     placeHolder: 'Enter here',
     customErrors: {
       required_if: 'required',
@@ -527,12 +539,12 @@ export const PUBLIC_COMPANY_REL = {
       ],
     skipField: true,
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
   },
   publicCompanyTicker: {
     key: 'publicCompanyTicker',
     value: '',
-    label: 'Ticker symbol',
+    label: 'Ticker Symbol or Company Name',
     error: undefined,
     rule: 'alphaPublicCompanyRel|required_if:publicCompanyRel,yes',
     placeHolder: 'E.g. GOOG',
@@ -552,7 +564,7 @@ export const EMPLOYMENT = {
           label: 'Employed', value: 'EMPLOYED', key: 'Employed', text: 'Employed',
         },
         {
-          label: 'Self Employed', value: 'SELF_EMPLOYED', key: 'Self Employed', text: 'Self Employed',
+          label: 'Self-Employed', value: 'SELF_EMPLOYED', key: 'Self Employed', text: 'Self Employed',
         },
         {
           label: 'Retired', value: 'RETIRED', key: 'Retired', text: 'Retired',
@@ -575,7 +587,7 @@ export const EMPLOYMENT = {
     label: 'Employer',
     error: undefined,
     rule: 'required_if:status,EMPLOYED',
-    placeHolder: 'Type employer name',
+    placeHolder: 'Enter employer name',
     objRef: 'employment',
     objRefOutput: 'employment',
     customErrors: {
@@ -585,10 +597,10 @@ export const EMPLOYMENT = {
   position: {
     key: 'position',
     value: '',
-    label: 'Current Position Held',
+    label: 'Position',
     error: undefined,
     rule: 'required_if:status,EMPLOYED',
-    placeHolder: 'E.g. CEO',
+    placeHolder: 'e.g. Manager',
     objRef: 'employment',
     objRefOutput: 'employment',
     customErrors: {

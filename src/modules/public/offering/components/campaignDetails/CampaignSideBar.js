@@ -124,7 +124,7 @@ export default class CampaignSideBar extends Component {
                 && (
                   <p className="raise-type mt-20 mb-0">
                     {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
-                    {isMobile
+                    {/* {isMobile
                       ? (<PopUpModal label={CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} content={(<span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)} />)
                       : (
                         <Popup
@@ -134,7 +134,7 @@ export default class CampaignSideBar extends Component {
                           position="top center"
                         />
                       )
-                    }
+                    } */}
                   </p>
                 )
               }

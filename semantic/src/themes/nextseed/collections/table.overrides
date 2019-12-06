@@ -172,6 +172,9 @@
             }
             .offering-title{
                 display:inline-block;
+                a{
+                    color: @primary-one !important;
+                }
                 .disable-click {
                     pointer-events: none;
                 }
@@ -191,6 +194,9 @@
             background-color:@white;
             font-weight:@fontMedium;
             color:@neutral-middark;
+        }
+        &.selectable tbody tr:hover{
+            background: fade(@primary-one, 6%) !important;
         }
     }
     &.application-list{

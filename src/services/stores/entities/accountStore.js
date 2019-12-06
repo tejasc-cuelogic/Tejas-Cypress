@@ -36,12 +36,15 @@ export class AccountStore {
       linkbankValue: 0,
     },
     1: {
-      store: iraAccountStore, location: 3, accountId: 'iraAccountId', name: 'ira', linkbankValue: 3,
-
+      store: iraAccountStore,
+      location: 5,
+      accountId: 'iraAccountId',
+      name: 'ira',
+      linkbankValue: 4,
     },
     2: {
       store: entityAccountStore,
-      location: 5,
+      location: 6,
       accountId: 'entityAccountId',
       name: 'entity',
       linkbankValue: 5,
@@ -124,7 +127,7 @@ export class AccountStore {
     const accountId = get(accountDetails, 'details.accountId') || store[`${accountType}AccountId`];
     await this.updateToAccountProcessing(accountId, accountvalue);
     window.sessionStorage.removeItem('cipErrorMessage');
-    const url = store.showProcessingModal ? `${match.url}/${accountType}/processing` : '/app/summary';
+    const url = store.showProcessingModal ? `${match.url}/${accountType}/processing` : '/app/setup';
     store.setFieldValue('showProcessingModal', false);
     return url;
   }
