@@ -8,7 +8,7 @@ import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { ApolloLink } from 'apollo-link';
 import { authStore } from '../services/stores';
-import { REACT_APP_PUBLIC_API, REACT_APP_PUBLIC_API_KEY, REACT_APP_DEPLOY_ENV } from '../constants/common';
+import { REACT_APP_PUBLIC_API, REACT_APP_PUBLIC_API_KEY, REACT_APP_DEPLOY_ENV, RETRY_CONFIG } from '../constants/common';
 
 global.fetch = fetch;
 
@@ -16,6 +16,7 @@ const uri = `${REACT_APP_PUBLIC_API}/graphql`;
 
 export const GqlClient = new ApolloClient({
   link: ApolloLink.from([
+    new RetryLink(RETRY_CONFIG),
     onError((res) => {
       // if (graphQLErrors) {
       //   graphQLErrors.forEach(({ message, locations, path }) =>
@@ -29,18 +30,12 @@ export const GqlClient = new ApolloClient({
         authStore.sendErrorMail(res);
       }
     }),
-    new RetryLink({
-      delay: {
-        initial: 100, max: 3000, jitter: false,
-      },
-      attempts: { max: 5 },
-    }),
     new HttpLink({
       uri,
       headers: {
-        'x-api-key': REACT_APP_PUBLIC_API_KEY,
+        'x-api-key': REACT_APP_PUBLIC_API_KEY
       },
-    })
+    }),
   ]),
   cache: new InMemoryCache()
 });
