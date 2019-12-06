@@ -23,23 +23,23 @@ class Helper {
     const details = {};
     if (key === 'id.error') {
       details.alertMsg = 'Verification failed';
-      details.route = '/app/summary/identity-verification/1';
+      details.route = '/app/setup/identity-verification/1';
       details.msgType = 'error';
       details.key = key;
     } else if (key === 'id.failure' && questions) {
       details.alertMsg = 'Verification failed';
-      details.route = '/app/summary/identity-verification/2';
+      details.route = '/app/setup/identity-verification/2';
       details.display = false;
       details.msgType = 'error';
       details.key = key;
     } else if (key === 'id.success') {
       details.alertMsg = 'Verification passed!';
-      details.route = '/app/summary';
+      details.route = '/app/setup';
       details.msgType = 'success';
       details.key = key;
     } else {
       details.alertMsg = 'Verification failed';
-      details.route = '/app/summary/identity-verification/1';
+      details.route = '/app/setup/identity-verification/1';
       details.msgType = 'error';
       details.key = key;
     }

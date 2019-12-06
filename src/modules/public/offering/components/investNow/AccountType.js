@@ -4,7 +4,7 @@ import { Header, Form, Button, Icon, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import cookie from 'react-cookies';
-import { FormRadioGroup } from '../../../../../theme/form';
+import { FormRadioGroup, FormArrowButton } from '../../../../../theme/form';
 import { Spinner } from '../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -262,6 +262,7 @@ class AccountType extends Component {
     const { getCurrentInvestNowHealthCheck, investNowError } = this.props.investmentLimitStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { campaign } = this.props.campaignStore;
+    const { submitStep } = this.props;
     const offeringId = get(campaign, 'id');
     // const offeringDetailObj =
     //  this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
@@ -324,7 +325,7 @@ class AccountType extends Component {
     let redirectURL = '';
     if (!showAccountList || investAccTypes.values.length <= 1 || this.props.changeInvest) {
       redirectURL = (!isRegulationCheck || (isRegulationCheck && selectedAccountStatus !== 'FULL') || !isAccountCreated) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') && userProfileFullStatus !== 'FULL'
-        ? `${this.props.userDetailsStore.pendingStep}` : (currentUser && currentUser.roles && currentUser.roles.includes('investor') && selectedAccountStatus === 'PARTIAL') ? `${this.props.userDetailsStore.pendingStepForPartialAndProcessingAccount}` : '/app/summary' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
+        ? `${this.props.userDetailsStore.pendingStep}` : (currentUser && currentUser.roles && currentUser.roles.includes('investor') && selectedAccountStatus === 'PARTIAL') ? `${this.props.userDetailsStore.pendingStepForPartialAndProcessingAccount}` : '/app/setup' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
     }
     if ((isRegulationCheck && selectedAccountStatus === 'FULL' && !userAccredetiationState) || this.props.inProgress) {
       return <Spinner loaderMessage="Loading.." />;
@@ -357,12 +358,23 @@ class AccountType extends Component {
                   ? (
                     <>
                       <p className="center-align">{headerSubheaderObj.subHeader}</p>
-                      <FormRadioGroup
-                        name="investAccountType"
-                        containerclassname="button-radio center-align"
-                        fielddata={investAccTypes}
-                        changed={accTypeChanged}
-                      />
+                      {isMobile
+                        ? (
+                        <FormArrowButton
+                          fielddata={investAccTypes}
+                          name="investAccountType"
+                          changed={accTypeChanged}
+                          action={submitStep}
+                        />
+                        )
+                        : (
+                        <FormRadioGroup
+                          name="investAccountType"
+                          containerclassname="button-radio center-align"
+                          fielddata={investAccTypes}
+                          changed={accTypeChanged}
+                        />
+                        )}
                     </>
                   )
                   : (

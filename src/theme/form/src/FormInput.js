@@ -1,9 +1,11 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon, Input } from 'semantic-ui-react';
+import { Form, Popup, Icon, Input, Modal } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { FieldError } from '../../shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @observer
 export default class FormInput extends Component {
@@ -53,14 +55,26 @@ export default class FormInput extends Component {
               {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
               {tooltip
                 && (
-                  <Popup
-                    hoverable={props.hoverable}
-                    trigger={<Icon className="ns-help-circle" />}
-                    content={tooltip}
-                    position="top center"
-                    className={props.name === 'securitiesExemption' ? 'left-align' : 'center-align'}
-                    wide
-                  />
+                  <>
+                    {isMobile ? (
+                      <Modal size="tiny" trigger={<Icon className="ns-help-circle" />} closeIcon>
+                        <h5>
+                          {label}
+                        </h5>
+                        {tooltip}
+                      </Modal>
+                    ) : (
+                        <Popup
+                          hoverable={props.hoverable}
+                          trigger={<Icon className="ns-help-circle" />}
+                          content={tooltip}
+                          position="top center"
+                          className={props.name === 'securitiesExemption' ? 'left-align' : 'center-align'}
+                          wide
+                        />
+                    )
+                    }
+                  </>
                 )
               }
               {props.removed
