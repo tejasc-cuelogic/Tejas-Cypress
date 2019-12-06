@@ -136,12 +136,14 @@ export default class OfferingLaunch extends Component {
           }
         </Form.Group>
         <Header as="h4">Edgar Link</Header>
-        <FormInput
-          displayMode={isReadonly}
-          name="edgarLink"
-          fielddata={COMPANY_LAUNCH_FRM.fields.edgarLink}
-          changed={(e, result) => formChange(e, result, formName)}
-        />
+        {['edgarLink', 'investmentConfirmationTemplateName'].map(field => (
+          <FormInput
+            displayMode={isReadonly}
+            name={field}
+            fielddata={COMPANY_LAUNCH_FRM.fields[field]}
+            changed={(e, result) => formChange(e, result, formName)}
+          />
+        ))}
         <Divider hidden />
         <ButtonGroupType2
           submitted={submitted}
