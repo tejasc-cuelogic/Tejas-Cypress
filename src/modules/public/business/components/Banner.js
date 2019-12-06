@@ -25,29 +25,23 @@ class Banner extends Component {
   }
 
   render() {
-    const { clientWidth } = document.documentElement;
-    const isTablet = clientWidth >= 768 && clientWidth < 992;
     return (
       <section className="banner home-banner">
         <Container>
           <Responsive minWidth={768} as={React.Fragment}>
             <div className="banner-caption">
               <Header as="h2">
-                Accelerate your<br />
-                growth with the<br />
-                power of the crowd.
+                Accelerate your growth with<br />
+                the power of the crowd.
               </Header>
-              <Button.Group className={!isTablet && 'mt-30'}>
-                <Button secondary content="Business Application" onClick={() => this.redirectTo('business')} />
-                <Button secondary content="CRE Application" onClick={() => this.redirectTo('cre')} />
-              </Button.Group>
+              <Button primary content="Apply Online" className="mt-30" />
+            </div>
+            <div className="banner-meta">
+              <p>
+                <b>Brian Ching | Pitch 25</b><br />Raised $549,000 from 392 investors
+              </p>
             </div>
           </Responsive>
-          <div className="banner-meta">
-            <p>
-              <b>Brian Ching | Pitch 25</b><br />Raised $549,000 from 392 investors
-            </p>
-          </div>
         </Container>
       </section>
     );

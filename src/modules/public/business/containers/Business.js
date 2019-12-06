@@ -5,7 +5,7 @@ import { Responsive, Visibility } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
-import { PublicSubNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 
@@ -45,7 +45,7 @@ class Business extends Component {
   module = name => DataFormatter.upperCamelCase(name);
 
   render() {
-    const { location, match, navStore } = this.props;
+    const { location, match } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <>
@@ -59,13 +59,13 @@ class Business extends Component {
           continuous
           className={`slide-down ${location.pathname.split('/')[2]}`}
         >
-          <PublicSubNav
+          {/* <PublicSubNav
             stepInRoute={navStore.stepInRoute}
             location={location}
             currentUser={this.props.userStore.currentUser}
             navItems={navItems}
             title="Fundraising"
-          />
+          /> */}
           <SuspenseBoundary>
             <Switch>
               <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />

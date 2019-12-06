@@ -44,10 +44,11 @@ section{
                 font-size: @13px;
                 line-height: @20px;
                 @media only screen and (max-width: @largestMobileScreen) {
-                    background: fade(@neutral-darkwhite, 90%);
+                    background: fade(@fullBlack, 70%);
                     width: ~"calc(100% + "(@relative42px)~")";
                     margin: 0 -@relative21px;
                     padding: @relative14px;
+                    color: @white;
                 }
             }
         }
@@ -78,7 +79,7 @@ section{
             }
         }
         &.business-banner{
-            background:url(../../assets/images/banners/how-it-works-banner.jpg) top center no-repeat;
+            background:url(../../assets/images/banners/how-it-works-banner.png) top center no-repeat;
             @media only screen and (max-width : @largestMobileScreen){
                 background:url(../../assets/images/banners/how-it-works-banner-mobile.jpg) center center no-repeat;
                 background-size: cover;
@@ -325,4 +326,8 @@ section{
             background-size: auto 66%;
         }
     } 
+}
+.investor-priority-section{
+    background:url(../../assets/images/investors/left-phone-mockup.png) no-repeat;
+    background-position: -40%;
 }

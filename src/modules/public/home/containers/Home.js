@@ -4,13 +4,13 @@ import { inject, observer } from 'mobx-react';
 import { Container, Divider, Header, Button, Responsive } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import HowItWorksSummary from '../components/HowItWorksSummary';
-import HowItWorks from '../components/HowItWorks';
+// import HowItWorks from '../components/HowItWorks';
 import FeaturedOn from '../../shared/components/FeaturedOn';
 import CampaignList from '../../offering/components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 import NewsLetter from '../components/NewsLetter';
 
-@inject('campaignStore')
+@inject('campaignStore', 'uiStore')
 @observer
 class Home extends Component {
   constructor(props) {
@@ -27,48 +27,49 @@ class Home extends Component {
     const {
       active, loading,
     } = this.props.campaignStore;
-    const isMobile = document.documentElement.clientWidth < 768;
+    const { responsiveVars } = this.props.uiStore;
     return (
       <>
         <Banner />
-        <Responsive maxWidth={767} as={React.Fragment}>
-          <Container>
-            <section>
-              <Header as="h2">Build an investment portfolio you care about.</Header>
-            </section>
-            <Divider fitted />
-          </Container>
-        </Responsive>
         <Responsive as={React.Fragment} fireOnMount onUpdate={this.handleOnUpdate}>
-          <HowItWorksSummary isMobile={isMobile} />
+          <HowItWorksSummary isMobile={responsiveVars.isMobile} />
         </Responsive>
-        <Divider fitted as={Container} />
-        <HowItWorks />
-        <Divider fitted as={Container} />
+        {/* <HowItWorks />
+        <Divider fitted as={Container} /> */}
         <CampaignList
           loading={loading}
           explore
-          campaigns={active.splice(0, 6)}
+          campaigns={active.splice(0, 3)}
           heading={(
             <>
-              <Header as="h2" textAlign="center">Latest Campaigns</Header>
-              <p className="mb-30 center-align">
-                Browse the newest investment opportunities on NextSeed.
-                The next big thing may be inviting you to participate.
+              <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} className={responsiveVars.isMobile ? 'mt-20' : 'mt-50'}>Diversify your portfolio with high-growth businesses</Header>
+              <p className={responsiveVars.isMobile ? 'mb-50' : 'mb-80 center-align'}>
+              These are just a few of the pre-vetted opportunities available in a growing number of industry categories.
               </p>
             </>
-)}
+          )}
+          loadMoreButton={(
+            <div className={`${responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'} center-align`}>
+              <Button fluid={responsiveVars.isMobile} primary content="View All Investment Opportunities" onClick={this.handleExploreBtn} />
+            </div>
+          )}
         />
-        <div className="center-align mb-50">
-          <Button secondary content="Explore Campaigns" onClick={this.handleExploreBtn} />
-        </div>
         <FeaturedOn />
-        <section className="learn-more">
-          <Container textAlign="center">
-            <Header as="h2">Want to learn more about NextSeed?</Header>
+        <section>
+          <Container textAlign={responsiveVars.isMobile ? '' : 'center'} className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
+            <Header as="h2">Looking to raise capital for your business?</Header>
+            <p>
+              Whether expanding or opening a brand-new concept, we make it<Responsive minWidth={992} as="br" />easy to raise money from thousands of local investors.
+            </p>
+            <div className={`${responsiveVars.isMobile ? 'mb-50' : 'center-align mb-40'} mt-30`}>
+              <Button fluid={responsiveVars.isMobile} className="relaxed" primary content="Apply Online" />
+            </div>
+            {!responsiveVars.isMobile && <Header as="h3" className="mb-80">It only takes 5 minutes!</Header>
+            }
+            <Divider section />
+            <Header as="h2" className={responsiveVars.isMobile ? 'mt-40' : 'mt-80'}>Join our newsletter</Header>
             <p className="mb-30">
-              Sign up for the mailing list to stay informed about new offerings,
-              updates and events.
+              Sign up to stay informed about new investment opportunities, updates and events.
             </p>
             <SubscribeForNewsletter className="public-form" />
           </Container>

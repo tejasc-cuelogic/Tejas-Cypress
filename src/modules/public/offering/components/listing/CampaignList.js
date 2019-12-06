@@ -205,6 +205,7 @@ export default class CampaignList extends Component {
                 </Grid>
                 ) : <InlineLoader text="No data found." />
             }
+            {this.props.loadMoreButton}
           </Container>
           {this.state.filters && <div className="overlay" />}
         </section>

@@ -3,11 +3,10 @@ import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import queryString from 'query-string';
-import { Visibility, Responsive } from 'semantic-ui-react';
+import { Visibility } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
-import Banner from '../components/Banner';
-import { PublicSubNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 import { REDIRECT_META } from '../../../../constants/redirect';
 
@@ -62,26 +61,26 @@ class Invest extends Component {
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
 
   render() {
-    const { match, location, navStore } = this.props;
+    const { match, location } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <>
         <MetaTagGenerator pathName={location.pathname} metaTagsData={metaTagsData} />
-        {location.pathname === '/invest/why-nextseed' || location.pathname === '/invest' ? <Banner />
+        {/* {location.pathname === '/invest/why-nextseed' || location.pathname === '/invest' ? <Banner />
           : <Responsive as="section" maxWidth={767} className={`banner ${location.pathname.split('/')[2]}`} />
-        }
+        } */}
         <Visibility
           onUpdate={this.handleUpdate}
           continuous
           className={`slide-down ${location.pathname.split('/')[2]}`}
         >
-          <PublicSubNav
+          {/* <PublicSubNav
             stepInRoute={navStore.stepInRoute}
             location={location}
             currentUser={this.props.userStore.currentUser}
             navItems={navItems}
             title="Investing"
-          />
+          /> */}
           <SuspenseBoundary>
             <Switch>
               <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />

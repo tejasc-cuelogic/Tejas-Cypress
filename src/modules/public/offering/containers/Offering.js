@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Container, Button, Divider } from 'semantic-ui-react';
+import { Header, Container, Button } from 'semantic-ui-react';
 // import Banner from '../components/Banner';
 import CampaignList from '../components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const LoadMoreBtn = ({ action, param }) => (
-  <div className={`${isMobile ? 'mb-30' : 'mb-50'} center-align`} data-cy={param}>
-    <Button secondary content="View More" onClick={() => action(param)} />
+  <div className={`${isMobile ? 'mb-20 mt-40' : 'mb-30 mt-80'} center-align`} data-cy={param}>
+    <Button fluid={isMobile} secondary content="View More" onClick={() => action(param)} />
   </div>
 );
-@inject('campaignStore')
+@inject('campaignStore', 'uiStore')
 @observer
 class Offering extends Component {
   constructor(props) {
@@ -26,33 +26,30 @@ class Offering extends Component {
       active, completed, loading, completedLoading, loadMoreRecord, activeList,
       completedList, activeToDisplay, completedToDisplay, RECORDS_TO_DISPLAY,
     } = this.props.campaignStore;
+    const { responsiveVars } = this.props.uiStore;
     return (
       <>
-        {/* <Banner /> */}
-        {/* <Responsive maxWidth={767} as={Container}>
-          <Header as="h2" className="mt-30">
-            Invest in growing local businesses
-          </Header>
-        </Responsive> */}
         <CampaignList
           refLink={this.props.match.url}
           loading={loading}
           campaigns={active}
           filters
-          heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-10' : 'mb-50'}>Active Campaigns</Header>}
-          subheading={<p className="campaign-subheader center-align">Invest in the growth of the following {isMobile ? <br /> : ''} local businesses</p>}
+          heading={<Header as={responsiveVars.isMobile ? 'h3' : 'h2'} textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>Active Campaigns</Header>}
+          subheading={<p className={responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}>Browse the newest investment opportunities on NextSeed. {!responsiveVars.isMobile && <br /> }The next big thing may be inviting you to participate.</p>}
+          loadMoreButton={(
+            <>
+            {activeList && activeList.length > RECORDS_TO_DISPLAY
+              && activeToDisplay < activeList.length
+              && <LoadMoreBtn action={loadMoreRecord} param="activeToDisplay" />
+            }
+            </>
+          )}
         />
-        {activeList && activeList.length > RECORDS_TO_DISPLAY
-          && activeToDisplay < activeList.length
-          && <LoadMoreBtn action={loadMoreRecord} param="activeToDisplay" />
-        }
-        <Divider section hidden />
-        <Divider hidden />
         <section className="bg-offwhite">
-          <Container textAlign="center">
-            <Header as={isMobile ? 'h3' : 'h2'}>Be the first to know about {isMobile ? <br /> : ''} new opportunities</Header>
+          <Container textAlign={responsiveVars.isMobile ? '' : 'center'} className="mb-20 mt-20">
+            <Header as="h2">Never miss an opportunity</Header>
             <p className="mb-30">
-              Sign up to have exclusive investment opportunities delivered straight to your inbox.
+              Sign up to stay informed about new investment opportunities, updates and events.
             </p>
             <SubscribeForNewsletter className="public-form" />
           </Container>
@@ -64,16 +61,18 @@ class Offering extends Component {
               loading={completedLoading}
               campaigns={completed}
               locked={3}
-              heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-30' : 'mb-50'}>Successfully Funded on NextSeed</Header>}
+              heading={<Header as={responsiveVars.isMobile ? 'h3' : 'h2'} textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-60'}>Successfully Funded on NextSeed</Header>}
+              loadMoreButton={(
+                <>
+                {!loading && completedList && completedList.length > RECORDS_TO_DISPLAY
+                  && completedToDisplay < completedList.length
+                  && <LoadMoreBtn action={loadMoreRecord} param="completedToDisplay" />
+                }
+                </>
+              )}
             />
           )
         }
-        {!loading && completedList && completedList.length > RECORDS_TO_DISPLAY
-          && completedToDisplay < completedList.length
-          && <LoadMoreBtn action={loadMoreRecord} param="completedToDisplay" />
-        }
-        <Divider section hidden />
-        <Divider hidden />
       </>
     );
   }
