@@ -55,16 +55,13 @@ export default class FinancialInformation extends Component {
               </span>
             </p>
             {/* <p className="grey-header">Your investment limit:<span className="highlight-text
-          large ml-10">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}</span></p>
-        */}
-
+              large ml-10">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}</span></p>
+            */}
             <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20' : ''} link`}>How is this calculated?</a>
           </div>
-          
           {isMobile && (
             <Button fluid primary className="relaxed mt-20" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
           )}
-
         </Form>
       </>
     );
