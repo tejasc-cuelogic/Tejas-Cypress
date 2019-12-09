@@ -437,7 +437,7 @@ class HowItWorks extends Component {
       Have questions about how we can help your business achieve your goals? We{"'"}re here to help.
           </p>
           <div className={responsiveVars.isMobile ? '' : 'center-align'}>
-            <Button primary fluid={responsiveVars.isMobile}>Contact Us</Button>
+            <Button primary as={Link} to="/business-application/questions/need-help" fluid={responsiveVars.isMobile}>Contact Us</Button>
           </div>
         </section>
       </Container>
