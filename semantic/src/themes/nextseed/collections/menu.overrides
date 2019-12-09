@@ -45,7 +45,9 @@
                 background-color: transparent;
             }
             &.menu-button .ui.button {
-                width: 110px;
+                width: 115px;
+                padding-bottom: 0.68em;
+                padding-top: 0.68em;
                 &.basic {
                     box-shadow: 0 0 0 1px @primary-one inset !important;
                     border: none !important;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Container, Divider, Header, Button, Responsive, Grid } from 'semantic-ui-react';
 import Banner from '../components/Banner';
@@ -68,13 +68,13 @@ class Home extends Component {
                   we make it easy to raise money from thousands of local investors.
                 </p>
                 {!responsiveVars.isMobile
-                  && <Button fluid={responsiveVars.isMobile} className="relaxed" primary content="Apply Online" />}
+                  && <Button as={Link} to="/register" className="relaxed" primary>Apply Online</Button>}
                 {responsiveVars.isMobile && <NSImage path="home.jpg" />}
               </Grid.Column>
               <Grid.Column>
                 {!responsiveVars.isMobile && <NSImage path="home.jpg" />}
                 {responsiveVars.isMobile
-                && <Button fluid={responsiveVars.isMobile} className="relaxed mb-14" primary content="Apply Online" />}
+                && <Button as={Link} to="/register" primary fluid className="mt-14 relaxed">Apply Online</Button>}
               </Grid.Column>
             </Grid>
             <Divider section />
