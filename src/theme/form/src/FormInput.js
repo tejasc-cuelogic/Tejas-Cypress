@@ -24,7 +24,7 @@ export default class FormInput extends Component {
 
   change = (e) => {
     const { dataid, lowercase } = this.props;
-    const value = this.props.fielddata.rule.includes('email') ? e.target.value.trim() : e.target.value;
+    const value = this.props.fielddata && this.props.fielddata.rule && this.props.fielddata.rule.includes('email') ? e.target.value.trim() : e.target.value;
     this.props.changed(e, { name: e.target.name, value: (lowercase ? value.toLowerCase() : value), dataid });
   }
 
