@@ -357,10 +357,10 @@ class HowItWorks extends Component {
                     <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
                   “{t.description}”
                     </Item.Description>
-                    <Item className="testimonial-user-details">
+                    <Item.Extra className="testimonial-user-details">
                       <p><b>{t.name}</b></p>
                       <span>{t.investment}</span>
-                    </Item>
+                    </Item.Extra>
                   </Item.Content>
                 </Item>
               </Item.Group>
