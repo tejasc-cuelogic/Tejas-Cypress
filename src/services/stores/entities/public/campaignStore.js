@@ -1,13 +1,13 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce } from 'lodash';
+import { get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
-import { STAGES } from '../../../constants/admin/offerings';
+// import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
 import { userDetailsStore, watchListStore, userStore, authStore } from '../../index';
@@ -74,8 +74,8 @@ export class CampaignStore {
   }
 
   @action
-  initRequest = (publicRef, referralCode = false, field = 'data') => {
-    const stage = Object.keys(pickBy(STAGES, s => publicRef.includes(s.publicRef)));
+  initRequest = (stage, referralCode = false, field = 'data') => {
+    // const stage = Object.keys(pickBy(STAGES, s => publicRef.includes(s.publicRef)));
     const variables = { filters: { stage } };
     if (referralCode) {
       variables.filters.referralCode = referralCode;

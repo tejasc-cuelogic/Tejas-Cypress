@@ -81,7 +81,7 @@ export default class RedirectManager extends React.PureComponent {
   }
 
   findIssuerReferralCode = (referralCode) => {
-    this.props.campaignStore.initRequest(['creation', 'active', 'completed'], referralCode.toLowerCase()).then((data) => {
+    this.props.campaignStore.initRequest(['CREATION', 'LIVE', 'COMPLETE'], referralCode.toLowerCase()).then((data) => {
       if (data) {
         this.setState({ found: 2 });
         if (this.props.authStore.isUserLoggedIn) {

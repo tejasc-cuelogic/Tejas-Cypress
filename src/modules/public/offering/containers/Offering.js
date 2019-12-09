@@ -16,8 +16,8 @@ const LoadMoreBtn = ({ action, param }) => (
 class Offering extends Component {
   constructor(props) {
     super(props);
-    this.props.campaignStore.initRequest(['active']).finally(() => {
-      this.props.campaignStore.initRequest(['completed'], false, 'completedOfferings');
+    this.props.campaignStore.initRequest(['LIVE']).finally(() => {
+      this.props.campaignStore.initRequest(['COMPLETE'], false, 'completedOfferings');
     });
   }
 
