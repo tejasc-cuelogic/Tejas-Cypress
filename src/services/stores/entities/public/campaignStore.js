@@ -74,9 +74,9 @@ export class CampaignStore {
   }
 
   @action
-  initRequest = (stage, referralCode = false, field = 'data') => {
+  initRequest = (group, referralCode = false, field = 'data') => {
     // const stage = Object.keys(pickBy(STAGES, s => publicRef.includes(s.publicRef)));
-    const variables = { filters: { stage } };
+    const variables = { filters: { group } };
     if (referralCode) {
       variables.filters.referralCode = referralCode;
     }
