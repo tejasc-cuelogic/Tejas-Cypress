@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Header, Card, Button } from 'semantic-ui-react';
+import { Card, Button, Statistic } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { includes, capitalize } from 'lodash';
 
@@ -19,25 +19,27 @@ export default class AccountSetup extends Component {
 
   renderAccType = () => {
     const { currentActiveAccount } = this.props.userDetailsStore;
-    this.props.history.push(`/dashboard/summary/account-creation/${currentActiveAccount}`);
+    this.props.history.push(`/dashboard/setup/account-creation/${currentActiveAccount}`);
   }
 
   render() {
     const { currentActiveAccount } = this.props.userDetailsStore;
-    const msg = 'You\'re almost there! Continue setting up your NextSeed Investment Account to join the community and get access to local opportunities';
     return (
       <div className={includes(this.props.location.pathname, 'transactions') ? 'content-spacer' : ''}>
         {
-          <>
-            <Header as="h4">{currentActiveAccount === 'ira' ? currentActiveAccount.toUpperCase() : capitalize(currentActiveAccount)} Investment Account</Header>
-            <p>{msg}</p>
-            <Card fluid={isMobile}>
-              <Card.Content className="mt-10 mb-10">
-                <p><b>Account Setup</b></p>
-                <Button fluid color="green" content="Continue" onClick={() => this.renderAccType()} />
-              </Card.Content>
-            </Card>
-          </>
+      <div className="closable-card">
+        <Card fluid raised>
+          <Card.Content>
+            <Statistic size="tiny" className="cta">
+              <Statistic.Value>You&apos;re almost there!</Statistic.Value>
+              <Statistic.Label>Once you finish setting up your {currentActiveAccount === 'ira' ? currentActiveAccount.toUpperCase() : capitalize(currentActiveAccount)} Account, you can begin investing on NextSeed.</Statistic.Label>
+            </Statistic>
+            <div className="center-align">
+              <Button onClick={() => this.renderAccType()} className={isMobile && 'mt-20 ml-18'} compact color="green">Continue</Button>
+            </div>
+          </Card.Content>
+        </Card>
+        </div>
         }
       </div>
     );

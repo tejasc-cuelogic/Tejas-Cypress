@@ -64,7 +64,7 @@ const LegalIdentityQuestions = observer(({
       </Form>
     </Modal.Content>
     <Modal.Actions className="signup-actions">
-      <p><Link to="/dashboard/summary" onClick={close}>I’ll finish this later</Link></p>
+      <p><Link to="/dashboard/setup" onClick={close}>I’ll finish this later</Link></p>
     </Modal.Actions>
   </Modal>
 ));

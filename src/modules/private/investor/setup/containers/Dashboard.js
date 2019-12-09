@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
 import { Header, Card, Button } from 'semantic-ui-react';
-import { get } from 'lodash';
 // import money from 'money-math';
+import { get } from 'lodash';
 import { InlineLoader } from '../../../../../theme/shared';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import CashMovement from '../components/CashMovement';
-import StickyNotification from '../components/stickyNotification';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 import AccountCreation from '../../accountSetup/containers/accountCreation';
 import IdentityVerification from '../../accountSetup/containers/identityVerification';
 import EstablishProfile from '../../accountSetup/containers/establishProfile';
 import Helper from '../../../../../helper/utility';
 import ProccessingAccountsScreen from '../components/processingAccountsScreen';
+import StickyNotification from '../../accountSetup/components/StickyNotification';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const summaryDetails = ({
@@ -76,9 +76,9 @@ export default class Dashboard extends Component {
     }
     return (
       <>
-        <Route path="/dashboard/summary/account-creation" component={AccountCreation} />
-        <Route exact path="/dashboard/summary/identity-verification/:step" component={IdentityVerification} />
-        <Route path="/dashboard/summary/establish-profile" component={EstablishProfile} />
+        <Route path="/dashboard/setup/account-creation" component={AccountCreation} />
+        <Route exact path="/dashboard/setup/identity-verification/:step" component={IdentityVerification} />
+        <Route path="/dashboard/setup/establish-profile" component={EstablishProfile} />
         <PrivateLayout
           {...this.props}
           P4={
@@ -87,7 +87,10 @@ export default class Dashboard extends Component {
           P5={!get(multipleUserAccounts, 'noAccounts')
             ? (
             <StickyNotification
+              isInvestor
               {...this.props}
+              signupStatus={signupStatus}
+              userDetailsStore={this.props.userDetailsStore}
               multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
               accountId={get(multipleUserAccounts, 'accountId') || null}
               accountType={get(multipleUserAccounts, 'accountType') || null}
@@ -99,7 +102,7 @@ export default class Dashboard extends Component {
               ? <ProccessingAccountsScreen />
               : (
                 <>
-                  <Header as="h4">Portfolio Summary</Header>
+                  <Header as={isMobile ? 'h5' : 'h4'} className={isMobile ? 'mb-0 mt-10' : ''}>Portfolio Summary</Header>
                   <SummaryHeader details={summaryDetails(summary)} />
                   {cashMovementData && cashMovementData.length
                     ? (
@@ -108,7 +111,7 @@ export default class Dashboard extends Component {
                           ? (
                             <Card fluid>
                               <Card.Content>
-                                <Header as="h4">Investments and Payments</Header>
+                                <Header as={isMobile ? 'h5' : 'h4'}>Investments and Payments</Header>
                                 <CashMovement data={cashMovementData} />
                               </Card.Content>
                             </Card>
@@ -120,7 +123,7 @@ export default class Dashboard extends Component {
                       <>
                         <Card fluid={isMobile}>
                           <Card.Content>
-                            <Header as="h4" className="mt-10">Browse the latest investment opportunities.</Header>
+                            <Header as={isMobile ? 'h5' : 'h4'} className="mt-10">Browse the latest investment opportunities.</Header>
                             <Button fluid as={Link} target="_blank" compact to="/offerings" size="large" color="green" className="mb-10">Start investing now</Button>
                           </Card.Content>
                         </Card>

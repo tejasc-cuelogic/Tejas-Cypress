@@ -9,6 +9,7 @@ import ConfirmModal from '../../components/confirmModal';
 import Helper from '../../../../../../helper/utility';
 // import AgreementsPdfLoader from '../../../settings/components/agreements/AgreementsPdfLoader';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const successMessage = 'Check out some of the investment opportunities now available to you as a member of the NextSeed community.';
 const processingMessage = 'While we set up your account, check out some of the investment opportunities now available to you as a member of the NextSeed community.';
 @inject('identityStore', 'accountStore', 'bankAccountStore', 'uiStore', 'userDetailsStore', 'userStore', 'iraAccountStore', 'entityAccountStore', 'individualAccountStore')
@@ -21,13 +22,17 @@ export default class AccountCreation extends Component {
     const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
     const accType = INVESTMENT_ACC_TYPES.fields.accType.values[0];
     // eslint-disable-next-line prefer-destructuring
-    if (accType) {
+    if (isMobile) {
+      this.props.accountStore.setAccTypeChange();
+    } else if (accType) {
       this.props.accountStore.setAccTypeChange(accType.value);
     }
   }
 
   handleCloseModal = () => {
-    this.props.history.push('/dashboard/summary');
+    const { getInvestorAccountsRoute, hasAnyAccount } = this.props.userDetailsStore;
+    const accountType = getInvestorAccountsRoute(this.props.accountStore.INVESTMENT_ACC_TYPES.fields.accType.value);
+    this.props.history.push(hasAnyAccount ? `/dashboard/account-details/${accountType}/portfolio` : '/dashboard/setup');
   }
 
   handleUserIdentity = async (accountType) => {
@@ -55,7 +60,7 @@ export default class AccountCreation extends Component {
         this.props.uiStore.setProgress();
         this.handleLegalDocsBeforeSubmit(accountType);
       }
-    } catch {
+    } catch (err) {
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
     }
   }

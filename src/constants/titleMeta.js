@@ -14,7 +14,7 @@ const INVESTOR_INVESTMENT_ACC_META = {};
   ['portfolio', 'transfer-funds', 'bank-accounts', 'transactions', 'statements'].forEach((subtab) => {
     INVESTOR_ACC_META[`/dashboard/account-details/${acc}/${subtab}`] = `${acc === 'ira' ? 'IRA' : startCase(acc)} Account | ${startCase(subtab)} - NextSeed`;
   });
-  INVESTOR_INVESTMENT_ACC_META[`/dashboard/summary/account-creation/${acc}`] = `Create ${acc === 'ira' ? 'IRA' : startCase(acc)} Investment Account - NextSeed`;
+  INVESTOR_INVESTMENT_ACC_META[`/dashboard/setup/account-creation/${acc}`] = `Create ${acc === 'ira' ? 'IRA' : startCase(acc)} Investment Account - NextSeed`;
 });
 
 export const TITLES = {
@@ -62,8 +62,8 @@ export const TITLES = {
   ...INVESTOR_ACC_META,
   ...ADMIN_TITLE_META,
   ...INVESTOR_INVESTMENT_ACC_META,
-  '/dashboard/summary/account-creation': 'Create Investment Account - NextSeed',
-  '/dashboard/summary': 'Investor Dashboard - NextSeed',
+  '/dashboard/setup/account-creation': 'Create Investment Account - NextSeed',
+  '/dashboard/setup': 'Investor Dashboard - NextSeed',
   '/dashboard/referrals': 'Referrals - NextSeed',
   '/': 'Alternative Investments Made Simple - NextSeed',
 };

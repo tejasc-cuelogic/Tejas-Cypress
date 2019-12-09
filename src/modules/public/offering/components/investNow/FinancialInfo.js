@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, withRouter, Link } from 'react-router-dom';
-import { Header, Form, Popup, Icon, Divider, Table, Message } from 'semantic-ui-react';
+import { Header, Form, Popup, Icon, Divider, Table, Message, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { get, includes, capitalize } from 'lodash';
 import { MaskedInput } from '../../../../../theme/form';
@@ -9,6 +9,7 @@ import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 import Helper from '../../../../../helper/utility';
 import { Spinner, ListErrors } from '../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @inject('investmentStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
 @observer
@@ -62,7 +63,7 @@ class FinancialInfo extends Component {
     const validBonusRewards = investmentBonusRewards(investmentAmount);
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
-    const { match, refLink, offeringDetails } = this.props;
+    const { match, refLink, offeringDetails, submitStep, disableContinueButton } = this.props;
     const currentInvestmentLimit = getCurrentInvestNowHealthCheck
       && getCurrentInvestNowHealthCheck.investmentLimit
       ? getCurrentInvestNowHealthCheck.investmentLimit : 0;
@@ -163,6 +164,11 @@ class FinancialInfo extends Component {
                           className="right-align-placeholder"
                           containerclassname="right-align"
                         />
+                        {isMobile
+                          && (
+                            <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+                          )
+                        }
                       </Table.Cell>
                     </Table.Row>
                     <Table.Row>
@@ -204,6 +210,7 @@ class FinancialInfo extends Component {
               </>
             )
             : (
+              <>
               <MaskedInput
                 data-cy="investmentAmount"
                 hidelabel
@@ -217,6 +224,12 @@ class FinancialInfo extends Component {
                 autoFocus
                 allowNegative={false}
               />
+              {isMobile
+                && (
+                  <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+                )
+              }
+              </>
             )}
         </Form>
         {this.props.changeInvest && !includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) && getDiffInvestmentLimitAmount

@@ -18,14 +18,15 @@ export default class AccountCreation extends React.Component {
   }
 
   checkIfAccountIsAlreadyPresent = (accountType) => {
-    if (this.props.userDetailsStore.checkIfAccountIsAlreadyPresent(accountType)) {
-      this.props.history.push('/dashboard/summary');
+    const { checkIfAccountIsAlreadyPresent, getInvestorAccountsRoute } = this.props.userDetailsStore;
+    if (checkIfAccountIsAlreadyPresent(accountType)) {
+      const route = getInvestorAccountsRoute('individual');
+      this.props.history.push(`/dashboard/account-details/${route}/portfolio`);
     }
   }
 
   handleMultiStepModalclose = () => {
     this.updateUser();
-    this.props.history.push('/dashboard/summary');
     this.props.bankAccountStore.setBankLinkInterface('list');
     this.props.bankAccountStore.resetStoreData();
     this.props.uiStore.setProgress(false);
@@ -38,13 +39,21 @@ export default class AccountCreation extends React.Component {
   }
 
   updateUser = () => {
-    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub).then(() => {
+      const { getInvestorAccountsRoute } = this.props.userDetailsStore;
+      const route = getInvestorAccountsRoute('individual');
+      if (route) {
+        this.props.history.push(`/dashboard/account-details/${route}/portfolio`);
+      } else {
+        this.props.history.push('/dashboard/setup');
+      }
+    });
   }
 
   render() {
     const {
       inProgress, inProgressArray,
-      isEnterPressed,
+      isEnterPressed, setFieldvalue,
       setIsEnterPressed,
       resetIsEnterPressed,
       createAccountMessage,
@@ -88,7 +97,7 @@ export default class AccountCreation extends React.Component {
         stepToBeRendered: 2,
       },
       {
-        name: 'Summary',
+        name: 'Confirmation',
         component: <Summary handleCreateAccount={this.props.handleCreateAccount} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
         disableNextButton: true,
         isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : stepToBeRendered > 2 ? 'error' : '',
@@ -97,7 +106,7 @@ export default class AccountCreation extends React.Component {
     return (
       <>
       <div className="step-progress">
-        <MultiStep isAccountCreation loaderMsg={createAccountMessage} setLinkbankSummary={setLinkBankSummary} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} loaderMsg={createAccountMessage} setLinkbankSummary={setLinkBankSummary} page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress || inProgressArray.includes('submitAccountLoader')} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
       </>
     );

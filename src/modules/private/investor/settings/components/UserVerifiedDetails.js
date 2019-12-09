@@ -21,7 +21,7 @@ const userVerifiedDetails = ({
     return (
       <Card fluid className="form-card">
         <Header as="h5">Identity not verified</Header>
-        <Link to="/dashboard/summary/identity-verification/0"><b>Verify Identity</b></Link>
+        <Link to="/dashboard/setup/identity-verification/0"><b>Verify Identity</b></Link>
       </Card>
     );
   }

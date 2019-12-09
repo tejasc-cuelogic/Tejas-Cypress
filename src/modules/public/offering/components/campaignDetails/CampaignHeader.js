@@ -143,14 +143,14 @@ export default class CampaignHeader extends Component {
                     && (
                       <p className="raise-type mb-0">
                         {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
-                        <Popup
+                        {/* <Popup
                           hoverable
                           trigger={<Icon name="help circle" color="green" />}
                           content={
                             <span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>
                           }
                           position="top center"
-                        />
+                        /> */}
                       </p>
                     )
                   }

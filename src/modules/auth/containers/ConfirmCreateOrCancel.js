@@ -14,7 +14,7 @@ export default class ConfirmCreateOrCancel extends Component {
 
   handleCancelAccount = () => {
     if (this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
-      this.props.history.push('/dashboard/summary');
+      this.props.history.push('/dashboard/setup');
     } else {
       this.props.history.push('/');
     }

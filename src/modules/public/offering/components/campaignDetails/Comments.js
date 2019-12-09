@@ -166,7 +166,7 @@ class Comments extends Component {
               }
               <Form reply className="public-form clearfix">
                 {loggedInAsInvestor && !accountStatusFull
-                  ? <Link to="/dashboard/summary" className="ui button secondary">Finish Account Setup</Link>
+                  ? <Link to="/dashboard/setup" className="ui button secondary">Finish Account Setup</Link>
                   : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
                 }
               </Form>

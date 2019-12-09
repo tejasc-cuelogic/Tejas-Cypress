@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Card, Statistic, Button } from 'semantic-ui-react';
+import { Card, Statistic, Button, Icon } from 'semantic-ui-react';
+import { get } from 'lodash';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -7,9 +8,9 @@ const notificationCard = {
   verifyAccreditation: {
     message:
     <span>
-          Are you an accredited investor? Go through the steps to verify your status
-          today, and for a limited time, we will add a $100 credit to your account.
-      <br /><a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
+      Are you an accredited investor? Go through the steps to verify your status
+      today, and for a limited time, we will add a $100 credit to your account.
+      {!isMobile ? <><br /><a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a></> : ''}
     </span>,
     btnText: 'Verify',
     header: 'Earn $100 by verifying your accredited investor status',
@@ -72,18 +73,35 @@ export default class StickyNotification extends Component {
   render() {
     const cardData = this.getNotificationCard();
     return (
-      <div className="top-cta-section">
-        <div className="sticky-notification">
-          <Card fluid raised>
-            <Card.Content>
-              <Statistic size="mini" className="cta acc-verify-status">
-                <Statistic.Value className="mb-10">{cardData.header}</Statistic.Value>
+      <div className="closable-card">
+        <Button onClick={this.props.onCloseSticky} icon className="link-button">
+          <Icon className="ns-close-light" />
+        </Button>
+        <Card fluid raised>
+          <Card.Content>
+            <Statistic size="tiny" className="cta">
+              {get(this.props, 'notificationCard.congratulations')
+                ? <p className="intro-text text-uppercase"><b>{get(this.props, 'notificationCard.congratulations')}</b></p> : ''
+              }
+               <Statistic.Value>{cardData.header}</Statistic.Value>
                 <Statistic.Label>{cardData.message}</Statistic.Label>
-              </Statistic>
-              <Button onClick={e => cardData.onClick(e)} floated={!isMobile && 'right'} className={isMobile && 'mt-20'} compact color="green">{cardData.btnText}</Button>
-            </Card.Content>
-          </Card>
-        </div>
+            </Statistic>
+            {isMobile && (
+              <>
+                {!this.isUserAccreditated()
+                  && (
+                    <div className="ml-18 mt-14">
+                      <a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
+                    </div>
+                  )
+                }
+              </>
+            )}
+            <div className={`${isMobile ? 'ml-18' : ''} center-align`}>
+              <Button onClick={e => cardData.onClick(e)} className={isMobile && 'mt-20'} compact color="green">{cardData.btnText}</Button>
+            </div>
+          </Card.Content>
+        </Card>
       </div>
     );
   }
