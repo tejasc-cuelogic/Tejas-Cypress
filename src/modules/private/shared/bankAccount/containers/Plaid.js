@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { Header, Button, Image, Grid, Form, Input, Message, Dimmer, Loader } from 'semantic-ui-react';
+import { Header, Button, Image, Grid, Form, Input, Message } from 'semantic-ui-react';
 import { bankAccountActions } from '../../../../../services/actions';
 import ManualForm from './ManualForm';
 import { IND_BANK_LIST } from '../../../../../constants/account';
 import { ListErrors } from '../../../../../theme/shared';
-import AddFunds from './AddFunds';
 import LinkbankSummary from './LinkbankSummary';
 import NSImage from '../../../../shared/NSImage';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('bankAccountStore', 'uiStore', 'transactionStore', 'accountStore')
 @withRouter
@@ -27,7 +28,11 @@ export default class Plaid extends Component {
   }
 
   componentWillUnmount() {
-    this.props.bankAccountStore.resetPlaidBankSearch();
+    this.props.bankAccountStore.resetPlaidBankSearch(true);
+    const modalEle = document.getElementById('multistep-modal');
+    if (modalEle && isMobile) {
+      modalEle.parentNode.scrollTo(0, 0);
+    }
   }
 
 
@@ -64,25 +69,20 @@ export default class Plaid extends Component {
       formBankSearch,
       bankSearchChange,
       bankListing,
-      showAddFunds,
       isPlaidBankVerified,
       linkbankSummary,
       isAccountPresent,
     } = this.props.bankAccountStore;
-    const { errors, inProgress } = this.props.uiStore;
+    const { errors } = this.props.uiStore;
     const { action, refLink } = this.props;
-    const headerText = 'Link bank account';
+    const headerText = 'Next, link your bank account';
     const subHeaderText = action && action === 'change'
       ? 'Select your bank from the list'
-      : `In order to make your first investment, you will need to link your bank and 
-      add funds into your account. Please choose the bank below.`;
+      : `In order to make your first investment,
+      please add funds from an account below.`;
     if (isPlaidBankVerified) {
       this.handleBankSelect(refLink);
       this.props.bankAccountStore.setPlaidBankVerificationStatus(false);
-    }
-
-    if (showAddFunds) {
-      return <AddFunds />;
     }
 
     if (action !== 'change' && linkbankSummary) {
@@ -91,18 +91,18 @@ export default class Plaid extends Component {
     if (bankLinkInterface === 'form') {
       return <ManualForm action={action} refLink={refLink} />;
     }
-    if (action === 'change' && inProgress) {
-      return (
-        <Dimmer className="fullscreen" active={inProgress}>
-          <Loader active={inProgress}>
-            Please wait...
-          </Loader>
-        </Dimmer>
-      );
-    }
+    // if (action === 'change' && inProgress) {
+    //   return (
+    //     <Dimmer className="fullscreen" active={inProgress}>
+    //       <Loader active={inProgress}>
+    //         Please wait...
+    //       </Loader>
+    //     </Dimmer>
+    //   );
+    // }
     return (
       <>
-        <div className="center-align">
+        <div className={isMobile ? '' : 'center-align'}>
           <Header as="h3">{headerText}</Header>
           <p className="mb-30">{subHeaderText}</p>
           <Form>
@@ -115,6 +115,7 @@ export default class Plaid extends Component {
               value={formBankSearch.fields.bankName.value}
               onChange={bankSearchChange}
               onKeyPress={bankAccountActions.bankSearch}
+              className="search-field"
             />
           </Form>
           <div className="bank-list">
@@ -180,7 +181,9 @@ export default class Plaid extends Component {
               </Message>
             )
           }
-          <Button color="green" className="link-button" content="Or enter it manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
+          <div className="center-align mt-30">
+            <Button color="green" className="link-button" content="Link bank account manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
+          </div>
         </div>
         <div className="center-align mt-30">
           {

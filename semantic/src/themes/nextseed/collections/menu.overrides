@@ -573,8 +573,8 @@ footer .ui.text.menu{
         >.item {
             justify-content: space-between;
             width: 100%;
-            border: 1px solid @neutral-darkwhite;
-            border-radius: 4px;
+            // border: 1px solid @neutral-darkwhite;
+            // border-radius: 4px;
             >i.dropdown.icon:before {
                 content: '\e914';
                 font-family: 'nextseed';
@@ -741,6 +741,17 @@ footer .ui.text.menu{
     &.secondary-menu{
         margin:0;
         background-color:@neutral-darkwhite;
+        &.investor{
+            background-color:transparent;
+            a.item{
+                &:before{
+                    display: none;
+                }
+                &:hover, &.active{
+                    background-color:@neutral-midwhite;
+                }  
+            }
+        }
         a.item{
             padding:@16px @20px;
             &:before{
@@ -758,7 +769,16 @@ footer .ui.text.menu{
         }
     }
 }
-
+.transaction-details .ui.inverted.menu .item{
+    padding:@16px @25px;
+    &:before{
+        background-color:@neutral-middark;
+    }
+    &:hover, &:focus, &.active{
+        background-color:@white;
+        color:@link-color !important;
+    }
+}
 .business-application{
     .ui.inverted.menu .item{
         &:hover, &:active, &:focus, &.active{
@@ -769,11 +789,6 @@ footer .ui.text.menu{
         background-color: transparent;
     }
 }
-
-
-.public-header-nav{
-    padding:@47px 0 @20px;
-}
 .ui.sidebar.menu.public-sidebar {
     overflow: hidden !important;
     z-index: 103;
@@ -781,15 +796,12 @@ footer .ui.text.menu{
         margin-left: @24px;
         margin-right: @24px;
     }
-    &.overlay .ui.image.logo {
-        margin: @14px 0 0 @24px;
-        width: 150px;
-    }
     &.vertical {
         .item {
             border-radius: 0 !important;
-            padding: @14px @26px;
-            font-weight: @fontMedium;
+            padding: @10px @22px;
+            font-weight: @normal;
+            font-size: @18px;
             span {
                 margin-left: 0;
                 max-width: 100%;
@@ -819,10 +831,18 @@ footer .ui.text.menu{
         }
         .public-action-nav .item {
             border-bottom: 0;
-            padding: @8px @26px;
+            padding: @8px @22px;
             .ui.button.basic{
                 box-shadow:0 0 0 1px @thumbInactiveBackground inset !important;
                 border:none !important;
+            }
+        }
+        .logged-in-nav{
+            background-color: @neutral-offwhite;
+            margin-bottom: 20px;
+            padding: @14px 0;
+            .item span {
+                font-weight: @fontMedium;
             }
         }
     }
@@ -879,9 +899,9 @@ footer .ui.text.menu{
     }
     &.left {
         .item {
-            text-transform: uppercase;
             &:hover,&:focus,&.active{
                 color: @primary-one !important;
+                text-decoration: none !important;
             }
             &.active.no-active{
                 background-color: transparent !important;
@@ -910,6 +930,21 @@ footer .ui.text.menu{
             }
         }
     }
+    .sidebar-logo {
+        height: @58px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .ui.image.logo {
+            width: 130px;
+            margin-left: @22px;
+        }
+        .ns-close-light{
+            position: relative;
+            margin-right: @26px;
+            right: 0;
+        }
+    }
 }
 //Public Responsive Menu End
 
@@ -918,3 +953,13 @@ footer .ui.text.menu{
     margin: auto !important;
 }
 
+/*Public page header start*/
+.public-pages .header-wrap{
+    max-width: 1680px;
+    margin: auto;
+    .ui.menu{
+        max-width: 1680px;
+        left: auto;
+    }
+}
+/*Public page header end*/

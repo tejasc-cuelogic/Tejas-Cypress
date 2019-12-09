@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Form, Header, Grid } from 'semantic-ui-react';
+import { Form, Header, Grid, Button } from 'semantic-ui-react';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @inject('accreditationStore')
 @observer
@@ -33,6 +34,11 @@ export default class NetWorthQualCheck extends Component {
               </Grid.Column>
             ))}
           </Grid>
+          {isMobile
+          && (
+            <Button onClick={this.props.submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+          )
+          }
         </Form>
       </div>
     );

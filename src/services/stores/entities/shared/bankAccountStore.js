@@ -240,10 +240,10 @@ export class BankAccountStore {
   }
 
   @action
-  resetPlaidBankSearch = () => {
-    if (this.showAddFunds
-      || this.bankLinkInterface === 'form'
-      || this.linkbankSummary) {
+  resetPlaidBankSearch = (forceReset = false) => {
+    if (this.bankLinkInterface === 'form'
+      || this.linkbankSummary
+      || forceReset) {
       this.setBankListing();
       this.resetFormData('formBankSearch');
     }
@@ -496,13 +496,10 @@ export class BankAccountStore {
   }
 
   @computed get isLinkbankInComplete() {
-    const isAddFundsDirty = this.addFundsByAccType.meta.isDirty;
     return this.manualLinkBankSubmitted
-    || isAddFundsDirty
     || this.formLinkBankManually.meta.isDirty
     || this.linkbankSummary
-    || !this.isAccountPresent
-    || this.showAddFunds;
+    || !this.isAccountPresent;
   }
 
   @action
@@ -716,7 +713,7 @@ export class BankAccountStore {
             resolve();
           },
           onError: (err) => {
-            uiStore.setProgress(isLoader);
+            uiStore.setProgress(false);
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             reject();
           },
