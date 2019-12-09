@@ -9,6 +9,8 @@ import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
 // import Helper from '../../../../../helper/utility';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @withRouter
 @inject('uiStore', 'portfolioStore', 'campaignStore', 'accountStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
 @observer
@@ -197,6 +199,12 @@ export default class InvestNow extends React.Component {
     }
   }
 
+  handleSubmitStep = () => { // only for mobile screens
+    const { stepToBeRendered } = this.props.investmentStore;
+    const { multiSteps } = this.props.uiStore;
+    this.multiClickHandler(multiSteps[stepToBeRendered]);
+  }
+
   render() {
     const { changeInvest, uiStore } = this.props;
     const { showAccountList } = this.props.accreditationStore;
@@ -213,7 +221,7 @@ export default class InvestNow extends React.Component {
       this.setState({ isInvestmentUpdate: true });
     }
     const {
-      inProgress,
+      inProgress, setFieldvalue,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
@@ -226,6 +234,8 @@ export default class InvestNow extends React.Component {
           changeInvest={changeInvest}
           cancel={this.handleMultiStepModalclose}
           inProgress={inProgress}
+          submitStep={this.handleSubmitStep}
+          disableContinueButton={!this.props.investmentStore.disableNextbtn}
           isFromPublicPage={this.state.isInvestmentUpdate}
         />,
         isValid: '',
@@ -239,6 +249,8 @@ export default class InvestNow extends React.Component {
           changeInvest={changeInvest || this.state.isInvestmentUpdate}
           offeringDetails={this.state.isInvestmentUpdate && campaign}
           isFromPublicPage={this.state.isInvestmentUpdate}
+          submitStep={this.handleSubmitStep}
+          disableContinueButton={!this.props.investmentStore.disableNextbtn}
         />,
         isValid: '',
         stepToBeRendered: 2,
@@ -251,6 +263,7 @@ export default class InvestNow extends React.Component {
           offeringSecurityType={securityType}
           confirm={this.handleConfirm}
           cancel={this.handleCancel}
+          refLink={this.props.refLink}
         />,
         isValid: '',
         onlyDisableNextButton: true,
@@ -258,6 +271,7 @@ export default class InvestNow extends React.Component {
     ];
     const isMultiStepButtonsVisible = !!showAccountList && multipleAccountExsists;
     const closeOnDimmerClickAction = false;
+    this.props.investmentStore.setFieldValue('disablePrevButton', true);
     return (
       <div className="step-progress">
         {
@@ -271,7 +285,7 @@ export default class InvestNow extends React.Component {
             disableNxtbtn={this.props.investmentStore.disableNextbtn}
             isEnterPressed={isEnterPressed}
             resetEnterPressed={resetIsEnterPressed}
-            hideHeader
+            hideHeader={!isMobile}
             setStepTobeRendered={this.handleStepChange}
             setStepTobeRenderedForAlert={this.handleStepChnageOnPreviousForAlert}
             stepToBeRendered={this.props.investmentStore.stepToBeRendered}
@@ -280,6 +294,7 @@ export default class InvestNow extends React.Component {
             handleMultiStepModalclose={this.handleMultiStepModalclose}
             isStepButtonsVisible={isMultiStepButtonsVisible}
             closeOnDimmerClick={closeOnDimmerClickAction}
+            setUiStorevalue={setFieldvalue}
           />
         }
       </div>

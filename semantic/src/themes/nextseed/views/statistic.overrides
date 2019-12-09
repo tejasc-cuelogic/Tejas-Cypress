@@ -168,7 +168,7 @@
     padding-left:@18px;
     &:before{
         content:"";
-        width:3px;
+        width:2px;
         height:100%;
         background:@primary-one;
         position:absolute;
@@ -189,10 +189,38 @@
     }
 }
 .investment-summary .ui.statistic{
-    padding-left:0;
-    &:before{
-        display:none;
-    }
+    // padding-left:0;
+    // &:before{
+    //     display:none;
+	// }
+	.label, a{
+		font-size: @13px;
+	}
+	.value{
+		font-size: @20px;
+	}
+	@media only screen and (max-width : @largestTabletScreen){
+		justify-content: space-between;
+		width: 100%;
+		padding-left:0;
+		&:before{
+		    display:none;
+		}
+		.label{
+			font-size: @15px;
+			color: @neutral;
+			a{
+				font-size: @13px;
+			}
+			i.icon{
+				color: @neutral-middark;
+			}
+		}
+		&.mini.horizontal > .value{
+			font-size: @15px !important;
+		}
+
+	}
 }
 .tabular-wrap, .sticky-notification{
     .ui.statistic{
@@ -229,7 +257,44 @@
 			@media only screen and (max-width : @largestMobileScreen){
 				width: 100%;
 			}
-
+		}
+	}
+}
+.closable-card{
+    .ui.statistic{
+		margin:0;
+		flex: 1;
+		padding-left: @20px;
+		@media only screen and (max-width : @largestTabletScreen){
+			padding-right: @18px;
+			&:before{
+				display: none;
+			}
+		}
+        .value{
+            font-size:@20px !important;
+			text-transform:none;
+			@media only screen and (max-width : @largestTabletScreen){
+				font-size:@15px !important;
+			}
+        }
+        .label{
+			font-size:@15px;
+			@media only screen and (max-width : @largestTabletScreen){
+				position: relative;
+				margin-top: @12px;
+				&:before{
+					content: "";
+					width: 2px;
+					height: 100%;
+					background: @primary-one;
+					position: absolute;
+					left: -@16px;
+				}
+			}
+		}
+		~div{
+			flex: 1;
 		}
 	}
 }
