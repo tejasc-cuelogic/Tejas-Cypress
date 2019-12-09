@@ -38,7 +38,7 @@ export default class Portfolio extends Component {
     setFieldValue('currentActiveAccount', accountType);
     this.props.investmentStore.accTypeChanged(null, { value: accountType });
     this.props.accreditationStore.changeShowAccountListFlag(false);
-    if (!this.props.accreditationStore.accreditationData.ira) {
+    if (!this.props.isAdmin && !this.props.accreditationStore.accreditationData.ira) {
       this.props.accreditationStore.getUserAccreditation().then(() => {
         this.props.accreditationStore.initiateAccreditation();
       });
