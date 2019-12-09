@@ -11,7 +11,7 @@ const featuredOn = [
 const FeaturedOn = ({ uiStore }) => (
   <section>
     <Container className={uiStore.responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
-      <Header as="h3" textAlign="center" className="mb-50">As seen on</Header>
+      <Header as="h2" textAlign="center" className="mb-50">As seen on</Header>
       <Grid relaxed={uiStore.responsiveVars.isMobile && 'very'} columns={5} doubling verticalAlign="middle" className={uiStore.responsiveVars.isMobile ? '' : 'vertical-gutter'}>
         <Responsive minWidth="768" as={React.Fragment}>
           {/* {featuredOn.map(row => (
