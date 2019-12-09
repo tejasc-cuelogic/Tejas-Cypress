@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Container, Button, Grid, Responsive } from 'semantic-ui-react';
+import { Header, Container, Button, Grid, Responsive, Divider } from 'semantic-ui-react';
 // import Banner from '../components/Banner';
 import CampaignList from '../components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
@@ -8,7 +8,7 @@ import SubscribeForNewsletter from '../../shared/components/SubscribeForNewslett
 const isMobile = document.documentElement.clientWidth < 768;
 const LoadMoreBtn = ({ action, param }) => (
   <div className={`${isMobile ? 'mb-20 mt-40' : 'mb-30 mt-80'} center-align`} data-cy={param}>
-    <Button fluid={isMobile} secondary content="View More" onClick={() => action(param)} />
+    <Button fluid={isMobile} primary basic content="View More" onClick={() => action(param)} />
   </div>
 );
 @inject('campaignStore', 'uiStore')
@@ -45,21 +45,23 @@ class Offering extends Component {
             </>
           )}
         />
-        <section className="bg-offwhite">
-          <Container className="mb-20 mt-20">
+        <Divider as={Container} fitted />
+        <section>
+          <Container className="mb-60 mt-60">
             <Grid columns={2} stackable>
               <Grid.Column>
-                <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-10' : 'mt-80 mb-20'}>Never miss an opportunity</Header>
+                <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-10' : 'mb-20'}>Never miss an opportunity</Header>
                 <p className={responsiveVars.isMobile ? 'mb-10' : ''}>
                   Sign up to stay informed about new investment<Responsive minWidth={768} as="br" /> opportunities, updates and events.
                 </p>
               </Grid.Column>
               <Grid.Column verticalAlign="middle">
-                <SubscribeForNewsletter className={`${responsiveVars.isMobile ? 'mt-0' : 'mt-80'} public-form`} />
+                <SubscribeForNewsletter className="public-form" />
               </Grid.Column>
             </Grid>
           </Container>
         </section>
+        <Divider as={Container} fitted />
         {!loading
           && (
             <CampaignList
