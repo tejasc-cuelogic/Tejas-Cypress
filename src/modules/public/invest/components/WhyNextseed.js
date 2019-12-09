@@ -49,17 +49,17 @@ export default class WhyNextseed extends Component {
               <Grid.Column>
                 <Header as="h5" className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Explore</Header>
                 <p className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Browse a curated selection of pre-vetted businesses that have passed our strict screening process.</p>
-                <Link to="">Our vetting process</Link>
+                <Link to="/resources/education-center/investor/business-survival">Our vetting process</Link>
               </Grid.Column>
               <Grid.Column>
                 <Header as="h5" className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Invest</Header>
                 <p className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Invest with an Individual account, an Investment Entity, or a new Self-Directed IRA. </p>
-                <Link to="">Our types of accounts offered</Link>
+                <Link to="/resources/education-center/investor/account-opening-requirements-and-options">Our types of accounts offered</Link>
               </Grid.Column>
               <Grid.Column>
                 <Header as="h5" className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Receive</Header>
                 <p className={responsiveVars.uptoTablet ? 'mb-10' : ''}>NextSeed collects and processes any payments directly into your investment account.</p>
-                <Link to="">Our payments process</Link>
+                <Link to="/resources/education-center/investor/payments">Our payments process</Link>
               </Grid.Column>
             </Grid>
             </div>

@@ -167,7 +167,7 @@ class HowItWorks extends Component {
             </Grid.Column>
           </Grid>
           <div className="center-align">
-            <Button fluid={responsiveVars.isMobile} as={Link} to="/" primary className={responsiveVars.isMobile ? '' : 'mb-14 relaxed'}>Apply Online</Button>
+            <Button fluid={responsiveVars.isMobile} as={Link} to="/business-application/business" primary className={responsiveVars.isMobile ? '' : 'mb-14 relaxed'}>Apply Online</Button>
           </div>
         </section>
         <Divider fitted />
@@ -243,7 +243,7 @@ class HowItWorks extends Component {
                   <List.Item className="mb-30">
                     <Header as="h5">Pay and engage investors painlessly.</Header>
                     <p>
-                    Tap into our marketing, advertising and PR experts. We’ll provide the tools and support you need to raise funds and cultivate a base of thousands of local investors.
+                    Our investor management support streamlines your monthly payments, investor updates, reward fulfillment and even annual tax forms.
                     </p>
                   </List.Item>
                 </List>

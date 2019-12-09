@@ -713,9 +713,9 @@ export const PUBLIC_NAV = [
     subPanel: 1,
     exact: true,
     subNavigations: [
-      { title: 'For Investors', to: 'business' },
-      { title: 'For Businesses', to: 'invest' },
-      { title: 'Education', to: 'resources/education-center' },
+      { title: 'For Investors', to: 'invest' },
+      { title: 'For Businesses', to: 'business' },
+      { title: 'Education Center', to: 'resources/education-center' },
     ],
   },
   {

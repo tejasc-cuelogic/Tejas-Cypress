@@ -56,7 +56,7 @@ export default class CampaignList extends Component {
       return (
         <Label.Group size="small">
           {bannerFirst
-          && <Label color={bannerFirst === 'Processing' ? 'grey' : 'blue'}>{bannerFirst}</Label>
+          && <Label color={bannerFirst === 'Processing' ? 'grey' : bannerFirst === 'NEW' ? 'black' : 'green'}>{bannerFirst}</Label>
           }
           {bannerSecond
           && <Label color={bannerFirst === 'Processing' ? 'grey' : 'green'}>{bannerSecond}</Label>
