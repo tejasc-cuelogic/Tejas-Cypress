@@ -40,7 +40,7 @@ class Home extends Component {
         <CampaignList
           loading={loading}
           explore
-          campaigns={active.splice(0, 3)}
+          campaigns={active.slice(0, 3)}
           heading={(
             <>
               <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} className={responsiveVars.isMobile ? 'mt-20' : 'mt-50'}>Diversify your portfolio with high-growth businesses</Header>

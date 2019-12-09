@@ -23,8 +23,8 @@ class Offering extends Component {
 
   render() {
     const {
-      active, completed, loading, completedLoading, loadMoreRecord, activeList,
-      completedList, activeToDisplay, completedToDisplay, RECORDS_TO_DISPLAY,
+      orderedActiveList, completed, loading, completedLoading, loadMoreRecord,
+      completedList, completedToDisplay, RECORDS_TO_DISPLAY,
     } = this.props.campaignStore;
     const { responsiveVars } = this.props.uiStore;
     return (
@@ -32,18 +32,10 @@ class Offering extends Component {
         <CampaignList
           refLink={this.props.match.url}
           loading={loading}
-          campaigns={active}
+          campaigns={orderedActiveList}
           filters
           heading={<Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>Active Campaigns</Header>}
           subheading={<p className={responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}>Browse the newest investment opportunities on NextSeed. {!responsiveVars.isMobile && <br /> }The next big thing may be inviting you to participate.</p>}
-          loadMoreButton={(
-            <>
-            {activeList && activeList.length > RECORDS_TO_DISPLAY
-              && activeToDisplay < activeList.length
-              && <LoadMoreBtn action={loadMoreRecord} param="activeToDisplay" />
-            }
-            </>
-          )}
         />
         <Divider as={Container} fitted />
         <section>
