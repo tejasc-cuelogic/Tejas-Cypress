@@ -44,13 +44,13 @@ class Home extends Component {
           heading={(
             <>
               <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} className={responsiveVars.isMobile ? 'mt-20' : 'mt-50'}>Diversify your portfolio with high-growth businesses</Header>
-              <p className={responsiveVars.isMobile ? 'mb-50' : 'mb-80 center-align'}>
+              <p className={`${responsiveVars.isMobile ? 'mb-50' : 'mb-80 center-align'} neutral-text`}>
               These are just a few of the pre-vetted opportunities available in a growing number of industry categories.
               </p>
             </>
           )}
           loadMoreButton={(
-            <div className={`${responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'} center-align`}>
+            <div className={`${responsiveVars.isMobile ? 'mb-20' : 'mb-50'} mt-50 center-align`}>
               <Button fluid={responsiveVars.isMobile} primary basic content="View All Investment Opportunities" onClick={this.handleExploreBtn} />
             </div>
           )}
@@ -63,7 +63,7 @@ class Home extends Component {
             <Grid columns={2} stackable>
               <Grid.Column>
                 <Header as="h2" className={responsiveVars.isMobile ? 'mb-20' : 'mb-30'}>Looking to raise capital <Responsive minWidth={768} as="br" />for your business?</Header>
-                <p className={responsiveVars.isMobile ? 'mb-30' : 'mb-60'}>
+                <p className={`${responsiveVars.isMobile ? 'mb-30' : 'mb-60'} neutral-text`}>
                   Whether expanding or opening a brand-new concept, <Responsive minWidth={992} as="br" />
                   we make it easy to raise money from thousands of local investors.
                 </p>
@@ -74,14 +74,14 @@ class Home extends Component {
               <Grid.Column>
                 {!responsiveVars.isMobile && <NSImage path="home.jpg" />}
                 {responsiveVars.isMobile
-                && <Button as={Link} to="/register" primary fluid className="mt-14 relaxed">Apply Online</Button>}
+                && <Button as={Link} to="/register" primary fluid className="mb-20 mt-10 relaxed">Apply Online</Button>}
               </Grid.Column>
             </Grid>
             <Divider section />
             <Grid columns={2} stackable>
               <Grid.Column>
                 <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-10' : 'mt-80 mb-20'}>Join our newsletter</Header>
-                <p className={responsiveVars.isMobile ? 'mb-10' : ''}>
+                <p className={`${responsiveVars.isMobile ? 'mb-10' : ''} neutral-text`}>
                   Sign up to stay informed about new investment<Responsive minWidth={768} as="br" /> opportunities, updates and events.
                 </p>
               </Grid.Column>
