@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Button, Message, Dimmer, Loader } from 'semantic-ui-react';
+import { Header, Form, Button, Dimmer, Loader } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { MaskedInput, FormRadioGroup } from '../../../../../theme/form';
 import { validationActions } from '../../../../../services/actions';
 import AddFunds from './AddFunds';
 import LinkbankSummary from './LinkbankSummary';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore', 'transactionStore')
 @withRouter
@@ -17,15 +19,19 @@ export default class ManualForm extends Component {
     // this.props.bankAccountStore.setIsManualLinkBankSubmitted();
     this.props.bankAccountStore.setShouldValidateAmount();
     this.props.uiStore.clearErrors();
+    const modalEle = document.getElementById('multistep-modal');
+    if (modalEle && isMobile) {
+      modalEle.parentNode.scrollTo(0, 0);
+    }
   }
 
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.bankAccountStore.resetAddFundsForm();
     this.props.bankAccountStore.setIsManualLinkBankSubmitted();
-    const { investmentAccType } = this.props.accountStore;
-    const accTypeStore = investmentAccType === 'individual' ? 'individualAccountStore' : investmentAccType === 'entity' ? 'entityAccountStore' : investmentAccType === 'ira' ? 'iraAccountStore' : 'individualAccountStore';
-    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5, linkBankStepValue: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3, linkBankStepValue: 3 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1, linkBankStepValue: 0 };
+    const { investmentAccType, ACC_TYPE_MAPPING, INVESTMENT_ACC_TYPES } = this.props.accountStore;
+    const { store } = ACC_TYPE_MAPPING[INVESTMENT_ACC_TYPES.fields.accType.value];
+    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 6, linkBankStepValue: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5, linkBankStepValue: 4 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1, linkBankStepValue: 0 };
     if (this.props.action === 'change') {
       this.props.uiStore.setProgress();
       this.props.bankAccountStore.validateManualAccount(investmentAccType).then(() => {
@@ -35,18 +41,15 @@ export default class ManualForm extends Component {
         });
       });
     } else {
-      this.props[accTypeStore].createAccount(currentStep).then(() => {
+      store.createAccount(currentStep).then(() => {
         if (this.props.bankAccountStore.isAccountPresent) {
           this.props.bankAccountStore.resetRoutingNum();
           this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
           this.props.bankAccountStore.setBankLinkInterface('list');
-          if (investmentAccType !== 'individual') {
-            this.props.bankAccountStore.setShowAddFunds();
-          }
         }
-        this.props[accTypeStore].setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
+        store.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
       }).catch(() => {
-        this.props[accTypeStore].setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
+        store.setStepToBeRendered(this.props.accountStore.getStepValue(currentStep));
       });
     }
   }
@@ -83,11 +86,25 @@ export default class ManualForm extends Component {
     }
     const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
     return (
-      <div className="center-align">
-        <Header as="h3">Link bank manually</Header>
-        <p>Enter your bank{"'"}s routing number and your checking account number.</p>
+      <div className={isMobile ? '' : 'center-align'}>
+        <Header as="h3">
+        Enter your bank account and routing number
+        </Header>
         <Form error={!!errors} onSubmit={this.handleSubmitForm}>
-          <div className="field-wrap left-align">
+          <Form.Field className={isMobile ? 'mb-40' : 'mb-50'}>
+            <>
+              {
+                <FormRadioGroup
+                  fielddata={formLinkBankManually.fields.accountType}
+                  changed={accountTypeChange}
+                  name="accountType"
+                  value={formLinkBankManually.fields.value}
+                  containerclassname={`${isMobile ? 'horizontal' : ''} button-radio center-align`}
+                />
+              }
+            </>
+          </Form.Field>
+          <div className={`${isMobile ? '' : 'field-wrap'} left-align`}>
             <MaskedInput
               name="accountNumber"
               fielddata={formLinkBankManually.fields.accountNumber}
@@ -106,29 +123,21 @@ export default class ManualForm extends Component {
               className="fs-block"
               showerror
             />
-            <Form.Field>
-              <>
-                {
-                  <FormRadioGroup
-                    fielddata={formLinkBankManually.fields.accountType}
-                    changed={accountTypeChange}
-                    name="accountType"
-                    value={formLinkBankManually.fields.value}
-                  />
-                }
-              </>
-            </Form.Field>
           </div>
           {errors
             && (
-<Message error className="mb-30">
-              <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />              {/* <ListErrors errors={[errors.message]} /> */}
-            </Message>
+            <p className="error mb-30">
+              <HtmlEditor readOnly content={errors.message ? errors.message.replace('GraphQL error: ', '') : ''} />
+              {' '}
+              {/* <ListErrors errors={[errors.message]} /> */}
+            </p>
             )
           }
-          <Button primary size="large" className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid || inProgress} />
+          <Button primary size="large" fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Confirm" disabled={!formLinkBankManually.meta.isValid || inProgress} />
         </Form>
-        <Button color="green" className="link-button mt-30" content="Or link account directly" onClick={this.linkAccountDirectly} />
+        <div className="center-align">
+          <Button color="green" className="link-button mt-30" content="Link bank account automatically" onClick={this.linkAccountDirectly} />
+        </div>
       </div>
     );
   }

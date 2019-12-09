@@ -427,7 +427,6 @@ export class IdentityStore {
       if (!isMobile && !userStore.isInvestor) {
         Helper.toast(`Verification ${requestMode}.`, 'success');
       }
-      userDetailsStore.updateUserDetails('phone', this.formattedUserInfoForCip.phoneDetails);
       this.setFieldValue('signUpLoading', false);
     } catch (err) {
       this.setFieldValue('signUpLoading', false);

@@ -18,7 +18,9 @@ import Congratulation from '../../../../public/offering/components/investNow/agr
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
 import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+import StickyNotification from '../../setup/components/stickyNotification';
 
+const isTablet = document.documentElement.clientWidth < 992;
 @inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore', 'referralsStore', 'investmentStore', 'accreditationStore')
 @observer
 export default class Portfolio extends Component {
@@ -26,6 +28,7 @@ export default class Portfolio extends Component {
     open: false,
     embedUrl: '',
     inActiveItems: [],
+    showSticky: true,
   };
 
   constructor(props) {
@@ -69,6 +72,11 @@ export default class Portfolio extends Component {
 
   closeModal = () => {
     this.setState({ open: false });
+  }
+
+  onCloseSticky = () => {
+    this.setState({ showSticky: false });
+    localStorage.setItem('hideNotifications', true);
   }
 
   toggleAccordion = (of) => {
@@ -117,6 +125,9 @@ export default class Portfolio extends Component {
 
   render() {
     const { match, portfolioStore, userDetailsStore, refLink } = this.props;
+    const {
+      multipleUserAccounts,
+    } = userDetailsStore;
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
     const { referralData } = this.props.referralsStore;
     const { getActiveAccounts } = userDetailsStore;
@@ -143,6 +154,17 @@ export default class Portfolio extends Component {
         </div>
       );
     }
+    const notificationCard = {
+      message:
+  <span>
+    <p>
+        Are you an accredited investor? Go through the steps to verify your status
+        today, and for a limited time, we will add a $100 credit to your account.
+    </p>
+    <a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
+  </span>,
+      header: 'Earn $100 by verifying your accredited investor status',
+    };
     // const tnarValue = get(getInvestorAccounts, 'tnar');
     const summaryDetails = {
       isAccountFrozen: isUserAccountFrozen,
@@ -177,16 +199,29 @@ export default class Portfolio extends Component {
     const activeSorted = getInvestorAccounts && getInvestorAccounts.investments.active.length ? orderBy(getInvestorAccounts.investments.active, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     let completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     completedSorted = filter(completedSorted, o => !includes(['TERMINATED', 'FAILED', 'REJECTED'], get(o, 'offering.stage')));
+    const hideNotifications = localStorage.getItem('hideNotifications');
     return (
       <>
         {this.props.isAdmin
           && <AccountHeader module="Investments" pathname={this.props.location.pathname} />
         }
+        {!get(multipleUserAccounts, 'noAccounts') && this.state.showSticky && !hideNotifications
+        && (
+          <StickyNotification
+            {...this.props}
+            notificationCard={notificationCard}
+            onCloseSticky={this.onCloseSticky}
+            multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
+            accountId={get(multipleUserAccounts, 'accountId') || null}
+            accountType={get(multipleUserAccounts, 'accountType') || null}
+          />
+        )
+        }
         <SummaryHeader refLink={refLink} isAdmin={this.props.isAdmin} details={summaryDetails} />
         {(getPieChartData.investmentType.length || getPieChartData.industry.length)
           ? <PortfolioAllocations isAdmin={this.props.isAdmin} pieChart={getPieChartData} /> : ''
         }
-        <Header as="h4">My Investments</Header>
+        <Header as={isTablet ? 'h5' : 'h4'}>My Investments</Header>
         {pendingSorted.length
           ? <InvestmentList isAdmin={this.props.isAdmin} handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={pendingSorted.length} match={match} /> : null
         }
@@ -204,7 +239,7 @@ export default class Portfolio extends Component {
               <p>No investments or reservations pending.</p>
               <Card>
                 <Card.Content>
-                  <Header as="h4">Browse the latest investment opportunities.</Header>
+                  <Header as={isTablet ? 'h5' : 'h4'}>Browse the latest investment opportunities.</Header>
                   <Button as={Link} target="_blank" to="/offerings" className={isUserAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
                 </Card.Content>
               </Card>

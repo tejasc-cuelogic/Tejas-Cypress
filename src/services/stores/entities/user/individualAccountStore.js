@@ -9,6 +9,7 @@ import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 // import userStore from '../userStore';
 
+
 class IndividualAccountStore {
   @observable stepToBeRendered = 0;
 
@@ -164,6 +165,7 @@ class IndividualAccountStore {
               bankAccountStore.setPlaidAccDetails(linkedBank);
               this.setFieldValue('apiCall', false);
             }
+            this.setStepToBeRendered(currentStep.stepToBeRendered);
             uiStore.setErrors(null);
             uiStore.setProgress(false);
             resolve(result);

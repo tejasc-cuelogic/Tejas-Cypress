@@ -142,15 +142,15 @@ export default class CampaignHeader extends Component {
                   {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                     && (
                       <p className="raise-type mb-0">
-                        <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
-                        <Popup
+                        {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
+                        {/* <Popup
                           hoverable
                           trigger={<Icon name="help circle" color="green" />}
                           content={
                             <span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>
                           }
                           position="top center"
-                        />
+                        /> */}
                       </p>
                     )
                   }
@@ -187,7 +187,7 @@ export default class CampaignHeader extends Component {
                       </>
                     )
                   }
-                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
+                  {/* {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
                     && (
                       <>
                       <p className="mb-0">
@@ -198,7 +198,7 @@ export default class CampaignHeader extends Component {
                       </p>
                       </>
                     )
-                  }
+                  } */}
                   <div className="mt-20">
                     {isCreation
                       ? <Button fluid secondary={diffForProcessing.value !== 0} content="Coming Soon" disabled />

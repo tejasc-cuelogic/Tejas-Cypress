@@ -36,7 +36,7 @@ const userInfo = ['dateAccountWasOpened',
 ];
 
 
-describe.skip('Audit Investor', () => {
+describe('Audit Investor', () => {
   describe('Data compare', () => {
     before(() => {
       cy.fixture('admin/user').then((data) => {

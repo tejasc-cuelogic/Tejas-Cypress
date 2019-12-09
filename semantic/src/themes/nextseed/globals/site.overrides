@@ -114,6 +114,9 @@ h6{
 .mt-10 {
 	margin-top: @10px !important;
 }
+.mt-14{
+	margin-top:@14px !important;
+}
 .mt-20 {
 	margin-top: @20px !important;
 }
@@ -125,6 +128,9 @@ h6{
 }
 .mt-50 {
 	margin-top: @50px !important;
+}
+.mt-60 {
+	margin-top: @60px !important;
 }
 .mt-74 {
 	margin-top: @74px;
@@ -144,6 +150,9 @@ h6{
 .ml-10 {
 	margin-left: @10px !important;
 }
+.ml-18 {
+	margin-left: @18px !important;
+}
 .pb-20{
 	padding-bottom: @20px !important;
 }
@@ -162,6 +171,9 @@ h6{
 .mlr-0{
 	margin-left: 0 !important;
 	margin-right: 0 !important;
+}
+.display-block{
+	display: block !important;
 }
 .plr-0{
 	padding-left: 0 !important;
@@ -266,10 +278,21 @@ h6{
 	word-break: normal !important;
 }
 .full-width{
-	width: 100%;
+	width: 100% !important;
 }
 .show-top{
 	z-index: 99999 !important;
+}
+.error{
+	font-style: normal;
+}
+.mobile-bottom-notes{
+	position: absolute;
+	width: calc(100% - 30px);
+    top: 90%;
+	left: 50%;
+    transform: translate(-50%, 0);
+	padding-bottom: @30px;
 }
 .d-flex{
 	display: flex !important;
@@ -325,6 +348,9 @@ a{
 		color: @primary-one !important;
 	}
 }
+.display-block {
+	display: block !important;
+}
 .green-hover.ui.button.link-button.grey:hover {
 	color: @primary-one !important;
 }
@@ -334,6 +360,9 @@ a{
 .bg-offwhite {
 	background-color: @neutral-offwhite !important;
 	// padding:@14px @20px;       commented to resolve on public homepage
+}
+.bg-white {
+	background-color: @white !important;
 }
 .bg-midwhite{
 	background-color: @neutral-midwhite;
@@ -459,6 +488,7 @@ footer{
 			}
 			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
 				justify-content: center;
+				align-items: center;
 			}
 			img.ui.image {
 				display: inline-block;
@@ -1535,11 +1565,17 @@ a.icon-link {
 	padding:@20px @40px;
 	@media only screen and (max-width : @largestSmallMonitor){
 		min-height:auto;
-		padding:@20px @60px;
+		padding: @14px;
 	}
 	@media only screen and (max-width : @largestMobileScreen){
 		~ .secondary-menu{
 			padding:0 @20px @14px;
+		}
+	}
+	&.investor{
+		background: transparent;
+		h3.ui.header{
+			position:relative;
 		}
 	}
 	h1.ui.header{
@@ -2012,6 +2048,7 @@ ol.progtrckr{
 		font-weight:@fontMedium;
 		line-height:@16px;
 		text-align:center;
+		text-transform: capitalize;
 		cursor:pointer;
 		position:relative;
 		&:after{
@@ -2162,7 +2199,64 @@ ol.progtrckr{
 svg:not(:root).recharts-surface{
 	overflow:visible;
 }
+.portfolio-allocation{
+	@media only screen and (max-width : @largestMobileScreen){
+		background: @white;
+		padding: @24px;
+		&:first-child{
+			border-bottom: 1px solid @neutral-darkwhite;
+		}
+	}
+}
 .donut-chart, .portfolio-allocation{
+	.recharts-legend-wrapper{
+		@media only screen and (max-width : @largestMobileScreen){
+			height: 100% !important;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+		.chartLegends{
+			li{
+				font-size:@22px;
+				line-height: 30px;
+				margin: 0 @10px 0 0;
+				@media only screen and (max-width : @largestMobileScreen){
+					font-size: @14px;
+					line-height: 18px;
+				}
+				span{
+					font-size:@13px;
+					color:@fullBlack;
+					@media only screen and (max-width : @largestMobileScreen){
+						font-size: @10px;
+					}
+					i {
+						color: @neutral-offdark;
+					}
+				}
+			}
+		}
+	}
+
+	// .recharts-legend-wrapper .chartLegends li{
+	// 	font-size:@22px;
+	// 	line-height: 30px;
+	// 	margin: 0 @10px 0 0;
+	// 	@media only screen and (max-width : @largestMobileScreen){
+	// 		line-height: 14px;
+	// 	}
+	// 	span{
+	// 		font-size:@13px;
+	// 		color:@fullBlack;
+	// 		@media only screen and (max-width : @largestMobileScreen){
+	// 			font-size: @10px;
+	// 		}
+	// 		i {
+	// 			color: @neutral-offdark;
+	// 		}
+	// 	}
+	// }
 	.recharts-wrapper{
 		.recharts-legend-wrapper{
 			z-index:-1;
@@ -2170,10 +2264,16 @@ svg:not(:root).recharts-surface{
 		.recharts-pie-sector .datavalue{
 			font-size:@20px;
 			font-weight:@fontMedium;
+			@media only screen and (max-width : @largestMobileScreen){
+				font-size: @10px;
+			}
 		}
 		tspan{
 			font-size:@18px;
 			font-weight:@fontMedium;
+			@media only screen and (max-width : @largestMobileScreen){
+				font-size: @14px;
+			}
 		}
 		.chartLegends li{
 			font-size:@22px;
@@ -2201,7 +2301,7 @@ svg:not(:root).recharts-surface{
 	}
 }
 .boanusreward-chart .recharts-wrapper tspan{
-	font-size: 28px;
+	font-size: @28px;
 	line-height: 38px;
 	fill: @primary-one;
 	font-weight: @fontMedium;
@@ -2394,14 +2494,14 @@ p.check-extra-info{
 		font-weight:@fontMedium;
 		border-radius:100%;
 	}
-	&.admin{
-		background-color:@highlight-primary;
-	}
-	&.issuer{
-		background-color:@fullBlack;
-	}
-	&.investor{
-		background-color:@highlight-tertiary;
+	// &.admin{
+	// 	background-color:@highlight-primary;
+	// }
+	// &.issuer{
+	// 	background-color:@fullBlack;
+	// }
+	&.investor .sb-avatar__text{
+		color: @neutral-offdark;
 	}
 }
 
@@ -2542,6 +2642,9 @@ p.check-extra-info{
 	.ui.image.logo {
 		height: @25px;
 		width: auto;
+	}
+	.icon.ns-hamburger{
+		color: @neutral-middark !important;
 	}
 	&.public-header-section-v2 .sign-in{
 		right: 22px;
@@ -2729,7 +2832,7 @@ input[type='range']::-webkit-slider-thumb {
 }
 //	IRA account creation
 .promitional-offer-block {
-	border: 1px solid @primary-one;
+	border: 1px solid @neutral-darkwhite;
 	padding: @10px;
 	h5.ui.header {
 		margin: 0;
@@ -2768,7 +2871,7 @@ input[type='range']::-webkit-slider-thumb {
 	}
 }
 //	IRA account creation
-.highlight-text, .negative-text {
+.highlight-text, .negative-text, .grey-header {
 	&.large {
 		font-size: @20px;
 		font-weight: @fontMedium;
@@ -2957,7 +3060,6 @@ table.css-wu4c77-diff-container {
 		}
 	}
 }
-
 // Offering new design - 1972 - Start
 //Public comment section
 .custom-segment{
