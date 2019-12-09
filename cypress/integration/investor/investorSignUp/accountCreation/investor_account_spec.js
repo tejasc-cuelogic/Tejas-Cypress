@@ -52,7 +52,7 @@ describe.skip('Account Creation', () => {
       cy.wait('@addFunds');
     registerApiCall('submitAccount', '/dev/graphql');
     cy.get('.dimmer-visible').should('not.be.visible')
-    cy.get('div.content').get('button.button').contains('Create your account').click({ force: true });
+    cy.get('div.content').get('button.button').contains('Create Your Account').click({ force: true });
     cy.wait('@submitAccount');
     cy.wait('@submitAccount');
   });

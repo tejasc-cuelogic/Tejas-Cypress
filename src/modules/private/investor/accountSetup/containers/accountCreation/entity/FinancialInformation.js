@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Divider } from 'semantic-ui-react';
+import { Header, Form, Divider, Button } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('entityAccountStore', 'investmentLimitStore')
+const isMobile = document.documentElement.clientWidth < 768;
+
+@inject('entityAccountStore', 'investmentLimitStore', 'uiStore')
 @observer
 export default class FinancialInformation extends Component {
   constructor(props) {
@@ -17,17 +19,22 @@ export default class FinancialInformation extends Component {
     this.props.investmentLimitStore.setFieldValue('investedAmount', 0);
   }
 
+  handleContinueButton = () => {
+    const { createAccount, stepToBeRendered } = this.props.entityAccountStore;
+    const { multiSteps } = this.props.uiStore;
+    createAccount(multiSteps[stepToBeRendered]);
+  }
+
   render() {
     const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
     return (
       <>
-        <Header as="h3" textAlign="center">Calculate your investment limit</Header>
-        <p className="center-align">
-          Your net assets and annual revenue are used to determine your 12-month investment limit.{' '}
-          <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className="link">How is this calculated?</a>
+        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
+        <p className={isMobile ? '' : 'center-align'}>
+          Your entity{"'"}s net assets and annual revenue are used to determine your 12-month investment limit under Regulation Crowdfunding.
         </p>
         <Form error>
-          <div className="field-wrap">
+          <div className={isMobile ? '' : 'field-wrap'}>
             {['netAssets', 'annualIncome'].map(field => (
               <MaskedInput
                 key={field}
@@ -48,9 +55,13 @@ export default class FinancialInformation extends Component {
               </span>
             </p>
             {/* <p className="grey-header">Your investment limit:<span className="highlight-text
-          large ml-10">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}</span></p>
-          */}
+              large ml-10">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}</span></p>
+            */}
+            <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20' : ''} link`}>How is this calculated?</a>
           </div>
+          {isMobile && (
+            <Button fluid primary className="relaxed mt-20" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
+          )}
         </Form>
       </>
     );

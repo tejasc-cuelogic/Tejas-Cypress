@@ -24,6 +24,12 @@ export default class Accreditation extends React.Component {
     this.props.accreditationStore.setStepToBeRendered(step);
   }
 
+  handleSubmitStep = () => { // only for mobile screens
+    const { stepToBeRendered } = this.props.accreditationStore;
+    const { multiSteps } = this.props.uiStore;
+    this.multiClickHandler(multiSteps[stepToBeRendered]);
+  }
+
   render() {
     const {
       INCOME_EVIDENCE_FORM,
@@ -33,7 +39,7 @@ export default class Accreditation extends React.Component {
     const steps = [
       {
         name: 'Inc. evidence',
-        component: <IncomeEvidence />,
+        component: <IncomeEvidence submitStep={this.handleSubmitStep} />,
         isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
       },
       {
@@ -43,7 +49,7 @@ export default class Accreditation extends React.Component {
       },
     ];
     const {
-      inProgress,
+      inProgress, setFieldvalue,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
@@ -52,6 +58,7 @@ export default class Accreditation extends React.Component {
     return (
       <div className="step-progress">
         <MultiStep
+          setUiStorevalue={setFieldvalue}
           steps={steps}
           setIsEnterPressed={setIsEnterPressed}
           isEnterPressed={isEnterPressed}

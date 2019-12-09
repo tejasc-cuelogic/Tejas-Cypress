@@ -4,14 +4,14 @@ import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
 import ChartPie from './ChartPie';
 
 const isTablet = document.documentElement.clientWidth < 992;
-const COLORS = ['#C782FF', '#28DAC9', '#0681A1', '#86D200', '#D2FF85', '#474747'];
+const COLORS = ['#C782FF', '#28DAC9', '#4287f5', '#8742f5', '#cc8718', '#0681A1', '#86D200', '#474747', '#140c87', '#f5426c'];
 
 const PortfolioAllocations = ({ pieChart, isAdmin }) => (
   <>
-    <Header as="h4">Portfolio Allocations</Header>
+    <Header as={isTablet ? 'h5' : 'h4'}>Portfolio Allocations</Header>
     <Grid celled={isTablet ? undefined : 'internally'}>
       <Grid.Row>
-        <Grid.Column className="portfolio-allocation" widescreen={isAdmin ? 7 : 6} largeScreen={7} computer={7} tablet={16} mobile={16}>
+        <Grid.Column className="portfolio-allocation" widescreen={isAdmin ? 7 : 6} largeScreen={7} computer={7} tablet={12} mobile={16}>
           <ChartPie title="Investment Type" data={pieChart.investmentType} colors={COLORS} />
         </Grid.Column>
         <Grid.Column className="portfolio-allocation" widescreen={isAdmin ? 9 : 6} largeScreen={9} computer={9} tablet={16} mobile={16}>

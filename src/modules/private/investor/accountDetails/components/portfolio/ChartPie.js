@@ -54,19 +54,17 @@ export default class ChartPie extends Component {
   }
 
   renderLegend = (props) => {
-    const { payload } = props;
     const hasIcons = !!this.props.icons;
     return (
       <ul className="chartLegends">
         {
-          payload.map((entry) => {
-            const icon = get(entry, 'payload.payload.key');
+          props && props.data.map((entry, indx) => {
+            const icon = get(entry, 'key');
             return (
-              <li style={{ color: entry.color }} key={`item-${entry.value}`}>
+              <li style={{ color: this.props.colors[indx] }} key={`item-${entry.name}`}>
                 <span>
-                  {entry.icon}
                   {hasIcons && <Icon className={this.props.icons[icon]} />}
-                  {entry.value}
+                  {entry.name}
                 </span>
               </li>
             );
@@ -78,35 +76,84 @@ export default class ChartPie extends Component {
 
   render() {
     const { data, title, colors } = this.props;
+    const isSmallDevice = document.documentElement.clientWidth <= 320;
+    const isMobile = document.documentElement.clientWidth < 768;
+    const CustomLegend = () => (
+      <Legend
+        wrapperStyle={{ position: 'absolute' }}
+        layout="vertical"
+        verticalAlign="top"
+        align="right"
+        width={isSmallDevice ? 160 : 180}
+        data={data}
+        content={this.renderLegend}
+      />
+    );
     return (
-      <ResponsiveContainer height={220}>
-        <PieChart>
-          <Legend layout="vertical" verticalAlign="middle" align="right" content={this.renderLegend} />
-          <Pie
-            dataKey="value"
-            activeIndex={this.state.activeIndex}
-            activeShape={renderActiveShape}
-            data={data}
-            innerRadius="85%"
-            outerRadius="100%"
-            startAngle={0}
-            endAngle={360}
-            type="circle"
-            fill="#8884d8"
-            paddingAngle={0}
-            onMouseEnter={this.onPieEnter}
-            onMouseLeave={this.onPieLeave}
-            icon={this.props.icon}
-          >
-            {
-              data.map((entry, index) => (
-                <Cell key={colors[index % colors.length]} fill={colors[index % colors.length]} />
-              ))
-            }
-            <Label value={this.state.title || title} offset={0} position="center" />
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
+      <>
+        {!isMobile ? (
+        <ResponsiveContainer height={220}>
+          <PieChart>
+            <Legend layout="vertical" verticalAlign="middle" align="right" data={data} content={this.renderLegend} />
+            <Pie
+              dataKey="value"
+              activeIndex={this.state.activeIndex}
+              activeShape={renderActiveShape}
+              data={data}
+              innerRadius="85%"
+              outerRadius="100%"
+              startAngle={0}
+              endAngle={360}
+              type="circle"
+              fill="#8884d8"
+              paddingAngle={0}
+              onMouseEnter={this.onPieEnter}
+              onMouseLeave={this.onPieLeave}
+              icon={this.props.icon}
+            >
+              {
+                data.map((entry, index) => (
+                  <Cell key={colors[index % colors.length]} fill={colors[index % colors.length]} />
+                ))
+                }
+              <Label value={this.state.title || title} offset={0} position="center" />
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+        )
+          : (
+          <>
+            <ResponsiveContainer height={220} width={isSmallDevice ? 160 : 180}>
+              <PieChart>
+                <Pie
+                  dataKey="value"
+                  activeIndex={this.state.activeIndex}
+                  activeShape={renderActiveShape}
+                  data={data}
+                  innerRadius="85%"
+                  outerRadius="100%"
+                  startAngle={0}
+                  endAngle={360}
+                  type="circle"
+                  fill="#8884d8"
+                  paddingAngle={0}
+                  onMouseEnter={this.onPieEnter}
+                  onMouseLeave={this.onPieLeave}
+                  icon={this.props.icon}
+                >
+                  {
+                    data.map((entry, index) => (
+                      <Cell key={colors[index % colors.length]} fill={colors[index % colors.length]} />
+                    ))
+                    }
+                  <Label value={this.state.title || title} offset={0} position="center" />
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+            <CustomLegend />
+          </>
+          )}
+      </>
     );
   }
 }

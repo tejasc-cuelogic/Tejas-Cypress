@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Responsive, Sidebar, Menu, Icon, Dimmer, Loader } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
 import { SidebarNav } from './SidebarNav';
-import { UserAvatar, Logo, Image64 } from '../shared';
+import { UserAvatar, Image64 } from '../shared';
 import FireworksAnimation from '../../modules/public/offering/components/investNow/agreement/components/FireworkAnimation';
+import NavBarMobile from './NavBarMobile';
 
 const progressMap = ['viewLoanAgreement', 'portfolio'];
 
-@inject('uiStore')
+@inject('uiStore', 'navStore', 'userStore')
+@withRouter
 @observer
 class SidebarLeftPush extends Component {
   toggle = () => this.props.uiStore.updateLayoutState('leftPanel');
@@ -31,11 +33,26 @@ class SidebarLeftPush extends Component {
           </Dimmer>
           )
         }
-        <Responsive minWidth={1200}>
+        <Responsive minWidth={992}>
           <MySidebar layoutState={layoutState} toggle={this.toggle} desktop {...this.props} />
         </Responsive>
-        <Responsive maxWidth={1199}>
-          <MySidebar layoutState={layoutState} toggle={this.toggleMobile} mobile {...this.props} />
+        <Responsive maxWidth={991}>
+          {this.props.userStore.isInvestor
+            ? (
+              <NavBarMobile
+                onPusherClick={this.handlePusher}
+                onToggle={this.toggleMobile}
+                visible={layoutState.leftPanelMobile}
+                handleLogOut={this.props.handleLogOut}
+                isMobile
+                stepInRoute={this.props.navStore.stepInRoute}
+                currentUser={this.props.userStore.currentUser}
+                // publicContent={this.getRoutes(isAuthLocation)}
+                hasHeader
+                {...this.props}
+              />
+            ) : <MySidebar layoutState={layoutState} toggle={this.toggleMobile} mobile {...this.props} />
+          }
         </Responsive>
       </>
     );
@@ -44,7 +61,7 @@ class SidebarLeftPush extends Component {
 export default SidebarLeftPush;
 
 const MySidebar = observer(props => (
-  <Sidebar.Pushable>
+  <Sidebar.Pushable className={`${props.match.url.includes('/business-application') ? 'business-app' : ''} ${props.userStore.isInvestor ? 'investor' : ''} private-pushable`}>
     {!props.match.url.includes('/business-application') ? (
       <>
         <Sidebar
@@ -65,14 +82,6 @@ const MySidebar = observer(props => (
             renderThumbHorizontal={p => <div {...p} className="thumb-horizontal" />}
             renderView={p => <div {...p} className="view" />}
           >
-            <Link to="/" className="logo-wrapper">
-              <Logo
-                className="logo"
-                dataSrc={((props.layoutState.leftPanel)
-                  ? (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoGreenGrey')
-                  : 'LogoSmall')}
-              />
-            </Link>
             {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
             <div className="user-picture">
               {props.UserInfo.avatarUrl
