@@ -34,7 +34,7 @@ class Offering extends Component {
           loading={loading}
           campaigns={active}
           filters
-          heading={<Header as={responsiveVars.isMobile ? 'h3' : 'h2'} textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>Active Campaigns</Header>}
+          heading={<Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-30'}>Active Campaigns</Header>}
           subheading={<p className={responsiveVars.isMobile ? 'mb-40' : 'center-align mb-80'}>Browse the newest investment opportunities on NextSeed. {!responsiveVars.isMobile && <br /> }The next big thing may be inviting you to participate.</p>}
           loadMoreButton={(
             <>
@@ -47,11 +47,11 @@ class Offering extends Component {
         />
         <Divider as={Container} fitted />
         <section>
-          <Container className="mb-60 mt-60">
+          <Container className={responsiveVars.isMobile ? 'mb-10 mt-0' : 'mb-60 mt-60'}>
             <Grid columns={2} stackable>
               <Grid.Column>
                 <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-10' : 'mb-20'}>Never miss an opportunity</Header>
-                <p className={responsiveVars.isMobile ? 'mb-10' : ''}>
+                <p>
                   Sign up to stay informed about new investment<Responsive minWidth={768} as="br" /> opportunities, updates and events.
                 </p>
               </Grid.Column>
@@ -69,7 +69,7 @@ class Offering extends Component {
               loading={completedLoading}
               campaigns={completed}
               locked={3}
-              heading={<Header as={responsiveVars.isMobile ? 'h3' : 'h2'} textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-60'}>Successfully Funded Campaigns</Header>}
+              heading={<Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} caption className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-60'}>Successfully Funded Campaigns</Header>}
               loadMoreButton={(
                 <>
                 {!loading && completedList && completedList.length > RECORDS_TO_DISPLAY
