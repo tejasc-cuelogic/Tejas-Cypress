@@ -357,10 +357,10 @@ class HowItWorks extends Component {
                     <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
                   “{t.description}”
                     </Item.Description>
-                    <Item.Extra className="testimonial-user-details">
+                    <Item className="testimonial-user-details">
                       <p><b>{t.name}</b></p>
                       <span>{t.investment}</span>
-                    </Item.Extra>
+                    </Item>
                   </Item.Content>
                 </Item>
               </Item.Group>
@@ -410,7 +410,7 @@ class HowItWorks extends Component {
                 </Grid.Row>
               </Grid>
               <Divider hidden />
-              <p>
+              <p className={`${uiStore.responsiveVars.isMobile ? '' : 'center-align'} note`}>
                 The above figures include the total amount raised in offerings completed through
                 today by NextSeed Securities, LLC, NextSeed US LLC and NextSeed TX LLC. Historical
                 figures only. Past performance of one business is not a guarantee of future
