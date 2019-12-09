@@ -410,7 +410,7 @@ class HowItWorks extends Component {
                 </Grid.Row>
               </Grid>
               <Divider hidden />
-              <p className={`${uiStore.responsiveVars.isMobile ? '' : 'center-align'} note`}>
+              <p className={`${responsiveVars.isMobile ? '' : 'center-align'} note`}>
                 The above figures include the total amount raised in offerings completed through
                 today by NextSeed Securities, LLC, NextSeed US LLC and NextSeed TX LLC. Historical
                 figures only. Past performance of one business is not a guarantee of future
