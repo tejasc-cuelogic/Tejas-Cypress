@@ -427,6 +427,7 @@ export class IdentityStore {
         Helper.toast(`Verification ${requestMode}.`, 'success');
       }
       this.setFieldValue('signUpLoading', false);
+      uiStore.setProgress(false);
     } catch (err) {
       this.setFieldValue('signUpLoading', false);
       uiStore.setProgress(false);
