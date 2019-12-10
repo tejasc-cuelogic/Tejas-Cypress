@@ -41,7 +41,7 @@ export default class AllRequests extends Component {
   paginate = params => this.props.bankAccountStore.pageRequest(params);
 
   render() {
-    const { bankAccountStore, uiStore } = this.props;
+    const { bankAccountStore, uiStore, match } = this.props;
     const { inProgress } = uiStore;
     const {
       changeRequests, loading, count, requestState,
@@ -74,7 +74,7 @@ export default class AllRequests extends Component {
                 : changeRequests.map((req, index) => (
                   <Table.Row key={`${req.userId}_${index}`}>
                     <Table.Cell>
-                      <Link to={`/app/users/${req.userId}/profile-data`}><p><b>{req.firstName} {req.lastName}</b></p></Link>
+                      <Link onClick={() => sessionStorage.setItem('userDetailsRefUrl', match.url)} to={`/app/users/${req.userId}/profile-data`}><p><b>{req.firstName} {req.lastName}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
                       {get(req, 'linkedBank.changeRequest.dateRequested') ? DataFormatter.getDateAsPerTimeZone(moment.unix(get(req, 'linkedBank.changeRequest.dateRequested')), false, false, false) : 'N/A'}
