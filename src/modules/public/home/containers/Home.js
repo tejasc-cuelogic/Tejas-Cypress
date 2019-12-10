@@ -15,7 +15,7 @@ import NewsLetter from '../components/NewsLetter';
 class Home extends Component {
   constructor(props) {
     super(props);
-    props.campaignStore.initRequest(['LIVE']);
+    props.campaignStore.initRequest('LIVE');
   }
 
   handleExploreBtn = () => {
