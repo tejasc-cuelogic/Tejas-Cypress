@@ -215,6 +215,10 @@ export class CampaignStore {
     return offeringList.splice(0, this.activeToDisplay);
   }
 
+  @computed get creation() {
+    return this.CompletedOfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'creation')).includes(o.stage));
+  }
+
   @computed get activeList() {
     // const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
     return orderBy(this.OfferingList, o => (get(o, 'keyTerms.shorthandBusinessName') ? get(o, 'keyTerms.shorthandBusinessName').toLowerCase() : get(o, 'keyTerms.shorthandBusinessName')), ['asc']);
@@ -232,8 +236,8 @@ export class CampaignStore {
   }
 
   @computed get completedList() {
-    // return sortBy(this.CompletedOfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage)), ['order']);
-    return sortBy(this.CompletedOfferingList, ['order']);
+    return sortBy(this.CompletedOfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage)), ['order']);
+    // return sortBy(this.CompletedOfferingList, ['order']);
   }
 
   @action
@@ -428,7 +432,7 @@ export class CampaignStore {
     const filtered = comments.filter(c => ((c.createdUserInfo && c.createdUserInfo.id === issuerId
       && c.approved)
       || (c.createdUserInfo && c.createdUserInfo.id !== issuerId)) && c.scope === 'PUBLIC');
-    return filtered.length;
+    return filtered;
   }
 
   getBoxLink = (fileId, accountType) => new Promise((resolve) => {
