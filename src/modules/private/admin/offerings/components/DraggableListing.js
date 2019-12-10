@@ -127,8 +127,6 @@ export default class DraggableListing extends Component {
     }
   }
 
-  paginate = params => this.props.offeringsStore.pageRequest(params);
-
   handleDeleteCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
