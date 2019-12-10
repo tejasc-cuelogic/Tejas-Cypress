@@ -428,7 +428,7 @@ export class CampaignStore {
     const filtered = comments.filter(c => ((c.createdUserInfo && c.createdUserInfo.id === issuerId
       && c.approved)
       || (c.createdUserInfo && c.createdUserInfo.id !== issuerId)) && c.scope === 'PUBLIC');
-    return filtered.length;
+    return filtered;
   }
 
   getBoxLink = (fileId, accountType) => new Promise((resolve) => {
