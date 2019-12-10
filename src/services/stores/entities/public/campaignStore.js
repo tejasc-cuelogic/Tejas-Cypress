@@ -528,14 +528,14 @@ export class CampaignStore {
         launchDate || null,
         false, true, true, customAddinggDaysDateObj,
       );
-      const customAddingHoursDateObject = {
+      /* const customAddingHoursDateObject = {
         number: 48,
         format: 'Hours',
       };
       const launchDaysToRemains = DataFormatter.diffDaysForLauch(
         launchDate || null,
         false, true, true, customAddingHoursDateObject,
-      );
+      ); */
       const closeDaysToRemains = DataFormatter.diffDays(closingDate || null, false, true);
       const closeDaysToRemainsInHours = DataFormatter.getDateDifferenceInHoursOrMinutes(closingDate, true, true);
       const isInProcessing = closeDaysToRemainsInHours.value <= 0 && (!get(offeringDetails, 'closureSummary.hardCloseDate') || get(offeringDetails, 'closureSummary.hardCloseDate') === 'Invalid date');
@@ -545,9 +545,9 @@ export class CampaignStore {
       if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
         isReachedMax = true;
       }
-      if (launchDate && (launchDaysToRemains < closeDaysToRemains
+      if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains
         || closeDaysToRemains === null)
-        && launchDaysToRemains >= 0 && launchDaysToRemains <= 2) {
+        && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
         resultObject.isBannerShow = true;
         resultObject.datesBanner = 'NEW';
         resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
@@ -574,11 +574,11 @@ export class CampaignStore {
         resultObject.category = 'processing';
         return processingOfferingsArr.push(resultObject);
       }
-      if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains
-        || closeDaysToRemains === null)
-        && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
-        resultObject.datesBanner = 'NEW';
-      }
+      // if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains
+      //   || closeDaysToRemains === null)
+      //   && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
+      //   resultObject.datesBanner = 'NEW';
+      // }
       resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
       resultObject.isBannerShow = !!(resultObject.datesBanner || resultObject.amountsBanner);
       resultObject.launchDate = moment(launchDate).unix() || null;
