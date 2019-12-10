@@ -239,7 +239,7 @@ class CampaignLayout extends Component {
             <Divider hidden section />
           </>
         ) : null}
-        {dataRoomDocs.length
+        {(dataRoomDocs.length && get(campaign, 'stage') === 'LIVE')
           ? (
             <>
               <Documents newLayout />
