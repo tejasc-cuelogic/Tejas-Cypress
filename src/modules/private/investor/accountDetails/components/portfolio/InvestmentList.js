@@ -132,21 +132,21 @@ const InvestmentList = (props) => {
                 <Table.Body>
                   {
                     investments.map(data => (
-                      <Table.Row key={data.investmentDate} onClick={() => { if (!isMobile) { handleViewInvestment(!['active', 'pending'].includes(props.listOf) ? data.offering.id : ''); } }}>
+
+                      <Table.Row key={data.investmentDate} onClick={() => { if (!isMobile) { handleViewInvestment(props.listOf !== 'pending' ? data.offering.id : ''); } }}>
                         <Table.Cell>
                           <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />
                         </Table.Cell>
                         <Table.Cell>
                           <div className="offering-title">
-                            {props.listOf === 'pending' && !isAdmin ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (props.listOf === 'active' && !isAdmin)
-                              ? (<p>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</p>) : (
+                            {props.listOf === 'pending' && !isAdmin ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
                               <Link className={`${isMobile ? 'disable-click' : ''}`} to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
-                              )}
-                              {(get(data, 'offering.keyTerms.city') || get(data, 'offering.keyTerms.state')) && (
-                                <p className="date-stamp">
-                                  {get(data, 'offering.keyTerms.city')} {get(data, 'offering.keyTerms.state')}
-                                </p>
-                              )}
+                            )}
+                            {(get(data, 'offering.keyTerms.city') || get(data, 'offering.keyTerms.state')) && (
+                              <p className="date-stamp">
+                                {get(data, 'offering.keyTerms.city')} {get(data, 'offering.keyTerms.state')}
+                              </p>
+                            )}
                           </div>
                         </Table.Cell>
 
