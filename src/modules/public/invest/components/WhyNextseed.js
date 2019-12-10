@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Grid, Container, Button, Divider, Responsive, Icon } from 'semantic-ui-react';
+import { Header, Grid, Container, Button, Divider, Responsive, Icon, Item } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
 import NSImage from '../../../shared/NSImage';
 
@@ -30,6 +30,29 @@ const businesses = [
     },
   ],
 ];
+const highlights = [
+  {
+    title: 'Explore',
+    icon: 'icons/compass-icon.svg',
+    meta: 'Browse a curated selection of pre-vetted businesses that have passed our strict screening process.',
+    extra: 'Our vetting process',
+    link: '/resources/education-center/investor/business-survival',
+  },
+  {
+    title: 'Invest',
+    icon: 'icons/money-icon.svg',
+    meta: 'Invest with an Individual account, an Investment Entity, or a new Self-Directed IRA.',
+    extra: 'Our types of accounts offered',
+    link: '/resources/education-center/investor/account-opening-requirements-and-options',
+  },
+  {
+    title: 'Receive',
+    icon: 'icons/arrows-icon.svg',
+    meta: 'NextSeed collects and processes any payments directly into your investment account.',
+    extra: 'Our payments process',
+    link: '/resources/education-center/investor/payments',
+  },
+];
 @inject('uiStore', 'authStore')
 @observer
 export default class WhyNextseed extends Component {
@@ -45,23 +68,27 @@ export default class WhyNextseed extends Component {
             </Header>
             <p className={responsiveVars.uptoTablet ? 'mb-30' : 'center-align mb-70'}>You can harness our cutting-edge technology and expertise in private investments to build your portfolio.</p>
             <div className="how-it-works-steps">
-            <Grid stackable centered columns={3} relaxed={responsiveVars.uptoTablet ? '' : 'very'}>
-              <Grid.Column>
-                <Header as="h5" className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Explore</Header>
-                <p className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Browse a curated selection of pre-vetted businesses that have passed our strict screening process.</p>
-                <Link to="/resources/education-center/investor/business-survival">Our vetting process</Link>
-              </Grid.Column>
-              <Grid.Column>
-                <Header as="h5" className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Invest</Header>
-                <p className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Invest with an Individual account, an Investment Entity, or a new Self-Directed IRA. </p>
-                <Link to="/resources/education-center/investor/account-opening-requirements-and-options">Our types of accounts offered</Link>
-              </Grid.Column>
-              <Grid.Column>
-                <Header as="h5" className={responsiveVars.uptoTablet ? 'mb-10' : ''}>Receive</Header>
-                <p className={responsiveVars.uptoTablet ? 'mb-10' : ''}>NextSeed collects and processes any payments directly into your investment account.</p>
-                <Link to="/resources/education-center/investor/payments">Our payments process</Link>
-              </Grid.Column>
-            </Grid>
+              <Item.Group className="horizontal-items home-page">
+                {
+                  highlights.map(h => (
+                    <Item>
+                      <div className="ui mini image">
+                        <NSImage path={h.icon} />
+                      </div>
+                      <Item.Content>
+                        <Item.Header as="h6">{h.title}</Item.Header>
+                        <Item.Meta>{h.meta}</Item.Meta>
+                        <Item.Extra>
+                          <Link to={h.link}>
+                            {h.extra}
+                            <Icon className="ns-chevron-right ml-10" color="green" />
+                          </Link>
+                        </Item.Extra>
+                      </Item.Content>
+                    </Item>
+                  ))
+                }
+              </Item.Group>
             </div>
             <Header as={responsiveVars.uptoTablet ? 'h2' : 'h3'} textAlign="center" className={responsiveVars.uptoTablet ? 'mt-30' : 'mt-70'}>
               Watch our video

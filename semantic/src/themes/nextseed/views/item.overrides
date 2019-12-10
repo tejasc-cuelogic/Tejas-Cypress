@@ -303,6 +303,10 @@
                 line-height:24px;
                 margin:0;
             }
+            .extra a{
+                text-decoration: none;
+                display: inline-flex;
+            }
         }
         &.home-page{
             &:not(.unstackable)>.item{
