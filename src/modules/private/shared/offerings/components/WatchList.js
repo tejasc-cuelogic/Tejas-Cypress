@@ -61,7 +61,7 @@ export default class WatchList extends Component {
                     <Table.Cell collapsing>
                       {hasUsersAccess
                         ? (
-                    <Link to={`/app/users/${user.userId}/profile-data`}>
+                    <Link onClick={() => sessionStorage.setItem('userDetailsRefUrl', this.props.match.url)} to={`/app/users/${user.userId}/profile-data`}>
                       {`${get(user, 'userInfo.info.firstName')} ${get(user, 'userInfo.info.lastName')}`}
                     </Link>
                         ) : (
