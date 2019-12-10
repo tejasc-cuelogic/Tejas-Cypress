@@ -222,8 +222,9 @@ export class InvestmentLimitStore {
         { name: field, value: fieldVal[field] ? fieldVal[field] : 0 },
       );
     });
-    const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
-    this.currentLimit = this.getInvestmentLimit(data);
+    // const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
+    // this.currentLimit = this.getInvestmentLimit(data);
+    this.currentLimit = (accountType === 'entity') ? this.entityCurrentLimit : this.individualIRACurrentLimit;
     this.INVESTEMENT_LIMIT_META = Validator.onChange(
       this.INVESTEMENT_LIMIT_META,
       { name: limitField, value: this.currentLimit },
