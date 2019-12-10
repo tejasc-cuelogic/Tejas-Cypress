@@ -69,7 +69,8 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
       }
         </>
       )}
-      {['active', 'completed'].includes(listOf)
+      <br />
+      {['active', 'completed'].includes(listOf) && false
       && (
         <Button className="mt-30 mb-30" primary fluid content="Open Offering Details" as={Link} to={`${match.url}/investment-details/${data.offering.id}`} />
       )
