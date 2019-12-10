@@ -43,7 +43,7 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
         <Table.Body>
           {INVESTMENT_CARD_META.filter(i => i.for.includes(listOf)).map(row => (
             <Table.Row>
-              <Table.Cell>{row.label}</Table.Cell>
+              <Table.Cell collapsing>{row.label}</Table.Cell>
               <Table.Cell className="grey-header right-align">
                 {row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key)) : 'N/A'
                   : get(data, row.key) || 'N/A'
@@ -58,20 +58,20 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
         <>
       {viewAgreement && data.agreementId
       && (
-        <Button className="mt-30 mb-30 link-button" fluid content="View Agreement" onClick={() => viewAgreement(data.agreementId)} />
+        <Button className="mt-30 link-button" fluid content="View Agreement" onClick={() => viewAgreement(data.agreementId)} />
       )
       }
       {!isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0)))
-        && <Button className="mt-30 mb-30" primary fluid onClick={e => handleInvestNowClick(e, data.offering.id)} content="Change Investment Amount" />
+        && <Button className="mt-20" primary fluid onClick={e => handleInvestNowClick(e, data.offering.id)} content="Change Investment Amount" />
       }
       {(isAdmin || (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod))))
-        && <Button className="mt-30 mb-30" basic fluid as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} content="Cancel" />
+        && <Button className="mt-20 mb-30" basic fluid as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} content="Cancel" />
       }
         </>
       )}
       {['active', 'completed'].includes(listOf)
       && (
-        <Button className="mt-30 mb-30" primary fluid content="Open Offering Details" as={Link} to={`${match.url}/investment-details/${data.offering.id}`} />
+        <Button className="mt-20 mb-30" primary fluid content="Open Offering Details" as={Link} to={`${match.url}/investment-details/${data.offering.id}`} />
       )
       }
     </Accordion.Content>
@@ -176,15 +176,15 @@ const InvestmentList = (props) => {
                 }
                 <Table.Cell collapsing>
                   {props.listOf === 'pending' && (
-                    <Button.Group size="mini" compact>
+                    <Button.Group compact>
                       {viewAgreement && data.agreementId} {
-                        <Button onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
+                        <Button className="link-button mr-10" onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
                       }
                       {!props.isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0)))
                         && <Button onClick={e => handleInvestNowClick(e, data.offering.id)} primary content="Change" />
                       }
                       {(props.isAdmin || (get(data, 'offering.keyTerms.securities') !== 'REAL_ESTATE' && (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)))))
-                        && <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
+                        && <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} basic content="Cancel" />
                       }
                       {(!props.isAdmin && (get(data.offering, 'closureSummary.processingDate') && (DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0 || (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)))
                         && (
@@ -208,7 +208,7 @@ const InvestmentList = (props) => {
             <Table.HeaderCell colSpan={props.listOf === 'active' ? '1' : '2'} />
             <Table.HeaderCell textAlign="right">Total:</Table.HeaderCell>
             <Table.HeaderCell className="neutral-text">{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'investedAmount') : 0)}</Table.HeaderCell>
-            <Table.HeaderCell colSpan='3' />
+            <Table.HeaderCell colSpan="3" />
             {props.listOf !== 'pending'
             && (
               <Table.HeaderCell>{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
