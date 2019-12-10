@@ -178,7 +178,7 @@ const InvestmentList = (props) => {
                   {props.listOf === 'pending' && (
                     <Button.Group compact>
                       {viewAgreement && data.agreementId} {
-                        <Button className="link-button mr-10" onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
+                        <Button className="link-button mr-10" onClick={() => viewAgreement(data.agreementId)} content="View Agreement" />
                       }
                       {!props.isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0)))
                         && <Button onClick={e => handleInvestNowClick(e, data.offering.id)} primary content="Change" />
@@ -208,7 +208,7 @@ const InvestmentList = (props) => {
             <Table.HeaderCell colSpan={props.listOf === 'active' ? '1' : '2'} />
             <Table.HeaderCell textAlign="right">Total:</Table.HeaderCell>
             <Table.HeaderCell className="neutral-text">{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'investedAmount') : 0)}</Table.HeaderCell>
-            <Table.HeaderCell colSpan="3" />
+          <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : '3'} />
             {props.listOf !== 'pending'
             && (
               <Table.HeaderCell>{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
@@ -242,12 +242,12 @@ const InvestmentList = (props) => {
         </Card>
       </>
     ) : (
-      <Accordion fluid styled className="card-style">
+      <Accordion fluid styled className="card-style portfolio-list">
       <Accordion.Title onClick={() => props.toggleAccordion(props.listOf)} active={isActive} className="text-capitalize">
         <Icon className={`ns-chevron-${isActive ? 'up' : 'down'}`} />
         {`${props.listOf} (${props.listOfCount})`}
       </Accordion.Title>
-      <Accordion.Content active={!props.inActiveItems.includes(props.listOf)}>
+      <Accordion.Content className="bg-offwhite" active={!props.inActiveItems.includes(props.listOf)}>
         {!investments || !investments.length
           ? <InlineLoader text="No data available" />
           : (
@@ -258,7 +258,7 @@ const InvestmentList = (props) => {
               {listAsPerSecurityType[type] && listAsPerSecurityType[type].length
                 ? (
               <>
-                <Header as="h5" content={CAMPAIGN_KEYTERMS_SECURITIES[type]} />
+                <Header as="h5" className="investment-list" content={CAMPAIGN_KEYTERMS_SECURITIES[type]} />
                 <ListTable listData={listAsPerSecurityType[type]} />
               </>
                 ) : null
