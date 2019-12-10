@@ -12,7 +12,7 @@ import {
   getAmountInvestedInCampaign,
   validateInvestmentAmount, getInvestorInFlightCash,
   generateAgreement, finishInvestment, transferFundsForInvestment,
-  investNowGeneratePurchaseAgreement,
+  investNowGeneratePurchaseAgreement, investNowGetInvestmentAgreement,
 } from '../../queries/investNow';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 
@@ -362,8 +362,18 @@ export class InvestmentStore {
             if (!resp.data.investNowGeneratePurchaseAgreement) {
               this.setShowTransferRequestErr(true);
             }
-            this.setFieldValue('agreementDetails', resp.data.investNowGeneratePurchaseAgreement);
-            resolve({ isValid: status, flag });
+
+            // Get docusign and npa document urls:
+            const agreementVaraibles = {
+              agreementId: this.investmentAmount.toString(),
+              offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
+              accountId: this.getSelectedAccountTypeId,
+            };
+            this.getInvestmentAgreement(agreementVaraibles)
+              .then((result) => {
+                this.setFieldValue('agreementDetails', result.data.investNowGetInvestmentAgreement);
+                resolve({ isValid: status, flag });
+              });
           }))
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
@@ -378,6 +388,21 @@ export class InvestmentStore {
     } else {
       resolve();
     }
+  });
+
+  getInvestmentAgreement = varaibleObj => new Promise((resolve, reject) => {
+    graphql({
+      client,
+      query: investNowGetInvestmentAgreement,
+      variables: varaibleObj,
+      onFetch: (data) => {
+        resolve(data);
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      },
+    });
   });
 
   checkLockinPeriod = () => {
