@@ -484,12 +484,12 @@ export class CampaignStore {
   }
 
   generateBanner = (offeringDetailsList, addObjectProps = false) => {
-    let parallelOfferingsArr = [];
-    let newOfferingsArr = [];
     let closingOfferingsArr = [];
-    let processingOfferingsArr = [];
-    let reachedMaxOfferingsArr = [];
+    let newOfferingsArr = [];
+    let parallelOfferingsArr = [];
     let otherOfferingsArr = [];
+    let reachedMaxOfferingsArr = [];
+    let processingOfferingsArr = [];
     offeringDetailsList.map((offeringDetails) => {
       const offeringKeyTermDetails = get(offeringDetails, 'keyTerms');
       const minimumOfferingAmountCF = get(offeringKeyTermDetails, 'minOfferingAmountCF') || '0.00';
@@ -596,9 +596,9 @@ export class CampaignStore {
     otherOfferingsArr = orderBy(otherOfferingsArr, ['launchDate'], ['desc']);
     reachedMaxOfferingsArr = orderBy(reachedMaxOfferingsArr, ['processingDate'], ['asc']);
     const sortedResultObject = [
-      ...parallelOfferingsArr,
-      ...newOfferingsArr,
       ...closingOfferingsArr,
+      ...newOfferingsArr,
+      ...parallelOfferingsArr,
       ...otherOfferingsArr,
       ...reachedMaxOfferingsArr,
       ...processingOfferingsArr,

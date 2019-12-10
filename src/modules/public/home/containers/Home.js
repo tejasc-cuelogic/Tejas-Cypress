@@ -48,7 +48,7 @@ class Home extends Component {
         <CampaignList
           loading={loading}
           explore
-          campaigns={active.splice(0, 6)}
+          campaigns={active.slice(0, 6)}
           heading={(
             <>
               <Header as="h2" textAlign="center">Latest Campaigns</Header>
