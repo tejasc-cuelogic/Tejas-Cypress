@@ -207,7 +207,7 @@ class offerDetails extends Component {
       navItems = modifySubNavs(navItems, newLayout);
       navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
     }
-    if (get(campaign, 'stage') !== 'LIVE') {
+    if (!['LIVE', 'CREATION'].includes(get(campaign, 'stage'))) {
       navItems = navItems.filter(n => n.to !== '#data-room');
     }
     if ((details && details.data && !details.data.getOfferingDetailsBySlug)
@@ -267,7 +267,7 @@ class offerDetails extends Component {
                   <SuspenseBoundary>
                     <Switch>
                       <Route exact path={match.url} render={props => <InitialComponent offeringName={offeringName} refLink={this.props.match.url} {...props} />} />
-                      {(newLayout && get(campaign, 'stage') === 'LIVE')
+                      {(newLayout && ['LIVE', 'CREATION'].includes(get(campaign, 'stage')))
                         && (
                           <Route path={`${this.props.match.url}/data-room`} component={DocumentModal} />
                         )
