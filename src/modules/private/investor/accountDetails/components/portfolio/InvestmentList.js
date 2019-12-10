@@ -12,17 +12,19 @@ const INVESTMENT_CARD_META = [
   { label: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', for: ['pending'] },
   { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: value => CAMPAIGN_KEYTERMS_SECURITIES[value], for: ['pending'] },
   { label: 'Invested Amount', key: 'investedAmount', for: ['pending'], getRowValue: value => Helper.CurrencyFormat(value) },
-  { label: 'Status', key: 'offering.stage', for: ['pending'], getRowValue: value => STAGES[value].label },
+  { label: 'Status', key: 'offering.stage', for: ['pending', 'completed'], getRowValue: value => STAGES[value].label },
   {
     label: 'Days to close',
     key: 'offering.closureSummary.processingDate',
     for: ['pending'],
     getRowValue: value => ((DataFormatter.diffDays(value, false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value === 0 ? '' : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value < 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label}` : DataFormatter.diffInDaysHoursMin(value).diffText)) || 'N/A',
   },
-  { label: 'Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active', 'completed'], getRowValue: value => `${value}%` },
-  { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active', 'completed'], getRowValue: value => `${value} months` },
+  { label: 'Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%` },
+  { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months` },
   { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], getRowValue: value => <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(value, false, false, false)} /> },
-  { label: 'Principal Remaining', key: '', for: ['active', 'completed'] }, // pending
+  { label: 'Principal Remaining', key: '', for: ['active'] }, // pending
+  { label: 'Net Payments Recieved', key: 'netPaymentsReceived', for: ['completed'] },
+  { label: 'Realized Multiple', key: 'offering.keyTerms.investmentMultiple', for: ['completed'] },
 ];
 
 const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleInvestNowClick, isAdmin, match }) => {
@@ -178,7 +180,7 @@ const InvestmentList = (props) => {
                   {props.listOf === 'pending' && (
                     <Button.Group compact>
                       {viewAgreement && data.agreementId} {
-                        <Button className="link-button mr-10" onClick={() => viewAgreement(data.agreementId)} secondary content="View Agreement" />
+                        <Button className="link-button mr-10" onClick={() => viewAgreement(data.agreementId)} content="View Agreement" />
                       }
                       {!props.isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0)))
                         && <Button onClick={e => handleInvestNowClick(e, data.offering.id)} primary content="Change" />
@@ -250,10 +252,8 @@ const InvestmentList = (props) => {
       <Accordion.Content active={!props.inActiveItems.includes(props.listOf)}>
         {!investments || !investments.length
           ? <InlineLoader text="No data available" />
-          : (
-<>
-            {props.listOf === 'active'
-              ? keytermsSecurityTypes.map(type => (
+          : props.listOf === 'active'
+            ? keytermsSecurityTypes.map(type => (
               <>
               {listAsPerSecurityType[type] && listAsPerSecurityType[type].length
                 ? (
@@ -264,11 +264,8 @@ const InvestmentList = (props) => {
                 ) : null
               }
               </>
-              ))
-              : <ListTable listData={props.investments} />
-            }
-          </>
-          )
+            ))
+            : <ListTable listData={props.investments} />
         }
       </Accordion.Content>
     </Accordion>
