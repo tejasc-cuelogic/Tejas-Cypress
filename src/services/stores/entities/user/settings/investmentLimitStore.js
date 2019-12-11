@@ -271,9 +271,6 @@ export class InvestmentLimitStore {
             // },
             {
               query: userDetailsQuery,
-              variables: {
-                userId: userDetailsStore.currentUserId,
-              },
             }],
         })
         .then(() => {
