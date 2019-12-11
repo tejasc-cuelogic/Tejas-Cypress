@@ -1,13 +1,12 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find, get, isNull } from 'lodash';
-import { bankAccountStore, uiStore, userDetailsStore, userStore } from '../../index';
+import { bankAccountStore, uiStore, userDetailsStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { submitInvestorAccount, upsertInvestorAccount, createIndividualGoldStarInvestor } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-// import userStore from '../userStore';
 
 
 class IndividualAccountStore {
@@ -54,7 +53,7 @@ class IndividualAccountStore {
         .catch((err) => {
           reject(err);
         });
-    })
+    });
   };
 
   submitAccount = () => {
