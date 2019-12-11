@@ -77,7 +77,8 @@ export default class AccountDetails extends Component {
   handleCloseModal = () => {
     this.props.userDetailsStore.setFieldValue('selectedUserId', '');
     this.props.bankAccountStore.resetRoutingNum();
-    this.props.history.push(this.props.refLink);
+    this.props.history.push(sessionStorage.getItem('userDetailsRefUrl') || this.props.refLink);
+    sessionStorage.removeItem('userDetailsRefUrl');
   }
 
   render() {

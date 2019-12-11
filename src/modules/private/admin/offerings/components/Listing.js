@@ -59,16 +59,18 @@ export default class Listing extends Component {
 
   render() {
     const {
-      uiStore, offeringsStore, stage,
+      uiStore, offeringsStore, stage, noPagination,
     } = this.props;
     const {
       offerings,
+      allOfferings,
       loading,
       count,
       requestState,
     } = offeringsStore;
     const { confirmBox } = uiStore;
-    const totalRecords = count || 0;
+    const totalRecords = noPagination ? 0 : (count || 0);
+    const offeringList = noPagination ? allOfferings : offerings;
     if (loading) {
       return <InlineLoader />;
     }
@@ -104,10 +106,10 @@ export default class Listing extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {offerings.length === 0 ? (
+              {offeringList.length === 0 ? (
                 <Table.Row><Table.Cell colSpan={8} textAlign="center">No Offering to display !</Table.Cell></Table.Row>
               )
-                : offerings.map(offering => (
+                : offeringList.map(offering => (
                   <Table.Row key={offering.id} className={this.props.uiStore.inProgressArray.length && offering.id === this.state.loadingOfferId ? 'disabled' : ''}>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       <Link to={`${this.props.match.url}/edit/${offering.id}`}>
