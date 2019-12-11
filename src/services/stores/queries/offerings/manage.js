@@ -11,6 +11,12 @@ const common = {
     offeringSize
     preferredReturn
     targetInvestmentPeriod
+    minOfferingAmountCF
+    maxOfferingAmountCF
+    minOfferingAmount506
+    maxOfferingAmount506
+    minOfferingAmount506C
+    maxOfferingAmount506C
   }
   leadDetails {
     email {
@@ -51,6 +57,8 @@ const common = {
     hardCloseDate
     operationsDate
     launchDate
+    totalInvestmentAmount
+    totalInvestorCount
     repayment {
       currentRepaidAmount
       count

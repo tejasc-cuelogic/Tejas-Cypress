@@ -10,7 +10,7 @@ import {
   allOfferings, allOfferingsCompact, updateOffering,
   deleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings,
 } from '../../../queries/offerings/manage';
-import { offeringCreationStore, userStore, uiStore } from '../../../index';
+import { offeringCreationStore, userStore, uiStore, campaignStore } from '../../../index';
 import { ClientDb, DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -50,6 +50,8 @@ export class OfferingsStore {
 
   @observable totalRaisedAmount = [];
 
+  @observable orderedActiveLiveList = [];
+
   @action
   initRequest = (props, forceResetDb = false) => {
     const {
@@ -68,6 +70,9 @@ export class OfferingsStore {
           this.requestState.page = 1;
           this.requestState.skip = 0;
           this.setDb(res.getOfferings, stage);
+          if (stage === 'live') {
+            this.orderedActiveListArr();
+          }
         }
       },
       onError: (err) => {
@@ -281,7 +286,7 @@ export class OfferingsStore {
   }
 
   @action
-  setOrderForOfferings = (newArr, stage) => {
+  setOrderForOfferings = (newArr, stage, isMerge = false) => {
     const offeringOrderDetails = [];
     newArr.forEach((item, index) => {
       offeringOrderDetails.push({
@@ -291,7 +296,11 @@ export class OfferingsStore {
       // eslint-disable-next-line no-param-reassign
       newArr[index].order = index + 1;
     });
-    this.setDb(newArr);
+    if (isMerge) {
+      this.orderedActiveLiveList[1].offerings = newArr;
+    } else {
+      this.setDb(newArr);
+    }
     client
       .mutate({
         mutation: setOrderForOfferings,
@@ -325,6 +334,20 @@ export class OfferingsStore {
     return this.db[this.requestState.stage]
       && this.db[this.requestState.stage].length ? toJS(sortBy(this.db[this.requestState.stage], ['order'])) : [];
   }
+
+  @action
+  orderedActiveListArr = () => {
+    const liveOfferingList = this.db.live
+      && this.db.live.length ? toJS(this.db.live) : [];
+    this.orderedActiveLiveList = campaignStore.generateBanner(liveOfferingList, true, true);
+  }
+
+  // @computed get orderedActiveLiveList() {
+  //   const liveOfferingList = this.db.live
+  //     && this.db.live.length ? toJS(this.db.live) : [];
+  //   const orderedActiveListArr = campaignStore.generateBanner(liveOfferingList, true, true);
+  //   return orderedActiveListArr;
+  // }
 
   @computed get allOfferings() {
     return this.db[this.requestState.stage]

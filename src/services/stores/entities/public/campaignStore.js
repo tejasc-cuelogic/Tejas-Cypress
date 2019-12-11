@@ -498,7 +498,7 @@ export class CampaignStore {
     this.totalPaymentChart = payChart;
   }
 
-  generateBanner = (offeringDetailsList, addObjectProps = false) => {
+  generateBanner = (offeringDetailsList, addObjectProps = false, isFromAdmin = false) => {
     let closingOfferingsArr = [];
     let newOfferingsArr = [];
     let otherOfferingsArr = [];
@@ -596,6 +596,16 @@ export class CampaignStore {
     processingOfferingsArr = orderBy(processingOfferingsArr, ['processingDate'], ['desc']);
     otherOfferingsArr = orderBy(otherOfferingsArr, ['order'], ['asc']);
     reachedMaxOfferingsArr = orderBy(reachedMaxOfferingsArr, ['processingDate'], ['asc']);
+    // const sortedResultObject = [];
+    if (isFromAdmin) {
+      const sortedResultObject = [
+        { category: 'closingSoonAndNew', title: 'Closing Soon And New', offerings: [...closingOfferingsArr, ...newOfferingsArr] },
+        { category: 'other', title: 'Other', offerings: [...otherOfferingsArr] },
+        { category: 'reachedMax', title: 'Reached Max', offerings: [...reachedMaxOfferingsArr] },
+        { category: 'processing', title: 'Processing', offerings: [...processingOfferingsArr] },
+      ];
+      return sortedResultObject;
+    }
     const sortedResultObject = [
       ...closingOfferingsArr,
       ...newOfferingsArr,
