@@ -62,6 +62,7 @@ export default class TransferFunds extends Component {
                       isAccountHardFrozen={isAccountHardFrozen}
                       cash={cashAmount || '0.00'}
                       setFieldValue={setFieldValue}
+                      account={accountType}
                       showAccountFrozenModal={showAccountFrozenModal}
                     />
                   </Grid.Column>

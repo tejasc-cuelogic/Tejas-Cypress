@@ -46,6 +46,8 @@ export class TransactionStore {
 
   @observable showConfirmPreview = false;
 
+  @observable showSuccessModal = false;
+
   @observable reSendVerificationCode = null;
 
   @observable transactionOtpRequestId = null;
@@ -229,6 +231,7 @@ export class TransactionStore {
     this.data = [];
     this.db = [];
     this.setDb([]);
+    this.showSuccessModal = false;
   }
 
   @action
@@ -288,7 +291,7 @@ export class TransactionStore {
     const errorMessage = 'Please enter a valid amount to deposit.';
     this[formName] = Validator.onChange(
       this[formName],
-      { name: field, value: values.floatValue },
+      { name: field, value: values.floatValue.toFixed(2) },
     );
     if (formName === 'TRANSFER_FRM' && values.floatValue <= 0) {
       uiStore.setErrors(errorMessage);
