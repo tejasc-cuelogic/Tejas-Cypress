@@ -106,7 +106,7 @@ export default class AddWithdrawFund extends Component {
       <>
         {!cashAvailable.loading
           && (
-            <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
+            <Modal dimmer open size="mini" closeOnDimmerClick={false}>
               <Modal.Header className="signup-header">
                 <Header as="h3"><AccTypeTitle noText />
                   {headingTitle}
@@ -166,21 +166,21 @@ export default class AddWithdrawFund extends Component {
                             {match.params.action === 'withdraw'
                               ? (
                                 <>
-                                  <label>From</label>
+                                  <Header.Subheader>From</Header.Subheader>
                                   {currentActiveAccountDetails
                                     && currentActiveAccountDetails.name
                                     ? currentActiveAccountDetails.name : null} Account
                             <Divider hidden />
-                                  <label>To</label>
+                                  <Header.Subheader>To</Header.Subheader>
                                   {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
                                 </>
                               )
                               : (
                                 <>
-                                  <label>From</label>
+                                  <Header.Subheader>From</Header.Subheader>
                                   {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
                                   <Divider hidden />
-                                  <label>To</label>
+                                  <Header.Subheader>To</Header.Subheader>
                                   {currentActiveAccountDetails
                                     && currentActiveAccountDetails.name
                                     ? currentActiveAccountDetails.name : null} Account
@@ -210,7 +210,7 @@ export default class AddWithdrawFund extends Component {
 
                   <div className="center-align mt-30">
                     <Button.Group>
-                      {showConfirmPreview && !showSuccessModal
+                      {!showSuccessModal
                         ? <Button onClick={this.cancelTransfer} content="Cancel" /> : null
                       }
                       {showSuccessModal
