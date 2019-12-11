@@ -35,10 +35,10 @@ export default class Documents extends Component {
     }
     return (
       <div className={this.props.portfolioSection ? 'content-spacer' : ''}>
-        <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
+        {/* <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
           Documents
           <span className="anchor" id="data-room" />
-        </Header>
+        </Header> */}
         {!this.props.newLayout && <Divider hidden />}
         <Grid columns={3} stackable doubling>
           {
@@ -59,9 +59,8 @@ export default class Documents extends Component {
             ))
           }
         </Grid>
-        {this.state.doc
-        &&
-        <DocumentModal doc={this.state.doc} close={this.close} />
+        {this.state.doc &&
+          <DocumentModal doc={this.state.doc} close={this.close} />
         }
       </div>
     );
