@@ -51,8 +51,8 @@ export default class CampaignList extends Component {
   renderBaners = (offering) => {
     const resultFound = get(offering, 'isBannerShow');
     if (resultFound) {
-      const bannerFirst = get(offering, 'bannerFirstText');
-      const bannerSecond = get(offering, 'bannerSecondText');
+      const bannerFirst = get(offering, 'datesBanner');
+      const bannerSecond = get(offering, 'amountsBanner');
       return (
         <Label.Group size="small">
           {bannerFirst
