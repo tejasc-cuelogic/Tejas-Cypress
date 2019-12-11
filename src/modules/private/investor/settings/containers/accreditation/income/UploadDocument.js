@@ -10,7 +10,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 @observer
 export default class UploadDocument extends Component {
   onFileDrop = (files, field) => {
-    this.props.accreditationStore.setFileUploadData('INCOME_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Income', '', '', '', this.props.match.params.accountId);
+    this.props.accreditationStore.setFileUploadData('INCOME_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Income', '', '', '');
   }
 
   handleDelCancel = () => {
@@ -22,7 +22,7 @@ export default class UploadDocument extends Component {
   }
 
   handleDelDoc = (field) => {
-    this.props.accreditationStore.removeUploadedData('INCOME_UPLOAD_DOC_FORM', field, null, this.props.accountType, this.props.match.params.accountId);
+    this.props.accreditationStore.removeUploadedData('INCOME_UPLOAD_DOC_FORM', field, null, this.props.accountType);
   }
 
   render() {
