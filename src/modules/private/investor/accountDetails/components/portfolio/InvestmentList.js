@@ -24,7 +24,7 @@ const INVESTMENT_CARD_META = [
   { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], getRowValue: value => <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(value, false, false, false)} /> },
   { label: 'Principal Remaining', key: '', for: ['active'] }, // pending
   { label: 'Net Payments Recieved', key: 'netPaymentsReceived', for: ['completed'] },
-  { label: 'Realized Multiple', key: 'offering.keyTerms.investmentMultiple', for: ['completed'] },
+  { label: 'Realized Multiple', key: 'offering.closureSummary.keyTerms.multiple', getRowValue: value => `${value}x`, for: ['completed'] },
 ];
 
 const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleInvestNowClick, isAdmin, match }) => {
@@ -71,7 +71,8 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
       }
         </>
       )}
-      {['active', 'completed'].includes(listOf)
+      <br />
+      {['active', 'completed'].includes(listOf) && false
       && (
         <Button className="mt-20 mb-30" primary fluid content="Open Offering Details" as={Link} to={`${match.url}/investment-details/${data.offering.id}`} />
       )
@@ -116,10 +117,9 @@ const InvestmentList = (props) => {
                 </Table.Cell>
                 <Table.Cell>
                   <div className="offering-title">
-                    {props.listOf === 'pending' && !isAdmin ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (props.listOf === 'active' && !isAdmin)
-                      ? (<p>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</p>) : (
-                      <Link className={`${isMobile ? 'disable-click' : ''}`} to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
-                      )}
+                  {props.listOf === 'pending' && !isAdmin ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
+                    <Link className={`${isMobile ? 'disable-click' : ''}`} to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
+                  )}
                       {(get(data, 'offering.keyTerms.city') || get(data, 'offering.keyTerms.state')) && (
                         <p className="date-stamp">
                           {get(data, 'offering.keyTerms.city')} {get(data, 'offering.keyTerms.state')}
