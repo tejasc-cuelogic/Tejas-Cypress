@@ -73,6 +73,13 @@ const SortableItem = SortableElement(({
             <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
           </Button>
         ))}
+        {['live'].includes(stage)
+        && (
+          <Button icon className="link-button">
+            <Icon className="ns-trash" onClick={() => handleAction('Delete', offering.id, !offering.isAvailablePublicly)} />
+          </Button>
+        )
+        }
       </Button.Group>
     </div>
   </div>
@@ -126,8 +133,6 @@ export default class DraggableListing extends Component {
       this.props.uiStore.setConfirmBox(action, offeringId, isPublished);
     }
   }
-
-  paginate = params => this.props.offeringsStore.pageRequest(params);
 
   handleDeleteCancel = () => {
     this.props.uiStore.setConfirmBox('');
