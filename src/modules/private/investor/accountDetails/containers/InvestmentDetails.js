@@ -5,6 +5,7 @@ import { Modal, Card } from 'semantic-ui-react';
 import moment from 'moment';
 import { includes, get } from 'lodash';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
+import Documents from '../../../../public/offering/components/campaignDetails/documents';
 import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import NotFound from '../../../../shared/NotFound';
@@ -17,6 +18,7 @@ const navItems = [
   { title: 'Transactions', to: 'transactions', component: 'Transactions' },
   { title: 'Updates', to: 'updates', component: 'Updates' },
   { title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards' },
+  { title: 'Documents', to: 'documents', component: Documents, load: false },
 ];
 @inject('portfolioStore', 'campaignStore', 'uiStore', 'offeringCreationStore', 'updateStore')
 @observer
@@ -99,6 +101,7 @@ class InvestmentDetails extends PureComponent {
                         render={props => (
                           <CurrentModule
                             isAdmin={this.props.isAdmin}
+                            portfolioSection
                             {...props}
                           />
                         )
