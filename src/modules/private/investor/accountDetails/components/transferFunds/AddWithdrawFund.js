@@ -100,7 +100,7 @@ export default class AddWithdrawFund extends Component {
     const cashAmount = cash ? money.isNegative(cash) ? '0.00' : cash : '0.00';
     const transferNotifyText = showSuccessModal && match.params.action === 'add'
       ? 'These funds are immediately available for investment. Please allow 5-7 business days for this transfer to be fully processed'
-      : 'Please Allow 5-7 Business days for this transfer to be fully processed';
+      : 'Please allow 5-7 business days for this transfer to be fully processed.';
 
     return (
       <>
@@ -166,21 +166,21 @@ export default class AddWithdrawFund extends Component {
                             {match.params.action === 'withdraw'
                               ? (
                                 <>
-                                  <Header.Subheader>From</Header.Subheader>
+                                  <label>From</label>
                                   {currentActiveAccountDetails
                                     && currentActiveAccountDetails.name
                                     ? currentActiveAccountDetails.name : null} Account
                             <Divider hidden />
-                                  <Header.Subheader>To</Header.Subheader>
+                                  <label>To</label>
                                   {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
                                 </>
                               )
                               : (
                                 <>
-                                  <Header.Subheader>From</Header.Subheader>
+                                  <label>From</label>
                                   {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
                                   <Divider hidden />
-                                  <Header.Subheader>To</Header.Subheader>
+                                  <label>To</label>
                                   {currentActiveAccountDetails
                                     && currentActiveAccountDetails.name
                                     ? currentActiveAccountDetails.name : null} Account
