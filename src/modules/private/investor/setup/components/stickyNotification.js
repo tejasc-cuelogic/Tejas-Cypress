@@ -34,16 +34,16 @@ export default class StickyNotification extends Component {
   handleVerifyAccreditation = (e) => {
     e.preventDefault();
     const url = '/dashboard/account-settings/investment-limits';
-    const { accountType, accountId, multipleAccounts } = this.props;
+    const { accountType, multipleAccounts } = this.props;
     if (!multipleAccounts) {
       if (accountType === 'entity') {
         if (this.props.userDetailsStore.isEntityTrust) {
-          this.props.history.push(`${url}/verify-trust-entity-accreditation/${accountId}/${accountType}`);
+          this.props.history.push(`${url}/verify-trust-entity-accreditation/${accountType}`);
         } else {
-          this.props.history.push(`${url}/verify-entity-accreditation/${accountId}/${accountType}`);
+          this.props.history.push(`${url}/verify-entity-accreditation/${accountType}`);
         }
       } else {
-        this.props.history.push(`${url}/verify-accreditation/${accountId}/${accountType}`);
+        this.props.history.push(`${url}/verify-accreditation/${accountType}`);
       }
     } else {
       this.props.history.push('/dashboard/account-settings/investment-limits');
