@@ -127,12 +127,6 @@ section{
                 background-size: cover;
             }
         }
-        &.security {
-            background:url(../../assets/images/investors/security_mobile.jpg) center center no-repeat;
-            @media only screen and (max-width : @largestMobileScreen){
-                background-size: cover;
-            }
-        }
         &.track {
             background:url(../../assets/images/investors/laptop_mobile.png) center center no-repeat;
             background-size: contain;
@@ -224,110 +218,7 @@ section{
         }
     }
 }
-// business and invest pages
-.slide-down{
-	&.process{
-        background:url(../../assets/images/business/process.png) 0% center no-repeat;
-        background-size:auto 120%;
-        @media only screen and (max-width : @largestTabletScreen){
-            background:none;
-        }
-        @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor) {
-            background:url(../../assets/images/business/process-full.png) 0% center no-repeat;
-            background-size: auto 66%;
-        }
-        @media only screen and (min-width : @largeMonitorBreakpoint) and (max-width: 1365px) {
-            background:url(../../assets/images/business/process-full.png) 0% center no-repeat;
-            background-size: auto 80%;
-        }
-        @media only screen and (min-width : 1366px) and (max-width: 1439px) {
-            background:url(../../assets/images/business/process-full.png) 0% center no-repeat;
-            background-size: auto 95%;
-        }
-        @media only screen and (min-width : 1440px) and (max-width: 1679px) {
-            background-size: auto 103%;
-        }
-	}
-	&.all-inclusive{
-        background:url(../../assets/images/business/inclusive.png) 100% center no-repeat;
-        background-size:auto 93%;
-        @media only screen and (max-width : @largestTabletScreen){
-            background:none;
-        }
-        @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor) {
-            background-size: auto 46%;
-        }
-        @media only screen and (min-width : @largeMonitorBreakpoint) and (max-width: 1365px) {
-            background-size: auto 64%;
-        }
-        @media only screen and (min-width : 1366px) and (max-width: 1439px) {
-            background-size: auto 75%;
-        }
-        @media only screen and (min-width : 1440px) and (max-width: 1679px) {
-            background-size: auto 80%;
-        }
-    }
-    &.account-types {
-        background:url(../../assets/images/investors/account_types.png) 100% center no-repeat;
-        @media only screen and (max-width : @largestTabletScreen){
-            background:none;
-        }
-        @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor) {
-            background:url(../../assets/images/investors/account_types-full.png) 100% center no-repeat;
-            background-size: auto 62%;
-        }
-        @media only screen and (min-width : @largeMonitorBreakpoint) and (max-width: 1365px) {
-            background:url(../../assets/images/investors/account_types-full.png) 100% center no-repeat;
-            background-size: auto 78%;
-        }
-        @media only screen and (min-width : 1366px) and (max-width: 1439px) {
-            background:url(../../assets/images/investors/account_types-full.png) 100% center no-repeat;
-            background-size: auto 95%;
-        }
-        @media only screen and (min-width : 1440px) and (max-width: 1679px) {
-            background:url(../../assets/images/investors/account_types-full.png) 100% center no-repeat;
-            background-size: auto 100%;
-        }
-    } 
-    &.security{
-        background:url(../../assets/images/investors/security.png) 0% center no-repeat;
-        background-size:auto 90%;
-        @media only screen and (max-width : @largestTabletScreen){
-            background:none;
-        }
-        @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor) {
-            background-size: auto 46%;
-        }
-        @media only screen and (min-width : @largeMonitorBreakpoint) and (max-width: 1365px) {
-            background-size: auto 58%;
-        }
-        @media only screen and (min-width : 1366px) and (max-width: 1439px) {
-            background-size: auto 70%;
-        }
-        @media only screen and (min-width : 1440px) and (max-width: 1679px) {
-            background-size: auto 75%;
-        }
-    } 
-    &.track{
-        background:url(../../assets/images/investors/laptop.png) 100% center no-repeat;
-        @media only screen and (max-width : @largestTabletScreen){
-            background:none;
-        }
-        @media only screen and (min-width : @computerBreakpoint) and (max-width: @largestSmallMonitor) {
-            background-size: auto 46%;
-        }
-        @media only screen and (min-width : @largeMonitorBreakpoint) and (max-width: 1365px) {
-            background-size: auto 55%;
-        }
-        @media only screen and (min-width : 1366px) and (max-width: 1439px) {
-            background-size: auto 62%;
-        }
-        @media only screen and (min-width : 1440px) and (max-width: 1679px) {
-            background-size: auto 66%;
-        }
-    } 
-}
 .investor-priority-section{
     background:url(../../assets/images/investors/left-phone-mockup.png) no-repeat;
-    background-position: -40%;
+    background-position: -40% 100%;
 }

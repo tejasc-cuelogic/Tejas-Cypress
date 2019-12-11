@@ -277,6 +277,10 @@
             }
         }
     }
+    &.bordered{
+        box-shadow: none;
+        border-radius: @4px;
+    }
 }
 //  Public page Ends
 

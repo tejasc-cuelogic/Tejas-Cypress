@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Grid, Container, Button, Divider, Responsive, Icon, Item } from 'semantic-ui-react';
+import { Header, Grid, Container, Button, Divider, Responsive, Icon, Item, Segment, Card } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
 import NSImage from '../../../shared/NSImage';
 
@@ -12,23 +12,21 @@ const settings = {
   dots: false,
 };
 const businesses = [
-  [
-    {
-      title: 'Houston, TX',
-      image: 'investors/img-2.png',
-      description: '539 members invested $1,000,000 to open Bravery Chef Hall',
-    },
-    {
-      title: 'Seattle, WA',
-      image: 'investors/img.png',
-      description: '292 members invested $327,800 to launch Fair Isle Brewing',
-    },
-    {
-      title: 'Denver, CO',
-      image: 'investors/img-1.png',
-      description: '289 members invested $300,000 in Urban Putt’s second location',
-    },
-  ],
+  {
+    title: 'Houston, TX',
+    image: 'investors/img-2.jpg',
+    description: '539 members invested $1,000,000 to open Bravery Chef Hall',
+  },
+  {
+    title: 'Seattle, WA',
+    image: 'investors/img.jpg',
+    description: '292 members invested $327,800 to launch Fair Isle Brewing',
+  },
+  {
+    title: 'Denver, CO',
+    image: 'investors/img-1.jpg',
+    description: '289 members invested $300,000 in Urban Putt’s second location',
+  },
 ];
 const highlights = [
   {
@@ -90,12 +88,14 @@ export default class WhyNextseed extends Component {
                 }
               </Item.Group>
             </div>
-            <Header as={responsiveVars.uptoTablet ? 'h2' : 'h3'} textAlign="center" className={responsiveVars.uptoTablet ? 'mt-30' : 'mt-70'}>
-              Watch our video
-              <a href="" className="ml-16">
-                <Icon size="large" className="ns-play play-icon mlr-0" />
-              </a>
-            </Header>
+            <a href="" className="no-decoration">
+              <Segment className={`${responsiveVars.uptoTablet ? 'mt-30' : 'mt-70'} video-segment`}>
+                <Header as={responsiveVars.uptoTablet ? 'h2' : 'h3'} textAlign="center">
+                  Watch our video
+                    <Icon size="large" color="green" className="ns-play play-icon ml-16" />
+                </Header>
+              </Segment>
+            </a>
           </section>
           <Divider fitted as={!responsiveVars.uptoTablet && Container} />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
@@ -106,38 +106,33 @@ export default class WhyNextseed extends Component {
             {!responsiveVars.uptoTablet
               ? (
                 <Container>
-                  <Grid centered stackable className="vertical-gutter">
-                    {businesses.map((row, index) => (
-                      <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
-                        {
-                          row.map(b => (
-                            <Grid.Column textAlign="center" width={4}>
-                              <NSImage path={b.image} centered />
-                              <Header as="h5">{b.title}</Header>
-                              <p>{b.description}</p>
-                            </Grid.Column>
-                          ))
-                        }
-                      </Grid.Row>
-                    ))
+                  <Card.Group itemsPerRow={3}>
+                    {
+                      businesses.map(b => (
+                        <Card className="bordered center-align">
+                          <NSImage path={b.image} centered />
+                          <Card.Content>
+                            <Header as="h5">{b.title}</Header>
+                            <p>{b.description}</p>
+                          </Card.Content>
+                        </Card>
+                      ))
                     }
-                  </Grid>
+                  </Card.Group>
                 </Container>
               )
               : (
                 <>
                   <Container>
-                    <NsCarousel {...settings}>
-                      {businesses.map(row => (
-                        row.map(b => (
-                          <Grid.Row>
-                            <Grid.Column className="center-align">
-                              <NSImage path={b.image} centered />
-                              <Header as="h5">{b.title}</Header>
-                              <p>{b.description}</p>
-                            </Grid.Column>
-                          </Grid.Row>
-                        ))
+                    <NsCarousel {...settings} className="investor-slide">
+                      {businesses.map(b => (
+                        <Card className="bordered center-align">
+                          <NSImage path={b.image} centered />
+                          <Card.Content>
+                            <Header as="h5">{b.title}</Header>
+                            <p>{b.description}</p>
+                          </Card.Content>
+                        </Card>
                       ))
                       }
                     </NsCarousel>
@@ -150,11 +145,11 @@ export default class WhyNextseed extends Component {
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
             <Grid>
               <Grid.Row>
-                <Grid.Column widescreen={7} computer={7} tablet={16} mobile={16}>
+                <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle">
                   <div>
-                    <Header as="h2">Your portfolio at your fingertips</Header>
+                    <Header as="h2">Your portfolio at<Responsive as="br" minWidth={768} /> your fingertips</Header>
                     <p className="mb-30 mt-20">
-                      See how your investments are performing and reinvest<Responsive as={React.Fragment} minWidth={992}><br /></Responsive>any earnings effortlessly with our easy-to-use dashboard.</p>
+                      See how your investments are performing<Responsive as="br" minWidth={768} /> and reinvest any earnings effortlessly with<Responsive as="br" minWidth={768} /> our easy-to-use dashboard.</p>
                     {!authStore.isUserLoggedIn && !responsiveVars.isMobile
                       && (
                         <Button as={Link} to="/auth/register-investor" primary className="mb-30">Create a  Free Account</Button>
@@ -162,7 +157,7 @@ export default class WhyNextseed extends Component {
                     }
                   </div>
                 </Grid.Column>
-                <Grid.Column widescreen={9} computer={9} tablet={16} mobile={16}>
+                <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16}>
                   <NSImage path="investors/mackbook-mockup.png" />
                   {!authStore.isUserLoggedIn && responsiveVars.isMobile
                     && (
@@ -183,37 +178,32 @@ export default class WhyNextseed extends Component {
                   )
                 }
                 <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
-                  <div>
-                    <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-50'}>Your security is our top priority</Header>
-                    <Header as="h5" className="mb-10">Your funds stay safe and sound.</Header>
-                    <p className={responsiveVars.uptoTablet ? 'mb-14' : 'mb-20'}>
-                      The uninvested cash  in your account <sup>1</sup> is FDIC-insured up
-                      to $250,000.
-                    </p>
-                    <Header as="h5" className="mb-10">Keep your information protected.</Header>
-                    <p className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-50'}>We safeguard your information with bank-level security measures</p>
-                    {responsiveVars.isMobile
-                      && <NSImage path="investors/left-phone-mockup-mobile.png" className="mb-20" />
-                    }
-                    <NSImage path="ssl.jpg" />
-                    <p className={`note ${responsiveVars.uptoTablet ? 'mt-30' : 'mt-50 mb-50'}`}>
-                      <sup>1</sup> NextSeed accounts are provided and held at our partner bank, Happy
-                      State Bank DBA GoldStar Trust Company (&quot;GoldStar&quot;), which provides FDIC
-                      insurance for uninvested cash in NextSeed accounts.
-                    </p>
-                  </div>
+                  <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-50'}>Your security is our top priority</Header>
+                  {responsiveVars.isMobile
+                    && <NSImage path="investors/left-phone-mockup-mobile.png" className="mb-20" />
+                  }
+                  <Header as="h5" className="mb-10">Your funds stay safe and sound.</Header>
+                  <p className={responsiveVars.uptoTablet ? 'mb-14' : 'mb-20'}>
+                    The uninvested cash  in your account <sup>1</sup> is FDIC-insured up
+                    to $250,000.
+                  </p>
+                  <Header as="h5" className="mb-10">Keep your information protected.</Header>
+                  <p className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-50'}>We safeguard your information with bank-level security measures</p>
+                  <NSImage path="ssl.jpg" />
+                  <p className={`note ${responsiveVars.uptoTablet ? 'mt-30' : 'mt-50 mb-50'}`}>
+                    <sup>1</sup> NextSeed accounts are provided and held at our partner bank, Happy
+                    State Bank DBA GoldStar Trust Company (&quot;GoldStar&quot;), which provides FDIC
+                    insurance for uninvested cash in NextSeed accounts.
+                  </p>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
           </section>
           <Divider fitted as={!responsiveVars.uptoTablet && Container} />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-            <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-40' : 'center-align mb-70'}>Every investment comes with <Responsive as={React.Fragment} minWidth={992}><br /></Responsive>risk and opportunity</Header>
-            <Grid centered stackable reversed="mobile">
-              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 5}>
-                <NSImage path="investors/couple-pitch.jpg" />
-              </Grid.Column>
-              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 5}>
+            <Grid centered reversed="mobile">
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
+                <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-50'}>Every investment comes <Responsive minWidth={992} as="br" />with risk and opportunity</Header>
                 <p>
                   Remember, returns and bonus rewards are not guaranteed. Investments can be lost entirely.
                   Be sure to do your own due diligence, review all offering documents carefully,
@@ -223,6 +213,9 @@ export default class WhyNextseed extends Component {
                 <p>
                   Businesses may fail, but those that succeed can make a lasting impact in your city.
                 </p>
+              </Grid.Column>
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right">
+                <NSImage path="investors/couple-pitch.jpg" fluid />
               </Grid.Column>
             </Grid>
           </section>

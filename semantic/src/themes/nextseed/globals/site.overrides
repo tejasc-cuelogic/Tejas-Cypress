@@ -374,6 +374,9 @@ a{
 	&.green-hover:hover{
 		color: @primary-one !important;
 	}
+	&.no-decoration:hover{
+		text-decoration: none;
+	}
 }
 .display-block {
 	display: block !important;
@@ -1047,6 +1050,19 @@ footer{
 				>div{
 					height:100%;
 				}
+			}
+		}
+	}
+	&.investor-slide{
+		@media only screen and (max-width : @largestMobileScreen) {
+			.slick-slide{
+				padding: 0 @30px;
+			}
+			.slick-prev{
+				left:-20px;
+			}
+			.slick-next{
+				right:-20px;
 			}
 		}
 	}
