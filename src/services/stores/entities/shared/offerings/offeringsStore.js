@@ -342,13 +342,6 @@ export class OfferingsStore {
     this.orderedActiveLiveList = campaignStore.generateBanner(liveOfferingList, true, true);
   }
 
-  // @computed get orderedActiveLiveList() {
-  //   const liveOfferingList = this.db.live
-  //     && this.db.live.length ? toJS(this.db.live) : [];
-  //   const orderedActiveListArr = campaignStore.generateBanner(liveOfferingList, true, true);
-  //   return orderedActiveListArr;
-  // }
-
   @computed get allOfferings() {
     return this.db[this.requestState.stage]
       && this.db[this.requestState.stage].length ? this.db[this.requestState.stage] : [];
