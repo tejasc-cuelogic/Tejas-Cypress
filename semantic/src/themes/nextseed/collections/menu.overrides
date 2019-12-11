@@ -2,11 +2,11 @@
          Theme Overrides
 *******************************/
 .header-wrap{
-    max-width: 1680px;
-    margin: auto;
+    // max-width: 1680px;
+    // margin: auto;
     .ui.menu{
-        max-width: 1680px;
-        left: auto;
+        // max-width: 1680px;
+        // left: auto;
         height:@primaryHeaderHeight;
         border:none;
         border-radius:0;
