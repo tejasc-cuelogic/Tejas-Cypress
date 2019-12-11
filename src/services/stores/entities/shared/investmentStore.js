@@ -364,16 +364,25 @@ export class InvestmentStore {
             }
 
             // Get docusign and npa document urls:
-            const agreementVaraibles = {
-              agreementId: this.investmentAmount.toString(),
-              offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
-              accountId: this.getSelectedAccountTypeId,
-            };
-            this.getInvestmentAgreement(agreementVaraibles)
-              .then((result) => {
-                this.setFieldValue('agreementDetails', result.data.investNowGetInvestmentAgreement);
-                resolve({ isValid: status, flag });
-              });
+            if (get(resp, 'data.investNowGeneratePurchaseAgreement.agreementId')) {
+              const agreementVariables = {
+                agreementId: get(resp, 'data.investNowGeneratePurchaseAgreement.agreementId'),
+                offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
+                accountId: this.getSelectedAccountTypeId,
+              };
+              this.getInvestmentAgreement(agreementVariables)
+                .then((result) => {
+                  this.setFieldValue('agreementDetails', result.investNowGetInvestmentAgreement);
+                  resolve({ isValid: status, flag });
+                }).catch((error) => {
+                  Helper.toast('Something went wrong, please try again later.', 'error');
+                  this.setShowTransferRequestErr(true);
+                  uiStore.setErrors(error.message);
+                  reject();
+                });
+            } else {
+              resolve({ isValid: status, flag });
+            }
           }))
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
@@ -390,11 +399,11 @@ export class InvestmentStore {
     }
   });
 
-  getInvestmentAgreement = varaibleObj => new Promise((resolve, reject) => {
+  getInvestmentAgreement = variables => new Promise((resolve, reject) => {
     graphql({
       client,
       query: investNowGetInvestmentAgreement,
-      variables: varaibleObj,
+      variables,
       onFetch: (data) => {
         resolve(data);
       },

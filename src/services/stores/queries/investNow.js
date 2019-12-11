@@ -160,7 +160,7 @@ mutation investNowGeneratePurchaseAgreement($userId: String!,
 `;
 
 export const investNowGetInvestmentAgreement = gql`
-mutation investNowGetInvestmentAgreement($userId: String!,
+query investNowGetInvestmentAgreement(
   $accountId: String!,
   $offeringId: String!,
   $agreementId: Int!
