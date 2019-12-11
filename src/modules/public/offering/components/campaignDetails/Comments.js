@@ -116,7 +116,7 @@ class Comments extends Component {
       MESSAGE_FRM, msgEleChange, buttonLoader,
     } = this.props.messageStore;
     const { showOnlyOne, newLayout } = this.props;
-    comments = showOnlyOne ? [get(comments, '[0]')] : comments;
+    comments = showOnlyOne ? [get(commentsMainThreadCount, '[0]')] : comments;
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     const { isInvestorAccreditated } = this.props.userDetailsStore;
     const offeringRegulation = get(campaign, 'keyTerms.regulation');
@@ -207,7 +207,7 @@ class Comments extends Component {
             </Message>
           )
         }
-        {comments && commentsMainThreadCount
+        {(comments && commentsMainThreadCount.length)
           ? (
             <>
               <div color="green" className={`${newLayout ? 'mt-30' : 'mt-50'} offering-comment`}>
