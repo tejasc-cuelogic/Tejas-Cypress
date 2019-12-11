@@ -155,7 +155,7 @@ export default class AddWithdrawFund extends Component {
                             ? <label>Withdrawal Amount</label>
                             : <label>Deposit Amount</label>
                           }
-                          <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value, false)}
+                          <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value)}
                             {!showSuccessModal
                               && <span className="highlight-text" onClick={() => this.props.transactionStore.setInitialLinkValue(false)}>Change</span>
                             }
