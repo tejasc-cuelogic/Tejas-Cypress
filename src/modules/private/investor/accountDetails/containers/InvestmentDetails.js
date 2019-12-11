@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Card } from 'semantic-ui-react';
 import moment from 'moment';
 import { includes, get } from 'lodash';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
+import Documents from '../../../../public/offering/components/campaignDetails/documents';
 import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import NotFound from '../../../../shared/NotFound';
@@ -17,10 +18,11 @@ const navItems = [
   { title: 'Transactions', to: 'transactions', component: 'Transactions' },
   { title: 'Updates', to: 'updates', component: 'Updates' },
   { title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards' },
+  { title: 'Documents', to: 'documents', component: Documents, load: false },
 ];
 @inject('portfolioStore', 'campaignStore', 'uiStore', 'offeringCreationStore', 'updateStore')
 @observer
-class InvestmentDetails extends Component {
+class InvestmentDetails extends PureComponent {
   constructor(props) {
     super(props);
     const { portfolioStore, uiStore, isAdmin } = this.props;
@@ -71,9 +73,6 @@ class InvestmentDetails extends Component {
         },
       ],
     };
-    if (details.loading) {
-      return null;
-    }
 
     if (details && details.data && !details.data.getOfferingById) {
       return <NotFound />;
@@ -102,6 +101,7 @@ class InvestmentDetails extends Component {
                         render={props => (
                           <CurrentModule
                             isAdmin={this.props.isAdmin}
+                            portfolioSection
                             {...props}
                           />
                         )

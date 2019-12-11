@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { Header, Grid, Segment, Button, Divider } from 'semantic-ui-react';
 import DocumentModal from './DataRoom/DocumentModal';
+import { InlineLoader } from '../../../../../theme/shared';
 
 const isTablet = document.documentElement.clientWidth < 992;
 @inject('campaignStore', 'uiStore', 'accreditationStore', 'authStore')
@@ -28,9 +29,12 @@ export default class Documents extends Component {
   close = () => this.setState({ doc: null });
 
   render() {
-    const { dataRoomDocs } = this.props.campaignStore;
+    const { dataRoomDocs, loading } = this.props.campaignStore;
+    if (loading && this.props.portfolioSection) {
+      return <InlineLoader />;
+    }
     return (
-      <div>
+      <div className={this.props.portfolioSection ? 'content-spacer' : ''}>
         <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
           Documents
           <span className="anchor" id="data-room" />
