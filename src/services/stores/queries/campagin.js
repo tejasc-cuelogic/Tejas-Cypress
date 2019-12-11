@@ -4,6 +4,7 @@ export const allOfferings = gql`
 query getOfferingList($filters: OfferingFilterInputType, $userId: String){
     getOfferingList(filters: $filters) {
       id
+      isAvailablePublicly
       watchListStatus(userId: $userId)
       offeringSlug
       stage
