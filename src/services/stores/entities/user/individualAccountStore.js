@@ -39,20 +39,23 @@ class IndividualAccountStore {
     this.stepToBeRendered = step;
   }
 
-  createIndividualGoldStarInvestor = (accountId, userId = userStore.currentUser.sub) => new Promise((resolve, reject) => {
-    client
-      .mutate({
-        mutation: createIndividualGoldStarInvestor,
-        variables: {
-          userId,
-          accountId,
-        },
-      })
-      .then(res => resolve(res))
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  createIndividualGoldStarInvestor = (accountId, userId = false) => {
+    let variables = {
+      accountId,
+    };
+    variables = userId ? { ...variables, userId } : { ...variables };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: createIndividualGoldStarInvestor,
+          variables,
+        })
+        .then(res => resolve(res))
+        .catch((err) => {
+          reject(err);
+        });
+    })
+  };
 
   submitAccount = () => {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
