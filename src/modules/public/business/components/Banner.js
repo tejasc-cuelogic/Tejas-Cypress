@@ -36,12 +36,12 @@ class Banner extends Component {
               </Header>
               <Button primary content="Apply Online" className="mt-30" />
             </div>
+          </Responsive>
             <div className="banner-meta">
               <p>
-                <b>Brian Ching | Pitch 25</b><br />Raised $549,000 from 392 investors
+                Brian Ching | Pitch 25<br /><b>Raised $549,000 from 392 investors</b>
               </p>
             </div>
-          </Responsive>
         </Container>
       </section>
     );

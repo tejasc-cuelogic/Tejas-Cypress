@@ -39,21 +39,25 @@ section{
                 }
             }
             .banner-meta {
-                align-self: baseline;
                 color: @neutral;
                 font-size: @13px;
-                line-height: @20px;
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                padding: @16px @28px;
+                background-color: fade(@white, 45%);
+                text-align: right;
                 @media only screen and (max-width: @largestMobileScreen) {
-                    background: fade(@fullBlack, 70%);
-                    width: ~"calc(100% + "(@relative42px)~")";
-                    margin: 0 -@relative21px;
+                    background-color: fade(@white, 45%);
+                    width: 100%;
                     padding: @relative14px;
-                    color: @white;
+                    text-align: left;
                 }
             }
         }
         &.home-banner{
             background:url(../../assets/images/banners/why-us-banner.jpg) top center no-repeat;
+            position: relative;
             @media only screen and (max-width : @largestMobileScreen){
                 background:url(../../assets/images/banners/why-us-banner-mobile.jpg) center center no-repeat;
                 background-size: cover;
@@ -79,7 +83,7 @@ section{
             }
         }
         &.business-banner{
-            background:url(../../assets/images/banners/how-it-works-banner.png) top center no-repeat;
+            background:url(../../assets/images/banners/how-it-works-banner.jpg) top center no-repeat;
             @media only screen and (max-width : @largestMobileScreen){
                 background:url(../../assets/images/banners/how-it-works-banner-mobile.jpg) center center no-repeat;
                 background-size: cover;
