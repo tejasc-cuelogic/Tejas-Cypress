@@ -291,7 +291,7 @@ export class TransactionStore {
     const errorMessage = 'Please enter a valid amount to deposit.';
     this[formName] = Validator.onChange(
       this[formName],
-      { name: field, value: values.floatValue.toFixed(2) },
+      { name: field, value: values.floatValue },
     );
     if (formName === 'TRANSFER_FRM' && values.floatValue <= 0) {
       uiStore.setErrors(errorMessage);
