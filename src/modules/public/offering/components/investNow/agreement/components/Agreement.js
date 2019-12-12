@@ -268,8 +268,8 @@ export default class Agreement extends React.Component {
                 </Grid>
                 <div className="center-align mt-30">
                   <Button.Group widths="2" className="inline">
-                    <Button type="button" color="gray" content="Cancel" onClick={this.handleCancelAgreement} />
-                    <Button primary content="Invest" loading={inProgress} onClick={this.submit} />
+                    <Button type="button" color="gray" disabled={inProgress} loading={inProgress} content="Cancel" onClick={this.handleCancelAgreement} />
+                    <Button primary content="Invest" disabled={inProgress} loading={inProgress} onClick={this.submit} />
                   </Button.Group>
                 </div>
                 {!this.state.showError && investmentFlowErrorMessage
