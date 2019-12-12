@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce } from 'lodash';
+import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce, isArray } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Calculator } from 'amortizejs';
@@ -74,9 +74,14 @@ export class CampaignStore {
   }
 
   @action
-  initRequest = (publicRef, referralCode = false, field = 'data') => {
-    const stage = Object.keys(pickBy(STAGES, s => publicRef.includes(s.publicRef)));
-    const variables = { filters: { stage } };
+  initRequest = (group, referralCode = false, field = 'data') => {
+    let stageGroup = group;
+    let groupKey = 'group';
+    if (isArray(group)) {
+      groupKey = 'stage';
+      stageGroup = Object.keys(pickBy(STAGES, s => group.includes(s.publicRef)));
+    }
+    const variables = { filters: { [groupKey]: stageGroup } };
     if (referralCode) {
       variables.filters.referralCode = referralCode;
     }
@@ -317,6 +322,9 @@ export class CampaignStore {
     campaignStatus.isInvestedInOffering = get(campaign, 'isInvestedInOffering');
     campaignStatus.isRevenueShare = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary;
     campaignStatus.isTermNote = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
+    campaignStatus.isFund = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS;
+    campaignStatus.isRealEstate = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE;
+    campaignStatus.isPreferredEquity = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C;
     campaignStatus.doneComputing = (get(this.details, 'data.getOfferingDetailsBySlug') && !isEmpty(this.details.data.getOfferingDetailsBySlug.keyTerms)) || false;
     return campaignStatus;
   }

@@ -7,6 +7,7 @@ export const CAMPAIGN_KEYTERMS_SECURITIES = {
   CONVERTIBLE_NOTES: 'Convertible Notes',
   SAFE: 'SAFE',
   REAL_ESTATE: 'LLC Membership Interests',
+  FUNDS: 'Funds - Limited Partner Interest',
 };
 export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
   TERM_NOTE: 'TERM_NOTE',
@@ -15,6 +16,7 @@ export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
   CONVERTIBLE_NOTES: 'CONVERTIBLE_NOTES',
   SAFE: 'SAFE',
   REAL_ESTATE: 'REAL_ESTATE',
+  FUNDS: 'FUNDS',
 };
 export const ROUND_TYPES_ENUM = {
   SEED: 'Seed',
