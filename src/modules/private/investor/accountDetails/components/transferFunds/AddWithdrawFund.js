@@ -107,7 +107,7 @@ export default class AddWithdrawFund extends Component {
       <>
         {!cashAvailable.loading
           && (
-            <Modal dimmer open size="mini" closeIcon={!showSuccessModal || !showConfirmPreview} onClose={this.goBack} closeOnDimmerClick={false}>
+            <Modal dimmer open size="mini" closeIcon={!showConfirmPreview && !showSuccessModal} onClose={this.goBack} closeOnDimmerClick={false}>
               <Modal.Header className="signup-header">
                 <Header as="h3"><AccTypeTitle noText />
                   {headingTitle}
