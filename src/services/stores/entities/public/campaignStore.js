@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce } from 'lodash';
+import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce, isArray } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
 import { Calculator } from 'amortizejs';
@@ -74,9 +74,14 @@ export class CampaignStore {
   }
 
   @action
-  initRequest = (publicRef, referralCode = false, field = 'data') => {
-    const stage = Object.keys(pickBy(STAGES, s => publicRef.includes(s.publicRef)));
-    const variables = { filters: { stage } };
+  initRequest = (group, referralCode = false, field = 'data') => {
+    let stageGroup = group;
+    let groupKey = 'group';
+    if (isArray(group)) {
+      groupKey = 'stage';
+      stageGroup = Object.keys(pickBy(STAGES, s => group.includes(s.publicRef)));
+    }
+    const variables = { filters: { [groupKey]: stageGroup } };
     if (referralCode) {
       variables.filters.referralCode = referralCode;
     }
