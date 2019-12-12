@@ -330,6 +330,7 @@
                 >.content{
                     >.header:not(.ui){
                         font-size: @17px;
+                        margin-bottom: @10px;
                     }
                     .meta{
                         font-size: @17px;
