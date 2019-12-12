@@ -37,7 +37,7 @@ export default class VerifyEntityAccreditation extends React.Component {
     }
     if (step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM') {
       this.props.accreditationStore
-        .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase(), 2)
+        .updateAccreditation(step.formName, params.accountType.toUpperCase(), 2)
         .then(() => {
           this.handleStepChange(step.stepToBeRendered);
         });

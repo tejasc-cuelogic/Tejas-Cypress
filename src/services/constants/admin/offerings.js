@@ -499,6 +499,7 @@ export const SECURITIES_VALUES = [
   { key: 'Convertible Notes', value: 'CONVERTIBLE_NOTES', text: 'Convertible Notes' },
   { key: 'SAFE', value: 'SAFE', text: 'SAFE' },
   { key: 'Real Estate', value: 'REAL_ESTATE', text: 'Real Estate' },
+  { key: 'Funds - Limited Partner Interest', value: 'FUNDS', text: 'Funds - Limited Partner Interest' },
 ];
 
 export const ROUND_TYPE_VALUES = [
