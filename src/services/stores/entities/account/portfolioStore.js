@@ -135,8 +135,12 @@ export class PortfolioStore {
       ['pending', 'active', 'completed'].forEach((field) => {
         investmentData.investments[field].forEach((ele) => {
           if (get(ele, 'offering.keyTerms.securities') && get(ele, 'offering.keyTerms.industry')) {
-            this.pieChartDataEval.investmentType[ele.offering.keyTerms.securities].value += 1;
-            this.pieChartDataEval.industry[ele.offering.keyTerms.industry].value += 1;
+            if (this.pieChartDataEval.investmentType[ele.offering.keyTerms.securities]) {
+              this.pieChartDataEval.investmentType[ele.offering.keyTerms.securities].value += 1;
+            }
+            if (this.pieChartDataEval.industry[ele.offering.keyTerms.industry]) {
+              this.pieChartDataEval.industry[ele.offering.keyTerms.industry].value += 1;
+            }
           }
         });
       });

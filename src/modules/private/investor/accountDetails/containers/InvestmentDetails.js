@@ -6,7 +6,7 @@ import moment from 'moment';
 import { includes, get } from 'lodash';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import Documents from '../../../../public/offering/components/campaignDetails/documents';
-import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry, InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import NotFound from '../../../../shared/NotFound';
 import { DataFormatter } from '../../../../../helper';
@@ -80,39 +80,43 @@ class InvestmentDetails extends PureComponent {
     return (
       <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
-          <SummaryHeader details={summaryDetails} />
-          <Card fluid>
-            <SecondaryMenu match={match} navItems={navItems} />
-            <SuspenseBoundary>
-              <Switch>
-                <Route
-                  exact
-                  path={match.url}
-                  component={getModule(navItems[0].component)}
-                />
-                {
-                  navItems.map((item) => {
-                    const CurrentModule = item.load === false
-                      ? item.component : getModule(item.component);
-                    return (
-                      <Route
-                        key={item.to}
-                        path={`${match.url}/${item.to}`}
-                        render={props => (
-                          <CurrentModule
-                            isAdmin={this.props.isAdmin}
-                            portfolioSection
-                            {...props}
+          {details.loading ? <InlineLoader /> : (
+            <>
+              <SummaryHeader details={summaryDetails} loading={details.loading} />
+              <Card fluid>
+                <SecondaryMenu match={match} navItems={navItems} />
+                <SuspenseBoundary>
+                  <Switch>
+                    <Route
+                      exact
+                      path={match.url}
+                      component={getModule(navItems[0].component)}
+                    />
+                    {
+                      navItems.map((item) => {
+                        const CurrentModule = item.load === false
+                          ? item.component : getModule(item.component);
+                        return (
+                          <Route
+                            key={item.to}
+                            path={`${match.url}/${item.to}`}
+                            render={props => (
+                              <CurrentModule
+                                isAdmin={this.props.isAdmin}
+                                portfolioSection
+                                {...props}
+                              />
+                            )
+                          }
                           />
-                        )
-                      }
-                      />
-                    );
-                  })
-                }
-              </Switch>
-            </SuspenseBoundary>
-          </Card>
+                        );
+                      })
+                    }
+                  </Switch>
+                </SuspenseBoundary>
+              </Card>
+            </>
+          )}
         </Modal.Content>
       </Modal>
     );
