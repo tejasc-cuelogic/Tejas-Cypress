@@ -190,7 +190,7 @@ export class TransactionsStore {
       id: requestID,
       reason: data.justifyDescription,
     };
-    variables = actionName === 'Declined' ? { ...variables, cancelInvestment: data.cancelInvestment || false } : { ...variables };
+    variables = ['Declined', 'Failed'].includes(actionName) ? { ...variables, cancelInvestment: data.cancelInvestment || false } : { ...variables };
     return new Promise((resolve, reject) => {
       client
         .mutate({

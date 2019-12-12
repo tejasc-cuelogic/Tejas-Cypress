@@ -51,7 +51,7 @@ export default class ConfirmModal extends Component {
               fielddata={TRANSACTION_FAILURE.fields.justifyDescription}
               changed={(e, result) => formChange(e, result, 'TRANSACTION_FAILURE')}
             />
-            {STATUS_MAPPING[statusType].failedCta.action === 'Declined'
+            {['Declined', 'Failed'].includes(STATUS_MAPPING[statusType].failedCta.action)
             && (
               <Checkbox
                 className="field"
