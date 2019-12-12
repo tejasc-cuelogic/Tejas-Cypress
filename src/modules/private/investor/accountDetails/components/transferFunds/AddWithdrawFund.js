@@ -91,6 +91,7 @@ export default class AddWithdrawFund extends Component {
       TRANSFER_FRM, TransferChange, showConfirmPreview, getValidWithdrawAmt,
       cash, cashAvailable, showSuccessModal,
     } = transactionStore;
+    const { inProgress } = this.props.uiStore;
     const { currentActiveAccountDetails } = this.props.userDetailsStore;
     const linkBankDetials = (get(currentActiveAccountDetails, 'details.linkedBank.changeRequest') && get(currentActiveAccountDetails, 'details.linkedBank.pendingUpdate')) ? get(currentActiveAccountDetails, 'details.linkedBank.changeRequest') : get(currentActiveAccountDetails, 'details.linkedBank') || null;
     const accountType = linkBankDetials && linkBankDetials.accountType ? linkBankDetials.accountType : 'N/A';
@@ -106,7 +107,7 @@ export default class AddWithdrawFund extends Component {
       <>
         {!cashAvailable.loading
           && (
-            <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
+            <Modal dimmer open size="mini" closeIcon={!showSuccessModal} onClose={this.goBack} closeOnDimmerClick={false}>
               <Modal.Header className="signup-header">
                 <Header as="h3"><AccTypeTitle noText />
                   {headingTitle}
@@ -166,12 +167,12 @@ export default class AddWithdrawFund extends Component {
                             {match.params.action === 'withdraw'
                               ? (
                                 <>
-                                  <Header.Subheader>From</Header.Subheader>
+                                  <Header.Subheader className="grey-header">From</Header.Subheader>
                                   {currentActiveAccountDetails
                                     && currentActiveAccountDetails.name
                                     ? currentActiveAccountDetails.name : null} Account
-                            <Divider hidden />
-                                  <Header.Subheader>To</Header.Subheader>
+                                  <Divider hidden />
+                                  <Header.Subheader className="grey-header">To</Header.Subheader>
                                   {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
                                 </>
                               )
@@ -184,7 +185,7 @@ export default class AddWithdrawFund extends Component {
                                   {currentActiveAccountDetails
                                     && currentActiveAccountDetails.name
                                     ? currentActiveAccountDetails.name : null} Account
-                          </>
+                                </>
                               )}
                           </Header>
                         </Statistic>
@@ -211,7 +212,7 @@ export default class AddWithdrawFund extends Component {
                   <div className="center-align mt-30">
                     <Button.Group>
                       {showConfirmPreview && !showSuccessModal
-                        ? <Button onClick={this.cancelTransfer} content="Cancel" /> : null
+                        ? <Button onClick={this.cancelTransfer} loading={inProgress} disabled={inProgress} content="Cancel" /> : null
                       }
                       {showSuccessModal
                         ? (
@@ -226,8 +227,9 @@ export default class AddWithdrawFund extends Component {
                         : (
                           <Button
                             primary
-                            disabled={!((getValidWithdrawAmt && TRANSFER_FRM.meta.isValid) || (match.params.action !== 'withdraw' && TRANSFER_FRM.fields.amount.value > 0 && TRANSFER_FRM.meta.isValid)) || !this.state.isActivebutton}
-                            content="Confirm"
+                            loading={inProgress}
+                            disabled={inProgress || !((getValidWithdrawAmt && TRANSFER_FRM.meta.isValid) || (match.params.action !== 'withdraw' && TRANSFER_FRM.fields.amount.value > 0 && TRANSFER_FRM.meta.isValid)) || !this.state.isActivebutton}
+                            content={showConfirmPreview || showSuccessModal ? 'Confirm' : 'Continue'}
                           />
                         )
                       }
