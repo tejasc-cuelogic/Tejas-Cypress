@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-closing-tag-location */
 /* eslint-disable react/jsx-indent */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import { includes } from 'lodash';
@@ -17,7 +17,7 @@ const processingMsg = `We are currently processing your account creation request
 
 @inject('userDetailsStore')
 @observer
-export default class AccountDetails extends Component {
+export default class AccountDetails extends PureComponent {
   constructor(props) {
     super(props);
     if (this.props.match.isExact) {

@@ -14,7 +14,6 @@ export default class Verification extends Component {
     this.props.accreditationStore
       .updateAccreditation(
         form,
-        params.accountId,
         params.accountType.toUpperCase(),
         this.props.type || 0,
       )
