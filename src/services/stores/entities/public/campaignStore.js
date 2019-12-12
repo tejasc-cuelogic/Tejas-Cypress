@@ -519,6 +519,7 @@ export class CampaignStore {
       const maxOfferingAmountCF = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
       const maxOfferingAmountRegD = get(offeringKeyTermDetails, 'maxOfferingAmount506') && get(offeringKeyTermDetails, 'maxOfferingAmount506') !== '0.00' ? get(offeringKeyTermDetails, 'maxOfferingAmount506') : get(offeringKeyTermDetails, 'maxOfferingAmount506C') ? get(offeringKeyTermDetails, 'maxOfferingAmount506C') : '0.00';
       const regulation = get(offeringKeyTermDetails, 'regulation');
+      const securities = get(offeringKeyTermDetails, 'securities');
       const minimumOfferingAmount = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], regulation) ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
       const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
       const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;
@@ -558,7 +559,7 @@ export class CampaignStore {
         && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
         resultObject.isBannerShow = true;
         resultObject.datesBanner = 'NEW';
-        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         resultObject.category = 'newOffering';
@@ -567,7 +568,7 @@ export class CampaignStore {
         const labelBannerFirst = ((includes(['Minute Left', 'Minutes Left'], closeDaysToRemainsInHours.label) && closeDaysToRemainsInHours.value > 0) || closeDaysToRemainsInHours.value <= 48) ? `${closeDaysToRemainsInHours.value} ${closeDaysToRemainsInHours.label}` : closeDaysToRemains === 1 ? `${closeDaysToRemains} Day Left` : `${closeDaysToRemains} Days Left`;
         resultObject.isBannerShow = !!labelBannerFirst;
         resultObject.datesBanner = labelBannerFirst;
-        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         resultObject.category = 'closingSoon';
@@ -587,7 +588,7 @@ export class CampaignStore {
       //   && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
       //   resultObject.datesBanner = 'NEW';
       // }
-      resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+      resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
       resultObject.isBannerShow = !!(resultObject.datesBanner || resultObject.amountsBanner);
       resultObject.launchDate = moment(launchDate).unix() || null;
       resultObject.processingDate = moment(closingDate).unix() || null;
@@ -614,10 +615,10 @@ export class CampaignStore {
     return sortedResultObject;
   }
 
-  generateLabelBannerSecond = (amountCompairResult, percentageCompairResult, percent) => {
+  generateLabelBannerSecond = (amountCompairResult, percentageCompairResult, percent, offeringSecurity) => {
     let labelBannerSecond = null;
     if (money.isNegative(amountCompairResult)
-      && !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult)) {
+      && !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult) && !['REAL_ESTATE'].includes(offeringSecurity)) {
       labelBannerSecond = `${Math.round(percent)}% Funded`;
     } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
       labelBannerSecond = 'Reached Max';
