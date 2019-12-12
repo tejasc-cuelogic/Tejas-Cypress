@@ -58,7 +58,7 @@ export default class VerifyEntityAccreditation extends React.Component {
       { key: 'INCOME_EVIDENCE_FORM', component: <IncomeEvidence isEntity submitStep={this.handleSubmitStep} {...this.props} /> },
       {
         key: 'VERIFICATION',
-        component: <Verification refLink={this.props.refLink} isEntity type={2} {...this.props} />,
+        component: <Verification isEntity type={2} {...this.props} />,
       },
     ];
     return (

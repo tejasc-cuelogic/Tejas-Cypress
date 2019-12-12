@@ -68,7 +68,6 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
         key: 'VERIFICATION',
         component: <Verification
           isEntity
-          refLink={this.props.refLink}
           type={3}
           {...this.props}
         />,

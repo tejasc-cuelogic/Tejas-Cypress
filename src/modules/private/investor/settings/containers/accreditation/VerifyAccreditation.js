@@ -61,7 +61,6 @@ export default class Accreditation extends React.Component {
         key: 'VERIFICATION',
         component: <Verification
           step={3}
-          refLink={this.props.refLink}
           type={1}
           {...this.props}
         />,
@@ -74,7 +73,6 @@ export default class Accreditation extends React.Component {
           key: 'VERIFICATION',
           component: <Verification
             step={2}
-            refLink={this.props.refLink}
             type={1}
             {...this.props}
           />,
@@ -88,7 +86,6 @@ export default class Accreditation extends React.Component {
           key: 'VERIFICATION',
           component: <Verification
             step={3}
-            refLink={this.props.refLink}
             type={1}
             {...this.props}
           />,
@@ -102,7 +99,6 @@ export default class Accreditation extends React.Component {
             key: 'VERIFICATION',
             component: <Verification
               step={3}
-              refLink={this.props.refLink}
               type={1}
               {...this.props}
             />,
