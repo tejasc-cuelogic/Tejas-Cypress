@@ -557,8 +557,8 @@ export class InvestmentStore {
             portfolioStore.getPortfolioDetailsAfterInvestment(portfolioVar)
               .then(() => {
                 campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
+                resolve(status);
               });
-            resolve(status);
           })
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
