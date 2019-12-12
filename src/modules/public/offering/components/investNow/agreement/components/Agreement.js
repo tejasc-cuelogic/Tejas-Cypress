@@ -155,7 +155,7 @@ export default class Agreement extends React.Component {
             </div>
           </Modal.Content>
         </Modal>
-        <Modal size="large" className="confirm-investment" open closeIcon closeOnRootNodeClick={false} closeOnDimmerClick={false} onClose={e => this.handleCloseModal(e)}>
+        <Modal size="large" className="confirm-investment" open closeIcon={!agreementDetails} closeOnRootNodeClick={false} closeOnDimmerClick={false} onClose={e => this.handleCloseModal(e)}>
           <Modal.Content className="signup-content">
             <div style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
               <div className="pdf-viewer">
@@ -204,6 +204,7 @@ export default class Agreement extends React.Component {
                           name={field}
                           containerclassname={`ui very relaxed list ${this.state.showError && !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid ? 'error' : ''}`}
                           changed={setCheckbox}
+                          disabled={inProgress}
                           customLabel={(
                             <>
                               I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">{agreementStatement}</Link>.
@@ -268,7 +269,7 @@ export default class Agreement extends React.Component {
                 </Grid>
                 <div className="center-align mt-30">
                   <Button.Group widths="2" className="inline">
-                    <Button type="button" color="gray" disabled={inProgress} loading={inProgress} content="Cancel" onClick={this.handleCancelAgreement} />
+                    <Button type="button" color="gray" disabled={inProgress} content="Cancel" onClick={this.handleCancelAgreement} />
                     <Button primary content="Invest" disabled={inProgress} loading={inProgress} onClick={this.submit} />
                   </Button.Group>
                 </div>
