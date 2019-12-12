@@ -165,13 +165,13 @@
             }
         }
         tbody{
-            font-weight:@fontMedium;
             i.offering-icon{
                 color:@border-color;
                 vertical-align:top;
             }
             .offering-title{
                 display:inline-block;
+                font-weight: @fontMedium;
                 a{
                     color: @primary-one !important;
                 }
