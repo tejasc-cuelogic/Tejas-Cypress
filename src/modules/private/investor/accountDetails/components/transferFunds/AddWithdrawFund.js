@@ -100,13 +100,13 @@ export default class AddWithdrawFund extends Component {
     const cashAmount = cash ? money.isNegative(cash) ? '0.00' : cash : '0.00';
     const transferNotifyText = showSuccessModal && match.params.action === 'add'
       ? 'These funds are immediately available for investment. Please allow 5-7 business days for this transfer to be fully processed'
-      : 'Please allow 5-7 business days for this transfer to be fully processed.';
+      : 'Please allow 5-7 business days for this transfer to be fully processed';
 
     return (
       <>
         {!cashAvailable.loading
           && (
-            <Modal dimmer open size="mini" closeOnDimmerClick={false}>
+            <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
               <Modal.Header className="signup-header">
                 <Header as="h3"><AccTypeTitle noText />
                   {headingTitle}
@@ -210,7 +210,7 @@ export default class AddWithdrawFund extends Component {
 
                   <div className="center-align mt-30">
                     <Button.Group>
-                      {!showSuccessModal
+                      {showConfirmPreview && !showSuccessModal
                         ? <Button onClick={this.cancelTransfer} content="Cancel" /> : null
                       }
                       {showSuccessModal
