@@ -25,6 +25,8 @@ export default class CampaignHeader extends Component {
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
       percentBefore, diffForProcessing, countDown, isInvestedInOffering,
     } = campaignStatus;
+    const showCounter = (!isClosed && diffForProcessing.value > 0 && !campaignStatus.isFund) || (!campaignStatus.isFund) || (isClosed && get(campaign, 'closureSummary.repayment.count') > 0) || (earlyBird && earlyBird.available > 0
+    && isEarlyBirdRewards && !isClosed && bonusRewards);
     return (
       <>
         <div className="campaign-banner">
@@ -56,22 +58,30 @@ export default class CampaignHeader extends Component {
                         />
                       )
                     }
+                    {showCounter
+                    && (
                     <div className="offer-stats">
                       <Statistic.Group>
-                        {!isClosed && diffForProcessing.value > 0
-                          && (
-                            <Statistic size="mini" className="basic">
-                              <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
-                              <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
-                            </Statistic>
+                        {!campaignStatus.isFund
+                          ? (
+                            <>
+                              {!isClosed && diffForProcessing.value > 0
+                                && (
+                                  <Statistic size="mini" className="basic">
+                                    <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
+                                    <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
+                                  </Statistic>
+                                )}
+                              <Statistic size="mini" className="basic">
+                                <Statistic.Value>
+                                  {get(campaign, 'closureSummary.totalInvestorCount') || 0}
+                                </Statistic.Value>
+                                <Statistic.Label>Investors</Statistic.Label>
+                              </Statistic>
+                            </>
                           )
+                          : null
                         }
-                        <Statistic size="mini" className="basic">
-                          <Statistic.Value>
-                            {get(campaign, 'closureSummary.totalInvestorCount') || 0}
-                          </Statistic.Value>
-                          <Statistic.Label>Investors</Statistic.Label>
-                        </Statistic>
                         {isClosed && get(campaign, 'closureSummary.repayment.count') > 0
                           && (
                             <Statistic size="mini" className="basic">
@@ -96,6 +106,7 @@ export default class CampaignHeader extends Component {
                         }
                       </Statistic.Group>
                     </div>
+                    )}
                   </div>
                   <div className="clearfix social-links mt-10">
                     {campaign && get(campaign, 'offering.overview.social')
@@ -128,17 +139,43 @@ export default class CampaignHeader extends Component {
                       )
                     }
                   </Statistic>
-                  {!isClosed
-                    ? <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
-                    : <Progress percent="100" size="tiny" color="green" />
-                  }
-                  <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content={!minFlagStatus ? 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' : 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.'}
-                      position="top center"
-                    />
-                  </p>
+                  {!campaignStatus.isFund
+                    ? (
+                      !isClosed
+                        ? <Progress percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
+                        : <Progress percent="100" size="tiny" color="green" />
+                    ) : null}
+                  {!campaignStatus.isFund
+                    ? (
+                      <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content={!minFlagStatus ? 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' : 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.'}
+                          position="top center"
+                        />
+                      </p>
+                    )
+                    : (
+                      <>
+                        <p>
+                          <span className="mr-10">{Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
+                          <Popup
+                            trigger={<Icon name="help circle" color="green" />}
+                            content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                            position="top center"
+                          />
+                          </span>
+                          |
+                          <span className="ml-10">{Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
+                            <Popup
+                              trigger={<Icon name="help circle" color="green" />}
+                              content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                              position="top center"
+                            />
+                          </span>
+                        </p>
+                      </>
+                    )}
                   {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                     && (
                       <p className="raise-type mb-0">

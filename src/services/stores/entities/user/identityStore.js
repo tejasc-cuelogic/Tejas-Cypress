@@ -427,11 +427,13 @@ export class IdentityStore {
         Helper.toast(`Verification ${requestMode}.`, 'success');
       }
       this.setFieldValue('signUpLoading', false);
+      uiStore.setProgress(false);
+      return true;
     } catch (err) {
       this.setFieldValue('signUpLoading', false);
       uiStore.setProgress(false);
       uiStore.setErrors(toJS(DataFormatter.getSimpleErr(err)));
-      throw new Error(err);
+      return false;
     }
   }
 
