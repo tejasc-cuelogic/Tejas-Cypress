@@ -29,21 +29,23 @@ export default class Verification extends Component {
     const { isEntity, accountType } = this.props;
     return (
       INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest'
-        ? <VerificationForm clicked={this.submit} /> : isEntity
+        ? <VerificationForm clicked={this.submit} {...this.props} /> : isEntity
           ? (
             <AssetsUploadDocument
               accountType={accountType}
               clicked={this.submit}
               isEntity={isEntity}
+              {...this.props}
             />
           )
           : (ACCREDITATION_FORM.fields.method.value === 'INCOME')
-            ? <IncomeUploadDocument accountType={accountType} clicked={this.submit} />
+            ? <IncomeUploadDocument accountType={accountType} clicked={this.submit} {...this.props} />
             : (
               <AssetsUploadDocument
                 accountType={accountType}
                 clicked={this.submit}
                 isEntity={isEntity}
+                {...this.props}
               />
             )
     );
