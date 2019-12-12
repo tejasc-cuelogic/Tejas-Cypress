@@ -185,7 +185,6 @@ export const CANCEL_INVESTMENT = FormHelper.generateMeta([
   ['voidReason', 'Void Reason', '', 'optional', 'Void Reason'],
   ['voidType', 'Void Type', 'ADMINCANCEL', 'optional', 'Void Type'],
   ['sendNotification', 'Send Notification', '', 'optional', ''],
-  ['cancelInvestment', 'Cancel Investment', '', 'optional', ''],
 ]);
 
 export const VOID_TYPE = [
