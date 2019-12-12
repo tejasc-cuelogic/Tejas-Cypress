@@ -14,7 +14,7 @@ import {
   generateAgreement, finishInvestment, transferFundsForInvestment,
   investNowGeneratePurchaseAgreement, investNowGetInvestmentAgreement,
 } from '../../queries/investNow';
-import { getInvestorAccountPortfolio } from '../../queries/portfolio';
+// import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 
 // import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
 
@@ -534,13 +534,13 @@ export class InvestmentStore {
           .mutate({
             mutation: finishInvestment,
             variables: varObj,
-            refetchQueries: [{
-              query: getInvestorAccountPortfolio,
-              variables: {
-                userId: userDetailsStore.currentUserId,
-                accountId: this.getSelectedAccountTypeId,
-              },
-            }],
+            // refetchQueries: [{
+            //   query: getInvestorAccountPortfolio,
+            //   variables: {
+            //     userId: userDetailsStore.currentUserId,
+            //     accountId: this.getSelectedAccountTypeId,
+            //   },
+            // }],
           })
           .then((data) => {
             const { status, message, flag } = data.data.investNowSubmit;
@@ -550,8 +550,15 @@ export class InvestmentStore {
               const errorMessage = !status ? message : null;
               this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             }
+            const portfolioVar = {
+              userId: userDetailsStore.currentUserId,
+              accountId: this.getSelectedAccountTypeId,
+            };
+            portfolioStore.getPortfolioDetailsAfterInvestment(portfolioVar)
+              .then(() => {
+                campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
+              });
             resolve(status);
-            campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
           })
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
