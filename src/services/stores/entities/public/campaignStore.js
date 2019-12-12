@@ -317,6 +317,9 @@ export class CampaignStore {
     campaignStatus.isInvestedInOffering = get(campaign, 'isInvestedInOffering');
     campaignStatus.isRevenueShare = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary;
     campaignStatus.isTermNote = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
+    campaignStatus.isFund = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS;
+    campaignStatus.isRealEstate = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE;
+    campaignStatus.isPreferredEquity = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C;
     campaignStatus.doneComputing = (get(this.details, 'data.getOfferingDetailsBySlug') && !isEmpty(this.details.data.getOfferingDetailsBySlug.keyTerms)) || false;
     return campaignStatus;
   }
