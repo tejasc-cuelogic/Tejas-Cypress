@@ -107,7 +107,7 @@ export default class AddWithdrawFund extends Component {
       <>
         {!cashAvailable.loading
           && (
-            <Modal dimmer open size="mini" closeIcon={!showSuccessModal} onClose={this.goBack} closeOnDimmerClick={false}>
+            <Modal dimmer open size="mini" closeIcon={!showSuccessModal || !showConfirmPreview} onClose={this.goBack} closeOnDimmerClick={false}>
               <Modal.Header className="signup-header">
                 <Header as="h3"><AccTypeTitle noText />
                   {headingTitle}
@@ -143,7 +143,7 @@ export default class AddWithdrawFund extends Component {
                         name="amount"
                         containerclassname="fund-amount"
                         currency
-                        fielddata={{ ...TRANSFER_FRM.fields.amount, value: Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value) }}
+                        fielddata={TRANSFER_FRM.fields.amount}
                         changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM', match.params.action === 'withdraw')}
                       />
                     )
