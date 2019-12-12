@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { includes, orderBy, get, filter } from 'lodash';
 import { inject, observer } from 'mobx-react';
@@ -23,7 +23,7 @@ import StickyNotification from '../../setup/components/stickyNotification';
 const isTablet = document.documentElement.clientWidth < 992;
 @inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore', 'referralsStore', 'investmentStore', 'accreditationStore')
 @observer
-export default class Portfolio extends Component {
+export default class Portfolio extends PureComponent {
   state = {
     open: false,
     embedUrl: '',
