@@ -52,7 +52,7 @@ export default class TransferFunds extends Component {
         {!isEmpty(linkedBank) && accountType !== 'ira'
           ? (
             <>
-              {!isMobile ? <Header as="h4">Transfer funds</Header> : ''}
+              {!isMobile ? <Header as="h4">Transfer Funds</Header> : ''}
               <Grid>
                 <Grid.Row>
                   <Grid.Column widescreen={7} largeScreen={10} computer={10} tablet={16} mobile={16}>

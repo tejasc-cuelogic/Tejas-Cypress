@@ -57,7 +57,7 @@ export default class AddWithdrawFund extends Component {
     if (showSuccessModal) {
       headingTitle = 'Success';
     } else if (showConfirmPreview) {
-      headingTitle = match.params.action === 'add' ? 'Confirm Request' : 'Confirm Withdrawl';
+      headingTitle = match.params.action === 'add' ? 'Confirm Request' : 'Confirm Withdrawal';
     } else {
       headingTitle = match.params.action === 'add' ? 'Add Funds' : 'Withdraw Funds';
     }
@@ -101,7 +101,7 @@ export default class AddWithdrawFund extends Component {
     const cashAmount = cash ? money.isNegative(cash) ? '0.00' : cash : '0.00';
     const transferNotifyText = showSuccessModal && match.params.action === 'add'
       ? 'These funds are immediately available for investment. Please allow 5-7 business days for this transfer to be fully processed'
-      : 'Please Allow 5-7 Business days for this transfer to be fully processed';
+      : 'Please allow 5-7 business days for this transfer to be fully processed';
 
     return (
       <>
@@ -153,8 +153,8 @@ export default class AddWithdrawFund extends Component {
                       <>
                         <div className="field fund-amount">
                           {match.params.action === 'withdraw'
-                            ? <label>Withdrawal Amount</label>
-                            : <label>Deposit Amount</label>
+                            ? <label>Withdrawal amount</label>
+                            : <label>Deposit amount</label>
                           }
                           <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value)}
                             {!showSuccessModal
