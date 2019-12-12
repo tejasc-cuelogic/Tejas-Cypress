@@ -105,13 +105,16 @@ export default class CancelInvestment extends Component {
                           fielddata={CANCEL_INVESTMENT_FRM.fields.voidReason}
                           changed={(e, result) => formChange(e, result, 'CANCEL_INVESTMENT_FRM')}
                         />
-                        <Checkbox
-                          className="field"
-                          label={CANCEL_INVESTMENT_FRM.fields.sendNotification.label}
-                          name="sendNotification"
-                          checked={CANCEL_INVESTMENT_FRM.fields.sendNotification.value}
-                          onChange={(e, result) => formChange(e, result, 'CANCEL_INVESTMENT_FRM')}
-                        />
+                        {['sendNotification', 'cancelInvestment'].map(field => (
+                          <Checkbox
+                            className="field mr-10"
+                            label={CANCEL_INVESTMENT_FRM.fields[field].label}
+                            name={field}
+                            checked={CANCEL_INVESTMENT_FRM.fields[field].value}
+                            onChange={(e, result) => formChange(e, result, 'CANCEL_INVESTMENT_FRM')}
+                          />
+                        ))
+                        }
                     </>
                   ) : ''
                 }
