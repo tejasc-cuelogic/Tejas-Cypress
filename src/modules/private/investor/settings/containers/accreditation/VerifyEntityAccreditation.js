@@ -11,7 +11,7 @@ import PopulateAccreditationSteps from './PopulateAccreditationSteps';
 export default class VerifyEntityAccreditation extends React.Component {
   constructor(props) {
     super(props);
-    const { accountType } = this.props.match.params;
+    const { accountType } = this.props;
     this.props.accreditationStore.getUserAccreditation().then(() => {
       this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
       this.props.accreditationStore.setFormData('INCOME_EVIDENCE_FORM', 'accreditation', accountType);
@@ -29,7 +29,7 @@ export default class VerifyEntityAccreditation extends React.Component {
   }
 
   multiClickHandler = (step) => {
-    const { params } = this.props.match;
+    const { accountType } = this.props;
     if (step.formName === 'ENTITY_ACCREDITATION_FORM' && this.props.accreditationStore[step.formName].fields.method.value !== 'ASSETS') {
       this.props.accreditationStore.setFieldVal('accType', 'nonTrust');
       this.props.history.push(`${this.props.refLink}/falied`);
@@ -37,7 +37,7 @@ export default class VerifyEntityAccreditation extends React.Component {
     }
     if (step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM') {
       this.props.accreditationStore
-        .updateAccreditation(step.formName, params.accountType.toUpperCase(), 2)
+        .updateAccreditation(step.formName, accountType.toUpperCase(), 2)
         .then(() => {
           this.handleStepChange(step.stepToBeRendered);
         });
@@ -55,16 +55,17 @@ export default class VerifyEntityAccreditation extends React.Component {
   render() {
     const formArray = [
       { key: 'ENTITY_ACCREDITATION_FORM' },
-      { key: 'INCOME_EVIDENCE_FORM', component: <IncomeEvidence isEntity submitStep={this.handleSubmitStep} /> },
+      { key: 'INCOME_EVIDENCE_FORM', component: <IncomeEvidence isEntity submitStep={this.handleSubmitStep} {...this.props} /> },
       {
         key: 'VERIFICATION',
-        component: <Verification refLink={this.props.refLink} isEntity type={2} />,
+        component: <Verification refLink={this.props.refLink} isEntity type={2} {...this.props} />,
       },
     ];
     return (
       <PopulateAccreditationSteps
         multiClickHandler={this.multiClickHandler}
         formArray={formArray}
+        {...this.props}
       />
     );
   }

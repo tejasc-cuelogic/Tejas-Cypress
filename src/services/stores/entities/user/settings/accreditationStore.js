@@ -979,9 +979,7 @@ export class AccreditationStore {
     this.showAccountList = statusValue;
   }
 
-  pendingStepForAccreditation = selectedAccountName => (selectedAccountName === 'entity'
-    ? '/app/account-settings/investment-limits/verify-entity-accreditation/entity'
-    : `/app/account-settings/investment-limits/verify-accreditation/${selectedAccountName}`)
+  pendingStepForAccreditation = selectedAccountName => (`/app/account-settings/investment-limits/verify-accreditation/${selectedAccountName}`)
 
   offeringAccreditatoinStatusMessage = (
     currentStatus, accreditedStatus, isRegulationCheck = false,

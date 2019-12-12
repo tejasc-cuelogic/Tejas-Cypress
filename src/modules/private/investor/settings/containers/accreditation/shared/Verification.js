@@ -10,11 +10,11 @@ import IncomeUploadDocument from '../income/UploadDocument';
 @observer
 export default class Verification extends Component {
   submit = (form) => {
-    const { params } = this.props.match;
+    const { accountType } = this.props;
     this.props.accreditationStore
       .updateAccreditation(
         form,
-        params.accountType.toUpperCase(),
+        accountType.toUpperCase(),
         this.props.type || 0,
       )
       .then(() => {
@@ -26,26 +26,25 @@ export default class Verification extends Component {
     const {
       ACCREDITATION_FORM, INCOME_EVIDENCE_FORM,
     } = this.props.accreditationStore;
-    const { isEntity } = this.props;
-    const { params } = this.props.match;
+    const { isEntity, accountType } = this.props;
     return (
       INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest'
         ? <VerificationForm clicked={this.submit} /> : isEntity
           ? (
-<AssetsUploadDocument
-  accountType={params.accountType}
-  clicked={this.submit}
-  isEntity={isEntity}
-/>
+            <AssetsUploadDocument
+              accountType={accountType}
+              clicked={this.submit}
+              isEntity={isEntity}
+            />
           )
           : (ACCREDITATION_FORM.fields.method.value === 'INCOME')
-            ? <IncomeUploadDocument accountType={params.accountType} clicked={this.submit} />
+            ? <IncomeUploadDocument accountType={accountType} clicked={this.submit} />
             : (
-<AssetsUploadDocument
-  accountType={params.accountType}
-  clicked={this.submit}
-  isEntity={isEntity}
-/>
+              <AssetsUploadDocument
+                accountType={accountType}
+                clicked={this.submit}
+                isEntity={isEntity}
+              />
             )
     );
   }

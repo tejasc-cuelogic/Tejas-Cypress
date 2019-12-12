@@ -11,7 +11,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class VerifyEntityAccreditation extends Component {
   constructor(props) {
     super(props);
-    const { accountType } = this.props.match.params;
+    const { accountType } = this.props;
     this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
   }
 
