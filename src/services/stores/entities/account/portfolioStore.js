@@ -324,7 +324,7 @@ export class PortfolioStore {
         userId: investorUserId,
         voidReason: cancelAgreementData.voidReason,
         voidType: cancelAgreementData.voidType,
-        sendNotification: cancelAgreementData.sendNotification,
+        sendNotification: cancelAgreementData.sendNotification || false,
       };
     }
     uiStore.setProgress(true);
