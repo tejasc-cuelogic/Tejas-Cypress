@@ -167,21 +167,21 @@ export default class AddWithdrawFund extends Component {
                             {match.params.action === 'withdraw'
                               ? (
                                 <>
-                                  <Header.Subheader className="grey-header">From</Header.Subheader>
+                                  <Header.Subheader className="grey-label">From</Header.Subheader>
                                   {currentActiveAccountDetails
                                     && currentActiveAccountDetails.name
                                     ? currentActiveAccountDetails.name : null} Account
                                   <Divider hidden />
-                                  <Header.Subheader className="grey-header">To</Header.Subheader>
+                                  <Header.Subheader className="grey-label">To</Header.Subheader>
                                   {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
                                 </>
                               )
                               : (
                                 <>
-                                  <Header.Subheader>From</Header.Subheader>
+                                  <Header.Subheader className="grey-label">From</Header.Subheader>
                                   {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
                                   <Divider hidden />
-                                  <Header.Subheader>To</Header.Subheader>
+                                  <Header.Subheader className="grey-label">To</Header.Subheader>
                                   {currentActiveAccountDetails
                                     && currentActiveAccountDetails.name
                                     ? currentActiveAccountDetails.name : null} Account
@@ -204,7 +204,7 @@ export default class AddWithdrawFund extends Component {
 
                   {showSuccessModal
                     && (
-                      <Header as="h6" className="mt-10 mb-10 grey-header">
+                      <Header as="h6" className="mt-10 mb-10 grey-label">
                         {transferNotifyText}
                       </Header>
                     )}
@@ -219,7 +219,6 @@ export default class AddWithdrawFund extends Component {
                           <Button
                             as={Link}
                             to={`/app/account-details/${this.props.account}/portfolio`}
-                            className="grey"
                           >
                             Close
                         </Button>
