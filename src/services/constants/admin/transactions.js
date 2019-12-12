@@ -105,12 +105,6 @@ export const TRANSACTION_FAILURE = {
       max: 'Description cannot be greater than 250 characters.',
     },
   },
-  cancelInvestment: {
-    value: false,
-    label: 'Cancel Investment',
-    error: undefined,
-    rule: 'optional',
-  },
 };
 
 export const FILTER_META = {

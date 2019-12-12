@@ -184,18 +184,16 @@ export class TransactionsStore {
 
   @action
   failTransaction = (requestID, actionName) => {
-    const data = Validator.evaluateFormData(this.TRANSACTION_FAILURE.fields);
+    const reason = Validator.evaluateFormData(this.TRANSACTION_FAILURE.fields);
     this.addLoadingRequestId(requestID);
-    let variables = {
-      id: requestID,
-      reason: data.justifyDescription,
-    };
-    variables = ['Declined', 'Failed'].includes(actionName) ? { ...variables, cancelInvestment: data.cancelInvestment || false } : { ...variables };
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: this.ctHandler[actionName],
-          variables,
+          variables: {
+            id: requestID,
+            reason: reason.justifyDescription,
+          },
         })
         .then(() => {
           this.removeLoadingRequestId(requestID);
@@ -212,14 +210,10 @@ export class TransactionsStore {
 
   @action
   formChange = (e, result, form) => {
-    if (result && (result.type === 'checkbox')) {
-      this[form].fields[result.name].value = result.checked;
-    } else {
-      this[form] = Validator.onChange(
-        this[form],
-        Validator.pullValues(e, result),
-      );
-    }
+    this[form] = Validator.onChange(
+      this[form],
+      Validator.pullValues(e, result),
+    );
   }
 
   @action
