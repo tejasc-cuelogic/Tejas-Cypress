@@ -53,7 +53,7 @@ export class PortfolioStore {
         CONVERTIBLE_NOTES: { name: 'Convertible Notes', value: 0 },
         SAFE: { name: 'Safe', value: 0 },
         REAL_ESTATE: { name: 'LLC Membership Interests', value: 0 },
-        FUNDS: { name: 'Funds - Limited Partner Interest', value: 0 },
+        FUNDS: { name: 'Limited Partner Interest', value: 0 },
       },
       industry: {
         FASHION_AND_MERCHANDISING: { name: 'Fashion and Merchandising', value: 0 },
