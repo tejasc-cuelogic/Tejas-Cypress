@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Form, Header, Icon, Confirm, Divider } from 'semantic-ui-react';
-import { FormInput, MaskedInput, FormTextarea } from '../../../../../../theme/form';
+import { FormInput, MaskedInput, FormTextarea, FormDropDown } from '../../../../../../theme/form';
 import ButtonGroup from '../ButtonGroup';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
@@ -85,6 +85,18 @@ export default class General extends Component {
               fielddata={GENERAL_FRM.fields.numOfEmployees}
               changed={(values, name) => maskArrayChange(values, formName, name)}
               number
+            />
+            <FormDropDown
+              containerclassname={isReadonly ? 'display-only' : ''}
+              className={isReadonly ? 'display-only' : ''}
+              disabled={isReadonly}
+              fielddata={GENERAL_FRM.fields.taxedAs}
+              selection
+              value={GENERAL_FRM.fields.taxedAs.value}
+              name="taxedAs"
+              placeholder={isReadonly ? 'N/A' : 'Choose here'}
+              options={GENERAL_FRM.fields.taxedAs.values}
+              onChange={(e, result) => formArrayChange(e, result, formName)}
             />
           </Form.Group>
           <Header as="h4">Contact</Header>
