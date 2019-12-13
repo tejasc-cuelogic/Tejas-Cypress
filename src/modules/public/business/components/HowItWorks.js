@@ -142,43 +142,48 @@ class HowItWorks extends Component {
                 <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle">
                   <div>
                     <Header as="h2">Raise exactly the type<Responsive as="br" minWidth={1200} /> of capital you need</Header>
-                    <p className="mb-60 mt-40">
+                    <p className={responsiveVars.isMobile ? 'mb-30 mt-10' : 'mb-60 mt-40'}>
                       Whether you{"'"}re raising capital for an expansion, a new venture, or to improve your current capacity, our investment banking team will find the right capital solution to keep you in control of your business.
                   </p>
-                    {!authStore.isUserLoggedIn && !responsiveVars.isMobile
-                      && (
-                        <Button as={Link} to="/business-application/business" primary className="mb-30">Apply Online</Button>
-                      )
-                    }
+                  {!authStore.isUserLoggedIn && !responsiveVars.isMobile
+                    && (
+                      <Button as={Link} to="/business-application/business" primary className="mb-30">Apply Online</Button>
+                    )
+                  }
                   </div>
                 </Grid.Column>
                 <Grid.Column className="centered" widescreen={5} computer={5} tablet={16} mobile={16} verticalAlign="middle">
-                  <List>
-                    <List.Item className="mb-30">
-                      <Header as="h3">
+                  <List className={responsiveVars.isMobile ? 'capital-list' : ''}>
+                    <List.Item className={responsiveVars.isMobile ? 'mt-0' : 'mb-30'}>
+                      <Header as={responsiveVars.isMobile ? 'h5' : 'h3'}>
                         <Icon className="ns-tick" color="grey" />
                         Debt
-                    </Header>
+                       </Header>
                     </List.Item>
-                    <List.Item className="mb-30">
-                      <Header as="h3">
+                    <List.Item className={responsiveVars.isMobile ? 'mt-14' : 'mb-30'}>
+                      <Header as={responsiveVars.isMobile ? 'h5' : 'h3'}>
                         <Icon className="ns-tick" color="grey" />
                         Convertible Notes
                     </Header>
                     </List.Item>
-                    <List.Item className="mb-30">
-                      <Header as="h3">
+                    <List.Item className={responsiveVars.isMobile ? 'mt-0' : 'mb-30'}>
+                      <Header as={responsiveVars.isMobile ? 'h5' : 'h3'}>
                         <Icon className="ns-tick" color="grey" />
                         Equity
                     </Header>
                     </List.Item>
-                    <List.Item className="mb-30">
-                      <Header as="h3">
+                    <List.Item className={responsiveVars.isMobile ? 'mt-14' : 'mb-30'}>
+                      <Header as={responsiveVars.isMobile ? 'h5' : 'h3'}>
                         <Icon className="ns-tick" color="grey" />
                         SAFEs
                     </Header>
                     </List.Item>
                   </List>
+                  {!authStore.isUserLoggedIn && responsiveVars.isMobile
+                    && (
+                      <Button className="mt-40" as={Link} to="/business-application/business" primary fluid>Apply Online</Button>
+                    )
+                  }
                 </Grid.Column>
               </Grid.Row>
             </Grid>
@@ -225,15 +230,15 @@ class HowItWorks extends Component {
             }
           </section>
           <Divider fitted />
-          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-40' : 'pt-100 pb-100'}>
             <Header as="h2" textAlign={responsiveVars.isMobile ? 'mb-30' : 'center'}>From launched to funded in 71<sup>*</sup> days</Header>
-            <p className={responsiveVars.isMobile ? 'mb-50' : 'mb-50 center-align'}>
+            <p className={responsiveVars.isMobile ? 'mb-30' : 'mb-50 center-align'}>
               We give you the platform, tools, and support to locate new investors<Responsive minWidth={992} as="br" /> as well as activate and engage your fans and customers.
           </p>
             <Grid padded="vertically">
               <Grid.Row centered={!responsiveVars.isMobile}>
                 <Grid.Column computer={9} tablet={16} mobile={16} verticalAlign="middle" className="side-section process-right-section">
-                  <List itemsPerRow={2} stackable className={`${isMobile ? 'mb-40' : 'mb-80'} left-align`}>
+                  <List itemsPerRow={2} stackable className={`${isMobile ? 'mb-0' : 'mb-80'} left-align`}>
                     <List.Item className="mb-30">
                       <Header as="h5">Save time with our online application.</Header>
                       <p>
@@ -252,7 +257,7 @@ class HowItWorks extends Component {
                         Tap into our marketing, advertising and PR experts. We’ll provide the tools and support you need to raise funds and cultivate a base of thousands of local investors.
                     </p>
                     </List.Item>
-                    <List.Item className="mb-30">
+                    <List.Item className={isMobile ? 'mb-0' : 'mb-30'}>
                       <Header as="h5">Pay and engage investors painlessly.</Header>
                       <p>
                         Our investor management support streamlines your monthly payments, investor updates, reward fulfillment and even annual tax forms.
@@ -273,7 +278,7 @@ class HowItWorks extends Component {
                 <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle">
                   <div>
                     <Header as="h2">Reach your goals with<Responsive as="br" minWidth={1200} /> full-service support</Header>
-                    <p className="mb-80 mt-40">
+                    <p className={responsiveVars.isMobile ? 'mb-30 mt-14' : 'mb-80 mt-40'}>
                       Our success fee comes with everything you need to launch, promote and service your campaign. Best of all, we only charge you if your offering is funded.
                     </p>
                     {!authStore.isUserLoggedIn && !responsiveVars.isMobile
@@ -288,73 +293,73 @@ class HowItWorks extends Component {
                     <Grid.Column computer={16} tablet={16} mobile={16} verticalAlign="middle">
                       <Item.Group className="horizontal-items left-align">
                         <Item>
-                          <div className="ui image">
+                          <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
                             <NSImage path="icons/checkmark.svg" />
                           </div>
-                          <Item.Content>
+                          <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Marketing</Item.Header>
                             <Item.Meta>Expert advertising, marketing and PR resources.</Item.Meta>
                           </Item.Content>
                         </Item>
                         <Item>
-                          <div className="ui image">
+                          <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
                             <NSImage path="icons/checkmark.svg" />
                           </div>
-                          <Item.Content>
+                          <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Escrow</Item.Header>
                             <Item.Meta>Handling all banking, escrow and processing fees.</Item.Meta>
                           </Item.Content>
                         </Item>
                         <Item>
-                          <div className="ui image">
+                          <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
                             <NSImage path="icons/checkmark.svg" />
                           </div>
-                          <Item.Content>
+                          <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Campaign Development</Item.Header>
                             <Item.Meta>Design and content creation services.</Item.Meta>
                           </Item.Content>
                         </Item>
                         <Item>
-                          <div className="ui image">
+                          <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
                             <NSImage path="icons/checkmark.svg" />
                           </div>
-                          <Item.Content>
+                          <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Investment Processing</Item.Header>
                             <Item.Meta>Collecting commitments and distributing funds.</Item.Meta>
                           </Item.Content>
                         </Item>
                         <Item>
-                          <div className="ui image">
+                          <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
                             <NSImage path="icons/checkmark.svg" />
                           </div>
-                          <Item.Content>
+                          <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Q&A</Item.Header>
                             <Item.Meta>Facilitating investor questions during the offering.</Item.Meta>
                           </Item.Content>
                         </Item>
                         <Item>
-                          <div className="ui image">
+                          <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
                             <NSImage path="icons/checkmark.svg" />
                           </div>
-                          <Item.Content>
+                          <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Disclosure Preparation</Item.Header>
                             <Item.Meta>Legal templates and Regulatory filing assistance.</Item.Meta>
                           </Item.Content>
                         </Item>
                         <Item>
-                          <div className="ui image">
+                          <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
                             <NSImage path="icons/checkmark.svg" />
                           </div>
-                          <Item.Content>
+                          <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Investor Services</Item.Header>
                             <Item.Meta>Servicing payments to investors.</Item.Meta>
                           </Item.Content>
                         </Item>
                         <Item>
-                          <div className="ui image">
+                          <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
                             <NSImage path="icons/checkmark.svg" />
                           </div>
-                          <Item.Content>
+                          <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Tax Form Preparation</Item.Header>
                             <Item.Meta>Distributing year-end documents to investors.</Item.Meta>
                           </Item.Content>
@@ -391,10 +396,10 @@ class HowItWorks extends Component {
           </section>
           <Divider fitted />
           <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'} proven-result-section`}>
-            <Grid columns={2} stackable relaxed={!isTablet && 'very'} className="mb-40">
+            <Grid columns={2} stackable relaxed={!isTablet && 'very'} className={responsiveVars.isMobile ? '' : 'mb-40'}>
               <Grid.Column>
                 <Header as="h2">Data so far</Header>
-                <p className="mb-80">
+                <p className={responsiveVars.isMobile ? 'mb-30 mt-10' : 'mb-80'}>
                   Every day, entrepreneurs like you are raising capital on
                   NextSeed to bring their concepts to life.
               </p>
@@ -439,13 +444,13 @@ class HowItWorks extends Component {
                       className="ns-play play-icon"
                     />
                   </Link>
-                  <Card.Content className="caption-note center-align">
+                  <Card.Content className={`${responsiveVars.isMobile ? '' : 'center-align'} caption-note`}>
                     The Native Hostel and Bar & Kitchen raised $396,500 from 227 investors.
                   </Card.Content>
                 </Card>
               </Grid.Column>
             </Grid>
-            <p className={`${responsiveVars.isMobile ? '' : 'center-align mt-80'} note`}>
+            <p className={`${responsiveVars.isMobile ? 'mt-20' : 'center-align mt-80'} note`}>
               The above figures include the total amount raised in offerings completed through
               today by NextSeed Securities, LLC, NextSeed US LLC<Responsive as="br" minWidth="768" /> and NextSeed TX LLC. Historical
               figures only. Past performance of one business is not a guarantee of future
@@ -456,7 +461,7 @@ class HowItWorks extends Component {
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
             <Grid stackable>
               <Grid.Column width={10}>
-                <Header as="h2" className={responsiveVars.isMobile ? 'mb-10' : 'mb-20'}>Let us know how we can help</Header>
+                <Header as="h2" className="mb-20">Let us know how we can help</Header>
                 <p className={`${responsiveVars.isMobile ? 'mb-10' : ''} neutral-text`}>
                 Have questions about how we can help your business achieve your goals? We{"'"}re here to help.
                 </p>

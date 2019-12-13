@@ -175,6 +175,9 @@ h6{
 .pt-0{
 	padding-top:0 !important;
 }
+.pt-10{
+	padding-top:10px !important;
+}
 .pt-50{
 	padding-top:50px !important;
 }
@@ -929,6 +932,10 @@ footer{
 				position: absolute;
 				left: 46px;
 				top: 0;
+				@media only screen and (max-width : @largestMobileScreen){
+					left: 36px;
+					height: calc(100% - 160px);
+				}
 			}
 			&:hover {
 				box-shadow: none;
@@ -937,6 +944,9 @@ footer{
 				text-align: left;
 				padding: 0 0 0 147px;
 				position: relative;
+				@media only screen and (max-width : @largestMobileScreen){
+					padding-left: @58px;
+				}
 				&:before {
 					counter-increment: section;
 					content: counter(section);
@@ -945,14 +955,20 @@ footer{
 					top: 0;
 					font-weight: 500;
 					line-height: 66px;
-					font-size: 28px;
-					color: #20c86d;
+					font-size: @28px;
+					color: @primary-one;
 					height: 66px;
 					width: 66px;
 					border-radius: 50%;
-					border: 1px solid #20c86d;
+					border: 1px solid @primary-one;
 					text-align: center;
-					background: #fff;
+					background: @white;
+					@media only screen and (max-width : @largestMobileScreen){
+						height: @45px;
+						width: @45px;
+						font-size: @20px;
+						line-height: 45px;
+					}
 				}
 			}
 		}
