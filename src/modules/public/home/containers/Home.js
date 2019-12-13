@@ -60,7 +60,7 @@ class Home extends Component {
         <Divider as={Container} fitted />
         <section>
           <Container className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
-            <Grid columns={2} stackable>
+            <Grid columns={2} stackable className={responsiveVars.isMobile ? '' : 'mb-80'}>
               <Grid.Column>
                 <Header as="h2" className={responsiveVars.isMobile ? 'mb-20' : 'mb-30'}>Looking to raise capital <Responsive minWidth={768} as="br" />for your business?</Header>
                 <p className={`${responsiveVars.isMobile ? 'mb-30' : 'mb-60'} neutral-text`}>

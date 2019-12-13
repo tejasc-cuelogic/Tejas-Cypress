@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import { Route, Link, withRouter } from 'react-router-dom';
-// Embed
 import { inject, observer } from 'mobx-react';
-// import { get } from 'lodash';
 import { Header, Grid, Button, Container, List, Statistic, Divider, Responsive, Item, Icon, Card } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
 import VideoModal from './VideoModal';
 import NSImage from '../../../shared/NSImage';
-// import Helper from '../../../../helper/utility';
 
 @inject('offeringsStore', 'uiStore', 'authStore')
 @withRouter
@@ -24,7 +21,6 @@ class HowItWorks extends Component {
   }
 
   render() {
-    // const amount = this.props.offeringsStore.totalAmountRaised;
     const nsvideos = {
       embed: '247714163',
     };
@@ -99,7 +95,7 @@ class HowItWorks extends Component {
         <Container>
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
             <Header as="h2" className={isMobile ? 'mb-30' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>
-              Get flexible financing that doesn’t<Responsive minWidth={768} as="br" />
+              Get flexible financing that doesn’t<Responsive minWidth={992} as="br" />
               {' '}cost you everything
           </Header>
             <Item.Group className="horizontal-items home-page">
@@ -145,8 +141,8 @@ class HowItWorks extends Component {
               <Grid.Row>
                 <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle">
                   <div>
-                    <Header as="h2">Raise exactly the type<Responsive as="br" minWidth={768} /> of capital you need</Header>
-                    <p className="mb-30 mt-20">
+                    <Header as="h2">Raise exactly the type<Responsive as="br" minWidth={1200} /> of capital you need</Header>
+                    <p className="mb-60 mt-40">
                       Whether you{"'"}re raising capital for an expansion, a new venture, or to improve your current capacity, our investment banking team will find the right capital solution to keep you in control of your business.
                   </p>
                     {!authStore.isUserLoggedIn && !responsiveVars.isMobile
@@ -232,12 +228,12 @@ class HowItWorks extends Component {
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
             <Header as="h2" textAlign={responsiveVars.isMobile ? 'mb-30' : 'center'}>From launched to funded in 71<sup>*</sup> days</Header>
             <p className={responsiveVars.isMobile ? 'mb-50' : 'mb-50 center-align'}>
-              We give you the platform, tools, and support to locate new investors<Responsive minWidth={768} as="br" /> as well as activate and engage your fans and customers.
+              We give you the platform, tools, and support to locate new investors<Responsive minWidth={992} as="br" /> as well as activate and engage your fans and customers.
           </p>
             <Grid padded="vertically">
               <Grid.Row centered={!responsiveVars.isMobile}>
                 <Grid.Column computer={9} tablet={16} mobile={16} verticalAlign="middle" className="side-section process-right-section">
-                  <List itemsPerRow={2} stackable className={`${isMobile ? 'mb-40' : 'mb-30'} left-align`}>
+                  <List itemsPerRow={2} stackable className={`${isMobile ? 'mb-40' : 'mb-80'} left-align`}>
                     <List.Item className="mb-30">
                       <Header as="h5">Save time with our online application.</Header>
                       <p>
@@ -276,8 +272,8 @@ class HowItWorks extends Component {
               <Grid.Row>
                 <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle">
                   <div>
-                    <Header as="h2">Reach your goals with<Responsive as="br" minWidth={768} /> full-service support</Header>
-                    <p className="mb-30 mt-20">
+                    <Header as="h2">Reach your goals with<Responsive as="br" minWidth={1200} /> full-service support</Header>
+                    <p className="mb-80 mt-40">
                       Our success fee comes with everything you need to launch, promote and service your campaign. Best of all, we only charge you if your offering is funded.
                     </p>
                     {!authStore.isUserLoggedIn && !responsiveVars.isMobile
@@ -376,17 +372,15 @@ class HowItWorks extends Component {
               {testimonial.map(t => (
                 <Item.Group key={t}>
                   <Item>
-                    <div className="ui medium image">
-                      <NSImage path={t.image} />
-                    </div>
+                    <NSImage path={t.image} size="large" />
                     <Item.Content verticalAlign="middle">
                       <Item.Header as={isMobile ? 'h3' : 'h2'}>{t.title}</Item.Header>
                       <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
                         “{t.description}”
                     </Item.Description>
                       <Item.Extra className="testimonial-user-details">
-                        <p><b>{t.name}</b></p>
-                        <span>{t.investment}</span>
+                        <p>{t.name}</p>
+                        <span><b>{t.investment}</b></span>
                       </Item.Extra>
                     </Item.Content>
                   </Item>
@@ -397,10 +391,10 @@ class HowItWorks extends Component {
           </section>
           <Divider fitted />
           <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'} proven-result-section`}>
-            <Grid columns={2} stackable relaxed={!isTablet && 'very'}>
+            <Grid columns={2} stackable relaxed={!isTablet && 'very'} className="mb-40">
               <Grid.Column>
                 <Header as="h2">Data so far</Header>
-                <p className="mb-30">
+                <p className="mb-80">
                   Every day, entrepreneurs like you are raising capital on
                   NextSeed to bring their concepts to life.
               </p>
@@ -436,36 +430,41 @@ class HowItWorks extends Component {
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
-                <Divider hidden />
-                <p className={`${responsiveVars.isMobile ? '' : 'center-align'} note`}>
-                  The above figures include the total amount raised in offerings completed through
-                  today by NextSeed Securities, LLC, NextSeed US LLC and NextSeed TX LLC. Historical
-                  figures only. Past performance of one business is not a guarantee of future
-                  results of another business.
-              </p>
               </Grid.Column>
               <Grid.Column>
-                <Link to="/business/how-it-works/video" className="video-wrapper">
-                  <NSImage path="677134021.jpg" />
-                  <Icon
-                    className="ns-play play-icon"
-                  />
-                </Link>
-                <p className="caption-note mt-10">
-                  The Native Hostel and Bar & Kitchen raised $396,500 from 227 investors.
-              </p>
+                <Card className="bordered" fluid>
+                  <Link to="/business/how-it-works/video" className="video-wrapper">
+                    <NSImage path="677134021.jpg" />
+                    <Icon
+                      className="ns-play play-icon"
+                    />
+                  </Link>
+                  <Card.Content className="caption-note center-align">
+                    The Native Hostel and Bar & Kitchen raised $396,500 from 227 investors.
+                  </Card.Content>
+                </Card>
               </Grid.Column>
             </Grid>
+            <p className={`${responsiveVars.isMobile ? '' : 'center-align mt-80'} note`}>
+              The above figures include the total amount raised in offerings completed through
+              today by NextSeed Securities, LLC, NextSeed US LLC<Responsive as="br" minWidth="768" /> and NextSeed TX LLC. Historical
+              figures only. Past performance of one business is not a guarantee of future
+              results of another business.
+            </p>
           </section>
           <Divider fitted />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-            <Header as="h2" textAlign={isMobile ? 'left' : 'center'}>Let us know how we can help</Header>
-            <p className={responsiveVars.isMobile ? 'mb-40' : 'mb-40 center-align'}>
-              Have questions about how we can help your business achieve your goals? We{"'"}re here to help.
-          </p>
-            <div className={responsiveVars.isMobile ? '' : 'center-align'}>
-              <Button primary as={Link} to="/business-application/questions/need-help" fluid={responsiveVars.isMobile}>Contact Us</Button>
-            </div>
+            <Grid stackable>
+              <Grid.Column width={10}>
+                <Header as="h2" className={responsiveVars.isMobile ? 'mb-10' : 'mb-20'}>Let us know how we can help</Header>
+                <p className={`${responsiveVars.isMobile ? 'mb-10' : ''} neutral-text`}>
+                Have questions about how we can help your business achieve your goals? We{"'"}re here to help.
+                </p>
+              </Grid.Column>
+              <Grid.Column width={6} verticalAlign="middle" className="center-align">
+                <Button primary as={Link} to="/business-application/questions/need-help" fluid={responsiveVars.isMobile}>Contact Us</Button>
+              </Grid.Column>
+            </Grid>
           </section>
         </Container>
         <Route path="/business/how-it-works/video" render={props => <VideoModal {...props} videoDetails={nsvideos} />} />

@@ -88,14 +88,14 @@ export default class WhyNextseed extends Component {
                 }
               </Item.Group>
             </div>
-            <a href="" className="no-decoration">
+            <Link to="/business/how-it-works/video" className="no-decoration">
               <Segment className={`${responsiveVars.uptoTablet ? 'mt-30' : 'mt-70'} video-segment`}>
                 <Header as={responsiveVars.uptoTablet ? 'h2' : 'h3'} textAlign="center">
                   Watch our video
                     <Icon size="large" color="green" className="ns-play play-icon ml-16" />
                 </Header>
               </Segment>
-            </a>
+            </Link>
           </section>
           <Divider fitted as={!responsiveVars.uptoTablet && Container} />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>

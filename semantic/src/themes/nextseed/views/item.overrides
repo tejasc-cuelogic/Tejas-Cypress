@@ -347,7 +347,7 @@
         padding-left:@14px;
     }
     h2.header:not(.ui){
-        font-size:@28px;
+        font-size:@40px;
         margin:0;
         @media only screen and (max-width :@largestMobileScreen){
             font-size:@20px;
@@ -355,8 +355,9 @@
         }
     }
     .description{
-        font-size:@20px;
-        line-height:31px;
+        font-size:@17px;
+        line-height:30px;
+        color: @neutral;
         @media only screen and (max-width :@largestMobileScreen){
             font-size:@15px;
             line-height:24px;
@@ -370,7 +371,7 @@
         }
         span{
             line-height:@24px;
-            color:@primary-one;
+            color:@neutral;
             font-weight:@bold;
         }
     }
