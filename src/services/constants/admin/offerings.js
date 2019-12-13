@@ -1477,6 +1477,16 @@ export const GENERAL = {
     placeHolder: 'Enter here',
     tooltip: 'Including owners/officers of the company',
   },
+  taxedAs: {
+    label: 'Taxed As',
+    value: 'Corporation',
+    error: undefined,
+    rule: 'string',
+    values: [
+      { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
+      { key: 'Partnership', value: 'PARTNERSHIP', text: 'Partnership' },
+    ],
+  },
   businessStreet: {
     label: 'Business Street Address',
     value: '',
