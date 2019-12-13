@@ -380,6 +380,26 @@ export class PortfolioStore {
   resetPortfolioData = () => {
     this.setFieldValue('investmentLists', null);
   }
+
+  @action
+  getPortfolioDetailsAfterInvestment = portfolioObj => new Promise((resolve, reject) => {
+    this.investmentLists = graphql({
+      client,
+      query: getInvestorAccountPortfolio,
+      variables: portfolioObj,
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data && this.investmentLists && !this.investmentLists.loading) {
+          resolve(true);
+        } else if (!this.details.loading) {
+          resolve(false);
+        }
+      },
+      onError: () => {
+        reject();
+      },
+    });
+  });
 }
 
 export default new PortfolioStore();
