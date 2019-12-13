@@ -139,10 +139,11 @@ export const transferRequestAdminVerified = gql`
   }`;
 
 export const declineTransferRequest = gql`
-  mutation declineTransferRequest($id: Int!, $reason: String){
+  mutation declineTransferRequest($id: Int!, $reason: String, $cancelInvestment: Boolean){
     declineTransferRequest(
     id: $id
     reason: $reason
+    cancelInvestment: $cancelInvestment
     )
   }`;
 

@@ -480,6 +480,21 @@ query getOfferingById($id: String!) {
         edgarLink
       }
     }
+    legal {
+      dataroom {
+        documents {
+          name
+          accreditedOnly
+          upload {
+            fileId
+            fileName
+            fileHandle {
+              boxFileId
+            }
+          }
+        }
+      }
+    }
     selectedOffer {
       structure
     }

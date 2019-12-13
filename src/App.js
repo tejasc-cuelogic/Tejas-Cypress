@@ -246,8 +246,9 @@ class App extends Component {
         <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
       );
     }
+    const { isInvestor } = this.props.userStore;
     return (
-      <div className="public-pages">
+      <div className={(isInvestor || !matchPath(location.pathname, { path: '/app' })) ? 'public-pages' : ''}>
         {this.props.authStore.isUserLoggedIn
           && (
             <IdleTimer

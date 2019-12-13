@@ -413,7 +413,7 @@ export class BusinessAppStore {
     if (data) {
       this.appStepsStatus[1].status = data.stepStatus;
       data.debts.forEach((ele, key) => {
-        ['amount', 'interestExpenses', 'remainingPrincipal', 'term', 'maturityDate', 'termStartDate'].forEach((field) => {
+        ['amount', 'interestExpenses', 'remainingPrincipal', 'term', 'maturityDate', 'termStartDate', 'creditorName', 'existingLienOnBusiness'].forEach((field) => {
           this.BUSINESS_DETAILS_FRM.fields.debts[key][field].value = ele[field];
         });
         if (key < data.debts.length - 1) {
@@ -752,6 +752,8 @@ export class BusinessAppStore {
         term: this.getValidDataForInt(item.term),
         termStartDate: item.termStartDate.value ? moment(item.termStartDate.value).format('MM/DD/YYYY') : null,
         maturityDate: item.maturityDate.value ? moment(item.maturityDate.value).format('MM/DD/YYYY') : null,
+        creditorName: item.creditorName.value,
+        existingLienOnBusiness: item.existingLienOnBusiness.value,
       })),
       owners: data.owners.map(item => ({
         fullLegalName: this.getValidDataForString(item.fullLegalName),

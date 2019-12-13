@@ -496,7 +496,7 @@ export class UserDetailsStore {
       ) ? this.userDetails.legalDetails.status : 'FAIL';
       details.roles = mapValues(this.userDetails.roles, (a) => {
         const data = {
-          accountId: a.accountId,
+          accountId: get(a, 'details.accountId'),
           name: a.name,
           status: a.details ? a.details.accountStatus : null,
         };
@@ -597,6 +597,11 @@ export class UserDetailsStore {
   @action
   setDelStatus = (status) => {
     this.deleting = status;
+  }
+
+  getIdByAccountType = (type) => {
+    const role = this.userDetails.roles.find(i => i.name === type);
+    return role ? get(role, 'details.accountId') : '';
   }
 
   @computed get isCipExpirationInProgress() {

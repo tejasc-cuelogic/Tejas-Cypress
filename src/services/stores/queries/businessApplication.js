@@ -202,6 +202,8 @@ query getBusinessApplicationById ($id: String!) {
         remainingPrincipal
         term
         termStartDate
+        creditorName
+        existingLienOnBusiness
         maturityDate
       }
       owners {
