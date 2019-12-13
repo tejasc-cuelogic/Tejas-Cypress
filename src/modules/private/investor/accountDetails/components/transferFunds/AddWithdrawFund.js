@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { capitalize, get } from 'lodash';
 import money from 'money-math';
 import { Modal, Button, Header, Form, Divider, Statistic, Message } from 'semantic-ui-react';
@@ -24,6 +24,7 @@ export default class AddWithdrawFund extends Component {
     if (!cash) {
       this.props.transactionStore.getInvestorAvailableCash(false);
     }
+    this.props.transactionStore.setFieldValue('showSuccessModal', false);
     setInitialLinkValue(false);
     setInitialFundValue();
   }
@@ -49,6 +50,20 @@ export default class AddWithdrawFund extends Component {
     }
   }
 
+  getHeadingTitle = () => {
+    const { match, transactionStore } = this.props;
+    const { showSuccessModal, showConfirmPreview } = transactionStore;
+    let headingTitle = '';
+    if (showSuccessModal) {
+      headingTitle = 'Success';
+    } else if (showConfirmPreview) {
+      headingTitle = match.params.action === 'add' ? 'Confirm Request' : 'Confirm Withdrawal';
+    } else {
+      headingTitle = match.params.action === 'add' ? 'Add Funds' : 'Withdraw Funds';
+    }
+    return headingTitle;
+  }
+
   cancelTransfer = () => {
     const { setInitialLinkValue } = this.props.transactionStore;
     setInitialLinkValue(false);
@@ -58,7 +73,7 @@ export default class AddWithdrawFund extends Component {
     this.props.transactionStore.addFunds(transferAmount, transferDescription).then(() => {
       this.setState({ isActivebutton: true });
       Helper.toast(toasterMessage, 'success');
-      this.props.history.replace(this.props.refLink);
+      this.props.transactionStore.setFieldValue('showSuccessModal', true);
     });
   }
 
@@ -66,7 +81,7 @@ export default class AddWithdrawFund extends Component {
     this.props.transactionStore.withdrawFunds(transferAmount, transferDescription).then(() => {
       this.setState({ isActivebutton: true });
       Helper.toast(toasterMessage, 'success');
-      this.props.history.replace(this.props.refLink);
+      this.props.transactionStore.setFieldValue('showSuccessModal', true);
     });
   }
 
@@ -74,20 +89,25 @@ export default class AddWithdrawFund extends Component {
     const { match, transactionStore } = this.props;
     const {
       TRANSFER_FRM, TransferChange, showConfirmPreview, getValidWithdrawAmt,
-      cash, cashAvailable,
+      cash, cashAvailable, showSuccessModal,
     } = transactionStore;
+    const { inProgress } = this.props.uiStore;
     const { currentActiveAccountDetails } = this.props.userDetailsStore;
     const linkBankDetials = (get(currentActiveAccountDetails, 'details.linkedBank.changeRequest') && get(currentActiveAccountDetails, 'details.linkedBank.pendingUpdate')) ? get(currentActiveAccountDetails, 'details.linkedBank.changeRequest') : get(currentActiveAccountDetails, 'details.linkedBank') || null;
     const accountType = linkBankDetials && linkBankDetials.accountType ? linkBankDetials.accountType : 'N/A';
     const { errors } = this.props.uiStore;
-    const headingTitle = match.params.action === 'add' ? 'Add funds' : (!showConfirmPreview && match.params.action === 'withdraw') ? 'Withdraw funds' : 'Confirm withdrawal';
+    const headingTitle = this.getHeadingTitle();
     const labelForWithdrawInput = match.params.action !== 'add' && (!showConfirmPreview) ? 'Amount you want to withdraw' : 'Withdrawal amount';
     const cashAmount = cash ? money.isNegative(cash) ? '0.00' : cash : '0.00';
+    const transferNotifyText = showSuccessModal && match.params.action === 'add'
+      ? 'These funds are immediately available for investment. Please allow 5-7 business days for this transfer to be fully processed'
+      : 'Please allow 5-7 business days for this transfer to be fully processed';
+
     return (
       <>
         {!cashAvailable.loading
           && (
-            <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
+            <Modal dimmer open size="mini" closeIcon={!showConfirmPreview && !showSuccessModal} onClose={this.goBack} closeOnDimmerClick={false}>
               <Modal.Header className="signup-header">
                 <Header as="h3"><AccTypeTitle noText />
                   {headingTitle}
@@ -128,16 +148,18 @@ export default class AddWithdrawFund extends Component {
                       />
                     )
                   }
-                  {showConfirmPreview
+                  {showConfirmPreview || showSuccessModal
                     ? (
                       <>
                         <div className="field fund-amount">
                           {match.params.action === 'withdraw'
                             ? <label>Withdrawal amount</label>
-                            : ''
+                            : <label>Deposit amount</label>
                           }
-                          <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value, false)}
-                            <span className="highlight-text" onClick={() => this.props.transactionStore.setInitialLinkValue(false)}>Change</span>
+                          <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value)}
+                            {!showSuccessModal
+                              && <span className="highlight-text" onClick={() => this.props.transactionStore.setInitialLinkValue(false)}>Change</span>
+                            }
                           </Header>
                         </div>
                         <Statistic className="mt-10 mb-10">
@@ -145,25 +167,25 @@ export default class AddWithdrawFund extends Component {
                             {match.params.action === 'withdraw'
                               ? (
                                 <>
-                                  <Header.Subheader>From</Header.Subheader>
+                                  <Header.Subheader className="grey-label">From</Header.Subheader>
                                   {currentActiveAccountDetails
                                     && currentActiveAccountDetails.name
                                     ? currentActiveAccountDetails.name : null} Account
-                            <Divider hidden />
-                                  <Header.Subheader>To</Header.Subheader>
+                                  <Divider hidden />
+                                  <Header.Subheader className="grey-label">To</Header.Subheader>
                                   {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
                                 </>
                               )
                               : (
                                 <>
-                                  <Header.Subheader>From</Header.Subheader>
+                                  <Header.Subheader className="grey-label">From</Header.Subheader>
                                   {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : `${capitalize(accountType)} Account`} <span>{linkBankDetials && linkBankDetials.accountNumber ? `${Helper.encryptNumberWithX(linkBankDetials.accountNumber)}` : null}</span>
                                   <Divider hidden />
-                                  <Header.Subheader>To</Header.Subheader>
+                                  <Header.Subheader className="grey-label">To</Header.Subheader>
                                   {currentActiveAccountDetails
                                     && currentActiveAccountDetails.name
                                     ? currentActiveAccountDetails.name : null} Account
-                          </>
+                                </>
                               )}
                           </Header>
                         </Statistic>
@@ -179,16 +201,37 @@ export default class AddWithdrawFund extends Component {
                     )
                     : null
                   }
+
+                  {showSuccessModal
+                    && (
+                      <Header as="h6" className="mt-10 mb-10 grey-label">
+                        {transferNotifyText}
+                      </Header>
+                    )}
+
                   <div className="center-align mt-30">
                     <Button.Group>
-                      {showConfirmPreview
-                        ? <Button onClick={this.cancelTransfer} content="Cancel" /> : null
+                      {showConfirmPreview && !showSuccessModal
+                        ? <Button onClick={this.cancelTransfer} loading={inProgress} disabled={inProgress} content="Cancel" /> : null
                       }
-                      <Button
-                        primary
-                        disabled={!((getValidWithdrawAmt && TRANSFER_FRM.meta.isValid) || (match.params.action !== 'withdraw' && TRANSFER_FRM.fields.amount.value > 0 && TRANSFER_FRM.meta.isValid)) || !this.state.isActivebutton}
-                        content="Confirm"
-                      />
+                      {showSuccessModal
+                        ? (
+                          <Button
+                            as={Link}
+                            to={`/app/account-details/${this.props.account}/portfolio`}
+                          >
+                            Close
+                        </Button>
+                        )
+                        : (
+                          <Button
+                            primary
+                            loading={inProgress}
+                            disabled={inProgress || !((getValidWithdrawAmt && TRANSFER_FRM.meta.isValid) || (match.params.action !== 'withdraw' && TRANSFER_FRM.fields.amount.value > 0 && TRANSFER_FRM.meta.isValid)) || !this.state.isActivebutton}
+                            content={showConfirmPreview || showSuccessModal ? 'Confirm' : 'Continue'}
+                          />
+                        )
+                      }
                     </Button.Group>
                   </div>
                 </Form>

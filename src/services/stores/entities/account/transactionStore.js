@@ -46,6 +46,8 @@ export class TransactionStore {
 
   @observable showConfirmPreview = false;
 
+  @observable showSuccessModal = false;
+
   @observable reSendVerificationCode = null;
 
   @observable transactionOtpRequestId = null;
@@ -229,6 +231,7 @@ export class TransactionStore {
     this.data = [];
     this.db = [];
     this.setDb([]);
+    this.showSuccessModal = false;
   }
 
   @action
