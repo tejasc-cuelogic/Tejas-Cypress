@@ -554,6 +554,7 @@ export const getOfferingDetails = gql`
           offeringDeadline
           employmentIdNumber
           numOfEmployees
+          taxedAs
           businessStreet
           businessCity
           businessState

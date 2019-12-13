@@ -14,7 +14,7 @@ import {
   generateAgreement, finishInvestment, transferFundsForInvestment,
   investNowGeneratePurchaseAgreement, investNowGetInvestmentAgreement,
 } from '../../queries/investNow';
-import { getInvestorAccountPortfolio } from '../../queries/portfolio';
+// import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 
 // import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
 
@@ -534,13 +534,6 @@ export class InvestmentStore {
           .mutate({
             mutation: finishInvestment,
             variables: varObj,
-            refetchQueries: [{
-              query: getInvestorAccountPortfolio,
-              variables: {
-                userId: userDetailsStore.currentUserId,
-                accountId: this.getSelectedAccountTypeId,
-              },
-            }],
           })
           .then((data) => {
             const { status, message, flag } = data.data.investNowSubmit;
@@ -550,14 +543,25 @@ export class InvestmentStore {
               const errorMessage = !status ? message : null;
               this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             }
-            resolve(status);
-            campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
+            const portfolioVar = {
+              userId: userDetailsStore.currentUserId,
+              accountId: this.getSelectedAccountTypeId,
+            };
+            portfolioStore.getPortfolioDetailsAfterInvestment(portfolioVar)
+              .then(() => {
+                campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
+                resolve(status);
+                uiStore.setProgress(false);
+              })
+              .catch((error) => {
+                Helper.toast('Something went wrong, please try again later.', 'error');
+                uiStore.setErrors(error.message);
+                uiStore.setProgress(false);
+              });
           })
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
-          })
-          .finally(() => {
             uiStore.setProgress(false);
           });
       });
