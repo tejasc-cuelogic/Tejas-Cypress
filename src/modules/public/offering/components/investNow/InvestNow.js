@@ -1,13 +1,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter, Route } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import money from 'money-math';
 import { MultiStep } from '../../../../../helper';
 import TransferRequest from './TransferRequest';
 import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
-import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 // import Helper from '../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -275,7 +274,6 @@ export default class InvestNow extends React.Component {
     this.props.investmentStore.setFieldValue('disablePrevButton', true);
     return (
       <div className="step-progress">
-        <Route exact path={`${this.props.match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={props.match.params.offeringId} refLink={props.match.url} {...props} />} />
         {
           <MultiStep
             loaderMsg={this.state.submitLoading ? `Please wait...<br /><br />
