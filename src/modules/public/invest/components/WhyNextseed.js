@@ -19,12 +19,12 @@ const businesses = [
   },
   {
     title: 'Seattle, WA',
-    image: 'investors/img.jpg',
+    image: 'investors/img-1.jpg',
     description: '292 members invested $327,800 to launch Fair Isle Brewing',
   },
   {
     title: 'Denver, CO',
-    image: 'investors/img-1.jpg',
+    image: 'investors/img.jpg',
     description: '289 members invested $300,000 in Urban Putt’s second location',
   },
 ];
