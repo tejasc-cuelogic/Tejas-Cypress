@@ -1483,8 +1483,8 @@ export const GENERAL = {
     error: undefined,
     rule: 'string',
     values: [
-      { key: 'Corporation', value: 'Corporation', text: 'Corporation' },
-      { key: 'Partnership', value: 'Partnership', text: 'Partnership' },
+      { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
+      { key: 'Partnership', value: 'PARTNERSHIP', text: 'Partnership' },
     ],
   },
   businessStreet: {
