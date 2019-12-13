@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Accordion, Icon, Confirm } from 'semantic-ui-react';
+import { Accordion, Icon } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../theme/shared';
 import Listing from './Listing';
 import DraggableListing from './DraggableListing';
@@ -13,17 +13,22 @@ import DraggableListing from './DraggableListing';
 @withRouter
 @observer
 export default class AllLiveOfferings extends Component {
-  state = { activeIndex: 0, isPublic: false }
+  state = { activeIndex: [] }
 
   toggleAccordianContent = (categoryIndex = null) => {
     const index = categoryIndex;
-    if (categoryIndex === null) {
-      this.state.activeIndex = index === 0 ? -1 : this.state.activeIndex;
-    }
     const { activeIndex } = this.state;
-    const newIndex = activeIndex === index ? -1 : index;
+    const newIndex = activeIndex;
+
+    const currentIndexPosition = activeIndex.indexOf(index);
+    if (currentIndexPosition > -1) {
+      newIndex.splice(currentIndexPosition, 1);
+    } else {
+      newIndex.push(index);
+    }
+
     this.setState({ activeIndex: newIndex });
-  }
+  };
 
   render() {
     const { activeIndex } = this.state;
@@ -31,7 +36,7 @@ export default class AllLiveOfferings extends Component {
       uiStore, offeringsStore, stage,
     } = this.props;
     const { orderedActiveLiveList, loading } = offeringsStore;
-    const { confirmBox, inProgress } = uiStore;
+    const { inProgress } = uiStore;
     if (loading || inProgress) {
       return <InlineLoader />;
     }
@@ -41,12 +46,12 @@ export default class AllLiveOfferings extends Component {
     return (
       <>
         {orderedActiveLiveList && orderedActiveLiveList.length && orderedActiveLiveList.map((offering, index) => (
-          <Accordion fluid styled className="card-style">
-            <Accordion.Title onClick={() => this.toggleAccordianContent(index)} className="text-capitalize">
-              <Icon className={activeIndex === index ? 'ns-chevron-up' : 'ns-chevron-down'} />
-              {offering.title} <small>{offering.offerings.length} elements</small>
+          <Accordion exclusive={false} fluid styled className="card-style">
+            <Accordion.Title onClick={() => this.toggleAccordianContent(index)}>
+              <Icon className={activeIndex.includes(index) ? 'ns-chevron-up' : 'ns-chevron-down'} />
+              {offering.title} <small>{offering.offerings.length} {offering.offerings.length <= 1 ? 'Offering' : 'Offerings'}</small>
             </Accordion.Title>
-            <Accordion.Content active={activeIndex === index} className="categories-acc">
+            <Accordion.Content active={activeIndex.includes(index)} className="categories-acc">
               {['other'].includes(offering.category)
                 ? <DraggableListing stage={stage} allLiveOfferingsList={offering.offerings} />
                 : <Listing stage={stage} noPagination allLiveOfferingsList={offering.offerings} />
@@ -54,15 +59,6 @@ export default class AllLiveOfferings extends Component {
             </Accordion.Content>
           </Accordion>
         ))}
-        <Confirm
-          header="Confirm"
-          content={confirmBox.entity === 'Publish' ? `Are you sure you want to make this offering ${this.state.isPublic ? 'Public' : 'Non-Public'}?` : 'Are you sure you want to delete this offering?'}
-          open={confirmBox.entity === 'Delete' || confirmBox.entity === 'Publish'}
-          onCancel={this.handleDeleteCancel}
-          onConfirm={confirmBox.entity === 'Publish' ? this.handlePublishOffering : this.handleDeleteOffering}
-          size="mini"
-          className="deletion"
-        />
       </>
     );
   }

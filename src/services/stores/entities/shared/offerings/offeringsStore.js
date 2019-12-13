@@ -64,7 +64,7 @@ export class OfferingsStore {
       query: stage === 'active' ? allOfferingsCompact : allOfferings,
       variables: stage !== 'active' ? { stage: reqStages }
         : { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy: stage === 'live' ? 'network-only' : 'cache-and-network',
       onFetch: (res) => {
         if (res && !this.data[stage].loading && (!this.db[stage] || forceResetDb)) {
           this.requestState.page = 1;
@@ -197,19 +197,27 @@ export class OfferingsStore {
   @action
   removeOneFromData = (id, Stage) => {
     const stage = Stage || this.requestState.stage;
-    const db = { ...toJS(this.db) };
-    remove(db[stage], i => i.id === id);
-    remove(db.overview, i => i.id === id);
-    ClientDb.initiateDb(db);
-    this.db = { ...db };
-    const data = { ...toJS(this.data) };
-    if (data[stage]) {
-      remove(data[stage].data.getOfferings, i => i.id === id);
+    if (stage !== 'live') {
+      const db = { ...toJS(this.db) };
+      remove(db[stage], i => i.id === id);
+      remove(db.overview, i => i.id === id);
+      ClientDb.initiateDb(db);
+      this.db = { ...db };
+      const data = { ...toJS(this.data) };
+      if (data[stage]) {
+        remove(data[stage].data.getOfferings, i => i.id === id);
+      }
+      if (data.overview) {
+        remove(data.overview.data.getOfferings, i => i.id === id);
+      }
+      this.data = { ...data };
+    } else {
+      const newArr = this.orderedActiveLiveList[1].offerings;
+      remove(newArr, i => i.id === id);
+      this.orderedActiveLiveList[1].offerings = newArr;
+      console.log(this.orderedActiveLiveList[1].offerings);
+      this.initRequest({ stage });
     }
-    if (data.overview) {
-      remove(data.overview.data.getOfferings, i => i.id === id);
-    }
-    this.data = { ...data };
   }
 
   @action

@@ -608,10 +608,9 @@ export class CampaignStore {
     // const sortedResultObject = [];
     if (isFromAdmin) {
       const sortedResultObject = [
-        { category: 'closingSoonAndNew', title: 'Closing Soon And New', offerings: [...closingOfferingsArr, ...newOfferingsArr] },
-        { category: 'other', title: 'Other', offerings: [...otherOfferingsArr] },
-        { category: 'reachedMax', title: 'Reached Max', offerings: [...reachedMaxOfferingsArr] },
-        { category: 'processing', title: 'Processing', offerings: [...processingOfferingsArr] },
+        { category: 'closingSoonAndNew', title: 'Closing Soon and New', offerings: [...closingOfferingsArr, ...newOfferingsArr] },
+        { category: 'other', title: 'Current Offerings', offerings: [...otherOfferingsArr] },
+        { category: 'reachedMaxAndProcessing', title: 'Reached Max and Processing', offerings: [...reachedMaxOfferingsArr, ...processingOfferingsArr] },
       ];
       return sortedResultObject;
     }
