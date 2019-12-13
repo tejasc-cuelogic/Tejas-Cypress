@@ -229,7 +229,7 @@ class CampaignLayout extends Component {
             </>
           ) : null
         }
-        {campaignStatus.gallary !== 0 ? (
+        {campaignStatus.gallary !== 0 && !campaignStatus.isFund ? (
           <>
             <Gallery
               newLayout
