@@ -251,6 +251,11 @@ h6{
 .grey-header {
 	color: @neutral-middark !important;
 }
+.grey-label{
+	color: @neutral !important;
+	opacity: 0.4;
+	font-weight: @fontMedium !important;
+}
 .caption-note{
 	font-size:@12px;
 	font-style:italic;
