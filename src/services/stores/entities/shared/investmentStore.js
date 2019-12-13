@@ -534,13 +534,6 @@ export class InvestmentStore {
           .mutate({
             mutation: finishInvestment,
             variables: varObj,
-            // refetchQueries: [{
-            //   query: getInvestorAccountPortfolio,
-            //   variables: {
-            //     userId: userDetailsStore.currentUserId,
-            //     accountId: this.getSelectedAccountTypeId,
-            //   },
-            // }],
           })
           .then((data) => {
             const { status, message, flag } = data.data.investNowSubmit;
@@ -558,13 +551,17 @@ export class InvestmentStore {
               .then(() => {
                 campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
                 resolve(status);
+                uiStore.setProgress(false);
+              })
+              .catch((error) => {
+                Helper.toast('Something went wrong, please try again later.', 'error');
+                uiStore.setErrors(error.message);
+                uiStore.setProgress(false);
               });
           })
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
-          })
-          .finally(() => {
             uiStore.setProgress(false);
           });
       });

@@ -387,7 +387,7 @@ export class PortfolioStore {
       client,
       query: getInvestorAccountPortfolio,
       variables: portfolioObj,
-      // fetchPolicy: 'network-only',
+      fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data && this.investmentLists && !this.investmentLists.loading) {
           resolve(true);
