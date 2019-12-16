@@ -108,7 +108,7 @@ export default class InvestNow extends React.Component {
 
   handleStepChnageOnPreviousForAlert = () => {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
-    this.props.accreditationStore.changeShowAccountListFlag(true);
+    this.props.accreditationStore.changeShowAccountListFlag(!this.props.changeInvest);
   }
 
   handleCancel = () => {
