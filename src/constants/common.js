@@ -74,5 +74,8 @@ export const RETRY_CONFIG = {
   delay: {
     initial: 100, max: 3000, jitter: false,
   },
-  attempts: { max: 25 },
+  attempts: {
+    max: 5,
+    retryIf: error => !!error && error.message === 'Failed to fetch',
+  },
 };

@@ -2,13 +2,13 @@ import { observable, action, computed, toJS } from 'mobx';
 import { capitalize, orderBy, mapValues, get, includes } from 'lodash';
 import { Calculator } from 'amortizejs';
 import money from 'money-math';
+import graphql from 'mobx-apollo';
 import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO, PREFERRED_EQUITY_INVESTMENT_INFO } from '../../../constants/investment';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore, campaignStore, portfolioStore, investmentLimitStore } from '../../index';
-import { investNowSubmit, investNowGeneratePurchaseAgreement } from '../../queries/investNow';
-import { getInvestorAccountPortfolio } from '../../queries/portfolio';
+import { investNowSubmit, investNowGeneratePurchaseAgreement, investNowGetInvestmentAgreement } from '../../queries/investNow';
 
 export class InvestmentStore {
   @observable INVESTMONEY_FORM = Validator.prepareFormObject(INVESTMENT_INFO);
@@ -336,8 +336,27 @@ export class InvestmentStore {
             if (!resp.data.investNowGeneratePurchaseAgreement) {
               this.setShowTransferRequestErr(true);
             }
-            this.setFieldValue('agreementDetails', resp.data.investNowGeneratePurchaseAgreement);
-            resolve({ isValid: status, flag });
+
+            // Get docusign and npa document urls:
+            if (get(resp, 'data.investNowGeneratePurchaseAgreement.agreementId')) {
+              const agreementVariables = {
+                agreementId: get(resp, 'data.investNowGeneratePurchaseAgreement.agreementId'),
+                offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
+                accountId: this.getSelectedAccountTypeId,
+              };
+              this.getInvestmentAgreement(agreementVariables)
+                .then((result) => {
+                  this.setFieldValue('agreementDetails', result.investNowGetInvestmentAgreement);
+                  resolve({ isValid: status, flag });
+                }).catch((error) => {
+                  Helper.toast('Something went wrong, please try again later.', 'error');
+                  this.setShowTransferRequestErr(true);
+                  uiStore.setErrors(error.message);
+                  reject();
+                });
+            } else {
+              resolve({ isValid: status, flag });
+            }
           }))
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
@@ -352,6 +371,21 @@ export class InvestmentStore {
     } else {
       resolve();
     }
+  });
+
+  getInvestmentAgreement = variables => new Promise((resolve, reject) => {
+    graphql({
+      client,
+      query: investNowGetInvestmentAgreement,
+      variables,
+      onFetch: (data) => {
+        resolve(data);
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      },
+    });
   });
 
   checkLockinPeriod = () => {
@@ -389,12 +423,6 @@ export class InvestmentStore {
           .mutate({
             mutation: investNowSubmit,
             variables,
-            refetchQueries: [{
-              query: getInvestorAccountPortfolio,
-              variables: {
-                accountId: this.getSelectedAccountTypeId,
-              },
-            }],
           })
           .then((data) => {
             const { status, message, flag } = data.data.investNowSubmit;
@@ -404,14 +432,24 @@ export class InvestmentStore {
               const errorMessage = !status ? message : null;
               this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             }
-            resolve(status);
-            campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
+            const portfolioVar = {
+              accountId: this.getSelectedAccountTypeId,
+            };
+            portfolioStore.getPortfolioDetailsAfterInvestment(portfolioVar)
+              .then(() => {
+                campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
+                resolve(status);
+                uiStore.setProgress(false);
+              })
+              .catch((error) => {
+                Helper.toast('Something went wrong, please try again later.', 'error');
+                uiStore.setErrors(error.message);
+                uiStore.setProgress(false);
+              });
           })
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
-          })
-          .finally(() => {
             uiStore.setProgress(false);
           });
       });

@@ -328,7 +328,6 @@ export const campaignDetailsAdditionalQuery = gql`
   query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
-    isInvestedInOffering
     comments {
       id
       scope
@@ -478,6 +477,21 @@ query getOfferingById($id: String!) {
         expectedOpsDate
         terminationDate
         edgarLink
+      }
+    }
+    legal {
+      dataroom {
+        documents {
+          name
+          accreditedOnly
+          upload {
+            fileId
+            fileName
+            fileHandle {
+              boxFileId
+            }
+          }
+        }
       }
     }
     selectedOffer {

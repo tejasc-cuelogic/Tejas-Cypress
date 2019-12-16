@@ -63,7 +63,7 @@ const SummaryHeader = props => (
                       && isMobile && <Link to={props.isAdmin ? `${props.refLink}/transactions/addfunds` : `/app/account-details/${props.details.accountType}/transfer-funds/add`}>Deposit funds</Link>
                     }
                   </Statistic.Label>
-                  <Statistic.Value>{showValue(row)}</Statistic.Value>
+                  <Statistic.Value>{props.loading ? 'loading...' : showValue(row)}</Statistic.Value>
                 </Statistic>
               </Card.Content>
               {row.title === 'Total Balance'

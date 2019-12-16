@@ -51,11 +51,27 @@ mutation investNowGeneratePurchaseAgreement(
   ) {
       agreementId
       envelopeId
-      docuSignViewURL
-      npaViewUrl
       status
       message
       flag
+    }
+  }
+`;
+
+export const investNowGetInvestmentAgreement = gql`
+query investNowGetInvestmentAgreement(
+  $accountId: String!,
+  $offeringId: String!,
+  $agreementId: Int!
+) {
+  investNowGetInvestmentAgreement(
+    accountId: $accountId,
+    offeringId: $offeringId,
+    agreementId: $agreementId
+  ) {
+      agreementId
+      docuSignViewURL
+      npaViewUrl
     }
   }
 `;

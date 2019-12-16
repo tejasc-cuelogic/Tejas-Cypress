@@ -33,7 +33,6 @@ const httpLink = new HttpLink({
 const authLink = setContext(async (_, { headers }) => {
   // get the authentication token from local storage if it exists
   const session = await Auth.currentSession();
-  console.log('token', session);
   const jwtToken = get(session, 'idToken.jwtToken');
   return {
     headers: {
@@ -60,7 +59,6 @@ export const GqlClient = new ApolloClient({
         authStore.sendErrorMail(res);
       }
       if (get(res, 'networkError.statusCode') === 401 || get(res, 'networkError.result.message') === 'The incoming token has expired') {
-        console.log(res);
         authActions.logout('timeout').then(() => {
           window.location = '/login';
         });
