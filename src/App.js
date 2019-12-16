@@ -248,7 +248,7 @@ class App extends Component {
     }
     const { isInvestor } = this.props.userStore;
     return (
-      <div className={(isInvestor || !matchPath(location.pathname, { path: '/app' })) ? 'public-pages' : ''}>
+      <div className={(isInvestor || !matchPath(location.pathname, { path: '/dashboard' })) ? 'public-pages' : ''}>
         {this.props.authStore.isUserLoggedIn
           && (
             <IdleTimer
