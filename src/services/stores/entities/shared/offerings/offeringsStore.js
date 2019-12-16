@@ -50,7 +50,7 @@ export class OfferingsStore {
 
   @observable totalRaisedAmount = [];
 
-  @observable orderedActiveLiveList = [];
+  @observable.struct orderedActiveLiveList = [];
 
   @action
   initRequest = (props, forceResetDb = false) => {
@@ -89,6 +89,7 @@ export class OfferingsStore {
 
   @action
   updateOfferingPublicaly = (id, isAvailablePublicly) => {
+    const { stage } = this.requestState;
     uiStore.addMoreInProgressArray('publish');
     const variables = {
       id,
@@ -100,7 +101,7 @@ export class OfferingsStore {
         variables,
       }).then(() => {
         uiStore.removeOneFromProgressArray('publish');
-        this.changePublicFlagForOffer(id, isAvailablePublicly);
+        this.changePublicFlagForOffer(id, isAvailablePublicly, stage);
         Helper.toast('Offering updated successfully.', 'success');
       }).catch(() => {
         uiStore.removeOneFromProgressArray('publish');
@@ -162,7 +163,7 @@ export class OfferingsStore {
   }
 
   @action
-  deleteOffering = (id) => {
+  deleteOffering = (id, indexVal) => {
     uiStore.addMoreInProgressArray('delete');
     client
       .mutate({
@@ -172,7 +173,7 @@ export class OfferingsStore {
         },
       })
       .then(() => {
-        this.removeOneFromData(id);
+        this.removeOneFromData(id, undefined, indexVal);
         uiStore.removeOneFromProgressArray('delete');
         Helper.toast('Offering deleted successfully.', 'success');
       })
@@ -183,7 +184,7 @@ export class OfferingsStore {
   }
 
   @action
-  changePublicFlagForOffer = (id, isAvailablePublicly) => {
+  changePublicFlagForOffer = (id, isAvailablePublicly, stage) => {
     const db = { ...toJS(this.db) };
     const offer = db[this.requestState.stage].find(o => o.id === id);
     offer.isAvailablePublicly = isAvailablePublicly;
@@ -192,32 +193,38 @@ export class OfferingsStore {
     const offerInData = data[this.requestState.stage].data.getOfferings.find(o => o.id === id);
     offerInData.isAvailablePublicly = isAvailablePublicly;
     this.data = { ...data };
+    if (stage && stage === 'live') {
+      this.orderedActiveListArr();
+    }
   }
 
   @action
   removeOneFromData = (id, Stage) => {
     const stage = Stage || this.requestState.stage;
-    if (stage !== 'live') {
-      const db = { ...toJS(this.db) };
-      remove(db[stage], i => i.id === id);
-      remove(db.overview, i => i.id === id);
-      ClientDb.initiateDb(db);
-      this.db = { ...db };
-      const data = { ...toJS(this.data) };
-      if (data[stage]) {
-        remove(data[stage].data.getOfferings, i => i.id === id);
-      }
-      if (data.overview) {
-        remove(data.overview.data.getOfferings, i => i.id === id);
-      }
-      this.data = { ...data };
-    } else {
-      const newArr = this.orderedActiveLiveList[1].offerings;
-      remove(newArr, i => i.id === id);
-      this.orderedActiveLiveList[1].offerings = newArr;
-      console.log(this.orderedActiveLiveList[1].offerings);
-      this.initRequest({ stage });
+    const db = { ...toJS(this.db) };
+    remove(db[stage], i => i.id === id);
+    remove(db.overview, i => i.id === id);
+    ClientDb.initiateDb(db);
+    this.db = { ...db };
+    const data = { ...toJS(this.data) };
+    if (data[stage]) {
+      remove(data[stage].data.getOfferings, i => i.id === id);
     }
+    if (data.overview) {
+      remove(data.overview.data.getOfferings, i => i.id === id);
+    }
+    this.data = { ...data };
+    if (stage === 'live') {
+      this.orderedActiveListArr();
+    }
+    /* else {
+      // const arrayIndex = findIndex(this.orderedActiveLiveList[1].offerings, o => o.id === id);
+      // const temp = this.orderedActiveLiveList[1].offerings;
+      const temp = this.orderedActiveLiveList[liveListIndex].offerings;
+      remove(temp, i => i.id === id);
+      this.orderedActiveLiveList[liveListIndex].offerings = temp;
+      this.initRequest({ stage }, true);
+    } */
   }
 
   @action
@@ -294,7 +301,7 @@ export class OfferingsStore {
   }
 
   @action
-  setOrderForOfferings = (newArr, stage, isMerge = false) => {
+  setOrderForOfferings = (newArr, stage, isMerge = false, indexVal) => {
     const offeringOrderDetails = [];
     newArr.forEach((item, index) => {
       offeringOrderDetails.push({
@@ -305,7 +312,7 @@ export class OfferingsStore {
       newArr[index].order = index + 1;
     });
     if (isMerge) {
-      this.orderedActiveLiveList[1].offerings = newArr;
+      this.orderedActiveLiveList[indexVal].offerings = newArr;
     } else {
       this.setDb(newArr);
     }

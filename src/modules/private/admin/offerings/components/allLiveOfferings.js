@@ -53,8 +53,8 @@ export default class AllLiveOfferings extends Component {
             </Accordion.Title>
             <Accordion.Content active={activeIndex.includes(index)} className="categories-acc">
               {['other'].includes(offering.category)
-                ? <DraggableListing stage={stage} allLiveOfferingsList={offering.offerings} />
-                : <Listing stage={stage} noPagination allLiveOfferingsList={offering.offerings} />
+                ? <DraggableListing stage={stage} allLiveOfferingsList={offering.offerings} offeringListIndex={index} />
+                : <Listing stage={stage} noPagination allLiveOfferingsList={offering.offerings} offeringListIndex={index} />
               }
             </Accordion.Content>
           </Accordion>
