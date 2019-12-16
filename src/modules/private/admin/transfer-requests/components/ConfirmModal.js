@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Button, Form } from 'semantic-ui-react';
+import { Modal, Header, Button, Form, Checkbox } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { FormTextarea } from '../../../../../theme/form';
 import { STATUS_MAPPING } from '../../../../../services/constants/admin/transactions';
@@ -51,6 +51,17 @@ export default class ConfirmModal extends Component {
               fielddata={TRANSACTION_FAILURE.fields.justifyDescription}
               changed={(e, result) => formChange(e, result, 'TRANSACTION_FAILURE')}
             />
+            {['Declined', 'Failed'].includes(STATUS_MAPPING[statusType].failedCta.action)
+            && (
+              <Checkbox
+                className="field"
+                label={TRANSACTION_FAILURE.fields.cancelInvestment.label}
+                name="cancelInvestment"
+                checked={TRANSACTION_FAILURE.fields.cancelInvestment.value}
+                onChange={(e, result) => formChange(e, result, 'TRANSACTION_FAILURE')}
+              />
+            )
+            }
             <div className="center-align mt-30">
               <Button className="red relaxed" content={`Confirm ${statusType === 'pending' ? 'Decline' : 'Failure'}`} loading={btnLoader.includes(parseInt(requestId, 10))} disabled={!TRANSACTION_FAILURE.meta.isValid} onClick={this.handleConfirm} />
             </div>

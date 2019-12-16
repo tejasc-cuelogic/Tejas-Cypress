@@ -231,8 +231,17 @@
 			&.categories-acc {
 				padding: @30px @40px;
 			}
+			.ui.header.investment-list{
+				margin: 0 0 @14px 67px;
+				padding-top: @14px;
+			}
 		}
-
+		&.portfolio-list .title{
+			font-size: @16px;
+			>.icon{
+				margin-right: @35px;
+			}
+		}
 	}
 	.row-wrap:last-child{
 		border-radius:0 0 @styledBorderRadius @styledBorderRadius;
