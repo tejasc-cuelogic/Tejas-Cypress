@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Container, Grid, Statistic, Responsive, Divider } from 'semantic-ui-react';
+import { Header, Container, Grid, Statistic, Responsive, Divider, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import NSImage from '../../../shared/NSImage';
@@ -23,7 +23,7 @@ class Mission extends Component {
     const teamInfo = (
       <Grid centered className="team-list">
         <TeamList
-          columns={3}
+          columns={4}
           className="team-gallery"
           match={this.props.match}
           joinColumn
@@ -43,33 +43,23 @@ class Mission extends Component {
             <Grid centered stackable>
               <Grid.Row>
                 <Grid.Column textAlign={isMobile ? 'left' : 'center'}>
-                  <Header as="h2" className={isMobile ? 'mb-20' : 'mb-30'}>
+                  <Header as="h2" className={isMobile ? 'mb-20' : 'mb-60'}>
                     Invest in each other. Grow together
                   </Header>
-                  <p className={isMobile ? 'mb-0' : 'mb-30'}>Our mission is to connect businesses and individuals to build vibrant communities.</p>
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
-                <Grid.Column width={8}>
-                  <NSImage path="about-page.jpg" />
+                <Grid.Column width={8} verticalAlign="middle">
+                  <Header as="h3" className="highlight-text quotes left-align">
+                    <sup><Icon size="mini" className="ns-quote-left" /></sup> Our mission is to build prosperous communities by making meaningful investments accessible to everyone. <sup><Icon size="mini" className="ns-quote-right" /></sup>
+                  </Header>
                 </Grid.Column>
                 <Grid.Column width={8}>
                   <p>
-                    By using the latest crowdfunding laws and technology, NextSeed is empowering
-                    business owners and everyday people to invest in one another and grow together.
+                    We are a fast-growing fintech company that enables everyday investors to invest directly in local businesses, enabling private companies across the US to raise capital directly from everyday investors. The Next Seed, Inc. operates NextSeed Services, LLC, a fully-integrated online investment platform, and NextSeed Securities, LLC, a forward-thinking investment banking practice.
                   </p>
                   <p>
-                    Through NextSeed, local entrepreneurs are building places people love, creating jobs, and making a tangible impact in their neighborhoods. Investors are getting access to private investment opportunities once reserved for the well-connected and engaging with the businesses that matter most to them.
-                  </p>
-                  <p>
-                    The team behind NextSeed created the first registered funding portal with the
-                    Securities & Exchange Commission (SEC) and became a member of the Financial
-                    Industry Regulatory Authority{' '}
-                    (<a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>).
-                    {' '}The portal closed the first-ever regulation crowdfunding offering in the country. Beginning in October 2018, NextSeed Securities LLC operates as an SEC-registered broker-dealer and FINRA member.
-                  </p>
-                  <p>
-                    Anyone in the US, regardless of income or net worth, can now invest in innovative local business concepts that are defining the new landscape of Main Street. Everyday people have an opportunity to start building a portfolio of impactful, local and community-driven investments.
+                    We recently merged with Collaboration Capital, an SEC-registered investment adviser that focuses on impact and ESG investing strategies. Collaboration Capital was established in 2017 and has since become an industry leader in the impact/ESG investing space, currently with over $175 million AUM. Together, we aim to build a leading technology-driven impact investment firm open to everyone, furthering our mission to democratize finance.
                   </p>
                 </Grid.Column>
               </Grid.Row>
@@ -177,7 +167,7 @@ class Mission extends Component {
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
           <Container>
             <Grid centered>
-              <Grid.Column textAlign={isMobile ? 'left' : 'center'} computer={10} tablet={10} mobile={16}>
+              <Grid.Column textAlign={isMobile ? 'left' : 'center'} computer={13} tablet={13} mobile={16}>
                 <Header as="h2" className="mb-30">Meet our team</Header>
                 <p className={isMobile ? 'mb-40' : 'mb-60'}>
                   We{"'"}re a team of entrepreneurs with backgrounds in business, finance, law, marketing and technology.<Responsive minWidth={992} as="br" /> We{"'"}re here to empower business owners and everyday people to invest in one another.

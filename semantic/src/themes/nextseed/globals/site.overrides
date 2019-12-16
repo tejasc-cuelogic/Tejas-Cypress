@@ -3095,6 +3095,17 @@ input[type='range']::-webkit-slider-thumb {
 .testimonial .slick-slider {
 	.slick-list{
 		margin: 0 @50px;
+		@media only screen and (max-width : @largestMobileScreen){
+			margin: 0 @30px;
+			.testimonial-user-details{
+				.ui.image{
+					float: left;
+				}
+			}
+			.ui.items>.item>.content{
+				padding-left: 0;
+			}
+		}
 	}
 	.slick-prev, .slick-next {
 		@media only screen and (max-width : @largestMobileScreen){
@@ -3157,3 +3168,13 @@ table.css-wu4c77-diff-container {
     margin: auto;
 }
 // HTML editor images placeholder end
+.quotes i.icon{
+	font-size: 1.71428571rem !important;
+	&.ns-quote-left{
+		margin-right: 11px !important;
+	}
+	&.ns-quote-right{
+		margin-left: 11px !important;
+		margin-right: 0 !important;
+	}
+}

@@ -341,7 +341,7 @@ export class NavigationItems extends Component {
                     <Button
                       loading={this.props.userDetailsStore.currentUser.loading}
                       disabled={this.props.userDetailsStore.currentUser.loading}
-                      secondary
+                      primary
                     >Dashboard
                   </Button>
                   </Menu.Item>

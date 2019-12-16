@@ -30,6 +30,7 @@ class HowItWorks extends Component {
       arrows: true,
       dots: false,
     };
+    const { responsiveVars } = this.props.uiStore;
     const businesses = [
       {
         title: 'Breweries & Distilleries',
@@ -68,26 +69,25 @@ class HowItWorks extends Component {
         description: 'The NextSeed process was extremely smooth and allowed me to focus on getting Pitch 25 up and running. The amount of community buzz that we got through this process gave our business a huge boost.',
         name: 'Brian Ching | Pitch 25',
         investment: '$549,900 from 392 investors',
-        image: 'business/lian.png',
+        image: responsiveVars.isMobile ? 'business/lian-mobile.png' : 'business/lian.png',
       },
       {
         title: 'Real Success Stories',
         description: 'The all-in-one platform allowed us to expand quickly and build a new customer base. Our partnership with NextSeed is a win-win.',
         name: 'Jess Hughes | Citizen Pilates',
         investment: '$100,000 from 75 investors',
-        image: 'business/jess.png',
+        image: responsiveVars.isMobile ? 'business/lian-mobile.png' : 'business/jess.png',
       },
       {
         title: 'Real Success Stories',
         description: 'Your patrons get to be part of what you’re creating. It’s the best way to access this many investors while retaining 100% ownership.',
         name: 'Michael Dickson, Native Hostel',
         investment: '$396,500 from 227 investors',
-        image: 'business/michael.png',
+        image: responsiveVars.isMobile ? 'business/lian-mobile.png' : 'business/michael.png',
       },
     ];
     const isMobile = document.documentElement.clientWidth < 768;
     const isTablet = document.documentElement.clientWidth < 992;
-    const { responsiveVars } = this.props.uiStore;
     const { authStore } = this.props;
 
     return (
@@ -145,11 +145,11 @@ class HowItWorks extends Component {
                     <p className={responsiveVars.isMobile ? 'mb-30 mt-10' : 'mb-60 mt-40'}>
                       Whether you{"'"}re raising capital for an expansion, a new venture, or to improve your current capacity, our investment banking team will find the right capital solution to keep you in control of your business.
                   </p>
-                  {!authStore.isUserLoggedIn && !responsiveVars.isMobile
-                    && (
-                      <Button as={Link} to="/business-application/business" primary className="mb-30">Apply Online</Button>
-                    )
-                  }
+                    {!authStore.isUserLoggedIn && !responsiveVars.isMobile
+                      && (
+                        <Button as={Link} to="/business-application/business" primary className="mb-30">Apply Online</Button>
+                      )
+                    }
                   </div>
                 </Grid.Column>
                 <Grid.Column className="centered" widescreen={5} computer={5} tablet={16} mobile={16} verticalAlign="middle">
@@ -377,13 +377,17 @@ class HowItWorks extends Component {
               {testimonial.map(t => (
                 <Item.Group key={t}>
                   <Item>
-                    <NSImage path={t.image} size="large" />
+                    {!responsiveVars.isMobile
+                      && <NSImage path={t.image} size="large" />}
                     <Item.Content verticalAlign="middle">
                       <Item.Header as={isMobile ? 'h3' : 'h2'}>{t.title}</Item.Header>
                       <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
                         “{t.description}”
                     </Item.Description>
                       <Item.Extra className="testimonial-user-details">
+                        {responsiveVars.isMobile
+                          && <NSImage path={t.image} />
+                        }
                         <p>{t.name}</p>
                         <span><b>{t.investment}</b></span>
                       </Item.Extra>
@@ -463,7 +467,7 @@ class HowItWorks extends Component {
               <Grid.Column width={10}>
                 <Header as="h2" className="mb-20">Let us know how we can help</Header>
                 <p className={`${responsiveVars.isMobile ? 'mb-10' : ''} neutral-text`}>
-                Have questions about how we can help your business achieve your goals? We{"'"}re here to help.
+                  Have questions about how we can help your business achieve your goals? We{"'"}re here to help.
                 </p>
               </Grid.Column>
               <Grid.Column width={6} verticalAlign="middle" className="center-align">
