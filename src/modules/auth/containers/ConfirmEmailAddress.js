@@ -29,11 +29,7 @@ export default class ConfirmEmailAddress extends Component {
       this.props.history.push(this.props.refLink || '/login');
     }
     this.props.authStore.setUserCredentiansConfirmEmail();
-    if (this.props.userDetailsStore.signupStatus.isMigratedUser
-      && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
-      && !this.props.identityStore.sendOtpToMigratedUser.includes('EMAIL')) {
-      this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
-    }
+    this.startPhoneVerification();
   }
 
   componentDidMount() {
@@ -47,6 +43,14 @@ export default class ConfirmEmailAddress extends Component {
   componentWillUnmount() {
     this.props.authStore.resetForm('CONFIRM_FRM');
     this.props.uiStore.clearErrors();
+  }
+
+  startPhoneVerification = async () => {
+    if (this.props.userDetailsStore.signupStatus.isMigratedUser
+      && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
+      && !this.props.identityStore.sendOtpToMigratedUser.includes('EMAIL')) {
+      await this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
+    }
   }
 
   handleSubmitForm = (e) => {
