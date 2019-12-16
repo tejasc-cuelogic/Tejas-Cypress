@@ -334,7 +334,6 @@ export const campaignDetailsAdditionalQuery = gql`
   query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
-    isInvestedInOffering
     comments {
       id
       scope
