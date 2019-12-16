@@ -288,6 +288,13 @@ export default class BusinessDetails extends Component {
                         }
                       </Header>
                       <Form.Group widths="two">
+                        <FormInput
+                          readOnly={formReadOnlyMode}
+                          containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                          name="creditorName"
+                          fielddata={debt.creditorName}
+                          changed={(e, res) => businessDetailsChange(e, res, 'debts', index)}
+                        />
                         <MaskedInput
                           readOnly={formReadOnlyMode}
                           containerclassname={formReadOnlyMode ? 'display-only' : ''}
@@ -343,16 +350,9 @@ export default class BusinessDetails extends Component {
                               changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                             />
                           ) : ''}
-                        <FormInput
-                          readOnly={formReadOnlyMode}
-                          containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                          name="creditorName"
-                          fielddata={debt.creditorName}
-                          changed={(e, res) => businessDetailsChange(e, res, 'debts', index)}
-                        />
                         <FormDropDown
                           className={formReadOnlyMode ? 'display-only' : ''}
-                          readOnly={formReadOnlyMode}
+                          displayMode={formReadOnlyMode}
                           name="existingLienOnBusiness"
                           placeholder="Choose here"
                           fluid
