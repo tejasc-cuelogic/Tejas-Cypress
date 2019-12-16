@@ -239,6 +239,8 @@ export default class InvestNow extends React.Component {
           isFromPublicPage={this.state.isInvestmentUpdate}
         />,
         isValid: '',
+        disableNextButton: changeInvest,
+        disablePrevButton: changeInvest,
         stepToBeRendered: 1,
         isDirty: true,
       },
