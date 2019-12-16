@@ -33,7 +33,7 @@ export default class PopulateAccreditationSteps extends React.Component {
   StepsMetaData = {
     ACCREDITATION_FORM: {
       name: '',
-      component: <IncomeQualCheck submitStep={this.handleSubmitStep} />,
+      component: <IncomeQualCheck submitStep={this.handleSubmitStep} {...this.props} />,
       isHideLabel: true,
       formName: 'ACCREDITATION_FORM',
       isDirty: true,
@@ -41,37 +41,37 @@ export default class PopulateAccreditationSteps extends React.Component {
     },
     NETWORTH_QAL_FORM: {
       name: 'Net worth',
-      component: <NetWorthCheck submitStep={this.handleSubmitStep} />,
+      component: <NetWorthCheck submitStep={this.handleSubmitStep} {...this.props} />,
       formName: 'NETWORTH_QAL_FORM',
       isDirty: true,
     },
     NET_WORTH_FORM: {
       name: 'Net worth',
-      component: <NetWorth submitStep={this.handleSubmitStep} />,
+      component: <NetWorth submitStep={this.handleSubmitStep} {...this.props} />,
       formName: 'NET_WORTH_FORM',
       isDirty: true,
     },
     INCOME_EVIDENCE_FORM: {
       name: 'Evidence',
-      component: <IncomeEvidence submitStep={this.handleSubmitStep} />,
+      component: <IncomeEvidence submitStep={this.handleSubmitStep} {...this.props} />,
       formName: 'INCOME_EVIDENCE_FORM',
       isDirty: true,
     },
     VERIFICATION: {
       name: 'Verification',
-      component: <Verification submitStep={this.handleSubmitStep} />,
+      component: <Verification submitStep={this.handleSubmitStep} {...this.props} />,
       isDirty: true,
     },
     ENTITY_ACCREDITATION_FORM: {
       name: '',
-      component: <EntityAccreditationMethod submitStep={this.handleSubmitStep} />,
+      component: <EntityAccreditationMethod submitStep={this.handleSubmitStep} {...this.props} />,
       isHideLabel: true,
       isDirty: true,
       formName: 'ENTITY_ACCREDITATION_FORM',
     },
     TRUST_ENTITY_ACCREDITATION_FRM: {
       name: '',
-      component: <TrustEntityAccreditationMethod submitStep={this.handleSubmitStep} />,
+      component: <TrustEntityAccreditationMethod submitStep={this.handleSubmitStep} {...this.props} />,
       isHideLabel: true,
       isDirty: true,
       formName: 'TRUST_ENTITY_ACCREDITATION_FRM',
@@ -155,6 +155,7 @@ export default class PopulateAccreditationSteps extends React.Component {
           stepToBeRendered={this.props.accreditationStore.stepToBeRendered}
           formHeaderClick
           setUiStorevalue={setFieldvalue}
+          {...this.props}
         />
       </div>
     );

@@ -168,7 +168,7 @@ class LegalDetails extends React.Component {
               )
             }
             <div className="center-align mt-30">
-              <Button primary size="large" className="very relaxed" content="Verify my identity" disabled={inProgress} />
+              <Button primary size="large" className="very relaxed" content="Verify my identity" disabled={!form.meta.isValid || inProgress} />
             </div>
           </Form>
         </Modal.Content>
