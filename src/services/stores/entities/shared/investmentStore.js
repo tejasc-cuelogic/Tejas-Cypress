@@ -9,7 +9,6 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore, campaignStore, portfolioStore, investmentLimitStore } from '../../index';
 import { investNowSubmit, investNowGeneratePurchaseAgreement, investNowGetInvestmentAgreement } from '../../queries/investNow';
-import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 
 export class InvestmentStore {
   @observable INVESTMONEY_FORM = Validator.prepareFormObject(INVESTMENT_INFO);
@@ -424,12 +423,6 @@ export class InvestmentStore {
           .mutate({
             mutation: investNowSubmit,
             variables,
-            refetchQueries: [{
-              query: getInvestorAccountPortfolio,
-              variables: {
-                accountId: this.getSelectedAccountTypeId,
-              },
-            }],
           })
           .then((data) => {
             const { status, message, flag } = data.data.investNowSubmit;
@@ -439,14 +432,24 @@ export class InvestmentStore {
               const errorMessage = !status ? message : null;
               this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             }
-            resolve(status);
-            campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
+            const portfolioVar = {
+              accountId: this.getSelectedAccountTypeId,
+            };
+            portfolioStore.getPortfolioDetailsAfterInvestment(portfolioVar)
+              .then(() => {
+                campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
+                resolve(status);
+                uiStore.setProgress(false);
+              })
+              .catch((error) => {
+                Helper.toast('Something went wrong, please try again later.', 'error');
+                uiStore.setErrors(error.message);
+                uiStore.setProgress(false);
+              });
           })
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
-          })
-          .finally(() => {
             uiStore.setProgress(false);
           });
       });
