@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { Link, Route, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Grid, Container, Button, Divider, Responsive, Icon, Item, Segment, Card } from 'semantic-ui-react';
-import { NsCarousel } from '../../../../theme/shared';
+import { NsCarousel, VideoModal } from '../../../../theme/shared';
 import NSImage from '../../../shared/NSImage';
-import VideoModal from '../../business/components/VideoModal';
 
 const settings = {
   slidesToShow: 1,

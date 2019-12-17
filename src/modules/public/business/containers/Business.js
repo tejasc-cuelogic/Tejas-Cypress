@@ -35,8 +35,7 @@ class Business extends Component {
     return (
       <>
         <MetaTagGenerator pathName={location.pathname} metaTagsData={metaTagsData} />
-        {location.pathname === '/how-it-works/business'
-          || location.pathname === '/business' ? <Banner />
+        {location.pathname === '/how-it-works/business' ? <Banner />
           : <Responsive as="section" maxWidth={991} className={`banner ${location.pathname.split('/')[2]}`} />
         }
         <HowItWorks />
