@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Embed, Modal } from 'semantic-ui-react';
-import { InlineLoader } from '../../../../theme/shared';
+import InlineLoader from './InlineLoader';
 
 class VideoModal extends Component {
   handleClose = () => this.props.history.goBack();

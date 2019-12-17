@@ -144,6 +144,9 @@
     }
     &.team-list {
         margin: 0;
+        @media only screen and (max-width : @largestMobileScreen){
+            margin: 0 -@14px;
+        }
         >.column {
             padding: 0;
         }

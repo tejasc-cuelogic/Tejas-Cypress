@@ -63,13 +63,6 @@ section{
                 background-size: cover;
             }
         }
-        &.mission-banner{
-            background:url(../../assets/images/banners/mission-banner.jpg) top center no-repeat;
-            @media only screen and (max-width : @largestMobileScreen){
-                background:url(../../assets/images/banners/mission-banner-mobile.jpg) center center no-repeat;
-                background-size: cover;
-            }
-        }
         &.campaign-list-banner{
             background:url(../../assets/images/banners/campaign-list-banner.jpg) top center no-repeat;
             height: 300px;
@@ -86,13 +79,6 @@ section{
             background:url(../../assets/images/banners/how-it-works-banner.jpg) top center no-repeat;
             @media only screen and (max-width : @largestMobileScreen){
                 background:url(../../assets/images/banners/how-it-works-banner-mobile.jpg) center center no-repeat;
-                background-size: cover;
-            }
-        }
-        &.invest-banner{
-            background:url(../../assets/images/banners/home-banner.jpg) top center no-repeat;
-            @media only screen and (max-width : @largestMobileScreen){
-                background:url(../../assets/images/banners/home-banner-mobile.jpg) center center no-repeat;
                 background-size: cover;
             }
         }
@@ -125,29 +111,6 @@ section{
                 display: none;    
             }
         }
-        &.account-types {
-            background:url(../../assets/images/investors/account_types_mobile.jpg) center center no-repeat;
-            @media only screen and (max-width : @largestMobileScreen){
-                background-size: cover;
-            }
-        }
-        &.track {
-            background:url(../../assets/images/investors/laptop_mobile.png) center center no-repeat;
-            background-size: contain;
-            height: 160px;
-        }
-        &.process {
-            background:url(../../assets/images/business/process_mobile.jpg) center center no-repeat;
-            @media only screen and (max-width : @largestMobileScreen){
-                background-size: cover;
-            }
-        }
-        &.all-inclusive {
-            background:url(../../assets/images/business/inclusive_mobile.jpg) center center no-repeat;
-            @media only screen and (max-width : @largestMobileScreen){
-                background-size: cover;
-            }
-        }
         &.campaign-details-banner{
             background-position: top center;
             background-repeat: no-repeat;
@@ -167,22 +130,6 @@ section{
         background:@neutral-offdark;
         position:relative;
         z-index:101;
-    }
-}
-.public-pusher>section.banner{
-    @media only screen and (max-width : @largestMobileScreen){
-        &.funding-options, &.how-it-works, &.track {
-            height: auto;
-            margin-top: 0;
-        }
-        &.track{
-            background: none;
-        }
-    }
-    @media only screen and (max-width : @largestTabletScreen){
-        &.funding-options {
-            display: none;
-        }
     }
 }
 .campaign-banner {

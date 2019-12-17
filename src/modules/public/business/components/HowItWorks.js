@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Route, Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Grid, Button, Container, List, Statistic, Divider, Responsive, Item, Icon, Card } from 'semantic-ui-react';
-import { NsCarousel } from '../../../../theme/shared';
-import VideoModal from './VideoModal';
+import { NsCarousel, VideoModal } from '../../../../theme/shared';
 import NSImage from '../../../shared/NSImage';
 
 @inject('offeringsStore', 'uiStore', 'authStore')

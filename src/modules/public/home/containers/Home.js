@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Container, Divider, Header, Button, Responsive, Grid } from 'semantic-ui-react';
 import Banner from '../components/Banner';
@@ -8,10 +8,9 @@ import HowItWorksSummary from '../components/HowItWorksSummary';
 import FeaturedOn from '../../shared/components/FeaturedOn';
 import CampaignList from '../../offering/components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
-import NewsLetter from '../components/NewsLetter';
 import NSImage from '../../../shared/NSImage';
 
-@inject('campaignStore', 'uiStore')
+@inject('campaignStore', 'uiStore', 'authStore')
 @observer
 class Home extends Component {
   constructor(props) {
@@ -29,6 +28,7 @@ class Home extends Component {
       active, loading,
     } = this.props.campaignStore;
     const { responsiveVars } = this.props.uiStore;
+    const { authStore } = this.props;
     return (
       <>
         <Banner />
@@ -67,13 +67,13 @@ class Home extends Component {
                   Whether expanding or opening a brand-new concept, <Responsive minWidth={992} as="br" />
                   we make it easy to raise money from thousands of local investors.
                 </p>
-                {!responsiveVars.isMobile
+                {!authStore.isUserLoggedIn && !responsiveVars.isMobile
                   && <Button as={Link} to="/register" className="relaxed" primary>Apply Online</Button>}
                 {responsiveVars.isMobile && <NSImage path="home.jpg" />}
               </Grid.Column>
               <Grid.Column>
                 {!responsiveVars.isMobile && <NSImage path="home.jpg" />}
-                {responsiveVars.isMobile
+                {!authStore.isUserLoggedIn && responsiveVars.isMobile
                 && <Button as={Link} to="/register" primary fluid className="mb-20 mt-10 relaxed">Apply Online</Button>}
               </Grid.Column>
             </Grid>
@@ -91,7 +91,6 @@ class Home extends Component {
             </Grid>
           </Container>
         </section>
-        <Route path="/subscribe/newsletter" component={NewsLetter} />
       </>
     );
   }

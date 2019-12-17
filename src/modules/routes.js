@@ -39,11 +39,6 @@ export const publicRoutes = [
     exact: true,
   },
   {
-    path: '/subscribe/newsletter',
-    component: Home,
-    exact: true,
-  },
-  {
     path: '/agreements/referral-program-terms-and-conditions',
     component: ReferralProgramTerms,
   },
