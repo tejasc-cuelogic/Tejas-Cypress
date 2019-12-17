@@ -36,12 +36,8 @@ export default class StickyNotification extends Component {
     const url = '/dashboard/account-settings/investment-limits';
     const { accountType, multipleAccounts } = this.props;
     if (!multipleAccounts) {
-      if (accountType === 'entity') {
-        if (this.props.userDetailsStore.isEntityTrust) {
-          this.props.history.push(`${url}/verify-trust-entity-accreditation/${accountType}`);
-        } else {
-          this.props.history.push(`${url}/verify-entity-accreditation/${accountType}`);
-        }
+      if (this.props.userDetailsStore.isEntityTrust && accountType === 'entity') {
+        this.props.history.push(`${url}/verify-trust-entity-accreditation/${accountType}`);
       } else {
         this.props.history.push(`${url}/verify-accreditation/${accountType}`);
       }

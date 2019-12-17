@@ -250,6 +250,7 @@ export class AccreditationStore {
             }).then(() => {
               this.updateAccreditation(form, accountType.toUpperCase()).then(() => {
                 this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
+                this.checkFormValid(form, false, false);
               });
             }).catch(() => {
               Helper.toast('Something went wrong, please try again later.', 'error');
@@ -352,6 +353,7 @@ export class AccreditationStore {
     }
     this.setFormFileArray(form, field, 'error', undefined);
     this.setFormFileArray(form, field, 'showLoader', false);
+    this.checkFormValid(form, false, false);
   }
 
   @action
@@ -979,9 +981,7 @@ export class AccreditationStore {
     this.showAccountList = statusValue;
   }
 
-  pendingStepForAccreditation = selectedAccountName => (selectedAccountName === 'entity'
-    ? '/dashboard/account-settings/investment-limits/verify-entity-accreditation/entity'
-    : `/dashboard/account-settings/investment-limits/verify-accreditation/${selectedAccountName}`);
+  pendingStepForAccreditation = selectedAccountName => (`/dashboard/account-settings/investment-limits/verify-accreditation/${selectedAccountName}`);
 
   offeringAccreditatoinStatusMessage = (
     currentStatus, accreditedStatus, isRegulationCheck = false,
