@@ -10,7 +10,7 @@ import {
   allOfferings, allOfferingsCompact, updateOffering,
   deleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings,
 } from '../../../queries/offerings/manage';
-import { offeringCreationStore, userStore, uiStore } from '../../../index';
+import { offeringCreationStore, userStore, uiStore, campaignStore } from '../../../index';
 import { ClientDb, DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -50,6 +50,8 @@ export class OfferingsStore {
 
   @observable totalRaisedAmount = [];
 
+  @observable.struct orderedActiveLiveList = [];
+
   @action
   initRequest = (props, forceResetDb = false) => {
     const {
@@ -62,12 +64,15 @@ export class OfferingsStore {
       query: stage === 'active' ? allOfferingsCompact : allOfferings,
       variables: stage !== 'active' ? { stage: reqStages }
         : { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy: stage === 'live' ? 'network-only' : 'cache-and-network',
       onFetch: (res) => {
         if (res && !this.data[stage].loading && (!this.db[stage] || forceResetDb)) {
           this.requestState.page = 1;
           this.requestState.skip = 0;
           this.setDb(res.getOfferings, stage);
+          if (stage === 'live') {
+            this.orderedActiveListArr();
+          }
         }
       },
       onError: (err) => {
@@ -84,6 +89,7 @@ export class OfferingsStore {
 
   @action
   updateOfferingPublicaly = (id, isAvailablePublicly) => {
+    const { stage } = this.requestState;
     uiStore.addMoreInProgressArray('publish');
     const variables = {
       id,
@@ -95,7 +101,7 @@ export class OfferingsStore {
         variables,
       }).then(() => {
         uiStore.removeOneFromProgressArray('publish');
-        this.changePublicFlagForOffer(id, isAvailablePublicly);
+        this.changePublicFlagForOffer(id, isAvailablePublicly, stage);
         Helper.toast('Offering updated successfully.', 'success');
       }).catch(() => {
         uiStore.removeOneFromProgressArray('publish');
@@ -157,7 +163,7 @@ export class OfferingsStore {
   }
 
   @action
-  deleteOffering = (id) => {
+  deleteOffering = (id, indexVal) => {
     uiStore.addMoreInProgressArray('delete');
     client
       .mutate({
@@ -167,7 +173,7 @@ export class OfferingsStore {
         },
       })
       .then(() => {
-        this.removeOneFromData(id);
+        this.removeOneFromData(id, undefined, indexVal);
         uiStore.removeOneFromProgressArray('delete');
         Helper.toast('Offering deleted successfully.', 'success');
       })
@@ -178,7 +184,7 @@ export class OfferingsStore {
   }
 
   @action
-  changePublicFlagForOffer = (id, isAvailablePublicly) => {
+  changePublicFlagForOffer = (id, isAvailablePublicly, stage) => {
     const db = { ...toJS(this.db) };
     const offer = db[this.requestState.stage].find(o => o.id === id);
     offer.isAvailablePublicly = isAvailablePublicly;
@@ -187,6 +193,9 @@ export class OfferingsStore {
     const offerInData = data[this.requestState.stage].data.getOfferings.find(o => o.id === id);
     offerInData.isAvailablePublicly = isAvailablePublicly;
     this.data = { ...data };
+    if (stage && stage === 'live') {
+      this.orderedActiveListArr();
+    }
   }
 
   @action
@@ -205,6 +214,17 @@ export class OfferingsStore {
       remove(data.overview.data.getOfferings, i => i.id === id);
     }
     this.data = { ...data };
+    if (stage === 'live') {
+      this.orderedActiveListArr();
+    }
+    /* else {
+      // const arrayIndex = findIndex(this.orderedActiveLiveList[1].offerings, o => o.id === id);
+      // const temp = this.orderedActiveLiveList[1].offerings;
+      const temp = this.orderedActiveLiveList[liveListIndex].offerings;
+      remove(temp, i => i.id === id);
+      this.orderedActiveLiveList[liveListIndex].offerings = temp;
+      this.initRequest({ stage }, true);
+    } */
   }
 
   @action
@@ -281,7 +301,7 @@ export class OfferingsStore {
   }
 
   @action
-  setOrderForOfferings = (newArr, stage) => {
+  setOrderForOfferings = (newArr, stage, isMerge = false, indexVal) => {
     const offeringOrderDetails = [];
     newArr.forEach((item, index) => {
       offeringOrderDetails.push({
@@ -291,7 +311,11 @@ export class OfferingsStore {
       // eslint-disable-next-line no-param-reassign
       newArr[index].order = index + 1;
     });
-    this.setDb(newArr);
+    if (isMerge) {
+      this.orderedActiveLiveList[indexVal].offerings = newArr;
+    } else {
+      this.setDb(newArr);
+    }
     client
       .mutate({
         mutation: setOrderForOfferings,
@@ -324,6 +348,13 @@ export class OfferingsStore {
   @computed get allOfferingsSorted() {
     return this.db[this.requestState.stage]
       && this.db[this.requestState.stage].length ? toJS(sortBy(this.db[this.requestState.stage], ['order'])) : [];
+  }
+
+  @action
+  orderedActiveListArr = () => {
+    const liveOfferingList = this.db.live
+      && this.db.live.length ? toJS(this.db.live) : [];
+    this.orderedActiveLiveList = campaignStore.generateBanner(liveOfferingList, true, true);
   }
 
   @computed get allOfferings() {

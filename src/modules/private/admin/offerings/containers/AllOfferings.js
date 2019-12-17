@@ -6,6 +6,7 @@ import { ByKeyword } from '../../../../../theme/form/Filters';
 import { DataFormatter } from '../../../../../helper';
 import Listing from '../components/Listing';
 import DraggableListing from '../components/DraggableListing';
+import AllLiveOfferings from '../components/allLiveOfferings';
 
 
 @inject('uiStore', 'navStore', 'offeringsStore')
@@ -78,9 +79,11 @@ export default class Offerings extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        {!['completed', 'live'].includes(stage)
-          ? <Listing stage={stage} noPagination={['creation'].includes(stage)} />
-          : <DraggableListing stage={stage} />
+        {['live'].includes(stage)
+          ? <AllLiveOfferings stage={stage} />
+          : !['completed'].includes(stage)
+            ? <Listing stage={stage} noPagination={['creation'].includes(stage)} />
+            : <DraggableListing stage={stage} />
         }
       </div>
     );
