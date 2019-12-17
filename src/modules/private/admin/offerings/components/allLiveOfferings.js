@@ -46,7 +46,7 @@ export default class AllLiveOfferings extends Component {
     return (
       <>
         {orderedActiveLiveList && orderedActiveLiveList.length && orderedActiveLiveList.map((offering, index) => (
-          <Accordion exclusive={false} fluid styled className="card-style">
+          <Accordion exclusive={false} fluid styled className={`card-style ${index === 0 ? 'mt-20' : ''}`}>
             <Accordion.Title onClick={() => this.toggleAccordianContent(index)}>
               <Icon className={activeIndex.includes(index) ? 'ns-chevron-up' : 'ns-chevron-down'} />
               {offering.title} <small>{offering.offerings.length} {offering.offerings.length <= 1 ? 'Offering' : 'Offerings'}</small>
