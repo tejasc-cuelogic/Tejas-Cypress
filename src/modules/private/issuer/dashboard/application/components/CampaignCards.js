@@ -13,7 +13,7 @@ const isMobile = clientWidth < 768;
 
 const CampaignCards = (props) => {
   const { offeringsStore, businessAppStore } = props;
-  const handleHeaderClick = id => props.history.push(`/app/offering/${id}`);
+  const handleHeaderClick = id => props.history.push(`/dashboard/offering/${id}`);
   const getCampaignName = b => (get(b, 'keyTerms.shorthandBusinessName') || get(b, 'keyTerms.legalBusinessName') || 'N/A');
   if (!offeringsStore.issuerOfferings.length || businessAppStore.businessApplicationsList.loading) {
     return (null);

@@ -104,9 +104,9 @@ export default class NavBarMobile extends Component {
                       <Link onClick={this.setAuthRef} to={`/${stepInRoute.to}`} className="sign-in neutral-text">
                         {stepInRoute.title}
                       </Link>
-                    ) : ((this.props.userStore.isInvestor && !location.pathname.startsWith('/app')) || !this.props.userStore.isInvestor) ? (
+                    ) : ((this.props.userStore.isInvestor && !location.pathname.startsWith('/dashboard')) || !this.props.userStore.isInvestor) ? (
                       <Link
-                        to={this.props.userStore.isInvestor ? pendingStep : '/app/dashboard'}
+                        to={this.props.userStore.isInvestor ? pendingStep : '/dashboard'}
                         className="sign-in neutral-text"
                       >
                         Dashboard
@@ -177,7 +177,7 @@ export default class NavBarMobile extends Component {
                           && signupStatus.inActiveAccounts.length > 0
                           && (
                             <Menu.Item className="btn-item mt-30">
-                              <Button fluid basic compact as={Link} to="/app/setup/account-creation" content="Add New Account" />
+                              <Button fluid basic compact as={Link} to="/dashboard/setup/account-creation" content="Add New Account" />
                             </Menu.Item>
                           )
                         } */}
@@ -199,11 +199,11 @@ export default class NavBarMobile extends Component {
           <Sidebar.Pusher
             dimmed={visible}
             onClick={onPusherClick}
-            className={`public-pusher ${isNewCampaign ? 'public-pusher-v2' : ''} ${!hasHeader && 'noheader'} ${location.pathname.startsWith('/app') ? 'private-pusher' : ''}`}
+            className={`public-pusher ${isNewCampaign ? 'public-pusher-v2' : ''} ${!hasHeader && 'noheader'} ${location.pathname.startsWith('/dashboard') ? 'private-pusher' : ''}`}
           >
             {publicContent}
             {this.props.userStore.isInvestor && this.props.children}
-            {!location.pathname.startsWith('/app') && (hasFooter.find(item => matchPath(location.pathname, { path: item })))
+            {!location.pathname.startsWith('/dashboard') && (hasFooter.find(item => matchPath(location.pathname, { path: item })))
               && <Footer path={location.pathname} />}
           </Sidebar.Pusher>
         </Sidebar.Pushable>

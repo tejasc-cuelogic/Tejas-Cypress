@@ -129,7 +129,7 @@ export default class ConfirmPhoneNumber extends Component {
           />
           {editMode
             ? <Link className="grey-link green-hover" to={this.props.match.url} onClick={this.startPhoneVerification}>Confirm Phone number</Link>
-            : <Link className="grey-link green-hover" to="/app/account-settings/profile-data/new-phone-number" onClick={this.handleChangePhoneNumber}>Change phone number</Link>
+            : <Link className="grey-link green-hover" to="/dashboard/account-settings/profile-data/new-phone-number" onClick={this.handleChangePhoneNumber}>Change phone number</Link>
           }
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
             <Form.Field className="otp-wrap">

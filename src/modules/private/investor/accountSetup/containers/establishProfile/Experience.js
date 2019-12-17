@@ -37,13 +37,13 @@ export default class Experience extends Component {
             || (userStatus && userStatus.includes('FULL'))) {
             if (hasAnyAccount) {
               const route = getInvestorAccountsRoute();
-              this.props.history.push(`/app/account-details/${route}/portfolio`);
+              this.props.history.push(`/dashboard/account-details/${route}/portfolio`);
             } else {
-              this.props.history.push('/app/setup');
+              this.props.history.push('/dashboard/setup');
             }
             setTimeout(() => this.props.uiStore.setProgress(false), 2000);
           } else {
-            this.props.history.push('/app/setup/account-creation');
+            this.props.history.push('/dashboard/setup/account-creation');
           }
         });
       } else {

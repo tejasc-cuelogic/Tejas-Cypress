@@ -76,9 +76,9 @@ export default class Dashboard extends Component {
     }
     return (
       <>
-        <Route path="/app/setup/account-creation" component={AccountCreation} />
-        <Route exact path="/app/setup/identity-verification/:step" component={IdentityVerification} />
-        <Route path="/app/setup/establish-profile" component={EstablishProfile} />
+        <Route path="/dashboard/setup/account-creation" component={AccountCreation} />
+        <Route exact path="/dashboard/setup/identity-verification/:step" component={IdentityVerification} />
+        <Route path="/dashboard/setup/establish-profile" component={EstablishProfile} />
         <PrivateLayout
           {...this.props}
           P4={
