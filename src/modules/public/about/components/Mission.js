@@ -26,7 +26,6 @@ class Mission extends Component {
           columns={4}
           className="team-gallery"
           match={this.props.match}
-          joinColumn
         />
         <Route
           path={`${this.props.match.url}/:id`}
@@ -43,7 +42,7 @@ class Mission extends Component {
             <Grid centered stackable>
               <Grid.Row>
                 <Grid.Column textAlign={isMobile ? 'left' : 'center'}>
-                  <Header as="h2" className={isMobile ? 'mb-20' : 'mb-60'}>
+                  <Header as="h2" className={isMobile ? 'mb-10' : 'mb-60'}>
                     Invest in each other. Grow together
                   </Header>
                 </Grid.Column>
@@ -69,9 +68,9 @@ class Mission extends Component {
         <Divider fitted as={Container} />
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
           <Container>
-            <Header as="h2" className="mb-80 center-align">We{"'"}ve built our brand and our platform<Responsive minWidth={768} as="br" /> on three core values</Header>
-            <Card.Group itemsPerRow={3} stackable className="statistic-section proven-result-section">
-              <Card className="bordered">
+            <Header as="h2" className={responsiveVars.isMobile ? 'mb-30' : 'mb-80 center-align'}>We{"'"}ve built our brand and our platform<Responsive minWidth={768} as="br" /> on three core values</Header>
+            <Card.Group itemsPerRow={responsiveVars.isMobile ? 1 : 3} className="statistic-section proven-result-section" doubling>
+              <Card className={`${responsiveVars.isMobile ? 'mlr-0' : ''} bordered`}>
                 <Card.Content extra>
                   <Header as="h3" className="mb-10">Trust</Header>
                   <p>
@@ -87,7 +86,7 @@ class Mission extends Component {
                   </Statistic>
                 </Card.Content>
               </Card>
-              <Card className="bordered">
+              <Card className={`${responsiveVars.isMobile ? 'mlr-0' : ''} bordered`}>
                 <Card.Content extra>
                   <Header as="h3" className="mb-10">Innovation</Header>
                   <p>
@@ -103,7 +102,7 @@ class Mission extends Component {
                   </Statistic>
                 </Card.Content>
               </Card>
-              <Card className="bordered">
+              <Card className={`${responsiveVars.isMobile ? 'mlr-0' : ''} bordered`}>
                 <Card.Content extra>
                   <Header as="h3" className="mb-10">Community</Header>
                   <p>
@@ -140,9 +139,9 @@ class Mission extends Component {
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
           <Container>
             <Grid centered>
-              <Grid.Column textAlign={isMobile ? 'left' : 'center'} computer={13} tablet={13} mobile={16}>
-                <Header as="h2" className="mb-30">Meet our team</Header>
-                <p className={isMobile ? 'mb-40' : 'mb-60'}>
+              <Grid.Column textAlign={responsiveVars.isMobile ? 'left' : 'center'} computer={15} tablet={14} mobile={16}>
+                <Header as="h2" className={responsiveVars.isMobile ? 'mb-10' : 'mb-30'}>Meet our team</Header>
+                <p className={responsiveVars.isMobile ? 'mb-40' : 'mb-60'}>
                   We{"'"}re a team of entrepreneurs with backgrounds in business, finance, law, marketing and technology.<Responsive minWidth={992} as="br" /> We{"'"}re here to empower business owners and everyday people to invest in one another.
                 </p>
                 {loading ? (<InlineLoader />)
@@ -159,11 +158,12 @@ class Mission extends Component {
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
                 <Header as="h2" className="mb-30">Democratize finance.<Responsive minWidth={992} as="br" />Create change.<Responsive minWidth={992} as="br" />Join our team.</Header>
                 {responsiveVars.isMobile
-                && <NSImage path="collage.jpg" fluid />}
+                && <NSImage path="collage.jpg" className="mb-30" fluid />}
                 <p>
                 We’re just getting started in our journey to shape the future of finance in local communities. We’re looking for talented and motivated individuals who are seeking an adventure to learn new skills and cover new ground.
                 </p>
-                <Divider hidden />
+                {!responsiveVars.isMobile
+                && <Divider hidden />}
                 <p>
                   If you are a self-starter and love working in a dynamic environment, NextSeed may be the place for you.
                 </p>
@@ -184,12 +184,12 @@ class Mission extends Component {
           <Container>
             <Grid centered stackable>
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8}>
-                {responsiveVars.isMobile
+                {responsiveVars.uptoTablet
                   && <Header as="h2" className="mb-30">Our Offices</Header>}
                 <NSImage path="map.png" fluid />
               </Grid.Column>
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right" verticalAlign="middle" textAlign="left">
-                {!responsiveVars.isMobile
+                {!responsiveVars.uptoTablet
                   && <Header as="h2" className="mb-30">Our Offices</Header>}
                 <p>
                   We are headquartered in Houston, TX with satellite offices in Austin, New York and Los Angeles.

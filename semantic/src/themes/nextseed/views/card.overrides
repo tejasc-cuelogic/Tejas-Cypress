@@ -744,6 +744,9 @@
         }
         >.extra{
             min-height: 200px !important;
+            @media only screen and (max-width : @largestMobileScreen){
+                min-height: auto !important;
+            }
         }
     }
 }
