@@ -172,10 +172,12 @@ class Mission extends Component {
                   <b>Contact info:</b> Submit your resume to <a target="_blank" rel="noreferrer noopener" href="mailto:jobs@nextseed.com">jobs@nextseed.com</a> and indicate position in the subject line.
                 </p>
               </Grid.Column>
-              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} verticalAlign="middle">
-                {!responsiveVars.isMobile
-                && <NSImage path="collage.jpg" fluid />}
-              </Grid.Column>
+              {!responsiveVars.isMobile
+                && (
+                  <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} verticalAlign="middle">
+                    <NSImage path="collage.jpg" fluid />
+                  </Grid.Column>
+                )}
             </Grid>
           </Container>
         </section>

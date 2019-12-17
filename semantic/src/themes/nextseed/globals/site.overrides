@@ -1141,6 +1141,9 @@ footer{
 		margin: 0;
 		>.column {
 			padding: @17px !important;
+			@media only screen and (max-width : @largestMobileScreen){
+				padding: 0 !important;
+			}
 		}
 	}
 	.team-overlay h4.ui.header {
@@ -3097,7 +3100,7 @@ input[type='range']::-webkit-slider-thumb {
 	}
 	.slick-prev, .slick-next {
 		@media only screen and (max-width : @largestMobileScreen){
-			top: 20%;
+			top: 50%;
 		}
 	}
 }
