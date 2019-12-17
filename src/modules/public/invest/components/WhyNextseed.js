@@ -154,7 +154,7 @@ export default class WhyNextseed extends Component {
                       See how your investments are performing<Responsive as="br" minWidth={768} /> and reinvest any earnings effortlessly with<Responsive as="br" minWidth={768} /> our easy-to-use dashboard.</p>
                     {!authStore.isUserLoggedIn && !responsiveVars.isMobile
                       && (
-                        <Button as={Link} to="/auth/register-investor" primary className="mb-30">Create a  Free Account</Button>
+                        <Button as={Link} to="/register-investor" primary className="mb-30">Create a  Free Account</Button>
                       )
                     }
                   </div>
@@ -163,7 +163,7 @@ export default class WhyNextseed extends Component {
                   <NSImage path="investors/mackbook-mockup.png" />
                   {!authStore.isUserLoggedIn && responsiveVars.isMobile
                     && (
-                      <Button fluid as={Link} to="/auth/register-investor" primary className="mt-30">Create a  Free Account</Button>
+                      <Button fluid as={Link} to="/register-investor" primary className="mt-30">Create a  Free Account</Button>
                     )
                   }
                 </Grid.Column>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { Header, Container, Button, Responsive } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
@@ -34,7 +34,11 @@ class Banner extends Component {
                 Accelerate your growth with<br />
                 the power of the crowd.
               </Header>
-              <Button primary content="Apply Online" className="mt-30" />
+              {!this.props.authStore.isUserLoggedIn
+              && (
+                <Button as={Link} to="/business-application/business" primary className="mb-30">Apply Online</Button>
+              )
+              }
             </div>
           </Responsive>
             <div className="banner-meta">

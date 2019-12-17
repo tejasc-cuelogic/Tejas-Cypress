@@ -93,7 +93,7 @@ const HowItWorksSummary = ({ uiStore, authStore }) => (
             </p>
             {!authStore.isUserLoggedIn && !uiStore.responsiveVars.isMobile
               && (
-                <Button as={Link} to="/auth/register-investor" primary className="mb-30">Create a  Free Account</Button>
+                <Button as={Link} to="/register-investor" primary className="mb-30">Create a  Free Account</Button>
               )
             }
             {uiStore.responsiveVars.isMobile
@@ -106,7 +106,7 @@ const HowItWorksSummary = ({ uiStore, authStore }) => (
             }
             {!authStore.isUserLoggedIn && uiStore.responsiveVars.isMobile
               && (
-                <Button fluid as={Link} to="/auth/register-investor" primary>Create a  Free Account</Button>
+                <Button fluid as={Link} to="/register-investor" primary>Create a  Free Account</Button>
               )
             }
           </Grid.Column>
