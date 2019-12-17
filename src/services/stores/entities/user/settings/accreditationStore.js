@@ -981,7 +981,7 @@ export class AccreditationStore {
     this.showAccountList = statusValue;
   }
 
-  pendingStepForAccreditation = selectedAccountName => (`/app/account-settings/investment-limits/verify-accreditation/${selectedAccountName}`)
+  pendingStepForAccreditation = selectedAccountName => (`/dashboard/account-settings/investment-limits/verify-accreditation/${selectedAccountName}`);
 
   offeringAccreditatoinStatusMessage = (
     currentStatus, accreditedStatus, isRegulationCheck = false,

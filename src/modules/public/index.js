@@ -27,6 +27,9 @@ export default class Public extends React.Component {
     super(props);
     this.props.uiStore.addMoreInProgressArray('publicLoading');
     this.props.navStore.setNavStatus({}, 'main');
+    if (this.props.location.pathname === '/how-it-works') {
+      this.props.history.push('/how-it-works/investors');
+    }
   }
 
   componentDidMount() {

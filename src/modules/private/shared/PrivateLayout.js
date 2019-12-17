@@ -54,7 +54,7 @@ class PrivateLayout extends Component {
         }
         {this.props.P1
           && (
-<div className="search-filters">
+          <div className="search-filters">
             <Form>
               <Grid stackable>
                 <Grid.Row>
@@ -68,7 +68,7 @@ class PrivateLayout extends Component {
         {this.props.P2}
         {this.props.P3}
         {this.props.P5}
-        <div className={`${(overrideContainerClass.find(item => matchPath(location.pathname, { path: `/app/${item}` }))) ? '' : 'content-spacer'}`}>
+        <div className={`${(overrideContainerClass.find(item => matchPath(location.pathname, { path: `/dashboard/${item}` }))) ? '' : 'content-spacer'}`}>
           {this.props.children}
         </div>
       </>

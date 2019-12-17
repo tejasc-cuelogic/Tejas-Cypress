@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Grid, Container, Button, Divider, Responsive, Icon, Item, Segment, Card } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
 import NSImage from '../../../shared/NSImage';
+import VideoModal from '../../business/components/VideoModal';
 
 const settings = {
   slidesToShow: 1,
@@ -52,6 +53,7 @@ const highlights = [
   },
 ];
 @inject('uiStore', 'authStore')
+@withRouter
 @observer
 export default class WhyNextseed extends Component {
   render() {
@@ -88,7 +90,7 @@ export default class WhyNextseed extends Component {
                 }
               </Item.Group>
             </div>
-            <Link to="/business/how-it-works/video" className="no-decoration">
+            <Link to="/how-it-works/investors/video" className="no-decoration">
               <Segment className={`${responsiveVars.uptoTablet ? 'mt-30' : 'mt-70'} video-segment`}>
                 <Header as={responsiveVars.uptoTablet ? 'h2' : 'h3'} textAlign="center">
                   Watch our video
@@ -220,6 +222,7 @@ export default class WhyNextseed extends Component {
             </Grid>
           </section>
         </Container>
+        <Route path="/how-it-works/investors/video" render={props => <VideoModal {...props} videoDetails={{ embed: 307106547 }} />} />
       </>
     );
   }

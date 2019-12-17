@@ -51,7 +51,7 @@ export default class PublicSubNav extends Component {
                     <Menu.Item
                       className="menu-button"
                       as={Link}
-                      to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'setup' : 'dashboard'}`}
+                      to={`/dashboard/${currentUser.roles && currentUser.roles.includes('investor') ? 'setup' : 'dashboard'}`}
                     >
                       <Button secondary>Dashboard</Button>
                     </Menu.Item>

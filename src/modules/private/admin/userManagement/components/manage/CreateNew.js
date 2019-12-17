@@ -19,14 +19,14 @@ export default class CreateNew extends Component {
     e.preventDefault();
     adminActions.createNewUser()
       .then(() => {
-        this.props.history.push('/app/users');
+        this.props.history.push('/dashboard/users');
       })
       .catch((err) => {
         console.log(err, 'Error:');
       });
   }
 
-  handleCloseModal = () => this.props.history.push('/app/users');
+  handleCloseModal = () => this.props.history.push('/dashboard/users');
 
   render() {
     const { USR_FRM, userEleChange, capabilitiesMeta } = this.props.userStore;
