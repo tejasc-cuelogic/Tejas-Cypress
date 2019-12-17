@@ -76,14 +76,14 @@ class HowItWorks extends Component {
         description: 'The all-in-one platform allowed us to expand quickly and build a new customer base. Our partnership with NextSeed is a win-win.',
         name: 'Jess Hughes | Citizen Pilates',
         investment: '$100,000 from 75 investors',
-        image: responsiveVars.isMobile ? 'business/lian-mobile.png' : 'business/jess.png',
+        image: responsiveVars.isMobile ? 'business/jess-mobile.png' : 'business/jess.png',
       },
       {
         title: 'Real Success Stories',
         description: 'Your patrons get to be part of what you’re creating. It’s the best way to access this many investors while retaining 100% ownership.',
         name: 'Michael Dickson, Native Hostel',
         investment: '$396,500 from 227 investors',
-        image: responsiveVars.isMobile ? 'business/lian-mobile.png' : 'business/michael.png',
+        image: responsiveVars.isMobile ? 'business/michael-mobile.png' : 'business/michael.png',
       },
     ];
     const isMobile = document.documentElement.clientWidth < 768;
