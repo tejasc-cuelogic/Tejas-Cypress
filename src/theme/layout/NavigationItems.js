@@ -151,7 +151,7 @@ export class NavItems extends Component {
               item
               defaultOpen={item.defaultOpen}
               key={item.to}
-              className={`${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible hide-dropdown' : ''}`}
+              className={`${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible hide-dropdown' : this.isActive(item.to, location, app, item.subNavigations) ? 'active' : ''}`}
               name={item.to}
               // disabled={isMobile && item.title === 'How NextSeed Works'}
               onClick={(isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
@@ -311,7 +311,7 @@ export class NavigationItems extends Component {
             ? (
               <Menu.Item position={isMobBussinessApp ? 'right' : ''}>
                 <Button.Group>
-                  <Button as={Link} to="/business/how-it-works" loading={loading} inverted color="red">Cancel</Button>
+                  <Button as={Link} to="/how-it-works/business" loading={loading} inverted color="red">Cancel</Button>
                   {(isPrequalQulify || location.pathname.endsWith('/pre-qualification'))
                     && (
                       <SubmitButton

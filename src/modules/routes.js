@@ -68,7 +68,7 @@ export const publicRoutes = [
     component: News,
   },
   {
-    path: '/invest',
+    path: '/how-it-works/investors',
     component: Invest,
   },
   {
@@ -112,7 +112,7 @@ export const publicRoutes = [
     component: Offering,
   },
   {
-    path: '/business',
+    path: '/how-it-works/business',
     component: Business,
   },
   {

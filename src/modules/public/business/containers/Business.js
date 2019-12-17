@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch } from 'react-router-dom';
-import { Responsive, Visibility } from 'semantic-ui-react';
-import { DataFormatter } from '../../../../helper';
-import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
+import { Responsive } from 'semantic-ui-react';
 import Banner from '../components/Banner';
-import { SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
-import ConfirmLoginModal from '../components/ConfirmLoginModal';
+import HowItWorks from '../components/HowItWorks';
 
-const getModule = component => lazyRetry(() => import(`../components/${component}`));
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Learn how small business entrepreneurs are using debt crowdfunding on NextSeed to retain ownership in their breweries, restaurants, bars, fitness studios, and more.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
@@ -35,53 +30,16 @@ const metaTagsData = [
 @inject('navStore', 'userStore')
 @observer
 class Business extends Component {
-  constructor(props) {
-    super(props);
-    if (props.match.isExact) {
-      props.history.replace(`${props.match.url}/how-it-works`);
-    }
-  }
-
-  module = name => DataFormatter.upperCamelCase(name);
-
   render() {
-    const { location, match } = this.props;
-    const navItems = GetNavMeta(match.url, [], true).subNavigations;
+    const { location } = this.props;
     return (
       <>
         <MetaTagGenerator pathName={location.pathname} metaTagsData={metaTagsData} />
-        {location.pathname === '/business/how-it-works'
+        {location.pathname === '/how-it-works/business'
           || location.pathname === '/business' ? <Banner />
           : <Responsive as="section" maxWidth={991} className={`banner ${location.pathname.split('/')[2]}`} />
         }
-        <Visibility
-          onUpdate={this.handleUpdate}
-          continuous
-          className={`slide-down ${location.pathname.split('/')[2]}`}
-        >
-          {/* <PublicSubNav
-            stepInRoute={navStore.stepInRoute}
-            location={location}
-            currentUser={this.props.userStore.currentUser}
-            navItems={navItems}
-            title="Fundraising"
-          /> */}
-          <SuspenseBoundary>
-            <Switch>
-              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
-              {
-                navItems.map(item => (
-                  <Route
-                    key={item.to}
-                    path={`${match.url}/${item.to}`}
-                    component={getModule(this.module(item.title))}
-                  />
-                ))
-              }
-              <Route path={`${this.props.match.url}/confirm-login`} render={() => <ConfirmLoginModal refLink={`${this.props.match.url}/how-it-works`} />} />
-            </Switch>
-          </SuspenseBoundary>
-        </Visibility>
+        <HowItWorks />
       </>
     );
   }

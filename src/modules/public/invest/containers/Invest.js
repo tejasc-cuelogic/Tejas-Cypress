@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import queryString from 'query-string';
-import { Visibility } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
-import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
-import { SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 import { REDIRECT_META } from '../../../../constants/redirect';
+import WhyNextseed from '../components/WhyNextseed';
 
-const getModule = component => lazyRetry(() => import(`../components/${component}`));
 
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses.' },
@@ -51,9 +47,6 @@ class Invest extends Component {
         }
       });
     }
-    if (props.match.isExact) {
-      props.history.replace(`${props.match.url}/why-nextseed`);
-    }
   }
 
   module = name => DataFormatter.upperCamelCase(name);
@@ -61,41 +54,11 @@ class Invest extends Component {
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
 
   render() {
-    const { match, location } = this.props;
-    const navItems = GetNavMeta(match.url, [], true).subNavigations;
+    const { location } = this.props;
     return (
       <>
         <MetaTagGenerator pathName={location.pathname} metaTagsData={metaTagsData} />
-        {/* {location.pathname === '/invest/why-nextseed' || location.pathname === '/invest' ? <Banner />
-          : <Responsive as="section" maxWidth={767} className={`banner ${location.pathname.split('/')[2]}`} />
-        } */}
-        <Visibility
-          onUpdate={this.handleUpdate}
-          continuous
-          className={`slide-down ${location.pathname.split('/')[2]}`}
-        >
-          {/* <PublicSubNav
-            stepInRoute={navStore.stepInRoute}
-            location={location}
-            currentUser={this.props.userStore.currentUser}
-            navItems={navItems}
-            title="Investing"
-          /> */}
-          <SuspenseBoundary>
-            <Switch>
-              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
-              {
-                navItems.map(item => (
-                  <Route
-                    key={item.to}
-                    path={`${match.url}/${item.to}`}
-                    component={getModule(this.module(item.title))}
-                  />
-                ))
-              }
-            </Switch>
-          </SuspenseBoundary>
-        </Visibility>
+        <WhyNextseed />
       </>
     );
   }

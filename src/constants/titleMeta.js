@@ -19,13 +19,13 @@ const INVESTOR_INVESTMENT_ACC_META = {};
 
 export const TITLES = {
   '/offerings/': 'Investment Opportunities - NextSeed',
-  '/business/how-it-works': 'How It Works | Businesses - NextSeed',
+  '/how-it-works/business': 'How It Works | Businesses - NextSeed',
   '/business/funding-options/term-notes': 'How It Works | Businesses - NextSeed',
   '/business/funding-options/revenue-sharing-notes': 'How It Works | Businesses - NextSeed',
   '/business/funding-options/preferred-equity': 'How It Works | Businesses - NextSeed',
   '/business/process': 'How It Works | Businesses - NextSeed',
   '/business/all-inclusive': 'How It Works | Businesses - NextSeed',
-  '/invest/why-nextseed': 'How It Works | Investors - NextSeed',
+  '/how-it-works/investors': 'How It Works | Investors - NextSeed',
   '/invest/how-it-works': 'How It Works | Investors - NextSeed',
   '/invest/account-types': 'How It Works | Investors - NextSeed',
   '/invest/security': 'How It Works | Investors - NextSeed',
