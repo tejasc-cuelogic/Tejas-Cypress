@@ -101,6 +101,9 @@
 		text-align: left;
 		font-size: @28px !important;
 		font-weight: @fontMedium;
+		~.value{
+			margin-top: @26px;
+		}
 	}
 	>.label {
 		font-size: @15px;

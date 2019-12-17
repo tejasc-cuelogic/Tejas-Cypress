@@ -737,6 +737,15 @@
             }
         }
     }
+    &.statistic-section .ui.card{
+        .content{
+            padding: @30px @40px;
+            border-top: 0 !important;
+        }
+        >.extra{
+            min-height: 200px !important;
+        }
+    }
 }
 
 .ui.card.verification{

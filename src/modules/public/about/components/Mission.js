@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Container, Grid, Statistic, Responsive, Divider, Icon } from 'semantic-ui-react';
+import { Header, Container, Grid, Statistic, Responsive, Divider, Icon, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import NSImage from '../../../shared/NSImage';
@@ -67,86 +67,59 @@ class Mission extends Component {
           </Container>
         </section>
         <Divider fitted as={Container} />
-        <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-50'} statistic-section featured-statistic`}>
+        <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
           <Container>
-            <Grid centered>
-              <Grid.Row>
-                <Grid.Column width={14}>
-                  <Header as="h2" className="mb-70" textAlign={responsiveVars.isMobile ? '' : 'center'}>
-                    We{"'"}ve built our brand and our platform <Responsive minWidth={992} as="br" />on three core values.
-                  </Header>
-                  <Grid celled columns={isMobile ? 1 : 2} className="mb-40">
-                    <Grid.Row>
-                      <Grid.Column verticalAlign="middle">
-                        <Header as="h2">Trust</Header>
-                        <p>
-                        Our team of experts vet every offering on our platform, giving people real opportunities to invest in the local businesses they believe in.
-                        </p>
-                      </Grid.Column>
-                      <Grid.Column className="blue-block center-align">
-                        <Statistic size={isMobile ? 'small' : 'large'} className="basic">
-                          <Statistic.Value>Top 3%</Statistic.Value>
-                          <Statistic.Label className="mb-30">
-                          Business applicants approved and launched campaigns <sup>1</sup>
-                          </Statistic.Label>
-                          <Statistic.Value>90%+</Statistic.Value>
-                          <Statistic.Label>
-                          Campaigns meet fundraising goals <sup>2</sup>
-                          </Statistic.Label>
-                        </Statistic>
-                      </Grid.Column>
-                    </Grid.Row>
-                  </Grid>
-                  <Grid celled columns={isMobile ? 1 : 2} className="mb-40">
-                    <Grid.Row>
-                      <Grid.Column verticalAlign="middle">
-                        <Header as="h2">Innovation</Header>
-                        <p>
-                        We’re reinventing how local economies can grow from within by offering
-                        access to new forms of investments and capital.
-                        </p>
-                      </Grid.Column>
-                      <Grid.Column className="primary-block center-align">
-                        <Statistic size={isMobile ? 'small' : 'large'} className="basic">
-                          <Statistic.Value>May 2016</Statistic.Value>
-                          <Statistic.Label className="mb-30">
-                            NextSeed US LLC became the first Funding Portal registered by the SEC
-                          </Statistic.Label>
-                          <Statistic.Value>October 2018</Statistic.Value>
-                          <Statistic.Label>
-                            NextSeed Securities LLC is licensed and registered with the SEC as a
-                            broker-dealer
-                          </Statistic.Label>
-                        </Statistic>
-                      </Grid.Column>
-                    </Grid.Row>
-                  </Grid>
-                  <Grid celled columns={isMobile ? 1 : 2}>
-                    <Grid.Row>
-                      <Grid.Column verticalAlign="middle">
-                        <Header as="h2">Community</Header>
-                        <p>
-                        We empower entrepreneurs from all walks of life to follow their
-                        dreams and give back to their communities.
-                        </p>
-                      </Grid.Column>
-                      <Grid.Column className="green-block center-align">
-                        <Statistic size={isMobile ? 'small' : 'large'} className="basic">
-                          <Statistic.Value>$8.9 million</Statistic.Value>
-                          <Statistic.Label className="mb-30">
-                            Invested in women and minority-owned businesses <sup>3</sup>
-                          </Statistic.Label>
-                          <Statistic.Value>80%</Statistic.Value>
-                          <Statistic.Label>
-                            Issuers are women and minority-owned businesses <sup>4</sup>
-                          </Statistic.Label>
-                        </Statistic>
-                      </Grid.Column>
-                    </Grid.Row>
-                  </Grid>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
+            <Header as="h2" className="mb-80 center-align">We{"'"}ve built our brand and our platform<Responsive minWidth={768} as="br" /> on three core values</Header>
+            <Card.Group itemsPerRow={3} stackable className="statistic-section proven-result-section">
+              <Card className="bordered">
+                <Card.Content extra>
+                  <Header as="h3" className="mb-10">Trust</Header>
+                  <p>
+                    Our team of experts vet every offering on our platform, giving people real opportunities to invest in businesses they believe in.
+                  </p>
+                </Card.Content>
+                <Card.Content className="bg-offwhite">
+                  <Statistic color="green" size="mini" className="basic">
+                    <Statistic.Value>Top 3%</Statistic.Value>
+                    <Statistic.Label className="grey-header">Business applicants approved and launched campaigns</Statistic.Label>
+                    <Statistic.Value>90%+</Statistic.Value>
+                    <Statistic.Label className="grey-header">Campaigns meet fundraising goals</Statistic.Label>
+                  </Statistic>
+                </Card.Content>
+              </Card>
+              <Card className="bordered">
+                <Card.Content extra>
+                  <Header as="h3" className="mb-10">Innovation</Header>
+                  <p>
+                    We’re reinventing how local economies can grow from within by offering access to new forms of investments and capital.
+                  </p>
+                </Card.Content>
+                <Card.Content className="bg-offwhite">
+                  <Statistic color="green" size="mini" className="basic">
+                    <Statistic.Value>May 2016</Statistic.Value>
+                    <Statistic.Label className="grey-header">NextSeed US LLC became the first Funding Portal registered by the SEC</Statistic.Label>
+                    <Statistic.Value>October 2018</Statistic.Value>
+                    <Statistic.Label className="grey-header">NextSeed Securities, LLC is licensed and registered with the SEC as a broker-dealer</Statistic.Label>
+                  </Statistic>
+                </Card.Content>
+              </Card>
+              <Card className="bordered">
+                <Card.Content extra>
+                  <Header as="h3" className="mb-10">Community</Header>
+                  <p>
+                    We empower entrepreneurs from all walks of life to follow their dreams and give back to their communities.
+                  </p>
+                </Card.Content>
+                <Card.Content className="bg-offwhite">
+                  <Statistic color="green" size="mini" className="basic">
+                    <Statistic.Value>$10.6 million</Statistic.Value>
+                    <Statistic.Label className="grey-header">Invested in women and minority-owned businesses</Statistic.Label>
+                    <Statistic.Value>&gt;75% </Statistic.Value>
+                    <Statistic.Label className="grey-header">Investment dollars go to women or minority-owned businesses</Statistic.Label>
+                  </Statistic>
+                </Card.Content>
+              </Card>
+            </Card.Group>
             {!isMobile && <Divider hidden section />}
             <p className={`${responsiveVars.isMobile ? 'mt-40' : 'center-align mt-30'} note`}>
               <sup>1</sup> This calculates the percent of businesses that began the application
@@ -157,7 +130,7 @@ class Mission extends Component {
               <sup>2</sup> Historical figures only. Past performance of one business is not a
               guarantee of future results of another business.
             </p>
-            <p className={`${responsiveVars.isMobile ? '' : 'center-align mb-10'} note`}>
+            <p className={`${responsiveVars.isMobile ? '' : 'center-align'} note`}>
               <sup>3,4</sup> Data reflects figures from both the NextSeed TX and Reg CF
               Platforms as of October 2018.
             </p>
@@ -182,40 +155,44 @@ class Mission extends Component {
         <Divider fitted as={Container} />
         <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
           <Container>
-            <Grid centered>
-              <Grid.Column textAlign={isMobile ? 'left' : 'center'} computer={12} tablet={12} mobile={16}>
-                <Header as="h2">
-                  Democratize finance. Create change. Join our team.
-                </Header>
-                <p className="mt-30">
-                  We’re just getting started in our journey to shape the future of finance in
-                  local communities. We’re looking for talented and motivated individuals who
-                  are seeking an adventure to learn new skills and cover new ground. If you are
-                  a self-starter and love working in a dynamic environment, NextSeed may be
-                  the place for you.
+            <Grid centered reversed="mobile">
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
+                <Header as="h2" className="mb-30">Democratize finance.<Responsive minWidth={992} as="br" />Create change.<Responsive minWidth={992} as="br" />Join our team.</Header>
+                {responsiveVars.isMobile
+                && <NSImage path="collage.jpg" fluid />}
+                <p>
+                We’re just getting started in our journey to shape the future of finance in local communities. We’re looking for talented and motivated individuals who are seeking an adventure to learn new skills and cover new ground.
                 </p>
-                <NSImage path="collage.jpg" className={`${isMobile ? 'mt-30 mb-40' : 'mt-60 mb-70'} careers-banner`} />
-                {!isMobile && <Divider hidden section />}
-                <Header as="h4" className="mb-20">About NextSeed</Header>
-                <p className="left-align">
-                  NextSeed Inc. (<a target="_blank" rel="noreferrer noopener" href="https://www.nextseed.com">www.nextseed.com</a>) is a
-                  financial technology company designed to empower mainstream entrepreneurs with
-                  financing needs and connect them to investors (whether individuals or firms)
-                  looking to invest directly into local businesses and commercial real estate
-                  projects as a differentiated private asset class. We have developed a unique
-                  online marketplace that enables entrepreneurs to fundraise through both accredited
-                  and non-accredited investors across the country. NextSeed Inc.’s affiliate,
-                  NextSeed Securities, is a registered broker dealer and FINRA member.
+                <Divider hidden />
+                <p>
+                  If you are a self-starter and love working in a dynamic environment, NextSeed may be the place for you.
                 </p>
-                <p className="left-align">
-                  We are headquartered in Houston, TX with satellite offices in Austin, New York
-                  and Los Angeles. As a rapidly growing startup that leverages cutting edge
-                  technologies to help us scale quickly, we are looking for highly motivated
-                  individuals to join the team.
+                <Divider hidden />
+                <p>
+                  <b>Contact info:</b> Submit your resume to <a target="_blank" rel="noreferrer noopener" href="mailto:jobs@nextseed.com">jobs@nextseed.com</a> and indicate position in the subject line.
                 </p>
-                <p className="left-align">
-                  Contact info: Submit your resume to <a target="_blank" rel="noreferrer noopener" href="mailto:jobs@nextseed.com">jobs@nextseed.com</a>
-                  and indicate position in the subject line.
+              </Grid.Column>
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} verticalAlign="middle">
+                {!responsiveVars.isMobile
+                && <NSImage path="collage.jpg" fluid />}
+              </Grid.Column>
+            </Grid>
+          </Container>
+        </section>
+        <Divider fitted as={Container} />
+        <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+          <Container>
+            <Grid centered stackable>
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8}>
+                {responsiveVars.isMobile
+                  && <Header as="h2" className="mb-30">Our Offices</Header>}
+                <NSImage path="map.png" fluid />
+              </Grid.Column>
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right" verticalAlign="middle" textAlign="left">
+                {!responsiveVars.isMobile
+                  && <Header as="h2" className="mb-30">Our Offices</Header>}
+                <p>
+                  We are headquartered in Houston, TX with satellite offices in Austin, New York and Los Angeles.
                 </p>
               </Grid.Column>
             </Grid>
