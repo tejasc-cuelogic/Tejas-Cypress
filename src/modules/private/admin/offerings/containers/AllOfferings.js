@@ -26,9 +26,12 @@ export default class Offerings extends Component {
   }
 
   componentWillUnmount() {
-    const { setDb, allOfferingsList } = this.props.offeringsStore;
+    const { setDb, allOfferingsList, requestState, orderedActiveListArr } = this.props.offeringsStore;
     if (allOfferingsList.length) {
       setDb(allOfferingsList);
+    }
+    if (requestState.stage === 'live') {
+      orderedActiveListArr();
     }
   }
 
