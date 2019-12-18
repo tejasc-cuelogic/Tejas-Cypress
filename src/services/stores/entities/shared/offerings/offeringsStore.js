@@ -163,7 +163,7 @@ export class OfferingsStore {
   }
 
   @action
-  deleteOffering = (id, indexVal) => {
+  deleteOffering = (id) => {
     uiStore.addMoreInProgressArray('delete');
     client
       .mutate({
@@ -173,7 +173,7 @@ export class OfferingsStore {
         },
       })
       .then(() => {
-        this.removeOneFromData(id, undefined, indexVal);
+        this.removeOneFromData(id);
         uiStore.removeOneFromProgressArray('delete');
         Helper.toast('Offering deleted successfully.', 'success');
       })
@@ -217,14 +217,6 @@ export class OfferingsStore {
     if (stage === 'live') {
       this.orderedActiveListArr();
     }
-    /* else {
-      // const arrayIndex = findIndex(this.orderedActiveLiveList[1].offerings, o => o.id === id);
-      // const temp = this.orderedActiveLiveList[1].offerings;
-      const temp = this.orderedActiveLiveList[liveListIndex].offerings;
-      remove(temp, i => i.id === id);
-      this.orderedActiveLiveList[liveListIndex].offerings = temp;
-      this.initRequest({ stage }, true);
-    } */
   }
 
   @action
