@@ -53,7 +53,7 @@ export default class PublicSubNav extends Component {
                       onClick={(e) => {
                         e.preventDefault();
                         this.props.navStore.setFieldValue('navStatus', 'main');
-                        this.props.history.push(`${currentUser.roles && currentUser.roles.includes('investor') ? 'dashboard/setup' : '/dashboard'}`);
+                        this.props.history.push(`${currentUser.roles && currentUser.roles.includes('investor') ? '/init-dashboard' : '/dashboard'}`);
                       }}
                     >
                       <Button secondary>Dashboard</Button>

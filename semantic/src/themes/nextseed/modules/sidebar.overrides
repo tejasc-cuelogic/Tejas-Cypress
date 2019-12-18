@@ -382,6 +382,9 @@
 				background-color:@neutral !important;
 			}
 		}
+		&.no-active{
+			color: @white !important;
+		}
 	}
 	&:not(.visible) .dropdown .menu.transition{
 		background-color:@neutral;
