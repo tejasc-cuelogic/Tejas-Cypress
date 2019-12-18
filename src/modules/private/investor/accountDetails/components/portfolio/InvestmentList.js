@@ -22,8 +22,8 @@ const INVESTMENT_CARD_META = [
   { label: 'Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%` },
   { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months` },
   { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], getRowValue: value => <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(value, false, false, false)} /> },
+  { label: 'Net Payments Recieved', key: 'netPaymentsReceived', for: ['completed', 'active'] },
   { label: 'Principal Remaining', key: '', for: ['active'] }, // pending
-  { label: 'Net Payments Recieved', key: 'netPaymentsReceived', for: ['completed'] },
   { label: 'Realized Multiple', key: 'offering.closureSummary.keyTerms.multiple', getRowValue: value => `${value}x`, for: ['completed'] },
 ];
 
@@ -86,7 +86,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 const InvestmentList = (props) => {
   const listHeader = {
     pending: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Days to close'],
-    active: ['Offering', 'Invested Amount', 'Status', 'Close Date', 'Term', 'Net Payments Received'],
+    active: ['Offering', 'Invested Amount', 'Status', 'Close Date', 'Term', 'Net Payments Received', 'Principal Remaining'],
     completed: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Close Date', 'Net Payments Received'],
   }[props.listOf];
 
@@ -173,6 +173,14 @@ const InvestmentList = (props) => {
                   && (
                     <Table.Cell>
                       {Helper.MoneyMathDisplayCurrency(get(data, 'netPaymentsReceived') || 0)}
+                    </Table.Cell>
+                  )
+                }
+
+                {props.listOf === 'active'
+                  && (
+                    <Table.Cell>
+                      {'N/A'}
                     </Table.Cell>
                   )
                 }
