@@ -131,8 +131,7 @@ class Mission extends Component {
               guarantee of future results of another business.
             </p>
             <p className={`${responsiveVars.isMobile ? '' : 'center-align'} note`}>
-              <sup>3,4</sup> Data reflects figures from both the NextSeed TX and Reg CF
-              Platforms as of October 2018.
+              <sup>3,4</sup> Data reflects figures from offerings conducted by NextSeed TX LLC, NextSeed UC LLC and NextSeed Securities, LLC as of November 2019.
             </p>
           </Container>
         </section>
@@ -142,7 +141,7 @@ class Mission extends Component {
             <Grid centered>
               <Grid.Column textAlign={responsiveVars.isMobile ? 'left' : 'center'} computer={15} tablet={14} mobile={16}>
                 <Header as="h2" className={responsiveVars.isMobile ? 'mb-10' : 'mb-30'}>Meet our team</Header>
-                <p className={`${responsiveVars.isMobile ? 'mb-40' : 'mb-60'} neutral-text1`}>
+                <p className={`${responsiveVars.isMobile ? 'mb-40' : 'mb-60'} neutral-text`}>
                   We{"'"}re a team of entrepreneurs with backgrounds in business, finance, law, marketing and technology.<Responsive minWidth={992} as="br" /> We{"'"}re here to empower business owners and everyday people to invest in one another.
                 </p>
                 {loading ? (<InlineLoader />)
