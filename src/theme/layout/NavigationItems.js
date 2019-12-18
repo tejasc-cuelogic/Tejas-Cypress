@@ -246,8 +246,7 @@ export class NavigationItems extends Component {
   }
 
   handleDashboardBtn = () => {
-    const { isInvestor } = this.props.userStore;
-    this.props.history.push(isInvestor ? '/dashboard/setup' : '/dashboard');
+    this.props.history.push('/init-dashboard');
   }
 
   render() {
