@@ -51,13 +51,13 @@ const highlights = [
     link: '/resources/education-center/investor/payments',
   },
 ];
-@inject('uiStore', 'authStore')
+@inject('uiStore', 'userStore')
 @withRouter
 @observer
 export default class WhyNextseed extends Component {
   render() {
     const { responsiveVars } = this.props.uiStore;
-    const { authStore } = this.props;
+    const { userStore } = this.props;
     return (
       <>
         <Container>
@@ -151,7 +151,7 @@ export default class WhyNextseed extends Component {
                     <Header as="h2">Your portfolio at<Responsive as="br" minWidth={768} /> your fingertips</Header>
                     <p className="mb-30 mt-20">
                       See how your investments are performing<Responsive as="br" minWidth={768} /> and reinvest any earnings effortlessly with<Responsive as="br" minWidth={768} /> our easy-to-use dashboard.</p>
-                    {!authStore.isUserLoggedIn && !responsiveVars.isMobile
+                    {!userStore.isInvestor && !responsiveVars.isMobile
                       && (
                         <Button as={Link} to="/register-investor" primary className="mb-30">Create a  Free Account</Button>
                       )
@@ -160,7 +160,7 @@ export default class WhyNextseed extends Component {
                 </Grid.Column>
                 <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16}>
                   <NSImage path="investors/mackbook-mockup.png" />
-                  {!authStore.isUserLoggedIn && responsiveVars.isMobile
+                  {!userStore.isInvestor && responsiveVars.isMobile
                     && (
                       <Button fluid as={Link} to="/register-investor" primary className="mt-30">Create a  Free Account</Button>
                     )
