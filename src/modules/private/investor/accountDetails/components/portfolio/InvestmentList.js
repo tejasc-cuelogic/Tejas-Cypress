@@ -172,7 +172,7 @@ const InvestmentList = (props) => {
                 {props.listOf !== 'pending'
                   && (
                     <Table.Cell>
-                      {Helper.MoneyMathDisplayCurrency(get(data, 'netPaymentsReceived') || 0)}
+                      {Helper.MoneyMathDisplayCurrency(get(data, 'netPaymentsReceived') || '0.00')}
                     </Table.Cell>
                   )
                 }
@@ -180,7 +180,7 @@ const InvestmentList = (props) => {
                 {props.listOf === 'active'
                   && (
                     <Table.Cell>
-                      {'N/A'}
+                      {Helper.MoneyMathDisplayCurrency(get(data, 'remainingPrincipal') || '0.00')}
                     </Table.Cell>
                   )
                 }
