@@ -5,7 +5,7 @@ import { Header, Grid, Button, Container, List, Statistic, Divider, Responsive, 
 import { NsCarousel, VideoModal } from '../../../../theme/shared';
 import NSImage from '../../../shared/NSImage';
 
-@inject('offeringsStore', 'uiStore', 'authStore')
+@inject('offeringsStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 class HowItWorks extends Component {
@@ -87,7 +87,7 @@ class HowItWorks extends Component {
     ];
     const isMobile = document.documentElement.clientWidth < 768;
     const isTablet = document.documentElement.clientWidth < 992;
-    const { authStore } = this.props;
+    const { userStore } = this.props;
 
     return (
       <>
@@ -144,7 +144,7 @@ class HowItWorks extends Component {
                     <p className={responsiveVars.isMobile ? 'mb-30 mt-10' : 'mb-60 mt-40'}>
                       Whether you{"'"}re raising capital for an expansion, a new venture, or to improve your current capacity, our investment banking team will find the right capital solution to keep you in control of your business.
                   </p>
-                    {!authStore.isUserLoggedIn && !responsiveVars.isMobile
+                    {!userStore.isIssuer && !responsiveVars.isMobile
                       && (
                         <Button as={Link} to="/business-application/business" primary className="mb-30">Apply Online</Button>
                       )
@@ -178,7 +178,7 @@ class HowItWorks extends Component {
                     </Header>
                     </List.Item>
                   </List>
-                  {!authStore.isUserLoggedIn && responsiveVars.isMobile
+                  {!userStore.isIssuer && responsiveVars.isMobile
                     && (
                       <Button className="mt-40" as={Link} to="/business-application/business" primary fluid>Apply Online</Button>
                     )
@@ -280,7 +280,7 @@ class HowItWorks extends Component {
                     <p className={responsiveVars.isMobile ? 'mb-30 mt-14' : 'mb-80 mt-40'}>
                       Our success fee comes with everything you need to launch, promote and service your campaign. Best of all, we only charge you if your offering is funded.
                     </p>
-                    {!authStore.isUserLoggedIn && !responsiveVars.isMobile
+                    {!userStore.isIssuer && !responsiveVars.isMobile
                       && (
                         <Button as={Link} to="/business-application/business" primary className="mb-30">Apply Online</Button>
                       )

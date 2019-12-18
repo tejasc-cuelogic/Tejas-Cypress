@@ -34,7 +34,7 @@ class Banner extends Component {
                 Accelerate your growth with<br />
                 the power of the crowd.
               </Header>
-              {!this.props.authStore.isUserLoggedIn
+              {!this.props.userStore.isIssuer
               && (
                 <Button as={Link} to="/business-application/business" primary className="mb-30">Apply Online</Button>
               )
