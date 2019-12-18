@@ -78,8 +78,8 @@ export default class Offerings extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        {!['completed'].includes(stage)
-          ? <Listing stage={stage} />
+        {!['completed', 'live'].includes(stage)
+          ? <Listing stage={stage} noPagination={['creation'].includes(stage)} />
           : <DraggableListing stage={stage} />
         }
       </div>

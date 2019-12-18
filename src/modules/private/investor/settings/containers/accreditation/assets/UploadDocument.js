@@ -16,8 +16,7 @@ export default class UploadDocument extends Component {
   }
 
   onFileDrop = (files, field) => {
-    const { params } = this.props.match;
-    this.props.accreditationStore.setFileUploadData('ASSETS_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Assets', '', '', '', params.accountId);
+    this.props.accreditationStore.setFileUploadData('ASSETS_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Assets', '', '', '');
   }
 
   handleDelCancel = () => {
@@ -29,7 +28,7 @@ export default class UploadDocument extends Component {
   }
 
   handleDelDoc = (field, index) => {
-    this.props.accreditationStore.removeUploadedData('ASSETS_UPLOAD_DOC_FORM', field, index, this.props.accountType, this.props.match.params.accountId);
+    this.props.accreditationStore.removeUploadedData('ASSETS_UPLOAD_DOC_FORM', field, index, this.props.accountType);
   }
 
   render() {
@@ -50,13 +49,14 @@ export default class UploadDocument extends Component {
           />
           {!this.props.isEntity
             && (
-<FormCheckbox
-  fielddata={ASSETS_UPLOAD_DOC_FORM.fields.isAccepted}
-  name="isAccepted"
-  changed={(e, result) => formChange(e, result, 'ASSETS_UPLOAD_DOC_FORM')}
-  defaults
-  containerclassname="ui relaxed list"
-/>
+              <FormCheckbox
+                fielddata={ASSETS_UPLOAD_DOC_FORM.fields.isAccepted}
+                name="isAccepted"
+                changed={(e, result) => formChange(e, result, 'ASSETS_UPLOAD_DOC_FORM')}
+                defaults
+                disabled={ASSETS_UPLOAD_DOC_FORM.fields.statementDoc.value.length === 0}
+                containerclassname="ui relaxed list"
+              />
             )
           }
           <Divider hidden />

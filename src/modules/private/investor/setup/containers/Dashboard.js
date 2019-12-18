@@ -25,13 +25,13 @@ const summaryDetails = ({
     title: false,
     summary: [
       {
-        title: 'Total Invested', content: totalInvested || '', type: 1, info: 'Includes all investments made in successfully closed offerings. Does not include reservations or commitments in live offerings.',
+        title: 'Total Invested', content: totalInvested || '0.00', type: 1, info: 'Includes all investments made in successfully closed offerings. Does not include reservations or commitments in live offerings.',
       },
       {
-        title: 'Pending Investment', content: pendingInvestments || '', type: 1, info: 'Includes amounts reserved or committed in live offerings.',
+        title: 'Pending Investment', content: pendingInvestments || '0.00', type: 1, info: 'Includes amounts reserved or committed in live offerings.',
       },
       {
-        title: 'Paid to Date', content: paidToDate || '', type: 1, info: 'Net payments received to date from all prior investments.',
+        title: 'Paid to Date', content: paidToDate || '0.00', type: 1, info: 'Net payments received to date from all prior investments.',
       },
       // {
       //   title: 'TNAR', content: tnar && !money.isZero(tnar) ? `${tnar}%` : 'N/A',

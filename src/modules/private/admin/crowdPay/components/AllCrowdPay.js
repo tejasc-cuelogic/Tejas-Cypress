@@ -59,12 +59,12 @@ export default class AllCrowdPay extends Component {
   paginate = params => this.props.crowdpayStore.pageRequest(params);
 
   render() {
-    const { crowdpayStore } = this.props;
+    const { crowdpayStore, match } = this.props;
     const {
       accounts, count, requestState, crowdPayCtaHandler, loadingCrowdPayIds, loading,
       isLazyLoading,
     } = crowdpayStore;
-    const { type } = this.props.match.params;
+    const { type } = match.params;
     if (loading && requestState.page === 1) {
       return <InlineLoader />;
     }
@@ -114,7 +114,7 @@ export default class AllCrowdPay extends Component {
                     <Table.Row key={account.accountId} className={loadingCrowdPayIds.includes(account.accountId) ? 'disabled' : ''}>
                       <Table.Cell>
                         <p>
-                          <Link to={`/dashboard/users/${account.userId}/profile-data`}>
+                          <Link onClick={() => sessionStorage.setItem('userDetailsRefUrl', match.url)} to={`/dashboard/users/${account.userId}/profile-data`}>
                             <b>{account.firstName} {account.lastName}</b>
                           </Link>
                           <br />{account.email}<br />{account.phone ? Helper.phoneNumberFormatter(account.phone) : ''}
@@ -228,7 +228,7 @@ export default class AllCrowdPay extends Component {
                       }
                       <Actions
                         crowdPayCtaHandler={crowdPayCtaHandler}
-                        refLink={this.props.match.url}
+                        refLink={match.url}
                         type={type}
                         account={account}
                       />
@@ -238,8 +238,8 @@ export default class AllCrowdPay extends Component {
             </Table.Body>
           </Table>
         </div>
-        <Route exact path={`${this.props.match.url}/:action`} render={props => <MessageModal refLink={this.props.match.url} {...props} />} />
-        <Route path={`${this.props.match.url}/:userId/:accountId/:action`} render={props => <ConfirmModel refLink={this.props.match.url} {...props} />} />
+        <Route exact path={`${match.url}/:action`} render={props => <MessageModal refLink={match.url} {...props} />} />
+        <Route path={`${match.url}/:userId/:accountId/:action`} render={props => <ConfirmModel refLink={match.url} {...props} />} />
         {totalRecords > 0
           && <NsPagination floated="right" isLazyloading={isLazyLoading} initRequest={this.paginate} meta={{ totalRecords, requestState }} />
         }

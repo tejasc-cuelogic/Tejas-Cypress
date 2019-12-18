@@ -231,7 +231,7 @@ export class AccreditationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '', accountId) => {
+  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '') => {
     const stepName = this.getFileUploadEnum(accountType, accreditationMethod);
     const tags = [accreditationMethod];
     if (accreditationMethod === 'Income') {
@@ -248,8 +248,9 @@ export class AccreditationStore {
             fileUpload.putUploadedFileOnS3({
               preSignedUrl, fileData: file, fileType: fileData.fileType,
             }).then(() => {
-              this.updateAccreditation(form, accountId, accountType.toUpperCase()).then(() => {
+              this.updateAccreditation(form, accountType.toUpperCase()).then(() => {
                 this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
+                this.checkFormValid(form, false, false);
               });
             }).catch(() => {
               Helper.toast('Something went wrong, please try again later.', 'error');
@@ -320,7 +321,8 @@ export class AccreditationStore {
   });
 
   @action
-  removeUploadedData = (form, field, index = null, accountType, accountId) => {
+  removeUploadedData = (form, field, index = null, accountType) => {
+    const accountId = userDetailsStore.getIdByAccountType(accountType.toLowerCase());
     let removeFileId = '';
     if (index != null) {
       const fileId = this[form].fields[field].fileId.splice(index, 1);
@@ -339,7 +341,7 @@ export class AccreditationStore {
     }
     if (accountType && accountId) {
       fileUpload.removeUploadedData(removeFileId).then(() => {
-        this.updateAccreditation(form, accountId, accountType.toUpperCase()).then(() => {
+        this.updateAccreditation(form, accountType.toUpperCase()).then(() => {
           this.setFormFileArray(form, field, 'showLoader', false);
         }).catch(() => {
           Helper.toast('Something went wrong, please try again later.', 'error');
@@ -351,6 +353,7 @@ export class AccreditationStore {
     }
     this.setFormFileArray(form, field, 'error', undefined);
     this.setFormFileArray(form, field, 'showLoader', false);
+    this.checkFormValid(form, false, false);
   }
 
   @action
@@ -532,8 +535,9 @@ export class AccreditationStore {
   }
 
   @action
-  updateAccreditation = (form, accountId, accountType, formType = 0) => {
+  updateAccreditation = (form, accountType, formType = 0) => {
     uiStore.setProgress();
+    const accountId = userDetailsStore.getIdByAccountType(accountType.toLowerCase());
     let hasVerifier = null;
     let userAccreditationDetails = '';
     if (form === 'ENTITY_ACCREDITATION_FORM') {
@@ -977,13 +981,7 @@ export class AccreditationStore {
     this.showAccountList = statusValue;
   }
 
-  pendingStepForAccreditation = (selectedAccountName) => {
-    const userCreatedAccountList = userDetailsStore.userDetails.roles;
-    const selectedAccountDetails = find(userCreatedAccountList, { name: selectedAccountName });
-    const selectedAccountId = selectedAccountDetails.details.accountId;
-    const urlToReturn = selectedAccountName === 'entity' ? `/dashboard/account-settings/investment-limits/verify-entity-accreditation/${selectedAccountId}/entity` : `/dashboard/account-settings/investment-limits/verify-accreditation/${selectedAccountId}/${selectedAccountName}`;
-    return urlToReturn;
-  }
+  pendingStepForAccreditation = selectedAccountName => (`/dashboard/account-settings/investment-limits/verify-accreditation/${selectedAccountName}`);
 
   offeringAccreditatoinStatusMessage = (
     currentStatus, accreditedStatus, isRegulationCheck = false,

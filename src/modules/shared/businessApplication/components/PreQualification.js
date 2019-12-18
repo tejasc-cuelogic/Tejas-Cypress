@@ -119,6 +119,7 @@ export default class PreQualification extends Component {
       isPrequalQulify, currentApplicationType, fetchBusinessApplicationsDataById, BUSINESS_ACCOUNT,
     } = this.props.businessAppStore;
     const { hideFields, match } = this.props;
+    const { inProgress } = this.props.uiStore;
     const { params } = match;
     if (params.applicationType !== 'commercial-real-estate' && currentApplicationType !== 'commercial-real-estate' && params.applicationType !== 'business' && currentApplicationType !== 'business') {
       return <NotFound />;
@@ -190,8 +191,8 @@ export default class PreQualification extends Component {
             <>
               <Divider hidden />
               <Button
-                loading={this.props.uiStore.inProgress}
-                disabled={!userExists ? !BUSINESS_APP_FRM_BASIC.meta.isValid : !(BUSINESS_APP_FRM_BASIC.meta.isValid && BUSINESS_ACCOUNT.fields.password.value !== '')}
+                loading={inProgress}
+                disabled={(!userExists ? !BUSINESS_APP_FRM_BASIC.meta.isValid : !(BUSINESS_APP_FRM_BASIC.meta.isValid && BUSINESS_ACCOUNT.fields.password.value !== '')) || inProgress}
                 size="large"
                 color="green"
                 className="very relaxed"
@@ -219,8 +220,8 @@ export default class PreQualification extends Component {
             {!preQualFormDisabled
               ? (
                 <Button
-                  loading={this.props.uiStore.inProgress}
-                  disabled={!BUSINESS_APP_FRM.meta.isValid || (BUSINESS_APP_FRM.meta.isValid && this.props.uiStore.inProgress)}
+                  loading={inProgress}
+                  disabled={!BUSINESS_APP_FRM.meta.isValid || (BUSINESS_APP_FRM.meta.isValid && inProgress)}
                   size="large"
                   color="green"
                   className={`${isMobile && 'mb-50'} very relaxed`}

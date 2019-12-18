@@ -72,15 +72,15 @@ export default class ConfirmPhoneNumber extends Component {
     }
   }
 
-  startPhoneVerification = () => {
+  startPhoneVerification = async () => {
     this.props.identityStore.setReSendVerificationCode(true);
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
     this.props.uiStore.clearErrors();
     const { mfaMethod, phoneNumber } = this.props.identityStore.ID_VERIFICATION_FRM.fields;
     const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
     const phoneNumberValue = phoneNumber.value;
-    this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile);
-    if (!this.props.refLink) {
+    const res = await this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile);
+    if (res && !this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }
   }
@@ -124,6 +124,7 @@ export default class ConfirmPhoneNumber extends Component {
       confirmMigratedUserPhoneNumber,
       personalInfoChange,
       isOptConfirmed,
+      signUpLoading,
     } = this.props.identityStore;
     const { errors, editMode, responsiveVars } = this.props.uiStore;
     const { signupStatus } = this.props.userDetailsStore;
@@ -150,11 +151,11 @@ export default class ConfirmPhoneNumber extends Component {
         <Modal.Content className="signup-content center-align">
           {dataLoading
             && (
-<Dimmer active={dataLoading}>
-              <Loader active={dataLoading} />
-            </Dimmer>
+              <Dimmer active={dataLoading}>
+                <Loader active={dataLoading} />
+              </Dimmer>
             )
-           }
+          }
           <MaskedInput
             hidelabel
             value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
@@ -171,59 +172,59 @@ export default class ConfirmPhoneNumber extends Component {
           />
           {!editMode
             && (
-            <Link className={`grey-link green-hover ${this.props.uiStore.inProgress ? 'disabled' : ''}`} to={this.props.refLink ? this.props.refLink : this.props.match.url} onClick={this.handleChangePhoneNumber}>
-              Change phone number
+              <Link className={`grey-link green-hover ${this.props.uiStore.inProgress || signUpLoading ? 'disabled' : ''}`} to={this.props.refLink ? this.props.refLink : this.props.match.url} onClick={this.handleChangePhoneNumber}>
+                Change phone number
             </Link>
             )
           }
           <Form className="mb-20" error onSubmit={this.handleConfirmPhoneNumber}>
             {!editMode
-            && (
-<Form.Field className="otp-wrap">
-              <label>Enter verification code here:</label>
-              <ReactCodeInput
-                filterChars
-                fields={6}
-                autoFocus={!isMobile}
-                type="number"
-                className="otp-field"
-                pattern="[0-9]*"
-                inputmode="numeric"
-                disabled={(reSendVerificationCode && this.props.uiStore.inProgress) || (errors && errors.message && errors.message.includes('The number you entered is invalid'))}
-                fielddata={ID_PHONE_VERIFICATION.fields.code}
-                onChange={phoneVerificationChange}
-              />
-              <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
-            </Form.Field>
-            )
+              && (
+                <Form.Field className="otp-wrap">
+                  <label>Enter verification code here:</label>
+                  <ReactCodeInput
+                    filterChars
+                    fields={6}
+                    autoFocus={!isMobile}
+                    type="number"
+                    className="otp-field"
+                    pattern="[0-9]*"
+                    inputmode="numeric"
+                    disabled={(reSendVerificationCode && this.props.uiStore.inProgress) || signUpLoading || (errors && errors.message && errors.message.includes('The number you entered is invalid'))}
+                    fielddata={ID_PHONE_VERIFICATION.fields.code}
+                    onChange={phoneVerificationChange}
+                  />
+                  <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
+                </Form.Field>
+              )
             }
             {editMode
               && (
-<div className="mt-30 mb-30">
-                <Header as="h6">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
-                <FormRadioGroup
-                  fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
-                  name="mfaMethod"
-                  changed={(e, result) => personalInfoChange(e, result)}
-                  containerclassname="button-radio center-align"
-                />
-              </div>
+                <div className="mt-30 mb-30">
+                  <Header as="h6">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
+                  <FormRadioGroup
+                    fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
+                    name="mfaMethod"
+                    changed={(e, result) => personalInfoChange(e, result)}
+                    containerclassname="button-radio center-align"
+                  />
+                </div>
               )
             }
             {errors
               && (
-<Message error textAlign="left" className="mb-30">
-                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-              </Message>
+                <Message error textAlign="left" className="mb-30">
+                  <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+                </Message>
               )
             }
             {!editMode
               ? <Button primary size="large" className="very relaxed" content="Confirm" disabled={!ID_PHONE_VERIFICATION.meta.isValid || (!!(errors && errors.message) || dataLoading)} />
               : (
-<Button.Group widths="2" className="inline">
-                <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />
-                <Button type="button" loading={reSendVerificationCode && this.props.uiStore.inProgress} disabled={errors || !ID_VERIFICATION_FRM.fields.phoneNumber.value || (ID_VERIFICATION_FRM.fields.phoneNumber.value && ID_VERIFICATION_FRM.fields.phoneNumber.value.length < 10)} primary content="Save" onClick={() => this.startPhoneVerification()} />
-              </Button.Group>
+                <Button.Group widths="2" className="inline">
+                  <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />
+                  <Button type="button" loading={reSendVerificationCode && (this.props.uiStore.inProgress || signUpLoading)} disabled={!ID_VERIFICATION_FRM.fields.phoneNumber.value || (ID_VERIFICATION_FRM.fields.phoneNumber.value && ID_VERIFICATION_FRM.fields.phoneNumber.value.length < 10)} primary content="Save" onClick={() => this.startPhoneVerification()} />
+                </Button.Group>
               )
             }
           </Form>

@@ -12,9 +12,9 @@ import {
   getAmountInvestedInCampaign,
   validateInvestmentAmount, getInvestorInFlightCash,
   generateAgreement, finishInvestment, transferFundsForInvestment,
-  investNowGeneratePurchaseAgreement,
+  investNowGeneratePurchaseAgreement, investNowGetInvestmentAgreement,
 } from '../../queries/investNow';
-import { getInvestorAccountPortfolio } from '../../queries/portfolio';
+// import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 
 // import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
 
@@ -362,8 +362,27 @@ export class InvestmentStore {
             if (!resp.data.investNowGeneratePurchaseAgreement) {
               this.setShowTransferRequestErr(true);
             }
-            this.setFieldValue('agreementDetails', resp.data.investNowGeneratePurchaseAgreement);
-            resolve({ isValid: status, flag });
+
+            // Get docusign and npa document urls:
+            if (get(resp, 'data.investNowGeneratePurchaseAgreement.agreementId')) {
+              const agreementVariables = {
+                agreementId: get(resp, 'data.investNowGeneratePurchaseAgreement.agreementId'),
+                offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
+                accountId: this.getSelectedAccountTypeId,
+              };
+              this.getInvestmentAgreement(agreementVariables)
+                .then((result) => {
+                  this.setFieldValue('agreementDetails', result.investNowGetInvestmentAgreement);
+                  resolve({ isValid: status, flag });
+                }).catch((error) => {
+                  Helper.toast('Something went wrong, please try again later.', 'error');
+                  this.setShowTransferRequestErr(true);
+                  uiStore.setErrors(error.message);
+                  reject();
+                });
+            } else {
+              resolve({ isValid: status, flag });
+            }
           }))
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
@@ -378,6 +397,21 @@ export class InvestmentStore {
     } else {
       resolve();
     }
+  });
+
+  getInvestmentAgreement = variables => new Promise((resolve, reject) => {
+    graphql({
+      client,
+      query: investNowGetInvestmentAgreement,
+      variables,
+      onFetch: (data) => {
+        resolve(data);
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      },
+    });
   });
 
   checkLockinPeriod = () => {
@@ -500,13 +534,6 @@ export class InvestmentStore {
           .mutate({
             mutation: finishInvestment,
             variables: varObj,
-            refetchQueries: [{
-              query: getInvestorAccountPortfolio,
-              variables: {
-                userId: userDetailsStore.currentUserId,
-                accountId: this.getSelectedAccountTypeId,
-              },
-            }],
           })
           .then((data) => {
             const { status, message, flag } = data.data.investNowSubmit;
@@ -516,14 +543,25 @@ export class InvestmentStore {
               const errorMessage = !status ? message : null;
               this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             }
-            resolve(status);
-            campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
+            const portfolioVar = {
+              userId: userDetailsStore.currentUserId,
+              accountId: this.getSelectedAccountTypeId,
+            };
+            portfolioStore.getPortfolioDetailsAfterInvestment(portfolioVar)
+              .then(() => {
+                campaignStore.getCampaignDetails(campaignStore.getOfferingSlug, false, true);
+                resolve(status);
+                uiStore.setProgress(false);
+              })
+              .catch((error) => {
+                Helper.toast('Something went wrong, please try again later.', 'error');
+                uiStore.setErrors(error.message);
+                uiStore.setProgress(false);
+              });
           })
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
-          })
-          .finally(() => {
             uiStore.setProgress(false);
           });
       });

@@ -1,10 +1,11 @@
 /* eslint-disable */
 import React, { Component } from 'react';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { Header, Grid, Segment, Button, Divider } from 'semantic-ui-react';
 import DocumentModal from './DataRoom/DocumentModal';
+import { InlineLoader } from '../../../../../theme/shared';
 
 const isTablet = document.documentElement.clientWidth < 992;
 @inject('campaignStore', 'uiStore', 'accreditationStore', 'authStore')
@@ -28,13 +29,22 @@ export default class Documents extends Component {
   close = () => this.setState({ doc: null });
 
   render() {
-    const { dataRoomDocs } = this.props.campaignStore;
+    const { campaign, dataRoomDocs, loading } = this.props.campaignStore;
+    if (loading && this.props.portfolioSection) {
+      return <InlineLoader />;
+    }
     return (
-      <div>
-        <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
-          Documents
-          <span className="anchor" id="data-room" />
-        </Header>
+      <div className={this.props.portfolioSection ? 'content-spacer' : ''}>
+        {(dataRoomDocs.length && ['LIVE', 'CREATION'].includes(get(campaign, 'stage')))
+          ? (
+            <>
+              <Header as="h3" className={`${(this.props.newLayout && isTablet) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mb-30'} anchor-wrap`}>
+                <span className="anchor" id="data-room" />
+                Documents
+              </Header>
+            </>
+          ) : null
+        }
         {!this.props.newLayout && <Divider hidden />}
         <Grid columns={3} stackable doubling>
           {
@@ -55,9 +65,8 @@ export default class Documents extends Component {
             ))
           }
         </Grid>
-        {this.state.doc
-        &&
-        <DocumentModal doc={this.state.doc} close={this.close} />
+        {this.state.doc &&
+          <DocumentModal doc={this.state.doc} close={this.close} />
         }
       </div>
     );

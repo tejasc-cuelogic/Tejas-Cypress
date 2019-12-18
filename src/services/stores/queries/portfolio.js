@@ -135,6 +135,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
               date
             }
             keyTerms {
+              multiple
               maturityDate
             }
           }

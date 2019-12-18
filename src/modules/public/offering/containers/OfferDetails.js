@@ -26,6 +26,13 @@ const getModule = component => lazyRetry(() => import(`../components/campaignDet
 
 const isMobile = document.documentElement.clientWidth < 992;
 const offsetValue = document.getElementsByClassName('offering-side-menu mobile-campain-header')[0] && document.getElementsByClassName('offering-side-menu mobile-campain-header')[0].offsetHeight;
+const navTitleMeta = {
+  '#top-things-to-know': 'Executive Summary',
+  '#key-terms': 'Summary of Terms',
+  '#company-description': 'Fund Description',
+  '#business-model': 'Investment Strategy',
+};
+
 @inject('campaignStore', 'userStore', 'navStore', 'uiStore', 'userDetailsStore', 'authStore', 'watchListStore', 'nsUiStore')
 @withRouter
 @observer
@@ -192,7 +199,7 @@ class offerDetails extends Component {
       return <Spinner page loaderMessage="Loading.." />;
     }
     const {
-      details, campaign, navCountData, modifySubNavs,
+      details, campaign, navCountData, modifySubNavs, campaignStatus,
     } = campaignStore;
     const { isWatching } = this.props.watchListStore;
     let navItems = [];
@@ -206,6 +213,13 @@ class offerDetails extends Component {
       navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
       navItems = modifySubNavs(navItems, newLayout);
       navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
+    }
+    if (!['LIVE', 'CREATION'].includes(get(campaign, 'stage'))) {
+      navItems = navItems.filter(n => n.to !== '#data-room');
+    }
+    if (campaignStatus.isFund) {
+      navItems = navItems.filter(n => n.to !== '#gallery');
+      navItems = navItems.map(n => (navTitleMeta[n.to] ? { ...n, title: navTitleMeta[n.to] } : { ...n }));
     }
     if ((details && details.data && !details.data.getOfferingDetailsBySlug)
       || this.state.found === 2) {
@@ -264,7 +278,7 @@ class offerDetails extends Component {
                   <SuspenseBoundary>
                     <Switch>
                       <Route exact path={match.url} render={props => <InitialComponent offeringName={offeringName} refLink={this.props.match.url} {...props} />} />
-                      {newLayout
+                      {(newLayout && ['LIVE', 'CREATION'].includes(get(campaign, 'stage')))
                         && (
                           <Route path={`${this.props.match.url}/data-room`} component={DocumentModal} />
                         )

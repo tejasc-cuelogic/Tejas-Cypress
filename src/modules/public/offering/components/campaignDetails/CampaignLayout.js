@@ -229,7 +229,7 @@ class CampaignLayout extends Component {
             </>
           ) : null
         }
-        {campaignStatus.gallary !== 0 ? (
+        {campaignStatus.gallary !== 0 && !campaignStatus.isFund ? (
           <>
             <Gallery
               newLayout
@@ -239,7 +239,7 @@ class CampaignLayout extends Component {
             <Divider hidden section />
           </>
         ) : null}
-        {dataRoomDocs.length
+        {(dataRoomDocs.length && ['LIVE', 'CREATION'].includes(get(campaign, 'stage')))
           ? (
             <>
               <Documents newLayout />
