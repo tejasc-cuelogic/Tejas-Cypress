@@ -246,7 +246,7 @@ const InvestmentList = (props) => {
     ) : (
       <Accordion fluid styled className="card-style portfolio-list">
       <Accordion.Title onClick={() => props.toggleAccordion(props.listOf)} active={isActive} className="text-capitalize">
-        <Icon className={`ns-chevron-${isActive ? 'up' : 'down'}`} />
+        <Icon className={`ns-chevron-${isActive ? 'up' : 'right'}`} />
         {`${props.listOf} (${props.listOfCount})`}
       </Accordion.Title>
       <Accordion.Content className="bg-offwhite" active={!props.inActiveItems.includes(props.listOf)}>
