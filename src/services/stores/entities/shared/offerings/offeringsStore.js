@@ -50,7 +50,7 @@ export class OfferingsStore {
 
   @observable totalRaisedAmount = [];
 
-  @observable.struct orderedActiveLiveList = [];
+  @observable orderedActiveLiveList = [];
 
   @action
   initRequest = (props, forceResetDb = false) => {
@@ -64,7 +64,7 @@ export class OfferingsStore {
       query: stage === 'active' ? allOfferingsCompact : allOfferings,
       variables: stage !== 'active' ? { stage: reqStages }
         : { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
-      fetchPolicy: stage === 'live' ? 'network-only' : 'cache-and-network',
+      fetchPolicy: 'cache-and-network',
       onFetch: (res) => {
         if (res && !this.data[stage].loading && (!this.db[stage] || forceResetDb)) {
           this.requestState.page = 1;
