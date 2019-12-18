@@ -22,8 +22,8 @@ const INVESTMENT_CARD_META = [
   { label: 'Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%` },
   { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months` },
   { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], getRowValue: value => <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(value, false, false, false)} /> },
-  { label: 'Net Payments Recieved', key: 'netPaymentsReceived', for: ['completed', 'active'] },
-  { label: 'Principal Remaining', key: '', for: ['active'] }, // pending
+  { label: 'Net Payments Recieved', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}` },
+  { label: 'Principal Remaining', key: 'remainingPrincipal', for: ['active'], getRowValue: value => `$${value}` }, // pending
   { label: 'Realized Multiple', key: 'offering.closureSummary.keyTerms.multiple', getRowValue: value => `${value}x`, for: ['completed'] },
 ];
 
