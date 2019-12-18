@@ -132,38 +132,38 @@ export const publicRoutes = [
 
 export const privateRoutes = [
   {
-    path: '/app/edgar/:offeringId/edgar/:filingId',
+    path: '/dashboard/edgar/:offeringId/edgar/:filingId',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/edgar/:offeringId/edgar',
+    path: '/dashboard/edgar/:offeringId/edgar',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/edgar/:offeringId/filing/:filingId/xml/:xmlId',
+    path: '/dashboard/edgar/:offeringId/filing/:filingId/xml/:xmlId',
     component: XmlForm,
     auth: AdminAuthorization,
   },
   {
-    path: '/app/edgar/:offeringId/filing/:filingId/xml',
+    path: '/dashboard/edgar/:offeringId/filing/:filingId/xml',
     component: XmlForm,
     auth: AdminAuthorization,
   },
   {
-    path: '/app/edgar/:offeringId',
+    path: '/dashboard/edgar/:offeringId',
     component: BusinessDetails,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/edgar',
+    path: '/dashboard/edgar',
     component: Edgar,
     auth: BusinessAuthorization,
     exact: true,
   },
   {
-    path: '/app/users',
+    path: '/dashboard/users',
     component: UserManagement,
     auth: AdminAuthorization,
   },

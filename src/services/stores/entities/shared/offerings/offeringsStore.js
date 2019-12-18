@@ -154,6 +154,9 @@ export class OfferingsStore {
     } else {
       this.setDb(this.allOfferingsList);
     }
+    if (this.requestState.stage === 'live') {
+      this.orderedActiveListArr();
+    }
   }
 
   @action

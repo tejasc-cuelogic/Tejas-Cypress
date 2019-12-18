@@ -26,17 +26,17 @@ export default class ChooseOffer extends Component {
   signPortalAgreement = () => {
     const { match, businessAppReviewStore } = this.props;
     businessAppReviewStore.signPortalAgreement().then(() => {
-      this.props.history.push(`/app/dashboard/${match.params.applicationId}/offers/offersSigning`);
+      this.props.history.push(`/dashboard/application/${match.params.applicationId}/offers/offersSigning`);
     });
   }
 
-  declineApplication = () => this.props.history.push(`/app/dashboard/${this.props.match.params.applicationId}/offers/decline`);
+  declineApplication = () => this.props.history.push(`/dashboard/application/${this.props.match.params.applicationId}/offers/decline`);
 
   module = name => DataFormatter.upperCamelCase(name);
 
   handleCloseModal = () => {
     this.props.businessAppReviewStore.setFieldvalue('selectedOfferIndex', null);
-    this.props.history.push('/app/dashboard');
+    this.props.history.push('/dashboard');
   }
 
   handleSetField = (field, value, location = null) => {
