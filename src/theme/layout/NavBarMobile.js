@@ -88,7 +88,7 @@ export default class NavBarMobile extends Component {
                   />
                 )
                 : (
-<div className={`public-header-section ${isNewCampaign ? 'public-header-section-v2' : ''} ${visible ? 'active' : ''} ${navStatus === 'sub' ? 'slide-up' : ''}`}>
+                  <div className={`public-header-section ${isNewCampaign ? 'public-header-section-v2' : ''} ${visible ? 'active' : ''} ${navStatus === 'sub' ? 'slide-up' : ''}`}>
                     {navTitle === 'Home' || (location.pathname.startsWith('/offerings') || this.props.userStore.isInvestor)
                       ? (
                         <Link to="/">
@@ -134,10 +134,12 @@ export default class NavBarMobile extends Component {
               renderView={p => <div {...p} className="view" />}
             >
               <div className="sidebar-logo">
-                <Logo
-                  dataSrc="LogoGreenGrey"
-                  className="mobile-header-logo"
-                />
+                <Link onClick={onToggle} to="/" className="logo">
+                  <Logo
+                    dataSrc="LogoGreenGrey"
+                    className="mobile-header-logo"
+                  />
+                </Link>
                 <Icon onClick={onToggle} className="ns-close-light" />
               </div>
               {this.props.userStore.isInvestor

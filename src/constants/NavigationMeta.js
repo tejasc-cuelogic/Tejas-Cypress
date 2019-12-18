@@ -762,7 +762,7 @@ export const MOBILE_NAV = [
     accessibleTo: ENTITY_ACC.accessibleTo,
     isLoggedIn: true,
   },
-  { title: 'Explore', to: 'offerings', isLoggedIn: true },
+  { title: 'Investment Opportunities', to: 'offerings', isLoggedIn: true },
   {
     title: 'Refer a Friend',
     to: 'app/referrals',
@@ -771,10 +771,10 @@ export const MOBILE_NAV = [
   },
   { title: 'Settings', to: 'app/account-settings', isLoggedIn: true },
   { title: 'Add New Account', to: 'app/setup/account-creation', isLoggedIn: true },
-  { title: 'How it Works Investor', to: 'how-it-works/investors' },
-  { title: 'How it Works Business', to: 'how-it-works/business' },
+  { title: 'For Investor', to: 'how-it-works/investors' },
+  { title: 'For Businesses', to: 'how-it-works/business' },
   { title: 'Education Center', to: 'resources/education-center' },
-  { title: 'About Us', to: 'about' },
+  { title: 'Who We Are', to: 'about' },
   { title: 'Insights', to: 'resources/insights' },
   { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
 ];
