@@ -205,10 +205,10 @@ export class NavItems extends Component {
                                 key={item.to}
                                 name={item.to}
                                 id={(newLayout && isTablet) ? `${item.to.slice(1)}-mob-nav` : ''}
-                                className={`${isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : `${((item.defaultActive && this.isActiveSubMenu(`${item.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(item.to, location) ? 'active' : ''}`} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''} ${(newLayout && ((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) ? 'hasLabel' : '')}`}
+                                className={`${((isMobile && item.title === 'Home' && location.pathname !== '/') || (!isMobile && item.title === 'Dashboard' && location.pathname !== '/dashboard')) ? 'no-active' : `${((item.defaultActive && this.isActiveSubMenu(`${item.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(item.to, location) ? 'active' : ''}`} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''} ${(newLayout && ((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) ? 'hasLabel' : '')}`}
                                 as={NavLink}
                                 onClick={isMobile ? this.mobileMenuClick : this.doNothing}
-                                to={`${(isApp) ? '/dashboard' : (this.props.sub ? match.url : '')}${item.useRefLink ? '' : item.asRoot ? '' : `/${item.to}`}`}
+                                to={`${(isApp) ? '/dashboard' : (this.props.sub ? match.url : '')}${(item.useRefLink || item.asRoot) ? '' : '/'}${item.asRoot ? '' : item.to}`}
                               >
                                 {item.icon && <Icon className={item.icon} />}
                                 {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
@@ -246,8 +246,7 @@ export class NavigationItems extends Component {
   }
 
   handleDashboardBtn = () => {
-    const { isInvestor } = this.props.userStore;
-    this.props.history.push(isInvestor ? '/dashboard/setup' : '/dashboard');
+    this.props.history.push('/init-dashboard');
   }
 
   render() {

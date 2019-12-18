@@ -34,7 +34,7 @@ export const publicRoutes = [
     exact: true,
   },
   {
-    path: '/dashboard',
+    path: '/init-dashboard',
     component: DashboardCta,
     exact: true,
   },
