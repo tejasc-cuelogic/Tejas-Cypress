@@ -66,9 +66,11 @@ export default class BusinessApplication extends Component {
       currentApplicationType, businessAppParitalSubmit, businessApplicationSubmitAction, apiCall,
     } = this.props.businessAppStore;
     // if (checkFormisValid(applicationStep, true)) {
+    this.props.businessAppStore.setFieldvalue('appSubmitLoading', true);
     businessAppParitalSubmit().then((result) => {
       if (isRedirect && result && this.props.businessAppStore.canSubmitApp && !apiCall) {
         businessApplicationSubmitAction().then(() => {
+          this.props.businessAppStore.setFieldvalue('appSubmitLoading', false);
           Helper.toast('Business application submitted successfully!', 'success');
           this.props.history.push('/dashboard');
           window.location.reload();

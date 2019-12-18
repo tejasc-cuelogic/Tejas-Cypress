@@ -93,6 +93,8 @@ export class BusinessAppStore {
 
   @observable userExists = false;
 
+  @observable appSubmitLoading = false;
+
   @observable userRoles = [];
 
   @observable businessAppDataById = null;
@@ -1146,6 +1148,7 @@ export class BusinessAppStore {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
           uiStore.setProgress(false);
+          this.setFieldvalue('appSubmitLoading', false);
           this.setFieldvalue('apiCall', false);
           reject(error);
         });
@@ -1250,6 +1253,7 @@ export class BusinessAppStore {
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
+          this.setFieldvalue('appSubmitLoading', false);
           reject(error);
         })
         .finally(() => {
