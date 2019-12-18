@@ -74,6 +74,15 @@ export default class OfferingDetails extends Component {
     if (access.level !== 'FULL') {
       navItems = navItems.filter(n => (n.title !== 'Close'));
     }
+    // add business application after Bonus Rewards
+    if (offer.applicationId && offer.issuerId) {
+      const pos = navItems.findIndex(n => n.to === 'bonus-rewards');
+      navItems.splice(
+        (pos + 1),
+        0,
+        { forced: `/dashboard/applications/completed/view/${offer.applicationId}/${offer.issuerId}/activity-history`, title: 'Business Application' },
+      );
+    }
     const { responsiveVars } = this.props.uiStore;
     return (
       <>
