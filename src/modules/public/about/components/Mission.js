@@ -26,6 +26,7 @@ class Mission extends Component {
           columns={4}
           className="team-gallery"
           match={this.props.match}
+          joinColumn
         />
         <Route
           path={`${this.props.match.url}/:id`}
@@ -55,10 +56,10 @@ class Mission extends Component {
                 </Grid.Column>
                 <Grid.Column width={8}>
                   <p>
-                    We are a fast-growing fintech company that enables everyday investors to invest directly in local businesses, enabling private companies across the US to raise capital directly from everyday investors. The Next Seed, Inc. operates NextSeed Services, LLC, a fully-integrated online investment platform, and NextSeed Securities, LLC, a forward-thinking investment banking practice.
+                    We are a fast-growing fintech company that empowers everyday investors to invest directly in local businesses, enabling private companies across the US to raise capital directly from their community. The Next Seed, Inc. operates NextSeed Services LLC, a fully-integrated online investment platform, and NextSeed Securities, LLC, a forward-thinking investment banking practice.
                   </p>
                   <p>
-                    We recently merged with Collaboration Capital, an SEC-registered investment adviser that focuses on impact and ESG investing strategies. Collaboration Capital was established in 2017 and has since become an industry leader in the impact/ESG investing space, currently with over $175 million AUM. Together, we aim to build a leading technology-driven impact investment firm open to everyone, furthering our mission to democratize finance.
+                    We recently acquired Collaboration Capital, an SEC-registered investment adviser that focuses on impact and ESG investing strategies. Collaboration Capital was established in 2017 and has since become an industry leader in the impact/ESG investing space, currently with over $175 million AUM. Together, we aim to build a leading technology-driven impact investment firm open to everyone, furthering our mission to democratize finance.
                   </p>
                 </Grid.Column>
               </Grid.Row>
@@ -80,9 +81,9 @@ class Mission extends Component {
                 <Card.Content className="bg-offwhite">
                   <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>Top 3%</Statistic.Value>
-                    <Statistic.Label className="grey-header">Business applicants approved and launched campaigns</Statistic.Label>
+                    <Statistic.Label className="grey-header">Business applicants approved and launched campaigns<sup>1</sup></Statistic.Label>
                     <Statistic.Value>90%+</Statistic.Value>
-                    <Statistic.Label className="grey-header">Campaigns meet fundraising goals</Statistic.Label>
+                    <Statistic.Label className="grey-header">Campaigns meet fundraising goals<sup>2</sup></Statistic.Label>
                   </Statistic>
                 </Card.Content>
               </Card>
@@ -112,9 +113,9 @@ class Mission extends Component {
                 <Card.Content className="bg-offwhite">
                   <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>$10.6 million</Statistic.Value>
-                    <Statistic.Label className="grey-header">Invested in women and minority-owned businesses</Statistic.Label>
+                    <Statistic.Label className="grey-header">Invested in women and minority-owned businesses<sup>3</sup></Statistic.Label>
                     <Statistic.Value>&gt;75% </Statistic.Value>
-                    <Statistic.Label className="grey-header">Investment dollars go to women or minority-owned businesses</Statistic.Label>
+                    <Statistic.Label className="grey-header">Investment dollars go to women or minority-owned businesses<sup>4</sup></Statistic.Label>
                   </Statistic>
                 </Card.Content>
               </Card>
@@ -141,7 +142,7 @@ class Mission extends Component {
             <Grid centered>
               <Grid.Column textAlign={responsiveVars.isMobile ? 'left' : 'center'} computer={15} tablet={14} mobile={16}>
                 <Header as="h2" className={responsiveVars.isMobile ? 'mb-10' : 'mb-30'}>Meet our team</Header>
-                <p className={responsiveVars.isMobile ? 'mb-40' : 'mb-60'}>
+                <p className={`${responsiveVars.isMobile ? 'mb-40' : 'mb-60'} neutral-text1`}>
                   We{"'"}re a team of entrepreneurs with backgrounds in business, finance, law, marketing and technology.<Responsive minWidth={992} as="br" /> We{"'"}re here to empower business owners and everyday people to invest in one another.
                 </p>
                 {loading ? (<InlineLoader />)

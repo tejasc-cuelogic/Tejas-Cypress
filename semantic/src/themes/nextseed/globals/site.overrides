@@ -1144,6 +1144,20 @@ footer{
 			@media only screen and (max-width : @largestMobileScreen){
 				padding: 0 !important;
 			}
+			&:last-child {
+				padding: @70px @20px !important;
+				@media only screen and (max-width : @largestSmallMonitor){
+					padding: @56px 0 !important;
+				}
+				a {
+					text-decoration: none;
+					.icon {
+						margin: 0 0 0 @10px;
+						vertical-align: middle;
+     					line-height: 1;
+					}
+				}
+			}
 		}
 	}
 	.team-overlay h4.ui.header {
