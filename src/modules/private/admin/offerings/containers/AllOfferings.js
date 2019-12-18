@@ -7,6 +7,7 @@ import { DataFormatter } from '../../../../../helper';
 import Listing from '../components/Listing';
 import DraggableListing from '../components/DraggableListing';
 import AllLiveOfferings from '../components/allLiveOfferings';
+import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
 
 @inject('uiStore', 'navStore', 'offeringsStore')
@@ -48,6 +49,8 @@ export default class Offerings extends Component {
   render() {
     const { match } = this.props;
     const { stage } = this.props.match.params;
+    const isDev = !['production', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV);
+
     const {
       filters,
       requestState,
@@ -73,7 +76,9 @@ export default class Offerings extends Component {
                         {stage === 'creation'
                           && <Button color="green" as={Link} to={`${match.url}/new`} loading={inProgressArray.includes('upsert')} content="Create New Offering" />
                         }
-                        <Button color="green" as={Link} to={match.url} className="relaxed" content="Export" />
+                        {isDev
+                          && <Button color="green" as={Link} to={match.url} className="relaxed" content="Export" />
+                        }
                       </Button.Group>
                     </Grid.Column>
                   </>
