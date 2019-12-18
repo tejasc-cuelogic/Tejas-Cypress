@@ -13,7 +13,7 @@ import IdentityVerification from '../../accountSetup/containers/identityVerifica
 import EstablishProfile from '../../accountSetup/containers/establishProfile';
 import Helper from '../../../../../helper/utility';
 import ProccessingAccountsScreen from '../components/processingAccountsScreen';
-import StickyNotification from '../../accountSetup/components/StickyNotification';
+import StickyNotification from '../components/stickyNotification';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const summaryDetails = ({
@@ -70,7 +70,7 @@ export default class Dashboard extends Component {
       signupStatus,
     } = this.props.userDetailsStore;
     const isInitialAccountProcessing = signupStatus.activeAccounts.length === 0
-    && signupStatus.processingAccounts.length > 0;
+      && signupStatus.processingAccounts.length > 0;
     if (summaryLoading) {
       return <InlineLoader />;
     }
@@ -86,15 +86,15 @@ export default class Dashboard extends Component {
           }
           P5={!get(multipleUserAccounts, 'noAccounts')
             ? (
-            <StickyNotification
-              isInvestor
-              {...this.props}
-              signupStatus={signupStatus}
-              userDetailsStore={this.props.userDetailsStore}
-              multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
-              accountId={get(multipleUserAccounts, 'accountId') || null}
-              accountType={get(multipleUserAccounts, 'accountType') || null}
-            />
+              <StickyNotification
+                isInvestor
+                {...this.props}
+                signupStatus={signupStatus}
+                userDetailsStore={this.props.userDetailsStore}
+                multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
+                accountId={get(multipleUserAccounts, 'accountId') || null}
+                accountType={get(multipleUserAccounts, 'accountType') || null}
+              />
             ) : ''}
         >
           {
@@ -116,7 +116,7 @@ export default class Dashboard extends Component {
                               </Card.Content>
                             </Card>
                           ) : null
-              }
+                        }
                       </>
                     )
                     : (
@@ -129,7 +129,7 @@ export default class Dashboard extends Component {
                         </Card>
                       </>
                     )
-          }
+                  }
                 </>
               )
           }

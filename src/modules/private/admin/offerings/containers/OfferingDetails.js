@@ -75,7 +75,7 @@ export default class OfferingDetails extends Component {
       navItems = navItems.filter(n => (n.title !== 'Close'));
     }
     // add business application after Bonus Rewards
-    if (offer.applicationId && offer.issuerId) {
+    if (offer.stage === 'CREATION' && offer.applicationId && offer.issuerId) {
       const pos = navItems.findIndex(n => n.to === 'bonus-rewards');
       navItems.splice(
         (pos + 1),
