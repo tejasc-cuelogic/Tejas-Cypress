@@ -101,6 +101,8 @@ export class BusinessAppStore {
 
   @observable enableSave = false;
 
+  @observable apiCall = false;
+
   @observable showUserError = false;
 
   @observable sourcesTotal = 0;
@@ -1125,6 +1127,7 @@ export class BusinessAppStore {
   @action
   businessApplicationSubmitAction = () => {
     uiStore.setProgress();
+    this.setFieldvalue('apiCall', true);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -1135,15 +1138,16 @@ export class BusinessAppStore {
           refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
+          uiStore.setProgress(false);
+          this.setFieldvalue('apiCall', false);
           resolve(result);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
-          reject(error);
-        })
-        .finally(() => {
           uiStore.setProgress(false);
+          this.setFieldvalue('apiCall', false);
+          reject(error);
         });
     });
   }
