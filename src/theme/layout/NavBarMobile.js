@@ -51,13 +51,13 @@ export default class NavBarMobile extends Component {
       navTitle = 'For Investors';
     } else if (location.pathname.startsWith('/business') && !location.pathname.startsWith('/business-application/')) {
       navTitle = 'For Businesses';
-    } else if (location.pathname.startsWith('/resources/education-center')) {
+    } else if (location.pathname.startsWith('/education-center')) {
       navTitle = 'Education';
-    } else if (location.pathname.startsWith('/resources/insights')) {
+    } else if (location.pathname.startsWith('/insights')) {
       navTitle = 'Insights';
     } else if (location.pathname.startsWith('/offerings')) {
       navTitle = '';
-    } else if (location.pathname.startsWith('/agreements/legal')) {
+    } else if (location.pathname.startsWith('/legal')) {
       navTitle = 'Legal';
     }
     const { signupStatus, pendingStep } = userDetailsStore;
