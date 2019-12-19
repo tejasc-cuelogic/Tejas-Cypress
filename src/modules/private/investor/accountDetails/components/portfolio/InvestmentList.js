@@ -22,8 +22,8 @@ const INVESTMENT_CARD_META = [
   { label: 'Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%` },
   { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months` },
   { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], getRowValue: value => <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(value, false, false, false)} /> },
-  { label: 'Principal Remaining', key: '', for: ['active'] }, // pending
-  { label: 'Net Payments Recieved', key: 'netPaymentsReceived', for: ['completed'] },
+  { label: 'Net Payments Recieved', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}` },
+  { label: 'Principal Remaining', key: 'remainingPrincipal', for: ['active'], getRowValue: value => `$${value}` }, // pending
   { label: 'Realized Multiple', key: 'offering.closureSummary.keyTerms.multiple', getRowValue: value => `${value}x`, for: ['completed'] },
 ];
 
@@ -86,7 +86,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 const InvestmentList = (props) => {
   const listHeader = {
     pending: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Days to close'],
-    active: ['Offering', 'Invested Amount', 'Status', 'Close Date', 'Term', 'Net Payments Received'],
+    active: ['Offering', 'Invested Amount', 'Status', 'Close Date', 'Term', 'Net Payments Received', 'Principal Remaining'],
     completed: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Close Date', 'Net Payments Received'],
   }[props.listOf];
 
@@ -172,7 +172,15 @@ const InvestmentList = (props) => {
                 {props.listOf !== 'pending'
                   && (
                     <Table.Cell>
-                      {Helper.MoneyMathDisplayCurrency(get(data, 'netPaymentsReceived') || 0)}
+                      {Helper.MoneyMathDisplayCurrency(get(data, 'netPaymentsReceived') || '0.00')}
+                    </Table.Cell>
+                  )
+                }
+
+                {props.listOf === 'active'
+                  && (
+                    <Table.Cell>
+                      {Helper.MoneyMathDisplayCurrency(get(data, 'remainingPrincipal') || '0.00')}
                     </Table.Cell>
                   )
                 }
@@ -246,7 +254,7 @@ const InvestmentList = (props) => {
     ) : (
       <Accordion fluid styled className="card-style portfolio-list">
       <Accordion.Title onClick={() => props.toggleAccordion(props.listOf)} active={isActive} className="text-capitalize">
-        <Icon className={`ns-chevron-${isActive ? 'up' : 'down'}`} />
+        <Icon className={`ns-chevron-${isActive ? 'up' : 'right'}`} />
         {`${props.listOf} (${props.listOfCount})`}
       </Accordion.Title>
       <Accordion.Content className="bg-offwhite" active={!props.inActiveItems.includes(props.listOf)}>
