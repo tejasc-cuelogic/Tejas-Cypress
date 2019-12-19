@@ -280,16 +280,21 @@ export default class Leader extends Component {
             placeHolder="Street Address, City, State, Zip"
           />
           <Form.Group widths="equal">
-            {
-              ['city', 'state'].map(field => (
-                <FormInput
-                  displayMode={isReadonly}
-                  name={field}
-                  fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
-                  changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
-                />
-              ))
-            }
+            <FormInput
+              displayMode={isReadonly}
+              name="city"
+              fielddata={LEADERSHIP_FRM.fields.leadership[index].city}
+              changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
+            />
+            <FormDropDown
+              name="state"
+              fielddata={LEADERSHIP_FRM.fields.leadership[index].state}
+              value={LEADERSHIP_FRM.fields.leadership[index].state}
+              options={US_STATES_FOR_INVESTOR}
+              selection
+              onChange={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
+              placeholder="Texas"
+            />
             <MaskedInput
               displayMode={isReadonly}
               name="zip"
