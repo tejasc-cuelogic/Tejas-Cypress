@@ -32,9 +32,7 @@ import {
   getBusinessApplications,
   createBusinessApplicationPrequalificaiton,
   createBusinessApplicationBasicInfo,
-  upsertBusinessApplicationInformationPerformance,
-  upsertBusinessApplicationInformationBusinessDetails,
-  upsertBusinessApplicationInformationDocumentation,
+  upsertBusinessApplicationInformation,
   submitApplication,
   helpAndQuestion,
 } from '../../queries/businessApplication';
@@ -93,6 +91,8 @@ export class BusinessAppStore {
 
   @observable userExists = false;
 
+  @observable appSubmitLoading = false;
+
   @observable userRoles = [];
 
   @observable businessAppDataById = null;
@@ -100,6 +100,8 @@ export class BusinessAppStore {
   @observable applicationIssuerId = null;
 
   @observable enableSave = false;
+
+  @observable apiCall = false;
 
   @observable showUserError = false;
 
@@ -415,7 +417,7 @@ export class BusinessAppStore {
     if (data) {
       this.appStepsStatus[1].status = data.stepStatus;
       data.debts.forEach((ele, key) => {
-        ['amount', 'interestExpenses', 'remainingPrincipal', 'term', 'maturityDate', 'termStartDate'].forEach((field) => {
+        ['amount', 'interestExpenses', 'remainingPrincipal', 'term', 'maturityDate', 'termStartDate', 'creditorName', 'existingLienOnBusiness'].forEach((field) => {
           this.BUSINESS_DETAILS_FRM.fields.debts[key][field].value = ele[field];
         });
         if (key < data.debts.length - 1) {
@@ -754,6 +756,8 @@ export class BusinessAppStore {
         term: this.getValidDataForInt(item.term),
         termStartDate: item.termStartDate.value ? moment(item.termStartDate.value).format('MM/DD/YYYY') : null,
         maturityDate: item.maturityDate.value ? moment(item.maturityDate.value).format('MM/DD/YYYY') : null,
+        creditorName: item.creditorName.value,
+        existingLienOnBusiness: item.existingLienOnBusiness.value,
       })),
       owners: data.owners.map(item => ({
         fullLegalName: this.getValidDataForString(item.fullLegalName),
@@ -1123,6 +1127,7 @@ export class BusinessAppStore {
   @action
   businessApplicationSubmitAction = () => {
     uiStore.setProgress();
+    this.setFieldvalue('apiCall', true);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -1133,15 +1138,17 @@ export class BusinessAppStore {
           refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
+          uiStore.setProgress(false);
+          this.setFieldvalue('apiCall', false);
           resolve(result);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
-          reject(error);
-        })
-        .finally(() => {
           uiStore.setProgress(false);
+          this.setFieldvalue('appSubmitLoading', false);
+          this.setFieldvalue('apiCall', false);
+          reject(error);
         });
     });
   }
@@ -1172,7 +1179,6 @@ export class BusinessAppStore {
       key = 3;
     }
     stepStatus = isPartialDataFlag ? 'IN_PROGRESS' : 'COMPLETE';
-    let mutationQuery = upsertBusinessApplicationInformationBusinessDetails;
     let variableData = {
       applicationId: isApplicationManager ? this.applicationId : this.currentApplicationId,
       applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE',
@@ -1196,14 +1202,12 @@ export class BusinessAppStore {
         ...variableData,
         businessPerformance: data,
       };
-      mutationQuery = upsertBusinessApplicationInformationPerformance;
     } else if (stepName === 'DOCUMENTATION') {
       data = this.getFormatedDocumentationData;
       variableData = {
         ...variableData,
         businessDocumentation: data,
       };
-      mutationQuery = upsertBusinessApplicationInformationDocumentation;
     }
     if (isApplicationManager) {
       variableData.targetIssuerId = this.businessApplicationDetailsAdmin.userId;
@@ -1212,7 +1216,7 @@ export class BusinessAppStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: mutationQuery,
+          mutation: upsertBusinessApplicationInformation,
           variables: variableData,
           refetchQueries: [
             {
@@ -1231,7 +1235,7 @@ export class BusinessAppStore {
             if (this.canSubmitApp && this.businessApplicationDetailsAdmin.applicationStage === 'IN_PROGRESS') {
               this.businessApplicationSubmitAction().then(() => {
                 Helper.toast('Business application submitted successfully!', 'success');
-                this.props.history.push('/app/dashboard');
+                this.props.history.push('/dashboard');
                 resolve(result);
               });
             } else {
@@ -1244,6 +1248,7 @@ export class BusinessAppStore {
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
+          this.setFieldvalue('appSubmitLoading', false);
           reject(error);
         })
         .finally(() => {

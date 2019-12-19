@@ -16,7 +16,7 @@ class LegalDetails extends React.Component {
     if ((this.props.userDetailsStore.signupStatus.isMigratedFullAccount
       && this.props.match.url !== this.props.userDetailsStore.pendingStep)
       || this.props.userDetailsStore.isLegaLVerificationDone) {
-      this.props.history.push('/app/setup');
+      this.props.history.push('/dashboard/setup');
     }
   }
 
@@ -168,12 +168,12 @@ class LegalDetails extends React.Component {
               )
             }
             <div className="center-align mt-30">
-              <Button primary size="large" className="very relaxed" content="Verify my identity" disabled={inProgress} />
+              <Button primary size="large" className="very relaxed" content="Verify my identity" disabled={!form.meta.isValid || inProgress} />
             </div>
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><Link to="/app/setup" onClick={close}>I’ll finish this later</Link></p>
+          <p><Link to="/dashboard/setup" onClick={close}>I’ll finish this later</Link></p>
         </Modal.Actions>
       </Modal>
     );

@@ -44,8 +44,8 @@ export const allUsersQuery = gql`
 `;
 
 export const userDetailsQueryForBoxFolder = gql`
-  query getUserDetails($userId: ID!) {
-    user(id: $userId) {
+  query getUserDetails($userId: String) {
+    user(userId: $userId) {
       id
       storageDetails
     }
@@ -53,8 +53,8 @@ export const userDetailsQueryForBoxFolder = gql`
 `;
 
 export const userDetailsQuery = gql`
-  query getUserDetails($userId: ID!) {
-    user(id: $userId) {
+  query getUserDetails($userId: String) {
+    user(userId: $userId) {
       id
       userHash
       wpUserId
@@ -266,8 +266,8 @@ export const userDetailsQuery = gql`
 `;
 
 export const selectedUserDetailsQuery = gql`
-  query getUserDetails($userId: ID!) {
-    user(id: $userId) {
+  query getUserDetails($userId: String) {
+    user(userId: $userId) {
       id
       skipAddressVerifyCheck
       skipPhoneVerifyCheck
@@ -494,8 +494,8 @@ export const selectedUserDetailsQuery = gql`
 `;
 
 export const userAccreditationQuery = gql`
-  query userAccreditationQuery($userId: ID!) {
-    user(id: $userId) {
+  query userAccreditationQuery($userId: String) {
+    user(userId: $userId) {
       id
       roles {
         name
@@ -581,31 +581,9 @@ export const userAccreditationQuery = gql`
   }
 `;
 
-export const createUserMutation = gql`
-  mutation createUser($name: String!, $email: String!, $city: String!, $state: String!, $ssn: String!, $dateOfBirth: DateTime!, ) {
-    createUser(name: $name, email: $email, city: $city, state: $state, ssn: $ssn, dateOfBirth: $dateOfBirth) {
-      id
-      name
-      email
-      city
-      state
-      ssn
-      dateOfBirth
-    }
-  }
-`;
 export const resetPasswordExpirationForCognitoUser = gql`
-  mutation _resetPasswordExpirationDurationForCognitoUser($emailAddress: String!) {
+  mutation resetPasswordExpirationDurationForCognitoUser($emailAddress: String!) {
     resetPasswordExpirationDurationForCognitoUser (emailAddress: $emailAddress)
-  }
-`;
-
-
-export const deleteUserMutation = gql`
-  mutation deleteUser($id:  ID! ) {
-    deleteUser(id: $id) {
-      id
-    }
   }
 `;
 
@@ -617,25 +595,8 @@ export const toggleUserAccount = gql`
   }
 `;
 
-export const userSubscription = gql`
-  subscription {
-    User(filter: { mutation_in: [CREATED, UPDATED, DELETED] }) {
-      mutation
-      node {
-        id
-        name
-        email
-        city
-        state
-        ssn
-        dateOfBirth
-      }
-    }
-  }
-`;
-
 export const adminAddUser = gql`
-  mutation _createUser($userDetails: UserInputObjectType! ){
+  mutation createUser($userDetails: UserInputObjectType! ){
     createUser(userDetails: $userDetails) {
         id
       }
@@ -654,7 +615,7 @@ mutation skipAddressOrPhoneValidationCheck($userId: String!, $shouldSkip: Boolea
 export const deleteProfile = gql`
 mutation adminDeleteInvestorOrIssuerUser($userId: String, $reason: String) {
   adminDeleteInvestorOrIssuerUser(
-     cognitoUUId: $userId
+     userId: $userId
      reason: $reason
   ) {
     status
@@ -665,7 +626,7 @@ mutation adminDeleteInvestorOrIssuerUser($userId: String, $reason: String) {
 export const adminHardDeleteUser = gql`
 mutation adminHardDeleteUser($userId: String!, $reason: String) {
   adminHardDeleteUser(
-     cognitoUUId: $userId
+     userId: $userId
      reason: $reason
   ) {
     status
@@ -674,9 +635,8 @@ mutation adminHardDeleteUser($userId: String!, $reason: String) {
  }`;
 
 export const frozenEmailToAdmin = gql`
-mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
+mutation notifyAdminFrozenAccountActivity($accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
   notifyAdminFrozenAccountActivity(
-     userId: $userId
      accountId: $accountId
      activity: $activity
      offeringId: $offeringId
@@ -703,7 +663,7 @@ query investorAccountDeleteProcess {
 `;
 
 export const getEmailList = gql`
-query _fetchEmails ($recipientId: String!, $subject: String, $fromDate: String, $toDate: String, $limit: Int, $lek: String){
+query fetchEmails ($recipientId: String!, $subject: String, $fromDate: String, $toDate: String, $limit: Int, $lek: String){
   fetchEmails(
     recipientId: $recipientId
     subject: $subject

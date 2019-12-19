@@ -5,8 +5,8 @@ import cleanDeep from 'clean-deep';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
-import { getCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountDecline, crowdPayAccountValidate, createIndividualAccount, getDecryptedGoldstarAccountNumber } from '../../queries/CrowdPay';
-import { crowdPayAccountNotifyGs } from '../../queries/account';
+import { getCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountDecline, crowdPayAccountValidate, getDecryptedGoldstarAccountNumber } from '../../queries/CrowdPay';
+import { crowdPayAccountNotifyGs, submitInvestorAccount } from '../../queries/account';
 import { FILTER_META, CROWDPAY_FILTERS, CONFIRM_CROWDPAY, CROWDPAY_ACCOUNTS_STATUS } from '../../../constants/crowdpayAccounts';
 import Helper from '../../../../helper/utility';
 import { uiStore, individualAccountStore } from '../../index';
@@ -61,7 +61,7 @@ export class CrowdpayStore {
     DECLINE: crowdPayAccountReview,
     ACCOUNT_DECLINE: crowdPayAccountDecline,
     VALIDATE: crowdPayAccountValidate,
-    CREATEACCOUNT: createIndividualAccount,
+    CREATEACCOUNT: submitInvestorAccount,
   }
 
   @action

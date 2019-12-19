@@ -71,10 +71,7 @@ export const USER_IDENTITY = {
     label: 'Title',
     placeHolder: 'Select',
     error: undefined,
-    rule: 'required',
-    customErrors: {
-      required: '* required.',
-    },
+    rule: 'optional',
     objRefOutput: 'legalName',
     objRef: 'legalDetails.legalName',
   },

@@ -127,7 +127,7 @@ export class AccountStore {
     const accountId = get(accountDetails, 'details.accountId') || store[`${accountType}AccountId`];
     await this.updateToAccountProcessing(accountId, accountvalue);
     window.sessionStorage.removeItem('cipErrorMessage');
-    const url = store.showProcessingModal ? `${match.url}/${accountType}/processing` : '/app/setup';
+    const url = store.showProcessingModal ? `${match.url}/${accountType}/processing` : '/dashboard/setup';
     store.setFieldValue('showProcessingModal', false);
     return url;
   }

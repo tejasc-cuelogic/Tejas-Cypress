@@ -53,7 +53,7 @@ class Disclosure extends Component {
           {
             !this.props.userStore.currentUser
               ? <Button as={Link} to={`/${stepInRoute.to}`} primary content={stepInRoute.title} className="mt-20 mb-50" />
-              : <Button as={Link} to="/app/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
+              : <Button as={Link} to="/dashboard/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
           }
         </section>
       );

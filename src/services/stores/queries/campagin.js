@@ -127,12 +127,6 @@ export const getOfferingById = gql`
   }
 `;
 
-export const isValidInvestorInOffering = gql`
-  query isValidInvestorInOffering ($offeringId: String!, $userId: String!, $offeringStage: OfferingStageEnumType!) {
-    isValidInvestorInOffering (offeringId: $offeringId, userId: $userId, offeringStage: $offeringStage)
-  }
-`;
-
 export const campaignDetailsQuery = gql`
   query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
@@ -335,7 +329,6 @@ export const campaignDetailsAdditionalQuery = gql`
   query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
-    isInvestedInOffering
     comments {
       id
       scope
