@@ -2,14 +2,19 @@ import React, { Component } from 'react';
 import { Header, Grid, Reveal } from 'semantic-ui-react';
 import { inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
+import scrollIntoView from 'scroll-into-view';
 import LazyLoad from 'react-lazyload';
 import { Image64 } from '../../../../theme/shared';
 
 @inject('teamStore')
 class teamList extends Component {
+  handleScroll = () => {
+    scrollIntoView(document.querySelector('#job-position'), { align: { top: 0, topOffset: 70 } });
+  }
+
   render() {
     const {
-      columns, className, match, joinColumn,
+      columns, className, match, joinColumn, hasJob,
     } = this.props;
     const { teamMembers } = this.props.teamStore;
     return (
@@ -35,14 +40,12 @@ class teamList extends Component {
           {joinColumn
             && (
               <Grid.Column verticalAlign="middle" className={`${(teamMembers.length % 2 === 0) && 'centered'}`}>
-                <Link to="/">
-                  <Header as="h4" textAlign="center">
-                    Join our team
-                <Header.Subheader className="mt-10 hightlight-text">
-                      See open positions
-                </Header.Subheader>
-                  </Header>
-                </Link>
+                <Header onClick={this.handleScroll} as="h4" textAlign="center">
+                  Join our team
+                  <Header.Subheader className={`mt-10 ${hasJob ? 'highlight-text' : ''}`}>
+                    {hasJob ? 'See open positions' : 'No open positions at this time'}
+                  </Header.Subheader>
+                </Header>
               </Grid.Column>
             )}
         </Grid>

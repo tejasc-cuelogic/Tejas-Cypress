@@ -72,6 +72,16 @@
     &.capital-list{
         column-count: 2;
     }
+    &.job-list>.item{
+        .header, .content{
+            line-height: 26px;
+            font-weight: @normal;
+        }
+        &:last-child{
+            padding-bottom: @14px;
+            border-bottom: 1px solid rgba(34,36,38,.15);
+        }
+    }
 }
 //  Public page Ends
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Container, Grid, Statistic, Responsive, Divider, Icon, Card } from 'semantic-ui-react';
+import { Header, Container, Grid, Statistic, Responsive, Divider, Icon, Card, List } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import NSImage from '../../../shared/NSImage';
@@ -9,21 +9,24 @@ import TeamList from './TeamList';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('teamStore', 'uiStore')
+@inject('teamStore', 'uiStore', 'publicStore')
 @observer
 class Mission extends Component {
   constructor(props) {
     super(props);
     props.teamStore.initRequest();
+    props.publicStore.getJobListing();
   }
 
   render() {
     const { teamMembers, loading } = this.props.teamStore;
     const { responsiveVars } = this.props.uiStore;
+    const { jobsList } = this.props.publicStore;
     const teamInfo = (
       <Grid centered className="team-list">
         <TeamList
           columns={4}
+          hasJob={jobsList.length}
           className="team-gallery"
           match={this.props.match}
           joinColumn={responsiveVars.isMobile}
@@ -145,7 +148,7 @@ class Mission extends Component {
                   We{"'"}re a team of entrepreneurs with backgrounds in business, finance, law, marketing and technology.<Responsive minWidth={992} as="br" /> We{"'"}re here to empower business owners and everyday people to invest in one another.
                 </p>
                 {loading ? (<InlineLoader />)
-                  : teamMembers.length === 0 ? <section className="center-align"><h3 style={{ color: '#31333d7d' }}>No Records to Display</h3></section>
+                  : teamMembers.length === 0 ? <section className="center-align"><h3 style={{ color: '#31333d' }}>No Records to Display</h3></section>
                     : teamInfo}
               </Grid.Column>
             </Grid>
@@ -158,12 +161,12 @@ class Mission extends Component {
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
                 <Header as="h2" className="mb-30">Democratize finance. <Responsive minWidth={992} as="br" />Create change. <Responsive minWidth={992} as="br" />Join our team.</Header>
                 {responsiveVars.isMobile
-                && <NSImage path="collage.jpg" className="mb-30" fluid />}
+                  && <NSImage path="collage.jpg" className="mb-30" fluid />}
                 <p>
-                We’re just getting started in our journey to shape the future of finance in local communities. We’re looking for talented and motivated individuals who are seeking an adventure to learn new skills and cover new ground.
+                  We’re just getting started in our journey to shape the future of finance in local communities. We’re looking for talented and motivated individuals who are seeking an adventure to learn new skills and cover new ground.
                 </p>
                 {!responsiveVars.isMobile
-                && <Divider hidden />}
+                  && <Divider hidden />}
                 <p>
                   If you are a self-starter and love working in a dynamic environment, NextSeed may be the place for you.
                 </p>
@@ -178,6 +181,27 @@ class Mission extends Component {
                     <NSImage path="collage.jpg" fluid />
                   </Grid.Column>
                 )}
+                <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
+                {loading
+                  ? (<InlineLoader />)
+                  : (
+                    <div id="job-position">
+                      <Header as="h3" className={responsiveVars.isMobile ? 'mt-40' : 'mt-50'}>Current Positions</Header>
+                      <List divided relaxed="very" className="job-list">
+                        {jobsList.map(i => (
+                          <List.Item onClick={() => this.openDoc(i.BOX_FILE_ID)}>
+                            <List.Content>
+                              <List.Header className="highlight-text">{i.POSITION}</List.Header>
+                              <List.Description className="neutral-text">{`${i.CITY} ${i.STATE}`}</List.Description>
+                            </List.Content>
+                          </List.Item>
+                        ))
+                        }
+                      </List>
+                    </div>
+                  )
+                }
+                </Grid.Column>
             </Grid>
           </Container>
         </section>
