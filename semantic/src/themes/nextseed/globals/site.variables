@@ -42,7 +42,7 @@
 @emSize   : 14px;
 
 /* The size of page text  */
-@fontSize : 15px;
+@fontSize : 17px;
 
 
 /*-------------------
@@ -135,7 +135,7 @@
 @pageBackground      : #FFFFFF;
 @pageOverflowX       : hidden;
 
-@lineHeight          : 1.571428em;
+@lineHeight          : 26px;
 @textColor           : @neutral;
 
 /*-------------------

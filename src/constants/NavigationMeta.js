@@ -771,7 +771,7 @@ export const MOBILE_NAV = [
   },
   { title: 'Settings', to: 'app/account-settings', isLoggedIn: true },
   { title: 'Add New Account', to: 'app/setup/account-creation', isLoggedIn: true },
-  { title: 'For Investor', to: 'how-it-works/investors' },
+  { title: 'For Investors', to: 'how-it-works/investors' },
   { title: 'For Businesses', to: 'how-it-works/business' },
   { title: 'Education Center', to: 'resources/education-center' },
   { title: 'Who We Are', to: 'about' },

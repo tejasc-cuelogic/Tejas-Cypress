@@ -71,7 +71,7 @@
 		}
 	}
 	>.label {
-		font-size: @15px;
+		font-size: @17px;
 		text-align: left;
 		text-transform: none;
 		font-weight: @normal;

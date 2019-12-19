@@ -4,9 +4,6 @@ import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Header, Container, Button, Dimmer, Loader } from 'semantic-ui-react';
 
-const { clientWidth } = document.documentElement;
-const isTablet = clientWidth >= 768 && clientWidth < 992;
-
 @inject('navStore', 'userDetailsStore', 'authStore', 'userStore', 'uiStore')
 @observer
 class Banner extends Component {
@@ -31,7 +28,7 @@ class Banner extends Component {
               { showButton
                 ? (
                   <Button
-                    className={`${!isTablet && 'mt-30'} relaxed`}
+                    className="relaxed"
                     primary
                     content="Get Started"
                     as={Link}

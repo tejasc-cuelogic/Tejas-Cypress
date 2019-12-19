@@ -14,6 +14,9 @@
             color: @primary-one !important;
             font-weight: @fontMedium;
         }
+        &.primary{
+            border: 0;
+        }
     }
 }
 //  Public Page Ends

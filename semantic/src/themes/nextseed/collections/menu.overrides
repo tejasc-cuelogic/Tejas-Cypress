@@ -834,7 +834,7 @@ footer .ui.text.menu{
             border-bottom: 0;
             padding: @8px @22px;
             .ui.button.basic{
-                box-shadow:0 0 0 1px @thumbInactiveBackground inset !important;
+                box-shadow:0 0 0 1px @primary-one inset !important;
                 border:none !important;
             }
         }

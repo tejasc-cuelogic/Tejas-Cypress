@@ -149,7 +149,7 @@ export default class WhyNextseed extends Component {
                 <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle">
                   <div>
                     <Header as="h2">Your portfolio at<Responsive as="br" minWidth={768} /> your fingertips</Header>
-                    <p className="mb-30 mt-20">
+                    <p className="mb-30 mt-30">
                       See how your investments are performing<Responsive as="br" minWidth={768} /> and reinvest any earnings effortlessly with<Responsive as="br" minWidth={768} /> our easy-to-use dashboard.</p>
                     {!userStore.isInvestor && !responsiveVars.isMobile
                       && (

@@ -26,7 +26,7 @@ class Mission extends Component {
           columns={4}
           className="team-gallery"
           match={this.props.match}
-          joinColumn
+          joinColumn={responsiveVars.isMobile}
         />
         <Route
           path={`${this.props.match.url}/:id`}
@@ -44,7 +44,7 @@ class Mission extends Component {
               <Grid.Row>
                 <Grid.Column textAlign={isMobile ? 'left' : 'center'}>
                   <Header as="h2" className={isMobile ? 'mb-10' : 'mb-60'}>
-                    Invest in each other. Grow together
+                    Invest in each other. Grow together.
                   </Header>
                 </Grid.Column>
               </Grid.Row>
@@ -74,48 +74,48 @@ class Mission extends Component {
               <Card className={`${responsiveVars.isMobile ? 'mlr-0' : ''} bordered`}>
                 <Card.Content extra>
                   <Header as="h3" className="mb-10">Trust</Header>
-                  <p>
+                  <p className="neutral-text">
                     Our team of experts vet every offering on our platform, giving people real opportunities to invest in businesses they believe in.
                   </p>
                 </Card.Content>
                 <Card.Content className="bg-offwhite">
                   <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>Top 3%</Statistic.Value>
-                    <Statistic.Label className="grey-header">Business applicants approved and launched campaigns<sup>1</sup></Statistic.Label>
+                    <Statistic.Label className="neutral-text">Business applicants approved and launched campaigns<sup>1</sup></Statistic.Label>
                     <Statistic.Value>90%+</Statistic.Value>
-                    <Statistic.Label className="grey-header">Campaigns meet fundraising goals<sup>2</sup></Statistic.Label>
+                    <Statistic.Label className="neutral-text">Campaigns meet fundraising goals<sup>2</sup></Statistic.Label>
                   </Statistic>
                 </Card.Content>
               </Card>
               <Card className={`${responsiveVars.isMobile ? 'mlr-0' : ''} bordered`}>
                 <Card.Content extra>
                   <Header as="h3" className="mb-10">Innovation</Header>
-                  <p>
+                  <p className="neutral-text">
                     We’re reinventing how local economies can grow from within by offering access to new forms of investments and capital.
                   </p>
                 </Card.Content>
                 <Card.Content className="bg-offwhite">
                   <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>May 2016</Statistic.Value>
-                    <Statistic.Label className="grey-header">NextSeed US LLC became the first Funding Portal registered by the SEC</Statistic.Label>
+                    <Statistic.Label className="neutral-text">NextSeed US LLC became the first Funding Portal registered by the SEC</Statistic.Label>
                     <Statistic.Value>October 2018</Statistic.Value>
-                    <Statistic.Label className="grey-header">NextSeed Securities, LLC is licensed and registered with the SEC as a broker-dealer</Statistic.Label>
+                    <Statistic.Label className="neutral-text">NextSeed Securities, LLC is licensed and registered with the SEC as a broker-dealer</Statistic.Label>
                   </Statistic>
                 </Card.Content>
               </Card>
               <Card className={`${responsiveVars.isMobile ? 'mlr-0' : ''} bordered`}>
                 <Card.Content extra>
                   <Header as="h3" className="mb-10">Community</Header>
-                  <p>
+                  <p className="neutral-text">
                     We empower entrepreneurs from all walks of life to follow their dreams and give back to their communities.
                   </p>
                 </Card.Content>
                 <Card.Content className="bg-offwhite">
                   <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>$10.6 million</Statistic.Value>
-                    <Statistic.Label className="grey-header">Invested in women and minority-owned businesses<sup>3</sup></Statistic.Label>
+                    <Statistic.Label className="neutral-text">Invested in women and minority-owned businesses<sup>3</sup></Statistic.Label>
                     <Statistic.Value>&gt;75% </Statistic.Value>
-                    <Statistic.Label className="grey-header">Investment dollars go to women or minority-owned businesses<sup>4</sup></Statistic.Label>
+                    <Statistic.Label className="neutral-text">Investment dollars go to women or minority-owned businesses<sup>4</sup></Statistic.Label>
                   </Statistic>
                 </Card.Content>
               </Card>
@@ -156,7 +156,7 @@ class Mission extends Component {
           <Container>
             <Grid centered reversed="mobile">
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
-                <Header as="h2" className="mb-30">Democratize finance.<Responsive minWidth={992} as="br" />Create change.<Responsive minWidth={992} as="br" />Join our team.</Header>
+                <Header as="h2" className="mb-30">Democratize finance. <Responsive minWidth={992} as="br" />Create change. <Responsive minWidth={992} as="br" />Join our team.</Header>
                 {responsiveVars.isMobile
                 && <NSImage path="collage.jpg" className="mb-30" fluid />}
                 <p>

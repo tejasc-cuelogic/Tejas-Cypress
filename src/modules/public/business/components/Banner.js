@@ -36,7 +36,7 @@ class Banner extends Component {
               </Header>
               {!this.props.userStore.isIssuer
               && (
-                <Button as={Link} to="/business-application/business" primary className="mb-30">Apply Online</Button>
+                <Button as={Link} to="/business-application/business" primary>Apply Online</Button>
               )
               }
             </div>

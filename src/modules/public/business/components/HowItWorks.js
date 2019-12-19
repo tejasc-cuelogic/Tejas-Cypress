@@ -239,25 +239,25 @@ class HowItWorks extends Component {
                 <Grid.Column computer={9} tablet={16} mobile={16} verticalAlign="middle" className="side-section process-right-section">
                   <List itemsPerRow={2} stackable className={`${isMobile ? 'mb-0' : 'mb-80'} left-align`}>
                     <List.Item className="mb-30">
-                      <Header as="h5">Save time with our online application.</Header>
+                      <p className="mb-14"><b>Save time with our online application.</b></p>
                       <p>
                         Find out quickly if NextSeed is right for your business. Our online application guides you through the process, and we’re here to answer questions along the way.
                     </p>
                     </List.Item>
                     <List.Item className="mb-30">
-                      <Header as="h5">Easily create and launch your campaign.</Header>
+                      <p className="mb-14"><b>Easily create and launch your campaign.</b></p>
                       <p>
                         Our team of deal structuring and content specialists will be there to help at every step. From the content to the paperwork, our team will provide the frameworks and templates to make the process a breeze.
                     </p>
                     </List.Item>
                     <List.Item className="mb-30">
-                      <Header as="h5">Tell your story and amplify your message.</Header>
+                      <p className="mb-14"><b>Tell your story and amplify your message.</b></p>
                       <p>
                         Tap into our marketing, advertising and PR experts. We’ll provide the tools and support you need to raise funds and cultivate a base of thousands of local investors.
                     </p>
                     </List.Item>
                     <List.Item className={isMobile ? 'mb-0' : 'mb-30'}>
-                      <Header as="h5">Pay and engage investors painlessly.</Header>
+                      <p className="mb-14"><b>Pay and engage investors painlessly.</b></p>
                       <p>
                         Our investor management support streamlines your monthly payments, investor updates, reward fulfillment and even annual tax forms.
                     </p>

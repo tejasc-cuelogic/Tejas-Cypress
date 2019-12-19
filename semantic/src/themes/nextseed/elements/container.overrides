@@ -27,15 +27,8 @@ section{
                 justify-content: center;
                 flex-direction: column;
                 align-items: flex-start;
-                h1.ui.header{
-                    @media only screen and (max-width : @computerBreakpoint) {
-                        font-size: 38px;
-                        line-height: 46px;
-                    }
-                    span {
-                        margin-top: @14px;
-                        display: inline-block;
-                    }
+                h2.ui.header{
+                    margin-bottom: @45px;  
                 }
             }
             .banner-meta {

@@ -9,7 +9,8 @@ html,body{
 }
 //	iOS cursor position on keypad-in fix
 body{
-	color:@neutral-middark;
+	color:@neutral;
+	font-weight: @normal;
 }
 .public-pages {
 	background: @white;
@@ -929,19 +930,6 @@ footer{
 			@media only screen and (max-width : @largestMobileScreen){
 				padding:0 0 30px !important;
 			}
-			&:before{
-				content: '';
-				height: calc(100% - 132px);
-				width: 1px;
-				background: @primary-one;
-				position: absolute;
-				left: 46px;
-				top: 0;
-				@media only screen and (max-width : @largestMobileScreen){
-					left: 36px;
-					height: calc(100% - 160px);
-				}
-			}
 			&:hover {
 				box-shadow: none;
 			}
@@ -968,12 +956,27 @@ footer{
 					border: 1px solid @primary-one;
 					text-align: center;
 					background: @white;
+					z-index: 1;
 					@media only screen and (max-width : @largestMobileScreen){
 						height: @45px;
 						width: @45px;
 						font-size: @20px;
 						line-height: 45px;
 					}
+				}
+				&:after{
+					content: '';
+					height: 100%;
+					width: 1px;
+					background: @primary-one;
+					position: absolute;
+					left: 33px;
+					top: 33px;
+					z-index: 0;
+					visibility: visible;
+				}
+				&:last-child:after{
+					display: none;
 				}
 			}
 		}

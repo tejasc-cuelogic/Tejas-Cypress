@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Icon, Grid, Reveal } from 'semantic-ui-react';
+import { Header, Grid, Reveal } from 'semantic-ui-react';
 import { inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
@@ -15,7 +15,7 @@ class teamList extends Component {
     return (
       <Grid.Column>
         <Grid columns={columns} className={className} doubling>
-          { teamMembers.map(member => member.isPublished && (
+          {teamMembers.map(member => member.isPublished && (
             <Grid.Column>
               <Reveal as={Link} to={`${match.url}/${member.id}`} animated="fade">
                 <Reveal.Content hidden>
@@ -32,20 +32,19 @@ class teamList extends Component {
               </Reveal>
             </Grid.Column>
           ))}
-          { joinColumn
-          && (
-<Grid.Column verticalAlign="middle" className={`${(teamMembers.length % 2 === 0) && 'centered'}`}>
-            <Link to="/about/careers">
-              <Header as="h4" textAlign="center">
-                Join our team
-                <Header.Subheader className="mt-10">
-                  See open positions
-                  <Icon color="green" className="ns-arrow-right right" />
+          {joinColumn
+            && (
+              <Grid.Column verticalAlign="middle" className={`${(teamMembers.length % 2 === 0) && 'centered'}`}>
+                <Link to="/">
+                  <Header as="h4" textAlign="center">
+                    Join our team
+                <Header.Subheader className="mt-10 hightlight-text">
+                      See open positions
                 </Header.Subheader>
-              </Header>
-            </Link>
-          </Grid.Column>
-          ) }
+                  </Header>
+                </Link>
+              </Grid.Column>
+            )}
         </Grid>
       </Grid.Column>
     );

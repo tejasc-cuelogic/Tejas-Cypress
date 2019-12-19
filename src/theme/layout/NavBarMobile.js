@@ -43,10 +43,10 @@ export default class NavBarMobile extends Component {
     const nav = GetNavMeta(location.pathname, [], true);
     let navTitle = nav ? nav.title : '';
     const logInSignUp = stepInRoute.to !== 'login' ? [
-      { to: 'login', title: 'Log In', className: 'basic' },
-      { to: 'register', title: 'Sign Up', className: 'secondary' },
+      { to: 'login', title: 'Log In', className: 'basic primary' },
+      { to: 'register', title: 'Sign Up', className: 'primary' },
     ]
-      : [{ ...stepInRoute, className: 'secondary' }];
+      : [{ ...stepInRoute, className: 'primary' }];
     if (location.pathname.startsWith('/invest')) {
       navTitle = 'For Investors';
     } else if (location.pathname.startsWith('/business') && !location.pathname.startsWith('/business-application/')) {
