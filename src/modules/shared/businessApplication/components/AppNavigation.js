@@ -54,6 +54,7 @@ export default class AppNavigation extends Component {
           this.props.history.push('/dashboard');
         });
       } else {
+        this.props.businessAppStore.setFieldvalue('appSubmitLoading', false);
         this.props.history.push(`/dashboard/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step].to}`);
       }
     });
