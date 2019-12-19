@@ -50,8 +50,11 @@ export default class PublicSubNav extends Component {
                   ) : (
                     <Menu.Item
                       className="menu-button"
-                      as={Link}
-                      to={`/dashboard/${currentUser.roles && currentUser.roles.includes('investor') ? 'setup' : 'dashboard'}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.props.navStore.setFieldValue('navStatus', 'main');
+                        this.props.history.push(`${currentUser.roles && currentUser.roles.includes('investor') ? '/init-dashboard' : '/dashboard'}`);
+                      }}
                     >
                       <Button secondary>Dashboard</Button>
                     </Menu.Item>
