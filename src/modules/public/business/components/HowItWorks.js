@@ -287,13 +287,13 @@ class HowItWorks extends Component {
                     }
                   </div>
                 </Grid.Column>
-                <Grid.Column className="centered" widescreen={9} computer={9} tablet={16} mobile={16} verticalAlign="middle">
+                <Grid.Column floated="right" widescreen={9} computer={9} tablet={16} mobile={16} verticalAlign="middle">
                   <Grid relaxed padded="vertically">
                     <Grid.Column computer={16} tablet={16} mobile={16} verticalAlign="middle">
                       <Item.Group className="horizontal-items left-align">
                         <Item>
                           <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
-                            <NSImage path="icons/checkmark.svg" />
+                            <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Marketing</Item.Header>
@@ -302,7 +302,7 @@ class HowItWorks extends Component {
                         </Item>
                         <Item>
                           <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
-                            <NSImage path="icons/checkmark.svg" />
+                            <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Escrow</Item.Header>
@@ -311,7 +311,7 @@ class HowItWorks extends Component {
                         </Item>
                         <Item>
                           <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
-                            <NSImage path="icons/checkmark.svg" />
+                            <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Campaign Development</Item.Header>
@@ -320,7 +320,7 @@ class HowItWorks extends Component {
                         </Item>
                         <Item>
                           <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
-                            <NSImage path="icons/checkmark.svg" />
+                            <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Investment Processing</Item.Header>
@@ -329,7 +329,7 @@ class HowItWorks extends Component {
                         </Item>
                         <Item>
                           <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
-                            <NSImage path="icons/checkmark.svg" />
+                            <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Q&A</Item.Header>
@@ -338,7 +338,7 @@ class HowItWorks extends Component {
                         </Item>
                         <Item>
                           <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
-                            <NSImage path="icons/checkmark.svg" />
+                            <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Disclosure Preparation</Item.Header>
@@ -347,7 +347,7 @@ class HowItWorks extends Component {
                         </Item>
                         <Item>
                           <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
-                            <NSImage path="icons/checkmark.svg" />
+                            <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Investor Services</Item.Header>
@@ -356,7 +356,7 @@ class HowItWorks extends Component {
                         </Item>
                         <Item>
                           <div className={`${responsiveVars.isMobile ? 'mlr-0' : ''} ui image`}>
-                            <NSImage path="icons/checkmark.svg" />
+                            <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
                             <Item.Header as="h5">Tax Form Preparation</Item.Header>

@@ -279,12 +279,12 @@
         margin-right:-@14px;
         >.item{
             width:45%;
-            @media only screen and (max-width :@largestMobileScreen){
-                width:100%;
-            }
             margin:0 auto @30px;
             padding-left:@14px;
             padding-right:@14px;
+            @media only screen and (max-width :@largestMobileScreen){
+                width:100%;
+            }
             .ui.mini.image{
                 width:45px;
                 margin-right: @20px;
@@ -295,17 +295,27 @@
                 +.content{
                     padding-left:@10px;
                     @media only screen and (max-width :@largestMobileScreen){
-                        padding:14px 0 0;
+                        padding:@14px 0 0;
                     }
                 }
             }
+            .content>.header:not(.ui){
+                font-size: @17px;
+                margin-bottom: @10px;
+            }
             .meta{
-                line-height:24px;
+                line-height:26px;
                 margin:0;
             }
             .extra a{
                 text-decoration: none;
                 display: inline-flex;
+            }
+            >.ui.image+.content{
+                padding-left:@20px;
+                @media only screen and (max-width :@largestMobileScreen){
+                    padding-left:0;
+                }
             }
         }
         &.home-page{
@@ -328,10 +338,6 @@
                     margin-right: @15px;
                 }
                 >.content{
-                    >.header:not(.ui){
-                        font-size: @17px;
-                        margin-bottom: @10px;
-                    }
                     .meta{
                         font-size: @17px;
                         color: @neutral;

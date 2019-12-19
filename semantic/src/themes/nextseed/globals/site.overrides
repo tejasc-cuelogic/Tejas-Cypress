@@ -10,7 +10,13 @@ html,body{
 //	iOS cursor position on keypad-in fix
 body{
 	color:@neutral;
+	font-size: @17px;
+	line-height: 26px;
 	font-weight: @normal;
+	@media only screen and (max-width : @largestMobileScreen){
+		font-size: @15px;
+		line-height: 24px;
+	}
 }
 .public-pages {
 	background: @white;
@@ -233,6 +239,7 @@ h6{
 .note{
 	color:@neutral-middark !important;
 	font-size: @12px;
+	line-height: 18px;
 }
 .justify-text {
 	text-align: justify;
@@ -539,6 +546,7 @@ footer{
 	}
 	.footer-social {
 		flex-grow: 0;
+		font-size: @15px;
 		@media only screen and (max-width : @largestMobileScreen){
 			text-align: center;
 		}
@@ -555,7 +563,7 @@ footer{
 		}
 		p {
 			display: inline-block;
-			margin-left: 60px;
+			margin-left: @40px;
 			@media only screen and (max-width : @largestMobileScreen){
 				display: block;
 				margin-left: 0;
@@ -572,8 +580,10 @@ footer{
 	}
 	.copyright-info{
 		flex-grow: 1;
-		font-size:@13px;
-		line-height:@22px;
+		p{
+			font-size:@13px;
+			line-height:@20px;
+		}
 		@media only screen and (max-width : @largestMobileScreen){
 			float:none;
 		}
@@ -974,6 +984,10 @@ footer{
 					top: 33px;
 					z-index: 0;
 					visibility: visible;
+					@media only screen and (max-width : @largestMobileScreen){
+						left: 22.5px;
+						top: 45px;
+					}
 				}
 				&:last-child:after{
 					display: none;

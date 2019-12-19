@@ -48,12 +48,12 @@ class Footer extends Component {
                   </div>
                 </>
               </div>
-              <div className="footer-social">
+              <div className="footer-social grey-header">
                 <SocialLinks />
                 <p className={isMobile && 'mt-20'}>© 2019 NextSeed Technologies LLC</p>
               </div>
             </Grid.Column>
-            <Grid.Column computer={10} tablet={16} mobile={16} className="copyright-info">
+            <Grid.Column computer={10} tablet={16} mobile={16} className="copyright-info grey-header">
               <p>
                 This site is operated by NextSeed Services LLC ({'"'}NextSeed{'"'}), which is
                 neither a registered broker-dealer nor funding portal.
