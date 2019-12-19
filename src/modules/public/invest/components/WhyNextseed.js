@@ -89,7 +89,7 @@ export default class WhyNextseed extends Component {
                 }
               </Item.Group>
             </div>
-            <Link to="/how-it-works/investors/video" className="no-decoration">
+            <Link to="/investors/video" className="no-decoration">
               <Segment className={`${responsiveVars.uptoTablet ? 'mt-30' : 'mt-70'} video-segment`}>
                 <Header as={responsiveVars.uptoTablet ? 'h2' : 'h3'} textAlign="center">
                   Watch our video
@@ -221,7 +221,7 @@ export default class WhyNextseed extends Component {
             </Grid>
           </section>
         </Container>
-        <Route path="/how-it-works/investors/video" render={props => <VideoModal {...props} videoDetails={{ embed: 307106547 }} />} />
+        <Route path="/investors/video" render={props => <VideoModal {...props} videoDetails={{ embed: 307106547 }} />} />
       </>
     );
   }

@@ -697,9 +697,9 @@ export const PUBLIC_NAV = [
     subPanel: 1,
     exact: true,
     subNavigations: [
-      { title: 'For Investors', to: 'how-it-works/investors' },
-      { title: 'For Businesses', to: 'how-it-works/business' },
-      { title: 'Education Center', to: 'resources/education-center' },
+      { title: 'For Investors', to: 'investors' },
+      { title: 'For Businesses', to: 'business' },
+      { title: 'Education Center', to: 'education-center' },
     ],
   },
   {
@@ -708,10 +708,10 @@ export const PUBLIC_NAV = [
     subPanel: 1,
     exact: true,
     subNavigations: [
-      { title: 'Who We Are', to: 'about/mission' },
+      { title: 'Who We Are', to: 'about' },
       // { title: 'Team & Culture', to: 'about/team' },
       // { title: 'Careers', to: 'about/careers' },
-      { title: 'Insights', to: 'resources/insights' },
+      { title: 'Insights', to: 'insights' },
       { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
     ],
   },
@@ -730,7 +730,7 @@ export const PUBLIC_NAV = [
   // },
   {
     title: 'Legal',
-    to: 'agreements/legal',
+    to: 'legal',
     exact: true,
     subPanel: 1,
     subNavigations: [
@@ -771,11 +771,11 @@ export const MOBILE_NAV = [
   },
   { title: 'Settings', to: 'app/account-settings', isLoggedIn: true },
   { title: 'Add New Account', to: 'app/setup/account-creation', isLoggedIn: true },
-  { title: 'For Investor', to: 'how-it-works/investors' },
-  { title: 'For Businesses', to: 'how-it-works/business' },
-  { title: 'Education Center', to: 'resources/education-center' },
+  { title: 'For Investor', to: 'investors' },
+  { title: 'For Businesses', to: 'business' },
+  { title: 'Education Center', to: 'education-center' },
   { title: 'Who We Are', to: 'about' },
-  { title: 'Insights', to: 'resources/insights' },
+  { title: 'Insights', to: 'insights' },
   { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
 ];
 

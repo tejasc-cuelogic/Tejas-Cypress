@@ -13,6 +13,9 @@ import Business from './public/business/containers/Business';
 import Resources from './public/resources';
 import Partners from './public/partners';
 import News from './public/news';
+import Insights from './public/resources/containers/Insights';
+import InsightsDetails from './public/resources/containers/InsightsDetails';
+import EducationCenter from './public/resources/containers/EducationCenter';
 
 import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
@@ -55,7 +58,7 @@ export const publicRoutes = [
     component: Agreements,
   },
   {
-    path: '/about',
+    path: '/about/:section?', // optional section to support old urls
     component: About,
   },
   {
@@ -63,7 +66,7 @@ export const publicRoutes = [
     component: News,
   },
   {
-    path: '/how-it-works/investors',
+    path: '/investors',
     component: Invest,
   },
   {
@@ -107,8 +110,24 @@ export const publicRoutes = [
     component: Offering,
   },
   {
-    path: '/how-it-works/business',
+    path: '/business',
     component: Business,
+  },
+  {
+    path: '/insights/category/:id',
+    component: Insights,
+  },
+  {
+    path: '/insights/:slug',
+    component: InsightsDetails,
+  },
+  {
+    path: '/insights',
+    component: Insights,
+  },
+  {
+    path: '/education-center',
+    component: EducationCenter,
   },
   {
     path: '/resources',

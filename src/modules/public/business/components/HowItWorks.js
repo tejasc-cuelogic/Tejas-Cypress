@@ -441,7 +441,7 @@ class HowItWorks extends Component {
               </Grid.Column>
               <Grid.Column>
                 <Card className="bordered" fluid>
-                  <Link to="/how-it-works/business/video" className="video-wrapper">
+                  <Link to="/business/video" className="video-wrapper">
                     <NSImage path="677134021.jpg" />
                     <Icon
                       className="ns-play play-icon"
@@ -475,7 +475,7 @@ class HowItWorks extends Component {
             </Grid>
           </section>
         </Container>
-        <Route path="/how-it-works/business/video" render={props => <VideoModal {...props} videoDetails={nsvideos} />} />
+        <Route path="/business/video" render={props => <VideoModal {...props} videoDetails={nsvideos} />} />
       </>
     );
   }

@@ -296,7 +296,7 @@ export class NavigationItems extends Component {
             ? (
               <Menu.Item position={isMobBussinessApp ? 'right' : ''}>
                 <Button.Group>
-                  <Button as={Link} to="/how-it-works/business" loading={loading} inverted color="red">Cancel</Button>
+                  <Button as={Link} to="/business" loading={loading} inverted color="red">Cancel</Button>
                   {(isPrequalQulify || location.pathname.endsWith('/pre-qualification'))
                     && (
                       <SubmitButton

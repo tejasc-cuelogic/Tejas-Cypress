@@ -11,13 +11,6 @@ const getModule = component => lazyRetry(() => import(`../components/${component
 @inject('navStore', 'userStore')
 @observer
 class About extends Component {
-  constructor(props) {
-    super(props);
-    if (props.match.isExact) {
-      props.history.replace(`${props.match.url}/mission`);
-    }
-  }
-
   module = name => DataFormatter.upperCamelCase(name);
 
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
@@ -27,27 +20,10 @@ class About extends Component {
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <>
-        {/* {location.pathname === '/about/mission' && <Banner />} */}
         <Visibility onUpdate={this.handleUpdate} continuous className="slide-down">
-          {/* <PublicSubNav
-            stepInRoute={navStore.stepInRoute}
-            location={location}
-            currentUser={this.props.userStore.currentUser}
-            navItems={navItems}
-            title="About Us"
-          /> */}
             <SuspenseBoundary>
               <Switch>
                 <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
-                {
-                  navItems.map(item => (
-                    <Route
-                      key={item.to}
-                      path={`${match.url}/${item.to}`}
-                      component={getModule(this.module(item.title))}
-                    />
-                  ))
-                }
               </Switch>
             </SuspenseBoundary>
         </Visibility>
