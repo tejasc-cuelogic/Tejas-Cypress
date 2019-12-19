@@ -293,7 +293,7 @@ export default class Leader extends Component {
               options={US_STATES}
               selection
               onChange={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
-              placeholder="Texas"
+              placeholder="NY"
             />
             <MaskedInput
               displayMode={isReadonly}
