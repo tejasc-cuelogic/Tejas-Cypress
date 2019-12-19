@@ -12,9 +12,6 @@ export const INVESTEMENT_LIMIT = {
     error: undefined,
     rule: 'required',
     tooltip: 'Mention your Annual Income here',
-    customErrors: {
-      required: 'required.',
-    },
   },
   netWorth: {
     value: '',
@@ -22,9 +19,6 @@ export const INVESTEMENT_LIMIT = {
     error: undefined,
     rule: 'required',
     tooltip: 'Mention your Net Worth here',
-    customErrors: {
-      required: 'required.',
-    },
   },
   cfInvestments: {
     value: '',
@@ -32,9 +26,6 @@ export const INVESTEMENT_LIMIT = {
     error: undefined,
     rule: 'required',
     tooltip: 'Other Crowdfunding investments',
-    customErrors: {
-      required: 'required.',
-    },
   },
   currentLimitIndividualOrIra: {
     value: '',
