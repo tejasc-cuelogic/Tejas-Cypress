@@ -44,7 +44,6 @@
     "react/no-this-in-sfc": [0],
     "template-curly-spacing" : "off",
     "indent" : "off"
-
   },
   "parserOptions": {
     "ecmaFeatures": {
