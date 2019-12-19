@@ -57,7 +57,7 @@ export default class NavBarMobile extends Component {
       navTitle = 'Insights';
     } else if (location.pathname.startsWith('/offerings')) {
       navTitle = '';
-    } else if (location.pathname.startsWith('/agreements/legal')) {
+    } else if (location.pathname.startsWith('/legal')) {
       navTitle = 'Legal';
     }
     const { signupStatus, pendingStep } = userDetailsStore;

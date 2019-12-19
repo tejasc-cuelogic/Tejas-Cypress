@@ -46,6 +46,9 @@ export default class Public extends React.Component {
     <Switch>
       <Redirect from="/resources/*" to="/*" />
       <Redirect from="/about/*" to="/about" />
+      <Redirect from="/agreements/legal/*" to="/legal/*" />
+      <Redirect from="/invest/*" to="/investors" />
+      <Redirect from="/business/*" to="/business" />
       {publicRoutes.map((route) => {
         const CurrentComponent = route.auth ? route.auth(route.component, this.props) : route.component;
         return (

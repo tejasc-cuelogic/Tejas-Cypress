@@ -54,7 +54,7 @@ export const publicRoutes = [
     component: IraPromotionTerms,
   },
   {
-    path: '/agreements/:section',
+    path: '/legal',
     component: Agreements,
   },
   {
