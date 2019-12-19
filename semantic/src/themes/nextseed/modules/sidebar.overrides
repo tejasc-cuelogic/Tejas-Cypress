@@ -7,8 +7,6 @@
 	&:not(body) {
 		transform: none;
 		position: relative;
-		max-width: 1680px;
-		margin: auto;
 		&.private-pushable{
 			transform: translate3d(0,0,0);
 			height: calc(100vh - 72px);
@@ -384,6 +382,9 @@
 				background-color:@neutral !important;
 			}
 		}
+		&.no-active{
+			color: @white !important;
+		}
 	}
 	&:not(.visible) .dropdown .menu.transition{
 		background-color:@neutral;
@@ -411,7 +412,9 @@
 }
 
 .public-pages > .pushable {
-	width: 100%;
+	// width: 100%;
+	max-width: 1680px;
+	margin: auto;
 	.ui.push.sidebar {
 		z-index: 102;
 	}

@@ -12,16 +12,16 @@ class AvailableCashTransfer extends Component {
   transferCtaInfo = () => ([
     {
       url: `${this.props.match.url}/withdraw`,
-      content: 'Withdraw funds',
+      content: 'Withdraw Funds',
     },
     {
       url: `${this.props.match.url}/add`,
-      content: 'Add funds',
+      content: 'Add Funds',
     },
   ]);
 
   handleTransferFunds = (transInfo) => {
-    if ((this.props.isAccountFrozen && transInfo.content === 'Add funds') || (this.props.isAccountHardFrozen && transInfo.content === 'Withdraw funds')) {
+    if ((this.props.isAccountFrozen && transInfo.content === 'Add Funds') || (this.props.isAccountHardFrozen && transInfo.content === 'Withdraw Funds')) {
       this.props.setFieldValue('showAccountFrozenModal', true);
     } else {
       this.props.history.push(transInfo.url);

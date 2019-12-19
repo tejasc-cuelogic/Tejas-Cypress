@@ -497,7 +497,7 @@ export class UserDetailsStore {
       ) ? this.userDetails.legalDetails.status : 'FAIL';
       details.roles = mapValues(this.userDetails.roles, (a) => {
         const data = {
-          accountId: a.accountId,
+          accountId: get(a, 'details.accountId'),
           name: a.name,
           status: a.details ? a.details.accountStatus : null,
         };
@@ -600,6 +600,11 @@ export class UserDetailsStore {
     this.deleting = status;
   }
 
+  getIdByAccountType = (type) => {
+    const role = this.userDetails.roles.find(i => i.name === type);
+    return role ? get(role, 'details.accountId') : '';
+  }
+
   @computed get isCipExpirationInProgress() {
     return get(this.userDetails, 'cip.expiration')
     && this.signupStatus.investorProfileCompleted && !this.isUserVerified && !this.isLegalDocsPresent && this.signupStatus.partialAccounts.length;
@@ -607,7 +612,7 @@ export class UserDetailsStore {
 
   @computed
   get pendingStep() {
-    let routingUrl = '/app/setup';
+    let routingUrl = '/dashboard/setup';
     const selectedAccountType = investmentStore
       && investmentStore.investAccTypes && investmentStore.investAccTypes.value;
     const investorAccountCreatedList = map(filter(this.signupStatus.roles, a => a.name !== 'investor'), 'name');
@@ -617,36 +622,36 @@ export class UserDetailsStore {
         this.setSignUpDataForMigratedUser(this.userDetails);
         routingUrl = '/welcome-email';
       } else if (!this.signupStatus.isMigratedFullAccount && !get(this.userDetails, 'cip.requestId')) {
-        routingUrl = '/app/setup/identity-verification/0';
+        routingUrl = '/dashboard/setup/identity-verification/0';
       } else if ((get(this.userDetails, 'cip.requestId'))) {
         if (this.signupStatus.phoneVerification !== 'DONE') {
-          routingUrl = '/app/setup/identity-verification/3';
+          routingUrl = '/dashboard/setup/identity-verification/3';
         } else if (!this.signupStatus.investorProfileCompleted) {
-          routingUrl = '/app/setup/establish-profile';
+          routingUrl = '/dashboard/setup/establish-profile';
         }
       }
     } else if (this.isCipExpirationInProgress) {
-      routingUrl = `/app/setup/account-creation/${this.signupStatus.partialAccounts[0]}`;
+      routingUrl = `/dashboard/setup/account-creation/${this.signupStatus.partialAccounts[0]}`;
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
       && this.signupStatus.idVerification !== 'OFFLINE'
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
-      routingUrl = '/app/setup/identity-verification/0';
+      routingUrl = '/dashboard/setup/identity-verification/0';
     } else if (this.signupStatus.phoneVerification !== 'DONE') {
-      routingUrl = '/app/setup/identity-verification/3';
+      routingUrl = '/dashboard/setup/identity-verification/3';
     } else if (!this.signupStatus.investorProfileCompleted) {
-      routingUrl = '/app/setup/establish-profile';
+      routingUrl = '/dashboard/setup/establish-profile';
     } else if (isEmpty(investorAccountCreatedList)) {
-      routingUrl = '/app/setup/account-creation';
+      routingUrl = '/dashboard/setup/account-creation';
     } else if (this.partialInvestNowSessionURL && this.signupStatus.partialAccounts.length > 0) {
       const redirectAccount = selectedAccountType || this.signupStatus.partialAccounts[0];
-      routingUrl = `/app/setup/account-creation/${redirectAccount}`;
+      routingUrl = `/dashboard/setup/account-creation/${redirectAccount}`;
     } else if (this.signupStatus.activeAccounts.length > 0
       || this.signupStatus.frozenAccounts.length > 0 || this.signupStatus.partialAccounts.length > 0) {
       const redirectAccount = this.signupStatus.activeAccounts[0] || this.signupStatus.frozenAccounts[0] || this.signupStatus.partialAccounts[0];
-      routingUrl = `/app/account-details/${redirectAccount}/portfolio`;
+      routingUrl = `/dashboard/account-details/${redirectAccount}/portfolio`;
     } else {
-      routingUrl = '/app/setup';
+      routingUrl = '/dashboard/setup';
     }
     return routingUrl;
   }
@@ -818,21 +823,21 @@ export class UserDetailsStore {
 
   @computed
   get pendingStepForPartialAndProcessingAccount() {
-    let routingUrl = '/app/setup';
+    let routingUrl = '/dashboard/setup';
     const selectedAccountType = investmentStore
       && investmentStore.investAccTypes && investmentStore.investAccTypes.value;
     if (this.signupStatus.partialAccounts.length > 0) {
       const redirectAccount = selectedAccountType || this.signupStatus.partialAccounts[0];
       const accValue = findKey(INVESTMENT_ACCOUNT_TYPES, val => val === redirectAccount);
       accountStore.setAccTypeChange(accValue);
-      routingUrl = `/app/setup/account-creation/${redirectAccount}`;
+      routingUrl = `/dashboard/setup/account-creation/${redirectAccount}`;
     } else if (this.signupStatus.inActiveAccounts.length > 0) {
       const redirectAccount = selectedAccountType || this.signupStatus.inActiveAccounts[0];
       const accValue = findKey(INVESTMENT_ACCOUNT_TYPES, val => val === redirectAccount);
       accountStore.setAccTypeChange(accValue);
-      routingUrl = `/app/setup/account-creation/${redirectAccount}`;
+      routingUrl = `/dashboard/setup/account-creation/${redirectAccount}`;
     } else {
-      routingUrl = '/app/setup';
+      routingUrl = '/dashboard/setup';
     }
     return routingUrl;
   }

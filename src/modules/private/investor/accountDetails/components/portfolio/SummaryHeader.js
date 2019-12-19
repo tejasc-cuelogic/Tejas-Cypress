@@ -60,14 +60,14 @@ const SummaryHeader = props => (
                       }
                     </div>
                     {row.title === 'Total Balance'
-                      && isMobile && <Link to={props.isAdmin ? `${props.refLink}/transactions/addfunds` : `/app/account-details/${props.details.accountType}/transfer-funds/add`}>Deposit funds</Link>
+                      && isMobile && <Link to={props.isAdmin ? `${props.refLink}/transactions/addfunds` : `/dashboard/account-details/${props.details.accountType}/transfer-funds/add`}>Deposit funds</Link>
                     }
                   </Statistic.Label>
-                  <Statistic.Value>{showValue(row)}</Statistic.Value>
+                  <Statistic.Value>{props.loading ? 'loading...' : showValue(row)}</Statistic.Value>
                 </Statistic>
               </Card.Content>
               {row.title === 'Total Balance'
-                && !isMobile && <Link className={`${props.details.isAccountFrozen ? 'disabled' : ''} mt-14 ml-18 display-block`} to={props.isAdmin ? `${props.refLink}/transactions/addfunds` : `/app/account-details/${props.details.accountType}/transfer-funds/add`}>Deposit funds</Link>
+                && !isMobile && <Link className={`${props.details.isAccountFrozen ? 'disabled' : ''} mt-14 ml-18 display-block`} to={props.isAdmin ? `${props.refLink}/transactions/addfunds` : `/dashboard/account-details/${props.details.accountType}/transfer-funds/add`}>Deposit funds</Link>
               }
             </Grid.Column>
           ))

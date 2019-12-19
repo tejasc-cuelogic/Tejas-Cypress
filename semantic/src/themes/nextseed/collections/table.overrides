@@ -165,13 +165,18 @@
             }
         }
         tbody{
-            font-weight:@fontMedium;
             i.offering-icon{
                 color:@border-color;
                 vertical-align:top;
             }
             .offering-title{
                 display:inline-block;
+                font-weight: @fontMedium;
+                text-overflow: ellipsis;
+                width: 150px;
+                white-space: nowrap;
+                overflow: hidden;
+                color: @primary-one;;
                 a{
                     color: @primary-one !important;
                 }

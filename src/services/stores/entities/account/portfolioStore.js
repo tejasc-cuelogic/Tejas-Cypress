@@ -52,7 +52,8 @@ export class PortfolioStore {
         PREFERRED_EQUITY_506C: { name: 'Preferred Equity', value: 0 },
         CONVERTIBLE_NOTES: { name: 'Convertible Notes', value: 0 },
         SAFE: { name: 'Safe', value: 0 },
-        REAL_ESTATE: { name: 'Real Estate', value: 0 },
+        REAL_ESTATE: { name: 'LLC Membership Interests', value: 0 },
+        FUNDS: { name: 'Funds - Limited Partner Interest', value: 0 },
       },
       industry: {
         FASHION_AND_MERCHANDISING: { name: 'Fashion and Merchandising', value: 0 },
@@ -135,8 +136,12 @@ export class PortfolioStore {
       ['pending', 'active', 'completed'].forEach((field) => {
         investmentData.investments[field].forEach((ele) => {
           if (get(ele, 'offering.keyTerms.securities') && get(ele, 'offering.keyTerms.industry')) {
-            this.pieChartDataEval.investmentType[ele.offering.keyTerms.securities].value += 1;
-            this.pieChartDataEval.industry[ele.offering.keyTerms.industry].value += 1;
+            if (this.pieChartDataEval.investmentType[ele.offering.keyTerms.securities]) {
+              this.pieChartDataEval.investmentType[ele.offering.keyTerms.securities].value += 1;
+            }
+            if (this.pieChartDataEval.industry[ele.offering.keyTerms.industry]) {
+              this.pieChartDataEval.industry[ele.offering.keyTerms.industry].value += 1;
+            }
           }
         });
       });
@@ -323,7 +328,7 @@ export class PortfolioStore {
         userId: investorUserId,
         voidReason: cancelAgreementData.voidReason,
         voidType: cancelAgreementData.voidType,
-        sendNotification: cancelAgreementData.sendNotification,
+        sendNotification: cancelAgreementData.sendNotification || false,
       };
     }
     uiStore.setProgress(true);
@@ -375,6 +380,26 @@ export class PortfolioStore {
   resetPortfolioData = () => {
     this.setFieldValue('investmentLists', null);
   }
+
+  @action
+  getPortfolioDetailsAfterInvestment = portfolioObj => new Promise((resolve, reject) => {
+    this.investmentLists = graphql({
+      client,
+      query: getInvestorAccountPortfolio,
+      variables: portfolioObj,
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data && this.investmentLists && !this.investmentLists.loading) {
+          resolve(true);
+        } else if (!this.details.loading) {
+          resolve(false);
+        }
+      },
+      onError: () => {
+        reject();
+      },
+    });
+  });
 }
 
 export default new PortfolioStore();

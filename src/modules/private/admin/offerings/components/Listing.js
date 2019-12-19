@@ -59,16 +59,18 @@ export default class Listing extends Component {
 
   render() {
     const {
-      uiStore, offeringsStore, stage,
+      uiStore, offeringsStore, stage, noPagination, allLiveOfferingsList,
     } = this.props;
     const {
       offerings,
+      allOfferings,
       loading,
       count,
       requestState,
     } = offeringsStore;
     const { confirmBox } = uiStore;
-    const totalRecords = count || 0;
+    const totalRecords = noPagination ? 0 : (count || 0);
+    const offeringList = allLiveOfferingsList || (noPagination ? allOfferings : offerings);
     if (loading) {
       return <InlineLoader />;
     }
@@ -80,18 +82,22 @@ export default class Listing extends Component {
               <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
                 <Table.HeaderCell>Status</Table.HeaderCell>
-                {stage !== 'engagement'
-                  ? (
-                    <>
-                      <Table.HeaderCell>Created Date</Table.HeaderCell>
-                      <Table.HeaderCell>{stage === 'creation' ? 'Days till launch' : 'Launch Date'}</Table.HeaderCell>
-                    </>
-                  )
-                  : <Table.HeaderCell>Hard Close Date</Table.HeaderCell>
-                }
                 {stage === 'live'
+                  ? (
+                    <Table.HeaderCell></Table.HeaderCell>
+                  )
+                  : (stage !== 'engagement'
+                    ? (
+                      <>
+                        <Table.HeaderCell>Created Date</Table.HeaderCell>
+                        <Table.HeaderCell>{stage === 'creation' ? 'Days till launch' : 'Launch Date'}</Table.HeaderCell>
+                      </>
+                    )
+                    : <Table.HeaderCell>Hard Close Date</Table.HeaderCell>
+                  )}
+                {/* {stage === 'live'
                   && <Table.HeaderCell>Days till close</Table.HeaderCell>
-                }
+                } */}
                 {stage !== 'engagement'
                   && <Table.HeaderCell>Lead</Table.HeaderCell>
                 }
@@ -104,10 +110,10 @@ export default class Listing extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {offerings.length === 0 ? (
+              {offeringList.length === 0 ? (
                 <Table.Row><Table.Cell colSpan={8} textAlign="center">No Offering to display !</Table.Cell></Table.Row>
               )
-                : offerings.map(offering => (
+                : offeringList.map(offering => (
                   <Table.Row key={offering.id} className={this.props.uiStore.inProgressArray.length && offering.id === this.state.loadingOfferId ? 'disabled' : ''}>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       <Link to={`${this.props.match.url}/edit/${offering.id}`}>
@@ -120,15 +126,45 @@ export default class Listing extends Component {
                     </Table.Cell>
                     <Table.Cell className="text-capitalize">
                       {offering && offering.stage
-                        ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 0
+                        ? stage === 'live' && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 0 && get(offering, 'category') && ['processing'].includes(get(offering, 'category'))
                           ? STAGES.PROCESSING.label
-                          : stage === 'live' && get(offering, 'closureSummary.processingDate') && ((includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)
+                          : stage === 'live' && get(offering, 'category') && !['processing', 'reachedMax'].includes(get(offering, 'category')) && get(offering, 'closureSummary.processingDate') && ((includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)
                             ? STAGES.LOCK.label
-                            : STAGES[offering.stage].label
+                            : stage === 'live' && get(offering, 'category') && ['reachedMax'].includes(get(offering, 'category'))
+                              ? 'Reached Max'
+                              : STAGES[offering.stage].label
                         : STAGES[offering.stage].label
                       }
                     </Table.Cell>
-                    {stage !== 'engagement'
+                    {stage === 'live'
+                      ? (
+                        <Table.Cell>
+                          <div className="balance width-250">
+                            Create: {get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}<br />
+                            Launched: {get(offering, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), true, false, false)} /> : 'N/A'}<br />
+                            Days till close: {offering.closureSummary && offering.closureSummary.processingDate
+                            ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value === 0 ? get(offering, 'closureSummary.processingDate') : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label}` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A'
+                            }
+                          </div>
+                        </Table.Cell>
+                      )
+                      : (
+                        stage !== 'engagement'
+                          ? (
+                            <>
+                              <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}</Table.Cell>
+                              <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
+                                {offering.offering && offering.offering.launch
+                                  && offering.closureSummary.launchDate
+                                  ? DataFormatter.diffDays(get(offering, 'closureSummary.launchDate'), false, true) < 0 ? DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), false, false, false) : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.launchDate')).diffText : 'N/A'
+                                }
+                              </Table.Cell>
+                            </>
+                          )
+                          : <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}</Table.Cell>
+
+                      )}
+                    {/* {stage !== 'engagement'
                       ? (
                         <>
                           <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}</Table.Cell>
@@ -150,7 +186,7 @@ export default class Listing extends Component {
                           }
                         </Table.Cell>
                       )
-                    }
+                    } */}
                     {stage !== 'engagement'
                       && <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>
                     }

@@ -116,7 +116,7 @@ class Comments extends Component {
       MESSAGE_FRM, msgEleChange, buttonLoader,
     } = this.props.messageStore;
     const { showOnlyOne, newLayout } = this.props;
-    comments = showOnlyOne ? [get(comments, '[0]')] : comments;
+    comments = showOnlyOne ? [get(commentsMainThreadCount, '[0]')] : comments;
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     const { isInvestorAccreditated } = this.props.userDetailsStore;
     const offeringRegulation = get(campaign, 'keyTerms.regulation');
@@ -129,7 +129,7 @@ class Comments extends Component {
                 Post comment is only available to accredited investors.
               </Header>
               <p>Please confirm your accredited investor status to post comment.</p>
-              <Button as={Link} to="/app/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
+              <Button as={Link} to="/dashboard/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
             </section>
           </Modal.Content>
         </Modal>
@@ -166,7 +166,7 @@ class Comments extends Component {
               }
               <Form reply className="public-form clearfix">
                 {loggedInAsInvestor && !accountStatusFull
-                  ? <Link to="/app/setup" className="ui button secondary">Finish Account Setup</Link>
+                  ? <Link to="/dashboard/setup" className="ui button secondary">Finish Account Setup</Link>
                   : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
                 }
               </Form>
@@ -207,7 +207,7 @@ class Comments extends Component {
             </Message>
           )
         }
-        {comments && commentsMainThreadCount
+        {(comments && commentsMainThreadCount.length)
           ? (
             <>
               <div color="green" className={`${newLayout ? 'mt-30' : 'mt-50'} offering-comment`}>

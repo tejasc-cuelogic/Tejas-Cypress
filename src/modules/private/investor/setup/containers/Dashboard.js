@@ -13,7 +13,7 @@ import IdentityVerification from '../../accountSetup/containers/identityVerifica
 import EstablishProfile from '../../accountSetup/containers/establishProfile';
 import Helper from '../../../../../helper/utility';
 import ProccessingAccountsScreen from '../components/processingAccountsScreen';
-import StickyNotification from '../../accountSetup/components/StickyNotification';
+import StickyNotification from '../components/stickyNotification';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const summaryDetails = ({
@@ -25,13 +25,13 @@ const summaryDetails = ({
     title: false,
     summary: [
       {
-        title: 'Total Invested', content: totalInvested || '', type: 1, info: 'Includes all investments made in successfully closed offerings. Does not include reservations or commitments in live offerings.',
+        title: 'Total Invested', content: totalInvested || '0.00', type: 1, info: 'Includes all investments made in successfully closed offerings. Does not include reservations or commitments in live offerings.',
       },
       {
-        title: 'Pending Investment', content: pendingInvestments || '', type: 1, info: 'Includes amounts reserved or committed in live offerings.',
+        title: 'Pending Investment', content: pendingInvestments || '0.00', type: 1, info: 'Includes amounts reserved or committed in live offerings.',
       },
       {
-        title: 'Paid to Date', content: paidToDate || '', type: 1, info: 'Net payments received to date from all prior investments.',
+        title: 'Paid to Date', content: paidToDate || '0.00', type: 1, info: 'Net payments received to date from all prior investments.',
       },
       // {
       //   title: 'TNAR', content: tnar && !money.isZero(tnar) ? `${tnar}%` : 'N/A',
@@ -70,15 +70,15 @@ export default class Dashboard extends Component {
       signupStatus,
     } = this.props.userDetailsStore;
     const isInitialAccountProcessing = signupStatus.activeAccounts.length === 0
-    && signupStatus.processingAccounts.length > 0;
+      && signupStatus.processingAccounts.length > 0;
     if (summaryLoading) {
       return <InlineLoader />;
     }
     return (
       <>
-        <Route path="/app/setup/account-creation" component={AccountCreation} />
-        <Route exact path="/app/setup/identity-verification/:step" component={IdentityVerification} />
-        <Route path="/app/setup/establish-profile" component={EstablishProfile} />
+        <Route path="/dashboard/setup/account-creation" component={AccountCreation} />
+        <Route exact path="/dashboard/setup/identity-verification/:step" component={IdentityVerification} />
+        <Route path="/dashboard/setup/establish-profile" component={EstablishProfile} />
         <PrivateLayout
           {...this.props}
           P4={
@@ -86,15 +86,15 @@ export default class Dashboard extends Component {
           }
           P5={!get(multipleUserAccounts, 'noAccounts')
             ? (
-            <StickyNotification
-              isInvestor
-              {...this.props}
-              signupStatus={signupStatus}
-              userDetailsStore={this.props.userDetailsStore}
-              multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
-              accountId={get(multipleUserAccounts, 'accountId') || null}
-              accountType={get(multipleUserAccounts, 'accountType') || null}
-            />
+              <StickyNotification
+                isInvestor
+                {...this.props}
+                signupStatus={signupStatus}
+                userDetailsStore={this.props.userDetailsStore}
+                multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
+                accountId={get(multipleUserAccounts, 'accountId') || null}
+                accountType={get(multipleUserAccounts, 'accountType') || null}
+              />
             ) : ''}
         >
           {
@@ -116,7 +116,7 @@ export default class Dashboard extends Component {
                               </Card.Content>
                             </Card>
                           ) : null
-              }
+                        }
                       </>
                     )
                     : (
@@ -129,7 +129,7 @@ export default class Dashboard extends Component {
                         </Card>
                       </>
                     )
-          }
+                  }
                 </>
               )
           }

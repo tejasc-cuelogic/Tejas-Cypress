@@ -10,7 +10,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 export default class ConfirmCancelModal extends React.Component {
     handleCloseModal = () => {
-      this.props.history.push('/app/setup/establish-profile');
+      this.props.history.push('/dashboard/setup/establish-profile');
     }
 
     handleFinishLater = () => {
@@ -30,7 +30,7 @@ export default class ConfirmCancelModal extends React.Component {
               <Button fluid={isMobile} primary size="large" onClick={this.handleCloseModal} className="very relaxed" content="Go Back" />
             </div>
             <div className={`${isMobile ? 'mb-30' : ''} center-align mt-14`}>
-              <p><Link to="/app/setup" onClick={this.handleFinishLater}>Finish later</Link></p>
+              <p><Link to="/dashboard/setup" onClick={this.handleFinishLater}>Finish later</Link></p>
             </div>
           </Modal.Content>
         </Modal>
