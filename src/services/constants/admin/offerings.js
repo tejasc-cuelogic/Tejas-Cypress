@@ -1479,7 +1479,7 @@ export const GENERAL = {
   },
   taxedAs: {
     label: 'Taxed As',
-    value: 'Corporation',
+    value: 'CORPORATION',
     error: undefined,
     rule: 'string',
     values: [
