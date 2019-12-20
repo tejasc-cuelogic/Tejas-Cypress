@@ -332,7 +332,7 @@ export default class XmlForm extends React.Component {
   handleXmlSubmissionSubmit = () => {
     businessActions.submitXMLInformation('xmlSubmission')
       .then(() => {
-        this.props.history.push(`/app/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`);
+        this.props.history.push(`/dashboard/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`);
         Helper.toast('XML form submitted successfully', 'success');
       })
       .catch((errors) => {
@@ -346,7 +346,7 @@ export default class XmlForm extends React.Component {
 
     businessActions.copyXMLInformation()
       .then(() => {
-        this.props.history.push(`/app/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`);
+        this.props.history.push(`/dashboard/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`);
         Helper.toast('Copy XML submission successfully', 'success');
       })
       .catch((error) => {
@@ -408,7 +408,7 @@ export default class XmlForm extends React.Component {
             <Responsive
               minWidth={Responsive.onlyLargeScreen.minWidth}
               as={Link}
-              to={`/app/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`}
+              to={`/dashboard/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`}
               className="back-link"
             >
               <Icon name="ns-arrow-left" />

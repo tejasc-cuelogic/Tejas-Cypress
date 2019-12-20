@@ -23,8 +23,8 @@ const keyTermList = [
   { label: 'Maturity', key: 'keyTerms.maturity', type: 'months', for: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
   { label: 'Pre-Money Valuation', key: 'keyTerms.premoneyValuation', type: '$', for: ['PREFERRED_EQUITY_506C'] },
   { label: 'Share Price', key: 'keyTerms.priceCopy', type: '', for: ['PREFERRED_EQUITY_506C'] },
-  { label: 'Valuation Cap', key: 'keyTerms.valuationCap', type: '$', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
-  { label: 'Discount', key: 'keyTerms.discount', type: '%', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
+  { label: 'Valuation Cap', key: 'keyTerms.valuationCap', type: '', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
+  { label: 'Discount', key: 'keyTerms.discount', type: '', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
   // { label: 'Total Payments to investors', forFunded: true, key: 'closureSummary.repayment.count', type: '', for: [''] },
   // { label: 'Total Paid to investors', forFunded: true, key: 'closureSummary.repayment.currentRepaidAmount', type: '$', for: [''] },
 ];
@@ -104,7 +104,7 @@ export default class CampaignList extends Component {
                           <Icon name="heart" />
                         )
                         }
-                        <div className="campaign-card-details">
+                        <div className={`campaign-card-details ${!get(offering, 'isAvailablePublicly') ? 'disabled' : ''}`}>
                           <Card.Content>
                             <Card.Header>{offering && offering.keyTerms
                               && offering.keyTerms.shorthandBusinessName ? offering.keyTerms.shorthandBusinessName : ''
@@ -169,7 +169,7 @@ export default class CampaignList extends Component {
                             <Button className="mt-30" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
                           </Card.Content>
                         </div>
-                        <Card.Content extra>
+                        <Card.Content extra className={!get(offering, 'isAvailablePublicly') ? 'disabled' : ''}>
                           <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} from {get(offering, 'closureSummary.totalInvestorCount') || 0} investors</b></p>
                           {isFunded
                           && (

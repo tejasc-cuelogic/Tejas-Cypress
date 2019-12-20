@@ -91,6 +91,8 @@ export class BusinessAppStore {
 
   @observable userExists = false;
 
+  @observable appSubmitLoading = false;
+
   @observable userRoles = [];
 
   @observable businessAppDataById = null;
@@ -98,6 +100,8 @@ export class BusinessAppStore {
   @observable applicationIssuerId = null;
 
   @observable enableSave = false;
+
+  @observable apiCall = false;
 
   @observable showUserError = false;
 
@@ -1123,6 +1127,7 @@ export class BusinessAppStore {
   @action
   businessApplicationSubmitAction = () => {
     uiStore.setProgress();
+    this.setFieldvalue('apiCall', true);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -1133,15 +1138,17 @@ export class BusinessAppStore {
           refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
+          uiStore.setProgress(false);
+          this.setFieldvalue('apiCall', false);
           resolve(result);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
-          reject(error);
-        })
-        .finally(() => {
           uiStore.setProgress(false);
+          this.setFieldvalue('appSubmitLoading', false);
+          this.setFieldvalue('apiCall', false);
+          reject(error);
         });
     });
   }
@@ -1228,7 +1235,7 @@ export class BusinessAppStore {
             if (this.canSubmitApp && this.businessApplicationDetailsAdmin.applicationStage === 'IN_PROGRESS') {
               this.businessApplicationSubmitAction().then(() => {
                 Helper.toast('Business application submitted successfully!', 'success');
-                this.props.history.push('/app/dashboard');
+                this.props.history.push('/dashboard');
                 resolve(result);
               });
             } else {
@@ -1241,6 +1248,7 @@ export class BusinessAppStore {
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
+          this.setFieldvalue('appSubmitLoading', false);
           reject(error);
         })
         .finally(() => {

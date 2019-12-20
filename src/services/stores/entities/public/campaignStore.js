@@ -85,12 +85,12 @@ export class CampaignStore {
     if (referralCode) {
       variables.filters.referralCode = referralCode;
     }
-    if (!referralCode && userStore.currentUser && userStore.currentUser.sub) {
-      variables.userId = userStore.currentUser.sub;
-    }
-    return new Promise((resolve) => {
+    // if (!referralCode && userStore.currentUser && userStore.currentUser.sub) {
+    //   variables.userId = userStore.currentUser.sub;
+    // }
+    return new Promise((resolve, reject) => {
       this[field] = graphql({
-        client: clientPublic,
+        client: (!referralCode && userStore.currentUser && userStore.currentUser.sub) ? client : clientPublic,
         query: referralCode ? getOfferingsReferral : allOfferings,
         variables,
         onFetch: (data) => {
@@ -101,6 +101,7 @@ export class CampaignStore {
         },
         onError: (err) => {
           console.log(err);
+          reject();
         },
       });
     });
@@ -205,6 +206,10 @@ export class CampaignStore {
     return offeringList.splice(0, this.activeToDisplay);
   }
 
+  @computed get creation() {
+    return this.CompletedOfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'creation')).includes(o.stage));
+  }
+
   @computed get activeList() {
     // const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
     return orderBy(this.OfferingList, o => (get(o, 'keyTerms.shorthandBusinessName') ? get(o, 'keyTerms.shorthandBusinessName').toLowerCase() : get(o, 'keyTerms.shorthandBusinessName')), ['asc']);
@@ -222,8 +227,8 @@ export class CampaignStore {
   }
 
   @computed get completedList() {
-    // return sortBy(this.CompletedOfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage)), ['order']);
-    return sortBy(this.CompletedOfferingList, ['order']);
+    return sortBy(this.CompletedOfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage)), ['order']);
+    // return sortBy(this.CompletedOfferingList, ['order']);
   }
 
   @action
@@ -491,7 +496,7 @@ export class CampaignStore {
     this.totalPaymentChart = payChart;
   }
 
-  generateBanner = (offeringDetailsList, addObjectProps = false) => {
+  generateBanner = (offeringDetailsList, addObjectProps = false, isFromAdmin = false) => {
     let closingOfferingsArr = [];
     let newOfferingsArr = [];
     let otherOfferingsArr = [];
@@ -590,6 +595,15 @@ export class CampaignStore {
     processingOfferingsArr = orderBy(processingOfferingsArr, ['processingDate'], ['desc']);
     otherOfferingsArr = orderBy(otherOfferingsArr, ['order'], ['asc']);
     reachedMaxOfferingsArr = orderBy(reachedMaxOfferingsArr, ['processingDate'], ['asc']);
+    // const sortedResultObject = [];
+    if (isFromAdmin) {
+      const sortedResultObject = [
+        { category: 'closingSoonAndNew', title: 'Closing Soon and New', offerings: [...closingOfferingsArr, ...newOfferingsArr] },
+        { category: 'other', title: 'Current Offerings', offerings: [...otherOfferingsArr] },
+        { category: 'reachedMaxAndProcessing', title: 'Reached Max and Processing', offerings: [...reachedMaxOfferingsArr, ...processingOfferingsArr] },
+      ];
+      return sortedResultObject;
+    }
     const sortedResultObject = [
       ...closingOfferingsArr,
       ...newOfferingsArr,

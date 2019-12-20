@@ -218,7 +218,7 @@ export default class AddWithdrawFund extends Component {
                         ? (
                           <Button
                             as={Link}
-                            to={`/app/account-details/${this.props.account}/portfolio`}
+                            to={`/dashboard/account-details/${this.props.account}/portfolio`}
                           >
                             Close
                         </Button>

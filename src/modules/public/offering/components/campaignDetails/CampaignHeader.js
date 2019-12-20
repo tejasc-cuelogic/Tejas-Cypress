@@ -194,7 +194,7 @@ export default class CampaignHeader extends Component {
                   {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
                     && (
                       <p className="mb-0">
-                        Interest Rate : {get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-'}
+                        Interest Rate: {get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-'}
                       </p>
                     )
                   }
@@ -221,6 +221,22 @@ export default class CampaignHeader extends Component {
                         <p className="mb-0">
                           {`${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price:`} {get(campaign, 'keyTerms.priceCopy') || '-'}
                         </p>
+                      </>
+                    )
+                  }
+                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE
+                    && (
+                      <>
+                      {get(campaign, 'keyTerms.valuationCap') && (
+                        <p className="mb-0">
+                          Valuation Cap: {get(campaign, 'keyTerms.valuationCap')}
+                        </p>
+                      )}
+                      {get(campaign, 'keyTerms.discount') && (
+                        <p className="mb-0">
+                          Discount: {get(campaign, 'keyTerms.discount')}
+                        </p>
+                      )}
                       </>
                     )
                   }

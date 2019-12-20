@@ -115,7 +115,7 @@ export default class ConfirmEmailAddress extends Component {
 
   handleCloseModal = () => {
     // if (!this.props.refLink && this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
-    //   this.props.history.push('/app/setup');
+    //   this.props.history.push('/dashboard/setup');
     // } else {
     //   this.props.history.push(this.props.uiStore.authRef || '/');
     // }
@@ -149,14 +149,14 @@ export default class ConfirmEmailAddress extends Component {
     } else if (this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
       this.props.history.replace(this.props.userDetailsStore.pendingStep);
     } else {
-      this.props.history.replace('/app/setup/identity-verification/0');
+      this.props.history.replace('/dashboard/setup/identity-verification/0');
     }
     this.props.identityStore.setIsOptConfirmed(false);
   }
 
   render() {
     const changeEmailAddressLink = this.props.refLink
-      ? '/app/account-settings/profile-data/new-email-address' : '/register-investor';
+      ? '/dashboard/account-settings/profile-data/new-email-address' : '/register-investor';
     const {
       CONFIRM_FRM,
       ConfirmChange,

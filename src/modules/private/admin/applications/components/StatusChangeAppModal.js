@@ -33,7 +33,7 @@ export default class StatusChangeAppModal extends Component {
     const { match } = this.props;
     const { params } = match;
     this.props.uiStore.setErrors(null);
-    this.props.history.push(`/app/applications/${params.id}`);
+    this.props.history.push(`/dashboard/applications/${params.id}`);
   }
 
   updateApplicationStatus = (e) => {
@@ -44,7 +44,7 @@ export default class StatusChangeAppModal extends Component {
       .updateApplicationStatus(params.appId, params.userId, params.appStatus, params.action)
       .then(() => {
         this.props.uiStore.setErrors(null);
-        this.props.history.push(`/app/applications/${params.id}`);
+        this.props.history.push(`/dashboard/applications/${params.id}`);
       });
   }
 
@@ -83,7 +83,7 @@ export default class StatusChangeAppModal extends Component {
                 ).then(() => {
                   this.props.uiStore.setErrors(null);
                   this.props.uiStore.setProgress(false);
-                  this.props.history.push('/app/applications/in-progress');
+                  this.props.history.push('/dashboard/applications/in-progress');
                 });
             } else {
               adminActions.createNewUser(userDetails, 'SUPPRESS', false).then(() => {
@@ -101,7 +101,7 @@ export default class StatusChangeAppModal extends Component {
                     ).then(() => {
                       this.props.uiStore.setErrors(null);
                       this.props.uiStore.setProgress(false);
-                      this.props.history.push('/app/applications/in-progress');
+                      this.props.history.push('/dashboard/applications/in-progress');
                     });
                 }, 5000);
               }).catch(() => {
