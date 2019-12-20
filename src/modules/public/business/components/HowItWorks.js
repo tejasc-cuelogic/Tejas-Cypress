@@ -19,6 +19,11 @@ class HowItWorks extends Component {
     window.scrollTo(0, 0);
   }
 
+  handleApplyCta = () => {
+    this.props.uiStore.setAuthRef('/business');
+    this.props.history.push('/register');
+  }
+
   render() {
     const nsvideos = {
       embed: '247714163',
@@ -146,7 +151,7 @@ class HowItWorks extends Component {
                   </p>
                     {!userStore.isIssuer && !responsiveVars.isMobile
                       && (
-                        <Button as={Link} to="/business-application/business" primary className="mb-30">Apply Online</Button>
+                        <Button onClick={this.handleApplyCta} primary className="mb-30">Apply Online</Button>
                       )
                     }
                   </div>
@@ -180,7 +185,7 @@ class HowItWorks extends Component {
                   </List>
                   {!userStore.isIssuer && responsiveVars.isMobile
                     && (
-                      <Button className="mt-40" as={Link} to="/business-application/business" primary fluid>Apply Online</Button>
+                      <Button className="mt-40" onClick={this.handleApplyCta} primary fluid>Apply Online</Button>
                     )
                   }
                 </Grid.Column>
@@ -282,7 +287,7 @@ class HowItWorks extends Component {
                     </p>
                     {!userStore.isIssuer && !responsiveVars.isMobile
                       && (
-                        <Button as={Link} to="/business-application/business" primary className="mb-30">Apply Online</Button>
+                        <Button onClick={this.handleApplyCta} primary className="mb-30">Apply Online</Button>
                       )
                     }
                   </div>
