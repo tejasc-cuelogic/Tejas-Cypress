@@ -17,9 +17,8 @@ export const removeUploadedFile = gql`
   }`;
 
 export const updateUserReferralCode = gql`
-mutation _updateUserReferralCode($cognitoUserId: String!, $referralCode: String!) {
+mutation updateUserReferralCode($referralCode: String!) {
   updateUserReferralCode (
-    cognitoUserId: $cognitoUserId
     referralCode: $referralCode
   )
 }`;
@@ -33,14 +32,14 @@ export const getBoxFileDetails = gql`
 `;
 
 export const createCdnSignedUrl = gql`
-  mutation _createCdnSignedUrl($key: String!){
+  mutation createCdnSignedUrl($key: String!){
     createCdnSignedUrl(
       key: $key
     )
   }
 `;
 export const deleteCdnS3File = gql`
-mutation _deleteCdnS3File($key: String!){ 
+mutation deleteCdnS3File($key: String!){ 
   deleteCdnS3File(
     key: $key
   )
@@ -66,7 +65,7 @@ mutation sendAlertToAdminFromClient($emailContent: String!){
 `;
 
 export const createUploadEntryAccreditationAdmin = gql`
-  mutation _createUploadEntryAccreditationAdmin($userRole: UserRoleEnum!, $fileData: UploadFileMetaInput!, $accountType:InvestorAccountTypeEnum!, $action:AccreditationStatus!, $userId: String!) {
+  mutation createUploadEntryAccreditationAdmin($userRole: UserRoleEnum!, $fileData: UploadFileMetaInput!, $accountType:InvestorAccountTypeEnum!, $action:AccreditationStatus!, $userId: String!) {
     createUploadEntryAccreditationAdmin(userRole: $userRole, fileData: $fileData, accountType: $accountType, action: $action, userId: $userId) {
       preSignedUrl
       fileId

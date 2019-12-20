@@ -6,7 +6,7 @@ import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as clientPrivate } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import { allTeamMembers, getTeamMemberById, deleteTeamMemberById, filteredTeamMembers, newTeamMember, editTeamMember, setMemberOrderInTeam } from '../../queries/Team';
+import { allTeamMembers, getTeamMemberById, deleteTeamMemberById, newTeamMember, editTeamMember, setMemberOrderInTeam } from '../../queries/Team';
 import { TEAM } from '../../../constants/team';
 import { uiStore } from '../../index';
 import { fileUpload } from '../../../actions';
@@ -326,17 +326,6 @@ export class TeamStore {
         meta: {},
       },
     };
-  }
-
-  @action
-  filterTeamMembersByName = (teamMemberName) => {
-    const query = filteredTeamMembers;
-    const client = clientPrivate;
-    this.data = graphql({
-      client,
-      query,
-      variables: { memberName: teamMemberName },
-    });
   }
 
   @computed get count() {

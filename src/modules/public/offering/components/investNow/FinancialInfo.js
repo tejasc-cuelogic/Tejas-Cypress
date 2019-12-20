@@ -36,16 +36,11 @@ class FinancialInfo extends Component {
       const investorTotalAmountInvested = get(this.props.investmentLimitStore.getCurrentInvestNowHealthCheck, 'investorTotalAmountInvested') || '0';
       this.props.investmentLimitStore.setFieldValue('investorTotalAmountInvested', investorTotalAmountInvested);
     }
-    // if (this.props.match.isExact && this.props.investmentStore.getSelectedAccountTypeId) {
-    //   this.props.investmentLimitStore
-    //     .getInvestorTotalAmountInvested(this.props.investmentStore.getSelectedAccountTypeId);
-    // }
   }
 
   render() {
     const {
       investmentAmount,
-      // isValidInvestAmtInOffering,
       INVESTMONEY_FORM,
       PREFERRED_EQUITY_INVESTMONEY_FORM,
       investMoneyChange,
@@ -121,7 +116,8 @@ class FinancialInfo extends Component {
                       position="top center"
                       hoverable
                     />
-                    <Link to={this.props.changeInvest && !this.props.isFromPublicPage ? 'change-investment-limit' : `${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
+                    {/* <Link to={this.props.changeInvest && !this.props.isFromPublicPage ? 'change-investment-limit' : `${match.url}/change-investment-limit`} className="link"><small>Update</small></Link> */}
+                    <Link to={`${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
                   </p>
                 )
               }

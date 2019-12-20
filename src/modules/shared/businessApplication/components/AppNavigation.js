@@ -20,14 +20,12 @@ export default class AppNavigation extends Component {
 
   actualSubmit = (where) => {
     const {
-      // checkFormisValid,
       currentApplicationId, currentApplicationType,
     } = this.props.businessAppStore;
+    // partial save triggered on previous/next tab click
+    this.submitSaveContinue();
     if (where >= 0) {
-      // if (checkFormisValid(`${this.state.navItems[this.state.step].to}`, true)) {
-      this.submitSaveContinue();
       this.props.history.push(`/dashboard/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
-      // }
     } else {
       this.props.history.push(`/dashboard/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
     }
@@ -45,13 +43,16 @@ export default class AppNavigation extends Component {
       currentApplicationType, businessAppParitalSubmit, businessApplicationSubmitAction, apiCall,
     } = this.props.businessAppStore;
     // if (checkFormisValid(`${this.state.navItems[this.state.step].to}`, true)) {
+    this.props.businessAppStore.setFieldvalue('appSubmitLoading', true);
     businessAppParitalSubmit().then((result) => {
       if (result && this.props.businessAppStore.canSubmitApp && !apiCall) {
         businessApplicationSubmitAction().then(() => {
+          this.props.businessAppStore.setFieldvalue('appSubmitLoading', false);
           Helper.toast('Business application submitted successfully!', 'success');
           this.props.history.push('/dashboard');
         });
       } else {
+        this.props.businessAppStore.setFieldvalue('appSubmitLoading', false);
         this.props.history.push(`/dashboard/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step].to}`);
       }
     });
@@ -59,7 +60,7 @@ export default class AppNavigation extends Component {
   }
 
   render() {
-    const { isFileUploading, formReadOnlyMode, ButtonTextToggle } = this.props.businessAppStore;
+    const { isFileUploading, formReadOnlyMode, ButtonTextToggle, appSubmitLoading } = this.props.businessAppStore;
     const { inProgress } = this.props.uiStore;
     return (
       <>
@@ -93,7 +94,7 @@ export default class AppNavigation extends Component {
                             {/* <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading}
                     primary className="very relaxed" content={isFileUploading
                     ? 'File operation in process' : 'Save'} /> */}
-                            <Button type="button" loading={inProgress} onClick={this.submit} disabled={isFileUploading || inProgress} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : ButtonTextToggle} />
+                            <Button type="button" loading={inProgress || appSubmitLoading} onClick={this.submit} disabled={isFileUploading || inProgress || appSubmitLoading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : ButtonTextToggle} />
                           </>
                         )
                       }

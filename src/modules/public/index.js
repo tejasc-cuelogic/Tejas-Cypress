@@ -101,7 +101,7 @@ export default class Public extends React.Component {
 
   render() {
     const { location, match } = this.props;
-    const { BUSINESS_APP_FRM, isPrequalQulify } = this.props.businessAppStore;
+    const { BUSINESS_APP_FRM, isPrequalQulify, appSubmitLoading } = this.props.businessAppStore;
     const { isValid } = BUSINESS_APP_FRM.meta;
     const { inProgress } = this.props.uiStore;
     // const NoFooter = [
@@ -130,7 +130,7 @@ export default class Public extends React.Component {
               canSubmitApp={isValid}
               isPrequalQulify={isPrequalQulify}
               preQualSubmit={this.preQualSubmit}
-              loading={inProgress}
+              loading={inProgress || appSubmitLoading}
             />
           )}
           {this.getRoutes(isAuthLocation)}

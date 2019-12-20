@@ -571,7 +571,6 @@ export class AccreditationStore {
       userAccreditationDetails.isPartialProfile = true;
     }
     const payLoad = {
-      id: userDetailsStore.currentUserId,
       accountId,
       accountType,
       userAccreditationDetails,
@@ -581,9 +580,6 @@ export class AccreditationStore {
     }
     const refetchQueries = formType ? [{
       query: userAccreditationQuery,
-      variables: {
-        userId: userDetailsStore.currentUserId,
-      },
     }] : [];
     return new Promise((resolve, reject) => {
       client
@@ -704,30 +700,28 @@ export class AccreditationStore {
     if (setInProgressArray) {
       uiStore.addMoreInProgressArray('getUserAccreditation');
     }
-    if (userId || userDetailsStore.currentUserId) {
-      this.userData = graphql({
-        client,
-        query: userAccreditationQuery,
-        fetchPolicy: 'network-only',
-        variables: { userId: userId || userDetailsStore.currentUserId },
-        onFetch: () => {
-          if (!this.userData.loading) {
-            if (setInProgressArray) {
-              uiStore.removeOneFromProgressArray('getUserAccreditation');
-            }
-            uiStore.setProgress(false);
-            res();
-          }
-        },
-        onError: () => {
-          uiStore.setProgress(false);
+    this.userData = graphql({
+      client,
+      query: userAccreditationQuery,
+      fetchPolicy: 'network-only',
+      variables: userId ? { userId } : { },
+      onFetch: () => {
+        if (!this.userData.loading) {
           if (setInProgressArray) {
             uiStore.removeOneFromProgressArray('getUserAccreditation');
           }
-          Helper.toast('Something went wrong, please try again later.', 'error');
-        },
-      });
-    }
+          uiStore.setProgress(false);
+          res();
+        }
+      },
+      onError: () => {
+        uiStore.setProgress(false);
+        if (setInProgressArray) {
+          uiStore.removeOneFromProgressArray('getUserAccreditation');
+        }
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
   })
 
   @action
@@ -741,9 +735,6 @@ export class AccreditationStore {
           variables: payLoad,
           refetchQueries: [{
             query: userAccreditationQuery,
-            variables: {
-              userId: userDetailsStore.currentUserId,
-            },
           }],
         })
         .then(() => {
