@@ -33,7 +33,7 @@ export default class StickyNotification extends Component {
 
   handleVerifyAccreditation = (e) => {
     e.preventDefault();
-    const url = '/app/account-settings/investment-limits';
+    const url = '/dashboard/account-settings/investment-limits';
     const { accountType, multipleAccounts } = this.props;
     if (!multipleAccounts) {
       if (this.props.userDetailsStore.isEntityTrust && accountType === 'entity') {
@@ -42,12 +42,12 @@ export default class StickyNotification extends Component {
         this.props.history.push(`${url}/verify-accreditation/${accountType}`);
       }
     } else {
-      this.props.history.push('/app/account-settings/investment-limits');
+      this.props.history.push('/dashboard/account-settings/investment-limits');
     }
   }
 
   handleReferral = () => {
-    this.props.history.push('/app/referrals');
+    this.props.history.push('/dashboard/referrals');
   }
 
   isUserAccreditated = () => {

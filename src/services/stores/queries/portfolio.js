@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const getInvestorAccountPortfolio = gql`
-query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlight: Boolean, $includeInterest: Boolean) {
+query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFlight: Boolean, $includeInterest: Boolean) {
   getInvestorAccountPortfolio(
     userId: $userId,
     accountId: $accountId,
@@ -61,6 +61,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         investmentDate
         regulation
         netPaymentsReceived
+        remainingPrincipal
         offering {
           id
           stage
@@ -146,8 +147,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
 }
 `;
 
-export const getInvestorDetailsById = gql`
-query getInvestmentDetails($userId: String!, $accountId: String!, $offeringId: String!) {
+export const getInvestmentDetails = gql`
+query getInvestmentDetails($userId: String, $accountId: String!, $offeringId: String!) {
   getInvestmentDetails(
     userId: $userId,
     accountId: $accountId,
@@ -166,18 +167,9 @@ export const cancelAgreement = gql`
   mutation cancelAgreement($agreementId: Int!, $userId: String, $voidReason: String, $voidType: AgreementVoidTypeEnum, $sendNotification: Boolean) {
     cancelAgreement(agreementId: $agreementId, userId: $userId, voidReason: $voidReason, voidType: $voidType, sendNotification: $sendNotification)
   }`;
-export const withdrawFunds = gql`
-  mutation withdrawFunds($amount:  Float!, $accountId: String! ) {
-    withdrawFunds(amount: $amount, accountId: $accountId)
-  }`;
-export const addFunds = gql`
-  mutation addFunds($amount:  Float!, $accountId: String! ) {
-    addFunds(amount: $amount, accountId: $accountId)
-  }
-`;
 
 export const getMonthlyPaymentsToInvestorByOffering = gql`
-query _getMonthlyPaymentsToInvestorByOffering($userId:String, $accountId:String!, $offeringId:String!) {
+query getMonthlyPaymentsToInvestorByOffering($userId:String, $accountId:String!, $offeringId:String!) {
   getMonthlyPaymentsToInvestorByOffering (
     userId: $userId
     accountId: $accountId
@@ -192,7 +184,7 @@ query _getMonthlyPaymentsToInvestorByOffering($userId:String, $accountId:String!
 `;
 
 export const getUserAccountSummary = gql`
-  query _getUserAccountSummary($userId: String!) {
+  query getUserAccountSummary($userId: String) {
     getUserAccountSummary (userId: $userId) {
       totalInvested
       pendingInvestments

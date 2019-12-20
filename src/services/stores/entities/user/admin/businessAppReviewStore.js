@@ -666,7 +666,6 @@ export class BusinessAppReviewStore {
     uiStore.setProgress();
     let payLoad = {
       applicationId: offerData.applicationId,
-      issuerId: offerData.userId,
       selectedOffer: offer,
       callbackUrl: `${window.location.origin}/secure-gateway`,
     };
@@ -731,7 +730,6 @@ export class BusinessAppReviewStore {
       query: getPortalAgreementStatus,
       variables: {
         applicationId: offerData.applicationId,
-        issuerId: offerData.userId,
       },
       fetchPolicy: 'network-only',
       onFetch: (data) => {

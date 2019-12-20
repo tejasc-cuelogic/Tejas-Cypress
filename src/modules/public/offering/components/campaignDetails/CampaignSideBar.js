@@ -164,10 +164,26 @@ export default class CampaignSideBar extends Component {
                   </p>
                 )
               }
+              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE
+                && (
+                  <>
+                  {get(campaign, 'keyTerms.valuationCap') && (
+                    <p className="mb-0">
+                      Valuation Cap: {get(campaign, 'keyTerms.valuationCap')}
+                    </p>
+                  )}
+                  {get(campaign, 'keyTerms.discount') && (
+                    <p className="mb-0">
+                      Discount: {get(campaign, 'keyTerms.discount')}
+                    </p>
+                  )}
+                  </>
+                )
+              }
               {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
                 && (
                   <p className="mb-0">
-                    Interest Rate : {get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-'}
+                    Interest Rate: {get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-'}
                   </p>
                 )
               }
