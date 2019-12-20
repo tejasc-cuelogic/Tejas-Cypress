@@ -8,7 +8,7 @@ import SummaryHeader from '../components/portfolio/SummaryHeader';
 import Documents from '../../../../public/offering/components/campaignDetails/documents';
 import { SuspenseBoundary, lazyRetry, InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-import NotFound from '../../../../shared/NotFound';
+// import NotFound from '../../../../shared/NotFound';
 import { DataFormatter } from '../../../../../helper';
 
 
@@ -16,22 +16,23 @@ const getModule = component => lazyRetry(() => import(`../components/portfolio/$
 @inject('portfolioStore', 'campaignStore', 'uiStore', 'offeringCreationStore', 'updateStore')
 @observer
 class InvestmentDetails extends PureComponent {
-  constructor(props) {
-    super(props);
+  componentDidMount() {
     const { portfolioStore, uiStore, isAdmin } = this.props;
     if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/Overview`);
+      this.props.history.replace(`${this.props.match.url}/overview`);
     }
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
-    if (this.props.offeringCreationStore.currentOfferingId !== this.props.match.params.id
+    if (this.props.offeringCreationStore.currentOfferingSlug !== this.props.match.params.offeringSlug
       || portfolioStore.currentAcccountType !== accountType) {
       if (uiStore.inProgress !== 'portfolio') {
         this.props.uiStore.setProgress('portfolioDirect');
       }
-      portfolioStore.getInvestorDetails(accountType, this.props.match.params.id, isAdmin).then(() => this.props.uiStore.setProgress(false));
-      this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true, true);
-      this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.id);
-      portfolioStore.currentAccoutType(accountType);
+      this.props.campaignStore.getCampaignDetails(this.props.match.params.offeringSlug).then((res) => {
+        this.props.offeringCreationStore.setCurrentOfferingId(res.id);
+        this.props.offeringCreationStore.setFieldValue('currentOfferingSlug', this.props.match.params.offeringSlug);
+        portfolioStore.currentAccoutType(accountType);
+        portfolioStore.getInvestorDetails(accountType, res.id, isAdmin).then(() => this.props.uiStore.setProgress(false));
+      });
     }
   }
 
@@ -74,9 +75,9 @@ class InvestmentDetails extends PureComponent {
       ],
     };
 
-    if (details && details.data && !details.data.getOfferingById) {
-      return <NotFound />;
-    }
+    // if (details && details.data && !details.data.getOfferingDetailsBySlug) {
+    //   return <NotFound />;
+    // }
     if (dataRoomDocs.length === 0) {
       navItems = navItems.filter(f => f.title !== 'Documents');
     }
