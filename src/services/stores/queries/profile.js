@@ -1,109 +1,9 @@
 import gql from 'graphql-tag';
 
-export const verifyCIPUser = gql`
-mutation verifyCIPUsers($userId: String!, $user: UserCIPInput){
-    verifyCIPIdentity(userId: $userId, user: $user){
-      ... on UserCIPSoftFail{
-        softFailId: id
-        key
-        message
-        qualifiers {
-          key
-          message
-        }
-        questions{
-          prompt
-          type
-          choices {
-            text
-          }
-        }
-      }
-      ... on UserCIPPass{
-        passId: id
-        key
-        message
-        summary
-      }
-      ... on UserCIPHardFail{
-        hardFailId: id
-        key
-        message
-        qualifiers {
-          key
-          message
-        }
-      }
-      ... on UserCIPFail{
-        key
-        message
-      }
-    }
-  }`;
-
-export const verifyCIPAnswers = gql`
-  mutation verifyCIPAnswers($cipAnswers: CIPAnswersInput){
-    verifyCIPAnswers(cipAnswers: $cipAnswers) {
-      ... on UserCIPSoftFail{
-        softFailId: id
-        key
-        message
-        qualifiers {
-          key
-          message
-        }
-        questions {
-          prompt
-          type
-          choices {
-            text
-          }
-        }
-      }
-
-      ... on UserCIPHardFail{
-        hardFailId: id
-        key
-        message
-        qualifiers {
-          key
-          message
-        }
-      }
-
-      ... on UserCIPPass {
-        passId: id
-        key
-        message
-        summary
-      }
-    }
-  }`;
-
-export const startUserPhoneVerification = gql`
-  mutation _startUserPhoneVerification($phoneDetails: phoneInput! $method: PhoneVerificationMethodsEnum!) {
-    startUserPhoneVerification(phoneDetails: $phoneDetails method: $method) {
-      carrier
-      is_cellphone
-      message
-      seconds_to_expire
-      uuid
-      success
-    }
-  }`;
-
-export const checkUserPhoneVerificationCode = gql`
-  mutation _checkUserPhoneVerificationCode($phoneDetails: phoneInput! $verificationCode: String!) {
-    checkUserPhoneVerificationCode(phoneDetails: $phoneDetails  verificationCode: $verificationCode) {
-      message
-      success
-    }
- }`;
-
 export const updateUserProfileData = gql`
-  mutation _updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: ProfileDataLegalInput, $preferredInfo: PreferredInfoInput, $capabilities: [String], $targetUserId: String) {
+  mutation updateUserProfileData($profileDetails: UserInfoInput!, $legalDetails: ProfileDataLegalInput, $preferredInfo: PreferredInfoInput, $capabilities: [String], $targetUserId: String) {
   updateUserProfileData(
-  profileDetails: $profileDetails, targetUserId: $targetUserId, legalDetails: $legalDetails, preferredInfo: $preferredInfo, capabilities: $capabilities
+  profileDetails: $profileDetails, userId: $targetUserId, legalDetails: $legalDetails, preferredInfo: $preferredInfo, capabilities: $capabilities
   ) {
       id
       info {
@@ -120,14 +20,14 @@ export const updateUserProfileData = gql`
   }`;
 
 export const requestEmailChnage = gql`
-  mutation _requestEmailChange($newEmail: String!) {
+  mutation requestEmailChange($newEmail: String!) {
     requestEmailChange(
       newEmail: $newEmail
     )
   }`;
 
 export const verifyAndUpdateEmail = gql`
-  mutation _verifyAndUpdateEmail($confirmationCode: String! $resourceId: String!) {
+  mutation verifyAndUpdateEmail($confirmationCode: String! $resourceId: String!) {
     verifyAndUpdateEmail(
       confirmationCode: $confirmationCode
       resourceId: $resourceId
@@ -135,22 +35,6 @@ export const verifyAndUpdateEmail = gql`
       email {
         address
       }
-    }
-  }`;
-
-export const updateUserPhoneDetail = gql`
-  mutation _updateUserPhoneDetail($phoneDetails: phoneInput!){
-    updateUserPhoneDetails(
-      phoneDetails: $phoneDetails,
-      ) {
-        id
-        email {
-          address
-        }
-        phone {
-          number
-          verified
-        }
     }
   }`;
 
@@ -162,7 +46,7 @@ export const isUniqueSSN = gql`
   }`;
 
 export const verifyCip = gql`
-  mutation _verifyCip($userId: String!, $user: UserCIPInput, $phoneDetails: phoneInput!, $isCipOffline: Boolean){
+  mutation verifyCip($userId: String, $user: UserCIPInput, $phoneDetails: phoneInput!, $isCipOffline: Boolean){
     verifyCip(userId: $userId, user: $user, phoneDetails: $phoneDetails, isCipOffline: $isCipOffline)
   }`;
 
@@ -172,11 +56,10 @@ export const verifyCipSoftFail = gql`
   }`;
 
 export const verifyCipHardFail = gql`
-mutation verifyCipHardFail($license: String!, $residence: String!, $userId: String) {
+mutation verifyCipHardFail($license: String!, $residence: String!) {
     verifyCipHardFail(
       license: $license
       residence: $residence
-      userId: $userId
     )
   }`;
 
@@ -191,9 +74,8 @@ export const portPrequalDataToApplication = gql`
   }`;
 
 export const requestOtp = gql`
-  mutation requestOtp($userId: String $type: MFAModeEnum, $address: String){
+  mutation requestOtp($type: MFAModeEnum, $address: String){
     requestOtp(
-      userId: $userId
       type: $type
       address: $address
     )

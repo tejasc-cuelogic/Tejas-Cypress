@@ -32,9 +32,7 @@ import {
   getBusinessApplications,
   createBusinessApplicationPrequalificaiton,
   createBusinessApplicationBasicInfo,
-  upsertBusinessApplicationInformationPerformance,
-  upsertBusinessApplicationInformationBusinessDetails,
-  upsertBusinessApplicationInformationDocumentation,
+  upsertBusinessApplicationInformation,
   submitApplication,
   helpAndQuestion,
 } from '../../queries/businessApplication';
@@ -92,6 +90,8 @@ export class BusinessAppStore {
   @observable isPrequalQulify = false;
 
   @observable userExists = false;
+
+  @observable appSubmitLoading = false;
 
   @observable userRoles = [];
 
@@ -1146,6 +1146,7 @@ export class BusinessAppStore {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
           uiStore.setProgress(false);
+          this.setFieldvalue('appSubmitLoading', false);
           this.setFieldvalue('apiCall', false);
           reject(error);
         });
@@ -1178,7 +1179,6 @@ export class BusinessAppStore {
       key = 3;
     }
     stepStatus = isPartialDataFlag ? 'IN_PROGRESS' : 'COMPLETE';
-    let mutationQuery = upsertBusinessApplicationInformationBusinessDetails;
     let variableData = {
       applicationId: isApplicationManager ? this.applicationId : this.currentApplicationId,
       applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE',
@@ -1202,14 +1202,12 @@ export class BusinessAppStore {
         ...variableData,
         businessPerformance: data,
       };
-      mutationQuery = upsertBusinessApplicationInformationPerformance;
     } else if (stepName === 'DOCUMENTATION') {
       data = this.getFormatedDocumentationData;
       variableData = {
         ...variableData,
         businessDocumentation: data,
       };
-      mutationQuery = upsertBusinessApplicationInformationDocumentation;
     }
     if (isApplicationManager) {
       variableData.targetIssuerId = this.businessApplicationDetailsAdmin.userId;
@@ -1218,7 +1216,7 @@ export class BusinessAppStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: mutationQuery,
+          mutation: upsertBusinessApplicationInformation,
           variables: variableData,
           refetchQueries: [
             {
@@ -1250,6 +1248,7 @@ export class BusinessAppStore {
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
+          this.setFieldvalue('appSubmitLoading', false);
           reject(error);
         })
         .finally(() => {
