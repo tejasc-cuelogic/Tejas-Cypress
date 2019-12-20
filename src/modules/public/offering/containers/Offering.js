@@ -39,17 +39,6 @@ class Offering extends Component {
             Invest in growing local businesses
           </Header>
         </Responsive> */}
-        {(showCreationList && !loading)
-        && (
-          <CampaignList
-            refLink={this.props.match.url}
-            loading={completedLoading}
-            campaigns={creation}
-            filters
-            heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-10' : 'mb-50'}>Coming Soon</Header>}
-            subheading={<p className="campaign-subheader center-align">These offerings are in Creation</p>}
-          />
-        )}
         <CampaignList
           refLink={this.props.match.url}
           loading={loading}
@@ -63,6 +52,17 @@ class Offering extends Component {
           && <LoadMoreBtn action={loadMoreRecord} param="activeToDisplay" />
         }
         <Divider section hidden />
+        {(showCreationList && !loading)
+        && (
+          <CampaignList
+            refLink={this.props.match.url}
+            loading={completedLoading}
+            campaigns={creation}
+            filters
+            heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-10' : 'mb-50'}>Coming Soon</Header>}
+            subheading={<p className="campaign-subheader center-align">These offerings are in Creation</p>}
+          />
+        )}
         <Divider hidden />
         <section className="bg-offwhite">
           <Container textAlign="center">
