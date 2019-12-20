@@ -266,6 +266,7 @@ export const PRIVATE_NAV = [
       },
       { title: 'Legal', to: 'legal', accessFor: [1] },
       { title: 'Offering', to: 'offering', accessFor: [1] },
+      { title: 'Content', to: 'content', accessFor: [1] },
       { title: 'Media', to: 'media', accessFor: [1] },
       { title: 'Leadership', to: 'leadership', accessFor: [1] },
       { title: 'Investors', to: 'investors', accessFor: [2, 3, 4] },

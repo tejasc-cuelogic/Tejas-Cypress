@@ -3,6 +3,7 @@ import KeyTerms from './KeyTerms';
 import Legal from './Legal';
 import OfferingSection from './Offering';
 import Leadership from './Leadership';
+import Content from './Content';
 import BonusRewards from './BonusRewards';
 import Media from './Media';
 import Close from './Close';
@@ -31,6 +32,7 @@ const OfferingModule = (to) => {
     case 'transactions': module = Transactions; break;
     case 'updates': module = Updates; break;
     case 'offering-creation': module = OfferingCreation; break;
+    case 'content': module = Content; break;
     case 'activity-history': module = ActivityHistory; break;
     case 'watch-list': module = WatchList; break;
     case 'documents': module = Documents; break;
