@@ -29,7 +29,7 @@ export default class AccountCreation extends React.Component {
     const { checkIfAccountIsAlreadyPresent, getInvestorAccountsRoute } = this.props.userDetailsStore;
     if (checkIfAccountIsAlreadyPresent(accountType)) {
       const route = getInvestorAccountsRoute(accountType);
-      this.props.history.push(`/app/account-details/${route}/portfolio`);
+      this.props.history.push(`/dashboard/account-details/${route}/portfolio`);
     }
   }
 
@@ -51,9 +51,9 @@ export default class AccountCreation extends React.Component {
       const { getInvestorAccountsRoute } = this.props.userDetailsStore;
       const route = getInvestorAccountsRoute('ira');
       if (route) {
-        this.props.history.push(`/app/account-details/${route}/portfolio`);
+        this.props.history.push(`/dashboard/account-details/${route}/portfolio`);
       } else {
-        this.props.history.push('/app/setup');
+        this.props.history.push('/dashboard/setup');
       }
     });
   }

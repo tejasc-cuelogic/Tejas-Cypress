@@ -136,45 +136,45 @@ export default class BusinessDocumentation extends Component {
           />
           {getPersonalGuaranteeCondition
             && (
-            <div>
-              {!hideFields
-              && (
-              <p>
-                Please <a href="https://nextseed.box.com/shared/static/cnru75v5lv5akiz5p7fap0d7nqljwuy9.pdf" className="link"><b>download</b></a>, fill out and upload the
-                Personal Guarantee Form along with any supporting documentation
+              <div>
+                {!hideFields
+                  && (
+                    <p>
+                      Please <a href="https://nextseed.box.com/shared/static/cnru75v5lv5akiz5p7fap0d7nqljwuy9.pdf" className="link"><b>download</b></a>, fill out and upload the
+                      Personal Guarantee Form along with any supporting documentation
               </p>
-              )
-              }
-              <DropZone
-                sharableLink
-                blockDownload={get(userAccess, 'asSupport')}
-                hideFields={hideFields}
-                disabled={formReadOnlyMode && disableFileUpload}
-                asterisk="true"
-                multiple
-                name="personalGuaranteeForm"
-                fielddata={fields.personalGuaranteeForm}
-                ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
-                onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
-              />
-            </div>
+                  )
+                }
+                <DropZone
+                  sharableLink
+                  blockDownload={get(userAccess, 'asSupport')}
+                  hideFields={hideFields}
+                  disabled={formReadOnlyMode && disableFileUpload}
+                  asterisk="true"
+                  multiple
+                  name="personalGuaranteeForm"
+                  fielddata={fields.personalGuaranteeForm}
+                  ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM', null, this.props.userStore.isApplicationManager)}
+                  onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
+                />
+              </div>
             )
           }
         </FormElementWrap>
         {this.props.userStore.isAdmin && this.props.userStore.isApplicationManager
           ? (
-<div className="right aligned">
-            <Button
-              inverted
-              type="button"
-              onClick={() => businessAppParitalSubmit(true)}
-              className="align-right right-align"
-              color="green"
-              content="Save"
-              disabled={!(businessApplicationDetailsAdmin.applicationStage === 'COMPLETED' ? enableSave && BUSINESS_DOC_FRM.meta.isValid : enableSave)}
-              loading={inProgress}
-            />
-          </div>
+            <div className="right aligned">
+              <Button
+                inverted
+                type="button"
+                onClick={() => businessAppParitalSubmit(true)}
+                className="align-right right-align"
+                color="green"
+                content="Save"
+                disabled={!(businessApplicationDetailsAdmin.applicationStage === 'COMPLETED' ? enableSave && BUSINESS_DOC_FRM.meta.isValid : enableSave) || inProgress}
+                loading={inProgress}
+              />
+            </div>
           )
           : ''}
       </>

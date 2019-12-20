@@ -25,27 +25,6 @@ query insights($sortByCreationDateAsc: Boolean!, $categoryId: String){
 }
 `;
 
-export const getArticlesByCatId = gql`
-query _getArticleByCategoryId($id:ID! ) {
-  insightArticlesByCategoryId (
-    id: $id
-  ) {
-    id
-    content
-    featuredImage
-    minuteRead
-    title
-    updated {
-      date
-    }
-    created {
-      date
-    }
-    banner
-  }
-}
-`;
-
 export const getArticleById = gql`
 query insight($id: ID!) {
   insightsArticle(id: $id) {
@@ -60,27 +39,6 @@ query insight($id: ID!) {
     tags
     author
     slug
-    articleStatus
-    updated {
-      by
-      date
-      __typename
-    }
-    __typename
-  }
-}
-`;
-
-export const getInsightById = gql`
-query insight($id: ID!) {
-  insightsArticle(id: $id) {
-    id
-    title
-    featuredImage
-    content
-    category
-    tags
-    author
     articleStatus
     updated {
       by

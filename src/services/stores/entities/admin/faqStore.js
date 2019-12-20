@@ -5,7 +5,7 @@ import { forEach, map, sortBy, kebabCase } from 'lodash';
 import { GqlClient as clientPrivate } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import { faqs, getFaqById, upsertFaq, faqsListByFilters, deleteFaq, updateStatus, setOrderForFAQ } from '../../queries/faq';
+import { faqs, getFaqById, upsertFaq, deleteFaq } from '../../queries/faq';
 import { FAQ } from '../../../constants/faq';
 import { uiStore } from '../../index';
 
@@ -85,38 +85,6 @@ export class FaqStore {
     if (id !== 'all') {
       this.selectedRecords = this.selectedRecords.filter(recordId => recordId !== 'all');
     }
-  }
-
-  @action
-  applyGlobalAction = () => {
-    const idArr = this.selectedRecords;
-    const status = this.globalAction;
-    this.data.loading = true;
-    if (status === 'delete') {
-      this.deleteRecords(idArr);
-    } else {
-      this.updateRecordStatus(idArr, status);
-    }
-  }
-
-  updateRecordStatus = (id, status) => {
-    uiStore.setProgress();
-    clientPrivate.mutate({
-      mutation: updateStatus,
-      variables: {
-        id,
-        itemStatus: status,
-      },
-      refetchQueries: [{ query: faqs }],
-    }).then(() => {
-      this.resetSelectedRecords();
-      uiStore.setProgress();
-      Helper.toast('Status updated successfully.', 'success');
-    }).catch(() => {
-      this.resetSelectedRecords();
-      uiStore.setProgress();
-      Helper.toast('Error while updating status.', 'error');
-    });
   }
 
   @action
@@ -255,33 +223,6 @@ export class FaqStore {
   }
 
   @action
-  setFaqOrder = (newArr) => {
-    uiStore.setProgress();
-    const data = [];
-    newArr.forEach((item, index) => {
-      if (item) {
-        data.push({
-          id: item.id,
-          order: index + 1,
-        });
-        // eslint-disable-next-line no-param-reassign
-        newArr[index].order = index + 1;
-      }
-    });
-    clientPrivate
-      .mutate({
-        mutation: setOrderForFAQ,
-        variables: { faqItemsList: data },
-      }).then(() => {
-        this.initRequest();
-        Helper.toast('Order updated successfully.', 'success');
-      }).catch(() => {
-        uiStore.setProgress(false);
-        Helper.toast('Error while updating order', 'error');
-      });
-  }
-
-  @action
   formChange = (e, result) => {
     this.FAQ_FRM = Validator.onChange(this.FAQ_FRM, Validator.pullValues(e, result));
     if (result.name === 'question') {
@@ -341,30 +282,6 @@ export class FaqStore {
     } else {
       this[formName].fields[field][getField] = value;
     }
-  }
-
-  @action
-  faqListByFilter = () => {
-    const data = this.requestState.search;
-    uiStore.setProgress();
-    this.data = graphql({
-      client: clientPrivate,
-      query: faqsListByFilters,
-      fetchPolicy: 'network-only',
-      variables: {
-        question: data.keyword,
-        faqType: data.type !== 'All' ? data.type : undefined,
-        categoryId: data.categoryName,
-        itemStatus: data.status !== 'All' ? data.status : undefined,
-      },
-      onFetch: (res) => {
-        if (res && res.faqsListByFilters) {
-          this.resetSelectedRecords();
-          uiStore.setProgress(false);
-          this.setDb(res.faqsListByFilters);
-        }
-      },
-    });
   }
 
   @computed get count() {
