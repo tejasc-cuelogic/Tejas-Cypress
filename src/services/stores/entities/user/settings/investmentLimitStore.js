@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { mapValues, filter, find, map } from 'lodash';
+import { mapValues, filter, find } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -57,7 +57,7 @@ export class InvestmentLimitStore {
   }
 
   @action
-  getInvestorInvestmentLimit = accountId => new Promise((resolve) => {
+  getInvestorInvestmentLimit = (accountId, isLoaderConsider = true) => new Promise((resolve) => {
     this.investorInvestmentLimit = graphql({
       client,
       query: getInvestorInvestmentLimit,
@@ -65,7 +65,9 @@ export class InvestmentLimitStore {
         accountId,
       },
       onFetch: (data) => {
-        if (data && !this.investorInvestmentLimit.loading) {
+        if (data && !isLoaderConsider) {
+          resolve(data);
+        } else if (data && !this.investorInvestmentLimit.loading) {
           resolve(data);
         }
       },
@@ -142,7 +144,7 @@ export class InvestmentLimitStore {
     // }
     limit = Math.min(limit, maxLimit);
     const remainingAmount = limit
-    - ((data.cfInvestments || 0) + investedAmtFloat);
+      - ((data.cfInvestments || 0) + investedAmtFloat);
     let remaining = Math.max(0, remainingAmount);
     if ((investedAmtFloat + data.cfInvestments || 0) >= maxLimit) {
       remaining = 0;
@@ -162,20 +164,38 @@ export class InvestmentLimitStore {
     );
   }
 
+  // @action
+  // setAccountsLimits = () => {
+  //   const { accountList } = this.getActiveAccountList;
+  //   accountList.forEach((account) => {
+  //     this.getInvestorInvestmentLimit(account.details.accountId).then((data) => {
+  //       if (data.getInvestorInvestmentLimit === '0.00') {
+  //         this.setInvestmentLimitInfo(account.name, account.details.accountId);
+  //       } else {
+  //         this.setFieldValue('currentLimit', data.getInvestorInvestmentLimit);
+  //       }
+  //       if (account.name === 'entity') {
+  //         this.setFieldValue('entityCurrentLimit', this.currentLimit);
+  //       } else {
+  //         this.setFieldValue('individualIRACurrentLimit', this.currentLimit);
+  //       }
+  //     });
+  //   });
+  // }
+
   @action
   setAccountsLimits = () => {
     const { accountList } = this.getActiveAccountList;
+    const isLoaderConsider = !(accountList.length > 1);
     accountList.forEach((account) => {
-      this.getInvestorInvestmentLimit(account.details.accountId).then((data) => {
+      this.getInvestorInvestmentLimit(account.details.accountId, isLoaderConsider).then((data) => {
         if (data.getInvestorInvestmentLimit === '0.00') {
           this.setInvestmentLimitInfo(account.name, account.details.accountId);
-        } else {
-          this.setFieldValue('currentLimit', data.getInvestorInvestmentLimit);
         }
         if (account.name === 'entity') {
-          this.setFieldValue('entityCurrentLimit', this.currentLimit);
+          this.setFieldValue('entityCurrentLimit', data.getInvestorInvestmentLimit);
         } else {
-          this.setFieldValue('individualIRACurrentLimit', this.currentLimit);
+          this.setFieldValue('individualIRACurrentLimit', data.getInvestorInvestmentLimit);
         }
       });
     });
@@ -200,8 +220,9 @@ export class InvestmentLimitStore {
         { name: field, value: fieldVal[field] ? fieldVal[field] : 0 },
       );
     });
-    const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
-    this.currentLimit = this.getInvestmentLimit(data);
+    // const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
+    // this.currentLimit = this.getInvestmentLimit(data);
+    this.currentLimit = (accountType === 'entity') ? this.entityCurrentLimit : this.individualIRACurrentLimit;
     this.INVESTEMENT_LIMIT_META = Validator.onChange(
       this.INVESTEMENT_LIMIT_META,
       { name: limitField, value: this.currentLimit },
@@ -222,10 +243,10 @@ export class InvestmentLimitStore {
   @action
   initiateInvestmentLimit = () => {
     this.activeAccounts = userDetailsStore.getActiveAccounts;
-    const activeAccountList = this.getActiveAccountList;
-    map(activeAccountList.accountList, (account) => {
-      this.setInvestmentLimitInfo(account.name);
-    });
+    // const activeAccountList = this.getActiveAccountList;
+    // map(activeAccountList.accountList, (account) => {
+    //   this.setInvestmentLimitInfo(account.name);
+    // });
   }
 
   @action
