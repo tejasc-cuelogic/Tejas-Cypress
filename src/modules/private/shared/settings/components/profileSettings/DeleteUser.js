@@ -28,7 +28,7 @@ export default class DeleteUser extends React.Component {
     if (this.props.userStore.confirmDelete) {
       authActions.logout('user').then(() => {
         this.props.history.push('/');
-      });
+      }).catch(err => console.log(err));
     } else {
       this.setState({ modalOpen: false });
     }
@@ -47,7 +47,7 @@ export default class DeleteUser extends React.Component {
   createNewAccount = () => {
     authActions.logout('user').then(() => {
       this.props.history.push('/register-investor');
-    });
+    }).catch(err => console.log(err));
   }
 
   render() {

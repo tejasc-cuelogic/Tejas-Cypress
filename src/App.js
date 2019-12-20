@@ -195,7 +195,7 @@ class App extends Component {
         if (this.props.location.pathname.includes('/dashboard/')) {
           this.props.history.push('/login');
         }
-      });
+      }).catch(err => console.log(err));
     }
   }
 

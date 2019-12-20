@@ -72,7 +72,7 @@ export default class Public extends React.Component {
         if (isToggle) {
           this.handleToggle();
         }
-      });
+      }).catch(err => console.log(err));
   }
 
   preQualSubmit = (e) => {

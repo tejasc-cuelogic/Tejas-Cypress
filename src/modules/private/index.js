@@ -59,7 +59,7 @@ export default class Private extends React.Component {
     authActions.logout('user')
       .then(() => {
         this.props.history.push('/');
-      });
+      }).catch(err => console.log(err));
   }
 
   render() {

@@ -36,7 +36,7 @@ export default class ResetPassword extends Component {
       } else {
         this.props.history.push('/login');
       }
-    });
+    }).catch(err => console.log(err));
   }
 
   handleCloseModal = (e) => {
