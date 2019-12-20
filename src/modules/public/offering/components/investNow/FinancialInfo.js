@@ -116,7 +116,8 @@ class FinancialInfo extends Component {
                       position="top center"
                       hoverable
                     />
-                    <Link to={this.props.changeInvest && !this.props.isFromPublicPage ? 'change-investment-limit' : `${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
+                    {/* <Link to={this.props.changeInvest && !this.props.isFromPublicPage ? 'change-investment-limit' : `${match.url}/change-investment-limit`} className="link"><small>Update</small></Link> */}
+                    <Link to={`${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
                   </p>
                 )
               }

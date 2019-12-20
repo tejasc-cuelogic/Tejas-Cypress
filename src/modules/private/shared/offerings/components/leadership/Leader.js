@@ -288,6 +288,7 @@ export default class Leader extends Component {
             />
             <FormDropDown
               name="state"
+              checkStateCode
               fielddata={LEADERSHIP_FRM.fields.leadership[index].state}
               value={LEADERSHIP_FRM.fields.leadership[index].state}
               options={US_STATES}
