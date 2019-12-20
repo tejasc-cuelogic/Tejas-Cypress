@@ -85,12 +85,12 @@ export class CampaignStore {
     if (referralCode) {
       variables.filters.referralCode = referralCode;
     }
-    if (!referralCode && userStore.currentUser && userStore.currentUser.sub) {
-      variables.userId = userStore.currentUser.sub;
-    }
-    return new Promise((resolve) => {
+    // if (!referralCode && userStore.currentUser && userStore.currentUser.sub) {
+    //   variables.userId = userStore.currentUser.sub;
+    // }
+    return new Promise((resolve, reject) => {
       this[field] = graphql({
-        client: clientPublic,
+        client: (!referralCode && userStore.currentUser && userStore.currentUser.sub) ? client : clientPublic,
         query: referralCode ? getOfferingsReferral : allOfferings,
         variables,
         onFetch: (data) => {
@@ -101,6 +101,7 @@ export class CampaignStore {
         },
         onError: (err) => {
           console.log(err);
+          reject();
         },
       });
     });
