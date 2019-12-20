@@ -97,7 +97,7 @@ class Overview extends Component {
             <Grid.Column width={isMobile ? 16 : 9}>
               <Header as="h4">Offering Summary</Header>
               <div className="table-wrapper">
-                <Table unstackable definition basic="very">
+                <Table definition basic="very">
                   <Table.Body>
                     { keyTerms && keyTerms.shorthandBusinessName
                       ? (

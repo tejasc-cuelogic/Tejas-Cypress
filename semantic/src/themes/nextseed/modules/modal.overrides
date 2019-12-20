@@ -842,6 +842,12 @@
         }
     }
     .ui.card{
+        @media only screen and (max-width : @largestMobileScreen ){
+            width: calc(100% + 44px);
+            margin-left: -22px;
+            margin-right: -22px;
+            border-radius: 0;
+        }
         .private-dropdown{
             @media only screen and (max-width : @largestMobileScreen ){
                 position: static;

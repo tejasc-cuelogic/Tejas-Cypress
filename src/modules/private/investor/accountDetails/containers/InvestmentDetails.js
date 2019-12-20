@@ -53,6 +53,7 @@ class InvestmentDetails extends PureComponent {
       { title: 'Documents', to: 'documents', component: Documents, load: false },
     ];
     const { campaign, details, dataRoomDocs } = this.props.campaignStore;
+    const { responsiveVars } = this.props.uiStore;
     const hardCloseDate = moment(new Date(`${get(campaign, 'closureSummary.hardCloseDate')} 23:59:59`)).format('MM/DD/YYYY HH:mm:ss');
     const summaryDetails = {
       accountType: 'individual',
@@ -82,7 +83,7 @@ class InvestmentDetails extends PureComponent {
     }
     return (
       <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
-        <Modal.Content className="transaction-details">
+        <Modal.Content className={`${responsiveVars.isMobile ? 'mt-30' : ''} transaction-details`}>
           {details.loading ? <InlineLoader /> : (
             <>
               <SummaryHeader details={summaryDetails} loading={details.loading} />
