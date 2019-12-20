@@ -10,7 +10,7 @@ import CampaignList from '../../offering/components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 import NSImage from '../../../shared/NSImage';
 
-@inject('campaignStore', 'uiStore', 'authStore')
+@inject('campaignStore', 'uiStore', 'userStore')
 @observer
 class Home extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class Home extends Component {
       active, loading,
     } = this.props.campaignStore;
     const { responsiveVars } = this.props.uiStore;
-    const { authStore } = this.props;
+    const { userStore } = this.props;
     return (
       <>
         <Banner />
@@ -67,13 +67,13 @@ class Home extends Component {
                   Whether expanding or opening a brand-new concept, <Responsive minWidth={992} as="br" />
                   we make it easy to raise money from thousands of local investors.
                 </p>
-                {!authStore.isUserLoggedIn && !responsiveVars.isMobile
+                {!userStore.isIssuer && !responsiveVars.isMobile
                   && <Button as={Link} to="/register" className="relaxed" primary>Apply Online</Button>}
                 {responsiveVars.isMobile && <NSImage path="home.jpg" />}
               </Grid.Column>
               <Grid.Column>
                 {!responsiveVars.isMobile && <NSImage path="home.jpg" />}
-                {!authStore.isUserLoggedIn && responsiveVars.isMobile
+                {!userStore.isIssuer && responsiveVars.isMobile
                 && <Button as={Link} to="/register" primary fluid className="mb-20 mt-10 relaxed">Apply Online</Button>}
               </Grid.Column>
             </Grid>

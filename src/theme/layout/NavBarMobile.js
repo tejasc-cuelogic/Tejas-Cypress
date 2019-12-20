@@ -4,7 +4,7 @@ import { Link, matchPath } from 'react-router-dom';
 import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { Logo } from '../shared';
-import { NavItems, NavigationItems } from './NavigationItems';
+import { NavItems } from './NavigationItems';
 import Footer from './Footer';
 import { GetNavMeta } from './SidebarNav';
 // import { MOBILE_NAV } from '../../constants/NavigationMeta';
@@ -79,15 +79,15 @@ export default class NavBarMobile extends Component {
               >
                 <Icon className="ns-hamburger" role="button" tabIndex="0" />
               </div>
-              {location.pathname.startsWith('/business-application/')
+              {/* {location.pathname.startsWith('/business-application/')
                 ? (
                   <NavigationItems
                     {...this.props}
                     isMobBussinessApp
                     isPrequalQulify={this.props.businessAppStore.isPrequalQulify}
                   />
-                )
-                : (
+                ) */}
+                {/* : ( */}
                   <div className={`public-header-section ${isNewCampaign ? 'public-header-section-v2' : ''} ${visible ? 'active' : ''} ${navStatus === 'sub' ? 'slide-up' : ''}`}>
                     {navTitle === 'Home' || (location.pathname.startsWith('/offerings') || this.props.userStore.isInvestor)
                       ? (
@@ -120,8 +120,8 @@ export default class NavBarMobile extends Component {
                     ) : null
                     }
                   </div>
-                )
-              }
+                {/* )
+              } */}
             </>
           )}
           <Sidebar
