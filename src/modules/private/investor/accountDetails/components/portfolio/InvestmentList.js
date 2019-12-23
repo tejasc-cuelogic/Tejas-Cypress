@@ -22,7 +22,7 @@ const INVESTMENT_CARD_META = [
   { label: 'Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%` },
   { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months` },
   { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], getRowValue: value => <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(value, false, false, false)} /> },
-  { label: 'Net Payments Recieved', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}` },
+  { label: 'Net Payments Received', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}` },
   { label: 'Principal Remaining', key: 'remainingPrincipal', for: ['active'], getRowValue: value => `$${value}` }, // pending
   { label: 'Realized Multiple', key: 'offering.closureSummary.keyTerms.multiple', getRowValue: value => `${value}x`, for: ['completed'] },
 ];
@@ -31,54 +31,54 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
   const [active, setActive] = useState(false);
   const toggleAccordion = () => setActive(!active);
   return (
-<Accordion fluid styled>
-    <Accordion.Title className="text-capitalize">
-      <Header as="h6" className="mt-0" onClick={toggleAccordion}>
-        <Icon className={`ns-chevron-${active ? 'down' : 'right'}`} color="green" />
-        {get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}
-        <Header.Subheader>{CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')] || 'N/A'}</Header.Subheader>
-      </Header>
-      {Helper.CurrencyFormat(data.investedAmount)}
-    </Accordion.Title>
-    <Accordion.Content active={active}>
-      <Table basic="very" unstackable className="no-border campaign-card">
-        <Table.Body>
-          {INVESTMENT_CARD_META.filter(i => i.for.includes(listOf)).map(row => (
-            <Table.Row>
-              <Table.Cell collapsing>{row.label}</Table.Cell>
-              <Table.Cell className="grey-header right-align">
-                {row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key)) : 'N/A'
-                  : get(data, row.key) || 'N/A'
-                }
-              </Table.Cell>
-            </Table.Row>
-          ))
-          }
-        </Table.Body>
-      </Table>
-      {listOf === 'pending' && (
-        <>
-      {viewAgreement && data.agreementId
-      && (
-        <Button className="mt-30 link-button" fluid content="View Agreement" onClick={() => viewAgreement(data.agreementId)} />
-      )
-      }
-      {!isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0)))
-        && <Button className="mt-20" primary fluid onClick={e => handleInvestNowClick(e, data.offering.id)} content="Change Investment Amount" />
-      }
-      {(isAdmin || (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod))))
-        && <Button className="mt-20 mb-30" basic fluid as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} content="Cancel" />
-      }
-        </>
-      )}
-      <br />
-      {['active', 'completed'].includes(listOf) && false
-      && (
-        <Button className="mt-20 mb-30" primary fluid content="Open Offering Details" as={Link} to={`${match.url}/investment-details/${data.offering.id}`} />
-      )
-      }
-    </Accordion.Content>
-  </Accordion>
+    <Accordion fluid styled>
+      <Accordion.Title className="text-capitalize">
+        <Header as="h6" className="mt-0" onClick={toggleAccordion}>
+          <Icon className={`ns-chevron-${active ? 'down' : 'right'}`} color="green" />
+          {get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}
+          <Header.Subheader>{CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')] || 'N/A'}</Header.Subheader>
+        </Header>
+        {Helper.CurrencyFormat(data.investedAmount)}
+      </Accordion.Title>
+      <Accordion.Content active={active}>
+        <Table basic="very" unstackable className="no-border campaign-card">
+          <Table.Body>
+            {INVESTMENT_CARD_META.filter(i => i.for.includes(listOf)).map(row => (
+              <Table.Row>
+                <Table.Cell collapsing>{row.label}</Table.Cell>
+                <Table.Cell className="grey-header right-align">
+                  {row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key)) : 'N/A'
+                    : get(data, row.key) || 'N/A'
+                  }
+                </Table.Cell>
+              </Table.Row>
+            ))
+            }
+          </Table.Body>
+        </Table>
+        {listOf === 'pending' && (
+          <>
+            {viewAgreement && data.agreementId
+              && (
+                <Button className="mt-30 link-button" fluid content="View Agreement" onClick={() => viewAgreement(data.agreementId)} />
+              )
+            }
+            {!isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0)))
+              && <Button className="mt-20" primary fluid onClick={e => handleInvestNowClick(e, data.offering.id)} content="Change Investment Amount" />
+            }
+            {(isAdmin || (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod))))
+              && <Button className="mt-20 mb-30" basic fluid as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} content="Cancel" />
+            }
+          </>
+        )}
+        <br />
+        {['active', 'completed'].includes(listOf) && false
+          && (
+            <Button className="mt-20 mb-30" primary fluid content="Open Offering Details" as={Link} to={`${match.url}/investment-details/${data.offering.id}`} />
+          )
+        }
+      </Accordion.Content>
+    </Accordion>
   );
 };
 
@@ -87,7 +87,7 @@ const InvestmentList = (props) => {
   const listHeader = {
     pending: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Days to close'],
     active: ['Offering', 'Invested Amount', 'Status', 'Close Date', 'Term', 'Net Payments Received', 'Principal Remaining'],
-    completed: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Close Date', 'Net Payments Received'],
+    completed: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Close Date', 'Net Payments Received', 'Realized Multiple'],
   }[props.listOf];
 
   const {
@@ -129,11 +129,11 @@ const InvestmentList = (props) => {
                 </Table.Cell>
                 {props.listOf !== 'active'
                   && (
-                  <Table.Cell>
-                    {
-                      get(data, 'offering.keyTerms.securities') ? CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')] : '-'
-                    }
-                  </Table.Cell>
+                    <Table.Cell>
+                      {
+                        get(data, 'offering.keyTerms.securities') ? CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')] : '-'
+                      }
+                    </Table.Cell>
                   )
                 }
                 <Table.Cell className="text-capitalize">
@@ -164,7 +164,7 @@ const InvestmentList = (props) => {
                   && (
                     <Table.Cell>
                       {
-                       get(data, 'offering.keyTerms.maturity') ? `${data.offering.keyTerms.maturity} months` : 'N/A'
+                        get(data, 'offering.keyTerms.maturity') ? `${data.offering.keyTerms.maturity} months` : 'N/A'
                       }
                     </Table.Cell>
                   )
@@ -181,6 +181,13 @@ const InvestmentList = (props) => {
                   && (
                     <Table.Cell>
                       {Helper.MoneyMathDisplayCurrency(get(data, 'remainingPrincipal') || '0.00')}
+                    </Table.Cell>
+                  )
+                }
+                {props.listOf === 'completed'
+                  && (
+                    <Table.Cell>
+                      {get(data, 'offering.closureSummary.keyTerms.multiple') ? `${data.offering.closureSummary.keyTerms.multiple}x` : 'N/A'}
                     </Table.Cell>
                   )
                 }
@@ -220,9 +227,9 @@ const InvestmentList = (props) => {
             <Table.HeaderCell className="neutral-text">{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'investedAmount') : 0)}</Table.HeaderCell>
             <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : '3'} />
             {props.listOf !== 'pending'
-            && (
-              <Table.HeaderCell>{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
-            )}
+              && (
+                <Table.HeaderCell>{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'netPaymentsReceived', false) : 0)}</Table.HeaderCell>
+              )}
             {props.listOf !== 'pending' && <Table.HeaderCell colSpan="1" />}
           </Table.Row>
         </Table.Footer>
@@ -238,47 +245,47 @@ const InvestmentList = (props) => {
   }
   return (
     <>
-    {isMobile ? (
-      <>
-        <Card className="investment-summary investment-card">
-          <Card.Header className="text-capitalize">{`${props.listOf} (${props.listOfCount})`}</Card.Header>
-          <Card.Content>
-            {investments.map(data => (
-              <InvestmentCard data={data} {...props} />
-            ))
-            }
-            <p className="right-align neutral-text">Total: <b>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0)}</b></p>
-          </Card.Content>
-        </Card>
-      </>
-    ) : (
-      <Accordion fluid styled className="card-style portfolio-list">
-      <Accordion.Title onClick={() => props.toggleAccordion(props.listOf)} active={isActive} className="text-capitalize">
-        <Icon className={`ns-chevron-${isActive ? 'up' : 'right'}`} />
-        {`${props.listOf} (${props.listOfCount})`}
-      </Accordion.Title>
-      <Accordion.Content className="bg-offwhite" active={!props.inActiveItems.includes(props.listOf)}>
-        {!investments || !investments.length
-          ? <InlineLoader text="No data available" />
-          : props.listOf === 'active'
-            ? keytermsSecurityTypes.map(type => (
-              <>
-              {listAsPerSecurityType[type] && listAsPerSecurityType[type].length
-                ? (
-              <>
-                <Header as="h5" className="investment-list" content={CAMPAIGN_KEYTERMS_SECURITIES[type]} />
-                <ListTable listData={listAsPerSecurityType[type]} />
-              </>
-                ) : null
+      {isMobile ? (
+        <>
+          <Card className="investment-summary investment-card">
+            <Card.Header className="text-capitalize">{`${props.listOf} (${props.listOfCount})`}</Card.Header>
+            <Card.Content>
+              {investments.map(data => (
+                <InvestmentCard data={data} {...props} />
+              ))
               }
-              </>
-            ))
-            : <ListTable listData={props.investments} />
-        }
-      </Accordion.Content>
-    </Accordion>
-    )
-    }
+              <p className="right-align neutral-text">Total: <b>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0)}</b></p>
+            </Card.Content>
+          </Card>
+        </>
+      ) : (
+          <Accordion fluid styled className="card-style portfolio-list">
+            <Accordion.Title onClick={() => props.toggleAccordion(props.listOf)} active={isActive} className="text-capitalize">
+              <Icon className={`ns-chevron-${isActive ? 'up' : 'right'}`} />
+              {`${props.listOf} (${props.listOfCount})`}
+            </Accordion.Title>
+            <Accordion.Content className="bg-offwhite" active={!props.inActiveItems.includes(props.listOf)}>
+              {!investments || !investments.length
+                ? <InlineLoader text="No data available" />
+                : props.listOf === 'active'
+                  ? keytermsSecurityTypes.map(type => (
+                    <>
+                      {listAsPerSecurityType[type] && listAsPerSecurityType[type].length
+                        ? (
+                          <>
+                            <Header as="h5" className="investment-list" content={CAMPAIGN_KEYTERMS_SECURITIES[type]} />
+                            <ListTable listData={listAsPerSecurityType[type]} />
+                          </>
+                        ) : null
+                      }
+                    </>
+                  ))
+                  : <ListTable listData={props.investments} />
+              }
+            </Accordion.Content>
+          </Accordion>
+        )
+      }
     </>
   );
 };
