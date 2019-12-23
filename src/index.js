@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import promiseFinally from 'promise.prototype.finally';
 import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
+import * as OfflinePluginRuntime from 'offline-plugin/runtime';
 import App from './App';
 import * as stores from './services/stores';
 import { ErrorBoundry as CustomErrorBoundry, Utilities as Utils } from './helper';
@@ -56,3 +57,12 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root'),
 );
+
+OfflinePluginRuntime.install({
+  onUpdateReady: () => {
+    OfflinePluginRuntime.applyUpdate();
+  },
+  onUpdated: () => {
+    stores.uiStore.setAppUpdated();
+  },
+});

@@ -31,6 +31,8 @@ const CopyPlugin = require('copy-webpack-plugin');
 const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
 const SriPlugin = require('webpack-subresource-integrity');
 
+const OfflinePlugin = require('offline-plugin');
+
 const postcssNormalize = require('postcss-normalize');
 
 const WebpackDashboard = require('webpack-dashboard/plugin');
@@ -560,6 +562,16 @@ module.exports = (webpackEnv) => {
             title: 'Hot Module Replacement For Development',
           },
       )),
+      // OfflinePlugin for service worker and handle updates.
+      new OfflinePlugin({
+        excludes: ['**/*.map'],
+        updateStrategy: 'changed',
+        autoUpdate: 1000 * 60 * 1, //every minute
+        ServiceWorker: {
+          events: true,
+          navigateFallbackURL: '/',
+        },
+      }),
       // // will calculate and add sri / integrity keys
       // // paths must match FROM locations in CopyPlugin above as well as replete anytransforms (like SEGMENT WRITE KEY)
       new HtmlWebpackTagsPlugin({
