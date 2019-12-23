@@ -45,7 +45,7 @@ class InvestmentDetails extends PureComponent {
 
   render() {
     const { match, portfolioStore } = this.props;
-    const { getInvestor } = portfolioStore;
+    const { getInvestor, loadingInvestDetails } = portfolioStore;
     let navItems = [
       { title: 'Overview', to: 'overview', component: 'Overview' },
       { title: 'Transactions', to: 'transactions', component: 'Transactions' },
@@ -84,9 +84,9 @@ class InvestmentDetails extends PureComponent {
     return (
       <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
-          {details.loading ? <InlineLoader /> : (
+          {details.loading || loadingInvestDetails ? <InlineLoader /> : (
             <>
-              <SummaryHeader details={summaryDetails} loading={details.loading} />
+              <SummaryHeader details={summaryDetails} loading={details.loading || loadingInvestDetails} />
               <Card fluid>
                 <SecondaryMenu match={match} navItems={navItems} />
                 <SuspenseBoundary>
