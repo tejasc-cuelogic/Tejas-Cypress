@@ -169,6 +169,8 @@ export class NavStore {
         sNav = sNav.filter(n => (!n.filterKey || _.get(offer, n.filterKey)));
         if (userStore.isIssuer && b.stage === 'COMPLETE') {
           sNav = sNav.filter(s => s.title !== 'Overview' && s.title !== 'Bonus Rewards');
+        } else if (userStore.isIssuer && b.stage === 'LIVE') {
+          sNav = sNav.filter(s => s.title !== 'Investors');
         }
         filteredNavs.splice(
           bIndex,
@@ -177,7 +179,7 @@ export class NavStore {
             ...filteredNavs[bIndex],
             ...{
               title: this.businessName(b),
-              to: `offering/${b.id}`,
+              to: `offering/${b.offeringSlug}`,
               subNavigations: sNav,
             },
           },
@@ -201,7 +203,7 @@ export class NavStore {
     const { roles, specificNav } = this.params;
     let nav = [];
     if (roles && specificNav) {
-      nav = toJS(this.NAV_ITEMS.find(i => matchPath(specificNav, { path: `/app/${i.to}` })));
+      nav = toJS(this.NAV_ITEMS.find(i => matchPath(specificNav, { path: `/dashboard/${i.to}` })));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
         nav.subNavigations = nav.subNavigations.filter(n => ((!n.accessibleTo
@@ -218,7 +220,13 @@ export class NavStore {
     this.params[key] = value;
     const { roles, currentNav, appStatus } = this.params;
     if (roles && currentNav) {
-      const nav = toJS(this.allNavItems.find(i => matchPath(currentNav, { path: `/app/${i.to}` })));
+      // hack for root so if /app i.e /dashboard
+      const nav = toJS(this.allNavItems.find((i) => {
+        if (value === '/dashboard' && currentNav === '/dashboard' && i.to === 'dashboard') {
+          return true;
+        }
+        return matchPath(currentNav, { path: `/dashboard/${i.to}` });
+      }));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
         nav.subNavigations = nav.subNavigations.filter(n => ((!n.accessibleTo

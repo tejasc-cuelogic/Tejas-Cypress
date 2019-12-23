@@ -115,6 +115,8 @@ export const PRIVATE_NAV = [
       admin: 'admin/dashboard/Dashboard',
     },
     accessibleTo: ['issuer', 'admin'],
+    asRoot: true,
+    exact: true,
     subPanel: 0,
   },
   {
@@ -133,6 +135,14 @@ export const PRIVATE_NAV = [
       { title: 'Bonus rewards', to: 'bonus-rewards', component: 'BonusRewards' },
       { title: 'Messages', to: 'talk', component: 'Messages' },
     ],
+  },
+  {
+    title: 'Application',
+    to: 'application',
+    noNav: true,
+    path: 'issuer/dashboard/init',
+    accessibleTo: ['issuer'],
+    subPanel: 0,
   },
   {
     title: 'Accounts',
@@ -245,7 +255,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'gift',
     title: 'Offering',
-    to: 'offering/:id',
+    to: 'offering/:offeringSlug',
     accessibleTo: ['issuer'],
     path: 'issuer/offering',
     subPanel: 1,

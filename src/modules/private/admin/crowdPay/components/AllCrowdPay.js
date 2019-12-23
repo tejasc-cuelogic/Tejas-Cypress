@@ -36,7 +36,9 @@ export default class AllCrowdPay extends Component {
   constructor(props) {
     super(props);
     const { type } = this.props.match.params;
-    if (this.props.match.isExact && type && this.props.crowdpayStore.isApiHit !== type) {
+    const { accounts } = this.props.crowdpayStore;
+    if ((this.props.match.isExact && type && this.props.crowdpayStore.isApiHit !== type)
+       || accounts.length === 0) {
       this.props.crowdpayStore.setData('isApiHit', type);
       this.props.crowdpayStore.reset();
       this.props.crowdpayStore.initRequest(type, true, false);
@@ -114,7 +116,7 @@ export default class AllCrowdPay extends Component {
                     <Table.Row key={account.accountId} className={loadingCrowdPayIds.includes(account.accountId) ? 'disabled' : ''}>
                       <Table.Cell>
                         <p>
-                          <Link onClick={() => sessionStorage.setItem('userDetailsRefUrl', match.url)} to={`/app/users/${account.userId}/profile-data`}>
+                          <Link onClick={() => sessionStorage.setItem('userDetailsRefUrl', match.url)} to={`/dashboard/users/${account.userId}/profile-data`}>
                             <b>{account.firstName} {account.lastName}</b>
                           </Link>
                           <br />{account.email}<br />{account.phone ? Helper.phoneNumberFormatter(account.phone) : ''}

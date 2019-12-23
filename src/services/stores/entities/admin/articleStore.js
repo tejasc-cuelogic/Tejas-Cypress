@@ -9,7 +9,7 @@ import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { ARTICLES, THUMBNAIL_EXTENSIONS } from '../../../constants/admin/article';
-import { getArticleDetailsBySlug, deleteArticle, allInsightArticles, getArticleDetails, getArticlesByCatId, getArticleById, createArticle, updateArticle, insightArticlesListByFilter } from '../../queries/insightArticle';
+import { getArticleDetailsBySlug, deleteArticle, allInsightArticles, getArticleDetails, getArticleById, createArticle, updateArticle, insightArticlesListByFilter } from '../../queries/insightArticle';
 import { getCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
 import { uiStore, commonStore } from '../..';
@@ -101,11 +101,6 @@ export class ArticleStore {
         fetchPolicy: 'network-only',
         variables: { sortByCreationDateAsc: sortAsc, categoryId },
       });
-    }
-
-    @action
-    requestArticlesByCategoryId = (id) => {
-      this.data = graphql({ client: clientPublic, query: getArticlesByCatId, variables: { id } });
     }
 
     @action

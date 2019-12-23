@@ -6,6 +6,8 @@ import { ByKeyword } from '../../../../../theme/form/Filters';
 import { DataFormatter } from '../../../../../helper';
 import Listing from '../components/Listing';
 import DraggableListing from '../components/DraggableListing';
+import AllLiveOfferings from '../components/allLiveOfferings';
+import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
 
 @inject('uiStore', 'navStore', 'offeringsStore')
@@ -25,9 +27,12 @@ export default class Offerings extends Component {
   }
 
   componentWillUnmount() {
-    const { setDb, allOfferingsList } = this.props.offeringsStore;
+    const { setDb, allOfferingsList, requestState, orderedActiveListArr } = this.props.offeringsStore;
     if (allOfferingsList.length) {
       setDb(allOfferingsList);
+    }
+    if (requestState.stage === 'live') {
+      orderedActiveListArr();
     }
   }
 
@@ -44,6 +49,8 @@ export default class Offerings extends Component {
   render() {
     const { match } = this.props;
     const { stage } = this.props.match.params;
+    const isDev = !['production', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV);
+
     const {
       filters,
       requestState,
@@ -69,7 +76,9 @@ export default class Offerings extends Component {
                         {stage === 'creation'
                           && <Button color="green" as={Link} to={`${match.url}/new`} loading={inProgressArray.includes('upsert')} content="Create New Offering" />
                         }
-                        <Button color="green" as={Link} to={match.url} className="relaxed" content="Export" />
+                        {isDev
+                          && <Button color="green" as={Link} to={match.url} className="relaxed" content="Export" />
+                        }
                       </Button.Group>
                     </Grid.Column>
                   </>
@@ -78,9 +87,11 @@ export default class Offerings extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        {!['completed', 'live'].includes(stage)
-          ? <Listing stage={stage} noPagination={['creation'].includes(stage)} />
-          : <DraggableListing stage={stage} />
+        {['live'].includes(stage)
+          ? <AllLiveOfferings stage={stage} />
+          : !['completed'].includes(stage)
+            ? <Listing stage={stage} noPagination={['creation'].includes(stage)} />
+            : <DraggableListing stage={stage} />
         }
       </div>
     );

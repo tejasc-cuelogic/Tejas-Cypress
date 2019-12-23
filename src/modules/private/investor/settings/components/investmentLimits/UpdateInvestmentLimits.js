@@ -29,7 +29,7 @@ export default class UpdateInvestmentLimits extends Component {
     const errors = false;
     const { inProgress } = this.props.uiStore;
     const {
-      INVESTEMENT_LIMIT_META, maskingFieldChange, currentLimit, investmentCalculate,
+      INVESTEMENT_LIMIT_META, maskingFieldChange, currentLimit,
     } = this.props.investmentLimitStore;
     const { fields } = INVESTEMENT_LIMIT_META;
     return (
@@ -47,7 +47,7 @@ export default class UpdateInvestmentLimits extends Component {
           <Modal.Content>
             <Statistic size="tiny">
               <Statistic.Label>Estimated investment limit</Statistic.Label>
-              <Statistic.Value>{Helper.CurrencyFormat(currentLimit, 0)}</Statistic.Value>
+              <Statistic.Value>{Helper.MoneyMathDisplayCurrency(currentLimit, false)}</Statistic.Value>
             </Statistic>
             <Divider clearing hidden />
             <Form error onSubmit={this.submit}>
@@ -61,7 +61,7 @@ export default class UpdateInvestmentLimits extends Component {
                     value={fields[field].value}
                     fielddata={fields[field]}
                     changed={maskingFieldChange}
-                    onblur={investmentCalculate}
+                    // onblur={investmentCalculate}
                   />
                 ))
               }

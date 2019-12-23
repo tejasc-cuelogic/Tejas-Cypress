@@ -534,6 +534,12 @@ export const BUSINESS_DETAILS = {
     maturityDate: {
       value: null, label: 'Maturity Date', error: undefined, rule: 'optional|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
     },
+    creditorName: {
+      value: null, label: 'Creditor Name', error: undefined, rule: 'optional', placeHolder: 'ex. Creditor Name',
+    },
+    existingLienOnBusiness: {
+      value: null, label: 'Existing Lien on Business', error: undefined, rule: 'optional', placeHolder: 'ex Yes',
+    },
   }],
   sources: [{
     name: {

@@ -156,6 +156,9 @@ h6{
 .pb-20{
 	padding-bottom: @20px !important;
 }
+.pb-40{
+	padding-bottom: @40px !important;
+}
 .pt-0{
 	padding-top:0 !important;
 }
@@ -250,6 +253,11 @@ h6{
 }
 .grey-header {
 	color: @neutral-middark !important;
+}
+.grey-label{
+	color: @neutral !important;
+	opacity: 0.4;
+	font-weight: @fontMedium !important;
 }
 .caption-note{
 	font-size:@12px;
@@ -576,6 +584,15 @@ footer{
 		@media only screen and (max-width : @largestMobileScreen){
 			font-size: @15px;
 			margin-bottom: @20px;
+		}
+	}
+	.ui.header.coming-soon-header{
+		position: relative;
+		i.icon{
+			position: absolute;
+			right: 0;
+			cursor: pointer;
+			font-size: @30px;
 		}
 	}
 }

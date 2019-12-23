@@ -6,11 +6,11 @@ import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, isValidInvestorInOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
-import { userDetailsStore, watchListStore, userStore, authStore } from '../../index';
+import { userDetailsStore, watchListStore, userStore, authStore, offeringCreationStore, portfolioStore } from '../../index';
 // import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
@@ -38,6 +38,8 @@ export class CampaignStore {
 
   @observable activeToDisplay = this.RECORDS_TO_DISPLAY;
 
+  @observable creationToDisplay = 6;
+
   @observable gallarySelectedImageIndex = null;
 
   @observable docsWithBoxLink = [];
@@ -59,6 +61,8 @@ export class CampaignStore {
   @observable isFetchedError = false;
 
   @observable docLoading = false;
+
+  @observable hideCreationList = false;
 
   @observable documentMeta = {
     closingBinder: { selectedDoc: null, accordionActive: true },
@@ -85,12 +89,12 @@ export class CampaignStore {
     if (referralCode) {
       variables.filters.referralCode = referralCode;
     }
-    if (!referralCode && userStore.currentUser && userStore.currentUser.sub) {
-      variables.userId = userStore.currentUser.sub;
-    }
-    return new Promise((resolve) => {
+    // if (!referralCode && userStore.currentUser && userStore.currentUser.sub) {
+    //   variables.userId = userStore.currentUser.sub;
+    // }
+    return new Promise((resolve, reject) => {
       this[field] = graphql({
-        client: clientPublic,
+        client: (!referralCode && userStore.currentUser && userStore.currentUser.sub) ? client : clientPublic,
         query: referralCode ? getOfferingsReferral : allOfferings,
         variables,
         onFetch: (data) => {
@@ -101,6 +105,7 @@ export class CampaignStore {
         },
         onError: (err) => {
           console.log(err);
+          reject();
         },
       });
     });
@@ -114,19 +119,23 @@ export class CampaignStore {
       client: gqlClient,
       query: queryType ? campaignDetailsForInvestmentQuery : campaignDetailsQuery,
       variables: { id, isValid },
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       onFetch: (data) => {
         if (data && data.getOfferingDetailsBySlug && !this.details.loading) {
           if (!queryType) {
             watchListStore.setFieldValue('isWatching', ['WATCHING', 'INVESTOR'].includes(get(data.getOfferingDetailsBySlug, 'watchListStatus')));
             this.getCampaignAdditionalDetails(id);
           }
+          offeringCreationStore.setCurrentOfferingId(data.getOfferingDetailsBySlug.id);
           resolve(data.getOfferingDetailsBySlug);
         } else if (!this.details.loading) {
+          offeringCreationStore.setCurrentOfferingId(data.getOfferingById.id);
           resolve(false);
         }
       },
       onError: (err) => {
+        offeringCreationStore.setCurrentOfferingId(null);
+        portfolioStore.setFieldValue('investmentDetails', {});
         reject(err);
       },
     });
@@ -177,21 +186,6 @@ export class CampaignStore {
     });
   });
 
-  @action
-  isValidInvestorInOffering = params => new Promise((resolve) => {
-    const response = graphql({
-      client,
-      query: isValidInvestorInOffering,
-      variables: { ...params },
-      onFetch: (data) => {
-        if (data && !response.loading) {
-          resolve(data.isValidInvestorInOffering);
-        }
-      },
-      fetchPolicy: 'network-only',
-    });
-  });
-
   @computed get allData() {
     return this.data;
   }
@@ -220,6 +214,15 @@ export class CampaignStore {
     return offeringList.splice(0, this.activeToDisplay);
   }
 
+  @computed get creationList() {
+    return this.CompletedOfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'creation')).includes(o.stage));
+  }
+
+  @computed get creation() {
+    const creationList = this.creationList.slice();
+    return creationList.splice(0, this.creationToDisplay);
+  }
+
   @computed get activeList() {
     // const activeListArr = this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
     return orderBy(this.OfferingList, o => (get(o, 'keyTerms.shorthandBusinessName') ? get(o, 'keyTerms.shorthandBusinessName').toLowerCase() : get(o, 'keyTerms.shorthandBusinessName')), ['asc']);
@@ -237,15 +240,15 @@ export class CampaignStore {
   }
 
   @computed get completedList() {
-    // return sortBy(this.CompletedOfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage)), ['order']);
-    return sortBy(this.CompletedOfferingList, ['order']);
+    return sortBy(this.CompletedOfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage)), ['order']);
+    // return sortBy(this.CompletedOfferingList, ['order']);
   }
 
   @action
   loadMoreRecord = (type) => {
-    const offeringsList = type === 'completedToDisplay' ? this.completedList : this.orderedActiveList;
+    const offeringsList = type === 'completedToDisplay' ? this.completedList : type === 'activeToDisplay' ? this.orderedActiveList : this.creationList;
     if (offeringsList.length > this[type]) {
-      this[type] = this[type] + this.RECORDS_TO_DISPLAY;
+      this[type] = this[type] + (type === 'creationToDisplay' ? 6 : this.RECORDS_TO_DISPLAY);
     }
   }
 
@@ -253,6 +256,7 @@ export class CampaignStore {
   resetDisplayCounts = () => {
     this.completedToDisplay = this.RECORDS_TO_DISPLAY;
     this.activeToDisplay = this.RECORDS_TO_DISPLAY;
+    this.creationToDisplay = 6;
   }
 
   @computed get campaign() {
@@ -506,7 +510,7 @@ export class CampaignStore {
     this.totalPaymentChart = payChart;
   }
 
-  generateBanner = (offeringDetailsList, addObjectProps = false) => {
+  generateBanner = (offeringDetailsList, addObjectProps = false, isFromAdmin = false) => {
     let closingOfferingsArr = [];
     let newOfferingsArr = [];
     let otherOfferingsArr = [];
@@ -519,6 +523,7 @@ export class CampaignStore {
       const maxOfferingAmountCF = get(offeringKeyTermDetails, 'maxOfferingAmountCF') || '0.00';
       const maxOfferingAmountRegD = get(offeringKeyTermDetails, 'maxOfferingAmount506') && get(offeringKeyTermDetails, 'maxOfferingAmount506') !== '0.00' ? get(offeringKeyTermDetails, 'maxOfferingAmount506') : get(offeringKeyTermDetails, 'maxOfferingAmount506C') ? get(offeringKeyTermDetails, 'maxOfferingAmount506C') : '0.00';
       const regulation = get(offeringKeyTermDetails, 'regulation');
+      const securities = get(offeringKeyTermDetails, 'securities');
       const minimumOfferingAmount = includes(['BD_CF_506C', 'BD_506C', 'BD_506B'], regulation) ? minimumOfferingAmountRegD : minimumOfferingAmountCF;
       const launchDate = get(offeringDetails, 'closureSummary.launchDate') && get(offeringDetails, 'closureSummary.launchDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.launchDate') : null;
       const closingDate = get(offeringDetails, 'closureSummary.processingDate') && get(offeringDetails, 'closureSummary.processingDate') !== 'Invalid date' ? get(offeringDetails, 'closureSummary.processingDate') : null;
@@ -558,7 +563,7 @@ export class CampaignStore {
         && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
         resultObject.isBannerShow = true;
         resultObject.datesBanner = 'NEW';
-        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         resultObject.category = 'newOffering';
@@ -567,7 +572,7 @@ export class CampaignStore {
         const labelBannerFirst = ((includes(['Minute Left', 'Minutes Left'], closeDaysToRemainsInHours.label) && closeDaysToRemainsInHours.value > 0) || closeDaysToRemainsInHours.value <= 48) ? `${closeDaysToRemainsInHours.value} ${closeDaysToRemainsInHours.label}` : closeDaysToRemains === 1 ? `${closeDaysToRemains} Day Left` : `${closeDaysToRemains} Days Left`;
         resultObject.isBannerShow = !!labelBannerFirst;
         resultObject.datesBanner = labelBannerFirst;
-        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         resultObject.category = 'closingSoon';
@@ -587,7 +592,7 @@ export class CampaignStore {
       //   && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
       //   resultObject.datesBanner = 'NEW';
       // }
-      resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent);
+      resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
       resultObject.isBannerShow = !!(resultObject.datesBanner || resultObject.amountsBanner);
       resultObject.launchDate = moment(launchDate).unix() || null;
       resultObject.processingDate = moment(closingDate).unix() || null;
@@ -604,6 +609,15 @@ export class CampaignStore {
     processingOfferingsArr = orderBy(processingOfferingsArr, ['processingDate'], ['desc']);
     otherOfferingsArr = orderBy(otherOfferingsArr, ['order'], ['asc']);
     reachedMaxOfferingsArr = orderBy(reachedMaxOfferingsArr, ['processingDate'], ['asc']);
+    // const sortedResultObject = [];
+    if (isFromAdmin) {
+      const sortedResultObject = [
+        { category: 'closingSoonAndNew', title: 'Closing Soon and New', offerings: [...closingOfferingsArr, ...newOfferingsArr] },
+        { category: 'other', title: 'Current Offerings', offerings: [...otherOfferingsArr] },
+        { category: 'reachedMaxAndProcessing', title: 'Reached Max and Processing', offerings: [...reachedMaxOfferingsArr, ...processingOfferingsArr] },
+      ];
+      return sortedResultObject;
+    }
     const sortedResultObject = [
       ...closingOfferingsArr,
       ...newOfferingsArr,
@@ -614,10 +628,10 @@ export class CampaignStore {
     return sortedResultObject;
   }
 
-  generateLabelBannerSecond = (amountCompairResult, percentageCompairResult, percent) => {
+  generateLabelBannerSecond = (amountCompairResult, percentageCompairResult, percent, offeringSecurity) => {
     let labelBannerSecond = null;
     if (money.isNegative(amountCompairResult)
-      && !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult)) {
+      && !money.isZero(percentageCompairResult) && !money.isNegative(percentageCompairResult) && !['REAL_ESTATE'].includes(offeringSecurity)) {
       labelBannerSecond = `${Math.round(percent)}% Funded`;
     } else if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
       labelBannerSecond = 'Reached Max';

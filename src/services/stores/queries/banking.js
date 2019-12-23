@@ -40,7 +40,7 @@ mutation getDecryptedRoutingNumber($userId: String, $accountId: String, $request
 `;
 
 export const hasPendingTransfersWithPendingBankChange = gql`
-query hasPendingTransfersWithPendingBankChange($userId: String, $accountId: String!) {
-  hasPendingTransfersWithPendingBankChange(userId: $userId, accountId: $accountId)
+query hasPendingTransfersWithPendingBankChange($accountId: String!) {
+  hasPendingTransfersWithPendingBankChange(accountId: $accountId)
 }
 `;
