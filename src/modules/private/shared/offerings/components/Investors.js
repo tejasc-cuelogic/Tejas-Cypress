@@ -7,12 +7,12 @@ import { ByKeyword } from '../../../../../theme/form/Filters';
 import Listing from './investors/Listing';
 import Helper from '../../../../../helper/utility';
 
-@inject('userStore', 'offeringInvestorStore', 'offeringsStore')
+@inject('userStore', 'offeringInvestorStore', 'offeringsStore', 'offeringCreationStore')
 @observer
 export default class BonusRewards extends Component {
   constructor(props) {
     super(props);
-    this.props.offeringInvestorStore.initRequest(this.props.offeringId);
+    this.props.offeringInvestorStore.initRequest(this.props.offeringCreationStore.currentOfferingId);
   }
 
   executeSearch = (e) => {
