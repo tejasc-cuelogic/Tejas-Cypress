@@ -33,7 +33,10 @@ export default class Offering extends Component {
     if (offerLoading || (offer && !offer.stage)) {
       return <InlineLoader />;
     }
-    const navItems = this.props.navStore.navMeta.subNavigations;
+    let navItems = this.props.navStore.navMeta.subNavigations;
+    if (offer.stage === 'LIVE') {
+      navItems = navItems.filter(n => (n.title !== 'Investors'));
+    }
     return (
       <>
         <Helmet>
