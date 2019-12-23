@@ -8,6 +8,8 @@ import InvestmentTimeline from './Rewards/InvestmentTimeline';
 import RewardList from './Rewards/RewardList';
 import Redeem from '../../../rewardsWallet/components/Redeem';
 import { InlineLoader } from '../../../../../../theme/shared';
+import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
+
 
 @inject('campaignStore', 'portfolioStore', 'investmentStore', 'uiStore', 'userDetailsStore')
 @observer
@@ -29,6 +31,10 @@ class BonusRewards extends Component {
     const rewardList = investmentBonusRewards(investedAmount ? parseFloat(investedAmount.replace(/,/g, '')) : 0);
     const metaTitle = 'Check the Updates tab for the latest information on when rewards will be delivered.  Unless otherwise indicated, rewards will be available after the business is open.';
     return (
+      <>
+      {responsiveVars.isMobile
+      && <SecondaryMenu refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+      }
       <div className="inner-content-spacer">
         <InvestmentTimeline title="Your investment" {...props} />
         {rewardList && rewardList.length > 0 &&
@@ -44,6 +50,7 @@ class BonusRewards extends Component {
         }
         <Route exact path={`${props.match.url}/redeem/:id`} component={Redeem} />
       </div>
+      </>
     );
   }
 }

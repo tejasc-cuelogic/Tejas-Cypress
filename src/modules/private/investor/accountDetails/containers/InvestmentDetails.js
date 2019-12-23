@@ -88,13 +88,18 @@ class InvestmentDetails extends PureComponent {
             <>
               <SummaryHeader details={summaryDetails} loading={details.loading} />
               <Card fluid className={responsiveVars.isMobile ? 'mt-0' : ''}>
-                <SecondaryMenu match={match} navItems={navItems} />
+                {!responsiveVars.isMobile
+                && <SecondaryMenu match={match} navItems={navItems} />
+                }
                 <SuspenseBoundary>
                   <Switch>
                     <Route
                       exact
                       path={match.url}
-                      component={getModule(navItems[0].component)}
+                      render={(props) => {
+                        const FirstComponent = getModule(navItems[0].component);
+                        return (<FirstComponent {...props} refMatch={JSON.parse(JSON.stringify(match))} MobileNavItems={navItems} />);
+                      }}
                     />
                     {
                       navItems.map((item) => {
@@ -109,6 +114,8 @@ class InvestmentDetails extends PureComponent {
                                 isAdmin={this.props.isAdmin}
                                 portfolioSection
                                 {...props}
+                                MobileNavItems={navItems}
+                                refMatch={JSON.parse(JSON.stringify(match))}
                               />
                             )
                           }
