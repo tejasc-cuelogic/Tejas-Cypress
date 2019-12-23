@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { isEmpty } from 'lodash';
-import { Header, Container, Button, Divider } from 'semantic-ui-react';
+import { Header, Container, Button, Divider, Icon } from 'semantic-ui-react';
 // import Banner from '../components/Banner';
 import CampaignList from '../components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
@@ -59,12 +59,13 @@ class Offering extends Component {
         {(!hideCreationList && showCreationList && !loading)
         && (
           <>
+          <Divider section as={Container} />
           <CampaignList
             refLink={this.props.match.url}
             loading={completedLoading}
             campaigns={creation}
             filters
-            heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-10' : 'mb-50'}>Coming Soon <Button onClick={this.hideCreationList}>X</Button></Header>}
+            heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={`${isMobile ? 'mb-10' : 'mb-50'} coming-soon-header`}>Coming Soon<Icon className="ns-offer-declined" onClick={this.hideCreationList} /></Header>}
             subheading={<p className="campaign-subheader center-align">These offerings are in Creation</p>}
           />
           {creationList && creationList.length > 6
