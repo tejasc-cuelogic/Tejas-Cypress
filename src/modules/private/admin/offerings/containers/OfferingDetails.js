@@ -12,6 +12,8 @@ import EditOffering from '../components/EditOfferingModal';
 import EditPoc from '../components/EditPocModal';
 import { REACT_APP_DEPLOY_ENV, NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import Helper from '../../../../../helper/utility';
+import ApplicationDetails from '../../applications/containers/ApplicationDetails';
+
 
 @inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore', 'uiStore')
 @observer
@@ -74,8 +76,8 @@ export default class OfferingDetails extends Component {
     if (access.level !== 'FULL') {
       navItems = navItems.filter(n => (n.title !== 'Close'));
     }
-    // add business application after Bonus Rewards
-    if (offer.stage === 'CREATION' && offer.applicationId && offer.issuerId) {
+    // add business application after Bonus Rewards // offer.stage === 'CREATION' &&
+    if (offer.applicationId && offer.issuerId) {
       const pos = navItems.findIndex(n => n.to === 'bonus-rewards');
       navItems.splice(
         (pos + 1),
@@ -111,13 +113,18 @@ export default class OfferingDetails extends Component {
                   navItems.map((item) => {
                     const { offeringid } = this.props.match.params;
                     const CurrentModule = OfferingModule(item.to);
-                    return (
+                    if (item.title === 'Business Application') {
+                      return (
+                        <Route path={`${match.url}/:id/view/:appId/:userId`} render={props => <ApplicationDetails refLink={match.url} {...props} />} />
+                      );
+                    }
+                      return (
                         <Route
                           key={item.to}
                           path={`${match.url}/${item.to}`}
                           render={props => <CurrentModule classes={item.title === 'Activity History' ? 'offering-activity' : ''} module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} stepName="OFFERING_ACTIVITY_HISTORY" resourceId={offeringid} offeringId={offeringid} />}
                         />
-                    );
+                      );
                   })
                 }
               </Switch>
