@@ -38,6 +38,8 @@ export class CampaignStore {
 
   @observable activeToDisplay = this.RECORDS_TO_DISPLAY;
 
+  @observable creationToDisplay = 6;
+
   @observable gallarySelectedImageIndex = null;
 
   @observable docsWithBoxLink = [];
@@ -59,6 +61,8 @@ export class CampaignStore {
   @observable isFetchedError = false;
 
   @observable docLoading = false;
+
+  @observable hideCreationList = false;
 
   @observable documentMeta = {
     closingBinder: { selectedDoc: null, accordionActive: true },
@@ -206,8 +210,13 @@ export class CampaignStore {
     return offeringList.splice(0, this.activeToDisplay);
   }
 
-  @computed get creation() {
+  @computed get creationList() {
     return this.CompletedOfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'creation')).includes(o.stage));
+  }
+
+  @computed get creation() {
+    const creationList = this.creationList.slice();
+    return creationList.splice(0, this.creationToDisplay);
   }
 
   @computed get activeList() {
@@ -233,9 +242,9 @@ export class CampaignStore {
 
   @action
   loadMoreRecord = (type) => {
-    const offeringsList = type === 'completedToDisplay' ? this.completedList : this.orderedActiveList;
+    const offeringsList = type === 'completedToDisplay' ? this.completedList : type === 'activeToDisplay' ? this.orderedActiveList : this.creationList;
     if (offeringsList.length > this[type]) {
-      this[type] = this[type] + this.RECORDS_TO_DISPLAY;
+      this[type] = this[type] + (type === 'creationToDisplay' ? 6 : this.RECORDS_TO_DISPLAY);
     }
   }
 
@@ -243,6 +252,7 @@ export class CampaignStore {
   resetDisplayCounts = () => {
     this.completedToDisplay = this.RECORDS_TO_DISPLAY;
     this.activeToDisplay = this.RECORDS_TO_DISPLAY;
+    this.creationToDisplay = 6;
   }
 
   @computed get campaign() {

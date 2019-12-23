@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { isEmpty } from 'lodash';
-import { Header, Container, Button, Divider } from 'semantic-ui-react';
+import { Header, Container, Button, Divider, Icon } from 'semantic-ui-react';
 // import Banner from '../components/Banner';
 import CampaignList from '../components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
@@ -24,10 +24,14 @@ class Offering extends Component {
     });
   }
 
+  hideCreationList = () => {
+    this.props.campaignStore.setFieldValue('hideCreationList', true);
+  }
+
   render() {
     const {
-      active, creation, completed, loading, completedLoading, loadMoreRecord, activeList,
-      completedList, activeToDisplay, completedToDisplay, RECORDS_TO_DISPLAY,
+      active, creation, creationList, creationToDisplay, completed, loading, completedLoading, loadMoreRecord, activeList,
+      completedList, activeToDisplay, completedToDisplay, RECORDS_TO_DISPLAY, hideCreationList,
     } = this.props.campaignStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const showCreationList = this.props.userStore.isAdmin && !isEmpty(access);
@@ -39,17 +43,6 @@ class Offering extends Component {
             Invest in growing local businesses
           </Header>
         </Responsive> */}
-        {(showCreationList && !loading)
-        && (
-          <CampaignList
-            refLink={this.props.match.url}
-            loading={completedLoading}
-            campaigns={creation}
-            filters
-            heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-10' : 'mb-50'}>Coming Soon</Header>}
-            subheading={<p className="campaign-subheader center-align">These offerings are in Creation</p>}
-          />
-        )}
         <CampaignList
           refLink={this.props.match.url}
           loading={loading}
@@ -63,6 +56,24 @@ class Offering extends Component {
           && <LoadMoreBtn action={loadMoreRecord} param="activeToDisplay" />
         }
         <Divider section hidden />
+        {(!hideCreationList && showCreationList && !loading)
+        && (
+          <>
+          <Divider section as={Container} />
+          <CampaignList
+            refLink={this.props.match.url}
+            loading={completedLoading}
+            campaigns={creation}
+            filters
+            heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={`${isMobile ? 'mb-10' : 'mb-50'} coming-soon-header`}>Coming Soon<Icon className="ns-offer-declined" onClick={this.hideCreationList} /></Header>}
+            subheading={<p className="campaign-subheader center-align">These offerings are in Creation</p>}
+          />
+          {creationList && creationList.length > 6
+            && creationToDisplay < creationList.length
+            && <LoadMoreBtn action={loadMoreRecord} param="creationToDisplay" />
+          }
+          </>
+        )}
         <Divider hidden />
         <section className="bg-offwhite">
           <Container textAlign="center">
