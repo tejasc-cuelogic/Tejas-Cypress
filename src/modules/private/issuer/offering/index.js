@@ -39,7 +39,10 @@ export default class Offering extends Component {
     if (this.isUuid() && campaign.id) {
       return <Redirect from={`/dashboard/offering/${this.props.match.params.offeringSlug}/comments`} to={`/dashboard/offering/${campaign.offeringSlug}/comments`} />;
     }
-    const navItems = this.props.navStore.navMeta.subNavigations;
+    let navItems = this.props.navStore.navMeta.subNavigations;
+    if (campaign.stage === 'LIVE') {
+      navItems = navItems.filter(n => (n.title !== 'Investors'));
+    }
     return (
       <>
         <Helmet>
