@@ -1,10 +1,11 @@
 import gql from 'graphql-tag';
 
 export const allOfferings = gql`
-query getOfferingList($filters: OfferingFilterInputType, $userId: String){
+query getOfferingList($filters: OfferingListFilterInputType){
     getOfferingList(filters: $filters) {
       id
-      watchListStatus(userId: $userId)
+      isAvailablePublicly
+      watchListStatus
       offeringSlug
       stage
       media {
@@ -83,7 +84,7 @@ query checkEarlyBirdByInvestorAccountAndOfferingId($offeringId: String!, $accoun
 }`;
 
 export const getOfferingsReferral = gql`
-query getOfferingList($filters: OfferingFilterInputType){
+query getOfferingList($filters: OfferingListFilterInputType){
     getOfferingList(filters: $filters) {
       id
       stage

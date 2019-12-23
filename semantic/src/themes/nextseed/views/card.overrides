@@ -169,6 +169,9 @@
                     margin-bottom: @8px;
                 }
             }
+            &.disabled{
+                background: @neutral-darkwhite;
+            }
         }
         >.content.extra {
             padding:0 @28px @21px;
@@ -180,6 +183,9 @@
                 font-size: @13px;
                 color: @neutral;
                 margin-bottom: 0;
+            }
+            &.disabled{
+                background: @neutral-darkwhite;
             }
         }
         .message {

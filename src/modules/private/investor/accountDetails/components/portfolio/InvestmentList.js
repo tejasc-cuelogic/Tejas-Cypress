@@ -111,14 +111,14 @@ const InvestmentList = (props) => {
         <Table.Body>
           {
             listData.map(data => (
-              <Table.Row key={data.investmentDate} onClick={() => { if (!isMobile) { handleViewInvestment(!['active', 'pending'].includes(props.listOf) ? data.offering.id : ''); } }}>
+              <Table.Row key={data.investmentDate} onClick={() => { if (!isMobile) { handleViewInvestment(!['active', 'pending'].includes(props.listOf) ? get(data, 'offering.offeringSlug') : ''); } }}>
                 <Table.Cell>
                   <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />
                 </Table.Cell>
                 <Table.Cell>
                   <div className="offering-title">
                   {props.listOf === 'pending' && !isAdmin ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
-                    <Link className={`${isMobile ? 'disable-click' : ''}`} to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
+                    <Link className={`${isMobile ? 'disable-click' : ''}`} to={`${match.url}/investment-details/${get(data, 'offering.offeringSlug')}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
                   )}
                       {(get(data, 'offering.keyTerms.city') || get(data, 'offering.keyTerms.state')) && (
                         <p className="date-stamp">
