@@ -11,7 +11,7 @@ const AppUpdated = () => {
       </Modal.Header>
       <Modal.Content>
         <Modal.Description>
-          <p style={{ marginLeft: '26px' }}>Please refresh your browser to enjoy the latest version.</p>
+          <p style={{ marginLeft: '27px' }}>Please refresh your browser to enjoy the latest version.</p>
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
