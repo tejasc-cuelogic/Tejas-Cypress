@@ -160,7 +160,7 @@ class KeyTermsDetails extends Component {
             <KeyTermsFieldHoc
               data={keyTerms}
               field="securities"
-              title="Type of Securities"
+              title={offerStructure && offerStructure === 'REAL_ESTATE' ? 'Type of investment' : 'Type of Securities'}
               content={(
                 <p>
                   {offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}

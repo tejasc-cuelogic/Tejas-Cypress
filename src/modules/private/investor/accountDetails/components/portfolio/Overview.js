@@ -115,7 +115,7 @@ class Overview extends Component {
                     { keyTerms && keyTerms.securities
                       ? (
                       <Table.Row verticalAlign="top">
-                        <Table.Cell>Securities</Table.Cell>
+                        <Table.Cell>{keyTerms.securities === 'REAL_ESTATE' ? 'Type of investment' : 'Securities'}</Table.Cell>
                         <Table.Cell>
                           {keyTerms && keyTerms.securities
                             ? CAMPAIGN_KEYTERMS_SECURITIES[keyTerms.securities]
