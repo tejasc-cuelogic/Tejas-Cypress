@@ -24,13 +24,13 @@ class SidebarLeftPush extends Component {
     return (
       <>
         {showFireworkAnimation
-        && <FireworksAnimation />
+          && <FireworksAnimation />
         }
         {progressMap.includes(this.props.uiStore.inProgress)
           && (
-<Dimmer active={this.props.uiStore.inProgress} className="fullscreen">
-            <Loader active={this.props.uiStore.inProgress} />
-          </Dimmer>
+            <Dimmer active={this.props.uiStore.inProgress} className="fullscreen">
+              <Loader active={this.props.uiStore.inProgress} />
+            </Dimmer>
           )
         }
         <Responsive minWidth={992}>
@@ -72,7 +72,7 @@ const MySidebar = observer(props => (
           }
           vertical
           inverted={(props.UserInfo.roles[0] !== 'investor')}
-          className={props.UserInfo.roles[0]}
+          className={`${props.uiStore.devBanner ? 'pb-40' : ''} ${props.UserInfo.roles[0]}`}
         >
           <Scrollbars
             className="ns-scrollbar"
@@ -86,12 +86,12 @@ const MySidebar = observer(props => (
             <div className="user-picture">
               {props.UserInfo.avatarUrl
                 ? (
-<Image64
-  avatar
-  size={!props.layoutState.leftPanel ? 'mini' : 'huge'}
-  circular
-  srcUrl={props.UserInfo.avatarUrl}
-/>
+                  <Image64
+                    avatar
+                    size={!props.layoutState.leftPanel ? 'mini' : 'huge'}
+                    circular
+                    srcUrl={props.UserInfo.avatarUrl}
+                  />
                 )
                 : <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : 'huge'} />
               }
