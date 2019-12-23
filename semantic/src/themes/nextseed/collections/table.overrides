@@ -253,6 +253,9 @@
                 border-top: none;
             }
         }
+        &.without-border-shadow tr{
+            box-shadow: none !important;
+        }
     }
     &.basic.form-table {
         background: @neutral-offwhite;

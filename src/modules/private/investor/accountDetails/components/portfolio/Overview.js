@@ -11,7 +11,7 @@ import { DataFormatter } from '../../../../../../helper';
 import Helper from '../../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
-@inject('portfolioStore', 'campaignStore', 'userDetailsStore', 'transactionStore')
+@inject('portfolioStore', 'campaignStore', 'userDetailsStore', 'transactionStore', 'uiStore')
 @observer
 class Overview extends Component {
   state = {
@@ -71,6 +71,7 @@ class Overview extends Component {
     const { agreementIds, loading } = this.props.transactionStore;
     let aggrementDocs = get(campaign, 'closureSummary.keyTerms.supplementalAgreements.documents') || [];
     aggrementDocs = aggrementDocs.length ? aggrementDocs.filter(d => d.isVisible && get(d, 'upload.fileHandle.boxFileId')) : [];
+    const { responsiveVars } = this.props.uiStore;
     if (loading) {
       return (
         <InlineLoader />
@@ -78,7 +79,7 @@ class Overview extends Component {
     }
     return (
       <>
-        <div className="inner-content-spacer bg-offwhite">
+        <div className={`${responsiveVars.isMobile ? '' : 'bg-offwhite'} inner-content-spacer`}>
           <span className="pull-left">
             <Header as="h5">
               <AccTypeTitle moreText="investment" />
@@ -95,9 +96,9 @@ class Overview extends Component {
         <div className="inner-content-spacer">
           <Grid>
             <Grid.Column width={isMobile ? 16 : 9}>
-              <Header as="h4">Offering Summary</Header>
+              <Header as="h4">Offering Summary |{edgarLink}|</Header>
               <div className="table-wrapper">
-                <Table definition basic="very">
+                <Table definition basic="very" className={responsiveVars.isMobile ? 'without-border-shadow' : ''}>
                   <Table.Body>
                     { keyTerms && keyTerms.shorthandBusinessName
                       ? (
@@ -277,10 +278,10 @@ class Overview extends Component {
                         <Table.Cell>
                           <Button.Group vertical>
                             {agreementIds && agreementIds.length !== 0 && agreementIds.map(agreementId => (
-                              <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {agreementId} </Button>
+                              <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className={`${responsiveVars.isMobile ? 'mt-14 mb-14' : ''} link-button highlight-text left-align`}><Icon className="ns-pdf-file" size="large" /> {agreementId} </Button>
                             ))}
                             {aggrementDocs && aggrementDocs.length !== 0 && aggrementDocs.map(doc => (
-                              <Button icon loading={this.state.loadingDoc === get(doc, 'upload.fileHandle.boxFileId')} onClick={() => this.handleViewSuppAgreement(get(doc, 'upload.fileHandle.boxFileId'))} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {doc.name}</Button>
+                              <Button icon loading={this.state.loadingDoc === get(doc, 'upload.fileHandle.boxFileId')} onClick={() => this.handleViewSuppAgreement(get(doc, 'upload.fileHandle.boxFileId'))} className={`${responsiveVars.isMobile ? 'mt-14 mb-14' : ''} link-button highlight-text left-align`}><Icon className="ns-pdf-file" size="large" /> {doc.name}</Button>
                             ))}
                           </Button.Group>
                         </Table.Cell>

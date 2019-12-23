@@ -87,7 +87,7 @@ class InvestmentDetails extends PureComponent {
           {details.loading ? <InlineLoader /> : (
             <>
               <SummaryHeader details={summaryDetails} loading={details.loading} />
-              <Card fluid>
+              <Card fluid className={responsiveVars.isMobile ? 'mt-0' : ''}>
                 <SecondaryMenu match={match} navItems={navItems} />
                 <SuspenseBoundary>
                   <Switch>
