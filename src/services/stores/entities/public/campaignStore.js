@@ -10,7 +10,7 @@ import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, get
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
-import { userDetailsStore, watchListStore, userStore, authStore } from '../../index';
+import { userDetailsStore, watchListStore, userStore, authStore, offeringCreationStore, portfolioStore } from '../../index';
 // import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
@@ -114,19 +114,23 @@ export class CampaignStore {
       client: gqlClient,
       query: queryType ? campaignDetailsForInvestmentQuery : campaignDetailsQuery,
       variables: { id, isValid },
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       onFetch: (data) => {
         if (data && data.getOfferingDetailsBySlug && !this.details.loading) {
           if (!queryType) {
             watchListStore.setFieldValue('isWatching', ['WATCHING', 'INVESTOR'].includes(get(data.getOfferingDetailsBySlug, 'watchListStatus')));
             this.getCampaignAdditionalDetails(id);
           }
+          offeringCreationStore.setCurrentOfferingId(data.getOfferingDetailsBySlug.id);
           resolve(data.getOfferingDetailsBySlug);
         } else if (!this.details.loading) {
+          offeringCreationStore.setCurrentOfferingId(data.getOfferingById.id);
           resolve(false);
         }
       },
       onError: (err) => {
+        offeringCreationStore.setCurrentOfferingId(null);
+        portfolioStore.setFieldValue('investmentDetails', {});
         reject(err);
       },
     });

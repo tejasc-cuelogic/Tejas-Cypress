@@ -179,7 +179,7 @@ export class NavStore {
             ...filteredNavs[bIndex],
             ...{
               title: this.businessName(b),
-              to: `offering/${b.id}`,
+              to: `offering/${b.offeringSlug}`,
               subNavigations: sNav,
             },
           },
