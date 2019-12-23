@@ -47,6 +47,10 @@ if (['localhost', 'develop', 'dev', 'predev', 'review'].includes(REACT_APP_DEPLO
 promiseFinally.shim();
 configure({ enforceActions: true });
 
+const onAppUpdated = () => {
+  stores.uiStore.setAppUpdated();
+};
+
 ReactDOM.render(
   <Provider {...stores}>
     <BrowserRouter>

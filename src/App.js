@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import { get, isEmpty } from 'lodash';
 import queryString from 'query-string';
 import IdleTimer from 'react-idle-timer';
+import { Modal, Button } from 'semantic-ui-react';
 import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
 import { DevBanner, AppUpdated, Spinner } from './theme/shared';
