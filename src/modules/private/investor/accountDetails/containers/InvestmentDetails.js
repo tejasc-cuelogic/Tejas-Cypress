@@ -8,7 +8,7 @@ import SummaryHeader from '../components/portfolio/SummaryHeader';
 import Documents from '../../../../public/offering/components/campaignDetails/documents';
 import { SuspenseBoundary, lazyRetry, InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-// import NotFound from '../../../../shared/NotFound';
+import NotFound from '../../../../shared/NotFound';
 import { DataFormatter } from '../../../../../helper';
 
 
@@ -75,9 +75,9 @@ class InvestmentDetails extends PureComponent {
       ],
     };
 
-    // if (details && details.data && !details.data.getOfferingDetailsBySlug) {
-    //   return <NotFound />;
-    // }
+    if (details && details.data && !details.data.getOfferingDetailsBySlug) {
+      return <NotFound />;
+    }
     if (dataRoomDocs.length === 0) {
       navItems = navItems.filter(f => f.title !== 'Documents');
     }
