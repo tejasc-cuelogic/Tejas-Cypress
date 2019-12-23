@@ -24,10 +24,14 @@ class Offering extends Component {
     });
   }
 
+  hideCreationList = () => {
+    this.props.campaignStore.setFieldValue('hideCreationList', true);
+  }
+
   render() {
     const {
-      active, creation, completed, loading, completedLoading, loadMoreRecord, activeList,
-      completedList, activeToDisplay, completedToDisplay, RECORDS_TO_DISPLAY,
+      active, creation, creationList, creationToDisplay, completed, loading, completedLoading, loadMoreRecord, activeList,
+      completedList, activeToDisplay, completedToDisplay, RECORDS_TO_DISPLAY, hideCreationList,
     } = this.props.campaignStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const showCreationList = this.props.userStore.isAdmin && !isEmpty(access);
@@ -52,16 +56,22 @@ class Offering extends Component {
           && <LoadMoreBtn action={loadMoreRecord} param="activeToDisplay" />
         }
         <Divider section hidden />
-        {(showCreationList && !loading)
+        {(!hideCreationList && showCreationList && !loading)
         && (
+          <>
           <CampaignList
             refLink={this.props.match.url}
             loading={completedLoading}
             campaigns={creation}
             filters
-            heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-10' : 'mb-50'}>Coming Soon</Header>}
+            heading={<Header as={isMobile ? 'h3' : 'h2'} textAlign="center" caption className={isMobile ? 'mb-10' : 'mb-50'}>Coming Soon <Button onClick={this.hideCreationList}>X</Button></Header>}
             subheading={<p className="campaign-subheader center-align">These offerings are in Creation</p>}
           />
+          {creationList && creationList.length > 6
+            && creationToDisplay < creationList.length
+            && <LoadMoreBtn action={loadMoreRecord} param="creationToDisplay" />
+          }
+          </>
         )}
         <Divider hidden />
         <section className="bg-offwhite">
