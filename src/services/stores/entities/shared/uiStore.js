@@ -1,7 +1,6 @@
 /* eslint-disable space-unary-ops */
 import { action, observable, computed } from 'mobx';
 import { REACT_APP_DEPLOY_ENV, NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
-import Helper from '../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
 export class UiStore {
