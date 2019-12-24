@@ -22,7 +22,7 @@ const INVESTMENT_CARD_META = [
   { label: 'Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%` },
   { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months` },
   { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], getRowValue: value => <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(value, false, false, false)} /> },
-  { label: 'Net Payments Recieved', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}` },
+  { label: 'Net Payments Received', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}` },
   { label: 'Principal Remaining', key: 'remainingPrincipal', for: ['active'], getRowValue: value => `$${value}` }, // pending
   { label: 'Realized Multiple', key: 'offering.closureSummary.keyTerms.multiple', getRowValue: value => `${value}x`, for: ['completed'] },
 ];
@@ -87,7 +87,7 @@ const InvestmentList = (props) => {
   const listHeader = {
     pending: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Days to close'],
     active: ['Offering', 'Invested Amount', 'Status', 'Close Date', 'Term', 'Net Payments Received', 'Principal Remaining'],
-    completed: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Close Date', 'Net Payments Received'],
+    completed: ['Offering', 'Investment Type', 'Invested Amount', 'Status', 'Close Date', 'Net Payments Received', 'Realized Multiple'],
   }[props.listOf];
 
   const {
@@ -111,20 +111,20 @@ const InvestmentList = (props) => {
         <Table.Body>
           {
             listData.map(data => (
-              <Table.Row key={data.investmentDate} onClick={() => { if (!isMobile) { handleViewInvestment(!['active', 'pending'].includes(props.listOf) ? data.offering.id : ''); } }}>
+              <Table.Row key={data.investmentDate} onClick={() => { if (!isMobile) { handleViewInvestment(!['active', 'pending'].includes(props.listOf) ? get(data, 'offering.offeringSlug') : ''); } }}>
                 <Table.Cell>
                   <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />
                 </Table.Cell>
                 <Table.Cell>
                   <div className="offering-title">
-                    {props.listOf === 'pending' && !isAdmin ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
-                      <Link className={`${isMobile ? 'disable-click' : ''}`} to={`${match.url}/investment-details/${data.offering.id}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
-                    )}
-                    {(get(data, 'offering.keyTerms.city') || get(data, 'offering.keyTerms.state')) && (
-                      <p className="date-stamp">
-                        {get(data, 'offering.keyTerms.city')} {get(data, 'offering.keyTerms.state')}
-                      </p>
-                    )}
+                  {props.listOf === 'pending' && !isAdmin ? (<Link to={`/offerings/${get(data, 'offering.offeringSlug')}/overview`} target="_blank">{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>) : (
+                    <Link className={`${isMobile ? 'disable-click' : ''}`} to={`${match.url}/investment-details/${get(data, 'offering.offeringSlug')}`}>{get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}</Link>
+                  )}
+                      {(get(data, 'offering.keyTerms.city') || get(data, 'offering.keyTerms.state')) && (
+                        <p className="date-stamp">
+                          {get(data, 'offering.keyTerms.city')} {get(data, 'offering.keyTerms.state')}
+                        </p>
+                      )}
                   </div>
                 </Table.Cell>
                 {props.listOf !== 'active'
@@ -181,6 +181,13 @@ const InvestmentList = (props) => {
                   && (
                     <Table.Cell>
                       {Helper.MoneyMathDisplayCurrency(get(data, 'remainingPrincipal') || '0.00')}
+                    </Table.Cell>
+                  )
+                }
+                {props.listOf === 'completed'
+                  && (
+                    <Table.Cell>
+                      {get(data, 'offering.closureSummary.keyTerms.multiple') ? `${data.offering.closureSummary.keyTerms.multiple}x` : 'N/A'}
                     </Table.Cell>
                   )
                 }

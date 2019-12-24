@@ -120,6 +120,8 @@ export class OfferingCreationStore {
 
   @observable currentOfferingId = null;
 
+  @observable currentOfferingSlug = null;
+
   @observable issuerOfferingBac = {};
 
   @observable affiliatedIssuerOfferingBac = {};
