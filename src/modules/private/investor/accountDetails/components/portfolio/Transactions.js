@@ -7,6 +7,7 @@ import { DropdownFilter } from '../../../../../../theme/form/Filters';
 import Helper from '../../../../../../helper/utility';
 import { DateTimeFormat, InlineLoader, IframeModal } from '../../../../../../theme/shared';
 import { DataFormatter } from '../../../../../../helper';
+import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 
 const termNote = {
   columns: [
@@ -30,7 +31,7 @@ const revShare = {
   ],
 };
 
-@inject('transactionStore', 'campaignStore')
+@inject('transactionStore', 'campaignStore', 'uiStore')
 @observer
 export default class Transactions extends Component {
   state = {
@@ -65,6 +66,7 @@ export default class Transactions extends Component {
     } = this.props.transactionStore;
     const { offerStructure } = this.props.campaignStore;
     const finalResult = offerStructure === 'TERM_NOTE' ? termNote : revShare;
+    const { responsiveVars } = this.props.uiStore;
     if (loading) {
       return (
         <InlineLoader />
@@ -77,19 +79,22 @@ export default class Transactions extends Component {
     }
     return (
       <>
-        <Form className="inner-content-spacer">
-          <Grid>
-            <Grid.Row verticalAlign="middle">
-              {investmentOptions.length > 1
-                && (
-                <Grid.Column width={4}>
-                  <DropdownFilter value={this.props.transactionStore.selectedInvestment} change={this.setSearchParam} name="Select Investment" options={investmentOptions} />
-                </Grid.Column>
-                )
-              }
-            </Grid.Row>
-          </Grid>
-        </Form>
+        {investmentOptions.length > 1
+          && (
+            <Form className="inner-content-spacer">
+              <Grid>
+                <Grid.Row verticalAlign="middle">
+                    <Grid.Column width={4}>
+                      <DropdownFilter value={this.props.transactionStore.selectedInvestment} change={this.setSearchParam} name="Select Investment" options={investmentOptions} />
+                    </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Form>
+            )
+          }
+        {responsiveVars.isMobile
+        && <SecondaryMenu refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+        }
         <div className="table-wrapper">
           {!allPaymentHistoryData.length
             ? <InlineLoader text="No Payments" />

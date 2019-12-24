@@ -9,6 +9,7 @@ import PayOffChart from './PayOffChart';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { DataFormatter } from '../../../../../../helper';
 import Helper from '../../../../../../helper/utility';
+import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('portfolioStore', 'campaignStore', 'userDetailsStore', 'transactionStore', 'uiStore')
@@ -93,6 +94,9 @@ class Overview extends Component {
             )
           }
         </div>
+        {responsiveVars.isMobile
+        && <SecondaryMenu refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+        }
         <div className="inner-content-spacer">
           <Grid>
             <Grid.Column width={isMobile ? 16 : 9}>
