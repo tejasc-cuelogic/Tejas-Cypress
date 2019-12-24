@@ -93,7 +93,7 @@ export default class Transactions extends Component {
             )
           }
         {responsiveVars.isMobile
-        && <SecondaryMenu refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+        && <SecondaryMenu isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
         }
         <div className="table-wrapper">
           {!allPaymentHistoryData.length

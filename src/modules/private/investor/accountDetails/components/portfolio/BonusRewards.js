@@ -30,10 +30,11 @@ class BonusRewards extends Component {
     const investedAmount = get(getInvestor, 'myInvestment') ? get(getInvestor, 'myInvestment') : 0;
     const rewardList = investmentBonusRewards(investedAmount ? parseFloat(investedAmount.replace(/,/g, '')) : 0);
     const metaTitle = 'Check the Updates tab for the latest information on when rewards will be delivered.  Unless otherwise indicated, rewards will be available after the business is open.';
+    const { responsiveVars } = this.props.uiStore;
     return (
       <>
       {responsiveVars.isMobile
-      && <SecondaryMenu refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+      && <SecondaryMenu isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
       }
       <div className="inner-content-spacer">
         <InvestmentTimeline title="Your investment" {...props} />
