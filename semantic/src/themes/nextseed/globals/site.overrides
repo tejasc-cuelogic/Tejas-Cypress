@@ -3115,3 +3115,7 @@ table.css-wu4c77-diff-container {
     margin: auto;
 }
 // HTML editor images placeholder end
+.card-bottom-button{
+	background: @neutral-offwhite;
+	padding: 0 @20px;
+}

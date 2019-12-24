@@ -85,7 +85,7 @@ class Overview extends Component {
               <AccTypeTitle moreText="investment" />
             </Header>
           </span>
-          {isPreviewLinkShow
+          {isPreviewLinkShow && !responsiveVars.isMobile
             && (
               <span className="pull-right">
                 <Link target="_blank" to={`/offerings/${campaign.offeringSlug}`} className="pull-right">View offering page</Link>
@@ -96,7 +96,7 @@ class Overview extends Component {
         <div className="inner-content-spacer">
           <Grid>
             <Grid.Column width={isMobile ? 16 : 9}>
-              <Header as="h4">Offering Summary</Header>
+              {!responsiveVars.isMobile && <Header as="h4">Offering Summary</Header>}
               <div className="table-wrapper">
                 <Table definition basic="very" className={responsiveVars.isMobile ? 'without-border-shadow' : ''}>
                   <Table.Body>
@@ -273,15 +273,15 @@ class Overview extends Component {
                     }
                     {(agreementIds && agreementIds.length) || (aggrementDocs && aggrementDocs.length)
                       ? (
-                        <Table.Row verticalAlign="top">
+                        <Table.Row verticalAlign="top" className={responsiveVars.isMobile ? 'pb-0' : ''}>
                           <Table.Cell>Investor Agreement{(agreementIds.length + aggrementDocs.length) > 1 && 's'} </Table.Cell>
                           <Table.Cell>
                             <Button.Group vertical>
                               {agreementIds && agreementIds.length !== 0 && agreementIds.map(agreementId => (
-                                <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className={`${responsiveVars.isMobile ? 'mt-14 mb-14' : ''} link-button highlight-text left-align`}><Icon className="ns-pdf-file" size="large" /> {agreementId} </Button>
+                                <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {agreementId} </Button>
                               ))}
                               {aggrementDocs && aggrementDocs.length !== 0 && aggrementDocs.map(doc => (
-                                <Button icon loading={this.state.loadingDoc === get(doc, 'upload.fileHandle.boxFileId')} onClick={() => this.handleViewSuppAgreement(get(doc, 'upload.fileHandle.boxFileId'))} className={`${responsiveVars.isMobile ? 'mt-14 mb-14' : ''} link-button highlight-text left-align`}><Icon className="ns-pdf-file" size="large" /> {doc.name}</Button>
+                                <Button icon loading={this.state.loadingDoc === get(doc, 'upload.fileHandle.boxFileId')} onClick={() => this.handleViewSuppAgreement(get(doc, 'upload.fileHandle.boxFileId'))} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {doc.name}</Button>
                               ))}
                             </Button.Group>
                           </Table.Cell>
@@ -334,11 +334,17 @@ class Overview extends Component {
               ) : ''
             }
           </Grid>
-          {edgarLink && responsiveVars.isMobile
-          && (
-            <Button className="mt-30" fluid onClick={() => window.open(edgarLink.includes('http') ? edgarLink : `http://${edgarLink}`, '_blank')} primary content="View Form C Filing" />
-          )}
         </div>
+        {isPreviewLinkShow && responsiveVars.isMobile
+          && (
+            <>
+              <Divider fitted />
+              <div className="center-align mt-14 mb-14">
+                <Button className="link-button highlight-text" as={Link} target="_blank" to={`/offerings/${campaign.offeringSlug}`}>View offering page</Button>
+              </div>
+            </>
+          )
+        }
         {chartData.length > 0 && !responsiveVars.isMobile
           && (
             <>
@@ -356,6 +362,12 @@ class Overview extends Component {
           srcUrl={this.state.embedUrl}
           loading={false}
         />
+        {edgarLink && responsiveVars.isMobile
+          && (
+            <div className="card-bottom-button">
+              <Button className="mt-30" fluid onClick={() => window.open(edgarLink.includes('http') ? edgarLink : `http://${edgarLink}`, '_blank')} primary content="View Form C Filing" />
+            </div>
+          )}
       </>
     );
   }
