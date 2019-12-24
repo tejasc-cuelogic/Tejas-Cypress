@@ -214,7 +214,7 @@ export class NavItems extends Component {
                                 {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
                                 {(item.title !== 'Updates' || (item.title === 'Updates' && item.to.includes('updates') && this.props.countData) || isPrivateApp) ? <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span> : ''}
                                 {((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) && this.props.countData
-                                  ? <Label circular color="blue" size="small">{this.props.countData[item.to === '#updates' ? 'updates' : item.to === '#comments' ? 'comments' : item.to]}</Label> : null
+                                  ? <Label circular color="green" size="small">{this.props.countData[item.to === '#updates' ? 'updates' : item.to === '#comments' ? 'comments' : item.to]}</Label> : null
                                 }
                               </Menu.Item>
                               {this.props.userStore.isInvestor && item.title === 'Setup' && !investorAccounts.length
