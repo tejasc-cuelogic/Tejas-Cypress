@@ -511,7 +511,6 @@ export class CampaignStore {
   }
 
   generateBanner = (offeringDetailsList, addObjectProps = false, isFromAdmin = false) => {
-    let realEstateOfferingsArr = [];
     let closingOfferingsArr = [];
     let newOfferingsArr = [];
     let otherOfferingsArr = [];
@@ -559,19 +558,15 @@ export class CampaignStore {
       if (money.isZero(amountCompairResult) || !money.isNegative(amountCompairResult)) {
         isReachedMax = true;
       }
-      if (securities === 'REAL_ESTATE' && !isInProcessing && !isReachedMax) {
-        resultObject.isBannerShow = true;
-        resultObject.datesBanner = 'Real Estate';
-        resultObject.launchDate = moment(launchDate).unix() || null;
-        resultObject.processingDate = moment(closingDate).unix() || null;
-        resultObject.category = 'realEstate';
-        return realEstateOfferingsArr.push(resultObject);
-      } if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains
+      if (launchDate && (launchDaysToRemainsForNewLable < closeDaysToRemains
         || closeDaysToRemains === null)
         && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
         resultObject.isBannerShow = true;
         resultObject.datesBanner = 'NEW';
         resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
+        if (securities === 'REAL_ESTATE') {
+          resultObject.realEstateBanner = 'Real Estate';
+        }
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         resultObject.category = 'newOffering';
@@ -581,6 +576,9 @@ export class CampaignStore {
         resultObject.isBannerShow = !!labelBannerFirst;
         resultObject.datesBanner = labelBannerFirst;
         resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
+        if (securities === 'REAL_ESTATE') {
+          resultObject.realEstateBanner = 'Real Estate';
+        }
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         resultObject.category = 'closingSoon';
@@ -590,6 +588,9 @@ export class CampaignStore {
       } if (isInProcessing) {
         resultObject.isBannerShow = true;
         resultObject.datesBanner = 'Processing';
+        if (securities === 'REAL_ESTATE') {
+          resultObject.realEstateBanner = 'Real Estate';
+        }
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         resultObject.category = 'processing';
@@ -601,6 +602,9 @@ export class CampaignStore {
       //   resultObject.datesBanner = 'NEW';
       // }
       resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
+      if (securities === 'REAL_ESTATE') {
+        resultObject.realEstateBanner = 'Real Estate';
+      }
       resultObject.isBannerShow = !!(resultObject.datesBanner || resultObject.amountsBanner);
       resultObject.launchDate = moment(launchDate).unix() || null;
       resultObject.processingDate = moment(closingDate).unix() || null;
@@ -613,7 +617,6 @@ export class CampaignStore {
       return otherOfferingsArr.push(resultObject);
     });
     newOfferingsArr = orderBy(newOfferingsArr, ['launchDate'], ['desc']);
-    realEstateOfferingsArr = orderBy(realEstateOfferingsArr, ['launchDate'], ['desc']);
     closingOfferingsArr = orderBy(closingOfferingsArr, ['processingDate'], ['asc']);
     processingOfferingsArr = orderBy(processingOfferingsArr, ['processingDate'], ['desc']);
     otherOfferingsArr = orderBy(otherOfferingsArr, ['order'], ['asc']);
@@ -621,14 +624,13 @@ export class CampaignStore {
     // const sortedResultObject = [];
     if (isFromAdmin) {
       const sortedResultObject = [
-        { category: 'closingSoonAndNew', title: 'Real Estate, Closing Soon and New', offerings: [...realEstateOfferingsArr, ...closingOfferingsArr, ...newOfferingsArr] },
+        { category: 'closingSoonAndNew', title: 'Closing Soon and New', offerings: [...closingOfferingsArr, ...newOfferingsArr] },
         { category: 'other', title: 'Current Offerings', offerings: [...otherOfferingsArr] },
         { category: 'reachedMaxAndProcessing', title: 'Reached Max and Processing', offerings: [...reachedMaxOfferingsArr, ...processingOfferingsArr] },
       ];
       return sortedResultObject;
     }
     const sortedResultObject = [
-      ...realEstateOfferingsArr,
       ...closingOfferingsArr,
       ...newOfferingsArr,
       ...otherOfferingsArr,
