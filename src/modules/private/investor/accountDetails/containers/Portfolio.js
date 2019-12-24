@@ -141,7 +141,6 @@ export default class Portfolio extends PureComponent {
       );
     }
     const { getInvestorAccounts, getPieChartData, portfolioError } = portfolioStore;
-    getInvestorAccounts.totalBalance = '-1.5';
     const totalPortfolioBalance = getInvestorAccounts && getInvestorAccounts.totalBalance ? !this.props.isAdmin && money.isNegative(getInvestorAccounts.totalBalance) ? '0.00' : getInvestorAccounts.totalBalance : '0.00';
     const ERROR_MSG = `Sorry, this page is not loading correctly. We've notified the team.<br />
       Please check back again later, and contact us at
