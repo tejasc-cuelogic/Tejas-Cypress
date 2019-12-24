@@ -6,7 +6,7 @@ export const CAMPAIGN_KEYTERMS_SECURITIES = {
   PREFERRED_EQUITY_506C: 'Preferred Equity',
   CONVERTIBLE_NOTES: 'Convertible Notes',
   SAFE: 'SAFE',
-  REAL_ESTATE: 'Real Estate Fund (Qualified Opportunity Fund)',
+  REAL_ESTATE: 'LLC Membership Interests',
   FUNDS: 'Funds - Limited Partner Interest',
 };
 export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
