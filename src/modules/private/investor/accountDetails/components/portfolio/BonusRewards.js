@@ -24,7 +24,7 @@ class BonusRewards extends Component {
   render() {
     const { props } = this;
     const { getEarlyBirdCheck, earlyBirdRewards, earlyBirdLoading } = props.campaignStore;
-    // const { inProgress } = this.props.uiStore;
+    const { responsiveVars } = this.props.uiStore;
     const { getInvestor } = props.portfolioStore;
     const { investmentBonusRewards } = props.investmentStore
     const investedAmount = get(getInvestor, 'myInvestment') ? get(getInvestor, 'myInvestment') : 0;

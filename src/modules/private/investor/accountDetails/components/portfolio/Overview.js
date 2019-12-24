@@ -95,7 +95,7 @@ class Overview extends Component {
           }
         </div>
         {responsiveVars.isMobile
-        && <SecondaryMenu refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+        && <SecondaryMenu classname="no-shadow" refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
         }
         <div className="inner-content-spacer">
           <Grid>
@@ -106,7 +106,7 @@ class Overview extends Component {
                   <Table.Body>
                     {keyTerms && keyTerms.shorthandBusinessName
                       ? (
-                        <Table.Row verticalAlign="top">
+                        <Table.Row verticalAlign="top" className={responsiveVars.isMobile ? 'pt-0' : ''}>
                           <Table.Cell width={5}>Issuer</Table.Cell>
                           <Table.Cell>
                             {keyTerms && keyTerms.shorthandBusinessName

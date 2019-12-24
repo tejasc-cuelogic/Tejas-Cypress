@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { isArray } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Form, Grid, Table } from 'semantic-ui-react';
+import { Form, Grid, Table, List, Button } from 'semantic-ui-react';
 import { THeader } from '../../../../../../theme/table/NSTable';
 import { DropdownFilter } from '../../../../../../theme/form/Filters';
 import Helper from '../../../../../../helper/utility';
@@ -79,71 +79,106 @@ export default class Transactions extends Component {
     }
     return (
       <>
+        {responsiveVars.isMobile
+          && <SecondaryMenu classname="no-shadow" refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+        }
         {investmentOptions.length > 1
           && (
             <Form className="inner-content-spacer">
               <Grid>
                 <Grid.Row verticalAlign="middle">
-                    <Grid.Column width={4}>
-                      <DropdownFilter value={this.props.transactionStore.selectedInvestment} change={this.setSearchParam} name="Select Investment" options={investmentOptions} />
-                    </Grid.Column>
+                  <Grid.Column width={responsiveVars.isMobile ? 16 : 4}>
+                    <DropdownFilter value={this.props.transactionStore.selectedInvestment} change={this.setSearchParam} name="Select Investment" options={investmentOptions} />
+                  </Grid.Column>
                 </Grid.Row>
               </Grid>
             </Form>
-            )
-          }
-        {responsiveVars.isMobile
-        && <SecondaryMenu refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+          )
         }
-        <div className="table-wrapper">
-          {!allPaymentHistoryData.length
-            ? <InlineLoader text="No Payments" />
-            : (
-            <Table unstackable singleLine className="investment-details" textAlign="right">
-              <THeader columns={finalResult.columns} />
-              <Table.Body>
-                {
-                  allPaymentHistoryData.map(row => (
-                    <Table.Row key={Helper.guid()}>
-                      <Table.Cell collapsing textAlign="left">
-                        <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(row.completeDate, true, false, false)} />
-                      </Table.Cell>
-                      <Table.Cell className="positive-text">{Helper.CurrencyFormat(row.grossTotalAmount)}</Table.Cell>
+        {responsiveVars.isMobile ? (
+          <>
+            <div className="bg-offwhite transaction-year">
+              2019
+            </div>
+            <List divided verticalAlign="middle" className="transaction-mob">
+              <List.Item>
+                <List.Content floated="right">
+                  <Button className="link-button highlight-text">Add</Button>
+                </List.Content>
+                <List.Content>Lena</List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content floated="right">
+                  <Button className="link-button highlight-text">Add</Button>
+                </List.Content>
+                <List.Content>Lindsay</List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content floated="right">
+                  <Button className="link-button highlight-text">Add</Button>
+                </List.Content>
+                <List.Content>Mark</List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content floated="right">
+                  <Button className="link-button highlight-text">Add</Button>
+                </List.Content>
+                <List.Content>Molly</List.Content>
+              </List.Item>
+            </List>
+          </>
+        ) : (
+            <div className="table-wrapper">
+              {!allPaymentHistoryData.length
+                ? <InlineLoader text="No Payments" />
+                : (
+                  <Table unstackable singleLine className="investment-details" textAlign="right">
+                    <THeader columns={finalResult.columns} />
+                    <Table.Body>
                       {
-                        offerStructure === 'TERM_NOTE'
-                          ? (
-                            <>
-                              <Table.Cell>
-                                {Helper.CurrencyFormat(row.interestGrossAmount)}
-                              </Table.Cell>
-                              <Table.Cell>
-                                {Helper.CurrencyFormat(row.principalGrossAmount)}
-                              </Table.Cell>
-                              <Table.Cell>{Helper.CurrencyFormat(row.feeTotalAmount)}</Table.Cell>
-                              <Table.Cell>{Helper.CurrencyFormat(row.netTotalAmount)}</Table.Cell>
-                              <Table.Cell>
-                                {`$${row.remainingPrincipalDue}`}
-                              </Table.Cell>
-                            </>
-                          )
-                          : (
-                            <>
-                              <Table.Cell>{Helper.CurrencyFormat(row.feeTotalAmount)}</Table.Cell>
-                              <Table.Cell>{Helper.CurrencyFormat(row.netTotalAmount)}</Table.Cell>
-                              <Table.Cell>
-                                {`$${row.remainingAmountDue}`}
-                              </Table.Cell>
-                            </>
-                          )
+                        allPaymentHistoryData.map(row => (
+                          <Table.Row key={Helper.guid()}>
+                            <Table.Cell collapsing textAlign="left">
+                              <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(row.completeDate, true, false, false)} />
+                            </Table.Cell>
+                            <Table.Cell className="positive-text">{Helper.CurrencyFormat(row.grossTotalAmount)}</Table.Cell>
+                            {
+                              offerStructure === 'TERM_NOTE'
+                                ? (
+                                  <>
+                                    <Table.Cell>
+                                      {Helper.CurrencyFormat(row.interestGrossAmount)}
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                      {Helper.CurrencyFormat(row.principalGrossAmount)}
+                                    </Table.Cell>
+                                    <Table.Cell>{Helper.CurrencyFormat(row.feeTotalAmount)}</Table.Cell>
+                                    <Table.Cell>{Helper.CurrencyFormat(row.netTotalAmount)}</Table.Cell>
+                                    <Table.Cell>
+                                      {`$${row.remainingPrincipalDue}`}
+                                    </Table.Cell>
+                                  </>
+                                )
+                                : (
+                                  <>
+                                    <Table.Cell>{Helper.CurrencyFormat(row.feeTotalAmount)}</Table.Cell>
+                                    <Table.Cell>{Helper.CurrencyFormat(row.netTotalAmount)}</Table.Cell>
+                                    <Table.Cell>
+                                      {`$${row.remainingAmountDue}`}
+                                    </Table.Cell>
+                                  </>
+                                )
+                            }
+                          </Table.Row>
+                        ))
                       }
-                    </Table.Row>
-                  ))
-                }
-              </Table.Body>
-            </Table>
-            )
-          }
-        </div>
+                    </Table.Body>
+                  </Table>
+                )
+              }
+            </div>
+          )
+        }
         <IframeModal
           open={this.state.open}
           close={this.closeModal}

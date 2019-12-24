@@ -704,6 +704,12 @@ footer .ui.text.menu{
 .transaction-details{
     .ui.card .mobile-dropdown-menu.private-secondary-menu{
         overflow: visible;
+        &.no-shadow{
+            box-shadow: none;
+            border: 1px solid @neutral-darkwhite;
+            border-left: 0;
+            border-right: 0;
+        }
     }
     .ui.inverted.menu{
         &.offer-details{

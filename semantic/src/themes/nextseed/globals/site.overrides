@@ -3119,3 +3119,10 @@ table.css-wu4c77-diff-container {
 	background: @neutral-offwhite;
 	padding: 0 @20px;
 }
+.transaction-year{
+	padding: @8px @20px;
+	font-size: @13px;
+	font-weight: @bold;
+	line-height: 20px;
+	color: @neutral;
+}
