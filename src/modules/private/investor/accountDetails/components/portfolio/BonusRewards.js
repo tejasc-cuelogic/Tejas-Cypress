@@ -33,7 +33,7 @@ class BonusRewards extends Component {
     return (
       <>
       {responsiveVars.isMobile
-      && <SecondaryMenu refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+      && <SecondaryMenu isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
       }
       <div className="inner-content-spacer">
         <InvestmentTimeline title="Your investment" {...props} />

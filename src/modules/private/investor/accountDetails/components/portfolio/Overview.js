@@ -95,7 +95,7 @@ class Overview extends Component {
           }
         </div>
         {responsiveVars.isMobile
-        && <SecondaryMenu classname="no-shadow" refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+        && <SecondaryMenu classname="no-shadow" bonusRewards isBonusReward refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
         }
         <div className="inner-content-spacer">
           <Grid>
