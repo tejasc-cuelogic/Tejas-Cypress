@@ -255,7 +255,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'gift',
     title: 'Offering',
-    to: 'offering/:id',
+    to: 'offering/:offeringSlug',
     accessibleTo: ['issuer'],
     path: 'issuer/offering',
     subPanel: 1,
