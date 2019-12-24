@@ -56,6 +56,7 @@ export default class OfferingDetails extends Component {
     let navItems = navStore.specificNavs.subNavigations;
     const { offerLoading, offerOld } = offeringsStore;
     let { offer } = offeringsStore;
+    const template = get(offer, 'id') === '1fb13640-262e-11ea-b890-ab580291bf00' ? 2 : 1;
     const { offerStatus } = offeringsStore;
     offer = !offerLoading && offerOld.stage ? offerOld : offer;
     if (!get(offer, 'id') || (offerLoading && offer && !offer.stage)) {
@@ -74,6 +75,7 @@ export default class OfferingDetails extends Component {
     if (access.level !== 'FULL') {
       navItems = navItems.filter(n => (n.title !== 'Close'));
     }
+    navItems = navItems.filter(n => (n.template === template || !n.template));
     const { responsiveVars } = this.props.uiStore;
     return (
       <>
@@ -97,11 +99,11 @@ export default class OfferingDetails extends Component {
             <Card fluid>
               <SecondaryMenu isBonusReward bonusRewards className="offer-details" offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
               <Switch>
-                <Route exact path={match.url} component={OfferingModule('overview')} />
+                <Route exact path={match.url} component={OfferingModule('overview', template)} />
                 {
                   navItems.map((item) => {
                     const { offeringid } = this.props.match.params;
-                    const CurrentModule = OfferingModule(item.to);
+                    const CurrentModule = OfferingModule(item.to, template);
                     return (
                         <Route
                           key={item.to}
