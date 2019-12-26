@@ -24,7 +24,7 @@ const INVESTMENT_CARD_META = [
   { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], getRowValue: value => <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(value, false, false, false)} /> },
   { label: 'Net Payments Received', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}` },
   { label: 'Principal Remaining', key: 'remainingPrincipal', for: ['active'], getRowValue: value => `$${value}` }, // pending
-  { label: 'Realized Multiple', key: 'offering.closureSummary.keyTerms.multiple', getRowValue: value => `${value}x`, for: ['completed'] },
+  { label: 'Realized Multiple', key: 'realizedMultiple', getRowValue: value => `${value}x`, for: ['completed'] },
 ];
 
 const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleInvestNowClick, isAdmin, match }) => {
@@ -187,7 +187,7 @@ const InvestmentList = (props) => {
                 {props.listOf === 'completed'
                   && (
                     <Table.Cell>
-                      {get(data, 'offering.closureSummary.keyTerms.multiple') ? `${data.offering.closureSummary.keyTerms.multiple}x` : 'N/A'}
+                      {get(data, 'realizedMultiple') ? `${data.realizedMultiple}x` : 'N/A'}
                     </Table.Cell>
                   )
                 }

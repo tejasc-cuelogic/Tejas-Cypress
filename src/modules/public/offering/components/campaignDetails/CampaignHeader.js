@@ -263,7 +263,7 @@ export default class CampaignHeader extends Component {
                           <Grid>
                             <Grid.Column width={followBtn ? '10' : ''} className="center-align">
                               <Button
-                                secondary={!isInProcessing}
+                                primary={!isInProcessing}
                                 disabled={maxFlagStatus || isInProcessing}
                                 onClick={this.handleInvestNowClick}
                                 fluid
