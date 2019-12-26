@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-import { lazyRetry, InlineLoader } from '../../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry, InlineLoader } from '../../../../../theme/shared';
 import { DataFormatter } from '../../../../../helper';
 import ActivityHistory from '../../ActivityHistory';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
@@ -17,8 +17,7 @@ export default class ApplicationDetails extends Component {
   constructor(props) {
     super(props);
     const { match, applicationId, issuerId } = this.props;
-    const { params } = match;
-    if (this.props.businessAppStore.applicationId !== params.appId) {
+    if (this.props.businessAppStore.applicationId !== applicationId) {
       this.props.businessAppStore.fetchAdminApplicationById(applicationId, 'completed', issuerId)
         .then(() => {
           if (match.isExact) {
@@ -33,12 +32,15 @@ export default class ApplicationDetails extends Component {
   render() {
     const { match, businessAppStore, applicationId } = this.props;
     const { isIssuer } = this.props.userStore;
-    if (!businessAppStore.businessApplicationDetailsAdmin) {
+    const {
+      businessApplicationDetailsAdmin,
+    } = businessAppStore;
+    if (!businessApplicationDetailsAdmin) {
       return <InlineLoader />;
     }
     const {
       applicationStatus, prequalStatus, userId,
-    } = businessAppStore.businessApplicationDetailsAdmin; // deleted, stashed,
+    } = businessApplicationDetailsAdmin; // deleted, stashed,
     let navItems = [
       { title: 'Activity History', to: 'activity-history', component: ActivityHistory },
       { title: 'Pre-qualification', to: 'pre-qualification' },
@@ -63,6 +65,7 @@ export default class ApplicationDetails extends Component {
     return (
       <div className={isIssuer ? 'ui card fluid' : ''}>
         <SecondaryMenu force2ary={!isIssuer} match={match} navItems={navItems} />
+        <SuspenseBoundary>
         <Switch>
           <Route
             exact
@@ -81,7 +84,7 @@ export default class ApplicationDetails extends Component {
                     <CurrentComponent
                       module={item.title === 'Activity History' ? 'applicationDetails' : false}
                       showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false}
-                      resourceId={params.appId}
+                      resourceId={applicationId}
                       applicationId={applicationId}
                       applicationIssuerId={userId}
                       stepName={appStepStatus !== 'Failed' ? 'APPN_ACTIVITY_HISTORY' : ''}
@@ -98,6 +101,7 @@ export default class ApplicationDetails extends Component {
             })
           }
         </Switch>
+        </SuspenseBoundary>
       </div>
     );
   }

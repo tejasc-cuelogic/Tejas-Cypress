@@ -118,7 +118,7 @@ export default class OfferingDetails extends Component {
                       <Route
                         key={item.to}
                         path={`${match.url}/${item.to}`}
-                        render={props => <CurrentModule classes={item.title === 'Activity History' ? 'offering-activity' : ''} module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} stepName="OFFERING_ACTIVITY_HISTORY" resourceId={offeringid} offeringId={offeringid} issuerId={offer.issuerId && offer.issuerId} applicationId={offer.applicationId && offer.applicationId} />}
+                        render={props => <CurrentModule classes={item.title === 'Activity History' ? 'offering-activity' : ''} module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} stepName="OFFERING_ACTIVITY_HISTORY" resourceId={offeringid} offeringId={offeringid} issuerId={offer.issuerId} applicationId={offer.applicationId} />}
                       />
                     );
                   })
