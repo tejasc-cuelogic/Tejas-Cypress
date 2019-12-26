@@ -12,7 +12,6 @@ import EditOffering from '../components/EditOfferingModal';
 import EditPoc from '../components/EditPocModal';
 import { REACT_APP_DEPLOY_ENV, NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import Helper from '../../../../../helper/utility';
-import ApplicationDetails from '../../applications/containers/ApplicationDetails';
 
 
 @inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore', 'uiStore')
@@ -77,12 +76,14 @@ export default class OfferingDetails extends Component {
       navItems = navItems.filter(n => (n.title !== 'Close'));
     }
     // add business application after Bonus Rewards // offer.stage === 'CREATION' &&
-    if (offer.applicationId && offer.issuerId) {
-      const pos = navItems.findIndex(n => n.to === 'bonus-rewards');
+    if (offer.applicationId && !['WP_MIGRATION'].includes(offer.applicationId) && offer.issuerId) {
+      const pos = navItems.findIndex(n => n.to === 'overview');
+      const posSecond = navItems.findIndex(n => n.to === 'offering-creation');
       navItems.splice(
         (pos + 1),
         0,
-        { forced: `/dashboard/applications/completed/view/${offer.applicationId}/${offer.issuerId}/activity-history`, title: 'Business Application' },
+        { to: 'applications', title: 'App' },
+        navItems.splice(posSecond, 1)[0],
       );
     }
     const { responsiveVars } = this.props.uiStore;
@@ -113,18 +114,13 @@ export default class OfferingDetails extends Component {
                   navItems.map((item) => {
                     const { offeringid } = this.props.match.params;
                     const CurrentModule = OfferingModule(item.to);
-                    if (item.title === 'Business Application') {
-                      return (
-                        <Route path={`${match.url}/:id/view/:appId/:userId`} render={props => <ApplicationDetails refLink={match.url} {...props} />} />
-                      );
-                    }
-                      return (
-                        <Route
-                          key={item.to}
-                          path={`${match.url}/${item.to}`}
-                          render={props => <CurrentModule classes={item.title === 'Activity History' ? 'offering-activity' : ''} module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} stepName="OFFERING_ACTIVITY_HISTORY" resourceId={offeringid} offeringId={offeringid} />}
-                        />
-                      );
+                    return (
+                      <Route
+                        key={item.to}
+                        path={`${match.url}/${item.to}`}
+                        render={props => <CurrentModule classes={item.title === 'Activity History' ? 'offering-activity' : ''} module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} stepName="OFFERING_ACTIVITY_HISTORY" resourceId={offeringid} offeringId={offeringid} issuerId={offer.issuerId && offer.issuerId} applicationId={offer.applicationId && offer.applicationId} />}
+                      />
+                    );
                   })
                 }
               </Switch>
