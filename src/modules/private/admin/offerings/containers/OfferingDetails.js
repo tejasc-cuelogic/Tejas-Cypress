@@ -56,12 +56,12 @@ export default class OfferingDetails extends Component {
     let navItems = navStore.specificNavs.subNavigations;
     const { offerLoading, offerOld } = offeringsStore;
     let { offer } = offeringsStore;
-    const template = get(offer, 'id') === '1fb13640-262e-11ea-b890-ab580291bf00' ? 2 : 1;
     const { offerStatus } = offeringsStore;
     offer = !offerLoading && offerOld.stage ? offerOld : offer;
     if (!get(offer, 'id') || (offerLoading && offer && !offer.stage)) {
       return <InlineLoader />;
     }
+    const template = get(offer, 'template') === 2 ? 2 : 1;
     const isDev = ['localhost', 'develop', 'dev'].includes(REACT_APP_DEPLOY_ENV);
     navItems = navStore.filterByAccess(
       navItems,

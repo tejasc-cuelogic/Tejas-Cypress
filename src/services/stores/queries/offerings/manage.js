@@ -121,6 +121,7 @@ export const getOfferingDetails = gql`
       referralCode
       previewPassword
       regulation
+      template
       rootFolderId
       goldstar {
         isin

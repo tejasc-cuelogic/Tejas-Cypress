@@ -524,6 +524,12 @@ export const REGULATION_VALUES = [
   { key: 'Reg D 506(b) - Securities', value: 'BD_506B', text: 'Reg D 506(b) - Securities' },
   { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
 ];
+
+export const OFFERING_TEMPLATE_VALUES = [
+  { key: 1, value: 1, text: '1' },
+  { key: 2, value: 2, text: '2' },
+];
+
 export const BD_REGULATION_VALUES = [
   { key: 'Reg CF - Securities', value: 'BD_CF', text: 'Reg CF - Securities' },
   { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
@@ -1764,6 +1770,13 @@ export const NEW_OFFER = {
     label: 'Regulation',
     error: undefined,
     rule: 'required',
+    placeHolder: 'Choose here',
+  },
+  template: {
+    value: '',
+    label: 'Offering Template',
+    error: undefined,
+    rule: 'optional',
     placeHolder: 'Choose here',
   },
 };

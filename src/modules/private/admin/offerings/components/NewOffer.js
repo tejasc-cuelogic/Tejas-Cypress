@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
 import { FormInput, FormDropDown } from '../../../../../theme/form';
-import { REGULATION_VALUES } from '../../../../../services/constants/admin/offerings';
+import { REGULATION_VALUES, OFFERING_TEMPLATE_VALUES } from '../../../../../services/constants/admin/offerings';
 
 @inject('offeringCreationStore')
 @observer
@@ -24,7 +24,7 @@ export default class NewOffer extends Component {
 
   change = (e, result, formName, field) => {
     this.props.offeringCreationStore.formChange(e, result, formName);
-    if (field !== 'regulation') {
+    if (field !== 'regulation' || field !== 'template') {
       this.props.offeringCreationStore.offerCreateChange(formName, field);
     }
   }
@@ -49,17 +49,19 @@ export default class NewOffer extends Component {
                 />
               ))
             }
-            <FormDropDown
-              containerclassname="dropdown-field"
-              fluid
-              fielddata={NEW_OFFER_FRM.fields.regulation}
-              selection
-              value={NEW_OFFER_FRM.fields.regulation.value}
-              name="regulation"
-              placeholder="Choose here"
-              options={REGULATION_VALUES}
-              onChange={(e, result) => this.change(e, result, formName, 'regulation')}
-            />
+            {['regulation', 'template'].map(field => (
+              <FormDropDown
+                containerclassname="dropdown-field"
+                fluid
+                fielddata={NEW_OFFER_FRM.fields[field]}
+                selection
+                value={NEW_OFFER_FRM.fields[field].value}
+                name={field}
+                placeholder="Choose here"
+                options={field === 'regulation' ? REGULATION_VALUES : OFFERING_TEMPLATE_VALUES}
+                onChange={(e, result) => this.change(e, result, formName, field)}
+              />
+            ))}
             <div className="center-align">
               <Button primary content="Add new offering" disabled={!NEW_OFFER_FRM.meta.isValid} />
             </div>
