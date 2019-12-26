@@ -38,31 +38,41 @@ class Updates extends Component {
     }
     return (
       <>
-       {responsiveVars.isMobile
-        && <SecondaryMenu isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
-        }
-        <Grid padded relaxed={responsiveVars.isMobile ? '' : 'very'}>
-        {!responsiveVars.isMobile && (
+        {responsiveVars.isMobile
+        ? (
           <>
-            <Grid.Column width={4} className="update-list">
-              <UpdatesTimeline match={this.props.match} heading="Recent" list={summary} />
+          <SecondaryMenu classname="no-shadow" isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+          <Grid padded>
+            <Grid.Column width={12} computer={16} className="update-details">
+            {filteredUpdates.map((update, index) => (
+              <UpdateDetails {...this.props} id={index} />
+            ))
+            }
             </Grid.Column>
-            <Grid.Column width={1} only="computer" />
+          </Grid>
           </>
-        )}
-        <Grid.Column width={12} computer={responsiveVars.isMobile ? 16 : 10} className="update-details">
-          <Route
-            exact
-            path={this.props.match.url}
-            // component={UpdateDetails}
-            render={props => <UpdateDetails {...props} />}
-          />
-          <Route
-            path={`${this.props.match.url}/:id`}
-            render={props => <UpdateDetails {...props} />}
-          />
-        </Grid.Column>
-      </Grid>
+            )
+            : (
+            <Grid padded relaxed="very">
+              <Grid.Column width={4} className="update-list">
+                <UpdatesTimeline match={this.props.match} heading="Recent" list={summary} />
+              </Grid.Column>
+              <Grid.Column width={1} only="computer" />
+              <Grid.Column width={12} computer={10} className="update-details">
+                <Route
+                  exact
+                  path={this.props.match.url}
+                  // component={UpdateDetails}
+                  render={props => <UpdateDetails {...props} />}
+                />
+                <Route
+                  path={`${this.props.match.url}/:id`}
+                  render={props => <UpdateDetails {...props} />}
+                />
+              </Grid.Column>
+            </Grid>
+            )
+        }
       </>
     );
   }
