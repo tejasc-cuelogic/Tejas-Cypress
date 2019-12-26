@@ -2,8 +2,11 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { get, pick } from 'lodash';
 import ReactCodeInput from 'react-code-input';
-import { FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown } from '.';
+import { Button, Form } from 'semantic-ui-react';
+import { ImageCropper, FormTextarea, FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown } from '.';
 import Address from './src/Address';
+import { Image64 } from '../shared';
+import Helper from '../../helper/utility';
 
 function formHoc(WrappedComponent, metaInfo) {
   // eslint-disable-next-line no-unused-expressions
@@ -197,6 +200,72 @@ function formHoc(WrappedComponent, metaInfo) {
       );
     }
 
+    FormTextarea = (name, props) => {
+      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
+      return (
+        <FormTextarea
+          name={name}
+          fielddata={fieldData}
+          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
+          containerclassname="secondary"
+          {...props}
+        />
+      );
+    }
+
+    ImageCropper = (name, props) => {
+      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
+      const handleVerifyFileExtension = (fileExt, field) => {
+        const validate = Helper.validateImageExtension(fileExt);
+        if (validate.isInvalid) {
+          const attr = 'error';
+          const { errorMsg } = validate;
+          this.props[metaInfo.store].setMediaAttribute(metaInfo.form, attr, errorMsg, field);
+          this.props[metaInfo.store].setMediaAttribute(metaInfo.form, 'value', '', field);
+        }
+      };
+      const handelImageDeimension = (width, height, field) => {
+        if (width < 200 || height < 200) {
+          const attr = 'error';
+          const errorMsg = 'Image size should not be less than 200 x 200.';
+          this.props[metaInfo.store].setMediaAttribute(metaInfo.form, attr, errorMsg, field);
+          this.props[metaInfo.store].setMediaAttribute(metaInfo.form, 'value', '', field);
+        }
+      };
+      const setData = (attr, value) => {
+        this.props[metaInfo.store].setMediaAttribute(metaInfo.form, attr, value, name);
+      };
+      const handleresetImageCropper = () => {
+        this.props[metaInfo.store].resetImageCropper(metaInfo.form, name);
+      };
+      return (
+        <Form className="cropper-wrap tombstone-img">
+          {fieldData.preSignedUrl ? (
+            <div className="file-uploader attached">
+              {!props.isReadonly
+                && <Button onClick={() => this.showConfirmModal(name)} circular icon={{ className: 'ns-close-light' }} />
+              }
+              <Image64 srcUrl={fieldData.preSignedUrl} />
+            </div>
+          ) : (
+              <ImageCropper
+                disabled={props.isReadonly}
+                fieldData={fieldData}
+                setData={(attr, value) => setData(attr, value)}
+                verifyExtension={handleVerifyFileExtension}
+                handelReset={handleresetImageCropper}
+                verifyImageDimension={handelImageDeimension}
+                field={fieldData}
+                modalUploadAction={props.uploadMedia}
+                name={name}
+                cropInModal
+                aspect={3 / 2}
+              />
+            )}
+        </Form>
+      );
+    }
+
     render() {
       const smartElement = {
         Input: this.Input,
@@ -210,6 +279,8 @@ function formHoc(WrappedComponent, metaInfo) {
         RadioGroup: this.RadioGroup,
         FormCheckBox: this.FormCheckBox,
         FormDropDown: this.FormDropDown,
+        FormTextarea: this.FormTextarea,
+        ImageCropper: this.ImageCropper,
       };
       return (
         <WrappedComponent

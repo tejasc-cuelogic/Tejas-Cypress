@@ -161,6 +161,21 @@ export default class DataModelStore {
     FormValidator.setAddressFields(place, this[form]);
   }
 
+  setMediaAttribute = (form, attr, value, field) => {
+    this[form].fields[field][attr] = value;
+  }
+
+  resetImageCropper = (form, field) => {
+    const attributes = ['src', 'error', 'meta'];
+    attributes.forEach((val) => {
+      if ((typeof this[form].fields[field][val] === 'object') && (this[form].fields[field][val] !== null)) {
+        this[form].fields[field][val] = {};
+      } else {
+        this[form].fields[field][val] = '';
+      }
+    });
+  }
+
   setFileUploadData = (form, field, multiple = false, index = null, arrayName = null, stepName, files, { userRole, investorId, applicationId, offeringId, applicationIssuerId, tags }) => {
     const path = (arrayName && index !== null) ? `fields.${arrayName}[${index}].${field}` : `fields.${field}`;
     const file = files[0];
@@ -325,4 +340,6 @@ export const decorateDefault = {
   setInitiateSrch: action,
   setFormData: action,
   resetFilters: action,
+  setMediaAttribute: action,
+  resetImageCropper: action,
 };

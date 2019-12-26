@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Grid } from 'semantic-ui-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
+import { lazyRetry } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
 const getModule = component => lazyRetry(() => import(`./${component}`));
@@ -27,28 +26,16 @@ export default class OfferingV2 extends Component {
     ];
     const { match } = this.props;
     return (
-      <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : ''}>
-        <Grid>
-          <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
-            <div className="sticky-sidebar">
-              <SecondaryMenu secondary vertical match={match} navItems={navItems} />
-            </div>
-          </Grid.Column>
-          <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
-            <div className={isIssuer && !match.url.includes('offering-creation') ? 'ui card fluid form-card' : ''}>
-            <SuspenseBoundary>
-              <Switch>
-                  <Route exact path={match.url} component={getModule(navItems[0].component)} />
-                  {
-                    navItems.map(item => (
-                      <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
-                    ))
-                  }
-                </Switch>
-              </SuspenseBoundary>
-            </div>
-          </Grid.Column>
-        </Grid>
+      <div className={isIssuer ? 'ui card fluid' : ''}>
+        <SecondaryMenu force2ary={!isIssuer} match={match} navItems={navItems} />
+        <Switch>
+          <Route exact path={match.url} component={getModule(navItems[0].component)} />
+          {
+            navItems.map(item => (
+              <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
+            ))
+          }
+        </Switch>
       </div>
     );
   }
