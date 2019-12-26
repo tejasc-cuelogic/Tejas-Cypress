@@ -137,7 +137,7 @@ export class Utility {
       fileData.fileName = this.sanitize(fileInfo.name);
       fileData.fileType = fileInfo.type;
       fileData.fileExtension = fileInfo.name.substr((fileInfo.name.lastIndexOf('.') + 1));
-      fileData.fileSize = fileInfo.size;
+      fileData.fileSize = fileInfo.size ? fileInfo.size.toString() : '0';
     }
     return fileData;
   }
