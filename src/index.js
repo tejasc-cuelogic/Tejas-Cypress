@@ -7,7 +7,6 @@ import { BrowserRouter } from 'react-router-dom';
 import promiseFinally from 'promise.prototype.finally';
 import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
-import * as OfflinePluginRuntime from 'offline-plugin/runtime';
 import App from './App';
 import * as stores from './services/stores';
 import { ErrorBoundry as CustomErrorBoundry, Utilities as Utils } from './helper';
@@ -57,23 +56,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root'),
 );
-
-OfflinePluginRuntime.install({
-  onInstalled: () => {
-    console.log('SW Event:', 'onInstalled');
-  },
-  onUpdating: () => {
-    console.log('SW Event:', 'onUpdating');
-  },
-  onUpdateReady: () => {
-    OfflinePluginRuntime.applyUpdate();
-    console.log('[OfflinePluginRuntime] onUpdateReady');
-  },
-  onUpdated: () => {
-    stores.uiStore.setAppUpdated();
-    console.log('[OfflinePluginRuntime] new version is available.. please referesh...');
-  },
-  onUpdateFailed: () => {
-    console.log('SW Event:', 'onUpdateFailed');
-  },
-});

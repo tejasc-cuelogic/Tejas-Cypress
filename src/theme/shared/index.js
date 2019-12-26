@@ -28,4 +28,3 @@ export { default as SuccessScreen } from './src/SuccessScreen';
 export { default as NsPaginationHookType } from './src/NsPaginationHookType';
 export { default as SuspenseBoundary } from './src/SuspenseBoundary';
 export { default as lazyRetry } from './src/LazyLoadRetry';
-export { default as AppUpdated } from './src/AppUpdated';
