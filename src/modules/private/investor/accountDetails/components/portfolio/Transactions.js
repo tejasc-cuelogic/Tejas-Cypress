@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { isArray } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Form, Grid, Table, List, Button } from 'semantic-ui-react';
+import { Form, Grid, Table, List, Button, Modal, Icon } from 'semantic-ui-react';
 import { THeader } from '../../../../../../theme/table/NSTable';
 import { DropdownFilter } from '../../../../../../theme/form/Filters';
 import Helper from '../../../../../../helper/utility';
@@ -37,6 +37,7 @@ export default class Transactions extends Component {
   state = {
     open: false,
     embedUrl: '',
+    viewDetails: false,
   };
 
   componentDidMount() {
@@ -57,6 +58,69 @@ export default class Transactions extends Component {
   closeModal = () => {
     this.setState({ open: false });
   }
+
+  open = () => this.setState({ viewDetails: true });
+
+  close = () => this.setState({ viewDetails: false });
+
+
+  ViewTransactionDetails = () => (
+    <Modal
+      className="view-transaction-details"
+      onClose={this.close}
+      onOpen={this.open}
+      open={this.state.viewDetails}
+      trigger={<Button className="link-button highlight-text">View</Button>}
+    >
+      <Modal.Header className="bg-offwhite">
+        <Button onClick={this.close} className="link-button neutral-text"><Icon className="ns-chevron-left" /> Back</Button>
+      </Modal.Header>
+      <List divided verticalAlign="middle" className="transaction-mob">
+        <List.Item>
+          <List.Content floated="right">
+          10-24-2019
+          </List.Content>
+          <List.Content className="neutral-text">Payment Date</List.Content>
+        </List.Item>
+        <List.Item>
+          <List.Content floated="right">
+          $150.00
+          </List.Content>
+          <List.Content className="neutral-text">Payment Received</List.Content>
+        </List.Item>
+        <List.Item>
+          <List.Content floated="right">
+          $30.00
+          </List.Content>
+          <List.Content className="neutral-text">Interest Paid</List.Content>
+        </List.Item>
+        <List.Item>
+          <List.Content floated="right">
+          $120.00
+          </List.Content>
+          <List.Content className="neutral-text">Principal Paid</List.Content>
+        </List.Item>
+        <List.Item>
+          <List.Content floated="right">
+          $2.00
+          </List.Content>
+          <List.Content className="neutral-text">Service Fees</List.Content>
+        </List.Item>
+        <List.Item>
+          <List.Content floated="right">
+          $148.00
+          </List.Content>
+          <List.Content className="neutral-text">Net Payment Received</List.Content>
+        </List.Item>
+        <List.Item>
+          <List.Content floated="right">
+          $2.00
+          </List.Content>
+          <List.Content className="neutral-text">Remaining Principal Due</List.Content>
+        </List.Item>
+      </List>
+    </Modal>
+  );
 
   render() {
     const {
@@ -80,7 +144,7 @@ export default class Transactions extends Component {
     return (
       <>
         {responsiveVars.isMobile
-        && <SecondaryMenu classname="no-shadow" isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+          && <SecondaryMenu classname="no-shadow" isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
         }
         {investmentOptions.length > 1
           && (
@@ -93,8 +157,8 @@ export default class Transactions extends Component {
                 </Grid.Row>
               </Grid>
             </Form>
-            )
-          }
+          )
+        }
         {responsiveVars.isMobile ? (
           <>
             <div className="bg-offwhite transaction-year">
@@ -103,25 +167,25 @@ export default class Transactions extends Component {
             <List divided verticalAlign="middle" className="transaction-mob">
               <List.Item>
                 <List.Content floated="right">
-                  <Button className="link-button highlight-text">Add</Button>
+                  <this.ViewTransactionDetails />
                 </List.Content>
                 <List.Content>Lena</List.Content>
               </List.Item>
               <List.Item>
                 <List.Content floated="right">
-                  <Button className="link-button highlight-text">Add</Button>
+                  <this.ViewTransactionDetails />
                 </List.Content>
                 <List.Content>Lindsay</List.Content>
               </List.Item>
               <List.Item>
                 <List.Content floated="right">
-                  <Button className="link-button highlight-text">Add</Button>
+                  <this.ViewTransactionDetails />
                 </List.Content>
                 <List.Content>Mark</List.Content>
               </List.Item>
               <List.Item>
                 <List.Content floated="right">
-                  <Button className="link-button highlight-text">Add</Button>
+                  <this.ViewTransactionDetails />
                 </List.Content>
                 <List.Content>Molly</List.Content>
               </List.Item>
