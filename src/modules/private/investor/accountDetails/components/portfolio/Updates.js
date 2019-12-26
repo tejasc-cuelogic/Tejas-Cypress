@@ -41,12 +41,16 @@ class Updates extends Component {
        {responsiveVars.isMobile
         && <SecondaryMenu isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
         }
-        <Grid padded relaxed="very">
-        <Grid.Column width={4} className="update-list">
-          <UpdatesTimeline match={this.props.match} heading="Recent" list={summary} />
-        </Grid.Column>
-        <Grid.Column width={1} only="computer" />
-        <Grid.Column width={12} computer={10} className="update-details">
+        <Grid padded relaxed={responsiveVars.isMobile ? '' : 'very'}>
+        {!responsiveVars.isMobile && (
+          <>
+            <Grid.Column width={4} className="update-list">
+              <UpdatesTimeline match={this.props.match} heading="Recent" list={summary} />
+            </Grid.Column>
+            <Grid.Column width={1} only="computer" />
+          </>
+        )}
+        <Grid.Column width={12} computer={responsiveVars.isMobile ? 16 : 10} className="update-details">
           <Route
             exact
             path={this.props.match.url}
