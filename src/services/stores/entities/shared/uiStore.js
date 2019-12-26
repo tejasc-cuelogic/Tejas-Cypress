@@ -77,9 +77,16 @@ export class UiStore {
 
   @observable isFromBusinessApplication = false;
 
+  @observable appUpdated = false;
+
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
+  }
+
+  @action
+  setAppUpdated() {
+    this.appUpdated = true;
   }
 
   @action
