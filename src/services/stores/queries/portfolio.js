@@ -62,6 +62,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
         regulation
         netPaymentsReceived
         remainingPrincipal
+        realizedMultiple
         offering {
           id
           stage
@@ -105,6 +106,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
         investmentDate
         regulation
         netPaymentsReceived
+        realizedMultiple
         offering {
           id
           stage
