@@ -72,7 +72,6 @@ export default class Transactions extends Component {
     const rowsMeta = offerStructure === 'TERM_NOTE' ? termNote.columns : revShare.columns;
     if (this.state.viewDetails === id) {
       recordData = this.props.transactionStore.allPaymentHistoryData.find(r => r.completeDate === id);
-      console.log('record', recordData);
     }
     return (
       <Modal
@@ -147,6 +146,9 @@ export default class Transactions extends Component {
           )
         }
         {responsiveVars.isMobile ? (
+          !allPaymentHistoryData.length
+          ? <InlineLoader text="No Payments" />
+          : (
           <>
           {Object.keys(allPaymentHistoryAsPerYears).map(year => (
             <>
@@ -170,6 +172,7 @@ export default class Transactions extends Component {
           ))
           }
           </>
+          )
         ) : (
             <div className="table-wrapper">
               {!allPaymentHistoryData.length
