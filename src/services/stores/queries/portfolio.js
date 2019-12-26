@@ -65,6 +65,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
         offering {
           id
           stage
+          offeringSlug
           keyTerms {
             shorthandBusinessName
             securities
@@ -104,9 +105,11 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
         investmentDate
         regulation
         netPaymentsReceived
+        realizedMultiple
         offering {
           id
           stage
+          offeringSlug
           keyTerms {
             shorthandBusinessName
             securities
