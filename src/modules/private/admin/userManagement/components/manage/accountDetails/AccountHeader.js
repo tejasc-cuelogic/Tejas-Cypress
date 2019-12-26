@@ -76,6 +76,8 @@ export default class AccountHeader extends Component {
                         />
                       ))
                     }
+
+
                     {isAccFrozen(accountStatus)
                       && <Button loading={loadingVal} secondary onClick={e => this.toggleConfirmModal(e, 'UNFREEZE')}><Icon className="ns-freeze" />Unfreeze</Button>
                     }
