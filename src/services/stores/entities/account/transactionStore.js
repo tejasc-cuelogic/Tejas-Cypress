@@ -149,6 +149,23 @@ export class TransactionStore {
       ? orderBy(this.paymentHistoryData.data.getPaymentHistory, o => (o.completeDate ? moment(new Date(o.completeDate)).unix() : ''), ['desc']) : [];
   }
 
+  @computed get allPaymentHistoryAsPerYears() {
+    if (!this.allPaymentHistoryData.length) {
+      return {};
+    }
+    const recordsAsPeryear = {};
+    this.allPaymentHistoryData.forEach((record) => {
+      const year = new Date(record.completeDate).getFullYear();
+      if (recordsAsPeryear[year]) {
+        recordsAsPeryear[year].push(record);
+      } else {
+        recordsAsPeryear[year] = [];
+        recordsAsPeryear[year].push(record);
+      }
+    });
+    return recordsAsPeryear;
+  }
+
   @computed get loading() {
     return this.data.loading || this.investmentsByOffering.loading
       || this.paymentHistoryData.loading || this.loanAgreementData.loading;
