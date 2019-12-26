@@ -564,8 +564,8 @@ module.exports = (webpackEnv) => {
       )),
       // OfflinePlugin for service worker and handle updates.
       new OfflinePlugin({
-        excludes: ['**/*.map'],
-        updateStrategy: 'changed',
+        excludes: [],
+        updateStrategy: 'all',
         autoUpdate: 1000 * 60 * 1, //every minute
         ServiceWorker: {
           events: true,
