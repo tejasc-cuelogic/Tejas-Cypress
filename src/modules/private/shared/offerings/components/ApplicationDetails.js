@@ -10,14 +10,14 @@ import { ACTIVITY_HISTORY_TYPES } from '../../../../../constants/common';
 
 const getModule = component => lazyRetry(() => import(`../../../admin/applications/components/details/${component}`));
 
-@withRouter
 @inject('offeringsStore', 'navStore', 'userStore', 'businessAppStore')
+@withRouter
 @observer
 export default class ApplicationDetails extends Component {
   constructor(props) {
     super(props);
     const { match, applicationId, issuerId } = this.props;
-    if (this.props.businessAppStore.applicationId !== applicationId) {
+    if (!this.props.businessAppStore.firstLoad.includes('getOne')) {
       this.props.businessAppStore.fetchAdminApplicationById(applicationId, 'completed', issuerId)
         .then(() => {
           if (match.isExact) {

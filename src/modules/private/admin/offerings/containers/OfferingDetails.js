@@ -14,7 +14,7 @@ import { REACT_APP_DEPLOY_ENV, NEXTSEED_BOX_URL } from '../../../../../constants
 import Helper from '../../../../../helper/utility';
 
 
-@inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore', 'uiStore')
+@inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore', 'uiStore', 'businessAppStore')
 @observer
 export default class OfferingDetails extends Component {
   constructor(props) {
@@ -39,6 +39,7 @@ export default class OfferingDetails extends Component {
     this.props.offeringCreationStore.resetAffiliatedIssuerForm();
     this.props.offeringCreationStore.resetAllForms();
     this.props.offeringCreationStore.resetOfferingId();
+    this.props.businessAppStore.resetFirstLoad();
     this.props.history.push(`${this.props.refLink}/${this.props.match.params.stage}`);
     window.onpopstate = null;
   };
