@@ -235,7 +235,7 @@ function formHoc(WrappedComponent, metaInfo) {
       const setData = (attr, value) => {
         this.props[metaInfo.store].setMediaAttribute(metaInfo.form, attr, value, name);
       };
-      const handleresetImageCropper = () => {
+      const handleResetImageCropper = () => {
         this.props[metaInfo.store].resetImageCropper(metaInfo.form, name);
       };
       return (
@@ -253,7 +253,7 @@ function formHoc(WrappedComponent, metaInfo) {
                 fieldData={fieldData}
                 setData={(attr, value) => setData(attr, value)}
                 verifyExtension={handleVerifyFileExtension}
-                handelReset={handleresetImageCropper}
+                handelReset={handleResetImageCropper}
                 verifyImageDimension={handelImageDeimension}
                 field={fieldData}
                 modalUploadAction={props.uploadMedia}

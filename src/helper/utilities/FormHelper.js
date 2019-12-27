@@ -6,6 +6,7 @@ const S3UPLOAD = {
   base64String: '',
   responseUrl: '',
   fileData: '',
+  preSignedUrl: '',
   meta: {},
   objRef: 'uploads',
   objType: 's3File',

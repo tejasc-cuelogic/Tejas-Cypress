@@ -22,7 +22,6 @@ class Tombstone extends Component {
     const { manageOfferingStore, smartElement } = this.props;
     const { TOMBSTONE_BASIC_FRM } = manageOfferingStore;
     const isReadonly = false;
-    console.log(TOMBSTONE_BASIC_FRM.fields.tombstoneImage.preSignedUrl);
     return (
       <div className="inner-content-spacer">
         <Form>
@@ -49,4 +48,4 @@ class Tombstone extends Component {
   }
 }
 
-export default formHOC(observer(Tombstone), metaInfo);
+export default formHOC(Tombstone, metaInfo);
