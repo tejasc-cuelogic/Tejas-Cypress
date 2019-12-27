@@ -39,7 +39,7 @@ class Updates extends Component {
     return (
       <>
        {responsiveVars.isMobile
-        && <SecondaryMenu isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+        && <SecondaryMenu isPortfolio isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
         }
         <Grid padded relaxed={responsiveVars.isMobile ? '' : 'very'}>
         {!responsiveVars.isMobile && (

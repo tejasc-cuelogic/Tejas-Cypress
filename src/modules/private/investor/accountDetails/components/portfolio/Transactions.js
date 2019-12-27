@@ -131,7 +131,7 @@ export default class Transactions extends Component {
     return (
       <>
         {responsiveVars.isMobile
-          && <SecondaryMenu classname="no-shadow" isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+          && <SecondaryMenu isPortfolio classname="no-shadow" isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
         }
         {investmentOptions.length > 1
           && (

@@ -873,6 +873,10 @@
                 .ui.menu.mobile-dropdown-menu{
                     overflow: visible;
                 }
+                &.sticky{
+                    position: sticky;
+                    top: 0;
+                }
             }
         }
         .update-list{

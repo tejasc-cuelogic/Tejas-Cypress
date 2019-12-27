@@ -137,6 +137,7 @@ class SecondaryMenu extends Component {
                 useIsActive
                 isBonusReward={this.props.isBonusReward}
                 bonusRewards={this.props.bonusRewards}
+                isPortfolio={this.props.isPortfolio}
               />
             )
           }
