@@ -23,6 +23,7 @@ import {
   investmentStore,
   accreditationStore,
   transactionStore,
+  offeringsStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -460,6 +461,7 @@ export class Auth {
     entityAccountStore.resetStoreData();
     bankAccountStore.resetStoreData();
     individualAccountStore.resetStoreData();
+    offeringsStore.resetStoreData();
     portfolioStore.resetPortfolioData();
     userDetailsStore.setPartialInvestmenSession();
     investmentStore.resetData();
