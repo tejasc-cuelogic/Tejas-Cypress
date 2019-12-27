@@ -105,7 +105,7 @@ export default class Portfolio extends PureComponent {
     return (
       <Switch>
         <Route
-          path={`${match.url}/investment-details/:id`}
+          path={`${match.url}/investment-details/:offeringSlug`}
           render={props => <InvestmentDetails refLink={match.url} {...props} />}
         />
         <Route exact path={`${match.url}/:offeringId/invest-now/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={match.params.offeringId} refLink={match.url} {...props} />} />
@@ -141,7 +141,7 @@ export default class Portfolio extends PureComponent {
       );
     }
     const { getInvestorAccounts, getPieChartData, portfolioError } = portfolioStore;
-    const totalPortfolioBalance = getInvestorAccounts && getInvestorAccounts.totalBalance ? money.isNegative(getInvestorAccounts.totalBalance) ? '0.00' : getInvestorAccounts.totalBalance : '0.00';
+    const totalPortfolioBalance = getInvestorAccounts && getInvestorAccounts.totalBalance ? !this.props.isAdmin && money.isNegative(getInvestorAccounts.totalBalance) ? '0.00' : getInvestorAccounts.totalBalance : '0.00';
     const ERROR_MSG = `Sorry, this page is not loading correctly. We've notified the team.<br />
       Please check back again later, and contact us at
       <a href="mailto:support@nextseed.com">support@nextseed.com</a> with any questions.`;

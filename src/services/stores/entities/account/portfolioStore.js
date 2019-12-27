@@ -307,7 +307,7 @@ export class PortfolioStore {
   }
 
   @computed get loadingInvestDetails() {
-    return this.investmentDetails.loading;
+    return get(this.investmentDetails, 'loading');
   }
 
   @action
