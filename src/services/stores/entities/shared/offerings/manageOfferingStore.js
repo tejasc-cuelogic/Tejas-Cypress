@@ -1,13 +1,15 @@
 import { decorate, observable, action } from 'mobx';
 import { FormValidator as Validator } from '../../../../../helper';
 import DataModelStore, * as dataModelStore from '../dataModelStore';
-import { TOMBSTONE_BASIC } from '../../../../constants/offering/formMeta/offering';
+import { TOMBSTONE_BASIC, TOMBSTONE_META } from '../../../../constants/offering/formMeta/offering';
 import { fileUpload } from '../../../../actions';
 import Helper from '../../../../../helper/utility';
 
 
 export class ManageOfferingStore extends DataModelStore {
   TOMBSTONE_BASIC_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
+
+  TOMBSTONE_META_FRM = Validator.prepareFormObject(TOMBSTONE_META);
 
   uploadMedia = (name, form = 'TOMBSTONE_BASIC_FRM') => {
     const fileObj = {
@@ -29,6 +31,7 @@ export class ManageOfferingStore extends DataModelStore {
 decorate(ManageOfferingStore, {
   ...dataModelStore.decorateDefault,
   TOMBSTONE_BASIC_FRM: observable,
+  TOMBSTONE_META_FRM: observable,
   uploadMedia: action,
 });
 

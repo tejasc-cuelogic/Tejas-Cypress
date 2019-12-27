@@ -17,7 +17,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     Input = (name, props) => {
-      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[metaInfo.arrayName][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormInput
           name={name}
@@ -26,7 +26,7 @@ function formHoc(WrappedComponent, metaInfo) {
           format={get(fieldData, 'format')}
           fielddata={fieldData}
           onblur={get(props, 'handleBlur') || false}
-          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
+          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form))}
           label={get(props, 'label') || false}
           {...props}
         />
@@ -119,27 +119,27 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     FormCheckBox = (name, props) => {
-      const fieldData = this.fieldsData[name];
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[metaInfo.arrayName][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormCheckbox
           name={name}
           fielddata={fieldData}
-          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
-          containerclassname="ui relaxed list"
+          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form), '', get(props, 'toggle') ? { value: result.checked } : false)}
+          containerclassname="ui relaxed list mr-10"
           {...props}
         />
       );
     }
 
     FormSelect = (name, props) => {
-      const fieldData = get(props, 'fielddata') || this.props[metaInfo.store][metaInfo.form].fields[name];
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[metaInfo.arrayName][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormSelect
-          containerwidth={8}
           name={name}
           placeholder="Select"
           fielddata={fieldData}
-          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
+          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form))}
+          options={get(props, 'options') || fieldData.options}
           {...props}
         />
       );
@@ -191,6 +191,7 @@ function formHoc(WrappedComponent, metaInfo) {
       const fieldData = get(props, 'fielddata') || this.fieldsData[name];
       return (
         <FormDropDown
+          containerwidth={8}
           name={name}
           selection
           fielddata={fieldData}

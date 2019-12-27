@@ -132,7 +132,7 @@ export default class DataModelStore {
     }
   }
 
-  formChange = (e, result, form, type) => {
+  formChange = (e, result, form, type, checked = undefined) => {
     const formName = Array.isArray(form) ? form[0] : form;
     if (Array.isArray(form)) {
       this[formName] = FormValidator.onArrayFieldChange(
@@ -141,12 +141,17 @@ export default class DataModelStore {
         form[1],
         form[2],
         type,
+        checked,
       );
     } else {
-      this[formName] = FormValidator.onChange(this[formName], FormValidator.pullValues(e, result), type);
+      this[formName] = FormValidator.onChange(this[formName], FormValidator.pullValues(e, result), type, checked);
     }
     this.currTime = +new Date();
   };
+
+  addMore = (form, key, count = 1) => {
+    this[form] = FormValidator.addMoreRecordToSubSection(this[form], key, count, true);
+  }
 
   passwordChange = (e, result, form) => {
     FormValidator.onChange(this[form], FormValidator.pullValuesForPassword(e, result));
@@ -345,4 +350,5 @@ export const decorateDefault = {
   resetFilters: action,
   setMediaAttribute: action,
   resetImageCropper: action,
+  addMore: action,
 };
