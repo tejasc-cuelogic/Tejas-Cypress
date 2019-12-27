@@ -7,7 +7,6 @@ import { Grid, Form, Card, Header, Button, Table } from 'semantic-ui-react';
 import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../../theme/form';
 import { US_STATES_FOR_INVESTOR } from '../../../../../constants/account';
 
-import UserVerifiedDetails from '../../../investor/settings/components/UserVerifiedDetails';
 import UserInvestorDetails from '../../../investor/settings/components/UserInvestorDetails';
 import NewPhoneNumber from './profileSettings/NewPhoneNumber';
 import NewEmailAddress from './profileSettings/NewEmailAddress';
@@ -42,9 +41,8 @@ export default class ProfileData extends Component {
 
   render() {
     const {
-      email, legalDetails, info, phone, investorProfileData, status,
+      email, info, phone, investorProfileData,
     } = this.props.userDetailsStore.userDetails;
-    const { signupStatus, validAccStatus, isCompleteIndividualAccount } = this.props.userDetailsStore;
     const User = { ...this.props.userStore.currentUser };
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles: toJS(User.roles),
@@ -56,6 +54,7 @@ export default class ProfileData extends Component {
       profileInfoMaskedChange,
       setAddressFieldsForProfile,
     } = this.props.identityStore;
+    const { responsiveVars } = this.props.uiStore;
 
     if (isEmpty(this.props.userDetailsStore.userDetails) || !info) {
       return <InlineLoader />;
@@ -84,15 +83,15 @@ export default class ProfileData extends Component {
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell rowSpan="2">
-                      <div className="profile-pic-wrapper">
+                      <div className={`${responsiveVars.isMobile ? 'mb-20' : ''} profile-pic-wrapper`}>
                         {userAvatar.avatarUrl
                           ? (
-<Image64
-  avatar
-  circular
-  size=""
-  srcUrl={userAvatar.avatarUrl}
-/>
+                            <Image64
+                              avatar
+                              circular
+                              size=""
+                              srcUrl={userAvatar.avatarUrl}
+                            />
                           )
                           : <UserAvatar UserInfo={userAvatar} />
                         }
@@ -166,28 +165,17 @@ export default class ProfileData extends Component {
         </Grid.Column>
         {userAvatar.roles.includes('investor')
           && (
-<Grid.Column widescreen={5} largeScreen={6} tablet={16} mobile={16}>
-            <Card.Group>
-              <UserVerifiedDetails
-                {...this.props}
-                email={email}
-                legalDetails={legalDetails}
-                status={status}
-                signupStatus={signupStatus}
-                validAccStatus={validAccStatus}
-                isIndividualFullAccount={isCompleteIndividualAccount}
-              />
-            </Card.Group>
-            {investorProfileData && !investorProfileData.isPartialProfile
-              && (
-<UserInvestorDetails
-  {...this.props}
-  investorProfileData={investorProfileData}
-/>
-              )
-            }
-            <Route exact path={`${this.props.match.url}/establish-profile`} render={() => <EstablishProfile refUrl={this.props.match.url} />} />
-          </Grid.Column>
+            <Grid.Column widescreen={5} largeScreen={6} tablet={16} mobile={16}>
+              {investorProfileData && !investorProfileData.isPartialProfile
+                && (
+                  <UserInvestorDetails
+                    {...this.props}
+                    investorProfileData={investorProfileData}
+                  />
+                )
+              }
+              <Route exact path={`${this.props.match.url}/establish-profile`} render={() => <EstablishProfile refUrl={this.props.match.url} />} />
+            </Grid.Column>
           )
         }
       </Grid>

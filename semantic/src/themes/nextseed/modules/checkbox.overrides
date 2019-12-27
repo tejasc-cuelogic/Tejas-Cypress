@@ -235,3 +235,19 @@
 .error .ui.checkbox:not(.radio) label:before{
 	border-color:@highlight-primary;
 }
+
+.ui.read-only.checkbox{
+	label{
+		color: @neutral-offdark !important;
+	}
+	input:checked~label{
+		&:after{
+			color: @neutral;
+		}
+		&:before{
+			color: @neutral-offdark;
+			background: @neutral-offdark;
+			border-color: @neutral-offdark;
+		}
+	}
+}
