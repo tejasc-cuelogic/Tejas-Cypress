@@ -200,7 +200,7 @@ const InvestmentList = (props) => {
         <Table.Footer>
           <Table.Row>
             <Table.HeaderCell colSpan={['active', 'completed'].includes(props.listOf) ? '1' : '2'} />
-            <Table.HeaderCell textAlign="right">Total:</Table.HeaderCell>
+            <Table.HeaderCell>Total:</Table.HeaderCell>
             <Table.HeaderCell className="neutral-text">{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'investedAmount') : 0)}</Table.HeaderCell>
             <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : '3'} />
             {props.listOf !== 'pending'

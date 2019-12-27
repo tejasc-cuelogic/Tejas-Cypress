@@ -189,6 +189,9 @@
                 font-weight:@normal;
                 color:@border-color;
             }
+            td.wrap-text{
+                white-space: normal;
+            }
         }
         i.ns-individual-line, i.ns-ira-line, i.ns-entity-line{
             font-size:@20px;
@@ -433,6 +436,7 @@
             color: @border-color;
         }
     }
+
 }
 
 .compare-table {
