@@ -62,6 +62,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
         regulation
         netPaymentsReceived
         remainingPrincipal
+        remainingPayment
         realizedMultiple
         offering {
           id
