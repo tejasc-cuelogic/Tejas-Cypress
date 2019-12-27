@@ -153,9 +153,9 @@ const InvestmentList = (props) => {
   };
 
   const INVESTMENT_CARD_DESKTOP = [
-    { label: '', for: ['active', 'pending', 'completed'], children: data => <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />, investmentType: [] },
-    { label: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], children: data => offeringName(data), investmentType: [] },
-    { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: value => CAMPAIGN_KEYTERMS_SECURITIES[value], for: isMobile ? ['pending'] : ['pending', 'complete'], investmentType: [] },
+    { label: '', for: ['active', 'pending', 'completed'], children: data => <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />, investmentType: [], className: 'collapsing' },
+    { label: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], children: data => offeringName(data), investmentType: [], className: 'collapsing' },
+    { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: value => CAMPAIGN_KEYTERMS_SECURITIES[value], for: isMobile ? ['pending'] : ['pending', 'complete'], investmentType: [], className: 'wrap-text two wide' },
     { label: 'Invested Amount', key: 'investedAmount', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], getRowValue: value => Helper.CurrencyFormat(value), children: data => investedAmount(data), className: 'text-capitalize', investmentType: [] },
     { label: 'Status', key: 'offering.stage', for: isMobile ? ['pending', 'completed'] : ['active', 'pending', 'completed'], getRowValue: value => STAGES[value].label, children: data => stageLabel(data), investmentType: [] },
     {
@@ -339,7 +339,7 @@ const InvestmentList = (props) => {
         <Table.Footer>
           <Table.Row>
             <Table.HeaderCell colSpan={['active', 'completed'].includes(props.listOf) ? '1' : '2'} />
-            <Table.HeaderCell textAlign="right">Total:</Table.HeaderCell>
+            <Table.HeaderCell>Total:</Table.HeaderCell>
             <Table.HeaderCell className="neutral-text">{Helper.CurrencyFormat(listData && listData.length ? Helper.getTotal(listData, 'investedAmount') : 0)}</Table.HeaderCell>
             <Table.HeaderCell colSpan={props.listOf === 'completed' ? '2' : '3'} />
             {props.listOf !== 'pending'
