@@ -7,7 +7,7 @@ export class UiStore {
   @observable
   modalStatus = false;
 
-  appLoader = false;
+  @observable appLoader = false;
 
   @observable layoutState = {
     leftPanel: true,
