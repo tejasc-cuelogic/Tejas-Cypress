@@ -107,6 +107,7 @@ const INVESTMENT_CARD_MOBILE = INVESTMENT_CARD_META.filter(meta => meta.isMobile
 const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleInvestNowClick, isAdmin, match }) => {
   const [active, setActive] = useState(false);
   const toggleAccordion = () => setActive(!active);
+  const mobileMeta = INVESTMENT_CARD_MOBILE.filter(i => (listOf === 'active' ? i.for.includes(listOf) && (i.securityType.length === 0 || i.securityType.includes(CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')])) : i.for.includes(listOf)));
   return (
     <Accordion fluid styled>
       <Accordion.Title className="text-capitalize">
@@ -120,7 +121,7 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
       <Accordion.Content active={active}>
         <Table basic="very" unstackable className="no-border campaign-card">
           <Table.Body>
-            {INVESTMENT_CARD_MOBILE.filter(i => i.for.includes(listOf) && (i.securityType.length === 0 || i.securityType.includes(CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')]))).map(row => (
+            {mobileMeta.map(row => (
               <Table.Row>
                 <Table.Cell collapsing>{row.label}</Table.Cell>
                 <Table.Cell className="grey-header right-align">
