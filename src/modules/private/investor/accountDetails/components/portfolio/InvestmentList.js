@@ -75,35 +75,34 @@ const handleActions = (data) => {
 };
 
 const INVESTMENT_CARD_META = [
-  { label: '', for: ['active', 'pending', 'completed'], children: data => <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />, isMobile: false, securityType: [] },
-  { label: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], children: data => offeringName(data), isMobile: true, securityType: [] },
-  { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: value => CAMPAIGN_KEYTERMS_SECURITIES[value], for: isMobile ? ['pending'] : ['pending', 'complete'], isMobile: true, securityType: [] },
-  { label: 'Invested Amount', key: 'investedAmount', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], getRowValue: value => Helper.CurrencyFormat(value), children: data => investedAmount(data), isMobile: true, className: 'text-capitalize', securityType: [] },
-  { label: 'Status', key: 'offering.stage', for: isMobile ? ['pending', 'completed'] : ['active', 'pending', 'completed'], getRowValue: value => STAGES[value].label, children: data => stageLabel(data), isMobile: true, securityType: [] },
+  { label: '', for: ['active', 'pending', 'completed'], children: data => <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />, isMobile: false, isDesktop: true, securityType: [] },
+  { label: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], children: data => offeringName(data), isMobile: true, isDesktop: true, securityType: [] },
+  { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: value => CAMPAIGN_KEYTERMS_SECURITIES[value], for: isMobile ? ['pending'] : ['pending', 'complete'], isMobile: true, isDesktop: true, securityType: [] },
+  { label: 'Invested Amount', key: 'investedAmount', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], getRowValue: value => Helper.CurrencyFormat(value), children: data => investedAmount(data), isMobile: true, isDesktop: true, className: 'text-capitalize', securityType: [] },
+  { label: 'Status', key: 'offering.stage', for: isMobile ? ['pending', 'completed'] : ['active', 'pending', 'completed'], getRowValue: value => STAGES[value].label, children: data => stageLabel(data), isMobile: true, isDesktop: true, securityType: [] },
   {
     label: 'Days to close',
     key: 'offering.closureSummary.processingDate',
     for: ['pending'],
     isMobile: true,
+    isDesktop: true,
     securityType: [],
     getRowValue: value => ((DataFormatter.diffDays(value, false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value === 0 ? '' : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value < 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label}` : DataFormatter.diffInDaysHoursMin(value).diffText)) || 'N/A',
   },
-  { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], children: data => closeDate(data), isMobile: true, securityType: [] },
-  { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months`, isMobile: true, securityType: [] },
-  { label: 'Net Payments Received', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}`, isMobile: true, securityType: [] },
-  { label: 'Principal Remaining', key: 'remainingPrincipal', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, securityType: ['Term Note'] }, // pending
-  { label: 'Realized Multiple', key: 'realizedMultiple', getRowValue: value => `${value}x`, for: ['completed', 'active'], isMobile: true, securityType: ['Preferred Equity'] },
-  { label: 'Payments Remaining', key: 'remainingPayment', for: ['active'], getRowValue: value => `$${value}`, isMobile: false, securityType: ['Revenue Sharing Note'] },
+  { label: 'Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%`, isMobile: true, isDesktop: false, securityType: ['Term Note'] },
+  { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months`, isMobile: true, isDesktop: true, securityType: [] },
+  { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], children: data => closeDate(data), isMobile: true, isDesktop: true, securityType: [] },
+  { label: 'Net Payments Received', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: [] },
+  { label: 'Principal Remaining', key: 'remainingPrincipal', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['Term Note'] }, // pending
+  { label: 'Realized Multiple', key: 'realizedMultiple', getRowValue: value => `${value}x`, for: ['completed', 'active'], isMobile: true, isDesktop: true, securityType: ['Preferred Equity'] },
+  { label: 'Payments Remaining', key: 'remainingPayment', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['Revenue Sharing Note'] },
   {
-    label: '', for: ['pending'], children: data => handleActions(data), isMobile: false,
+    label: '', for: ['pending'], children: data => handleActions(data), isMobile: false, isDesktop: true, securityType: [],
   },
 ];
 
 
-const INVESTMENT_CARD_MOBILE = [
-  ...INVESTMENT_CARD_META,
-  ...[{ label: 'Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%` }],
-].filter(meta => meta.isMobile);
+const INVESTMENT_CARD_MOBILE = INVESTMENT_CARD_META.filter(meta => meta.isMobile);
 
 const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleInvestNowClick, isAdmin, match }) => {
   const [active, setActive] = useState(false);
@@ -121,7 +120,7 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
       <Accordion.Content active={active}>
         <Table basic="very" unstackable className="no-border campaign-card">
           <Table.Body>
-            {INVESTMENT_CARD_MOBILE.filter(i => i.for.includes(listOf)).map(row => (
+            {INVESTMENT_CARD_MOBILE.filter(i => i.for.includes(listOf) && (i.securityType.length === 0 || i.securityType.includes(CAMPAIGN_KEYTERMS_SECURITIES[get(data, 'offering.keyTerms.securities')]))).map(row => (
               <Table.Row>
                 <Table.Cell collapsing>{row.label}</Table.Cell>
                 <Table.Cell className="grey-header right-align">
@@ -215,7 +214,7 @@ const InvestmentList = (props) => {
   );
   const listAsPerSecurityType = {};
   const listHeaderAsPerSecurityType = {};
-  const listMetaByType = INVESTMENT_CARD_META.filter(i => i.for.includes(listOf));
+  const listMetaByType = INVESTMENT_CARD_META.filter(i => i.for.includes(listOf) && i.isDesktop);
   const keytermsSecurityTypes = Object.keys(CAMPAIGN_KEYTERMS_SECURITIES);
   if (props.listOf === 'active') {
     keytermsSecurityTypes.forEach((type) => {
