@@ -45,7 +45,7 @@ const SummaryHeader = props => (
                 <Statistic size="mini" horizontal={isMobile} className={row.status}>
                   <Statistic.Label>
                     <div>
-                      {row.info ? <PopUpModal content={row.info} customTrigger={<span>{row.title}</span>} showOnlyPopup={!isMobile} /> : row.title}
+                      {row.info ? <PopUpModal content={row.info} customTrigger={<span className="popup-label">{row.title}</span>} showOnlyPopup={!isMobile} /> : row.title}
                     </div>
                     {row.title === 'Total Balance'
                       && isMobile && <Link to={props.isAdmin ? `${props.refLink}/transactions/addfunds` : `/dashboard/account-details/${props.details.accountType}/transfer-funds/add`}>Deposit funds</Link>

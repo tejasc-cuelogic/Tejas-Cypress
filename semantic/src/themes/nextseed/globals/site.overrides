@@ -474,6 +474,10 @@ i.icon.right {
 		}
 	}
 }
+// render popup on label//
+.popup-label{
+	border-bottom: 1px dashed @neutral-offdark !important;
+}
 //	Helper Classes Ends
 
 // Footer Styles

@@ -209,6 +209,7 @@
 		.label{
 			font-size: @15px;
 			color: @neutral;
+			margin-left: 0;
 			a{
 				font-size: @13px;
 			}
