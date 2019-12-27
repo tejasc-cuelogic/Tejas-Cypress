@@ -109,6 +109,8 @@ export class BusinessAppStore {
 
   @observable usesTotal = 0;
 
+  @observable firstLoad = [];
+
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
@@ -117,6 +119,11 @@ export class BusinessAppStore {
   @action
   setAppStepsStatus = (index, key, value) => {
     this.appStepsStatus[index][key] = value;
+  }
+
+  @action
+  resetFirstLoad = () => {
+    this.firstLoad = [];
   }
 
   @action
@@ -225,6 +232,7 @@ export class BusinessAppStore {
     }
     this.setFieldvalue('applicationId', appId);
     this.setFieldvalue('applicationIssuerId', userId);
+    this.firstLoad.push('getOne');
     const applicationType = appType === 'prequal-failed' ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     let payLoad = {
       applicationId: appId,
