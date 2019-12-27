@@ -19,18 +19,18 @@ function TombstoneMeta(props) {
   const { smartElement, manageOfferingStore } = props;
   const { TOMBSTONE_META_FRM } = manageOfferingStore;
   return (
-    <Form.Group widths={5}>
+    <>
       {TOMBSTONE_META_FRM.fields[metaInfo.arrayName].map((field, i) => (
-        <>
+        <Form.Group widths={5}>
         {smartElement.Input('rowKey', { multiForm: [metaInfo.form, metaInfo.arrayName, i] })}
         {smartElement.FormSelect('rowType', { multiForm: [metaInfo.form, metaInfo.arrayName, i], containerwidth: 4 })}
         {TOMBSTONE_META_FRM.fields.tombstoneMeta[i].rowType.value === 'custom' && smartElement.Input('custom', { multiForm: [metaInfo.form, metaInfo.arrayName, i] })}
         {TOMBSTONE_META_FRM.fields.tombstoneMeta[i].rowType.value === 'mapped' && smartElement.FormSelect('mapped', { multiForm: [metaInfo.form, metaInfo.arrayName, i], containerwidth: 4 })}
         {TOMBSTONE_META_FRM.fields.tombstoneMeta[i].rowType.value === 'mapped' && smartElement.FormCheckBox('readOnly', { multiForm: [metaInfo.form, metaInfo.arrayName, i], defaults: true, toggle: true })}
         {smartElement.FormCheckBox('isVisible', { multiForm: [metaInfo.form, metaInfo.arrayName, i], defaults: true, toggle: true })}
-        </>
+        </Form.Group>
       ))}
-    </Form.Group>
+    </>
   );
 }
 
