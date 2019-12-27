@@ -19,9 +19,9 @@ const imgMap = {
 @observer
 export default class Logo extends React.Component {
   showLoader = (refImg) => {
-    if (['LogoLendio', 'LogoNsAndLendio', 'LogoNsAndLendioWhite'].includes(refImg)) {
+    if (!['LogoLendio', 'LogoNsAndLendio', 'LogoNsAndLendioWhite'].includes(refImg)) {
       this.props.uiStore.setAppLoader(true);
-      setTimeout(() => { this.props.uiStore.setAppLoader(false); }, 100);
+      setTimeout(() => { this.props.uiStore.setAppLoader(false); }, 80);
     }
   };
 
