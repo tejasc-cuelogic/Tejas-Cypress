@@ -2,7 +2,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { get, pick } from 'lodash';
 import ReactCodeInput from 'react-code-input';
-import { Button, Form } from 'semantic-ui-react';
+import { Button, Form, Confirm } from 'semantic-ui-react';
 import { ImageCropper, FormTextarea, FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown } from '.';
 import Address from './src/Address';
 import { Image64 } from '../shared';
@@ -238,14 +238,33 @@ function formHoc(WrappedComponent, metaInfo) {
       const handleResetImageCropper = () => {
         this.props[metaInfo.store].resetImageCropper(metaInfo.form, name);
       };
+      const showConfirmModal = () => {
+        this.props[metaInfo.store].setFieldValue('showConfirmModal', true);
+      };
+      const handleRemoveConfirm = () => {
+        this.props[metaInfo.store].setFieldValue('showConfirmModal', false);
+        this.props[metaInfo.store].resetImageCropper(metaInfo.form, name);
+        // this.removeMedia(this.state.imageType, this.state.index);
+      };
+      const handleRemoveCancel = () => {
+        this.props[metaInfo.store].setFieldValue('showConfirmModal', false);
+      };
       return (
         <Form className="cropper-wrap tombstone-img">
           {fieldData.preSignedUrl ? (
             <div className="file-uploader attached">
               {!props.isReadonly
-                && <Button onClick={() => this.showConfirmModal(name)} circular icon={{ className: 'ns-close-light' }} />
+                && <Button onClick={() => showConfirmModal(name)} circular icon={{ className: 'ns-close-light' }} />
               }
               <Image64 srcUrl={fieldData.preSignedUrl} />
+              <Confirm
+                content="Are you sure you want to remove this media file?"
+                open={this.props[metaInfo.store].showConfirmModal}
+                onCancel={handleRemoveCancel}
+                onConfirm={handleRemoveConfirm}
+                size="mini"
+                className="deletion"
+              />
             </div>
           ) : (
               <ImageCropper

@@ -15,6 +15,8 @@ export default class DataModelStore {
 
   currTime;
 
+  showConfirmModal = false;
+
   // 0: error, 1: loading, 2: success
   auStatus = null;
 
@@ -166,7 +168,7 @@ export default class DataModelStore {
   }
 
   resetImageCropper = (form, field) => {
-    const attributes = ['src', 'error', 'meta'];
+    const attributes = ['src', 'error', 'meta', 'base64String', 'responseUrl', 'value', 'preSignedUrl'];
     attributes.forEach((val) => {
       if ((typeof this[form].fields[field][val] === 'object') && (this[form].fields[field][val] !== null)) {
         this[form].fields[field][val] = {};
@@ -316,6 +318,7 @@ export default class DataModelStore {
 
 export const decorateDefault = {
   result: observable,
+  showConfirmModal: observable,
   removeFileIdsList: observable,
   currTime: observable,
   currentScore: observable,
