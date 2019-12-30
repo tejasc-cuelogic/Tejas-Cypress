@@ -47,7 +47,7 @@
             box-shadow:1px 0 0 0 @celledBorderColor, 0 1px 0 0 @celledBorderColor !important;
             @media only screen and (max-width:@largestMobileScreen){
                 border:none;
-                padding:@consecutiveGridDistance !important;
+                padding:@consecutiveGridDistance @22px !important;
             }
         }
     }

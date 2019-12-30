@@ -4,7 +4,7 @@ import { Card } from 'semantic-ui-react';
 import HtmlEditor from '../../../../../../shared/HtmlEditor';
 
 const RewardList = ({ list, earlyBird, classname, cardClass }) => (
-  <Card.Group stackable itemsPerRow={3} className={classname}>
+  <Card.Group stackable itemsPerRow={3} className={classname} doubling>
     {
       list.map(card => (
         <Card key={card.id} className={cardClass}>
