@@ -2051,6 +2051,15 @@ dl.dl-horizontal{
 			font-weight:@normal !important;
 		}
 	}
+	&.profile-data{
+		dt{
+			width:130px;
+			white-space: normal;
+		}
+		dd{
+			margin-left: 140px;
+		}
+	}
 }
 
 //	Multistep modal navigation

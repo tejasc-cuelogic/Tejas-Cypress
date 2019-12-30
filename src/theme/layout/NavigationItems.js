@@ -210,7 +210,8 @@ export class NavItems extends Component {
                                 className={`${((isMobile && item.title === 'Home' && location.pathname !== '/') || (!isMobile && item.title === 'Dashboard' && location.pathname !== '/dashboard')) ? 'no-active' : `${((item.defaultActive && this.isActiveSubMenu(`${item.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(item.to, location) ? 'active' : ''}`} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''} ${(newLayout && ((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) ? 'hasLabel' : '')}`}
                                 as={NavLink}
                                 onClick={isMobile ? this.mobileMenuClick : this.doNothing}
-                                to={`${(isApp) ? '/dashboard' : (this.props.sub ? match.url : '')}${(item.useRefLink || item.asRoot) ? '' : '/'}${item.asRoot ? '' : item.to}`}
+                                target={item.forced ? '_blank' : false}
+                                to={item.forced || `${(isApp) ? '/dashboard' : (this.props.sub ? match.url : '')}${(item.useRefLink || item.asRoot) ? '' : '/'}${item.asRoot ? '' : item.to}`}
                               >
                                 {item.icon && <Icon className={item.icon} />}
                                 {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}

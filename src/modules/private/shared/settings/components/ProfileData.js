@@ -54,6 +54,7 @@ export default class ProfileData extends Component {
       profileInfoMaskedChange,
       setAddressFieldsForProfile,
     } = this.props.identityStore;
+    const { responsiveVars } = this.props.uiStore;
 
     if (isEmpty(this.props.userDetailsStore.userDetails) || !info) {
       return <InlineLoader />;
@@ -82,7 +83,7 @@ export default class ProfileData extends Component {
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell rowSpan="2">
-                      <div className="profile-pic-wrapper">
+                      <div className={`${responsiveVars.isMobile ? 'mb-20' : ''} profile-pic-wrapper`}>
                         {userAvatar.avatarUrl
                           ? (
                             <Image64
