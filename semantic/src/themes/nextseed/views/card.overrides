@@ -848,6 +848,7 @@
 
 .mob-reward-list.ui.card{
     box-shadow: 0px 1px 8px fade(@fullBlack, 25%) !important;
+    margin-bottom: 0;
     >.content{
         padding: 0;
         >.header:not(.ui){
