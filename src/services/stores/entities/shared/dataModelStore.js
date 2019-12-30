@@ -153,6 +153,13 @@ export default class DataModelStore {
     this[form] = FormValidator.addMoreRecordToSubSection(this[form], key, count, true);
   }
 
+  removeOne = (form, arrayName, index, e = undefined) => {
+    if (e) {
+      e.preventDefault();
+    }
+    this[form].fields[arrayName].splice(index, 1);
+  }
+
   passwordChange = (e, result, form) => {
     FormValidator.onChange(this[form], FormValidator.pullValuesForPassword(e, result));
     if (e.score !== undefined) {
@@ -351,4 +358,5 @@ export const decorateDefault = {
   setMediaAttribute: action,
   resetImageCropper: action,
   addMore: action,
+  removeOne: action,
 };

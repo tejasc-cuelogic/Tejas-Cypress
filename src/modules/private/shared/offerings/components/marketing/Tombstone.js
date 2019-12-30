@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Form, Header, Divider, Button } from 'semantic-ui-react';
+import { Form, Header, Divider, Grid } from 'semantic-ui-react';
 import ButtonGroupType2 from '../ButtonGroupType2';
 import formHOC from '../../../../../../theme/form/formHOC';
 import TombstoneMeta from './TombstoneMeta';
+import TombstonePreview from './TombstonePreview';
 
 const metaInfo = {
   store: 'manageOfferingStore',
@@ -21,22 +22,24 @@ class Tombstone extends Component {
 
   render() {
     const { manageOfferingStore, smartElement } = this.props;
-    const { TOMBSTONE_BASIC_FRM, TOMBSTONE_META_FRM, addMore } = manageOfferingStore;
+    const { TOMBSTONE_BASIC_FRM } = manageOfferingStore;
     const isReadonly = false;
     return (
       <div className="inner-content-spacer">
         <Form>
-          <Header as="h4">{TOMBSTONE_BASIC_FRM.fields.tombstoneImage.label}</Header>
-          {smartElement.ImageCropper('tombstoneImage', { disabled: isReadonly, uploadMedia: this.uploadMedia })}
-          <Divider hidden />
-          <Header as="h4">{TOMBSTONE_BASIC_FRM.fields.tombstoneDescription.label}</Header>
-          {smartElement.FormTextarea('tombstoneDescription', { readOnly: isReadonly, containerclassname: 'secondary', hidelabel: true })}
-          <Header as="h4">
-            Tombstone Meta
-            {TOMBSTONE_META_FRM.fields.tombstoneMeta.length < 10
-            && <Button size="small" color="blue" className="ml-10 link-button mt-20" onClick={() => addMore('TOMBSTONE_META_FRM', 'tombstoneMeta')}>+ Add another section</Button>
-            }
-          </Header>
+          <TombstonePreview />
+          <Grid columns="2">
+            <Grid.Column>
+              <Header as="h4">{TOMBSTONE_BASIC_FRM.fields.image.label}</Header>
+              {smartElement.ImageCropper('image', { disabled: isReadonly, uploadMedia: this.uploadMedia })}
+              <Divider hidden />
+            </Grid.Column>
+            <Grid.Column>
+              <Header as="h4">Tombstone</Header>
+              {smartElement.Input('customTag', { readOnly: isReadonly })}
+              {smartElement.FormTextarea('description', { readOnly: isReadonly, containerclassname: 'secondary' })}
+            </Grid.Column>
+          </Grid>
           <TombstoneMeta />
           <Divider section />
           <ButtonGroupType2

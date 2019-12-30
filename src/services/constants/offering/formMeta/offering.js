@@ -1,59 +1,59 @@
 import { FormHelper } from '../../../../helper';
 
 export const TOMBSTONE_BASIC = FormHelper.generateMeta([
-  ['tombstoneDescription', 'Tombstone Description', '', 'optional', 'Describe your project and what you`re raising funds to accomplish.'],
-  ['tombstoneImage', 'Tombstone Image', '', 'optional', '', { s3Upload: true }],
+  ['description', 'Tombstone Description', '', 'optional', 'Describe your project and what you`re raising funds to accomplish.'],
+  ['customTag', 'Tombstone Custom Tag', '', 'optional', 'Enter here...'],
+  ['image', 'Tombstone Image', '', 'optional', '', { s3Upload: true }],
 ]);
 
 export const TOMBSTONE_META = {
-  tombstoneMeta: [{
-    rowKey: {
+  meta: [{
+    keyLabel: {
       label: 'Key Name',
       value: '',
       error: undefined,
       rule: 'optional',
       placeHolder: 'e.g. Multiple',
     },
-    rowType: {
-      label: 'Row Type',
+    keyType: {
+      label: 'Key Type',
       value: '',
       error: undefined,
       rule: 'optional',
       placeHolder: 'e.g. mapped',
       options: [
         { key: 'mapped', value: 'mapped', text: 'Mapped' },
-        { key: 'custome', value: 'custom', text: 'Custom' },
+        { key: 'custom', value: 'custom', text: 'Custom' },
       ],
     },
-    custom: {
-      label: 'Custom Value',
-      value: '',
-      error: undefined,
-      rule: 'optional',
-      placeHolder: 'Enter here',
-    },
-    mapped: {
-      label: 'Mapped Key',
+    keyValue: {
+      label: 'Key Value',
       value: '',
       error: undefined,
       rule: 'optional',
       options: [
         { key: 'multiple', value: 'multiple', text: 'Multiple' },
-        { key: 'Max Offering Amount', value: 'maxOfferingAmount', text: 'Max Offering Amount' },
+        { key: 'Max Offering Amount CF', value: 'maxOfferingAmountCF', text: 'Max Offering Amount CF' },
+        { key: 'Max Offering Amount 506', value: 'maxOfferingAmount506', text: 'Max Offering Amount 506' },
+        { key: 'Max Offering Amount 506C', value: 'maxOfferingAmount506C', text: 'Max Offering Amount 506C' },
+        { key: 'Min Offering Amount CF', value: 'minOfferingAmountCF', text: 'Min Offering Amount CF' },
+        { key: 'Min Offering Amount 506', value: 'minOfferingAmount506', text: 'Min Offering Amount 506' },
+        { key: 'Min Offering Amount 506C', value: 'minOfferingAmount506C', text: 'Min Offering Amount 506C' },
+        { key: 'Security', value: 'securities', text: 'Security' },
+        { key: 'Total Round Size', value: 'totalRoundSize', text: 'Total Round Size' },
+        { key: 'Preferred Return', value: 'preferredReturn', text: 'Preferred Return' },
+        { key: 'Offering Size', value: 'offeringSize', text: 'Offering Size' },
       ],
       placeHolder: 'Enter here',
     },
-    readOnly: {
-      value: false,
-      values: [
-        {
-          label: 'Read Only',
-          value: 'TRUE',
-        },
-      ],
+  }],
+  toggleMeta: [{
+    label: {
+      label: 'Label',
+      value: '',
       error: undefined,
       rule: 'optional',
-      placeHolder: '',
+      placeHolder: 'e.g. Raised',
     },
     isVisible: {
       value: false,

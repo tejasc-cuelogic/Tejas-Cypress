@@ -17,7 +17,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     Input = (name, props) => {
-      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[metaInfo.arrayName][props.multiForm[2]][name] : this.fieldsData[name]));
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormInput
           name={name}
@@ -119,7 +119,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     FormCheckBox = (name, props) => {
-      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[metaInfo.arrayName][props.multiForm[2]][name] : this.fieldsData[name]));
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormCheckbox
           name={name}
@@ -132,7 +132,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     FormSelect = (name, props) => {
-      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[metaInfo.arrayName][props.multiForm[2]][name] : this.fieldsData[name]));
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormSelect
           name={name}

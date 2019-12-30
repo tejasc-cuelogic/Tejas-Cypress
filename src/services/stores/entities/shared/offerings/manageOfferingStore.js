@@ -4,6 +4,7 @@ import DataModelStore, * as dataModelStore from '../dataModelStore';
 import { TOMBSTONE_BASIC, TOMBSTONE_META } from '../../../../constants/offering/formMeta/offering';
 import { fileUpload } from '../../../../actions';
 import Helper from '../../../../../helper/utility';
+import { offeringCreationStore } from '../../../index';
 
 
 export class ManageOfferingStore extends DataModelStore {
@@ -16,11 +17,11 @@ export class ManageOfferingStore extends DataModelStore {
       obj: this[form].fields[name].base64String,
       name: Helper.sanitize(this[form].fields[name].fileName),
     };
-    fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`)
+    fileUpload.uploadToS3(fileObj, `offerings/${offeringCreationStore.currentOfferingId}`)
       .then((res) => {
         console.log(res);
-        this.setMediaAttribute(form, 'value', res, 'tombstoneImage');
-        this.setMediaAttribute(form, 'preSignedUrl', res, 'tombstoneImage');
+        this.setMediaAttribute(form, 'value', res, 'image');
+        this.setMediaAttribute(form, 'preSignedUrl', res, 'image');
       })
       .catch((err) => {
         console.log(err);
