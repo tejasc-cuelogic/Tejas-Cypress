@@ -57,7 +57,7 @@ export default class AllTransactions extends Component {
 
   render() {
     const { transactionsStore, match, accountStore } = this.props;
-    const { isAccFrozen, isAccSoftFrozen } = accountStore;
+    const { isAccFrozen, isAccHardFrozen } = accountStore;
     const { statusType } = this.props.match.params;
     const {
       allRecords, loading, btnLoader,
@@ -98,7 +98,7 @@ export default class AllTransactions extends Component {
                   <NoR cols={columns.length} msg="No record to display" />
                 )
                   : allRecords.map((row) => {
-                    const isApproveDisabled = (statusType === 'pending' && ((row.direction === 'DEPOSIT' && isAccFrozen(get(row, 'investorAccountInfo.accountStatus'))) || (row.direction === 'WITHDRAWAL' && isAccSoftFrozen(get(row, 'investorAccountInfo.accountStatus')))));
+                    const isApproveDisabled = (statusType === 'pending' && ((row.direction === 'DEPOSIT' && isAccFrozen(get(row, 'investorAccountInfo.accountStatus'))) || (row.direction === 'WITHDRAWAL' && isAccHardFrozen(get(row, 'investorAccountInfo.accountStatus')))));
                     return (
                       <Table.Row key={row.id}>
                         {
