@@ -169,6 +169,9 @@
                     margin-bottom: @8px;
                 }
             }
+            &.disabled{
+                background: @neutral-darkwhite;
+            }
         }
         >.content.extra {
             padding:0 @28px @21px;
@@ -180,6 +183,9 @@
                 font-size: @13px;
                 color: @neutral;
                 margin-bottom: 0;
+            }
+            &.disabled{
+                background: @neutral-darkwhite;
             }
         }
         .message {
@@ -329,7 +335,20 @@
         border:@neutral-darkwhite 1px solid;
     }
     dl.dl-horizontal dd {
-        color: @neutral;
+        color: @neutral-middark !important;
+    }
+    &.disabled{
+        .ui.form .field>.selection.dropdown[readonly]{
+            border-bottom: none;
+            color: @neutral-middark !important;
+            pointer-events: none;
+            i.icon{
+                color: @neutral-middark;
+            }
+        }
+        .ui.input>input[readonly]{
+            color: @neutral-middark;
+        }
     }
 }
 .ui.stackable.cards>.card{

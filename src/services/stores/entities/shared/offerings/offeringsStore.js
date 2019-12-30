@@ -406,6 +406,15 @@ export class OfferingsStore {
     this.initLoad = [];
   }
 
+  @action
+  resetStoreData = () => {
+    this.data = {};
+    this.offerData = {};
+    this.oldOfferData = {};
+    this.db = {};
+    this.initLoad = [];
+  }
+
   @computed get closingBinderDocs() {
     const closingBinder = get(this.offer, 'closingBinder') || [];
     const filteredData = closingBinder.filter(c => c.aliasAccreditedOnly).map(c => ({ name: c.name, documentId: get(c, 'upload.fileHandle.boxFileId') }));

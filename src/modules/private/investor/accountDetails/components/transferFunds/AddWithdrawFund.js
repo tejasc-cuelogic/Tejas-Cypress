@@ -100,8 +100,8 @@ export default class AddWithdrawFund extends Component {
     const labelForWithdrawInput = match.params.action !== 'add' && (!showConfirmPreview) ? 'Amount you want to withdraw' : 'Withdrawal amount';
     const cashAmount = cash ? money.isNegative(cash) ? '0.00' : cash : '0.00';
     const transferNotifyText = showSuccessModal && match.params.action === 'add'
-      ? 'These funds are immediately available for investment. Please allow 5-7 business days for this transfer to be fully processed'
-      : 'Please allow 5-7 business days for this transfer to be fully processed';
+      ? 'These funds are immediately available for investment. Please allow 5-7 business days for this transfer to be fully processed.'
+      : 'Please allow 5-7 business days for this transfer to be fully processed.';
 
     return (
       <>
@@ -212,7 +212,7 @@ export default class AddWithdrawFund extends Component {
                   <div className="center-align mt-30">
                     <Button.Group>
                       {showConfirmPreview && !showSuccessModal
-                        ? <Button onClick={this.cancelTransfer} loading={inProgress} disabled={inProgress} content="Cancel" /> : null
+                        ? <Button onClick={this.cancelTransfer} disabled={inProgress} content="Cancel" /> : null
                       }
                       {showSuccessModal
                         ? (

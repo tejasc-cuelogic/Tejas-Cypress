@@ -12,6 +12,7 @@ class Dashboard extends Component {
       <PrivateLayout
         {...this.props}
       >
+
         <ApplicationCard />
         <CampaignCards />
       </PrivateLayout>

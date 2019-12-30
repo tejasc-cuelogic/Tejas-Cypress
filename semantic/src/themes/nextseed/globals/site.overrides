@@ -179,6 +179,9 @@ h6{
 .pb-20{
 	padding-bottom: @20px !important;
 }
+.pb-40{
+	padding-bottom: @40px !important;
+}
 .pt-0{
 	padding-top:0 !important;
 }
@@ -625,6 +628,15 @@ footer{
 		@media only screen and (max-width : @largestMobileScreen){
 			font-size: @15px;
 			margin-bottom: @20px;
+		}
+	}
+	.ui.header.coming-soon-header{
+		position: relative;
+		i.icon{
+			position: absolute;
+			right: 0;
+			cursor: pointer;
+			font-size: @30px;
 		}
 	}
 }
@@ -2104,6 +2116,15 @@ dl.dl-horizontal{
 		}
 		.field.display-only input{
 			font-weight:@normal !important;
+		}
+	}
+	&.profile-data{
+		dt{
+			width:130px;
+			white-space: normal;
+		}
+		dd{
+			margin-left: 140px;
 		}
 	}
 }
