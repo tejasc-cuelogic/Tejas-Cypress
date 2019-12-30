@@ -231,7 +231,6 @@ export class PortfolioStore {
       client,
       query: getInvestorAccountPortfolio,
       variables,
-      fetchPolicy: 'no-cache',
       onFetch: (data) => {
         if (data && this.investmentLists && !this.investmentLists.loading) {
           this.calculateInvestmentType();
