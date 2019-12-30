@@ -565,6 +565,9 @@ export class CampaignStore {
         resultObject.isBannerShow = true;
         resultObject.datesBanner = 'NEW';
         resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
+        if (securities === 'REAL_ESTATE') {
+          resultObject.realEstateBanner = 'Real Estate';
+        }
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         resultObject.category = 'newOffering';
@@ -574,6 +577,9 @@ export class CampaignStore {
         resultObject.isBannerShow = !!labelBannerFirst;
         resultObject.datesBanner = labelBannerFirst;
         resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
+        if (securities === 'REAL_ESTATE') {
+          resultObject.realEstateBanner = 'Real Estate';
+        }
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         resultObject.category = 'closingSoon';
@@ -583,6 +589,9 @@ export class CampaignStore {
       } if (isInProcessing) {
         resultObject.isBannerShow = true;
         resultObject.datesBanner = 'Processing';
+        if (securities === 'REAL_ESTATE') {
+          resultObject.realEstateBanner = 'Real Estate';
+        }
         resultObject.launchDate = moment(launchDate).unix() || null;
         resultObject.processingDate = moment(closingDate).unix() || null;
         resultObject.category = 'processing';
@@ -594,6 +603,9 @@ export class CampaignStore {
       //   resultObject.datesBanner = 'NEW';
       // }
       resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
+      if (securities === 'REAL_ESTATE') {
+        resultObject.realEstateBanner = 'Real Estate';
+      }
       resultObject.isBannerShow = !!(resultObject.datesBanner || resultObject.amountsBanner);
       resultObject.launchDate = moment(launchDate).unix() || null;
       resultObject.processingDate = moment(closingDate).unix() || null;
