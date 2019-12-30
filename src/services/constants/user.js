@@ -124,7 +124,6 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
-    skipField: true,
     objRefOutput: 'legalAddress',
     objRef: 'legalDetails.legalAddress',
   },
