@@ -97,6 +97,7 @@ export class CampaignStore {
         client: (!referralCode && userStore.currentUser && userStore.currentUser.sub) ? client : clientPublic,
         query: referralCode ? getOfferingsReferral : allOfferings,
         variables,
+        fetchPolicy: 'no-cache',
         onFetch: (data) => {
           if (data && !this[field].loading) {
             const offering = data.getOfferingList.length && data.getOfferingList[0];
