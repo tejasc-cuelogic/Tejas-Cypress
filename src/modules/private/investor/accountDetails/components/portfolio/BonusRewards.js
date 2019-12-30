@@ -33,7 +33,7 @@ class BonusRewards extends Component {
     return (
       <>
       {responsiveVars.isMobile
-      && <SecondaryMenu isPortfolio isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+      && <SecondaryMenu classname="no-shadow" isPortfolio isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
       }
       <div className={`${responsiveVars.isMobile ? 'mob-reward-list' : ''} inner-content-spacer`}>
         {!responsiveVars.isMobile &&
