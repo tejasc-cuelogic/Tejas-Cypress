@@ -372,7 +372,7 @@ export class Utility {
 
   // formatValue = (format, value) => {
   //   if (format) {
-  //     return 
+  //     return
   //   }
   // };
 }
