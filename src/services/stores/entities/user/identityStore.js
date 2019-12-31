@@ -743,6 +743,7 @@ export class IdentityStore {
         fields.state.value = selectedState;
       }
       fields.street.value = legalDetails.legalAddress.street;
+      fields.streetTwo.value = legalDetails.legalAddress.streetTwo;
       fields.zipCode.value = legalDetails.legalAddress.zipCode;
     }
     if (legalDetails && legalDetails.dateOfBirth) {
