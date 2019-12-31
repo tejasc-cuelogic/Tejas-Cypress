@@ -17,7 +17,7 @@ const metaInfo = {
 @observer
 class Tombstone extends Component {
   uploadMedia = (name) => {
-    this.props.manageOfferingStore.uploadMedia(name).then(() => this.forceUpdate());
+    this.props.manageOfferingStore.uploadMedia(name);
   }
 
   render() {
@@ -38,7 +38,7 @@ class Tombstone extends Component {
               <Header as="h4">Tombstone</Header>
               {smartElement.Input('customTag', { readOnly: isReadonly })}
               {smartElement.FormTextarea('description', { readOnly: isReadonly, containerclassname: 'secondary' })}
-              {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list' })}
+              {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list field', label: 'Tombstone Toggle Meta' })}
             </Grid.Column>
           </Grid>
           <TombstoneMeta />

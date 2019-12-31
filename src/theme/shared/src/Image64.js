@@ -57,7 +57,7 @@ function Image64(props) {
 
   useEffect(() => {
     getImage();
-  }, []);
+  }, props.reRender ? null : []);
 
   return props.bg ? (
     <div {...props} style={{ backgroundImage: `url(${data})` }} />

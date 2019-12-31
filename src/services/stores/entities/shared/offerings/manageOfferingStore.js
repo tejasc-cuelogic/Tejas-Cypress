@@ -12,7 +12,7 @@ export class ManageOfferingStore extends DataModelStore {
 
   TOMBSTONE_META_FRM = Validator.prepareFormObject(TOMBSTONE_META);
 
-  uploadMedia = (name, form = 'TOMBSTONE_BASIC_FRM') => new Promise((resolve) => {
+  uploadMedia = (name, form = 'TOMBSTONE_BASIC_FRM') => {
     const fileObj = {
       obj: this[form].fields[name].base64String,
       name: Helper.sanitize(this[form].fields[name].fileName),
@@ -22,12 +22,11 @@ export class ManageOfferingStore extends DataModelStore {
         console.log(res);
         this.setMediaAttribute(form, 'value', res, 'image');
         this.setMediaAttribute(form, 'preSignedUrl', res, 'image');
-        resolve();
       })
       .catch((err) => {
         console.log(err);
       });
-  });
+  };
 }
 
   decorate(ManageOfferingStore, {

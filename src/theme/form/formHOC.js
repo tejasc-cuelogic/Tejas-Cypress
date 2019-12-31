@@ -252,12 +252,12 @@ function formHoc(WrappedComponent, metaInfo) {
       };
       return (
         <Form className="cropper-wrap tombstone-img">
-          {fieldData.preSignedUrl ? (
+          {fieldData.value ? (
             <div className="file-uploader attached">
               {!props.isReadonly
                 && <Button onClick={() => showConfirmModal(name)} circular icon={{ className: 'ns-close-light' }} />
               }
-              <Image64 srcUrl={fieldData.preSignedUrl} />
+              <Image64 srcUrl={fieldData.value} />
               <Confirm
                 content="Are you sure you want to remove this media file?"
                 open={this.props[metaInfo.store].showConfirmModal}

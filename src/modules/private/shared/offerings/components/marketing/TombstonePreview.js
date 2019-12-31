@@ -33,6 +33,7 @@ export default class TombstonePreview extends Component {
               <div className="campaign-image-wrap">
                 <div className="campaign-card-image">
                   <Image64
+                    reRender
                     bg
                     centered
                     srcUrl={TOMBSTONE_BASIC_FRM.fields.image.value}

@@ -7,14 +7,15 @@ import { Icon, Popup, List, Checkbox } from 'semantic-ui-react';
 
 const FormCheckbox = observer((props) => {
   const {
-    label, values, tooltip, value,
+    values, tooltip, value,
   } = props.fielddata;
   const {
     customLabel, conditionalCustomLabel, customUpdateLimitLabel, customRegulationLabel,
-    tooltipHardDisable, currentInvestmentStatus,
+    tooltipHardDisable, currentInvestmentStatus, label,
   } = props;
   return (
     <div className={props.containerclassname || false}>
+      {label ? <label>{label}</label> : null}
       {
         values.map(c => (
           <List.Item className="ui checkbox">
