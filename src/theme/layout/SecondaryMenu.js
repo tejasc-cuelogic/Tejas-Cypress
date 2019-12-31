@@ -84,7 +84,7 @@ class SecondaryMenu extends Component {
     const showMoreMenuLength = (get(responsiveVars, 'isTabletLand') || get(responsiveVars, 'isSmallScreen')) ? 5 : 8;
     const showMoreMenu = !get(responsiveVars, 'isMobile') && this.props.offering && navItems && navItems.length > showMoreMenuLength;
     if (showMoreMenu) {
-      const dropOptions = navItems.splice(showMoreMenuLength - 1, navItems.length - showMoreMenuLength);
+      const dropOptions = navItems.splice(showMoreMenuLength, navItems.length - showMoreMenuLength);
       options = dropOptions.map(o => ({ key: o.to, text: o.title, value: o.to }));
     }
     // const mobNavItems = map(navItemList, i => mapKeys(i, (v, k) => iMap[k] || k));
