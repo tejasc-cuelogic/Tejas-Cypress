@@ -11,7 +11,7 @@ const FormSelect = observer((props) => {
     error,
     placeHolder,
   } = props.fielddata;
-  let width = '';
+  let width = false;
   if (props.containerwidth) {
     width = props.containerwidth;
   }

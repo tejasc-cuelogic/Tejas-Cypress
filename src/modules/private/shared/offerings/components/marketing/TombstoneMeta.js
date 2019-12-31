@@ -2,7 +2,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
-import { Form, Button, Icon, Header } from 'semantic-ui-react';
+import { Form, Button, Icon, Header, Table } from 'semantic-ui-react';
 import formHOC from '../../../../../../theme/form/formHOC';
 import Helper from '../../../../../../helper/utility';
 
@@ -24,18 +24,44 @@ function TombstoneMeta(props) {
         }
       </Header>
       {TOMBSTONE_META_FRM.fields.meta.map((field, i) => (
-        <Form.Group widths={TOMBSTONE_META_FRM.fields.meta[i].keyType.value === '' ? 3 : TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'custom' ? 4 : 6}>
-        {smartElement.Input('keyLabel', { multiForm: [metaInfo.form, 'meta', i] })}
-        {smartElement.FormSelect('keyType', { multiForm: [metaInfo.form, 'meta', i], containerwidth: TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' ? 3 : 4 })}
-        {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'custom' && smartElement.Input('keyValue', { label: 'Custom Value', multiForm: [metaInfo.form, 'meta', i] })}
-        {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' && smartElement.FormSelect('keyValue', { label: 'Key List', multiForm: [metaInfo.form, 'meta', i], containerwidth: TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' ? 3 : 4 })}
-        {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' && smartElement.Input('keyFormat', { multiForm: [metaInfo.form, 'meta', i] })}
-        {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' && <div className="field">{TOMBSTONE_META_FRM.fields.meta[i].keyLabel.value}  :  {get(offer, `keyTerms.${TOMBSTONE_META_FRM.fields.meta[i].keyValue.value}`) ? Helper.formatValue(TOMBSTONE_META_FRM.fields.meta[i].keyFormat.value, get(offer, `keyTerms.${TOMBSTONE_META_FRM.fields.meta[i].keyValue.value}`)) : 'N/A'}</div>}
-        <div className="field">
-        <Button disabled={TOMBSTONE_META_FRM.fields.meta.length === 1} icon circular floated="right" className="link-button">
-          <Icon className="ns-trash" onClick={e => removeOne(metaInfo.form, 'meta', i, e)} />
-        </Button>
-        </div>
+        <Form.Group>
+            <Table basic compact className="form-table">
+              <Table.Body>
+                <Table.Cell>
+                  {smartElement.Input('keyLabel', { multiForm: [metaInfo.form, 'meta', i] })}
+                </Table.Cell>
+                <Table.Cell>
+                  {smartElement.FormSelect('keyType', { multiForm: [metaInfo.form, 'meta', i] })}
+                </Table.Cell>
+                {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'custom' && (
+                  <Table.Cell>
+                    {smartElement.Input('keyValue', { label: 'Custom Value', multiForm: [metaInfo.form, 'meta', i] })}
+                  </Table.Cell>
+                )}
+                {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' && (
+                  <Table.Cell>
+                    {smartElement.FormSelect('keyValue', { label: 'Key List', multiForm: [metaInfo.form, 'meta', i] })}
+                  </Table.Cell>
+                )}
+                {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' && (
+                  <Table.Cell>
+                    {smartElement.Input('keyFormat', { multiForm: [metaInfo.form, 'meta', i] })}
+                  </Table.Cell>
+                )}
+                {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' && (
+                  <Table.Cell>
+                    {<div className="field">{TOMBSTONE_META_FRM.fields.meta[i].keyLabel.value ? TOMBSTONE_META_FRM.fields.meta[i].keyLabel.value : 'N/A'}  :  {get(offer, `keyTerms.${TOMBSTONE_META_FRM.fields.meta[i].keyValue.value}`) ? Helper.formatValue(TOMBSTONE_META_FRM.fields.meta[i].keyFormat.value, get(offer, `keyTerms.${TOMBSTONE_META_FRM.fields.meta[i].keyValue.value}`)) : 'N/A'}</div>}
+                  </Table.Cell>
+                )}
+                {TOMBSTONE_META_FRM.fields.meta.length > 1 && (
+                  <Table.Cell collapsing>
+                    <Button icon circular floated="right" className="link-button">
+                      <Icon className="ns-trash" onClick={e => removeOne(metaInfo.form, 'meta', i, e)} />
+                    </Button>
+                  </Table.Cell>
+                )}
+              </Table.Body>
+            </Table>
         </Form.Group>
       ))}
     </>
