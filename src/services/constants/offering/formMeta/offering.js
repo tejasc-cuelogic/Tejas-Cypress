@@ -58,6 +58,7 @@ export const TOMBSTONE_META = {
       error: undefined,
       rule: 'optional',
       placeHolder: 'e.g. $100',
+      tooltip: 'Please use {{var}} to replace with variable selected.',
     },
   }],
 };
