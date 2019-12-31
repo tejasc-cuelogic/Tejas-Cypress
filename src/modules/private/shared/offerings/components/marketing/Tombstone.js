@@ -12,22 +12,25 @@ const metaInfo = {
   form: 'TOMBSTONE_BASIC_FRM',
 };
 
-@inject('manageOfferingStore')
+@inject('manageOfferingStore', 'offeringsStore')
 @withRouter
 @observer
 class Tombstone extends Component {
   uploadMedia = (name) => {
-    this.props.manageOfferingStore.uploadMedia(name);
+    this.props.manageOfferingStore.uploadMedia(name).then(() => this.forceUpdate());
   }
 
   render() {
-    const { manageOfferingStore, smartElement } = this.props;
+    const { manageOfferingStore, smartElement, offeringsStore } = this.props;
     const { TOMBSTONE_BASIC_FRM } = manageOfferingStore;
     const isReadonly = false;
     return (
       <div className="inner-content-spacer">
         <Form>
-          <TombstonePreview />
+          <TombstonePreview
+            manageOfferingStore={manageOfferingStore}
+            offeringsStore={offeringsStore}
+          />
           <Grid columns="2">
             <Grid.Column>
               <Header as="h4">{TOMBSTONE_BASIC_FRM.fields.image.label}</Header>

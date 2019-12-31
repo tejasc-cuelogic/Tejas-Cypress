@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import { Card, Grid, Icon, Button, Divider, Table, Label } from 'semantic-ui-react';
@@ -10,14 +10,9 @@ import NSImage from '../../../../../shared/NSImage';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { DataFormatter } from '../../../../../../helper';
 
-@inject('manageOfferingStore', 'offeringsStore')
 @withRouter
 @observer
 export default class TombstonePreview extends Component {
-  uploadMedia = (name) => {
-    this.props.manageOfferingStore.uploadMedia(name);
-  }
-
   renderBanner = content => (
     <Label.Group size="small">
       <Label color="grey">{content}</Label>
@@ -26,7 +21,7 @@ export default class TombstonePreview extends Component {
 
   render() {
     const { manageOfferingStore, offeringsStore } = this.props;
-    const { TOMBSTONE_BASIC_FRM } = manageOfferingStore;
+    const { TOMBSTONE_BASIC_FRM, TOMBSTONE_META_FRM } = manageOfferingStore;
     const { offer } = offeringsStore;
     const isFunded = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULTED'].includes(get(offer, 'stage'));
     return (
@@ -39,7 +34,7 @@ export default class TombstonePreview extends Component {
                   <Image64
                     bg
                     centered
-                    srcUrl={TOMBSTONE_BASIC_FRM.fields.image.value || null}
+                    srcUrl={TOMBSTONE_BASIC_FRM.fields.image.value}
                     alt={`${offer.keyTerms.shorthandBusinessName} poster`}
                   />
                 </div>
@@ -74,38 +69,20 @@ export default class TombstonePreview extends Component {
                   <div className="campaign-card-table-wrapper">
                     <Table basic="very" compact="very" unstackable className="no-border campaign-card">
                       <Table.Body>
-                        {/* {(isFunded ? keyTermList.filter(i => i.forFunded) : keyTermList).map(row => (
+                        {TOMBSTONE_META_FRM.fields.meta.map(row => (
                           <>
-                            {((isFunded || row.for.includes('ALL') || row.for.includes(offer.keyTerms.securities)) && ((get(offer, row.key) === 0 || get(offer, row.key)) || row.value))
-                              && (
+                            {(
                                 <Table.Row verticalAlign="top">
-                                  <Table.Cell collapsing>{(row.label === 'Share Price') ? `${capitalize(get(offer, 'keyTerms.equityUnitType'))} Price` : row.label}</Table.Cell>
-                                  <Table.Cell className={`${!isFunded && !row.for.includes('ALL') ? 'highlight-text' : ''} right-align`}>
-                                    <b>
-                                      {((get(offer, row.key) !== undefined && get(offer, row.key) !== null) || row.value)
-                                        ? (
-                                          <>
-                                            {typeof row.type === 'object' ? (
-                                              row.type[get(offer, row.key)] || '-'
-                                            ) : row.type === '$' ? row.key ? Helper.CurrencyFormat(get(offer, row.key), 0) : row.value
-                                                : row.type === '%' ? row.key ? `${get(offer, row.key)}%` : row.value
-                                                  : row.type === 'X' ? row.key ? `${get(offer, row.key)}x` : row.value
-                                                    : row.type === 'months' ? row.key ? `${get(offer, row.key)} months` : row.value
-                                                      : row.type === 'string' ? row.key ? `${get(offer, row.key)}` : row.value
-                                                        : row.key ? get(offer, row.key) === 0 ? 0 : (get(offer, row.key) || '') : row.value
-                                            }
-                                          </>
-                                        )
-                                        : '-'
-                                      }
-                                    </b>
+                                  <Table.Cell collapsing>{row.keyLabel.value}</Table.Cell>
+                                  <Table.Cell className="highlight-text right-align">
+                                    <b>{row.keyType.value === 'custom' ? row.keyValue.value : get(offer, `keyTerms.${row.keyValue.value}`)}</b>
                                   </Table.Cell>
                                 </Table.Row>
                               )
                             }
                           </>
                         ))
-                        } */}
+                        }
                       </Table.Body>
                     </Table>
                   </div>
