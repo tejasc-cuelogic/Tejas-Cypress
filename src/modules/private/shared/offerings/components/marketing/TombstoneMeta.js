@@ -23,11 +23,12 @@ function TombstoneMeta(props) {
         }
       </Header>
       {TOMBSTONE_META_FRM.fields.meta.map((field, i) => (
-        <Form.Group widths={TOMBSTONE_META_FRM.fields.meta[i].keyType.value === '' ? 3 : TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'custom' ? 4 : 5}>
+        <Form.Group widths={TOMBSTONE_META_FRM.fields.meta[i].keyType.value === '' ? 3 : TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'custom' ? 4 : 6}>
         {smartElement.Input('keyLabel', { multiForm: [metaInfo.form, 'meta', i] })}
         {smartElement.FormSelect('keyType', { multiForm: [metaInfo.form, 'meta', i], containerwidth: TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' ? 3 : 4 })}
         {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'custom' && smartElement.Input('keyValue', { label: 'Custom Value', multiForm: [metaInfo.form, 'meta', i] })}
         {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' && smartElement.FormSelect('keyValue', { label: 'Key List', multiForm: [metaInfo.form, 'meta', i], containerwidth: TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' ? 3 : 4 })}
+        {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' && smartElement.Input('keyFormat', { multiForm: [metaInfo.form, 'meta', i] })}
         {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' && <div className="field">{TOMBSTONE_META_FRM.fields.meta[i].keyLabel.value}  :  {get(offer, `keyTerms.${TOMBSTONE_META_FRM.fields.meta[i].keyValue.value}`) || 'N/A'}</div>}
         <div className="field">
         <Button disabled={TOMBSTONE_META_FRM.fields.meta.length === 1} icon circular floated="right" className="link-button">

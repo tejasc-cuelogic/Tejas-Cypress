@@ -369,6 +369,12 @@ export class Utility {
       return 'Alternative Investments Made Simple - NextSeed';
     }
   };
+
+  // formatValue = (format, value) => {
+  //   if (format) {
+  //     return 
+  //   }
+  // };
 }
 
 export default new Utility();

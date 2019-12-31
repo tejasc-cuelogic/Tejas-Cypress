@@ -33,7 +33,7 @@ const NavItems = ({
           </Dropdown.Menu>
         </Dropdown>
       ) : (
-        <Menu.Item key={item.to} onClick={navCustomClick} as={NavLink} to={`${match.url}/${item.to}`}>
+        <Menu.Item target={item.forced ? '_blank' : false} key={item.to} onClick={navCustomClick} as={NavLink} to={item.forced || `${match.url}/${item.to}`}>
           {item.showIcon
             ? stepsStatus[key].status === 'IN_PROGRESS'
               ? (

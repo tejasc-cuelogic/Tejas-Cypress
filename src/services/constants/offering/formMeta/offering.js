@@ -46,6 +46,13 @@ export const TOMBSTONE_META = {
       ],
       placeHolder: 'Enter here',
     },
+    keyFormat: {
+      label: 'Key Format',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'e.g. $100',
+    },
   }],
   toggleMeta: [{
     label: {

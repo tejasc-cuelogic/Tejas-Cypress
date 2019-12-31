@@ -17,7 +17,7 @@ import WatchList from './WatchList';
 import Documents from './Documents';
 import Marketing from './Marketing';
 import OfferingV2 from './OfferingV2';
-import BusinessApplication from './BusinessApplication';
+import ApplicationDetails from './ApplicationDetails';
 
 const OfferingModule = (to, template = 1) => {
   let module = null;
@@ -39,7 +39,7 @@ const OfferingModule = (to, template = 1) => {
     case 'watch-list': module = WatchList; break;
     case 'documents': module = Documents; break;
     case 'marketing': module = Marketing; break;
-    case 'app': module = BusinessApplication; break;
+    case 'applications': module = ApplicationDetails; break;
     default: module = Overview; break;
   }
   return module;

@@ -81,7 +81,7 @@ export default class AccountDetails extends Component {
               path={`${match.url}/investments/cancel-investment/:id`}
               render={props => <CancelInvestment isAdmin accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}
             />
-            <Route path={`${match.url}/investments/investment-details/:id`} render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} />
+            <Route path={`${match.url}/investments/investment-details/:offeringSlug`} render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} />
             <Route exact path={`${match.url}/transactions`} render={props => <Transactions isAdmin {...props} />} />
             <Route exact path={`${match.url}/transactions/:action`} render={props => <AddWithdrawFunds {...props} isAdmin userId={get(this.props.userDetailsStore.getDetailsOfUser, 'id')} accountId={get(account, 'details.accountId')} />} />
             <Route exact path={`${match.url}/overview`} render={props => <Overview isAdmin copied={this.props.copied} {...props} />} />

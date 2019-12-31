@@ -261,7 +261,6 @@ export const PRIVATE_NAV = [
     subPanel: 1,
     subNavigations: [
       { title: 'Overview', to: 'overview', accessFor: [1, 2, 3, 4], template: 2 },
-      { title: 'App', to: 'app', accessFor: [1, 2, 3, 4], template: 2 },
       { title: 'Marketing', to: 'marketing', accessFor: [1, 2, 3, 4], template: 2 },
       { title: 'Overview', to: 'overview', accessFor: [1, 2, 3, 4], template: 1 },
       {
