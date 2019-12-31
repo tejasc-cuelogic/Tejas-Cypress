@@ -77,7 +77,7 @@ export default class OfferingLaunch extends Component {
     let goldStartFields = ['contactId', 'isin', 'esAccountNumber', 'sfAccountNumber'];
     goldStartFields = regulation === CAMPAIGN_KEYTERMS_REGULATION_ENUM.BD_CF_506C ? [...goldStartFields, 'esAccountNumberRegD', 'isinRegD', 'sfAccountNumberRegD'] : goldStartFields;
     return (
-      <Form>
+      <Form className="inner-content-spacer">
         <Header as="h4">Launch Timeline</Header>
         <Form.Group widths="equal">
           {
