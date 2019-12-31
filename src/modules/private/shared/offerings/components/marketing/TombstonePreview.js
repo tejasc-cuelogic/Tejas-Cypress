@@ -75,7 +75,7 @@ export default class TombstonePreview extends Component {
                                 <Table.Row verticalAlign="top">
                                   <Table.Cell collapsing>{row.keyLabel.value}</Table.Cell>
                                   <Table.Cell className="highlight-text right-align">
-                                    <b>{row.keyType.value === 'custom' ? row.keyValue.value : get(offer, `keyTerms.${row.keyValue.value}`)}</b>
+                                    <b>{row.keyType.value === 'custom' ? row.keyValue.value : Helper.formatValue(row.keyFormat.value, get(offer, `keyTerms.${row.keyValue.value}`))}</b>
                                   </Table.Cell>
                                 </Table.Row>
                               )

@@ -1,8 +1,14 @@
 import { FormHelper } from '../../../../helper';
 
+const TOMBSTONE_TOGGLE_META = [
+  { label: 'Early Bird', value: 'EARLY_BIRD' },
+  { label: 'Investor Count', value: 'INVESTOR_COUNT' },
+];
+
 export const TOMBSTONE_BASIC = FormHelper.generateMeta([
   ['description', 'Tombstone Description', '', 'optional', 'Describe your project and what you`re raising funds to accomplish.'],
   ['customTag', 'Tombstone Custom Tag', '', 'optional', 'Enter here...'],
+  ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { values: TOMBSTONE_TOGGLE_META } }],
   ['image', 'Tombstone Image', '', 'optional', '', { s3Upload: true }],
 ]);
 
@@ -52,27 +58,6 @@ export const TOMBSTONE_META = {
       error: undefined,
       rule: 'optional',
       placeHolder: 'e.g. $100',
-    },
-  }],
-  toggleMeta: [{
-    label: {
-      label: 'Label',
-      value: '',
-      error: undefined,
-      rule: 'optional',
-      placeHolder: 'e.g. Raised',
-    },
-    isVisible: {
-      value: false,
-      values: [
-        {
-          label: 'Is Visible',
-          value: 'TRUE',
-        },
-      ],
-      error: undefined,
-      rule: 'optional',
-      placeHolder: '',
     },
   }],
 };

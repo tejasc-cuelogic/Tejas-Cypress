@@ -41,6 +41,7 @@ class Tombstone extends Component {
               <Header as="h4">Tombstone</Header>
               {smartElement.Input('customTag', { readOnly: isReadonly })}
               {smartElement.FormTextarea('description', { readOnly: isReadonly, containerclassname: 'secondary' })}
+              {smartElement.FormCheckBox('toggleMeta', { defaults: true, containerclassname: 'ui list' })}
             </Grid.Column>
           </Grid>
           <TombstoneMeta />

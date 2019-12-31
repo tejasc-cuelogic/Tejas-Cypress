@@ -370,11 +370,12 @@ export class Utility {
     }
   };
 
-  // formatValue = (format, value) => {
-  //   if (format) {
-  //     return
-  //   }
-  // };
+  formatValue = (format, value) => {
+    if (format && format.search('{{var}}') > -1) {
+      return format.replace('{{var}}', value);
+    }
+    return value;
+  };
 }
 
 export default new Utility();
