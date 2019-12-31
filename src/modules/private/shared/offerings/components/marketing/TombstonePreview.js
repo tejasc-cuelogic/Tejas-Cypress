@@ -26,8 +26,8 @@ export default class TombstonePreview extends Component {
     const isFunded = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULTED'].includes(get(offer, 'stage'));
     return (
       <div className="inner-content-spacer">
-        <Grid columns="2">
-          <Grid.Column>
+        <Grid centered>
+          <Grid.Column width="6">
             <Card className="campaign" fluid to={`/offerings/${offer.offeringSlug}`}>
               <div className="campaign-image-wrap">
                 <div className="campaign-card-image">
@@ -121,9 +121,6 @@ export default class TombstonePreview extends Component {
               }
             </Card>
             <Divider hidden />
-          </Grid.Column>
-          <Grid.Column>
-            <div>Front</div>
           </Grid.Column>
         </Grid>
       </div>
