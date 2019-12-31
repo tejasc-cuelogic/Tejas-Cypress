@@ -12,7 +12,7 @@ const metaInfo = {
   form: 'TOMBSTONE_BASIC_FRM',
 };
 
-@inject('manageOfferingStore', 'offeringsStore')
+@inject('manageOfferingStore')
 @withRouter
 @observer
 class Tombstone extends Component {
@@ -21,16 +21,13 @@ class Tombstone extends Component {
   }
 
   render() {
-    const { manageOfferingStore, smartElement, offeringsStore } = this.props;
+    const { manageOfferingStore, smartElement } = this.props;
     const { TOMBSTONE_BASIC_FRM } = manageOfferingStore;
     const isReadonly = false;
     return (
       <div className="inner-content-spacer">
         <Form>
-          <TombstonePreview
-            manageOfferingStore={manageOfferingStore}
-            offeringsStore={offeringsStore}
-          />
+          <TombstonePreview />
           <Grid columns="2">
             <Grid.Column>
               <Header as="h4">{TOMBSTONE_BASIC_FRM.fields.image.label}</Header>

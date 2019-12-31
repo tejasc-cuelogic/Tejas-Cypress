@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import { Card, Grid, Icon, Button, Divider, Table, Label } from 'semantic-ui-react';
@@ -10,6 +10,7 @@ import NSImage from '../../../../../shared/NSImage';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { DataFormatter } from '../../../../../../helper';
 
+@inject('manageOfferingStore', 'offeringsStore')
 @withRouter
 @observer
 export default class TombstonePreview extends Component {
