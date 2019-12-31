@@ -278,10 +278,7 @@ export class NavStore {
     let posApp = '';
     let posSecond = '';
     switch (offeringStage) {
-      case 'CREATION':
-        posSecond = navigationList.findIndex(n => n.to === 'offering-creation');
-        break;
-      case 'LIVE':
+      case 'OTHER':
         posOverview = navigationList.findIndex(n => n.to === 'overview');
         posApp = navigationList.findIndex(n => n.to === 'applications');
         posSecond = navigationList.findIndex(n => n.to === 'offering-creation');

@@ -85,7 +85,8 @@ export default class OfferingDetails extends Component {
         { to: 'applications', title: 'App' },
       );
     }
-    navItems = navStore.manageNavigationOrder(navItems, offer.stage);
+    const offeringState = !['CREATION'].includes(offer.stage) ? 'OTHER' : offer.stage;
+    navItems = navStore.manageNavigationOrder(navItems, offeringState);
     const { responsiveVars } = this.props.uiStore;
     return (
       <>
