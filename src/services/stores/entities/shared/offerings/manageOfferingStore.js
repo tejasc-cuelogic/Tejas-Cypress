@@ -23,7 +23,8 @@ export class ManageOfferingStore extends DataModelStore {
     fileUpload.uploadToS3(fileObj, `offerings/${offeringCreationStore.currentOfferingId}`)
       .then((res) => {
         console.log(res);
-        this.setMediaAttribute(form, 'value', res, 'image');
+        const url = res.split('/');
+        this.setMediaAttribute(form, 'value', url[url.length - 1], 'image');
         this.setMediaAttribute(form, 'preSignedUrl', res, 'image');
       })
       .catch((err) => {
@@ -31,7 +32,7 @@ export class ManageOfferingStore extends DataModelStore {
       });
   };
 
-  updateOffering = params => new Promise((res, rej) => {
+  updateOffering = params => new Promise((res) => {
     const { keyName, forms } = params;
     const offeringDetails = {};
     let data;
@@ -47,7 +48,6 @@ export class ManageOfferingStore extends DataModelStore {
       ...params,
       id: offeringCreationStore.currentOfferingId,
       offeringDetails,
-      rej,
       res,
     };
     console.log(offeringDetails);
@@ -56,7 +56,7 @@ export class ManageOfferingStore extends DataModelStore {
 
   updateOfferingMutation = (params) => {
     const {
-      id, offeringDetails, keyName, notify = true, successMsg = undefined, fromS3 = false, res, rej, msgType = 'success',
+      id, offeringDetails, keyName, notify = true, successMsg = undefined, fromS3 = false, res, msgType = 'success',
      } = params;
     uiStore.setProgress('save');
     const variables = {
@@ -88,7 +88,6 @@ export class ManageOfferingStore extends DataModelStore {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
         Helper.toast('Something went wrong.', 'error');
         uiStore.setProgress(false);
-        rej();
       });
   };
 
