@@ -32,14 +32,13 @@ export const typeOtpCode = () => {
   });
 };
 
-export const enterCodeAndConfirm = () => {
-  cy.wait(500);
-  registerApiCall('confirm');
-  typeOtpCode();
+export const enterCodeAndConfirm = (operationName) => {
   cy.wait(100);
+  registerApiCall(operationName, '**/graphql');
+  cy.wait(100);
+  typeOtpCode();
   cy.get('form').find('button').contains('Confirm').click();
-  cy.wait('@confirm');
-  cy.wait(500);
+  cy.wait(`@${operationName}`);
 };
 
 export const clickRadioAndNext = (selector, radioVal, operationName) => {
