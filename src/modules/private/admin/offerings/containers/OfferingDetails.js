@@ -40,9 +40,7 @@ export default class OfferingDetails extends Component {
     this.props.offeringCreationStore.resetAllForms();
     this.props.offeringCreationStore.resetOfferingId();
     this.props.businessAppStore.resetFirstLoad();
-    const { stage } = this.props.match.params;
-    this.props.offeringsStore.initRequest({ stage }, true);
-    this.props.history.push(`${this.props.refLink}/${stage}`);
+    this.props.history.push(`${this.props.refLink}/${this.props.match.params.stage}`);
     window.onpopstate = null;
   };
 
