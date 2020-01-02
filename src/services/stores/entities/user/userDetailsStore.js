@@ -20,7 +20,7 @@ import {
   userListingStore,
   userStore,
 } from '../../index';
-import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, adminUpdateUserStatus, skipAddressOrPhoneValidationCheck, frozenEmailToAdmin, adminFreezeAccount, getEmailList } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminUserHardDelete, adminUpdateUserStatus, adminSkipAddressOrPhoneValidationCheck, frozenEmailToAdmin, adminFreezeAccount, getEmailList } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE, US_STATES } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -266,16 +266,16 @@ export class UserDetailsStore {
   }
 
   @action
-  skipAddressOrPhoneValidationCheck = type => new Promise(async (resolve, reject) => {
+  adminSkipAddressOrPhoneValidationCheck = type => new Promise(async (resolve, reject) => {
     const shouldSkip = type === 'PHONE' ? !this.isPhoneSkip : !this.isAddressSkip;
     const payLoad = { userId: this.selectedUserId, shouldSkip, type };
     client
       .mutate({
-        mutation: skipAddressOrPhoneValidationCheck,
+        mutation: adminSkipAddressOrPhoneValidationCheck,
         variables: payLoad,
       })
       .then(action((res) => {
-        this.setFieldValue(type === 'PHONE' ? 'isPhoneSkip' : 'isAddressSkip', get(res, 'data.skipAddressOrPhoneValidationCheck'));
+        this.setFieldValue(type === 'PHONE' ? 'isPhoneSkip' : 'isAddressSkip', get(res, 'data.adminSkipAddressOrPhoneValidationCheck'));
         resolve();
       })).catch(() => reject());
   });
@@ -287,16 +287,16 @@ export class UserDetailsStore {
     try {
       const res = await client
         .mutate({
-          mutation: !isHardDelete ? deleteProfile : adminHardDeleteUser,
+          mutation: !isHardDelete ? deleteProfile : adminUserHardDelete,
           variables: !isInvestor ? { userId: this.selectedUserId, reason } : {},
         });
       uiStore.removeOneFromProgressArray('deleteProfile');
-      if (get(res, 'data.adminDeleteInvestorOrIssuerUser.status') || get(res, 'data.adminHardDeleteUser.status')) {
+      if (get(res, 'data.adminDeleteInvestorOrIssuerUser.status') || get(res, 'data.adminUserHardDelete.status')) {
         userStore.setFieldValue('confirmDelete', true);
         Helper.toast('User Profile Deleted Successfully!', 'success');
         resolve();
       } else {
-        reject(!isHardDelete ? get(res, 'data.adminDeleteInvestorOrIssuerUser.message') : get(res, 'data.adminHardDeleteUser.message'));
+        reject(!isHardDelete ? get(res, 'data.adminDeleteInvestorOrIssuerUser.message') : get(res, 'data.adminUserHardDelete.message'));
       }
     } catch (error) {
       uiStore.removeOneFromProgressArray('deleteProfile');

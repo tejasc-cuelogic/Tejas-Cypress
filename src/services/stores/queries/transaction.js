@@ -70,9 +70,9 @@ export const getInvestmentsByUserIdAndOfferingId = gql`
   }
 `;
 
-export const getTransactions = gql`
-query getTransactions($status: [TransactionStatusEnum], $offset: Int, $direction: TransactionDirectionEnum, $limit: Int, $minAmount: Int, $maxAmount: Int, $dateFilterStart: String, $dateFilterStop: String) {
-  getTransactions(
+export const adminGetTransactions = gql`
+query adminGetTransactions($status: [TransactionStatusEnum], $offset: Int, $direction: TransactionDirectionEnum, $limit: Int, $minAmount: Int, $maxAmount: Int, $dateFilterStart: String, $dateFilterStop: String) {
+  adminGetTransactions(
     status: $status, 
     offset: $offset, 
     direction: $direction,

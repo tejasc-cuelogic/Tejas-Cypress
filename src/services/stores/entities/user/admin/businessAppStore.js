@@ -5,7 +5,7 @@ import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FILTER_META } from '../../../../../constants/user';
 import { BUSINESS_DETAILS_EDIT_META } from '../../../../constants/businessApplication';
-import { getBusinessApplicationsDetailsAdmin, getBusinessApplicationAdmin, getBusinessApplicationSummary, updateBusinessApplicationInformation, exportAllToEmail } from '../../../queries/businessApplication';
+import { adminBusinessApplicationsDetails, getBusinessApplicationAdmin, getBusinessApplicationSummary, updateBusinessApplicationInformation, exportAllToEmail } from '../../../queries/businessApplication';
 import Helper from '../../../../../helper/utility';
 import { uiStore } from '../../../index';
 
@@ -244,7 +244,7 @@ export class BusinessAppStore {
             ...additionalVariables,
           },
           refetchQueries: !rating ? [{
-            query: getBusinessApplicationsDetailsAdmin,
+            query: adminBusinessApplicationsDetails,
             variables: refetchPayLoad,
           }] : null,
         })

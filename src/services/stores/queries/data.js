@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
-export const generateInvestorFolderStructure = gql`
-mutation generateInvestorFolderStructure($userId: String!){
-    generateInvestorFolderStructure(userId: $userId)  
+export const adminGenerateInvestorFolderStructure = gql`
+mutation adminGenerateInvestorFolderStructure($userId: String!){
+    adminGenerateInvestorFolderStructure(userId: $userId)  
 }`;
 
 
@@ -57,9 +57,9 @@ mutation processTransferRequest($transferId: Int!) {
     transferId: $transferId,
   )
 }`;
-export const encryptOrDecryptUtility = gql`
-query encryptOrDecryptValue($userId: String!, $text: String!, $type: EncryptDecryptEnum!){
-  encryptOrDecryptValue(
+export const adminEncryptOrDecryptValue = gql`
+query adminEncryptOrDecryptValue($userId: String!, $text: String!, $type: EncryptDecryptEnum!){
+  adminEncryptOrDecryptValue(
    userId: $userId
    text: $text
    type: $type

@@ -256,8 +256,8 @@ Cypress.Commands.add('deleteUser', (userType='Investor') => {
     cy.get('div.floated.buttons').get('button.button').contains('Hard Delete Profile').click({ force: true });
     cy.get('div.modal.deletion').get('div.actions').get('button.button').contains('OK').click({ force: true });
 
-    registerApiCall('adminHardDeleteUser', '/dev/graphql');
-    cy.wait('@adminHardDeleteUser');
+    registerApiCall('adminUserHardDelete', '/dev/graphql');
+    cy.wait('@adminUserHardDelete');
     cy.Logout();
   });
 })

@@ -2,7 +2,7 @@
 import { observable, action, toJS, computed } from 'mobx';
 import { get } from 'lodash';
 import graphql from 'mobx-apollo';
-import { updateOfferingRepaymentsMeta, getListOfPartialOrCIPProcessingAccount, adminProcessFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility, processTransferRequest } from '../../queries/data';
+import { updateOfferingRepaymentsMeta, getListOfPartialOrCIPProcessingAccount, adminProcessFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, adminEncryptOrDecryptValue, processTransferRequest } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
@@ -218,14 +218,14 @@ export class DataStore {
     return new Promise((resolve, reject) => {
       this.data = graphql({
         client,
-        query: encryptOrDecryptUtility,
+        query: adminEncryptOrDecryptValue,
         variables: processData,
         fetchPolicy: 'network-only',
         onFetch: (res) => {
-          if (res && res.encryptOrDecryptValue && !this.data.loading) {
+          if (res && res.adminEncryptOrDecryptValue && !this.data.loading) {
             this.setFieldValue('inProgress', false, 'encryptOrDecryptValue');
             Helper.toast('Your request is processed.', 'success');
-            resolve(res.encryptOrDecryptValue);
+            resolve(res.adminEncryptOrDecryptValue);
           }
         },
         onError: () => {

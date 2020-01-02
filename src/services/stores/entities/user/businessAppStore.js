@@ -27,7 +27,7 @@ import Helper from '../../../../helper/utility';
 import {
   getPreQualificationById,
   getBusinessApplicationsById,
-  getBusinessApplicationsDetailsAdmin,
+  adminBusinessApplicationsDetails,
   getPrequalBusinessApplicationsById,
   getBusinessApplications,
   createBusinessApplicationPrequalificaiton,
@@ -245,7 +245,7 @@ export class BusinessAppStore {
     uiStore.setLoaderMessage('Getting application data');
     this.businessApplicationsDataById = graphql({
       client,
-      query: getBusinessApplicationsDetailsAdmin,
+      query: adminBusinessApplicationsDetails,
       variables: payLoad,
       fetchPolicy: 'network-only',
       onFetch: (data) => {

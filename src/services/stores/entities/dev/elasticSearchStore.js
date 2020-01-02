@@ -2,7 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import { get, sortBy, includes } from 'lodash';
 import graphql from 'mobx-apollo';
 import * as elasticSearchQueries from '../../queries/elasticSearch';
-import { generateInvestorFolderStructure, storageDetailsForInvestor, syncEsDocument } from '../../queries/data';
+import { adminGenerateInvestorFolderStructure, storageDetailsForInvestor, syncEsDocument } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
@@ -194,18 +194,18 @@ export class ElasticSearchStore {
     return new Promise((res, rej) => {
       client
         .mutate({
-          mutation: generateInvestorFolderStructure,
+          mutation: adminGenerateInvestorFolderStructure,
           variables: { userId },
         })
         .then(action((result) => {
-          if (result.data.generateInvestorFolderStructure.includes('True')) {
+          if (result.data.adminGenerateInvestorFolderStructure.includes('True')) {
             Helper.toast('Box folder details not found, creation has been initiated, please check after some time.', 'success');
             this.resetForm('STORAGE_DETAILS_SYNC_FRM');
             document.getElementsByName('userId')[0].value = '';
           } else {
             const tempobj = { ...this.STORAGE_DETAILS_SYNC_FRM };
             tempobj.fields.userId.value = '';
-            tempobj.fields.userId.error = result.data.generateInvestorFolderStructure;
+            tempobj.fields.userId.error = result.data.adminGenerateInvestorFolderStructure;
             this.setFieldValue('STORAGE_DETAILS_SYNC_FRM', tempobj);
           }
           uiStore.setProgress(false);

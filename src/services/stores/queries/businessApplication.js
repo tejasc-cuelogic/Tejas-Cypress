@@ -304,9 +304,9 @@ query getBusinessApplicationById ($id: String!) {
 }
 `;
 
-export const getBusinessApplicationsDetailsAdmin = gql`
-query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: String, $applicationType: ViewBusinessApplicationTypeEnum!) {
-  businessApplicationsDetailsAdmin(
+export const adminBusinessApplicationsDetails = gql`
+query adminBusinessApplicationsDetails ($applicationId: String!, $userId: String, $applicationType: ViewBusinessApplicationTypeEnum!) {
+  adminBusinessApplicationsDetails(
     applicationId: $applicationId
     applicationType: $applicationType
     userId: $userId
@@ -405,7 +405,7 @@ mutation updateBusinessApplicationInformation(
 }
 `;
 
-export const updateApplicationStatusAndReview = gql`
+export const adminUpdateApplicationStatusAndReview = gql`
 mutation updateApplicationData(
   $applicationId: ID!
   $userId: String
@@ -420,7 +420,7 @@ mutation updateApplicationData(
   $approvedStatus: ApprovedStatusEnum
   $temporaryPassword: String
 ) {
-  updateApplicationStatusAndReview(
+  adminUpdateApplicationStatusAndReview(
     applicationId: $applicationId
     userId: $userId
     actionType: $actionType
@@ -513,9 +513,9 @@ mutation createOffering($applicationId: String!){
 }
 `;
 
-export const generatePortalAgreement = gql`
-mutation generatePortalAgreement($applicationId: String!, $userId: String!){
-  generatePortalAgreement(
+export const adminGeneratePortalAgreement = gql`
+mutation adminGeneratePortalAgreement($applicationId: String!, $userId: String!){
+  adminGeneratePortalAgreement(
     applicationId: $applicationId
     userId: $userId
   )

@@ -603,9 +603,9 @@ export const adminAddUser = gql`
   }
 `;
 
-export const skipAddressOrPhoneValidationCheck = gql`
-mutation skipAddressOrPhoneValidationCheck($userId: String!, $shouldSkip: Boolean!, $type : SkipValidationTypeEnum!) {
-  skipAddressOrPhoneValidationCheck(
+export const adminSkipAddressOrPhoneValidationCheck = gql`
+mutation adminSkipAddressOrPhoneValidationCheck($userId: String!, $shouldSkip: Boolean!, $type : SkipValidationTypeEnum!) {
+  adminSkipAddressOrPhoneValidationCheck(
      userId: $userId
      shouldSkip: $shouldSkip
      type: $type
@@ -623,9 +623,9 @@ mutation adminDeleteInvestorOrIssuerUser($userId: String, $reason: String) {
   }
  }`;
 
-export const adminHardDeleteUser = gql`
-mutation adminHardDeleteUser($userId: String!, $reason: String) {
-  adminHardDeleteUser(
+export const adminUserHardDelete = gql`
+mutation adminUserHardDelete($userId: String!, $reason: String) {
+  adminUserHardDelete(
      userId: $userId
      reason: $reason
   ) {

@@ -2,7 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { isArray, get, forOwn, filter, find, findIndex, has } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { transferRequestAdminSync, getTransactions, transferRequestAdminApprove, transferRequestAdminVerified, declineTransferRequest } from '../../queries/transaction';
+import { transferRequestAdminSync, adminGetTransactions, transferRequestAdminApprove, transferRequestAdminVerified, declineTransferRequest } from '../../queries/transaction';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { ClientDb, FormValidator as Validator } from '../../../../helper';
@@ -66,14 +66,14 @@ export class TransactionsStore {
     if (isFailedProcess) {
       return;
     }
-    const transactions = get(this.data, 'data.getTransactions.transactions');
+    const transactions = get(this.data, 'data.adminGetTransactions.transactions');
     if (isApproved && transactions) {
-      this.data.data.getTransactions.transactions = filter(transactions, row => row.requestId !== requestId);
+      this.data.data.adminGetTransactions.transactions = filter(transactions, row => row.requestId !== requestId);
     } else if (transactions) {
       const index = findIndex(transactions, record => record.requestId === requestId);
       const transaction = find(transactions, record => record.requestId === requestId);
       transaction.gsProcessId = true;
-      this.data.data.getTransactions.transactions[index] = transaction;
+      this.data.data.adminGetTransactions.transactions[index] = transaction;
     }
     this.setData(this.data.data || []);
   }
@@ -104,7 +104,7 @@ export class TransactionsStore {
     };
     this.data = graphql({
       client,
-      query: getTransactions,
+      query: adminGetTransactions,
       variables: payLoad,
       fetchPolicy: 'network-only',
       onFetch: (res) => {
@@ -130,10 +130,10 @@ export class TransactionsStore {
 
   @action
   setData = (data) => {
-    if (get(data, 'getTransactions')) {
-      this.setDb(DataFormatter.mapDatesToType(data.getTransactions.transactions, ['startDate', 'failDate', 'estDateAvailable'], 'unix'));
-      this.searchCount = data.getTransactions.transactionCount.searchCount;
-      this.setTabCount(data.getTransactions.transactionCount);
+    if (get(data, 'adminGetTransactions')) {
+      this.setDb(DataFormatter.mapDatesToType(data.adminGetTransactions.transactions, ['startDate', 'failDate', 'estDateAvailable'], 'unix'));
+      this.searchCount = data.adminGetTransactions.transactionCount.searchCount;
+      this.setTabCount(data.adminGetTransactions.transactionCount);
     } else {
       this.resetData();
     }

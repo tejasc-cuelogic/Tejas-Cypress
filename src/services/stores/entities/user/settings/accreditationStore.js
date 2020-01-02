@@ -268,7 +268,7 @@ export class AccreditationStore {
           });
         } else {
           fileUpload.setAccreditationFileUploadData('INVESTOR', fileData, accountType.toUpperCase(), actionValue, targetUserId).then((result) => {
-            const { fileId, preSignedUrl } = result.data.createUploadEntryAccreditationAdmin;
+            const { fileId, preSignedUrl } = result.data.adminAccreditedStatusUploadEntry;
             this.putUploadedFileOnS3(
               form, field, preSignedUrl, file, fileData, fileId,
               accreditationMethod,
