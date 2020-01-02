@@ -2892,7 +2892,7 @@ const OFFERING_CLOSE_COMMON = {
     value: 1,
     label: 'Concurrency',
     error: undefined,
-    rule: 'number',
+    rule: 'numeric',
     placeHolder: 'Choose here',
   },
 };
