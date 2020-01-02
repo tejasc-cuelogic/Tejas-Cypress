@@ -20,7 +20,7 @@ import {
   userListingStore,
   userStore,
 } from '../../index';
-import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressOrPhoneValidationCheck, frozenEmailToAdmin, freezeAccount, getEmailList } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, adminUpdateUserStatus, skipAddressOrPhoneValidationCheck, frozenEmailToAdmin, adminFreezeAccount, getEmailList } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE, US_STATES } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -428,7 +428,7 @@ export class UserDetailsStore {
     const params = { accountStatus, id };
     client
       .mutate({
-        mutation: toggleUserAccount,
+        mutation: adminUpdateUserStatus,
         variables: params,
       })
       .then(() => {
@@ -449,7 +449,7 @@ export class UserDetailsStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: freezeAccount,
+          mutation: adminFreezeAccount,
           variables: {
             userId,
             accountId,

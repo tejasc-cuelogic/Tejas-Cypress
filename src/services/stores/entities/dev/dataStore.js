@@ -2,7 +2,7 @@
 import { observable, action, toJS, computed } from 'mobx';
 import { get } from 'lodash';
 import graphql from 'mobx-apollo';
-import { updateOfferingRepaymentsMeta, getListOfPartialOrCIPProcessingAccount, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility, processTransferRequest } from '../../queries/data';
+import { updateOfferingRepaymentsMeta, getListOfPartialOrCIPProcessingAccount, adminProcessFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility, processTransferRequest } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
@@ -110,7 +110,7 @@ export class DataStore {
     return new Promise((res, rej) => {
       client
         .mutate({
-          mutation: processFullInvestorAccount,
+          mutation: adminProcessFullInvestorAccount,
           variables: {
             userId: processData.userId,
             accountId: processData.accountId,

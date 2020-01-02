@@ -2,9 +2,9 @@ import gql from 'graphql-tag';
 import { ELIGIBLE_TAGS } from '../../../constants/common';
 
 // queries, mutations and subscriptions , limit: "10"
-export const allUsersQuery = gql`
-  query listUsers($accountType: [UserFilterTypeEnum], $accountStatus: [UserFilterStatusEnum], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int, $limit: Int, $sortBy: UserFilterSortByEnum, $sortType: UserFilterSortTypeEnum) {
-    listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page, limit: $limit, sortBy: $sortBy, sortType: $sortType) {
+export const adminListUsers = gql`
+  query adminListUsers($accountType: [UserFilterTypeEnum], $accountStatus: [UserFilterStatusEnum], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int, $limit: Int, $sortBy: UserFilterSortByEnum, $sortType: UserFilterSortTypeEnum) {
+    adminListUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page, limit: $limit, sortBy: $sortBy, sortType: $sortType) {
       resultCount
       users {
         id
@@ -587,9 +587,9 @@ export const resetPasswordExpirationForCognitoUser = gql`
   }
 `;
 
-export const toggleUserAccount = gql`
-  mutation updateUserStatus($id: String!, $accountStatus: profileLockEnum!) {
-    updateUserStatus(userId: $id, accountStatus:$accountStatus) {
+export const adminUpdateUserStatus = gql`
+  mutation adminUpdateUserStatus($id: String!, $accountStatus: profileLockEnum!) {
+    adminUpdateUserStatus(userId: $id, accountStatus:$accountStatus) {
       id
     }
   }
@@ -643,9 +643,9 @@ mutation notifyAdminFrozenAccountActivity($accountId: String!, $activity: Freeze
    )
  }`;
 
-export const freezeAccount = gql`
-mutation freezeAccount($userId: String!, $accountId: String!, $freeze: FreezeAccountStatus!, $reason: String) {
-  freezeAccount(
+export const adminFreezeAccount = gql`
+mutation adminFreezeAccount($userId: String!, $accountId: String!, $freeze: FreezeAccountStatus!, $reason: String) {
+  adminFreezeAccount(
      userId: $userId
      accountId: $accountId
      freeze: $freeze

@@ -11,7 +11,7 @@ import {
   IRA_ADD_FUND, BANK_REQUEST_VERIFY_DENY_FORM,
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
-import { getlistLinkedBankUsers, isValidOpeningDepositAmount, linkBankRequestApprove } from '../../queries/bankAccount';
+import { adminListLinkedBankUsers, isValidOpeningDepositAmount, adminLinkedBankApprove } from '../../queries/bankAccount';
 import { validationActions } from '../../../actions';
 
 export class BankAccountStore {
@@ -96,8 +96,8 @@ export class BankAccountStore {
     this.loadingRequestIds = filter(this.loadingRequestIds, loadingId => loadingId !== requestId);
     if (isSuccess) {
       this.setDb(filter(this.changeRequests, changeRequest => changeRequest.userId !== requestId));
-      const linkedBankList = filter(get(this.data, 'data.listLinkedBankUsers.linkedBankList'), changeRequest => changeRequest.userId !== requestId);
-      this.data.data.listLinkedBankUsers.linkedBankList = linkedBankList || [];
+      const linkedBankList = filter(get(this.data, 'data.adminListLinkedBankUsers.linkedBankList'), changeRequest => changeRequest.userId !== requestId);
+      this.data.data.adminListLinkedBankUsers.linkedBankList = linkedBankList || [];
     }
   }
 
@@ -380,11 +380,11 @@ export class BankAccountStore {
       const variables = { page: 1, limit: 100 };
       this.data = graphql({
         client,
-        query: getlistLinkedBankUsers,
+        query: adminListLinkedBankUsers,
         variables,
         onFetch: (res) => {
           if (res && !this.data.loading) {
-            this.setDb(res.listLinkedBankUsers.linkedBankList);
+            this.setDb(res.adminListLinkedBankUsers.linkedBankList);
           }
           this.setFieldValue('apiCall', true);
         },
@@ -402,14 +402,14 @@ export class BankAccountStore {
     const { keyword } = this.requestState.search;
     let resultArray = [];
     if (keyword) {
-      this.setDb(get(this.data, 'data.listLinkedBankUsers.linkedBankList') || []);
+      this.setDb(get(this.data, 'data.adminListLinkedBankUsers.linkedBankList') || []);
       ClientDb.filterFromNestedObjs(['firstName', 'lastName'], keyword);
       resultArray = ClientDb.getDatabase();
       this.setDb(uniqWith(resultArray, isEqual));
       this.requestState.page = 1;
       this.requestState.skip = 0;
     } else {
-      this.setDb(get(this.data, 'data.listLinkedBankUsers.linkedBankList') || []);
+      this.setDb(get(this.data, 'data.adminListLinkedBankUsers.linkedBankList') || []);
     }
   }
 
@@ -737,7 +737,7 @@ export class BankAccountStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: isDeny ? declineBankChangeRequest : linkBankRequestApprove,
+          mutation: isDeny ? declineBankChangeRequest : adminLinkedBankApprove,
           variables: {
             accountId,
             userId,
@@ -746,7 +746,7 @@ export class BankAccountStore {
         })
         .then((res) => {
           this.removeLoadingRequestId(userId);
-          Helper.toast(isDeny ? (res.data.declineBankChangeRequest ? 'Link bank requested is denied successfully.' : 'Something went wrong, please try again later.') : res.data.linkBankRequestApprove.message, (isDeny && !res.data.declineBankChangeRequest) ? 'error' : 'success');
+          Helper.toast(isDeny ? (res.data.declineBankChangeRequest ? 'Link bank requested is denied successfully.' : 'Something went wrong, please try again later.') : res.data.adminLinkedBankApprove.message, (isDeny && !res.data.declineBankChangeRequest) ? 'error' : 'success');
           uiStore.setProgress(false);
           resolve();
         })
