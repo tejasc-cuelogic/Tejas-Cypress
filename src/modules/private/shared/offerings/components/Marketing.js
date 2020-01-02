@@ -6,7 +6,7 @@ import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
 const getModule = component => lazyRetry(() => import(`./marketing/${component}`));
 
-@inject('userStore', 'uiStore', 'offeringCreationStore')
+@inject('userStore', 'uiStore', 'manageOfferingStore')
 @withRouter
 @observer
 export default class Marketing extends Component {
@@ -15,6 +15,8 @@ export default class Marketing extends Component {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/tombstone`);
     }
+    this.props.manageOfferingStore.setFormData('TOMBSTONE_BASIC_FRM', 'tombstone');
+    this.props.manageOfferingStore.setFormData('TOMBSTONE_META_FRM', 'tombstone');
   }
 
   render() {

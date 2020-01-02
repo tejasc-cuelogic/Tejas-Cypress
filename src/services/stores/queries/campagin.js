@@ -115,7 +115,7 @@ query offeringWatchList($offeringId: String){
 }
 `;
 
-export const getOfferingById = gql`
+export const getOffering = gql`
   query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
@@ -403,8 +403,8 @@ export const campaignDetailsAdditionalQuery = gql`
 `;
 
 export const campaignDetailsForInvestmentQuery = gql`
-query getOfferingById($id: String!) {
-  getOfferingById (id: $id) {
+query getOffering($id: String!) {
+  getOffering (id: $id) {
     id
     offeringSlug
     isAvailablePublicly

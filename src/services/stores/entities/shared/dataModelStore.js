@@ -4,7 +4,7 @@ import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import { FormValidator, DataFormatter, MobxApollo, Utilities as Utils } from '../../../../helper';
-import { nsUiStore } from '../../index';
+import { nsUiStore, commonStore, uiStore } from '../../index';
 import { fileUpload } from '../../../actions';
 import Helper from '../../../../helper/utility';
 
@@ -27,6 +27,8 @@ export default class DataModelStore {
   currentScore = 0;
 
   removeFileIdsList = [];
+
+  removeFileNamesList = [];
 
   requestState = {
     lek: { 'page-1': null },
@@ -55,13 +57,29 @@ export default class DataModelStore {
     }
   }
 
-  removeUploadedFiles = () => {
-    const fileList = toJS(this.removeFileIdsList);
-    if (fileList.length) {
-      forEach(fileList, (fileId) => {
-        fileUpload.removeUploadedData(fileId);
-      });
-      this.setFieldValue('removeFileIdsList', []);
+  removeUploadedFiles = (fromS3) => {
+    if (fromS3) {
+      const fileList = toJS(this.removeFileNamesList);
+      if (fileList.length) {
+        forEach(fileList, (fileName) => {
+          commonStore.deleteCdnS3File(`offerings/${this.currentOfferingId}/${fileName}`).then(() => {
+          }).catch((error) => {
+            uiStore.setErrors(error.message);
+          });
+        });
+        this.setFieldValue('removeFileNamesList', []);
+      }
+    } else {
+      const fileList = toJS(this.removeFileIdsList);
+      if (fileList.length) {
+        forEach(fileList, (fileId) => {
+          fileUpload.removeUploadedData(fileId).then(() => {
+          }).catch((error) => {
+            uiStore.setErrors(error.message);
+          });
+        });
+        this.setFieldValue('removeFileIdsList', []);
+      }
     }
   }
 
@@ -331,6 +349,7 @@ export default class DataModelStore {
 export const decorateDefault = {
   result: observable,
   showConfirmModal: observable,
+  removeFileNamesList: observable,
   removeFileIdsList: observable,
   currTime: observable,
   currentScore: observable,

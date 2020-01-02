@@ -391,11 +391,11 @@ export class OfferingsStore {
   }
 
   @computed get offer() {
-    return (this.offerData.data && toJS(this.offerData.data.getOfferingById)) || {};
+    return (this.offerData.data && toJS(this.offerData.data.getOffering)) || {};
   }
 
   @computed get offerOld() {
-    return (this.oldOfferData.data && toJS(this.oldOfferData.data.getOfferingById)) || {};
+    return (this.oldOfferData.data && toJS(this.oldOfferData.data.getOffering)) || {};
   }
 
   @computed get loading() {

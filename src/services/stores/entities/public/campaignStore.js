@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
@@ -130,7 +130,7 @@ export class CampaignStore {
           offeringCreationStore.setCurrentOfferingId(data.getOfferingDetailsBySlug.id);
           resolve(data.getOfferingDetailsBySlug);
         } else if (!this.details.loading) {
-          offeringCreationStore.setCurrentOfferingId(data.getOfferingById.id);
+          offeringCreationStore.setCurrentOfferingId(data.getOffering.id);
           resolve(false);
         }
       },
@@ -172,7 +172,7 @@ export class CampaignStore {
   getIssuerIdForOffering = id => new Promise((resolve, reject) => {
     this.details = graphql({
       client: clientPublic,
-      query: getOfferingById,
+      query: getOffering,
       variables: { id },
       onFetch: (data) => {
         if (data && !this.details.loading) {
@@ -263,8 +263,8 @@ export class CampaignStore {
   @computed get campaign() {
     if (this.details.data && this.details.data.getOfferingDetailsBySlug) {
       return toJS(this.details.data.getOfferingDetailsBySlug);
-    } if (this.details.data && this.details.data.getOfferingById) {
-      return toJS(this.details.data.getOfferingById);
+    } if (this.details.data && this.details.data.getOffering) {
+      return toJS(this.details.data.getOffering);
     }
     return {};
   }

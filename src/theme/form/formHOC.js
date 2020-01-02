@@ -225,7 +225,7 @@ function formHoc(WrappedComponent, metaInfo) {
           this.props[metaInfo.store].setMediaAttribute(metaInfo.form, 'value', '', field);
         }
       };
-      const handelImageDeimension = (width, height, field) => {
+      const handelImageDimension = (width, height, field) => {
         if (width < 200 || height < 200) {
           const attr = 'error';
           const errorMsg = 'Image size should not be less than 200 x 200.';
@@ -244,8 +244,10 @@ function formHoc(WrappedComponent, metaInfo) {
       };
       const handleRemoveConfirm = () => {
         this.props[metaInfo.store].setFieldValue('showConfirmModal', false);
+        if (props.removeMedia) {
+          props.removeMedia(metaInfo.form, name);
+        }
         this.props[metaInfo.store].resetImageCropper(metaInfo.form, name);
-        // this.removeMedia(this.state.imageType, this.state.index);
       };
       const handleRemoveCancel = () => {
         this.props[metaInfo.store].setFieldValue('showConfirmModal', false);
@@ -274,7 +276,7 @@ function formHoc(WrappedComponent, metaInfo) {
                 setData={(attr, value) => setData(attr, value)}
                 verifyExtension={handleVerifyFileExtension}
                 handelReset={handleResetImageCropper}
-                verifyImageDimension={handelImageDeimension}
+                verifyImageDimension={handelImageDimension}
                 field={fieldData}
                 modalUploadAction={props.uploadMedia}
                 name={name}

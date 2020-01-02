@@ -1153,11 +1153,11 @@ export class OfferingCreationStore {
     approvedObj, fromS3 = false, leaderIndex,
     msgType = 'success', isLaunchContingency = false,
   ) => new Promise((res, rej) => {
-    let { getOfferingById } = offeringsStore.offerData.data;
-    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
+    let { getOffering } = offeringsStore.offerData.data;
+    getOffering = Helper.replaceKeysDeep(toJS(getOffering), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
     let payloadData = {
-      applicationId: getOfferingById.applicationId,
-      issuerId: getOfferingById.issuerId,
+      applicationId: getOffering.applicationId,
+      issuerId: getOffering.issuerId,
     };
     const { firstName, lastName } = userDetailsStore.userDetails.info;
     if (keyName) {
@@ -1190,12 +1190,12 @@ export class OfferingCreationStore {
           ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
         };
         if (subKey === 'launch') {
-          const closureSummary = { ...getOfferingById.closureSummary };
+          const closureSummary = { ...getOffering.closureSummary };
           closureSummary.processingDate = get(payloadData[keyName].launch, 'terminationDate') || null;
           closureSummary.launchDate = get(payloadData[keyName].launch, 'targetDate') || null;
           payloadData.closureSummary = closureSummary;
           payloadData.closureSummary = mergeWith(
-            toJS(getOfferingById.closureSummary),
+            toJS(getOffering.closureSummary),
             payloadData.closureSummary,
             this.mergeCustomize,
           );
@@ -1222,12 +1222,12 @@ export class OfferingCreationStore {
           keyTerms: Validator.evaluateFormData(this.KEY_TERMS_FRM.fields),
         };
         payloadData.keyTerms = mergeWith(
-          toJS(getOfferingById.keyTerms),
+          toJS(getOffering.keyTerms),
           payloadData.keyTerms,
           this.mergeCustomize,
         );
         payloadData.closureSummary = mergeWith(
-          toJS(getOfferingById.closureSummary),
+          toJS(getOffering.closureSummary),
           payloadData.closureSummary,
           this.mergeCustomize,
         );
@@ -1236,11 +1236,11 @@ export class OfferingCreationStore {
         payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
         payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
       } else if (keyName === 'editPocForm') {
-        if (get(getOfferingById, 'stage') === 'CREATION' && this.POC_DETAILS_FRM.fields.targetDate.value) {
+        if (get(getOffering, 'stage') === 'CREATION' && this.POC_DETAILS_FRM.fields.targetDate.value) {
           payloadData.closureSummary = {};
           payloadData.closureSummary.launchDate = this.POC_DETAILS_FRM.fields.targetDate.value;
           payloadData.closureSummary = mergeWith(
-            toJS(getOfferingById.closureSummary),
+            toJS(getOffering.closureSummary),
             payloadData.closureSummary,
             this.mergeCustomize,
           );
@@ -1248,7 +1248,7 @@ export class OfferingCreationStore {
           payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
         }
       } else if (keyName === 'BonusRewardTier') {
-        const rewardsTiersData = getOfferingById.rewardsTiers || [];
+        const rewardsTiersData = getOffering.rewardsTiers || [];
         const isEarlyBirds = fields.isEarlyBirds.value;
         if (!subKey) {
           if (isEarlyBirds.length) {
@@ -1274,12 +1274,12 @@ export class OfferingCreationStore {
     }
     if (keyName === 'keyTerms') {
       payloadData.regulation = this.KEY_TERMS_FRM.fields.regulation.value;
-      const closureSummary = { ...getOfferingById.closureSummary };
+      const closureSummary = { ...getOffering.closureSummary };
       const keyTerms = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
       closureSummary.keyTerms = { ...closureSummary.keyTerms, priceCalculation: keyTerms.priceCalculation, multiple: keyTerms.multiple, interestRate: get(payloadData, 'keyTerms.interestRate') };
       payloadData.closureSummary = closureSummary;
       payloadData.closureSummary = mergeWith(
-        toJS(getOfferingById.closureSummary),
+        toJS(getOffering.closureSummary),
         payloadData.closureSummary,
         this.mergeCustomize,
       );
@@ -1341,8 +1341,8 @@ export class OfferingCreationStore {
           forEach(payloadData[keyName], (ele, index) => {
             if (!this.removeIndex || this.removeIndex !== index) {
               leaders.push(mergeWith(
-                toJS(getOfferingById[keyName] && getOfferingById[keyName].length
-                  > index ? getOfferingById[keyName][index] : {}),
+                toJS(getOffering[keyName] && getOffering[keyName].length
+                  > index ? getOffering[keyName][index] : {}),
                 payloadData[keyName][index],
                 this.mergeCustomize,
               ));
@@ -1353,7 +1353,7 @@ export class OfferingCreationStore {
           payloadData[keyName] = leaders;
         } else {
           payloadData[keyName] = mergeWith(
-            getOfferingById[keyName],
+            getOffering[keyName],
             payloadData[keyName],
             this.mergeCustomize,
           );
@@ -1463,10 +1463,10 @@ export class OfferingCreationStore {
     approvedObj,
     index = undefined,
   ) => {
-    const { getOfferingById } = offeringsStore.offerData.data;
-    const issuerBacId = getOfferingById.legal && getOfferingById.legal.issuerBacId;
+    const { getOffering } = offeringsStore.offerData.data;
+    const issuerBacId = getOffering.legal && getOffering.legal.issuerBacId;
     const offeringBacDetails = Validator.evaluateFormData(fields);
-    offeringBacDetails.offeringId = getOfferingById.id;
+    offeringBacDetails.offeringId = getOffering.id;
     offeringBacDetails.bacType = bacType;
     let mutation = issuerBacId ? updateBac : createBac;
     let variables = {
@@ -1481,7 +1481,7 @@ export class OfferingCreationStore {
     }
     if (issuerNumber !== undefined) {
       const payload = { ...offeringBacDetails.getOfferingBac[issuerNumber] };
-      payload.offeringId = getOfferingById.id;
+      payload.offeringId = getOffering.id;
       payload.bacType = bacType;
       if (!afIssuerId) {
         mutation = createBac;
@@ -1498,9 +1498,9 @@ export class OfferingCreationStore {
     }
     if (leaderNumber !== undefined) {
       const payload = { ...offeringBacDetails.getOfferingBac[leaderNumber] };
-      payload.offeringId = getOfferingById.id;
+      payload.offeringId = getOffering.id;
       payload.bacType = bacType;
-      const { leadership } = getOfferingById;
+      const { leadership } = getOffering;
       if (!afIssuerId) {
         mutation = createBac;
         payload.email = leadership[index].email;
@@ -1552,21 +1552,21 @@ export class OfferingCreationStore {
         variables,
         refetchQueries: [{
           query: getOfferingDetails,
-          variables: { id: getOfferingById.id },
+          variables: { id: getOffering.id },
         },
         {
           query: getOfferingBac,
-          variables: { offeringId: getOfferingById.id, bacType: 'AFFILIATED_ISSUER' },
+          variables: { offeringId: getOffering.id, bacType: 'AFFILIATED_ISSUER' },
         },
         {
           query: getOfferingBac,
-          variables: { offeringId: getOfferingById.id, bacType: 'ISSUER' },
+          variables: { offeringId: getOffering.id, bacType: 'ISSUER' },
         },
         ],
       })
       .then(() => {
         this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
-        offeringsStore.getOne(getOfferingById.id);
+        offeringsStore.getOne(getOffering.id);
         if (bacType === 'LEADERSHIP') {
           this.initLoad.splice(this.initLoad.indexOf('LEADER_FRM'), 1);
           this.getLeadershipOfferingBac(this.currentOfferingId, 'LEADERSHIP');
@@ -1940,7 +1940,7 @@ export class OfferingCreationStore {
   }
 
   getClosureObject = (type) => {
-    let { getOfferingById } = offeringsStore.offerData.data;
+    let { getOffering } = offeringsStore.offerData.data;
     let obj = {};
     if (type === 'CLOSING_BINDER') {
       obj = Validator.evaluateFormData(this.OFFERING_CLOSE_1.fields);
@@ -1952,16 +1952,16 @@ export class OfferingCreationStore {
       const filteredSupplementalAgreementsDocs = supplementalAgreementsDocs.filter(d => d.name !== '' && d.upload.fileId !== '');
       set(obj, 'closureSummary.keyTerms.supplementalAgreements', { documents: filteredSupplementalAgreementsDocs });
     }
-    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
+    getOffering = Helper.replaceKeysDeep(toJS(getOffering), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
     obj = Helper.replaceKeysDeep(obj, { accreditedOnly: 'isVisible' });
     obj.closureSummary = mergeWith(
-      toJS(getOfferingById.closureSummary),
+      toJS(getOffering.closureSummary),
       obj.closureSummary,
       this.mergeCustomize,
     );
     if (type === 'CLOSING_BINDER' && (!obj.closingBinder || !obj.closingBinder.length)) {
       // obj.closingBinder = mergeWith(
-      //   toJS(getOfferingById.closingBinder),
+      //   toJS(getOffering.closingBinder),
       //   obj.closingBinder,
       //   this.mergeCustomize,
       // );

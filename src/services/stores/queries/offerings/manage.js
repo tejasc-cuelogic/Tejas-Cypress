@@ -114,8 +114,8 @@ export const deleteOffering = gql`
 `;
 
 export const getOfferingDetails = gql`
-  query getOfferingById($id: String!) {
-    getOfferingById(id: $id) {
+  query getOffering($id: String!) {
+    getOffering(id: $id) {
       id
       offeringSlug
       referralCode
@@ -123,6 +123,21 @@ export const getOfferingDetails = gql`
       regulation
       template
       rootFolderId
+      tombstone {
+        image {
+          url
+          fileName
+        }
+        description
+        meta {
+          keyLabel
+          keyType
+          keyValue
+          keyFormat
+        }
+        customTag
+        toggleMeta
+      }
       goldstar {
         isin
         contactId

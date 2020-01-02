@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Form, Header, Divider, Grid } from 'semantic-ui-react';
-import ButtonGroupType2 from '../ButtonGroupType2';
+import OfferingButtonGroup from '../OfferingButtonGroup';
 import formHOC from '../../../../../../theme/form/formHOC';
 import TombstoneMeta from './TombstoneMeta';
 import TombstonePreview from './TombstonePreview';
@@ -20,6 +20,18 @@ class Tombstone extends Component {
     this.props.manageOfferingStore.uploadMedia(name);
   }
 
+  removeMedia = (form, name) => {
+    console.log(form, name);
+  }
+
+  handleFormSubmit = () => {
+    const params = {
+      keyName: 'tombstone',
+      forms: ['TOMBSTONE_BASIC_FRM', 'TOMBSTONE_META_FRM'],
+    };
+    this.props.manageOfferingStore.updateOffering(params);
+  }
+
   render() {
     const { manageOfferingStore, smartElement } = this.props;
     const { TOMBSTONE_BASIC_FRM } = manageOfferingStore;
@@ -31,7 +43,7 @@ class Tombstone extends Component {
           <Grid columns="2">
             <Grid.Column>
               <Header as="h4">{TOMBSTONE_BASIC_FRM.fields.image.label}</Header>
-              {smartElement.ImageCropper('image', { disabled: isReadonly, uploadMedia: this.uploadMedia })}
+              {smartElement.ImageCropper('image', { disabled: isReadonly, uploadMedia: this.uploadMedia, removeMedia: this.removeMedia })}
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
@@ -43,10 +55,7 @@ class Tombstone extends Component {
           </Grid>
           <TombstoneMeta />
           <Divider section />
-          <ButtonGroupType2
-            submitted={false}
-            isManager={false}
-            approved={false}
+          <OfferingButtonGroup
             updateOffer={this.handleFormSubmit}
           />
         </Form>
