@@ -24,6 +24,7 @@ export default class EditOffering extends React.Component {
       currentOfferingId,
     } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, null, 'editPocForm').then(() => {
+      this.props.offeringsStore.initRequest({ stage: this.props.stage.toLowerCase() });
       this.props.history.push(this.props.refLink);
     });
   }
