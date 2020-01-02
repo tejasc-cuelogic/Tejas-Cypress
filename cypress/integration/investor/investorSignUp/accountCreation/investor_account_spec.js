@@ -53,20 +53,20 @@ describe('Account Creation', () => {
     cy.wait('@submitAccount');
   });
 
-  // it.skip('should create IRA account successfully', () => {
-  //   cy.get('.btn-item').contains('Open New Account').click({ force: true });
-  //   cy.get('input[name="accType"]').check('1', { force: true });
-  //   cy.get('button.next').click();
-  //   iraAccountCreation();
-  //   // cy.get('div.content').get('button.button').contains('Explore Campaigns').click({ force: true });
-  //   // clickonDashboard();
-  //   // cy.find('a.button').contains('Add New Account');
-  // });
+  it.skip('should create IRA account successfully', () => {
+    cy.get('.btn-item').contains('Open New Account').click({ force: true });
+    cy.get('input[name="accType"]').check('1', { force: true });
+    cy.get('button.next').click();
+    iraAccountCreation();
+    // cy.get('div.content').get('button.button').contains('Explore Campaigns').click({ force: true });
+    // clickonDashboard();
+    // cy.find('a.button').contains('Add New Account');
+  });
 
-  // it.skip('should create Entity account successfully', () => {
-  //   cy.get('.btn-item').contains('Open New Account').click({ force: true });
-  //   cy.get('input[name="accType"]').check('2', { force: true });
-  //   cy.get('button.next').click();
-  //   entityAccountCreation();
-  // });
+  it.skip('should create Entity account successfully', () => {
+    cy.get('.btn-item').contains('Open New Account').click({ force: true });
+    cy.get('input[name="accType"]').check('2', { force: true });
+    cy.get('button.next').click();
+    entityAccountCreation();
+  });
 });
