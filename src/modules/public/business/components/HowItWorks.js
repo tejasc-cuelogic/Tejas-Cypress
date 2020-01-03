@@ -70,17 +70,17 @@ class HowItWorks extends Component {
     const testimonial = [
       {
         title: 'Real Success Stories',
-        description: 'The NextSeed process was extremely smooth and allowed me to focus on getting Pitch 25 up and running. The amount of community buzz that we got through this process gave our business a huge boost.',
-        name: 'Brian Ching | Pitch 25',
-        investment: '$549,900 from 392 investors',
-        image: responsiveVars.isMobile ? 'business/lian-mobile.png' : 'business/lian.png',
-      },
-      {
-        title: 'Real Success Stories',
         description: 'The all-in-one platform allowed us to expand quickly and build a new customer base. Our partnership with NextSeed is a win-win.',
         name: 'Jess Hughes | Citizen Pilates',
         investment: '$100,000 from 75 investors',
         image: responsiveVars.isMobile ? 'business/jess-mobile.png' : 'business/jess.png',
+      },
+      {
+        title: 'Real Success Stories',
+        description: 'The NextSeed process was extremely smooth and allowed me to focus on getting Pitch 25 up and running. The amount of community buzz that we got through this process gave our business a huge boost.',
+        name: 'Brian Ching | Pitch 25',
+        investment: '$549,900 from 392 investors',
+        image: responsiveVars.isMobile ? 'business/lian-mobile.png' : 'business/lian.png',
       },
       {
         title: 'Real Success Stories',
@@ -468,13 +468,13 @@ class HowItWorks extends Component {
           <Divider fitted />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
             <Grid stackable>
-              <Grid.Column width={10}>
+              <Grid.Column width={11}>
                 <Header as="h2" className="mb-20">Let us know how we can help</Header>
                 <p className={`${responsiveVars.isMobile ? 'mb-10' : ''} neutral-text`}>
                   Have questions about how we can help your business achieve your goals? We{"'"}re here to help.
                 </p>
               </Grid.Column>
-              <Grid.Column width={6} verticalAlign="middle" className="center-align">
+              <Grid.Column width={5} verticalAlign="middle" className="center-align">
                 <Button primary as={Link} to="/business-application/questions/need-help" fluid={responsiveVars.isMobile}>Contact Us</Button>
               </Grid.Column>
             </Grid>

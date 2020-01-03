@@ -50,17 +50,27 @@ export default class CampaignList extends Component {
 
   renderBaners = (offering) => {
     const resultFound = get(offering, 'isBannerShow');
+    const realEstateBanner = get(offering, 'realEstateBanner');
     if (resultFound) {
       const bannerFirst = get(offering, 'datesBanner');
       const bannerSecond = get(offering, 'amountsBanner');
       return (
         <Label.Group size="small">
+          {realEstateBanner
+            && <Label color="grey">{realEstateBanner}</Label>
+          }
           {bannerFirst
           && <Label color={bannerFirst === 'Processing' ? 'grey' : bannerFirst === 'NEW' ? 'black' : 'green'}>{bannerFirst}</Label>
           }
           {bannerSecond
-          && <Label color={bannerFirst === 'Processing' ? 'grey' : 'green'}>{bannerSecond}</Label>
+            && <Label color={bannerFirst === 'Processing' ? 'grey' : 'green'}>{bannerSecond}</Label>
           }
+        </Label.Group>
+      );
+    } if (realEstateBanner) {
+      return (
+        <Label.Group size="small">
+          <Label color="grey">{realEstateBanner}</Label>
         </Label.Group>
       );
     }
@@ -82,127 +92,127 @@ export default class CampaignList extends Component {
               : campaigns && campaigns.length
                 ? (
                   <Grid doubling columns={3} stackable>
-                  {campaigns.map(offering => (
-                    <Grid.Column key={offering.id} data-cy={offering.offeringSlug}>
-                      <Card className="campaign" fluid as={Link} to={`/offerings/${offering.offeringSlug}`}>
-                        <div className="campaign-image-wrap">
-                          <div className="campaign-card-image">
-                            <Image64
-                              bg
-                              centered
-                              srcUrl={offering && offering.media && offering.media.tombstoneImage
-                                && offering.media.tombstoneImage.url
-                                ? offering.media.tombstoneImage.url : null
-                              }
-                              alt={`${offering.keyTerms.shorthandBusinessName} poster`}
-                            />
-                          </div>
-                        </div>
-                        {offering.stage === 'LIVE' ? this.renderBaners(offering) : null }
-                        {(['INVESTOR', 'WATCHING'].includes(offering.watchListStatus))
-                        && (
-                          <Icon name="heart" />
-                        )
-                        }
-                        <div className={`campaign-card-details ${!get(offering, 'isAvailablePublicly') ? 'disabled' : ''}`}>
-                          <Card.Content>
-                            <Card.Header>{offering && offering.keyTerms
-                              && offering.keyTerms.shorthandBusinessName ? offering.keyTerms.shorthandBusinessName : ''
-                            }
-                            </Card.Header>
-                            <Card.Meta>
-                              {offering && offering.keyTerms && offering.keyTerms.city
-                                ? offering.keyTerms.city : '-'
-                              },{' '}
-                              {offering && offering.keyTerms && offering.keyTerms.state
-                                ? offering.keyTerms.state : '-'
-                              }
-                            </Card.Meta>
-                            <Card.Description>
-                              <HtmlEditor
-                                readOnly
-                                content={(offering && offering.offering
-                                  && offering.offering.overview
-                                  && offering.offering.overview.tombstoneDescription
-                                  ? offering.offering.overview.tombstoneDescription : '')}
+                    {campaigns.map(offering => (
+                      <Grid.Column key={offering.id} data-cy={offering.offeringSlug}>
+                        <Card className="campaign" fluid as={Link} to={`/offerings/${offering.offeringSlug}`}>
+                          <div className="campaign-image-wrap">
+                            <div className="campaign-card-image">
+                              <Image64
+                                bg
+                                centered
+                                srcUrl={offering && offering.media && offering.media.tombstoneImage
+                                  && offering.media.tombstoneImage.url
+                                  ? offering.media.tombstoneImage.url : null
+                                }
+                                alt={`${offering.keyTerms.shorthandBusinessName} poster`}
                               />
-                            </Card.Description>
-                            <Divider />
-                            <div className="campaign-card-table-wrapper">
-                              <Table basic="very" compact="very" unstackable className="no-border campaign-card">
-                              <Table.Body>
-                                  {(isFunded ? keyTermList.filter(i => i.forFunded) : keyTermList).map(row => (
-                                    <>
-                                    {((isFunded || row.for.includes('ALL') || row.for.includes(offering.keyTerms.securities)) && ((get(offering, row.key) === 0 || get(offering, row.key)) || row.value))
-                                    && (
-                                    <Table.Row verticalAlign="top">
-                                      <Table.Cell collapsing>{(row.label === 'Share Price') ? `${capitalize(get(offering, 'keyTerms.equityUnitType'))} Price` : row.label}</Table.Cell>
-                                      <Table.Cell className={`${!isFunded && !row.for.includes('ALL') ? 'highlight-text' : ''} right-align`}>
-                                        <b>
-                                        {((get(offering, row.key) !== undefined && get(offering, row.key) !== null) || row.value)
-                                          ? (
-                                        <>
-                                          {typeof row.type === 'object' ? (
-                                            row.type[get(offering, row.key)] || '-'
-                                          ) : row.type === '$' ? row.key ? Helper.CurrencyFormat(get(offering, row.key), 0) : row.value
-                                            : row.type === '%' ? row.key ? `${get(offering, row.key)}%` : row.value
-                                              : row.type === 'X' ? row.key ? `${get(offering, row.key)}x` : row.value
-                                                : row.type === 'months' ? row.key ? `${get(offering, row.key)} months` : row.value
-                                                  : row.type === 'string' ? row.key ? `${get(offering, row.key)}` : row.value
-                                                    : row.key ? get(offering, row.key) === 0 ? 0 : (get(offering, row.key) || '') : row.value
-                                          }
-                                        </>
-                                          )
-                                          : '-'
-                                        }
-                                        </b>
-                                        </Table.Cell>
-                                    </Table.Row>
-                                    )
-                                    }
-                                    </>
-                                  ))
-                                  }
-                                </Table.Body>
-                              </Table>
                             </div>
-                            <Button basic className="mt-30" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
+                          </div>
+                          {offering.stage === 'LIVE' ? this.renderBaners(offering) : null}
+                          {(['INVESTOR', 'WATCHING'].includes(offering.watchListStatus))
+                            && (
+                              <Icon name="heart" />
+                            )
+                          }
+                          <div className="campaign-card-details">
+                            <Card.Content>
+                              <Card.Header>{offering && offering.keyTerms
+                                && offering.keyTerms.shorthandBusinessName ? offering.keyTerms.shorthandBusinessName : ''
+                              }
+                              </Card.Header>
+                              <Card.Meta>
+                                {offering && offering.keyTerms && offering.keyTerms.city
+                                  ? offering.keyTerms.city : '-'
+                                },{' '}
+                                {offering && offering.keyTerms && offering.keyTerms.state
+                                  ? offering.keyTerms.state : '-'
+                                }
+                              </Card.Meta>
+                              <Card.Description>
+                                <HtmlEditor
+                                  readOnly
+                                  content={(offering && offering.offering
+                                    && offering.offering.overview
+                                    && offering.offering.overview.tombstoneDescription
+                                    ? offering.offering.overview.tombstoneDescription : '')}
+                                />
+                              </Card.Description>
+                              <Divider />
+                              <div className="campaign-card-table-wrapper">
+                                <Table basic="very" compact="very" unstackable className="no-border campaign-card">
+                                  <Table.Body>
+                                    {(isFunded ? keyTermList.filter(i => i.forFunded) : keyTermList).map(row => (
+                                      <>
+                                        {((isFunded || row.for.includes('ALL') || row.for.includes(offering.keyTerms.securities)) && ((get(offering, row.key) === 0 || get(offering, row.key)) || row.value))
+                                          && (
+                                            <Table.Row verticalAlign="top">
+                                              <Table.Cell collapsing>{(row.label === 'Share Price') ? `${capitalize(get(offering, 'keyTerms.equityUnitType'))} Price` : (row.label === 'Security' && get(offering, row.key) && get(offering, row.key) === 'REAL_ESTATE') ? ' Type of Investment' : row.label}</Table.Cell>
+                                              <Table.Cell collapsing className={`${!isFunded && !row.for.includes('ALL') ? 'highlight-text' : ''} right-align`}>
+                                                <b>
+                                                  {((get(offering, row.key) !== undefined && get(offering, row.key) !== null) || row.value)
+                                                    ? (
+                                                      <>
+                                                        {typeof row.type === 'object' ? (
+                                                          row.type[get(offering, row.key)] && get(offering, row.key) === 'REAL_ESTATE' ? <>Real Estate Fund<br />(Qual. Opportunity Fund)</> : row.type[get(offering, row.key)] || '-'
+                                                        ) : row.type === '$' ? row.key ? Helper.CurrencyFormat(get(offering, row.key), 0) : row.value
+                                                            : row.type === '%' ? row.key ? `${get(offering, row.key)}%` : row.value
+                                                              : row.type === 'X' ? row.key ? `${get(offering, row.key)}x` : row.value
+                                                                : row.type === 'months' ? row.key ? `${get(offering, row.key)} months` : row.value
+                                                                  : row.type === 'string' ? row.key ? `${get(offering, row.key)}` : row.value
+                                                                    : row.key ? get(offering, row.key) === 0 ? 0 : (get(offering, row.key) || '') : row.value
+                                                        }
+                                                      </>
+                                                    )
+                                                    : '-'
+                                                  }
+                                                </b>
+                                              </Table.Cell>
+                                            </Table.Row>
+                                          )
+                                        }
+                                      </>
+                                    ))
+                                    }
+                                  </Table.Body>
+                                </Table>
+                              </div>
+                              <Button className="mt-30" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
+                            </Card.Content>
+                          </div>
+                          <Card.Content extra>
+                            <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} from {get(offering, 'closureSummary.totalInvestorCount') || 0} investors</b></p>
+                            {isFunded
+                              && (
+                                <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>
+                              )
+                            }
+                            <p className="more-info">
+                              Offered by {offering && offering.regulation
+                                ? CAMPAIGN_OFFERED_BY[offering.regulation]
+                                : CAMPAIGN_OFFERED_BY[offering.keyTerms.regulation]}
+                            </p>
                           </Card.Content>
-                        </div>
-                        <Card.Content extra className={!get(offering, 'isAvailablePublicly') ? 'disabled' : ''}>
-                          <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} from {get(offering, 'closureSummary.totalInvestorCount') || 0} investors</b></p>
-                          {isFunded
-                          && (
-                            <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>
+                          {offering.stage === 'LOCK' && (
+                            <Card.Content className="card-hidden">
+                              <div className="lock-image">
+                                <NSImage mini path="icon_lock.png" />
+                              </div>
+                              <div className="details">
+                                <div className="tags mb-10 text-uppercase intro-text">
+                                  <b>hidden</b>
+                                </div>
+                                <Card.Header>For NextSeed members only.</Card.Header>
+                                <Card.Meta>
+                                  Login or complete your profile to view this offering.
+                              </Card.Meta>
+                              </div>
+                            </Card.Content>
                           )
                           }
-                          <p className="more-info">
-                            Offered by {offering && offering.regulation
-                            ? CAMPAIGN_OFFERED_BY[offering.regulation]
-                            : CAMPAIGN_OFFERED_BY[offering.keyTerms.regulation]}
-                          </p>
-                        </Card.Content>
-                        {offering.stage === 'LOCK' && (
-                          <Card.Content className="card-hidden">
-                            <div className="lock-image">
-                              <NSImage mini path="icon_lock.png" />
-                            </div>
-                            <div className="details">
-                              <div className="tags mb-10 text-uppercase intro-text">
-                                <b>hidden</b>
-                              </div>
-                              <Card.Header>For NextSeed members only.</Card.Header>
-                              <Card.Meta>
-                                Login or complete your profile to view this offering.
-                              </Card.Meta>
-                            </div>
-                          </Card.Content>
-                        )
-                        }
-                      </Card>
-                    </Grid.Column>
-                  ))}
-                </Grid>
+                        </Card>
+                      </Grid.Column>
+                    ))}
+                  </Grid>
                 ) : <InlineLoader text="No data found." />
             }
             {this.props.loadMoreButton}
