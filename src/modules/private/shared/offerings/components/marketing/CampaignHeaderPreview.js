@@ -29,8 +29,8 @@ export default class CampaignHeaderPreview extends Component {
     return (
       <>
         <div className="campaign-banner">
-          {get(headerBasicFields, 'heroBackgroundImage.value')
-            && <Image64 bg className="campaign-details-banner" srcUrl={get(headerBasicFields, 'heroBackgroundImage.value')} />
+          {get(headerBasicFields, 'heroBackgroundImage.preSignedUrl')
+            && <Image64 bg className="campaign-details-banner" srcUrl={get(headerBasicFields, 'heroBackgroundImage.preSignedUrl')} />
           }
           <section className="banner">
             <Responsive minWidth={768} as={Container}>
@@ -43,7 +43,7 @@ export default class CampaignHeaderPreview extends Component {
                         <Link to={`${this.props.match.url}${newLayout ? '' : '/overview'}/herovideo`}>
                           <Image64
                             bg
-                            srcUrl={get(headerBasicFields, 'heroImage.value')}
+                            srcUrl={get(headerBasicFields, 'heroImage.preSignedUrl')}
                             imgType="heroImage"
                           />
                           <Icon className="ns-play play-icon" />
@@ -52,7 +52,7 @@ export default class CampaignHeaderPreview extends Component {
                       : (
                         <Image64
                           bg
-                          srcUrl={get(headerBasicFields, 'heroImage.value')}
+                          srcUrl={get(headerBasicFields, 'heroImage.preSignedUrl')}
                           imgType="heroImage"
                         />
                       )
