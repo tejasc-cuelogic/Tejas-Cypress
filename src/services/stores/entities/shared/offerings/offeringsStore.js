@@ -258,6 +258,9 @@ export class OfferingsStore {
         db[this.requestState.stage][offerIndex] = { ...db[this.requestState.stage][offerIndex], ...payload };
         ClientDb.initiateDb(db);
         this.db = { ...db };
+        if (this.requestState.stage === 'live') {
+          this.orderedActiveListArr();
+        }
       }
       if (offerIndexInData !== -1) {
         data[this.requestState.stage].data.getOfferings[offerIndexInData] = { ...data[this.requestState.stage].data.getOfferings[offerIndexInData], ...payload };
