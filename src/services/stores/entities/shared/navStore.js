@@ -59,10 +59,10 @@ export class NavStore {
       permitted = [...roles];
     } else {
       permitted = [...roles,
-        ...userDetailsStore.signupStatus.partialAccounts,
-        ...userDetailsStore.signupStatus.activeAccounts,
-        ...userDetailsStore.signupStatus.processingAccounts,
-        ...userDetailsStore.signupStatus.frozenAccounts];
+      ...userDetailsStore.signupStatus.partialAccounts,
+      ...userDetailsStore.signupStatus.activeAccounts,
+      ...userDetailsStore.signupStatus.processingAccounts,
+      ...userDetailsStore.signupStatus.frozenAccounts];
     }
     if (User.roles && User.roles.includes('investor') && userDetails && userDetails.id && !(_.get(userDetails, 'email.verified') !== undefined && _.get(userDetails, 'phone.verified') !== undefined)) {
       navigationItems = navigationItems.filter(item => item.title !== 'Account Settings');
@@ -95,15 +95,15 @@ export class NavStore {
       navigationItems,
       n => ((!n.accessibleTo || n.accessibleTo.length === 0
         || _.intersection(n.accessibleTo, permitted).length > 0)
-      && (!n.env || n.env.length === 0
-        || _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)
+        && (!n.env || n.env.length === 0
+          || _.intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0)
         && (!n.capability || this.canAccessBasedOnCapability(n.capability))),
     );
     routes = _.map(routes, r => ({
       ...r,
       subNavigations:
-      _.filter(r.subNavigations, s => (!s.capability
-        || this.canAccessBasedOnCapability(s.capability))),
+        _.filter(r.subNavigations, s => (!s.capability
+          || this.canAccessBasedOnCapability(s.capability))),
     }));
     return routes;
   }
@@ -135,7 +135,7 @@ export class NavStore {
 
   @action
   filterByAccess = (sNavs, phase, exclude = []) => toJS(sNavs.filter(sN => !sN.accessFor
-      || (sN.accessFor.includes(typeof phase === 'number' ? (phase <= 4 ? phase : 4) : phase) && !exclude.includes(sN.to))));
+    || (sN.accessFor.includes(typeof phase === 'number' ? (phase <= 4 ? phase : 4) : phase) && !exclude.includes(sN.to))));
 
   businessName = b => ((b.keyTerms && b.keyTerms.shorthandBusinessName)
     ? b.keyTerms.shorthandBusinessName : (
@@ -242,7 +242,7 @@ export class NavStore {
     const acctiveAccountList = userDetailsStore.getActiveAccounts;
     const { accStatus } = userDetailsStore.signupStatus;
     if (this.navMeta && this.navMeta.subNavigations
-        && ((acctiveAccountList && acctiveAccountList.length === 0) || (accStatus !== 'FULL'))) {
+      && ((acctiveAccountList && acctiveAccountList.length === 0) || (accStatus !== 'FULL'))) {
       this.navMeta.subNavigations = _.filter(this.navMeta.subNavigations, subNavigation => subNavigation.component !== 'InvestmentLimits');
     }
   }
@@ -271,6 +271,23 @@ export class NavStore {
       // this.subNavStatus = 'main';
       this.campaignHeaderStatus = bottomPassed;
     }
+  }
+
+  manageNavigationOrder = (navigationList, offeringStage) => {
+    let posOverview = '';
+    let posApp = '';
+    let posSecond = '';
+    switch (offeringStage) {
+      case 'OTHER':
+        posOverview = navigationList.findIndex(n => n.to === 'overview');
+        posApp = navigationList.findIndex(n => n.to === 'applications');
+        posSecond = navigationList.findIndex(n => n.to === 'offering-creation');
+        navigationList.splice(((posApp && posApp !== '' && posApp >= 0 ? posApp : posOverview) + 1), 0, navigationList.splice(posSecond, 1)[0]);
+        break;
+      default:
+        break;
+    }
+    return [...navigationList];
   }
 }
 
