@@ -5,6 +5,11 @@ const TOMBSTONE_TOGGLE_META = [
   { label: 'Investor Count', value: 'INVESTOR_COUNT' },
 ];
 
+const HEADER_TOGGLE_META = [
+  { label: 'Early Bird', value: 'EARLY_BIRD' },
+  { label: 'Investor Count', value: 'INVESTOR_COUNT' },
+];
+
 export const TOMBSTONE_BASIC = FormHelper.generateMeta([
   ['description', 'Tombstone Description', '', 'optional', 'Describe your project and what you`re raising funds to accomplish.'],
   ['customTag', 'Tombstone Custom Tag', '', 'optional', 'Enter here...'],
@@ -12,7 +17,14 @@ export const TOMBSTONE_BASIC = FormHelper.generateMeta([
   ['image', 'Tombstone Image', '', 'optional', '', { s3Upload: true }],
 ]);
 
-export const TOMBSTONE_META = {
+export const HEADER_BASIC = FormHelper.generateMeta([
+  ['heroVideoURL', 'Hero Video URL', '', 'optional', 'Enter here...'],
+  ['toggleMeta', 'Toggle Meta', [], 'optional', 'Enter here...', { asIn: true, props: { values: HEADER_TOGGLE_META } }],
+  ['heroImage', 'Hero Image', '', 'optional', '', { s3Upload: true }],
+  ['heroBackgroundImage', 'Hero Background Image', '', 'optional', '', { s3Upload: true }],
+]);
+
+export const TOMBSTONE_HEADER_META = {
   meta: [{
     keyLabel: {
       label: 'Key Name',

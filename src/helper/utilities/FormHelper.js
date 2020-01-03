@@ -8,6 +8,7 @@ const S3UPLOAD = {
   fileData: '',
   preSignedUrl: '',
   meta: {},
+  confirmModal: false,
   objRef: 'uploads',
   objType: 's3File',
   objRefOutput2: 'uploads',

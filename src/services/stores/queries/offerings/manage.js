@@ -65,6 +65,41 @@ const common = {
     }
   }
   order`,
+  offeringTemplate2: `
+  tombstone {
+    image {
+      url
+      fileName
+    }
+    description
+    meta {
+      keyLabel
+      keyType
+      keyValue
+      keyFormat
+    }
+    customTag
+    toggleMeta
+  }
+  header {
+    heroImage {
+      url
+      fileName
+    }
+    heroBackgroundImage {
+      url
+      fileName
+    }
+    heroVideoURL
+    meta {
+      keyLabel
+      keyType
+      keyValue
+      keyFormat
+    }
+    toggleMeta
+  }
+  `,
 };
 export const allOfferingsCompact = gql`
   query getOfferings($stage: [OfferingStageEnumType], $issuerId: String){
@@ -123,21 +158,7 @@ export const getOfferingDetails = gql`
       regulation
       template
       rootFolderId
-      tombstone {
-        image {
-          url
-          fileName
-        }
-        description
-        meta {
-          keyLabel
-          keyType
-          keyValue
-          keyFormat
-        }
-        customTag
-        toggleMeta
-      }
+      ${common.offeringTemplate2}
       goldstar {
         isin
         contactId

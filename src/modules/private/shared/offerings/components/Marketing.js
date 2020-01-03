@@ -16,14 +16,14 @@ export default class Marketing extends Component {
       this.props.history.push(`${this.props.match.url}/tombstone`);
     }
     this.props.manageOfferingStore.setFormData('TOMBSTONE_BASIC_FRM', 'tombstone');
-    this.props.manageOfferingStore.setFormData('TOMBSTONE_META_FRM', 'tombstone');
+    this.props.manageOfferingStore.setFormData('HEADER_BASIC_FRM', 'header');
   }
 
   render() {
     const { isIssuer } = this.props.userStore;
     const navItems = [
       { title: 'Tombstone', to: 'tombstone', component: 'Tombstone' },
-      { title: 'Header', to: 'header', component: 'Header' },
+      { title: 'Header', to: 'header', component: 'CampaignHeader' },
       { title: 'Content', to: 'content', component: 'Content' },
       { title: 'Misc', to: 'misc', component: 'Misc' },
     ];

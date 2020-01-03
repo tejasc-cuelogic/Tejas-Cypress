@@ -198,12 +198,12 @@ export default class DataModelStore {
   }
 
   resetImageCropper = (form, field) => {
-    const attributes = ['src', 'error', 'meta', 'base64String', 'responseUrl', 'value', 'preSignedUrl'];
+    const attributes = ['src', 'error', 'meta', 'base64String', 'responseUrl', 'value', 'preSignedUrl', 'confirmModal'];
     attributes.forEach((val) => {
       if ((typeof this[form].fields[field][val] === 'object') && (this[form].fields[field][val] !== null)) {
         this[form].fields[field][val] = {};
       } else {
-        this[form].fields[field][val] = '';
+        this[form].fields[field][val] = val === 'confirmModal' ? false : '';
       }
     });
   }

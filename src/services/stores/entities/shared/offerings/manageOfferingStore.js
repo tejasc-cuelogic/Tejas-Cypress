@@ -2,7 +2,7 @@ import { decorate, observable, action } from 'mobx';
 import { startCase } from 'lodash';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore, * as dataModelStore from '../dataModelStore';
-import { TOMBSTONE_BASIC, TOMBSTONE_META } from '../../../../constants/offering/formMeta/offering';
+import { TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC } from '../../../../constants/offering/formMeta/offering';
 import { fileUpload } from '../../../../actions';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -13,9 +13,11 @@ import { offeringUpsert } from '../../../queries/offerings/manage-v2';
 export class ManageOfferingStore extends DataModelStore {
   TOMBSTONE_BASIC_FRM = Validator.prepareFormObject(TOMBSTONE_BASIC);
 
-  TOMBSTONE_META_FRM = Validator.prepareFormObject(TOMBSTONE_META);
+  TOMBSTONE_HEADER_META_FRM = Validator.prepareFormObject(TOMBSTONE_HEADER_META);
 
-  uploadMedia = (name, form = 'TOMBSTONE_BASIC_FRM') => {
+  HEADER_BASIC_FRM = Validator.prepareFormObject(HEADER_BASIC);
+
+  uploadMedia = (name, form) => {
     const fileObj = {
       obj: this[form].fields[name].base64String,
       name: Helper.sanitize(this[form].fields[name].fileName),
@@ -24,8 +26,8 @@ export class ManageOfferingStore extends DataModelStore {
       .then((res) => {
         console.log(res);
         const url = res.split('/');
-        this.setMediaAttribute(form, 'value', url[url.length - 1], 'image');
-        this.setMediaAttribute(form, 'preSignedUrl', res, 'image');
+        this.setMediaAttribute(form, 'value', url[url.length - 1], name);
+        this.setMediaAttribute(form, 'preSignedUrl', res, name);
       })
       .catch((err) => {
         console.log(err);
@@ -93,8 +95,9 @@ export class ManageOfferingStore extends DataModelStore {
 
   getActionType = (formName, getField = 'actionType') => {
     const metaDataMapping = {
-      TOMBSTONE_META_FRM: { isMultiForm: true },
+      TOMBSTONE_HEADER_META_FRM: { isMultiForm: true },
       TOMBSTONE_BASIC_FRM: { isMultiForm: false },
+      HEADER_BASIC_FRM: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -115,7 +118,8 @@ export class ManageOfferingStore extends DataModelStore {
   decorate(ManageOfferingStore, {
     ...dataModelStore.decorateDefault,
     TOMBSTONE_BASIC_FRM: observable,
-    TOMBSTONE_META_FRM: observable,
+    TOMBSTONE_HEADER_META_FRM: observable,
+    HEADER_BASIC_FRM: observable,
     uploadMedia: action,
     updateOffering: action,
     updateOfferingMutation: action,

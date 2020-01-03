@@ -16,8 +16,13 @@ const metaInfo = {
 @withRouter
 @observer
 class Tombstone extends Component {
+  constructor(props) {
+    super(props);
+    this.props.manageOfferingStore.setFormData('TOMBSTONE_HEADER_META_FRM', 'tombstone');
+  }
+
   uploadMedia = (name) => {
-    this.props.manageOfferingStore.uploadMedia(name);
+    this.props.manageOfferingStore.uploadMedia(name, 'TOMBSTONE_BASIC_FRM');
   }
 
   removeMedia = (form, name) => {
@@ -27,7 +32,7 @@ class Tombstone extends Component {
   handleFormSubmit = () => {
     const params = {
       keyName: 'tombstone',
-      forms: ['TOMBSTONE_BASIC_FRM', 'TOMBSTONE_META_FRM'],
+      forms: ['TOMBSTONE_BASIC_FRM', 'TOMBSTONE_HEADER_META_FRM'],
     };
     this.props.manageOfferingStore.updateOffering(params);
   }

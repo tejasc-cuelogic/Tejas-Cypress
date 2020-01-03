@@ -239,31 +239,27 @@ function formHoc(WrappedComponent, metaInfo) {
       const handleResetImageCropper = () => {
         this.props[metaInfo.store].resetImageCropper(metaInfo.form, name);
       };
-      const showConfirmModal = () => {
-        this.props[metaInfo.store].setFieldValue('showConfirmModal', true);
+      const setConfirmModal = (val) => {
+        this.props[metaInfo.store].setMediaAttribute(metaInfo.form, 'confirmModal', val, name);
       };
       const handleRemoveConfirm = () => {
-        this.props[metaInfo.store].setFieldValue('showConfirmModal', false);
         if (props.removeMedia) {
           props.removeMedia(metaInfo.form, name);
         }
         this.props[metaInfo.store].resetImageCropper(metaInfo.form, name);
-      };
-      const handleRemoveCancel = () => {
-        this.props[metaInfo.store].setFieldValue('showConfirmModal', false);
       };
       return (
         <Form className="cropper-wrap tombstone-img">
           {fieldData.value ? (
             <div className="file-uploader attached">
               {!props.isReadonly
-                && <Button onClick={() => showConfirmModal(name)} circular icon={{ className: 'ns-close-light' }} />
+                && <Button onClick={() => setConfirmModal(true)} circular icon={{ className: 'ns-close-light' }} />
               }
               <Image64 srcUrl={fieldData.value} />
               <Confirm
                 content="Are you sure you want to remove this media file?"
-                open={this.props[metaInfo.store].showConfirmModal}
-                onCancel={handleRemoveCancel}
+                open={fieldData.confirmModal}
+                onCancel={() => setConfirmModal(false)}
                 onConfirm={handleRemoveConfirm}
                 size="mini"
                 className="deletion"

@@ -22,7 +22,7 @@ export default class TombstonePreview extends Component {
 
   render() {
     const { manageOfferingStore, offeringsStore } = this.props;
-    const { TOMBSTONE_BASIC_FRM, TOMBSTONE_META_FRM } = manageOfferingStore;
+    const { TOMBSTONE_BASIC_FRM, TOMBSTONE_HEADER_META_FRM } = manageOfferingStore;
     const { offer } = offeringsStore;
     const isFunded = ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULTED'].includes(get(offer, 'stage'));
     return (
@@ -71,7 +71,7 @@ export default class TombstonePreview extends Component {
                   <div className="campaign-card-table-wrapper">
                     <Table basic="very" compact="very" unstackable className="no-border campaign-card">
                       <Table.Body>
-                        {TOMBSTONE_META_FRM.fields.meta.map(row => (
+                        {TOMBSTONE_HEADER_META_FRM.fields.meta.map(row => (
                           <>
                             {(
                                 <Table.Row verticalAlign="top">

@@ -8,22 +8,22 @@ import Helper from '../../../../../../helper/utility';
 
 const metaInfo = {
     store: 'manageOfferingStore',
-    form: 'TOMBSTONE_META_FRM',
+    form: 'TOMBSTONE_HEADER_META_FRM',
   };
 
 function TombstoneMeta(props) {
   const { smartElement, manageOfferingStore, offeringsStore } = props;
   const { offer } = offeringsStore;
-  const { TOMBSTONE_META_FRM, removeOne, addMore } = manageOfferingStore;
+  const { TOMBSTONE_HEADER_META_FRM, removeOne, addMore } = manageOfferingStore;
   return (
     <>
       <Header as="h4">
         Tombstone Meta
-        {TOMBSTONE_META_FRM.fields.meta.length < 5
-        && <Button size="small" color="blue" className="ml-10 link-button mt-20" onClick={() => addMore('TOMBSTONE_META_FRM', 'meta')}>+ Add another section</Button>
+        {TOMBSTONE_HEADER_META_FRM.fields.meta.length < 5
+        && <Button size="small" color="blue" className="ml-10 link-button mt-20" onClick={() => addMore('TOMBSTONE_HEADER_META_FRM', 'meta')}>+ Add another section</Button>
         }
       </Header>
-      {TOMBSTONE_META_FRM.fields.meta.map((field, i) => (
+      {TOMBSTONE_HEADER_META_FRM.fields.meta.map((field, i) => (
         <Form.Group>
             <Table basic compact className="form-table">
               <Table.Body>
@@ -33,27 +33,27 @@ function TombstoneMeta(props) {
                 <Table.Cell>
                   {smartElement.FormSelect('keyType', { multiForm: [metaInfo.form, 'meta', i] })}
                 </Table.Cell>
-                {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'custom' && (
+                {TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyType.value === 'custom' && (
                   <Table.Cell>
                     {smartElement.Input('keyValue', { label: 'Custom Value', multiForm: [metaInfo.form, 'meta', i] })}
                   </Table.Cell>
                 )}
-                {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' && (
+                {TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyType.value === 'mapped' && (
                   <Table.Cell>
                     {smartElement.FormSelect('keyValue', { label: 'Key List', multiForm: [metaInfo.form, 'meta', i] })}
                   </Table.Cell>
                 )}
-                {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' && (
+                {TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyType.value === 'mapped' && (
                   <Table.Cell>
                     {smartElement.Input('keyFormat', { multiForm: [metaInfo.form, 'meta', i] })}
                   </Table.Cell>
                 )}
-                {TOMBSTONE_META_FRM.fields.meta[i].keyType.value === 'mapped' && (
+                {TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyType.value === 'mapped' && (
                   <Table.Cell>
-                    {<div className="field">{TOMBSTONE_META_FRM.fields.meta[i].keyLabel.value ? TOMBSTONE_META_FRM.fields.meta[i].keyLabel.value : 'N/A'}  :  {get(offer, `keyTerms.${TOMBSTONE_META_FRM.fields.meta[i].keyValue.value}`) ? Helper.formatValue(TOMBSTONE_META_FRM.fields.meta[i].keyFormat.value, get(offer, `keyTerms.${TOMBSTONE_META_FRM.fields.meta[i].keyValue.value}`)) : 'N/A'}</div>}
+                    {<div className="field">{TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyLabel.value ? TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyLabel.value : 'N/A'}  :  {get(offer, `keyTerms.${TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyValue.value}`) ? Helper.formatValue(TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyFormat.value, get(offer, `keyTerms.${TOMBSTONE_HEADER_META_FRM.fields.meta[i].keyValue.value}`)) : 'N/A'}</div>}
                   </Table.Cell>
                 )}
-                {TOMBSTONE_META_FRM.fields.meta.length > 1 && (
+                {TOMBSTONE_HEADER_META_FRM.fields.meta.length > 1 && (
                   <Table.Cell collapsing>
                     <Button icon circular floated="right" className="link-button">
                       <Icon className="ns-trash" onClick={e => removeOne(metaInfo.form, 'meta', i, e)} />
