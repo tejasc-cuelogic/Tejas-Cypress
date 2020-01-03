@@ -124,9 +124,9 @@ query adminGetTransactions($status: [TransactionStatusEnum], $offset: Int, $dire
 `;
 
 
-export const adminTransferRequestAdminApprove = gql`
-  mutation adminTransferRequestAdminApprove($id: Int!){
-    adminTransferRequestAdminApprove(
+export const adminTransferRequestApprove = gql`
+  mutation adminTransferRequestApprove($id: Int!){
+    adminTransferRequestApprove(
     id: $id
     )
   }`;

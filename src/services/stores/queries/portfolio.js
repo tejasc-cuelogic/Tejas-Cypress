@@ -168,9 +168,9 @@ query getInvestmentDetails($userId: String, $accountId: String!, $offeringId: St
 }
 `;
 
-export const investNowCancelAgreementAdmin = gql`
-  mutation investNowCancelAgreementAdmin($agreementId: Int!, $userId: String, $voidReason: String, $voidType: AgreementVoidTypeEnum, $sendNotification: Boolean) {
-    investNowCancelAgreementAdmin(agreementId: $agreementId, userId: $userId, voidReason: $voidReason, voidType: $voidType, sendNotification: $sendNotification)
+export const investNowCancelAgreement = gql`
+  mutation investNowCancelAgreement($agreementId: Int!, $userId: String, $voidReason: String, $voidType: AgreementVoidTypeEnum, $sendNotification: Boolean) {
+    investNowCancelAgreement(agreementId: $agreementId, userId: $userId, voidReason: $voidReason, voidType: $voidType, sendNotification: $sendNotification)
   }`;
 
 export const getMonthlyPaymentsToInvestorByOffering = gql`
