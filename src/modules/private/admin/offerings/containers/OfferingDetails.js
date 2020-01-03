@@ -79,14 +79,14 @@ export default class OfferingDetails extends Component {
     // add business application after Bonus Rewards // offer.stage === 'CREATION' &&
     if (offer.applicationId && !['WP_MIGRATION'].includes(offer.applicationId) && offer.issuerId) {
       const pos = navItems.findIndex(n => n.to === 'overview');
-      const posSecond = navItems.findIndex(n => n.to === 'offering-creation');
       navItems.splice(
         (pos + 1),
         0,
         { to: 'applications', title: 'App' },
-        navItems.splice(posSecond, 1)[0],
       );
     }
+    const offeringState = !['CREATION'].includes(offer.stage) ? 'OTHER' : offer.stage;
+    navItems = navStore.manageNavigationOrder(navItems, offeringState);
     const { responsiveVars } = this.props.uiStore;
     return (
       <>
