@@ -47,7 +47,8 @@ input[type=number]{
         padding: @12px;
         background: @white;
         border-radius: @4px;
-        border: 1px solid @neutral-darkwhite;
+        border: 1px solid @neutral;
+        opacity: 0.4;
     }
     textarea {
         padding: @14px;

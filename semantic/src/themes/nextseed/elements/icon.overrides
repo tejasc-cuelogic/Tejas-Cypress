@@ -2120,6 +2120,12 @@ i.icon[class*="ns-"]{
 .ns-proprietor:before{
     content:@ns-proprietor;
 }
+.ns-quote-left:before {
+    content: @ns-quote-left;
+}
+.ns-quote-right:before {
+    content: @ns-quote-right;
+}
 .ns-real-estate:before{
     content:@ns-real-estate;
 }

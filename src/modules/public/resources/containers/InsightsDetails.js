@@ -32,7 +32,7 @@ export default class InsightsDetails extends Component {
         <Container>
           <section className="insight-post">
             <Breadcrumb className="mb-30">
-              <Breadcrumb.Section as={Link} to="/resources/insights">Insights</Breadcrumb.Section>
+              <Breadcrumb.Section as={Link} to="/insights">Insights</Breadcrumb.Section>
               <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
               <Breadcrumb.Section active>{ArticlesDetails.title}</Breadcrumb.Section>
             </Breadcrumb>
