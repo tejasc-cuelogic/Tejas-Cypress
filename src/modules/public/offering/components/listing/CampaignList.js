@@ -60,7 +60,7 @@ export default class CampaignList extends Component {
             && <Label color="grey">{realEstateBanner}</Label>
           }
           {bannerFirst
-            && <Label color={bannerFirst === 'Processing' ? 'grey' : 'blue'}>{bannerFirst}</Label>
+          && <Label color={bannerFirst === 'Processing' ? 'grey' : bannerFirst === 'NEW' ? 'black' : 'green'}>{bannerFirst}</Label>
           }
           {bannerSecond
             && <Label color={bannerFirst === 'Processing' ? 'grey' : 'green'}>{bannerSecond}</Label>
@@ -215,6 +215,7 @@ export default class CampaignList extends Component {
                   </Grid>
                 ) : <InlineLoader text="No data found." />
             }
+            {this.props.loadMoreButton}
           </Container>
           {this.state.filters && <div className="overlay" />}
         </section>

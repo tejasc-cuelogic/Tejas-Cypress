@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Container, Divider, Header, Button, Responsive } from 'semantic-ui-react';
+import { Container, Divider, Header, Button, Responsive, Grid } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import HowItWorksSummary from '../components/HowItWorksSummary';
-import HowItWorks from '../components/HowItWorks';
+// import HowItWorks from '../components/HowItWorks';
 import FeaturedOn from '../../shared/components/FeaturedOn';
 import CampaignList from '../../offering/components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
-import NewsLetter from '../components/NewsLetter';
+import NSImage from '../../../shared/NSImage';
 
-@inject('campaignStore')
+@inject('campaignStore', 'uiStore', 'userStore')
 @observer
 class Home extends Component {
   constructor(props) {
@@ -27,53 +27,70 @@ class Home extends Component {
     const {
       active, loading,
     } = this.props.campaignStore;
-    const isMobile = document.documentElement.clientWidth < 768;
+    const { responsiveVars } = this.props.uiStore;
+    const { userStore } = this.props;
     return (
       <>
         <Banner />
-        <Responsive maxWidth={767} as={React.Fragment}>
-          <Container>
-            <section>
-              <Header as="h2">Build an investment portfolio you care about.</Header>
-            </section>
-            <Divider fitted />
-          </Container>
-        </Responsive>
         <Responsive as={React.Fragment} fireOnMount onUpdate={this.handleOnUpdate}>
-          <HowItWorksSummary isMobile={isMobile} />
+          <HowItWorksSummary isMobile={responsiveVars.isMobile} />
         </Responsive>
-        <Divider fitted as={Container} />
-        <HowItWorks />
-        <Divider fitted as={Container} />
+        {/* <HowItWorks />
+        <Divider fitted as={Container} /> */}
         <CampaignList
           loading={loading}
           explore
-          campaigns={active.slice(0, 6)}
+          campaigns={active.slice(0, 3)}
           heading={(
             <>
-              <Header as="h2" textAlign="center">Latest Campaigns</Header>
-              <p className="mb-30 center-align">
-                Browse the newest investment opportunities on NextSeed.
-                The next big thing may be inviting you to participate.
+              <Header as="h2" textAlign={responsiveVars.isMobile ? '' : 'center'} className={responsiveVars.isMobile ? 'mt-20' : 'mt-50'}>Diversify your portfolio with high-growth businesses</Header>
+              <p className={`${responsiveVars.isMobile ? 'mb-50' : 'mb-80 center-align'} neutral-text`}>
+              These are just a few of the pre-vetted opportunities available in a growing number of industry categories.
               </p>
             </>
-)}
+          )}
+          loadMoreButton={(
+            <div className={`${responsiveVars.isMobile ? 'mb-20' : 'mb-50'} mt-50 center-align`}>
+              <Button fluid={responsiveVars.isMobile} primary basic content="View All Investment Opportunities" onClick={this.handleExploreBtn} />
+            </div>
+          )}
         />
-        <div className="center-align mb-50">
-          <Button secondary content="Explore Campaigns" onClick={this.handleExploreBtn} />
-        </div>
+        <Divider as={Container} fitted />
         <FeaturedOn />
-        <section className="learn-more">
-          <Container textAlign="center">
-            <Header as="h2">Want to learn more about NextSeed?</Header>
-            <p className="mb-30">
-              Sign up for the mailing list to stay informed about new offerings,
-              updates and events.
-            </p>
-            <SubscribeForNewsletter className="public-form" />
+        <Divider as={Container} fitted />
+        <section>
+          <Container className={responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
+            <Grid columns={2} stackable className={responsiveVars.isMobile ? '' : 'mb-80'}>
+              <Grid.Column>
+                <Header as="h2" className={responsiveVars.isMobile ? 'mb-20' : 'mb-30'}>Looking to raise capital <Responsive minWidth={768} as="br" />for your business?</Header>
+                <p className={`${responsiveVars.isMobile ? 'mb-30' : 'mb-60'} neutral-text`}>
+                  Whether expanding or opening a brand-new concept, <Responsive minWidth={992} as="br" />
+                  we make it easy to raise money from thousands of local investors.
+                </p>
+                {!userStore.isIssuer && !responsiveVars.isMobile
+                  && <Button as={Link} to="/register" className="relaxed" primary>Apply Online</Button>}
+                {responsiveVars.isMobile && <NSImage path="home.jpg" />}
+              </Grid.Column>
+              <Grid.Column>
+                {!responsiveVars.isMobile && <NSImage path="home.jpg" />}
+                {!userStore.isIssuer && responsiveVars.isMobile
+                && <Button as={Link} to="/register" primary fluid className="mb-20 mt-10 relaxed">Apply Online</Button>}
+              </Grid.Column>
+            </Grid>
+            <Divider section />
+            <Grid columns={2} stackable>
+              <Grid.Column>
+                <Header as="h2" className={responsiveVars.isMobile ? 'mt-0 mb-10' : 'mt-80 mb-20'}>Join our newsletter</Header>
+                <p className={`${responsiveVars.isMobile ? 'mb-10' : ''} neutral-text`}>
+                  Sign up to stay informed about new investment<Responsive minWidth={768} as="br" /> opportunities, updates and events.
+                </p>
+              </Grid.Column>
+              <Grid.Column verticalAlign="middle">
+                <SubscribeForNewsletter className={`${responsiveVars.isMobile ? 'mt-0' : 'mt-80'} public-form`} />
+              </Grid.Column>
+            </Grid>
           </Container>
         </section>
-        <Route path="/subscribe/newsletter" component={NewsLetter} />
       </>
     );
   }
