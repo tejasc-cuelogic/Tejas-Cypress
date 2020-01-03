@@ -35,6 +35,8 @@ const postcssNormalize = require('postcss-normalize');
 
 const WebpackDashboard = require('webpack-dashboard/plugin');
 
+const OfflinePlugin = require('offline-plugin');
+
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
@@ -560,6 +562,23 @@ module.exports = (webpackEnv) => {
             title: 'Hot Module Replacement For Development',
           },
       )),
+      /*
+        OfflinePlugin for service worker and handle updates.
+        https://stackoverflow.com/questions/40100922/activate-updated-service-worker-on-refresh
+        https://zach.codes/handling-client-side-app-updates-with-service-workers/
+        https://github.com/NekR/offline-plugin/blob/874beb8b2818357fc3c2831147238f540f329783/docs/runtime.md
+        https://github.com/NekR/offline-plugin/blob/66cde2c7784b5be8c84fecbb93c6f9f96faacdb5/docs/options.md
+      */
+      new OfflinePlugin({
+        excludes: ['**/.*', '**/*.map', '**/*.jpg', '**/*.png', '**/*.gz', '**/google-fonts.*', '**/**/google-fonts.*'],
+        updateStrategy: 'changed',
+        responseStrategy: 'network-first', // default: cache-first
+        autoUpdate: 1000 * 60 * 5, //check every 5 minute
+        ServiceWorker: {
+          events: true,
+          navigateFallbackURL: '/',
+        },
+      }),
       // // will calculate and add sri / integrity keys
       // // paths must match FROM locations in CopyPlugin above as well as replete anytransforms (like SEGMENT WRITE KEY)
       new HtmlWebpackTagsPlugin({
