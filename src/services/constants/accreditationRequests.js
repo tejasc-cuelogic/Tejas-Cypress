@@ -1,3 +1,5 @@
+import { CURR_YEAR } from '../../constants/common';
+
 export const FILTER_META = {
   method: {
     value: [],
@@ -54,7 +56,7 @@ export const CONFIRM_ACCREDITATION = {
     placeHolder: 'Type your comment here...',
   },
   expiration: {
-    value: '12/31/2019',
+    value: `12/31/${CURR_YEAR}`,
     label: 'Expiration Date',
     placeHolder: 'Enter here',
     error: undefined,
