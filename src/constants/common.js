@@ -79,3 +79,5 @@ export const RETRY_CONFIG = {
     retryIf: error => !!error && error.message === 'Failed to fetch',
   },
 };
+
+export const CURR_YEAR = new Date().getFullYear();
