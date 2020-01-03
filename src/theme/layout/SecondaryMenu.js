@@ -4,7 +4,6 @@ import { get } from 'lodash';
 import { Responsive, Menu, Dropdown, Icon, Header, Popup } from 'semantic-ui-react';
 import { MobileDropDownNav } from '../shared';
 
-// const iMap = { to: 'key', title: 'text' };
 const NavItems = ({
   isActive, location, navItems, navClick, match, stepsStatus, addon, navCustomClick,
 }) => navItems.map((item, key) => (
@@ -87,7 +86,6 @@ class SecondaryMenu extends Component {
       const dropOptions = navItems.splice(showMoreMenuLength, navItems.length - showMoreMenuLength);
       options = dropOptions.map(o => ({ key: o.to, text: o.title, value: o.to }));
     }
-    // const mobNavItems = map(navItemList, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
       <>
         <Responsive minWidth={768} as={React.Fragment}>

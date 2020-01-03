@@ -282,11 +282,7 @@ export class NavStore {
         posOverview = navigationList.findIndex(n => n.to === 'overview');
         posApp = navigationList.findIndex(n => n.to === 'applications');
         posSecond = navigationList.findIndex(n => n.to === 'offering-creation');
-        if (posApp && posApp !== '' && posApp >= 0) {
-          navigationList.splice((posApp + 1), 0, navigationList.splice(posSecond, 1)[0]);
-        } else {
-          navigationList.splice((posOverview + 1), 0, navigationList.splice(posSecond, 1)[0]);
-        }
+        navigationList.splice(((posApp && posApp !== '' && posApp >= 0 ? posApp : posOverview) + 1), 0, navigationList.splice(posSecond, 1)[0]);
         break;
       default:
         break;
