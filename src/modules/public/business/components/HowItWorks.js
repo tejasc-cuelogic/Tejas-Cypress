@@ -244,25 +244,25 @@ class HowItWorks extends Component {
                 <Grid.Column computer={9} tablet={16} mobile={16} verticalAlign="middle" className="side-section process-right-section">
                   <List itemsPerRow={2} stackable className={`${isMobile ? 'mb-0' : 'mb-80'} left-align`}>
                     <List.Item className="mb-30">
-                      <p className="mb-14"><b>Save time with our online application.</b></p>
+                      <p className="mb-14"><b>Save time with our online<Responsive maxWidth={767} as="br" /> application.</b></p>
                       <p>
                         Find out quickly if NextSeed is right for your business. Our online application guides you through the process, and we’re here to answer questions along the way.
                     </p>
                     </List.Item>
                     <List.Item className="mb-30">
-                      <p className="mb-14"><b>Easily create and launch your campaign.</b></p>
+                      <p className="mb-14"><b>Easily create and launch your<Responsive maxWidth={767} as="br" /> campaign.</b></p>
                       <p>
                         Our team of deal structuring and content specialists will be there to help at every step. From the content to the paperwork, our team will provide the frameworks and templates to make the process a breeze.
                     </p>
                     </List.Item>
                     <List.Item className="mb-30">
-                      <p className="mb-14"><b>Tell your story and amplify your message.</b></p>
+                      <p className="mb-14"><b>Tell your story and amplify your<Responsive maxWidth={767} as="br" /> message.</b></p>
                       <p>
                         Tap into our marketing, advertising and PR experts. We’ll provide the tools and support you need to raise funds and cultivate a base of thousands of local investors.
                     </p>
                     </List.Item>
                     <List.Item className={isMobile ? 'mb-0' : 'mb-30'}>
-                      <p className="mb-14"><b>Pay and engage investors painlessly.</b></p>
+                      <p className="mb-14"><b>Pay and engage investors<Responsive maxWidth={767} as="br" /> painlessly.</b></p>
                       <p>
                         Our investor management support streamlines your monthly payments, investor updates, reward fulfillment and even annual tax forms.
                     </p>
@@ -301,7 +301,7 @@ class HowItWorks extends Component {
                             <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
-                            <Item.Header as="h5">Marketing</Item.Header>
+                            <Item.Header as="h5" className={responsiveVars.isMobile ? 'mb-0' : ''}>Marketing</Item.Header>
                             <Item.Meta>Expert advertising, marketing and PR resources.</Item.Meta>
                           </Item.Content>
                         </Item>
@@ -310,7 +310,7 @@ class HowItWorks extends Component {
                             <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
-                            <Item.Header as="h5">Escrow</Item.Header>
+                            <Item.Header as="h5" className={responsiveVars.isMobile ? 'mb-0' : ''}>Escrow</Item.Header>
                             <Item.Meta>Handling all banking, escrow and processing fees.</Item.Meta>
                           </Item.Content>
                         </Item>
@@ -319,7 +319,7 @@ class HowItWorks extends Component {
                             <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
-                            <Item.Header as="h5">Campaign Development</Item.Header>
+                            <Item.Header as="h5" className={responsiveVars.isMobile ? 'mb-0' : ''}>Campaign Development</Item.Header>
                             <Item.Meta>Design and content creation services.</Item.Meta>
                           </Item.Content>
                         </Item>
@@ -328,7 +328,7 @@ class HowItWorks extends Component {
                             <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
-                            <Item.Header as="h5">Investment Processing</Item.Header>
+                            <Item.Header as="h5" className={responsiveVars.isMobile ? 'mb-0' : ''}>Investment Processing</Item.Header>
                             <Item.Meta>Collecting commitments and distributing funds.</Item.Meta>
                           </Item.Content>
                         </Item>
@@ -337,7 +337,7 @@ class HowItWorks extends Component {
                             <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
-                            <Item.Header as="h5">Q&A</Item.Header>
+                            <Item.Header as="h5" className={responsiveVars.isMobile ? 'mb-0' : ''}>Q&A</Item.Header>
                             <Item.Meta>Facilitating investor questions during the offering.</Item.Meta>
                           </Item.Content>
                         </Item>
@@ -346,7 +346,7 @@ class HowItWorks extends Component {
                             <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
-                            <Item.Header as="h5">Disclosure Preparation</Item.Header>
+                            <Item.Header as="h5" className={responsiveVars.isMobile ? 'mb-0' : ''}>Disclosure Preparation</Item.Header>
                             <Item.Meta>Legal templates and Regulatory filing assistance.</Item.Meta>
                           </Item.Content>
                         </Item>
@@ -355,7 +355,7 @@ class HowItWorks extends Component {
                             <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
-                            <Item.Header as="h5">Investor Services</Item.Header>
+                            <Item.Header as="h5" className={responsiveVars.isMobile ? 'mb-0' : ''}>Investor Services</Item.Header>
                             <Item.Meta>Servicing payments to investors.</Item.Meta>
                           </Item.Content>
                         </Item>
@@ -364,7 +364,7 @@ class HowItWorks extends Component {
                             <NSImage path="icons/checkmark.svg" className="mt-half" />
                           </div>
                           <Item.Content className={responsiveVars.isMobile ? 'pt-10' : ''}>
-                            <Item.Header as="h5">Tax Form Preparation</Item.Header>
+                            <Item.Header as="h5" className={responsiveVars.isMobile ? 'mb-0' : ''}>Tax Form Preparation</Item.Header>
                             <Item.Meta>Distributing year-end documents to investors.</Item.Meta>
                           </Item.Content>
                         </Item>
@@ -404,25 +404,25 @@ class HowItWorks extends Component {
           </section>
           <Divider fitted />
           <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'} proven-result-section`}>
-            <Grid columns={2} stackable relaxed={!isTablet && 'very'} className={responsiveVars.isMobile ? '' : 'mb-40'}>
-              <Grid.Column>
+            <Grid stackable relaxed={!isTablet && 'very'} className={responsiveVars.isMobile ? '' : 'mb-40'}>
+              <Grid.Column width={7}>
                 <Header as="h2">Data so far</Header>
                 <p className={responsiveVars.isMobile ? 'mb-30 mt-10' : 'mb-80'}>
-                  Every day, entrepreneurs like you are raising capital on
+                  Every day, entrepreneurs like you are raising capital<Responsive minWidth={992} as="br" /> on
                   NextSeed to bring their concepts to life.
-              </p>
+                </p>
                 <Grid columns={2} stackable relaxed={!isTablet && 'very'}>
                   <Grid.Row>
                     <Grid.Column>
                       <Statistic color="green" size="mini" className="basic">
                         <Statistic.Value>$10M+</Statistic.Value>
-                        <Statistic.Label>Capital deployed by NextSeed investors</Statistic.Label>
+                        <Statistic.Label className="neutral-text">Capital deployed by<br />NextSeed investors</Statistic.Label>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column>
                       <Statistic color="green" size="mini" className="basic">
                         <Statistic.Value>40+</Statistic.Value>
-                        <Statistic.Label>Businesses funded</Statistic.Label>
+                        <Statistic.Label className="neutral-text">Businesses<br />funded</Statistic.Label>
                       </Statistic>
                     </Grid.Column>
                   </Grid.Row>
@@ -430,21 +430,21 @@ class HowItWorks extends Component {
                     <Grid.Column>
                       <Statistic color="green" size="mini" className="basic">
                         <Statistic.Value>90%+</Statistic.Value>
-                        <Statistic.Label>
-                          Campaigns successfully raised their minimum
+                        <Statistic.Label className="neutral-text">
+                          Campaigns successfully<br />raised their minimum
                       </Statistic.Label>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column>
                       <Statistic color="green" size="mini" className="basic">
                         <Statistic.Value>15,000+</Statistic.Value>
-                        <Statistic.Label>Average unique page views per offering</Statistic.Label>
+                        <Statistic.Label className="neutral-text">Average unique page<br />views per offering</Statistic.Label>
                       </Statistic>
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
               </Grid.Column>
-              <Grid.Column>
+              <Grid.Column width={8} floated="right">
                 <Card className="bordered" fluid>
                   <Link to="/business/video" className="video-wrapper">
                     <NSImage path="677134021.jpg" />
@@ -452,7 +452,7 @@ class HowItWorks extends Component {
                       className="ns-play play-icon"
                     />
                   </Link>
-                  <Card.Content className={`${responsiveVars.isMobile ? '' : 'center-align'} caption-note`}>
+                  <Card.Content className={`${responsiveVars.isMobile ? '' : 'center-align'} caption-note grey-header`}>
                     The Native Hostel and Bar & Kitchen raised $396,500 from 227 investors.
                   </Card.Content>
                 </Card>

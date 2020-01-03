@@ -301,6 +301,7 @@ h6{
 	font-size:@12px !important;
 	font-style:italic;
 	margin:@7px 0;
+	line-height: 18px;
 	&:first-child{
 		margin-top:0px;
 	}

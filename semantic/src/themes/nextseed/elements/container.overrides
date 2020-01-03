@@ -40,6 +40,9 @@ section{
                 padding: @16px @28px;
                 background-color: fade(@white, 45%);
                 text-align: right;
+                p{
+                    line-height: 20px;
+                }
                 @media only screen and (max-width: @largestMobileScreen) {
                     background-color: fade(@white, 45%);
                     width: 100%;

@@ -47,9 +47,8 @@ class Banner extends Component {
             </div>
           </Responsive>
             <div className="banner-meta">
-              <p>
-                Brian Ching | Pitch 25<br /><b>Raised $549,000 from 392 investors</b>
-              </p>
+              <p className="mb-0">Brian Ching | Pitch 25</p>
+              <p><b>Raised $549,000 from 392 investors</b></p>
             </div>
         </Container>
       </section>

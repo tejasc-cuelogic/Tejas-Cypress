@@ -355,6 +355,7 @@
     h2.header:not(.ui){
         font-size:@40px;
         margin:0;
+        font-weight: @fontMedium;
         @media only screen and (max-width :@largestMobileScreen){
             font-size:@20px;
             line-height:24px;
