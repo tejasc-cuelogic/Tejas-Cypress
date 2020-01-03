@@ -150,11 +150,10 @@ class App extends Component {
       this.props.navStore.setNavStatus(calculations, 'main');
     }
 
-    if ((sessionStorage.getItem('isBoxFirewalled') !== 'true' && !this.props.authStore.isBoxApiChecked)) {
-      sessionStorage.setItem('isBoxFirewalled', false);
-      this.isBoxFirewalled().catch(() => {
-        sessionStorage.setItem('isBoxFirewalled', true);
-      });
+    if ((sessionStorage.getItem('isBoxFirewalled') !== 'true') && !this.props.authStore.isBoxApiChecked) {
+      this.isBoxFirewalled()
+      .then(() => sessionStorage.setItem('isBoxFirewalled', false))
+      .catch(() => sessionStorage.setItem('isBoxFirewalled', true));
       this.props.authStore.setFieldvalue('isBoxApiChecked', true);
     }
   }
@@ -180,13 +179,12 @@ class App extends Component {
   isBoxFirewalled = () => new Promise((resolve, reject) => {
     const testURL = NEXTSEED_BOX_URL;
     const myInit = {
-      method: 'HEAD',
       mode: 'no-cors',
     };
     const myRequest = new Request(testURL, myInit);
-    fetch(myRequest).catch(() => {
-      reject();
-    });
+    fetch(myRequest)
+    .then(() => resolve())
+    .catch(() => reject());
   });
 
   onIdle = () => {
