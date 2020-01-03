@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Responsive, Sidebar, Menu, Icon, Dimmer, Loader } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
-import NotificationPanel from './NotificationPanel';
+// import NotificationPanel from './NotificationPanel';
 import { SidebarNav } from './SidebarNav';
 import { UserAvatar, Image64 } from '../shared';
 import FireworksAnimation from '../../modules/public/offering/components/investNow/agreement/components/FireworkAnimation';
@@ -112,6 +112,6 @@ const MySidebar = observer(props => (
       {props.mobile && <Icon onClick={props.toggle} className="ns-hamburger" />}
       {props.children}
     </Sidebar.Pusher>
-    <NotificationPanel status={props.layoutState.notificationPanel} />
+    {/* <NotificationPanel status={props.layoutState.notificationPanel} /> */}
   </Sidebar.Pushable>
 ));
