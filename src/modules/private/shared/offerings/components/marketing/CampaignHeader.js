@@ -5,7 +5,7 @@ import { Form, Header, Divider, Grid } from 'semantic-ui-react';
 import OfferingButtonGroup from '../OfferingButtonGroup';
 import formHOC from '../../../../../../theme/form/formHOC';
 import TombstoneMeta from './TombstoneMeta';
-// import TombstonePreview from './TombstonePreview';
+import CampaignHeaderPreview from './CampaignHeaderPreview';
 
 const metaInfo = {
   store: 'manageOfferingStore',
@@ -44,7 +44,9 @@ class CampaignHeader extends Component {
     return (
       <div className="inner-content-spacer">
         <Form>
-          {/* <TombstonePreview /> */}
+          <CampaignHeaderPreview />
+          <Divider hidden />
+          <Divider section />
           <Grid columns="2">
             <Grid.Column>
               <Header as="h4">{HEADER_BASIC_FRM.fields.heroImage.label}</Header>
