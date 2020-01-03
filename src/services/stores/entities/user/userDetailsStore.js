@@ -291,12 +291,12 @@ export class UserDetailsStore {
           variables: !isInvestor ? { userId: this.selectedUserId, reason } : {},
         });
       uiStore.removeOneFromProgressArray('deleteProfile');
-      if (get(res, 'data.adminDeleteInvestorOrIssuerUser.status') || get(res, 'data.adminUserHardDelete.status')) {
+      if (get(res, 'data.DeleteInvestorOrIssuerUserOutput.status') || get(res, 'data.adminUserHardDelete.status')) {
         userStore.setFieldValue('confirmDelete', true);
         Helper.toast('User Profile Deleted Successfully!', 'success');
         resolve();
       } else {
-        reject(!isHardDelete ? get(res, 'data.adminDeleteInvestorOrIssuerUser.message') : get(res, 'data.adminUserHardDelete.message'));
+        reject(!isHardDelete ? get(res, 'data.DeleteInvestorOrIssuerUserOutput.message') : get(res, 'data.adminUserHardDelete.message'));
       }
     } catch (error) {
       uiStore.removeOneFromProgressArray('deleteProfile');
