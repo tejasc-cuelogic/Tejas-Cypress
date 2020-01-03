@@ -1,7 +1,8 @@
 import Amplify from '@aws-amplify/core';
 import AmplifyAuth from '@aws-amplify/auth';
 import { isEmpty, forIn } from 'lodash';
-import { registerApiCall } from '../integration/common.utility';
+import { registerApiCall, prepRequest } from '../integration/common.utility';
+import { cleanUpTestUsers } from '../fixtures/userQueries';
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -104,11 +105,6 @@ Cypress.Commands.add('applicationUnlock', () => {
   cy.get('input[name="password"]').type(Cypress.env('appPassword'));
     cy.get('div.content').get('button.button').contains('Log in').click({ force: true });
 });
-// Cypress.Commands.add('itterativeWait', (itteration, alias) => {
-//   for (let i = 0; i < itteration; i++) {
-//     cy.wait(`@${alias}`)
-//   }
-// });
 
 Cypress.Commands.add('formFill', (dataSet, parentSelector) => {
   if (!isEmpty(dataSet)) {
@@ -205,10 +201,27 @@ const deleteUserCtaAction = (ctaName) => {
   cy.get('div.signup-content.content > form').get('button.button').contains('Submit').click();
 }
 
-Cypress.Commands.add('deleteUser', (userType='Investor') => {
+
+Cypress.Commands.add('cleanUpUser', () => {
   const investorEmail = window.localStorage.getItem('investorEmail');
   cy.Logout();
+  console.log('investorEmail====', investorEmail); 
+  cy.login(investorEmail, 'nextseed01test').then((user) => {
+    if (user.signInUserSession) {
+      if (user.signInUserSession.idToken && user.signInUserSession.idToken.jwtToken) {
+        const authToken = user.signInUserSession.idToken.jwtToken;
+        cy.request(
+          prepRequest(cleanUpTestUsers(user.attributes.sub), authToken)
+        )
+      }
+    }
+  })
+});
+
+Cypress.Commands.add('deleteUser', (userType='Investor') => {
+  const investorEmail = window.localStorage.getItem('investorEmail');
   console.log('investorEmail====', investorEmail);
+  cy.Logout();
   cy.visit('/');
   // cy.applicationUnlock();
   cy.get('.header-wrap').get('.menu-button').contains('Log In').click({ force: true });

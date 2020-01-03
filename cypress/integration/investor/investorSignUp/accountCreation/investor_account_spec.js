@@ -6,7 +6,7 @@ import {
         iraAccountCreation,
         entityAccountCreation
        } from './utility/investorAccount.utlity';
-import { registerApiCall, clickonDashboard } from '../../../common.utility';
+import { registerApiCall } from '../../../common.utility';
 
 describe('Account Creation', () => {
   before(() => {
@@ -22,9 +22,10 @@ describe('Account Creation', () => {
     cy.saveLocalStorage();
   });
 
-  // after(() => {
-  //   cy.deleteUser();
-  // });
+  after(() => {
+    cy.restoreLocalStorage();
+    cy.cleanUpUser();
+  });
 
   it('should successfully link bank with plaid process', () => {
     individualPlaidProcess('.progtrckr-doing', '1');
@@ -58,9 +59,6 @@ describe('Account Creation', () => {
     cy.get('input[name="accType"]').check('1', { force: true });
     cy.get('button.next').click();
     iraAccountCreation();
-    // cy.get('div.content').get('button.button').contains('Explore Campaigns').click({ force: true });
-    // clickonDashboard();
-    // cy.find('a.button').contains('Add New Account');
   });
 
   it.skip('should create Entity account successfully', () => {
