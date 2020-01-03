@@ -26,7 +26,7 @@ export class Admin {
     if (user.email) {
       user.email = user.email.toLowerCase();
     }
-    return authStore.createAdminUser(user.email).then(() => {
+    return authStore.adminValidateCreateAdminUser(user.email).then(() => {
       const attributes = [];
       const mapKey = { role: 'custom:roles', capabilities: 'custom:user_capabilities' };
       Object.keys(user).map((item) => {

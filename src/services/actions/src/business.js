@@ -3,7 +3,7 @@ import moment from 'moment';
 import shortid from 'shortid';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../api/gqlApi';
-import { getXmlDetails,
+import { adminBusinessFilingSubmission,
   filerInformationMutation,
   issuerInformationMutation,
   offeringInformationMutation,
@@ -11,7 +11,7 @@ import { getXmlDetails,
   signatureMutation,
   documentListMutation,
   xmlSubmissionMutation,
-  cloneXmlSubmissionMutation } from '../../stores/queries/business';
+  adminCloneXmlSubmission } from '../../stores/queries/business';
 import { businessStore, uiStore } from '../../stores';
 import {
   EDGAR_URL,
@@ -157,7 +157,7 @@ export class Business {
     } = businessStore;
 
     const payload = {
-      mutation: cloneXmlSubmissionMutation,
+      mutation: adminCloneXmlSubmission,
       variables: {
         filingId,
         xmlSubmissionId,
@@ -325,11 +325,11 @@ export class Business {
     uiStore.setActionLoader('Fetching Edgar data');
     uiStore.addMoreInProgressArray('fetchEdgarDetails');
     const payload = {
-      query: `query fetchFilingById { businessFiling(businessId: "${businessId}", `
+      query: `query adminBusinessFiling { adminBusinessFiling(businessId: "${businessId}", `
         + `filingId: "${filingId}") { filingPayload } }`,
     };
     ApiService.post(GRAPHQL, payload)
-      .then(data => businessStore.setTemplateVariable(data.body.data.businessFiling.filingPayload))
+      .then(data => businessStore.setTemplateVariable(data.body.data.adminBusinessFiling.filingPayload))
       .catch(err => console.log(err))
       .finally(() => {
         uiStore.removeOneFromProgressArray('fetchEdgarDetails');
@@ -360,7 +360,7 @@ export class Business {
     uiStore.setLoaderMessage('Fetching details');
     const accountTypeToPass = accountType && accountType === 'SECURITIES' ? accountType : 'SERVICES';
     const payload = {
-      query: 'query fetchFilingById($offeringId: ID!, $filingId: ID!){businessFiling(offeringId: '
+      query: 'query adminBusinessFiling($offeringId: ID!, $filingId: ID!){adminBusinessFiling(offeringId: '
         + '$offeringId, filingId: $filingId) { folderId } }',
       variables: {
         offeringId,
@@ -370,8 +370,8 @@ export class Business {
     return new Promise((resolve, reject) => {
       ApiService.post(GRAPHQL, payload)
         .then((data) => {
-          this.fetchAttachedFiles(data.body.data.businessFiling.folderId, accountTypeToPass)
-            .then(() => resolve(data.body.data.businessFiling.folderId));
+          this.fetchAttachedFiles(data.body.data.adminBusinessFiling.folderId, accountTypeToPass)
+            .then(() => resolve(data.body.data.adminBusinessFiling.folderId));
         })
         .catch(err => reject(err))
         .finally(() => {
@@ -389,16 +389,16 @@ export class Business {
     uiStore.setLoaderMessage('Fetching XML Data');
     graphql({
       client,
-      query: getXmlDetails,
+      query: adminBusinessFilingSubmission,
       fetchPolicy: 'network-only',
       variables: {
         filingId,
         xmlSubmissionId: xmlId,
       },
       onFetch: (data) => {
-        if (data && data.businessFilingSubmission) {
+        if (data && data.adminBusinessFilingSubmission) {
           uiStore.removeOneFromProgressArray('fetchXmlDetails');
-          this.setXmlPayload(data.businessFilingSubmission);
+          this.setXmlPayload(data.adminBusinessFilingSubmission);
         }
       },
       onError: (err) => {
@@ -470,8 +470,8 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Deleting XML Submission');
     const payload = {
-      query: `mutation deleteXmlSubmissionById($filingId: String!, $xmlSubmissionId: String!) {
-        deleteBusinessFilingSubmission(filingId: $filingId, xmlSubmissionId: $xmlSubmissionId){
+      query: `mutation adminDeleteBusinessFilingSubmission($filingId: String!, $xmlSubmissionId: String!) {
+        adminDeleteBusinessFilingSubmission(filingId: $filingId, xmlSubmissionId: $xmlSubmissionId){
           xmlSubmissionId
         }
       }`,
@@ -497,8 +497,8 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Deleting Business Filing');
     const payload = {
-      query: `mutation deleteBusinessFiling($offeringId: String!, $filingId: String!) {
-         deleteBusinessFiling(offeringId: $offeringId, filingId: $filingId ){
+      query: `mutation adminDeleteBusinessFiling($offeringId: String!, $filingId: String!) {
+         adminDeleteBusinessFiling(offeringId: $offeringId, filingId: $filingId ){
            offeringId
            created
           }
@@ -527,41 +527,13 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage(`${status} XML Submission`);
     const payload = {
-      query: `mutation lockUnlockBusinessFilingSubmission($offeringId: String!, $filingId: String!, $xmlSubmissionId: String!, $lockedStatus: Boolean!){
-        lockBusinessFilingSubmission(offeringId: $offeringId,filingId: $filingId, xmlSubmissionId: $xmlSubmissionId, lockedStatus: $lockedStatus){
+      query: `mutation adminLockBusinessFilingSubmission($offeringId: String!, $filingId: String!, $xmlSubmissionId: String!, $lockedStatus: Boolean!){
+        adminLockBusinessFilingSubmission(offeringId: $offeringId,filingId: $filingId, xmlSubmissionId: $xmlSubmissionId, lockedStatus: $lockedStatus){
           offeringId xmlSubmissionId lockedStatus
         }
       }`,
       variables: {
         offeringId, filingId, xmlSubmissionId, lockedStatus,
-      },
-    };
-    return new Promise((res, rej) => {
-      ApiService.post(GRAPHQL, payload)
-        .then(data => res(data))
-        .catch(err => rej(err))
-        .finally(() => {
-          uiStore.setProgress(false);
-          uiStore.clearLoaderMessage();
-        });
-    });
-  }
-
-  /**
-   * @desc To lock/unlock filing
-   */
-  lockUnlockFiling = (businessId, filingId, lockedStatus) => {
-    const status = lockedStatus === false ? 'Unlocking' : 'Locking';
-    uiStore.setProgress();
-    uiStore.setLoaderMessage(`${status} filing`);
-    const payload = {
-      query: `mutation lockUnlockBusinessFiling($businessId: String!, $filingId: String!, $lockedStatus: Boolean!){
-        lockBusinessFiling(businessId: $businessId, filingId: $filingId, lockedStatus: $lockedStatus){
-          filingId
-        }
-      }`,
-      variables: {
-        businessId, filingId, lockedStatus,
       },
     };
     return new Promise((res, rej) => {

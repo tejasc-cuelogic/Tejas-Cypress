@@ -29,7 +29,7 @@ export default class EsAudit extends Component {
   }
 
   handleSync = (params) => {
-    this.props.elasticSearchStore.syncEsDocument(params);
+    this.props.elasticSearchStore.adminSyncEsDocument(params);
   }
 
   renderTitle = title => capitalize(title.replace('_', ' '));

@@ -2,7 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import { get, sortBy, includes } from 'lodash';
 import graphql from 'mobx-apollo';
 import * as elasticSearchQueries from '../../queries/elasticSearch';
-import { adminGenerateInvestorFolderStructure, storageDetailsForInvestor, syncEsDocument } from '../../queries/data';
+import { adminGenerateInvestorFolderStructure, storageDetailsForInvestor, adminSyncEsDocument } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
@@ -124,13 +124,13 @@ export class ElasticSearchStore {
   });
 
   @action
-  syncEsDocument = (params) => {
+  adminSyncEsDocument = (params) => {
     this.setFieldValue('inProgress', params.targetIndex);
     const syncESVarible = params.indexAliasName === 'ACCREDITATIONS' ? { documentId: params.documentId, targetIndex: params.targetIndex, userId: params.userId, accountType: params.accountType } : includes(['CROWDPAY', 'LINKEDBANK'], params.indexAliasName) ? { documentId: params.documentId, targetIndex: params.targetIndex, userId: params.userId } : { documentId: params.documentId, targetIndex: params.targetIndex };
     const getESVariable = { indexAliasName: params.indexAliasName, random: params.documentId };
     client
       .mutate({
-        mutation: syncEsDocument,
+        mutation: adminSyncEsDocument,
         variables: syncESVarible,
         refetchQueries: [{
           query: elasticSearchQueries.getESAudit,

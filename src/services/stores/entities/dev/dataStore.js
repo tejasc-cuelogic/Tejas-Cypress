@@ -2,7 +2,7 @@
 import { observable, action, toJS, computed } from 'mobx';
 import { get } from 'lodash';
 import graphql from 'mobx-apollo';
-import { updateOfferingRepaymentsMeta, getListOfPartialOrCIPProcessingAccount, adminProcessFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, adminEncryptOrDecryptValue, processTransferRequest } from '../../queries/data';
+import { updateOfferingRepaymentsMeta, getListOfPartialOrCIPProcessingAccount, adminProcessFullInvestorAccount, adminCrowdPayProcessCip, adminProcessInvestorAccount, adminEncryptOrDecryptValue, adminProcessTransferRequest } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
@@ -161,7 +161,7 @@ export class DataStore {
     this.setFieldValue('inProgress', true, 'processTransferRequest');
     client
       .mutate({
-        mutation: processTransferRequest,
+        mutation: adminProcessTransferRequest,
         variables: { transferId },
       })
       .then(() => {
@@ -181,14 +181,14 @@ export class DataStore {
     return new Promise((res, rej) => {
       client
         .mutate({
-          mutation: adminProcessCip,
+          mutation: adminCrowdPayProcessCip,
           variables: {
             userId: processData.userId,
             accountId: processData.accountId,
           },
         })
         .then(action((result) => {
-          if (result.data.adminProcessCip) {
+          if (result.data.adminCrowdPayProcessCip) {
             this.adminProcessInvestorAccount(processData).then(() => {
               this.setFieldValue('inProgress', false, 'adminProcessCip');
               Helper.toast('Your request is processed.', 'success');

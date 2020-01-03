@@ -20,7 +20,7 @@ import {
   userListingStore,
   userStore,
 } from '../../index';
-import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminUserHardDelete, adminUpdateUserStatus, adminSkipAddressOrPhoneValidationCheck, frozenEmailToAdmin, adminFreezeAccount, getEmailList } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminUserHardDelete, adminUpdateUserStatus, adminSkipAddressOrPhoneValidationCheck, frozenAccountActiivtyDetected, adminFreezeAccount, getEmailList } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE, US_STATES } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -806,11 +806,11 @@ export class UserDetailsStore {
     };
     client
       .mutate({
-        mutation: frozenEmailToAdmin,
+        mutation: frozenAccountActiivtyDetected,
         variables: payLoad,
       })
       .then((res) => {
-        if (res.data.notifyAdminFrozenAccountActivity) {
+        if (res.data.frozenAccountActiivtyDetected) {
           // const offeringId = campaignStore.campaign && campaignStore.campaign.id;
           const offeringDetailObj = { offeringId, isEmailSent: true };
           cookie.save('ADMIN_FROZEN_EMAIL', offeringDetailObj, { maxAge: 3600 });

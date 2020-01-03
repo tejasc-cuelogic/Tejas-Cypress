@@ -10,7 +10,7 @@ import {
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup } from '../../queries/profile';
 import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
-import { createAdminUser } from '../../queries/users';
+import { adminValidateCreateAdminUser } from '../../queries/users';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { uiStore, navStore, identityStore, userDetailsStore, userStore, businessAppStore } from '../../index';
@@ -559,13 +559,13 @@ export class AuthStore {
   });
 
   @action
-  createAdminUser = email => new Promise((res, rej) => {
+  adminValidateCreateAdminUser = email => new Promise((res, rej) => {
     client.mutate({
-      mutation: createAdminUser,
+      mutation: adminValidateCreateAdminUser,
       variables: { email },
     })
       .then((data) => {
-        res(data.createAdminUser);
+        res(data.adminValidateCreateAdminUser);
       })
       .catch((err) => {
         rej(err);

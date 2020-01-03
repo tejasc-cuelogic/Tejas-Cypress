@@ -37,9 +37,9 @@ mutation adminProcessFullInvestorAccount($userId: String!, $accountId: String!, 
     skipFullAccountValidation: $skipFullAccountValidation,
   )
 }`;
-export const adminProcessCip = gql`
-mutation adminProcessCip($userId: String!, $accountId: String!) {
-  adminProcessCip(
+export const adminCrowdPayProcessCip = gql`
+mutation adminCrowdPayProcessCip($userId: String!, $accountId: String!) {
+  adminCrowdPayProcessCip(
     userId: $userId,
     accountId: $accountId,
   )
@@ -51,9 +51,9 @@ mutation adminProcessInvestorAccount($userId: String!, $accountId: String!) {
     accountId: $accountId,
   )
 }`;
-export const processTransferRequest = gql`
-mutation processTransferRequest($transferId: Int!) {
-  processTransferRequest(
+export const adminProcessTransferRequest = gql`
+mutation adminProcessTransferRequest($transferId: Int!) {
+  adminProcessTransferRequest(
     transferId: $transferId,
   )
 }`;
@@ -90,9 +90,9 @@ query getListOfPartialOrCIPProcessingAccount {
   }
 }`;
 
-export const syncEsDocument = gql`
-mutation syncEsDocument($documentId: String!, $targetIndex: String!, $userId: String!, $accountType: [InvestorAccountTypeEnum]){
-  syncEsDocument(documentId: $documentId, targetIndex: $targetIndex, userId: $userId, accountType: $accountType)
+export const adminSyncEsDocument = gql`
+mutation adminSyncEsDocument($documentId: String!, $targetIndex: String!, $userId: String!, $accountType: [InvestorAccountTypeEnum]){
+  adminSyncEsDocument(documentId: $documentId, targetIndex: $targetIndex, userId: $userId, accountType: $accountType)
 }`;
 
 export const getPluginList = gql`

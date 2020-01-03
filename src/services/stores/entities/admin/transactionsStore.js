@@ -2,7 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { isArray, get, forOwn, filter, find, findIndex, has } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { transferRequestAdminSync, adminGetTransactions, transferRequestAdminApprove, transferRequestAdminVerified, declineTransferRequest } from '../../queries/transaction';
+import { adminTransferRequestSync, adminGetTransactions, adminTransferRequestAdminApprove, adminTransferRequestVerified, adminDeclineTransferRequest } from '../../queries/transaction';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { ClientDb, FormValidator as Validator } from '../../../../helper';
@@ -13,11 +13,11 @@ export class TransactionsStore {
   nonTerminatedStatuses = ['PRE_PENDING', 'PENDING', 'PROCESSING']
 
   ctHandler = {
-    Approved: transferRequestAdminApprove,
-    Declined: declineTransferRequest,
-    Verified: transferRequestAdminVerified,
-    Failed: declineTransferRequest,
-    Sync: transferRequestAdminSync,
+    Approved: adminTransferRequestAdminApprove,
+    Declined: adminDeclineTransferRequest,
+    Verified: adminTransferRequestVerified,
+    Failed: adminDeclineTransferRequest,
+    Sync: adminTransferRequestSync,
   }
 
   @observable filters = false;
@@ -166,7 +166,7 @@ export class TransactionsStore {
       })
       .then((data) => {
         if (actionName === 'Approved') {
-          this.removeLoadingRequestId(requestID, false, data && get(data, 'data.transferRequestAdminApprove'));
+          this.removeLoadingRequestId(requestID, false, data && get(data, 'data.adminTransferRequestAdminApprove'));
         } else {
           this.removeLoadingRequestId(requestID);
         }

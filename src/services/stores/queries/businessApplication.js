@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
-export const getBusinessApplicationAdmin = gql`
-query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String, $lek: String){
-  businessApplicationsAdmin(
+export const adminBusinessApplications = gql`
+query adminBusinessApplications($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String, $lek: String){
+  adminBusinessApplications(
     applicationType: $applicationType
     orderBy: $orderBy
     limit: $limit
@@ -17,9 +17,9 @@ query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $order
 }
 `;
 
-export const getBusinessApplicationSummary = gql`
-query getBusinessApplicationSummary{
-  businessApplicationsSummary {
+export const adminBusinessApplicationsSummary = gql`
+query adminBusinessApplicationsSummary{
+  adminBusinessApplicationsSummary {
     prequalFaild
     inProgress
     completed
@@ -406,7 +406,7 @@ mutation updateBusinessApplicationInformation(
 `;
 
 export const adminUpdateApplicationStatusAndReview = gql`
-mutation updateApplicationData(
+mutation adminUpdateApplicationStatusAndReview(
   $applicationId: ID!
   $userId: String
   $actionType: AdminApplicationActionTypeEnum!
@@ -531,8 +531,8 @@ mutation applicationDeclinedByIssuer($applicationId: String!, $comments: [Busine
 }
 `;
 
-export const exportAllToEmail = gql`
-mutation exportAllToEmail($applicationType: ApplicationTypeEnum!) {
-  exportAllToEmail(applicationType: $applicationType)
+export const adminExportAllToEmail = gql`
+mutation adminExportAllToEmail($applicationType: ApplicationTypeEnum!) {
+  adminExportAllToEmail(applicationType: $applicationType)
 }
 `;

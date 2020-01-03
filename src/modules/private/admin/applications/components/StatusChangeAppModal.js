@@ -18,8 +18,8 @@ export default class StatusChangeAppModal extends Component {
     if (this.props.match.params.action === 'PROMOTE' && this.props.match.params.id !== 'in-progress') {
       this.props.businessAppReviewStore.resetPasswordFrm();
       this.props.businessAppReviewStore.resetEmailFrm();
-      const { businessApplicationsDetailsAdmin, fetchAdminApplicationById } = this.props.businessAppStore;
-      if (!businessApplicationsDetailsAdmin) {
+      const { adminBusinessApplicationsDetails, fetchAdminApplicationById } = this.props.businessAppStore;
+      if (!adminBusinessApplicationsDetails) {
         fetchAdminApplicationById(this.props.match.params.appId, this.props.match.params.id)
           .then(() => {
             this.props.businessAppReviewStore.resetEmailFrm();
@@ -56,7 +56,7 @@ export default class StatusChangeAppModal extends Component {
     this.props.businessAppStore
       .fetchAdminApplicationById(params.appId, appType, params.userId, true)
       .then((data) => {
-        const prequalData = (data && data.businessApplicationsDetailsAdmin) || null;
+        const prequalData = (data && data.adminBusinessApplicationsDetails) || null;
         const { PROMOTE_APPLICATION_STATUS_PASSWORD_FRM, PROMOTE_APPLICATION_STATUS_EMAIL_FRM } = this.props.businessAppReviewStore;
         const { applicationRoles } = this.props.businessAppStore;
         if (prequalData) {

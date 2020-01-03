@@ -1312,9 +1312,9 @@ mutation deleteBac($id: String! $offeringId: String!){
   }
 }`;
 
-export const getOfferingFilingList = gql`
-  query getOfferingFilingList($offeringId: ID! $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) {
-    businessFilings(offeringId: $offeringId ) {
+export const adminBusinessFilings = gql`
+  query adminBusinessFilings($offeringId: ID! $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) {
+    adminBusinessFilings(offeringId: $offeringId ) {
       offeringId
       filingId
       filingFolderName
@@ -1333,9 +1333,9 @@ export const getOfferingFilingList = gql`
   }
 `;
 
-export const generateBusinessFiling = gql`
-  mutation createBusinessFiling ($offeringId: String!) {
-    createBusinessFiling(offeringId: $offeringId) {
+export const adminCreateBusinessFiling = gql`
+  mutation adminCreateBusinessFiling ($offeringId: String!) {
+    adminCreateBusinessFiling(offeringId: $offeringId) {
       filingId
       offeringId
     }
@@ -1393,9 +1393,9 @@ query getTotalAmount{
   }
   `;
 
-export const offerClose = gql`
-  mutation offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType, $service: OfferingCloseServiceEnum, $concurrency: Int) {
-    offeringClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload, service: $service, concurrency: $concurrency)
+export const adminOfferingClose = gql`
+  mutation adminOfferingClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType, $service: OfferingCloseServiceEnum, $concurrency: Int) {
+    adminOfferingClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload, service: $service, concurrency: $concurrency)
   }
 `;
 

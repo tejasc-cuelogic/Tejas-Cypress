@@ -124,32 +124,32 @@ query adminGetTransactions($status: [TransactionStatusEnum], $offset: Int, $dire
 `;
 
 
-export const transferRequestAdminApprove = gql`
-  mutation transferRequestAdminApprove($id: Int!){
-    transferRequestAdminApprove(
+export const adminTransferRequestAdminApprove = gql`
+  mutation adminTransferRequestAdminApprove($id: Int!){
+    adminTransferRequestAdminApprove(
     id: $id
     )
   }`;
 
-export const transferRequestAdminVerified = gql`
-  mutation transferRequestAdminVerified($id: Int!){
-    transferRequestAdminVerified(
+export const adminTransferRequestVerified = gql`
+  mutation adminTransferRequestVerified($id: Int!){
+    adminTransferRequestVerified(
     id: $id
     )
   }`;
 
-export const declineTransferRequest = gql`
-  mutation declineTransferRequest($id: Int!, $reason: String, $cancelInvestment: Boolean){
-    declineTransferRequest(
+export const adminDeclineTransferRequest = gql`
+  mutation adminDeclineTransferRequest($id: Int!, $reason: String, $cancelInvestment: Boolean){
+    adminDeclineTransferRequest(
     id: $id
     reason: $reason
     cancelInvestment: $cancelInvestment
     )
   }`;
 
-export const transferRequestAdminSync = gql`
-mutation transferRequestAdminSync($id: Int!){
-  transferRequestAdminSync(
+export const adminTransferRequestSync = gql`
+mutation adminTransferRequestSync($id: Int!){
+  adminTransferRequestSync(
   id: $id
   )
 }`;

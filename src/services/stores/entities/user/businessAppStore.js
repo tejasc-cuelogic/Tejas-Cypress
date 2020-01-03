@@ -250,17 +250,17 @@ export class BusinessAppStore {
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data && !this.businessApplicationsDataById.loading) {
-          this.setFieldvalue('currentApplicationType', data.businessApplicationsDetailsAdmin.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
+          this.setFieldvalue('currentApplicationType', data.adminBusinessApplicationsDetails.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
           const {
             prequalDetails, signupCode, businessGeneralInfo, utmSource,
-          } = data.businessApplicationsDetailsAdmin;
+          } = data.adminBusinessApplicationsDetails;
           businessAppAdminStore
             .setBusinessDetails(
               ((businessGeneralInfo && businessGeneralInfo.businessName)
                 || (prequalDetails.businessGeneralInfo.businessName)),
               signupCode, utmSource,
             );
-          this.setBusinessApplicationData(false, data.businessApplicationsDetailsAdmin);
+          this.setBusinessApplicationData(false, data.adminBusinessApplicationsDetails);
           uiStore.setAppLoader(false);
           resolve(data);
         }
@@ -595,8 +595,8 @@ export class BusinessAppStore {
 
   @computed get businessApplicationDetailsAdmin() {
     return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
-      && this.businessApplicationsDataById.data.businessApplicationsDetailsAdmin
-      && toJS(this.businessApplicationsDataById.data.businessApplicationsDetailsAdmin)
+      && this.businessApplicationsDataById.data.adminBusinessApplicationsDetails
+      && toJS(this.businessApplicationsDataById.data.adminBusinessApplicationsDetails)
     ) || null;
   }
 

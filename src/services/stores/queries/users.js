@@ -595,9 +595,9 @@ export const adminUpdateUserStatus = gql`
   }
 `;
 
-export const adminAddUser = gql`
-  mutation createUser($userDetails: UserInputObjectType! ){
-    createUser(userDetails: $userDetails) {
+export const adminCreateUser = gql`
+  mutation adminCreateUser($userDetails: UserInputObjectType! ){
+    adminCreateUser(userDetails: $userDetails) {
         id
       }
   }
@@ -634,9 +634,9 @@ mutation adminUserHardDelete($userId: String!, $reason: String) {
   }
  }`;
 
-export const frozenEmailToAdmin = gql`
-mutation notifyAdminFrozenAccountActivity($accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
-  notifyAdminFrozenAccountActivity(
+export const frozenAccountActiivtyDetected = gql`
+mutation frozenAccountActiivtyDetected($accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
+  frozenAccountActiivtyDetected(
      accountId: $accountId
      activity: $activity
      offeringId: $offeringId
@@ -697,9 +697,9 @@ query fetchEmails ($recipientId: String!, $subject: String, $fromDate: String, $
 }
 `;
 
-export const createAdminUser = gql`
-  mutation createAdminUser($email: String!){
-  createAdminUser(
+export const adminValidateCreateAdminUser = gql`
+  mutation adminValidateCreateAdminUser($email: String!){
+  adminValidateCreateAdminUser(
     email: $email
   )
 }`;
