@@ -41,7 +41,7 @@ const metaTagsData = [
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
 const isMobile = document.documentElement.clientWidth < 768;
-const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/', '/resources/insights/category/', '/dashboard/resources/knowledge-base/'];
+const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/', '/insights/category/', '/dashboard/resources/knowledge-base/'];
 @inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
@@ -165,6 +165,7 @@ class App extends Component {
 
   getSizes = () => ({
     isMobile: document.documentElement.clientWidth < 768,
+    uptoTablet: document.documentElement.clientWidth < 992,
     isTablet: document.documentElement.clientWidth >= 768
       && document.documentElement.clientWidth < 992,
     isTabletLand: document.documentElement.clientWidth >= 768

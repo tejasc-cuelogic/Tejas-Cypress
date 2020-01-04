@@ -29,3 +29,4 @@ export { default as NsPaginationHookType } from './src/NsPaginationHookType';
 export { default as SuspenseBoundary } from './src/SuspenseBoundary';
 export { default as lazyRetry } from './src/LazyLoadRetry';
 export { default as NotifyVersionUpdate } from './src/NotifyVersionUpdate';
+export { default as VideoModal } from './src/VideoModal';

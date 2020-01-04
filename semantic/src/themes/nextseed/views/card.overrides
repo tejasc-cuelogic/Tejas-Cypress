@@ -283,6 +283,10 @@
             }
         }
     }
+    &.bordered{
+        box-shadow: none;
+        border-radius: @4px;
+    }
 }
 //  Public page Ends
 
@@ -749,6 +753,18 @@
             }
             dd{
                 margin-left:150px;
+            }
+        }
+    }
+    &.statistic-section .ui.card{
+        .content{
+            padding: @30px @40px;
+            border-top: 0 !important;
+        }
+        >.extra{
+            min-height: 200px !important;
+            @media only screen and (max-width : @largestMobileScreen){
+                min-height: auto !important;
             }
         }
     }
