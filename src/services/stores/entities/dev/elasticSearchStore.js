@@ -32,11 +32,11 @@ export class ElasticSearchStore {
   @observable swapIndex = null;
 
   @observable mutations = {
-    USERS: ['userDeleteIndices', 'userPopulateIndex'],
-    CROWDPAY: ['crowdPayDeleteIndices', 'crowdPayPopulateIndex'],
-    ACCREDITATIONS: ['accreditationDeleteIndices', 'accreditationPopulateIndex'],
-    LINKEDBANK: ['linkedBankDeleteIndices', 'linkedBankPopulateIndex'],
-    OFFERINGS: ['offeringsDeleteIndices', 'offeringsPopulateIndex'],
+    USERS: ['adminDeleteUserIndices', 'adminPopulateUserIndex'],
+    CROWDPAY: ['adminDeleteCrowdPayIndices', 'adminPopulateCrowdPayIndex'],
+    ACCREDITATIONS: ['adminDeleteAccreditationIndices', 'adminPopulateAccreditationIndex'],
+    LINKEDBANK: ['adminDeleteLinkedBankIndices', 'adminPopulateLinkedBankIndex'],
+    OFFERINGS: ['adminDeleteOfferingIndices', 'adminPopulateOfferingIndices'],
   }
 
   @action
@@ -103,15 +103,15 @@ export class ElasticSearchStore {
   swapIndexAliases = indexAliasName => new Promise((resolve, reject) => {
     client
       .mutate({
-        mutation: elasticSearchQueries.swapIndexOnAlias,
+        mutation: elasticSearchQueries.adminSwapIndexOnAlias,
         variables: { indexAliasName },
         refetchQueries: [{ query: elasticSearchQueries.getESAuditList }],
       })
       .then((result) => {
-        if (get(result, 'data.swapIndexOnAlias.success')) {
+        if (get(result, 'data.adminSwapIndexOnAlias.success')) {
           Helper.toast('Your request is processed successfully.', 'success');
         } else {
-          Helper.toast(get(result, 'data.swapIndexOnAlias.message'), 'error');
+          Helper.toast(get(result, 'data.adminSwapIndexOnAlias.message'), 'error');
         }
         resolve(result);
         this.setFieldValue('inProgress', false);
@@ -133,7 +133,7 @@ export class ElasticSearchStore {
         mutation: adminSyncEsDocument,
         variables: syncESVarible,
         refetchQueries: [{
-          query: elasticSearchQueries.getESAudit,
+          query: elasticSearchQueries.adminGetESAudit,
           variables: getESVariable,
         }],
       })
@@ -160,7 +160,7 @@ export class ElasticSearchStore {
     this.esAuditOutput = graphql({
       client,
       fetchPolicy: 'network-only',
-      query: elasticSearchQueries.getESAudit,
+      query: elasticSearchQueries.adminGetESAudit,
       variables,
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -169,13 +169,13 @@ export class ElasticSearchStore {
   }
 
   @computed get eSAudit() {
-    return get(this.esAudit, 'data.getESAudit.indices[0]')
-      ? sortBy(toJS(get(this.esAudit, 'data.getESAudit.indices')), ['alias']) : [];
+    return get(this.esAudit, 'data.adminGetESAudit.indices[0]')
+      ? sortBy(toJS(get(this.esAudit, 'data.adminGetESAudit.indices')), ['alias']) : [];
   }
 
   @computed get esAuditParaOutput() {
-    return get(this.esAuditOutput, 'data.getESAudit.indices[0]')
-      ? toJS(get(this.esAuditOutput, 'data.getESAudit.indices[0]')) : [];
+    return get(this.esAuditOutput, 'data.adminGetESAudit.indices[0]')
+      ? toJS(get(this.esAuditOutput, 'data.adminGetESAudit.indices[0]')) : [];
   }
 
   @computed get eSAuditLoading() {

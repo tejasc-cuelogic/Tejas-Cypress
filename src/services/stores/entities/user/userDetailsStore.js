@@ -20,7 +20,7 @@ import {
   userListingStore,
   userStore,
 } from '../../index';
-import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminUserHardDelete, adminUpdateUserStatus, adminSkipAddressOrPhoneValidationCheck, frozenAccountActiivtyDetected, adminFreezeAccount, getEmailList } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminUserHardDelete, adminUpdateUserStatus, adminSkipAddressOrPhoneValidationCheck, frozenAccountActiivtyDetected, adminFreezeAccount, adminFetchEmails } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE, US_STATES } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -942,10 +942,10 @@ export class UserDetailsStore {
     variables.recipientId = get(this.getDetailsOfUser, 'id');
     this.emailListArr = graphql({
       client,
-      query: getEmailList,
+      query: adminFetchEmails,
       variables,
       onFetch: (res) => {
-        if (get(res, 'fetchEmails.emails') && !this.emailListArr.loading) {
+        if (get(res, 'adminFetchEmails.emails') && !this.emailListArr.loading) {
           resolve();
         }
       },
@@ -961,7 +961,7 @@ export class UserDetailsStore {
   }
 
   @computed get userEmails() {
-    return this.emailListArr && this.emailListArr.data.fetchEmails && this.emailListArr.data.fetchEmails.emails;
+    return this.emailListArr && this.emailListArr.data.adminFetchEmails && this.emailListArr.data.adminFetchEmails.emails;
   }
 }
 

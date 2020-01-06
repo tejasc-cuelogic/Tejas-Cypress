@@ -42,15 +42,15 @@ export const getFaqById = gql`
   }
 `;
 
-export const deleteFaq = gql`
-  mutation deleteFaq($ids: [String]){
-    deleteFaq(ids: $ids)
+export const adminDeleteFaq = gql`
+  mutation adminDeleteFaq($ids: [String]){
+    adminDeleteFaq(ids: $ids)
   }
 `;
 
-export const upsertFaq = gql`
-  mutation upsertFaq ($faqInput: FaqItemInput) {
-    upsertFaq ( faqInput: $faqInput ) {
+export const adminUpsertFaq = gql`
+  mutation adminUpsertFaq ($faqInput: FaqItemInput) {
+    adminUpsertFaq ( faqInput: $faqInput ) {
       id
       slug
       author

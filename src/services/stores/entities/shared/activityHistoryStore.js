@@ -4,7 +4,7 @@ import { isArray, capitalize, uniqWith, isEqual } from 'lodash';
 import moment from 'moment';
 import DataModelStore, { decorateDefault } from './dataModelStore';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allActivities, createActivityHistory } from '../../queries/activity';
+import { adminFilterActivityHistories, createActivityHistory } from '../../queries/activity';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { LOG_ACTIVITY } from '../../../constants/activity';
@@ -12,7 +12,7 @@ import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../cons
 
 export class ActivityHistoryStore extends DataModelStore {
   constructor() {
-    super({ allActivities, createActivityHistory });
+    super({ adminFilterActivityHistories, createActivityHistory });
   }
 
   ACTIVITY_FRM = Validator.prepareFormObject(LOG_ACTIVITY);
@@ -42,7 +42,7 @@ export class ActivityHistoryStore extends DataModelStore {
       : { ...filterParams };
     this.data = graphql({
       client,
-      query: allActivities,
+      query: adminFilterActivityHistories,
       variables: filterParams,
       fetchPolicy: 'network-only',
       onFetch: (data) => {
@@ -95,7 +95,7 @@ export class ActivityHistoryStore extends DataModelStore {
         mutation: 'createActivityHistory',
         variables: { activityHistoryDetails: payload },
         refetchQueries: [{
-          query: allActivities,
+          query: adminFilterActivityHistories,
           variables: { resourceId: payload.resourceId, orderBy: { field: 'activityDate', sort: 'desc' } },
           fetchPolicy: 'network-only',
         }],

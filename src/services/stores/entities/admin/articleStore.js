@@ -219,8 +219,7 @@ export class ArticleStore {
     }
 
     @computed get getInsightArticleListing() {
-      return (this.allInsightsList.data && (toJS(this.data.data.insightsArticles)
-        || toJS(this.allInsightsList.data.insightArticlesByCategoryId))) || [];
+      return (this.allInsightsList.data && (toJS(this.allInsightsList.data.insightArticlesByCategoryId))) || [];
     }
 
     @computed get adminInsightArticleListing() {
@@ -273,9 +272,8 @@ export class ArticleStore {
     }
 
     @computed get InsightArticles() {
-      return (this.data.data && (toJS(this.data.data.insightsArticles)
-        || toJS(this.data.data.insightArticlesByCategoryId)
-        || toJS(this.data.data.getInsightsArticles))) || [];
+      return (toJS(this.data.data.insightArticlesByCategoryId)
+        || toJS(this.data.data.getInsightsArticles)) || [];
     }
 
     @computed get InsightFeaturedArticles() {

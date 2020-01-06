@@ -96,8 +96,8 @@ mutation adminSyncEsDocument($documentId: String!, $targetIndex: String!, $userI
 }`;
 
 export const getPluginList = gql`
-query listRequestPlugins {
-  listRequestPlugins {
+query adminListRequestPlugins {
+  adminListRequestPlugins {
     plugins{
       name
       plugin
@@ -111,7 +111,7 @@ query listRequestPlugins {
       }
     }
   }
-  listCronPlugins
+  adminListCronPlugins
   {
     plugins{   
       name   
@@ -126,7 +126,7 @@ query listRequestPlugins {
       }
     }     
   }
-  listProcessorPlugins
+  adminListProcessorPlugins
   {
     plugins{
       name
@@ -149,9 +149,9 @@ query listRequestPlugins {
 }
 `;
 
-export const listFilePlugins = gql`
-query listFilePlugins {
-  listFilePlugins {
+export const adminListFilePlugins = gql`
+query adminListFilePlugins {
+  adminListFilePlugins {
     name
     plugin
     pluginInputs {
@@ -166,18 +166,18 @@ query listFilePlugins {
 } 
 `;
 
-export const requestFactoryPluginTrigger = gql`
-mutation invokeRequest($plugin: String!, $payload: String, $invocationType: RequestInvocationEnum) {
-  invokeRequest(
+export const adminInvokeRequest = gql`
+mutation adminInvokeRequest($plugin: String!, $payload: String, $invocationType: RequestInvocationEnum) {
+  adminInvokeRequest(
     plugin: $plugin,
     payload: $payload
     invocationType: $invocationType
   )
 }`;
 
-export const fetchCronLogs = gql`
-query fetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaTypeEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
-  fetchCronLogs(
+export const adminFetchCronLogs = gql`
+query adminFetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaTypeEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+  adminFetchCronLogs(
     cron: $cron,
     jobId: $jobId
     cronMetaType: $cronMetaType
@@ -200,17 +200,17 @@ query fetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaTypeE
   }
 }`;
 
-export const processFactoryPluginTrigger = gql`
-mutation invokeProcessorDriver($method: DevAuditTypeEnum, $payload: String) {
-  invokeProcessorDriver(
+export const adminInvokeProcessorDriver = gql`
+mutation adminInvokeProcessorDriver($method: DevAuditTypeEnum, $payload: String) {
+  adminInvokeProcessorDriver(
     method: $method,
     payload: $payload
   )
 }`;
 
-export const fetchRequestFactoryLogs = gql`
-query fetchRequestFactoryLogs($plugin: String!, $status: RequestRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
-  fetchRequestFactoryLogs(
+export const adminFetchRequestFactoryLogs = gql`
+query adminFetchRequestFactoryLogs($plugin: String!, $status: RequestRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+  adminFetchRequestFactoryLogs(
     plugin: $plugin,
     status: $status
     fromDate: $fromDate
@@ -243,9 +243,9 @@ query fetchRequestFactoryLogs($plugin: String!, $status: RequestRunLogStatusEnum
   }
 }`;
 
-export const fetchProcessLogs = gql`
-query fetchProcessLogs($plugin: String!, $status: ProcessRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
-  fetchProcessLogs(
+export const adminFetchProcessLogs = gql`
+query adminFetchProcessLogs($plugin: String!, $status: ProcessRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+  adminFetchProcessLogs(
     plugin: $plugin,
     status: $status
     fromDate: $fromDate
@@ -267,9 +267,9 @@ query fetchProcessLogs($plugin: String!, $status: ProcessRunLogStatusEnum, $from
   }
 }`;
 
-export const fileFactoryPluginTrigger = gql`
-mutation generateFile($identifier: String!, $ownerId: String!, $resourceId: String!, $account: String, $payload: String) {
-  generateFile(
+export const adminGenerateFile = gql`
+mutation adminGenerateFile($identifier: String!, $ownerId: String!, $resourceId: String!, $account: String, $payload: String) {
+  adminGenerateFile(
     identifier: $identifier,
     ownerId: $ownerId,
     resourceId: $resourceId,
