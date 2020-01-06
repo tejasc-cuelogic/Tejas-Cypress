@@ -116,7 +116,7 @@ class SecondaryMenu extends Component {
           </Menu>
         </Responsive>
         <Responsive className="secondary-menu" maxWidth={767} as={React.Fragment}>
-          {match.url === '/agreements/legal'
+          {match.url === '/legal'
             ? (
               <MobileDropDownNav
                 inverted
