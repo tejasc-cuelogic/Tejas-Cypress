@@ -5,7 +5,6 @@ import { registerApiCall, clickRadioAndNext, btnClickAndWait, uploadFile, enterC
 
 export const investorFlowProcess = () => {
   cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
-  cy.wait(3000);
   cy.applicationUnlock();
   fillSignUpFormAndProceed();
   enterCodeAndConfirm('confirmEmail');
@@ -29,7 +28,7 @@ export const individualManualLinkbankProcess = () => {
 };
 
 export const addFunds = (amount, doNotDeposit = true) => {
-  registerApiCall('addFunds', 'dev/graphql');
+  registerApiCall('addFunds', '/dev/graphql');
   if (doNotDeposit) {
     cy.get('div.content').get('div.center-align > button.link-button').contains('I don’t want to deposit any money now').click();
   } else {
