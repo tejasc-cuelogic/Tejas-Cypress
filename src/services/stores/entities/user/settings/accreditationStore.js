@@ -312,7 +312,7 @@ export class AccreditationStore {
         }).catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
-          reject();
+          reject(error);
         });
       });
     } else {
@@ -632,7 +632,7 @@ export class AccreditationStore {
           });
       }).catch((error) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        uiStore.setErrors(error.message);
+        uiStore.setErrors(error ? error.message : '');
         reject();
         uiStore.setProgress(false);
       });
