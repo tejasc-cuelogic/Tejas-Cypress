@@ -49,8 +49,7 @@ describe('Account Creation', () => {
     addFunds('15000');
     registerApiCall('submitAccount', '/dev/graphql');
     cy.get('.dimmer-visible').should('not.be.visible')
-    cy.get('.dimmer-visible').should('not.be.visible')
-    cy.get('#multistep-modal > div.multistep.content > div.center-align > button').contains('Create your account').click({ force: true });
+    cy.get('div.center-align > button').contains('Create your account').click({ force: true });
     cy.wait('@submitAccount');
     cy.wait('@submitAccount');
   });
