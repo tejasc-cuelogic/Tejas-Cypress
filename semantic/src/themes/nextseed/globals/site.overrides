@@ -1175,8 +1175,8 @@ footer{
 				padding: 0 !important;
 			}
 			&:last-child {
-				padding: @70px @20px !important;
-				@media only screen and (max-width : @largestSmallMonitor){
+				// padding: @70px @20px !important;
+				@media only screen and (max-width : @largestTabletScreen){
 					padding: @56px 0 !important;
 				}
 				a {
