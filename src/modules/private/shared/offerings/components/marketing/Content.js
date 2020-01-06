@@ -12,9 +12,11 @@ export default class Content extends Component {
   constructor(props) {
     super(props);
     if (props.isExact) {
-      this.props.history.push('1');
+      props.history.push('1');
     }
-    // this.props.manageOfferingStore.setFormData('OFFERING_CONTENT_FRM', 'content');
+    if (!props.manageOfferingStore.initLoad.includes('OFFERING_CONTENT_FRM')) {
+      props.manageOfferingStore.setFormData('OFFERING_CONTENT_FRM');
+    }
   }
 
   render() {

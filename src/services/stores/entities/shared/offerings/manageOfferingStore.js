@@ -178,6 +178,7 @@ export class ManageOfferingStore extends DataModelStore {
 
   setFormData = (form, ref, keepAtLeastOne) => {
     Validator.resetFormData(this[form]);
+    this.initLoad.push(form);
     const { offer } = offeringsStore;
     if (!offer) {
       return false;

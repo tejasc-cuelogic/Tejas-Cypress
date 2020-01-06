@@ -11,6 +11,8 @@ import Helper from '../../../../helper/utility';
 export default class DataModelStore {
   result = [];
 
+  initLoad = []
+
   gqlRef = {};
 
   currTime;
@@ -357,6 +359,7 @@ export default class DataModelStore {
 
 export const decorateDefault = {
   result: observable,
+  initLoad: observable,
   showConfirmModal: observable,
   removeFileNamesList: observable,
   removeFileIdsList: observable,
