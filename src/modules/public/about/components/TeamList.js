@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Header, Grid, Reveal } from 'semantic-ui-react';
 import { inject } from 'mobx-react';
-import { Link } from 'react-router-dom';
 import scrollIntoView from 'scroll-into-view';
 import LazyLoad from 'react-lazyload';
 import { Image64 } from '../../../../theme/shared';
+import TeamModal from './TeamModal';
 
 @inject('teamStore')
 class teamList extends Component {
@@ -14,7 +14,7 @@ class teamList extends Component {
 
   render() {
     const {
-      columns, className, match, joinColumn, hasJob,
+      columns, className, joinColumn, hasJob,
     } = this.props;
     const { teamMembers } = this.props.teamStore;
     return (
@@ -22,19 +22,24 @@ class teamList extends Component {
         <Grid columns={columns} className={className} doubling>
           {teamMembers.map(member => member.isPublished && (
             <Grid.Column>
-              <Reveal as={Link} to={`${match.url}/${member.id}`} animated="fade">
-                <Reveal.Content hidden>
-                  <div className="team-overlay">
-                    <p><b>{member.memberName}</b></p>
-                    <p>{member.title}</p>
-                  </div>
-                </Reveal.Content>
-                <Reveal.Content visible>
-                  <LazyLoad height={100}>
-                    <Image64 avatarPlaceholder srcUrl={member.avatar} alt={member.memberName} />
-                  </LazyLoad>
-                </Reveal.Content>
-              </Reveal>
+              <TeamModal
+                id={member.id}
+                trigger={(
+                  <Reveal animated="fade">
+                    <Reveal.Content hidden>
+                      <div className="team-overlay">
+                        <p><b>{member.memberName}</b></p>
+                        <p>{member.title}</p>
+                      </div>
+                    </Reveal.Content>
+                    <Reveal.Content visible>
+                      <LazyLoad height={100}>
+                        <Image64 avatarPlaceholder srcUrl={member.avatar} alt={member.memberName} />
+                      </LazyLoad>
+                    </Reveal.Content>
+                  </Reveal>
+                 )}
+              />
             </Grid.Column>
           ))}
           {joinColumn
