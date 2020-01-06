@@ -389,8 +389,6 @@ export class PortfolioStore {
       onFetch: (data) => {
         if (data && this.investmentLists && !this.investmentLists.loading) {
           resolve(true);
-        } else if (!this.details.loading) {
-          resolve(false);
         }
       },
       onError: () => {

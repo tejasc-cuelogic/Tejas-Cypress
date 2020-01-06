@@ -788,7 +788,7 @@ export class Business {
     }
   }
 
-  validateDocumentList = (documentList, setError = true) => {
+  validateDocumentList = (documentList = [], setError = true) => {
     const documentCount = documentList.length;
     let documnetCurrentCount = 0;
     _.map(documentList, (document) => {

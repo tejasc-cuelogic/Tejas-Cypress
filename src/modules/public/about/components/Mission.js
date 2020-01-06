@@ -1,22 +1,35 @@
 import React, { Component } from 'react';
 import { Header, Container, Grid, Statistic, Responsive, Divider, Icon, Card, List } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { Route } from 'react-router-dom';
 import NSImage from '../../../shared/NSImage';
-import TeamModal from './TeamModal';
-import { InlineLoader } from '../../../../theme/shared';
+import { InlineLoader, IframeModal } from '../../../../theme/shared';
 import TeamList from './TeamList';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('teamStore', 'uiStore', 'publicStore')
+@inject('teamStore', 'uiStore', 'publicStore', 'campaignStore')
 @observer
 class Mission extends Component {
   constructor(props) {
     super(props);
     props.teamStore.initRequest();
     props.publicStore.getJobListing();
+    this.state = {
+      open: false,
+      embedUrl: '',
+    };
   }
+
+  closeModal = () => {
+    this.setState({ open: false });
+  }
+
+  openDoc = (id) => {
+    this.setState({ loading: true, open: true });
+    this.props.campaignStore.getBoxLink(id, 'SERVICES').then((res) => {
+      this.setState({ embedUrl: res, loading: false });
+    });
+   }
 
   render() {
     const { teamMembers, loading } = this.props.teamStore;
@@ -30,12 +43,6 @@ class Mission extends Component {
           className="team-gallery"
           match={this.props.match}
           joinColumn={responsiveVars.isMobile}
-        />
-        <Route
-          path={`${this.props.match.url}/:id`}
-          render={
-            props => <TeamModal refLink={this.props.match.url} {...props} />
-          }
         />
       </Grid>
     );
@@ -189,9 +196,9 @@ class Mission extends Component {
                       <Header as="h3" className={responsiveVars.isMobile ? 'mt-40' : 'mt-50'}>Current Positions</Header>
                       <List divided relaxed="very" className="job-list">
                         {jobsList.map(i => (
-                          <List.Item onClick={() => this.openDoc(i.BOX_FILE_ID)}>
+                          <List.Item>
                             <List.Content>
-                              <List.Header className="highlight-text">{i.POSITION}</List.Header>
+                              <List.Header style={{ cursor: 'pointer' }} onClick={() => this.openDoc(i.BOX_FILE_ID)} className="highlight-text">{i.POSITION}</List.Header>
                               <List.Description className="neutral-text">{`${i.CITY} ${i.STATE}`}</List.Description>
                             </List.Content>
                           </List.Item>
@@ -224,6 +231,12 @@ class Mission extends Component {
             </Grid>
           </Container>
         </section>
+        <IframeModal
+          open={this.state.open}
+          close={this.closeModal}
+          srcUrl={this.state.embedUrl}
+          loading={this.state.loading}
+        />
       </>
     );
   }

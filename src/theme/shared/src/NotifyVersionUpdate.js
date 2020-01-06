@@ -7,11 +7,11 @@ const NotifyVersionUpdate = () => {
     <Modal dimmer open>
       <Modal.Header>
         <Icon name="sync alternate" color="green" />
-        Let{"'"}s Refresh
+        &nbsp;Let{"'"}s Refresh
       </Modal.Header>
       <Modal.Content>
         <Modal.Description>
-          <h5 style={{ marginLeft: '27px', fontWeight: 'normal' }}>
+          <h5 style={{ fontWeight: 'normal' }}>
             There is new update of this website available.<br />
             You will need to reload your browser to continue.
           </h5>
