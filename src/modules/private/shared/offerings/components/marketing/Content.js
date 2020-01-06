@@ -1,14 +1,57 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Switch, Route } from 'react-router-dom';
+import { Button, Grid } from 'semantic-ui-react';
+import OfferingContent from './Content/OfferingContent';
+import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 
-@inject('userStore', 'uiStore', 'offeringCreationStore')
+@inject('manageOfferingStore')
 @withRouter
 @observer
 export default class Content extends Component {
+  constructor(props) {
+    super(props);
+    if (props.isExact) {
+      this.props.history.push('1');
+    }
+    // this.props.manageOfferingStore.setFormData('OFFERING_CONTENT_FRM', 'content');
+  }
+
   render() {
+    const { match } = this.props;
+    const { OFFERING_CONTENT_FRM, addMore } = this.props.manageOfferingStore;
+    const navItems = [];
+    OFFERING_CONTENT_FRM.fields.content.map((content, index) => {
+      navItems.push({ title: `${content.title.value !== '' ? content.title.value : `Content ${index + 1}`}`, to: `${index + 1}`, index });
+      return navItems;
+    });
     return (
-      <div>Cooming Soon Content</div>
+      <div className={match.url.includes('offering-creation') ? 'inner-content-spacer' : ''}>
+        <Grid>
+          <Grid.Column widescreen={4} computer={4} tablet={3} mobile={16}>
+            <div className="sticky-sidebar">
+              <SecondaryMenu secondary vertical match={match} navItems={navItems} />
+              {OFFERING_CONTENT_FRM.fields.content.length < 10
+              && <Button size="small" color="blue" className="link-button mt-20" onClick={() => addMore('OFFERING_CONTENT_FRM', 'content')}>+ Add another leader</Button>
+              }
+            </div>
+          </Grid.Column>
+          <Grid.Column widescreen={12} computer={12} tablet={13} mobile={16}>
+            <Switch>
+              <Route
+                exact
+                path={match.url}
+                render={props => <OfferingContent refLink={match.url} {...props} index={0} />}
+              />
+              {
+                navItems.map(item => (
+                  <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} render={props => <OfferingContent refLink={match.url} {...props} index={item.index || 0} />} />
+                ))
+              }
+            </Switch>
+          </Grid.Column>
+        </Grid>
+      </div>
     );
   }
 }

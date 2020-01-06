@@ -26,6 +26,61 @@ export const HEADER_BASIC = FormHelper.generateMeta([
   ['heroBackgroundImage', 'Hero Background Image', '', 'optional', '', { s3Upload: true }],
 ]);
 
+export const OFFERING_CONTENT = {
+  content: [{
+    title: {
+      label: 'Title',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'e.g. Investment Term',
+    },
+    order: {
+      label: 'Order',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'e.g. 1',
+    },
+    scope: {
+      label: 'Scope',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      options: [
+        { key: 'PUBLIC', value: 'PUBLIC', text: 'Public' },
+        { key: 'ACCREDITED_HIDDEN', value: 'ACCREDITED_HIDDEN', text: 'Accredited Hidden' },
+        { key: 'ACCREDITED_REQUIRED', value: 'ACCREDITED_REQUIRED', text: 'Accredited Required' },
+        { key: 'HIDDEN', value: 'HIDDEN', text: 'Hidden' },
+      ],
+      placeHolder: 'Enter here',
+    },
+    contentType: {
+      label: 'Content Type',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      options: [
+        { key: 'CUSTOM', value: 'CUSTOM', text: 'Custom' },
+        { key: 'INVESTMENT_DETAILS', value: 'INVESTMENT_DETAILS', text: 'Investment Details' },
+        { key: 'BONUS_REWARDS', value: 'BONUS_REWARDS', text: 'Bonus Rewards' },
+        { key: 'DATA_ROOM', value: 'DATA_ROOM', text: 'Data Room' },
+        { key: 'GALLERY', value: 'GALLERY', text: 'Gallery' },
+        { key: 'COMMENTS', value: 'COMMENTS', text: 'Comments' },
+        { key: 'UPDATES', value: 'UPDATES', text: 'Updates' },
+      ],
+      placeHolder: 'Enter here',
+    },
+    customValue: {
+      label: 'Custom Value',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'e.g. Custom Value',
+    },
+  }],
+};
+
 export const TOMBSTONE_HEADER_META = {
   meta: [{
     keyLabel: {

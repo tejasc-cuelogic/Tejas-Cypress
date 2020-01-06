@@ -150,6 +150,15 @@ export default class DataModelStore {
     }
   }
 
+  editorChange = (field, value, form, ref, index = undefined) => {
+    if (index !== undefined) {
+      this[form].fields[ref][index][field].value = value;
+    } else {
+      this[form].fields[field].value = value;
+      this[form] = FormValidator.validateForm(this[form], true, false, false);
+    }
+  }
+
   formChange = (e, result, form, type, checked = undefined) => {
     const formName = Array.isArray(form) ? form[0] : form;
     if (Array.isArray(form)) {
@@ -378,4 +387,5 @@ export const decorateDefault = {
   resetImageCropper: action,
   addMore: action,
   removeOne: action,
+  editorChange: action,
 };

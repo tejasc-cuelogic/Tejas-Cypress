@@ -5,6 +5,7 @@ import ReactCodeInput from 'react-code-input';
 import { Button, Form, Confirm } from 'semantic-ui-react';
 import { ImageCropper, FormTextarea, FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown } from '.';
 import Address from './src/Address';
+import HtmlEditor from '../../modules/shared/HtmlEditor';
 import { Image64 } from '../shared';
 import Helper from '../../helper/utility';
 
@@ -171,7 +172,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     Masked = (name, props) => {
-      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <MaskedInput
           name={name}
@@ -181,7 +182,7 @@ function formHoc(WrappedComponent, metaInfo) {
           fielddata={fieldData}
           showerror={fieldData.showError}
           // eslint-disable-next-line no-shadow
-          changed={(values, name) => this.props[metaInfo.store].maskChange(values, name, metaInfo.form, fieldData.maskFormattedChange)}
+          changed={(values, name) => this.props[metaInfo.store].maskChange(values, name, (get(props, 'multiForm') || metaInfo.form), fieldData.maskFormattedChange)}
           {...props}
         />
       );
@@ -209,6 +210,19 @@ function formHoc(WrappedComponent, metaInfo) {
           fielddata={fieldData}
           changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
           containerclassname="secondary"
+          {...props}
+        />
+      );
+    }
+
+    HtmlEditor = (name, props) => {
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
+      return (
+        <HtmlEditor
+          name={name}
+          content={fieldData.value}
+          form={metaInfo.form}
+          changed={(field, value, form, index) => this.props[metaInfo.store].editorChange(field, value, form, get(props, 'multiForm') ? props.multiForm[1] : undefined, get(props, 'multiForm') ? props.multiForm[2] : index)}
           {...props}
         />
       );
@@ -299,6 +313,7 @@ function formHoc(WrappedComponent, metaInfo) {
         FormDropDown: this.FormDropDown,
         FormTextarea: this.FormTextarea,
         ImageCropper: this.ImageCropper,
+        HtmlEditor: this.HtmlEditor,
       };
       return (
         <WrappedComponent

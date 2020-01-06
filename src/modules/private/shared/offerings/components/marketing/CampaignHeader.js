@@ -12,7 +12,7 @@ const metaInfo = {
   form: 'HEADER_BASIC_FRM',
 };
 
-@inject('userStore', 'uiStore', 'manageOfferingStore')
+@inject('manageOfferingStore')
 @withRouter
 @observer
 class CampaignHeader extends Component {

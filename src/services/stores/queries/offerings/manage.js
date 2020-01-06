@@ -66,6 +66,13 @@ const common = {
   }
   order`,
   offeringTemplate2: `
+  content {
+    title
+    order
+    contentType
+    scope
+    customValue
+  }
   tombstone {
     image {
       url

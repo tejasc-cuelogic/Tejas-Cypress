@@ -3,7 +3,7 @@ import { startCase, get, includes } from 'lodash';
 import money from 'money-math';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore, * as dataModelStore from '../dataModelStore';
-import { TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC } from '../../../../constants/offering/formMeta/offering';
+import { TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT } from '../../../../constants/offering/formMeta/offering';
 import { fileUpload } from '../../../../actions';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -18,6 +18,8 @@ export class ManageOfferingStore extends DataModelStore {
   TOMBSTONE_HEADER_META_FRM = Validator.prepareFormObject(TOMBSTONE_HEADER_META);
 
   HEADER_BASIC_FRM = Validator.prepareFormObject(HEADER_BASIC);
+
+  OFFERING_CONTENT_FRM = Validator.prepareFormObject(OFFERING_CONTENT);
 
   get campaignStatus() {
     console.log(this.TOMBSTONE_BASIC_FRM);
@@ -103,7 +105,7 @@ export class ManageOfferingStore extends DataModelStore {
 
   updateOffering = params => new Promise((res) => {
     const { keyName, forms } = params;
-    const offeringDetails = {};
+    let offeringDetails = {};
     let data;
     if (Array.isArray(forms)) {
       forms.forEach((f) => {
@@ -112,7 +114,11 @@ export class ManageOfferingStore extends DataModelStore {
     } else {
       data = Validator.evaluateFormData(this[forms].fields);
     }
-    offeringDetails[keyName] = data;
+    if (keyName) {
+      offeringDetails[keyName] = data;
+    } else {
+      offeringDetails = { ...data };
+    }
     const mutationsParams = {
       ...params,
       id: offeringCreationStore.currentOfferingId,
@@ -165,6 +171,7 @@ export class ManageOfferingStore extends DataModelStore {
       TOMBSTONE_HEADER_META_FRM: { isMultiForm: true },
       TOMBSTONE_BASIC_FRM: { isMultiForm: false },
       HEADER_BASIC_FRM: { isMultiForm: false },
+      OFFERING_CONTENT_FRM: { isMultiForm: true },
     };
     return metaDataMapping[formName][getField];
   }
@@ -185,6 +192,7 @@ export class ManageOfferingStore extends DataModelStore {
   decorate(ManageOfferingStore, {
     ...dataModelStore.decorateDefault,
     TOMBSTONE_BASIC_FRM: observable,
+    OFFERING_CONTENT_FRM: observable,
     TOMBSTONE_HEADER_META_FRM: observable,
     HEADER_BASIC_FRM: observable,
     uploadMedia: action,
