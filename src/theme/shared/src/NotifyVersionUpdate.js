@@ -13,12 +13,12 @@ const NotifyVersionUpdate = () => {
         <Modal.Description>
           <h5 style={{ marginLeft: '27px', fontWeight: 'normal' }}>
             There is new update of this website available.<br />
-            and you will need to reload your browser to see the latest.
+            You will need to reload your browser to continue.
           </h5>
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
-        <Button positive content="Refresh !" onClick={update} />
+        <Button positive content="Refresh" onClick={update} />
       </Modal.Actions>
     </Modal>
   );
