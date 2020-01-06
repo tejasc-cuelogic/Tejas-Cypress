@@ -74,7 +74,7 @@ export default class ConfirmModel extends Component {
               name="adminJustificationDocs"
               fielddata={CONFIRM_ACCREDITATION_FRM.fields.adminJustificationDocs}
               ondrop={(files, fieldName) => setFileUploadData('CONFIRM_ACCREDITATION_FRM', fieldName, files, accountType || 'individual', 'Admin', actionValue, userId, requestDate)}
-              onremove={fieldName => removeUploadedData('CONFIRM_ACCREDITATION_FRM', fieldName)}
+              onremove={fieldName => removeUploadedData('CONFIRM_ACCREDITATION_FRM', fieldName, null, accountType || 'individual')}
             />
             <div className="center-align mt-30">
               <Button className={actionValue === 'CONFIRMED' ? 'primary relaxed' : 'red relaxed'} content={actionValue === 'CONFIRMED' ? 'Approve request' : 'Decline request'} loading={inProgress} disabled={!CONFIRM_ACCREDITATION_FRM.meta.isValid || CONFIRM_ACCREDITATION_FRM.fields.adminJustificationDocs.showLoader} onClick={this.handleConfirm} />

@@ -8,6 +8,8 @@ const TOMBSTONE_TOGGLE_META = [
 const HEADER_TOGGLE_META = [
   { label: 'Early Bird', value: 'EARLY_BIRD' },
   { label: 'Investor Count', value: 'INVESTOR_COUNT' },
+  { label: 'Repayment Count', value: 'REPAYMENT_COUNT' },
+  { label: 'Days Left', value: 'DAYS_LEFT' },
 ];
 
 export const TOMBSTONE_BASIC = FormHelper.generateMeta([

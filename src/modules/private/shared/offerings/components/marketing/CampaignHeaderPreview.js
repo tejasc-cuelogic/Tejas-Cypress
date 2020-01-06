@@ -24,8 +24,6 @@ export default class CampaignHeaderPreview extends Component {
     const newLayout = true;
     const headerBasicFields = HEADER_BASIC_FRM.fields;
     const headerMetaFields = TOMBSTONE_HEADER_META_FRM.fields;
-    console.log(headerMetaFields);
-    // const offerStructure = get(offer, 'keyTerms.securities') || '';
     return (
       <>
         <div className="campaign-banner">
@@ -57,44 +55,53 @@ export default class CampaignHeaderPreview extends Component {
                         />
                       )
                     }
-                    <div className="offer-stats">
-                      <Statistic.Group>
-                        <>
-                          <Statistic size="mini" className="basic">
-                            <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
-                            <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
-                          </Statistic>
-                          <Statistic size="mini" className="basic">
-                            <Statistic.Value>
-                              {get(offer, 'closureSummary.totalInvestorCount') || 0}
-                            </Statistic.Value>
-                            <Statistic.Label>Investors</Statistic.Label>
-                          </Statistic>
-                        </>
-                        {isClosed && get(offer, 'closureSummary.repayment.count') > 0
-                          && (
+                    {headerBasicFields.toggleMeta.value.length
+                    ? (
+                      <div className="offer-stats">
+                        <Statistic.Group>
+                          <>
+                          {headerBasicFields.toggleMeta.value.includes('DAYS_LEFT')
+                            && (
+                            <Statistic size="mini" className="basic">
+                              <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
+                              <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
+                            </Statistic>
+                            )}
+                            {headerBasicFields.toggleMeta.value.includes('INVESTOR_COUNT')
+                            && (
                             <Statistic size="mini" className="basic">
                               <Statistic.Value>
-                                {get(offer, 'closureSummary.repayment.count') || 0}
+                                {get(offer, 'closureSummary.totalInvestorCount') || 0}
                               </Statistic.Value>
-                              <Statistic.Label>Payments made</Statistic.Label>
+                              <Statistic.Label>Investors</Statistic.Label>
                             </Statistic>
-                          )
-                        }
-                        {earlyBird && earlyBird.available > 0
-                          && isEarlyBirdRewards && !isClosed
-                          && bonusRewards
-                          ? (
-                            <Statistic size="mini" className="basic">
-                              <Statistic.Value>
-                                {get(offer, 'earlyBird.available') || 0}
-                              </Statistic.Value>
-                              <Statistic.Label>Early Bird Rewards</Statistic.Label>
-                            </Statistic>
-                          ) : ''
-                        }
-                      </Statistic.Group>
-                    </div>
+                            )}
+                          </>
+                          {headerBasicFields.toggleMeta.value.includes('REPAYMENT_COUNT') && isClosed && get(offer, 'closureSummary.repayment.count') > 0
+                            && (
+                              <Statistic size="mini" className="basic">
+                                <Statistic.Value>
+                                  {get(offer, 'closureSummary.repayment.count') || 0}
+                                </Statistic.Value>
+                                <Statistic.Label>Payments made</Statistic.Label>
+                              </Statistic>
+                            )
+                          }
+                          {headerBasicFields.toggleMeta.value.includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
+                            && isEarlyBirdRewards && !isClosed
+                            && bonusRewards
+                            ? (
+                              <Statistic size="mini" className="basic">
+                                <Statistic.Value>
+                                  {get(offer, 'earlyBird.available') || 0}
+                                </Statistic.Value>
+                                <Statistic.Label>Early Bird Rewards</Statistic.Label>
+                              </Statistic>
+                            ) : ''
+                          }
+                        </Statistic.Group>
+                      </div>
+                      ) : null}
                   </div>
                   <div className="clearfix social-links mt-10">
                     {offer && get(offer, 'offering.overview.social')
@@ -164,13 +171,6 @@ export default class CampaignHeaderPreview extends Component {
                         </p>
                       </>
                     )}
-                  {/* {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
-                    && (
-                      <p className="raise-type mb-0">
-                        {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
-                      </p>
-                    )
-                  } */}
                   {headerMetaFields.meta.map(row => (
                     <>
                       {(

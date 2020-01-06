@@ -239,6 +239,8 @@
 @ns-play: "\e992";
 @ns-plus-square: "\e987";
 @ns-proprietor: "\e963";
+@ns-quote-left: "\e9a9";
+@ns-quote-right: "\e9a8";
 @ns-real-estate: "\e964";
 @ns-reload-circle: "\e978";
 @ns-reload-circle-line: "\e979";
