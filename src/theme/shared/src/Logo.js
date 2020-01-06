@@ -1,33 +1,38 @@
 import React from 'react';
+import { inject, observer } from 'mobx-react';
 import NSImage from '../../../modules/shared/NSImage';
 
-const getSrc = (src) => {
-  switch (src) {
-    case 'LogoColor':
-      return 'logo-color.svg';
-    case 'LogoWhite':
-      return 'logo-white.svg';
-    case 'LogoWhiteGreen':
-      return 'logo-white-green.svg';
-    case 'LogoSmall':
-      return 'logo-icon.svg';
-    case 'LogoSmallWhite':
-      return 'logo-icon-white.svg';
-    case 'LogoLendio':
-      return 'lendio_logo.svg';
-    case 'LogoNsAndLendio':
-      return 'nextseed_and_lendio.svg';
-    case 'LogoNsAndLendioWhite':
-      return 'nextseed_and_lendio_white.svg';
-    case 'LogoBlack':
-      return 'logo_black.svg';
-    case 'LogoGreenGrey':
-      return 'logo.svg';
-    default:
-      return 'logo-color.svg';
-  }
+const imgMap = {
+  LogoColor: 'logo-color.svg',
+  LogoWhite: 'logo-white.svg',
+  LogoWhiteGreen: 'logo-white-green.svg',
+  LogoSmall: 'logo-icon.svg',
+  LogoSmallWhite: 'logo-icon-white.svg',
+  LogoLendio: 'lendio_logo.svg',
+  LogoNsAndLendio: 'nextseed_and_lendio.svg',
+  LogoNsAndLendioWhite: 'nextseed_and_lendio_white.svg',
+  LogoBlack: 'logo_black.svg',
+  LogoGreenGrey: 'logo.svg',
 };
 
-const Logo = props => <NSImage {...props} path={getSrc(props.dataSrc)} className="logo" />;
+@inject('uiStore')
+@observer
+export default class Logo extends React.Component {
+  showLoader = (refImg) => {
+    if (!['LogoLendio', 'LogoNsAndLendio', 'LogoNsAndLendioWhite'].includes(refImg)) {
+      this.props.uiStore.setAppLoader(true);
+      setTimeout(() => { this.props.uiStore.setAppLoader(false); }, 80);
+    }
+  };
 
-export default Logo;
+  render() {
+    return (
+      <NSImage
+        onClick={() => this.showLoader(this.props.dataSrc)}
+        {...this.props}
+        path={imgMap[this.props.dataSrc] || 'logo-color.svg'}
+        className="logo"
+      />
+    );
+  }
+}
