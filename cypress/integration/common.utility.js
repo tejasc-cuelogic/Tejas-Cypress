@@ -33,9 +33,7 @@ export const typeOtpCode = () => {
 };
 
 export const enterCodeAndConfirm = (operationName) => {
-  cy.wait(100);
-  registerApiCall(operationName, 'dev/graphql');
-  cy.wait(100);
+  registerApiCall(operationName, '/dev/graphql');
   typeOtpCode();
   cy.get('form').find('button').contains('Confirm').click();
   cy.wait(`@${operationName}`);

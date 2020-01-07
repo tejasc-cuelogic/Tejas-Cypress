@@ -16,7 +16,7 @@ export const investorFlowProcess = () => {
 };
 
 export const individualManualLinkbankProcess = () => {
-  registerApiCall('manualAccount', '/**/graphql');
+  registerApiCall('manualAccount', '/dev/graphql');
   cy.get('.dimmer-visible').should('not.be.visible')
   cy.get('div.content').get('div.center-align > button.link-button').contains('Change link bank account').click();
   cy.get('div.content').get('div.center-align > button.link-button').contains('Link bank account').click();
