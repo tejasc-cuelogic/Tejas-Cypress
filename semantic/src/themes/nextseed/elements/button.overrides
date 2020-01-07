@@ -3,15 +3,20 @@
 *******************************/
 //  Public page Starts
 .ui.button{
+    box-shadow: none;
     &:hover{
-        box-shadow:@buttonHoverShadow;
+        box-shadow:none;
     }
     &.basic {
         border: 1px solid @thumbBackground;
         box-shadow: none !important;
         &.highlight-text {
             color: @primary-one !important;
-            font-weight: @fontMedium;
+            font-weight: @normal;
+        }
+        &.primary{
+            border: 0;
+            font-weight: @normal;
         }
     }
 }
@@ -123,6 +128,9 @@
             &.note {
                 font-weight: @normal;
             }
+        }
+        &.primary{
+            font-weight: @normal;
         }
     }
     &.vertical.buttons{

@@ -75,6 +75,15 @@
             padding: @14px 0;
         }
     }
+    &.capital-list{
+        column-count: 2;
+    }
+    &.job-list>.item{
+        .header, .content{
+            line-height: 26px;
+            font-weight: @normal;
+        }
+    }
 }
 //  Public page Ends
 

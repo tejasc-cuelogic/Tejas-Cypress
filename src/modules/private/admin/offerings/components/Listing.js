@@ -154,8 +154,7 @@ export default class Listing extends Component {
                             <>
                               <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}</Table.Cell>
                               <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
-                                {offering.offering && offering.offering.launch
-                                  && offering.closureSummary.launchDate
+                                {get(offering, 'closureSummary.launchDate')
                                   ? DataFormatter.diffDays(get(offering, 'closureSummary.launchDate'), false, true) < 0 ? DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), false, false, false) : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.launchDate')).diffText : 'N/A'
                                 }
                               </Table.Cell>
