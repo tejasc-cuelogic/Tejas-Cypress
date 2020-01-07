@@ -1,3 +1,5 @@
+import { CURR_YEAR } from '../../constants/common';
+
 export const ACCREDITATION_STATUS_LABEL = {
   REQUESTED: 'Requested',
   CONFIRMED: 'Approved',
@@ -211,7 +213,7 @@ export const INCOME_UPLOAD_DOCUMENTS = {
     rule: 'required',
   },
   incomeDocSecondLastYear: {
-    label: '2017 Income Documentation',
+    label: `${CURR_YEAR - 2} Income Documentation`,
     value: '',
     error: undefined,
     rule: 'required',
@@ -225,7 +227,7 @@ export const INCOME_UPLOAD_DOCUMENTS = {
     objType: 'FileObjectType',
   },
   incomeDocLastYear: {
-    label: '2018 Income Documentation',
+    label: `${CURR_YEAR - 1} Income Documentation`,
     value: '',
     error: undefined,
     rule: 'required',

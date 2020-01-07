@@ -656,7 +656,7 @@ export class AccreditationStore {
               this.ASSETS_UPLOAD_DOC_FORM.fields[field].fileId.push(f.fileId);
               this.ASSETS_UPLOAD_DOC_FORM.fields[field].value.push(f.fileName);
             });
-          } else {
+          } else if (field && field !== 'incomeDocThirdLastYear') {
             this.INCOME_UPLOAD_DOC_FORM.fields[field].fileId = file.fileInfo && file.fileInfo.length && file.fileInfo[0].fileId;
             this.INCOME_UPLOAD_DOC_FORM.fields[field].value = file.fileInfo && file.fileInfo.length && file.fileInfo[0].fileName;
           }
