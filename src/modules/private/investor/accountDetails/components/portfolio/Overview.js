@@ -345,7 +345,7 @@ class Overview extends Component {
             </>
           )
         }
-        {chartData.length > 0 && !responsiveVars.isMobile
+        {chartData.length > 0
           && (
             <>
               <Divider />
