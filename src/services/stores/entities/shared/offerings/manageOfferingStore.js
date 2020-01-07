@@ -3,7 +3,7 @@ import { startCase, get, includes } from 'lodash';
 import money from 'money-math';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore, * as dataModelStore from '../dataModelStore';
-import { TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT } from '../../../../constants/offering/formMeta/offering';
+import { TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT, OFFERING_MISC } from '../../../../constants/offering/formMeta/offering';
 import { fileUpload } from '../../../../actions';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -20,6 +20,8 @@ export class ManageOfferingStore extends DataModelStore {
   HEADER_BASIC_FRM = Validator.prepareFormObject(HEADER_BASIC);
 
   OFFERING_CONTENT_FRM = Validator.prepareFormObject(OFFERING_CONTENT);
+
+  OFFERING_MISC_FRM = Validator.prepareFormObject(OFFERING_MISC);
 
   get campaignStatus() {
     console.log(this.TOMBSTONE_BASIC_FRM);
@@ -111,6 +113,9 @@ export class ManageOfferingStore extends DataModelStore {
       forms.forEach((f) => {
         data = { ...data, ...Validator.evaluateFormData(this[f].fields) };
       });
+    } else if (keyName === 'misc') {
+      data = offeringCreationStore.evaluateFormFieldToArray(this[forms].fields, false);
+      data = { ...data, ...Validator.evaluateFormData(this[forms].fields) };
     } else {
       data = Validator.evaluateFormData(this[forms].fields);
     }
@@ -172,6 +177,7 @@ export class ManageOfferingStore extends DataModelStore {
       TOMBSTONE_BASIC_FRM: { isMultiForm: false },
       HEADER_BASIC_FRM: { isMultiForm: false },
       OFFERING_CONTENT_FRM: { isMultiForm: true },
+      OFFERING_MISC_FRM: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -196,6 +202,7 @@ export class ManageOfferingStore extends DataModelStore {
     OFFERING_CONTENT_FRM: observable,
     TOMBSTONE_HEADER_META_FRM: observable,
     HEADER_BASIC_FRM: observable,
+    OFFERING_MISC_FRM: observable,
     uploadMedia: action,
     updateOffering: action,
     updateOfferingMutation: action,

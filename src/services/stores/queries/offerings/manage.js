@@ -73,6 +73,27 @@ const common = {
     scope
     customValue
   }
+  misc {
+    issuerStatement
+    logo {
+      url
+      fileName
+    }
+    avatar {
+      url
+      fileName
+    }
+    social {
+      type
+      url
+      shareLink
+      blurb
+      featuredImageUpload {
+        url
+        fileName
+      }
+    }
+  }
   tombstone {
     image {
       url

@@ -985,7 +985,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  evaluateFormFieldToArray = (fields) => {
+  evaluateFormFieldToArray = (fields, includeHighlight = true) => {
     const social = [];
     const highlight = [];
     map(fields, (ele, key) => {
@@ -1034,7 +1034,7 @@ export class OfferingCreationStore {
             social.push(object);
           }
         }
-        if (Array.isArray(toJS(fields[key]))) {
+        if (includeHighlight && Array.isArray(toJS(fields[key]))) {
           records.forEach((field) => {
             highlight.push(field.highlight.value);
           });
@@ -1043,7 +1043,8 @@ export class OfferingCreationStore {
         console.log(e);
       }
     });
-    return { social, highlight };
+    const socialData = includeHighlight ? { social, highlight } : { social };
+    return socialData;
   }
 
   generateActivityHistory = (resourceId, activityType, activityTitle, subType) => {
