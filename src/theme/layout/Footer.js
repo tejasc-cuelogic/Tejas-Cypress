@@ -81,11 +81,7 @@ class Footer extends Component {
                 <b>See general risk factors{' '}
                   <a href="https://nextseed.com/agreements/legal/general-risk-factors" target="_blank" rel="noopener noreferrer">here</a>
                 </b>.
-                NextSeed does not verify the adequacy, accuracy or completeness of any
-                information. Neither NextSeed nor any of its officers, directors, agents and
-                employees makes any warranty, express or implied, of any kind whatsoever related
-                to the adequacy, accuracy or completeness of any information on this site or the
-                use of information on this site. See additional general disclosures <Link to="/agreements/legal/general-disclosures" target="_blank">here</Link>.
+                See additional general disclosures <Link to="/agreements/legal/general-disclosures" target="_blank">here</Link>.
               </p>
               <p>
                 By accessing this site and any pages thereof, you agree to be bound by the <Link to="/agreements/legal/terms-of-use" target="_blank">Terms of Use</Link> and
