@@ -53,6 +53,15 @@
                     border: none !important;
                 }
             }
+            &.dropdown.item > i.icon.dropdown{
+                font-family:'Nextseed';
+                height:22px;
+                line-height:22px;
+                vertical-align:top;
+                &:before{
+                    content:"\e914";
+                }
+            }
         }
         &.inverted {
             background-color:fade(@neutral, 90%);
