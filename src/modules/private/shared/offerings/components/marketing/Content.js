@@ -28,7 +28,7 @@ export default class Content extends Component {
       return navItems;
     });
     return (
-      <div className={match.url.includes('offering-creation') ? 'inner-content-spacer' : ''}>
+      <div className="inner-content-spacer">
         <Grid>
           <Grid.Column widescreen={4} computer={4} tablet={3} mobile={16}>
             <div className="sticky-sidebar">
