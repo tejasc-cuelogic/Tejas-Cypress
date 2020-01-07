@@ -7,7 +7,7 @@ import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { KNOWLEDGE_BASE, CATEGORY_TYPES } from '../../../constants/admin/knowledgeBase';
-import { adminKnowledgeBaseById, adminKnowledgeBaseById, adminCreateKnowledgeBaseItem, adminUpdateKnowledgeBaseItem, adminDeleteKnowledgeBaseItems, adminFilterKnowledgeBase, adminSetOrderForKnowledgeBase } from '../../queries/knowledgeBase';
+import { getKnowledgeBaseDetails, adminKnowledgeBaseById, adminCreateKnowledgeBaseItem, adminUpdateKnowledgeBaseItem, adminDeleteKnowledgeBaseItems, adminFilterKnowledgeBase, adminSetOrderForKnowledgeBase } from '../../queries/knowledgeBase';
 import { getCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
 import { uiStore } from '../../index';
@@ -110,15 +110,15 @@ export class KnowledgeBaseStore {
   getKnowledgeBase = (id, isPublic = true) => {
     this.resetSearch();
     this.toggleSearch();
-    const query = isPublic ? adminKnowledgeBaseById : adminKnowledgeBaseById;
+    const query = isPublic ? getKnowledgeBaseDetails : adminKnowledgeBaseById;
     const apiClient = isPublic ? clientPublic : client;
     this.data = graphql({
       client: apiClient,
       query,
       variables: { id },
       onFetch: (res) => {
-        if (res && res.knowledgeBaseById && res.knowledgeBaseById !== null) {
-          this.setFormData(res.knowledgeBaseById);
+        if (res && res.adminKnowledgeBaseById && res.adminKnowledgeBaseById !== null) {
+          this.setFormData(res.adminKnowledgeBaseById);
         } else {
           Helper.toast('Invalid knowledge base id', 'error');
         }

@@ -68,7 +68,7 @@ query adminKnowledgeBaseById($id: ID!) {
 }
 `;
 
-export const adminKnowledgeBaseById = gql`
+export const getKnowledgeBaseDetails = gql`
 query adminKnowledgeBaseById ($id: ID!) {
     adminKnowledgeBaseById (id: $id) {
       id
