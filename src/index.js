@@ -58,7 +58,9 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
-if (!['localhost', 'review'].includes(REACT_APP_DEPLOY_ENV)) {
+// temporarily disable install
+
+if (['disabled'].includes(REACT_APP_DEPLOY_ENV)) {
   OfflinePluginRuntime.install({
     onInstalled: () => {
       // console.log('[OfflinePlugin] onInstalled');
