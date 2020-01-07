@@ -19,6 +19,9 @@ class Misc extends Component {
   //   super(props);
   //   this.props.manageOfferingStore.setFormData('OFFERING_MISC_FRM', 'misc');
   // }
+  onFileDrop = (files, name) => {
+    this.props.manageOfferingStore.uploadFileToS3('OFFERING_MISC_FRM', name, files);
+  }
 
   uploadMedia = (name) => {
     this.props.manageOfferingStore.uploadMedia(name, 'OFFERING_MISC_FRM');
@@ -82,16 +85,7 @@ class Misc extends Component {
                 <Header as="h6">{capitalize(field)}</Header>
                 <Form.Group>
                   {smartElement.Input(`${field}_shareLink`, { displayMode: isReadonly, key: field, containerwidth: '10' })}
-                  {smartElement.DropZone(`${field}_featuredImageUpload`, { displayMode: isReadonly, key: field, uploadtitle: 'Choose a file or drag it here', containerclassname: 'field six wide' })}
-                  {/* <DropZone
-                    disabled={isReadonly}
-                    name="facebook_featuredImageUpload"
-                    fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_featuredImageUpload}
-                    ondrop={(files, name) => this.onFileDrop(files, name)}
-                    onremove={field => this.handleDelDoc(field)}
-                    uploadtitle="Choose a file or drag it here"
-                    containerclassname="field six wide"
-                  /> */}
+                  {smartElement.DropZone(`${field}_featuredImageUpload`, { uploadMedia: this.onFileDrop, displayMode: isReadonly, key: field, uploadtitle: 'Choose a file or drag it here', containerclassname: 'field six wide' })}
                 </Form.Group>
                 {smartElement.FormTextarea(`${field}_blurb`, { readOnly: isReadonly, containerclassname: 'secondary' })}
               </>

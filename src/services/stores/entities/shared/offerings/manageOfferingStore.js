@@ -105,6 +105,35 @@ export class ManageOfferingStore extends DataModelStore {
       });
   };
 
+  uploadFileToS3 = (form, name, files, key, index) => {
+    let fileField = '';
+    if (key) {
+      fileField = this[form].fields[key][index][name];
+    } else {
+      fileField = this[form].fields[name];
+    }
+    fileField.showLoader = true;
+    const fileObj = {
+      obj: files[0],
+      name: Helper.sanitize(files[0].name),
+    };
+    fileUpload.uploadToS3(fileObj, `offerings/${offeringCreationStore.currentOfferingId}`)
+      .then(action((res) => {
+        Helper.toast('file uploaded successfully', 'success');
+        fileField.value = files[0].name;
+        fileField.preSignedUrl = res;
+        fileField.fileId = `${files[0].name}${Date.now()}`;
+        fileField.fileName = `${files[0].name}${Date.now()}`;
+      }))
+      .catch(action(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        fileField.showLoader = false;
+      }))
+      .finally(action(() => {
+        fileField.showLoader = false;
+      }));
+  }
+
   updateOffering = params => new Promise((res) => {
     const { keyName, forms } = params;
     let offeringDetails = {};
@@ -205,6 +234,7 @@ export class ManageOfferingStore extends DataModelStore {
     OFFERING_MISC_FRM: observable,
     uploadMedia: action,
     updateOffering: action,
+    uploadFileToS3: action,
     updateOfferingMutation: action,
     setFormData: action,
     campaignStatus: computed,
