@@ -8,6 +8,7 @@
   "screenshotsFolder": "cypress/reports/screenshots",
   "videosFolder": "cypress/reports/videos",
   "env": {
-    "appPassword": "fourroses"
+    "appPassword": "fourroses",
+    "commonPassword": "nextseed01test"
   }
 }

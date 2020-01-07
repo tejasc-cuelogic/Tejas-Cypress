@@ -205,8 +205,7 @@ const deleteUserCtaAction = (ctaName) => {
 Cypress.Commands.add('cleanUpUser', () => {
   const investorEmail = window.localStorage.getItem('investorEmail');
   cy.Logout();
-  console.log('investorEmail====', investorEmail); 
-  cy.login(investorEmail, 'nextseed01test').then((user) => {
+  cy.login(investorEmail, Cypress.env('commonPassword')).then((user) => {
     if (user.signInUserSession) {
       if (user.signInUserSession.idToken && user.signInUserSession.idToken.jwtToken) {
         const authToken = user.signInUserSession.idToken.jwtToken;
