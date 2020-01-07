@@ -69,21 +69,18 @@ class HowItWorks extends Component {
     ];
     const testimonial = [
       {
-        title: 'Real Success Stories',
         description: 'The all-in-one platform allowed us to expand quickly and build a new customer base. Our partnership with NextSeed is a win-win.',
         name: 'Jess Hughes | Citizen Pilates',
         investment: '$100,000 from 75 investors',
         image: responsiveVars.isMobile ? 'business/jess-mobile.png' : 'business/jess.png',
       },
       {
-        title: 'Real Success Stories',
         description: 'The NextSeed process was extremely smooth and allowed me to focus on getting Pitch 25 up and running. The amount of community buzz that we got through this process gave our business a huge boost.',
         name: 'Brian Ching | Pitch 25',
         investment: '$549,900 from 392 investors',
         image: responsiveVars.isMobile ? 'business/lian-mobile.png' : 'business/lian.png',
       },
       {
-        title: 'Real Success Stories',
         description: 'Your patrons get to be part of what you’re creating. It’s the best way to access this many investors while retaining 100% ownership.',
         name: 'Michael Dickson, Native Hostel',
         investment: '$396,500 from 227 investors',
@@ -377,6 +374,7 @@ class HowItWorks extends Component {
           </section>
           <Divider fitted />
           <section className={`${responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}  testimonial`}>
+            {responsiveVars.isMobile && <Header as="h2">Real success stories</Header>}
             <NsCarousel {...settings}>
               {testimonial.map(t => (
                 <Item.Group key={t}>
@@ -384,7 +382,7 @@ class HowItWorks extends Component {
                     {!responsiveVars.isMobile
                       && <NSImage path={t.image} size="large" />}
                     <Item.Content verticalAlign="middle">
-                      <Item.Header as={isMobile ? 'h3' : 'h2'}>{t.title}</Item.Header>
+                      {!responsiveVars.isMobile && <Item.Header as={isMobile ? 'h3' : 'h2'}>Real success stories</Item.Header>}
                       <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
                         “{t.description}”
                     </Item.Description>

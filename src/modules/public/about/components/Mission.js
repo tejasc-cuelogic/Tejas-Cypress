@@ -61,10 +61,10 @@ class Mission extends Component {
               <Grid.Row>
                 <Grid.Column width={8} verticalAlign="middle">
                   <Header as="h3" className="highlight-text quotes left-align">
-                    <sup><Icon size="mini" className="ns-quote-left" /></sup> Our mission is to build prosperous communities by making meaningful investments accessible to everyone. <sup><Icon size="mini" className="ns-quote-right" /></sup>
+                    <sup><Icon size="mini" className="ns-quote-left" /></sup> Our mission is to build <br />prosperous communities by making meaningful investments accessible to everyone. <sup><Icon size="mini" className="ns-quote-right" /></sup>
                   </Header>
                 </Grid.Column>
-                <Grid.Column width={8}>
+                <Grid.Column width={7} floated="right">
                   <p>
                     We are a fast-growing fintech company that empowers everyday investors to invest directly in local businesses, enabling private companies across the US to raise capital directly from their community. The Next Seed, Inc. operates NextSeed Services LLC, a fully-integrated online investment platform, and NextSeed Securities, LLC, a forward-thinking investment banking practice.
                   </p>
@@ -179,7 +179,7 @@ class Mission extends Component {
                 </p>
                 <Divider hidden />
                 <p>
-                  <b>Contact info:</b> Submit your resume to <a target="_blank" rel="noreferrer noopener" href="mailto:jobs@nextseed.com">jobs@nextseed.com</a> and indicate position in the subject line.
+                  <b>Contact info:</b> Submit your resume to <a target="_blank" rel="noreferrer noopener" href="mailto:jobs@nextseed.com">jobs@nextseed.com</a> <br />and indicate position in the subject line.
                 </p>
               </Grid.Column>
               {!responsiveVars.isMobile
