@@ -17,7 +17,7 @@ import { FormValidator as Validator, DataFormatter } from '../../../../../helper
 import { deleteBonusReward, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, adminOfferingClose, deleteBac, upsertBonusReward,
   getBonusRewards, adminBusinessFilings, initializeClosingBinder,
-  adminCreateBusinessFiling, upsertOffering } from '../../../queries/offerings/manage';
+  adminCreateBusinessFiling, adminUpsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore, offeringInvestorStore } from '../../../index';
@@ -1062,13 +1062,13 @@ export class OfferingCreationStore {
     uiStore.addMoreInProgressArray('upsert');
     client
       .mutate({
-        mutation: upsertOffering,
+        mutation: adminUpsertOffering,
         variables: { offeringDetails },
       })
       .then((res) => {
         uiStore.removeOneFromProgressArray(false);
-        offeringsStore.addNewOne(res.data.upsertOffering, 'creation');
-        this.generateActivityHistory(res.data.upsertOffering.id, ACTIVITY_HISTORY_TYPES.CREATION, 'Application Created by Admin.', 'STARTED');
+        offeringsStore.addNewOne(res.data.adminUpsertOffering, 'creation');
+        this.generateActivityHistory(res.data.adminUpsertOffering.id, ACTIVITY_HISTORY_TYPES.CREATION, 'Application Created by Admin.', 'STARTED');
         Helper.toast('Offering created successfully.', 'success');
       })
       .catch(() => {

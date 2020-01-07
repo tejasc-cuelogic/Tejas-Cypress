@@ -7,7 +7,7 @@ import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { KNOWLEDGE_BASE, CATEGORY_TYPES } from '../../../constants/admin/knowledgeBase';
-import { getKnowledgeBaseDetails, getKnowledgeBaseById, createKnowledgeBase, updateKnowledgeBase, deleteKBById, getAllKnowledgeBaseByFilters, setOrderForKnowledgeBase } from '../../queries/knowledgeBase';
+import { adminKnowledgeBaseById, adminKnowledgeBaseById, adminCreateKnowledgeBaseItem, adminUpdateKnowledgeBaseItem, adminDeleteKnowledgeBaseItems, adminFilterKnowledgeBase, adminSetOrderForKnowledgeBase } from '../../queries/knowledgeBase';
 import { getCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
 import { uiStore } from '../../index';
@@ -110,7 +110,7 @@ export class KnowledgeBaseStore {
   getKnowledgeBase = (id, isPublic = true) => {
     this.resetSearch();
     this.toggleSearch();
-    const query = isPublic ? getKnowledgeBaseDetails : getKnowledgeBaseById;
+    const query = isPublic ? adminKnowledgeBaseById : adminKnowledgeBaseById;
     const apiClient = isPublic ? clientPublic : client;
     this.data = graphql({
       client: apiClient,
@@ -139,7 +139,7 @@ export class KnowledgeBaseStore {
 
     client
       .mutate({
-        mutation: id === 'new' ? createKnowledgeBase : updateKnowledgeBase,
+        mutation: id === 'new' ? adminCreateKnowledgeBaseItem : adminUpdateKnowledgeBaseItem,
         variables: payload,
       })
       .then(() => {
@@ -162,8 +162,8 @@ export class KnowledgeBaseStore {
   sortBydate = data => orderBy(orderBy(data, o => (o.updated.date ? new Date(o.updated.date) : ''), ['desc']), d => d.order, ['asc'])
 
   @computed get count() {
-    return (this.data.data && this.data.data.knowledgeBaseByFilters
-      && this.data.data.knowledgeBaseByFilters.length) || 0;
+    return (this.data.data && this.data.data.adminFilterKnowledgeBase
+      && this.data.data.adminFilterKnowledgeBase.length) || 0;
   }
 
   @computed get getSelectedRecords() {
@@ -331,7 +331,7 @@ export class KnowledgeBaseStore {
     uiStore.setProgress();
     client
       .mutate({
-        mutation: deleteKBById,
+        mutation: adminDeleteKnowledgeBaseItems,
         variables: {
           id,
         },
@@ -366,14 +366,14 @@ export class KnowledgeBaseStore {
     this.toggleSearch();
     this.data = graphql({
       client,
-      query: getAllKnowledgeBaseByFilters,
+      query: adminFilterKnowledgeBase,
       fetchPolicy: 'network-only',
       onFetch: (res) => {
         if (res && !this.data.loading) {
           // this.requestState.page = 1;
           // this.requestState.skip = 0;
           // this.requestState.displayTillIndex = 10;
-          this.setDb(this.sortBydate(res.knowledgeBaseByFilters));
+          this.setDb(this.sortBydate(res.adminFilterKnowledgeBase));
         }
       },
     });
@@ -401,7 +401,7 @@ export class KnowledgeBaseStore {
     this.requestState.page = params.page || 1;
     this.data = graphql({
       client,
-      query: getAllKnowledgeBaseByFilters,
+      query: adminFilterKnowledgeBase,
       variables: params,
       fetchPolicy: 'network-only',
       onFetch: (res) => {
@@ -409,7 +409,7 @@ export class KnowledgeBaseStore {
         if (res && !this.data.loading) {
           this.requestState.page = params.page || 1;
           this.requestState.skip = params.skip || 0;
-          this.setDb(this.sortBydate(res.knowledgeBaseByFilters));
+          this.setDb(this.sortBydate(res.adminFilterKnowledgeBase));
         }
       },
     });
@@ -460,9 +460,9 @@ export class KnowledgeBaseStore {
     this.data.loading = true;
     client
       .mutate({
-        mutation: setOrderForKnowledgeBase,
+        mutation: adminSetOrderForKnowledgeBase,
         variables: { knowledgeBaseItemsList: data },
-        refetchQueries: [{ query: getAllKnowledgeBaseByFilters }],
+        refetchQueries: [{ query: adminFilterKnowledgeBase }],
       }).then(() => {
         Helper.toast('Order updated successfully.', 'success');
       }).catch(() => {

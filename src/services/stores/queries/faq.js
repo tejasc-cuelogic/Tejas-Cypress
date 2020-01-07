@@ -21,9 +21,9 @@ export const faqs = gql`
   }
 `;
 
-export const getFaqById = gql`
-  query getFaqById ($id: String!) {
-    getFaqById (id: $id) {
+export const adminGetFaqById = gql`
+  query adminGetFaqById ($id: String!) {
+    adminGetFaqById (id: $id) {
       id
       slug
       author

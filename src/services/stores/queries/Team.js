@@ -19,9 +19,9 @@ export const allTeamMembers = gql`
   }
 `;
 
-export const getTeamMemberById = gql`
-  query getTeamMemberById ($id: ID!) {
-    getTeamMemberById (id: $id) {
+export const adminGetTeamMemberById = gql`
+  query adminGetTeamMemberById ($id: ID!) {
+    adminGetTeamMemberById (id: $id) {
       id
       memberName
       avatar
@@ -37,15 +37,15 @@ export const getTeamMemberById = gql`
   }
 `;
 
-export const deleteTeamMemberById = gql`
-  mutation deleteTeamMember($id: [ID]){
-    deleteTeamMember(id: $id)
+export const adminDeleteTeamMember = gql`
+  mutation adminDeleteTeamMember($id: [ID]){
+    adminDeleteTeamMember(id: $id)
   }
 `;
 
-export const newTeamMember = gql`
-  mutation createTeamMember ($teamMemberDetailsInput: TeamMemberInput!) {
-    createTeamMember ( teamMemberDetailsInput: $teamMemberDetailsInput ) {
+export const adminCreateTeamMember = gql`
+  mutation adminCreateTeamMember ($teamMemberDetailsInput: TeamMemberInput!) {
+    adminCreateTeamMember ( teamMemberDetailsInput: $teamMemberDetailsInput ) {
       memberName
       avatar
       story
@@ -60,9 +60,9 @@ export const newTeamMember = gql`
   }
 `;
 
-export const editTeamMember = gql`
-  mutation updateTeamMemberInfo ($id: ID!, $teamMemberDetailsInput: TeamMemberInput!) {
-    updateTeamMemberInfo (
+export const adminUpdateTeamMemberInfo = gql`
+  mutation adminUpdateTeamMemberInfo ($id: ID!, $teamMemberDetailsInput: TeamMemberInput!) {
+    adminUpdateTeamMemberInfo (
       id: $id,
       teamMemberDetailsInput: $teamMemberDetailsInput
     ) {
@@ -82,8 +82,8 @@ export const editTeamMember = gql`
   }
 `;
 
-export const setMemberOrderInTeam = gql`
-mutation setMemberOrderInTeam($teamDetails: [TeamOrderInput]) {
-  setMemberOrderInTeam(teamDetails: $teamDetails)
+export const adminSetMemberOrderInTeam = gql`
+mutation adminSetMemberOrderInTeam($teamDetails: [TeamOrderInput]) {
+  adminSetMemberOrderInTeam(teamDetails: $teamDetails)
 }
 `;

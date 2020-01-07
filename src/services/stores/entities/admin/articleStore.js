@@ -9,7 +9,7 @@ import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { ARTICLES, THUMBNAIL_EXTENSIONS } from '../../../constants/admin/article';
-import { getArticleDetailsBySlug, deleteArticle, allInsightArticles, getArticleDetails, getArticleById, createArticle, updateArticle, insightArticlesListByFilter } from '../../queries/insightArticle';
+import { getArticleDetailsBySlug, adminDeleteArticle, allInsightArticles, getArticleDetails, adminInsightsArticle, adminCreateArticle, adminUpdateArticleInfo, adminInsightArticlesListByFilter } from '../../queries/insightArticle';
 import { getCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
 import { uiStore, commonStore } from '../..';
@@ -107,12 +107,12 @@ export class ArticleStore {
     getSingleInsightAdmin = (id) => {
       this.article = graphql({
         client,
-        query: getArticleById,
+        query: adminInsightsArticle,
         variables: { id },
         fetchPolicy: 'network-only',
         onFetch: (res) => {
-          if (res && res.insightsArticle) {
-            this.setForm(res.insightsArticle);
+          if (res && res.adminInsightsArticle) {
+            this.setForm(res.adminInsightsArticle);
           }
         },
       });
@@ -168,7 +168,7 @@ export class ArticleStore {
       payload.tags = payload.tags.split(',').filter(tag => tag !== '');
       client
         .mutate({
-          mutation: id === 'new' ? createArticle : updateArticle,
+          mutation: id === 'new' ? adminCreateArticle : adminUpdateArticleInfo,
           variables: id === 'new' ? { payload, isPartial: isDraft } : { payload, id, isPartial: isDraft },
         }).then(() => {
           Helper.toast('Category Saved successfully.', 'success');
@@ -188,11 +188,11 @@ export class ArticleStore {
     sortArticlesByFilter = () => {
       this.allInsightsList = graphql({
         client,
-        query: insightArticlesListByFilter,
+        query: adminInsightArticlesListByFilter,
         fetchPolicy: 'network-only',
         onFetch: (res) => {
-          if (res && res.insightArticlesListByFilter) {
-            this.setDb(this.sortBydate(res.insightArticlesListByFilter));
+          if (res && res.adminInsightArticlesListByFilter) {
+            this.setDb(this.sortBydate(res.adminInsightArticlesListByFilter));
           }
         },
       });
@@ -224,7 +224,7 @@ export class ArticleStore {
 
     @computed get adminInsightArticleListing() {
       return (this.allInsightsList && this.allInsightsList.data
-        && this.allInsightsList.data.insightArticlesListByFilter) || [];
+        && this.allInsightsList.data.adminInsightArticlesListByFilter) || [];
     }
 
     @computed get articleListingLoader() {
@@ -236,7 +236,7 @@ export class ArticleStore {
       uiStore.setProgress();
       client
         .mutate({
-          mutation: deleteArticle,
+          mutation: adminDeleteArticle,
           variables: { id },
         }).then(() => {
           Helper.toast('Category deleted successfully.', 'success');
@@ -286,7 +286,7 @@ export class ArticleStore {
     }
 
     @computed get singleArticlesDetails() {
-      return (this.article.data && toJS(this.article.data.insightsArticle)) || null;
+      return (this.article.data && toJS(this.article.data.adminInsightsArticle)) || null;
     }
 
     @computed get articleLoading() {
@@ -436,9 +436,9 @@ export class ArticleStore {
 
     @computed get allInsightsListing() {
       return (this.allInsightsList && this.allInsightsList.data
-        && this.allInsightsList.data.insightArticlesListByFilter
+        && this.allInsightsList.data.adminInsightArticlesListByFilter
         && toJS(sortBy(
-          this.allInsightsList.data.insightArticlesListByFilter,
+          this.allInsightsList.data.adminInsightArticlesListByFilter,
           ['title'],
         ).slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
     }

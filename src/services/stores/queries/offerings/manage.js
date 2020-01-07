@@ -105,9 +105,9 @@ export const allOfferings = gql`
   }
 `;
 
-export const deleteOffering = gql`
-  mutation deleteOffering($id: String!) {
-    deleteOffering(id: $id) {
+export const adminDeleteOffering = gql`
+  mutation adminDeleteOffering($id: String!) {
+    adminDeleteOffering(id: $id) {
       id
     }
   }
@@ -1215,9 +1215,9 @@ mutation updateOffering($id: String!, $issuerId: String, $adminId: String, $offe
 }
 `;
 
-export const upsertOffering = gql`
-mutation upsertOffering($id: String, $offeringDetails: OfferingInputType!) {
-  upsertOffering(id: $id, offeringDetails: $offeringDetails) {
+export const adminUpsertOffering = gql`
+mutation adminUpsertOffering($id: String, $offeringDetails: OfferingInputType!) {
+  adminUpsertOffering(id: $id, offeringDetails: $offeringDetails) {
     id
     ${common.offeringBasics}
   }
