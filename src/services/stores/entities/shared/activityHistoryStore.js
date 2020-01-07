@@ -125,9 +125,9 @@ export class ActivityHistoryStore extends DataModelStore {
   }
 
   get activities() {
-    return (this.allData.data && this.allData.data.filterActivityHistories
-      && this.allData.data.filterActivityHistories.activityHistory.length
-      && toJS(this.allData.data.filterActivityHistories.activityHistory)) || [];
+    return (this.allData.data && this.allData.data.adminFilterActivityHistories
+      && this.allData.data.adminFilterActivityHistories.activityHistory.length
+      && toJS(this.allData.data.adminFilterActivityHistories.activityHistory)) || [];
   }
 
   get error() {
