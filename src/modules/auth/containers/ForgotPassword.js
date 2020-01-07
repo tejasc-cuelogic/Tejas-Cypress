@@ -22,7 +22,8 @@ export default class ForgotPassword extends Component {
   onSubmit = (event) => {
     event.preventDefault();
     authActions.resetPassword()
-      .then(() => this.props.history.push('/reset-password'));
+      .then(() => this.props.history.push('/reset-password'))
+      .catch(err => window.logger(err));
   }
 
   handleCloseModal = (e) => {
