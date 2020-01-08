@@ -162,7 +162,7 @@ export default class Transactions extends Component {
                   <this.ViewTransactionDetails id={record.completeDate} />
                 </List.Content>
                 <List.Content>
-                  {moment(new Date(record.completeDate).toLocaleDateString(), 'DD/MM/YYYY').format('MM-DD-YYYY')}
+                  {moment(new Date(record.completeDate).toLocaleDateString(), 'DD/MM/YYYY').format('MM/DD/YYYY')}
                 </List.Content>
               </List.Item>
             ))
