@@ -12,7 +12,7 @@ const metaInfo = {
   form: 'HEADER_BASIC_FRM',
 };
 
-@inject('manageOfferingStore')
+@inject('manageOfferingStore', 'offeringCreationStore')
 @withRouter
 @observer
 class CampaignHeader extends Component {
@@ -38,8 +38,9 @@ class CampaignHeader extends Component {
   }
 
   render() {
-    const { manageOfferingStore, smartElement } = this.props;
+    const { manageOfferingStore, offeringCreationStore, smartElement } = this.props;
     const { HEADER_BASIC_FRM } = manageOfferingStore;
+    const { currentOfferingId } = offeringCreationStore;
     const isReadonly = false;
     return (
       <div className="inner-content-spacer">
@@ -50,12 +51,12 @@ class CampaignHeader extends Component {
           <Grid columns="2">
             <Grid.Column>
               <Header as="h4">{HEADER_BASIC_FRM.fields.heroImage.label}</Header>
-              {smartElement.ImageCropper('heroImage', { disabled: isReadonly, uploadMedia: this.uploadMedia, removeMedia: this.removeMedia })}
+              {smartElement.ImageCropper('heroImage', { disabled: isReadonly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
             <Header as="h4">{HEADER_BASIC_FRM.fields.heroBackgroundImage.label}</Header>
-              {smartElement.ImageCropper('heroBackgroundImage', { disabled: isReadonly, uploadMedia: this.uploadMedia, removeMedia: this.removeMedia })}
+              {smartElement.ImageCropper('heroBackgroundImage', { disabled: isReadonly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
               <Divider hidden />
             </Grid.Column>
           </Grid>

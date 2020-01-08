@@ -247,6 +247,26 @@ export default class DataModelStore {
     });
   }
 
+  uploadMedia = (name, form, path, files = false) => {
+    const fileObj = {
+      obj: files ? files[0] : this[form].fields[name].base64String,
+      name: Helper.sanitize(files ? files[0].name : this[form].fields[name].fileName),
+    };
+    this.setMediaAttribute(form, 'showLoader', true, name);
+    fileUpload.uploadToS3(fileObj, path)
+      .then((res) => {
+        console.log(res);
+        const url = res.split('/');
+        this.setMediaAttribute(form, 'value', url[url.length - 1], name);
+        this.setMediaAttribute(form, 'preSignedUrl', res, name);
+        this.setMediaAttribute(form, 'showLoader', false, name);
+      })
+      .catch((err) => {
+        this.setMediaAttribute(form, 'showLoader', false, name);
+        console.log(err);
+      });
+  };
+
   removeUploadedData = (form, field, index = null, arrayName = null) => {
     const path = (arrayName && index !== null) ? `fields.${arrayName}[${index}].${field}` : `fields.${field}`;
     let removeFileIds = '';

@@ -12,17 +12,13 @@ const metaInfo = {
   form: 'TOMBSTONE_BASIC_FRM',
 };
 
-@inject('manageOfferingStore')
+@inject('manageOfferingStore', 'offeringCreationStore')
 @withRouter
 @observer
 class Tombstone extends Component {
   constructor(props) {
     super(props);
     this.props.manageOfferingStore.setFormData('TOMBSTONE_HEADER_META_FRM', 'tombstone');
-  }
-
-  uploadMedia = (name) => {
-    this.props.manageOfferingStore.uploadMedia(name, 'TOMBSTONE_BASIC_FRM');
   }
 
   removeMedia = (form, name) => {
@@ -38,8 +34,9 @@ class Tombstone extends Component {
   }
 
   render() {
-    const { manageOfferingStore, smartElement } = this.props;
+    const { manageOfferingStore, offeringCreationStore, smartElement } = this.props;
     const { TOMBSTONE_BASIC_FRM } = manageOfferingStore;
+    const { currentOfferingId } = offeringCreationStore;
     const isReadonly = false;
     return (
       <div className="inner-content-spacer">
@@ -48,7 +45,7 @@ class Tombstone extends Component {
           <Grid columns="2">
             <Grid.Column>
               <Header as="h4">{TOMBSTONE_BASIC_FRM.fields.image.label}</Header>
-              {smartElement.ImageCropper('image', { disabled: isReadonly, uploadMedia: this.uploadMedia, removeMedia: this.removeMedia })}
+              {smartElement.ImageCropper('image', { disabled: isReadonly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>

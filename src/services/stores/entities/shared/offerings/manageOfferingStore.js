@@ -4,7 +4,6 @@ import money from 'money-math';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore, * as dataModelStore from '../dataModelStore';
 import { TOMBSTONE_BASIC, TOMBSTONE_HEADER_META, HEADER_BASIC, OFFERING_CONTENT, OFFERING_MISC } from '../../../../constants/offering/formMeta/offering';
-import { fileUpload } from '../../../../actions';
 import Helper from '../../../../../helper/utility';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { offeringCreationStore, offeringsStore, uiStore } from '../../../index';
@@ -88,52 +87,6 @@ export class ManageOfferingStore extends DataModelStore {
     return campaignStatus;
   }
 
-  uploadMedia = (name, form) => {
-    const fileObj = {
-      obj: this[form].fields[name].base64String,
-      name: Helper.sanitize(this[form].fields[name].fileName),
-    };
-    fileUpload.uploadToS3(fileObj, `offerings/${offeringCreationStore.currentOfferingId}`)
-      .then((res) => {
-        console.log(res);
-        const url = res.split('/');
-        this.setMediaAttribute(form, 'value', url[url.length - 1], name);
-        this.setMediaAttribute(form, 'preSignedUrl', res, name);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  uploadFileToS3 = (form, name, files, key, index) => {
-    let fileField = '';
-    if (key) {
-      fileField = this[form].fields[key][index][name];
-    } else {
-      fileField = this[form].fields[name];
-    }
-    fileField.showLoader = true;
-    const fileObj = {
-      obj: files[0],
-      name: Helper.sanitize(files[0].name),
-    };
-    fileUpload.uploadToS3(fileObj, `offerings/${offeringCreationStore.currentOfferingId}`)
-      .then(action((res) => {
-        Helper.toast('file uploaded successfully', 'success');
-        fileField.value = files[0].name;
-        fileField.preSignedUrl = res;
-        fileField.fileId = `${files[0].name}${Date.now()}`;
-        fileField.fileName = `${files[0].name}${Date.now()}`;
-      }))
-      .catch(action(() => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-        fileField.showLoader = false;
-      }))
-      .finally(action(() => {
-        fileField.showLoader = false;
-      }));
-  }
-
   updateOffering = params => new Promise((res) => {
     const { keyName, forms } = params;
     let offeringDetails = {};
@@ -178,11 +131,6 @@ export class ManageOfferingStore extends DataModelStore {
         variables,
       })
       .then(() => {
-        // let upatedOffering = null;
-        // if (get(result, 'data.updateOffering')) {
-        //   upatedOffering = Helper.replaceKeysDeep(toJS(get(result, 'data.updateOffering')), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
-        //   offeringsStore.updateOfferingList(id, upatedOffering, keyName);
-        // }
         this.removeUploadedFiles(fromS3);
         if (successMsg) {
           Helper.toast(successMsg, msgType || 'success');

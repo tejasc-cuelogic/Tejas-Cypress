@@ -23,10 +23,6 @@ class Misc extends Component {
     this.props.manageOfferingStore.uploadFileToS3('OFFERING_MISC_FRM', name, files);
   }
 
-  uploadMedia = (name) => {
-    this.props.manageOfferingStore.uploadMedia(name, 'OFFERING_MISC_FRM');
-  }
-
   removeMedia = (form, name) => {
     console.log(form, name);
   }
@@ -50,19 +46,17 @@ class Misc extends Component {
           <Grid columns="2">
             <Grid.Column>
             <Header as="h4">{OFFERING_MISC_FRM.fields.logo.label}</Header>
-            {smartElement.ImageCropper('logo', { disabled: isReadonly, uploadMedia: this.uploadMedia, removeMedia: this.removeMedia })}
+            {smartElement.ImageCropper('logo', { disabled: isReadonly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
             <Header as="h4">{OFFERING_MISC_FRM.fields.avatar.label}</Header>
-            {smartElement.ImageCropper('avatar', { disabled: isReadonly, uploadMedia: this.uploadMedia, removeMedia: this.removeMedia })}            </Grid.Column>
+            {smartElement.ImageCropper('avatar', { disabled: isReadonly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}            </Grid.Column>
           </Grid>
-          <Form.Group widths={1}>
-            <Form.Field>
-              <Header as="h6">{OFFERING_MISC_FRM.fields.issuerStatement.label}</Header>
-              {smartElement.HtmlEditor('issuerStatement', { readOnly: isReadonly, imageUploadPath: `offerings/${currentOfferingId}` })}
-            </Form.Field>
-          </Form.Group>
+          <Form.Field>
+            <Header as="h6">{OFFERING_MISC_FRM.fields.issuerStatement.label}</Header>
+            {smartElement.HtmlEditor('issuerStatement', { readOnly: isReadonly, imageUploadPath: `offerings/${currentOfferingId}` })}
+          </Form.Field>
           <Header as="h4">Social Media
             <Header.Subheader>
               Links to social media profiles where investors can learn more about offering
@@ -85,7 +79,7 @@ class Misc extends Component {
                 <Header as="h6">{capitalize(field)}</Header>
                 <Form.Group>
                   {smartElement.Input(`${field}_shareLink`, { displayMode: isReadonly, key: field, containerwidth: '10' })}
-                  {smartElement.DropZone(`${field}_featuredImageUpload`, { uploadMedia: this.onFileDrop, displayMode: isReadonly, key: field, uploadtitle: 'Choose a file or drag it here', containerclassname: 'field six wide' })}
+                  {smartElement.DropZone(`${field}_featuredImageUpload`, { S3Upload: true, uploadPath: `offerings/${currentOfferingId}`, displayMode: isReadonly, key: field, uploadtitle: 'Choose a file or drag it here', containerclassname: 'field six wide' })}
                 </Form.Group>
                 {smartElement.FormTextarea(`${field}_blurb`, { readOnly: isReadonly, containerclassname: 'secondary' })}
               </>
@@ -94,7 +88,7 @@ class Misc extends Component {
           {/* <Grid columns="2">
             <Grid.Column>
               <Header as="h4">{OFFERING_MISC_FRM.fields.image.label}</Header>
-              {smartElement.ImageCropper('image', { disabled: isReadonly, uploadMedia: this.uploadMedia, removeMedia: this.removeMedia })}
+              {smartElement.ImageCropper('image', { disabled: isReadonly, uploadPath: `offerings/${currentOfferingId}`, removeMedia: this.removeMedia })}
               <Divider hidden />
             </Grid.Column>
             <Grid.Column>
