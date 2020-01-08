@@ -3,6 +3,10 @@ import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Form, Divider, Header } from 'semantic-ui-react';
 import OfferingButtonGroup from '../../OfferingButtonGroup';
+import BonusRewards from '../../BonusRewards';
+import Comments from '../../Comments';
+import Updates from '../../Updates';
+import DataRoom from '../../legal/DataRoom';
 import formHOC from '../../../../../../../theme/form/formHOC';
 
 const metaInfo = {
@@ -47,10 +51,18 @@ class OfferingContent extends Component {
           </Form.Group>
           )}
           <Divider hidden />
-          <Divider hidden />
+          {/* {!['BONUS_REWARDS', 'DATA_ROOM'].includes(OFFERING_CONTENT_FRM.fields.content[index].contentType.value)
+          && ( */}
           <OfferingButtonGroup
             updateOffer={this.handleFormSubmit}
           />
+          {/* )} */}
+          <Divider section />
+          {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'BONUS_REWARDS' && <BonusRewards {...this.props} />}
+          {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'DATA_ROOM' && <DataRoom {...this.props} />}
+          {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'COMMENTS' && <Comments {...this.props} />}
+          {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'UPDATES' && <Updates {...this.props} />}
+          <Divider hidden />
         </Form>
       </div>
     );
