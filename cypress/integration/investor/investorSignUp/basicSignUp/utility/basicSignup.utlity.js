@@ -22,7 +22,7 @@ export const FillSignUpForm = () => {
 };
 
 export const fillSignUpFormAndProceed = () => {
-  registerApiCall('signUpForm');
+  registerApiCall('signUpForm', '**/graphql');
   goToSignUpScreen();
   FillSignUpForm();
   cy.get('button.button').contains('Register').click();
@@ -30,11 +30,10 @@ export const fillSignUpFormAndProceed = () => {
 };
 
 export const confirmEmailAddressScreen = () => {
-  cy.wait('@confirm');
-  cy.wait('@confirm');
   cy.contains('Continue').click();
 }
 
 export const confirmPhoneNumberScreen = () => {
   cy.get('div.content > .center-align > button').contains('Continue').click({ force: true });
+  cy.wait(200);
 }

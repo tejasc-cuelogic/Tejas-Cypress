@@ -757,6 +757,11 @@
         }
     }
     &.statistic-section .ui.card{
+        @media only screen and (min-width : @computerBreakpoint){
+        width: calc(33.33333333% - 28px);
+        margin-left: @14px;
+        margin-right: @14px;
+        }
         .content{
             padding: @30px @40px;
             border-top: 0 !important;
