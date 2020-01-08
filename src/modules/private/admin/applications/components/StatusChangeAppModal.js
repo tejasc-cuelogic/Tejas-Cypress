@@ -18,8 +18,8 @@ export default class StatusChangeAppModal extends Component {
     if (this.props.match.params.action === 'PROMOTE' && this.props.match.params.id !== 'in-progress') {
       this.props.businessAppReviewStore.resetPasswordFrm();
       this.props.businessAppReviewStore.resetEmailFrm();
-      const { adminBusinessApplicationsDetails, fetchAdminApplicationById } = this.props.businessAppStore;
-      if (!adminBusinessApplicationsDetails) {
+      const { businessApplicationDetailsAdmin, fetchAdminApplicationById } = this.props.businessAppStore;
+      if (!businessApplicationDetailsAdmin) {
         fetchAdminApplicationById(this.props.match.params.appId, this.props.match.params.id)
           .then(() => {
             this.props.businessAppReviewStore.resetEmailFrm();
