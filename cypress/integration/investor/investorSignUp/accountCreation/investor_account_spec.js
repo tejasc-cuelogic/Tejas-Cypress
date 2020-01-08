@@ -8,7 +8,7 @@ import {
        } from './utility/investorAccount.utlity';
 import { registerApiCall } from '../../../common.utility';
 
-describe.skip('Account Creation', () => {
+describe('Account Creation', () => {
   before(() => {
     investorFlowProcess();
   });
@@ -23,21 +23,12 @@ describe.skip('Account Creation', () => {
   });
 
   after(() => {
-    cy.deleteUser();
-  });
-
-  it('should successfully link bank with manual process', () => {
-    individualManualLinkbankProcess();
-    cy.get('input[name="value"]').then(() => {
-      cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
-        cy.log('step value', step);
-        assert.equal(step, 'Add funds', 'Should be on add funds modal')	
-      });
-    });
+    cy.restoreLocalStorage();
+    cy.cleanUpUser();
   });
 
   it('should successfully link bank with plaid process', () => {
-    individualPlaidProcess('.progtrckr-done', '1');
+    individualPlaidProcess('.progtrckr-doing', '1');
     cy.get('input[name="value"]').then(() => {
       cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-doing`).click({ force: true }).invoke('text').then((step) => {
         cy.log('step value', step);
@@ -46,25 +37,31 @@ describe.skip('Account Creation', () => {
     });
   });
 
-  it.skip('should create individual account successfully', () => {
+  it('should successfully link bank with manual process', () => {
+    cy.get(`.multistep-modal > ol.progtrckr > .progtrckr-done`).click({ force: true }).invoke('text').then((step) => {
+      cy.log('step value', step);
+      individualManualLinkbankProcess();
+    });
+  });
+
+  it('should create individual account successfully', () => {
+    cy.get('.dimmer-visible').should('not.be.visible');
     addFunds('15000');
-      cy.wait('@addFunds');
-      cy.wait('@addFunds');
     registerApiCall('submitAccount', '/dev/graphql');
     cy.get('.dimmer-visible').should('not.be.visible')
-    cy.get('div.content').get('button.button').contains('Create Your Account').click({ force: true });
+    cy.get('.center-align > button').contains('Create your account').click({ force: true });
     cy.wait('@submitAccount');
     cy.wait('@submitAccount');
   });
 
-  it('should create IRA account successfully', () => {
+  it.skip('should create IRA account successfully', () => {
     cy.get('.btn-item').contains('Open New Account').click({ force: true });
     cy.get('input[name="accType"]').check('1', { force: true });
     cy.get('button.next').click();
     iraAccountCreation();
   });
 
-  it('should create Entity account successfully', () => {
+  it.skip('should create Entity account successfully', () => {
     cy.get('.btn-item').contains('Open New Account').click({ force: true });
     cy.get('input[name="accType"]').check('2', { force: true });
     cy.get('button.next').click();
