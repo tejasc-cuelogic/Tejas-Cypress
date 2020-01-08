@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import snakeCase from 'lodash/snakeCase';
-import { Card, Grid, Popup, Divider, Statistic, Icon, Header } from 'semantic-ui-react';
-import { AccTypeTitle } from '../../../../../../theme/shared';
+import { Card, Grid, Divider, Statistic, Header } from 'semantic-ui-react';
+import { AccTypeTitle, PopUpModal } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 /*
   type =>
@@ -45,19 +45,7 @@ const SummaryHeader = props => (
                 <Statistic size="mini" horizontal={isMobile} className={row.status}>
                   <Statistic.Label>
                     <div>
-                      {row.title}
-                      {row.info
-                        && (
-                        <Popup
-                          trigger={<Icon className="ns-help-circle" />}
-                          content={row.info}
-                          position="top center"
-                          wide
-                          hoverable
-                          color="grey"
-                        />
-                        )
-                      }
+                      {row.info ? <PopUpModal content={row.info} customTrigger={<span className="popup-label">{row.title}</span>} showOnlyPopup={!isMobile} /> : row.title}
                     </div>
                     {row.title === 'Total Balance'
                       && isMobile && <Link to={props.isAdmin ? `${props.refLink}/transactions/addfunds` : `/dashboard/account-details/${props.details.accountType}/transfer-funds/add`}>Deposit funds</Link>

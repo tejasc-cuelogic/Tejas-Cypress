@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { includes, get, capitalize } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Table, Grid, Statistic, Button, Divider, Popup, Icon } from 'semantic-ui-react';
-import { AccTypeTitle, InlineLoader, IframeModal } from '../../../../../../theme/shared';
+import { Header, Table, Grid, Statistic, Button, Divider, Icon } from 'semantic-ui-react';
+import { AccTypeTitle, InlineLoader, IframeModal, PopUpModal } from '../../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
@@ -95,7 +95,7 @@ class Overview extends Component {
           }
         </div>
         {responsiveVars.isMobile
-        && <SecondaryMenu classname="no-shadow" bonusRewards isBonusReward refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+        && <SecondaryMenu isPortfolio classname="no-shadow" bonusRewards isBonusReward refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
         }
         <div className="inner-content-spacer">
           <Grid>
@@ -232,12 +232,8 @@ class Overview extends Component {
                     {maturityMonth
                       ? (
                         <Table.Row verticalAlign="top">
-                          <Table.Cell width={5}>Maturity{' '}
-                            <Popup
-                              trigger={<Icon name="help circle" color="green" />}
-                              content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
-                              position="top center"
-                            />
+                          <Table.Cell width={5}>{' '}
+                            <PopUpModal content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`} customTrigger={<span className="popup-label">Maturity</span>} showOnlyPopup={!isMobile} />
                           </Table.Cell>
                           <Table.Cell>
                             {maturityMonth
@@ -349,7 +345,7 @@ class Overview extends Component {
             </>
           )
         }
-        {chartData.length > 0 && !responsiveVars.isMobile
+        {chartData.length > 0
           && (
             <>
               <Divider />

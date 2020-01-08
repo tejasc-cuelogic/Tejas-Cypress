@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { isArray } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Form, Grid, Table, List, Button, Modal, Icon } from 'semantic-ui-react';
+import moment from 'moment';
 import { THeader } from '../../../../../../theme/table/NSTable';
 import { DropdownFilter } from '../../../../../../theme/form/Filters';
 import Helper from '../../../../../../helper/utility';
@@ -11,23 +12,23 @@ import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 
 const termNote = {
   columns: [
-    { title: 'Payment Date', field: 'payDate', textAlign: 'left' },
-    { title: 'Payment Received', field: 'received', className: 'positive-text' },
-    { title: 'Interest Paid', field: 'interest' },
-    { title: 'Principal Paid', field: 'principal' },
-    { title: 'Service Fees', field: 'fees' },
-    { title: 'Net Payment Received', field: 'netReceived' },
-    { title: 'Remaining Principal Due', field: 'remainingPrincipalDue' },
+    { title: 'Payment Date', field: 'completeDate', textAlign: 'left' },
+    { title: 'Payment Received', field: 'grossTotalAmount', className: 'positive-text' },
+    { title: 'Interest Paid', field: 'interestGrossAmount' },
+    { title: 'Principal Paid', field: 'principalGrossAmount' },
+    { title: 'Service Fees', field: 'feeTotalAmount' },
+    { title: 'Net Payment Received', field: 'netTotalAmount' },
+    { title: 'Remaining Principal Due', field: 'remainingPrincipalDue', containsComma: true },
   ],
 };
 
 const revShare = {
   columns: [
-    { title: 'Payment Date', field: 'payDate', textAlign: 'left' },
-    { title: 'Payment Received', field: 'received', className: 'positive-text' },
-    { title: 'Service Fees', field: 'fees' },
-    { title: 'Net Payment Received', field: 'netReceived' },
-    { title: 'Remaining Amount Due', field: 'remainingAmountDue' },
+    { title: 'Payment Date', field: 'completeDate', textAlign: 'left' },
+    { title: 'Payment Received', field: 'grossTotalAmount', className: 'positive-text' },
+    { title: 'Service Fees', field: 'feeTotalAmount' },
+    { title: 'Net Payment Received', field: 'netTotalAmount' },
+    { title: 'Remaining Amount Due', field: 'remainingAmountDue', containsComma: true },
   ],
 };
 
@@ -59,74 +60,59 @@ export default class Transactions extends Component {
     this.setState({ open: false });
   }
 
-  open = () => this.setState({ viewDetails: true });
+  open = (id) => {
+    this.setState({ viewDetails: id });
+  };
 
   close = () => this.setState({ viewDetails: false });
 
-
-  ViewTransactionDetails = () => (
-    <Modal
-      className="view-transaction-details"
-      onClose={this.close}
-      onOpen={this.open}
-      open={this.state.viewDetails}
-      trigger={<Button className="link-button highlight-text">View</Button>}
-    >
-      <Modal.Header className="bg-offwhite">
-        <Button onClick={this.close} className="link-button neutral-text"><Icon className="ns-chevron-left" /> Back</Button>
-      </Modal.Header>
-      <List divided verticalAlign="middle" className="transaction-mob">
-        <List.Item>
-          <List.Content floated="right">
-          10-24-2019
-          </List.Content>
-          <List.Content className="neutral-text">Payment Date</List.Content>
-        </List.Item>
-        <List.Item>
-          <List.Content floated="right">
-          $150.00
-          </List.Content>
-          <List.Content className="neutral-text">Payment Received</List.Content>
-        </List.Item>
-        <List.Item>
-          <List.Content floated="right">
-          $30.00
-          </List.Content>
-          <List.Content className="neutral-text">Interest Paid</List.Content>
-        </List.Item>
-        <List.Item>
-          <List.Content floated="right">
-          $120.00
-          </List.Content>
-          <List.Content className="neutral-text">Principal Paid</List.Content>
-        </List.Item>
-        <List.Item>
-          <List.Content floated="right">
-          $2.00
-          </List.Content>
-          <List.Content className="neutral-text">Service Fees</List.Content>
-        </List.Item>
-        <List.Item>
-          <List.Content floated="right">
-          $148.00
-          </List.Content>
-          <List.Content className="neutral-text">Net Payment Received</List.Content>
-        </List.Item>
-        <List.Item>
-          <List.Content floated="right">
-          $2.00
-          </List.Content>
-          <List.Content className="neutral-text">Remaining Principal Due</List.Content>
-        </List.Item>
-      </List>
-    </Modal>
-  );
+  ViewTransactionDetails = ({ id }) => {
+    let recordData = {};
+    const { offerStructure } = this.props.campaignStore;
+    const rowsMeta = offerStructure === 'TERM_NOTE' ? termNote.columns : revShare.columns;
+    if (this.state.viewDetails === id) {
+      recordData = this.props.transactionStore.allPaymentHistoryData.find(r => r.completeDate === id);
+    }
+    return (
+      <Modal
+        className="view-transaction-details"
+        onClose={this.close}
+        onOpen={() => this.open(id)}
+        open={this.state.viewDetails === id}
+        trigger={<Button className="link-button highlight-text">View</Button>}
+      >
+        <Modal.Header className="bg-offwhite">
+          <Button onClick={this.close} className="link-button neutral-text"><Icon className="ns-chevron-left" /> Back</Button>
+        </Modal.Header>
+        <List divided verticalAlign="middle" className="transaction-mob">
+          {rowsMeta.map(row => (
+            <>
+           {recordData[row.field]
+           && (
+            <List.Item>
+              <List.Content floated="right">
+                {row.field === 'completeDate'
+                ? moment(new Date(recordData.completeDate).toLocaleDateString(), 'DD/MM/YYYY').format('MM-DD-YYYY')
+                : row.containsComma ? `$${recordData[row.field]}` : Helper.CurrencyFormat(recordData[row.field])
+                }
+              </List.Content>
+              <List.Content className="neutral-text">{row.title}</List.Content>
+          </List.Item>
+           )
+           }
+           </>
+          ))}
+        </List>
+      </Modal>
+    );
+  }
 
   render() {
     const {
       investmentOptions,
       loading,
       allPaymentHistoryData,
+      allPaymentHistoryAsPerYears,
     } = this.props.transactionStore;
     const { offerStructure } = this.props.campaignStore;
     const finalResult = offerStructure === 'TERM_NOTE' ? termNote : revShare;
@@ -144,7 +130,7 @@ export default class Transactions extends Component {
     return (
       <>
         {responsiveVars.isMobile
-          && <SecondaryMenu classname="no-shadow" isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+          && <SecondaryMenu isPortfolio classname="no-shadow" isBonusReward bonusRewards refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
         }
         {investmentOptions.length > 1
           && (
@@ -160,37 +146,33 @@ export default class Transactions extends Component {
           )
         }
         {responsiveVars.isMobile ? (
+          !allPaymentHistoryData.length
+          ? <InlineLoader text="No Payments" />
+          : (
           <>
+          {Object.keys(allPaymentHistoryAsPerYears).map(year => (
+            <>
             <div className="bg-offwhite transaction-year">
-              2019
+              {year}
             </div>
             <List divided verticalAlign="middle" className="transaction-mob">
+            {allPaymentHistoryAsPerYears[year].map(record => (
               <List.Item>
                 <List.Content floated="right">
-                  <this.ViewTransactionDetails />
+                  <this.ViewTransactionDetails id={record.completeDate} />
                 </List.Content>
-                <List.Content>Lena</List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content floated="right">
-                  <this.ViewTransactionDetails />
+                <List.Content>
+                  {moment(new Date(record.completeDate).toLocaleDateString(), 'DD/MM/YYYY').format('MM-DD-YYYY')}
                 </List.Content>
-                <List.Content>Lindsay</List.Content>
               </List.Item>
-              <List.Item>
-                <List.Content floated="right">
-                  <this.ViewTransactionDetails />
-                </List.Content>
-                <List.Content>Mark</List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content floated="right">
-                  <this.ViewTransactionDetails />
-                </List.Content>
-                <List.Content>Molly</List.Content>
-              </List.Item>
-            </List>
+            ))
+          }
+          </List>
+            </>
+          ))
+          }
           </>
+          )
         ) : (
             <div className="table-wrapper">
               {!allPaymentHistoryData.length

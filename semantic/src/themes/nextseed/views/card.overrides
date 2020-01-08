@@ -375,6 +375,11 @@
             }
         }
     }
+    &.mob-reward-list{
+        padding: @18px !important;
+        border-radius: @4px;
+        margin-bottom: 0;
+    }
 }
 
 .ui.card.flexible{
@@ -859,6 +864,18 @@
         max-width: 100%;
         @media only screen and (max-width : @largestTabletScreen){
             margin: 0 0 @28px;
+        }
+    }
+}
+
+.mob-reward-list.ui.card{
+    box-shadow: 0px 1px 8px fade(@fullBlack, 25%) !important;
+    >.content{
+        padding: 0;
+        >.header:not(.ui){
+            font-size: @15px;
+            line-height: 24px;
+            margin-bottom: @5px;
         }
     }
 }

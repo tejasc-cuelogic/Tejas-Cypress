@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Card } from 'semantic-ui-react';
+import { Modal, Card, Icon } from 'semantic-ui-react';
 import moment from 'moment';
 import { includes, get } from 'lodash';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
@@ -83,7 +83,12 @@ class InvestmentDetails extends PureComponent {
       navItems = navItems.filter(f => f.title !== 'Documents');
     }
     return (
-      <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
+      <Modal closeOnDimmerClick={false} closeIcon={!responsiveVars.isMobile} size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
+        {responsiveVars.isMobile && (
+        <div className="mob-header">
+          <Icon className="ns-close-circle" color="grey" onClick={this.handleCloseModal} />
+        </div>
+        )}
         <Modal.Content className={`${responsiveVars.isMobile ? 'mt-30' : ''} transaction-details`}>
           {details.loading || loadingInvestDetails ? <InlineLoader /> : (
             <>
