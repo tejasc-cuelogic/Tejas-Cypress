@@ -338,9 +338,6 @@ export class AccreditationStore {
       this.setFormFileArray(form, field, 'value', '');
       this.setFormFileArray(form, field, 'preSignedUrl', '');
     }
-    if (form === 'INCOME_UPLOAD_DOC_FORM') {
-      this[form].fields.isAccepted.value = [];
-    }
     if (accountType && accountId) {
       fileUpload.removeUploadedData(removeFileId).then(() => {
         this.updateAccreditation(form, accountType.toUpperCase()).then(() => {
@@ -666,7 +663,6 @@ export class AccreditationStore {
         this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling.value = ['ACCEPTED'];
         this.ASSETS_UPLOAD_DOC_FORM.fields.isAccepted.value = ['ACCEPTED'];
       }
-      console.log('filesData->', filesData);
       forEach(filesData, (file) => {
         const field = findKey(UPLOAD_ASSET_ENUMS, obj => obj === file.type);
         if (file.fileInfo) {
@@ -796,6 +792,7 @@ export class AccreditationStore {
       if (appData.accreditation.filingStatus !== null) {
         this.FILLING_STATUS_FORM.fields.method.value = appData.accreditation.filingStatus;
       }
+      this.INCOME_UPLOAD_DOC_FORM.fields.estimateIncome.value = appData.accreditation.estimateIncome;
       this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ASSETS_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ENTITY_ACCREDITATION_FORM', false, false);
