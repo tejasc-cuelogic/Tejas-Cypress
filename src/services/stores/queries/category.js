@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const getCategories = isPublic => gql`
-query adminCategories($types: ${isPublic ? '[CategoryTypeEnum]' : '[CategoryTypesEnum]'}) {
-  adminCategories(categoryType: $types) {
+query getCategories($types: ${isPublic ? '[CategoryTypeEnum]' : '[CategoryTypesEnum]'}) {
+  categories(categoryType: $types) {
       id
       categoryName
       description

@@ -91,7 +91,7 @@ query getListOfPartialOrCIPProcessingAccount {
 }`;
 
 export const adminSyncEsDocument = gql`
-mutation adminSyncEsDocument($documentId: String!, $targetIndex: String!, $userId: String!, $accountType: [InvestorAccountTypeEnum]){
+mutation adminSyncEsDocument($documentId: String!, $targetIndex: String!, $userId: String, $accountType: [InvestorAccountTypeEnum]){
   adminSyncEsDocument(documentId: $documentId, targetIndex: $targetIndex, userId: $userId, accountType: $accountType)
 }`;
 

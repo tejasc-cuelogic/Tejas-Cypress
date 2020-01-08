@@ -76,7 +76,7 @@ export class CategoryStore {
     }
 
     @computed get categories() {
-      return (this.data.data && sortBy(toJS(this.data.data.categories), ['order'])) || [];
+      return (this.data.data && sortBy(toJS(this.data.data.adminCategories), ['order'])) || [];
     }
 
     @computed get loading() {
