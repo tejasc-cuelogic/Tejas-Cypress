@@ -1176,7 +1176,7 @@ footer{
 			}
 			&:last-child {
 				// padding: @70px @20px !important;
-				@media only screen and (max-width : @largestTabletScreen){
+				@media only screen and (max-width : @largestMobileScreen){
 					padding: @56px 0 !important;
 				}
 				a {
@@ -3213,15 +3213,21 @@ table.css-wu4c77-diff-container {
 }
 // HTML editor images placeholder end
 .quotes{
-	@media only screen and (max-width : @largestMobileScreen){
-		&.ui.header{
+	&.ui.header{
+		padding-left: 48px;
+		@media only screen and (max-width : @largestMobileScreen){
 			padding-left: @31px;
 		}
 		sup:first-child{
-			position: absolute;
-			left: 0;
-			top: 14px;
-			width: 20px;
+			margin-left: -48px;
+			margin-right: 0;
+			@media only screen and (max-width : @largestMobileScreen){
+				position: absolute;
+				left: 0;
+				top: 14px;
+				width: 20px;
+				margin-left: 0;
+			}
 		}
 	}
 	i.icon{

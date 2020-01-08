@@ -1,12 +1,12 @@
 import { registerApiCall, btnClickAndWait, clickRadioAndNext } from '../../../../../support/common';
 
 const handleOverviewStep = () => {
-  cy.get('div.multistep > .center-align > button').contains('Continue').click({ force: true });
+  cy.get('div.multistep > .center-align').find('button').contains('Continue').click({ force: true });
 };
 
 export const completeInvestorProfile = () => {
   cy.get('.dimmer-visible').should('not.be.visible')
-  cy.wait(200);
+  registerApiCall('upsertProfile', 'dev/graphql');
   cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
     cy.log('step value', text);
     // eslint-disable-next-line default-case
@@ -20,12 +20,14 @@ export const completeInvestorProfile = () => {
         completeInvestorProfile();
         break;
       case 'Brokerage Employment':
-        clickRadioAndNext('input[name="brokerageEmployment"]', 'no', 'upsertProfile');
+        cy.get('form > div.vertical').find('.primary').contains('No').click({ force: true });
+        cy.wait('@upsertProfile')
         completeInvestorProfile();
         break;
       case 'Public Company Relations':
-        clickRadioAndNext('input[name="publicCompanyRel"]', 'no', 'upsertProfile');
-        completeInvestorProfile();
+          cy.get('form > div.vertical').find('.primary').contains('No').click({ force: true });
+          cy.wait('@upsertProfile');
+          completeInvestorProfile();
         break;
       case 'Financial Information':
         cy.get('input[name="investorProfileType"]').check('JOINT', { force: true });
