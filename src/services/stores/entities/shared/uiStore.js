@@ -7,7 +7,7 @@ export class UiStore {
   @observable
   modalStatus = false;
 
-  appLoader = false;
+  @observable appLoader = false;
 
   @observable layoutState = {
     leftPanel: true,
@@ -77,9 +77,16 @@ export class UiStore {
 
   @observable isFromBusinessApplication = false;
 
+  @observable appUpdated = false;
+
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
+  }
+
+  @action
+  setAppUpdated() {
+    this.appUpdated = true;
   }
 
   @action

@@ -34,20 +34,32 @@
             }
         }
         .item{
-            font-weight:@fontMedium;
-            text-transform:uppercase;
+            font-size: @17px;
+            font-weight:@normal;
+            line-height: 20px;
+            text-transform:capitalize;
             padding: 0 @7px;
-            > span{
-                padding:0.5em 0;
-            }
             &:hover {
                 background-color: transparent;
             }
             &.menu-button .ui.button {
-                width: 110px;
+                width: 115px;
+                padding: @8px @16px;
+                font-size: @16px;
+                line-height: 24px;
+                font-weight: @normal;
                 &.basic {
-                    box-shadow: 0 0 0 1px @thumbInactiveBackground inset !important;
+                    box-shadow: 0 0 0 1px @primary-one inset !important;
                     border: none !important;
+                }
+            }
+            &.dropdown.item > i.icon.dropdown{
+                font-family:'Nextseed';
+                height:22px;
+                line-height:22px;
+                vertical-align:top;
+                &:before{
+                    content:"\e914";
                 }
             }
         }
@@ -838,7 +850,7 @@ footer .ui.text.menu{
             border-bottom: 0;
             padding: @8px @22px;
             .ui.button.basic{
-                box-shadow:0 0 0 1px @thumbInactiveBackground inset !important;
+                box-shadow:0 0 0 1px @primary-one inset !important;
                 border:none !important;
             }
         }
@@ -940,7 +952,7 @@ footer .ui.text.menu{
         display: flex;
         flex-direction: row;
         align-items: center;
-        .ui.image.logo {
+        a.logo {
             width: 130px;
             margin-left: @22px;
         }
