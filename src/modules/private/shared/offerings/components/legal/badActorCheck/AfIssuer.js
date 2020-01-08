@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider, Button, Confirm } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../../theme/form';
@@ -15,11 +14,13 @@ export default class AfIssuer extends Component {
     const issuerCount = AFFILIATED_ISSUER_FRM.fields.getOfferingBac.length;
     this.props.history.push(`${this.props.refLink}/${issuerCount}`);
   }
+
   toggleConfirmModal = (e, index, formName, afIssuerId) => {
     e.preventDefault();
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
     this.props.uiStore.setConfirmBox('', afIssuerId);
   }
+
   removeData = () => {
     const { deleteBac } = this.props.offeringCreationStore;
     const { confirmBox } = this.props.uiStore;
@@ -27,6 +28,7 @@ export default class AfIssuer extends Component {
     this.props.history.push(`${this.props.refLink}/1`);
     this.props.uiStore.setConfirmBox('');
   }
+
   handleSubmitIssuer = (id, approved) => {
     const {
       createOrUpdateOfferingBac,
@@ -51,22 +53,22 @@ export default class AfIssuer extends Component {
     const { isIssuer } = this.props.userStore;
     const afIssuerId = AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index].id.value;
     const isManager = access.asManager;
-    const submitted = (affiliatedIssuerOfferingBacData && affiliatedIssuerOfferingBacData.length &&
-      affiliatedIssuerOfferingBacData[issuerNumber] &&
-      affiliatedIssuerOfferingBacData[issuerNumber].submitted) ?
-      affiliatedIssuerOfferingBacData[issuerNumber].submitted : null;
-    const approved = (affiliatedIssuerOfferingBacData && affiliatedIssuerOfferingBacData.length &&
-      affiliatedIssuerOfferingBacData[issuerNumber] &&
-      affiliatedIssuerOfferingBacData[issuerNumber].approved) ?
-      affiliatedIssuerOfferingBacData[issuerNumber].approved : null;
+    const submitted = (affiliatedIssuerOfferingBacData && affiliatedIssuerOfferingBacData.length
+      && affiliatedIssuerOfferingBacData[issuerNumber]
+      && affiliatedIssuerOfferingBacData[issuerNumber].submitted)
+      ? affiliatedIssuerOfferingBacData[issuerNumber].submitted : null;
+    const approved = (affiliatedIssuerOfferingBacData && affiliatedIssuerOfferingBacData.length
+      && affiliatedIssuerOfferingBacData[issuerNumber]
+      && affiliatedIssuerOfferingBacData[issuerNumber].approved)
+      ? affiliatedIssuerOfferingBacData[issuerNumber].approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     return (
-      <Aux>
+      <>
         <Form className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'inner-content-spacer'}>
           <div className="clearfix mt-10 mb-10">
             <Button.Group floated="right">
-              {AFFILIATED_ISSUER_FRM.fields.getOfferingBac.length !== 1 &&
-                <Button color="red" disabled={isReadonly} className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName, afIssuerId)}>Delete Selected Issuer</Button>
+              {AFFILIATED_ISSUER_FRM.fields.getOfferingBac.length !== 1
+                && <Button color="red" disabled={isReadonly} className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName, afIssuerId)}>Delete Selected Issuer</Button>
               }
               <Button color="blue" disabled={isReadonly} className="link-button" onClick={e => this.addMore(e, formName)}>+ Add Affiliated Issuer</Button>
             </Button.Group>
@@ -80,7 +82,7 @@ export default class AfIssuer extends Component {
           />
           {
             ['certificateFormation', 'operatingAgreement', 'evidenceGoodStanding', 'executiveTeam'].map(field => (
-              <Aux>
+              <>
                 <FormTextarea
                   readOnly={isReadonly}
                   key={field}
@@ -89,7 +91,7 @@ export default class AfIssuer extends Component {
                   changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
                   containerclassname="secondary"
                 />
-              </Aux>
+              </>
             ))
           }
           <Divider section />
@@ -138,8 +140,7 @@ export default class AfIssuer extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }
-

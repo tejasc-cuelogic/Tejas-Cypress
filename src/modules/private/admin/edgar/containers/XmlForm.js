@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Form, Grid, Icon, Button, Header, Responsive } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -26,6 +25,7 @@ export default class XmlForm extends React.Component {
   state = {
     folderId: '',
   }
+
   componentDidMount() {
     this.props.businessStore.setXmlActiveTabName('filer');
     this.props.businessStore.setOfferingId(this.props.match.params.offeringId);
@@ -272,8 +272,8 @@ export default class XmlForm extends React.Component {
     const { formSignatureInfo } = this.props.businessStore;
     businessActions.validateSignatureInfo(formSignatureInfo.fields);
 
-    if (this.props.businessStore.canSubmitSigntureForm &&
-      !_.includes(this.props.businessStore.canSubmitSignaturePersonsForm, false)) {
+    if (this.props.businessStore.canSubmitSigntureForm
+      && !_.includes(this.props.businessStore.canSubmitSignaturePersonsForm, false)) {
       this.addAndRemoveErrorClass(currentStepName, '');
       businessActions.submitXMLInformation('signature')
         .then((data) => {
@@ -332,7 +332,7 @@ export default class XmlForm extends React.Component {
   handleXmlSubmissionSubmit = () => {
     businessActions.submitXMLInformation('xmlSubmission')
       .then(() => {
-        this.props.history.push(`/app/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`);
+        this.props.history.push(`/dashboard/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`);
         Helper.toast('XML form submitted successfully', 'success');
       })
       .catch((errors) => {
@@ -346,7 +346,7 @@ export default class XmlForm extends React.Component {
 
     businessActions.copyXMLInformation()
       .then(() => {
-        this.props.history.push(`/app/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`);
+        this.props.history.push(`/dashboard/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`);
         Helper.toast('Copy XML submission successfully', 'success');
       })
       .catch((error) => {
@@ -374,8 +374,7 @@ export default class XmlForm extends React.Component {
       saveButtonStatus = (!this.props.businessStore.formSignatureInfo.meta.isValid
         || this.props.businessStore.formSignatureInfo.fields.signaturePersons.length === 0);
     } else if (xmlActiveTabName === 'doc') {
-      const documents = _.filter(this.props.businessStore.formDocumentInfo.documentList, document =>
-        document.checked === true);
+      const documents = _.filter(this.props.businessStore.formDocumentInfo.documentList, document => document.checked === true);
       saveButtonStatus = (documents.length === 0);
       if (documents.length === 0) {
         this.props.businessStore.formDocumentInfo.meta.isDirty = false;
@@ -403,13 +402,13 @@ export default class XmlForm extends React.Component {
     }
     const { offer } = this.props.offeringsStore;
     return (
-      <Aux>
+      <>
         <div className="page-header-section">
           <Header as="h1">
             <Responsive
               minWidth={Responsive.onlyLargeScreen.minWidth}
               as={Link}
-              to={`/app/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`}
+              to={`/dashboard/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`}
               className="back-link"
             >
               <Icon name="ns-arrow-left" />
@@ -417,33 +416,39 @@ export default class XmlForm extends React.Component {
             XML Form
             <Button.Group floated="right">
               {
-                xmlSubmissionStatus === XML_STATUSES.completed &&
-                <Button
-                  color="green"
-                  onClick={this.handleXmlSubmissionCopy}
-                >
+                xmlSubmissionStatus === XML_STATUSES.completed
+                && (
+<Button
+  color="green"
+  onClick={this.handleXmlSubmissionCopy}
+>
                   Copy XML Submission
                 </Button>
+                )
               }
               {
-                xmlSubmissionStatus === XML_STATUSES.draft &&
-                <Button
-                  color="green"
-                  disabled={this.checkStepWiseStatus(xmlActiveTabName)}
-                  onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
-                >
+                xmlSubmissionStatus === XML_STATUSES.draft
+                && (
+<Button
+  color="green"
+  disabled={this.checkStepWiseStatus(xmlActiveTabName)}
+  onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
+>
                   Save
                 </Button>
+                )
               }
               {
-                xmlSubmissionStatus === XML_STATUSES.draft &&
-                <Button
-                  color="red"
-                  disabled={!this.props.businessStore.checkStepsStatus}
-                  onClick={this.handleXmlSubmissionSubmit}
-                >
+                xmlSubmissionStatus === XML_STATUSES.draft
+                && (
+<Button
+  color="red"
+  disabled={!this.props.businessStore.checkStepsStatus}
+  onClick={this.handleXmlSubmissionSubmit}
+>
                   Submit
                 </Button>
+                )
               }
             </Button.Group>
           </Header>
@@ -469,7 +474,7 @@ export default class XmlForm extends React.Component {
             <FormErrors xmlErrors={xmlErrors} className="field-error-message" />
           </Grid>
         </div>
-      </Aux>
+      </>
     );
   }
 }

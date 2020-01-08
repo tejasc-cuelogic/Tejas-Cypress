@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Form, Header, Icon, Confirm, Divider } from 'semantic-ui-react';
-import { FormInput, MaskedInput, FormTextarea } from '../../../../../../theme/form';
+import { FormInput, MaskedInput, FormTextarea, FormDropDown } from '../../../../../../theme/form';
 import ButtonGroup from '../ButtonGroup';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class General extends Component {
-  // componentWillMount() {
+  // constructor(props) {
+  //   super(props);
   //   this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal.general');
   //   this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
   //   if (!this.props.offeringCreationStore.initLoad.includes('DOCUMENTATION_FRM')) {
@@ -22,17 +22,20 @@ export default class General extends Component {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName, arrayName);
   }
+
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
+
   handleFormSubmit = (isApproved = null) => {
     const { GENERAL_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, GENERAL_FRM.fields, 'legal', 'general', true, undefined, isApproved);
   }
+
   editorChange =
-  (field, value, form) =>
-    this.props.offeringCreationStore.rtEditorChange(field, value, form);
+  (field, value, form) => this.props.offeringCreationStore.rtEditorChange(field, value, form);
+
   render() {
     const {
       GENERAL_FRM, currentOfferingId,
@@ -53,14 +56,14 @@ export default class General extends Component {
     const { match } = this.props;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
-    const submitted = (offer && offer.legal && offer.legal.general &&
-      offer.legal.general.submitted) ? offer.legal.general.submitted : null;
-    const approved = (offer && offer.legal && offer.legal.general && offer.legal.general.approved) ?
-      offer.legal.general.approved : null;
-    const issuerSubmitted = (offer && offer.legal && offer.legal.general &&
-      offer.legal.general.issuerSubmitted) ? offer.legal.general.issuerSubmitted : null;
-    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
-      (isManager && approved && approved.status));
+    const submitted = (offer && offer.legal && offer.legal.general
+      && offer.legal.general.submitted) ? offer.legal.general.submitted : null;
+    const approved = (offer && offer.legal && offer.legal.general && offer.legal.general.approved)
+      ? offer.legal.general.approved : null;
+    const issuerSubmitted = (offer && offer.legal && offer.legal.general
+      && offer.legal.general.issuerSubmitted) ? offer.legal.general.issuerSubmitted : null;
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer)
+      || (isManager && approved && approved.status));
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
         <Form>
@@ -82,6 +85,18 @@ export default class General extends Component {
               fielddata={GENERAL_FRM.fields.numOfEmployees}
               changed={(values, name) => maskArrayChange(values, formName, name)}
               number
+            />
+            <FormDropDown
+              containerclassname={isReadonly ? 'display-only' : ''}
+              className={isReadonly ? 'display-only' : ''}
+              disabled={isReadonly}
+              fielddata={GENERAL_FRM.fields.taxedAs}
+              selection
+              value={GENERAL_FRM.fields.taxedAs.value}
+              name="taxedAs"
+              placeholder={isReadonly ? 'N/A' : 'Choose here'}
+              options={GENERAL_FRM.fields.taxedAs.values}
+              onChange={(e, result) => formArrayChange(e, result, formName)}
             />
           </Form.Group>
           <Header as="h4">Contact</Header>
@@ -107,7 +122,7 @@ export default class General extends Component {
                 format={field === 'number' ? '(###) ###-####' : '#####'}
               />
             ))}
-          </Form.Group >
+          </Form.Group>
           <Header as="h4">Banking</Header>
           <Form.Group widths={3}>
             <FormInput
@@ -127,7 +142,7 @@ export default class General extends Component {
                 routingNumber={field === 'bankRoutingNumber'}
               />
             ))}
-          </Form.Group >
+          </Form.Group>
           <Divider section />
           <Header as="h4">Business Capitalization</Header>
           <p>{GENERAL_FRM.fields.businessCapitalization.label}</p>
@@ -148,7 +163,7 @@ export default class General extends Component {
               This section will also be public on the offering page.`}
           </p>
           {
-            <Aux>
+            <>
               {/* <MaskedInput
                 displayMode={isReadonly}
                 name="offeringExpenseAmount"
@@ -165,7 +180,7 @@ export default class General extends Component {
                 form={formName}
                 content={GENERAL_FRM.fields.offeringExpenseAmountDescription.value}
               />
-            </Aux>
+            </>
           }
           <Divider section />
           <Header as="h4">Describe Rights of Your Equity Shareholders</Header>
@@ -181,17 +196,19 @@ export default class General extends Component {
           <Divider section />
           <Header as="h4">
             Existing Securities
-            {!isReadonly &&
-            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'security')}><small>+ Add New Security</small></Link>
+            {!isReadonly
+            && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'security')}><small>+ Add New Security</small></Link>
             }
           </Header>
           {GENERAL_FRM.fields.security.map((security, index) => (
-            <Aux>
+            <>
               <Header as="h6">{`Security ${index + 1}`}
-                {!isReadonly && GENERAL_FRM.fields.security.length > 1 &&
-                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'security')} >
+                {!isReadonly && GENERAL_FRM.fields.security.length > 1
+                && (
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'security')}>
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
+                )
                 }
               </Header>
               <div className="featured-section">
@@ -205,7 +222,7 @@ export default class General extends Component {
                       changed={(e, result) => formArrayChange(e, result, formName, 'security', index)}
                     />
                   ))}
-                </Form.Group >
+                </Form.Group>
                 <FormInput
                   displayMode={isReadonly}
                   name="limitDiluteQualify"
@@ -213,25 +230,27 @@ export default class General extends Component {
                   changed={(e, result) => formArrayChange(e, result, formName, 'security', index)}
                 />
               </div>
-            </Aux>
+            </>
           ))}
           <Divider section />
           {/* <Button size="small" color="blue" className="link-button" onClick={e =>
             this.addMore(e, formName, 'security')}>+ Add New Security</Button> */}
           <Header as="h4">
             Other Exempt Offerings
-            {!isReadonly &&
-            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'exemptOfferings')}><small>+ Add New Other Exempt Offering</small></Link>
+            {!isReadonly
+            && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'exemptOfferings')}><small>+ Add New Other Exempt Offering</small></Link>
             }
           </Header>
           <p>Describe any past fund raises in the last 3 years.</p>
           {GENERAL_FRM.fields.exemptOfferings.map((offering, index) => (
-            <Aux>
+            <>
               <Header as="h6">{`Other Exempt Offering ${index + 1}`}
-                {!isReadonly && GENERAL_FRM.fields.exemptOfferings.length > 1 &&
-                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'exemptOfferings')} >
+                {!isReadonly && GENERAL_FRM.fields.exemptOfferings.length > 1
+                && (
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'exemptOfferings')}>
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
+                )
                 }
               </Header>
               <div className="featured-section">
@@ -253,7 +272,7 @@ export default class General extends Component {
                     changed={(values, name) => maskArrayChange(values, formName, name, 'exemptOfferings', index)}
                     number
                   />
-                </Form.Group >
+                </Form.Group>
                 <FormTextarea
                   readOnly={isReadonly}
                   name="useOfProceeds"
@@ -262,24 +281,26 @@ export default class General extends Component {
                   containerclassname="secondary"
                 />
               </div>
-            </Aux>
+            </>
           ))}
           <Divider section />
           {/* <Button size="small" color="blue" className="link-button" onClick={e => this.addMore
           (e, formName, 'exemptOfferings')}>+ Add New Other Exempt Offering</Button> */}
           <Header as="h4">
             Material Terms of any Indebteness
-            {!isReadonly &&
-            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'materialIndebtedness')}><small>+ Add New Term</small></Link>
+            {!isReadonly
+            && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'materialIndebtedness')}><small>+ Add New Term</small></Link>
             }
           </Header>
           {GENERAL_FRM.fields.materialIndebtedness.map((terms, index) => (
-            <Aux>
+            <>
               <Header as="h6">{`Term ${index + 1}`}
-                {!isReadonly && GENERAL_FRM.fields.materialIndebtedness.length > 1 &&
-                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'materialIndebtedness')} >
+                {!isReadonly && GENERAL_FRM.fields.materialIndebtedness.length > 1
+                && (
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'materialIndebtedness')}>
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
+                )
                 }
               </Header>
               <div className="featured-section">
@@ -310,7 +331,7 @@ export default class General extends Component {
                     fielddata={terms.paymentSchedule}
                     changed={(e, result) => formArrayChange(e, result, formName, 'materialIndebtedness', index)}
                   />
-                </Form.Group >
+                </Form.Group>
                 <FormTextarea
                   readOnly={isReadonly}
                   name="otherTerms"
@@ -319,13 +340,13 @@ export default class General extends Component {
                   containerclassname="secondary"
                 />
               </div>
-            </Aux>
+            </>
           ))}
           <Divider section />
           <Header as="h4">
             Affiliated Party Transactions
-            {!isReadonly &&
-            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'affiliatedTransactions')}><small>+ Add New Affiliated Party</small></Link>
+            {!isReadonly
+            && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'affiliatedTransactions')}><small>+ Add New Affiliated Party</small></Link>
             }
           </Header>
           <p>In the past year (and looking forward),
@@ -333,12 +354,14 @@ export default class General extends Component {
             (i.e., affiliated entities, directors or relatives)?
           </p>
           {GENERAL_FRM.fields.affiliatedTransactions.map((transaction, index) => (
-            <Aux>
+            <>
               <Header as="h6">{`Transaction ${index + 1}`}
-                {!isReadonly && GENERAL_FRM.fields.affiliatedTransactions.length > 1 &&
-                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'affiliatedTransactions')} >
+                {!isReadonly && GENERAL_FRM.fields.affiliatedTransactions.length > 1
+                && (
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'affiliatedTransactions')}>
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
+                )
                 }
               </Header>
               <div className="featured-section">
@@ -363,7 +386,7 @@ export default class General extends Component {
                     fielddata={transaction.amountTransaction}
                     changed={(values, name) => maskArrayChange(values, formName, name, 'affiliatedTransactions', index)}
                   />
-                </Form.Group >
+                </Form.Group>
                 <FormTextarea
                   readOnly={isReadonly}
                   name="description"
@@ -372,7 +395,7 @@ export default class General extends Component {
                   containerclassname="secondary"
                 />
               </div>
-            </Aux>
+            </>
           ))}
           <Divider hidden />
           <ButtonGroup
@@ -387,8 +410,8 @@ export default class General extends Component {
         </Form>
         <Confirm
           header="Confirm"
-          content={`Are you sure you want to remove this ${confirmModalName === 'security' ? 'security' :
-          confirmModalName === 'exemptOfferings' ? 'other exempt offering' : ''} `}
+          content={`Are you sure you want to remove this ${confirmModalName === 'security' ? 'security'
+            : confirmModalName === 'exemptOfferings' ? 'other exempt offering' : ''} `}
           open={confirmModal}
           onCancel={this.toggleConfirmModal}
           onConfirm={() => removeData('GENERAL_FRM', confirmModalName)}

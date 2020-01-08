@@ -12,12 +12,15 @@ import { Spinner } from '../../../../../theme/shared';
 @inject('businessStore', 'uiStore')
 @observer
 class Business extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     businessActions.listBusinesses();
   }
+
   componentWillUnmount() {
     this.props.uiStore.reset();
   }
+
   render() {
     if (this.props.uiStore.inProgress) {
       return (
@@ -29,13 +32,13 @@ class Business extends Component {
     return (
       <PrivateLayout
         {...this.props}
-        P1={
-          <Grid.Column width={5}>
+        P1={(
+<Grid.Column width={5}>
             <Form inverted>
               <Input fluid inverted icon="ns-search" iconPosition="left" placeholder="Type Business’s name, description" />
             </Form>
           </Grid.Column>
-        }
+)}
         P3={<Grid.Column width={4} textAlign="right"><NewBusinessForm /></Grid.Column>}
       >
         <BusinessList businessList={this.props.businessStore.businessList} />

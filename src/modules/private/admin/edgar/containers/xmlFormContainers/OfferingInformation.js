@@ -13,7 +13,7 @@ import {
   FormSelect,
   FormRadioGroup,
   MaskedInput,
-} from './../../../../../../theme/form';
+} from '../../../../../../theme/form';
 
 @inject('businessStore')
 @withRouter
@@ -22,9 +22,10 @@ export default class OfferingInformation extends React.Component {
   componentWillUnmount() {
     this.props.businessStore.setXmlError();
   }
+
   getSubscriptionDescClass = () => (
-    this.props.businessStore.formOfferingInfo.fields.overSubscriptionAllocationType.value === 'Other' &&
-    this.props.businessStore.formOfferingInfo.fields.overSubscriptionAccepted.value === 'Y'
+    this.props.businessStore.formOfferingInfo.fields.overSubscriptionAllocationType.value === 'Other'
+    && this.props.businessStore.formOfferingInfo.fields.overSubscriptionAccepted.value === 'Y'
   )
 
   getSubscriptionTypeClass = () => this.props.businessStore.formOfferingInfo.fields.overSubscriptionAccepted.value === 'N'
@@ -127,7 +128,7 @@ export default class OfferingInformation extends React.Component {
             <MaskedInput
               name="deadlineDate"
               fielddata={formOfferingInfo.fields.deadlineDate}
-              format="##/##/####"
+              format="##-##-####"
               changed={verifyDeadlineDate}
               dateOfBirth
               showerror

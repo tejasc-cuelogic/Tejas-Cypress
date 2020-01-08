@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { REACT_APP_DEPLOY_ENV } from '../../constants/common';
 // TODO: Improve the component
 
-const catchErrorBoundry = !['localhost', 'develop'].includes(REACT_APP_DEPLOY_ENV);
+const catchErrorBoundry = !['localhost', 'develop', 'dev'].includes(REACT_APP_DEPLOY_ENV);
 
 @inject('authStore')
 @withRouter
@@ -23,11 +23,18 @@ class ErrorBoundary extends React.Component {
     const redirectToHome = () => {
       window.location = window.location.origin;
     };
-
+    let emailContent = error.stack;
+    if (window.FS && window.FS.getCurrentSessionURL) {
+      const fullStorySession = window.FS.getCurrentSessionURL(true);
+      emailContent = {
+        ...emailContent,
+        fullStoryUrl: fullStorySession,
+      };
+    }
     if (catchErrorBoundry) {
       try {
         const params = {
-          emailContent: error.stack.toString(),
+          emailContent: emailContent.toString(),
         };
         this.props.authStore.notifyApplicationError(params).then(() => {
           redirectToHome();

@@ -4,7 +4,7 @@ import { Form, Button, Input } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import { FieldError } from '../../../../../theme/shared';
 
-import { FormInput, MaskedInput } from './../../../../../theme/form';
+import { FormInput, MaskedInput } from '../../../../../theme/form';
 
 const PersonalSignature = observer(props => (
   <div>
@@ -24,13 +24,13 @@ const PersonalSignature = observer(props => (
             onChange={props.handleChange}
           >
             {
-              props.xmlSubmissionStatus === 'DRAFT' &&
-              <Button icon="ns-close" color="red" dataid={personData.id} onClick={props.handleDeleteClick} />
+              props.xmlSubmissionStatus === 'DRAFT'
+              && <Button icon="ns-close" color="red" dataid={personData.id} onClick={props.handleDeleteClick} />
             }
             <input />
           </Input>
-          {personData.personSignature.error &&
-            <FieldError error={personData.personSignature.error} />
+          {personData.personSignature.error
+            && <FieldError error={personData.personSignature.error} />
           }
         </Form.Field>
         <FormInput
@@ -43,7 +43,7 @@ const PersonalSignature = observer(props => (
           <MaskedInput
             name="signatureDate"
             fielddata={personData.signatureDate}
-            format="##/##/####"
+            format="##-##-####"
             changed={date => props.changedDate(null, { name: 'signatureDate', value: date.formattedValue, dataid: personData.id })}
             dateOfBirth
             showerror

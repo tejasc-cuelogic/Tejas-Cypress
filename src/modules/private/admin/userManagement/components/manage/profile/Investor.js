@@ -17,12 +17,14 @@ import Helper from '../../../../../../../helper/utility';
 @withRouter
 @observer
 export default class Investor extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.investmentLimitStore.initiateInvestmentLimitOfSelectedUser();
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/basic`);
     }
   }
+
   getUserStorageDetails = (e) => {
     e.preventDefault();
     const userId = get(this.props.userDetailsStore.getDetailsOfUser, 'id');
@@ -38,6 +40,7 @@ export default class Investor extends Component {
         .catch(() => this.props.uiStore.removeOneFromProgressArray('getStorageDetails'));
     }
   }
+
   render() {
     const { getActiveAccountList } = this.props.investmentLimitStore;
     const { inProgressArray } = this.props.uiStore;

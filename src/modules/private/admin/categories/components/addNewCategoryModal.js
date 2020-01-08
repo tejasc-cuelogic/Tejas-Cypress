@@ -3,13 +3,14 @@ import { withRouter } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { Button, Modal, Header, Form } from 'semantic-ui-react';
 import { FormInput, FormTextarea } from '../../../../../theme/form';
-import { FieldError } from '../../../../../theme/shared';
+import { FieldError, InlineLoader } from '../../../../../theme/shared';
 
 @withRouter
 @inject('categoryStore', 'uiStore')
 @observer
 class AddNewCategory extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.uiStore.clearErrors();
     const { id } = this.props.match.params;
     if (id !== 'new') {
@@ -18,11 +19,12 @@ class AddNewCategory extends Component {
       this.props.categoryStore.reset();
     }
   }
+
     handleClose = () => {
-      this.props.categoryStore.currentCategoryIndex =
-      this.props.categoryStore.selectedCategoryState.index;
+      this.props.categoryStore.currentCategoryIndex = this.props.categoryStore.selectedCategoryState.index;
       this.props.history.push(this.props.refLink);
     }
+
     addCategory = () => {
       const { saveCategories } = this.props.categoryStore;
       saveCategories(this.props.match.params.id, 'defaultPublished').then(() => {
@@ -34,8 +36,11 @@ class AddNewCategory extends Component {
       const {
         formChange, CATEGORY_DETAILS_FRM, selectedCategoryState,
       } = this.props.categoryStore;
-      const { errors } = this.props.uiStore;
+      const { errors, inProgress } = this.props.uiStore;
       const { id } = this.props.match.params;
+      if (inProgress) {
+        return <InlineLoader />;
+      }
       return (
         <Modal
           closeIcon
@@ -57,8 +62,8 @@ class AddNewCategory extends Component {
                 fielddata={CATEGORY_DETAILS_FRM.fields.categoryName}
                 changed={(e, result) => formChange(e, result, 'CATEGORY_DETAILS_FRM')}
               />
-              {errors &&
-                <FieldError error={errors} />
+              {errors
+                && <FieldError error={errors} />
               }
               <FormTextarea
                 key="description"
@@ -70,7 +75,7 @@ class AddNewCategory extends Component {
                 <Button primary disabled={!CATEGORY_DETAILS_FRM.meta.isValid} onClick={() => this.addCategory()} content={id === 'new' ? 'Add Category' : 'Update Category'} />
               </div>
             </Form>
-          </Modal.Content >
+          </Modal.Content>
         </Modal>
       );
     }

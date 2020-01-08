@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Header, Grid, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormRadioGroup, FormCheckbox, MaskedInput } from '../../../../../theme/form';
@@ -21,8 +20,9 @@ export default class PreQualBusiness extends Component {
     const { fields } = BUSINESS_APP_FRM;
     const { hideFields } = this.props;
     return (
-      <Aux>
-        <FormElementWrap
+      <>
+        <span className="application-scroll" />
+        {/* <FormElementWrap
           hideFields={hideFields}
           header="What is your Business Model?*"
           subHeader="Only Business to Consumer models are accepted at this time."
@@ -35,7 +35,7 @@ export default class PreQualBusiness extends Component {
             changed={businessAppEleChange}
             containerclassname="button-radio"
           />
-        </FormElementWrap>
+        </FormElementWrap> */}
         <GeneralInformation
           hideFields={hideFields}
           fields={fields}
@@ -54,7 +54,16 @@ export default class PreQualBusiness extends Component {
             containerclassname="iconic-checkbox"
           />
         </FormElementWrap>
-        <FormElementWrap hideFields={hideFields} header="What can NextSeed help you with?*" subHeader="Select in which area NextSeed can help your business.">
+        <FormElementWrap hideFields={hideFields} header="Which of the following securities are you open to exploring with NextSeed?*" subHeader="Please select all that apply.">
+          <FormCheckbox
+            disabled={preQualFormDisabled}
+            fielddata={fields.businessSecurities}
+            name="businessSecurities"
+            changed={businessAppEleChange}
+            containerclassname="iconic-checkbox"
+          />
+        </FormElementWrap>
+        <FormElementWrap hideFields={hideFields} header="What can NextSeed help you with?*">
           <FormRadioGroup
             disabled={preQualFormDisabled}
             fielddata={fields.businessGoal}
@@ -68,8 +77,9 @@ export default class PreQualBusiness extends Component {
           <Grid>
             <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
               <div className="field-wrap">
-                {getFranchiseCondition &&
-                  <Aux>
+                {getFranchiseCondition
+                  && (
+                  <>
                     <Header as="h6" content="Are you an existing or previous franchise holder?*" />
                     <FormRadioGroup
                       disabled={preQualFormDisabled}
@@ -79,10 +89,12 @@ export default class PreQualBusiness extends Component {
                       containerclassname="button-radio"
                     />
                     <Divider section hidden />
-                  </Aux>
+                  </>
+                  )
                 }
-                {getBusinessTypeCondtion &&
-                  <Aux>
+                {getBusinessTypeCondtion
+                  && (
+                  <>
                     <Header as="h6" content="How long has the existing business been operating?" />
                     <Form.Group widths="equal">
                       {
@@ -103,11 +115,13 @@ export default class PreQualBusiness extends Component {
                       }
                     </Form.Group>
                     <Divider section hidden />
-                  </Aux>
+                  </>
+                  )
                 }
                 <Experience
                   fields={fields}
                   preQualFormDisabled={preQualFormDisabled}
+                  currentApplicationType={this.props.applicationType || currentApplicationType}
                   businessAppEleMaskChange={businessAppEleMaskChange}
                 />
               </div>
@@ -125,7 +139,8 @@ export default class PreQualBusiness extends Component {
         </FormElementWrap>
         <FormElementWrap hideFields={hideFields}>
           <Grid>
-            {getBusinessTypeCondtion &&
+            {getBusinessTypeCondtion
+              && (
               <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
                 <Header as={hideFields ? 'h4' : 'h3'}>
                   Previous year
@@ -144,6 +159,7 @@ export default class PreQualBusiness extends Component {
                         name={field}
                         asterisk="true"
                         prefix="$ "
+                        allowNegative={field === 'previousYearNetIncome'}
                         currency
                         value={fields[field].value}
                         fielddata={fields[field]}
@@ -153,6 +169,7 @@ export default class PreQualBusiness extends Component {
                   }
                 </div>
               </Grid.Column>
+              )
             }
             <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
               <Header as={hideFields ? 'h4' : 'h3'}>
@@ -170,6 +187,7 @@ export default class PreQualBusiness extends Component {
                       readOnly={preQualFormDisabled}
                       key={field}
                       name={field}
+                      allowNegative={field === 'nextYearNetIncome'}
                       prefix="$ "
                       currency
                       asterisk="true"
@@ -189,7 +207,7 @@ export default class PreQualBusiness extends Component {
           preQualFormDisabled={preQualFormDisabled}
           businessAppEleChange={businessAppEleChange}
         />
-      </Aux>
+      </>
     );
   }
 }

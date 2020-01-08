@@ -5,18 +5,20 @@ import { get } from 'lodash';
 import MessagesList from './comments/MessagesList';
 import MessagesWrap from './comments/MessagesWrap';
 import { InlineLoader } from '../../../../../theme/shared';
-import { DataFormatter } from '../../../../../helper';
 
 @inject('offeringCreationStore', 'messageStore', 'userStore', 'offeringsStore')
 @observer
 export default class Comments extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.messageStore.initRequest();
   }
+
   messageSelectHandler = (currentMessageId) => {
     this.props.messageStore.setDataValue('currentMessageId', currentMessageId);
     this.props.messageStore.resetMessageForm();
   }
+
   render() {
     const {
       match, messageStore, userStore, offeringsStore,
@@ -24,9 +26,10 @@ export default class Comments extends Component {
     const {
       messages, currentMessageId, loading, error, threadUsersList, newPostComment, threadMsgCount,
     } = messageStore;
-    const { isIssuer, isAdmin } = userStore;
     const { offer } = offeringsStore;
-    const passedProcessingDate = DataFormatter.diffDays(get(offer, 'closureSummary.processingDate'), false, true) <= 0;
+    const { isIssuer, isAdmin } = userStore;
+    const passedProcessingDate = false;
+    const currentOfferingIssuerId = get(offer, 'issuerId');
     if (loading) {
       return <InlineLoader />;
     }
@@ -35,25 +38,28 @@ export default class Comments extends Component {
     }
     return (
       <Card fluid className="messages comments">
-        {messages.length ?
-          <MessagesList
-            passedProcessingDate={passedProcessingDate}
-            threadMsgCount={threadMsgCount}
-            newPostComment={newPostComment}
-            threadUsersList={threadUsersList}
-            messageSelectHandler={this.messageSelectHandler}
-            match={match}
-            messages={messages}
-            currentMessageId={currentMessageId}
-            loading={loading}
-            error={error}
-            isIssuer={isIssuer}
-          /> : null
+        {messages.length
+          ? (
+            <MessagesList
+              passedProcessingDate={passedProcessingDate}
+              threadMsgCount={threadMsgCount}
+              newPostComment={newPostComment}
+              threadUsersList={threadUsersList}
+              messageSelectHandler={this.messageSelectHandler}
+              match={match}
+              messages={messages}
+              currentMessageId={currentMessageId}
+              loading={loading}
+              error={error}
+              isIssuer={isIssuer}
+            />
+          ) : null
         }
         <MessagesWrap
           passedProcessingDate={passedProcessingDate}
           isIssuer={isIssuer}
           isAdmin={isAdmin}
+          currentOfferingIssuerId={currentOfferingIssuerId}
         />
       </Card>
     );

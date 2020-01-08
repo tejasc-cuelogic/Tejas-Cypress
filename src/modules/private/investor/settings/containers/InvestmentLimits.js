@@ -13,7 +13,8 @@ import FailedAccreditation from '../components/investmentLimits/accreditation/fa
 @withRouter
 @observer
 export default class InvestmentLimits extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.investmentLimitStore.initiateInvestmentLimit();
     }
@@ -36,9 +37,11 @@ export default class InvestmentLimits extends Component {
   render() {
     return (
       <div>
-        <Route exact path={`${this.props.match.url}/verify-accreditation/:accountId/:accountType`} render={() => <VerifyAccreditation refLink={this.props.match.url} />} />
-        <Route exact path={`${this.props.match.url}/verify-entity-accreditation/:accountId/:accountType`} render={() => <VerifyEntityAccreditation refLink={this.props.match.url} />} />
-        <Route exact path={`${this.props.match.url}/verify-trust-entity-accreditation/:accountId/:accountType`} render={() => <VerifyTrustEntityAccreditation refLink={this.props.match.url} />} />
+        <Route exact path={`${this.props.match.url}/verify-accreditation/entity`} render={() => <VerifyEntityAccreditation accountType="entity" refLink={this.props.match.url} />} />
+        {
+          ['individual', 'ira'].map(accountType => <Route exact path={`${this.props.match.url}/verify-accreditation/${accountType}`} render={() => <VerifyAccreditation accountType={accountType} refLink={this.props.match.url} />} />)
+        }
+        <Route exact path={`${this.props.match.url}/verify-trust-entity-accreditation/entity`} render={() => <VerifyTrustEntityAccreditation accountType="entity" refLink={this.props.match.url} />} />
         <Route exact path={`${this.props.match.url}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
         <Route exact path={`${this.props.match.url}/falied`} render={() => <FailedAccreditation closeModal={this.closeModal} />} />
         <Route exact path={`${this.props.match.url}/update`} render={() => <UpdateInvestmentLimits refLink={this.props.match.url} />} />

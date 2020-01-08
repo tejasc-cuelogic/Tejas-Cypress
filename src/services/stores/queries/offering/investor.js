@@ -6,8 +6,11 @@ export const getInvestorListForOffering = gql`
       userId
       firstName
       lastName
+      street
+      streetTwo
       city
       state
+      zipCode
       amount
       investmentDate
       userEmail
@@ -15,11 +18,13 @@ export const getInvestorListForOffering = gql`
         code
         isValid
       }
+      regulation
       avatar
       investmentsCount
       accountType
       credit
       autoDraftAmount
+      earlyBirdEligibility
     }
   }
 `;

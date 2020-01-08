@@ -2,16 +2,19 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Header, Grid, Form } from 'semantic-ui-react';
+import { Header, Grid, Form, Button } from 'semantic-ui-react';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('uiStore', 'accreditationStore')
 @withRouter
 @observer
 export default class VerifyEntityAccreditation extends Component {
-  componentWillMount() {
-    const { accountType } = this.props.match.params;
+  constructor(props) {
+    super(props);
+    const { accountType } = this.props;
     this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
   }
+
   render() {
     const {
       ENTITY_ACCREDITATION_FORM,
@@ -43,6 +46,11 @@ export default class VerifyEntityAccreditation extends Component {
               </Grid.Column>
             ))}
           </Grid>
+          {isMobile
+          && (
+            <Button onClick={this.props.submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+          )
+          }
         </Form>
       </div>
     );

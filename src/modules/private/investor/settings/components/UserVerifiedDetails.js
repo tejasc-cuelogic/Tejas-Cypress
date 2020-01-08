@@ -5,23 +5,23 @@ import { Card, Header } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
 
 const userVerifiedDetails = ({
-  legalDetails, status, signupStatus, validAccStatus,
+  legalDetails, status, signupStatus, validAccStatus, isIndividualFullAccount,
 }) => {
   const setupComplete = () => ['FULL', 'MIGRATION_FULL'].includes(status);
   const isIdentityVerified = (cipStatus) => {
     if (cipStatus !== null) {
-      return validAccStatus.includes(cipStatus);
+      return validAccStatus.includes(cipStatus) || isIndividualFullAccount;
     }
     return false;
   };
-  const isUserVerified = () => (signupStatus.isWpUser ? setupComplete() :
-    isIdentityVerified(legalDetails.status));
+  const isUserVerified = () => (signupStatus.isWpUser ? setupComplete()
+    : isIdentityVerified(legalDetails.status));
 
   if (legalDetails === null || !isUserVerified()) {
     return (
       <Card fluid className="form-card">
         <Header as="h5">Identity not verified</Header>
-        <Link to="/app/summary/identity-verification/0" ><b>Verify Identity</b></Link>
+        <Link to="/dashboard/setup/identity-verification/0"><b>Verify Identity</b></Link>
       </Card>
     );
   }

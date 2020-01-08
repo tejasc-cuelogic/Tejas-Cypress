@@ -23,6 +23,7 @@ import {
   investmentStore,
   accreditationStore,
   transactionStore,
+  offeringsStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -41,8 +42,11 @@ import Helper from '../../../helper/utility';
  */
 export class Auth {
   defaultRole = 'investor';
+
   userPool = null;
+
   cognitoUser = null;
+
   constructor() {
     Amplify.configure({
       Auth: {
@@ -60,6 +64,7 @@ export class Auth {
       this.cognitoUser = await AmplifyAuth.currentSession();
       return this.cognitoUser;
     } catch (err) {
+      console.log('error in getUserSession', err);
       return null;
     } finally {
       uiStore.setProgress(false);
@@ -79,27 +84,37 @@ export class Auth {
 
     return (
       new Promise((res, rej) => {
-        AmplifyAuth.currentAuthenticatedUser().then((user) => {
-          const { signInUserSession, attributes } = user;
-          const mapData = this.parseRoles(this.mapCognitoToken(attributes));
-          userStore.setCurrentUser(mapData);
-          authStore.setUserLoggedIn(true);
-          commonStore.setToken(signInUserSession.idToken.jwtToken);
-          AWS.config.region = AWS_REGION;
-          if (userStore.isCurrentUserWithRole('admin')) {
-            this.setAWSAdminAccess(signInUserSession.idToken.jwtToken);
+        AmplifyAuth.currentSession().then((currentUser) => {
+          if (currentUser) {
+            AmplifyAuth.currentAuthenticatedUser().then((user) => {
+              const { signInUserSession, attributes } = user;
+              const mapData = this.parseRoles(this.mapCognitoToken(attributes));
+              userStore.setCurrentUser(mapData);
+              authStore.setUserLoggedIn(true);
+              commonStore.setToken(signInUserSession.idToken.jwtToken);
+              AWS.config.region = AWS_REGION;
+              if (userStore.isAdmin) {
+                this.setAWSAdminAccess(signInUserSession.idToken.jwtToken);
+              }
+              return res({ attributes, session: signInUserSession });
+            }).catch((err) => {
+              console.log('error in verifysession', err);
+              rej(err);
+            })
+              .finally(() => {
+                commonStore.setAppLoaded();
+                uiStore.setAppLoader(false);
+                uiStore.clearLoaderMessage();
+              });
           }
-
-          return res({ attributes, session: signInUserSession });
         }).catch((err) => {
           console.log('error in verifysession', err);
           rej(err);
-        })
-          .finally(() => {
-            commonStore.setAppLoaded();
-            uiStore.setAppLoader(false);
-            uiStore.clearLoaderMessage();
-          });
+        }).finally(() => {
+          commonStore.setAppLoaded();
+          uiStore.setAppLoader(false);
+          uiStore.clearLoaderMessage();
+        });
       })
     );
   }
@@ -115,8 +130,7 @@ export class Auth {
       IdentityPoolId: COGNITO_IDENTITY_POOL_ID,
       Logins: {},
     };
-    identityPoolDetails.Logins[`cognito-idp.${AWS_REGION}.amazonaws.com/${USER_POOL_ID}`] =
-      jwtToken;
+    identityPoolDetails.Logins[`cognito-idp.${AWS_REGION}.amazonaws.com/${USER_POOL_ID}`] = jwtToken;
 
     AWS.config.credentials = new AWS.CognitoIdentityCredentials(identityPoolDetails);
     return AWS.config.credentials.refresh((error) => {
@@ -140,21 +154,35 @@ export class Auth {
     const lowerCasedEmail = email.toLowerCase();
     client.cache.reset();
     authStore.setNewPasswordRequired(false);
+    authStore.setUserLoggedIn(false);
+    uiStore.addMoreInProgressArray('login');
 
     try {
       const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
-      this.amplifyLogin(user);
+      await this.amplifyLogin(user);
     } catch (err) {
-      uiStore.setErrors(this.simpleErr(err));
-      throw err;
-    } finally {
-      uiStore.setProgress(false);
+      if (Helper.matchRegexWithString(/\bTemporary password has expired(?![-])\b/, err.message)) {
+        await this.resetPasswordExpiration(lowerCasedEmail, password);
+      } else {
+        uiStore.removeOneFromProgressArray('login');
+        uiStore.setProgress(false);
+        uiStore.setErrors(this.simpleErr(err));
+        throw err;
+      }
     }
   }
 
-  amplifyLogin(user) {
+  resetPasswordExpiration = async (lowerCasedEmail, password) => {
+    const res = await userStore.resetPasswordExpirationForCognitoUser(lowerCasedEmail);
+    if (res.data.resetPasswordExpirationDurationForCognitoUser) {
+      const user = await AmplifyAuth.signIn({ username: lowerCasedEmail, password });
+      await this.amplifyLogin(user);
+    }
+    return Promise.resolve(true);
+  }
+
+  amplifyLogin = user => new Promise((res) => {
     if (user && !user.signInUserSession && user.challengeName && user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-      authStore.setUserLoggedIn(true);
       if (user.signInUserSession) {
         authStore.setCognitoUserSession(user.signInUserSession);
       }
@@ -162,19 +190,20 @@ export class Auth {
         authStore.setEmail(user.attributes.email.toLowerCase());
       }
       authStore.setNewPasswordRequired(true);
+      authStore.setUserLoggedIn(true);
+      res();
     }
     if (user && user.signInUserSession) {
       authStore.setUserLoggedIn(true);
       localStorage.removeItem('lastActiveTime');
       localStorage.removeItem('defaultNavExpanded');
-
       // Extract JWT from token
       const { idToken } = user.signInUserSession;
       commonStore.setToken(idToken.jwtToken);
       userStore.setCurrentUser(this.parseRoles(this.adjustRoles(idToken.payload)));
       userDetailsStore.getUser(userStore.currentUser.sub).then((data) => {
         if (window.localStorage.getItem('ISSUER_REFERRAL_CODE') && window.localStorage.getItem('ISSUER_REFERRAL_CODE') !== undefined) {
-          commonStore.updateUserReferralCode(userStore.currentUser.sub, window.localStorage.getItem('ISSUER_REFERRAL_CODE')).then(() => {
+          commonStore.updateUserReferralCode(window.localStorage.getItem('ISSUER_REFERRAL_CODE')).then(() => {
             window.localStorage.removeItem('ISSUER_REFERRAL_CODE');
           });
         }
@@ -193,15 +222,15 @@ export class Auth {
             },
           });
         }
-        // res();
+        res();
       });
       AWS.config.region = AWS_REGION;
       // Check if currentUser has admin role, if user has admin role set admin access to user
-      if (userStore.isCurrentUserWithRole('admin')) {
+      if (userStore.isAdmin) {
         this.setAWSAdminAccess(user.signInUserSession.idToken.jwtToken);
       }
     }
-  }
+  });
 
   /**
    * @desc Registers new user. Fetches required data from authStore.
@@ -271,8 +300,10 @@ export class Auth {
     const { email } = Validator.ExtractValues(authStore.FORGOT_PASS_FRM.fields);
     try {
       await AmplifyAuth.forgotPassword(email.toLowerCase());
-      uiStore.setLoaderMessage('Password changed successfully');
     } catch (err) {
+      if (get(err, 'code') === 'UserNotFoundException') {
+        return true;
+      }
       uiStore.setErrors(this.simpleErr(err));
       throw err;
     } finally {
@@ -365,9 +396,12 @@ export class Auth {
       window.analytics.reset();
     }
   }
+
   shutdownIntercom = () => {
     try {
-      window.Intercom('shutdown');
+      if (window.Intercom) {
+        window.Intercom('shutdown');
+      }
       console.log('Intercom Shutdown time:', new Date());
     } catch (e) {
       console.log(e);
@@ -388,11 +422,17 @@ export class Auth {
     commonStore.setToken(undefined);
     localStorage.removeItem('lastActiveTime');
     localStorage.removeItem('defaultNavExpanded');
+    window.sessionStorage.removeItem('AccountCipExp');
+    window.sessionStorage.removeItem('cipErrorMessage');
+    window.sessionStorage.removeItem('changedEmail');
+    const uKey = get(userStore, 'currentUser.sub') || 'public';
+    window.sessionStorage.removeItem(`${uKey}_pInfo`);
     authStore.setUserLoggedIn(false);
     userStore.forgetUser();
     this.segmentTrackLogout(logoutType);
     this.clearMobxStore();
   }
+
   /**
    * @desc Logs out user and clears all tokens stored in browser's local storage
    * @return null
@@ -421,6 +461,7 @@ export class Auth {
     entityAccountStore.resetStoreData();
     bankAccountStore.resetStoreData();
     individualAccountStore.resetStoreData();
+    offeringsStore.resetStoreData();
     portfolioStore.resetPortfolioData();
     userDetailsStore.setPartialInvestmenSession();
     investmentStore.resetData();

@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
+import { isEmpty, get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../../../../../theme/form';
 import OtherInformation from './OtherInformation';
+import TagsInformation from '../../../../../shared/TagsInformation';
 
 @inject('userDetailsStore')
 @observer
 export default class Issuer extends Component {
-  state = { displayMode: true };
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = { displayMode: true };
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
   }
+
   render() {
     const { detailsOfUser, USER_BASIC, formChange } = this.props.userDetailsStore;
     const formName = 'USER_BASIC';
     const details = toJS({ ...detailsOfUser.data.user });
     const { displayMode } = this.state;
+    const tags = toJS(get(details, 'tags'));
     return (
       <Form>
         <Header as="h4">
@@ -64,11 +69,16 @@ export default class Issuer extends Component {
               changed={(e, result) => formChange(e, result, formName)}
               displayMode={displayMode}
             />
-            ))
+          ))
           }
         </Form.Group>
         <Divider />
         <OtherInformation details={details} />
+        {!isEmpty(tags)
+        && (
+          <TagsInformation tags={tags} />
+        )
+        }
         <Divider />
       </Form>
     );

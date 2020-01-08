@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Header, Container, Responsive, Button, Dimmer, Loader } from 'semantic-ui-react';
+import { Header, Container, Button, Dimmer, Loader } from 'semantic-ui-react';
 
-const { clientWidth } = document.documentElement;
-const isTablet = clientWidth >= 768 && clientWidth < 992;
-
-@inject('navStore', 'userDetailsStore', 'authStore', 'userStore')
+@inject('navStore', 'userDetailsStore', 'authStore', 'userStore', 'uiStore')
 @observer
 class Banner extends Component {
   render() {
@@ -18,36 +14,35 @@ class Banner extends Component {
     const { stepInRoute } = this.props.navStore;
     const showButton = (!isUserLoggedIn || (isUserLoggedIn && isInvestor));
     const isFullInvestor = isInvestor && get(signupStatus, 'activeAccounts') && get(signupStatus, 'activeAccounts').length;
-    const redirectUrl = isUserLoggedIn ? (isFullInvestor ? '/offerings' : pendingStep) : `auth/${get(stepInRoute, 'to')}`;
+    const redirectUrl = isUserLoggedIn ? (isFullInvestor ? '/offerings' : pendingStep) : `${get(stepInRoute, 'to')}`;
+    const { responsiveVars } = this.props.uiStore;
 
     return (
       <section className="banner business-banner">
         <Container>
-          <Responsive minWidth={768} as={Aux}>
+          {/* <Responsive minWidth={768} as={React.Fragment}> */}
             <div className="banner-caption">
               <Header as="h2">
-                Build an investment<br />portfolio you care about.
+                Build an investment<br />portfolio you care about
               </Header>
-              { showButton ?
-                <Button
-                  className={`${!isTablet && 'mt-30'} relaxed`}
-                  primary
-                  content="Get Started"
-                  as={Link}
-                  to={redirectUrl}
-                /> : ''
+              { showButton
+                ? (
+                  <Button
+                    className="relaxed"
+                    primary
+                    content="Get Started"
+                    as={Link}
+                    to={redirectUrl}
+                    fluid={responsiveVars.isMobile}
+                  />
+                ) : ''
               }
             </div>
-          </Responsive>
-          <div className="banner-meta">
-            <p>
-              <b>Jessica Hughes | Citizen Pilates</b><br />Raised $100,000 from 75 investors
-            </p>
-          </div>
+          {/* </Responsive> */}
         </Container>
         {this.props.withDimmer && (
           <Dimmer active className="fullscreen">
-            <Loader active >Loading..</Loader>
+            <Loader active>Loading..</Loader>
           </Dimmer>
         )}
       </section>
@@ -56,4 +51,3 @@ class Banner extends Component {
 }
 
 export default Banner;
-

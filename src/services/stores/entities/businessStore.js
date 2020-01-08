@@ -12,7 +12,7 @@ import {
   NEW_OFFERING_INFORMATION,
   TEMPLATE_VARIABLES,
   XML_SUBMISSION_TABS,
-} from './../../../constants/business';
+} from '../../../constants/business';
 
 export class BusinessStore {
   formValues = [...FORM_VALUES];
@@ -151,8 +151,7 @@ export class BusinessStore {
   }
 
   @computed get canSubmitSignaturePersonsForm() {
-    return _.map(this.formSignatureInfo.fields.signaturePersons, signaturePerson =>
-      _.isEmpty(_.filter(signaturePerson, field => field.error)));
+    return _.map(this.formSignatureInfo.fields.signaturePersons, signaturePerson => _.isEmpty(_.filter(signaturePerson, field => field.error)));
   }
 
   @computed get getSummary() {

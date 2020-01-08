@@ -12,7 +12,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class NewPhoneNumber extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { userDetailsStore, identityStore } = this.props;
     if (userDetailsStore.userDetails.phone && userDetailsStore.userDetails.phone.type) {
       identityStore.phoneTypeChange(userDetailsStore.userDetails.phone.type);
@@ -20,25 +21,28 @@ export default class NewPhoneNumber extends Component {
       identityStore.phoneTypeChange('TEXT');
     }
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.push(this.props.refLink);
     this.props.uiStore.clearErrors();
     this.props.identityStore.resetFormData('ID_VERIFICATION_FRM');
   }
-  handleChangePhoneNumber = () => {
+
+  handleChangePhoneNumber = async () => {
     const { resetFormData, ID_VERIFICATION_FRM } = this.props.identityStore;
     resetFormData('ID_PHONE_VERIFICATION');
     const { phoneNumber, mfaMethod } = ID_VERIFICATION_FRM.fields;
     const phoneNumberValue = phoneNumber.value;
     const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
-    this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile).then(() => {
+    const res = await this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile);
+    if (res) {
       this.props.identityStore.setIsOptConfirmed(false);
       this.props.uiStore.clearErrors();
       this.props.history.push(`${this.props.refLink}/confirm`);
-    })
-      .catch(() => {});
+    }
   }
+
   render() {
     const {
       ID_VERIFICATION_FRM,
@@ -72,10 +76,12 @@ export default class NewPhoneNumber extends Component {
                 changed={(e, result) => personalInfoChange(e, result)}
               />
             </div>
-            {errors &&
-              <Message error className="mt-20">
+            {errors
+              && (
+<Message error className="mt-20">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
+              )
             }
             <div className="center-align mt-30">
               <Button primary size="large" className="very relaxed" content="Change Phone Number" loading={this.props.uiStore.inProgress} disabled={!!ID_VERIFICATION_FRM.fields.phoneNumber.error || isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value)} />

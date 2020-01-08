@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, withRouter, Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { Form, Header, Button, Confirm, Icon } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 import { FormInput, AutoComplete, MaskedInput } from '../../../../../../theme/form';
@@ -14,7 +13,8 @@ import { MAX_BENEFICIARY_LIMIT } from '../../../../../../constants/common';
 @withRouter
 @observer
 export default class AddBeneficiary extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.beneficiaryStore.setCurrentSelectedAccountId(this.props.accountId);
     if (!this.props.beneficiaryStore.isShareModalDataSet) {
       this.props.beneficiaryStore.beneficiaryReset();
@@ -64,18 +64,20 @@ export default class AddBeneficiary extends Component {
       beneficiaryModal,
     } = this.props.beneficiaryStore;
     return (
-      <Aux>
+      <>
         <Form onSubmit={this.submit}>
           {
-            BENEFICIARY_META.fields.beneficiary.length ?
-              BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
-                <Aux>
+            BENEFICIARY_META.fields.beneficiary.length
+              ? BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
+                <>
                   <Header as="h5">
                     {`Beneficiary ${index + 1}`}
-                    {BENEFICIARY_META.fields.beneficiary.length > 1 &&
-                      <Button icon className="link-button pull-right" onClick={e => this.toggleConfirm(e, index)}>
+                    {BENEFICIARY_META.fields.beneficiary.length > 1
+                      && (
+<Button icon className="link-button pull-right" onClick={e => this.toggleConfirm(e, index)}>
                         <Icon color="red" size="small" className="ns-trash" />
                       </Button>
+                      )
                     }
                   </Header>
                   <div className="field-wrap">
@@ -129,14 +131,14 @@ export default class AddBeneficiary extends Component {
                       }
                     </Form.Group>
                   </div>
-                </Aux>
-              )) :
-              <InlineLoader />
+                </>
+              ))
+              : <InlineLoader />
           }
-          {BENEFICIARY_META.fields.beneficiary.length !== MAX_BENEFICIARY_LIMIT &&
-            <Button color="violet" className="ghost-button pull-right" onClick={this.addMoreBeneficiary}>+ Add new beneficiary</Button>
+          {BENEFICIARY_META.fields.beneficiary.length !== MAX_BENEFICIARY_LIMIT
+            && <Button color="violet" className="ghost-button pull-right" onClick={this.addMoreBeneficiary}>+ Add new beneficiary</Button>
           }
-          <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>
+          <Button as={Link} to={this.props.refLink} color="red">Cancel</Button>
           <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
         </Form>
         <Confirm
@@ -151,7 +153,7 @@ export default class AddBeneficiary extends Component {
         <Route path={`${this.props.match.url}/confirm`} render={() => <BeneficiaryShareModal refLink={this.props.match.url} />} />
         <Route path={`${this.props.match.url}/preview`} render={() => <BeneficiaryPreviewModal refLink={this.props.match.url} />} />
         <Route path={`${this.props.match.url}/verify`} render={() => <ConfirmVerificationCode refLink={this.props.refLink} refLinkList={this.props.match.url} />} />
-      </Aux>
+      </>
     );
   }
 }

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
@@ -14,13 +13,13 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { identityStore, userDetailsStore } = this.props;
     if (identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
       if (userDetailsStore.userDetails && userDetailsStore.userDetails.phone
         && userDetailsStore.userDetails.phone.number) {
-        const fieldValue =
-        Helper.maskPhoneNumber(userDetailsStore.userDetails.phone.number);
+        const fieldValue = Helper.maskPhoneNumber(userDetailsStore.userDetails.phone.number);
         this.props.identityStore.phoneNumberChange(fieldValue);
       }
     }
@@ -29,9 +28,11 @@ export default class ConfirmPhoneNumber extends Component {
       identityStore.phoneTypeChange(fieldValue);
     }
   }
+
   componentDidMount() {
     Helper.otpShield();
   }
+
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
     const setMfaMode = !this.props.userDetailsStore.userDetails.phone;
@@ -39,7 +40,7 @@ export default class ConfirmPhoneNumber extends Component {
     if (this.props.refLink) {
       this.props.identityStore.verifyAndUpdatePhoneNumber().then(() => {
         if (setMfaMode) {
-          this.props.multiFactorAuthStore.updateMfaModeType();
+          this.props.multiFactorAuthStore.updateUserMFA();
         }
         Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.identityStore.setIsOptConfirmed(true);
@@ -55,6 +56,7 @@ export default class ConfirmPhoneNumber extends Component {
         .catch(() => {});
     }
   }
+
   handleChangePhoneNumber = () => {
     if (!this.props.newPhoneNumber) {
       this.props.uiStore.setEditMode(true);
@@ -62,13 +64,15 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.uiStore.clearErrors();
     }
   }
-  startPhoneVerification = () => {
+
+  startPhoneVerification = async () => {
     this.props.identityStore.setReSendVerificationCode(true);
-    this.props.identityStore.startPhoneVerification('', undefined, isMobile);
-    if (!this.props.refLink) {
+    const res = await this.props.identityStore.startPhoneVerification('', undefined, isMobile);
+    if (res && !this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }
   }
+
   handleCloseModal = () => {
     this.props.uiStore.setDashboardWizardStep();
     if (this.props.refLink) {
@@ -77,12 +81,14 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.uiStore.clearErrors();
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
   }
+
   handleContinue = () => {
     if (this.props.refLink) {
       this.props.history.push(this.props.refLink);
     }
     this.props.identityStore.setIsOptConfirmed(false);
   }
+
   render() {
     const {
       ID_VERIFICATION_FRM,
@@ -91,20 +97,20 @@ export default class ConfirmPhoneNumber extends Component {
       phoneVerificationChange,
       isOptConfirmed,
     } = this.props.identityStore;
-    const { errors, editMode } = this.props.uiStore;
+    const { errors, editMode, responsiveVars } = this.props.uiStore;
     if (isOptConfirmed) {
       return <SuccessScreen successMsg="Your phone number has been updated." handleContinue={this.handleContinue} />;
     }
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">Confirm your phone number</Header>
-          <p>
+          <Header as="h3" className={responsiveVars.isMobile ? 'mb-10' : ''}>Confirm your phone number</Header>
+          <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
             We&#39;re introducing Multi-Factor Authentication (MFA) to
             increase the security of your NextSeed account
           </p>
-          <Divider section />
-          <p>Please confirm the 6-digit verification code sent to your phone</p>
+          <Divider section={!responsiveVars.isMobile} />
+          <p className={responsiveVars.isMobile ? 'mb-half' : ''}>Please confirm the 6-digit verification code sent to your phone</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <MaskedInput
@@ -121,31 +127,33 @@ export default class ConfirmPhoneNumber extends Component {
             className="display-only"
             phoneNumberDisplayMode
           />
-          {editMode ?
-            <Link className="grey-link green-hover" to={this.props.match.url} onClick={this.startPhoneVerification}>Confirm Phone number</Link> :
-            <Link className="grey-link green-hover" to="/app/account-settings/profile-data/new-phone-number" onClick={this.handleChangePhoneNumber}>Change phone number</Link>
+          {editMode
+            ? <Link className="grey-link green-hover" to={this.props.match.url} onClick={this.startPhoneVerification}>Confirm Phone number</Link>
+            : <Link className="grey-link green-hover" to="/dashboard/account-settings/profile-data/new-phone-number" onClick={this.handleChangePhoneNumber}>Change phone number</Link>
           }
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
-                name="code"
+                filterChars
                 fields={6}
                 type="number"
                 className="otp-field"
-                autoFocus={!isMobile}
                 pattern="[0-9]*"
+                autoFocus={!isMobile}
                 inputmode="numeric"
                 fielddata={ID_PHONE_VERIFICATION.fields.code}
                 onChange={phoneVerificationChange}
               />
             </Form.Field>
-            {errors &&
-              <Message error className="mb-40">
+            {errors
+              && (
+<Message error className="mb-40">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
+              )
             }
-            <Button primary size="large" className="very relaxed" content="Confirm" loading={!this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid || (errors && errors.message)} />
+            <Button primary size="large" className="very relaxed" content="Confirm" loading={!this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">

@@ -1,31 +1,40 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { withRouter, Link } from 'react-router-dom';
-import { Header, Button, Image, Grid, Form, Input, Message, Dimmer, Loader } from 'semantic-ui-react';
+import { Header, Button, Image, Grid, Form, Input, Message } from 'semantic-ui-react';
 import { bankAccountActions } from '../../../../../services/actions';
 import ManualForm from './ManualForm';
 import { IND_BANK_LIST } from '../../../../../constants/account';
 import { ListErrors } from '../../../../../theme/shared';
-import AddFunds from './AddFunds';
 import LinkbankSummary from './LinkbankSummary';
 import NSImage from '../../../../shared/NSImage';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('bankAccountStore', 'uiStore', 'transactionStore', 'accountStore')
 @withRouter
 @observer
 export default class Plaid extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.bankAccountStore.setPlaidBankVerificationStatus(false);
     this.props.bankAccountStore.setShouldValidateAmount();
     this.setBankSummary();
     this.props.uiStore.clearErrors();
   }
 
-  componentWillUnmount() {
-    this.props.bankAccountStore.setBankListing();
-    this.props.bankAccountStore.resetFormData('formBankSearch');
+  componentDidUpdate() {
+    this.props.bankAccountStore.resetPlaidBankSearch();
   }
+
+  componentWillUnmount() {
+    this.props.bankAccountStore.resetPlaidBankSearch(true);
+    const modalEle = document.getElementById('multistep-modal');
+    if (modalEle && isMobile) {
+      modalEle.parentNode.scrollTo(0, 0);
+    }
+  }
+
 
   setBankSummary = () => {
     const {
@@ -33,18 +42,25 @@ export default class Plaid extends Component {
       showAddFunds,
       manualLinkBankSubmitted,
     } = this.props.bankAccountStore;
-    if (isAccountPresent &&
-      !showAddFunds &&
-      !manualLinkBankSubmitted) {
+    if (isAccountPresent
+      && !showAddFunds
+      && !manualLinkBankSubmitted
+      && this.props.action !== 'change') {
       this.props.bankAccountStore.setLinkBankSummary();
     }
   }
+
   handleBankSelect = (referenceLink) => {
     // const returnResult = bankAccountActions.bankSelect(institutionID, action);
-    this.props.transactionStore.requestOtpForManageTransactions().then(() => {
+    this.props.transactionStore.requestOtpForManageTransactions(true).then(() => {
       const confirmUrl = `${referenceLink}/confirm`;
       this.props.history.push(confirmUrl);
     });
+  }
+
+  handleInstitutionClick = (insId, action) => {
+    this.props.bankAccountStore.setFieldValue('bankSelect', true);
+    bankAccountActions.bankSelect(insId, action);
   }
 
   render() {
@@ -53,26 +69,20 @@ export default class Plaid extends Component {
       formBankSearch,
       bankSearchChange,
       bankListing,
-      showAddFunds,
       isPlaidBankVerified,
       linkbankSummary,
       isAccountPresent,
     } = this.props.bankAccountStore;
-    const { errors, inProgress } = this.props.uiStore;
+    const { errors } = this.props.uiStore;
     const { action, refLink } = this.props;
-    const headerText = 'Link bank account';
-    const subHeaderText = action && action === 'change' ?
-      'Select your bank from the list'
-      :
-      `In order to make your first investment, you will need to link your bank and 
-      add funds into your account. Please choose the bank below.`;
+    const headerText = 'Next, link your bank account';
+    const subHeaderText = action && action === 'change'
+      ? 'Select your bank from the list'
+      : `In order to make your first investment,
+      please add funds from an account below.`;
     if (isPlaidBankVerified) {
       this.handleBankSelect(refLink);
       this.props.bankAccountStore.setPlaidBankVerificationStatus(false);
-    }
-
-    if (showAddFunds) {
-      return <AddFunds />;
     }
 
     if (action !== 'change' && linkbankSummary) {
@@ -81,17 +91,18 @@ export default class Plaid extends Component {
     if (bankLinkInterface === 'form') {
       return <ManualForm action={action} refLink={refLink} />;
     }
-    if (action === 'change' && inProgress) {
-      return (
-        <Dimmer className="fullscreen" active={inProgress}>
-          <Loader active={inProgress}>
-          Please wait...
-          </Loader>
-        </Dimmer>);
-    }
+    // if (action === 'change' && inProgress) {
+    //   return (
+    //     <Dimmer className="fullscreen" active={inProgress}>
+    //       <Loader active={inProgress}>
+    //         Please wait...
+    //       </Loader>
+    //     </Dimmer>
+    //   );
+    // }
     return (
-      <Aux>
-        <div className="center-align">
+      <>
+        <div className={isMobile ? '' : 'center-align'}>
           <Header as="h3">{headerText}</Header>
           <p className="mb-30">{subHeaderText}</p>
           <Form>
@@ -104,27 +115,30 @@ export default class Plaid extends Component {
               value={formBankSearch.fields.bankName.value}
               onChange={bankSearchChange}
               onKeyPress={bankAccountActions.bankSearch}
+              className="search-field"
             />
           </Form>
           <div className="bank-list">
             {/* <Dimmer active={inProgress}>
               <Loader active={inProgress} />
             </Dimmer> */}
-            {typeof bankListing !== 'undefined' && bankListing.length === 0 &&
-              <Grid column={1} textAlign="center">
-                <Grid.Column>No results found.</Grid.Column>
-              </Grid>
+            {typeof bankListing !== 'undefined' && bankListing.length === 0
+              && (
+                <Grid column={1} textAlign="center">
+                  <Grid.Column>No results found.</Grid.Column>
+                </Grid>
+              )
             }
             {
               <Grid centered>
-                {typeof bankListing !== 'undefined' &&
-                  bankListing.map(bankData => (
+                {typeof bankListing !== 'undefined'
+                  && bankListing.map(bankData => (
                     <Grid.Column key={bankData.institution_id} computer={5} tablet={5} mobile={8}>
                       <Link
                         as="a"
                         className="bank-link"
                         to={this.props.match.url}
-                        onClick={() => bankAccountActions.bankSelect(
+                        onClick={() => this.handleInstitutionClick(
                           bankData.institution_id,
                           action,
                         )
@@ -139,15 +153,15 @@ export default class Plaid extends Component {
                     </Grid.Column>
                   ))
                 }
-                {typeof bankListing === 'undefined' &&
-                  IND_BANK_LIST.map(bankData => (
+                {typeof bankListing === 'undefined'
+                  && IND_BANK_LIST.map(bankData => (
                     <Grid.Column key={bankData.institutionID} computer={5} tablet={5} mobile={8}>
                       <Link
                         as="a"
                         className="bank-link"
                         to={this.props.match.url}
                         onClick={
-                          () => bankAccountActions.bankSelect(bankData.institutionID, action)
+                          () => this.handleInstitutionClick(bankData.institutionID, action)
                         }
                       >
                         {/* eslint-disable import/no-dynamic-require */}
@@ -160,20 +174,24 @@ export default class Plaid extends Component {
               </Grid>
             }
           </div>
-          {errors &&
-            <Message error>
-              <ListErrors errors={[errors.message]} />
-            </Message>
+          {errors
+            && (
+              <Message error>
+                <ListErrors errors={[errors.message]} />
+              </Message>
+            )
           }
-          <Button color="green" className="link-button" content="Or enter it manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
+          <div className="center-align mt-30">
+            <Button color="green" className="link-button" content="Link bank account manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
+          </div>
         </div>
         <div className="center-align mt-30">
           {
-            (isAccountPresent && action !== 'change') &&
-            <Button color="green" className="link-button" content="Keep existing linked bank" onClick={() => this.props.bankAccountStore.setLinkBankSummary()} />
+            (isAccountPresent && action !== 'change')
+            && <Button color="green" className="link-button" content="Keep existing linked bank" onClick={() => this.props.bankAccountStore.setLinkBankSummary()} />
           }
         </div>
-      </Aux>
+      </>
     );
   }
 }

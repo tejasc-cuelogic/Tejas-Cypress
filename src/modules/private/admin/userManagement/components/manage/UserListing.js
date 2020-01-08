@@ -3,9 +3,10 @@ import { get } from 'lodash';
 import { Table, Visibility, Card } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { UserAvatar, NsPagination } from './../../../../../../theme/shared';
+import { UserAvatar, NsPagination } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import UserTypeIcon from './UserTypeIcon';
+import { DataFormatter } from '../../../../../../helper';
 
 class UserListing extends Component {
   statusRow = (props) => {
@@ -23,6 +24,7 @@ class UserListing extends Component {
       </Table.Row>
     );
   };
+
   render() {
     const {
       paginate, sortState, listData, requestState, count, isManager,
@@ -53,23 +55,25 @@ class UserListing extends Component {
               {listData.map(user => (
                 <Table.Row className={(user.locked && user.locked.lock === 'LOCKED') ? 'locked' : ''} key={user.id}>
                   <Table.Cell>
-                    {!user.profilepic &&
-                      <div className="user-image">
-                        <UserAvatar
-                          UserInfo={{
-                            firstName: user.info ? user.info.firstName : '',
-                            lastName: user.info ? user.info.lastName : '',
-                            avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
-                            roles: user.roles.map(r => r.scope),
-                          }}
-                          base64url
-                          size="mini"
-                        />
-                      </div>
+                    {!user.profilepic
+                      && (
+                        <div className="user-image">
+                          <UserAvatar
+                            UserInfo={{
+                              firstName: user.info ? user.info.firstName : '',
+                              lastName: user.info ? user.info.lastName : '',
+                              avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
+                              roles: user.roles.map(r => r.scope),
+                            }}
+                            base64url
+                            size="mini"
+                          />
+                        </div>
+                      )
                     }
                   </Table.Cell>
                   <Table.Cell className="user-status">
-                    <span className="user-name">{isManager ? <Link to={`/app/users/${user.id}/profile-data`}><b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b></Link> : <b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b>}</span>
+                    <span className="user-name">{isManager ? <Link to={`/dashboard/users/${user.id}/profile-data`}><b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b></Link> : <b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b>}</span>
                     {user.email ? user.email.address : ''}
                   </Table.Cell>
                   <Table.Cell>
@@ -79,19 +83,19 @@ class UserListing extends Component {
                   <Table.Cell>{Helper.phoneNumberFormatter(get(user, 'phone.number') ? get(user, 'phone.number') : '')}</Table.Cell>
                   <Table.Cell><UserTypeIcon role={user.roles} /></Table.Cell>
                   <Table.Cell>
-                    {user.created ?
-                      moment.unix(user.created.date).format('MM/DD/YYYY') :
-                      'N/A'
+                    {user.created
+                      ? DataFormatter.getDateAsPerTimeZone(moment.unix(user.created.date), false, false, false)
+                      : 'N/A'
                     }
                   </Table.Cell>
                   <Table.Cell>
-                    {user.lastLoginDate ?
-                      moment.unix(user.lastLoginDate).format('MM/DD/YYYY') :
-                      'N/A'
+                    {user.lastLoginDate
+                      ? DataFormatter.getDateAsPerTimeZone(moment.unix(user.lastLoginDate), false, false, false)
+                      : 'N/A'
                     }
                   </Table.Cell>
-                  {isManager &&
-                  <Table.Cell><Link to={`/app/users/${user.id}/profile-data`} className="action">view profile</Link></Table.Cell>
+                  {isManager
+                    && <Table.Cell><Link to={`/dashboard/users/${user.id}/profile-data`} className="action">view profile</Link></Table.Cell>
                   }
                 </Table.Row>
               ))}
@@ -99,8 +103,8 @@ class UserListing extends Component {
             </Visibility>
           </Table>
         </div>
-        {totalRecords > 0 &&
-          <NsPagination initRequest={paginate} meta={{ totalRecords, requestState }} />
+        {totalRecords > 0
+          && <NsPagination initRequest={paginate} meta={{ totalRecords, requestState }} />
         }
       </Card>
     );

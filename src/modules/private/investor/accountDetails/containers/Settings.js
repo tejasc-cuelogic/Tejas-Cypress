@@ -9,11 +9,13 @@ import Helper from '../../../../../helper/utility';
 @withRouter
 @observer
 export default class Settings extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { setSettingsInfo } = this.props.settingStore;
     setSettingsInfo(accountType);
   }
+
   render() {
     const { settingsInfo } = this.props.settingStore;
     const { match } = this.props;
@@ -31,8 +33,8 @@ export default class Settings extends Component {
                         <Table.Row>
                           <Table.Cell><b>{row.label}</b></Table.Cell>
                           <Table.Cell>
-                            {(row.label === 'Annual Income') || (row.label === 'Net Worth') || (row.label === 'Entity net assets') || (row.label === 'Other CF Investments') ?
-                              (Helper.CurrencyFormat(row.value)) : (row.value)}
+                            {(row.label === 'Annual Income') || (row.label === 'Net Worth') || (row.label === 'Entity net assets') || (row.label === 'Other CF Investments')
+                              ? (Helper.CurrencyFormat(row.value)) : (row.value)}
                           </Table.Cell>
                         </Table.Row>
                       ))}

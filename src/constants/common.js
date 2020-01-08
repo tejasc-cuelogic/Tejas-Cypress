@@ -54,4 +54,30 @@ export const SAASQUATCH_TENANT_ALIAS = process.env.REACT_APP_SAASQUATCH_TENANT_A
 
 export const FROALA_EDITOR_LICENSE = process.env.REACT_APP_FROALA_API_KEY_NEW;
 
-export const userIdleTime = ['production', 'prod', 'master'].includes(process.env.REACT_APP_DEPLOY_ENV) ? (1000 * 60 * 60 * 1) : (1000 * 60 * 60 * 12);
+export const userIdleTime = ['production', 'prod', 'master', 'infosec'].includes(process.env.REACT_APP_DEPLOY_ENV) ? (1000 * 60 * 60 * 1) : (1000 * 60 * 60 * 12);
+
+export const isLoggingEnabled = ['localhost', 'dev'].includes(process.env.REACT_APP_DEPLOY_ENV);
+
+export const DEFAULT_TIME_ZONE_TO_DISPLAY = 'America/Chicago';
+
+export const IMAGE_UPLOAD_ALLOWED_EXTENSIONS = ['jpeg', 'jpg', 'png'];
+
+export const DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS = ['jpeg', 'jpg', 'png', 'pdf', 'txt', 'doc', 'docx', 'xls', 'xlsx', 'odt', 'csv'];
+
+export const DEV_FEATURE_ONLY = ['localhost', 'develop', 'dev', 'review'].includes(REACT_APP_DEPLOY_ENV);
+
+export const ELIGIBLE_TAGS = ['CJEVENT'];
+
+export const isProduction = ['production', 'prod'].includes(REACT_APP_DEPLOY_ENV);
+
+export const RETRY_CONFIG = {
+  delay: {
+    initial: 100, max: 3000, jitter: false,
+  },
+  attempts: {
+    max: 5,
+    retryIf: error => !!error && error.message === 'Failed to fetch',
+  },
+};
+
+export const CURR_YEAR = new Date().getFullYear();

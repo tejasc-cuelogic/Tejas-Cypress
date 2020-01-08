@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Modal, Button, Form, Divider } from 'semantic-ui-react';
 import { activityActions } from '../../../services/actions';
 import { Logo, FieldError } from '../../../theme/shared';
@@ -10,10 +9,13 @@ import { Logo, FieldError } from '../../../theme/shared';
 @withRouter
 @observer
 class DevPassProtected extends Component {
-  state = { password: '', error: '' };
-  componentWillMount() {
-    this.setState({ password: '', error: '' });
+  state = { password: '', error: '', previewPassLoader: false };
+
+  constructor(props) {
+    super(props);
+    this.state = { password: '', error: '' };
   }
+
   submit = () => {
     activityActions.devAppLogin({ password: this.state.password })
       .then(() => {
@@ -28,16 +30,22 @@ class DevPassProtected extends Component {
         this.setState({ error: 'Entered password is invalid, please try again.' });
       });
   }
+
   authPreviewOffer = () => {
-    if (this.state.password === this.props.previewPassword) {
-      this.props.authPreviewOffer(true, this.state.password);
-    } else {
-      this.setState({ error: 'Entered password is invalid, please try again.' });
-    }
+    this.setState({ previewPassLoader: true });
+    this.props.authStore.validateOfferingPreviewPassword(this.props.offeringSlug, this.state.password).then((status) => {
+      if (status) {
+        this.props.authPreviewOffer(true, this.state.password);
+      } else {
+        this.setState({ error: 'Entered password is invalid, please try again.' });
+      }
+      this.setState({ previewPassLoader: false });
+    }).catch(() => this.setState({ previewPassLoader: false }));
   }
+
   render() {
     return (
-      <Aux>
+      <>
         <Modal size="mini" basic open className="multistep-modal">
           <Logo size="medium" centered dataSrc="LogoWhiteGreen" />
           <Divider hidden />
@@ -56,12 +64,12 @@ class DevPassProtected extends Component {
               />
               <FieldError error={this.state.error} />
               <div className="center-align">
-                <Button disabled={!this.state.password} primary size="large" className="very relaxed">{this.props.offerPreview ? 'Continue' : 'Log in'}</Button>
+                <Button disabled={!this.state.password} primary size="large" className="very relaxed" loading={this.state.previewPassLoader}>{this.props.offerPreview ? 'Continue' : 'Log in'}</Button>
               </div>
             </Form>
           </Modal.Content>
         </Modal>
-      </Aux>
+      </>
     );
   }
 }

@@ -8,12 +8,14 @@ import EditKnowledgeBaseItem from './components/EditKnowledgeBaseItem';
 @inject('knowledgeBaseStore')
 @observer
 export default class KnowledgeBase extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.knowledgeBaseStore.categoriesLoaded) {
       this.props.knowledgeBaseStore.getCategoryList(false);
       this.props.knowledgeBaseStore.toggleSearch();
     }
   }
+
   render() {
     const { match, refMatch } = this.props;
     return (

@@ -10,12 +10,14 @@ export default class ConfirmCancellation extends Component {
   handleBack = () => {
     this.props.history.push(`${this.props.refLink}/agreement`);
   }
+
   handleConfirm = () => {
     const { agreementDetails } = this.props.investmentStore;
     const { cancelAgreement } = this.props.portfolioStore;
     cancelAgreement(agreementDetails.agreementId);
     this.props.history.push(`${this.props.refLink}/invest-now`);
   }
+
   render() {
     return (
       <Modal open closeOnDimmerClick={false} size="mini">

@@ -26,6 +26,7 @@ const Notifications = {
 @observer
 class notificationPanel extends Component {
   state = { notifications: Notifications };
+
   dismiss = (index, action) => {
     const { notifications } = this.state;
     if (action === 0) {
@@ -37,6 +38,7 @@ class notificationPanel extends Component {
     }
     this.setState({ notifications });
   }
+
   render() {
     const { layoutState } = this.props.uiStore;
     return (
@@ -61,16 +63,17 @@ class notificationPanel extends Component {
                       <b>{notification.who}</b> {notification.operation} <b>{notification.what}</b> {notification.from} {' '}
                       <b>{notification.module}</b>
                     </Message.Header>
-                    {notification.money &&
-                      <Header as="h3">${notification.money}</Header>
+                    {notification.money
+                      && <Header as="h3">${notification.money}</Header>
                     }
                     <Link to="/dashboard" className="link">See Details</Link>
                   </Message.Content>
-                  {notification.icon &&
-                    <Icon className={notification.icon} />
+                  {notification.icon
+                    && <Icon className={notification.icon} />
                   }
-                  {notification.confirmDismiss &&
-                    <div className="confirm-dismiss">
+                  {notification.confirmDismiss
+                    && (
+<div className="confirm-dismiss">
                       <p>Would you like to remove this notification?</p>
                       <Button.Group fluid>
                         <Button onClick={() => this.dismiss(key, 2)} compact color="red">
@@ -81,11 +84,12 @@ class notificationPanel extends Component {
                         </Button>
                       </Button.Group>
                     </div>
+                    )
                   }
                 </Message>
               ))}
             </div>
-            ))
+          ))
         }
       </div>
     );

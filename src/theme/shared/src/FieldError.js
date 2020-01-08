@@ -5,10 +5,11 @@ const FieldError = (props) => {
   if (props.error) {
     return (
       <p className={`${props.className ? `${props.className} field-error` : 'field-error'}`}>
-        {props.icon &&
-          <Icon name={props.icon} />}
+        {props.icon
+          && <Icon name={props.icon} />}
         {props.error}
-      </p>);
+      </p>
+    );
   }
   return null;
 };

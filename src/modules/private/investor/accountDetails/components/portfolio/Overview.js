@@ -1,149 +1,231 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
-import { includes, get } from 'lodash';
+import { includes, get, capitalize } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
 import { Header, Table, Grid, Statistic, Button, Divider, Popup, Icon } from 'semantic-ui-react';
-import { AccTypeTitle } from '../../../../../../theme/shared';
+import { AccTypeTitle, InlineLoader, IframeModal } from '../../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
+import { DataFormatter } from '../../../../../../helper';
+import Helper from '../../../../../../helper/utility';
 
-@inject('portfolioStore', 'campaignStore', 'userDetailsStore')
+const isMobile = document.documentElement.clientWidth < 768;
+@inject('portfolioStore', 'campaignStore', 'userDetailsStore', 'transactionStore')
 @observer
 class Overview extends Component {
-  componentWillMount() {
+  state = {
+    open: false,
+    embedUrl: '',
+    loadingDoc: '',
+  };
+
+  constructor(props) {
+    super(props);
     const { isAdmin } = this.props;
     const accountDetails = this.props.userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     // const investor = this.props.userDetailsStore.getDetailsOfUser;
     const accountType = isAdmin && get(accountDetails, 'name') ? get(accountDetails, 'name') : includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     this.props.portfolioStore.getPayOffData(accountType, isAdmin);
+    this.props.transactionStore.getInvestmentsByOfferingId(isAdmin);
+    window.addEventListener('message', this.docuSignListener);
   }
+
+  docuSignListener = (e) => {
+    if (e.data === 'viewing_complete') {
+      this.setState({ open: false });
+    }
+  };
+
+  closeModal = () => {
+    this.setState({ open: false });
+  }
+
+  handleViewLoanAgreement = (aggrementId) => {
+    this.setState({ loadingDoc: aggrementId });
+    this.props.transactionStore.getDocuSignViewURL(aggrementId).then((res) => {
+      this.setState({ open: true, embedUrl: res, loadingDoc: '' });
+    });
+  }
+
+  handleViewSuppAgreement = (aggrementId) => {
+    this.setState({ loadingDoc: aggrementId });
+    this.props.campaignStore.getBoxLink(aggrementId).then((res) => {
+      this.setState({ open: true, embedUrl: res, loadingDoc: '' });
+    });
+  }
+
   render() {
     const { campaign } = this.props.campaignStore;
     const chartData = this.props.portfolioStore.getChartData();
     const { keyTerms, offering } = campaign;
-    const overviewToDisplay = campaign && campaign.keyTerms && campaign.keyTerms.securities &&
-      campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? 'REVENUE' : 'TERM';
+    const overviewToDisplay = campaign && campaign.keyTerms && campaign.keyTerms.securities
+      && campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? 'REVENUE' : 'TERM';
     const isPreviewLinkShow = campaign && campaign.isAvailablePublicly;
+    const security = get(campaign, 'keyTerms.securities');
+    const isPreferredEquityOffering = !!['PREFERRED_EQUITY_506C'].includes(security);
+    const preferredEquityUnit = get(campaign, 'keyTerms.equityUnitType') ? `${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price` : 'N/A';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
-    const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
+    const maturityMonth = get(campaign, 'keyTerms.maturity') ? `${get(campaign, 'keyTerms.maturity')} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
+    const { agreementIds, loading } = this.props.transactionStore;
+    let aggrementDocs = get(campaign, 'closureSummary.keyTerms.supplementalAgreements.documents') || [];
+    aggrementDocs = aggrementDocs.length ? aggrementDocs.filter(d => d.isVisible && get(d, 'upload.fileHandle.boxFileId')) : [];
+    if (loading) {
+      return (
+        <InlineLoader />
+      );
+    }
     return (
-      <Aux>
+      <>
         <div className="inner-content-spacer bg-offwhite">
           <span className="pull-left">
             <Header as="h5">
               <AccTypeTitle moreText="investment" />
             </Header>
           </span>
-          {isPreviewLinkShow &&
+          {isPreviewLinkShow
+            && (
             <span className="pull-right">
-              <Link target="_blank" to={`/offerings/${campaign.offeringSlug}/overview`} className="pull-right">View offering page</Link>
+              <Link target="_blank" to={`/offerings/${campaign.offeringSlug}`} className="pull-right">View offering page</Link>
             </span>
+            )
           }
         </div>
         <div className="inner-content-spacer">
           <Grid>
-            <Grid.Column width={9}>
+            <Grid.Column width={isMobile ? 16 : 9}>
               <Header as="h4">Offering Summary</Header>
               <div className="table-wrapper">
                 <Table unstackable definition basic="very">
                   <Table.Body>
-                    { keyTerms && keyTerms.shorthandBusinessName ?
+                    { keyTerms && keyTerms.shorthandBusinessName
+                      ? (
                       <Table.Row verticalAlign="top">
                         <Table.Cell width={5}>Issuer</Table.Cell>
                         <Table.Cell>
-                          {keyTerms && keyTerms.shorthandBusinessName ?
-                            keyTerms.shorthandBusinessName
-                            :
-                            'N/A'
+                          {keyTerms && keyTerms.shorthandBusinessName
+                            ? keyTerms.shorthandBusinessName
+                            : 'N/A'
                           }
                         </Table.Cell>
-                      </Table.Row> : ''
+                      </Table.Row>
+                      ) : ''
                     }
-                    { keyTerms && keyTerms.securities ?
+                    { keyTerms && keyTerms.securities
+                      ? (
                       <Table.Row verticalAlign="top">
                         <Table.Cell>Securities</Table.Cell>
                         <Table.Cell>
-                          {keyTerms && keyTerms.securities ?
-                            CAMPAIGN_KEYTERMS_SECURITIES[keyTerms.securities]
-                            :
-                            'N/A'
+                          {keyTerms && keyTerms.securities
+                            ? CAMPAIGN_KEYTERMS_SECURITIES[keyTerms.securities]
+                            : 'N/A'
                           }
                         </Table.Cell>
-                      </Table.Row> : ''
+                      </Table.Row>
+                      ) : ''
                     }
-                    { offering && offering.launch && offering.launch.targetDate ?
+                    { offering && offering.launch && offering.launch.expectedOpsDate
+                      ? (
                       <Table.Row verticalAlign="top">
                         <Table.Cell>{overviewToDisplay && overviewToDisplay === 'REVENUE' ? 'Anticipated Opening' : 'Original Anticipated Opening Date'}</Table.Cell>
                         <Table.Cell>
-                          {offering && offering.launch &&
-                            offering.launch.targetDate ?
-                            moment(offering.launch.targetDate).format('ll')
-                            :
-                            'N/A'
+                          {offering && offering.launch
+                            && offering.launch.expectedOpsDate
+                            ? DataFormatter.getDateAsPerTimeZone(offering.launch.expectedOpsDate, false, true, false, undefined, 'CST', true)
+                            : 'N/A'
                           }
                         </Table.Cell>
-                      </Table.Row> : ''
+                      </Table.Row>
+                      ) : ''
                     }
-                    { get(campaign, 'closureSummary.keyTerms.interestRate') || get(campaign, 'closureSummary.keyTerms.multiple') ?
+                    { get(campaign, 'closureSummary.keyTerms.interestRate') || get(campaign, 'closureSummary.keyTerms.multiple')
+                      ? (
                       <Table.Row verticalAlign="top">
                         <Table.Cell>
-                          {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
-                            'Investment Multiple'
-                            :
-                            'Interest Rate'
+                          {overviewToDisplay && overviewToDisplay === 'REVENUE'
+                            ? 'Investment Multiple'
+                            : 'Interest Rate'
                           }
                         </Table.Cell>
-                        {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
+                        {overviewToDisplay && overviewToDisplay === 'REVENUE'
+                          ? (
                           <Table.Cell>
                             {campaign && get(campaign, 'closureSummary.keyTerms.multiple') ? `${get(campaign, 'closureSummary.keyTerms.multiple')}x` : 'N/A'}{' '}
                             <HtmlEditor
                               readOnly
-                              content={(keyTerms && keyTerms.investmentMultipleSummary ?
-                                keyTerms.investmentMultipleSummary : '')}
+                              content={(keyTerms && keyTerms.investmentMultipleSummary
+                                ? keyTerms.investmentMultipleSummary : '')}
                             />
                           </Table.Cell>
-                          :
+                          )
+                          : (
                           <Table.Cell>
-                            {campaign && get(campaign, 'closureSummary.keyTerms.interestRate') ?
-                              `${get(campaign, 'closureSummary.keyTerms.interestRate')}%` : 'N/A'
+                            {campaign && get(campaign, 'closureSummary.keyTerms.interestRate')
+                              ? `${get(campaign, 'closureSummary.keyTerms.interestRate')}%` : 'N/A'
                             }
                           </Table.Cell>
+                          )
                         }
-                      </Table.Row> : ''
+                      </Table.Row>
+                      ) : ''
                     }
-                    {keyTerms && keyTerms.frequencyOfPayments ?
+                    {isPreferredEquityOffering
+                       && (
+                       <>
+                        <Table.Row verticalAlign="top">
+                          <Table.Cell>{preferredEquityUnit}</Table.Cell>
+                          <Table.Cell>
+                            {get(campaign, 'closureSummary.keyTerms.priceCalculation')
+                              ? Helper.CurrencyFormat(get(campaign, 'closureSummary.keyTerms.priceCalculation'))
+                              : 'N/A'
+                            }
+                          </Table.Cell>
+                        </Table.Row>
+                        <Table.Row verticalAlign="top">
+                        <Table.Cell>Pre-Money Valuation</Table.Cell>
+                        <Table.Cell>
+                          {get(campaign, 'keyTerms.premoneyValuation')
+                            ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0)
+                            : 'N/A'
+                          }
+                        </Table.Cell>
+                      </Table.Row>
+                      </>
+                       )
+                    }
+                    {keyTerms && keyTerms.frequencyOfPayments
+                      ? (
                       <Table.Row verticalAlign="top">
                         <Table.Cell>Payments</Table.Cell>
                         <Table.Cell>
-                          {keyTerms && keyTerms.frequencyOfPayments ?
-                            keyTerms.frequencyOfPayments : 'N/A'}
+                          {keyTerms && keyTerms.frequencyOfPayments
+                            ? keyTerms.frequencyOfPayments : 'N/A'}
                         </Table.Cell>
-                      </Table.Row> : ''
+                      </Table.Row>
+                      ) : ''
                     }
-                    {overviewToDisplay && overviewToDisplay === 'REVENUE' && get(campaign, 'closureSummary.keyTerms.revSharePercentage') ?
+                    {overviewToDisplay && overviewToDisplay === 'REVENUE' && get(campaign, 'closureSummary.keyTerms.revSharePercentage')
+                      ? (
                       <Table.Row verticalAlign="top">
                         <Table.Cell>Revenue Sharing Percentage</Table.Cell>
                         <Table.Cell>
-                          {campaign && get(campaign, 'closureSummary.keyTerms.revSharePercentage') ?
-                            get(campaign, 'closureSummary.keyTerms.revSharePercentage').includes('%') ?
-                            get(campaign, 'closureSummary.keyTerms.revSharePercentage') : `${get(campaign, 'closureSummary.keyTerms.revSharePercentage')}%`
-                            :
-                            'N/A'}
+                          {campaign && get(campaign, 'closureSummary.keyTerms.revSharePercentage')
+                            ? get(campaign, 'closureSummary.keyTerms.revSharePercentage').includes('%')
+                              ? get(campaign, 'closureSummary.keyTerms.revSharePercentage') : `${get(campaign, 'closureSummary.keyTerms.revSharePercentage')}%`
+                            : 'N/A'}
                           <HtmlEditor
                             readOnly
-                            content={(keyTerms && keyTerms.revSharePercentageDescription ?
-                              keyTerms.revSharePercentageDescription : '')}
+                            content={(keyTerms && keyTerms.revSharePercentageDescription
+                              ? keyTerms.revSharePercentageDescription : '')}
                           />
                         </Table.Cell>
                       </Table.Row>
-                      :
-                      ''
+                      )
+                      : ''
                     }
-                    { maturityMonth ?
+                    { maturityMonth
+                      ? (
                       <Table.Row verticalAlign="top">
                         <Table.Cell width={5}>Maturity{' '}
                           <Popup
@@ -153,90 +235,122 @@ class Overview extends Component {
                           />
                         </Table.Cell>
                         <Table.Cell>
-                          {maturityMonth ?
-                            `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
-                            :
-                            'N/A'
+                          {maturityMonth
+                            ? `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
+                            : 'N/A'
                           }
                         </Table.Cell>
-                      </Table.Row> : ''
+                      </Table.Row>
+                      ) : ''
                     }
-                    { keyTerms && keyTerms.securityInterest ?
+                    { keyTerms && keyTerms.securityInterest
+                      ? (
                       <Table.Row verticalAlign="top">
                         <Table.Cell>Security Interest</Table.Cell>
                         <Table.Cell>
-                          {keyTerms && keyTerms.securityInterest ?
-                            keyTerms.securityInterest
-                            :
-                            'N/A'
+                          {keyTerms && keyTerms.securityInterest
+                            ? keyTerms.securityInterest
+                            : 'N/A'
                           }
                         </Table.Cell>
-                      </Table.Row> : ''
+                      </Table.Row>
+                      ) : ''
                     }
-                    { keyTerms && keyTerms.securitiesOwnershipPercentage ?
+                    { keyTerms && keyTerms.securitiesOwnershipPercentage
+                      ? (
                       <Table.Row verticalAlign="top">
                         <Table.Cell>Ownership % Represented by Securities</Table.Cell>
                         <Table.Cell>
-                          {keyTerms && keyTerms.securitiesOwnershipPercentage ?
-                            `${keyTerms.securitiesOwnershipPercentage}%
+                          {keyTerms && keyTerms.securitiesOwnershipPercentage
+                            ? `${keyTerms.securitiesOwnershipPercentage}%
                             equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities.`
-                            :
-                            'N/A'
+                            : 'N/A'
                           }
                         </Table.Cell>
-                      </Table.Row> : ''
+                      </Table.Row>
+                      ) : ''
                     }
-                    {edgarLink &&
+                    {(agreementIds && agreementIds.length) || (aggrementDocs && aggrementDocs.length)
+                      ? (
+                      <Table.Row verticalAlign="top">
+                        <Table.Cell>Investor Agreement{(agreementIds.length + aggrementDocs.length) > 1 && 's'} </Table.Cell>
+                        <Table.Cell>
+                          <Button.Group vertical>
+                            {agreementIds && agreementIds.length !== 0 && agreementIds.map(agreementId => (
+                              <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {agreementId} </Button>
+                            ))}
+                            {aggrementDocs && aggrementDocs.length !== 0 && aggrementDocs.map(doc => (
+                              <Button icon loading={this.state.loadingDoc === get(doc, 'upload.fileHandle.boxFileId')} onClick={() => this.handleViewSuppAgreement(get(doc, 'upload.fileHandle.boxFileId'))} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {doc.name}</Button>
+                            ))}
+                          </Button.Group>
+                        </Table.Cell>
+                      </Table.Row>
+                      ) : null
+                    }
+                    {edgarLink
+                    && (
                     <Table.Row>
                       <Table.Cell colSpan="2">
                         <Button onClick={() => window.open(edgarLink.includes('http') ? edgarLink : `http://${edgarLink}`, '_blank')} primary content="View Form C Filing" />
                       </Table.Cell>
                     </Table.Row>
+                    )
                     }
                   </Table.Body>
                 </Table>
               </div>
             </Grid.Column>
-            { get(campaign, 'closureSummary.keyTerms.businessOpenDate') ||
-            get(offering, 'closureSummary.repayment.completeDate') ?
+            { get(campaign, 'closureSummary.keyTerms.businessOpenDate')
+            || get(offering, 'closureSummary.repayment.completeDate')
+              ? (
               <Grid.Column width={4} floated="right">
                 <Header as="h4">Key Dates & Values</Header>
                 <Statistic.Group size="mini" className="vertical">
-                  { get(campaign, 'closureSummary.keyTerms.businessOpenDate') ?
+                  { get(campaign, 'closureSummary.keyTerms.businessOpenDate')
+                    ? (
                     <Statistic>
                       <Statistic.Label>Business Open Date</Statistic.Label>
                       <Statistic.Value>
-                        {get(campaign, 'closureSummary.keyTerms.businessOpenDate') ?
-                          moment(get(campaign, 'closureSummary.keyTerms.businessOpenDate')).format('MMM Do YYYY')
-                          :
-                          'N/A'
+                        {get(campaign, 'closureSummary.keyTerms.businessOpenDate')
+                          ? DataFormatter.getDateAsPerTimeZone(get(campaign, 'closureSummary.keyTerms.businessOpenDate'), false, false, false, 'MMM Do YYYY')
+                          : 'N/A'
                         }
                       </Statistic.Value>
-                    </Statistic> : ''
+                    </Statistic>
+                    ) : ''
                   }
                   {get(offering, 'closureSummary.repayment.completeDate') && (
                     <Statistic>
                       <Statistic.Label>Payoff Date</Statistic.Label>
                       <Statistic.Value>
-                        {moment(get(offering, 'closureSummary.repayment.completeDate').format('MMM Do YYYY')) || 'N/A'}
+                        {DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.repayment.completeDate'), false, false, false, 'MMM Do YYYY') || 'N/A'}
                       </Statistic.Value>
                     </Statistic>
                   )}
                 </Statistic.Group>
-              </Grid.Column> : ''
+              </Grid.Column>
+              ) : ''
             }
           </Grid>
         </div>
-        {chartData.length > 0 &&
-          <Aux>
+        {chartData.length > 0
+          && (
+          <>
             <Divider />
             <div className="inner-content-spacer payoff-chart">
               <Header as="h4">Payments</Header>
               <PayOffChart chartData={chartData} />
             </div>
-          </Aux>
+          </>
+          )
         }
-      </Aux>
+        <IframeModal
+          open={this.state.open}
+          close={this.closeModal}
+          srcUrl={this.state.embedUrl}
+          loading={false}
+        />
+      </>
     );
   }
 }

@@ -4,7 +4,7 @@ import {
 import apiService from '../../../api/restApi';
 import { bankAccountStore, accountStore, uiStore } from '../../stores';
 import Helper from '../../../helper/utility';
-import { validationActions } from '../../../services/actions';
+import { validationActions } from '..';
 
 
 const sharedPayload = { key: PLAID_PUBLIC_KEY };
@@ -73,34 +73,37 @@ export class BankAccount {
         bankAccountStore.setLinkBankSummary(false);
         uiStore.setProgress(false);
         const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
-        const renderStep = accountValue !== 0 ?
-          accountStore.ACC_TYPE_MAPPING[accountValue].location : 0;
-        accountStore.ACC_TYPE_MAPPING[accountValue].store
-          .setStepToBeRendered(renderStep);
+        if (accountValue === 0) {
+          accountStore.ACC_TYPE_MAPPING[accountValue].store
+            .setStepToBeRendered(accountValue);
+        }
       },
       onSuccess: (publicToken, metadata) => {
+        bankAccountStore.setFieldValue('bankSelect', false);
         bankAccountStore.setPlaidAccDetails(metadata);
         bankAccountStore.setNewPlaidBankDetails(metadata);
         bankAccountStore.resetRoutingNum();
         if (action === 'change') {
-          // bankAccountStore.changeBankPlaid();
           bankAccountStore.setPlaidBankVerificationStatus(true);
         } else {
-          // Helper.toast(`Account with Bank ${metadata.institution.name}
-          // successfully linked.`, 'success');
           const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
+          const { store, location, linkbankValue } = accountStore.ACC_TYPE_MAPPING[accountValue];
           const currentStep = {
             name: 'Link bank',
-            stepToBeRendered: accountStore.ACC_TYPE_MAPPING[accountValue].location,
+            stepToBeRendered: location,
             validate: validationActions.validateLinkBankForm,
+            linkBankStepValue: linkbankValue,
           };
           bankAccountStore.resetAddFundsForm();
-          accountStore.ACC_TYPE_MAPPING[accountValue].store.createAccount(currentStep);
-          accountStore.ACC_TYPE_MAPPING[accountValue].store
-            .setStepToBeRendered(accountStore.ACC_TYPE_MAPPING[accountValue].location);
-          if (accountStore.ACC_TYPE_MAPPING[accountValue].name !== 'individual') {
-            bankAccountStore.setShowAddFunds();
-          }
+          store.createAccount(currentStep).then(() => {
+            store.setStepToBeRendered(accountStore.getStepValue(currentStep));
+            uiStore.setProgress(false);
+          }).catch(() => {
+            uiStore.setProgress(false);
+            bankAccountStore.setLinkBankSummary(false);
+            store
+              .setStepToBeRendered(accountStore.getStepValue(currentStep));
+          });
         }
       },
       onExit: (err) => {

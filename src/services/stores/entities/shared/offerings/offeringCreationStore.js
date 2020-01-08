@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, arrow-body-style, max-len, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { includes, sortBy, get, has, map, startCase, mapKeys, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
+import { includes, sortBy, get, has, map, startCase, set, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -10,41 +10,60 @@ import {
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
-  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS,
-  OFFERING_CLOSE_1, OFFERING_CLOSE_2, OFFERING_CLOSE_3,
+  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS, CLOSING_BINDING,
+  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { deleteBonusReward, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, offerClose, deleteBac, upsertBonusReward,
-  getBonusRewards, getOfferingFilingList,
-  generateBusinessFiling, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
+  getBonusRewards, getOfferingFilingList, initializeClosingBinder,
+  generateBusinessFiling, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore } from '../../../index';
+import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore, offeringInvestorStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
 import { INDUSTRY_TYPES } from '../../../../../constants/offering';
 import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../../constants/common';
+import { US_STATES } from '../../../../../constants/account';
 
 export class OfferingCreationStore {
   @observable NEW_OFFER_FRM = Validator.prepareFormObject(NEW_OFFER);
+
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
+
   @observable OFFERING_OVERVIEW_FRM = Validator.prepareFormObject(OFFERING_OVERVIEW);
+
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
+
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
+
   @observable CLOSURE_SUMMARY_FRM = Validator.prepareFormObject(CLOSURE_SUMMARY);
+
   @observable OFFERING_MISC_FRM = Validator.prepareFormObject(MISC);
+
   @observable LAUNCH_CONTITNGENCIES_FRM =
     Validator.prepareFormObject({ launch: [] }, false, true, false, { launch: CONTINGENCIES.data });
+
   @observable CLOSING_CONTITNGENCIES_FRM =
     Validator.prepareFormObject({ close: [] }, false, true, false, { close: CONTINGENCIES.data });
+
   @observable ADD_NEW_CONTINGENCY_FRM = Validator.prepareFormObject(ADD_NEW_CONTINGENCY);
+
   @observable OFFERING_DETAILS_FRM = Validator.prepareFormObject(OFFERING_DETAILS);
+
   @observable OFFERING_CLOSE_FRM = Validator.prepareFormObject(OFFER_CLOSE);
+
   @observable OFFERING_CLOSE_1 = Validator.prepareFormObject(OFFERING_CLOSE_1);
+
   @observable OFFERING_CLOSE_2 = Validator.prepareFormObject(OFFERING_CLOSE_2);
+
   @observable OFFERING_CLOSE_3 = Validator.prepareFormObject(OFFERING_CLOSE_3);
+
+  @observable OFFERING_CLOSE_4 = Validator.prepareFormObject(OFFERING_CLOSE_4);
+
   @observable MEDIA_FRM = Validator.prepareFormObject(MEDIA);
+
   @observable LEADERSHIP_FRM =
     Validator.prepareFormObject(
       LEADERSHIP,
@@ -53,9 +72,13 @@ export class OfferingCreationStore {
       false,
       { leadership: LEADERSHIP.leadership },
     );
+
   @observable LEADERSHIP_EXP_FRM = Validator.prepareFormObject(LEADERSHIP_EXP);
+
   @observable GENERAL_FRM = Validator.prepareFormObject(GENERAL);
+
   @observable ISSUER_FRM = Validator.prepareFormObject(ISSUER);
+
   @observable AFFILIATED_ISSUER_FRM =
     Validator.prepareFormObject(
       AFFILIATED_ISSUER,
@@ -64,29 +87,57 @@ export class OfferingCreationStore {
       false,
       { getOfferingBac: AFFILIATED_ISSUER.getOfferingBac },
     );
+
   @observable LEADER_FRM = Validator.prepareFormObject(LEADER);
+
   @observable RISK_FACTORS_FRM = Validator.prepareFormObject(RISK_FACTORS);
+
   @observable ADD_NEW_TIER_FRM = Validator.prepareFormObject(ADD_NEW_TIER);
+
   @observable ADD_NEW_BONUS_REWARD_FRM = Validator.prepareFormObject(ADD_NEW_BONUS_REWARD);
+
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
+
   @observable EDIT_CONTINGENCY_FRM = Validator.prepareFormObject(EDIT_CONTINGENCY);
+
   @observable ADMIN_DOCUMENTATION_FRM = Validator.prepareFormObject(ADMIN_DOCUMENTATION);
+
   @observable DATA_ROOM_FRM = Validator.prepareFormObject(DATA_ROOM);
+
+  @observable CLOSING_BINDER_FRM = Validator.prepareFormObject(CLOSING_BINDING);
+
   @observable POC_DETAILS_FRM = Validator.prepareFormObject(POC_DETAILS);
+
   @observable contingencyFormSelected = undefined;
+
   @observable confirmModal = false;
+
   @observable confirmModalName = null;
+
   @observable removeIndex = null;
+
   @observable initLoad = [];
+
   @observable currentOfferingId = null;
+
+  @observable currentOfferingSlug = null;
+
   @observable issuerOfferingBac = {};
+
   @observable affiliatedIssuerOfferingBac = {};
+
   @observable offeringFilingList = {};
+
   @observable filingListApiRes = {};
+
   @observable leadershipOfferingBac = {};
+
   @observable bonusRewardsTiers = {};
+
   @observable bonusRewards = {};
+
   @observable tierTobeUnlinked = {};
+
   @observable leadershipExperience = {
     0: LEADERSHIP_EXP.employer,
     1: LEADERSHIP_EXP.employer,
@@ -99,17 +150,26 @@ export class OfferingCreationStore {
     8: LEADERSHIP_EXP.employer,
     9: LEADERSHIP_EXP.employer,
   };
+
   @observable requestState = {
     search: {},
   };
+
   @observable removeFileIdsList = [];
+
   @observable removeFileNamesList = [];
+
   @observable isUploadingFile = false;
+
   @observable isListingPage = false;
 
+  @observable outputMsg = null;
+
   @action
-  setFieldValue = (field, value, field2 = false) => {
-    if (field2) {
+  setFieldValue = (field, value, field2 = false, objRef = false) => {
+    if (objRef) {
+      set(this[field], objRef, value);
+    } else if (field2) {
       this[field][field2] = value;
     } else {
       this[field] = value;
@@ -134,22 +194,19 @@ export class OfferingCreationStore {
   setDefaultTiers = () => {
     DEFAULT_TIERS.map((tier) => {
       if (this.bonusRewardsTiers.data && this.bonusRewardsTiers.data.getBonusRewardTiers) {
-        const isExisted =
-          find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
+        const isExisted = find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
         if (!isExisted) {
           this.bonusRewardsTiers.data.getBonusRewardTiers.push(tier);
         }
       } else {
         this.bonusRewardsTiers.data = {};
         this.bonusRewardsTiers.data.getBonusRewardTiers = [];
-        const isExisted =
-          find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
+        const isExisted = find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
         if (!isExisted) {
           this.bonusRewardsTiers.data.getBonusRewardTiers.unshift(tier);
         }
       }
-      this.bonusRewardsTiers.data.getBonusRewardTiers =
-        orderBy([...new Set(toJS(this.bonusRewardsTiers.data.getBonusRewardTiers))], ['amount'], ['asc']);
+      this.bonusRewardsTiers.data.getBonusRewardTiers = orderBy([...new Set(toJS(this.bonusRewardsTiers.data.getBonusRewardTiers))], ['amount'], ['asc']);
       return this.bonusRewardsTiers;
     });
   }
@@ -199,12 +256,14 @@ export class OfferingCreationStore {
   }
 
   @action
-  resetForm = (form) => {
-    Validator.resetFormData(this[form]);
+  resetForm = (form, targetedFields = []) => {
+    Validator.resetFormData(this[form], targetedFields);
   }
 
   @action
   resetAllForms = () => {
+    offeringInvestorStore.setData('db', undefined);
+    offeringInvestorStore.setData('data', []);
     const forms = ['KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'CLOSURE_SUMMARY_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM'];
     forms.forEach((f) => {
       this[f] = Validator.resetFormData(this[f]);
@@ -265,18 +324,19 @@ export class OfferingCreationStore {
       },
     };
   }
+
   @action
   resetAffiliatedIssuerForm = () => {
-    this.AFFILIATED_ISSUER_FRM =
-      Validator.prepareFormObject(
-        AFFILIATED_ISSUER,
-        false,
-        true,
-        false,
-        { getOfferingBac: AFFILIATED_ISSUER.getOfferingBac },
-      );
+    this.AFFILIATED_ISSUER_FRM = Validator.prepareFormObject(
+      AFFILIATED_ISSUER,
+      false,
+      true,
+      false,
+      { getOfferingBac: AFFILIATED_ISSUER.getOfferingBac },
+    );
     this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
   }
+
   @action
   removeMedia = (name, index = undefined) => {
     let filename = '';
@@ -292,7 +352,6 @@ export class OfferingCreationStore {
         this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
       })
       .catch((err) => {
-        // force record deletion from db;
         this.resetFormField('MEDIA_FRM', name, undefined, index);
         this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
         console.log(err);
@@ -311,13 +370,9 @@ export class OfferingCreationStore {
       .then((res) => {
         Helper.toast(`${this.LEADERSHIP_FRM.fields.leadership[index][name].label} removed successfully.`, 'success');
         this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
-        // this.updateOffering
-        // (this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
         this.updateOffering(this.currentOfferingId, this.LEADERSHIP_FRM.fields, 'leadership', null, true, null, null, true, index);
       })
       .catch((err) => {
-        // force record deletion from db;
-        // this.resetFormField('LEADERSHIP_FRM', name, undefined, index);
         this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
         this.updateOffering(this.currentOfferingId, this.LEADERSHIP_FRM.fields, 'leadership', null, true, null, null, true, index);
         console.log(err);
@@ -328,7 +383,6 @@ export class OfferingCreationStore {
   uploadMedia = (name, form = 'MEDIA_FRM') => {
     const fileObj = {
       obj: this[form].fields[name].base64String,
-      // type: this[form].fields[name].meta.type,
       name: Helper.sanitize(this[form].fields[name].fileName),
     };
     fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`)
@@ -337,9 +391,8 @@ export class OfferingCreationStore {
         this.resetFormField(form, name, { fileName: fileObj.name, location: res });
         this.updateOffering(this.currentOfferingId, this[form].fields, 'media', false, false);
       })
-      .catch((err) => {
+      .catch(() => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        console.log(err);
       });
   }
 
@@ -407,6 +460,7 @@ export class OfferingCreationStore {
         Helper.toast('Something went wrong, please try again later.', 'error');
       });
   }
+
   @action
   setContingencyFormSelected = (formName) => {
     this.contingencyFormSelected = formName;
@@ -421,8 +475,15 @@ export class OfferingCreationStore {
 
   @action
   removeData = (formName, subForm = 'data', isApiDelete = false) => {
+    const subArray = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : subForm;
     if (!isApiDelete) {
-      this[formName].fields[subForm].splice(this.removeIndex, 1);
+      if (formName === 'CLOSING_BINDER_FRM' || formName === 'DATA_ROOM_FRM') {
+        let removeFileIds = '';
+        const { fileId } = this[formName].fields[subArray][this.removeIndex].upload;
+        removeFileIds = fileId;
+        this.removeFileIdsList = removeFileIds ? [...this.removeFileIdsList, removeFileIds] : [...this.removeFileIdsList];
+      }
+      this[formName].fields[subArray].splice(this.removeIndex, 1);
     }
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
@@ -515,9 +576,8 @@ export class OfferingCreationStore {
 
   @action
   maskChange = (values, form, field) => {
-    const cMap = ['launchDate', 'processingDate', 'terminationDate', 'expirationDate', 'targetDate', 'expectedOpsDate', 'notePurchaseDate', 'maturityDate', 'hardCloseDate'];
-    const fieldValue =
-      (cMap.includes(field)) ? values.formattedValue : values.floatValue;
+    const cMap = ['launchDate', 'processingDate', 'terminationDate', 'expirationDate', 'targetDate', 'expectedOpsDate', 'notePurchaseDate', 'maturityDate', 'hardCloseDate', 'anticipatedPaymentStartDate'];
+    const fieldValue = (cMap.includes(field)) ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
       { name: field, value: fieldValue },
@@ -526,11 +586,23 @@ export class OfferingCreationStore {
 
   @action
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
-    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod'], field) ? Math.abs(values.floatValue) || '' : includes(['interestRate'], field) ? values.value : values.floatValue;
-    this[form] = Validator.onArrayFieldChange(
-      this[form],
-      { name: field, value: fieldValue }, subForm, index,
-    );
+    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService', 'dlExpirationDate', 'dlIssuedDate'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod'], field) ? Math.abs(values.floatValue) || '' : includes(['interestRate', 'ssn'], field) ? values.value : values.floatValue;
+    if (form === 'KEY_TERMS_FRM' && includes(['minOfferingAmount506', 'maxOfferingAmount506'], field)) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: fieldValue }, subForm, index,
+      );
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: `${field}C`, value: fieldValue }, subForm, index,
+      );
+    } else if (!includes(['minOfferingAmount506C', 'maxOfferingAmount506C'], field)) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: fieldValue }, subForm, index,
+      );
+    }
+
     if (form === 'LEADERSHIP_EXP_FRM') {
       this.leadershipExperience[index2] = this[form];
     }
@@ -773,8 +845,8 @@ export class OfferingCreationStore {
   }
 
   @action
-  addMore = (form, key) => {
-    this[form] = Validator.addMoreRecordToSubSection(this[form], key, 1, true);
+  addMore = (form, key, count = 1) => {
+    this[form] = Validator.addMoreRecordToSubSection(this[form], key, count, true);
     if (form === 'DATA_ROOM_FRM' && key === 'documents') {
       this[form].fields[key][this[form].fields[key].length - 1].upload.showLoader = false;
     } else if (form === 'LEADER_FRM') {
@@ -793,7 +865,7 @@ export class OfferingCreationStore {
 
   @action
   setAddressFields = (place, index) => {
-    Validator.setAddressFieldsIndex(place, this.LEADERSHIP_FRM, 'LEADERSHIP_FRM', 'leadership', index);
+    Validator.setAddressFieldsIndex(place, this.LEADERSHIP_FRM, 'LEADERSHIP_FRM', 'leadership', index, true, US_STATES);
   }
 
 
@@ -811,10 +883,16 @@ export class OfferingCreationStore {
   @action
   setFormData = (form, ref, keepAtLeastOne) => {
     this.resetForm(form);
-    const { offer } = offeringsStore;
+    let { offer } = offeringsStore;
     if (!offer) {
       return false;
     }
+    offer = Helper.replaceKeysDeep(toJS(offer), { aliasId: 'id' });
+    offer = {
+      ...offer,
+      closureSummary: Helper.replaceKeysDeep(toJS(get(offer, 'closureSummary')), { aliasAccreditedOnly: 'accreditedOnly' }),
+      closingBinder: Helper.replaceKeysDeep(toJS(get(offer, 'closingBinder')), { aliasAccreditedOnly: 'accreditedOnly' }),
+    };
     if (form === 'MEDIA_FRM') {
       this.MEDIA_FRM = Validator.prepareFormObject(MEDIA);
     }
@@ -823,14 +901,18 @@ export class OfferingCreationStore {
     if (form === 'KEY_TERMS_FRM') {
       this.KEY_TERMS_FRM.fields.regulation.value = offer.regulation;
     }
+    if (form === 'COMPANY_LAUNCH_FRM' && get(offer, 'goldstar')) {
+      ['contactId', 'esAccountNumber', 'isin', 'sfAccountNumber', 'esAccountNumberRegD', 'isinRegD', 'sfAccountNumberRegD'].forEach((f) => {
+        this.COMPANY_LAUNCH_FRM.fields[f].value = get(offer, `goldstar.${f}`);
+      });
+    }
     if (form === 'LEADERSHIP_FRM') {
       forEach(offer.leadership, (emp, key) => {
-        this.LEADERSHIP_EXP_FRM =
-          Validator.setFormData(
-            this.LEADERSHIP_EXP_FRM,
-            offer.leadership[key],
-            ref, keepAtLeastOne,
-          );
+        this.LEADERSHIP_EXP_FRM = Validator.setFormData(
+          this.LEADERSHIP_EXP_FRM,
+          offer.leadership[key],
+          ref, keepAtLeastOne,
+        );
         this.leadershipExperience[key] = this.LEADERSHIP_EXP_FRM;
       });
     } else if (form === 'RISK_FACTORS_FRM') {
@@ -854,8 +936,7 @@ export class OfferingCreationStore {
     const currentForm = this[form];
     forEach(currentForm.fields, (field, key) => {
       if (has(field, 'defaultValue') && form === 'RISK_FACTORS_FRM') {
-        this[form].fields[key].defaultValue =
-          DataFormatter.stringTemplateFormatting(field.defaultValue, data);
+        this[form].fields[key].defaultValue = DataFormatter.stringTemplateFormatting(field.defaultValue, data);
       }
     });
   }
@@ -883,7 +964,9 @@ export class OfferingCreationStore {
       DOCUMENTATION_FRM: { isMultiForm: false },
       ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
       DATA_ROOM_FRM: { isMultiForm: true },
+      CLOSING_BINDER_FRM: { isMultiForm: true },
       POC_DETAILS_FRM: { isMultiForm: false },
+      OFFERING_CLOSE_1: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -973,27 +1056,24 @@ export class OfferingCreationStore {
     };
     activityHistoryStore.createActivityHistory(payload);
   }
+
   addNewOffer = () => {
     const offeringDetails = Validator.evaluateFormData(this.NEW_OFFER_FRM.fields);
-    uiStore.setProgress();
+    uiStore.addMoreInProgressArray('upsert');
     client
       .mutate({
         mutation: upsertOffering,
         variables: { offeringDetails },
-        refetchQueries: [{
-          query: allOfferings,
-          variables: { stage: ['CREATION'] },
-        }],
       })
       .then((res) => {
+        uiStore.removeOneFromProgressArray(false);
+        offeringsStore.addNewOne(res.data.upsertOffering, 'creation');
         this.generateActivityHistory(res.data.upsertOffering.id, ACTIVITY_HISTORY_TYPES.CREATION, 'Application Created by Admin.', 'STARTED');
         Helper.toast('Offering created successfully.', 'success');
       })
       .catch(() => {
+        uiStore.removeOneFromProgressArray(false);
         Helper.toast('Error while creating offer', 'error');
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
       });
   }
 
@@ -1001,7 +1081,7 @@ export class OfferingCreationStore {
   updateOfferingMutation = (
     id,
     payload, keyName, notify = true,
-    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false, approvedObj,
+    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false, approvedObj, emptyPayload = null,
   ) => {
     uiStore.setProgress(approvedObj && approvedObj.status ? approvedObj.status : 'save');
     const variables = {
@@ -1014,12 +1094,20 @@ export class OfferingCreationStore {
         variables.adminId = this.POC_DETAILS_FRM.fields.id.value;
       }
     }
+    if (emptyPayload) {
+      variables.offeringDetails = { ...variables.offeringDetails, ...emptyPayload };
+    }
     client
       .mutate({
         mutation: updateOffering,
         variables,
       })
-      .then(() => {
+      .then((result) => {
+        let upatedOffering = null;
+        if (get(result, 'data.updateOffering')) {
+          upatedOffering = Helper.replaceKeysDeep(toJS(get(result, 'data.updateOffering')), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
+          offeringsStore.updateOfferingList(id, upatedOffering, keyName);
+        }
         this.removeUploadedFiles(fromS3);
         if (successMsg) {
           Helper.toast(`${successMsg}`, msgType);
@@ -1040,6 +1128,7 @@ export class OfferingCreationStore {
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        console.log('Error', err);
         Helper.toast('Something went wrong.', 'error');
         rej();
       })
@@ -1052,7 +1141,7 @@ export class OfferingCreationStore {
   mergeCustomize = (objValue, srcValue, key, object, source, stack) => {
     if (OFFERING_CREATION_ARRAY_KEY_LIST.includes(key)) {
       return srcValue;
-    } else if (srcValue === undefined || srcValue === null || srcValue === '') {
+    } if (srcValue === undefined || srcValue === null || srcValue === '') {
       return null;
     }
   };
@@ -1065,7 +1154,7 @@ export class OfferingCreationStore {
     msgType = 'success', isLaunchContingency = false,
   ) => new Promise((res, rej) => {
     let { getOfferingById } = offeringsStore.offerData.data;
-    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id' });
+    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
     let payloadData = {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
@@ -1078,11 +1167,9 @@ export class OfferingCreationStore {
         payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
         payloadData[keyName].documentation = {};
         payloadData[keyName].documentation.issuer = {};
-        payloadData[keyName].documentation.issuer =
-          Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
+        payloadData[keyName].documentation.issuer = Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
         payloadData[keyName].documentation.admin = {};
-        payloadData[keyName].documentation.admin =
-          Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
+        payloadData[keyName].documentation.admin = Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
         const dataRoomDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
         const finalDataRoomDocs = [];
         dataRoomDocs.map((data, index) => {
@@ -1097,8 +1184,7 @@ export class OfferingCreationStore {
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
         payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
         payloadData[keyName].misc = Validator.evaluateFormData(this.OFFERING_MISC_FRM.fields);
-        payloadData[keyName].overview =
-        Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
+        payloadData[keyName].overview = Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
         payloadData[keyName].overview = {
           ...payloadData[keyName].overview,
           ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
@@ -1116,13 +1202,16 @@ export class OfferingCreationStore {
           payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
           payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
         }
+        if (get(payloadData, 'offering.launch.goldstar')) {
+          payloadData.goldstar = { ...get(payloadData, 'offering.launch.goldstar') };
+          payloadData.offering.launch.goldstar = undefined;
+        }
       } else if (keyName === 'media') {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       } else if (keyName === 'leadership') {
         let leadershipFields = Validator.evaluateFormData(fields);
         leadershipFields = leadershipFields.leadership.map((leadership, index) => {
-          const employer =
-            Validator.evaluateFormData(toJS(this.leadershipExperience[index]).fields);
+          const employer = Validator.evaluateFormData(toJS(this.leadershipExperience[index]).fields);
           return { ...leadership, ...{ employer: employer.employer } };
         });
         payloadData = { ...payloadData, [keyName]: leadershipFields };
@@ -1187,7 +1276,7 @@ export class OfferingCreationStore {
       payloadData.regulation = this.KEY_TERMS_FRM.fields.regulation.value;
       const closureSummary = { ...getOfferingById.closureSummary };
       const keyTerms = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
-      closureSummary.keyTerms = { ...closureSummary.keyTerms, multiple: keyTerms.multiple, interestRate: get(payloadData, 'keyTerms.interestRate') };
+      closureSummary.keyTerms = { ...closureSummary.keyTerms, priceCalculation: keyTerms.priceCalculation, multiple: keyTerms.multiple, interestRate: get(payloadData, 'keyTerms.interestRate') };
       payloadData.closureSummary = closureSummary;
       payloadData.closureSummary = mergeWith(
         toJS(getOfferingById.closureSummary),
@@ -1198,8 +1287,8 @@ export class OfferingCreationStore {
       payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
     }
     if (keyName !== 'BonusRewardTier' && keyName !== 'contingencies' && keyName !== 'editForm' && keyName !== 'editPocForm') {
-      const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
-        keyName === 'leadership' ? payloadData[keyName][leaderIndex] : payloadData[keyName] : payloadData;
+      const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey]
+        : keyName === 'leadership' ? payloadData[keyName][leaderIndex] : payloadData[keyName] : payloadData;
       if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
         if (approvedObj.status === 'manager_approved' || approvedObj.status === 'manager_edit') {
           payLoadDataOld.approved = {
@@ -1252,8 +1341,8 @@ export class OfferingCreationStore {
           forEach(payloadData[keyName], (ele, index) => {
             if (!this.removeIndex || this.removeIndex !== index) {
               leaders.push(mergeWith(
-                toJS(getOfferingById[keyName] && getOfferingById[keyName].length >
-                  index ? getOfferingById[keyName][index] : {}),
+                toJS(getOfferingById[keyName] && getOfferingById[keyName].length
+                  > index ? getOfferingById[keyName][index] : {}),
                 payloadData[keyName][index],
                 this.mergeCustomize,
               ));
@@ -1314,8 +1403,8 @@ export class OfferingCreationStore {
   }
 
   @computed get issuerOfferingBacData() {
-    return (this.issuerOfferingBac && this.issuerOfferingBac.data &&
-      toJS(this.issuerOfferingBac.data.getOfferingBac)) || null;
+    return (this.issuerOfferingBac && this.issuerOfferingBac.data
+      && toJS(this.issuerOfferingBac.data.getOfferingBac)) || null;
   }
 
   @action
@@ -1334,33 +1423,35 @@ export class OfferingCreationStore {
   }
 
   @computed get affiliatedIssuerOfferingBacData() {
-    return (this.affiliatedIssuerOfferingBac && this.affiliatedIssuerOfferingBac.data &&
-      toJS(this.affiliatedIssuerOfferingBac.data.getOfferingBac)) || null;
+    return (this.affiliatedIssuerOfferingBac && this.affiliatedIssuerOfferingBac.data
+      && toJS(this.affiliatedIssuerOfferingBac.data.getOfferingBac)) || null;
   }
 
   @action
   getLeadershipOfferingBac = (offeringId, bacType) => {
+    uiStore.addMoreInProgressArray('getLeadershipOfferingBac');
     this.leaderShipOfferingBac = graphql({
       client,
       fetchPolicy: 'network-only',
       query: getOfferingBac,
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res && res.getOfferingBac) {
+        if (res && res.getOfferingBac && !this.leaderShipOfferingBac.loading) {
           this.setBacFormData('LEADER_FRM', res || {}, false);
           const leadersCount = this.LEADERSHIP_FRM.fields.leadership.length;
-          if (leadersCount !==
-            this.LEADER_FRM.fields.getOfferingBac.length && (leadersCount - 1 !== 0)) {
-            this.addMore('LEADER_FRM', 'getOfferingBac', leadersCount - 1);
+          if (leadersCount
+            !== this.LEADER_FRM.fields.getOfferingBac.length && (leadersCount - 1 !== 0)) {
+            this.addMore('LEADER_FRM', 'getOfferingBac', leadersCount - this.LEADER_FRM.fields.getOfferingBac.length);
           }
         }
+        uiStore.removeOneFromProgressArray('getLeadershipOfferingBac');
       },
     });
   }
 
   @computed get leaderShipOfferingBacData() {
-    return (this.leaderShipOfferingBac && this.leaderShipOfferingBac.data &&
-      toJS(this.leaderShipOfferingBac.data.getOfferingBac)) || null;
+    return (this.leaderShipOfferingBac && this.leaderShipOfferingBac.data
+      && toJS(this.leaderShipOfferingBac.data.getOfferingBac)) || null;
   }
 
   createOrUpdateOfferingBac = (
@@ -1370,6 +1461,7 @@ export class OfferingCreationStore {
     leaderNumber = undefined,
     afIssuerId,
     approvedObj,
+    index = undefined,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const issuerBacId = getOfferingById.legal && getOfferingById.legal.issuerBacId;
@@ -1411,7 +1503,7 @@ export class OfferingCreationStore {
       const { leadership } = getOfferingById;
       if (!afIssuerId) {
         mutation = createBac;
-        payload.email = leadership[leaderNumber].email;
+        payload.email = leadership[index].email;
         variables = {
           offeringBacDetails: payload,
         };
@@ -1475,8 +1567,10 @@ export class OfferingCreationStore {
       .then(() => {
         this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
         offeringsStore.getOne(getOfferingById.id);
-
-        // this.getAffiliatedIssuerOfferingBac(this.currentOfferingId, 'AFFILIATED_ISSUER');
+        if (bacType === 'LEADERSHIP') {
+          this.initLoad.splice(this.initLoad.indexOf('LEADER_FRM'), 1);
+          this.getLeadershipOfferingBac(this.currentOfferingId, 'LEADERSHIP');
+        }
         Helper.toast('Offering has been saved successfully.', 'success');
       })
       .catch((err) => {
@@ -1526,11 +1620,15 @@ export class OfferingCreationStore {
   }
 
   @action
-  offeringClose = (params, step) => {
+  offeringClose = (params, step, scope) => new Promise((res) => {
     uiStore.setProgress(params.process);
+    this.setFieldValue('outputMsg', null);
     let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
     formData = cleanDeep(formData);
     if (formData.payload) {
+      if (scope) {
+        formData.payload.scope = scope;
+      }
       if (formData.payload.notePurchaseDate) {
         formData.payload.notePurchaseDate = moment(formData.payload.notePurchaseDate).format('MMMM D, YYYY');
       }
@@ -1540,6 +1638,8 @@ export class OfferingCreationStore {
       if (formData.payload.hardCloseDate) {
         formData.payload.hardCloseDate = moment(formData.payload.hardCloseDate).format('MMMM D, YYYY');
       }
+    } else if (!formData.payload && scope) {
+      formData.payload = { scope };
     }
     client
       .mutate({
@@ -1547,13 +1647,15 @@ export class OfferingCreationStore {
         variables: { ...params, ...formData },
       }).then((data) => {
         uiStore.setProgress(false);
-        console.log(data);
+        this.setFieldValue('outputMsg', { type: 'success', data: get(data, 'data.offeringClose') });
+        res(get(data, 'data.offeringClose'));
       }).catch((err) => {
         uiStore.setProgress(false);
+        this.setFieldValue('outputMsg', { type: 'error', data: get(err, 'message') });
         console.log(err);
         Helper.toast('Something went wrong.', 'error');
       });
-  }
+  });
 
   updateBonusRewardTier = (isDelete = false, amount = 0, earlyBirdQuantity = 0) => {
     const { fields } = this.ADD_NEW_TIER_FRM;
@@ -1583,8 +1685,7 @@ export class OfferingCreationStore {
       tierFieldObj.seqNum = index;
       tiersArray.push(tierFieldObj);
     });
-    this.ADD_NEW_BONUS_REWARD_FRM.fields =
-      { ...this.ADD_NEW_BONUS_REWARD_FRM.fields, ...tiersArray };
+    this.ADD_NEW_BONUS_REWARD_FRM.fields = { ...this.ADD_NEW_BONUS_REWARD_FRM.fields, ...tiersArray };
   };
 
   @computed get isCheckedAtLeastOneTiers() {
@@ -1623,8 +1724,8 @@ export class OfferingCreationStore {
 
   @computed
   get allBonusRewards() {
-    return (this.bonusRewards && this.bonusRewards.data && this.bonusRewards.data.getBonusRewards &&
-      orderBy(toJS(this.bonusRewards.data.getBonusRewards), 'created.date', 'asc')) || [];
+    return (this.bonusRewards && this.bonusRewards.data && this.bonusRewards.data.getBonusRewards
+      && orderBy(toJS(this.bonusRewards.data.getBonusRewards), 'created.date', 'asc')) || [];
   }
 
   @computed
@@ -1696,8 +1797,8 @@ export class OfferingCreationStore {
     const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
     const tiers = [];
     map(fields, ((field) => {
-      if ((field.key) &&
-      field.value.length && field.value.includes(field.key)) {
+      if ((field.key)
+      && field.value.length && field.value.includes(field.key)) {
         tiers.push(field.key);
       }
     }));
@@ -1707,8 +1808,8 @@ export class OfferingCreationStore {
         title: fields.name.value,
         description: fields.description.value,
         rewardStatus: 'In Review',
-        earlyBirdQuantity: fields.isEarlyBirds.value.length ?
-          earlyBirdQty : 0,
+        earlyBirdQuantity: fields.isEarlyBirds.value.length
+          ? earlyBirdQty : 0,
         expirationDate: fields.expirationDate.value ? moment(new Date(fields.expirationDate.value)).toISOString() : '',
         tiers,
       },
@@ -1817,13 +1918,58 @@ export class OfferingCreationStore {
   }
 
   @action
-  setAccreditedOnlyField = (index) => {
-    this.DATA_ROOM_FRM = Validator.onArrayFieldChange(
-      this.DATA_ROOM_FRM,
-      { name: 'accreditedOnly', value: !this.DATA_ROOM_FRM.fields.documents[index].accreditedOnly.value },
-      'documents',
+  setAccreditedOnlyField = (formName, index) => {
+    const arrName = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : 'documents';
+    this[formName] = Validator.onArrayFieldChange(
+      this[formName],
+      { name: 'accreditedOnly', value: !this[formName].fields[arrName][index].accreditedOnly.value },
+      arrName,
       index,
     );
+  }
+
+  @action
+  validateLeadership = () => {
+    let isValid = false;
+    this.LEADERSHIP_FRM.fields.leadership.forEach((leader) => {
+      if (leader.email.value === '' && !this.LEADERSHIP_FRM.meta.error) {
+        isValid = true;
+      }
+    });
+    return isValid;
+  }
+
+  getClosureObject = (type) => {
+    let { getOfferingById } = offeringsStore.offerData.data;
+    let obj = {};
+    if (type === 'CLOSING_BINDER') {
+      obj = Validator.evaluateFormData(this.OFFERING_CLOSE_1.fields);
+      const closerBinderDocs = Validator.evaluateFormData(this.CLOSING_BINDER_FRM.fields).closingBinder || [];
+      const filteredCloserBinderDocs = closerBinderDocs.filter(d => d.name !== '' && d.upload.fileId !== '');
+      obj.closingBinder = [...filteredCloserBinderDocs];
+    } else {
+      const supplementalAgreementsDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
+      const filteredSupplementalAgreementsDocs = supplementalAgreementsDocs.filter(d => d.name !== '' && d.upload.fileId !== '');
+      set(obj, 'closureSummary.keyTerms.supplementalAgreements', { documents: filteredSupplementalAgreementsDocs });
+    }
+    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
+    obj = Helper.replaceKeysDeep(obj, { accreditedOnly: 'isVisible' });
+    obj.closureSummary = mergeWith(
+      toJS(getOfferingById.closureSummary),
+      obj.closureSummary,
+      this.mergeCustomize,
+    );
+    if (type === 'CLOSING_BINDER' && (!obj.closingBinder || !obj.closingBinder.length)) {
+      // obj.closingBinder = mergeWith(
+      //   toJS(getOfferingById.closingBinder),
+      //   obj.closingBinder,
+      //   this.mergeCustomize,
+      // );
+      obj.closingBinder = null;
+    }
+    obj = omitDeep(obj, ['__typename', 'fileHandle']);
+    obj = cleanDeep(obj);
+    return obj;
   }
 
   @action
@@ -1836,6 +1982,28 @@ export class OfferingCreationStore {
       };
     });
     this.DATA_ROOM_FRM = Validator.setFormData(this.DATA_ROOM_FRM, { documents: dataRoomDocs });
+  }
+
+  @action
+  initializeClosingBinder = () => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: initializeClosingBinder,
+        variables: {
+          offeringId: this.currentOfferingId,
+        },
+      })
+      .then(() => {
+        offeringsStore.getOne(this.currentOfferingId, false);
+        Helper.toast('Closing binder initiated.', 'success');
+      })
+      .catch(action((err) => {
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
   }
 }
 

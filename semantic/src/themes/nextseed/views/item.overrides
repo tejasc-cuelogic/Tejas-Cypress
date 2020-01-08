@@ -58,6 +58,10 @@
                 &.team-avatar{
                     width:125px;
                     height:125px;
+                    &.team-avatar-v2{
+                        width: 80px;
+                        height: 80px;
+                    }
                 }
                 img.ui.image{
                     top: 50%;
@@ -91,6 +95,18 @@
 
                 }
             }
+            &.campaign-avatar-v2 .avatar-image {
+                width:60px;
+                height:60px;
+                .sb-avatar{
+                    width:60px;
+                    height:60px;
+                    line-height: 60px;
+                    .sb-avatar__text{
+                        font-size: @24px;
+                    }
+                }
+            }
         }
         .avatar-description{
             img{
@@ -99,6 +115,9 @@
             .description .ui.header{
                 color:@neutral-middark;
             }
+        }
+        >.content>.description.avatar-description-v2{
+            margin: @14px 0 @10px;
         }
     }
     &.messages{
@@ -250,36 +269,81 @@
     &.meet-team >.item:not(:last-child) {
         margin-bottom: @60px;
     }
-}
-.horizontal-items.ui.items{
-    display:flex;
-    flex-wrap:wrap;
-    margin-left:-@14px;
-    margin-right:-@14px;
-    >.item{
-        width:43%;
-        @media only screen and (max-width :@largestMobileScreen){
-            width:100%;
-        }
-        margin:0 auto @30px;
-        padding-left:@14px;
-        padding-right:@14px;
-        .ui.mini.image{
-            width:45px;
+    &.update-items > .item{
+        display: block;
+    }
+    &.horizontal-items{
+        display:flex;
+        flex-wrap:wrap;
+        margin-left:-@14px;
+        margin-right:-@14px;
+        >.item{
+            width:45%;
+            margin:0 auto @30px;
+            padding-left:@14px;
+            padding-right:@14px;
             @media only screen and (max-width :@largestMobileScreen){
-                padding-left:0;
+                width:100%;
+            }
+            .ui.mini.image{
+                width:45px;
+                margin-right: @20px;
+                @media only screen and (max-width :@largestMobileScreen){
+                    padding-left:0;
+                    margin:0;
+                }
+                +.content{
+                    padding-left:@10px;
+                    @media only screen and (max-width :@largestMobileScreen){
+                        padding:@14px 0 0;
+                    }
+                }
+            }
+            .content>.header:not(.ui){
+                font-size: @17px;
+                margin-bottom: @10px;
+            }
+            .meta{
+                line-height:26px;
                 margin:0;
             }
-            +.content{
-                padding-left:@10px;
+            .extra a{
+                text-decoration: none;
+                display: inline-flex;
+            }
+            >.ui.image+.content{
+                padding-left:@20px;
                 @media only screen and (max-width :@largestMobileScreen){
-                    padding:14px 0 0;
+                    padding-left:0;
                 }
             }
         }
-        .meta{
-            line-height:24px;
-            margin:0;
+        &.home-page{
+            &:not(.unstackable)>.item{
+                @media only screen and (max-width :@largestMobileScreen){
+                    flex-direction: row;
+                    margin-bottom: @17px;
+                    >.content{
+                        padding-top: 0 !important;
+                    }
+                }
+            }
+            >.item{
+                width: 33%;
+                @media only screen and (max-width :@largestMobileScreen){
+                    width:100%;
+                }
+                .ui.mini.image{
+                    width: @31px !important;
+                    margin-right: @15px;
+                }
+                >.content{
+                    .meta{
+                        font-size: @17px;
+                        color: @neutral;
+                    }
+                }
+            }
         }
     }
 }
@@ -291,14 +355,16 @@
     h2.header:not(.ui){
         font-size:@40px;
         margin:0;
+        font-weight: @fontMedium;
         @media only screen and (max-width :@largestMobileScreen){
             font-size:@20px;
             line-height:24px;
         }
     }
     .description{
-        font-size:@28px;
-        line-height:38px;
+        font-size:@17px;
+        line-height:30px;
+        color: @neutral;
         @media only screen and (max-width :@largestMobileScreen){
             font-size:@15px;
             line-height:24px;
@@ -312,7 +378,7 @@
         }
         span{
             line-height:@24px;
-            color:@primary-one;
+            color:@neutral;
             font-weight:@bold;
         }
     }

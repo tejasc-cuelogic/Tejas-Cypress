@@ -1,12 +1,14 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { get, find } from 'lodash';
+import Helper from '../../../../helper/utility';
 import { BUSINESS_INDUSTRIES, SECURITIES_VALUES } from '../../../../services/constants/admin/offerings';
 
 const OfferingMetaTags = ({ campaign, getOgDataFromSocial }) => (
   <Helmet>
     <meta name="description" content={getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'blurb')} />
     <link rel="canonical" href={window.location.href} />
+    <title>{Helper.pageTitle(`${get(campaign, 'keyTerms.shorthandBusinessName')} Campaign - NextSeed`)}</title>
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content={`${get(campaign, 'keyTerms.shorthandBusinessName')} | NextSeed`} />

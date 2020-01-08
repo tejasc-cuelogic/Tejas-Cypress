@@ -1,21 +1,21 @@
 import React from 'react';
-import { get } from 'lodash';
+import { get, startCase, capitalize } from 'lodash';
 import { Table, Header } from 'semantic-ui-react';
-import Aux from 'react-aux';
-import moment from 'moment';
+import { DataFormatter } from '../../../../../../../helper';
 
 const LockedInformation = ({ details, account }) => (
-  <Aux>
+  <>
     <Header as="h6">{account ? 'Frozen' : 'Locked'} Information</Header>
     <div className="bg-offwhite">
       <div className="table-wrapper">
         <Table unstackable basic="very" fixed>
           <Table.Body>
-            {account ?
-              <Aux>
+            {account
+              ? (
+              <>
                 <Table.Row>
                   <Table.Cell>Account Status: </Table.Cell>
-                  <Table.Cell>{get(details, 'details.accountStatus') || 'N/A'}</Table.Cell>
+                  <Table.Cell>{get(details, 'details.accountStatus') ? capitalize(startCase(get(details, 'details.accountStatus'))) : 'N/A'}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Frozen By: </Table.Cell>
@@ -23,7 +23,7 @@ const LockedInformation = ({ details, account }) => (
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Frozen Date: </Table.Cell>
-                  <Table.Cell>{get(details, 'details.frozen.date') ? moment(get(details, 'locked.date')).format('MM/DD/YYYY') : 'N/A'}</Table.Cell>
+                  <Table.Cell>{get(details, 'details.frozen.date') ? DataFormatter.getDateAsPerTimeZone(get(details, 'locked.date'), true, false, false) : 'N/A'}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Frozen Comment: </Table.Cell>
@@ -33,8 +33,10 @@ const LockedInformation = ({ details, account }) => (
                   <Table.Cell>Previous Status: </Table.Cell>
                   <Table.Cell>{get(details, 'details.frozen.previousStatus') || 'NA'}</Table.Cell>
                 </Table.Row>
-              </Aux> :
-              <Aux>
+              </>
+              )
+              : (
+              <>
                 <Table.Row>
                   <Table.Cell>User Status: </Table.Cell>
                   <Table.Cell>{get(details, 'locked.lock') || 'N/A'}</Table.Cell>
@@ -45,19 +47,20 @@ const LockedInformation = ({ details, account }) => (
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Locked Date: </Table.Cell>
-                  <Table.Cell>{get(details, 'locked.date') ? moment(get(details, 'locked.date')).format('MM/DD/YYYY') : 'N/A'}</Table.Cell>
+                  <Table.Cell>{get(details, 'locked.date') ? DataFormatter.getDateAsPerTimeZone(get(details, 'locked.date'), true, false, false) : 'N/A'}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Locked Comment: </Table.Cell>
                   <Table.Cell>{get(details, 'locked.comment') || 'NA'}</Table.Cell>
                 </Table.Row>
-              </Aux>
+              </>
+              )
             }
           </Table.Body>
         </Table>
       </div>
     </div>
-  </Aux>
+  </>
 );
 
 export default LockedInformation;

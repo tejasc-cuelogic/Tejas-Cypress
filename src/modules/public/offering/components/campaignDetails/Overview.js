@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
-import { get } from 'lodash';
+import { toJS } from 'mobx';
 import { Divider } from 'semantic-ui-react';
 import AboutTheCompany from './Overview/AboutTheCompany';
 import KeyTerms from './Overview/KeyTerms';
@@ -10,6 +10,7 @@ import VideoModal from './Overview/VideoModal';
 import AboutPhotoGallery from './AboutPhotoGallery';
 import Gallery from './AboutCompany/Gallery';
 import IssuerStatement from './Overview/IssuerStatement';
+import Helper from '../../../../../helper/utility';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
@@ -17,9 +18,11 @@ const topsAsPerWindowheight = window.innerHeight > 1000 ? 500 : 150;
 @inject('campaignStore', 'navStore')
 @observer
 class Overview extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     window.addEventListener('scroll', this.handleOnScroll);
   }
+
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
       this.props.navStore.setFieldValue('currentActiveHash', null);
@@ -27,47 +30,77 @@ class Overview extends Component {
         block: 'start',
         behavior: 'smooth',
       });
+    } else {
+      const { campaignNavData } = this.props.campaignStore;
+      const navs = (campaignNavData.find(i => i.title === 'Summary')).subNavigations;
+      const sel = navs && navs[0] && navs[0].to;
+      if (sel) {
+        this.props.navStore.setFieldValue('currentActiveHash', sel);
+      }
     }
+    Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore');
   }
+
   componentWillUnmount() {
     this.props.navStore.setFieldValue('currentActiveHash', null);
     window.removeEventListener('scroll', this.handleOnScroll);
+    Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore', 'remove');
   }
+
   handleOnScroll = () => {
-    const { campaign } = this.props.campaignStore;
-    const arr = get(campaign, 'updates') ? get(campaign, 'updates').length !== 0 ? ['top-things-to-know', 'investment-highlights', 'updates', 'gallery', 'issuer-statement'] : ['top-things-to-know', 'investment-highlights', 'gallery', 'issuer-statement'] : [];
-    arr.forEach((item) => {
-      if (document.getElementById(item).getBoundingClientRect().top < topsAsPerWindowheight &&
-        document.getElementById(item).getBoundingClientRect().top > -1) {
-        this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
-      }
-    });
+    const { campaignNavData } = this.props.campaignStore;
+    const navs = toJS((campaignNavData.find(i => i.title === 'Summary')).subNavigations);
+    if (navs && Array.isArray(navs)) {
+      navs.forEach((item) => {
+        if (document.getElementById(item.to.slice(1))
+        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top < topsAsPerWindowheight
+        && document.getElementById(item.to.slice(1)).getBoundingClientRect().top > -1) {
+          this.props.navStore.setFieldValue('currentActiveHash', item.to);
+        }
+      });
+    }
   }
+
   render() {
-    const { campaign } = this.props.campaignStore;
+    const { campaign, campaignStatus } = this.props.campaignStore;
     return (
       <div className="campaign-content-wrapper">
+        {campaignStatus.hasTopThingToKnow ? (
+        <>
         <AboutTheCompany refLink={this.props.refLink} campaign={campaign} />
-        <Divider hidden section />
+          <Divider hidden section />
+        </>
+        ) : null}
         <KeyTerms refLink={this.props.refLink} campaign={campaign} />
         <Divider hidden section />
-        {get(campaign, 'updates') && get(campaign, 'updates').length !== 0 &&
-          <LatestUpdates
-            updates={campaign && campaign.updates}
-            refLink={this.props.refLink}
-            isTabletLand={isTabletLand}
-            companyAvatarUrl={campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : ''}
-            bussinessName={campaign && campaign.keyTerms &&
-              campaign.keyTerms.shorthandBusinessName}
-          />
+        {campaignStatus.updates !== 0
+          ? (
+          <>
+            <LatestUpdates
+              updates={campaign && campaign.updates}
+              refLink={this.props.refLink}
+              isTabletLand={isTabletLand}
+              companyAvatarUrl={campaign && campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : ''}
+              bussinessName={campaign && campaign.keyTerms
+                && campaign.keyTerms.shorthandBusinessName}
+            />
+            <Divider hidden section />
+          </>
+          ) : null
         }
-        <Divider hidden section />
-        <Gallery
-          galleryUrl={this.props.match.url}
-          campaign={campaign}
-        />
-        <Divider hidden section />
-        <IssuerStatement campaign={campaign} />
+        {campaignStatus.gallary !== 0 ? (
+        <>
+          <Gallery
+            galleryUrl={this.props.match.url}
+            campaign={campaign}
+          />
+          <Divider hidden section />
+        </>
+        ) : null}
+        {campaignStatus.issuerStatement ? (
+          <IssuerStatement campaign={campaign} />
+        ) : null
+        }
         <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
         <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
       </div>

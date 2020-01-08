@@ -17,17 +17,26 @@ import { uiStore, userStore, userDetailsStore } from '../../index';
 
 class InvestorProfileStore {
   @observable EMPLOYMENT_FORM = FormValidator.prepareFormObject(EMPLOYMENT, true);
+
   @observable BROKERAGE_EMPLOYMENT_FORM =
     FormValidator.prepareFormObject(BROKERAGE_EMPLOYMENT, true);
+
   @observable PUBLIC_COMPANY_REL_FORM =
     FormValidator.prepareFormObject(PUBLIC_COMPANY_REL, true);
+
   @observable FINANCES_FORM = FormValidator.prepareFormObject(FINANCES, true);
+
   @observable INVESTMENT_EXP_FORM = FormValidator.prepareFormObject(INVESTMENT_EXPERIENCE, true);
+
   @observable INVESTOR_PROFILE_FULL =
     FormValidator.prepareFormObject(INVESTOR_PROFILE_FULL_META, true);
+
   @observable chkboxTicked = null;
+
   @observable stepToBeRendered = 0;
+
   @observable isInvestmentExperienceValid = true;
+
   @observable finishInvestorProfileLater = false;
 
   @action
@@ -58,19 +67,17 @@ class InvestorProfileStore {
 
   @action
   setInvestorDetailInfo = (investorProfileData) => {
-    this.INVESTOR_PROFILE_FULL =
-    FormValidator.prepareFormObject(INVESTOR_PROFILE_FULL_META, true);
-    this.INVESTOR_PROFILE_FULL =
-      FormValidator.setFormData(this.INVESTOR_PROFILE_FULL, investorProfileData);
-    if (investorProfileData && investorProfileData.brokerageFirmName && investorProfileData.brokerageFirmName !== '' &&
-      investorProfileData.brokerageFirmName !== 'false') {
+    this.INVESTOR_PROFILE_FULL = FormValidator.prepareFormObject(INVESTOR_PROFILE_FULL_META, true);
+    this.INVESTOR_PROFILE_FULL = FormValidator.setFormData(this.INVESTOR_PROFILE_FULL, investorProfileData);
+    if (investorProfileData && investorProfileData.brokerageFirmName && investorProfileData.brokerageFirmName !== ''
+      && investorProfileData.brokerageFirmName !== 'false') {
       this.INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value = 'yes';
     } else {
       this.INVESTOR_PROFILE_FULL.fields.brokerageFirmName.value = '';
       this.INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value = 'no';
     }
-    if (investorProfileData && investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== '' &&
-      investorProfileData.publicCompanyTicker !== 'false') {
+    if (investorProfileData && investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== ''
+      && investorProfileData.publicCompanyTicker !== 'false') {
       this.INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value = 'yes';
     } else {
       this.INVESTOR_PROFILE_FULL.fields.publicCompanyTicker.value = '';
@@ -84,14 +91,13 @@ class InvestorProfileStore {
     });
     if (investorProfileData && investorProfileData.annualIncome) {
       ['annualIncomeCurrentYear'].map((item, index) => {
-        this.INVESTOR_PROFILE_FULL.fields[item].value =
-          investorProfileData.annualIncome[index].income;
+        this.INVESTOR_PROFILE_FULL.fields[item].value = investorProfileData.annualIncome[index].income;
         return true;
       });
     }
-    this.INVESTOR_PROFILE_FULL =
-      FormValidator.validateForm(this.INVESTOR_PROFILE_FULL, false, false, false);
+    this.INVESTOR_PROFILE_FULL = FormValidator.validateForm(this.INVESTOR_PROFILE_FULL, false, false, false);
   }
+
   @action
   maskChange = (values, form, field) => {
     const fieldValue = values.floatValue;
@@ -100,13 +106,14 @@ class InvestorProfileStore {
       { name: field, value: fieldValue },
     );
   }
+
   @action
   employmentChange = (e, form, result) => {
     if (['brokerageEmployment', 'publicCompanyRel'].includes(result.name)) {
       const textInput = form === 'BROKERAGE_EMPLOYMENT_FORM' ? 'brokerageFirmName' : 'publicCompanyTicker';
       this[form].fields[textInput].value = '';
-      this[form].fields[textInput].error = result.fielddata.value ? undefined :
-        this[form].fields[textInput].error;
+      this[form].fields[textInput].error = result.fielddata.value ? undefined
+        : this[form].fields[textInput].error;
     }
     this.formChange(e, result, form);
   }
@@ -139,7 +146,7 @@ class InvestorProfileStore {
   get canSubmitFieldsForm() {
     if (this.chkboxTicked === 'checkbox1') {
       return !isEmpty(this.FINANCES_FORM.fields.directorShareHolderOfCompany.value);
-    } else if (this.chkboxTicked === 'checkbox2') {
+    } if (this.chkboxTicked === 'checkbox2') {
       return !isEmpty(this.FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value);
     }
     return false;
@@ -186,26 +193,31 @@ class InvestorProfileStore {
     if (this[currentStep.form].meta.isValid) {
       let formPayload = '';
       if (currentStep.form === 'EMPLOYMENT_FORM') {
-        formPayload =
-          { employment: FormValidator.ExtractValues(this.EMPLOYMENT_FORM.fields) };
+        if (this.EMPLOYMENT_FORM.fields.status.value !== 'EMPLOYED') {
+          FormValidator.resetFormData(this.EMPLOYMENT_FORM, ['employer', 'position']);
+          this[currentStep.form] = FormValidator.validateForm(this[currentStep.form], false, true);
+          uiStore.setFieldvalue('inProgressArray', []);
+        }
+        formPayload = { employment: FormValidator.ExtractValues(this.EMPLOYMENT_FORM.fields) };
+        if (formPayload.employment.status !== 'EMPLOYED') {
+          formPayload.employment = { ...formPayload.employment, employer: null, position: null };
+        }
       } else if (currentStep.form === 'BROKERAGE_EMPLOYMENT_FORM') {
         const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
         if (fields.brokerageEmployment.value === 'no') {
-          fields.brokerageFirmName.value = null;
+          fields.brokerageFirmName.value = 'false';
         } else {
           fields.brokerageFirmName.value = fields.brokerageFirmName.value;
         }
-        formPayload =
-          { brokerageFirmName: fields.brokerageFirmName.value };
+        formPayload = { brokerageFirmName: fields.brokerageFirmName.value };
       } else if (currentStep.form === 'PUBLIC_COMPANY_REL_FORM') {
         const { fields } = this.PUBLIC_COMPANY_REL_FORM;
         if (fields.publicCompanyRel.value === 'no') {
-          fields.publicCompanyTicker.value = null;
+          fields.publicCompanyTicker.value = 'false';
         } else {
           fields.publicCompanyTicker.value = fields.publicCompanyTicker.value;
         }
-        formPayload =
-          { publicCompanyTicker: fields.publicCompanyTicker.value };
+        formPayload = { publicCompanyTicker: fields.publicCompanyTicker.value };
       } else if (currentStep.form === 'FINANCES_FORM') {
         formPayload = {
           taxFilingAs: this.FINANCES_FORM.fields.investorProfileType.value,
@@ -251,6 +263,9 @@ class InvestorProfileStore {
     const { fields } = this.INVESTOR_PROFILE_FULL;
     let formData = FormValidator.evaluateFormData(fields);
     const YearsList = Helper.getLastThreeYearsLabel();
+    if (formData.employment.status !== 'EMPLOYED') {
+      formData.employment = { ...formData.employment, employer: null, position: null };
+    }
     formData = {
       ...formData,
       brokerageFirmName: fields.brokerageEmployment.value === 'no' ? 'false' : formData.brokerageFirmName,
@@ -276,13 +291,11 @@ class InvestorProfileStore {
             if (data.data.createInvestorProfile && data.data.createInvestorProfile.status) {
               userDetailsStore.setUserStatus(data.data.createInvestorProfile.status);
             }
-            userDetailsStore.getUser(userStore.currentUser.sub);
-            resolve();
+            userDetailsStore.getUser(userStore.currentUser.sub).then(() => resolve());
           } else {
             this.setStepToBeRendered(currentStep.stepToBeRendered);
             resolve();
           }
-          Helper.toast(`${currentStep.name} submitted successfully.`, 'success');
         }))
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
@@ -359,12 +372,12 @@ class InvestorProfileStore {
             } else {
               fields.brokerageFirmName.value = '';
             }
-            if (investorProfileData.brokerageFirmName && investorProfileData.brokerageFirmName !== '' &&
-              investorProfileData.brokerageFirmName !== 'false') {
-              fields.brokerageEmployment.value = 'yes';
-            } else {
-              fields.brokerageEmployment.value = 'no';
-            }
+            // if (investorProfileData.brokerageFirmName && investorProfileData.brokerageFirmName !== ''
+            //   && investorProfileData.brokerageFirmName !== 'false') {
+            //   fields.brokerageEmployment.value = 'yes';
+            // } else {
+            //   fields.brokerageEmployment.value = 'no';
+            // }
           }
           break;
         case 'PUBLIC_COMPANY_REL_FORM':
@@ -375,12 +388,12 @@ class InvestorProfileStore {
             } else {
               fields.publicCompanyTicker.value = '';
             }
-            if (investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== '' &&
-              investorProfileData.publicCompanyTicker !== 'false') {
-              fields.publicCompanyRel.value = 'yes';
-            } else {
-              fields.publicCompanyRel.value = 'no';
-            }
+            // if (investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== ''
+            //   && investorProfileData.publicCompanyTicker !== 'false') {
+            //   fields.publicCompanyRel.value = 'yes';
+            // } else {
+            //   fields.publicCompanyRel.value = 'no';
+            // }
           }
           break;
         case 'INVESTMENT_EXP_FORM':
@@ -390,8 +403,8 @@ class InvestorProfileStore {
           }
           if (investorProfileData.isRiskTaker) {
             const { fields } = this.INVESTMENT_EXP_FORM;
-            if ((Array.isArray(toJS(fields.isRiskTaker.value)) &&
-              fields.isRiskTaker.value.length === 0)) {
+            if ((Array.isArray(toJS(fields.isRiskTaker.value))
+              && fields.isRiskTaker.value.length === 0)) {
               fields.isRiskTaker.value.push('checked');
             }
           } else {
@@ -400,8 +413,8 @@ class InvestorProfileStore {
           }
           if (investorProfileData.isComfortable) {
             const { fields } = this.INVESTMENT_EXP_FORM;
-            if ((Array.isArray(toJS(fields.isComfortable.value)) &&
-              fields.isComfortable.value.length === 0)) {
+            if ((Array.isArray(toJS(fields.isComfortable.value))
+              && fields.isComfortable.value.length === 0)) {
               fields.isComfortable.value.push('checked');
             }
           } else {
@@ -411,12 +424,10 @@ class InvestorProfileStore {
           break;
         case 'FINANCES_FORM':
           this.FINANCES_FORM.fields.netWorth.value = investorProfileData.netWorth;
-          this.FINANCES_FORM.fields.investorProfileType.value =
-            investorProfileData.taxFilingAs;
+          // this.FINANCES_FORM.fields.investorProfileType.value = investorProfileData.taxFilingAs;
           if (investorProfileData.annualIncome) {
             ['annualIncomeCurrentYear'].map((item, index) => {
-              this.FINANCES_FORM.fields[item].value =
-                investorProfileData.annualIncome[index].income;
+              this.FINANCES_FORM.fields[item].value = investorProfileData.annualIncome[index].income;
               return true;
             });
           }
@@ -447,17 +458,23 @@ class InvestorProfileStore {
 
   @action
   validateInvestmentExperience = (form) => {
-    const { isComfortable, isRiskTaker, experienceLevel } = form ?
-      this.INVESTOR_PROFILE_FULL.fields : this.INVESTMENT_EXP_FORM.fields;
-    if ((Array.isArray(toJS(isComfortable.value)) && isComfortable.value.length === 0) ||
-      (Array.isArray(toJS(isRiskTaker.value)) && isRiskTaker.value.length === 0) ||
-      (experienceLevel.value === 'NONE')
+    const { isComfortable, isRiskTaker, experienceLevel } = form
+      ? this.INVESTOR_PROFILE_FULL.fields : this.INVESTMENT_EXP_FORM.fields;
+    if ((Array.isArray(toJS(isComfortable.value)) && isComfortable.value.length === 0)
+      || (Array.isArray(toJS(isRiskTaker.value)) && isRiskTaker.value.length === 0)
+      || (experienceLevel.value === 'NONE')
     ) {
       this.isInvestmentExperienceValid = false;
     } else {
       this.isInvestmentExperienceValid = true;
     }
   }
+
+  get isInvExperienceValid() {
+    const { isComfortable, isRiskTaker, experienceLevel } = FormValidator.ExtractValues(this.INVESTMENT_EXP_FORM.fields);
+    return isComfortable.length !== 0 && isRiskTaker.length !== 0 && experienceLevel !== 'NONE';
+  }
+
 
   @action
   experiencesEditChange = (e, result) => {

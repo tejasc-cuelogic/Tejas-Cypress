@@ -22,7 +22,7 @@
 
 @googleFontName    : @fontName;
 @importGoogleFonts : true;
-@googleFontSizes   : '400,500,700,400italic,500italic,700italic';
+@googleFontSizes   : '300,400,500,700,400italic,500italic,700italic';
 @googleSubset      : 'latin';
 
 @googleProtocol    : 'https://';
@@ -31,6 +31,7 @@
 
 @bold              : 700;
 @fontMedium        : 500;
+@semiBold          : 300;
 @normal            : 400;
 
 /*-------------------
@@ -134,7 +135,7 @@
 @pageBackground      : #FFFFFF;
 @pageOverflowX       : hidden;
 
-@lineHeight          : 1.571428em;
+@lineHeight          : 26px;
 @textColor           : @neutral;
 
 /*-------------------

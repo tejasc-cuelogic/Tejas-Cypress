@@ -18,22 +18,20 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.refLink) {
       this.props.uiStore.setAuthRef(this.props.refLink);
     }
 
-    if (!this.props.authStore.CONFIRM_FRM.fields.email.value &&
-      !this.props.authStore.isUserLoggedIn) {
-      this.props.history.push(this.props.refLink || '/auth/login');
+    if (!this.props.authStore.CONFIRM_FRM.fields.email.value
+      && !this.props.authStore.isUserLoggedIn) {
+      this.props.history.push(this.props.refLink || '/login');
     }
     this.props.authStore.setUserCredentiansConfirmEmail();
-    if (this.props.userDetailsStore.signupStatus.isMigratedUser
-      && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
-      && !this.props.identityStore.sendOtpToMigratedUser.includes('EMAIL')) {
-      this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
-    }
+    this.startPhoneVerification();
   }
+
   componentDidMount() {
     Helper.otpShield();
   }
@@ -41,9 +39,18 @@ export default class ConfirmEmailAddress extends Component {
   componentDidUpdate() {
     this.props.authStore.setUserCredentiansConfirmEmail();
   }
+
   componentWillUnmount() {
     this.props.authStore.resetForm('CONFIRM_FRM');
     this.props.uiStore.clearErrors();
+  }
+
+  startPhoneVerification = async () => {
+    if (this.props.userDetailsStore.signupStatus.isMigratedUser
+      && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
+      && !this.props.identityStore.sendOtpToMigratedUser.includes('EMAIL')) {
+      await this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
+    }
   }
 
   handleSubmitForm = (e) => {
@@ -55,11 +62,12 @@ export default class ConfirmEmailAddress extends Component {
       this.props.authStore.verifyAndUpdateEmail().then(() => {
         this.props.identityStore.setIsOptConfirmed(true);
         Helper.toast('Email has been verified and updated', 'success');
+        this.props.history.push(this.props.refLink);
       })
         .catch(() => { });
     } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === ''
-    && !this.props.userStore.currentUser) {
-      this.props.history.push('/auth/register-investor');
+      && !this.props.userStore.currentUser) {
+      this.props.history.push('/register-investor');
     } else {
       const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
       if (isMigratedUser) {
@@ -70,9 +78,8 @@ export default class ConfirmEmailAddress extends Component {
             if (roles.includes('investor')) {
               this.props.identityStore.setIsOptConfirmed(true);
             } else {
-              const redirectUrl = !roles ? '/auth/login' :
-                SIGNUP_REDIRECT_ROLEWISE.find(user =>
-                  roles.includes(user.role)).path;
+              const redirectUrl = !roles ? '/login'
+                : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
               this.props.history.replace(redirectUrl);
             }
           });
@@ -95,9 +102,8 @@ export default class ConfirmEmailAddress extends Component {
                 }
                 this.props.identityStore.setIsOptConfirmed(true);
               } else {
-                const redirectUrl = !roles ? '/auth/login' :
-                  SIGNUP_REDIRECT_ROLEWISE.find(user =>
-                    roles.includes(user.role)).path;
+                const redirectUrl = !roles ? '/login'
+                  : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
                 this.props.history.replace(redirectUrl);
               }
             })
@@ -109,7 +115,7 @@ export default class ConfirmEmailAddress extends Component {
 
   handleCloseModal = () => {
     // if (!this.props.refLink && this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
-    //   this.props.history.push('/app/summary');
+    //   this.props.history.push('/dashboard/setup');
     // } else {
     //   this.props.history.push(this.props.uiStore.authRef || '/');
     // }
@@ -143,25 +149,25 @@ export default class ConfirmEmailAddress extends Component {
     } else if (this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
       this.props.history.replace(this.props.userDetailsStore.pendingStep);
     } else {
-      this.props.history.replace('/app/summary/identity-verification/0');
+      this.props.history.replace('/dashboard/setup/identity-verification/0');
     }
     this.props.identityStore.setIsOptConfirmed(false);
   }
 
   render() {
-    const changeEmailAddressLink = this.props.refLink ?
-      '/app/account-settings/profile-data/new-email-address' : '/auth/register-investor';
+    const changeEmailAddressLink = this.props.refLink
+      ? '/dashboard/account-settings/profile-data/new-email-address' : '/register-investor';
     const {
       CONFIRM_FRM,
       ConfirmChange,
       confirmProgress,
       canSubmitConfirmEmail,
     } = this.props.authStore;
-    const { errors, inProgress } = this.props.uiStore;
+    const { errors, inProgress, responsiveVars } = this.props.uiStore;
     const { isOptConfirmed } = this.props.identityStore;
     const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
     if (errors && errors.code === 'NotAuthorizedException') {
-      this.props.history.push('/auth/login');
+      this.props.history.push('/login');
     } else if (isOptConfirmed && this.props.userStore.currentUser && this.props.userStore.currentUser.roles && this.props.userStore.currentUser.roles.includes('investor')) {
       return <SuccessScreen successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Your e-mail address has been confirmed.'}`} handleContinue={this.handleContinue} />;
     }
@@ -169,22 +175,24 @@ export default class ConfirmEmailAddress extends Component {
       <Modal closeOnDimmerClick={false} size="tiny" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Route exact path={`${this.props.match.url}/create-or-cancel`} render={() => <ConfirmCreateOrCancel refLink={this.props.match.url} />} />
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">Confirm your e-mail address</Header>
-          <p>
+          <Header as="h3" className={responsiveVars.isMobile ? 'mb-10' : ''}>Confirm your e-mail address</Header>
+          <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
             We use Multi-Factor Authentication (MFA) to increase the security of your
             NextSeed investment account.
           </p>
-          <Divider section />
-          <p>
-          Please confirm the 6-digit verification code sent to your email
+          <Divider section={!responsiveVars.isMobile} />
+          <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
+            Please confirm the 6-digit verification code sent to your email
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          { (confirmProgress === 'confirm' && inProgress) &&
-          <Dimmer page active={inProgress}>
-            <Loader active={inProgress} />
-          </Dimmer>
-         }
+          {(confirmProgress === 'confirm' && inProgress)
+            && (
+              <Dimmer page active={inProgress}>
+                <Loader active={inProgress} />
+              </Dimmer>
+            )
+          }
           <FormInput
             ishidelabel
             type="email"
@@ -197,10 +205,10 @@ export default class ConfirmEmailAddress extends Component {
             title={CONFIRM_FRM.fields.email.value}
             className={`${CONFIRM_FRM.fields.email.value.length > 38 ? 'font-16' : 'font-20'} display-only`}
           />
-          {(!isMigratedUser && !isEmpty(CONFIRM_FRM.fields.email.value)) &&
-            <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
+          {(!isMigratedUser && !isEmpty(CONFIRM_FRM.fields.email.value))
+            && <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
           }
-          <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)} >
+          <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
@@ -211,17 +219,20 @@ export default class ConfirmEmailAddress extends Component {
                 className="otp-field"
                 pattern="[0-9]*"
                 inputmode="numeric"
+                disabled={isEmpty(CONFIRM_FRM.fields.email.value)}
                 fielddata={CONFIRM_FRM.fields.code}
                 onChange={ConfirmChange}
               />
-              {!isEmpty(CONFIRM_FRM.fields.email.value) &&
-                <Button loading={confirmProgress === 'resend' && inProgress} type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
+              {!isEmpty(CONFIRM_FRM.fields.email.value)
+                && <Button loading={confirmProgress === 'resend' && inProgress} type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
               }
             </Form.Field>
-            {errors &&
-              <Message error className="mb-40">
-                <ListErrors errors={[errors.message]} />
-              </Message>
+            {errors
+              && (
+                <Message error className="mb-40">
+                  <ListErrors errors={[errors.message]} />
+                </Message>
+              )
             }
             <Button primary size="large" className="very relaxed" content="Confirm" disabled={!canSubmitConfirmEmail || (errors && errors.message) || inProgress} />
           </Form>

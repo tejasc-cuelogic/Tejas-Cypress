@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
 import { withRouter, Link } from 'react-router-dom';
@@ -14,20 +13,20 @@ const actions = {
 
 const DragHandle = sortableHandle(props => <Icon className={`${props.className} ns-drag-holder-large mr-10`} />);
 const SortableItem = SortableElement(({
-  knowledgeBase, key, handleAction,
+  knowledgeBase, key, handleAction, refUrl,
 }) => (
   <div className="row-wrap striped-table" key={key}>
     <div className="balance-half first-column">
       <DragHandle />
       <Label color={`${knowledgeBase.itemStatus === 'PUBLISHED' ? 'green' : knowledgeBase.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty className="mr-10" />
       <span className="user-name">
-        <Link to={`/app/knowledge-base/${knowledgeBase.id}/${knowledgeBase.itemStatus}`}>{knowledgeBase.title}</Link>
+        <Link to={`${refUrl}/${knowledgeBase.id}/${knowledgeBase.itemStatus}`}>{knowledgeBase.title}</Link>
       </span>
     </div>
     <div className="action width-100 right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
-          <Button className="link-button" >
+          <Button className="link-button">
             <Icon className={`ns-${actions[action].icon}`} onClick={() => handleAction(actions[action].label, knowledgeBase.id, knowledgeBase.itemStatus)} />
           </Button>
         ))}
@@ -37,7 +36,7 @@ const SortableItem = SortableElement(({
 ));
 
 const SortableList = SortableContainer(({
-  allCategorizedKnowledgeBase, handleAction, checkedRecords, getSelectedRecords,
+  allCategorizedKnowledgeBase, handleAction, checkedRecords, getSelectedRecords, refUrl,
 }) => (
   <div className="tbody">
     {allCategorizedKnowledgeBase.map((knowledgeBase, index) => (
@@ -49,6 +48,7 @@ const SortableList = SortableContainer(({
         handleAction={handleAction}
         checkedRecords={checkedRecords}
         getSelectedRecords={getSelectedRecords}
+        refUrl={refUrl}
       />
     ))}
   </div>
@@ -58,11 +58,14 @@ const SortableList = SortableContainer(({
 @observer
 export default class AllKnowledgeBaseItems extends Component {
   state = { activeIndex: 0, innerActiveIndex: [] }
-  componentWillMount() {
+
+  constructor(props) {
+    super(props);
     this.props.knowledgeBaseStore.resetPagination();
     this.props.knowledgeBaseStore.resetSearch();
     this.props.knowledgeBaseStore.initRequest(); // load data
   }
+
   onSortEnd = ({ oldIndex, newIndex }, userType, category) => {
     const { allCategorizedKnowledgeBase, setKnowledgeBaseOrder } = this.props.knowledgeBaseStore;
     if (oldIndex !== newIndex) {
@@ -70,8 +73,8 @@ export default class AllKnowledgeBaseItems extends Component {
       setKnowledgeBaseOrder(arrayMove(allCategorizedKnowledgeBase[userType][category], oldIndex, newIndex));
     }
   }
-  globalActionChange = (e, { name, value }) =>
-    this.props.knowledgeBaseStore.setGlobalAction(name, value);
+
+  globalActionChange = (e, { name, value }) => this.props.knowledgeBaseStore.setGlobalAction(name, value);
 
   handleAction = (action, articleId, status) => {
     if (action === 'Delete') {
@@ -80,11 +83,15 @@ export default class AllKnowledgeBaseItems extends Component {
       this.props.history.push(`${this.props.match.url}/${articleId}/${status}`);
     }
   }
+
   deleteKnowledgeBase = () => {
     const { deleteKBById, setConfirmBox } = this.props.knowledgeBaseStore;
-    deleteKBById(this.props.knowledgeBaseStore.confirmBox.refId);
-    setConfirmBox('');
+    deleteKBById(this.props.knowledgeBaseStore.confirmBox.refId).then(() => {
+      setConfirmBox('');
+      this.props.history.replace(this.props.refLink);
+    });
   }
+
   handleDeleteCancel = () => {
     this.props.knowledgeBaseStore.setConfirmBox('');
   }
@@ -98,6 +105,7 @@ export default class AllKnowledgeBaseItems extends Component {
       this.props.knowledgeBaseStore.removeSelectedRecords(result.value);
     }
   }
+
   toggleAccordion = (index, field) => {
     let stateChange = { ...this.state };
     const newIndex = this.state[field] === index ? -1 : index;
@@ -112,12 +120,14 @@ export default class AllKnowledgeBaseItems extends Component {
     }
     this.setState(stateChange);
   }
+
   checkedAllRecords = (e, result) => {
     this.props.knowledgeBaseStore.selectRecordsOnPage(result.checked);
   }
 
   render() {
     const { knowledgeBaseStore } = this.props;
+    const { inProgress } = this.props.uiStore;
     const {
       loading,
       confirmBox,
@@ -125,14 +135,14 @@ export default class AllKnowledgeBaseItems extends Component {
       allCategorizedKnowledgeBase,
     } = knowledgeBaseStore;
     const { activeIndex, innerActiveIndex } = this.state;
-    if (loading || categoryLoading) {
+    if (loading || categoryLoading || inProgress) {
       return <InlineLoader />;
     }
     if (Object.keys(allCategorizedKnowledgeBase).length === 0) {
       return <InlineLoader text="No data found." />;
     }
     return (
-      <Aux>
+      <>
         {Object.keys(allCategorizedKnowledgeBase).map(userType => (
           <Accordion key={userType} fluid styled className="card-style">
             <Accordion.Title onClick={() => this.toggleAccordion(userType, 'activeIndex')} className="text-capitalize">
@@ -155,6 +165,7 @@ export default class AllKnowledgeBaseItems extends Component {
                       lockAxis="y"
                       useDragHandle
                       handleAction={this.handleAction}
+                      refUrl={this.props.match.url}
                     />
                   </Accordion.Content>
                 </Accordion>
@@ -171,7 +182,7 @@ export default class AllKnowledgeBaseItems extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

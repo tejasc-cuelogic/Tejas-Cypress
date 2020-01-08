@@ -7,9 +7,9 @@ import Compose from './Compose';
 @inject('messageStore', 'uiStore', 'userDetailsStore')
 @observer
 export default class MessagesWrap extends Component {
-  confirmDelete = (e, id) => {
+  confirmDelete = (e, id, type = 'message') => {
     e.preventDefault();
-    this.props.uiStore.setConfirmBox('message', id);
+    this.props.uiStore.setConfirmBox(type, id);
     return true;
   }
 
@@ -17,16 +17,23 @@ export default class MessagesWrap extends Component {
     e.preventDefault();
     this.props.messageStore.setCommentForEdit(id, comment, scope);
   }
+
   deleteCommentHandler = (id) => {
     this.props.uiStore.setConfirmBox('', '', '', false);
     this.props.messageStore.deleteMessage(id);
   }
+
+  approveCommentHandler = (e, id) => {
+    this.props.uiStore.setConfirmBox('', '', '', false);
+    this.props.messageStore.approveComment(e, id);
+  }
+
   render() {
     const {
-      uiStore, messageStore, userDetailsStore, isIssuer, passedProcessingDate, isAdmin,
+      uiStore, messageStore, userDetailsStore, isIssuer, passedProcessingDate, isAdmin, currentOfferingIssuerId,
     } = this.props;
     const {
-      thread, approveComment, buttonLoader, currentOfferingIssuerId, threadMainMessage,
+      thread, buttonLoader, threadMainMessage,
     } = messageStore;
     const threadMessages = threadMainMessage.concat(thread);
     const { currentUserId } = userDetailsStore;
@@ -36,24 +43,25 @@ export default class MessagesWrap extends Component {
           currentOfferingIssuerId={currentOfferingIssuerId}
           buttonLoader={buttonLoader}
           isIssuer={isIssuer}
-          approveComment={approveComment}
           currentUserId={currentUserId}
           thread={threadMessages}
           commentEditHandler={this.commentEditHandler}
           deleteCommentHandler={this.confirmDelete}
           isAdmin={isAdmin}
         />
-        {!passedProcessingDate &&
-        <Compose isIssuer={isIssuer} />
+        {!passedProcessingDate
+        && <Compose isIssuer={isIssuer} />
         }
         <Confirm
           header="Confirm"
-          content="Are you sure you want to delete this message?"
-          open={uiStore.confirmBox.entity === 'message'}
+          content={`${uiStore.confirmBox.entity === 'message' ? 'Are you sure you want to delete this message?' : 'This comment will be immediately posted to the public campaign page and sent via email to any participants in this comment thread.'}`}
+          open={uiStore.confirmBox.entity === 'message' || uiStore.confirmBox.entity === 'APPROVE'}
           onCancel={() => uiStore.setConfirmBox('', '', '', false)}
-          onConfirm={() => this.deleteCommentHandler(uiStore.confirmBox.refId)}
+          // eslint-disable-next-line no-unused-expressions
+          onConfirm={(e) => { uiStore.confirmBox.entity === 'message' ? this.deleteCommentHandler(uiStore.confirmBox.refId) : this.approveCommentHandler(e, uiStore.confirmBox.refId); }}
           size="tiny"
-          className="deletion"
+          confirmButton={uiStore.confirmBox.entity === 'message' ? 'Delete' : 'Approve'}
+          className={uiStore.confirmBox.entity === 'message' ? 'deletion' : 'approval'}
         />
       </div>
     );

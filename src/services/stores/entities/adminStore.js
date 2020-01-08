@@ -8,6 +8,7 @@ import Helper from '../../../helper/utility';
 // e.g. `usersList` should be in userStore
 export class AdminStore {
   @observable usersList = {};
+
   @observable userId = null;
 
   @action

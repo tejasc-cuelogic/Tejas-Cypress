@@ -17,13 +17,14 @@ export default class Actions extends Component {
     } = this.props;
     return `${match.url}/${action}/${userId}/${requestDate}${accountId ? `/${accountId}/${accountType}` : ''}`;
   }
+
   render() {
     return (
       <Table.Cell collapsing textAlign="center">
         <Button.Group vertical compact size="mini">
-          {this.props.accreditation.verifier &&
-            this.props.accreditation.verifier.email &&
-            <Button loading={this.props.accreditationStore.inProgress.includes(this.props.userId)} onClick={() => this.props.emailVerifier(this.props.userId, this.props.accountId, this.props.accountType)} className="green" >Resend Verifier Email </Button>
+          {this.props.accreditation.verifier
+            && this.props.accreditation.verifier.email
+            && <Button loading={this.props.accreditationStore.inProgress.includes(this.props.userId)} onClick={() => this.props.emailVerifier(this.props.userId, this.props.accountId, this.props.accountType)} className="green">Resend Verifier Email </Button>
           }
           {Object.keys(actions).map(action => (
             <Button

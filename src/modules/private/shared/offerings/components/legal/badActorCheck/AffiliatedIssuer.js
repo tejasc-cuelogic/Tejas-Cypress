@@ -7,7 +7,8 @@ import AfIssuer from './AfIssuer';
 @inject('offeringCreationStore', 'userStore')
 @observer
 export default class AffiliatedIssuer extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/1`);
     }
@@ -22,6 +23,7 @@ export default class AffiliatedIssuer extends Component {
       getAffiliatedIssuerOfferingBac(currentOfferingId, 'AFFILIATED_ISSUER');
     }
   }
+
   render() {
     const { AFFILIATED_ISSUER_FRM } = this.props.offeringCreationStore;
     const navItems = [];
@@ -38,8 +40,7 @@ export default class AffiliatedIssuer extends Component {
           <Route
             exact
             path={match.url}
-            render={props =>
-              <AfIssuer refLink={match.url} {...props} index={0} />}
+            render={props => <AfIssuer refLink={match.url} {...props} index={0} />}
           />
           {
             navItems.map((item, index) => (

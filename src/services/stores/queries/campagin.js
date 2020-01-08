@@ -1,9 +1,11 @@
 import gql from 'graphql-tag';
 
 export const allOfferings = gql`
-query getOfferingList($filters: OfferingFilterInputType){
+query getOfferingList($filters: OfferingListFilterInputType){
     getOfferingList(filters: $filters) {
       id
+      isAvailablePublicly
+      watchListStatus
       offeringSlug
       stage
       media {
@@ -34,12 +36,33 @@ query getOfferingList($filters: OfferingFilterInputType){
         totalInvestorCount
         keyTerms {
           multiple
+          interestRate
+          priceCalculation
+        }
+        hardCloseDate
+        repayment {
+          count
+          currentRepaidAmount
         }
       }
       keyTerms {
+        minInvestAmt
+        priceCopy
+        premoneyValuation
+        maturity
+        interestRate
+        investmentMultiple
+        valuationCap
+        equityUnitType
+        discount
+        offeringSize
+        preferredReturn
+        targetInvestmentPeriod
         regulation
         minOfferingAmountCF
         maxOfferingAmountCF
+        minOfferingAmount506
+        maxOfferingAmount506
         minOfferingAmount506C
         maxOfferingAmount506C
         offeringDisclaimer
@@ -61,9 +84,10 @@ query checkEarlyBirdByInvestorAccountAndOfferingId($offeringId: String!, $accoun
 }`;
 
 export const getOfferingsReferral = gql`
-query getOfferingList($filters: OfferingFilterInputType){
+query getOfferingList($filters: OfferingListFilterInputType){
     getOfferingList(filters: $filters) {
       id
+      stage
       offeringSlug
       referralCode
       order
@@ -71,28 +95,44 @@ query getOfferingList($filters: OfferingFilterInputType){
   }
 `;
 
+export const offeringWatchList = gql`
+query offeringWatchList($offeringId: String){
+  offeringWatchList(offeringId: $offeringId) {
+    userId
+    status
+    offeringId
+    lastUpdated
+    userInfo {
+      email {
+        address
+      }
+    info {
+      firstName
+      lastName
+    }
+    }
+  }
+}
+`;
+
 export const getOfferingById = gql`
-  query getOfferingDetailsBySlug($id: String) {
+  query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
       id
-      previewPassword
+      isInvestedInOffering
       isAvailablePublicly
       stage
     }
   }
 `;
 
-export const isValidInvestorInOffering = gql`
-  query isValidInvestorInOffering ($offeringId: String!, $userId: String!, $offeringStage: OfferingStageEnumType!) {
-    isValidInvestorInOffering (offeringId: $offeringId, userId: $userId, offeringStage: $offeringStage)
-  }
-`;
-
 export const campaignDetailsQuery = gql`
-  query getOfferingDetailsBySlug($id: String) {
-    getOfferingDetailsBySlug (offeringSlug: $id) {
+  query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
+    getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
+    isInvestedInOffering
+    watchListStatus
     stage
     offeringSlug
     issuerId
@@ -101,8 +141,21 @@ export const campaignDetailsQuery = gql`
       id
     }
     keyTerms {
-      unitPrice
+      revShareSummaryUpload {
+        id
+        url
+        isPublic
+      }
+      priceCopy
+      discount
+      valuationCap
+      totalRoundSize
+      equityClass
+      equityUnitType
       roundType
+      offeringSize
+      preferredReturn
+      targetInvestmentPeriod
       premoneyValuation
       additionalKeyterms {
         label
@@ -124,6 +177,8 @@ export const campaignDetailsQuery = gql`
       interestRate
       minOfferingAmountCF
       maxOfferingAmountCF
+      minOfferingAmount506
+      maxOfferingAmount506
       minOfferingAmount506C
       maxOfferingAmount506C
       minInvestAmt
@@ -131,13 +186,18 @@ export const campaignDetailsQuery = gql`
       investmentMultipleSummary
       state
       city
+      nsFeePercentage
     }
-    bonusRewards{
+    bonusRewards {
       id
       title
       description
       earlyBirdQuantity
       tiers
+      created {
+        by
+        date
+      }
     }
     rewardsTiers
     earlyBird {
@@ -257,8 +317,18 @@ export const campaignDetailsQuery = gql`
       }
       keyTerms {
         multiple
+        priceCalculation
       }
     }
+    earlyBirdsCount
+  }
+}
+`;
+
+export const campaignDetailsAdditionalQuery = gql`
+  query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
+    getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
+    id
     comments {
       id
       scope
@@ -282,7 +352,7 @@ export const campaignDetailsQuery = gql`
           name
         }
       }
-      threadComment {
+      threadComments {
         id
         scope
         comment
@@ -312,6 +382,7 @@ export const campaignDetailsQuery = gql`
       title
       content
       scope
+      updatedDate
       updated {
         date
       }
@@ -320,16 +391,20 @@ export const campaignDetailsQuery = gql`
         info {
           firstName
           lastName
+          avatar{
+            url
+            name
+          }
         }
       }
     }
-    earlyBirdsCount
+    }
   }
-}
 `;
+
 export const campaignDetailsForInvestmentQuery = gql`
-query getOfferingById($id: ID) {
-  getOfferingDetailsById (id: $id) {
+query getOfferingById($id: String!) {
+  getOfferingById (id: $id) {
     id
     offeringSlug
     isAvailablePublicly
@@ -344,7 +419,21 @@ query getOfferingById($id: ID) {
         completeDate
       }
       keyTerms {
+        supplementalAgreements {
+          documents {
+            name
+            isVisible
+            upload {
+              fileId
+              fileName
+              fileHandle {
+                boxFileId
+              }
+            }
+          }
+        }
         multiple
+        priceCalculation
         revSharePercentage
         interestRate
         businessOpenDate
@@ -357,7 +446,11 @@ query getOfferingById($id: ID) {
       legalBusinessName
       shorthandBusinessName
       maturity
+      equityUnitType
       frequencyOfPayments
+      priceCopy
+      premoneyValuation
+      equityUnitType
       securities
       securityInterest
       securitiesOwnershipPercentage
@@ -366,6 +459,8 @@ query getOfferingById($id: ID) {
       interestRate
       minOfferingAmountCF
       maxOfferingAmountCF
+      minOfferingAmount506
+      maxOfferingAmount506
       minOfferingAmount506C
       maxOfferingAmount506C
       industry
@@ -380,8 +475,24 @@ query getOfferingById($id: ID) {
     offering {
       launch {
         targetDate
-        edgarLink
+        expectedOpsDate
         terminationDate
+        edgarLink
+      }
+    }
+    legal {
+      dataroom {
+        documents {
+          name
+          accreditedOnly
+          upload {
+            fileId
+            fileName
+            fileHandle {
+              boxFileId
+            }
+          }
+        }
       }
     }
     selectedOffer {
@@ -416,7 +527,6 @@ query getOfferingById($id: ID) {
       status
       scope
       tiers
-      isEarlyBirdOnly
       notificationSent {
         by
         date
@@ -453,4 +563,21 @@ query getOfferingById($id: ID) {
     }
   }
 }
+`;
+
+export const validateOfferingPreviewPassword = gql`
+query validateOfferingPreviewPassword($offeringSlug: String!, $previewPassword: String!) {
+  validateOfferingPreviewPassword (offeringSlug: $offeringSlug, previewPassword: $previewPassword)
+}`;
+
+export const addUserToOfferingWatchlist = gql`
+  mutation addUserToOfferingWatchlist($userId: String, $offeringId: String, $isInvestment: Boolean){
+    addUserToOfferingWatchlist(userId: $userId, offeringId: $offeringId, isInvestment: $isInvestment)
+  }
+`;
+
+export const removeUserFromOfferingWatchlist = gql`
+  mutation removeUserFromOfferingWatchlist($userId: String, $offeringId: String){
+    removeUserFromOfferingWatchlist(userId: $userId, offeringId: $offeringId)
+  }
 `;

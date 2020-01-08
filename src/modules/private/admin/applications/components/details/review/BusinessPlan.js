@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Grid, Form, Button, Divider, Header, Icon, Confirm, Table } from 'semantic-ui-react';
@@ -13,39 +12,47 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 const AddMore = ({
   addMore, formName, arrayName, title,
 }) => (
-  <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName, arrayName)} >+ {title}</Button>
+  <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName, arrayName)}>+ {title}</Button>
 );
 
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class BusinessPlan extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.businessAppReviewStore.initLoad.includes('BUSINESS_PLAN_FRM')) {
       this.props.businessAppReviewStore.setFormData('BUSINESS_PLAN_FRM', 'review.businessPlan');
     }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.businessPlan.managerOverview');
   }
+
   onFileDrop = (files, name, index) => {
     this.props.businessAppReviewStore.setFileUploadData('BUSINESS_PLAN_FRM', 'controlPersons', name, files, index);
   }
+
   addMore = (e, formName, arrayName = 'data') => {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore(formName, arrayName);
   }
+
   handleDelDoc = (field, index) => {
     this.props.businessAppReviewStore.removeUploadedData('BUSINESS_PLAN_FRM', field, index, 'controlPersons');
   }
+
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     this.props.businessAppReviewStore.toggleConfirmModal(index, formName);
   }
+
   submit = (e) => {
     e.preventDefault();
     this.props.businessAppReviewStore.saveReviewForms('BUSINESS_PLAN_FRM');
   }
+
   submitWithApproval = (form, action) => {
     this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
+
   render() {
     const {
       BUSINESS_PLAN_FRM, formChangeWithIndex, controlPersonMaskChange, totalSourcesAmount,
@@ -57,17 +64,17 @@ export default class BusinessPlan extends Component {
       businessApplicationDetailsAdmin, applicationReviewLoading,
     } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
-    const submitted = (review && review.businessPlan && review.businessPlan &&
-      review.businessPlan.submitted) ? review.businessPlan.submitted : null;
-    const approved = (review && review.businessPlan && review.businessPlan &&
-      review.businessPlan.approved) ? review.businessPlan.approved : null;
+    const submitted = (review && review.businessPlan && review.businessPlan
+      && review.businessPlan.submitted) ? review.businessPlan.submitted : null;
+    const approved = (review && review.businessPlan && review.businessPlan
+      && review.businessPlan.approved) ? review.businessPlan.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
     if (applicationReviewLoading) {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Form onSubmit={this.submit}>
           <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_FRM" />
           <Header as="h4">Location feasibility</Header>
@@ -82,19 +89,21 @@ export default class BusinessPlan extends Component {
           <Divider section />
           <Header as="h4">
             Control Persons
-            {(!isReadonly && BUSINESS_PLAN_FRM.fields.controlPersons.length < 5) &&
-            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'BUSINESS_PLAN_FRM', 'controlPersons')}><small>+ Add Control Person</small></Link>
+            {(!isReadonly && BUSINESS_PLAN_FRM.fields.controlPersons.length < 5)
+            && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'BUSINESS_PLAN_FRM', 'controlPersons')}><small>+ Add Control Person</small></Link>
             }
           </Header>
           {
             BUSINESS_PLAN_FRM.fields.controlPersons.map((controlPerson, index) => (
-              <Aux>
+              <>
                 <Header as="h6">
                   {`Control Person ${index + 1}`}
-                  {!isReadonly && BUSINESS_PLAN_FRM.fields.controlPersons.length > 1 &&
-                  <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'controlPersons')}>
+                  {!isReadonly && BUSINESS_PLAN_FRM.fields.controlPersons.length > 1
+                  && (
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'controlPersons')}>
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
+                  )
                   }
                 </Header>
                 <div className="bg-offwhite">
@@ -164,12 +173,12 @@ export default class BusinessPlan extends Component {
                     </Form.Field>
                   </Form.Group>
                 </div>
-              </Aux>
+              </>
             ))
           }
           <Divider section />
           {['timingOfOperation', 'financialToProjection', 'isPlanAdequate'].map(field => (
-            <Aux>
+            <>
               <FormTextarea
                 containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
                 readOnly={isReadonly}
@@ -179,7 +188,7 @@ export default class BusinessPlan extends Component {
                 changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM')}
               />
               <Divider section />
-            </Aux>
+            </>
           ))}
           <Header as="h4">Sources and Uses Chart</Header>
           <Grid columns={2}>
@@ -195,8 +204,8 @@ export default class BusinessPlan extends Component {
                 </Table.Header>
                 <Table.Body>
                   {
-                    BUSINESS_PLAN_FRM.fields.sources.length ?
-                    BUSINESS_PLAN_FRM.fields.sources.map((source, index) => (
+                    BUSINESS_PLAN_FRM.fields.sources.length
+                      ? BUSINESS_PLAN_FRM.fields.sources.map((source, index) => (
                       <Table.Row key={source} verticalAlign="top">
                         <Table.Cell width={8}>
                           <FormInput
@@ -221,22 +230,26 @@ export default class BusinessPlan extends Component {
                             size="small"
                           />
                         </Table.Cell>
-                        {!isReadonly &&
-                        <Table.Cell collapsing>
-                          <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'sources')} >
+                        {!isReadonly
+                        && (
+<Table.Cell collapsing>
+                          <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'sources')}>
                             <Icon className="ns-close-circle" color="grey" />
                           </Link>
                         </Table.Cell>
+                        )
                         }
                       </Table.Row>
-                    )) : ''
+                      )) : ''
                   }
-                  {!isReadonly &&
-                  <Table.Row>
+                  {!isReadonly
+                  && (
+<Table.Row>
                     <Table.Cell colSpan="3">
                       <AddMore addMore={this.addMore} arrayName="sources" formName="BUSINESS_PLAN_FRM" title="Add Source" />
                     </Table.Cell>
                   </Table.Row>
+                  )
                   }
                 </Table.Body>
                 <Table.Footer>
@@ -259,8 +272,8 @@ export default class BusinessPlan extends Component {
                 </Table.Header>
                 <Table.Body>
                   {
-                  BUSINESS_PLAN_FRM.fields.uses.length ?
-                  BUSINESS_PLAN_FRM.fields.uses.map((use, index) => (
+                  BUSINESS_PLAN_FRM.fields.uses.length
+                    ? BUSINESS_PLAN_FRM.fields.uses.map((use, index) => (
                     <Table.Row key={use[index]} verticalAlign="top">
                       <Table.Cell width={8}>
                         <FormInput
@@ -285,22 +298,26 @@ export default class BusinessPlan extends Component {
                           size="small"
                         />
                       </Table.Cell>
-                      {!isReadonly &&
-                      <Table.Cell collapsing>
-                        <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'uses')} >
+                      {!isReadonly
+                      && (
+<Table.Cell collapsing>
+                        <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'uses')}>
                           <Icon className="ns-close-circle" color="grey" />
                         </Link>
                       </Table.Cell>
+                      )
                       }
                     </Table.Row>
-                  )) : ''
+                    )) : ''
                   }
-                  {!isReadonly &&
-                  <Table.Row>
+                  {!isReadonly
+                  && (
+<Table.Row>
                     <Table.Cell colSpan="3">
                       <AddMore addMore={this.addMore} arrayName="uses" formName="BUSINESS_PLAN_FRM" title="Add Use" />
                     </Table.Cell>
                   </Table.Row>
+                  )
                   }
                 </Table.Body>
                 <Table.Footer>
@@ -336,15 +353,15 @@ export default class BusinessPlan extends Component {
         </Form>
         <Confirm
           header="Confirm"
-          content={`Are you sure you want to remove this ${confirmModalName === 'uses' ? 'use' :
-          confirmModalName === 'sources' ? 'source' : 'control person'}?`}
+          content={`Are you sure you want to remove this ${confirmModalName === 'uses' ? 'use'
+            : confirmModalName === 'sources' ? 'source' : 'control person'}?`}
           open={confirmModal}
           onCancel={this.toggleConfirmModal}
           onConfirm={() => removeData('BUSINESS_PLAN_FRM', confirmModalName)}
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

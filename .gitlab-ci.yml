@@ -12,6 +12,7 @@ stages:
   - version
   - package
   - deploy
+  - test
   - cleanup
 
 # force usage of AWS role, note runner is in old AWS account so need to to assume xaccount role
@@ -24,17 +25,14 @@ before_script:
   - export AWS_SESSION_TOKEN=$(echo "$creds_json" | jq .Credentials.SessionToken|tr -d '"')
 #---------------------------------Anchors--------------------------------------
 .build_template: &build_definition
-#  tags:
-#    - ns-client
   stage: build
   artifacts:
     paths:
       - build/
+      - .env
     expire_in: 1 day
 
 .deploy_template: &deploy_defination
-#  tags:
-#    - ns-client
   stage: deploy
 
 .review_template: &review_defination
@@ -42,19 +40,18 @@ before_script:
     refs:
       - branches
   except:
-    - master
-    - develop
-    - qa
+    - predev
+    - dev
     - demo
-#  tags:
-#    - ns-client
+    - qa
+    - master
 
 #.before_script_template: &before_script_defination
 #  before_script:
 #    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FsetEnvironmentVariables%2Esh/raw?ref=$BRANCH > setEnvironmentVariables.sh"
-    
-    
-#---------------------------------Review----------------------------------------  
+
+
+#---------------------------------Review----------------------------------------
 #Building code
 build:review:
   <<: *build_definition
@@ -62,7 +59,9 @@ build:review:
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
-    - node_modules/
+      - .npm
+      - node_modules/
+      - /root/.cache/Cypress
   # <<: *before_script_defination
   script:
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3BucketCreationScript%2Esh/raw?ref=$BRANCH > s3BucketCreationScript.sh"
@@ -70,8 +69,8 @@ build:review:
     - sh s3BucketCreationScript.sh $CI_COMMIT_REF_SLUG $REGION
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
     - npm install
-    - npm run build 
-  
+    - npm run build
+
 #Deploying code to s3 bucket
 deploy:review:
   <<: *review_defination
@@ -80,7 +79,7 @@ deploy:review:
     name: $CI_COMMIT_REF_NAME
     url: http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com
     on_stop: delete:review
-  script: 
+  script:
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
     - cd ./scripts/cicd/ && sh ./deployApp.sh $CI_COMMIT_REF_SLUG && cd ../.. # - sh deployApp.sh $CI_COMMIT_REF_SLUG
   dependencies:
@@ -93,13 +92,59 @@ delete:review:
   variables:
     GIT_STRATEGY: none
   script:
-    - aws s3 rb s3://$CI_COMMIT_REF_SLUG --force  
+    - aws s3 rb s3://$CI_COMMIT_REF_SLUG --force
   when: manual
   environment:
     name: $CI_COMMIT_REF_NAME
     action: stop
   dependencies: []
- 
+
+#Test review environment
+test:review:
+  <<: *review_defination
+  before_script:
+   - echo "Initiate e2e tests..."
+  image: cypress/base:10
+  artifacts:
+    expire_in: 4 hrs
+    when: always
+    paths:
+      - cypress/reports/screenshots
+      - cypress/reports/videos
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentCypressVariables.sh && cd ../..
+    - npm install
+    - CYPRESS_baseUrl=http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com $(npm bin)/cypress run
+  dependencies:
+    - build:review
+
+#---------------------------------PRE DEV-------------------------------------------
+build:predev:
+  <<: *build_definition
+  only:
+    refs:
+      - predev
+  # <<: *before_script_defination
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION predev $CI_COMMIT_REF_NAME && cd ../..
+    - npm install
+    - npm run build
+
+deploy:predev:
+  <<: *deploy_defination
+  only:
+    refs:
+      - predev
+  environment:
+    name: predev
+    url: http://$PREDEV_URL
+  script:
+    #- "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $PREDEV_URL && cd ../.. #- sh deployApp.sh $DEV_URL
+    - aws cloudfront create-invalidation --distribution-id $PREDEV_DISTRIBUTION_ID --paths "/*"
+  dependencies:
+    - build:predev
+
 #---------------------------------Dev-------------------------------------------
 
 #Building code
@@ -107,33 +152,22 @@ build:dev:
   <<: *build_definition
   only:
     refs:
-      - develop
+      - dev
   # <<: *before_script_defination
   script:
     - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build
 
-build:predev:
-  <<: *build_definition
-  only:
-    refs:
-      - develop
-  # <<: *before_script_defination
-  script:
-    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION predev $CI_COMMIT_REF_NAME && cd ../..
-    - npm install
-    - npm run build
-
-#Bump version code to patch 
+#Bump version code to patch
 version:dev:
   only:
     refs:
-      - develop
+      - dev
 #  tags:
 #    - ns-client
   stage: version
-  script: 
+  script:
     # Make a folder for the changelog utility
     - mkdir changelog && cd changelog
     # Clone the changelog.js file from the ops repo
@@ -147,12 +181,12 @@ version:dev:
     - git fetch --tags
     # Create/update the CHANGELOG.md file
     - node ./changelog/index.js --preset angular --infile CHANGELOG.md --same-file --release-count 0
-    # Stage the changes 
+    # Stage the changes
     - git add CHANGELOG.md
     # Commit the changes
     - git commit -m "Updated CHANGELOG.md [skip ci]"
-    # Push the changes back to the develop branch
-    - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-client.git/ HEAD:develop
+    # Push the changes back to the dev branch
+    - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-client.git/ HEAD:dev
   allow_failure: true
   dependencies:
     - build:dev
@@ -162,32 +196,69 @@ deploy:dev:
   <<: *deploy_defination
   only:
     refs:
-      - develop
+      - dev
   environment:
     name: dev
     url: http://$DEV_URL
-  script: 
+  script:
     #- "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
     - cd ./scripts/cicd/ && sh ./deployApp.sh $DEV_URL && cd ../.. #- sh deployApp.sh $DEV_URL
     - aws cloudfront create-invalidation --distribution-id $DEV_DISTRIBUTION_ID --paths "/*"
   dependencies:
     - build:dev
 
-deploy:predev:
+#Test dev environment
+test:dev:
+  stage: test
+  only:
+    refs:
+      - dev
+  before_script:
+   - echo "Initiate e2e tests..."
+  image: cypress/base:10
+  artifacts:
+    expire_in: 1 day
+    when: always
+    paths:
+      - cypress/reports/screenshots
+      - cypress/reports/videos
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentCypressVariables.sh && cd ../..
+    - npm install
+    - CYPRESS_baseUrl=https://$DEV_URL $(npm bin)/cypress run
+  dependencies:
+    - build:dev
+
+
+#---------------------------------Demo--------------------------------------------
+
+#Building code
+build:demo:
+  <<: *build_definition
+  only:
+    refs:
+      - demo
+  # <<: *before_script_defination
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION demo $CI_COMMIT_REF_NAME && cd ../..
+    - npm install
+    - npm run build
+
+#Deploying code to s3 bucket
+deploy:demo:
   <<: *deploy_defination
   only:
     refs:
-      - develop
+      - demo
   environment:
-    name: dev
-    url: http://$PREDEV_URL
+    name: demo
+    url: http://$DEMO_URL
   script:
-    #- "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - cd ./scripts/cicd/ && sh ./deployApp.sh $PREDEV_URL && cd ../.. #- sh deployApp.sh $DEV_URL
-    - aws cloudfront create-invalidation --distribution-id $PREDEV_DISTRIBUTION_ID --paths "/*"
+    # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $DEMO_URL && cd ../.. #- sh deployApp.sh $DEMO_URL
+    - aws cloudfront create-invalidation --distribution-id $DEMO_DISTRIBUTION_ID --paths "/*"
   dependencies:
-    - build:predev
-
+    - build:demo
 
 #---------------------------------Qa--------------------------------------------
 
@@ -219,54 +290,65 @@ deploy:qa:
   dependencies:
     - build:qa
 
-#---------------------------------Demo--------------------------------------------
-
+#---------------------------------Infosec---------------------------------------
 #Building code
-build:demo:
+build:infosec:
   <<: *build_definition
   only:
     refs:
-      - demo
-  # <<: *before_script_defination
+      - master
   script:
-    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION demo $CI_COMMIT_REF_NAME && cd ../..
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION infosec $CI_COMMIT_REF_NAME && cd ../..
     - npm install
-    - npm run build  
+    - npm run build
 
 #Deploying code to s3 bucket
-deploy:demo:
+deploy:infosec:
   <<: *deploy_defination
   only:
     refs:
-      - demo
+      - master
   environment:
-    name: demo
-    url: http://$DEMO_URL
-  script: 
-    # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - cd ./scripts/cicd/ && sh ./deployApp.sh $DEMO_URL && cd ../.. #- sh deployApp.sh $DEMO_URL
-    - aws cloudfront create-invalidation --distribution-id $DEMO_DISTRIBUTION_ID --paths "/*"
+    name: infosec
+    url: http://$INFOSEC_URL
+  script:
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $INFOSEC_URL && cd ../..
+    - aws cloudfront create-invalidation --distribution-id $INFOSEC_DISTRIBUTION_ID --paths "/*"
   dependencies:
-    - build:demo
+    - build:infosec
+
+#---------------------------------Staging---------------------------------------
+#Building code
+build:staging:
+  <<: *build_definition
+  only:
+    refs:
+      - master
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION staging $CI_COMMIT_REF_NAME && cd ../..
+    - npm install
+    - npm run build
+
+#Deploying code to s3 bucket
+deploy:staging:
+  <<: *deploy_defination
+  only:
+    refs:
+      - master
+  environment:
+    name: staging
+    url: http://$STAGING_URL
+  script:
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $STAGING_URL && cd ../..
+    - aws cloudfront create-invalidation --distribution-id $INFOSEC_DISTRIBUTION_ID --paths "/*"
+  dependencies:
+    - build:staging
 
 #---------------------------------Production------------------------------------
-
-#Building code
-#build:prod:
-#  <<: *build_definition
-#  only:
-#    refs:
-#      - master
-#  <<: *before_script_defination
-#  script:
-#    - sh ./scripts/cicd/setEnvironmentVariables.sh $REGION prod $CI_COMMIT_REF_NAME
-#    - npm install
-#    - npm run build
-
-package:prod:
+build:prod:
 #  tags:
 #    - ns-client
-  stage: package
+  stage: build
   only:
     refs:
       - master
@@ -281,19 +363,3 @@ package:prod:
     - rm -rf /tmp/$CI_COMMIT_REF_NAME.zip  # clean up
     - rm -rf ~/.aws/cli/cache
 
-
-#Deploying code to s3 bucket
-#deploy:prod:
-#  <<: *deploy_defination
-#  only:
-#    refs:
-#      - master
-#  environment:
-#    name: prod
-#    url: http://$PROD_URL_QA
-#  script:
-#    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-#    - sh deployApp.sh ns-client-prod
-#  when: manual
-#  dependencies:
-#    - build:prod

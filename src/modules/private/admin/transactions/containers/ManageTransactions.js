@@ -9,6 +9,7 @@ export default class ManageTransactions extends Component {
       // search goes here..
     }
   }
+
   render() {
     const { match } = this.props;
     return (

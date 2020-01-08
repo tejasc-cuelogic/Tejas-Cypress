@@ -5,9 +5,8 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
-import Aux from 'react-aux';
 import { Accordion, Icon, Button, Confirm } from 'semantic-ui-react';
-import { InlineLoader } from './../../../../../theme/shared';
+import { InlineLoader } from '../../../../../theme/shared';
 
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 
@@ -58,7 +57,9 @@ const SortableList = SortableContainer(({
 @observer
 export default class AllCategories extends Component {
   state = { activeIndex: 0 }
-  componentWillMount() {
+
+  constructor(props) {
+    super(props);
     if (this.props.categoryStore.ifApiHitFirstTime) {
       this.props.categoryStore.initRequest();
       this.props.categoryStore.ifApiHitFirstTime = false;
@@ -66,6 +67,7 @@ export default class AllCategories extends Component {
       this.toggleAccordianContent();
     }
   }
+
   onSortEnd = ({ oldIndex, newIndex }, index) => {
     const { allCategoriesData, setCategoryOrder } = this.props.categoryStore;
     const categories = allCategoriesData;
@@ -73,24 +75,30 @@ export default class AllCategories extends Component {
       setCategoryOrder(arrayMove(categories[index].categories, oldIndex, newIndex), index);
     }
   }
+
   openModal = (id, title, type, index) => {
     this.props.categoryStore.setFieldValue('selectedCategoryState', { title, type, index });
     this.props.history.push(`${this.props.match.url}/${id}`);
   }
+
   handleDeleteConfirm = (id) => {
     this.props.uiStore.setConfirmBox('Delete', id);
   }
+
   handleDelete = () => {
     this.props.categoryStore.deleteCategory(this.props.uiStore.confirmBox.refId);
     this.props.uiStore.setConfirmBox('');
   }
+
   handleDeleteCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
+
   publishStatus = (id, isPublished) => {
     const { saveCategories } = this.props.categoryStore;
     saveCategories(id, isPublished);
   }
+
   toggleAccordianContent = (categoryIndex = null) => {
     let index = categoryIndex;
     if (categoryIndex === null) {
@@ -104,11 +112,12 @@ export default class AllCategories extends Component {
     const newIndex = activeIndex === index ? -1 : index;
     this.setState({ activeIndex: newIndex });
   }
+
   render() {
     const { activeIndex } = this.state;
     const { loading } = this.props.categoryStore;
-    const { confirmBox } = this.props.uiStore;
-    if (loading) {
+    const { confirmBox, inProgress } = this.props.uiStore;
+    if (loading || inProgress) {
       return <InlineLoader />;
     }
     const categories = this.props.categoryStore.allCategoriesData;
@@ -116,7 +125,7 @@ export default class AllCategories extends Component {
       return <InlineLoader text="No data found." />;
     }
     return (
-      <Aux>
+      <>
         {categories && categories.length && categories.map((category, index) => (
           <Accordion fluid styled className="card-style">
             <Accordion.Title onClick={() => this.toggleAccordianContent(index)} className="text-capitalize">
@@ -151,7 +160,7 @@ export default class AllCategories extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

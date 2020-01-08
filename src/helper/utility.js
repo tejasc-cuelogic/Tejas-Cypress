@@ -4,10 +4,14 @@
 import { toast } from 'react-toastify';
 import _ from 'lodash';
 import moment from 'moment';
+import { toJS } from 'mobx';
 import money from 'money-math';
+import sanitizeHtml from 'sanitize-html';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
-// import userStore from './../services/stores/entities/userStore';
+import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS, REACT_APP_DEPLOY_ENV } from '../constants/common';
+import authStore from '../services/stores/entities/shared/authStore';
+import userStore from '../services/stores/entities/userStore';
 
 export class Utility {
   // Default options for the toast
@@ -23,14 +27,14 @@ export class Utility {
    * reference: https://fkhadra.github.io/react-toastify/
    */
   toast = (msg, alertType, optionsOverride) => {
-    // if (userStore.isAdmin) {
-    const cleanMsg = s => (s ? s.replace('GraphQL error: ', '') : '');
-    if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
-      toast[alertType](`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
-    } else {
-      toast(`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride));
+    if (!userStore.isInvestor) {
+      const cleanMsg = s => (s ? s.replace('GraphQL error: ', '') : '');
+      if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
+        toast[alertType](`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
+      } else {
+        toast(`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride));
+      }
     }
-    // }
   }
 
   unMaskInput = maskedInput => (
@@ -42,7 +46,7 @@ export class Utility {
     regex => (window.location.href.match(new RegExp(regex)) !== null),
   )
 
-  matchRegexWithString = (regex, str) => str.match(new RegExp(regex)) !== null
+  matchRegexWithString = (regex, str) => str.match(new RegExp(regex, 'i')) !== null
 
   guid = () => {
     function s4() {
@@ -53,9 +57,9 @@ export class Utility {
     return `${s4()}${s4()}-${s4()}${s4()}`;
   }
 
-  getTotal = (from, key) => {
+  getTotal = (from, key, isFloatToAmount = true) => {
     const total = '0.00';
-    return from.map(f => money.floatToAmount(f[key]))
+    return from.map(f => (isFloatToAmount ? money.floatToAmount(f[key] || 0) : f[key] || 0))
       .map(r => money.add(total, r))
       .reduce((sum, n) => money.add(sum, n));
   }
@@ -88,6 +92,7 @@ export class Utility {
       return '$0.00';
     }
   }
+
   CurrencyFormat = (amount, fraction = 2, maxFraction = 2) => new Intl.NumberFormat('en-US', {
     style: 'currency', currency: 'USD', minimumFractionDigits: fraction, maximumFractionDigits: maxFraction,
   }).format(amount)
@@ -101,14 +106,22 @@ export class Utility {
   }
 
   encryptNumber = (number) => {
+    if (!number) return null;
     let encryptedNumber = number.replace(/.(?=.{4,}$)/g, '...');
     encryptedNumber = encryptedNumber.slice(-7);
     return encryptedNumber;
   }
 
   encryptNumberWithX = (number) => {
+    if (!number) return null;
     const encryptedNumber = number.replace(/.(?=.{4,}$)/g, 'X');
     return encryptedNumber;
+  }
+
+  encrypSsnNumberByForm = (form) => {
+    const formData = _.cloneDeep(toJS({ ...form }));
+    formData.ssn.value = this.encryptNumberWithX(formData.ssn.value);
+    return formData;
   }
 
   replaceKeysDeep = (obj, keysMap) => _.transform(obj, (result, value, key) => {
@@ -129,6 +142,8 @@ export class Utility {
     return fileData;
   }
 
+  isSpecialCharPresent = str => (str ? new RegExp(/[^a-z0-9._-]+/gi).test(str) : '');
+
   sanitize = name => (name ? name.replace(/[^a-z0-9._-]+/gi, '_') : '');
 
   putUploadedFile = urlArray => new Promise((resolve, reject) => {
@@ -145,20 +160,22 @@ export class Utility {
   });
 
   maskPhoneNumber = (phoneNumber) => {
-    // const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
     const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '($1) $2-$3');
     return maskPhoneNumber;
   }
+
   phoneNumberFormatter = (phoneNumber) => {
     const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '($1) $2-$3');
     return maskPhoneNumber;
   }
+
   getDaysfromNow = (days) => {
     const d = new Date();
     let daysFromNow = d.setDate(d.getDate() + days);
     daysFromNow = new Date(daysFromNow).toISOString();
     return daysFromNow;
   }
+
   getLastThreeYearsLabel = () => {
     const currentYear = parseInt(moment().format('YYYY'), 10);
     return {
@@ -169,8 +186,8 @@ export class Utility {
 
   otpShield = () => {
     try {
-      const OtpItems = document.getElementsByClassName('otp-field')[0] ?
-        document.getElementsByClassName('otp-field')[0]
+      const OtpItems = document.getElementsByClassName('otp-field')[0]
+        ? document.getElementsByClassName('otp-field')[0]
           .getElementsByTagName('input') : '';
       for (let i = 0; i < OtpItems.length; i += 1) {
         OtpItems[i].addEventListener('keydown', (e) => {
@@ -186,7 +203,7 @@ export class Utility {
 
   downloadCSV = (params) => {
     try {
-      const parser = new Parser({ fields: params.fields, quote: '' });
+      const parser = new Parser({ fields: params.fields, quote: params.quote || '' });
       const csv = parser.parse(params.data);
       const uri = `data:text/csv;charset=utf-8,${escape(csv)}`;
       const link = document.createElement('a');
@@ -209,6 +226,7 @@ export class Utility {
       return false;
     }
   }
+
   b64toBlob = (data, sliceSize = 512) => {
     const block = data.split(';');
     // Get the content type of the image
@@ -232,6 +250,125 @@ export class Utility {
     const blob = new Blob(byteArrays, { type: contentType });
     return blob;
   }
+
+  removeSsn = () => {
+    try {
+      document.getElementsByName('ssn')[0].value = '';
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  eventListnerHandler = (className, funName, action = 'add') => {
+    const classname = document.getElementsByClassName(className);
+    Array.from(classname).forEach((element) => {
+      element[`${action}EventListener`]('click', this[funName]);
+    });
+  }
+
+  toggleReadMore = (e) => {
+    const htmlContent = e.target.closest('.parsed-data').querySelector('.html-toggle-content');
+    const toggleButtonText = e.target.closest('.parsed-data').querySelector('.toggleReadMoreText');
+    const arrowText = e.target.closest('.parsed-data').querySelector('.arrowText');
+    const customTitle = e.target.closest('.parsed-data').querySelector('.customTitle');
+    if (htmlContent.classList.contains('hide-content')) {
+      htmlContent.classList.add('read-content');
+      htmlContent.classList.remove('hide-content');
+      customTitle.classList.add('hide-content');
+      toggleButtonText.innerHTML = 'Collapse ';
+      arrowText.innerHTML = '&#9652';
+    } else {
+      htmlContent.classList.add('hide-content');
+      htmlContent.classList.remove('read-content');
+      customTitle.classList.remove('hide-content');
+      toggleButtonText.innerHTML = 'Expand ';
+      arrowText.innerHTML = '&#9660';
+      const parent = e.target.closest('.parsed-data').parentElement || e.target.closest('.parsed-data');
+      const currentActiveHash = parent.previousElementSibling.querySelector('span').getAttribute('id');
+      if (currentActiveHash) {
+        document.querySelector(`#${currentActiveHash}`).scrollIntoView({
+          block: 'start',
+        });
+      }
+    }
+  };
+
+  logger = (params, type = 'log', email = false, error = '') => {
+    if (isLoggingEnabled) {
+      // eslint-disable-next-line no-unused-expressions
+      type === 'info' ? console.info(params)
+        : type === 'warn' ? console.warn(params)
+          : type === 'clear' ? console.clear()
+            : console.log(params);
+      if (email) {
+        this.sendAlertEmail(params, type, error);
+      }
+    } else if (!isLoggingEnabled && (type === 'warn' || type === 'info')) {
+      // Send an email for these two type;
+      this.sendAlertEmail(params, type, error);
+    }
+  }
+
+  sendAlertEmail = (params, type, error) => {
+    const emailP = {
+      graphqlError: { operationName: `Logging ${type === 'warn' ? 'Warning' : type === 'info' ? 'Information' : 'error'} - ${params}` },
+      urlLocation: window.location.href,
+      message: _.get(error, 'stack'),
+    };
+    const emailParams = {
+      emailContent: JSON.stringify(emailP),
+    };
+    authStore.notifyApplicationError(emailParams);
+  }
+
+  processImageFileName = (originalFileName, deviceInfo) => {
+    const fileNameSplit = originalFileName.split('.');
+    const fileExt = fileNameSplit.pop();
+    const fileName = fileNameSplit.join('.');
+    const { isMobile, isTablet } = deviceInfo;
+    const prepName = res => `${fileName}${res ? `__${res}` : ''}.${fileExt}`;
+    return IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(fileExt.toLowerCase()) ? isMobile ? prepName(640) : isTablet ? prepName(1024) : prepName(1920) : prepName();
+  }
+
+  caseify = s => _.startCase(_.lowerCase(s));
+
+  sanitizeContent = (c) => {
+    try {
+      return sanitizeHtml(c);
+    } catch (e) {
+      console.log(e);
+      return '';
+    }
+  };
+
+  validateImageExtension = (ext) => {
+    const obj = {
+      isInvalid: ext ? !IMAGE_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()) : true,
+      errorMsg: `Only ${IMAGE_UPLOAD_ALLOWED_EXTENSIONS.join(', ')} extensions are allowed.`,
+    };
+    return obj;
+  };
+
+  validateDocumentExtension = (ext) => {
+    const obj = {
+      isInvalid: ext ? !DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS.includes(ext.toLowerCase()) : true,
+      errorMsg: `Only ${DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS.join(', ')} extensions are allowed.`,
+    };
+    return obj;
+  };
+
+  modalCssUpdate = (searchClass, addClass) => {
+    const modal = document.querySelector(`.${searchClass}`).closest('.page');
+    modal.classList.add(addClass);
+  }
+
+  pageTitle = (t = '') => {
+    try {
+      return (!['production', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV) ? `[${REACT_APP_DEPLOY_ENV}] | ${t}` : t);
+    } catch (e) {
+      return 'Alternative Investments Made Simple - NextSeed';
+    }
+  };
 }
 
 export default new Utility();

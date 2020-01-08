@@ -1,11 +1,10 @@
-import Aux from 'react-aux';
 import { includes } from 'lodash';
 import React, { Component } from 'react';
 import { Grid, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FillTable } from '../../../../../../theme/table/NSTable';
 import Helper from '../../../../../../helper/utility';
-import { NsPagination, InlineLoader } from './../../../../../../theme/shared';
+import { NsPagination, InlineLoader } from '../../../../../../theme/shared';
 
 const result = {
   columns: [
@@ -20,7 +19,8 @@ const result = {
 @inject('agreementsStore', 'statementStore', 'educationStore', 'userDetailsStore')
 @observer
 export default class TaxForms extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { setFieldValue } = this.props.userDetailsStore;
     this.props.statementStore.resetPagination();
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
@@ -58,7 +58,7 @@ export default class TaxForms extends Component {
     }
 
     return (
-      <Aux>
+      <>
         <Grid>
           <Grid.Row>
             <Grid.Column width={16}>
@@ -71,13 +71,13 @@ export default class TaxForms extends Component {
                   instructions={instructions}
                 />
               </Card>
-              {totalRecords > 0 && totalRecords > requestState.perPage &&
-              <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+              {totalRecords > 0 && totalRecords > requestState.perPage
+              && <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
               }
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </Aux>
+      </>
     );
   }
 }

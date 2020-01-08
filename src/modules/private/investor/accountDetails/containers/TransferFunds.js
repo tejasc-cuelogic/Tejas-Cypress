@@ -4,23 +4,24 @@ import { Header, Grid } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { includes, isEmpty, get } from 'lodash';
 import money from 'money-math';
-import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../theme/shared';
 import AvailableCashTransfer from '../components/transferFunds/AvailableCashTransfer';
-import HtmlEditor from '../../../../../modules/shared/HtmlEditor';
+import HtmlEditor from '../../../../shared/HtmlEditor';
 
 const NO_PERMISSION_MSG = `Please contact
   <a href="mailto:support@nextseed.com">support@nextseed.com</a>
   to request a transfer of your IRA funds.`;
 
 const NO_LINKED_BANK_MSG = `No Linked Bank available to Transfer Fund, go to
-  <a href='/app/account-details/ira/bank-accounts'>Bank Accounts<a>`;
+  <a href='/dashboard/account-details/ira/bank-accounts'>Bank Accounts<a>`;
 
-@inject('educationStore', 'transactionStore', 'userDetailsStore', 'uiStore')
+const isMobile = document.documentElement.clientWidth < 768;
+@inject('educationStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'accountStore')
 @withRouter
 @observer
 export default class TransferFunds extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { setFieldValue } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
@@ -29,10 +30,12 @@ export default class TransferFunds extends Component {
     }
     this.props.uiStore.clearErrors();
   }
+
   render() {
-    const { userDetails, isAccountFrozen } = this.props.userDetailsStore;
+    const { userDetails, isAccountFrozen, isAccountHardFrozen } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { cash, cashAvailable } = this.props.transactionStore;
+    const { setFieldValue, showAccountFrozenModal } = this.props.accountStore;
     const cashAmount = cash ? money.isNegative(cash) ? '0.00' : cash : '0.00';
     if (this.props.match.isExact && (!cash || cashAvailable.loading)) {
       return <InlineLoader />;
@@ -46,32 +49,41 @@ export default class TransferFunds extends Component {
     });
     return (
       <div>
-        { !isEmpty(linkedBank) && accountType !== 'ira' ?
-          <Aux>
-            <Header as="h4">Transfer funds</Header>
-            <Grid>
-              <Grid.Row>
-                <Grid.Column widescreen={7} largeScreen={10} computer={10} tablet={16} mobile={16}>
-                  <AvailableCashTransfer
-                    match={this.props.match}
-                    isAccountFrozen={isAccountFrozen}
-                    cash={cashAmount || '0.00'}
-                  />
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </Aux> : accountType === 'ira' ?
-            <section className="center-align">
-              <h4 style={{ color: '#31333d7d' }}>
-                <HtmlEditor readOnly content={NO_PERMISSION_MSG} />
-              </h4>
-            </section>
-          :
-            <section className="center-align">
-              <h4 style={{ color: '#31333d7d' }}>
-                <HtmlEditor readOnly content={NO_LINKED_BANK_MSG} />
-              </h4>
-            </section>
+        {!isEmpty(linkedBank) && accountType !== 'ira'
+          ? (
+            <>
+              {!isMobile ? <Header as="h4">Transfer Funds</Header> : ''}
+              <Grid>
+                <Grid.Row>
+                  <Grid.Column widescreen={7} largeScreen={10} computer={10} tablet={16} mobile={16}>
+                    <AvailableCashTransfer
+                      match={this.props.match}
+                      isAccountFrozen={isAccountFrozen}
+                      isAccountHardFrozen={isAccountHardFrozen}
+                      cash={cashAmount || '0.00'}
+                      setFieldValue={setFieldValue}
+                      account={accountType}
+                      showAccountFrozenModal={showAccountFrozenModal}
+                    />
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </>
+          ) : accountType === 'ira'
+            ? (
+              <section className="center-align">
+                <h4 style={{ color: '#31333d7d' }}>
+                  <HtmlEditor readOnly content={NO_PERMISSION_MSG} />
+                </h4>
+              </section>
+            )
+            : (
+              <section className="center-align">
+                <h4 style={{ color: '#31333d7d' }}>
+                  <HtmlEditor readOnly content={NO_LINKED_BANK_MSG} />
+                </h4>
+              </section>
+            )
         }
       </div>
     );

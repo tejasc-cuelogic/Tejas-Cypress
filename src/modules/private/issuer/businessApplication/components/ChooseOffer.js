@@ -1,42 +1,44 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import Loadable from 'react-loadable';
 import { Modal, Header, Card, Menu, Button, Statistic } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
-import { InlineLoader } from '../../../../../theme/shared';
+import { InlineLoader, SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 import OffersPanel from '../../../shared/offerings/components/shared/OffersPanel';
 
-const getModule = component => Loadable({
-  loader: () => import(`./tabs/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazyRetry(() => import(`./tabs/${component}`));
 
-@inject('businessAppReviewStore', 'uiStore')
+@inject('businessAppReviewStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class ChooseOffer extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match, businessAppReviewStore } = this.props;
     businessAppReviewStore.fetchApplicationOffers(match.params.applicationId).then(() => {
       this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers', 'appReviewStore');
     });
   }
+
   getBusinessName = res => ((res && res.prequalDetails) ? res.prequalDetails.businessGeneralInfo.businessName : '');
+
   signPortalAgreement = () => {
     const { match, businessAppReviewStore } = this.props;
     businessAppReviewStore.signPortalAgreement().then(() => {
-      this.props.history.push(`/app/dashboard/${match.params.applicationId}/offers/offersSigning`);
+      this.props.history.push(`/dashboard/application/${match.params.applicationId}/offers/offersSigning`);
     });
   }
-  declineApplication = () => this.props.history.push(`/app/dashboard/${this.props.match.params.applicationId}/offers/decline`);
+
+  declineApplication = () => this.props.history.push(`/dashboard/application/${this.props.match.params.applicationId}/offers/decline`);
+
   module = name => DataFormatter.upperCamelCase(name);
+
   handleCloseModal = () => {
-    this.props.history.push('/app/dashboard');
+    this.props.businessAppReviewStore.setFieldvalue('selectedOfferIndex', null);
+    this.props.history.push('/dashboard');
   }
+
   handleSetField = (field, value, location = null) => {
     this.props.businessAppReviewStore.setFieldvalue(field, value);
     if (location) {
@@ -45,6 +47,7 @@ export default class ChooseOffer extends Component {
       this.props.history.push(`${this.props.match.url}/general-conditions`);
     }
   }
+
   render() {
     const { match, businessAppReviewStore } = this.props;
     const {
@@ -57,6 +60,7 @@ export default class ChooseOffer extends Component {
       { title: 'Tax Reporting', to: 'tax-reporting' },
       { title: 'Payment Chart', to: 'payment-chart' },
     ];
+    const { isIssuer } = this.props.userStore;
     if (fetchBusinessApplicationOffers) {
       const offer = fetchBusinessApplicationOffers.offers.offer[selectedOfferIndex];
       if (offer && offer.additionalTerms) {
@@ -81,9 +85,10 @@ export default class ChooseOffer extends Component {
             signing the Portal Agreement to formalize our partnership and initiate the preparation
             of your crowdfunding campaign.
           </p>
-          {offerLoading ?
-            <InlineLoader /> :
-            <div className="ui form mt-20">
+          {offerLoading
+            ? <InlineLoader />
+            : (
+<div className="ui form mt-20">
               <OffersPanel
                 OFFERS_FRM={OFFERS_FRM}
                 formChangeWithIndex={formChangeWithIndex}
@@ -93,40 +98,53 @@ export default class ChooseOffer extends Component {
                 selectOffer={this.handleSetField}
                 refModule="issuer"
                 selectedOfferIndex={selectedOfferIndex}
+                isIssuer={isIssuer}
               />
             </div>
+            )
           }
-          {selectedOfferIndex !== null && !offerLoading ?
-            <Card fluid>
-              <SecondaryMenu
-                inverted
-                match={match}
-                navItems={navItems}
-                rightLabel={<Menu.Item header position="right">Offer {String.fromCharCode('A'.charCodeAt() + selectedOfferIndex)}</Menu.Item>}
-              />
-              <div className="inner-content-spacer">
-                <Switch>
-                  <Route
-                    exact
-                    path={match.url}
-                    component={getModule(this.module(navItems[0].title))}
-                  />
-                  {
-                    navItems.map(item => (
-                      <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
-                    ))
-                  }
-                </Switch>
-              </div>
-              <Card.Content extra className="center-align">
-                { fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL' ? '' :
-                <Button.Group>
-                  <Button color="red" disabled={this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} className="very relaxed" content="Decline NextSeed Offers" onClick={this.declineApplication} />
-                  <Button primary disabled={this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} className="very relaxed" content="Sign Portal Agreement" onClick={this.signPortalAgreement} />
-                </Button.Group>
+          {selectedOfferIndex !== null && !offerLoading
+            ? (
+              <Card fluid>
+                <SecondaryMenu
+                  inverted
+                  match={match}
+                  navItems={navItems}
+                  rightLabel={(
+                    <Menu.Item header position="right">
+Offer
+                      {String.fromCharCode('A'.charCodeAt() + selectedOfferIndex)}
+                    </Menu.Item>
+)}
+                />
+                <div className="inner-content-spacer">
+                  <SuspenseBoundary>
+                    <Switch>
+                      <Route
+                        exact
+                        path={match.url}
+                        component={getModule(this.module(navItems[0].title))}
+                      />
+                      {
+                      navItems.map(item => (
+                        <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                      ))
+                    }
+                    </Switch>
+                  </SuspenseBoundary>
+                </div>
+                <Card.Content extra className="center-align">
+                  { fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL' ? ''
+                    : (
+                      <Button.Group>
+                        <Button color="red" disabled={this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} className="very relaxed" content="Decline NextSeed Offers" onClick={this.declineApplication} />
+                        <Button primary disabled={this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} className="very relaxed" content="Sign Portal Agreement" onClick={this.signPortalAgreement} />
+                      </Button.Group>
+                    )
                 }
               </Card.Content>
-            </Card> : null
+            </Card>
+            ) : null
           }
         </Modal.Content>
       </Modal>

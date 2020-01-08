@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Grid, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import {
@@ -22,7 +21,7 @@ export default class PreQualRealEstate extends Component {
     const { fields } = BUSINESS_APP_FRM;
     const { hideFields } = this.props;
     return (
-      <Aux>
+      <>
         <GeneralInformation
           hideFields={hideFields}
           fields={fields}
@@ -50,10 +49,12 @@ export default class PreQualRealEstate extends Component {
             changed={businessAppEleChange}
           />
           <Divider hidden />
-          {!hideFields && getInvestmentTypeTooltip &&
+          {!hideFields && getInvestmentTypeTooltip
+          && (
           <p>
             {getInvestmentTypeTooltip}
-          </p>}
+          </p>
+          )}
         </FormElementWrap>
         <FormElementWrap hideFields={hideFields} header="Real Estate Type*" subHeader="Select all the Real Estate types that apply.">
           <FormCheckbox
@@ -136,7 +137,7 @@ export default class PreQualRealEstate extends Component {
           preQualFormDisabled={preQualFormDisabled}
           businessAppEleChange={businessAppEleChange}
         />
-      </Aux>
+      </>
     );
   }
 }

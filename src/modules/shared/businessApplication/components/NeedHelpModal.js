@@ -10,17 +10,20 @@ import { ListErrors } from '../../../../theme/shared';
 @withRouter
 @observer
 export default class NeedHelpModal extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match } = this.props;
     if (match.isExact) {
       this.props.businessAppStore.needHelpFormReset();
     }
   }
+
   handleCloseModal = (e) => {
     e.preventDefault();
     this.props.uiStore.setErrors(null);
     this.props.history.goBack();
   }
+
   submit = (e) => {
     e.preventDefault();
     this.props.businessAppStore.needHelpFormSubmit().then(() => {
@@ -64,10 +67,12 @@ export default class NeedHelpModal extends Component {
               containerclassname="secondary"
               changed={(e, res) => businessAppEleChange(e, res, 'NEED_HELP_FRM')}
             />
-            {errors &&
-              <Message error>
+            {errors
+              && (
+<Message error>
                 <ListErrors errors={[errors]} />
               </Message>
+              )
             }
             <div className="center-align">
               <Button.Group widths="2" className="inline">

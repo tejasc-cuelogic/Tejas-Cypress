@@ -114,6 +114,9 @@
             float:left;
             margin:@2px @4px @2px 0;
         }
+        &.email-list .item>.content{
+            padding: @7px 0;
+        }
     }
     a:not(.button){
         font-family:@pageFont;
@@ -162,13 +165,21 @@
             }
         }
         tbody{
-            font-weight:@fontMedium;
             i.offering-icon{
                 color:@border-color;
                 vertical-align:top;
             }
             .offering-title{
                 display:inline-block;
+                font-weight: @fontMedium;
+                text-overflow: ellipsis;
+                width: 150px;
+                white-space: nowrap;
+                overflow: hidden;
+                color: @primary-one;;
+                a{
+                    color: @primary-one !important;
+                }
                 .disable-click {
                     pointer-events: none;
                 }
@@ -177,6 +188,9 @@
                 font-size:@12px;
                 font-weight:@normal;
                 color:@border-color;
+            }
+            td.wrap-text{
+                white-space: normal;
             }
         }
         i.ns-individual-line, i.ns-ira-line, i.ns-entity-line{
@@ -188,6 +202,9 @@
             background-color:@white;
             font-weight:@fontMedium;
             color:@neutral-middark;
+        }
+        &.selectable tbody tr:hover{
+            background: fade(@primary-one, 6%) !important;
         }
     }
     &.application-list{
@@ -228,6 +245,16 @@
         }
         &.no-border td {
             border-top: none;
+        }
+        &.campaign-card{
+            tr{
+                border-bottom: 0;
+            }
+            td{		
+                padding-top: 0;
+                padding-bottom: 0;
+                border-top: none;
+            }
         }
     }
     &.basic.form-table {
@@ -349,7 +376,67 @@
                 border-bottom: 0;
             }
         }
+        &:not(.sortable){
+            tr{
+                @media only screen and (max-width : @largestMobileScreen){
+                    margin-left: -@14px;
+                    margin-right: -@14px;
+                    padding-left: @14px;
+                    padding-right: @14px;
+                }
+            }
+            td:first-child{
+                padding-left: @18px !important;
+                @media only screen and (max-width : @largestMobileScreen){
+                    padding-left: 0 !important;
+                }
+            }
+
+        }
     }
+    &.no-border td {
+        border-top: none;
+    }
+    &.campaign-card{
+        @media only screen and (max-width : @monitorBreakpoint){
+            font-size: @13px;
+            // min-height: 135px;
+        }
+        tr{
+            border-bottom: 0;
+        }
+        td{		
+            padding-top: 0;
+            padding-bottom: 0;
+            border-top: none;
+        }
+    }
+    &.inverted.source-table{
+        th{
+            background: @tertiary-text;
+            color: @white;
+            font-weight: @bold;
+        }
+        tbody{
+            background: @solidInternalBorderColor;
+            td{
+                padding: @7px @10px;
+            }
+        }
+        tfoot{
+            th{
+                background: @solidInternalBorderColor;
+                color: @fullBlack !important;
+                font-size: @13px;
+                font-weight: @bold;
+                border-top: 1px solid @neutral-darkwhite !important;
+            }
+        }
+        i.icon.ns-minus-circle{
+            color: @border-color;
+        }
+    }
+
 }
 
 .compare-table {

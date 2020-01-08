@@ -7,7 +7,8 @@ import { FormInput, FormCheckbox, MaskedInput } from '../../../../../../theme/fo
 @inject('offeringCreationStore')
 @observer
 export default class UpdateBonusReward extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { rewardId } = this.props.match.params;
     const { bonusRewards } = this.props;
     const { setUpdateBonusRewardsData, setCurrentRewardId } = this.props.offeringCreationStore;
@@ -16,15 +17,18 @@ export default class UpdateBonusReward extends Component {
     }
     setCurrentRewardId(rewardId);
   }
+
   handleUpdateBonusReward = () => {
     const { rewardId } = this.props.match.params;
     this.props.offeringCreationStore.updateBonusReward(rewardId);
     this.props.history.push(this.props.refLink);
   }
+
   handleCloseModal = () => {
     this.props.offeringCreationStore.resetRewardId();
     this.props.history.push(this.props.refLink);
   }
+
   render() {
     const {
       ADD_NEW_BONUS_REWARD_FRM,
@@ -70,7 +74,8 @@ export default class UpdateBonusReward extends Component {
                       name={field}
                       fielddata={ADD_NEW_BONUS_REWARD_FRM.fields[field]}
                       changed={(e, result) => formChange(e, result, formName)}
-                    />))
+                    />
+                  ))
                 }
                 <MaskedInput
                   name="expirationDate"

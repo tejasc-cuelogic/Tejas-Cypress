@@ -1,17 +1,27 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
-import { Header, Form, Message } from 'semantic-ui-react';
+import { Header, Form, Message, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { US_STATES_FOR_INVESTOR, ENTITY_TYPES } from '../../../../../../../constants/account';
 import { ListErrors } from '../../../../../../../theme/shared';
 import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../../../../theme/form';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('entityAccountStore', 'uiStore')
 @observer
 export default class General extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.uiStore.setErrors(null);
+    this.props.entityAccountStore.setFieldValue('GEN_INFO_FRM', 'required|taxId', 'fields.taxId.rule');
   }
+
+  handleContinueButton = () => {
+    const { createAccount, stepToBeRendered } = this.props.entityAccountStore;
+    const { multiSteps } = this.props.uiStore;
+    createAccount(multiSteps[stepToBeRendered]);
+  }
+
   render() {
     const {
       GEN_INFO_FRM,
@@ -21,14 +31,16 @@ export default class General extends Component {
     } = this.props.entityAccountStore;
     const { errors } = this.props.uiStore;
     return (
-      <Aux>
-        <Header as="h3" textAlign="center">General information</Header>
-        <p className="center-align">
-          Let{"'"}s create your Entity Investment Account. Get started by providing your
-          entity information.
+      <>
+        <Header as="h3" textAlign={isMobile ? '' : 'center'}>General information</Header>
+        <p className={isMobile ? '' : 'center-align'}>
+          Let
+          {"'"}
+          s create your Entity Investment Account. Get started by providing your
+                    entity information.
         </p>
         <Form error>
-          <div className="field-wrap">
+          <div className={isMobile ? '' : 'field-wrap'}>
             <FormInput
               name="name"
               fielddata={GEN_INFO_FRM.fields.name}
@@ -54,7 +66,7 @@ export default class General extends Component {
                 onChange={(e, result) => genInfoChange(e, result)}
               />
             </Form.Group>
-            <h6>Registered Address</h6>
+            <Header as={!isMobile ? 'h5' : 'h4'}>Registered Address</Header>
             <AutoComplete
               name="street"
               fielddata={GEN_INFO_FRM.fields.street}
@@ -92,13 +104,19 @@ export default class General extends Component {
               />
             </Form.Group>
           </div>
-          {errors &&
-            <Message className="center-align" error>
-              <ListErrors errors={[errors]} />
-            </Message>
+          {errors
+            && (
+              <Message className={isMobile ? '' : 'center-align'} error>
+                <ListErrors errors={[errors]} />
+              </Message>
+            )
+          }
+          {isMobile && (
+            <Button fluid primary className="relaxed" content="Continue" disabled={!GEN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
+          )
           }
         </Form>
-      </Aux>
+      </>
     );
   }
 }

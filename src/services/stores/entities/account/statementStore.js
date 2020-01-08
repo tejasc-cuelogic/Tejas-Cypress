@@ -4,12 +4,17 @@ import { orderBy, find, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { downloadFile, generateMonthlyStatementsPdf } from '../../queries/statement';
-import { uiStore, userDetailsStore, transactionStore } from '../../index';
+import { uiStore, userDetailsStore, transactionStore, accountStore } from '../../index';
+import { DataFormatter } from '../../../../helper';
+
 
 export class StatementStore {
   @observable data = [];
+
   @observable tranStore = [];
+
   @observable pdfLinkData = {};
+
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -17,7 +22,9 @@ export class StatementStore {
     displayTillIndex: 10,
     search: {},
   };
+
   @observable taxFormsCount = 0;
+
   @observable isAdmin = false;
 
   @action
@@ -55,20 +62,21 @@ export class StatementStore {
   generateMonthlyStatementsPdf = (timeStamp) => {
     const year = parseFloat(moment(timeStamp, 'MMM YYYY').format('YYYY'));
     const month = parseFloat(moment(timeStamp, 'MMM YYYY').format('MM'));
-    const account = this.isAdmin ?
-      userDetailsStore.currentActiveAccountDetailsOfSelectedUsers :
-      userDetailsStore.currentActiveAccountDetails;
-    const { userDetails, getDetailsOfUser } = userDetailsStore;
+    const account = this.isAdmin
+      ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers
+      : userDetailsStore.currentActiveAccountDetails;
+    const { getDetailsOfUser } = userDetailsStore;
+    let params = {
+      year,
+      month,
+      accountId: account.details.accountId,
+    };
+    params = this.isAdmin ? { ...params, userId: getDetailsOfUser.id } : { ...params };
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: generateMonthlyStatementsPdf,
-          variables: {
-            year,
-            month,
-            userId: this.isAdmin ? getDetailsOfUser.id : userDetails.id,
-            accountId: account.details.accountId,
-          },
+          variables: params,
         })
         .then((result) => {
           if (result.data) {
@@ -101,6 +109,11 @@ export class StatementStore {
         description: statementObj.text,
         fileId: moment(new Date(d)).format(statementObj.format),
       }
+      // {
+      //   [statementObj.field]: DataFormatter.getDateAsPerTimeZone(new Date(d), true, false, false, statementObj.format),
+      //   description: statementObj.text,
+      //   fileId: DataFormatter.getDateAsPerTimeZone(new Date(d), true, false, false, statementObj.format),
+      // }
     ));
   }
 
@@ -113,7 +126,14 @@ export class StatementStore {
         timeValues.push(dateStart.format('MM/DD/YYYY'));
         dateStart.add(1, statementObj.rangeParam);
       }
-      const fifthDateOfMonth = moment().startOf('month').day(6);
+      // const dateStart = statementObj.date ? DataFormatter.getCSTDateMomentObject(new Date(statementObj.date), true) : '';
+      // const dateEnd = DataFormatter.getCurrentCSTMoment();
+      // const timeValues = [];
+      // while (dateStart.isBefore(dateEnd) && !dateEnd.isSame(new Date(dateStart.format('MM/DD/YYYY')), 'month')) {
+      //   timeValues.push(dateStart);
+      //   dateStart.add(1, statementObj.rangeParam);
+      // }
+      const fifthDateOfMonth = DataFormatter.getCurrentCSTMoment().startOf('month').day(6);
       if (fifthDateOfMonth > dateEnd) {
         timeValues.pop();
       }
@@ -128,19 +148,19 @@ export class StatementStore {
     const pageWiseCount = this.requestState.perPage * page;
     this.requestState.displayTillIndex = pageWiseCount;
     this.requestState.page = page;
-    this.requestState.skip = (skip === pageWiseCount) ?
-      pageWiseCount - this.requestState.perPage : skip;
+    this.requestState.skip = (skip === pageWiseCount)
+      ? pageWiseCount - this.requestState.perPage : skip;
   }
 
   @computed get monthlyStatements() {
-    return (this.allStatements && this.allStatements.length &&
-      this.allStatements.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    return (this.allStatements && this.allStatements.length
+      && this.allStatements.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
   @computed get taxForms() {
-    const { taxStatement } = this.isAdmin ?
-      userDetailsStore.currentActiveAccountDetailsOfSelectedUsers.details :
-      userDetailsStore.currentActiveAccountDetails.details;
+    const { taxStatement } = this.isAdmin
+      ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers.details
+      : userDetailsStore.currentActiveAccountDetails.details;
     this.taxFormsCount = (taxStatement && taxStatement.length && orderBy(taxStatement, ['year'], ['desc'])
       .slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
     return this.taxFormsCount;
@@ -155,18 +175,17 @@ export class StatementStore {
   }
 
   taxFormCount = () => {
-    const { taxStatement } = this.isAdmin ?
-      userDetailsStore.currentActiveAccountDetailsOfSelectedUsers.details :
-      userDetailsStore.currentActiveAccountDetails.details;
+    const { taxStatement } = this.isAdmin
+      ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers.details
+      : userDetailsStore.currentActiveAccountDetails.details;
     return (taxStatement && taxStatement.length) || 0;
   }
 
   getTaxFormCountInNav = (accountType) => {
-    const accDetails = find(userDetailsStore.userDetails.roles, account =>
-      account.name === accountType &&
-      account.name !== 'investor' &&
-      account && account.details &&
-        (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
+    const accDetails = find(userDetailsStore.userDetails.roles, account => account.name === accountType
+      && account.name !== 'investor'
+      && account && account.details
+      && (account.details.accountStatus === 'FULL' || accountStore.isAccFrozen(account.details.accountStatus)));
     const taxStatement = get(accDetails, 'details.taxStatement');
     return (taxStatement && taxStatement.length) || 0;
   }

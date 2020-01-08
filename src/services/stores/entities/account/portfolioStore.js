@@ -3,24 +3,40 @@ import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { forEach, sortBy, get, times } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { getInvestorAccountPortfolio, getInvestorDetailsById, cancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
-import { userDetailsStore, userStore, uiStore, offeringCreationStore } from '../../index';
+import { FormValidator as Validator } from '../../../../helper';
+import { CANCEL_INVESTMENT } from '../../../constants/investment';
+import { getInvestorAccountPortfolio, getInvestmentDetails, cancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
+import { userDetailsStore, uiStore, offeringCreationStore } from '../../index';
 import Helper from '../../../../helper/utility';
 
 export class PortfolioStore {
   @observable investmentLists = null;
+
   @observable pieChartDataEval = null;
+
   @observable pieChartData = null;
+
   @observable accSummary = null;
+
   @observable currentOfferingId = null;
+
   @observable isCancelShowLink = false;
+
   @observable investmentDetails = null;
+
   @observable canceledInvestmentDetails = null;
+
   @observable PayOffData = null;
+
   @observable currentAcccountType = null;
+
   @observable isAdmin = false;
+
   @observable portfolioError = false;
+
   @observable apiCall = false;
+
+  @observable CANCEL_INVESTMENT_FRM = Validator.prepareFormObject(CANCEL_INVESTMENT);
 
   @action
   setFieldValue = (field, value) => {
@@ -33,6 +49,11 @@ export class PortfolioStore {
       investmentType: {
         TERM_NOTE: { name: 'Term Note', value: 0 },
         REVENUE_SHARING_NOTE: { name: 'Rev Share', value: 0 },
+        PREFERRED_EQUITY_506C: { name: 'Preferred Equity', value: 0 },
+        CONVERTIBLE_NOTES: { name: 'Convertible Notes', value: 0 },
+        SAFE: { name: 'Safe', value: 0 },
+        REAL_ESTATE: { name: 'LLC Membership Interests', value: 0 },
+        FUNDS: { name: 'Funds - Limited Partner Interest', value: 0 },
       },
       industry: {
         FASHION_AND_MERCHANDISING: { name: 'Fashion and Merchandising', value: 0 },
@@ -61,13 +82,32 @@ export class PortfolioStore {
   @action
   getSummary = (isAdmin = false) => {
     const { getDetailsOfUser } = userDetailsStore;
-    const userId = isAdmin ? getDetailsOfUser.id : userStore.currentUser.sub;
+    const userId = isAdmin ? getDetailsOfUser.id : null;
     this.accSummary = graphql({
       client,
       fetchPolicy: 'network-only',
       query: getUserAccountSummary,
-      variables: { userId },
+      variables: userId ? { userId } : { },
     });
+  }
+
+  @action
+  formChange = (e, result, form) => {
+    if (result && (result.type === 'checkbox')) {
+      this[form].fields[result.name].value = result.checked;
+      // this[form] = Validator.onChange(
+      //   this[form],
+      //   { name: result.name, value: result.checked },
+      //   'checkbox',
+      //   true,
+      //   result.checked,
+      // );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+      );
+    }
   }
 
   @action
@@ -76,17 +116,18 @@ export class PortfolioStore {
     const accountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     const investorUserDetails = userDetailsStore.getDetailsOfUser;
     const account = isAdmin ? accountDetails : userDetailsStore.currentActiveAccountDetails;
-    const userDetailsId = isAdmin ? investorUserDetails.id : userStore.currentUser.sub;
+    let variables = {
+      accountId: account.details.accountId,
+      offeringId: offeringCreationStore.currentOfferingId,
+    };
+    variables = isAdmin ? { ...variables, userId: investorUserDetails.id } : { ...variables };
     this.PayOffData = graphql({
       client,
       query: getMonthlyPaymentsToInvestorByOffering,
-      variables: {
-        userId: userDetailsId,
-        accountId: account.details.accountId,
-        offeringId: offeringCreationStore.currentOfferingId,
-      },
+      variables,
     });
   }
+
   @action
   calculateInvestmentType() {
     this.resetPiechartValues();
@@ -95,8 +136,12 @@ export class PortfolioStore {
       ['pending', 'active', 'completed'].forEach((field) => {
         investmentData.investments[field].forEach((ele) => {
           if (get(ele, 'offering.keyTerms.securities') && get(ele, 'offering.keyTerms.industry')) {
-            this.pieChartDataEval.investmentType[ele.offering.keyTerms.securities].value += 1;
-            this.pieChartDataEval.industry[ele.offering.keyTerms.industry].value += 1;
+            if (this.pieChartDataEval.investmentType[ele.offering.keyTerms.securities]) {
+              this.pieChartDataEval.investmentType[ele.offering.keyTerms.securities].value += 1;
+            }
+            if (this.pieChartDataEval.industry[ele.offering.keyTerms.industry]) {
+              this.pieChartDataEval.industry[ele.offering.keyTerms.industry].value += 1;
+            }
           }
         });
       });
@@ -175,17 +220,17 @@ export class PortfolioStore {
   @action
   getInvestorAccountPortfolio = (accountType) => {
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
-    const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers :
-      userDetailsStore.currentActiveAccountDetails;
-    const { userDetails, getDetailsOfUser } = userDetailsStore;
+    const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers
+      : userDetailsStore.currentActiveAccountDetails;
+    const { getDetailsOfUser } = userDetailsStore;
+    let variables = {
+      accountId: (account && account.details) ? account.details.accountId : null,
+    };
+    variables = this.isAdmin ? { ...variables, userId: getDetailsOfUser.id } : { ...variables };
     this.investmentLists = graphql({
       client,
       query: getInvestorAccountPortfolio,
-      variables: {
-        userId: this.isAdmin ? getDetailsOfUser.id : userDetails.id,
-        accountId: (account && account.details) ? account.details.accountId : null,
-      },
-      // fetchPolicy: 'network-only',
+      variables,
       onFetch: (data) => {
         if (data && this.investmentLists && !this.investmentLists.loading) {
           this.calculateInvestmentType();
@@ -205,17 +250,16 @@ export class PortfolioStore {
   }
 
   @computed get getInvestorAccounts() {
-    return (this.investmentLists && this.investmentLists.data &&
-      this.investmentLists.data.getInvestorAccountPortfolio &&
-      toJS(this.investmentLists.data.getInvestorAccountPortfolio)) || null;
+    return (this.investmentLists && this.investmentLists.data
+      && this.investmentLists.data.getInvestorAccountPortfolio
+      && toJS(this.investmentLists.data.getInvestorAccountPortfolio)) || null;
   }
 
   @computed get getInvestorAccountById() {
     const accounts = this.getInvestorAccounts;
     let offering = null;
     if (accounts) {
-      offering =
-        accounts.investments.pending.find(acc => acc.offering.id === this.currentOfferingId);
+      offering = accounts.investments.pending.find(acc => acc.offering.id === this.currentOfferingId);
     }
     return offering;
   }
@@ -223,26 +267,25 @@ export class PortfolioStore {
   @computed get loading() {
     return this.investmentLists.loading;
   }
+
   @action
   getInvestorDetails = (accountType, offeringId, isAdmin = false) => new Promise((resolve) => {
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
     const investorAccountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     const investorDetails = userDetailsStore.getDetailsOfUser;
     const account = isAdmin ? investorAccountDetails : userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
-    const investorUserId = isAdmin ? investorDetails.id : userDetails.id;
+    let variables = {
+      accountId: account.details.accountId,
+      offeringId,
+    };
+    variables = isAdmin ? { ...variables, userId: investorDetails.id } : { ...variables };
     if (uiStore.inProgress !== 'portfolioDirect') {
       uiStore.setProgress('portfolio');
     }
     this.investmentDetails = graphql({
       client,
-      query: getInvestorDetailsById,
-      variables: {
-        // userId: userDetails.id,
-        userId: investorUserId,
-        accountId: account.details.accountId,
-        offeringId,
-      },
+      query: getInvestmentDetails,
+      variables,
       onFetch: () => {
         if (!this.investmentDetails.loading) {
           uiStore.setProgress(false);
@@ -255,33 +298,49 @@ export class PortfolioStore {
       fetchPolicy: 'network-only',
     });
   });
+
   @computed get getInvestor() {
-    return (this.investmentDetails && this.investmentDetails.data &&
-      this.investmentDetails.data.getInvestmentDetails &&
-      toJS(this.investmentDetails.data.getInvestmentDetails)) || null;
+    return (this.investmentDetails && this.investmentDetails.data
+      && this.investmentDetails.data.getInvestmentDetails
+      && toJS(this.investmentDetails.data.getInvestmentDetails)) || null;
   }
+
   @computed get loadingInvestDetails() {
-    return this.investmentDetails.loading;
+    return get(this.investmentDetails, 'loading');
   }
 
   @action
-  cancelAgreement = (agreementId) => {
+  cancelAgreement = (agreementId, isAdmin = false) => {
+    const investorAccountDetails = userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+    const investorDetails = userDetailsStore.getDetailsOfUser;
+    const account = isAdmin ? investorAccountDetails : userDetailsStore.currentActiveAccountDetails;
+    const investorUserId = isAdmin ? investorDetails.id : null;
+    let variables = {
+      agreementId,
+    };
+    if (isAdmin) {
+      const cancelAgreementData = Validator.evaluateFormData(toJS(this.CANCEL_INVESTMENT_FRM.fields));
+      variables = {
+        ...variables,
+        userId: investorUserId,
+        voidReason: cancelAgreementData.voidReason,
+        voidType: cancelAgreementData.voidType,
+        sendNotification: cancelAgreementData.sendNotification || false,
+      };
+    }
+    let reetchVariable = {
+      accountId: account.details.accountId,
+    };
+    reetchVariable = investorUserId ? { ...reetchVariable, userId: investorUserId } : { ...reetchVariable };
     uiStore.setProgress(true);
-    const account = userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: cancelAgreement,
-          variables: {
-            agreementId,
-          },
+          variables,
           refetchQueries: [{
             query: getInvestorAccountPortfolio,
-            variables: {
-              userId: userDetails.id,
-              accountId: account.details.accountId,
-            },
+            variables: reetchVariable,
           }],
         })
         .then(() => {
@@ -299,22 +358,44 @@ export class PortfolioStore {
         });
     });
   }
+
   @action
   setInitialLinkValue = (boolValue) => {
     this.isCancelShowLink = boolValue;
   }
+
   @action
   setInvestmentDetailsForCancelRequest = (detailObject) => {
     this.canceledInvestmentDetails = detailObject;
   }
+
   @action
   currentAccoutType = (type) => {
     this.currentAcccountType = type;
   }
+
   @action
   resetPortfolioData = () => {
     this.setFieldValue('investmentLists', null);
   }
+
+  @action
+  getPortfolioDetailsAfterInvestment = portfolioObj => new Promise((resolve, reject) => {
+    this.investmentLists = graphql({
+      client,
+      query: getInvestorAccountPortfolio,
+      variables: portfolioObj,
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data && this.investmentLists && !this.investmentLists.loading) {
+          resolve(true);
+        }
+      },
+      onError: () => {
+        reject();
+      },
+    });
+  });
 }
 
 export default new PortfolioStore();

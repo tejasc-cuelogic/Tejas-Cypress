@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Grid, Header } from 'semantic-ui-react';
 import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 import NotFound from '../../shared/NotFound';
 
-@inject('uiStore', 'navStore')
+const isMobile = document.documentElement.clientWidth < 768;
+@inject('uiStore', 'navStore', 'userStore')
 @observer
 class PrivateHOC extends Component {
   render() {
     const pageMeta = this.props.navStore.navMeta;
+    const { isInvestor } = this.props.userStore;
     if (!pageMeta) {
       return <NotFound />;
     }
     return (
-      <Aux>
-        <div className="page-header-section">
+      <>
+        <div className={`${isInvestor ? 'investor' : ''} ${!this.props.hideHeader && 'page-header-section'}`}>
           <Grid columns="equal" stackable>
             <Grid.Row>
               <Grid.Column verticalAlign="middle">
-                {!this.props.P0 ?
-                  <Header as="h1">{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header> :
-                  this.props.P0
-                }
+              {!this.props.hideHeader
+                && <Header as={isInvestor ? 'h3' : 'h1'}>{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
+              }
               </Grid.Column>
               {this.props.P1}
               {this.props.P2}
@@ -33,21 +33,22 @@ class PrivateHOC extends Component {
                   this.props.uiStore.updateLayoutState('notificationPanel')} />
                   <span className="unread-count">3</span> */}
                 </span>
-                ) : (
+              ) : (
                   <Grid.Column width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated="right" textAlign="right">{this.props.P4}</Grid.Column>
-                )
+              )
               }
             </Grid.Row>
           </Grid>
         </div>
-        {this.props.P5}
-        {(pageMeta.subPanel === 1 || this.props.subNav) &&
-          <SecondaryMenu navCustomClick={this.props.navCustomClick} addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
+        {!isInvestor && this.props.P5}
+        {(pageMeta.subPanel === 1 || this.props.subNav)
+          && <SecondaryMenu navCustomClick={this.props.navCustomClick} addon={this.props.subNavAddon} noinvert refMatch={this.props.refMatch} match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
         }
-        <div className="content-spacer">
+        <div className={`${isInvestor && isMobile ? 'pt-0' : ''} content-spacer`}>
+        {isInvestor && this.props.P5}
           {this.props.children}
         </div>
-      </Aux>
+      </>
     );
   }
 }

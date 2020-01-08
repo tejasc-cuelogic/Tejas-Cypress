@@ -14,6 +14,7 @@ const Firework = sizeMe({
       height: PropTypes.number,
     }),
   }
+
   render() {
     return (
       <div className="animation-container">
@@ -36,4 +37,3 @@ const Firework = sizeMe({
 // });
 
 export default Firework;
-

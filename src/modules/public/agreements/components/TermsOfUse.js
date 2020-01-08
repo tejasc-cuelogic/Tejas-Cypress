@@ -2,12 +2,11 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-closing-tag-location */
 import React from 'react';
-import Aux from 'react-aux';
 import { Header, Divider, List } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 const TermsOfUse = () => (
-  <Aux>
+  <>
     <Header as="h2">Terms of Use</Header>
     <p>Revision Date: April 10, 2019 <br />Questions or Comments: info@nextseed.com</p>
     <Divider section />
@@ -688,7 +687,7 @@ const TermsOfUse = () => (
         Unless otherwise specified is these Terms, all notices under these Terms will be in writing
         and will be deemed to have been duly given when received, if personally delivered or sent
         by certified or registered mail, return receipt requested; when receipt is electronically
-        confirmed, if transmitted by facsimile or e-mail; or the day after it is sent, if sent for
+        confirmed, if transmitted by facsimile or email; or the day after it is sent, if sent for
         next day delivery by recognized overnight delivery service. Electronic notices should be
         sent to support@nextseed.com.
       </p>
@@ -730,8 +729,7 @@ const TermsOfUse = () => (
         Agreement, and (f) “Section” refers to a section of these Terms.
       </p>
     </div>
-  </Aux>
+  </>
 );
 
 export default TermsOfUse;
-

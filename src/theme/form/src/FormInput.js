@@ -1,21 +1,33 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon, Input } from 'semantic-ui-react';
+import { Form, Popup, Icon, Input, Modal } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { FieldError } from '../../shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @observer
 export default class FormInput extends Component {
   state = { showError: false };
+
+  constructor(props) {
+    super(props);
+    if (props.triggerError && props.fielddata.value !== '') {
+      this.setState({ showError: props.fielddata.error !== undefined });
+    }
+  }
+
   triggerError = (val) => {
     this.setState({ showError: val });
   }
+
   change = (e) => {
-    const { dataid } = this.props;
-    const value = this.props.fielddata.rule.includes('email') ? e.target.value.trim() : e.target.value;
-    this.props.changed(e, { name: e.target.name, value, dataid });
+    const { dataid, lowercase } = this.props;
+    const value = this.props.fielddata && this.props.fielddata.rule && this.props.fielddata.rule.includes('email') ? e.target.value.trim() : e.target.value;
+    this.props.changed(e, { name: e.target.name, value: (lowercase ? value.toLowerCase() : value), dataid });
   }
+
   render() {
     const { props } = this;
     const {
@@ -37,28 +49,46 @@ export default class FormInput extends Component {
         className={fieldClass}
         error={(!!error && this.state.showError) || (!!error && props.showerror)}
       >
-        {!props.ishidelabel && label !== '' &&
-          <label>
-            {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
-            {tooltip &&
-              <Popup
-                hoverable={props.hoverable}
-                trigger={<Icon className="ns-help-circle" />}
-                content={tooltip}
-                position="top center"
-                className={props.name === 'securitiesExemption' ? 'left-align' : 'center-align'}
-                wide
-              />
-            }
-            {props.removed &&
-              <Link to={props.linkto || '/'} onClick={e => props.removed(e)}>
-                <Icon className="ns-close-circle" color="grey" />
-              </Link>
-            }
-          </label>
+        {!props.ishidelabel && (label !== '' || props.label !== '')
+          && (
+            <label>
+              {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
+              {tooltip
+                && (
+                  <>
+                    {isMobile ? (
+                      <Modal size="tiny" trigger={<Icon className="ns-help-circle" />} closeIcon>
+                        <h5>
+                          {label}
+                        </h5>
+                        {tooltip}
+                      </Modal>
+                    ) : (
+                        <Popup
+                          hoverable={props.hoverable}
+                          trigger={<Icon className="ns-help-circle" />}
+                          content={tooltip}
+                          position="top center"
+                          className={props.name === 'securitiesExemption' ? 'left-align' : 'center-align'}
+                          wide
+                        />
+                    )
+                    }
+                  </>
+                )
+              }
+              {props.removed
+                && (
+                  <Link to={props.linkto || '/'} onClick={e => props.removed(e)}>
+                    <Icon className="ns-close-circle" color="grey" />
+                  </Link>
+                )
+              }
+            </label>
+          )
         }
-        {props.type === 'password' &&
-          <input style={{ opacity: 0, position: 'absolute', width: 0 }} tabIndex={-1} value="something" />
+        {props.type === 'password'
+          && <input style={{ opacity: 0, position: 'absolute', width: 0 }} tabIndex={-1} value="something" />
         }
         <Input
           fluid
@@ -74,6 +104,8 @@ export default class FormInput extends Component {
             }}
           onBlur={
             (e) => {
+              e.target.value = e.target.value ? e.target.value.trim() : e.target.value;
+              this.change(e);
               this.triggerError(true);
               if (props.onblur) {
                 this.props.onblur(e.target.value);
@@ -82,11 +114,11 @@ export default class FormInput extends Component {
           }
           readOnly={displayMode}
           {...props}
-          value={value === '' ? undefined : value}
+          value={value || ''}
           label={props.prefix || false}
         />
-        {((error && this.state.showError) || (error && props.showerror)) &&
-          <FieldError error={error} />
+        {((error && this.state.showError) || (error && props.showerror))
+          && <FieldError error={error} />
         }
       </Form.Field>
     );

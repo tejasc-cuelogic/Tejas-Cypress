@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const createUploadEntry = gql`
-  mutation createUploadEntry($applicationId:String, $applicationIssuerId:String, $stepName: stepsEnum!, $userRole: UserRoleEnum!, $fileData: UploadFileMetaInput!, $offeringId: String, $tags: [String]) {
-    createUploadEntry(applicationId: $applicationId, applicationIssuerId: $applicationIssuerId, stepName: $stepName, userRole: $userRole, fileData: $fileData, offeringId: $offeringId, tags: $tags) {
+  mutation createUploadEntry($applicationId:String, $applicationIssuerId:String, $stepName: stepsEnum!, $userRole: UserRoleEnum!, $fileData: UploadFileMetaInput!, $offeringId: String, $tags: [String], $investorId: String) {
+    createUploadEntry(applicationId: $applicationId, applicationIssuerId: $applicationIssuerId, stepName: $stepName, userRole: $userRole, fileData: $fileData, offeringId: $offeringId, tags: $tags, investorId: $investorId) {
       preSignedUrl
       fileId
     }
@@ -17,9 +17,8 @@ export const removeUploadedFile = gql`
   }`;
 
 export const updateUserReferralCode = gql`
-mutation _updateUserReferralCode($cognitoUserId: String!, $referralCode: String!) {
+mutation updateUserReferralCode($referralCode: String!) {
   updateUserReferralCode (
-    cognitoUserId: $cognitoUserId
     referralCode: $referralCode
   )
 }`;
@@ -33,14 +32,14 @@ export const getBoxFileDetails = gql`
 `;
 
 export const createCdnSignedUrl = gql`
-  mutation _createCdnSignedUrl($key: String!){
+  mutation createCdnSignedUrl($key: String!){
     createCdnSignedUrl(
       key: $key
     )
   }
 `;
 export const deleteCdnS3File = gql`
-mutation _deleteCdnS3File($key: String!){ 
+mutation deleteCdnS3File($key: String!){ 
   deleteCdnS3File(
     key: $key
   )
@@ -48,7 +47,7 @@ mutation _deleteCdnS3File($key: String!){
 `;
 
 export const subscribeToNewsLetter = gql`
-mutation subscribeToNewsLetterNotifyAdmin($subscriberName: String!, $emailAddress: String!){ 
+mutation subscribeToNewsLetterNotifyAdmin($subscriberName: String, $emailAddress: String!){ 
   subscribeToNewsLetterNotifyAdmin(
     subscriberName: $subscriberName
     emailAddress: $emailAddress
@@ -57,7 +56,7 @@ mutation subscribeToNewsLetterNotifyAdmin($subscriberName: String!, $emailAddres
 `;
 
 export const notifyAdmins = gql`
-mutation sendAlertToAdminFromClient($emailContent: String!){ 
+mutation sendAlertToAdminFromClient($emailContent: String!){
   sendAlertToAdminFromClient(
     type: BUG
     emailContent: $emailContent
@@ -66,7 +65,7 @@ mutation sendAlertToAdminFromClient($emailContent: String!){
 `;
 
 export const createUploadEntryAccreditationAdmin = gql`
-  mutation _createUploadEntryAccreditationAdmin($userRole: UserRoleEnum!, $fileData: UploadFileMetaInput!, $accountType:InvestorAccountTypeEnum!, $action:AccreditationStatus!, $userId: String!) {
+  mutation createUploadEntryAccreditationAdmin($userRole: UserRoleEnum!, $fileData: UploadFileMetaInput!, $accountType:InvestorAccountTypeEnum!, $action:AccreditationStatus!, $userId: String!) {
     createUploadEntryAccreditationAdmin(userRole: $userRole, fileData: $fileData, accountType: $accountType, action: $action, userId: $userId) {
       preSignedUrl
       fileId
@@ -79,3 +78,8 @@ query getsharedLink($id: ID, $uploadId: ID, $type: ShareLinkTypeEnum!, $accountT
   }
 `;
 
+export const getEmail = gql`
+query getEmail($id: String!, $requestDate: String!){
+  getEmail(recipientId: $id, requestDate: $requestDate)
+  }
+`;

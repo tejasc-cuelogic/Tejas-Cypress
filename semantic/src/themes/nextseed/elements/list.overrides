@@ -69,6 +69,15 @@
             font-weight: @bold;
         }       
     }
+    &.capital-list{
+        column-count: 2;
+    }
+    &.job-list>.item{
+        .header, .content{
+            line-height: 26px;
+            font-weight: @normal;
+        }
+    }
 }
 //  Public page Ends
 
@@ -240,8 +249,16 @@
             .extra{
                 font-size:@13px;
                 color:@neutral-offdark;
+            /* to get labels on top comment these 2 lines */
                 position:absolute;
                 right:12px;
+            /*********** end ***********/
+                &.offering-comment{
+                    position: static;
+                    margin-bottom: @7px;
+                    text-align: right;
+                    right: 0;
+                }
             }
             .comments& .ui.image{
                 position:relative;
@@ -353,6 +370,9 @@ ol.ui.list.step-list{
         }
     }
 }
+.process-account-list {
+    column-count: 3 !important;
+}
 
 .ui.bulleted.list .list>.item,
 .ui.bulleted.list>.item,
@@ -369,16 +389,18 @@ ul.ui.list li{
 }
 
 //offering secondary header
-.campaign-secondary-header .menu-secondary-fixed .ui.list > .item {
-    @media only screen and (max-width : @largestTabletScreen){
-        padding: 0;
-        &::after {
-            display: none;
-        }
-        .header {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+.campaign-secondary-header .menu-secondary-fixed{
+    .ui.list > .item {
+        @media only screen and (max-width : @largestTabletScreen){
+            padding: 0;
+            &::after {
+                display: none;
+            }
+            .header {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
         }
     }
 }

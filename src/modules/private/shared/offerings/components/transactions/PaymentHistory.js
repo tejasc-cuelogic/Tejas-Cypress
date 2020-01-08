@@ -21,8 +21,8 @@ const PaymentHistory = (props) => {
         <Table.Body>
           {props.data.length === 0 ? (
             <Table.Row><Table.Cell>No record to display !</Table.Cell></Table.Row>
-            ) :
-            props.data.map(data => (
+          )
+            : props.data.map(data => (
               <Table.Row key={data.id}>
                 <Table.Cell>{data.month}</Table.Cell>
                 <Table.Cell>{data.status}</Table.Cell>

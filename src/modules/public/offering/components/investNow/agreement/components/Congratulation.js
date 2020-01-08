@@ -1,44 +1,51 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
-import { get } from 'lodash';
+import { get, includes } from 'lodash';
 import { Modal, Header, Button, Icon, Divider } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
+@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore', 'investmentLimitStore')
 @withRouter
 @observer
 export default class Congratulation extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.changeInvestment) {
       this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
     } else {
       this.props.campaignStore.setFieldValue('showFireworkAnimation', true);
     }
   }
+
   componentWillUnmount() {
     this.props.accreditationStore.resetUserAccreditatedStatus();
+    this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
   }
+
   handleCloseModal = () => {
     this.props.investmentStore.resetData();
     this.props.accreditationStore.resetUserAccreditatedStatus();
-    this.props.history.push('overview');
+    this.props.history.push(`${this.props.refLink}`);
   }
+
   handleCloseModalWithRefferalLink = (e) => {
     e.preventDefault();
     this.props.investmentStore.resetData();
     this.props.accreditationStore.resetUserAccreditatedStatus();
-    this.props.history.push('/app/referrals');
+    this.props.history.push('/dashboard/referrals');
   }
+
   render() {
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { investmentAmount, investAccTypes } = this.props.investmentStore;
     const { campaign } = this.props.campaignStore;
     const accountType = investAccTypes && investAccTypes.value ? investAccTypes.value : '-';
-    const accountRedirectURL = accountType && accountType !== '-' ? `/app/account-details/${accountType}/portfolio` : '/app/summary';
+    const accountRedirectURL = accountType && accountType !== '-' ? `/dashboard/account-details/${accountType}/portfolio` : '/dashboard/setup';
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
+    const offeringSecurityType = get(offeringDetailsObj, 'keyTerms.securities');
+    const isOfferingPreferredEquity = !!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType);
     setTimeout(() => {
       if (this.props.changeInvestment) {
         this.props.uiStore.setFieldvalue('showFireworkAnimation', false);
@@ -47,12 +54,12 @@ export default class Congratulation extends React.Component {
       }
     }, 8500);
     return (
-      <Aux>
+      <>
         <Modal open closeIcon closeOnRootNodeClick={false} onClose={this.handleCloseModal}>
           <Modal.Header className="center-align signup-header">
             <Header as="h2">Congratulations!</Header>
             <Header as="h3">
-              You have invested <span className="positive-text">{Helper.CurrencyFormat(investmentAmount, 0)}</span> in { businessName}.
+              You have invested <span className="positive-text">{isOfferingPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in { businessName}.
             </Header>
           </Modal.Header>
           <Modal.Content className="signup-content center-align">
@@ -77,7 +84,7 @@ export default class Congratulation extends React.Component {
             </div>
           </Modal.Content>
         </Modal>
-      </Aux>
+      </>
     );
   }
 }

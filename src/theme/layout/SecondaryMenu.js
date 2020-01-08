@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { NavLink, withRouter } from 'react-router-dom';
+import { get } from 'lodash';
 import { Responsive, Menu, Dropdown, Icon, Header, Popup } from 'semantic-ui-react';
-import { MobileDropDownNav } from '../../theme/shared';
+import { MobileDropDownNav } from '../shared';
 
-// const iMap = { to: 'key', title: 'text' };
 const NavItems = ({
   isActive, location, navItems, navClick, match, stepsStatus, addon, navCustomClick,
 }) => navItems.map((item, key) => (
-  <Aux key={item.to}>
-    {(item.subNavigations) ?
-      (
+  <React.Fragment key={item.to}>
+    {(item.subNavigations)
+      ? (
         <Dropdown
           item
           key={item.to}
@@ -33,32 +32,35 @@ const NavItems = ({
           </Dropdown.Menu>
         </Dropdown>
       ) : (
-        <Menu.Item key={item.to} onClick={navCustomClick} as={NavLink} to={`${match.url}/${item.to}`}>
-          {item.showIcon ?
-            stepsStatus[key].status === 'IN_PROGRESS' ?
-              <Popup
-                trigger={
-                  <Icon
-                    name={item.icon[stepsStatus[key].status]}
-                    color={item.icon_color[stepsStatus[key].status]}
-                  />}
-                content={item.toolTipTitle || ''}
-                position="top center"
-              />
-              :
-              <Icon
-                color={item.icon_color[stepsStatus[key].status]}
-                name={item.icon[stepsStatus[key].status] || 'ns-circle'}
-              />
-            :
-            null
+        <Menu.Item target={item.forced ? '_blank' : false} key={item.to} onClick={navCustomClick} as={NavLink} to={item.forced || `${match.url}/${item.to}`}>
+          {item.showIcon
+            ? stepsStatus[key].status === 'IN_PROGRESS'
+              ? (
+                <Popup
+                  trigger={(
+                    <Icon
+                      name={item.icon[stepsStatus[key].status]}
+                      color={item.icon_color[stepsStatus[key].status]}
+                    />
+                  )}
+                  content={item.toolTipTitle || ''}
+                  position="top center"
+                />
+              )
+              : (
+                <Icon
+                  color={item.icon_color[stepsStatus[key].status]}
+                  name={item.icon[stepsStatus[key].status] || 'ns-circle'}
+                />
+              )
+            : null
           }
           {addon && addon.pos === 'left' && addon.data[item.to]}
           {item.title}
           {addon && addon.pos !== 'left' && addon.data[item.to]}
         </Menu.Item>
       )}
-  </Aux>
+  </React.Fragment>
 ));
 
 @withRouter
@@ -68,19 +70,27 @@ class SecondaryMenu extends Component {
       this.props.history.replace(`${this.props.match.url}/${name}`);
     }
   };
+
   isActive = (to, location) => (location.pathname.startsWith(`${this.props.match.url}/${to}`));
+
   render() {
     const {
       navItems, match, refMatch, location, vertical,
       noinvert, attached, className, stepsStatus, addon, heading,
-      force2ary, navCustomClick,
+      force2ary, navCustomClick, responsiveVars,
     } = this.props;
-    // const mobNavItems = map(navItemList, i => mapKeys(i, (v, k) => iMap[k] || k));
+    let options = [];
+    const showMoreMenuLength = (get(responsiveVars, 'isTabletLand') || get(responsiveVars, 'isSmallScreen')) ? 5 : 8;
+    const showMoreMenu = !get(responsiveVars, 'isMobile') && this.props.offering && navItems && navItems.length > showMoreMenuLength;
+    if (showMoreMenu) {
+      const dropOptions = navItems.splice(showMoreMenuLength, navItems.length - showMoreMenuLength);
+      options = dropOptions.map(o => ({ key: o.to, text: o.title, value: o.to }));
+    }
     return (
-      <Aux>
-        <Responsive minWidth={768} as={Aux}>
-          {heading &&
-            <Header as="h6">{heading}</Header>
+      <>
+        <Responsive minWidth={768} as={React.Fragment}>
+          {heading
+            && <Header as="h6">{heading}</Header>
           }
           <Menu
             className={className || ''}
@@ -101,29 +111,35 @@ class SecondaryMenu extends Component {
               stepsStatus={stepsStatus}
               navCustomClick={navCustomClick}
             />
+            {showMoreMenu && <Dropdown selectOnBlur={false} onChange={(e, data) => this.props.history.push(data.value)} text="More..." options={options} className="more-items link item" />}
             {this.props.rightLabel}
           </Menu>
         </Responsive>
-        <Responsive className="secondary-menu" maxWidth={767} as={Aux}>
-          {match.url === '/agreements/legal' ?
-            <MobileDropDownNav
-              inverted
-              refMatch={refMatch || match}
-              navItems={navItems}
-              location={location}
-              className="legal-menu"
-            />
-            :
-            <MobileDropDownNav
-              className="private-secondary-menu"
-              refMatch={refMatch || match}
-              navItems={navItems}
-              location={location}
-              // options={mobNavItems}
-            />
+        <Responsive className="secondary-menu" maxWidth={767} as={React.Fragment}>
+          {match.url === '/legal'
+            ? (
+              <MobileDropDownNav
+                inverted
+                refMatch={refMatch || match}
+                navItems={navItems}
+                location={location}
+                className="legal-menu"
+              />
+            )
+            : (
+              <MobileDropDownNav
+                className="private-secondary-menu"
+                refMatch={refMatch || match}
+                navItems={navItems}
+                location={location}
+                useIsActive
+                isBonusReward={this.props.isBonusReward}
+                bonusRewards={this.props.bonusRewards}
+              />
+            )
           }
         </Responsive>
-      </Aux>
+      </>
     );
   }
 }

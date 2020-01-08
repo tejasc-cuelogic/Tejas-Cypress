@@ -1,0 +1,123 @@
+{
+  "basicDetails": {
+    "firstName": {
+      "value": "automation"
+    },
+    "lastName": {
+      "value": "test"
+    },
+    "email": {
+      "value": "pankaj.cuelogic+issuer123@nextseed.com"
+    }
+  },
+  "generalInfo": {
+    "businessName": {
+      "value": "prequal fail lendio pass"
+    },
+    "website": {
+      "value": "http://localhost:3001/"
+    },
+    "phoneNumber": {
+      "value": 1111111111
+    },
+    "street": {
+      "value": "Aesthetic Way"
+    },
+    "city": {
+      "value": "Greensburg"
+    },
+    "state": {
+      "value": "Pennsylvania"
+    },
+    "zipCode": {
+      "value": 15601
+    }
+  },
+  "experienceDetails": {
+    "businessAgeYears": {
+      "value": 20
+    },
+    "businessAgeMonths": {
+      "value": 0
+    },
+    "industryExperience": {
+      "value": 0
+    },
+    "estimatedCreditScore": {
+      "value": 999
+    },
+    "totalProjectCost": {
+      "value": 10
+    },
+    "amountNeeded": {
+      "value": 12
+    }
+  },
+  "previousYearProjection": {
+    "previousYearGrossSales": {
+      "value": 90000
+    },
+    "previousYearCogSold": {
+      "value": 50
+    },
+    "previousYearOperatingExpenses": {
+      "value": 10
+    },
+    "previousYearNetIncome": {
+      "value": 25
+    }
+  },
+  "nextYearProjection": {
+    "nextYearGrossSales": {
+      "value": 50
+    },
+    "nextYearCogSold": {
+      "value": 50
+    },
+    "nextYearOperatingExpenses": {
+      "value": 10
+    },
+    "nextYearNetIncome": {
+      "value": 25
+    }
+  },
+  "businessDetails": {
+    "existingDebt": {
+      "amount": {
+        "value": 100000
+      },
+      "interestExpenses": {
+        "value": 30
+      },
+      "remainingPrincipal": {
+        "value": 80000
+      },
+      "term": {
+        "value": 3
+      }
+    },
+    "owner": {
+      "fullLegalName": {
+        "value": "automation test"
+      },
+      "title": {
+        "value": "CEO"
+      },
+      "yearsOfExp": {
+        "value": 10
+      },
+      "companyOwnerShip": {
+        "value": 40
+      },
+      "dateOfService": {
+        "value": "10/10/2019"
+      },
+      "ssn": {
+        "value": "111111111"
+      },
+      "linkedInUrl": {
+        "value": "http://linkedin.com/username"
+      }
+    }
+  }
+}

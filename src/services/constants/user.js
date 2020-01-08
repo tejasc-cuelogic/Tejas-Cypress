@@ -1,17 +1,10 @@
 import Validator from 'validatorjs';
 import moment from 'moment';
-import Aux from 'react-aux';
 import React from 'react';
-import { Popup } from 'semantic-ui-react';
+// import { Popup } from 'semantic-ui-react';
 
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
-Validator.register(
-  'maskedSSN', (value, attribute) => {
-    return value.toString().length === 9;
-  },
-  'The :attribute is not in the format XXX-XX-XXXX.',
-);
 
 Validator.register(
   'dob', (value, attribute) => {
@@ -21,8 +14,8 @@ Validator.register(
 );
 Validator.register(
   'afterDate', (value, attribute) => {
-    return moment(value, 'MM/DD/YYYY').isAfter(new Date('12/31/1909')) &&
-      moment(value, 'MM/DD/YYYY', true).isValid();
+    return moment(value, 'MM/DD/YYYY').isAfter(new Date('12/31/1909'))
+      && moment(value, 'MM/DD/YYYY', true).isValid();
   },
   'Invalid Date',
 );
@@ -43,7 +36,7 @@ Validator.register(
 export const securitySections = [
   {
     title: 'Password',
-    description: 'Change your NextSeed Password.',
+    description: 'We strongly recommend that you update your password regularly.',
     action: ['change-password', 'Change Password'],
   },
   // {
@@ -56,15 +49,15 @@ export const securitySections = [
     title: 'Multi-Factor Authentication',
     description:
       (
-        <Aux>You can choose your{' '}
-          <Popup wide position="top center" trigger={<span className="underline-text" >Active MFA</span>}>
+        <>Our MFA security feature gives your account an extra layer of protection.
+          {/* <Popup wide position="top center" trigger={<span className="underline-text">Active MFA</span>}>
             <Popup.Header className="grey-header">Active MFA Factor</Popup.Header>
             <Popup.Content>
               Manage your MFA contact preferences. All major actions in your account will
               require additional confirmation with a code sent to your phone or email address.
             </Popup.Content>
-          </Popup>
-        </Aux>
+          </Popup> */}
+        </>
       ),
     descriptionNotAvailable: '',
     action: ['mfa', 'Select Your Active MFA'],
@@ -72,16 +65,15 @@ export const securitySections = [
 ];
 
 export const USER_IDENTITY = {
-  title: {
-    key: 'title',
+  salutation: {
+    key: 'salutation',
     value: '',
     label: 'Title',
     placeHolder: 'Select',
     error: undefined,
-    rule: 'required',
-    customErrors: {
-      required: '* required.',
-    },
+    rule: 'optional',
+    objRefOutput: 'legalName',
+    objRef: 'legalDetails.legalName',
   },
   firstLegalName: {
     key: 'firstLegalName',
@@ -89,10 +81,11 @@ export const USER_IDENTITY = {
     label: 'First Name (Legal)',
     placeHolder: 'John',
     error: undefined,
-    rule: 'required|removeFrontAndTrailingSpaces',
+    rule: 'required',
     customErrors: {
       required: '* required.',
     },
+    objRefOutput: 'legalName',
     objRef: 'legalDetails.legalName',
   },
   lastLegalName: {
@@ -101,14 +94,15 @@ export const USER_IDENTITY = {
     label: 'Last Name (Legal)',
     placeHolder: 'Smith',
     error: undefined,
-    rule: 'required|removeFrontAndTrailingSpaces',
+    rule: 'required',
     customErrors: {
       required: '* required.',
     },
+    objRefOutput: 'legalName',
     objRef: 'legalDetails.legalName',
   },
-  residentalStreet: {
-    key: 'residentalStreet',
+  street: {
+    key: 'street',
     value: '',
     label: 'Residential Address',
     placeHolder: 'Street Address, City, State, Zip',
@@ -117,6 +111,7 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRefOutput: 'legalAddress',
     objRef: 'legalDetails.legalAddress',
   },
   streetTwo: {
@@ -129,6 +124,7 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRefOutput: 'legalAddress',
     objRef: 'legalDetails.legalAddress',
   },
   city: {
@@ -141,6 +137,7 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRefOutput: 'legalAddress',
     objRef: 'legalDetails.legalAddress',
   },
   state: {
@@ -153,11 +150,13 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRefOutput: 'legalAddress',
     objRef: 'legalDetails.legalAddress',
   },
   zipCode: {
     key: 'zipCode',
     value: '',
+    showError: true,
     label: 'Zip Code',
     placeHolder: '10011',
     error: undefined,
@@ -166,15 +165,21 @@ export const USER_IDENTITY = {
       required: '* required.',
       maskedField: 'The ZIP Code should be at least 5 digits',
     },
+    objRefOutput: 'legalAddress',
     objRef: 'legalDetails.legalAddress',
   },
   phoneNumber: {
     key: 'phoneNumber',
     value: '',
     label: 'Phone Number',
+    showError: true,
+    format: '(###) ###-####',
+    type: 'tel',
     placeHolder: '(123) 456-7890',
     error: undefined,
     rule: 'required|maskedPhoneNumber',
+    skipField: true,
+    objRef: 'phone',
     customErrors: {
       required: '* required.',
       maskedPhoneNumber: 'The phone number is not in the format XXX-XXX-XXXX.',
@@ -184,6 +189,8 @@ export const USER_IDENTITY = {
     key: 'dateOfBirth',
     value: '',
     label: 'Date of Birth',
+    showError: true,
+    format: '##/##/####',
     placeHolder: 'mm/dd/yyyy',
     error: undefined,
     rule: 'required|date|dob|leastAge|afterDate',
@@ -191,6 +198,7 @@ export const USER_IDENTITY = {
       required: '* required.',
     },
     objRef: 'legalDetails',
+    maskFormattedChange: 'formatted',
   },
   ssn: {
     key: 'ssn',
@@ -199,10 +207,12 @@ export const USER_IDENTITY = {
     placeHolder: '123-456-7890',
     error: undefined,
     rule: 'required|maskedSSN',
+    format: '###-##-####',
     customErrors: {
       required: '* required.',
     },
     objRef: 'legalDetails',
+    showError: true,
   },
   mfaMethod: {
     key: 'mfaMethod',
@@ -210,6 +220,7 @@ export const USER_IDENTITY = {
     values: [{ label: 'Text', value: 'TEXT' }, { label: 'Call', value: 'CALL' }],
     label: 'How would you like to receive the MFA Code ?',
     error: undefined,
+    skipField: true,
     rule: 'optional',
   },
 };
@@ -265,7 +276,7 @@ export const UPDATE_PROFILE_INFO = {
     value: '',
     label: 'First name',
     error: undefined,
-    rule: 'required|removeFrontAndTrailingSpaces',
+    rule: 'required',
     placeHolder: 'First name',
     objRef: 'info',
   },
@@ -273,7 +284,7 @@ export const UPDATE_PROFILE_INFO = {
     value: '',
     label: 'Last name',
     error: undefined,
-    rule: 'required|removeFrontAndTrailingSpaces',
+    rule: 'required',
     placeHolder: 'Last name',
     objRef: 'info',
   },
@@ -342,45 +353,27 @@ export const UPDATE_PROFILE_INFO = {
 };
 
 export const USER_PROFILE_ADDRESS_ADMIN = {
-  street: {
+  street: { ...USER_IDENTITY.street, objRef: 'info.mailingAddress' },
+  streetTwo: { ...USER_IDENTITY.streetTwo, objRef: 'info.mailingAddress' },
+  city: { ...USER_IDENTITY.city, objRef: 'info.mailingAddress' },
+  state: { ...USER_IDENTITY.state, objRef: 'info.mailingAddress' },
+  zipCode: { ...USER_IDENTITY.zipCode, objRef: 'info.mailingAddress' },
+};
+
+export const USER_PROFILE_PREFERRED_INFO = {
+  name: {
     value: '',
-    label: 'Residential Street',
-    error: undefined,
-    rule: 'string',
-    placeHolder: 'Residential Street',
-    objRef: 'info.mailingAddress',
-  },
-  streetTwo: {
-    value: '',
-    label: 'Address Line 2',
-    error: undefined,
-    rule: 'string',
-    placeHolder: 'Address Line 2',
-    objRef: 'info.mailingAddress',
-  },
-  city: {
-    value: '',
-    label: 'City',
-    error: undefined,
-    rule: 'string',
-    placeHolder: 'City',
-    objRef: 'info.mailingAddress',
-  },
-  state: {
-    value: '',
-    label: 'State',
-    error: undefined,
-    rule: 'string',
-    objRef: 'info.mailingAddress',
-  },
-  zipCode: {
-    value: '',
-    label: 'ZIP Code',
+    label: 'Preferred Name',
     error: undefined,
     rule: 'optional',
-    placeHolder: 'ZIP Code',
-    objRef: 'info.mailingAddress',
+    placeHolder: 'Preferred Name',
+    objRef: 'info.preferred',
   },
+  street: { ...USER_IDENTITY.street, objRef: 'info.preferred', objRefOutput: '' },
+  streetTwo: { ...USER_IDENTITY.streetTwo, objRef: 'info.preferred', objRefOutput: '', skipField: false },
+  city: { ...USER_IDENTITY.city, objRef: 'info.preferred', objRefOutput: '' },
+  state: { ...USER_IDENTITY.state, objRef: 'info.preferred', objRefOutput: '' },
+  zipCode: { ...USER_IDENTITY.zipCode, objRef: 'info.preferred', objRefOutput: '' },
 };
 
 export const USER_PROFILE_FOR_ADMIN = {
@@ -390,9 +383,8 @@ export const USER_PROFILE_FOR_ADMIN = {
   address: { ...UPDATE_PROFILE_INFO.email },
   firstLegalName: { ...USER_IDENTITY.firstLegalName },
   lastLegalName: { ...USER_IDENTITY.lastLegalName },
-  ssn: { ...USER_IDENTITY.ssn },
   dateOfBirth: { ...USER_IDENTITY.dateOfBirth },
-  street: { ...USER_IDENTITY.residentalStreet },
+  street: { ...USER_IDENTITY.street },
   streetTwo: { ...USER_IDENTITY.streetTwo },
   city: { ...USER_IDENTITY.city },
   state: { ...USER_IDENTITY.state },
@@ -407,9 +399,16 @@ export const USER_PROFILE_FOR_ADMIN = {
     base64String: '',
     responseUrl: '',
   },
+  ssn: {
+    key: 'ssn',
+    value: '',
+    label: 'Social Security Number',
+    placeHolder: '******1234',
+    error: undefined,
+    rule: 'optional|maskedSSN',
+    objRef: 'legalDetails',
+  },
 };
-
-export const PROFILE_PHOTO_EXTENSIONS = ['jpeg', 'jpg', 'png'];
 
 export const PROFILE_PHOTO_BYTES = 5242880;
 

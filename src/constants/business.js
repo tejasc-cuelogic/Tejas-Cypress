@@ -84,7 +84,7 @@ export const PERSONAL_SIGNATURE = {
   signatureDate: {
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'required|date',
     key: 'signatureDate',
     label: 'Signature Date',
     customErrors: {
@@ -285,7 +285,7 @@ export const ISSUER_INFORMATION = {
     placeHolder: 'Date of Incorporation/Organization',
     label: 'Date of Incorporation/Organization',
     error: undefined,
-    rule: 'required',
+    rule: 'required|date',
     customErrors: {
       required: 'The Date of Incorporation/Organization field is required.',
     },
@@ -361,7 +361,7 @@ export const ISSUER_INFORMATION = {
     },
   },
   companyName: {
-    value: 'NextSeed US LLC',
+    value: 'NextSeed Securities, LLC',
     key: 'companyName',
     placeHolder: 'Company Name',
     label: 'Company Name',
@@ -373,7 +373,7 @@ export const ISSUER_INFORMATION = {
     },
   },
   commissionCik: {
-    value: '0001667892',
+    value: '0001723503',
     key: 'commissionCik',
     placeHolder: 'CIK Number of Intermediary',
     label: 'CIK',
@@ -385,7 +385,7 @@ export const ISSUER_INFORMATION = {
     },
   },
   commissionFileNumber: {
-    value: '007-00023',
+    value: '008-70055',
     key: 'commissionFileNumber',
     placeHolder: 'Commission File Number',
     label: 'Commission File Number',
@@ -396,7 +396,7 @@ export const ISSUER_INFORMATION = {
     },
   },
   crdNumber: {
-    value: '283225',
+    value: '291387',
     key: 'crdNumber',
     placeHolder: 'CRD Number',
     label: 'CRD Number',
@@ -412,11 +412,11 @@ export const OFFERING_INFORMATION = {
   compensationAmount: {
     value: '',
     placeHolder: 'Add text here',
-    label: 'Amount of compensation to be paid to the intermediary,' +
-      'whether as a dollar amount or a percentage of the offering amount, ' +
-      'or a good faith estimate if the exact amount is not available at the' +
-      'time of the filing, for conducting the offering, including the amount' +
-      'of referral and any other fees associated with the offering',
+    label: 'Amount of compensation to be paid to the intermediary,'
+      + 'whether as a dollar amount or a percentage of the offering amount, '
+      + 'or a good faith estimate if the exact amount is not available at the'
+      + 'time of the filing, for conducting the offering, including the amount'
+      + 'of referral and any other fees associated with the offering',
     key: 'compensationAmount',
     error: undefined,
     rule: 'required|max:256',
@@ -428,8 +428,8 @@ export const OFFERING_INFORMATION = {
   financialInterest: {
     value: '',
     placeHolder: 'Add text here',
-    label: 'Any other financial interest in the issuer held by the intermediary, ' +
-      'or any arrangement for the intermediary to acquire such an interest',
+    label: 'Any other financial interest in the issuer held by the intermediary, '
+      + 'or any arrangement for the intermediary to acquire such an interest',
     key: 'financialInterest',
     error: undefined,
     rule: 'required|max:256',
@@ -467,8 +467,8 @@ export const OFFERING_INFORMATION = {
     label: 'No. of securities offered',
     key: 'noOfSecurityOffered',
     error: undefined,
-    rule: 'numeric|required_if:securityOfferedType,Other|required_if:securityOfferedType,Common Stock|' +
-      'required_if:securityOfferedType,Preferred Stock|max:9999999999',
+    rule: 'numeric|required_if:securityOfferedType,Other|required_if:securityOfferedType,Common Stock|'
+      + 'required_if:securityOfferedType,Preferred Stock|max:9999999999',
     customErrors: {
       numeric: 'Please provide numeric values.',
       max: 'The No. of securities offered is too long. Max length is :max.',
@@ -557,7 +557,7 @@ export const OFFERING_INFORMATION = {
     label: 'Deadline Date',
     key: 'deadlineDate',
     error: undefined,
-    rule: 'required',
+    rule: 'required|date',
     customErrors: {
       required: 'The Deadline Date field is required.',
     },
@@ -848,65 +848,6 @@ export const LEGAL_FORM_TYPES = [
   { key: 'General Partnership', value: 'General Partnership', text: 'General Partnership' },
   { key: 'Business Trust', value: 'Business Trust', text: 'Business Trust' },
   { key: 'Other', value: 'Other', text: 'Other (Specify)' },
-];
-
-export const US_STATES = [
-  { key: 'AL', value: 'AL', text: 'ALABAMA' },
-  { key: 'AK', value: 'AK', text: 'ALASKA' },
-  { key: 'AZ', value: 'AZ', text: 'ARIZONA' },
-  { key: 'AR', value: 'AR', text: 'ARKANSAS' },
-  { key: 'CA', value: 'CA', text: 'CALIFORNIA' },
-  { key: 'CO', value: 'CO', text: 'COLORADO' },
-  { key: 'CT', value: 'CT', text: 'CONNECTICUT' },
-  { key: 'DE', value: 'DE', text: 'DELAWARE' },
-  { key: 'DC', value: 'DC', text: 'DISTRICT OF COLUMBIA' },
-  { key: 'FL', value: 'FL', text: 'FLORIDA' },
-  { key: 'GA', value: 'GA', text: 'GEORGIA' },
-  { key: 'GU', value: 'GU', text: 'GUAM' },
-  { key: 'HI', value: 'HI', text: 'HAWAII' },
-  { key: 'ID', value: 'ID', text: 'IDAHO' },
-  { key: 'IL', value: 'IL', text: 'ILLINOIS' },
-  { key: 'IN', value: 'IN', text: 'INDIANA' },
-  { key: 'IA', value: 'IA', text: 'IOWA' },
-  { key: 'KS', value: 'KS', text: 'KANSAS' },
-  { key: 'KY', value: 'KY', text: 'KENTUCKY' },
-  { key: 'LA', value: 'LA', text: 'LOUISIANA' },
-  { key: 'ME', value: 'ME', text: 'MAINE' },
-  { key: 'MD', value: 'MD', text: 'MARYLAND' },
-  { key: 'MA', value: 'MA', text: 'MASSACHUSETTS' },
-  { key: 'MI', value: 'MI', text: 'MICHIGAN' },
-  { key: 'MN', value: 'MN', text: 'MINNESOTA' },
-  { key: 'MS', value: 'MS', text: 'MISSISSIPPI' },
-  { key: 'MO', value: 'MO', text: 'MISSOURI' },
-  { key: 'MT', value: 'MT', text: 'MONTANA' },
-  { key: 'NE', value: 'NE', text: 'NEBRASKA' },
-  { key: 'NV', value: 'NV', text: 'NEVADA' },
-  { key: 'NH', value: 'NH', text: 'NEW HAMPSHIRE' },
-  { key: 'NJ', value: 'NJ', text: 'NEW JERSEY' },
-  { key: 'NM', value: 'NM', text: 'NEW MEXICO' },
-  { key: 'NY', value: 'NY', text: 'NEW YORK' },
-  { key: 'NC', value: 'NC', text: 'NORTH CAROLINA' },
-  { key: 'ND', value: 'ND', text: 'NORTH DAKOTA' },
-  { key: 'OH', value: 'OH', text: 'OHIO' },
-  { key: 'OK', value: 'OK', text: 'OKLAHOMA' },
-  { key: 'OR', value: 'OR', text: 'OREGON' },
-  { key: 'PA', value: 'PA', text: 'PENNSYLVANIA' },
-  { key: 'PR', value: 'PR', text: 'PUERTO RICO' },
-  { key: 'RI', value: 'RI', text: 'RHODE ISLAND' },
-  { key: 'SC', value: 'SC', text: 'SOUTH CAROLINA' },
-  { key: 'SD', value: 'SD', text: 'SOUTH DAKOTA' },
-  { key: 'TN', value: 'TN', text: 'TENNESSEE' },
-  { key: 'TX', value: 'TX', text: 'TEXAS' },
-  { key: 'UT', value: 'UT', text: 'UTAH' },
-  { key: 'VT', value: 'VT', text: 'VERMONT' },
-  { key: 'VI', value: 'VI', text: 'VIRGIN ISLANDS, U.S.' },
-  { key: 'VA', value: 'VA', text: 'VIRGINIA' },
-  { key: 'WA', value: 'WA', text: 'WASHINGTON' },
-  { key: 'WV', value: 'WV', text: 'WEST VIRGINIA' },
-  { key: 'WI', value: 'WI', text: 'WISCONSIN' },
-  { key: 'WY', value: 'WY', text: 'WYOMING' },
-  { key: 'B5', value: 'B5', text: 'AMERICAN SAMOA' },
-  { key: '1V', value: '1V', text: 'NORTHERN MARIANA ISLANDS' },
 ];
 
 export const COUNTRIES = [

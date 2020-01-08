@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
 import { capitalize } from 'lodash';
-import { FormTextarea } from '../../../../../theme/form';
+import { FormTextarea, FormInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 import { adminActions } from '../../../../../services/actions';
 import Helper from '../../../../../helper/utility';
@@ -12,16 +12,30 @@ import Helper from '../../../../../helper/utility';
 @withRouter
 @observer
 export default class StatusChangeAppModal extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.businessAppReviewStore.resetCommentFrm();
+    if (this.props.match.params.action === 'PROMOTE' && this.props.match.params.id !== 'in-progress') {
+      this.props.businessAppReviewStore.resetPasswordFrm();
+      this.props.businessAppReviewStore.resetEmailFrm();
+      const { businessApplicationsDetailsAdmin, fetchAdminApplicationById } = this.props.businessAppStore;
+      if (!businessApplicationsDetailsAdmin) {
+        fetchAdminApplicationById(this.props.match.params.appId, this.props.match.params.id)
+          .then(() => {
+            this.props.businessAppReviewStore.resetEmailFrm();
+          });
+      }
+    }
   }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     const { match } = this.props;
     const { params } = match;
     this.props.uiStore.setErrors(null);
-    this.props.history.push(`/app/applications/${params.id}`);
+    this.props.history.push(`/dashboard/applications/${params.id}`);
   }
+
   updateApplicationStatus = (e) => {
     e.preventDefault();
     const { match } = this.props;
@@ -30,9 +44,10 @@ export default class StatusChangeAppModal extends Component {
       .updateApplicationStatus(params.appId, params.userId, params.appStatus, params.action)
       .then(() => {
         this.props.uiStore.setErrors(null);
-        this.props.history.push(`/app/applications/${params.id}`);
+        this.props.history.push(`/dashboard/applications/${params.id}`);
       });
   }
+
   promoteApplication = (e) => {
     e.preventDefault();
     const { match } = this.props;
@@ -42,13 +57,16 @@ export default class StatusChangeAppModal extends Component {
       .fetchAdminApplicationById(params.appId, appType, params.userId, true)
       .then((data) => {
         const prequalData = (data && data.businessApplicationsDetailsAdmin) || null;
+        const { PROMOTE_APPLICATION_STATUS_PASSWORD_FRM, PROMOTE_APPLICATION_STATUS_EMAIL_FRM } = this.props.businessAppReviewStore;
+        const { applicationRoles } = this.props.businessAppStore;
         if (prequalData) {
           const userDetails = {
             givenName: prequalData.firstName,
             familyName: prequalData.lastName,
-            email: prequalData.email,
-            TemporaryPassword: 'nextseed',
-            verifyPassword: 'nextseed',
+            email: !applicationRoles.includes('investor') ? prequalData.email : PROMOTE_APPLICATION_STATUS_EMAIL_FRM.fields.emailAddress.value,
+            TemporaryPassword:
+              PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.TemporaryPassword.value,
+            verifyPassword: PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.verifyPassword.value,
             role: ['issuer'],
           };
           adminActions.checkEmailExists(userDetails.email).then((userId) => {
@@ -59,23 +77,35 @@ export default class StatusChangeAppModal extends Component {
                   userId,
                   params.appStatus,
                   params.action,
+                  '',
+                  '',
+                  userDetails.TemporaryPassword,
                 ).then(() => {
                   this.props.uiStore.setErrors(null);
-                  this.props.history.push('/app/applications/in-progress');
+                  this.props.uiStore.setProgress(false);
+                  this.props.history.push('/dashboard/applications/in-progress');
                 });
             } else {
-              adminActions.createNewUser(userDetails).then(() => {
-                this.props.businessAppReviewStore
-                  .updateApplicationStatus(
-                    params.appId,
-                    this.props.adminStore.userId,
-                    params.appStatus,
-                    params.action,
-                  ).then(() => {
-                    this.props.uiStore.setErrors(null);
-                    this.props.history.push('/app/applications/in-progress');
-                  });
+              adminActions.createNewUser(userDetails, 'SUPPRESS', false).then(() => {
+                // This timeout is added intentionally beacause of parellel mutation executes. Don't delete this
+                setTimeout(() => {
+                  this.props.businessAppReviewStore
+                    .updateApplicationStatus(
+                      params.appId,
+                      this.props.adminStore.userId,
+                      params.appStatus,
+                      params.action,
+                      '',
+                      '',
+                      userDetails.TemporaryPassword,
+                    ).then(() => {
+                      this.props.uiStore.setErrors(null);
+                      this.props.uiStore.setProgress(false);
+                      this.props.history.push('/dashboard/applications/in-progress');
+                    });
+                }, 5000);
               }).catch(() => {
+                this.props.uiStore.setProgress(false);
                 Helper.toast('Something went wrong. Please try again after sometime', 'error');
               });
             }
@@ -83,34 +113,94 @@ export default class StatusChangeAppModal extends Component {
         }
       });
   }
+
   render() {
     const { uiStore, businessAppReviewStore, match } = this.props;
-    const { APPLICATION_STATUS_COMMENT_FRM, formChange } = businessAppReviewStore;
+    const {
+      APPLICATION_STATUS_COMMENT_FRM,
+      formChange,
+      PROMOTE_APPLICATION_STATUS_PASSWORD_FRM,
+      PROMOTE_APPLICATION_STATUS_EMAIL_FRM,
+    } = businessAppReviewStore;
+    const { applicationRoles } = this.props.businessAppStore;
     const { fields } = APPLICATION_STATUS_COMMENT_FRM;
     const { inProgress } = uiStore;
     const { errors } = uiStore;
     const { params } = match;
+    let isValid = true;
+    if (params.action === 'PROMOTE' && params.id !== 'in-progress') {
+      isValid = !(APPLICATION_STATUS_COMMENT_FRM.meta.isValid
+        && PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.meta.isValid);
+    } else {
+      isValid = !APPLICATION_STATUS_COMMENT_FRM.meta.isValid;
+    }
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">{params.action === 'REMOVED' ? 'Remove' : capitalize(params.action)} Application?</Header>
+          {params.action === 'PROMOTE' && params.id !== 'in-progress'
+            ? <Header as="h3">Promote PreQual?</Header>
+            : <Header as="h3">{params.action === 'REMOVED' ? 'Remove' : capitalize(params.id === 'in-progress' && params.action === 'PROMOTE' ? 'Submit' : params.action)} Application?</Header>
+          }
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error>
             <FormTextarea
               type="text"
               name="text"
+              label={params.id === 'in-progress' ? 'Please enter your justification for submission' : fields.text.label}
               fielddata={fields.text}
               changed={(e, result) => formChange(e, result, 'APPLICATION_STATUS_COMMENT_FRM')}
               containerclassname="secondary"
             />
-            {errors &&
+            {params.action === 'PROMOTE' && params.id !== 'in-progress'
+              ? (
+              <>
+                {applicationRoles && applicationRoles.includes('investor') && (
+                  <>
+                    <FormInput
+                      fluid
+                      type="text"
+                      name="emailAddress"
+                      fielddata={PROMOTE_APPLICATION_STATUS_EMAIL_FRM.fields.emailAddress}
+                      changed={(e, result) => formChange(e, result, 'PROMOTE_APPLICATION_STATUS_EMAIL_FRM')}
+                    />
+                    {!PROMOTE_APPLICATION_STATUS_EMAIL_FRM.meta.isDirty
+                      ? (
+                        <p className="negative-text">
+                          This email is already registered as an investor.  Please enter a new email address.
+                        </p>
+                      )
+                      : ''
+                    }
+                  </>
+                )}
+                <FormInput
+                  fluid
+                  type="password"
+                  name="TemporaryPassword"
+                  fielddata={PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.TemporaryPassword}
+                  changed={(e, result) => formChange(e, result, 'PROMOTE_APPLICATION_STATUS_PASSWORD_FRM')}
+                />
+                <FormInput
+                  fluid
+                  type="password"
+                  name="verifyPassword"
+                  fielddata={PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.fields.verifyPassword}
+                  changed={(e, result) => formChange(e, result, 'PROMOTE_APPLICATION_STATUS_PASSWORD_FRM')}
+                />
+              </>
+              )
+              : ''
+            }
+            {errors
+              && (
               <Message error>
                 <ListErrors errors={[errors]} />
               </Message>
+              )
             }
             <div className="center-align">
-              <Button primary className="very relaxed" content="Submit" disabled={!APPLICATION_STATUS_COMMENT_FRM.meta.isValid || inProgress} onClick={params.action === 'PROMOTE' ? this.promoteApplication : this.updateApplicationStatus} loading={inProgress} />
+              <Button primary className="very relaxed" content="Submit" disabled={isValid || inProgress} onClick={params.action === 'PROMOTE' && params.id !== 'in-progress' ? this.promoteApplication : this.updateApplicationStatus} loading={inProgress} />
             </div>
           </Form>
         </Modal.Content>

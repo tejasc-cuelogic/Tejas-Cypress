@@ -1,11 +1,10 @@
-import Aux from 'react-aux';
 import React, { Component } from 'react';
 import { includes } from 'lodash';
 import { Grid, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FillTable } from '../../../../../../theme/table/NSTable';
 import Helper from '../../../../../../helper/utility';
-import { InlineLoader, NsPagination } from './../../../../../../theme/shared';
+import { InlineLoader, NsPagination } from '../../../../../../theme/shared';
 
 const result = {
   columns: [
@@ -21,11 +20,14 @@ export default class MonthlyStatements extends Component {
   state = {
     pdfLoading: false,
   }
-  componentWillMount() {
+
+  constructor(props) {
+    super(props);
     const { setFieldValue } = this.props.userDetailsStore;
     this.props.statementStore.resetPagination();
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
+    this.props.statementStore.setFieldValue('isAdmin', this.props.isAdmin);
     this.props.transactionStore.setFieldValue('isAdmin', this.props.isAdmin);
     this.props.transactionStore.initRequest({ order: 'ASC', limitData: 1, statement: true });
   }
@@ -57,7 +59,7 @@ export default class MonthlyStatements extends Component {
     const totalRecords = monthlyStatementcount || 0;
     result.rows = monthlyStatements;
     return (
-      <Aux>
+      <>
         <Grid>
           <Grid.Row>
             <Grid.Column width={16}>
@@ -68,13 +70,13 @@ export default class MonthlyStatements extends Component {
                   result={result}
                 />
               </Card>
-              {totalRecords > 0 && totalRecords > requestState.perPage &&
-              <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+              {totalRecords > 0 && totalRecords > requestState.perPage
+              && <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
               }
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </Aux>
+      </>
     );
   }
 }

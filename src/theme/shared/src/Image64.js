@@ -1,58 +1,68 @@
-import React from 'react';
-import { Image } from 'semantic-ui-react';
+import React, { useState, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
+import { Image } from 'semantic-ui-react';
 import { UPLOADS_CONFIG } from '../../../constants/aws';
+// import apiService from '../../../api/restApi';
 import emptyImage1 from '../../../assets/images/gallery-placeholder-3-2.jpg';
 import emptyImage2 from '../../../assets/images/gallery-placeholder-16-9.jpg';
 import emptyImage3 from '../../../assets/images/gallery-placeholder-1-1.jpg';
 import userPlaceholder from '../../../assets/images/leader-placeholder.jpg';
+import Helper from '../../../helper/utility';
 
-@inject('imageStore')
-@observer
-class Image64 extends React.Component {
-  state = { data: this.props.avatar ? userPlaceholder : this.props.avatarPlaceholder ? emptyImage3 : this.props.imgType && this.props.imgType === 'heroImage' ? emptyImage2 : emptyImage1 };
-  componentWillMount() {
-    const emptyImage = this.props.avatar ? userPlaceholder : this.props.avatarPlaceholder ? emptyImage3 : this.props.imgType && this.props.imgType === 'heroImage' ? emptyImage2 : emptyImage1;
-    if (this.props.srcUrl) {
-      const imgUrl = (this.props.srcUrl.includes('https://') || this.props.srcUrl.includes('http://')) ? this.props.srcUrl : `https://${UPLOADS_CONFIG.bucket}/${this.props.srcUrl}`;
-      this.props.imageStore.getBase64Content(imgUrl).then((res) => {
-        if (res.includes('data:')) {
-          this.setState({ data: res || emptyImage });
-        } else {
-          this.setState({ data: imgUrl || emptyImage });
-        }
-      }).catch((err) => {
-        console.log(err);
-        this.setState({ data: emptyImage });
-      });
+function Image64(props) {
+  const [data, setData] = useState(props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1);
+  const [oData, setOData] = useState(props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1);
+  const [emptyImg, setEmptyImg] = useState(props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1);
+
+  async function getImage() {
+    const emptyImage = props.avatar ? userPlaceholder : props.avatarPlaceholder ? emptyImage3 : props.imgType && props.imgType === 'heroImage' ? emptyImage2 : emptyImage1;
+    setEmptyImg(emptyImage);
+    if (props.srcUrl) {
+      const imgUrl = (props.srcUrl.includes('https://') || props.srcUrl.includes('http://')) ? props.srcUrl : `https://${UPLOADS_CONFIG.bucket}/${encodeURI(props.srcUrl)}`;
+      try {
+        const imgName = props.avatar ? imgUrl : Helper.processImageFileName(imgUrl, props.uiStore.responsiveVars);
+        setOData(imgUrl || emptyImage);
+        // Deprecated the API call for getting base64 of an image
+        // const result = await apiService.getRemoteFile(imgName);
+        // setData(result.text.includes('data:') ? (result.text || emptyImage) : (imgName || emptyImage));
+        setData((imgName || emptyImage));
+      } catch (e) {
+        setData(emptyImage);
+      }
     } else {
-      this.setState({ data: emptyImage });
+      setData(emptyImage);
     }
   }
-  componentWillReceiveProps() {
-    const emptyImage = this.props.avatar ? userPlaceholder : this.props.avatarPlaceholder ? emptyImage3 : this.props.imgType && this.props.imgType === 'heroImage' ? emptyImage2 : emptyImage1;
-    if (this.props.srcUrl) {
-      const imgUrl = (this.props.srcUrl.includes('https://') || this.props.srcUrl.includes('http://')) ? this.props.srcUrl : `https://${UPLOADS_CONFIG.bucket}/${this.props.srcUrl}`;
-      this.props.imageStore.getBase64Content(imgUrl).then((res) => {
-        if (res.includes('data:')) {
-          this.setState({ data: res || emptyImage });
-        } else {
-          this.setState({ data: imgUrl || emptyImage });
-        }
-      }).catch((err) => {
-        console.log(err);
-        this.setState({ data: emptyImage });
-      });
+
+  function handelOnError(e) {
+    e.target.error = null;
+    if (!e.target.src.includes('data:') && (e.target.src.includes('http://') || e.target.src.includes('https://'))) {
+      const email = {
+        graphqlError: { operationName: 'Image Processing' },
+        filePath: e.target.src,
+        urlLocation: window.location.href,
+        message: 'The requested file is not found in bucket.',
+      };
+      const params = {
+        emailContent: JSON.stringify(email),
+      };
+      props.authStore.notifyApplicationError(params);
+    }
+    if (e.target.src.includes('__1920') || e.target.src.includes('__1024') || e.target.src.includes('__640')) {
+      e.target.src = `${oData}`;
     } else {
-      this.setState({ data: emptyImage });
+      e.target.src = emptyImg;
     }
   }
-  render() {
-    return this.props.bg ? (
-      <div {...this.props} style={{ backgroundImage: `url(${this.state.data})` }} />
-    ) :
-      <Image {...this.props} src={this.state.data} />;
-  }
+
+  useEffect(() => {
+    getImage();
+  }, []);
+
+  return props.bg ? (
+    <div {...props} style={{ backgroundImage: `url(${data})` }} />
+  )
+    : <Image {...props} alt={props.alt || 'Image not found!'} src={`${data}`} onError={handelOnError} />;
 }
 
-export default Image64;
+export default inject('uiStore', 'authStore')(observer(Image64));

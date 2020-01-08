@@ -2,23 +2,30 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
+import cleanDeep from 'clean-deep';
 import money from 'money-math';
-import { get, includes, orderBy, isArray } from 'lodash';
+import { get, orderBy, isArray, filter, forEach } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { ClientDb, FormValidator as Validator } from '../../../../helper';
-import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
+import { ClientDb, FormValidator as Validator, DataFormatter } from '../../../../helper';
+import { allTransactions, paymentHistory, getInvestmentsByUserIdAndOfferingId, addFundMutation, withdrawFundMutation, viewLoanAgreement } from '../../queries/transaction';
 import { getInvestorAvailableCash } from '../../queries/investNow';
 import { requestOtp, verifyOtp } from '../../queries/profile';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
-import { TRANSFER_FUND, VERIFY_OTP } from '../../../constants/transaction';
-import { uiStore, userDetailsStore, userStore, offeringCreationStore } from '../../index';
+import { TRANSFER_FUND, VERIFY_OTP, ADD_WITHDRAW_FUND } from '../../../constants/transaction';
+import { uiStore, userDetailsStore, offeringCreationStore } from '../../index';
 import Helper from '../../../../helper/utility';
 
 export class TransactionStore {
   @observable data = [];
+
+  @observable inProgress = [];
+
   @observable hasError = false;
+
   @observable statementDate = [];
+
   @observable filters = false;
+
   @observable requestState = {
     search: {},
     page: 1,
@@ -26,26 +33,52 @@ export class TransactionStore {
     skip: 0,
     displayTillIndex: 25,
   };
+
   @observable TRANSFER_FRM = Validator.prepareFormObject(TRANSFER_FUND);
+
+  @observable ADD_WITHDRAW_FUND_FRM = Validator.prepareFormObject(ADD_WITHDRAW_FUND);
+
   @observable OTP_VERIFY_META = Validator.prepareFormObject(VERIFY_OTP);
+
   @observable cash = null;
+
   @observable cashAvailable = {};
+
   @observable showConfirmPreview = false;
+
+  @observable showSuccessModal = false;
+
   @observable reSendVerificationCode = null;
+
   @observable transactionOtpRequestId = null;
+
   @observable transactionDisplayPhoneNumber = null;
+
   @observable confirmEmailAdress = '';
+
   @observable paymentHistoryData = [];
+
   @observable investmentsByOffering = [];
+
   @observable investmentOptions = [];
+
   @observable selectedInvestment = '';
+
   @observable validWithdrawAmt = false;
+
   @observable availableWithdrawCash = null;
+
   @observable aggrementId = '';
+
   @observable loanAgreementData = {};
+
   @observable isAdmin = false;
+
   @observable db = [];
+
   @observable apiCall = false;
+
+  @observable agreementIds = [];
 
   @action
   setFieldValue = (field, value) => {
@@ -53,26 +86,36 @@ export class TransactionStore {
   }
 
   @action
+  operateInProgress = (setVal, remove = false) => {
+    if (remove) {
+      this.inProgress = filter(this.inProgress, e => e !== setVal);
+    } else {
+      this.inProgress.push(setVal);
+    }
+  }
+
+  @action
   initRequest = (props) => {
     this.resetData();
-    const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers :
-      userDetailsStore.currentActiveAccountDetails;
-    const { userDetails, getDetailsOfUser } = userDetailsStore;
-
+    const account = this.isAdmin ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers
+      : userDetailsStore.currentActiveAccountDetails;
+    const { getDetailsOfUser } = userDetailsStore;
+    let variables = {
+      accountId: account.details.accountId,
+      orderBy: (props && props.order) || 'DESC',
+    };
+    variables = this.isAdmin ? { ...variables, userId: getDetailsOfUser.id } : { ...variables };
     this.data = graphql({
       client,
       query: allTransactions,
-      variables: {
-        accountId: account.details.accountId,
-        userId: this.isAdmin ? getDetailsOfUser.id : userDetails.id,
-        orderBy: (props && props.order) || 'DESC',
-      },
+      variables,
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (props && props.statement && !this.data.loading) {
           this.setFirstTransaction(data);
           this.hasError = false;
-        } else if (!this.data.loading) {
+        }
+        if (!this.data.loading) {
           this.setData();
         }
         this.setFieldValue('apiCall', true);
@@ -99,14 +142,16 @@ export class TransactionStore {
   @computed get totalRecords() {
     return this.db.length;
   }
+
   @computed get allPaymentHistoryData() {
-    return this.paymentHistoryData.data &&
-      this.paymentHistoryData.data.getPaymentHistory
+    return this.paymentHistoryData.data
+      && this.paymentHistoryData.data.getPaymentHistory
       ? orderBy(this.paymentHistoryData.data.getPaymentHistory, o => (o.completeDate ? moment(new Date(o.completeDate)).unix() : ''), ['desc']) : [];
   }
+
   @computed get loading() {
-    return this.data.loading || this.investmentsByOffering.loading ||
-    this.paymentHistoryData.loading || this.loanAgreementData.loading;
+    return this.data.loading || this.investmentsByOffering.loading
+      || this.paymentHistoryData.loading || this.loanAgreementData.loading;
   }
 
   @computed get error() {
@@ -114,8 +159,9 @@ export class TransactionStore {
   }
 
   @computed get accountTransactions() {
-    const transactions = (this.data.data && toJS(this.data.data.getAccountTransactions
+    let transactions = (this.data.data && toJS(this.data.data.getAccountTransactions
       && this.data.data.getAccountTransactions.transactions)) || [];
+    transactions = transactions.map(t => ({ ...t, date: DataFormatter.getDateAsPerTimeZone(t.date, false, false, false) }));
     return this.sortBydate(transactions);
   }
 
@@ -139,6 +185,7 @@ export class TransactionStore {
     this.requestState.search = srchParams;
     this.initiateFilters();
   }
+
   @action
   setData = () => {
     this.setDb(this.accountTransactions);
@@ -160,8 +207,10 @@ export class TransactionStore {
       ClientDb.filterData('type', transactionType);
     }
     if (dateRange && dateRange !== 'all') {
-      const sDate = moment(new Date()).subtract(dateRange, 'days');
-      const eDate = moment(new Date());
+      // const sDate = moment(new Date()).subtract(dateRange, 'days');
+      // const eDate = moment(new Date());
+      const sDate = DataFormatter.getCurrentCSTMoment().subtract(dateRange, 'days');
+      const eDate = DataFormatter.getCurrentCSTMoment();
       ClientDb.filterByDate(sDate, eDate, 'date', null, true);
     }
     this.db = ClientDb.getDatabase();
@@ -182,6 +231,7 @@ export class TransactionStore {
     this.data = [];
     this.db = [];
     this.setDb([]);
+    this.showSuccessModal = false;
   }
 
   @action
@@ -189,8 +239,8 @@ export class TransactionStore {
     const pageWiseCount = this.requestState.perPage * page;
     this.requestState.displayTillIndex = pageWiseCount;
     this.requestState.page = page;
-    this.requestState.skip = (skip === pageWiseCount) ?
-      pageWiseCount - this.requestState.perPage : skip;
+    this.requestState.skip = (skip === pageWiseCount)
+      ? pageWiseCount - this.requestState.perPage : skip;
   }
 
 
@@ -210,6 +260,30 @@ export class TransactionStore {
   resetTransferForm = () => {
     this.TRANSFER_FRM = Validator.prepareFormObject(TRANSFER_FUND);
   }
+
+  @action
+  resetAddWithdrawFunds = () => {
+    uiStore.clearErrors();
+    this.ADD_WITHDRAW_FUND_FRM = Validator.prepareFormObject(ADD_WITHDRAW_FUND);
+  }
+
+  @action
+  checkedChange = (value, field, formName) => {
+    uiStore.clearErrors();
+    this[formName].fields[field].value = value;
+    if (field === 'showAgreementId' && !value) {
+      this[formName].fields.agreementId.value = '';
+    }
+  };
+
+  @action
+  formChange = (values, field, formName, mask = false) => {
+    uiStore.clearErrors();
+    this[formName] = Validator.onChange(this[formName], {
+      name: field,
+      value: mask ? values.floatValue : values,
+    });
+  };
 
   @action
   TransferChange = (values, field, formName = 'TRANSFER_FRM', checkWithdrawAmt = false) => {
@@ -233,23 +307,48 @@ export class TransactionStore {
   };
 
   @action
+  addWithdrawFunds = (userId, accountId, actionType) => new Promise((resolve, reject) => {
+    this.operateInProgress(actionType);
+    const variables = cleanDeep(Validator.evaluateFormData(this.ADD_WITHDRAW_FUND_FRM.fields));
+    client
+      .mutate({
+        mutation: actionType === 'addfunds' ? addFundMutation : withdrawFundMutation,
+        variables: {
+          userId,
+          accountId,
+          ...variables,
+        },
+      })
+      .then(() => {
+        Helper.toast(`Funds ${actionType === 'addfunds' ? 'added' : 'withdraw'} successfully.`, 'success');
+        this.operateInProgress(actionType, true);
+        this.initRequest();
+        resolve();
+      })
+      .catch((error) => {
+        uiStore.setErrors(error.message);
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        this.operateInProgress(actionType, true);
+        reject();
+      });
+  });
+
+  @action
   addFunds = (amount, description) => {
     uiStore.setProgress(true);
     const account = userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: addFundMutation,
           variables: {
-            userId: userDetails.id,
             amount,
             accountId: account.details.accountId,
             description,
           },
           refetchQueries: [{
             query: getInvestorAccountPortfolio,
-            variables: { userId: userDetails.id, accountId: account.details.accountId },
+            variables: { accountId: account.details.accountId },
           }],
         })
         .then(() => {
@@ -258,11 +357,7 @@ export class TransactionStore {
           resolve();
         })
         .catch((error) => {
-          if (includes(error.message, 'at least $1')) {
-            uiStore.setErrors(error.message);
-          } else {
-            Helper.toast('Something went wrong, please try again later.', 'error');
-          }
+          uiStore.setErrors(error.message);
           this.setInitialLinkValue(false);
           reject();
         })
@@ -271,14 +366,17 @@ export class TransactionStore {
         });
     });
   }
+
   @action
   setInitialLinkValue = (boolValue) => {
     this.showConfirmPreview = boolValue;
   }
+
   @action
   setInitialFundValue = () => {
     Validator.resetFormData(this.TRANSFER_FRM);
   }
+
   @action
   verifyVerificationCodeChange = (value) => {
     this.OTP_VERIFY_META = Validator.onChange(
@@ -286,38 +384,14 @@ export class TransactionStore {
       { name: 'code', value },
     );
   };
+
   @action
   setReSendVerificationCode(value) {
     this.reSendVerificationCode = value;
   }
+
   @action
-  requestOtpForManageAddWithdrawTransactions = () => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: requestOptForTransaction,
-          variables: {
-            scopeType: 'TRANSFER',
-            method: 'sms',
-          },
-        })
-        .then((result) => {
-          this.transactionOtpRequestId = result.data.requestOtp.requestId;
-          this.setPhoneNumber(result.data.requestOtp.phoneNumber);
-          resolve();
-        })
-        .catch((error) => {
-          uiStore.setErrors(error.message);
-          reject(error);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
-  }
-  @action
-  requestOtpForManageTransactions = () => {
+  requestOtpForManageTransactions = (isLinkedBankChange = false) => {
     uiStore.setProgress();
     const { userDetails } = userDetailsStore;
     const otpType = userDetails.mfaMode === 'PHONE' ? userDetails.phone.type || 'TEXT' : 'EMAIL';
@@ -328,9 +402,9 @@ export class TransactionStore {
         .mutate({
           mutation: requestOtp,
           variables: {
-            userId: userStore.currentUser.sub,
             type: otpType,
-            address: otpType === 'EMAIL' ? address : '',
+            isLinkedBankChange,
+            address: otpType === 'EMAIL' ? address : number,
           },
         })
         .then((result) => {
@@ -353,6 +427,7 @@ export class TransactionStore {
         });
     });
   }
+
   confirmAccountLinking = (setProgress = true) => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -365,7 +440,6 @@ export class TransactionStore {
           },
         })
         .then((response) => {
-          // this.updateUserPhoneDetails();
           if (response.data.verifyOtp) {
             resolve();
           } else {
@@ -385,36 +459,38 @@ export class TransactionStore {
         });
     });
   }
+
   @action
   resetFormData(form) {
     this[form] = Validator.resetFormData(this[form]);
   }
+
   @action
   setPhoneNumber(phoneNumberVal) {
     this.transactionDisplayPhoneNumber = phoneNumberVal;
   }
+
   @action
   setConfirmEmailAddress(emailVal) {
     this.confirmEmailAdress = emailVal;
   }
+
   @action
   withdrawFunds = (amount, description) => {
     uiStore.setProgress(true);
     const account = userDetailsStore.currentActiveAccountDetails;
-    const { userDetails } = userDetailsStore;
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: withdrawFundMutation,
           variables: {
-            userId: userDetails.id,
             amount,
             accountId: account.details.accountId,
             description,
           },
           refetchQueries: [{
             query: getInvestorAccountPortfolio,
-            variables: { userId: userDetails.id, accountId: account.details.accountId },
+            variables: { accountId: account.details.accountId },
           }],
         })
         .then(() => {
@@ -423,11 +499,6 @@ export class TransactionStore {
           resolve();
         })
         .catch((error) => {
-          if (includes(error.message, 'at least $0.01')) {
-            uiStore.setErrors(error.message);
-          } else {
-            Helper.toast('Something went wrong, please try again later.', 'error');
-          }
           uiStore.setErrors(error.message);
           this.setInitialLinkValue(false);
           reject();
@@ -437,20 +508,22 @@ export class TransactionStore {
         });
     });
   }
+
   @action
   getInvestorAvailableCash = (includeInFlight = true, isAdmin = false) => {
-    const account = !isAdmin ? userDetailsStore.currentActiveAccountDetails :
-      userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
-    const { userDetails, getDetailsOfUser } = userDetailsStore;
+    const account = !isAdmin ? userDetailsStore.currentActiveAccountDetails
+      : userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+    const { getDetailsOfUser } = userDetailsStore;
+    let variables = {
+      accountId: account.details.accountId,
+      includeInFlight,
+    };
+    variables = isAdmin ? { ...variables, userId: getDetailsOfUser.id } : { ...variables };
     return new Promise((resolve, reject) => {
       this.cashAvailable = graphql({
         client,
         query: getInvestorAvailableCash,
-        variables: {
-          userId: !isAdmin ? userDetails.id : getDetailsOfUser.id,
-          accountId: account.details.accountId,
-          includeInFlight,
-        },
+        variables,
         onFetch: (data) => {
           if (data && !this.cashAvailable.loading) {
             if (!isAdmin) {
@@ -471,43 +544,52 @@ export class TransactionStore {
 
   @action
   getPaymentHistory = () => new Promise((resolve, reject) => {
-    this.paymentHistoryData = graphql({
-      client,
-      query: paymentHistory,
-      variables: {
-        investmentId: this.selectedInvestment,
-        offeringId: offeringCreationStore.currentOfferingId,
-      },
-      onFetch: (data) => {
-        if (data && !this.paymentHistoryData.loading) {
-          resolve();
-        }
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-        reject();
-      },
-      fetchPolicy: 'network-only',
-    });
+    if (this.selectedInvestment && offeringCreationStore.currentOfferingId) {
+      this.paymentHistoryData = graphql({
+        client,
+        query: paymentHistory,
+        variables: {
+          investmentId: this.selectedInvestment,
+          offeringId: offeringCreationStore.currentOfferingId,
+        },
+        onFetch: (data) => {
+          if (data && !this.paymentHistoryData.loading) {
+            resolve();
+          }
+        },
+        onError: () => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          reject();
+        },
+        fetchPolicy: 'network-only',
+      });
+    }
   })
 
   @action
   getInvestmentsByOfferingId = isAdmin => new Promise((resolve, reject) => {
     const investorDetail = userDetailsStore.getDetailsOfUser;
-    const userDetailId = isAdmin ? investorDetail.id : get(userDetailsStore, 'userDetails.id');
+    const userDetailId = isAdmin ? investorDetail.id : null;
+    let params = {
+      offeringId: offeringCreationStore.currentOfferingId,
+    };
+    params = userDetailId ? { ...params, userId: userDetailId } : { ...params };
+    this.agreementIds = [];
     this.investmentsByOffering = graphql({
       client,
       query: getInvestmentsByUserIdAndOfferingId,
-      variables: {
-        offeringId: offeringCreationStore.currentOfferingId,
-        userId: userDetailId,
-      },
+      variables: params,
       onFetch: (data) => {
         if (data && !this.investmentsByOffering.loading) {
-          this.setInvestmentOptions(data.getInvestmentsByUserIdAndOfferingId);
-          if (data.getInvestmentsByUserIdAndOfferingId[0]) {
-            this.setInvestment(data.getInvestmentsByUserIdAndOfferingId[0].investmentId);
+          const account = !isAdmin ? userDetailsStore.currentActiveAccountDetails
+            : userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
+          const accountId = get(account, 'details.accountId');
+          const investmentsByUserIdAndOfferingId = filter(data.getInvestmentsByUserIdAndOfferingId, e => e.accountId === accountId);
+          this.setInvestmentOptions(investmentsByUserIdAndOfferingId);
+          if (get(investmentsByUserIdAndOfferingId, '[0]')) {
+            this.setInvestment(get(investmentsByUserIdAndOfferingId, '[0].investmentId'));
           }
+          this.setAgreementIds(data.getInvestmentsByUserIdAndOfferingId);
           resolve();
         }
       },
@@ -560,6 +642,13 @@ export class TransactionStore {
       },
     });
   });
+
+  @action
+  setAgreementIds(investmentsByUser) {
+    forEach(investmentsByUser, (investment) => {
+      this.agreementIds.push(get(investment, 'agreement.agreementId'));
+    });
+  }
 }
 
 export default new TransactionStore();

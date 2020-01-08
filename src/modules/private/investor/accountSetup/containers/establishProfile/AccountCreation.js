@@ -13,27 +13,32 @@ import Experience from './Experience';
 @withRouter
 @observer
 export default class AccountCreation extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.userDetailsStore.setUserAccDetails();
   }
+
   handleMultiStepModalclose = () => {
     if (this.props.refUrl) {
       this.props.history.push(this.props.refUrl);
     } else {
-      this.props.history.push('/app/summary');
+      this.props.history.push('/dashboard/setup');
     }
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
+
   handleStepChange = (step) => {
     this.props.investorProfileStore.setStepToBeRendered(step);
     this.props.uiStore.clearErrors();
   }
+
   render() {
     const {
       inProgress,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
+      setFieldvalue, inProgressArray,
     } = this.props.uiStore;
     const {
       INVESTMENT_EXP_FORM,
@@ -44,8 +49,7 @@ export default class AccountCreation extends React.Component {
       PUBLIC_COMPANY_REL_FORM,
       stepToBeRendered,
     } = this.props.investorProfileStore;
-    const steps =
-    [
+    const steps = [
       {
         name: 'Overview',
         component: <Overview />,
@@ -97,7 +101,7 @@ export default class AccountCreation extends React.Component {
         disableKeyDown: true,
       },
       {
-        name: 'Investment Experience',
+        name: inProgressArray.includes('EXPERIENCED') ? 'RISKS' : 'Investment Experience',
         component: <Experience />,
         isValid: INVESTMENT_EXP_FORM.meta.isValid ? '' : stepToBeRendered > 5 ? 'error' : '',
         isDirty: INVESTMENT_EXP_FORM.meta.isDirty,
@@ -112,7 +116,7 @@ export default class AccountCreation extends React.Component {
     return (
 
       <div className="step-progress">
-        <MultiStep isAccountCreation disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={updateInvestorProfileData} inProgress={inProgress} steps={steps} formTitle="Complete your investor profile" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep isAccountCreation inProgressArray={inProgressArray} setUiStorevalue={setFieldvalue} disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={updateInvestorProfileData} inProgress={inProgress} steps={steps} formTitle="Complete your investor profile" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

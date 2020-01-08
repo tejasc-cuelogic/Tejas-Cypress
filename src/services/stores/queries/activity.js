@@ -17,6 +17,13 @@ export const allActivities = gql`
       activityTitle
       activityType
       activity
+      documents {
+        fileId
+        fileName
+        fileHandle {
+          boxFileId
+        }
+      }
       createdUserInfo {
         id
         roles {
@@ -31,13 +38,13 @@ export const allActivities = gql`
             name
           }
         }
-      }    
+      }
     }
   }
 }
 `;
 
-export const addActivity = gql`
+export const createActivityHistory = gql`
   mutation createActivityHistory ($activityHistoryDetails: ActivityHistoryInput!){
     createActivityHistory(activityHistoryDetails: $activityHistoryDetails) {
       resourceId

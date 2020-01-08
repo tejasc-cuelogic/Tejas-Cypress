@@ -5,18 +5,25 @@ import { forEach, map, sortBy, kebabCase } from 'lodash';
 import { GqlClient as clientPrivate } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import { faqs, getFaqById, upsertFaq, faqsListByFilters, deleteFaq, updateStatus, setOrderForFAQ } from '../../queries/faq';
+import { faqs, getFaqById, upsertFaq, deleteFaq } from '../../queries/faq';
 import { FAQ } from '../../../constants/faq';
 import { uiStore } from '../../index';
 
 export class FaqStore {
   @observable data = [];
+
   @observable db;
+
   @observable FAQ_FRM = Validator.prepareFormObject(FAQ);
+
   @observable editMode = false;
+
   @observable filters = false;
+
   @observable globalAction = '';
+
   @observable selectedRecords = [];
+
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -26,10 +33,12 @@ export class FaqStore {
     search: {
     },
   };
+
   @observable confirmBox = {
     entity: '',
     refId: '',
   };
+
   @observable removeFileIdsList = [];
 
   @action
@@ -44,20 +53,23 @@ export class FaqStore {
       onFetch: (res) => {
         if (res && res.faqs) {
           this.setDb(res.faqs);
-          uiStore.setProgress(false);
         }
+        uiStore.setProgress(false);
       },
     });
   }
+
   @action
   setGlobalAction = (name, globalAction) => {
     this[name] = globalAction;
   }
+
   @action
   setConfirmBox = (entity, refId) => {
     this.confirmBox.entity = entity;
     this.confirmBox.refId = refId;
   }
+
   @action
   addSelectedRecord = (id) => {
     this.isReadOnly = false;
@@ -66,6 +78,7 @@ export class FaqStore {
       this.selectedRecords.push('all');
     }
   }
+
   @action
   removeUnSelectedRecord = (id) => {
     this.selectedRecords = this.selectedRecords.filter(recordId => recordId !== id);
@@ -75,43 +88,13 @@ export class FaqStore {
   }
 
   @action
-  applyGlobalAction = () => {
-    const idArr = this.selectedRecords;
-    const status = this.globalAction;
-    this.data.loading = true;
-    if (status === 'delete') {
-      this.deleteRecords(idArr);
-    } else {
-      this.updateRecordStatus(idArr, status);
-    }
-  }
-
-  updateRecordStatus = (id, status) => {
-    uiStore.setProgress();
-    clientPrivate.mutate({
-      mutation: updateStatus,
-      variables: {
-        id,
-        itemStatus: status,
-      },
-      refetchQueries: [{ query: faqs }],
-    }).then(() => {
-      this.resetSelectedRecords();
-      uiStore.setProgress();
-      Helper.toast('Status updated successfully.', 'success');
-    }).catch(() => {
-      this.resetSelectedRecords();
-      uiStore.setProgress();
-      Helper.toast('Error while updating status.', 'error');
-    });
-  }
-  @action
   resetSelectedRecords = () => {
     this.selectedRecords = [];
     this.isReadOnly = true;
     this.globalAction = '';
   }
-  deleteRecords = (id) => {
+
+  deleteRecords = id => new Promise((resolve, reject) => {
     uiStore.setProgress();
     clientPrivate.mutate({
       mutation: deleteFaq,
@@ -121,14 +104,14 @@ export class FaqStore {
       refetchQueries: [{ query: faqs }],
     }).then(() => {
       this.resetSelectedRecords();
-      uiStore.setProgress(false);
       Helper.toast('Records deleted successfully.', 'success');
+      resolve();
     }).catch(() => {
       this.resetSelectedRecords();
-      uiStore.setProgress(false);
       Helper.toast('Error while deleting records.', 'error');
-    });
-  }
+      reject();
+    }).finally(() => uiStore.setProgress(false));
+  });
 
   @action
   setDb = (data) => {
@@ -138,10 +121,12 @@ export class FaqStore {
     });
     this.db = ClientDb.initiateDb(d, true);
   }
+
   @computed get allFaqs() {
-    return (this.db && this.db.length &&
-      toJS(sortBy(this.db, ['order']).slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
+    return (this.db && this.db.length
+      && toJS(sortBy(this.db, ['order']).slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
   }
+
   @computed get allCategorizedFaqs() {
     const arrFaqs = [];
     if (this.db && this.db.length) {
@@ -164,6 +149,7 @@ export class FaqStore {
     }
     return arrFaqs;
   }
+
   @computed get loading() {
     return this.data.loading;
   }
@@ -183,6 +169,7 @@ export class FaqStore {
       },
     });
   }
+
   @action
   maskChange = (values, form, field) => {
     this[form] = Validator.onChange(
@@ -190,6 +177,7 @@ export class FaqStore {
       { name: field, value: values.floatValue },
     );
   }
+
   @action
   setFormData = (formData) => {
     Object.keys(this.FAQ_FRM.fields).map(action((key) => {
@@ -198,11 +186,13 @@ export class FaqStore {
     this.editMode = true;
     Validator.validateForm(this.FAQ_FRM);
   }
+
   @action
   htmlContentChange = (field, value) => {
     this.FAQ_FRM.fields[field].value = value;
     Validator.validateForm(this.FAQ_FRM);
   }
+
   getFaqFormData = () => {
     const data = {};
     forEach(this.FAQ_FRM.fields, (t, key) => {
@@ -210,6 +200,7 @@ export class FaqStore {
     });
     return data;
   }
+
   @action
   checkUncheckAll = (checked = false) => {
     if (checked) {
@@ -224,36 +215,13 @@ export class FaqStore {
       });
     }
   }
+
   @action
   reset = () => {
     this.FAQ_FRM = Validator.prepareFormObject(FAQ);
+    this.requestState.search = {};
   }
-  @action
-  setFaqOrder = (newArr) => {
-    uiStore.setProgress();
-    const data = [];
-    newArr.forEach((item, index) => {
-      if (item) {
-        data.push({
-          id: item.id,
-          order: index + 1,
-        });
-        // eslint-disable-next-line no-param-reassign
-        newArr[index].order = index + 1;
-      }
-    });
-    clientPrivate
-      .mutate({
-        mutation: setOrderForFAQ,
-        variables: { faqItemsList: data },
-      }).then(() => {
-        this.initRequest();
-        Helper.toast('Order updated successfully.', 'success');
-      }).catch(() => {
-        uiStore.setProgress(false);
-        Helper.toast('Error while updating order', 'error');
-      });
-  }
+
   @action
   formChange = (e, result) => {
     this.FAQ_FRM = Validator.onChange(this.FAQ_FRM, Validator.pullValues(e, result));
@@ -275,14 +243,19 @@ export class FaqStore {
   toggleSearch = () => {
     this.filters = !this.filters;
   }
+
   @action
   FChange = (field, value) => {
     this.FAQ_FRM.fields[field].value = value;
     Validator.validateForm(this.FAQ_FRM);
   }
+
   @action
-  save = (id, isDraft = false) => new Promise((resolve, reject) => {
+  save = (id, status, isDraft = false) => new Promise((resolve, reject) => {
     uiStore.setProgress();
+    if (status) {
+      this.FAQ_FRM.fields.itemStatus.value = status;
+    }
     let data = this.getFaqFormData();
     data = id === 'new' ? data : { ...data, id };
     clientPrivate
@@ -301,6 +274,7 @@ export class FaqStore {
         reject();
       });
   });
+
   @action
   setFormFileArray = (formName, field, getField, value) => {
     if (Array.isArray(toJS(this[formName].fields[field][getField]))) {
@@ -309,32 +283,11 @@ export class FaqStore {
       this[formName].fields[field][getField] = value;
     }
   }
-  @action
-  faqListByFilter = () => {
-    const data = this.requestState.search;
-    uiStore.setProgress();
-    this.data = graphql({
-      client: clientPrivate,
-      query: faqsListByFilters,
-      fetchPolicy: 'network-only',
-      variables: {
-        question: data.keyword,
-        faqType: data.type !== 'All' ? data.type : undefined,
-        categoryId: data.categoryName,
-        itemStatus: data.status !== 'All' ? data.status : undefined,
-      },
-      onFetch: (res) => {
-        if (res && res.faqsListByFilters) {
-          this.resetSelectedRecords();
-          uiStore.setProgress(false);
-          this.setDb(res.faqsListByFilters);
-        }
-      },
-    });
-  }
+
   @computed get count() {
     return (this.db && this.db.length) || 0;
   }
+
   @action
   pageRequest = ({ skip, page }) => {
     this.requestState.displayTillIndex = this.requestState.perPage * page;
@@ -342,6 +295,7 @@ export class FaqStore {
     this.requestState.skip = skip;
     this.resetSelectedRecords();
   }
+
   @action
   setInitiateSrch = (keyword, value) => {
     this.requestState.search[keyword] = value;
@@ -350,6 +304,7 @@ export class FaqStore {
       this.faqListByFilter();
     }
   }
+
   @computed get selectedCount() {
     return this.selectedRecords.length || 0;
   }

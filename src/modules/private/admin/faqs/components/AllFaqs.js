@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
 import { Button, Icon, Label, Confirm, Accordion } from 'semantic-ui-react';
-import { InlineLoader } from './../../../../../theme/shared';
+import { InlineLoader } from '../../../../../theme/shared';
 
 const actions = {
   edit: { label: 'Edit', icon: 'pencil' },
@@ -12,20 +11,20 @@ const actions = {
 };
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({
-  faq, key, handleAction,
+  faq, key, handleAction, refUrl,
 }) => (
   <div className="row-wrap striped-table" key={key}>
     <div className="balance-half first-column">
       <DragHandle />
       <Label color={`${faq.itemStatus === 'PUBLISHED' ? 'green' : faq.itemStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty className="mr-10" />
       <span className="user-name">
-        <Link to={`/app/faqs/${faq.id}`}>{faq.question}</Link>
+        <Link to={`${refUrl}/${faq.id}/${faq.itemStatus}`}>{faq.question}</Link>
       </span>
     </div>
     <div className="action width-100 right-align">
       <Button.Group>
         {Object.keys(actions).map(action => (
-          <Button className="link-button" >
+          <Button className="link-button">
             <Icon className={`ns-${actions[action].icon}`} onClick={() => handleAction(actions[action].label, faq.id, faq.itemStatus)} />
           </Button>
         ))}
@@ -35,7 +34,7 @@ const SortableItem = SortableElement(({
 ));
 
 const SortableList = SortableContainer(({
-  allFaqs, handleAction, checkedRecords, selectedRecords,
+  allFaqs, handleAction, checkedRecords, selectedRecords, refUrl,
 }) => (
   <div className="tbody">
     { allFaqs.map((faq, index) => (
@@ -47,6 +46,7 @@ const SortableList = SortableContainer(({
         handleAction={handleAction}
         checkedRecords={checkedRecords}
         selectedRecords={selectedRecords}
+        refUrl={refUrl}
       />
     )) }
   </div>
@@ -55,33 +55,46 @@ const SortableList = SortableContainer(({
 @withRouter
 @observer
 export default class AllFaqs extends Component {
-  state = { activeIndex: 0, innerActiveIndex: [] }
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = { activeIndex: 0, innerActiveIndex: [] };
     this.props.faqStore.initRequest(); // load data
   }
+
+  componentWillUnmount() {
+    this.props.faqStore.reset();
+  }
+
   onSortEnd = ({ oldIndex, newIndex }, faqType, categorizedFaqs) => {
     const { allCategorizedFaqs, setFaqOrder } = this.props.faqStore;
     if (oldIndex !== newIndex) {
       setFaqOrder(arrayMove(allCategorizedFaqs[faqType][categorizedFaqs], oldIndex, newIndex));
     }
   }
-  handleAction = (action, faqId) => {
+
+  handleAction = (action, faqId, status) => {
     if (action === 'Delete') {
       this.props.faqStore.setConfirmBox(action, faqId);
     } else if (action === 'Edit') {
-      this.props.history.push(`${this.props.match.url}/${faqId}`);
+      this.props.history.push(`${this.props.match.url}/${faqId}/${status}`);
     }
   }
-  globalActionChange = (e, { name, value }) =>
-    this.props.faqStore.setGlobalAction(name, value);
+
+  globalActionChange = (e, { name, value }) => this.props.faqStore.setGlobalAction(name, value);
+
   deleteFaq = () => {
-    this.props.faqStore.deleteRecords(this.props.faqStore.confirmBox.refId);
-    this.props.faqStore.setConfirmBox('');
+    this.props.faqStore.deleteRecords(this.props.faqStore.confirmBox.refId).then(() => {
+      this.props.faqStore.setConfirmBox('');
+      this.props.history.replace(this.props.refLink);
+    });
   }
+
   handleDeleteCancel = () => {
     this.props.faqStore.setConfirmBox('');
   }
+
   paginate = params => this.props.faqStore.pageRequest(params);
+
   checkedRecords = (e, result) => {
     if (result && result.type === 'checkbox' && result.checked) {
       this.props.faqStore.addSelectedRecord(result.value);
@@ -89,17 +102,18 @@ export default class AllFaqs extends Component {
       this.props.faqStore.removeUnSelectedRecord(result.value);
     }
   }
+
   checkAll = (e, result) => {
     this.props.faqStore.checkUncheckAll(result.checked);
   }
+
   toggleAccordion = (index, field) => {
     let stateChange = [];
     const newIndex = this.state[field] === index ? -1 : index;
     if (field === 'activeIndex') {
       stateChange = { activeIndex: newIndex };
     } else if (this.state.innerActiveIndex.includes(index)) {
-      this.state.innerActiveIndex =
-        this.state.innerActiveIndex.filter(innerIndex => innerIndex !== index);
+      this.state.innerActiveIndex = this.state.innerActiveIndex.filter(innerIndex => innerIndex !== index);
     } else {
       this.state.innerActiveIndex.push(newIndex);
       stateChange = { ...this.state };
@@ -108,6 +122,7 @@ export default class AllFaqs extends Component {
     // { activeIndex: newIndex, innerActiveIndex: 0 } : { innerActiveIndex: newIndex };
     this.setState(stateChange);
   }
+
   render() {
     const { activeIndex, innerActiveIndex } = this.state;
     const {
@@ -120,8 +135,11 @@ export default class AllFaqs extends Component {
     if (inProgress || loading) {
       return <InlineLoader />;
     }
+    if (Object.keys(allCategorizedFaqs).length === 0) {
+      return <InlineLoader text="No data found." />;
+    }
     return (
-      <Aux>
+      <>
         {Object.keys(allCategorizedFaqs).map(faqType => (
           <Accordion key={faqType} fluid styled className="card-style">
             <Accordion.Title onClick={() => this.toggleAccordion(faqType, 'activeIndex')} className="text-capitalize">
@@ -134,7 +152,7 @@ export default class AllFaqs extends Component {
                   <Accordion.Title onClick={() => this.toggleAccordion(categorizedFaqs, 'innerActiveIndex')} className="text-capitalize">
                     <Icon className={!innerActiveIndex.includes(categorizedFaqs) ? 'ns-chevron-up' : 'ns-chevron-down'} />
                     {allCategorizedFaqs[faqType][categorizedFaqs][0].categoryName}
-                    <Button as={Link} to={`${this.props.match.url}/new/${faqType}/${categorizedFaqs}`} className="link-button pull-right"><small>+ Add FAQ</small></Button>
+                    <Button as={Link} to={`${this.props.match.url}/new/DRAFT/${faqType}/${categorizedFaqs}`} className="link-button pull-right"><small>+ Add FAQ</small></Button>
                   </Accordion.Title>
                   <Accordion.Content active={!innerActiveIndex.includes(categorizedFaqs)}>
                     <SortableList
@@ -146,6 +164,7 @@ export default class AllFaqs extends Component {
                       handleAction={this.handleAction}
                       checkedRecords={this.checkedRecords}
                       selectedRecords={selectedRecords}
+                      refUrl={this.props.match.url}
                     />
                   </Accordion.Content>
                 </Accordion>
@@ -163,7 +182,7 @@ export default class AllFaqs extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

@@ -7,6 +7,7 @@ export default class MessageModal extends Component {
   handleBack = () => {
     this.props.history.push(`${this.props.refLink}`);
   }
+
   render() {
     return (
       <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack} size="mini">

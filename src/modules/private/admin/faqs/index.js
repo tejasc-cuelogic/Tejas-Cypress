@@ -7,15 +7,17 @@ import FaqDetails from './containers/FaqDetails';
 @inject('articleStore')
 @withRouter
 export default class Faqs extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.articleStore.getCategoryListByTypes(false, ['INV_FAQ', 'ISSUER_FAQ']);
   }
+
   render() {
     const { match, refMatch } = this.props;
     return (
       <Switch>
         <Route exact path={`${match.url}`} render={props => <ManageFaqs refMatch={refMatch} {...props} />} />
-        <Route exact path={`${match.url}/:id/:faqType?/:categoryId?`} render={props => <FaqDetails refLink={match.url} {...props} />} />
+        <Route exact path={`${match.url}/:id/:status/:faqType?/:categoryId?`} render={props => <FaqDetails refLink={match.url} {...props} />} />
       </Switch>
     );
   }

@@ -4,42 +4,75 @@ import { isEmpty, map, uniqWith, isEqual, find, get, filter } from 'lodash';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore, individualAccountStore, entityAccountStore } from '../../index';
-import { linkBankRequestPlaid, linkBankRequestManual, validateBankAccount, linkBankRequestCancel, getDecryptedRoutingNumber } from '../../queries/banking';
+import { linkBankRequestPlaid, linkBankRequestManual, validateBankAccount, declineBankChangeRequest, getDecryptedRoutingNumber, hasPendingTransfersWithPendingBankChange } from '../../queries/banking';
 import Helper from '../../../../helper/utility';
 import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META, ENTITY_ADD_FUND,
-  IRA_ADD_FUND,
+  IRA_ADD_FUND, BANK_REQUEST_VERIFY_DENY_FORM,
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
-import { getlistLinkedBankUsers, isValidOpeningDepositAmount, linkBankRequestApprove, linkBankRequestDeny } from '../../queries/bankAccount';
-import { validationActions } from '../../../../services/actions';
+import { getlistLinkedBankUsers, isValidOpeningDepositAmount, linkBankRequestApprove } from '../../queries/bankAccount';
+import { validationActions } from '../../../actions';
 
 export class BankAccountStore {
   @observable bankLinkInterface = 'list';
+
   @observable plaidAccDetails = {};
+
   @observable routingNum = null;
+
   @observable plaidBankDetails = {};
+
   @observable bankListing = undefined;
+
   @observable depositMoneyNow = true;
+
   @observable showAddFunds = false;
+
+  @observable bankSelect = false;
+
+  @observable apiCall = false;
+
   @observable formBankSearch = Validator.prepareFormObject(IND_BANK_ACC_SEARCH);
+
+  @observable formBankRequestVerifyDeny = Validator.prepareFormObject(BANK_REQUEST_VERIFY_DENY_FORM);
+
   @observable formAddFunds = Validator.prepareFormObject(IND_ADD_FUND);
+
   @observable formEntityAddFunds = Validator.prepareFormObject(ENTITY_ADD_FUND);
+
   @observable formIraAddFunds = Validator.prepareFormObject(IRA_ADD_FUND);
+
   @observable formLinkBankManually = Validator.prepareFormObject(IND_LINK_BANK_MANUALLY);
+
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
+
   @observable filters = false;
+
   @observable CurrentAccountId;
+
   @observable isPlaidBankVerified = false;
+
   @observable newPlaidAccDetails = {};
+
   @observable isLinkedBankCancelRequest = false;
+
   @observable manualLinkBankSubmitted = false;
+
   @observable activeBankPladLogo = null;
+
   @observable pendingBankPladLogo = null;
+
   @observable db;
+
   @observable linkbankSummary = false;
+
   @observable shouldValidateAmount = false;
+
   @observable loadingState = false;
+
+  @observable hasPendingRequest = false;
+
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -50,6 +83,7 @@ export class BankAccountStore {
     search: {
     },
   };
+
   @observable loadingRequestIds = [];
 
   @action
@@ -76,6 +110,7 @@ export class BankAccountStore {
   setFieldValue = (field, value) => {
     this[field] = value;
   }
+
   @action
   setDepositMoneyNow(status) {
     this.depositMoneyNow = status;
@@ -103,12 +138,14 @@ export class BankAccountStore {
       Validator.pullValues(e, result),
     );
   }
+
   @action
   fChange = (e, result) => {
     this.FILTER_FRM = Validator.onChange(this.FILTER_FRM, Validator.pullValues(e, result));
     this.requestState.isLocked = this.FILTER_FRM.fields.locked.value[0] || false;
     this.requestState = { ...this.requestState };
   };
+
   @action
   setBankLinkInterface(mode) {
     this.resetLinkBankForm();
@@ -122,8 +159,7 @@ export class BankAccountStore {
 
   @action
   addFundChange = (values, field) => {
-    this[this.addFundsByAccType] =
-    Validator.onChange(this.addFundsByAccType, { name: field, value: values.floatValue });
+    this[this.addFundsByAccType] = Validator.onChange(this.addFundsByAccType, { name: field, value: values.floatValue });
   };
 
   @action
@@ -174,6 +210,7 @@ export class BankAccountStore {
     this.resetShowAddFunds();
     uiStore.clearErrors();
   }
+
   stepbankSummary = step => step.bankSummary;
 
   @action
@@ -181,8 +218,8 @@ export class BankAccountStore {
     if (!isEmpty(userDetailsStore.userDetails)) {
       const { roles } = userDetailsStore.userDetails;
       const accountData = find(roles, { name: accountType });
-      this.plaidAccDetails = accountData.details && accountData.details.linkedBank ?
-        accountData.details.linkedBank : {};
+      this.plaidAccDetails = accountData.details && accountData.details.linkedBank
+        ? accountData.details.linkedBank : {};
       this.CurrentAccountId = accountData.details && accountData.details.accountId;
     }
   }
@@ -191,13 +228,25 @@ export class BankAccountStore {
   setPlaidAccDetails = (plaidAccDetails) => {
     this.plaidAccDetails = plaidAccDetails;
   }
+
   @action
   setPlaidBankDetails = (plaidBankDetails) => {
     this.plaidBankDetails = plaidBankDetails;
   }
+
   @action
   setNewPlaidBankDetails = (objVal) => {
     this.newPlaidAccDetails = objVal;
+  }
+
+  @action
+  resetPlaidBankSearch = (forceReset = false) => {
+    if (this.bankLinkInterface === 'form'
+      || this.linkbankSummary
+      || forceReset) {
+      this.setBankListing();
+      this.resetFormData('formBankSearch');
+    }
   }
 
   /* eslint-disable camelcase */
@@ -213,12 +262,13 @@ export class BankAccountStore {
         routingNumber,
         accountType,
         account,
+        plaidAccountId,
       } = this.plaidAccDetails;
-      if (account_id && public_token) {
+      if ((account_id && public_token) || plaidAccountId) {
         plaidBankDetails.linkedBank = {
           plaidPublicToken: public_token,
-          plaidAccountId: account_id,
-          accountType: account.subtype.toUpperCase(),
+          plaidAccountId: plaidAccountId || account_id,
+          accountType: (accountType && accountType.toUpperCase()) || account.subtype.toUpperCase(),
         };
       } else {
         plaidBankDetails.linkedBank = {
@@ -239,8 +289,8 @@ export class BankAccountStore {
     }
     const { value } = this.addFundsByAccType.fields.value;
     const { isValid } = this.addFundsByAccType.meta;
-    accountAttributes.initialDepositAmount = this.depositMoneyNow && isValid ?
-      value : this.depositMoneyNow ? '' : -1;
+    accountAttributes.initialDepositAmount = this.depositMoneyNow && isValid
+      ? value : this.depositMoneyNow ? '' : -1;
     return accountAttributes;
   }
 
@@ -251,11 +301,11 @@ export class BankAccountStore {
 
   @computed
   get isPlaidDirty() {
-    return (this.isAccountPresent &&
-    this.formLinkBankManually.meta.isDirty &&
-    this.addFundsByAccType.meta.isDirty &&
-    !this.linkbankSummary) ||
-    this.showAddFunds;
+    return (this.isAccountPresent
+    && this.formLinkBankManually.meta.isDirty
+    && this.addFundsByAccType.meta.isDirty
+    && !this.linkbankSummary)
+    || this.showAddFunds;
   }
 
   @action
@@ -267,6 +317,25 @@ export class BankAccountStore {
   setShowAddFunds = (funds = true) => {
     this.showAddFunds = funds;
   }
+
+  @action
+  hasPendingTransfersWithPendingBankChange = () => new Promise((resolve) => {
+    client
+      .mutate({
+        mutation: hasPendingTransfersWithPendingBankChange,
+        variables: { accountId: this.CurrentAccountId },
+      })
+      .then((res) => {
+        this.setFieldValue('hasPendingRequest', get(res, 'data.hasPendingTransfersWithPendingBankChange'));
+        resolve();
+      })
+      .catch((error) => {
+        uiStore.setErrors(error.message);
+        Helper.toast(error.message, 'error');
+      }).finally(() => {
+        uiStore.setProgress(false);
+      });
+  });
 
   @action
   setLinkBankSummary = (showbank = true) => {
@@ -283,8 +352,8 @@ export class BankAccountStore {
   }
 
   @computed get isAccountPresent() {
-    return !isEmpty(get(this.plaidAccDetails, 'accountNumber')) ||
-      !isEmpty(get(this.plaidAccDetails, 'public_token'));
+    const { accountNumber, routingNumber, bankName } = this.plaidAccDetails;
+    return !isEmpty(accountNumber) && !isEmpty(routingNumber) && !isEmpty(bankName);
   }
 
   @action
@@ -317,6 +386,7 @@ export class BankAccountStore {
           if (res && !this.data.loading) {
             this.setDb(res.listLinkedBankUsers.linkedBankList);
           }
+          this.setFieldValue('apiCall', true);
         },
       });
     }
@@ -326,6 +396,7 @@ export class BankAccountStore {
     this.requestState.search[name] = value;
     this.initiateFilters();
   }
+
   @action
   initiateFilters = () => {
     const { keyword } = this.requestState.search;
@@ -341,6 +412,7 @@ export class BankAccountStore {
       this.setDb(get(this.data, 'data.listLinkedBankUsers.linkedBankList') || []);
     }
   }
+
   @action
   toggleSearch = () => {
     this.filters = !this.filters;
@@ -349,16 +421,17 @@ export class BankAccountStore {
   @computed get loading() {
     return this.data.loading;
   }
+
   @computed get changeRequests() {
     if (!this.requestState.isLocked) {
-      return (this.db && this.db.length &&
-        toJS(filter(
+      return (this.db && this.db.length
+        && toJS(filter(
           this.db.slice(this.requestState.skip, this.requestState.displayTillIndex),
           changeRequest => get(changeRequest, 'userInfo.locked.lock') !== 'LOCKED',
         ))) || [];
     }
-    return (this.db && this.db.length &&
-      toJS(this.db.slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
+    return (this.db && this.db.length
+      && toJS(this.db.slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
   }
 
   @action
@@ -377,14 +450,15 @@ export class BankAccountStore {
   @computed get addFundsByAccType() {
     return (Helper.matchRegexWithUrl([/\bentity(?![-])\b/]) ? this.formEntityAddFunds : Helper.matchRegexWithUrl([/\bira(?![-])\b/]) ? this.formIraAddFunds : this.formAddFunds);
   }
+
   @action
   validateAddFunds = () => {
     map(this.addFundsByAccType.fields, (value) => {
       const { key } = value;
       const fundValue = value;
-      fundValue.value = parseFloat(value.value, 0) === -1 || value.value === '' ||
+      fundValue.value = parseFloat(value.value, 0) === -1 || value.value === ''
         // eslint-disable-next-line no-restricted-globals
-        isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
+        || isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
       const { errors } = validationService.validate(value);
       Validator.setFormError(
         this.addFundsByAccType,
@@ -400,17 +474,26 @@ export class BankAccountStore {
     Validator.validateForm(form, false);
   }
 
+  // @computed get count() {
+  //   return (get(this.data, 'data.listLinkedBankUsers.resultCount')) || 0;
+  // }
+
   @computed get count() {
-    return (get(this.data, 'data.listLinkedBankUsers.resultCount')) || 0;
+    if (!this.requestState.isLocked) {
+      return (this.db && this.db.length
+        && toJS(filter(
+          this.db,
+          changeRequest => get(changeRequest, 'userInfo.locked.lock') !== 'LOCKED',
+        ).length)) || 0;
+    }
+    return (this.db && this.db.length) || 0;
   }
+
   @computed get isLinkbankInComplete() {
-    const isAddFundsDirty = this.addFundsByAccType.meta.isDirty;
-    return this.manualLinkBankSubmitted ||
-    isAddFundsDirty ||
-    this.formLinkBankManually.meta.isDirty ||
-    this.linkbankSummary ||
-    !this.isAccountPresent ||
-    this.showAddFunds;
+    return this.manualLinkBankSubmitted
+    || this.formLinkBankManually.meta.isDirty
+    || this.linkbankSummary
+    || !this.isAccountPresent;
   }
 
   @action
@@ -511,18 +594,18 @@ export class BankAccountStore {
   }
 
   @action
-  linkBankRequestCancel = () => {
+  declineBankChangeRequest = () => {
     const canceldData = {
       accountId: this.CurrentAccountId,
     };
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: linkBankRequestCancel,
+          mutation: declineBankChangeRequest,
           variables: canceldData,
         })
         .then(() => {
-          userDetailsStore.getUser(userStore.currentUser.sub);
+          userDetailsStore.getUser();
           resolve();
         })
         .catch((error) => {
@@ -542,7 +625,7 @@ export class BankAccountStore {
     this.resetFormData('formBankSearch');
     this.resetFormData('formAddFunds');
     this.resetFormData('formEntityAddFunds');
-    this.resetFormData('formLinkBankManually');
+    this.formLinkBankManually = Validator.prepareFormObject(IND_LINK_BANK_MANUALLY);
     this.resetRoutingNum();
     this.bankLinkInterface = 'list';
     this.plaidAccDetails = {};
@@ -554,27 +637,33 @@ export class BankAccountStore {
     this.isManualLinkBankSubmitted = false;
     this.linkbankSummary = false;
     this.shouldValidateAmount = false;
+    this.bankSelect = false;
   }
+
   @action
   setPlaidBankVerificationStatus = (booleanValue) => {
     this.isPlaidBankVerified = booleanValue;
   }
+
   @action
   setLinkedBankCancelRequestStatus = (booleanValue) => {
     this.isLinkedBankCancelRequest = booleanValue;
   }
+
   @action
   setActiveBankPlaidLogo = (logo) => {
     this.activeBankPladLogo = logo;
   }
+
   @action
   setPendingeBankPlaidLogo = (logo) => {
     this.pendingBankPladLogo = logo;
   }
+
   isEncrypted = (n, ref) => {
     if (n) {
-      return ((ref === 'routingNo' && n.length > 9) ||
-        n.includes('X'));
+      return ((ref === 'routingNo' && n.length > 9)
+        || n.includes('X'));
     }
     return false;
   }
@@ -618,7 +707,7 @@ export class BankAccountStore {
             resolve();
           },
           onError: (err) => {
-            uiStore.setProgress(isLoader);
+            uiStore.setProgress(false);
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             reject();
           },
@@ -642,28 +731,32 @@ export class BankAccountStore {
   }
 
   @action
-  updateAccountChangeAction = (accountId, userId, isDeny = false) => {
+  updateAccountChangeAction = (accountId, userId, justification, isDeny = false) => {
+    uiStore.setProgress();
     this.addLoadingRequestId(userId);
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: isDeny ? linkBankRequestDeny : linkBankRequestApprove,
+          mutation: isDeny ? declineBankChangeRequest : linkBankRequestApprove,
           variables: {
             accountId,
             userId,
+            justification,
           },
         })
         .then((res) => {
           this.removeLoadingRequestId(userId);
-          Helper.toast(isDeny ? (res.data.linkBankRequestDeny ? 'Link bank requested is denied successfully.' : 'Something went wrong, please try again later.') : res.data.linkBankRequestApprove.message, (isDeny && !res.data.linkBankRequestDeny) ? 'error' : 'success');
+          Helper.toast(isDeny ? (res.data.declineBankChangeRequest ? 'Link bank requested is denied successfully.' : 'Something went wrong, please try again later.') : res.data.linkBankRequestApprove.message, (isDeny && !res.data.declineBankChangeRequest) ? 'error' : 'success');
+          uiStore.setProgress(false);
           resolve();
         })
         .catch((error) => {
           if (error) {
             Helper.toast(error.message, 'error');
             uiStore.setErrors(error.message);
+            uiStore.setProgress(false);
+            this.removeLoadingRequestId(userId, false);
             reject();
-            this.removeLoadingRequestId(userId, true);
           }
         });
     });
@@ -672,40 +765,42 @@ export class BankAccountStore {
   @action
   fetchRoutingNumber = (requestType = 'LINKED_BANK') => {
     const { getAccountIdByType } = accountStore;
-    const { currentUserId } = userDetailsStore;
     const accountId = getAccountIdByType();
-    if (currentUserId && accountId && get(this.plaidAccDetails, 'accountNumber')) {
+    if (accountId && get(this.plaidAccDetails, 'accountNumber')) {
       uiStore.setProgress();
-      this.getDecryptedRoutingNum(accountId, currentUserId, requestType)
+      this.getDecryptedRoutingNum(accountId, false, requestType)
         .then(action((res) => {
           if (this.routingNum !== res) {
             this.routingNum = res;
           }
-          uiStore.setProgress(false);
+          uiStore.setProgress(!isEmpty(uiStore.createAccountMessage));
         }));
     }
   }
+
   @action
-  getDecryptedRoutingNum = (accountId, userId, requestType = 'CHANGE_REQUEST') => new Promise((resolve, reject) => {
-    client
-      .mutate({
-        mutation: getDecryptedRoutingNumber,
-        variables: {
-          userId,
-          accountId,
-          requestType,
-        },
-      })
-      .then(res => resolve(res.data.getDecryptedRoutingNumber))
-      .catch(() => {
-        if (requestType === 'CHANGE_REQUEST') {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-        }
-        uiStore.setProgress(false);
-        reject();
-      });
-  });
+  getDecryptedRoutingNum = (accountId, userId, requestType = 'CHANGE_REQUEST') => {
+    let variables = {
+      accountId,
+      requestType,
+    };
+    variables = userId ? { ...variables, userId } : { ...variables };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: getDecryptedRoutingNumber,
+          variables,
+        })
+        .then(res => resolve(res.data.getDecryptedRoutingNumber))
+        .catch(() => {
+          if (requestType === 'CHANGE_REQUEST') {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+          }
+          uiStore.setProgress(false);
+          reject();
+        });
+    });
+  }
 }
 
 export default new BankAccountStore();
-

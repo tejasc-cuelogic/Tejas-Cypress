@@ -34,6 +34,7 @@ export const BUSINESS_APPLICATION_STATUS = {
   LENDIO_SUCCESS: 'SUCCESS',
   REVIEW_FAILED: 'REVIEW_FAILED',
   ISSUER_DECLINED: 'ISSUER_DECLINED',
+  APPLICATION_IN_PROGRESS: 'APPLICATION_IN_PROGRESS',
 };
 
 export const BUSINESS_APP_ADMIN_STATUS = [
@@ -52,49 +53,49 @@ export const BUSINESS_APP_ADMIN_STATUS = [
 
 export const BUSINESS_APP_USER_STATUS = {
   PRE_QUALIFICATION_FAILED: {
-    status: 'Not Eligible', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+    status: 'Not Eligible', icon: 'ns-offer-pending', color: 'orange', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   PRE_QUALIFICATION_SUCCESSFUL: {
-    status: 'In-progress', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+    status: 'In-progress', icon: 'ns-offer-pending', color: 'orange', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   PRE_QUALIFICATION_SUBMITTED: {
-    status: 'In-progress', icon: 'ns-pencil-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+    status: 'In-progress', icon: 'ns-check-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   PRE_QUALIFICATION_PROMOTED: {
-    status: 'Promoted', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+    status: 'Promoted', icon: 'ns-offer-pending', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   APPLICATION_SUBMITTED: {
-    status: 'Pending Review', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Submitted Date', datePath: 'applicationSubmittedDate',
+    status: 'Pending Review', icon: 'ns-offer-pending', color: 'orange', dateTitle: 'Submitted Date', datePath: 'applicationSubmittedDate',
   },
   APPLICATION_OFFERED: {
-    status: 'Offer Extended', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Offer Date', datePath: 'offers.approved.date',
+    status: 'Offer Extended', icon: 'ns-offer-extended', color: 'orange', dateTitle: 'Offer Date', datePath: 'offers.approved.date',
   },
   APPLICATION_REVIEWED: {
-    status: 'Reviewed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+    status: 'Reviewed', icon: 'ns-offer-pending', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   APPLICATION_FAILED: {
-    status: 'Failed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+    status: 'Failed', icon: 'ns-offer-pending', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   APPLICATION_SUCCESSFUL: {
     status: 'Signed', icon: 'ns-check-circle-line', color: 'green', dateTitle: 'Signed Date', datePath: 'envelopeStatusChangedDateTime',
   },
   REVIEWED: {
-    status: 'Reviewed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+    status: 'Reviewed', icon: 'ns-offer-pending', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   DECLINED: {
-    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+    status: 'Offer Declined', icon: 'ns-offer-declined', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   APPLICATION_DECLINED: {
-    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+    status: 'Offer Declined', icon: 'ns-offer-declined', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   APPLICATION_DELETED: {
-    status: 'Deleted', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+    status: 'Deleted', icon: 'ns-offer-declined', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   ISSUER_DECLINED: {
-    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Declined Date', datePath: 'updated.date',
+    status: 'Offer Declined', icon: 'ns-offer-declined', color: 'orange', dateTitle: 'Declined Date', datePath: 'updated.date',
   },
   REVIEW_FAILED: {
-    status: 'Declined', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Reviewed Date',
+    status: 'Declined', icon: 'ns-offer-declined', color: 'orange', dateTitle: 'Reviewed Date',
   },
 };
 
@@ -151,10 +152,10 @@ export const NEED_HELP = {
 
 export const BUSINESS_PRE_QUALIFICATION_BASIC = {
   firstName: {
-    value: '', label: 'First Name', error: undefined, rule: 'required|removeFrontAndTrailingSpaces', placeHolder: 'e.g. John', customErrors: { required: 'required' },
+    value: '', label: 'First Name', error: undefined, rule: 'required', placeHolder: 'e.g. John', customErrors: { required: 'required' },
   },
   lastName: {
-    value: '', label: 'Last Name', error: undefined, rule: 'required|removeFrontAndTrailingSpaces', placeHolder: 'e.g. Smith', customErrors: { required: 'required' },
+    value: '', label: 'Last Name', error: undefined, rule: 'required', placeHolder: 'e.g. Smith', customErrors: { required: 'required' },
   },
   email: {
     value: '', label: 'Email Address', error: undefined, rule: 'required|email', placeHolder: 'e.g. abc@xyz.com', customErrors: { required: 'required' },
@@ -166,7 +167,7 @@ const BUSINESS_PREQUAL_COMMON = {
     value: '', label: 'Business Name', error: undefined, rule: 'required|string', placeHolder: 'e.g. NextBrewery', customErrors: { required: 'required' },
   },
   website: {
-    value: '', label: 'Website', error: undefined, rule: 'required', placeHolder: 'e.g. http://nextbrewery.com', customErrors: { required: 'required' },
+    value: '', label: 'Website', error: undefined, rule: 'required', placeHolder: 'e.g. www.nextbrewery.com', customErrors: { required: 'required' },
   },
   phoneNumber: {
     value: '', label: 'Phone Number', error: undefined, rule: 'required|maskedField:10', placeHolder: '(123) 456-7890', customErrors: { required: 'required', maskedField: 'required' },
@@ -185,7 +186,6 @@ const BUSINESS_PREQUAL_COMMON = {
   },
   industryExperience: {
     value: '',
-    label: 'How many years of related industry experience does your team have?',
     error: undefined,
     rule: 'required|numeric',
     maxLength: 2,
@@ -215,24 +215,33 @@ const BUSINESS_PREQUAL_COMMON = {
       { label: 'LLC', icon: 'ns-business', value: 'LLC' },
       { label: 'Limited Partnership', icon: 'ns-partnership', value: 'LIMITED_PARTNERSHIP' },
       { label: 'Sole Proprietor', icon: 'ns-proprietor', value: 'SOLE_PROPRIETOR' },
-      { label: 'Other use of fund', value: 'OTHER' },
+      { label: 'Other', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
     customErrors: { required: 'required' },
   },
+  companyTaxed: {
+    value: '',
+    values: [
+      { label: 'As a corporation', value: 'CORPORATION' },
+      { label: 'As a partnership', value: 'PARTNERSHIP' },
+    ],
+    error: undefined,
+    rule: 'optional',
+  },
 };
 
 export const BUSINESS_PRE_QUALIFICATION = {
   businessModel: {
-    value: '',
+    value: 'B2C',
     values: [
       { label: 'Business to Consumer', value: 'B2C' },
       { label: 'Business to Business', value: 'B2B' },
     ],
     error: undefined,
-    rule: 'required',
-    customErrors: { required: 'required' },
+    rule: 'optional',
+    // customErrors: { required: 'required' },
   },
   ...BUSINESS_PREQUAL_COMMON,
   businessAgeYears: {
@@ -283,9 +292,20 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'Food & Beverage', icon: 'ns-food-light', value: 'FOOD_AND_BEVERAGE' },
       { label: 'Real Estate', icon: 'ns-real-estate', value: 'REAL_ESTATE' },
       { label: 'Fitness & Wellness', icon: 'ns-dumbbells', value: 'FITNESS_AND_WELLNESS' },
-      { label: 'Hospitality', icon: 'ns-first-aid', value: 'HOSPITALITY' },
+      { label: 'Hospitality', icon: 'ns-hospitality-3', value: 'HOSPITALITY' },
       { label: 'Technology', icon: 'ns-technology', value: 'TECHNOLOGY' },
-      { label: 'Other', value: 'OTHER' },
+      { label: 'Other Industry Type', value: 'OTHER' },
+    ],
+    error: undefined,
+    rule: 'required',
+    customErrors: { required: 'required' },
+  },
+  businessSecurities: {
+    value: [],
+    values: [
+      { label: 'Equity', icon: 'ns-calculator-icon', value: 'EQUITY' },
+      { label: 'Debt', icon: 'ns-debt-icon', value: 'DEBT' },
+      { label: 'Convertible Notes / SAFE', icon: 'ns-convertible-icon', value: 'CONVERTIBLE_NOTE' },
     ],
     error: undefined,
     rule: 'required',
@@ -294,10 +314,10 @@ export const BUSINESS_PRE_QUALIFICATION = {
   businessGoal: {
     value: '',
     values: [
-      { label: 'Launch New Business', icon: 'ns-new-business', value: BUSINESS_GOAL.BRAND_NEW },
-      { label: 'Open Franchise', icon: 'ns-franchise', value: BUSINESS_GOAL.FRANCHISE },
-      { label: 'Expand/Upgrade Existing Business', icon: 'ns-expand-business', value: BUSINESS_GOAL.UPGRADE },
-      { label: 'Create Off-shoot of Existing Business', icon: 'ns-off-shoot-business', value: BUSINESS_GOAL.RESTRUCTURE },
+      { label: <span>Fund New Business <br /> (&lt;12 months of operations) </span>, icon: 'ns-new-business', value: BUSINESS_GOAL.BRAND_NEW },
+      // { label: 'Open Franchise', icon: 'ns-franchise', value: BUSINESS_GOAL.FRANCHISE },
+      { label: <span>Expand/Upgrade Existing Business <br /> (over 12 months of operations) </span>, icon: 'ns-expand-business', value: BUSINESS_GOAL.UPGRADE },
+      // { label: 'Create Off-shoot of Existing Business', icon: 'ns-off-shoot-business', value: BUSINESS_GOAL.RESTRUCTURE },
     ],
     error: undefined,
     rule: 'required',
@@ -312,8 +332,8 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'Inventory', icon: 'ns-inventory', value: 'INVENTORY' },
       { label: 'New Product Line', icon: 'ns-new-product', value: 'NEW_PRODUCT_LINE' },
       { label: 'New Location', icon: 'ns-new-location', value: 'NEW_LOCATION' },
-      { label: 'Restructure Debt', icon: 'ns-restructure-debt', value: 'RESTRUCTURE_DEBT' },
-      { label: 'Other use of fund', value: 'OTHER' },
+      { label: 'Restructuring / Recapitalization', icon: 'ns-restructure-debt', value: 'RESTRUCTURE_DEBT' },
+      { label: 'Other use of funds', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
@@ -484,7 +504,7 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
 
 export const BUSINESS_SIGNUP = {
   emailAddress: {
-    value: '', label: 'E-mail address', error: undefined, rule: 'required', placeHolder: 'e.g. john.doe@contact.com',
+    value: '', label: 'Email address', error: undefined, rule: 'required', placeHolder: 'e.g. john.doe@contact.com',
   },
   password: {
     value: '', label: 'Password', error: undefined, rule: 'required', placeHolder: 'Password',
@@ -497,16 +517,44 @@ export const BUSINESS_DETAILS = {
   },
   debts: [{
     amount: {
-      value: 0, label: 'Amount', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
+      value: null, label: 'Principal Amount', error: undefined, rule: 'optional', placeHolder: '$500,000', customErrors: { required: 'required' },
     },
     remainingPrincipal: {
-      value: 0, label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
+      value: null, label: 'Remaining Principal', error: undefined, rule: 'optional', placeHolder: '$150,000', customErrors: { required: 'required' },
     },
     interestExpenses: {
-      value: 0, label: 'Interest Expenses', error: undefined, rule: 'required|max:100', placeHolder: '10.0 %', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
+      value: null, label: 'Interest Rate', error: undefined, rule: 'optional|max:100', placeHolder: '10%', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
     },
     term: {
-      value: 0, label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' },
+      value: null, label: 'Term (in months)', error: undefined, rule: 'optional', placeHolder: '5', customErrors: { required: 'required' },
+    },
+    termStartDate: {
+      value: null, label: 'Term Start Date', error: undefined, rule: 'optional|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
+    },
+    maturityDate: {
+      value: null, label: 'Maturity Date', error: undefined, rule: 'optional|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
+    },
+    creditorName: {
+      value: null, label: 'Creditor Name', error: undefined, rule: 'optional', placeHolder: 'ex. Creditor Name',
+    },
+    existingLienOnBusiness: {
+      value: null, label: 'Existing Lien on Business', error: undefined, rule: 'optional', placeHolder: 'ex Yes',
+    },
+  }],
+  sources: [{
+    name: {
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'ex. Bank Loan', customErrors: { required: 'required' },
+    },
+    amount: {
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: '$ Amount', customErrors: { required: 'required' },
+    },
+  }],
+  uses: [{
+    name: {
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: 'ex. Build-Out', customErrors: { required: 'required' },
+    },
+    amount: {
+      value: '', label: '', error: undefined, rule: 'required', placeHolder: '$ Amount', customErrors: { required: 'required' },
     },
   }],
   owners: [{
@@ -539,13 +587,13 @@ export const BUSINESS_DETAILS = {
 
 export const BUSINESS_PERF_COMMON = {
   priorToThreeYear: {
-    value: [], label: 'Prior 3 Year Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], uploadtitle: 'Upload a file or drag it here', label: 'Prior 3 Year Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   ytd: {
-    value: [], label: 'YTD Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], uploadtitle: 'Upload a file or drag it here', label: 'YTD Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   fiveYearProjection: {
-    value: [], label: '5 Year Projections', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], uploadtitle: <span>Upload a file or drag it here <br /> (Excel or CSV format preferred)</span>, label: '5 Year Projections', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   sourcesAndUses: {
     value: [], label: '  ', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
@@ -585,7 +633,7 @@ export const BUSINESS_DOC = {
     value: [], label: 'Prior 6 months Bank Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   leaseAgreementsOrLOIs: {
-    value: [], label: 'Lease Agreement / Letter of Intent', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], tooltip: 'NextSeed requires a lease or LOI prior to launching your campaign. Before disbursing funds, the executed lease is required. If you are currently still in negotiations with your lease, please submit a draft of the current terms.', customErrors: { required: 'required' },
+    value: [], label: 'Lease Agreement / Letter of Intent', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], tooltip: 'NextSeed requires a lease or LOI prior to launching your campaign. Before disbursing funds, the executed lease is required. If you are currently still in negotiations with your lease, please submit a draft of the current terms.', customErrors: { required: 'required' },
   },
   personalTaxReturn: {
     value: [], label: 'Prior 2 Years of Personal Tax Returns', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },

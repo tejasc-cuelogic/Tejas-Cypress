@@ -1,9 +1,10 @@
 import gql from 'graphql-tag';
+import { ELIGIBLE_TAGS } from '../../../constants/common';
 
 // queries, mutations and subscriptions , limit: "10"
 export const allUsersQuery = gql`
-  query listUsers($accountType: [UserFilterTypeEnum], $accountStatus: [UserFilterStatusEnum], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int, $limit: Int) {
-    listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page, limit: $limit) {
+  query listUsers($accountType: [UserFilterTypeEnum], $accountStatus: [UserFilterStatusEnum], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int, $limit: Int, $sortBy: UserFilterSortByEnum, $sortType: UserFilterSortTypeEnum) {
+    listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page, limit: $limit, sortBy: $sortBy, sortType: $sortType) {
       resultCount
       users {
         id
@@ -43,8 +44,8 @@ export const allUsersQuery = gql`
 `;
 
 export const userDetailsQueryForBoxFolder = gql`
-  query getUserDetails($userId: ID!) {
-    user(id: $userId) {
+  query getUserDetails($userId: String) {
+    user(userId: $userId) {
       id
       storageDetails
     }
@@ -52,8 +53,8 @@ export const userDetailsQueryForBoxFolder = gql`
 `;
 
 export const userDetailsQuery = gql`
-  query getUserDetails($userId: ID!) {
-    user(id: $userId) {
+  query getUserDetails($userId: String) {
+    user(userId: $userId) {
       id
       userHash
       wpUserId
@@ -221,6 +222,16 @@ export const userDetailsQuery = gql`
         }
         dateOfBirth
         ssn
+        verificationDocs {
+          addressProof {
+            fileId
+            fileName
+          }
+          idProof {
+            fileId
+            fileName
+          }
+        }
         legalAddress {
           street
           city
@@ -255,9 +266,11 @@ export const userDetailsQuery = gql`
 `;
 
 export const selectedUserDetailsQuery = gql`
-  query getUserDetails($userId: ID!) {
-    user(id: $userId) {
+  query getUserDetails($userId: String) {
+    user(userId: $userId) {
       id
+      skipAddressVerifyCheck
+      skipPhoneVerifyCheck
       userHash
       wpUserId
       status
@@ -278,6 +291,7 @@ export const selectedUserDetailsQuery = gql`
           key
           message
         }
+        requestId
       }
       limits {
         income
@@ -298,6 +312,14 @@ export const selectedUserDetailsQuery = gql`
         avatar {
           name
           url
+        }
+        preferred {
+          name
+          street
+          streetTwo
+          city
+          state
+          zipCode
         }
       }
       email {
@@ -466,13 +488,14 @@ export const selectedUserDetailsQuery = gql`
         isComfortable
       }
       mfaMode
+      tags { ${ELIGIBLE_TAGS.join(' ')} }
     }
   }
 `;
 
 export const userAccreditationQuery = gql`
-  query userAccreditationQuery($userId: ID!) {
-    user(id: $userId) {
+  query userAccreditationQuery($userId: String) {
+    user(userId: $userId) {
       id
       roles {
         name
@@ -558,25 +581,9 @@ export const userAccreditationQuery = gql`
   }
 `;
 
-export const createUserMutation = gql`
-  mutation createUser($name: String!, $email: String!, $city: String!, $state: String!, $ssn: String!, $dateOfBirth: DateTime!, ) {
-    createUser(name: $name, email: $email, city: $city, state: $state, ssn: $ssn, dateOfBirth: $dateOfBirth) {
-      id
-      name
-      email
-      city
-      state
-      ssn
-      dateOfBirth
-    }
-  }
-`;
-
-export const deleteUserMutation = gql`
-  mutation deleteUser($id:  ID! ) {
-    deleteUser(id: $id) {
-      id
-    }
+export const resetPasswordExpirationForCognitoUser = gql`
+  mutation resetPasswordExpirationDurationForCognitoUser($emailAddress: String!) {
+    resetPasswordExpirationDurationForCognitoUser (emailAddress: $emailAddress)
   }
 `;
 
@@ -588,43 +595,39 @@ export const toggleUserAccount = gql`
   }
 `;
 
-export const userSubscription = gql`
-  subscription {
-    User(filter: { mutation_in: [CREATED, UPDATED, DELETED] }) {
-      mutation
-      node {
-        id
-        name
-        email
-        city
-        state
-        ssn
-        dateOfBirth
-      }
-    }
-  }
-`;
-
 export const adminAddUser = gql`
-  mutation _createUser($userDetails: UserInputObjectType! ){
+  mutation createUser($userDetails: UserInputObjectType! ){
     createUser(userDetails: $userDetails) {
         id
       }
   }
 `;
 
-export const skipAddressValidation = gql`
-mutation skipAddressValidationCheck($userId: String!, $shouldSkip: Boolean!) {
-  skipAddressValidationCheck(
+export const skipAddressOrPhoneValidationCheck = gql`
+mutation skipAddressOrPhoneValidationCheck($userId: String!, $shouldSkip: Boolean!, $type : SkipValidationTypeEnum!) {
+  skipAddressOrPhoneValidationCheck(
      userId: $userId
      shouldSkip: $shouldSkip
+     type: $type
    )
  }`;
 
 export const deleteProfile = gql`
-mutation adminDeleteInvestorOrIssuerUser($userId: String!) {
+mutation adminDeleteInvestorOrIssuerUser($userId: String, $reason: String) {
   adminDeleteInvestorOrIssuerUser(
-     cognitoUUId: $userId
+     userId: $userId
+     reason: $reason
+  ) {
+    status
+    message
+  }
+ }`;
+
+export const adminHardDeleteUser = gql`
+mutation adminHardDeleteUser($userId: String!, $reason: String) {
+  adminHardDeleteUser(
+     userId: $userId
+     reason: $reason
   ) {
     status
     message
@@ -632,9 +635,8 @@ mutation adminDeleteInvestorOrIssuerUser($userId: String!) {
  }`;
 
 export const frozenEmailToAdmin = gql`
-mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
+mutation notifyAdminFrozenAccountActivity($accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
   notifyAdminFrozenAccountActivity(
-     userId: $userId
      accountId: $accountId
      activity: $activity
      offeringId: $offeringId
@@ -642,7 +644,7 @@ mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!,
  }`;
 
 export const freezeAccount = gql`
-mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!, $reason: String) {
+mutation freezeAccount($userId: String!, $accountId: String!, $freeze: FreezeAccountStatus!, $reason: String) {
   freezeAccount(
      userId: $userId
      accountId: $accountId
@@ -650,3 +652,54 @@ mutation freezeAccount($userId: String!, $accountId: String!, $freeze: Boolean!,
      reason: $reason
    )
  }`;
+
+export const investorAccountDeleteProcess = gql`
+query investorAccountDeleteProcess {
+  investorAccountDeleteProcess {
+    totalBalance
+    validAgreement
+  }
+}
+`;
+
+export const getEmailList = gql`
+query fetchEmails ($recipientId: String!, $subject: String, $fromDate: String, $toDate: String, $limit: Int, $lek: String){
+  fetchEmails(
+    recipientId: $recipientId
+    subject: $subject
+    fromDate: $fromDate
+    toDate: $toDate
+    limit: $limit
+    lek: $lek
+    )
+  {
+    emails{
+      recipientId
+      fromName
+      fromEmail
+      toFirstName
+      toEmail
+      subject
+      requestDate
+      emailContent
+      attachments {
+        content
+      }
+      mergeVars {
+        content
+        name
+      }
+    }
+    resultCount
+    totalCount
+    lek
+  }
+}
+`;
+
+export const createAdminUser = gql`
+  mutation createAdminUser($email: String!){
+  createAdminUser(
+    email: $email
+  )
+}`;

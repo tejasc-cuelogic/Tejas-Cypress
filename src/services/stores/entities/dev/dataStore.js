@@ -1,20 +1,39 @@
 
-import { observable, action, toJS } from 'mobx';
+import { observable, action, toJS, computed } from 'mobx';
 import { get } from 'lodash';
-import { updateOfferingRepaymentsMeta, processFullInvestorAccount } from '../../queries/data';
+import graphql from 'mobx-apollo';
+import { updateOfferingRepaymentsMeta, getListOfPartialOrCIPProcessingAccount, processFullInvestorAccount, adminProcessCip, adminProcessInvestorAccount, encryptOrDecryptUtility, processTransferRequest } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META } from '../../../constants/admin/data';
+import { PROCESS_TRANSFER_REQ_META, OFFERING_REPAYMENT_META, PROCESS_FULL_ACCOUNT_META, RECREATEGOLDSTAR_META, ENCRYPTDECRYPTUTILITY_META } from '../../../constants/admin/data';
 
 export class DataStore {
   @observable OFFERING_REPAYMENT_META_FRM = Validator.prepareFormObject(OFFERING_REPAYMENT_META);
+
   @observable PROCESS_FULL_ACCOUNT_META_FRM =
-  Validator.prepareFormObject(PROCESS_FULL_ACCOUNT_META);
+    Validator.prepareFormObject(PROCESS_FULL_ACCOUNT_META);
+
+  @observable RECREATEGOLDSTAR_FRM =
+    Validator.prepareFormObject(RECREATEGOLDSTAR_META);
+
+  @observable ENCRYPTDECRYPTUTILITY_FRM =
+    Validator.prepareFormObject(ENCRYPTDECRYPTUTILITY_META);
+
+
+  @observable PROCESS_TRANSFER_REQ_FRM =
+    Validator.prepareFormObject(PROCESS_TRANSFER_REQ_META);
+
   @observable inProgress = {
     offeringRepayment: false,
     processFullAccount: false,
+    adminProcessCip: false,
+    encryptOrDecryptValue: false,
+    processTransferRequest: false,
   };
+
+  @observable partialOrCipAccountData = {};
+
   @observable outputMsg = null;
 
   @action
@@ -39,8 +58,18 @@ export class DataStore {
 
   @action
   formChange = (e, res, form) => {
-    this[form] =
-    Validator.onChange(this[form], Validator.pullValues(e, res));
+    this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
+  };
+
+  @action
+  formDataChange = (e, res, form, fieldType) => {
+    if (fieldType === 'mask') {
+      this[form] = Validator.onChange(
+        this[form],
+        { name: res, value: e.floatValue },
+      );
+      this.setFieldValue('countValues', '');
+    }
   };
 
   @action
@@ -88,6 +117,10 @@ export class DataStore {
             createRSAccount: (toJS(processData.options)).includes('createRSAccount'),
             createInitialDeposit: (toJS(processData.options)).includes('createInitialDeposit'),
             sendEmailToInvestor: (toJS(processData.options)).includes('sendEmailToInvestor'),
+            createGsContactAccount: (toJS(processData.options)).includes('createGsContactAccount'),
+            createAccountPdf: (toJS(processData.options)).includes('createAccountPdf'),
+            sendCrowdPayEmailToGS: (toJS(processData.options)).includes('sendCrowdPayEmailToGS'),
+            skipFullAccountValidation: (toJS(processData.options)).includes('skipFullAccountValidation'),
           },
         })
         .then(action((result) => {
@@ -103,6 +136,121 @@ export class DataStore {
         });
     });
   }
+
+  @action
+  adminProcessInvestorAccount = processData => new Promise((res, rej) => {
+    client
+      .mutate({
+        mutation: adminProcessInvestorAccount,
+        variables: {
+          userId: processData.userId,
+          accountId: processData.accountId,
+        },
+      })
+      .then(() => {
+        res();
+      })
+      .catch((error) => {
+        rej(error);
+      });
+  });
+
+  @action
+  processTransferRequest = () => {
+    const transferId = this.PROCESS_TRANSFER_REQ_FRM.fields.transferId.value;
+    this.setFieldValue('inProgress', true, 'processTransferRequest');
+    client
+      .mutate({
+        mutation: processTransferRequest,
+        variables: { transferId },
+      })
+      .then(() => {
+        this.setFieldValue('inProgress', false, 'processTransferRequest');
+      })
+      .catch((error) => {
+        Helper.toast(get(error, 'message'), 'error');
+        this.setFieldValue('inProgress', false, 'processTransferRequest');
+      });
+  };
+
+  @action
+  adminProcessCip = () => {
+    const processData = Validator.evaluateFormData(this.RECREATEGOLDSTAR_FRM.fields);
+    this.setFieldValue('inProgress', true, 'adminProcessCip');
+    this.setFieldValue('outputMsg', null);
+    return new Promise((res, rej) => {
+      client
+        .mutate({
+          mutation: adminProcessCip,
+          variables: {
+            userId: processData.userId,
+            accountId: processData.accountId,
+          },
+        })
+        .then(action((result) => {
+          if (result.data.adminProcessCip) {
+            this.adminProcessInvestorAccount(processData).then(() => {
+              this.setFieldValue('inProgress', false, 'adminProcessCip');
+              Helper.toast('Your request is processed.', 'success');
+              this.resetForm('RECREATEGOLDSTAR_FRM');
+              res(result);
+            }).catch((error) => {
+              this.setFieldValue('inProgress', false, 'adminProcessCip');
+              Helper.toast(get(error, 'message'), 'error');
+              rej(error);
+            });
+          }
+        }))
+        .catch((error) => {
+          this.setFieldValue('inProgress', false, 'adminProcessCip');
+          Helper.toast(get(error, 'message'), 'error');
+          rej(error);
+        });
+    });
+  }
+
+  @action
+  encryptOrDecryptValue = (type) => {
+    const processData = Validator.evaluateFormData(this.ENCRYPTDECRYPTUTILITY_FRM.fields);
+    processData.type = type;
+    this.setFieldValue('inProgress', type, 'encryptOrDecryptValue');
+    this.setFieldValue('outputMsg', null);
+    return new Promise((resolve, reject) => {
+      this.data = graphql({
+        client,
+        query: encryptOrDecryptUtility,
+        variables: processData,
+        fetchPolicy: 'network-only',
+        onFetch: (res) => {
+          if (res && res.encryptOrDecryptValue && !this.data.loading) {
+            this.setFieldValue('inProgress', false, 'encryptOrDecryptValue');
+            Helper.toast('Your request is processed.', 'success');
+            resolve(res.encryptOrDecryptValue);
+          }
+        },
+        onError: () => {
+          this.setFieldValue('inProgress', false, 'encryptOrDecryptValue');
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          // }
+          reject();
+        },
+      });
+    });
+  }
+
+  @action
+  getListOfPartialOrCIPProcessingAccount = () => {
+    this.partialOrCipAccountData = graphql({
+      client,
+      query: getListOfPartialOrCIPProcessingAccount,
+      fetchPolicy: 'network-only',
+    });
+  }
+
+  @computed get partialOrCipAccountList() {
+    return get(this.partialOrCipAccountData, 'data.getListOfPartialOrCIPProcessingAccount') || [];
+  }
 }
+
 
 export default new DataStore();

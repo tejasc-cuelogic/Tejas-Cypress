@@ -8,6 +8,31 @@ export const APPLICATION_STATUS_COMMENT = {
     placeHolder: 'Type your comment here...',
   },
 };
+export const PROMOTE_APPLICATION_STATUS_PASSWORD = {
+  TemporaryPassword: {
+    value: '',
+    label: 'Password',
+    error: undefined,
+    rule: 'required|min:8|max:40',
+    placeHolder: 'Password',
+  },
+  verifyPassword: {
+    value: '',
+    label: 'Verify Password',
+    error: undefined,
+    placeHolder: 'Verify Password',
+    rule: 'required|same:TemporaryPassword',
+    customErrors: {
+      same: 'The Password and Verify Password fields must match.',
+    },
+  },
+};
+
+export const PROMOTE_APPLICATION_STATUS_EMAIL = {
+  emailAddress: {
+    value: '', label: 'Email address', error: undefined, rule: 'required', placeHolder: 'e.g. john.doe@contact.com',
+  },
+};
 
 export const MANAGERS = {
   managerOverview: {
@@ -121,7 +146,7 @@ export const DOCUMENTATION = {
 export const PROJECTIONS = {
   reasonableHistoricals: {
     value: '',
-    label: 'If Existing Business, Compare Historical for Reasonabless',
+    label: 'If Existing Business, Compare Historical for Reasonableness',
     error: undefined,
     objRefOutput: 'projections',
     rule: 'optional',
@@ -526,7 +551,7 @@ export const OFFERS = {
     },
     personalGuarantee: {
       value: '',
-      label: 'Personal Garuntee',
+      label: 'Personal Guarantee',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',

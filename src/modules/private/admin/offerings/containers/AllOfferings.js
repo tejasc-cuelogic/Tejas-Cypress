@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Grid, Button, Form } from 'semantic-ui-react';
@@ -7,14 +6,34 @@ import { ByKeyword } from '../../../../../theme/form/Filters';
 import { DataFormatter } from '../../../../../helper';
 import Listing from '../components/Listing';
 import DraggableListing from '../components/DraggableListing';
+import AllLiveOfferings from '../components/allLiveOfferings';
+import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
 
 @inject('uiStore', 'navStore', 'offeringsStore')
 @observer
 export default class Offerings extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    const {
+      db, initRequest, setFieldValue, requestState,
+    } = this.props.offeringsStore;
     const params = { stage: this.props.match.params.stage };
-    this.props.offeringsStore.initRequest(params);
+    if (!db[params.stage]) {
+      initRequest(params);
+    } else {
+      setFieldValue('requestState', { ...requestState, ...params });
+    }
+  }
+
+  componentWillUnmount() {
+    const { setDb, allOfferingsList, requestState, orderedActiveListArr } = this.props.offeringsStore;
+    if (allOfferingsList.length) {
+      setDb(allOfferingsList);
+    }
+    if (requestState.stage === 'live') {
+      orderedActiveListArr();
+    }
   }
 
   executeSearch = (e) => {
@@ -30,10 +49,13 @@ export default class Offerings extends Component {
   render() {
     const { match } = this.props;
     const { stage } = this.props.match.params;
+    const isDev = !['production', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV);
+
     const {
       filters,
       requestState,
     } = this.props.offeringsStore;
+    const { inProgressArray } = this.props.uiStore;
     return (
       <div>
         <Form>
@@ -47,25 +69,29 @@ export default class Offerings extends Component {
                 requestState={requestState}
                 filters={filters}
                 more="no"
-                addon={
-                  <Aux>
+                addon={(
+                  <>
                     <Grid.Column width={5} textAlign="right" floated="right">
                       <Button.Group floated="right">
-                        {stage === 'creation' &&
-                          <Button color="green" as={Link} to={`${match.url}/new`} content="Create New Offering" />
+                        {stage === 'creation'
+                          && <Button color="green" as={Link} to={`${match.url}/new`} loading={inProgressArray.includes('upsert')} content="Create New Offering" />
                         }
-                        <Button color="green" as={Link} to={match.url} className="relaxed" content="Export" />
+                        {isDev
+                          && <Button color="green" as={Link} to={match.url} className="relaxed" content="Export" />
+                        }
                       </Button.Group>
                     </Grid.Column>
-                  </Aux>
-                }
+                  </>
+)}
               />
             </Grid.Row>
           </Grid>
         </Form>
-        {!['completed'].includes(stage) ?
-          <Listing stage={stage} />
-          : <DraggableListing stage={stage} />
+        {['live'].includes(stage)
+          ? <AllLiveOfferings stage={stage} />
+          : !['completed'].includes(stage)
+            ? <Listing stage={stage} noPagination={['creation'].includes(stage)} />
+            : <DraggableListing stage={stage} />
         }
       </div>
     );

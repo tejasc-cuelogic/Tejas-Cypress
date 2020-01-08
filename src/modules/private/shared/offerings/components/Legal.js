@@ -1,23 +1,19 @@
 import React, { Component } from 'react';
-import Loadable from 'react-loadable';
 import { Grid } from 'semantic-ui-react';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { InlineLoader } from '../../../../../theme/shared';
+import { InlineLoader, SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
 
-const getModule = component => Loadable({
-  loader: () => import(`./legal/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazyRetry(() => import(`./legal/${component}`));
 
 @inject('userStore', 'offeringsStore', 'offeringCreationStore')
 @withRouter
+@observer
 export default class Legal extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { setFormData } = this.props.offeringCreationStore;
     setFormData('GENERAL_FRM', 'legal.general');
     setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
@@ -29,10 +25,6 @@ export default class Legal extends Component {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/general`);
     }
-  }
-
-  shouldComponentUpdate() {
-    return !this.props.offeringCreationStore.isUploadingFile;
   }
 
   module = name => DataFormatter.upperCamelCase(name);
@@ -68,29 +60,31 @@ export default class Legal extends Component {
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
             <div className="sticky-sidebar">
               <SecondaryMenu heading="User Legal Info" secondary vertical match={match} navItems={userLegalInfo} />
-              {!isIssuer &&
-                <SecondaryMenu heading="Admin Legal Info" secondary vertical match={match} navItems={adminLegalInfo} />
+              {!isIssuer
+                && <SecondaryMenu heading="Admin Legal Info" secondary vertical match={match} navItems={adminLegalInfo} />
               }
             </div>
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
-            <Switch>
-              <Route
-                exact
-                path={match.url}
-                component={getModule(this.module(userLegalInfo[0].title))}
-              />
-              {
-                userLegalInfo.map(item => (
-                  <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
-                ))
-              }
-              {!isIssuer &&
-                adminLegalInfo.map(item => (
-                  <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
-                ))
-              }
-            </Switch>
+            <SuspenseBoundary>
+              <Switch>
+                <Route
+                  exact
+                  path={match.url}
+                  component={getModule(this.module(userLegalInfo[0].title))}
+                />
+                {
+                  userLegalInfo.map(item => (
+                    <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                  ))
+                }
+                {!isIssuer
+                  && adminLegalInfo.map(item => (
+                    <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                  ))
+                }
+              </Switch>
+            </SuspenseBoundary>
           </Grid.Column>
         </Grid>
       </div>

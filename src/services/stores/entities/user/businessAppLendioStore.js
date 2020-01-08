@@ -8,7 +8,9 @@ import { uiStore } from '../../index';
 
 export class BusinessAppStore {
   @observable LENDIO_QUAL_FRM = Validator.prepareFormObject(LENDIO_PRE_QUAL);
+
   @observable lendioUrl = null;
+
   @observable lendioObj = null;
 
   @action
@@ -100,9 +102,16 @@ export class BusinessAppStore {
 
   @action
   lendioEleChange = (e, res, type) => {
-    this.LENDIO_QUAL_FRM =
-      Validator.onChange(this.LENDIO_QUAL_FRM, Validator.pullValues(e, res, type));
+    this.LENDIO_QUAL_FRM = Validator.onChange(this.LENDIO_QUAL_FRM, Validator.pullValues(e, res, type));
   };
+
+  @action
+  lendioMaskChange = (values, field) => {
+    this.LENDIO_QUAL_FRM = Validator.onChange(
+      this.LENDIO_QUAL_FRM,
+      { name: field, value: values.floatValue },
+    );
+  }
 
   @action
   businessLendioEleChange = (e, res) => {

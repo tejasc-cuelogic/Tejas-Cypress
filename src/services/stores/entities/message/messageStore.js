@@ -10,17 +10,24 @@ import {
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { DRAFT_NEW } from '../../../constants/messages';
-import { offeringCreationStore, campaignStore, offeringsStore, userDetailsStore } from '../../index';
+import { offeringCreationStore, campaignStore, userDetailsStore } from '../../index';
+import uiStore from '../shared/uiStore';
 
 export class NewMessage {
   @observable MESSAGE_FRM = Validator.prepareFormObject(DRAFT_NEW);
+
   @observable requestState = { search: {} };
+
   @observable data = [];
+
   @observable currentMessageId = null;
+
   @observable currentOfferingId = null;
-  @observable currentOfferingIssuerId = get(offeringsStore.offerData, 'data.getOfferingById.issuerId');
+
   @observable editMessageId = null;
+
   @observable editScope = null;
+
   @observable buttonLoader = false;
 
   @action
@@ -80,15 +87,16 @@ export class NewMessage {
   }
 
   @action
-  createNewComment = (scope, campaignSlug, currentMessageId) => {
+  createNewComment = (scope, campaignSlug, currentMessageId, campaignId = null) => {
     this.setDataValue('buttonLoader', scope);
     this.currentMessageId = currentMessageId;
     const data = Validator.ExtractValues(this.MESSAGE_FRM.fields);
+
     const payload = {
       commentInput: {
-        offeringId: offeringCreationStore.currentOfferingId || this.currentOfferingId,
+        offeringId: campaignId || (offeringCreationStore.currentOfferingId || this.currentOfferingId),
         scope,
-        comment: data.comment,
+        comment: Helper.sanitizeContent(data.comment),
       },
     };
     if (this.editMessageId) {
@@ -111,7 +119,10 @@ export class NewMessage {
         this.resetMessageForm();
         Helper.toast('Message sent.', 'success');
       })
-      .catch(() => Helper.toast('Something went wrong please try again after sometime.', 'error'))
+      .catch((error) => {
+        Helper.toast('Something went wrong please try again after sometime.', 'error');
+        uiStore.setErrors(error.message);
+      })
       .finally(() => this.setDataValue('buttonLoader', false));
   }
 
@@ -139,26 +150,25 @@ export class NewMessage {
   }
 
   @action
-  deleteMessage = id =>
-    client
-      .mutate({
-        mutation: deleteMessage,
-        variables: { id: [id] },
-        refetchQueries: [{
-          query: offeringCommentsByOfferId,
-          variables: { offerId: offeringCreationStore.currentOfferingId },
-        }],
-      })
-      .then(() => Helper.toast('Message deleted successfully.', 'success'))
-      .catch(() => Helper.toast('Error while deleting message', 'error'));
+  deleteMessage = id => client
+    .mutate({
+      mutation: deleteMessage,
+      variables: { id: [id] },
+      refetchQueries: [{
+        query: offeringCommentsByOfferId,
+        variables: { offerId: offeringCreationStore.currentOfferingId },
+      }],
+    })
+    .then(() => Helper.toast('Message deleted successfully.', 'success'))
+    .catch(() => Helper.toast('Error while deleting message', 'error'));
 
   @computed get allData() {
     return this.data;
   }
 
   @computed get messages() {
-    return (this.allData.data && this.allData.data.offeringCommentsByOfferId &&
-      toJS(this.allData.data.offeringCommentsByOfferId)) || [];
+    return (this.allData.data && this.allData.data.offeringCommentsByOfferId
+      && toJS(this.allData.data.offeringCommentsByOfferId)) || [];
   }
 
   @computed get error() {
@@ -171,14 +181,14 @@ export class NewMessage {
 
   @computed get thread() {
     const msg = filter(this.messages, message => message.id === this.currentMessageId);
-    return (msg && msg.length && msg[0].threadComments &&
-      toJS(msg[0].threadComments)) || [];
+    return (msg && msg.length && msg[0].threadComments
+      && toJS(msg[0].threadComments)) || [];
   }
 
   @computed get threadMainMessage() {
     const msg = filter(this.messages, message => message.id === this.currentMessageId);
-    return (msg && msg.length && msg[0] &&
-      [toJS(msg[0])]) || [];
+    return (msg && msg.length && msg[0]
+      && [toJS(msg[0])]) || [];
   }
 
   @computed get getSelectedMessage() {
@@ -186,8 +196,8 @@ export class NewMessage {
       campaignStore.campaign && campaignStore.campaign.comments,
       message => message.id === this.currentMessageId,
     );
-    return (msg && msg.length && msg[0] &&
-      toJS(msg[0])) || null;
+    return (msg && msg.length && msg[0]
+      && toJS(msg[0])) || null;
   }
 
   threadUsersList = threadComments => uniqBy(threadComments, 'createdUserInfo.id');

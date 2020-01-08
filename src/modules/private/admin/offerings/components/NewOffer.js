@@ -7,23 +7,28 @@ import { REGULATION_VALUES } from '../../../../../services/constants/admin/offer
 @inject('offeringCreationStore')
 @observer
 export default class NewOffer extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.offeringCreationStore.resetForm('NEW_OFFER_FRM');
   }
+
   handleCloseModal = () => {
-    this.props.history.push('/app/offerings/creation');
+    this.props.history.push('/dashboard/offerings/creation');
   }
+
   handleSubmit = () => {
     const { addNewOffer } = this.props.offeringCreationStore;
     addNewOffer();
     this.handleCloseModal();
   }
+
   change = (e, result, formName, field) => {
     this.props.offeringCreationStore.formChange(e, result, formName);
     if (field !== 'regulation') {
       this.props.offeringCreationStore.offerCreateChange(formName, field);
     }
   }
+
   render() {
     const { NEW_OFFER_FRM } = this.props.offeringCreationStore;
     const formName = 'NEW_OFFER_FRM';
@@ -41,7 +46,8 @@ export default class NewOffer extends Component {
                   name={field}
                   fielddata={NEW_OFFER_FRM.fields[field]}
                   changed={(e, result) => this.change(e, result, formName, field)}
-                />))
+                />
+              ))
             }
             <FormDropDown
               containerclassname="dropdown-field"

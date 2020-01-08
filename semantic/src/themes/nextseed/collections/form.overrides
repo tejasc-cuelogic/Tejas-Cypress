@@ -65,6 +65,11 @@
         }
         >label{
             line-height:@18px;
+            &.dotted-tooltip {
+                border-bottom: 1px dotted;
+                display: inline-block;
+                cursor: pointer;
+            }
         }
         > .ui.label{
             background:transparent;
@@ -82,6 +87,10 @@
             &.large textarea {
                 min-height: 150px;
                 max-height: 150px; 
+            }
+            &.huge textarea{
+                min-height: 300px;
+                max-height: 300px;
             }
             textarea{
                 padding:@11px @14px;
@@ -189,9 +198,23 @@
             overflow:hidden;
             text-overflow:ellipsis;
         }
+        input[type="text"].right-align-placeholder{
+            text-align: right;
+            &::placeholder {
+                /* Firefox, Chrome, Opera */ 
+                text-align: right; 
+            }
+            &:-ms-input-placeholder {        
+                /* Internet Explorer 10-11 */ 
+                text-align: right; 
+            }  
+        }
     }
     .otp-wrap{
         margin:@32px 0 @42px 0;
+        @media only screen and (max-width : @largestMobileScreen){
+            margin:@15px 0 @15px 0;
+        }
         >label{
             width:100%;
         }
@@ -344,6 +367,30 @@
                 padding-left:@24px !important;
             }
         }
+        &.inverted.source-table{
+            input:not([type]),
+            input[type=date],
+            input[type=datetime-local],
+            input[type=email],
+            input[type=file],
+            input[type=number],
+            input[type=password],
+            input[type=search],
+            input[type=tel],
+            input[type=text],
+            input[type=time],
+            input[type=url],
+            textarea{
+                background: transparent;
+                border-radius: 0;
+                border-left: 0;
+                border-right: 0;
+                border-top: 0;
+                &:focus{
+                    border-color: @primary-one;
+                }
+            }
+        }
     }
     /*  Inverted Form  */
     &.inverted{
@@ -483,6 +530,35 @@
     }
     &.comment-input {
         padding: @10px 0 0;
+        &.history{
+            display: flex;
+            .field{
+                flex: 1;
+                margin-bottom: 0;
+                input{
+                    padding-left:@20px;
+                    padding-right:@20px;
+                }
+                .field-error{
+                    margin-left: @20px;
+                }
+            }
+            .attachment{
+                height: @40px;
+                i.icon{
+                    line-height: 40px;
+                    position: static;
+                    height: 40px;
+                }
+            }
+            .ui.button{
+                padding: 0 @14px;
+                height: @40px;
+                border-radius: 0 !important;
+                border: 0;
+                border-bottom: @border-color 1px solid;
+            }
+        }
         .ui.action.input>input {
             padding: @14px @20px;
         }
@@ -548,6 +624,14 @@
             textarea{
                 min-height:100%;
             }
+        }
+    }
+    .search-field input[type=text]{
+        border-bottom: none;
+        border: 1px solid @neutral-darkwhite;
+        border-radius: 4px;
+        ~i.icon{
+            left: 10px; 
         }
     }
 }
@@ -773,25 +857,26 @@ textarea{
             color:@primary-one !important;
         }
     }
-}
-.file-uploader-large .file-uploader{
-    width:250px;
-    height:140px;
-    margin:@5px auto;
-    display:table;
-    > div{
-        display:table-cell;
-        vertical-align:middle;
-    }
-    .icon{
-        display:block;
-        margin:0 auto;
-    }
-    input[type=file]{
-        height:138px;
-    }
-    &.attached{
-        display:block;
+    &.file-uploader-large{
+        width:250px;
+        height:140px;
+        margin:@5px auto;
+        display:table;
+        > .file-uploader-child{
+            display:table-cell;
+            vertical-align:middle;
+            color: @primary-one;
+        }
+        .icon{
+            display:block;
+            margin:0 auto;
+        }
+        input[type=file]{
+            height:138px;
+        }
+        &.attached{
+            display:block;
+        }
     }
 }
 

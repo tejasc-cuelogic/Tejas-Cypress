@@ -10,15 +10,19 @@ import AllInsights from '../components/AllInsights';
 @inject('articleStore')
 @observer
 export default class ManageInsights extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.articleStore.getCategoryList(false);
   }
-  setSearchParam = (e, { name, value }) =>
-    this.props.articleStore.setInitiateSrch(name, value);
+
+  setSearchParam = (e, { name, value }) => this.props.articleStore.setInitiateSrch(name, value);
+
   search = (e, name) => {
     this.props.articleStore.setInitiateSrch(name, e.target.value);
   }
+
   toggleSearch = () => this.props.articleStore.toggleSearch();
+
   render() {
     const { match } = this.props;
     const {
@@ -31,27 +35,27 @@ export default class ManageInsights extends Component {
       <PrivateLayout
         refMatch={this.props.refMatch}
         {...this.props}
-        P1={
-          <Search
-            {...this.props}
-            w={[10]}
-            placeholder="Search by keyword or phrase"
-            change={e => this.search(e, 'title')}
-            addon={
-              <Grid.Column width={3} textAlign="right" floated="right">
-                <Button color="green" as={Link} floated="right" to={`${match.url}/new`}>
+        P1={(
+<Search
+  {...this.props}
+  w={[10]}
+  placeholder="Search by keyword or phrase"
+  change={e => this.search(e, 'title')}
+  addon={(
+<Grid.Column width={3} textAlign="right" floated="right">
+                <Button color="green" as={Link} floated="right" to={`${match.url}/new/DRAFT`}>
                 Add new article
                 </Button>
               </Grid.Column>
-            }
-            toggleSearch={this.toggleSearch}
-            filters={filters}
-            requestState={requestState}
-            more="no"
-          />
-        }
-        P2={
-          <div className={`more search-filters ${filters ? '' : 'collapsed'}`}>
+)}
+  toggleSearch={this.toggleSearch}
+  filters={filters}
+  requestState={requestState}
+  more="no"
+/>
+)}
+        P2={(
+<div className={`more search-filters ${filters ? '' : 'collapsed'}`}>
             <Form>
               <Grid stackable columns="equal">
                 <Grid.Row>
@@ -96,7 +100,7 @@ export default class ManageInsights extends Component {
               </Grid>
             </Form>
           </div>
-        }
+)}
       >
         <AllInsights match={match} />
       </PrivateLayout>

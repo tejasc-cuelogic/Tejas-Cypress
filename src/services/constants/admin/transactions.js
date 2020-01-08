@@ -44,7 +44,7 @@ export const STATUS_META = [
   },
   {
     title: 'GS Transaction ID',
-    field: 'gstransactionId',
+    field: 'gsTransactionId',
     refStatus: ['PROCESSING', 'COMPLETE', 'FAILED'],
   },
   {
@@ -104,6 +104,12 @@ export const TRANSACTION_FAILURE = {
     customErrors: {
       max: 'Description cannot be greater than 250 characters.',
     },
+  },
+  cancelInvestment: {
+    value: false,
+    label: 'Cancel Investment',
+    error: undefined,
+    rule: 'optional',
   },
 };
 

@@ -2,7 +2,6 @@ import React from 'react';
 import { Table, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
-import Aux from 'react-aux';
 import Helper from '../../helper/utility';
 
 
@@ -28,16 +27,16 @@ const Actions = (props) => {
     }
   }
   return (
-    <Aux>
+    <>
       {props.additionalActions && additionalFileIdRef && (
-        <Link to="/" style={{ textTransform: 'none' }} onClick={e => props.download(e, additionalFileIdRef)} className="action" >
+        <Link to="/" style={{ textTransform: 'none' }} onClick={e => props.download(e, additionalFileIdRef)} className="action">
           <Icon className="ns-file" /> Instructions&nbsp;&nbsp;&nbsp;
         </Link>
       )}
-      <Link to="/" className="action" onClick={e => props.download(e, props.actions.fileId)} >
+      <Link to="/" className="action" onClick={e => props.download(e, props.actions.fileId)}>
         <Icon className={`ns-file ${props[0]}`} /> {props.label || 'PDF'}
       </Link>
-    </Aux>
+    </>
   );
 };
 
@@ -67,9 +66,9 @@ export const FillTable = ({
                             <Actions
                               download={download}
                               actions={{ fileId: row.fileId }}
-                              additionalActions={aRule &&
-                                aRule.val.includes(parseFloat(row[aRule.key])) ?
-                                additionalActions : false
+                              additionalActions={aRule
+                                && aRule.val.includes(parseFloat(row[aRule.key]))
+                                ? additionalActions : false
                               }
                               dataSet={{
                                 instructions,

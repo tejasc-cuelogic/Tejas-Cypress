@@ -1,9 +1,8 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Header, List } from 'semantic-ui-react';
 
 const GeneralConditions = () => (
-  <Aux>
+  <>
     <Header as="h4">Summary of related expenses</Header>
     <p>We strive to be the biggest advocate of your business - NextSeed does not charge any
       fees until your crowdfunding campaign has successfully delivered your fundraising goals.
@@ -67,7 +66,7 @@ const GeneralConditions = () => (
     (NextSeed will provide tracking) and the rest contributed by investors sourced by NextSeed,
     the total fee payable to NextSeed will be: 5% x $250K + 9% x $500K = $57.5K (or 7.7% of $750K).
     </p>
-  </Aux>
+  </>
 );
 
 export default GeneralConditions;

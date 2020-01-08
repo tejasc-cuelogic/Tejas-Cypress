@@ -28,8 +28,8 @@ const OfferingList = (props) => {
             <Table.Body>
               {props.data.length === 0 ? (
                 <Table.Row><Table.Cell>No Offering to display !</Table.Cell></Table.Row>
-                ) :
-                props.data.map(data => (
+              )
+                : props.data.map(data => (
                   <Table.Row key={data.id}>
                     <Table.Cell>{data.offering}</Table.Cell>
                     <Table.Cell className={`status ${kebabCase(data.status)}`}>{data.status}</Table.Cell>

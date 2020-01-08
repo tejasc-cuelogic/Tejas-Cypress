@@ -1,13 +1,12 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Link, Route } from 'react-router-dom';
-import moment from 'moment';
 import { Container, Header, Table, Card, Button } from 'semantic-ui-react';
 import { DateTimeFormat } from '../../../../../theme/shared';
 import Redeem from './Redeem';
+import { DataFormatter } from '../../../../../helper';
 
 const RewardList = props => props.rewards.map(offering => (
-  <Aux>
+  <>
     <Header as="h4">{offering.name}</Header>
     <Container as={!props.admin ? Card : false} fluid>
       <div className="table-wrapper">
@@ -28,20 +27,22 @@ const RewardList = props => props.rewards.map(offering => (
                 <Table.Row key={r.id}>
                   <Table.Cell><b>{r.name}</b></Table.Cell>
                   <Table.Cell>{r.status}</Table.Cell>
-                  <Table.Cell><DateTimeFormat datetime={r.expiry} /></Table.Cell>
+                  <Table.Cell><DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(r.expiry, true, false, false)} /></Table.Cell>
                   <Table.Cell textAlign="center">
-                    {r.redeemDate ?
-                      <DateTimeFormat datetime={r.redeemDate} /> :
-                      (moment().diff(r.expiry) < 0 ?
-                        <Button
-                          as={Link}
-                          to={`${props.match.url}/redeem/${r.id}`}
-                          size="tiny"
-                          color="green"
-                          className="ghost-button"
-                          content="Redeem"
-                        /> :
-                        'Expired'
+                    {r.redeemDate
+                      ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(r.redeemDate, true, false, false)} />
+                      : (DataFormatter.getCurrentCSTMoment().diff(DataFormatter.getDateAsPerTimeZone(r.expiry, true, false, false)) < 0
+                        ? (
+<Button
+  as={Link}
+  to={`${props.match.url}/redeem/${r.id}`}
+  size="tiny"
+  color="green"
+  className="ghost-button"
+  content="Redeem"
+/>
+                        )
+                        : 'Expired'
                       )
                     }
                   </Table.Cell>
@@ -54,7 +55,7 @@ const RewardList = props => props.rewards.map(offering => (
       </div>
     </Container>
     <Route exact path={`${props.match.url}/redeem/:id`} component={Redeem} />
-  </Aux>
+  </>
 ));
 
 export default RewardList;

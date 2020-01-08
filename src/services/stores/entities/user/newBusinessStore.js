@@ -13,11 +13,17 @@ import Helper from '../../../../helper/utility';
 
 export class NewBusinessStore {
   @observable BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
+
   @observable BUSINESS_ACCOUNT =Validator.prepareFormObject(BUSINESS_SIGNUP);
+
   @observable BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
+
   @observable BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
+
   @observable BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
+
   @observable LENDIO_QUAL_FRM = Validator.prepareFormObject(LENDIO_PRE_QUAL);
+
   @observable BUSINESS_APP_STATUS = '';
 
   @action

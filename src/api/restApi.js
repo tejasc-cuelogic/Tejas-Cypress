@@ -99,6 +99,7 @@ export class Api {
         });
     })
   )
+
   getRemoteFile = url => (
     new Promise((resolve, reject) => {
       request

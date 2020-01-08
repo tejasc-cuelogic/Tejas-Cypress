@@ -7,26 +7,20 @@ import { Image64 } from '../../../../theme/shared';
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('teamStore')
 class TeamModal extends Component {
-  state = {
-    modalOpen: true,
-  }
-  handleClose = () => this.props.history.push(this.props.refLink)
-
   render() {
     const { teamMembers } = this.props.teamStore;
-    const { match } = this.props;
-    const member = teamMembers.find(obj => obj.id === match.params.id);
+    const { id } = this.props;
+    const member = teamMembers.find(obj => obj.id === id);
     // const types = { FACEBOOK: 'facebook f', LINKEDIN: 'linkedin in' };
     return (
       <Modal
-        open={this.state.modalOpen}
-        onClose={this.handleClose}
         closeIcon
         size="large"
+        trigger={this.props.trigger}
         className="team-member-modal"
       >
-        {isMobile &&
-          <Modal.Header>Meet our team</Modal.Header>
+        {isMobile
+          && <Modal.Header>Meet our team</Modal.Header>
         }
         <Modal.Content scrolling={isMobile}>
           <Item.Group>

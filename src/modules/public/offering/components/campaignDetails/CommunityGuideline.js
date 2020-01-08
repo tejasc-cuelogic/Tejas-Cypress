@@ -3,6 +3,7 @@ import { Modal } from 'semantic-ui-react';
 
 class CommunityGuideline extends Component {
   handleClose = () => this.props.history.push(this.props.refLink);
+
   render() {
     return (
       <Modal

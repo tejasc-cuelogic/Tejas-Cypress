@@ -8,17 +8,18 @@ import { InlineLoader } from '../../../../../../theme/shared';
 @observer
 class VideoModal extends Component {
   handleClose = () => this.props.history.goBack();
+
   render() {
     const { campaign } = this.props.campaignStore;
     const { isTabletLand } = this.props;
-    const videoUrl = (campaign && campaign.media &&
-     campaign.media.heroVideo && campaign.media.heroVideo.fileName) || null;
+    const videoUrl = (campaign && campaign.media
+     && campaign.media.heroVideo && campaign.media.heroVideo.fileName) || null;
     const vimeoId = (videoUrl && get(videoUrl.split('/'), '[0]')) || null;
     return (
       <Modal open onClose={this.handleClose} size="large" closeIcon className="video-modal">
         <div className={isTabletLand && 'mt-30'}>
-          {videoUrl ?
-            <Embed autoplay active id={vimeoId} source="vimeo" /> : <InlineLoader text="No video is uploaded." className="bg-offwhite" />
+          {videoUrl
+            ? <Embed autoplay active id={vimeoId} source="vimeo" /> : <InlineLoader text="No video is uploaded." className="bg-offwhite" />
           }
         </div>
       </Modal>

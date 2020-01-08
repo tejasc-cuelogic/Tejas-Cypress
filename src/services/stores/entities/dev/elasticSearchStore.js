@@ -1,21 +1,43 @@
-import { observable, action } from 'mobx';
-import { get } from 'lodash';
+import { observable, action, computed, toJS } from 'mobx';
+import { get, sortBy, includes } from 'lodash';
+import graphql from 'mobx-apollo';
 import * as elasticSearchQueries from '../../queries/elasticSearch';
-import { generateInvestorFolderStructure, storageDetailsForInvestor } from '../../queries/data';
+import { generateInvestorFolderStructure, storageDetailsForInvestor, syncEsDocument } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { STORAGE_DETAILS_SYNC, BULK_STORAGE_DETAILS_SYNC } from '../../../constants/admin/data';
-import uiStore from '../../../stores/entities/shared/uiStore';
+import { STORAGE_DETAILS_SYNC, BULK_STORAGE_DETAILS_SYNC, ES_AUDIT } from '../../../constants/admin/data';
+import uiStore from '../shared/uiStore';
 
 export class ElasticSearchStore {
   @observable STORAGE_DETAILS_SYNC_FRM = Validator.prepareFormObject(STORAGE_DETAILS_SYNC);
+
+  @observable ES_AUDIT_FRM = Validator.prepareFormObject(ES_AUDIT);
+
   @observable BULK_STORAGE_DETAILS_SYNC_FRM =
-  Validator.prepareFormObject(BULK_STORAGE_DETAILS_SYNC);
+    Validator.prepareFormObject(BULK_STORAGE_DETAILS_SYNC);
+
   @observable inProgress = {};
+
   @observable bulkSyncLoader = false;
+
   @observable boxMsg = '';
+
   @observable countValues = [];
+
+  @observable esAudit = null;
+
+  @observable esAuditOutput = null;
+
+  @observable swapIndex = null;
+
+  @observable mutations = {
+    USERS: ['userDeleteIndices', 'userPopulateIndex'],
+    CROWDPAY: ['crowdPayDeleteIndices', 'crowdPayPopulateIndex'],
+    ACCREDITATIONS: ['accreditationDeleteIndices', 'accreditationPopulateIndex'],
+    LINKEDBANK: ['linkedBankDeleteIndices', 'linkedBankPopulateIndex'],
+    OFFERINGS: ['offeringsDeleteIndices', 'offeringsPopulateIndex'],
+  }
 
   @action
   setFieldValue = (field, value) => {
@@ -28,8 +50,145 @@ export class ElasticSearchStore {
   }
 
   @action
+  resetESForm = () => {
+    this.ES_AUDIT_FRM = Validator.prepareFormObject(ES_AUDIT);
+  }
+
+  @action
+  elasticSearchHandler = (alias, module, indexName) => {
+    this.setFieldValue('inProgress', `${alias}_${module}`);
+    if (module === 'SWAP') {
+      this.swapIndexAliases(alias);
+    } else if (module === 'POPULATE' || module === 'DELETE') {
+      const mutation = this.mutations[alias];
+      this.esMutations(module === 'POPULATE' ? mutation[1] : mutation[0], indexName.toUpperCase());
+    }
+  }
+
+  @action
+  esMutations = (mutation, index) => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: elasticSearchQueries[mutation],
+        variables: { index },
+        refetchQueries: [{ query: elasticSearchQueries.getESAuditList }],
+      })
+      .then((result) => {
+        Helper.toast('Your request is processed successfully.', 'success');
+        resolve(result);
+        this.setFieldValue('inProgress', false);
+      })
+      .catch((error) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject(error);
+        this.setFieldValue('inProgress', false);
+      });
+  });
+
+  @action
+  getESAudit = () => {
+    this.esAudit = graphql({
+      client,
+      fetchPolicy: 'network-only',
+      query: elasticSearchQueries.getESAuditList,
+      variables: {},
+      onError: () => {
+        this.setFieldValue('inProgress', false);
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
+  }
+
+  @action
+  swapIndexAliases = indexAliasName => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: elasticSearchQueries.swapIndexOnAlias,
+        variables: { indexAliasName },
+        refetchQueries: [{ query: elasticSearchQueries.getESAuditList }],
+      })
+      .then((result) => {
+        if (get(result, 'data.swapIndexOnAlias.success')) {
+          Helper.toast('Your request is processed successfully.', 'success');
+        } else {
+          Helper.toast(get(result, 'data.swapIndexOnAlias.message'), 'error');
+        }
+        resolve(result);
+        this.setFieldValue('inProgress', false);
+      })
+      .catch((error) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject(error);
+        this.setFieldValue('inProgress', false);
+      });
+  });
+
+  @action
+  syncEsDocument = (params) => {
+    this.setFieldValue('inProgress', params.targetIndex);
+    const syncESVarible = params.indexAliasName === 'ACCREDITATIONS' ? { documentId: params.documentId, targetIndex: params.targetIndex, userId: params.userId, accountType: params.accountType } : includes(['CROWDPAY', 'LINKEDBANK'], params.indexAliasName) ? { documentId: params.documentId, targetIndex: params.targetIndex, userId: params.userId } : { documentId: params.documentId, targetIndex: params.targetIndex };
+    const getESVariable = { indexAliasName: params.indexAliasName, random: params.documentId };
+    client
+      .mutate({
+        mutation: syncEsDocument,
+        variables: syncESVarible,
+        refetchQueries: [{
+          query: elasticSearchQueries.getESAudit,
+          variables: getESVariable,
+        }],
+      })
+      .then(() => {
+        Helper.toast('Your request is processed successfully.', 'success');
+        this.setFieldValue('inProgress', false);
+      })
+      .catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        this.setFieldValue('inProgress', false);
+      });
+  }
+
+  @action
+  getESAuditPara = (indexAliasName) => {
+    const { fields } = this.ES_AUDIT_FRM;
+    const formData = Validator.evaluateFormData(fields);
+    const variables = {
+      indexAliasName,
+    };
+    if (formData.random) {
+      variables.random = formData.random;
+    }
+    this.esAuditOutput = graphql({
+      client,
+      fetchPolicy: 'network-only',
+      query: elasticSearchQueries.getESAudit,
+      variables,
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
+  }
+
+  @computed get eSAudit() {
+    return get(this.esAudit, 'data.getESAudit.indices[0]')
+      ? sortBy(toJS(get(this.esAudit, 'data.getESAudit.indices')), ['alias']) : [];
+  }
+
+  @computed get esAuditParaOutput() {
+    return get(this.esAuditOutput, 'data.getESAudit.indices[0]')
+      ? toJS(get(this.esAuditOutput, 'data.getESAudit.indices[0]')) : [];
+  }
+
+  @computed get eSAuditLoading() {
+    return this.esAudit.loading;
+  }
+
+  @computed get esAuditParaOutputLoading() {
+    return this.esAuditOutput.loading;
+  }
+
+  @action
   submitStorageDetails = () => {
-    uiStore.setProgress();
+    uiStore.setProgress('syncStorageDetails');
     this.setFieldValue('boxMsg', '');
     const userId = get(this.STORAGE_DETAILS_SYNC_FRM, 'fields.userId.value') || null;
     return new Promise((res, rej) => {
@@ -61,9 +220,16 @@ export class ElasticSearchStore {
   }
 
   @action
+  formChange = (e, result, form) => {
+    this[form] = Validator.onChange(
+      this[form],
+      Validator.pullValues(e, result),
+    );
+  }
+
+  @action
   storageDetailsChange = (e, res) => {
-    this.STORAGE_DETAILS_SYNC_FRM =
-    Validator.onChange(this.STORAGE_DETAILS_SYNC_FRM, Validator.pullValues(e, res));
+    this.STORAGE_DETAILS_SYNC_FRM = Validator.onChange(this.STORAGE_DETAILS_SYNC_FRM, Validator.pullValues(e, res));
     this.setFieldValue('boxMsg', '');
   };
 
@@ -84,15 +250,14 @@ export class ElasticSearchStore {
         this.setFieldValue('BULK_STORAGE_DETAILS_SYNC_FRM', tempobj);
       }
     } else {
-      this[formName] =
-      Validator.onChange(this[formName], Validator.pullValues(field, values));
+      this[formName] = Validator.onChange(this[formName], Validator.pullValues(field, values));
     }
   };
 
   @action
   submitStorageDetailsinBulk = () => {
-    this.bulkSyncLoader = true;
     this.setFieldValue('countValues', '');
+    this.setFieldValue('bulkSyncLoader', 'syncAllInvestors');
     uiStore.clearErrors();
     const limit = get(this.BULK_STORAGE_DETAILS_SYNC_FRM, 'fields.limit.value') || null;
     return new Promise((res, rej) => {
@@ -115,27 +280,6 @@ export class ElasticSearchStore {
           Helper.toast('Something went wrong, please try again later.', 'error');
           this.setFieldValue('bulkSyncLoader', false);
           rej(error);
-        });
-    });
-  }
-
-  @action
-  elasticSearchHandler = (mutation) => {
-    this.setFieldValue('inProgress', mutation);
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: elasticSearchQueries[mutation],
-        })
-        .then((result) => {
-          Helper.toast('Your request is processed successfully.', 'success');
-          resolve(result);
-          this.setFieldValue('inProgress', false);
-        })
-        .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          reject(error);
-          this.setFieldValue('inProgress', false);
         });
     });
   }

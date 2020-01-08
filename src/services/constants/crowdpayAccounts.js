@@ -40,6 +40,7 @@ export const FILTER_META = {
     values: [
       { label: 'NS Processing', value: 'NS_PROCESSING' },
       { label: 'GS Processing', value: 'GS_PROCESSING' },
+      { label: 'Account Processing', value: 'ACCOUNT_PROCESSING' },
       { label: 'Declined', value: 'DECLINED' },
     ],
     error: undefined,
@@ -50,7 +51,7 @@ export const FILTER_META = {
 export const CROWDPAY_ACCOUNTS_STATUS = {
   PARTIAL: 'PARTIAL',
   FULL: 'FULL',
-  FROZEN: 'FROZEN',
+  FROZEN: ['HARD_FREEZE', 'SOFT_FREEZE'],
   CIP_PROCESSING: 'CIP_PROCESSING',
   NS_PROCESSING: 'NS_PROCESSING',
   GS_PROCESSING: 'GS_PROCESSING',

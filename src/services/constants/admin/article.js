@@ -12,7 +12,7 @@ export const ARTICLES = {
     value: '', label: 'Category', error: undefined, rule: 'required',
   },
   minuteRead: {
-    value: '', label: 'Min Read', error: undefined, rule: 'optional',
+    value: '', label: 'Min Read', error: undefined, rule: 'optional', defaultValue: 0,
   },
   banner: {
     value: '', label: 'Banner', error: undefined, rule: 'optional',

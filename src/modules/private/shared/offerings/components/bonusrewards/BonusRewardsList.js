@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
-import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { Header, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { InlineLoader } from '../../../../../../theme/shared';
+import { DataFormatter } from '../../../../../../helper';
 
 @inject('offeringCreationStore')
 @observer
@@ -17,19 +16,19 @@ export default class BonusRewardsList extends Component {
       return <InlineLoader text="Loading Bonus Rewards List..." />;
     }
     return (
-      <Aux>
+      <>
         {
-          bonusRewards &&
-          bonusRewards.map((reward) => {
-            if ((!this.props.isEarlyBird && reward.tiers.includes(tier)) ||
-            (this.props.isEarlyBird && reward.earlyBirdQuantity > 0)) {
+          bonusRewards
+          && bonusRewards.map((reward) => {
+            if ((!this.props.isEarlyBird && reward.tiers.includes(tier))
+            || (this.props.isEarlyBird && reward.earlyBirdQuantity > 0)) {
               return (
                 <div className="reward-wrap">
                   <Header as="h5">
                     {reward.title}
-                    {reward.expirationDate && <small className="note">  - Exp Date: {moment(reward.expirationDate).format('MMM D, YYYY')}</small>}
-                    {!isReadOnly &&
-                      <Button size="mini" compact floated="right" inverted color="blue" content="Edit" as={Link} to={`${refLink}/edit-bonus-reward/${reward.id}/${tier}`} />
+                    {reward.expirationDate && <small className="note">  - Exp Date: {DataFormatter.getDateAsPerTimeZone(reward.expirationDate, true, false, false, 'MMM D, YYYY')}</small>}
+                    {!isReadOnly
+                      && <Button size="mini" compact floated="right" inverted color="blue" content="Edit" as={Link} to={`${refLink}/edit-bonus-reward/${reward.id}/${tier}`} />
                     }
                   </Header>
                   {reward.description && <p>{reward.description}</p>}
@@ -39,7 +38,7 @@ export default class BonusRewardsList extends Component {
             return null;
           })
         }
-      </Aux>
+      </>
     );
   }
 }

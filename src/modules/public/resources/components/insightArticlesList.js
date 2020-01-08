@@ -16,10 +16,10 @@ class InsightArticlesList extends Component {
     }
     return (
       <Grid stackable doubling>
-        {InsightArticles && InsightArticles.length &&
-        InsightArticles.map(article => (
+        {InsightArticles && InsightArticles.length
+        && InsightArticles.map(article => (
           <Grid.Column mobile={16} tablet={8} computer={4}>
-            <Card className="campaign insights" fluid as={Link} to={`/resources/insights/${article.slug}`}>
+            <Card className="campaign insights" fluid as={Link} to={`/insights/${article.slug}`}>
               <Image64
                 centered
                 srcUrl={article.featuredImage ? article.featuredImage : null
@@ -38,7 +38,8 @@ class InsightArticlesList extends Component {
           </Grid.Column>
         ))
       }
-      </Grid>);
+      </Grid>
+    );
   }
 }
 

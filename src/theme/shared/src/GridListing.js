@@ -11,7 +11,7 @@ const gridListing = props => (
             <div className="offeringList">
               <h4>{offer.title}</h4>
               <p>{offer.description}</p>
-              <p><Menu.Item as={Link} to={props.details} >view details</Menu.Item></p>
+              <p><Menu.Item as={Link} to={props.details}>view details</Menu.Item></p>
             </div>
           </Grid.Column>
         ))

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { join } from 'lodash';
 import { Card, Table, Button, Icon, Label, Confirm } from 'semantic-ui-react';
 import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
+import { DataFormatter } from '../../../../../helper';
 
 const actions = {
   edit: { label: 'Edit', icon: 'pencil' },
@@ -24,31 +24,39 @@ const meta = [
 @inject('articleStore', 'uiStore')
 @observer
 export default class AllInsights extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.articleStore.sortArticlesByFilter();
-    console.log('allInsightsList ->', this.props.articleStore.allInsightsList);
   }
-  globalActionChange = (e, { name, value }) =>
-    this.props.articleStore.setGlobalAction(name, value);
-  handleAction = (action, articleId) => {
+
+  globalActionChange = (e, { name, value }) => this.props.articleStore.setGlobalAction(name, value);
+
+  handleAction = (action, articleId, status) => {
     if (action === 'Delete') {
       this.handleDeleteConfirm(articleId);
     } else if (action === 'Edit') {
       this.props.articleStore.currentArticleId = articleId;
-      this.props.history.push(`${this.props.match.url}/${articleId}`);
+      this.props.history.push(`${this.props.match.url}/${articleId}/${status}`);
     }
   }
+
   handleDeleteConfirm = (id) => {
     this.props.uiStore.setConfirmBox('Delete', id);
   }
+
   handleDelete = () => {
-    this.props.articleStore.deleteArticle(this.props.uiStore.confirmBox.refId);
-    this.props.uiStore.setConfirmBox('');
+    this.props.articleStore.deleteArticle(this.props.uiStore.confirmBox.refId).then(() => {
+      this.props.uiStore.setConfirmBox('');
+      this.props.history.replace(this.props.refLink);
+    });
   }
+
   handleDeleteCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
+
   paginate = params => this.props.articleStore.pageRequest(params);
+
   checkedRecords = (e, result) => {
     if (result && result.type === 'checkbox' && result.checked) {
       this.props.articleStore.addSelectedRecords(result.value);
@@ -72,17 +80,20 @@ export default class AllInsights extends Component {
 
   render() {
     const { articleStore } = this.props;
-    const { confirmBox } = this.props.uiStore;
+    const { confirmBox, inProgress } = this.props.uiStore;
     const {
       articleListingLoader,
       sortOrder,
       adminInsightList,
     } = articleStore;
-    if (articleListingLoader) {
+    if (articleListingLoader || inProgress) {
       return <InlineLoader />;
     }
+    if (adminInsightList.length === 0) {
+      return <InlineLoader text="No data found." />;
+    }
     return (
-      <Aux>
+      <>
         <Card fluid>
           <div className="table-wrapper">
             <Table unstackable striped sortable className="user-list">
@@ -104,7 +115,7 @@ export default class AllInsights extends Component {
               <Table.Body>
                 {adminInsightList ? adminInsightList.map(record => (
                   <Table.Row key={record.id}>
-                    <Table.Cell>{record.title || '-'}</Table.Cell>
+                    <Table.Cell><Link to={`${this.props.match.url}/${record.id}/${record.articleStatus}`}>{record.title || '-'}</Link></Table.Cell>
                     <Table.Cell>{record.category || 'N/A'}</Table.Cell>
                     <Table.Cell>{record.tags ? join(record.tags, ', ') : '-'}</Table.Cell>
                     <Table.Cell>
@@ -112,24 +123,26 @@ export default class AllInsights extends Component {
                     </Table.Cell>
                     <Table.Cell><Label color={`${record.articleStatus === 'PUBLISHED' ? 'green' : record.articleStatus === 'DRAFT' ? 'red' : 'yellow'}`} circular empty /></Table.Cell>
                     <Table.Cell>
-                      <DateTimeFormat format="MM-DD-YYYY" datetime={record.updated && record.updated.date} />
+                      <DateTimeFormat format="MM-DD-YYYY" datetime={DataFormatter.getDateAsPerTimeZone((record.updated && record.updated.date), true, false, false)} />
                     </Table.Cell>
                     <Table.Cell textAlign="center">
                       <Button.Group>
                         {Object.keys(actions).map(action => (
-                          <Button className="link-button" >
-                            <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, record.id)} />
+                          <Button className="link-button">
+                            <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, record.id, record.articleStatus)} />
                           </Button>
                         ))}
                       </Button.Group>
                     </Table.Cell>
                   </Table.Row>
-                )) :
-                <Table.Row>
+                ))
+                  : (
+<Table.Row>
                   <Table.Cell colSpan="7">
                     <InlineLoader text="No data available." />
                   </Table.Cell>
-                </Table.Row>}
+                </Table.Row>
+                  )}
               </Table.Body>
             </Table>
           </div>
@@ -143,7 +156,7 @@ export default class AllInsights extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

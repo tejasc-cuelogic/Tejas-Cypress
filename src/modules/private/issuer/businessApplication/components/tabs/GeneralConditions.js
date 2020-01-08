@@ -1,9 +1,8 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { Header, List } from 'semantic-ui-react';
 
 const GeneralConditions = () => (
-  <Aux>
+  <>
     <Header as="h4">Offer A Issuer Conditions</Header>
     <p>In order to successfully launch your crowdfunding campaign, please be advised
     that we will need to complete certain steps as described below with your
@@ -41,7 +40,7 @@ const GeneralConditions = () => (
         </List.Content>
       </List.Item>
     </List>
-  </Aux>
+  </>
 );
 
 export default GeneralConditions;

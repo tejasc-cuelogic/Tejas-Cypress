@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Icon, Header, Button, Confirm, Responsive } from 'semantic-ui-react';
@@ -7,7 +6,7 @@ import _ from 'lodash';
 
 import FillingsList from '../components/FillingsList';
 import { businessActions } from '../../../../../services/actions';
-import NewBusinessForm from '../containers/NewBusinessForm';
+import NewBusinessForm from './NewBusinessForm';
 import { Spinner } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
@@ -20,7 +19,7 @@ export default class BusinessDetails extends React.Component {
 
   handleAccordionTitleClick = (e, { dataid }) => this.props.uiStore.setOpenAccordion(dataid);
 
-  handleNewFiling = () => this.props.history.push(`/app/edgar/${this.props.match.params.businessId}/edgar`);
+  handleNewFiling = () => this.props.history.push(`/dashboard/edgar/${this.props.match.params.businessId}/edgar`);
 
   editBusinessModal = () => {
     this.props.businessStore.setEditBusinessMode(true);
@@ -60,7 +59,7 @@ export default class BusinessDetails extends React.Component {
     this.props.uiStore.setConfirmBox('', '');
     businessActions.deleteBusiness(this.props.match.params.businessId)
       .then(() => {
-        this.props.history.push('/app/edgar');
+        this.props.history.push('/dashboard/edgar');
         Helper.toast('Business deleted successfully', 'success');
       }).catch(() => {
         Helper.toast('Something went wrong while deleting business Please try again.', 'error', { position: 'top-center' });
@@ -70,13 +69,13 @@ export default class BusinessDetails extends React.Component {
   handleDeleteFiling = () => {
     if (this.props.uiStore.confirmBox.metaData.isAnyFilingLocked) {
       this.handleDeleteCancel();
-      this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
+      this.props.history.push(`/dashboard/edgar/${this.props.match.params.businessId}`);
     } else {
       const filingId = this.props.uiStore.confirmBox.subRefId;
       businessActions.deleteFiling(this.props.match.params.businessId, filingId)
         .then(() => {
           this.handleDeleteCancel();
-          this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
+          this.props.history.push(`/dashboard/edgar/${this.props.match.params.businessId}`);
           Helper.toast('Filing deleted successfully', 'success');
         }).catch(() => {
           Helper.toast('Something went wrong while deleting filing Please try again.', 'error', { position: 'top-center' });
@@ -89,7 +88,7 @@ export default class BusinessDetails extends React.Component {
     const xmlSubmissionId = this.props.uiStore.confirmBox.subRefId;
     businessActions.deleteXmlSubmission(filingId, xmlSubmissionId).then(() => {
       this.handleDeleteCancel();
-      this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
+      this.props.history.push(`/dashboard/edgar/${this.props.match.params.businessId}`);
       Helper.toast('XML Submission deleted successfully', 'success');
     }).catch(() => {
       Helper.toast('Something went wrong while deleting XMl submission Please try again.', 'error', { position: 'top-center' });
@@ -105,7 +104,7 @@ export default class BusinessDetails extends React.Component {
     businessActions.lockUnlockXmlSubmission(businessId, filingId, xmlSubmissionId, lockStatus)
       .then(() => {
         this.handleDeleteCancel();
-        this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
+        this.props.history.push(`/dashboard/edgar/${this.props.match.params.businessId}`);
         Helper.toast(`XML submission ${status} successfully`, 'success');
       });
   }
@@ -120,7 +119,7 @@ export default class BusinessDetails extends React.Component {
       );
     }
     return (
-      <Aux>
+      <>
         <div className="page-header-section">
           <Header as="h1">
             <Button
@@ -134,7 +133,7 @@ export default class BusinessDetails extends React.Component {
             <Responsive
               minWidth={Responsive.onlyLargeScreen.minWidth}
               as={Link}
-              to="/app/edgar"
+              to="/dashboard/edgar"
               className="back-link"
             >
               <Icon name="ns-arrow-left" />
@@ -204,7 +203,7 @@ export default class BusinessDetails extends React.Component {
             handleXMLSubmissionLockUnlock={this.handleXMLSubmissionLockUnlock}
           />
         </div>
-      </Aux>
+      </>
     );
   }
 }

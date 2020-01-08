@@ -1,47 +1,47 @@
-import { forEach } from 'lodash';
 
 class Helper {
   setIdentityQuestions = (response) => {
-    const { questions } = response;
-    const questionsArray = [];
-    let optionsArray = [];
-    forEach(questions, (question) => {
+    const questionsObj = {};
+
+    response.forEach((question) => {
       const questionObj = { rule: 'required', error: undefined };
-      optionsArray = [];
-      forEach(question.choices, (choice) => {
-        optionsArray.push({ key: choice.text, value: choice.text, text: choice.text });
+      const optionsArray = [];
+      question.Choices.forEach((choice) => {
+        optionsArray.push({ key: choice.Text, value: choice.Text, text: choice.Text });
       });
-      questionObj.label = question.prompt;
-      questionObj.key = question.type;
+      questionObj.label = question.Prompt;
+      questionObj.key = question.Type;
       questionObj.options = optionsArray;
       questionObj.value = '';
-      questionsArray.push(questionObj);
+      questionsObj[question.Type] = questionObj;
     });
-    return questionsArray;
+
+    return questionsObj;
   };
 
   getVerificationStatus = (key, questions) => {
     const details = {};
     if (key === 'id.error') {
       details.alertMsg = 'Verification failed';
-      details.route = '/app/summary/identity-verification/1';
+      details.route = '/dashboard/setup/identity-verification/1';
       details.msgType = 'error';
       details.key = key;
     } else if (key === 'id.failure' && questions) {
       details.alertMsg = 'Verification failed';
-      details.route = '/app/summary/identity-verification/2';
+      details.route = '/dashboard/setup/identity-verification/2';
       details.display = false;
       details.msgType = 'error';
       details.key = key;
     } else if (key === 'id.success') {
       details.alertMsg = 'Verification passed!';
-      details.route = '/app/summary';
+      details.route = '/dashboard/setup';
       details.msgType = 'success';
       details.key = key;
     } else {
       details.alertMsg = 'Verification failed';
-      details.route = '/app/summary/identity-verification/1';
+      details.route = '/dashboard/setup/identity-verification/1';
       details.msgType = 'error';
+      details.key = key;
     }
     return details;
   }

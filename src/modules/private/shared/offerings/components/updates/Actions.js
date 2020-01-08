@@ -1,105 +1,102 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { observer } from 'mobx-react';
 import { Button } from 'semantic-ui-react';
 
 const Actions = observer((props) => {
   const {
-    save, meta, isManager, isPending, isPublished,
-    edit, editForm, deleteUpdate, id, cancelUpdate, cancelChanges,
+    save, meta, isManager, isPublished, inProgress,
+    id, cancelUpdate, isPending, isDraft,
   } = props;
   return (
-    <Aux>
-      {(isManager && !isPublished) || editForm ?
-        <Button.Group compact floated="right">
-          <Button
-            inverted
-            color="red"
-            onClick={editForm ? cancelChanges : cancelUpdate}
-            content="Cancel"
-          />
-          {id !== 'new' &&
-            <Button
-              inverted
-              color="red"
-              onClick={deleteUpdate}
-              content="Delete"
-            />
-          }
-          <Button
-            inverted
-            onClick={() => save('DRAFT')}
-            color="green"
-            content={editForm ? 'Save and Unpublish' : 'Save as draft'}
-            disabled={!meta.isValid}
-          />
-          <Button
-            primary
-            onClick={() => save('PUBLISHED')}
-            content={editForm ? 'Save and Publish' : 'Publish'}
-            disabled={!meta.isValid}
-          />
-        </Button.Group> :
-        <Button.Group compact floated="right">
-          {!isManager &&
-            <Button
-              inverted
-              color="red"
-              onClick={cancelUpdate}
-              content="Cancel"
-            />
-          }
-          {id !== 'new' && !isPublished &&
-            <Button
-              inverted
-              color="red"
-              onClick={deleteUpdate}
-              content="Delete"
-            />
-          }
-          {!isPending && !isPublished &&
-            <Button
-              inverted
-              onClick={() => save('DRAFT')}
-              color="green"
-              content="Save as draft"
-              disabled={!meta.isValid}
-            />
-          }
-          {!isPublished &&
-            <Button
-              primary
-              onClick={() => save('PENDING')}
-              content={isPending ? 'Awaiting Manager Approval' : 'Submit for Approval'}
-              disabled={!meta.isValid || isPending}
-            />
-          }
-        </Button.Group>
-      }
-      {isManager && isPublished && !editForm &&
-        <Button.Group compact floated="right">
-          <Button
-            inverted
-            color="red"
-            onClick={cancelUpdate}
-            content="Cancel"
-          />
-          {id !== 'new' &&
-            <Button
-              inverted
-              color="red"
-              onClick={deleteUpdate}
-              content="Delete"
-            />
-          }
-          <Button
-            primary
-            onClick={() => edit()}
-            content="Edit"
-          />
-        </Button.Group>
-      }
-    </Aux>
+    <>
+      <Button.Group compact floated="right">
+        <Button
+          inverted
+          color="red"
+          onClick={isManager && id !== null ? () => save(id, 'DRAFT', true) : cancelUpdate}
+          disabled={inProgress}
+          content={isManager && id !== null ? 'Decline' : !meta.isDirty ? 'Close' : 'Cancel'}
+        />
+        {!isManager && !isPublished
+          && (
+            <>
+              {id
+                ? (
+                  <>
+                    <Button
+                      inverted
+                      onClick={() => save(id, isPending ? 'PENDING' : 'DRAFT', false, true)}
+                      color="green"
+                      content="Save"
+                      disabled={!(meta.isValid && meta.isDirty) || inProgress}
+                      loading={inProgress === 'DRAFT'}
+                    />
+                    <Button
+                      primary
+                      onClick={() => save(id, 'PENDING', true)}
+                      content="Submit"
+                      disabled={!meta.isValid || inProgress}
+                      loading={inProgress === 'PENDING'}
+                    />
+                  </>
+                )
+                : (
+                  <Button
+                    inverted
+                    onClick={() => save('new', 'DRAFT')}
+                    color="green"
+                    content="Create"
+                    disabled={!meta.isValid || inProgress}
+                  />
+                )
+              }
+            </>
+          )
+        }
+        {isManager
+          && (
+            <>
+              {id
+                ? (
+                    <>
+                      <Button
+                        inverted
+                        onClick={() => save(id, isPublished ? 'PUBLISHED' : isPending ? 'PENDING' : 'DRAFT', false, true)}
+                        color="green"
+                        content="Save"
+                        disabled={!(meta.isValid && meta.isDirty) || inProgress}
+                        loading={inProgress === 'DRAFT'}
+                      />
+                      {!isPublished
+                        && (
+                          <Button
+                            primary
+                            onClick={() => save(id, isDraft ? 'PENDING' : 'PUBLISHED', !isDraft)}
+                            content={isDraft ? 'Submit' : 'Publish'}
+                            disabled={!meta.isValid || inProgress}
+                            loading={inProgress === 'PUBLISHED' || inProgress === 'PENDING'}
+                          />
+                        )
+                      }
+                    </>
+                ) : (
+                    <>
+                      <Button
+                        inverted
+                        onClick={() => save('new', 'DRAFT')}
+                        color="green"
+                        content="Create"
+                        disabled={!meta.isValid || inProgress}
+                        loading={inProgress === 'DRAFT'}
+                      />
+                    </>
+                )
+                }
+            </>
+          )
+        }
+      </Button.Group>
+    </>
   );
 });
 

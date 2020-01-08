@@ -3,24 +3,30 @@ import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { Modal, Comment, Label, Form, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import { FormTextarea } from '../../../../../theme/form';
+import { DataFormatter } from '../../../../../helper';
 
 @inject('messageStore')
 @observer
 class CommentsReplyModal extends Component {
   state={ readMore: false }
-  componentWillMount() {
+
+  constructor(props) {
+    super(props);
     this.props.messageStore.resetMessageForm();
     this.props.messageStore.setDataValue('currentMessageId', !this.props.match.params.messageType ? this.props.match.params.id : null);
     this.props.messageStore.setDataValue('currentOfferingId', this.props.campaignId);
   }
+
   readMore = (e, id) => { e.preventDefault(); this.setState({ readMore: id }); }
+
   handleClose = () => this.props.history.push(this.props.refLink);
+
   send = (scope) => {
     this.props.messageStore.createNewComment(scope, this.props.campaignSlug);
     this.handleClose();
   }
+
   render() {
     const readMoreLength = 50;
     const { messageStore, match } = this.props;
@@ -29,8 +35,8 @@ class CommentsReplyModal extends Component {
       MESSAGE_FRM, msgEleChange, buttonLoader, getSelectedMessage,
     } = messageStore;
     const message = getSelectedMessage;
-    const date = message && message.updated ?
-      message.updated.date : message && message.created.date;
+    const date = message && message.updated
+      ? message.updated.date : message && message.created.date;
     return (
       <Modal
         open
@@ -41,18 +47,20 @@ class CommentsReplyModal extends Component {
         <Modal.Header>{messageType ? 'Post New Comment' : 'Reply'}</Modal.Header>
         <Modal.Content scrolling>
           <Comment.Group className="comments-modal">
-            {!messageType && message &&
-              <Comment className="issuer-comment">
+            {!messageType && message
+              && (
+<Comment className="issuer-comment">
                 <Comment.Content>
                   <Comment.Author>{get(message, 'createdUserInfo.info.firstName')} {this.props.issuerId === get(message, 'createdUserInfo.id') && <Label color="blue" size="mini">ISSUER</Label>}</Comment.Author>
-                  <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(date).format('ll')}</span></Comment.Metadata>
+                  <Comment.Metadata className="text-uppercase"><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(date, true, true, false)}</span></Comment.Metadata>
                   <Comment.Text className="mt-20">
-                    {this.state.readMore === message.id ?
-                      message.comment : message.comment.length > readMoreLength ? `${message.comment.substr(0, readMoreLength)}...` : message.comment.substr(0, readMoreLength)}
+                    {this.state.readMore === message.id
+                      ? message.comment : message.comment.length > readMoreLength ? `${message.comment.substr(0, readMoreLength)}...` : message.comment.substr(0, readMoreLength)}
                     {message.comment.length > readMoreLength && <Link to="/" onClick={e => this.readMore(e, this.state.readMoreInner !== message.id ? message.id : false)}>{this.state.readMoreInner !== message.id ? 'read more' : 'read less'}</Link>}
                   </Comment.Text>
                 </Comment.Content>
               </Comment>
+              )
             }
             {/* Add below div if signed up - do not remove */}
             <div className="mt-20">

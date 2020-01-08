@@ -2,11 +2,11 @@
          Theme Overrides
 *******************************/
 .header-wrap{
-    max-width: 1680px;
-    margin: auto;
+    // max-width: 1680px;
+    // margin: auto;
     .ui.menu{
-        max-width: 1680px;
-        left: auto;
+        // max-width: 1680px;
+        // left: auto;
         height:@primaryHeaderHeight;
         border:none;
         border-radius:0;
@@ -34,19 +34,22 @@
             }
         }
         .item{
-            font-weight:@fontMedium;
-            text-transform:uppercase;
+            font-size: @17px;
+            font-weight:@normal;
+            line-height: 20px;
+            text-transform:capitalize;
             padding: 0 @7px;
-            > span{
-                padding:0.5em 0;
-            }
             &:hover {
                 background-color: transparent;
             }
             &.menu-button .ui.button {
-                width: 110px;
+                width: 115px;
+                padding: @8px @16px;
+                font-size: @16px;
+                line-height: 24px;
+                font-weight: @normal;
                 &.basic {
-                    box-shadow: 0 0 0 1px @thumbInactiveBackground inset !important;
+                    box-shadow: 0 0 0 1px @primary-one inset !important;
                     border: none !important;
                 }
             }
@@ -124,13 +127,32 @@
     }
 }
 .ui.secondary.menu.menu-secondary-fixed {
+    align-items: center;
     @media only screen and (max-width : @largestLargeMonitor){
         background-color: fade(@white, 50%);
     }
     .item{
-        padding:@3px @18px;
+        padding:@3px @7px;
         &:hover {
             background-color: transparent;
+        }
+        &.menu-button > .ui.button{
+            width: 110px;
+        }
+        &.header > .ui.image.logo,&.menu-button{
+            visibility: hidden;
+        }
+    }
+    &.animate{
+        .item{
+            &.header > .ui.image.logo,&.menu-button{
+                visibility: visible;
+            }
+        }
+        &.reverse .item{
+            &.header > .ui.image.logo,&.menu-button{
+                visibility: hidden;
+            }
         }
     }
     .menu.menu-secondary {
@@ -218,9 +240,12 @@
         top: auto;
         bottom: -58px;
         height: auto;
-        padding: 10px 0;
+        padding: @10px 0;
         .ui.list {
             margin: 0;
+        }
+        &.campaign-secondary-menu-v2{
+            padding: @10px @7px;
         }
     }
     &.active{
@@ -234,7 +259,10 @@
                 top: auto;
                 bottom: 0;
                 height: auto;
-                padding: 10px 0;
+                padding: @10px 0;
+                &.campaign-secondary-menu-v2{
+                    padding: @10px @7px;
+                }
                 .ui.tiny.list {
                     margin: 0;
                     &.right.floated {
@@ -287,6 +315,9 @@ footer .ui.text.menu{
         width: 140px;
         @media only screen and (max-width : @largestMobileScreen){
             padding: 0;
+        }
+        @media only screen and (max-width : @largestTabletScreen){
+            align-self: center;
         }
         .item{
             color: @neutral-middark;
@@ -408,6 +439,28 @@ footer .ui.text.menu{
     }
 }
 
+// offering layout menu
+.offering-layout-menu .ui.vertical.menu{
+    .item{
+        &:hover, &.active{
+            color: @neutral;
+            &:first-child:before{
+                display: block !important;
+            }
+            &:before{
+                content: '';
+                width: 3px;
+                height: 15px;
+                position: absolute;
+                left: -14px;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: @primary-one;
+            }
+        }
+    }
+}
+
 //  Private pages menus
 .ui.menu{
     &.pagination.text{
@@ -522,8 +575,8 @@ footer .ui.text.menu{
         >.item {
             justify-content: space-between;
             width: 100%;
-            border: 1px solid @neutral-darkwhite;
-            border-radius: 4px;
+            // border: 1px solid @neutral-darkwhite;
+            // border-radius: 4px;
             >i.dropdown.icon:before {
                 content: '\e914';
                 font-family: 'nextseed';
@@ -584,16 +637,99 @@ footer .ui.text.menu{
             width: 100%;
         }
 	}
-	//Public Mobile View End
-}
-.transaction-details .ui.inverted.menu .item{
-    padding:@16px @25px;
-    &:before{
-        background-color:@neutral-middark;
+    //Public Mobile View End
+    //offering new layout mobile menu
+    &.text.campaign-mobile-menu-v2{
+        margin: 0;
+        padding: 0 @13px;
+        overflow-x: scroll;
+        border-bottom: 1px solid @neutral-darkwhite;
+        min-height: @45px;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        &.active{
+            position: fixed;
+            width: 100%;
+            top: 58px;
+            z-index: 9;
+            background: @white;
+        }
+        .item{
+            font-size: @15px;
+            margin: 0 @13px;
+            padding: @5px 0;
+            position: relative;
+            font-weight: @fontMedium;
+            &:last-child{
+                padding-right: @22px;
+                &:after{
+                    width: calc(100% - 22px);
+                }    
+            }
+            &:after{
+                content: '';
+                width: 100%;
+                height: 2px;
+                background: transparent;
+                position: absolute;
+                bottom: -9px;
+                left: 0;
+            }
+            &:hover{
+                color: @neutral-middark;
+            }
+            &.active, &:focus{
+                color: @primary-one;
+                &:after{
+                    background: @primary-one;
+                }
+            }
+            &.hasLabel:after{
+                bottom: -6px;
+            }
+        }
     }
-    &:hover, &:focus, &.active{
-        background-color:@white;
-        color:@link-color !important;
+    &.inverted{
+        .ui.dropdown.more-items{
+            // position: absolute;
+            // right: 0;
+            // top: 0;
+            // &:before{
+            //     left: 0;
+            // }
+        }
+        &.secondary{
+            position: relative;
+        }
+    }
+}
+.transaction-details{
+    .ui.card .mobile-dropdown-menu.private-secondary-menu{
+        overflow: visible;
+    }
+    .ui.inverted.menu{
+        &.offer-details{
+            overflow: visible;
+        }
+        .item{
+            padding:@16px @25px;
+            @media only screen and (max-width : @largestTabletScreen){
+                padding: @16px @20px;
+            }
+            &:before{
+                background-color:@neutral-middark;
+            }
+            &:hover, &:focus, &.active{
+                background-color:@white;
+                color:@link-color !important;
+            }
+        }
+    }
+    .inner-content-spacer .sticky-sidebar{
+        @media only screen and (max-width : @largestMobileScreen){
+            z-index: 10;
+        }
     }
 }
 
@@ -607,6 +743,17 @@ footer .ui.text.menu{
     &.secondary-menu{
         margin:0;
         background-color:@neutral-darkwhite;
+        &.investor{
+            background-color:transparent;
+            a.item{
+                &:before{
+                    display: none;
+                }
+                &:hover, &.active{
+                    background-color:@neutral-midwhite;
+                }  
+            }
+        }
         a.item{
             padding:@16px @20px;
             &:before{
@@ -624,7 +771,16 @@ footer .ui.text.menu{
         }
     }
 }
-
+.transaction-details .ui.inverted.menu .item{
+    padding:@16px @25px;
+    &:before{
+        background-color:@neutral-middark;
+    }
+    &:hover, &:focus, &.active{
+        background-color:@white;
+        color:@link-color !important;
+    }
+}
 .business-application{
     .ui.inverted.menu .item{
         &:hover, &:active, &:focus, &.active{
@@ -635,11 +791,6 @@ footer .ui.text.menu{
         background-color: transparent;
     }
 }
-
-
-.public-header-nav{
-    padding:@47px 0 @20px;
-}
 .ui.sidebar.menu.public-sidebar {
     overflow: hidden !important;
     z-index: 103;
@@ -647,15 +798,12 @@ footer .ui.text.menu{
         margin-left: @24px;
         margin-right: @24px;
     }
-    &.overlay .ui.image.logo {
-        margin: @14px 0 0 @24px;
-        width: 150px;
-    }
     &.vertical {
         .item {
             border-radius: 0 !important;
-            padding: @14px @26px;
-            font-weight: @fontMedium;
+            padding: @10px @22px;
+            font-weight: @normal;
+            font-size: @18px;
             span {
                 margin-left: 0;
                 max-width: 100%;
@@ -685,10 +833,18 @@ footer .ui.text.menu{
         }
         .public-action-nav .item {
             border-bottom: 0;
-            padding: @8px @26px;
+            padding: @8px @22px;
             .ui.button.basic{
-                box-shadow:0 0 0 1px @thumbInactiveBackground inset !important;
+                box-shadow:0 0 0 1px @primary-one inset !important;
                 border:none !important;
+            }
+        }
+        .logged-in-nav{
+            background-color: @neutral-offwhite;
+            margin-bottom: 20px;
+            padding: @14px 0;
+            .item span {
+                font-weight: @fontMedium;
             }
         }
     }
@@ -745,9 +901,9 @@ footer .ui.text.menu{
     }
     &.left {
         .item {
-            text-transform: uppercase;
             &:hover,&:focus,&.active{
                 color: @primary-one !important;
+                text-decoration: none !important;
             }
             &.active.no-active{
                 background-color: transparent !important;
@@ -776,6 +932,21 @@ footer .ui.text.menu{
             }
         }
     }
+    .sidebar-logo {
+        height: @58px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        a.logo {
+            width: 130px;
+            margin-left: @22px;
+        }
+        .ns-close-light{
+            position: relative;
+            margin-right: @26px;
+            right: 0;
+        }
+    }
 }
 //Public Responsive Menu End
 
@@ -783,3 +954,14 @@ footer .ui.text.menu{
     max-width: 1680px;
     margin: auto !important;
 }
+
+/*Public page header start*/
+.public-pages .header-wrap{
+    max-width: 1680px;
+    margin: auto;
+    .ui.menu{
+        max-width: 1680px;
+        left: auto;
+    }
+}
+/*Public page header end*/

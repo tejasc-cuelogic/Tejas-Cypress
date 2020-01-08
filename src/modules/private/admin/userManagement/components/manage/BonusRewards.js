@@ -1,33 +1,35 @@
 import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Checkbox } from 'semantic-ui-react';
+import moment from 'moment';
 import RewardList from '../../../../investor/rewardsWallet/components/RewardList';
-import { InlineLoader } from '../../../../../../theme/shared';
+import { USER_REWARDS_META } from '../../../../../../services/constants/offering';
 
-@inject('rewardStore')
-@observer
 export default class BonusRewards extends Component {
-  componentWillMount() {
-    this.props.rewardStore.initRequest();
+  constructor(props) {
+    super(props);
+    this.state = { rewards: USER_REWARDS_META,
+      showActive: false };
   }
-  activeOnly = () => this.props.rewardStore.activeOnly();
-  render() {
-    const {
-      rewards, loading, error, option,
-    } = this.props.rewardStore;
-    return (
-      <Aux>
+
+    activeOnly = () => this.setState({ showActive: !this.state.showActive });
+
+    render() {
+      const { showActive, rewards } = this.state;
+      const filteredRewards = showActive ? rewards.map((o) => {
+        const filtered = JSON.parse(JSON.stringify(o));
+        filtered.rewards = o.rewards.filter(r => !r.redeemDate && moment().diff(r.expiry) < 0);
+        return filtered;
+      }) : this.state.rewards;
+      return (
+      <>
         <Checkbox
-          defaultChecked={option}
+          checked={showActive}
           onClick={this.activeOnly}
           className="pull-right"
           label="Show active rewards only"
         />
-        {loading ? <InlineLoader /> :
-        <RewardList match={this.props.match} rewards={rewards} error={error} admin />
-        }
-      </Aux>
-    );
-  }
+         <RewardList match={this.props.match} rewards={filteredRewards} admin />
+      </>
+      );
+    }
 }

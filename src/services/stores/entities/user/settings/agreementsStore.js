@@ -3,11 +3,12 @@ import { forEach } from 'lodash';
 import graphql from 'mobx-apollo';
 import { uiStore } from '../../../index';
 import { GqlClient as client } from '../../../../../api/publicApi';
-import { getBoxEmbedLink, getLegalDocsFileIds } from '../../../queries/agreements';
+import { getBoxEmbedLink, getLegalDocsFileIds, getS3DownloadLinkByFileId } from '../../../queries/agreements';
 import Helper from '../../../../../helper/utility';
 
 export class AgreementsStore {
   @observable legalDocsList = [];
+
   @observable agreements = [
     {
       key: 'cCAgreement',
@@ -50,9 +51,15 @@ export class AgreementsStore {
       refEnum: 'INSTRUCTIONS_1099_2018',
     },
   ];
+
   @observable embedUrl = null;
+
+  @observable S3DownloadLink = null;
+
   @observable docLoading = false;
+
   @observable docIdsLoading = false;
+
   @observable alreadySet = false;
 
   @computed get getAgreementsList() {
@@ -72,7 +79,7 @@ export class AgreementsStore {
   }
 
   @action
-  getBoxEmbedLink = (of, fileId, accountType) => {
+  getBoxEmbedLink = (of, fileId, accountType) => new Promise((resolve) => {
     this.setField('docLoading', true);
     const fId = fileId || toJS(this.agreements).find(ele => ele.key === of).id;
     const accountTypeToPass = accountType && accountType === 'SECURITIES' ? accountType : 'SERVICES';
@@ -82,7 +89,38 @@ export class AgreementsStore {
     }).then((res) => {
       this.setAgreementUrl(of, res.data.getBoxEmbedLink);
       this.setField('docLoading', false);
+      resolve(res.data.getBoxEmbedLink);
     }).catch(() => this.setField('docLoading', false));
+  });
+
+  @action
+  readPdfFile = (key, docId) => {
+    this.setField('docLoading', true);
+    return new Promise((resolve, reject) => {
+      const fileId = docId || toJS(this.agreements).find(ele => ele.key === key).id;
+      this.pdfLinkData = graphql({
+        client,
+        query: getS3DownloadLinkByFileId,
+        variables: {
+          fileId,
+          accountType: 'SERVICES',
+          getS3DownloadLink: false,
+        },
+        fetchPolicy: 'network-only',
+        onFetch: (data) => {
+          this.setField('docLoading', false);
+          if (data && !this.pdfLinkData.loading) {
+            if (data.getS3DownloadLinkByFileId.preSignedUrl) {
+              resolve(data.getS3DownloadLinkByFileId.preSignedUrl);
+            } else {
+              Helper.toast('Unable to Fetch the File', 'error');
+              reject();
+            }
+          }
+        },
+        onError: () => reject(),
+      });
+    });
   }
 
   @action
@@ -94,6 +132,7 @@ export class AgreementsStore {
     });
     this.agreements = [...navList];
   }
+
   @computed get getNavItems() {
     const agreementsList = this.getAgreementsList;
     const navList = [];

@@ -4,11 +4,19 @@ export const CAMPAIGN_KEYTERMS_SECURITIES = {
   TERM_NOTE: 'Term Note',
   REVENUE_SHARING_NOTE: 'Revenue Sharing Note',
   PREFERRED_EQUITY_506C: 'Preferred Equity',
+  CONVERTIBLE_NOTES: 'Convertible Notes',
+  SAFE: 'SAFE',
+  REAL_ESTATE: 'LLC Membership Interests',
+  FUNDS: 'Funds - Limited Partner Interest',
 };
 export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
   TERM_NOTE: 'TERM_NOTE',
   REVENUE_SHARING_NOTE: 'REVENUE_SHARING_NOTE',
   PREFERRED_EQUITY_506C: 'PREFERRED_EQUITY_506C',
+  CONVERTIBLE_NOTES: 'CONVERTIBLE_NOTES',
+  SAFE: 'SAFE',
+  REAL_ESTATE: 'REAL_ESTATE',
+  FUNDS: 'FUNDS',
 };
 export const ROUND_TYPES_ENUM = {
   SEED: 'Seed',
@@ -62,19 +70,39 @@ export const CAMPAIGN_OFFERING_STATUS = {
   IN_REPAYMENT: 'In repayment',
   IN_DEFAULT: 'In default',
 };
-export const CAMPAIGN_KEYTERMS_REGULATION = {
+const KEYTERMS_REGULATION_COMMON = {
   FP_TX: 'Rule 147, TX',
   FP_CF: 'Reg CF - US',
   BD_CF: 'Reg CF Offering',
   BD_506C: 'Reg D Offering',
+  BD_506B: 'Reg B Offering',
+};
+export const CAMPAIGN_KEYTERMS_REGULATION = {
+  ...KEYTERMS_REGULATION_COMMON,
   BD_CF_506C: 'Parallel Offering (Reg CF & Reg D)',
 };
+
+export const CAMPAIGN_KEYTERMS_REGULATION_PARALLEL = {
+  ...KEYTERMS_REGULATION_COMMON,
+  BD_CF_506C: <>Parallel Offering<br />(Reg CF &amp; Reg D)</>,
+};
+
+export const CAMPAIGN_KEYTERMS_REGULATION_ENUM = {
+  FP_TX: 'FP_TX',
+  FP_CF: 'FP_CF',
+  BD_CF: 'BD_CF',
+  BD_506C: 'BD_506C',
+  BD_506B: 'BD_506B',
+  BD_CF_506C: 'BD_CF_506C',
+};
+
 export const CAMPAIGN_REGULATION_DETAILED = {
   REGULATION: {
     FP_TX: 'Texas Intrastate Crowdfunding',
     FP_CF: 'Regulation Crowdfunding',
     BD_CF: 'Regulation Crowdfunding',
     BD_506C: 'Regulation D 506(c)',
+    BD_506B: 'Regulation D 506(b)',
     BD_CF_506C: 'Parallel Offering (Reg CF & Reg D)',
   },
   TOOLTIP: {
@@ -82,6 +110,7 @@ export const CAMPAIGN_REGULATION_DETAILED = {
     FP_CF: <span>Regulation Crowdfunding offerings allow everyone to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
     BD_CF: <span>Regulation Crowdfunding offerings allow everyone to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
     BD_506C: <span>Regulation D 506(C) offerings allow Accredited Investors to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
+    BD_506B: <span>Regulation B 506(B) offerings allow Accredited Investors to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
     BD_CF_506C: <span>Parallel offerings are raising money under two different regulations. A portion of this raise is being conducted under <a target="_blank" href="/resources/education-center/investor/making-a-reg-d-investment">Reg D 506(C)</a> and a portion is being raised under <a target="_blank" href="/resources/education-center/investor/making-a-reg-cf-investment">Regulation Crowdfunding</a></span>,
   },
 };
@@ -90,6 +119,7 @@ export const CAMPAIGN_REGULATION_ABREVIATION = {
   FP_CF: 'REG CF',
   BD_CF: 'REG CF',
   BD_506C: 'REG D 506(C)',
+  BD_506B: 'REG D 506(B)',
   BD_CF_506C: 'REG CF & REG D 506(C)',
 };
 export const CAMPAIGN_OFFERED_BY = {
@@ -97,6 +127,7 @@ export const CAMPAIGN_OFFERED_BY = {
   FP_CF: 'NextSeed US LLC',
   BD_CF: 'NextSeed Securities, LLC',
   BD_506C: 'NextSeed Securities, LLC',
+  BD_506B: 'NextSeed Securities, LLC',
   BD_CF_506C: 'NextSeed Securities, LLC',
 };
 export const OFFERING_COMMENTS_SCOPE = {
@@ -123,7 +154,7 @@ export const CAMPAIGN_OFFERING_STAGE = {
   STARTUP_PERIOD: 'Startup Period',
   IN_REPAYMENT: 'Re Payment',
   COMPLETE: 'Completed',
-  DEFAULT: 'Default',
+  DEFAULTED: 'Default',
 };
 
 export const OFFERING_REGULATIONS = {
@@ -132,5 +163,12 @@ export const OFFERING_REGULATIONS = {
   FP_CF: 'FP - CF',
   BD_CF: 'BD - CF',
   BD_506C: 'BD - 506C',
+  BD_506B: 'BD - 506B',
   BD_CF_506C: 'BD - Parallel',
+};
+
+export const OFFERING_AGREEMENT_REGULATIONS = {
+  BD_CF: 'NSS CF',
+  BD_506C: 'RegD506C',
+  FP_CF: 'NSUS CF',
 };

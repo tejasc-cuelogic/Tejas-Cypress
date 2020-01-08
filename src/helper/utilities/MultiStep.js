@@ -1,9 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
-import Aux from 'react-aux';
 import Parser from 'html-react-parser';
-import { Modal, Header, Button, Dimmer, Loader } from 'semantic-ui-react';
-import Helper from '../../helper/utility';
+import { Modal, Header, Button, Dimmer, Loader, Progress } from 'semantic-ui-react';
+import Helper from '../utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const hasData = compState => compState.validForm;
@@ -44,7 +43,12 @@ export default class MultiStep extends React.Component {
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
   }
-  componentWillMount() {
+
+  componentDidMount() {
+    if (this.props.setUiStorevalue) {
+      this.props.setUiStorevalue('multiSteps', this.props.steps);
+    }
+
     if (typeof this.props.stepToBeRendered !== 'undefined' && this.props.stepToBeRendered !== '') {
       this.setNavState(this.props.stepToBeRendered);
     }
@@ -52,17 +56,40 @@ export default class MultiStep extends React.Component {
       this.setState({ showNextBtn: !this.props.steps[this.props.stepToBeRendered].disableNxtBtn });
     }
   }
-  componentWillReceiveProps(nextProps) {
+
+  static getDerivedStateFromProps(nextProps) {
+    const stateObj = {};
     if (typeof nextProps.stepToBeRendered !== 'undefined' && nextProps.stepToBeRendered !== '') {
-      this.setNavState(nextProps.stepToBeRendered);
+      stateObj.navState = getNavStates(
+        nextProps.stepToBeRendered, nextProps.steps.length,
+        nextProps.steps,
+      );
+      if (nextProps.stepToBeRendered < nextProps.steps.length) {
+        stateObj.compState = nextProps.stepToBeRendered;
+      }
+      if (nextProps.stepToBeRendered > 0 && nextProps.stepToBeRendered < nextProps.steps.length - 1) {
+        stateObj.showPreviousBtn = true;
+        stateObj.showNextBtn = true;
+      } else if (nextProps.stepToBeRendered === 0) {
+        stateObj.showPreviousBtn = !nextProps.disablePrevBtn;
+        stateObj.showNextBtn = true;
+      } else {
+        stateObj.showPreviousBtn = true;
+        stateObj.showNextBtn = false;
+      }
     }
     if (nextProps.stepToBeRendered > -1 && _.has(nextProps.steps[nextProps.stepToBeRendered], 'disableNxtBtn')) {
-      this.setState({ showNextBtn: !nextProps.steps[nextProps.stepToBeRendered].disableNxtBtn });
+      stateObj.showNextBtn = !nextProps.steps[nextProps.stepToBeRendered].disableNxtBtn;
     }
     if (typeof nextProps.disableNxtbtn !== 'undefined') {
-      this.setState({ showNextBtn: nextProps.disableNxtbtn });
+      stateObj.showNextBtn = nextProps.disableNxtbtn;
     }
+    if (!_.isEmpty(stateObj)) {
+      return stateObj;
+    }
+    return null;
   }
+
   getClassName(className, i) {
     let currentStatus = this.state.navState.styles[i];
     if (!this.state.navState.styles[i]) {
@@ -104,23 +131,23 @@ export default class MultiStep extends React.Component {
   }
 
   handleKeyDown(evt) {
-    if ((evt.which === 13 && (evt.target.name !== 'bankName') &&
-      (!this.props.steps[this.state.compState].disableNextButton) &&
-      !this.props.steps[this.state.compState].disableKeyDown)) {
+    if ((evt.which === 13 && (evt.target.name !== 'bankName')
+      && (!this.props.steps[this.state.compState].disableNextButton)
+      && !this.props.steps[this.state.compState].disableKeyDown)) {
       this.next();
     }
   }
 
   handleOnClick(evt) {
-    if (!this.props.steps[this.state.compState].onlyDisableNextButton &&
-      !this.props.formHeaderClick) {
+    if (!this.props.steps[this.state.compState].onlyDisableNextButton
+      && !this.props.formHeaderClick) {
       if (this.props.setStepTobeRendered) {
         this.props.setStepTobeRendered(evt.currentTarget.value);
-        if (evt.currentTarget.value === (this.props.steps.length - 1) &&
-          this.state.compState === (this.props.steps.length - 1)) {
+        if (evt.currentTarget.value === (this.props.steps.length - 1)
+          && this.state.compState === (this.props.steps.length - 1)) {
           this.setNavState(this.props.steps.length);
-        } else if (evt.currentTarget.value !== 0 &&
-          this.props.steps[(evt.currentTarget.value - 1)].isDirty) {
+        } else if (evt.currentTarget.value !== 0
+          && this.props.steps[(evt.currentTarget.value - 1)].isDirty) {
           this.props.createAccount(this.props.steps[(evt.currentTarget.value - 1)]);
           if (evt.currentTarget.value === (this.props.steps.length - 1)) {
             this.setNavState(evt.currentTarget.value);
@@ -136,11 +163,7 @@ export default class MultiStep extends React.Component {
 
   next() {
     if (!this.props.steps[this.state.compState].isDirty) {
-      if (this.props.bankSummary &&
-        this.props.bankSummary(this.props.steps[this.state.compState])) {
-        this.setNavState(this.state.compState + 1);
-        this.props.bankSummarySubmit();
-      } else if (this.props.isAccountCreation) {
+      if (this.props.isAccountCreation) {
         if (this.props.steps[this.state.compState].validForm) {
           this.setNavState(this.state.compState + 1);
           this.props.setStepTobeRendered(this.state.compState + 1);
@@ -151,12 +174,16 @@ export default class MultiStep extends React.Component {
         this.setNavState(this.state.compState + 1);
         this.props.setStepTobeRendered(this.state.compState + 1);
       }
+      const modalEle = document.getElementById('multistep-modal');
+      if (modalEle && isMobile) {
+        modalEle.parentNode.scrollTo(0, 0);
+      }
     } else {
       if (this.props.isAccountCreation && isMobile) {
         this.props.createAccount(this.props.steps[this.state.compState]).then(() => {
-          const modalDoc = document.getElementsByClassName('ui page modals dimmer transition visible active');
-          if (modalDoc && isMobile) {
-            setTimeout(() => modalDoc[0].scrollTo(0, 0), 100);
+          const modalEle = document.getElementById('multistep-modal');
+          if (modalEle && isMobile) {
+            setTimeout(() => modalEle.parentNode.scrollTo(0, 0), 100);
           }
         });
       } else {
@@ -170,6 +197,10 @@ export default class MultiStep extends React.Component {
   }
 
   previous() {
+    if (this.props.inProgressArray && this.props.inProgressArray.length) {
+      this.props.setUiStorevalue('inProgressArray', []);
+      return;
+    }
     if (this.state.compState > 0) {
       if (this.props.isAccountCreation) {
         if (this.props.steps[this.state.compState].addFunds) {
@@ -202,81 +233,152 @@ export default class MultiStep extends React.Component {
       /* eslint-disable jsx-a11y/click-events-have-key-events */
       /* eslint-disable react/no-array-index-key */
       return (
-        <Aux>
-          {this.props.steps[i].name &&
-            <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
-              {this.props.steps[i].name}
-            </li>
+        <>
+          {this.props.steps[i].name
+            && (
+              <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
+                {this.props.steps[i].name}
+              </li>
+            )
           }
-        </Aux>
+        </>
       );
     });
   }
 
   render() {
-    if (this.props.isEnterPressed &&
-      !this.props.steps[this.state.compState].disableNextButton) {
+    const currentStep = this.props.steps[this.state.compState];
+    if (this.props.isEnterPressed
+      && !currentStep.disableNextButton) {
       this.props.resetEnterPressed();
       this.next();
     }
-    const closeDimmerClickAction =
-      this.props.closeOnDimmerClick ? this.props.closeOnDimmerClick : false;
+    const closeDimmerClickAction = this.props.closeOnDimmerClick ? this.props.closeOnDimmerClick : false;
     return (
       /* eslint-disable jsx-a11y/no-static-element-interactions */
-      <div onKeyDown={!this.props.steps[this.state.compState].disableNextButton ?
-        this.handleKeyDown : false}
+      <div onKeyDown={!currentStep.disableNextButton
+        ? this.handleKeyDown : false}
       >
         <Modal
           onKeyPress={event => this.props.setIsEnterPressed(event)}
           basic
           open
-          closeIcon
-          className={`${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
+          closeIcon={!isMobile}
+          className={`${isMobile && 'bg-white'} ${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
           closeOnDimmerClick={closeDimmerClickAction}
           onClose={() => this.props.handleMultiStepModalclose()}
+          id="multistep-modal"
+          dimmer={isMobile && 'inverted'}
+          centered={!isMobile}
         >
-          {!this.props.hideHeader &&
-            <Aux>
-              <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
-              <ol className="progtrckr">
-                {!this.props.steps[this.state.compState].isHideLabel &&
-                  this.renderSteps()
+          {!this.props.hideHeader
+            && (
+              <>
+                {!isMobile
+                  ? (
+                    <>
+                      <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
+                      <ol className="progtrckr">
+                        {!currentStep.isHideLabel
+                          && this.renderSteps()
+                        }
+                      </ol>
+                    </>
+                  )
+                  : (
+                    <Modal.Header className="text-uppercase">
+                      {!currentStep.disablePrevButton
+                        && (
+                          <Button
+                            icon={{ className: 'ns-chevron-left' }}
+                            className={`${this.state.showPreviousBtn ? '' : 'disabled'} multistep__btn prev`}
+                            onClick={this.previous}
+                          />
+                        )
+                      }
+                      {!currentStep.isHideName
+                        ? currentStep.name : ''
+                      }
+                      <Button
+                        icon={{ className: 'ns-close-light' }}
+                        className="link-button pull-right multistep__btn"
+                        onClick={this.props.handleMultiStepModalclose}
+                      />
+                      <Progress className={(currentStep.name === '' || currentStep.isHideName) ? 'no-header' : ''} percent={((this.state.compState + 1) / (this.props.steps.length + 1)) * 100} attached="bottom" color="green" />
+                    </Modal.Header>
+                  )
                 }
-              </ol>
-            </Aux>
+              </>
+            )
           }
           <Dimmer active={this.props.inProgress} className={this.props.inProgress && 'fullscreen' ? 'fullscreen' : ''}>
-            <Loader active={this.props.inProgress} >
+            <Loader active={this.props.inProgress}>
               {this.props.loaderMsg ? Parser(this.props.loaderMsg) : ''}
             </Loader>
           </Dimmer>
           <Modal.Content className="multistep">
-            {this.props.steps[this.state.compState].component}
-            {!this.props.steps[this.state.compState].disablePrevButton &&
-              <Button
-                circular
-                icon={{ className: 'ns-arrow-left' }}
-                className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
-                onClick={this.previous}
-              />
+            {currentStep.component}
+            {!currentStep.disablePrevButton && !isMobile
+              && (
+                <Button
+                  circular
+                  icon={{ className: 'ns-arrow-left' }}
+                  className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
+                  onClick={this.previous}
+                />
+              )
             }
-            {this.props.isStepButtonsVisible === undefined || this.state.compState !== 0 ||
-              (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true) ?
-                <Aux>
-                  {!this.props.steps[this.state.compState].disableNextButton &&
-                    <Button
-                      type="submit"
-                      circular
-                      icon={{ className: 'ns-arrow-right' }}
-                      className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'multistep__btn next active' : 'multistep__btn next disabled'}
-                      onClick={this.next}
-                    />
+            {(this.props.isStepButtonsVisible === undefined || this.state.compState !== 0
+              || (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true)) && !isMobile
+              ? (
+                <>
+                  {!currentStep.disableNextButton
+                    && (
+                      <>
+                        {isMobile ? (
+                          <Button
+                            className={(this.state.showNextBtn && !currentStep.onlyDisableNextButton) ? 'active' : 'disabled'}
+                            onClick={this.next}
+                            primary
+                            content="Next"
+                            fluid
+                          />
+                        ) : (
+                            <Button
+                              type="submit"
+                              circular
+                              icon={{ className: 'ns-arrow-right' }}
+                              className={`${(this.state.showNextBtn && !currentStep.onlyDisableNextButton) ? 'active' : 'disabled'} multistep__btn next`}
+                              onClick={this.next}
+                            />
+                        )}
+                      </>
+                    )
                   }
-                </Aux>
-              :
-              null
+                </>
+              )
+              : null
             }
           </Modal.Content>
+          {/* {(this.props.isStepButtonsVisible === undefined || this.state.compState !== 0
+              || (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true)) && isMobile
+            ? (
+                <Aux>
+                  {!currentStep.disableNextButton
+                    && (
+                    <Button
+                      className={(this.state.showNextBtn && !currentStep.onlyDisableNextButton) ? 'active' : 'disabled'}
+                      onClick={this.next}
+                      attached="bottom"
+                      primary
+                      content="Next"
+                    />
+                    )
+                  }
+                </Aux>
+            )
+            : null
+          } */}
         </Modal>
       </div>
     );

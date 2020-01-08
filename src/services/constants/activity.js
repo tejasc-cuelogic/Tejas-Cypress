@@ -10,4 +10,16 @@ export const LOG_ACTIVITY = {
       max: 'This is too long. Max length is :max.',
     },
   },
+  documents: {
+    value: [],
+    label: '',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: [],
+    fileId: [],
+    fileData: [],
+    multiple: true,
+    objType: 'FileObjectType',
+  },
 };

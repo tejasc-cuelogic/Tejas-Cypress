@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { toJS } from 'mobx';
 import { get } from 'lodash';
@@ -8,19 +7,22 @@ import { ByKeyword } from '../../../../../theme/form/Filters';
 import Listing from './investors/Listing';
 import Helper from '../../../../../helper/utility';
 
-@inject('userStore', 'offeringInvestorStore', 'offeringsStore')
+@inject('userStore', 'offeringInvestorStore', 'offeringsStore', 'offeringCreationStore')
 @observer
 export default class BonusRewards extends Component {
-  componentWillMount() {
-    this.props.offeringInvestorStore.initRequest(this.props.offeringId);
+  constructor(props) {
+    super(props);
+    this.props.offeringInvestorStore.initRequest(this.props.offeringCreationStore.currentOfferingId);
   }
+
   executeSearch = (e) => {
     this.props.offeringInvestorStore.setInitiateSrch('keyword', e.target.value);
   }
+
   populateCsvData = () => {
     const { investorListsForCsvExport } = this.props.offeringInvestorStore;
     const { offer } = this.props.offeringsStore;
-    const fields = ['firstName', 'lastName', 'userEmail', 'city', 'state', 'accountType', 'amount', 'autoDraftAmount', 'credit', 'investmentDate', 'investmentsCount', 'referralCode'];
+    const fields = ['firstName', 'lastName', 'userEmail', 'street', 'streetTwo', 'city', 'state', 'zipCode', 'accountType', 'amount', 'autoDraftAmount', 'credit', 'investmentDate', 'investmentsCount', 'referralCode', 'earlyBirdEligibility', 'regulation'];
     const params = {
       fields,
       data: toJS(investorListsForCsvExport),
@@ -28,11 +30,12 @@ export default class BonusRewards extends Component {
     };
     Helper.downloadCSV(params);
   }
+
   render() {
     const { requestState, investorLists } = this.props.offeringInvestorStore;
     const { isIssuer, isAdmin } = this.props.userStore;
     return (
-      <Aux>
+      <>
         <Form className={!isIssuer ? 'search-filters more inner-content-spacer' : ''}>
           <Grid stackable className="bottom-aligned">
             <Grid.Row>
@@ -42,20 +45,22 @@ export default class BonusRewards extends Component {
                 placeholder="Search by name, city"
                 more="no"
                 requestState={requestState}
-                // addon={
-                // }
+              // addon={
+              // }
               />
-              {isAdmin &&
-              <Grid.Column floated="right" width={3} className="right-align">
-                <Button
-                  primary
-                  className="relaxed"
-                  content="Export"
-                  onClick={this.populateCsvData}
-                  // loading={inProgress}
-                  disabled={!investorLists.length}
-                />
-              </Grid.Column>
+              {isAdmin
+                && (
+                  <Grid.Column floated="right" width={3} className="right-align">
+                    <Button
+                      primary
+                      className="relaxed"
+                      content="Export"
+                      onClick={this.populateCsvData}
+                      // loading={inProgress}
+                      disabled={!investorLists.length}
+                    />
+                  </Grid.Column>
+                )
               }
             </Grid.Row>
           </Grid>
@@ -63,7 +68,7 @@ export default class BonusRewards extends Component {
         <div className={isIssuer ? 'ui card fluid' : ''}>
           <Listing />
         </div>
-      </Aux>
+      </>
     );
   }
 }

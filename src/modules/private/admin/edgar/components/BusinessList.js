@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Table } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { DateTimeFormat } from './../../../../../theme/shared';
+import { DateTimeFormat } from '../../../../../theme/shared';
 
 const BusinessList = observer(props => (
   <Card fluid>
@@ -20,10 +20,10 @@ const BusinessList = observer(props => (
           {
             props.businessList.map(business => (
               <Table.Row key={business.id}>
-                <Table.Cell singleLine><Link to={`/app/edgar/${business.id}`}>{business.name}</Link></Table.Cell>
+                <Table.Cell singleLine><Link to={`/dashboard/edgar/${business.id}`}>{business.name}</Link></Table.Cell>
                 <Table.Cell singleLine><DateTimeFormat datetime={business.created} /></Table.Cell>
                 <Table.Cell>{business.description || 'N/A'}</Table.Cell>
-                <Table.Cell singleLine><Link to={`/app/edgar/${business.id}`} className="action">view filing</Link></Table.Cell>
+                <Table.Cell singleLine><Link to={`/dashboard/edgar/${business.id}`} className="action">view filing</Link></Table.Cell>
               </Table.Row>
             ))
           }

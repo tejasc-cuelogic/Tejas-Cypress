@@ -13,12 +13,15 @@ export default class OfferSigning extends Component {
     isCreateOffer: false,
     showConfirmModal: false,
   }
+
   componentDidMount() {
     window.addEventListener('message', this.docuSignListener);
   }
+
   componentWillUnmount() {
     // window.removeEventListener('message', this.docuSignListener);
   }
+
   getPortalAgreementStatus = (funType = '') => {
     const { businessAppReviewStore } = this.props;
     businessAppReviewStore.getPortalAgreementStatus().then((data) => {
@@ -27,36 +30,42 @@ export default class OfferSigning extends Component {
       } else if (funType === 'Button') {
         this.setState({ showConfirmModal: true });
       } else {
-        this.props.history.push('/app/dashboard');
+        this.props.history.push('/dashboard');
       }
     }).finally(() => this.props.uiStore.setProgress(false));
   }
+
   createOffer = () => {
     this.setState({ isCreateOffer: true });
     const { match, businessAppReviewStore } = this.props;
     businessAppReviewStore.createOffering(match.params.applicationId).then(() => {
-      this.props.history.push(`/app/dashboard/${match.params.applicationId}/gettingStarted`);
+      this.props.history.push(`/dashboard/application/${match.params.applicationId}/gettingStarted`);
     });
   }
+
   docuSignListener = (e) => {
     setTimeout(() => {
       if (e.data === 'signing_complete' || e.data === 'viewing_complete') {
         this.getPortalAgreementStatus('Button');
       // } else if (e.data === 'viewing_complete') {
       //   this.createOffer();
-      } else if (e && e.data && !e.data.includes('setImmediate') && !e.data.includes('__fs') && !this.state.isCreateOffer) {
-        this.props.history.push('/app/dashboard');
+      } else if (e && e.data && typeof e.data === 'string' && !e.data.includes('setImmediate') && !e.data.includes('__fs') && !this.state.isCreateOffer) {
+        this.props.history.push('/dashboard');
       }
     }, 2000);
   };
+
   hideConfirm = () => {
     this.setState({ showConfirmModal: false });
   }
+
   doItLater = () => {
     this.setState({ showConfirmModal: false });
-    this.props.history.push('/app/dashboard');
+    this.props.history.push('/dashboard');
   }
+
   module = name => DataFormatter.upperCamelCase(name);
+
   render() {
     const { signPortalAgreementURL } = this.props.businessAppReviewStore;
     return (
@@ -66,8 +75,8 @@ export default class OfferSigning extends Component {
             <Grid.Row>
               <Grid.Column className="welcome-packet">
                 <div className="pdf-viewer">
-                  {this.props.uiStore.inProgress ? <InlineLoader /> :
-                  <iframe id="docuSignIframe" onLoad={this.iframeLoading} width="100%" height="100%" title="pdf" src={signPortalAgreementURL} />
+                  {this.props.uiStore.inProgress ? <InlineLoader />
+                    : <iframe id="docuSignIframe" onLoad={this.iframeLoading} width="100%" height="100%" title="pdf" src={signPortalAgreementURL} />
                   }
                 </div>
               </Grid.Column>

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { isEmpty, find, get } from 'lodash';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Table, Message, Button, Confirm } from 'semantic-ui-react';
@@ -8,7 +7,7 @@ import XmlSubmission from '../../../../admin/edgar/components/XmlSubmission';
 import Helper from '../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../theme/shared';
 import { businessActions } from '../../../../../../services/actions';
-import { NEXTSEED_BOX_URL, NEXTSEED_SECURITIES_BOX_URL } from './../../../../../../constants/common';
+import { NEXTSEED_BOX_URL, NEXTSEED_SECURITIES_BOX_URL } from '../../../../../../constants/common';
 
 @withRouter
 @inject('businessStore', 'offeringCreationStore', 'uiStore', 'commonStore', 'offeringsStore')
@@ -17,6 +16,7 @@ export default class EdgarFilingList extends Component {
   state = {
     showLoader: false,
   }
+
   confirmDelete = (e, {
     entity, refid, subrefid, lockedstatus, submissions,
   }) => {
@@ -50,7 +50,7 @@ export default class EdgarFilingList extends Component {
     const xmlSubmissionId = this.props.uiStore.confirmBox.subRefId;
     businessActions.deleteXmlSubmission(filingId, xmlSubmissionId).then(() => {
       this.handleDeleteCancel();
-      this.props.history.push(`/app/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
+      this.props.history.push(`/dashboard/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
       Helper.toast('XML Submission deleted successfully', 'success');
     }).catch(() => {
       Helper.toast('Something went wrong while deleting XMl submission, Please try again.', 'error', { position: 'top-center' });
@@ -71,7 +71,7 @@ export default class EdgarFilingList extends Component {
     )
       .then(() => {
         this.handleDeleteCancel();
-        this.props.history.push(`/app/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
+        this.props.history.push(`/dashboard/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
         Helper.toast(`XML submission ${status} successfully`, 'success');
       });
   }
@@ -80,12 +80,12 @@ export default class EdgarFilingList extends Component {
     const { currentOfferingId } = this.props.offeringCreationStore;
     if (this.props.uiStore.confirmBox.metaData.isAnyFilingLocked) {
       this.handleDeleteCancel();
-      this.props.history.push(`/app/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
+      this.props.history.push(`/dashboard/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
     } else {
       this.setState({ showLoader: true });
       const filingId = this.props.uiStore.confirmBox.subRefId;
       this.handleDeleteCancel();
-      this.props.history.push(`/app/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
+      this.props.history.push(`/dashboard/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
       businessActions.deleteFiling(currentOfferingId, filingId)
         .then(() => {
           this.setState({ showLoader: false });
@@ -96,6 +96,7 @@ export default class EdgarFilingList extends Component {
         });
     }
   }
+
   handleDocumentsLink = (e, { folderId }) => {
     const { offer } = this.props.offeringsStore;
     const params = {
@@ -125,11 +126,11 @@ export default class EdgarFilingList extends Component {
       );
     }
     return (
-      <Aux>
+      <>
         <Header as="h4">Edgar Filing</Header>
         {
           offeringFilingList.map(filing => (
-            <Aux>
+            <>
               <Table basic compact className="form-table">
                 <Table.Header>
                   <Table.Row>
@@ -177,7 +178,7 @@ export default class EdgarFilingList extends Component {
                   boxFolderLink={(`${BOX_URL_TO_CONSIDER}folder/${filing.folderId}`)}
                 />
               </Table>
-            </Aux>
+            </>
           ))
         }
         <Confirm
@@ -189,7 +190,7 @@ export default class EdgarFilingList extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

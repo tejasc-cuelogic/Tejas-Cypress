@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Table, Form } from 'semantic-ui-react';
 // import ManagerOverview from './ManagerOverview';
@@ -11,7 +10,7 @@ export default class Results extends Component {
   render() {
     const { RESULTS_FRM } = this.props.businessAppReviewStore;
     return (
-      <Aux>
+      <>
         <Header as="h4">
           Results
         </Header>
@@ -73,7 +72,7 @@ export default class Results extends Component {
         <Form>
           {/* <ManagerOverview form={MODEL_MANAGER_FRM} formName="MODEL_MANAGER_FRM" /> */}
         </Form>
-      </Aux>
+      </>
     );
   }
 }

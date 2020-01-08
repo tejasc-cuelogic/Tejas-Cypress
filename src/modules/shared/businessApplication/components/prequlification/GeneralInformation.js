@@ -5,7 +5,7 @@ import FormElementWrap from '../FormElementWrap';
 
 const GeneralInformation = props => (
   <FormElementWrap hideFields={props.hideFields} header="General Information">
-    <div className="application-scroll" />
+    <span className="cre-scroll" />
     <Grid>
       <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
         <div className="field-wrap">
@@ -18,14 +18,14 @@ const GeneralInformation = props => (
                 type="text"
                 name={field}
                 asterisk="true"
-                label={field === 'businessName' ? props.currentApplicationType === 'business' ? 'Business Name' : 'Entity Name' : 'Website'}
+                label={field === 'businessName' ? 'Entity Name' : 'Website'}
                 fielddata={props.fields[field]}
                 changed={props.businessAppEleChange}
               />
             ))
           }
           <MaskedInput
-            containerclassname={props.preQualFormDisabled ? 'display-only' : 'cre-scroll'}
+            containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
             readOnly={props.preQualFormDisabled}
             name="phoneNumber"
             asterisk="true"
@@ -37,16 +37,18 @@ const GeneralInformation = props => (
       <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
         <div className="field-wrap">
           <Header as="h6">
-            {props.currentApplicationType === 'business' ? 'Business Address' : 'Entity Address '}
-            {props.currentApplicationType === 'commercial-real-estate' &&
+            Entity Address
+            {props.currentApplicationType === 'commercial-real-estate'
+            && (
             <Popup
               trigger={<Icon className="ns-help-circle" />}
               content="Enter address of investment location,
-              not of owner or entity."
+                          not of owner or entity."
               position="top center"
               className="left-align"
               wide
             />
+            )
           }
           </Header>
           <AutoComplete
@@ -71,7 +73,7 @@ const GeneralInformation = props => (
                   fielddata={props.fields[field]}
                   changed={props.businessAppEleChange}
                 />
-                ))
+              ))
               }
             <MaskedInput
               zipCode

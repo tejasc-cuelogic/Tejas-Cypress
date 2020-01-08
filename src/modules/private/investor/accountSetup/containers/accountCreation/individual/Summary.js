@@ -1,20 +1,23 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Message, Table } from 'semantic-ui-react';
 import { isEmpty, get } from 'lodash';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
-@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore')
+
+const isMobile = document.documentElement.clientWidth < 768;
+@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'identityStore', 'accountStore')
 @withRouter
 @observer
 export default class Summary extends React.Component {
   state = {
     open: false,
   };
-  componentWillMount() {
+
+  constructor(props) {
+    super(props);
     const {
       getLegalDocsFileIds, alreadySet,
     } = this.props.agreementsStore;
@@ -22,6 +25,7 @@ export default class Summary extends React.Component {
       getLegalDocsFileIds();
     }
     this.props.bankAccountStore.fetchRoutingNumber();
+    this.props.uiStore.clearErrors();
   }
 
   componentDidUpdate() {
@@ -29,47 +33,22 @@ export default class Summary extends React.Component {
     const { userDetails } = this.props.userDetailsStore;
     this.props.uiStore.setProgress(get(userDetails, 'info.firstName') === null ? false : !get(userDetails, 'info.firstName'));
   }
-  handleCreateAccount = () => {
-    const {
-      isCipExpired,
-      signupStatus,
-      partialInvestNowSessionURL,
-      setPartialInvestmenSession,
-    } = this.props.userDetailsStore;
-    this.props.uiStore.setcreateAccountMessage();
-    if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
-      this.props.history.push('/app/summary/identity-verification/0');
-      Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
-      this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
-    } else if (isCipExpired) {
-      this.props.history.push('/app/summary/identity-verification/0');
-      Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
-      this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
-    } else {
-      this.props.individualAccountStore.submitAccount().then(() => {
-        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-        if (partialInvestNowSessionURL) {
-          this.props.history.push(partialInvestNowSessionURL);
-          setPartialInvestmenSession();
-        } else if (!this.props.individualAccountStore.showProcessingModal) {
-          this.props.history.push('/app/summary');
-          this.props.uiStore.resetcreateAccountMessage();
-        }
-      }).catch(() => { });
-    }
-  }
-  openModal = (type) => {
+
+  openModal = (e, type) => {
+    e.preventDefault();
     const { getBoxEmbedLink } = this.props.agreementsStore;
     getBoxEmbedLink(type);
     this.setState({
       open: true,
     });
   }
+
   closeModal = () => {
     this.setState({ open: false });
   }
+
   render() {
-    const { errors } = this.props.uiStore;
+    const { errors, inProgressArray } = this.props.uiStore;
     const {
       formAddFunds,
       plaidAccDetails,
@@ -78,62 +57,76 @@ export default class Summary extends React.Component {
       isAccountPresent,
       accountAttributes,
     } = this.props.bankAccountStore;
+    const { setStepToBeRendered } = this.props.individualAccountStore;
     const { userDetails } = this.props.userDetailsStore;
-    const bankAccountNumber = !isEmpty(plaidAccDetails) ?
-      plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
+    const bankAccountNumber = !isEmpty(plaidAccDetails)
+      ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
-      <Aux>
-        <Header as="h3" textAlign="center">Confirm Account</Header>
-        <div className="field-wrap">
+      <>
+        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Confirm your account to start investing! </Header>
+        <div className={isMobile ? '' : 'field-wrap'}>
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell>Investor: </Table.Cell>
+                  <Table.Cell className="grey-header">Investor: </Table.Cell>
                   <Table.Cell>{`${get(userDetails, 'info.firstName') || ''} ${get(userDetails, 'info.lastName') || ''} `}</Table.Cell>
                 </Table.Row>
-                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
-                  <Table.Row>
-                    <Table.Cell>Bank: </Table.Cell>
+                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
+                  && (
+                <Table.Row>
+                    <Table.Cell className="grey-header">Bank: </Table.Cell>
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
+                  )
                 }
                 <Table.Row>
-                  <Table.Cell>Bank Account Number: </Table.Cell>
+                  <Table.Cell className="grey-header">Account Type: </Table.Cell>
+                  <Table.Cell>{Helper.caseify(plaidAccDetails.accountType || '')}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell className="grey-header">Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                {!isEmpty(routingNum) &&
-                  <Table.Row>
-                    <Table.Cell>Routing Number</Table.Cell>
+                {!isEmpty(routingNum)
+                  && (
+               <Table.Row>
+                    <Table.Cell className="grey-header">Routing Number</Table.Cell>
                     <Table.Cell>
                       {routingNum || ''}
                     </Table.Cell>
                   </Table.Row>
+                  )
                 }
                 <Table.Row>
-                  <Table.Cell>Your Initial Deposit</Table.Cell>
+                  <Table.Cell className="grey-header">Your Initial Deposit</Table.Cell>
                   <Table.Cell>
-                    {[-1, ''].includes(accountAttributes.initialDepositAmount) ?
-                      Helper.CurrencyFormat(0) :
-                      Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
+                    {[-1, ''].includes(accountAttributes.initialDepositAmount)
+                      ? Helper.CurrencyFormat(0)
+                      : Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
+                      <span className="pull-right">
+                        <Button className="link-button highlight-text" onClick={() => setStepToBeRendered(1)}>Change</Button>
+                      </span>
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
             </Table>
           </div>
         </div>
-        {errors &&
-          <Message error className="center-align">
-            <ListErrors errors={[errors.message]} />
-          </Message>
+        {errors
+          && (
+            <Message error className="center-align">
+              <ListErrors errors={[errors.message]} />
+            </Message>
+          )
         }
-        <p className="center-align grey-header mt-30">
+        <p className={`${isMobile ? '' : 'center-align'} grey-header mt-30`}>
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>CrowdPay Custodial Account Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>NextSeed US LLC Member Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>NextSeed Securities LLC Investor Agreement</span>, and {' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>Substitute IRS Form W-9 Certification</span>.
+          <a className="highlight-text" style={{ cursor: 'pointer' }} href="/dashboard/legal-docs/cCAgreement" onClick={e => this.openModal(e, 'cCAgreement')}>CrowdPay Custodial Account Agreement</a>,{' '}
+          <a className="highlight-text" style={{ cursor: 'pointer' }} href="/dashboard/legal-docs/fPAgreemnt" onClick={e => this.openModal(e, 'fPAgreemnt')}>NextSeed US LLC Member Agreement</a>,{' '}
+          <a className="highlight-text" style={{ cursor: 'pointer' }} href="/dashboard/legal-docs/bDIAgreemnt" onClick={e => this.openModal(e, 'bDIAgreemnt')}>NextSeed Securities LLC Investor Agreement</a>, and {' '}
+          <a className="highlight-text" style={{ cursor: 'pointer' }} href="/dashboard/legal-docs/irsCertification" onClick={e => this.openModal(e, 'irsCertification')}>Substitute IRS Form W-9 Certification</a>.
           <IframeModal
             open={this.state.open}
             close={this.closeModal}
@@ -142,9 +135,9 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid} />
+          <Button primary size="large" fluid={isMobile} className="relaxed" content="Create your account" onClick={() => this.props.handleCreateAccount('individual')} disabled={errors || !isAccountPresent || !formAddFunds.meta.isValid || isEmpty(routingNum) || inProgressArray.includes('submitAccountLoader')} />
         </div>
-      </Aux>
+      </>
     );
   }
 }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import PrivateLayout from '../../shared/PrivateLayout';
 import AllRequests from './components/AllRequests';
 import { ByKeyword } from '../../../../theme/form/Filters';
@@ -9,15 +8,21 @@ import { FormCheckbox } from '../../../../theme/form';
 @inject('bankAccountStore')
 @observer
 export default class CrowdPay extends Component {
-  componentWillMount() {
-    this.props.bankAccountStore.initRequest();
+  constructor(props) {
+    super(props);
+    if (!this.props.bankAccountStore.apiCall) {
+      this.props.bankAccountStore.initRequest();
+    }
   }
-  setSearchParam = (e, { name, value }) =>
-    this.props.bankAccountStore.setInitiateSrch(name, value);
+
+  setSearchParam = (e, { name, value }) => this.props.bankAccountStore.setInitiateSrch(name, value);
+
   toggleSearch = () => this.props.bankAccountStore.toggleSearch();
+
   executeSearch = (e) => {
     this.props.bankAccountStore.setInitiateSrch('keyword', e.target.value);
   }
+
   dateFilterStart = (date) => {
     if (date) {
       this.props.bankAccountStore.setInitiateSrch('startDate', date);
@@ -29,6 +34,7 @@ export default class CrowdPay extends Component {
       this.props.bankAccountStore.setInitiateSrch('endDate', date);
     }
   }
+
   render() {
     // match
     const {
@@ -39,8 +45,8 @@ export default class CrowdPay extends Component {
     return (
       <PrivateLayout
         {...this.props}
-        P1={
-          <Aux>
+        P1={(
+          <>
             <ByKeyword
               change={this.executeSearch}
               w={[8]}
@@ -56,8 +62,8 @@ export default class CrowdPay extends Component {
               defaults
               containerclassname="ui list horizontal"
             />
-          </Aux>
-        }
+          </>
+)}
       >
         <AllRequests {...this.props} />
       </PrivateLayout>

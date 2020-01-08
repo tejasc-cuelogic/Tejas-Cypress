@@ -1775,6 +1775,9 @@ i.icon[class*="ns-"]{
 .ns-business:before{
     content:@ns-business;
 }
+.ns-calculator-icon:before{
+    content:@ns-calculator-icon;
+}
 .ns-calendar:before{
     content:@ns-calendar;
 }
@@ -1883,6 +1886,9 @@ i.icon[class*="ns-"]{
 .ns-contact-card:before{
     content:@ns-contact-card;
 }
+.ns-convertible-icon:before{
+    content:@ns-convertible-icon;
+}
 .ns-corporation:before{
     content:@ns-corporation;
 }
@@ -1894,6 +1900,9 @@ i.icon[class*="ns-"]{
 }
 .ns-dashboard-circle:before{
     content:@ns-dashboard-circle;
+}
+.ns-debt-icon:before{
+    content:@ns-debt-icon;
 }
 .ns-document:before{
     content:@ns-document;
@@ -1991,6 +2000,9 @@ i.icon[class*="ns-"]{
 .ns-hospitality-2:before {
     content:@ns-hospitality-2; 
 }
+.ns-hospitality-3:before {
+    content:@ns-hospitality-3; 
+}
 .ns-image:before{
     content:@ns-image;
 }
@@ -2036,6 +2048,9 @@ i.icon[class*="ns-"]{
 .ns-minus:before{
     content:@ns-minus; 
 }
+.ns-minus-circle:before{
+    content:@ns-minus-circle; 
+}
 .ns-minus-square:before{
     content:@ns-minus-square;
 }
@@ -2063,6 +2078,15 @@ i.icon[class*="ns-"]{
 .ns-offering:before{
     content:@ns-offering;
 }
+.ns-offer-declined:before {
+    content: @ns-offer-declined; 
+}
+.ns-offer-extended:before {
+    content: @ns-offer-extended; 
+}
+.ns-offer-pending:before {
+    content: @ns-offer-pending; 
+}
 .ns-other:before {
     content:@ns-other; 
 }
@@ -2074,6 +2098,9 @@ i.icon[class*="ns-"]{
 }
 .ns-pdf:before{
     content:@ns-pdf;
+}
+.ns-pdf-file:before{
+    content:@ns-pdf-file;
 }
 .ns-pencil:before{
     content:@ns-pencil;
@@ -2092,6 +2119,12 @@ i.icon[class*="ns-"]{
 }
 .ns-proprietor:before{
     content:@ns-proprietor;
+}
+.ns-quote-left:before {
+    content: @ns-quote-left;
+}
+.ns-quote-right:before {
+    content: @ns-quote-right;
 }
 .ns-real-estate:before{
     content:@ns-real-estate;

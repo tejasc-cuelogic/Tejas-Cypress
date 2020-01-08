@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Icon, Header, List, Form, Grid, Divider, Button } from 'semantic-ui-react';
 import { FormInput, FormDropDown, FormCheckbox, MaskedInput } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
-import NotFound from '../../../../shared/NotFound';
+import NotFound from '../../../NotFound';
 import { LENDING_PARTNER_LENDIO } from '../../../../../constants/business';
 import { LENDIO } from '../../../../../services/constants/businessApplication';
 import Helper from '../../../../../helper/utility';
@@ -12,7 +12,8 @@ import Helper from '../../../../../helper/utility';
 @inject('businessAppLendioStore', 'businessAppStore', 'uiStore')
 @observer
 export default class Application extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match } = this.props;
     if (match.isExact) {
       const {
@@ -26,6 +27,7 @@ export default class Application extends Component {
       });
     }
   }
+
   submit = (e) => {
     e.preventDefault();
     this.props.businessAppLendioStore.businessLendioPreQual(this.props.match.params.id)
@@ -38,7 +40,7 @@ export default class Application extends Component {
         } = data;
         const { params } = this.props.match;
         const redirectParam = (status === LENDIO.LENDIO_SUCCESS) ? 'yes' : 'no';
-        const redirectUrl = this.props.isPublic ? `/business-application/${params.applicationType}/${params.id}/lendio/${redirectParam}` : `/app/business-application/${params.applicationType}/${params.id}/lendio/${redirectParam}`;
+        const redirectUrl = this.props.isPublic ? `/business-application/${params.applicationType}/${params.id}/lendio/${redirectParam}` : `/dashboard/business-application/${params.applicationType}/${params.id}/lendio/${redirectParam}`;
         this.props.history.push(redirectUrl);
         this.props.businessAppLendioStore.setLendioUrl(url);
       })
@@ -52,6 +54,7 @@ export default class Application extends Component {
       LENDIO_QUAL_FRM,
       lendioEleChange,
       lendioObj,
+      lendioMaskChange,
     } = this.props.businessAppLendioStore;
     const { fields } = LENDIO_QUAL_FRM;
     const checkIsPresent = indexOf(fields.applicationAgreeConditions.value, 'agreeConditions');
@@ -125,7 +128,7 @@ export default class Application extends Component {
                     <MaskedInput
                       name="phoneNumber"
                       fielddata={fields.phoneNumber}
-                      changed={lendioEleChange}
+                      changed={lendioMaskChange}
                     />
                     <FormInput
                       key="comments"

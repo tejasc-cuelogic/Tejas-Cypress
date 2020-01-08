@@ -10,7 +10,10 @@ import ConfirmOTPModal from '../../../../../shared/ConfirmOTPModal';
 @withRouter
 @observer
 export default class TransferFundVerifyModal extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    // eslint-disable-next-line no-debugger
+    debugger;
     if (this.props.transactionStore.TRANSFER_FRM.fields.amount.value === '') {
       this.props.history.push(this.props.refLinkList);
     }
@@ -29,7 +32,7 @@ export default class TransferFundVerifyModal extends Component {
   }
 
   gotoMfaSettings = () => {
-    this.props.history.push('/app/account-settings/security');
+    this.props.history.push('/dashboard/account-settings/security');
   }
 
   resendVerification = (e) => {
@@ -41,12 +44,14 @@ export default class TransferFundVerifyModal extends Component {
       Helper.toast('The OTP is sent to your number!', 'success');
     });
   }
+
   transactionAddFund = (transferAmount, transferDescription, toasterMessage) => {
     this.props.transactionStore.addFunds(transferAmount, transferDescription).then(() => {
       Helper.toast(toasterMessage, 'success');
       this.props.history.push(this.props.refLinkList);
     });
   }
+
   transactionWithdrawFunds = (transferAmount, transferDescription, toasterMessage) => {
     this.props.transactionStore.withdrawFunds(transferAmount, transferDescription).then(() => {
       Helper.toast(toasterMessage, 'success');

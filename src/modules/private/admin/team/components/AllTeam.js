@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import Aux from 'react-aux';
+import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Icon, Grid, Button, Form, Confirm } from 'semantic-ui-react';
+import { Icon, Button, Confirm } from 'semantic-ui-react';
 import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'react-sortable-hoc';
-import { InlineLoader, NsPagination, UserAvatar } from './../../../../../theme/shared';
-import { ByKeyword } from '../../../../../theme/form/Filters';
+import { InlineLoader, NsPagination, UserAvatar } from '../../../../../theme/shared';
 
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({
-  teamMember, handleAction, handleEdit, save,
+  teamMember, handleAction, handleEdit, save, refUrl,
 }) => (
   <div className="row-wrap striped-table">
     <div className="balance-half first-column">
@@ -24,19 +22,19 @@ const SortableItem = SortableElement(({
           base64url
         />
       </div>
-      {teamMember.memberName}
+      <Link to={`${refUrl}/${teamMember.id}`}>{teamMember.memberName}</Link>
     </div>
     <div className="balance">
       {teamMember.title}
     </div>
     <div className="balance-half">
-      {teamMember && teamMember.social ?
-        teamMember.social.map(site => (
-          <Aux>
-            {site.url &&
-              <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon disabled name={site.type.toLowerCase()} /></a>
+      {teamMember && teamMember.social
+        ? teamMember.social.map(site => (
+          <>
+            {site.url
+              && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} /></a>
             }
-          </Aux>
+          </>
         )) : ''}
     </div>
     <div className="balance width-70 center-align">
@@ -44,13 +42,13 @@ const SortableItem = SortableElement(({
     </div>
     <div className="action width-130 right-align">
       <Button.Group>
-        <Button icon className="link-button" >
+        <Button icon className="link-button">
           <Icon className="ns-pencil" onClick={() => handleEdit(teamMember.id)} />
         </Button>
         <Button className="link-button">
           <Icon onClick={() => save(teamMember)} color="blue" name={teamMember.isPublished ? 'ns-view' : 'ns-no-view'} />
         </Button>
-        <Button icon className="link-button" >
+        <Button icon className="link-button">
           <Icon className="ns-trash" onClick={() => handleAction(teamMember.id)} />
         </Button>
       </Button.Group>
@@ -59,7 +57,7 @@ const SortableItem = SortableElement(({
 ));
 
 const SortableList = SortableContainer(({
-  teamMembers, handleAction, handleEdit, save,
+  teamMembers, handleAction, handleEdit, save, refUrl,
 }) => (
   <div className="tbody">
     {teamMembers.map((teamMember, index) => (
@@ -72,52 +70,59 @@ const SortableList = SortableContainer(({
         handleAction={handleAction}
         handleEdit={handleEdit}
         index={index}
+        refUrl={refUrl}
       />
     ))}
   </div>
 ));
 
-@inject('teamStore')
+@inject('teamStore', 'uiStore')
 @withRouter
 @observer
 export default class AllTeam extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.teamStore.initRequest(true);
   }
+
+  componentWillUnmount() {
+    this.props.teamStore.reset();
+  }
+
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { teamMembers, setTeamMemberOrder } = this.props.teamStore;
     if (oldIndex !== newIndex) {
       setTeamMemberOrder(arrayMove(teamMembers, oldIndex, newIndex));
     }
   }
+
   deleteTeamMember = () => {
-    this.props.teamStore.deleteTeamMemberById(this.props.teamStore.confirmBox.refId);
-    this.props.teamStore.setConfirmBox('');
+    this.props.teamStore.deleteTeamMemberById(this.props.teamStore.confirmBox.refId).then(() => {
+      this.props.teamStore.setConfirmBox('');
+      this.props.history.replace(this.props.refLink);
+    });
   }
+
   handleAction = (id) => {
     this.props.teamStore.setConfirmBox('Delete', id);
   }
+
   handleDeleteCancel = () => {
     this.props.teamStore.setConfirmBox('');
   }
-  executeSearch = (e) => {
-    this.props.teamStore.setInitiateSrch('keyword', e.target.value);
-  }
+
   paginate = params => this.props.teamStore.pageRequest(params);
-  handleAddNewMember = () => {
-    const { match } = this.props;
-    const redirectURL = `${match.url}/new`;
-    this.props.teamStore.reset();
-    this.props.history.push(redirectURL);
-  }
+
   handleEdit = (id) => {
     const { match } = this.props;
     this.props.history.push(`${match.url}/${id}`);
   }
+
   save = (teamMember) => {
     this.props.teamStore.save(teamMember.id, teamMember);
     this.props.history.push(this.props.refLink);
   }
+
   render() {
     const {
       teamMembers,
@@ -127,36 +132,15 @@ export default class AllTeam extends Component {
       confirmBox,
     } = this.props.teamStore;
     const totalRecords = count || 0;
-    if (loading) {
+    const { inProgress } = this.props.uiStore;
+    if (loading || inProgress) {
       return <InlineLoader />;
     }
+    if (teamMembers.length === 0) {
+      return <InlineLoader text="No data found." />;
+    }
     return (
-      <Aux>
-        <Form>
-          <Grid stackable className="bottom-aligned">
-            <Grid.Row>
-              <ByKeyword
-                change={this.executeSearch}
-                w={[11]}
-                placeholder="Search by keyword or phrase"
-                requestState={requestState}
-                more="no"
-                addon={
-                  <Grid.Column width={5} textAlign="right">
-                    {/*
-                    <Button
-                    color="green"
-                    as={Link}
-                    floated="right" to={`${match.url}/new`}> + Add new team member</Button>
-                    */}
-                    <Button color="green" onClick={this.handleAddNewMember} floated="right" > + Add new team member</Button>
-
-                  </Grid.Column>
-                }
-              />
-            </Grid.Row>
-          </Grid>
-        </Form>
+      <>
         <div className="ui card fluid">
           <div className="ui basic table">
             <div className="row-wrap striped-table thead">
@@ -176,11 +160,12 @@ export default class AllTeam extends Component {
               onSortEnd={e => this.onSortEnd(e)}
               handleDeleteConfirm={this.handleDeleteConfirm}
               lockAxis="y"
+              refUrl={this.props.match.url}
               useDragHandle
             />
           </div>
-          {totalRecords > 0 &&
-            <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+          {totalRecords > 0
+            && <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
           }
           <Confirm
             header="Confirm"
@@ -192,7 +177,7 @@ export default class AllTeam extends Component {
             className="deletion"
           />
         </div>
-      </Aux>
+      </>
     );
   }
 }

@@ -2,20 +2,13 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Grid, Icon, Button, Divider } from 'semantic-ui-react';
-import Loadable from 'react-loadable';
 import { mapValues } from 'lodash';
 import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../../helper';
-import { InlineLoader } from '../../../../../../theme/shared';
-// import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
+import { SuspenseBoundary, lazyRetry } from '../../../../../../theme/shared';
 import { NEXTSEED_SECURITIES_BOX_URL } from '../../../../../../constants/common';
 
-const getModule = component => Loadable({
-  loader: () => import(`./review/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazyRetry(() => import(`./review/${component}`));
 
 const navItems = [
   { title: 'Overview', to: 'overview' },
@@ -41,7 +34,8 @@ const navItems = [
 @withRouter
 @observer
 export default class Review extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.businessAppReviewStore.setFieldvalue('showGeneratePA', false);
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/${navItems[0].to}`);
@@ -53,6 +47,7 @@ export default class Review extends Component {
   representAddon = summary => mapValues(summary, s => (
     s !== '' && <Icon color={s === 'ns-check-circle' ? 'green' : 'orange'} name={s} />
   ));
+
   render() {
     const { match, businessAppReviewStore, appType } = this.props;
     const {
@@ -73,38 +68,43 @@ export default class Review extends Component {
                 navItems={navItems}
               />
               <Divider hidden />
-              {showGeneratePA &&
-              <Button.Group size="mini">
+              {showGeneratePA
+              && (
+<Button.Group size="mini">
                 <Button color="blue" content="Generate PA" loading={inProgress === 'GENERATE_PA'} onClick={generatePortalAgreement} />
-                {paBoxFolderId &&
-                <Button color="blue" className="link-button" content="PA BOX Link" onClick={() => window.open(`${NEXTSEED_SECURITIES_BOX_URL}folder/${paBoxFolderId}`, '_blank')} />
+                {paBoxFolderId
+                && <Button color="blue" className="link-button" content="PA BOX Link" onClick={() => window.open(`${NEXTSEED_SECURITIES_BOX_URL}folder/${paBoxFolderId}`, '_blank')} />
                 }
               </Button.Group>
+              )
               }
             </div>
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
-            <Switch>
-              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
-              {
-                navItems.map((item) => {
-                  const CurrentComponent = (item.component || getModule(this.module(item.title)));
-                  return (
-                    <Route
-                      exact={false}
-                      key={item.to}
-                      path={`${match.url}/${item.to}`}
-                      render={props =>
-                        (<CurrentComponent
-                          appType={appType}
-                          {...props}
-                        />)
-                      }
-                    />
-                  );
-                })
-              }
-            </Switch>
+            <SuspenseBoundary>
+              <Switch>
+                <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
+                {
+                  navItems.map((item) => {
+                    const CurrentComponent = (item.component || getModule(this.module(item.title)));
+                    return (
+                      <Route
+                        exact={false}
+                        key={item.to}
+                        path={`${match.url}/${item.to}`}
+                        render={props => (
+                          <CurrentComponent
+                            appType={appType}
+                            {...props}
+                          />
+                        )
+                        }
+                      />
+                    );
+                  })
+                }
+              </Switch>
+            </SuspenseBoundary>
           </Grid.Column>
         </Grid>
       </div>

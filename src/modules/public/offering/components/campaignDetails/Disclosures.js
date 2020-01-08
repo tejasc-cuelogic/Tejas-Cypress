@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header } from 'semantic-ui-react';
-import Aux from 'react-aux';
 import { get, isEmpty } from 'lodash';
 import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
@@ -15,7 +14,15 @@ const isMobile = document.documentElement.clientWidth < 992;
 @withRouter
 @observer
 export default class TermsOfUse extends Component {
-  componentWillMount() {
+  dataRoomHeader = (
+    <Header as="h3" className="mt-20 mb-30 anchor-wrap">
+      Data Room
+      <span className="anchor" />
+    </Header>
+  )
+
+  constructor(props) {
+    super(props);
     const { docsWithBoxLink, isFetchedError } = this.props.campaignStore;
     if (docsWithBoxLink.length === 0 && !isFetchedError) {
       const { campaign } = this.props.campaignStore;
@@ -26,12 +33,13 @@ export default class TermsOfUse extends Component {
       if (isMobile) {
         this.props.campaignStore.getAllBoxLinks(accountType);
       }
-      if (this.props.authStore.isUserLoggedIn &&
-        isEmpty(this.props.accreditationStore.userData)) {
+      if (this.props.authStore.isUserLoggedIn
+        && isEmpty(this.props.accreditationStore.userData)) {
         this.props.accreditationStore.getUserAccreditation();
       }
     }
   }
+
   componentDidMount() {
     if (!isMobile) {
       const sel = 'anchor';
@@ -43,13 +51,9 @@ export default class TermsOfUse extends Component {
     const { setFieldValue } = this.props.campaignStore;
     setFieldValue('isFetchedError', false);
   }
+
   module = name => DataFormatter.upperCamelCase(name);
-  dataRoomHeader = (
-    <Header as="h3" className="mt-20 mb-30 anchor-wrap">
-      Data Room
-      <span className="anchor" />
-    </Header>
-  )
+
   render() {
     const { campaign } = this.props.campaignStore;
     const campaignCreatedBy = get(campaign, 'created.id') || null;
@@ -59,35 +63,38 @@ export default class TermsOfUse extends Component {
         <div className="campaign-content-wrapper">
         {this.dataRoomHeader}
       <InlineLoader text="No Documents to Display" className="bg-offwhite" />
-        </div>);
+        </div>
+      );
     }
     if (isMobile && dataRoomDocs.length !== sortedDocswithBoxLink.length) {
       return (
         <div className="campaign-content-wrapper">
           {this.dataRoomHeader}
           <InlineLoader />
-        </div>);
+        </div>
+      );
     }
     const index = (this.props.location.hash || '#1').substr(1);
     return (
       <div className="campaign-content-wrapper">
         {this.dataRoomHeader}
-        {isMobile ?
-        sortedDocswithBoxLink.map(doc => (
-          <Aux>
+        {isMobile
+          ? sortedDocswithBoxLink.map(doc => (
+          <>
             <Header as="h4" className="mb-20 grey-header">{doc.name}</Header>
             <Disclosure campaignCreatedBy={campaignCreatedBy} doc={doc} />
-          </Aux>
-        ))
-        :
-        <Aux>
+          </>
+          ))
+          : (
+<>
           <Header as="h4" className="mb-20 grey-header">{dataRoomDocs[index - 1].name}</Header>
           <Disclosure
             campaignCreatedBy={campaignCreatedBy}
             doc={dataRoomDocs[index - 1]}
             fileId={get(dataRoomDocs[index - 1], 'upload.fileHandle.boxFileId')}
           />
-        </Aux>
+</>
+          )
         }
       </div>
     );

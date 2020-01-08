@@ -15,17 +15,18 @@ import {
 } from '../../../../../constants/account';
 
 const isMobile = document.documentElement.clientWidth < 768;
-@inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore', 'uiStore')
+@inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore', 'uiStore', 'userStore')
 @observer
 export default class AccountSetup extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.userDetailsStore.setUserAccDetails(this.props.accountStore.investmentAccType);
     const { signupStatus, validAccTypes } = this.props.userDetailsStore;
     if (signupStatus.inActiveAccounts.length !== 3) {
       this.props.accountStore.setInvestmentAccTypeValues(validAccTypes);
     }
-    if (signupStatus.activeAccounts.length !== 0 &&
-      signupStatus.investorProfileCompleted) {
+    if (signupStatus.activeAccounts.length !== 0
+      && signupStatus.investorProfileCompleted) {
       this.props.portfolioStore.getSummary();
     }
     this.props.uiStore.clearErrors();
@@ -33,8 +34,7 @@ export default class AccountSetup extends Component {
 
   navToAccTypes = (step) => {
     if (step) {
-      const accValue =
-      findKey(INVESTMENT_ACCOUNT_TYPES, val => val === step);
+      const accValue = findKey(INVESTMENT_ACCOUNT_TYPES, val => val === step);
       this.props.accountStore.setAccTypeChange(accValue);
       this.props.history.push(`${this.props.match.url}/account-creation/${step}`);
     } else {
@@ -50,24 +50,31 @@ export default class AccountSetup extends Component {
       getStepStatus,
       isBasicVerDoneForMigratedFullUser,
     } = this.props.userDetailsStore;
+    const { isInvestor } = this.props.userStore;
     return (
       <PrivateLayout
         {...this.props}
-        P5={!signupStatus.finalStatus ? !currentUser.loading ?
-          <StickyNotification
-            signupStatus={signupStatus}
-            userDetailsStore={this.props.userDetailsStore}
-          /> : <InlineLoader /> : ''}
+        forceTitle="Setup"
+        P5={!signupStatus.finalStatus ? !currentUser.loading
+          ? (
+            <StickyNotification
+              isInvestor={isInvestor}
+              signupStatus={signupStatus}
+              userDetailsStore={this.props.userDetailsStore}
+            />
+          ) : <InlineLoader /> : ''}
       >
-        <Header as="h4" className={isMobile ? 'mb-20' : ''}>{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
-        {!currentUser.loading ?
-          <ProgressCard
-            {...this.props}
-            isBasicVerDoneForMigratedFullUser={isBasicVerDoneForMigratedFullUser}
-            signupStatus={signupStatus}
-            getStepStatus={getStepStatus}
-            navToAccTypes={this.navToAccTypes}
-          /> : <InlineLoader />
+        <Header as={isMobile ? 'h5' : 'h4'} className={isMobile ? 'mb-30 center-align' : 'mt-80 mb-30'}>{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
+        {!currentUser.loading
+          ? (
+            <ProgressCard
+              {...this.props}
+              isBasicVerDoneForMigratedFullUser={isBasicVerDoneForMigratedFullUser}
+              signupStatus={signupStatus}
+              getStepStatus={getStepStatus}
+              navToAccTypes={this.navToAccTypes}
+            />
+          ) : <InlineLoader />
 
         }
         <Switch>

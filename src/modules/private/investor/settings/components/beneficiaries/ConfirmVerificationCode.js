@@ -14,11 +14,13 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class ConfirmVerificationCode extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber) {
       this.props.history.push(this.props.refLink);
     }
   }
+
   componentDidMount() {
     Helper.otpShield();
   }
@@ -32,7 +34,7 @@ export default class ConfirmVerificationCode extends Component {
   }
 
   gotoMfaSettings = () => {
-    this.props.history.push('/app/account-settings/security');
+    this.props.history.push('/dashboard/account-settings/security');
   }
 
   resendVerification = (e) => {
@@ -69,27 +71,29 @@ export default class ConfirmVerificationCode extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <p className="display-only">{formattedPhoneNumber}</p>
-          <p><Link to="/app/account-settings/security" className="link">See Multi-Factor Authentication Settings</Link></p>
+          <p><Link to="/dashboard/account-settings/security" className="link">See Multi-Factor Authentication Settings</Link></p>
           <Form error onSubmit={this.submit}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
-                name="code"
+                filterChars
                 fields={6}
                 type="number"
-                autoFocus={!isMobile}
                 className="otp-field"
                 pattern="[0-9]*"
                 inputmode="numeric"
+                autoFocus={!isMobile}
                 fielddata={OTP_VERIFY_META.fields.code}
                 onChange={verifyVerificationCodeChange}
               />
               <Button size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} onClick={e => this.resendVerification(e)} />
             </Form.Field>
-            {errors &&
-              <Message error className="mb-40">
+            {errors
+              && (
+<Message error className="mb-40">
                 <ListErrors errors={[errors]} />
               </Message>
+              )
             }
             <Button primary size="large" className="very relaxed" content="Submit to approval" loading={!this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTP_VERIFY_META.meta.isValid} />
           </Form>

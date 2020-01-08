@@ -10,8 +10,8 @@ const RewardList = ({ list, earlyBird }) => (
         <Card key={card.id}>
           <Card.Content>
             {
-            earlyBird ?
-              <Card.Header>EARLY BIRD REWARD</Card.Header> : ''
+            earlyBird
+              ? <Card.Header>EARLY BIRD REWARD</Card.Header> : ''
           }
             <Card.Header>
               <HtmlEditor

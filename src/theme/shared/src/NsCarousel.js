@@ -1,10 +1,9 @@
 /* eslint-disable react/no-did-mount-set-state, no-return-assign */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { Image64 } from '../../../theme/shared';
+import { Image64 } from '..';
 
 export default class NsCarousel extends Component {
   constructor(props) {
@@ -21,6 +20,7 @@ export default class NsCarousel extends Component {
       nav2: this.slider2,
     });
   }
+
   render() {
     const settings = {
       infinite: false,
@@ -56,7 +56,7 @@ export default class NsCarousel extends Component {
       }
       thumbSliderCustomClassToApply = this.props.customThumSliderClass ? 'thumb-location-gallery' : '';
       return (
-        <Aux>
+        <>
           <Slider
             {...settings}
             asNavFor={this.state.nav2}
@@ -78,14 +78,14 @@ export default class NsCarousel extends Component {
               <Image64 bg className="carousel-bg-thumb" srcUrl={i.url} />
             ))}
           </Slider>
-        </Aux>
+        </>
       );
     }
 
     return (
       <Slider {...settings}>
         {this.props.children}
-      </Slider >
+      </Slider>
     );
   }
 }

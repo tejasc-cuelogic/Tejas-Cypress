@@ -2,10 +2,11 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
-import { mapValues, map, concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase, get, findIndex } from 'lodash';
+import moment from 'moment';
+import { mapValues, map, concat, set, isEmpty, difference, pick, find, findKey, filter, lowerCase, get, findIndex } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
-import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM } from '../../../constants/user';
+import { USER_PROFILE_FOR_ADMIN, USER_PROFILE_ADDRESS_ADMIN, FREEZE_FORM, USER_PROFILE_PREFERRED_INFO } from '../../../constants/user';
 import {
   identityStore,
   accountStore,
@@ -17,35 +18,70 @@ import {
   uiStore,
   investmentStore,
   userListingStore,
+  userStore,
 } from '../../index';
-import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin, freezeAccount } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressOrPhoneValidationCheck, frozenEmailToAdmin, freezeAccount, getEmailList } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
-import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
+import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE, US_STATES } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
   @observable currentUser = {};
+
   @observable userFirstLoad = false;
+
+  @observable isClosedAccount = false;
+
   @observable currentActiveAccount = null;
+
+  @observable accreditationData = {};
+
   @observable isAddressSkip = false;
+
+  @observable isPhoneSkip = false;
+
   @observable isFrozen = false;
+
   @observable detailsOfUser = {};
+
   @observable editCard = 0;
+
   @observable deleting = 0;
+
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
+
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
+
+  @observable DELETE_MESSAGE_FRM = Validator.prepareFormObject(DELETE_MESSAGE);
+
   @observable USER_PROFILE_ADD_ADMIN_FRM = Validator.prepareFormObject(USER_PROFILE_ADDRESS_ADMIN);
+
+  @observable USER_PROFILE_PREFERRED_INFO_FRM = Validator.prepareFormObject(USER_PROFILE_PREFERRED_INFO);
+
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
+
   @observable FRM_FREEZE = Validator.prepareFormObject(FREEZE_FORM);
+
   @observable accountForWhichCipExpired = '';
+
   @observable partialInvestNowSessionURL = '';
+
   @observable userStatus = null;
+
   @observable selectedUserId = '';
+
   @observable displayMode = true;
+
+  @observable emailListArr = [];
 
   @action
   setFieldValue = (field, value) => {
     this[field] = value;
+  }
+
+  @action
+  setSSNErrorMessage = (msg) => {
+    this.USER_BASIC.fields.ssn.error = msg;
   }
 
   @computed get currentUserId() {
@@ -90,14 +126,31 @@ export class UserDetailsStore {
   @action
   setAddressFieldsForProfile = (place, form) => {
     Validator.setAddressFields(place, this[form]);
+    const state = US_STATES.find(s => s.text === this[form].fields.state.value.toUpperCase());
+    this[form].fields.state.value = state ? state.key : '';
+  }
+
+  @action
+  initiateAccreditation = () => {
+    const { userDetails } = this;
+    const entityAccreditation = userDetails && userDetails.roles
+      && userDetails.roles.find(role => role.name === 'entity');
+    const accData = {
+      individual: userDetails && userDetails.accreditation,
+      ira: userDetails && userDetails.accreditation,
+      entity: entityAccreditation && entityAccreditation.details
+        && entityAccreditation.details.accreditation,
+    };
+    this.accreditationData = accData;
   }
 
   @computed get getActiveAccounts() {
     let accDetails;
     if (this.userDetails) {
-      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor' &&
-        account.details &&
-        (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
+      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor'
+        && account.details
+        && (account.details.accountStatus === 'FULL'
+        || accountStore.isAccFrozen(account.details.accountStatus)));
     }
     return accDetails;
   }
@@ -113,8 +166,8 @@ export class UserDetailsStore {
   @computed get getActiveAccountsOfSelectedUsers() {
     let accDetails;
     if (this.getDetailsOfUser) {
-      accDetails = filter(this.getDetailsOfUser.roles, account => account.name !== 'investor' &&
-        account.details);
+      accDetails = filter(this.getDetailsOfUser.roles, account => account.name !== 'investor'
+        && account.details);
     }
     return accDetails;
   }
@@ -125,13 +178,25 @@ export class UserDetailsStore {
   }
 
   @computed get currentActiveAccountDetailsOfSelectedUsers() {
+    if (this.isClosedAccount) {
+      return accountStore.selectedClosedAccount;
+    }
     const activeAccounts = this.getActiveAccountsOfSelectedUsers;
     return find(activeAccounts, acc => acc.name === this.currentActiveAccount);
   }
 
   @computed get isAccountFrozen() {
-    const isFrozonAccountExists =
-      findIndex(this.signupStatus.frozenAccounts, o => o === this.currentActiveAccount);
+    const isFrozonAccountExists = findIndex(this.signupStatus.frozenAccounts, o => o === this.currentActiveAccount);
+    return isFrozonAccountExists >= 0;
+  }
+
+  @computed get isAccountSoftFrozen() {
+    const isFrozonAccountExists = findIndex(this.signupStatus.softFrozenAccounts, o => o === this.currentActiveAccount);
+    return isFrozonAccountExists >= 0;
+  }
+
+  @computed get isAccountHardFrozen() {
+    const isFrozonAccountExists = findIndex(this.signupStatus.hardFrozenAccounts, o => o === this.currentActiveAccount);
     return isFrozonAccountExists >= 0;
   }
 
@@ -152,8 +217,8 @@ export class UserDetailsStore {
   }
 
   @computed get getUserMfaMode() {
-    const mfaMode = (this.currentUser.data && this.currentUser.data.user &&
-      toJS(this.currentUser.data.user.mfaMode)) || 'EMAIL';
+    const mfaMode = (this.currentUser.data && this.currentUser.data.user
+      && toJS(this.currentUser.data.user.mfaMode)) || 'EMAIL';
     return mfaMode;
   }
 
@@ -184,38 +249,54 @@ export class UserDetailsStore {
   }
 
   @action
-  setAddressCheck = () => {
-    this.isAddressSkip = this.userDetails.skipAddressVerifyCheck || false;
+  updateUserDetails = (key, payload, path) => {
+    const tempData = { ...this.currentUser };
+    if (path) {
+      tempData.data.user[key] = set({ ...tempData.data.user[key], ...payload }, path, payload);
+    } else {
+      tempData.data.user[key] = { ...tempData.data.user[key], ...payload };
+    }
+    this.currentUser = { ...tempData };
   }
 
   @action
-  toggleAddressVerification = () => {
-    const payLoad = { userId: this.selectedUserId, shouldSkip: !this.isAddressSkip };
+  setAddressOrPhoneCheck = () => {
+    this.isAddressSkip = get(this.getDetailsOfUser, 'skipAddressVerifyCheck') || false;
+    this.isPhoneSkip = get(this.getDetailsOfUser, 'skipPhoneVerifyCheck') || false;
+  }
+
+  @action
+  skipAddressOrPhoneValidationCheck = type => new Promise(async (resolve, reject) => {
+    const shouldSkip = type === 'PHONE' ? !this.isPhoneSkip : !this.isAddressSkip;
+    const payLoad = { userId: this.selectedUserId, shouldSkip, type };
     client
       .mutate({
-        mutation: skipAddressValidation,
+        mutation: skipAddressOrPhoneValidationCheck,
         variables: payLoad,
       })
       .then(action((res) => {
-        this.isAddressSkip = res.data.skipAddressValidationCheck;
-      }));
-  }
+        this.setFieldValue(type === 'PHONE' ? 'isPhoneSkip' : 'isAddressSkip', get(res, 'data.skipAddressOrPhoneValidationCheck'));
+        resolve();
+      })).catch(() => reject());
+  });
+
   @action
-  deleteProfile = () => new Promise(async (resolve, reject) => {
+  deleteProfile = (isInvestor = false, isHardDelete = false) => new Promise(async (resolve, reject) => {
     uiStore.addMoreInProgressArray('deleteProfile');
-    const payLoad = { userId: this.selectedUserId };
+    const reason = this.DELETE_MESSAGE_FRM.fields.message.value;
     try {
       const res = await client
         .mutate({
-          mutation: deleteProfile,
-          variables: payLoad,
+          mutation: !isHardDelete ? deleteProfile : adminHardDeleteUser,
+          variables: !isInvestor ? { userId: this.selectedUserId, reason } : {},
         });
       uiStore.removeOneFromProgressArray('deleteProfile');
-      if (res.data.adminDeleteInvestorOrIssuerUser.status) {
+      if (get(res, 'data.adminDeleteInvestorOrIssuerUser.status') || get(res, 'data.adminHardDeleteUser.status')) {
+        userStore.setFieldValue('confirmDelete', true);
         Helper.toast('User Profile Deleted Successfully!', 'success');
         resolve();
       } else {
-        reject(res.data.adminDeleteInvestorOrIssuerUser.message);
+        reject(!isHardDelete ? get(res, 'data.adminDeleteInvestorOrIssuerUser.message') : get(res, 'data.adminHardDeleteUser.message'));
       }
     } catch (error) {
       uiStore.removeOneFromProgressArray('deleteProfile');
@@ -224,12 +305,11 @@ export class UserDetailsStore {
   });
 
   @action
-  getUser = userId => new Promise((res) => {
+  getUser = () => new Promise((res) => {
     this.currentUser = graphql({
       client,
       query: userDetailsQuery,
       fetchPolicy: 'network-only',
-      variables: { userId },
       onFetch: (result) => {
         if (!this.currentUser.loading) {
           identityStore.setProfileInfo(this.userDetails);
@@ -239,10 +319,10 @@ export class UserDetailsStore {
           }
           res(result);
           const user = { ...this.currentUser };
-          this.currentUser.data &&
-            this.currentUser.data.user &&
-            this.currentUser.data.user.roles &&
-            this.currentUser.data.user.roles.map((role, index) => {
+          this.currentUser.data
+            && this.currentUser.data.user
+            && this.currentUser.data.user.roles
+            && this.currentUser.data.user.roles.map((role, index) => {
               this.currentUser.data.user.roles[index].name = lowerCase(role.name);
               return this.currentUser;
             });
@@ -270,18 +350,26 @@ export class UserDetailsStore {
   }
 
   @action
-  getUserProfileDetails = (userId) => {
-    this.setFieldValue('selectedUserId', userId);
+  getUserProfileDetails = userId => new Promise((resolve, rej) => {
     this.detailsOfUser = graphql({
       client,
       query: selectedUserDetailsQuery,
       variables: { userId },
       fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data) {
+          this.setFieldValue('selectedUserId', userId);
+          resolve(data);
+        }
+      },
+      onError: () => {
+        rej();
+      },
     });
-  }
+  })
 
   getUserStorageDetails = (userId) => {
-    uiStore.setProgress();
+    uiStore.setProgress('userBoxAccount');
     return new Promise((resolve, rej) => {
       graphql({
         client,
@@ -308,8 +396,8 @@ export class UserDetailsStore {
   }
 
   @computed get getDetailsOfUser() {
-    const details = (this.detailsOfUser && this.detailsOfUser.data &&
-      this.detailsOfUser.data.user && toJS(this.detailsOfUser.data.user)) || {};
+    const details = (this.detailsOfUser && this.detailsOfUser.data
+      && this.detailsOfUser.data.user && toJS(this.detailsOfUser.data.user)) || {};
     details.roles && details.roles.map((role, index) => {
       details.roles[index].name = lowerCase(role.name);
       return details;
@@ -378,10 +466,17 @@ export class UserDetailsStore {
         .catch(() => { reject(); Helper.toast('Error while updating user', 'warn'); uiStore.setProgress(false); });
     });
   };
+
   @action
   resetModalForm = () => {
     this.FRM_FREEZE = Validator.prepareFormObject(FREEZE_FORM);
   }
+
+  @action
+  resetDeleteUserForm = () => {
+    this.DELETE_MESSAGE_FRM = Validator.prepareFormObject(DELETE_MESSAGE);
+  }
+
   @computed get signupStatus() {
     const details = {
       idVerification: 'FAIL',
@@ -396,13 +491,12 @@ export class UserDetailsStore {
     details.inActiveAccounts = [];
     const accTypes = [];
     if (this.userDetails) {
-      details.idVerification = (this.userDetails.legalDetails &&
-        this.userDetails.legalDetails.status
+      details.idVerification = (this.userDetails.legalDetails
+        && this.userDetails.legalDetails.status
       ) ? this.userDetails.legalDetails.status : 'FAIL';
       details.roles = mapValues(this.userDetails.roles, (a) => {
-        const data =
-        {
-          accountId: a.accountId,
+        const data = {
+          accountId: get(a, 'details.accountId'),
           name: a.name,
           status: a.details ? a.details.accountStatus : null,
         };
@@ -415,29 +509,28 @@ export class UserDetailsStore {
       details.inActiveAccounts = difference(validAccTypes, accTypes);
       details.partialAccounts = map(filter(details.roles, a => a.status === 'PARTIAL'), 'name');
       details.activeAccounts = map(filter(details.roles, a => a.status === 'FULL'), 'name');
-      details.frozenAccounts = map(filter(details.roles, a => a.status === 'FROZEN'), 'name');
+      details.frozenAccounts = map(filter(details.roles, a => accountStore.isAccFrozen(a.status)), 'name');
+      details.softFrozenAccounts = map(filter(details.roles, a => accountStore.isAccSoftFrozen(a.status)), 'name');
+      details.hardFrozenAccounts = map(filter(details.roles, a => accountStore.isAccHardFrozen(a.status)), 'name');
       details.processingAccounts = map(filter(details.roles, a => (a.status ? a.status.endsWith('PROCESSING') : null)), 'name');
       details.inprogressAccounts = map(filter(details.roles, a => a.name !== 'investor' && a.status !== 'FULL'), 'name');
-      details.phoneVerification = (this.userDetails.phone &&
-        this.userDetails.phone.number &&
-        !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
-      details.isMigratedUser =
-        (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
-      details.isMigratedFullAccount =
-        (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION') &&
-          this.userDetails.status === 'MIGRATION_FULL');
+      details.phoneVerification = this.userDetails.phone
+        && this.userDetails.phone.number
+        && this.userDetails.phone.verified
+        ? 'DONE' : 'FAIL';
+      details.isMigratedUser = (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
+      details.isMigratedFullAccount = (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION')
+        && this.userDetails.status === 'MIGRATION_FULL');
       details.accStatus = this.userDetails.status;
-      details.investorProfileCompleted =
-        this.userDetails.investorProfileData === null ?
-          false : this.userDetails.investorProfileData ?
-            !this.userDetails.investorProfileData.isPartialProfile : false;
-      details.isCipDoneForMigratedUser =
-        this.userDetails.cip && this.userDetails.cip.requestId !== null;
+      details.investorProfileCompleted = this.userDetails.investorProfileData === null
+        ? false : this.userDetails.investorProfileData
+          ? !this.userDetails.investorProfileData.isPartialProfile : false;
+      details.isCipDoneForMigratedUser = this.userDetails.cip && this.userDetails.cip.requestId !== null;
       details.isEmailConfirmed = this.userDetails.email && this.userDetails.email.verified
         && this.userDetails.email.verified !== null;
-      details.finalStatus = (details.activeAccounts.length > 2 &&
-        this.validAccStatus.includes(details.idVerification) &&
-        details.phoneVerification === 'DONE');
+      details.finalStatus = (details.activeAccounts.length > 2
+        && this.validAccStatus.includes(details.idVerification)
+        && details.phoneVerification === 'DONE');
       details.isWpUser = get(this.userDetails, 'wpUserId');
       return details;
     }
@@ -473,9 +566,32 @@ export class UserDetailsStore {
     return status;
   }
 
+  checkIfAccountIsAlreadyPresent = accountType => (this.signupStatus.processingAccounts.includes(accountType) || this.signupStatus.frozenAccounts.includes(accountType) || this.signupStatus.activeAccounts.includes(accountType));
+
   @computed get isUserVerified() {
     const accDetails = this.signupStatus;
     return this.validAccStatus.includes(accDetails.idVerification);
+  }
+
+  @computed get isSelectedAccountFull() {
+    return get(this.currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus')
+      ? get(this.currentActiveAccountDetailsOfSelectedUsers, 'details.accountStatus') === 'FULL' : null;
+  }
+
+  @computed get userHasOneFullAccount() {
+    return (this.userDetails.status === 'FULL'
+      && (this.signupStatus.activeAccounts.length > 0
+        || this.signupStatus.frozenAccounts.length > 0
+        || this.signupStatus.processingAccounts.length > 0));
+  }
+
+  @computed get hasAnyAccount() {
+    return (this.signupStatus.activeAccounts.length > 0 || this.signupStatus.partialAccounts.length > 0 || this.signupStatus.inprogressAccounts.length > 0);
+  }
+
+  @computed get isLegalDocsPresent() {
+    return get(this.userDetails.legalDetails, 'verificationDocs.addressProof.fileId')
+      || get(this.userDetails.legalDetails, 'verificationDocs.idProof.fileId');
   }
 
   @action
@@ -483,45 +599,58 @@ export class UserDetailsStore {
     this.deleting = status;
   }
 
+  getIdByAccountType = (type) => {
+    const role = this.userDetails.roles.find(i => i.name === type);
+    return role ? get(role, 'details.accountId') : '';
+  }
+
+  @computed get isCipExpirationInProgress() {
+    return get(this.userDetails, 'cip.expiration')
+    && this.signupStatus.investorProfileCompleted && !this.isUserVerified && !this.isLegalDocsPresent && this.signupStatus.partialAccounts.length;
+  }
+
   @computed
   get pendingStep() {
-    let routingUrl = '/app/summary';
-    const selectedAccountType = investmentStore &&
-      investmentStore.investAccTypes && investmentStore.investAccTypes.value;
+    let routingUrl = '/dashboard/setup';
+    const selectedAccountType = investmentStore
+      && investmentStore.investAccTypes && investmentStore.investAccTypes.value;
     const investorAccountCreatedList = map(filter(this.signupStatus.roles, a => a.name !== 'investor'), 'name');
     if (this.signupStatus.isMigratedUser) {
-      if (this.userDetails.email &&
-        (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
+      if (this.userDetails.email
+        && (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
         this.setSignUpDataForMigratedUser(this.userDetails);
-        routingUrl = '/auth/welcome-email';
+        routingUrl = '/welcome-email';
       } else if (!this.signupStatus.isMigratedFullAccount && !get(this.userDetails, 'cip.requestId')) {
-        routingUrl = '/app/summary/identity-verification/0';
+        routingUrl = '/dashboard/setup/identity-verification/0';
       } else if ((get(this.userDetails, 'cip.requestId'))) {
         if (this.signupStatus.phoneVerification !== 'DONE') {
-          routingUrl = '/app/summary/identity-verification/3';
+          routingUrl = '/dashboard/setup/identity-verification/3';
         } else if (!this.signupStatus.investorProfileCompleted) {
-          routingUrl = '/app/summary/establish-profile';
+          routingUrl = '/dashboard/setup/establish-profile';
         }
       }
-    } else if (!this.validAccStatus.includes(this.signupStatus.idVerification) &&
-      this.signupStatus.activeAccounts.length === 0 &&
-      this.signupStatus.processingAccounts.length === 0) {
-      routingUrl = '/app/summary/identity-verification/0';
+    } else if (this.isCipExpirationInProgress) {
+      routingUrl = `/dashboard/setup/account-creation/${this.signupStatus.partialAccounts[0]}`;
+    } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
+      && this.signupStatus.idVerification !== 'OFFLINE'
+      && this.signupStatus.activeAccounts.length === 0
+      && this.signupStatus.processingAccounts.length === 0) {
+      routingUrl = '/dashboard/setup/identity-verification/0';
     } else if (this.signupStatus.phoneVerification !== 'DONE') {
-      routingUrl = '/app/summary/identity-verification/3';
+      routingUrl = '/dashboard/setup/identity-verification/3';
     } else if (!this.signupStatus.investorProfileCompleted) {
-      routingUrl = '/app/summary/establish-profile';
+      routingUrl = '/dashboard/setup/establish-profile';
     } else if (isEmpty(investorAccountCreatedList)) {
-      routingUrl = '/app/summary/account-creation';
-    } else if (this.signupStatus.partialAccounts.length > 0) {
-      // const accValue =
-      //   findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
-      // accountStore.setAccTypeChange(accValue);
-      const redirectAccount =
-        selectedAccountType || this.signupStatus.partialAccounts[0];
-      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
+      routingUrl = '/dashboard/setup/account-creation';
+    } else if (this.partialInvestNowSessionURL && this.signupStatus.partialAccounts.length > 0) {
+      const redirectAccount = selectedAccountType || this.signupStatus.partialAccounts[0];
+      routingUrl = `/dashboard/setup/account-creation/${redirectAccount}`;
+    } else if (this.signupStatus.activeAccounts.length > 0
+      || this.signupStatus.frozenAccounts.length > 0 || this.signupStatus.partialAccounts.length > 0) {
+      const redirectAccount = this.signupStatus.activeAccounts[0] || this.signupStatus.frozenAccounts[0] || this.signupStatus.partialAccounts[0];
+      routingUrl = `/dashboard/account-details/${redirectAccount}/portfolio`;
     } else {
-      routingUrl = '/app/summary';
+      routingUrl = '/dashboard/setup';
     }
     return routingUrl;
   }
@@ -542,21 +671,29 @@ export class UserDetailsStore {
     return validPanes;
   }
 
+  @computed get isCompleteIndividualAccount() {
+    return this.signupStatus.activeAccounts.includes('individual')
+      || this.signupStatus.frozenAccounts.includes('individual')
+      || this.signupStatus.processingAccounts.includes('individual');
+  }
+
   @action
-  setFormData = (form, ref, keepAtLeastOne, validateForm = false) => {
+  setFormData = (form, ref, keepAtLeastOne, validateForm = false, isRemoveSsn = false) => {
     const details = toJS({ ...this.detailsOfUser.data.user });
     if (!details) {
       return false;
     }
     this[form] = Validator.setFormData(this[form], details, ref, keepAtLeastOne);
+    if (isRemoveSsn) {
+      this.USER_BASIC.fields.ssn.value = '';
+    }
     if (validateForm) {
       this[form] = Validator.validateForm(this[form]);
     }
     if (form === 'USER_INVESTOR_PROFILE') {
       if (details.investorProfileData && details.investorProfileData.annualIncome) {
         ['annualIncomeCurrentYear'].map((item, index) => {
-          this.USER_INVESTOR_PROFILE.fields[item].value =
-            details.investorProfileData.annualIncome[index].income;
+          this.USER_INVESTOR_PROFILE.fields[item].value = details.investorProfileData.annualIncome[index].income;
           return true;
         });
       }
@@ -567,7 +704,8 @@ export class UserDetailsStore {
 
   @action
   maskChange = (values, form, field) => {
-    const fieldValue = field === 'dateOfBirth' ? values.formattedValue : values.floatValue;
+    const valMap = { ssn: 'value', dateOfBirth: 'formattedValue' };
+    const fieldValue = values[valMap[field] || 'floatValue'];
     this[form] = Validator.onChange(
       this[form],
       { name: field, value: fieldValue },
@@ -591,22 +729,31 @@ export class UserDetailsStore {
       );
     }
   }
+
   @action
   userEleChange = (e, res, type) => {
     this.USER_BASIC = Validator.onChange(this.USER_BASIC, Validator.pullValues(e, res), type);
   };
+
   @action
   resetStoreData = () => {
     this.currentUser = {};
+    this.userFirstLoad = false;
+    this.accountForWhichCipExpired = '';
     this.setPartialInvestmenSession();
   }
 
   @computed get isCipExpired() {
     if (this.userDetails && this.userDetails.cip) {
       const { expiration } = this.userDetails.cip;
-      const expirationDate = new Date(expiration);
-      const currentDate = new Date();
-      if (expirationDate < currentDate) {
+      // const expirationDate = new Date(expiration);
+      // const currentDate = new Date();
+      // if (expirationDate < currentDate) {
+      //   return true;
+      // }
+      const expirationDate = moment(new Date(expiration)).format('MM/DD/YYYY');
+      const currentDate = moment().format('MM/DD/YYYY');
+      if (moment(expirationDate).isBefore(moment(currentDate))) {
         return true;
       }
     }
@@ -615,16 +762,23 @@ export class UserDetailsStore {
 
   @action
   setAccountForWhichCipExpired = (accountName) => {
+    window.sessionStorage.setItem('AccountCipExp', accountName);
     this.accountForWhichCipExpired = accountName;
   }
 
   @computed get isBasicVerDoneForMigratedFullUser() {
-    if (this.signupStatus.phoneVerification === 'DONE' &&
-      this.signupStatus.isEmailConfirmed &&
-      this.signupStatus.isCipDoneForMigratedUser) {
+    if (this.signupStatus.phoneVerification === 'DONE'
+      && this.signupStatus.isEmailConfirmed
+      && this.signupStatus.isCipDoneForMigratedUser) {
       return true;
     }
     return false;
+  }
+
+  @computed get isLegaLVerificationDone() {
+    return (this.validAccStatus
+      .includes(this.signupStatus.idVerification)
+      && this.signupStatus.phoneVerification === 'DONE');
   }
 
   @action
@@ -643,13 +797,12 @@ export class UserDetailsStore {
   @action setUserStatus = (status) => {
     this.userStatus = status || this.userStatus;
   }
+
   @action sendAdminEmailOfFrozenAccount = (activity, offeringId) => {
     const selectedAccount = this.currentActiveAccountDetails;
     const forzenAccountId = get(selectedAccount, 'details.accountId');
-    // selectedAccount && selectedAccount.details && selectedAccount.details.accountId ?
-    //  selectedAccount.details.accountId : '537fd0c0-1fc3-11e9-9cfb-1b268dcc26c4';
     const payLoad = {
-      userId: this.currentUserId, accountId: forzenAccountId, activity, offeringId,
+      accountId: forzenAccountId, activity, offeringId,
     };
     client
       .mutate({
@@ -664,88 +817,74 @@ export class UserDetailsStore {
         }
       });
   }
+
   @computed
   get pendingStepForPartialAndProcessingAccount() {
-    let routingUrl = '/app/summary';
-    const selectedAccountType = investmentStore &&
-      investmentStore.investAccTypes && investmentStore.investAccTypes.value;
+    let routingUrl = '/dashboard/setup';
+    const selectedAccountType = investmentStore
+      && investmentStore.investAccTypes && investmentStore.investAccTypes.value;
     if (this.signupStatus.partialAccounts.length > 0) {
-      const redirectAccount =
-        selectedAccountType || this.signupStatus.partialAccounts[0];
-      const accValue =
-        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === redirectAccount);
+      const redirectAccount = selectedAccountType || this.signupStatus.partialAccounts[0];
+      const accValue = findKey(INVESTMENT_ACCOUNT_TYPES, val => val === redirectAccount);
       accountStore.setAccTypeChange(accValue);
-      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
+      routingUrl = `/dashboard/setup/account-creation/${redirectAccount}`;
     } else if (this.signupStatus.inActiveAccounts.length > 0) {
-      const redirectAccount =
-        selectedAccountType || this.signupStatus.inActiveAccounts[0];
-      const accValue =
-        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === redirectAccount);
+      const redirectAccount = selectedAccountType || this.signupStatus.inActiveAccounts[0];
+      const accValue = findKey(INVESTMENT_ACCOUNT_TYPES, val => val === redirectAccount);
       accountStore.setAccTypeChange(accValue);
-      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
+      routingUrl = `/dashboard/setup/account-creation/${redirectAccount}`;
     } else {
-      routingUrl = '/app/summary';
+      routingUrl = '/dashboard/setup';
     }
     return routingUrl;
   }
 
   @computed
   get getAnalyticsUserId() {
-    return this.userDetails ?
-      (get(this.userDetails, 'wpUserId') || get(this.userDetails, 'id')) : false;
+    return this.userDetails
+      ? (get(this.userDetails, 'wpUserId') || get(this.userDetails, 'id')) : false;
   }
 
   @action
   updateUserProfileForSelectedUser = () => {
     const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
     const infoAdd = Validator.evaluateFormData(toJS(this.USER_PROFILE_ADD_ADMIN_FRM.fields));
-    const capabilities = [...basicData.capabilities];
-    console.log(capabilities);
+    const preferredInfo = Validator.evaluateFormData(toJS(this.USER_PROFILE_PREFERRED_INFO_FRM.fields));
     const profileDetails = {
       firstName: basicData.firstName,
       lastName: basicData.lastName,
-      mailingAddress: {
-        street: infoAdd.street,
-        streetTwo: infoAdd.streetTwo,
-        city: infoAdd.city,
-        state: infoAdd.state,
-        zipCode: infoAdd.zipCode,
-      },
+      mailingAddress: { ...infoAdd.legalAddress },
     };
+    let { capabilities } = basicData;
+    capabilities = capabilities.length ? capabilities : null;
     if (this.detailsOfUser.data.user.info.avatar) {
-      profileDetails.avatar = {
-        name: this.detailsOfUser.data.user.info.avatar.name,
-        url: this.detailsOfUser.data.user.info.avatar.url,
-      };
+      profileDetails.avatar = pick(
+        get(this.detailsOfUser, 'data.user.info.avatar'),
+        ['name', 'url'],
+      );
     }
-    const legalDetails = {
-      dateOfBirth: basicData.dateOfBirth,
-      legalAddress: {
-        street: basicData.street,
-        streetTwo: basicData.streetTwo,
-        city: basicData.city,
-        state: basicData.state,
-        zipCode: basicData.zipCode,
-      },
-      legalName: {
-        firstLegalName: basicData.firstLegalName,
-        lastLegalName: basicData.lastLegalName,
-      },
-    };
+    const legalDetails = basicData ? pick(basicData, ['dateOfBirth', 'legalAddress', 'legalName']) : null;
+    if (String(basicData.ssn).length === 9) {
+      legalDetails.ssn = basicData.ssn;
+    }
+
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: updateUserProfileData,
           variables: {
-            profileDetails: { ...profileDetails },
-            legalDetails: { ...legalDetails },
+            profileDetails,
+            legalDetails,
+            preferredInfo,
+            capabilities,
             targetUserId: get(this.getDetailsOfUser, 'id'),
           },
           refetchQueries: [{ query: userDetailsQuery, variables: { userId: get(this.getDetailsOfUser, 'id') } }],
         })
         .then(() => {
           Helper.toast('Profile has been updated.', 'success');
+          this.setFormData('USER_BASIC', false);
           uiStore.setProgress(false);
           resolve();
         })
@@ -756,11 +895,11 @@ export class UserDetailsStore {
         });
     });
   }
+
   @action
   updateUserBasicInfo = () => {
     const basicData = Validator.evaluateFormData(toJS(this.USER_BASIC.fields));
     const capabilities = [...basicData.capabilities];
-    console.log(capabilities);
     const profileDetails = {
       firstName: basicData.firstName,
       lastName: basicData.lastName,
@@ -788,6 +927,41 @@ export class UserDetailsStore {
           Helper.toast('Something went wrong, please try again in sometime', 'error');
         });
     });
+  }
+
+  getInvestorAccountsRoute = (accType) => {
+    if (this.signupStatus.activeAccounts.includes(accType) || this.signupStatus.partialAccounts.includes(accType) || this.signupStatus.inprogressAccounts.includes(accType)) {
+      return accType;
+    }
+    return this.signupStatus.activeAccounts[0] || this.signupStatus.partialAccounts[0] || this.signupStatus.inprogressAccounts[0] || false;
+  }
+
+  @action
+  getEmailList = () => new Promise((resolve, reject) => {
+    const variables = {};
+    variables.recipientId = get(this.getDetailsOfUser, 'id');
+    this.emailListArr = graphql({
+      client,
+      query: getEmailList,
+      variables,
+      onFetch: (res) => {
+        if (get(res, 'fetchEmails.emails') && !this.emailListArr.loading) {
+          resolve();
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      },
+    });
+  });
+
+  @computed get emailListOutputLoading() {
+    return this.emailListArr.loading;
+  }
+
+  @computed get userEmails() {
+    return this.emailListArr && this.emailListArr.data.fetchEmails && this.emailListArr.data.fetchEmails.emails;
   }
 }
 

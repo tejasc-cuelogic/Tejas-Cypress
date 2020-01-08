@@ -5,13 +5,14 @@ import { Grid, GridColumn, Checkbox, Card, Header } from 'semantic-ui-react';
 import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
-import { NEXTSEED_BOX_URL, NEXTSEED_SECURITIES_BOX_URL } from './../../../../../../constants/common';
+import { NEXTSEED_BOX_URL, NEXTSEED_SECURITIES_BOX_URL } from '../../../../../../constants/common';
 
 @inject('businessStore', 'offeringsStore')
 @withRouter
 @observer
 export default class FileSelector extends React.Component {
-  // componentWillMount() {
+  //   constructor(props) {
+  //   super(props);
   //   if (!this.props.offeringsStore.initLoad.includes('getOne')) {
   //     this.props.offeringsStore.getOne(this.props.match.params.offeringId);
   //   }

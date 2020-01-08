@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Header, List, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 992;
 @inject('campaignStore')
 @observer
 class CompanyHistory extends Component {
@@ -11,15 +11,16 @@ class CompanyHistory extends Component {
     const { campaign } = this.props;
     const emptyHistoryStatement = 'History not found';
     return (
-      <Aux>
-        <Header as="h3" className="anchor-wrap mb-30">
+      <>
+        <Header as="h3" className={`${(this.props.newLayout && isMobile) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
           History
           <span className="anchor" id="history" />
         </Header>
         {
-          campaign && campaign.offering && campaign.offering.about &&
-            campaign.offering.about.history && campaign.offering.about.history.length ?
-              <List className="history-section">
+          campaign && campaign.offering && campaign.offering.about
+            && campaign.offering.about.history && campaign.offering.about.history.length
+            ? (
+<List className="history-section">
                 {
                 campaign.offering.about.history.map(data => (
                   <List.Item className="mb-30">
@@ -34,10 +35,10 @@ class CompanyHistory extends Component {
                 ))
               }
               </List>
-            :
-              <InlineLoader text={emptyHistoryStatement} className="bg-offwhite" />
+            )
+            : <InlineLoader text={emptyHistoryStatement} className="bg-offwhite" />
         }
-      </Aux>
+      </>
     );
   }
 }

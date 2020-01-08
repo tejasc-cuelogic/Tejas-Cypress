@@ -19,9 +19,11 @@ export default class EditContingency extends Component {
     updateOffering(currentOfferingId, fields, 'contingencies');
     this.props.history.push(this.props.refLink);
   }
+
   handleCloseModal = () => {
     this.props.history.push(this.props.refLink);
   }
+
   render() {
     const {
       form,
@@ -32,7 +34,7 @@ export default class EditContingency extends Component {
     const { index } = this.props.match.params;
     return (
       <div>
-        <Modal size="small" open closeIcon onClose={this.handleCloseModal} >
+        <Modal size="small" open closeIcon onClose={this.handleCloseModal}>
           <Modal.Header>Edit Contingency</Modal.Header>
           <Modal.Content>
             <Form onSubmit={() => this.handleSubmitForm(form)}>
@@ -46,7 +48,7 @@ export default class EditContingency extends Component {
                 ))
               }
               <div className="center-align">
-                <Button disabled={!form.meta.isValid} className="relaxed" primary >Update Contingency</Button>
+                <Button disabled={!form.meta.isValid} className="relaxed" primary>Update Contingency</Button>
               </div>
             </Form>
           </Modal.Content>

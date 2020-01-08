@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 // import { Image } from 'semantic-ui-react';
 import Avatar from 'react-avatar';
-import { Image64 } from '../../../theme/shared';
+import { Image64 } from '..';
 import NSImage from '../../../modules/shared/NSImage';
 
 const userRoles = {
@@ -23,15 +23,17 @@ class UserAvatar extends Component {
     const avatarProfile = UserInfo.avatarUrl || (UserInfo.firstName && UserInfo.lastName) || UserInfo.name ? UserInfo.avatarUrl : 'leader-placeholder.jpg';
     if (avatarProfile) {
       return (
-        avatarProfile === 'leader-placeholder.jpg' ?
-          <NSImage path={avatarProfile} size={imgSize} avatar circular /> :
-          <Image64
-            srcUrl={avatarProfile}
-            alt={UserInfo.firstName}
-            size={imgSize}
-            avatar
-            circular
-          />
+        avatarProfile === 'leader-placeholder.jpg'
+          ? <NSImage path={avatarProfile} size={imgSize} avatar circular />
+          : (
+<Image64
+  srcUrl={avatarProfile}
+  alt={UserInfo.firstName}
+  size={imgSize}
+  avatar
+  circular
+/>
+          )
       );
     }
     return (

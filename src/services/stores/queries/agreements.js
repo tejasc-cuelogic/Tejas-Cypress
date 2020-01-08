@@ -1,13 +1,13 @@
 import gql from 'graphql-tag';
 
 export const getBoxEmbedLink = gql`
-  mutation _getBoxEmbedLink($fileId: String!, $accountType: BoxAccountTypeEnum) {
+  mutation getBoxEmbedLink($fileId: String!, $accountType: BoxAccountTypeEnum) {
     getBoxEmbedLink (fileId: $fileId, accountType: $accountType)
   }
 `;
 
 export const getLegalDocsFileIds = gql`
-query _getlegalDocsFileIds{
+query getlegalDocsFileIds{
   getLegalDocsFileIds
   {
     SECURITIES_PRIVACY_POLICY
@@ -26,3 +26,15 @@ query _getlegalDocsFileIds{
 }
 `;
 
+export const getS3DownloadLinkByFileId = gql`
+query getS3DownloadLinkByFileId($fileId: String!, $accountType: BoxAccountTypeEnum, $getS3DownloadLink: Boolean){
+  getS3DownloadLinkByFileId(
+    boxFileId: $fileId
+    accountType: $accountType
+    getS3DownloadLink: $getS3DownloadLink
+  )
+  {
+    preSignedUrl
+    boxFileId
+  }
+}`;

@@ -1,21 +1,32 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
-import { Form, Grid, Button, Modal } from 'semantic-ui-react';
+import { Route, Switch, withRouter } from 'react-router-dom';
+import { Form, Grid, Button } from 'semantic-ui-react';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import { InlineLoader } from '../../../../../theme/shared';
 import Listing from './updates/Listing';
 import NewUpdate from './updates/NewUpdate';
+import PreviewUpdate from './updates/PreviewUpdate';
 
 @inject('updateStore', 'userStore')
+@withRouter
 @observer
 export default class BonusRewards extends Component {
-  componentWillMount() {
-    this.props.updateStore.initRequest();
+  constructor(props) {
+    super(props);
+    if (this.props.match.isExact) {
+      this.props.updateStore.initRequest();
+    }
   }
+
   executeSearch = (e) => {
     this.props.updateStore.setInitiateSrch('keyword', e.target.value);
   }
+
+  addEditUpdate = (action) => {
+    this.props.history.push(`${this.props.match.url}/${action}`);
+  }
+
   render() {
     const {
       updateStore, match,
@@ -28,7 +39,7 @@ export default class BonusRewards extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Form className={!isIssuer ? 'search-filters more inner-content-spacer' : ''}>
           <Grid stackable className="bottom-aligned">
             <Grid.Row>
@@ -39,21 +50,21 @@ export default class BonusRewards extends Component {
                 requestState={requestState}
                 filters={filters}
                 more="no"
-                addon={
+                addon={(
                   <Grid.Column width={5} textAlign="right">
-                    <Modal closeOnEscape={false} closeOnDimmerClick={false} dimmer="inverted" size="large" trigger={<Button color="green" size="small">Add new Update</Button>} >
-                      <NewUpdate match={match} refLink={match.url} id="new" />
-                    </Modal>
+                    <Button color="green" size="small" onClick={() => this.addEditUpdate('new')}>Add new Update</Button>
                   </Grid.Column>
-                }
+                )}
               />
             </Grid.Row>
           </Grid>
         </Form>
-        <div className={isIssuer ? 'ui card fluid' : ''}>
-          <Listing data={updates} count={count} match={match} requestState={requestState} />
-        </div>
-      </Aux>
+        <Switch>
+          <Route exact path={match.url} render={props => <Listing data={updates} count={count} match={match} requestState={requestState} {...props} />} />
+          <Route exact path={`${match.url}/preview/:id?`} render={props => <PreviewUpdate match={match} refLink={match.url} {...props} />} />
+          <Route exact path={`${match.url}/:action?/:id?`} render={props => <NewUpdate match={match} refLink={match.url} {...props} />} />
+        </Switch>
+      </>
     );
   }
 }

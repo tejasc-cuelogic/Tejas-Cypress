@@ -2,22 +2,25 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Grid, Form, Input } from 'semantic-ui-react';
-import AccList from '../components/knowledgeBase/AccList';
-import Details from '../components/knowledgeBase/Details';
+import AccList from './knowledgeBase/AccList';
+import Details from './knowledgeBase/Details';
 import { InlineLoader } from '../../../../../theme/shared';
 
 @inject('educationStore', 'userStore')
 @observer
 export default class KnowledgeBase extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.educationStore.initRequest('Faq', null, this.props.userStore.isIssuer ? 'ISSUER_FAQ' : 'INV_FAQ');
   }
+
   search = (e) => {
     this.props.educationStore.setSrchParam(e.target.value);
-    if (this.props.location.pathname !== '/app/resources/faq') {
-      this.props.history.replace('/app/resources/faq');
+    if (this.props.location.pathname !== '/dashboard/resources/faq') {
+      this.props.history.replace('/dashboard/resources/faq');
     }
   }
+
   render() {
     const { match, location } = this.props;
     const {

@@ -10,8 +10,8 @@ const OfferingInvestDetails = props => (
           <Statistic size="mini" className={`basic ${props.disabledClass}`}>
             <Statistic.Label>Offering</Statistic.Label>
             <Statistic.Value>
-              {(props.offering && props.offering.offering.keyTerms &&
-                props.offering.offering.keyTerms.shorthandBusinessName)}
+              {(props.offering && props.offering.offering.keyTerms
+                && props.offering.offering.keyTerms.shorthandBusinessName)}
             </Statistic.Value>
           </Statistic>
         </Grid.Column>

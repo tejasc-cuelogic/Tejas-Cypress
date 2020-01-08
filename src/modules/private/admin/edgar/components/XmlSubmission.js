@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import _ from 'lodash';
-import { DateTimeFormat } from './../../../../../theme/shared';
+import { DateTimeFormat } from '../../../../../theme/shared';
 
 import {
   XML_STATUSES,
@@ -16,12 +16,12 @@ import {
 @observer
 class XmlSubmission extends Component {
   createNewSubmission = () => {
-    this.props.history.push(`/app/edgar/${this.props.offeringId}/filing/${this.props.filingId}/xml`);
+    this.props.history.push(`/dashboard/edgar/${this.props.offeringId}/filing/${this.props.filingId}/xml`);
   }
 
   render() {
     const { offeringId, filingId } = this.props;
-    const xmlUrl = `/app/edgar/${offeringId}/filing/${filingId}/xml`;
+    const xmlUrl = `/dashboard/edgar/${offeringId}/filing/${filingId}/xml`;
     if (!_.isEmpty(this.props.xmlSubmissions)) {
       return (
         <Table.Body active={this.props.active} key={this.props.filingId}>
@@ -41,27 +41,31 @@ class XmlSubmission extends Component {
                 <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>
                 <Table.Cell collapsing>
                   {
-                    xmlSubmission.xmlSubmissionStatus === XML_STATUSES.completed &&
-                    xmlSubmission.xmlSubmissionDownloadUrl &&
-                    <a href={xmlSubmission.xmlSubmissionDownloadUrl} target="_blank" rel="noopener noreferrer" download className="ui button icon link-button">
+                    xmlSubmission.xmlSubmissionStatus === XML_STATUSES.completed
+                    && xmlSubmission.xmlSubmissionDownloadUrl
+                    && (
+<a href={xmlSubmission.xmlSubmissionDownloadUrl} target="_blank" rel="noopener noreferrer" download className="ui button icon link-button">
                       <Icon name="download" />
                     </a>
+                    )
                   }
                   {
-                    xmlSubmission.xmlSubmissionStatus === XML_STATUSES.created &&
-                    !xmlSubmission.xmlSubmissionDownloadUrl &&
-                    <a download className="ui button icon link-button"><Icon name="circle notched loading" /></a>
+                    xmlSubmission.xmlSubmissionStatus === XML_STATUSES.created
+                    && !xmlSubmission.xmlSubmissionDownloadUrl
+                    && <a download className="ui button icon link-button"><Icon name="circle notched loading" /></a>
                   }
                   {
-                    xmlSubmission.xmlSubmissionStatus === XML_STATUSES.draft &&
-                    <Button
-                      icon
-                      className="link-button disabled"
-                      href={xmlSubmission.xmlSubmissionDownloadUrl}
-                      download
-                    >
+                    xmlSubmission.xmlSubmissionStatus === XML_STATUSES.draft
+                    && (
+<Button
+  icon
+  className="link-button disabled"
+  href={xmlSubmission.xmlSubmissionDownloadUrl}
+  download
+>
                       <Icon name="download" />
                     </Button>
+                    )
                   }
                   <Button icon className="link-button"><Icon className="ns-link" /></Button>
                   <Button

@@ -3,27 +3,30 @@ import { inject, observer } from 'mobx-react';
 // import { Button, Table, Popup, Icon, Modal, Form, Header } from 'semantic-ui-react';
 import { Modal, Header, Divider, Button, Message, Form, Statistic } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
+import { get } from 'lodash';
 import Helper from '../../../../../helper/utility';
 import { MaskedInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 
-@inject('investmentStore', 'userDetailsStore', 'rewardStore', 'uiStore')
+@inject('investmentStore', 'userDetailsStore', 'uiStore', 'investmentLimitStore')
 @withRouter
 @observer
 class ChangeInvestmentLimit extends Component {
-  componentWillMount = () => {
+  constructor(props) {
+    super(props);
     this.props.investmentStore.setInvestmentLimitData();
   }
+
   changeInvestmentLimit = () => {
     const { uiStore } = this.props;
     uiStore.setProgress();
-    const offeringId =
-      this.props.offeringId ? this.props.offeringId : this.props.match.params.offeringId;
+    const offeringId = this.props.offeringId ? this.props.offeringId : this.props.match.params.offeringId;
     this.props.investmentStore.updateInvestmentLimits(offeringId).then(() => {
       Helper.toast('Investment limit changed successfully.', 'success');
       this.handleCloseModal();
     });
   }
+
   handleCloseModal = () => {
     if (this.props.changeInvestment) {
       const redirectPath = this.props.match.url.includes('agreement') ? `${this.props.refLink}/${this.props.match.params.offeringId}/agreement` : `${this.props.refLink}/${this.props.match.params.offeringId}/invest-now`;
@@ -34,17 +37,21 @@ class ChangeInvestmentLimit extends Component {
     const { resetForm, INVESTMENT_LIMITS_FORM } = this.props.investmentStore;
     resetForm(INVESTMENT_LIMITS_FORM);
   }
+
   change = (values, name) => {
     this.props.investmentStore.investmentLimitChange(values, name);
     this.forceUpdate();
   }
+
   render() {
     const errors = false;
     const { inProgress } = this.props.uiStore;
     const {
       INVESTMENT_LIMITS_FORM,
-      changedInvestmentLimit,
+      // changedInvestmentLimit,
     } = this.props.investmentStore;
+    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
+    const currentInvestmentLimit = get(getCurrentInvestNowHealthCheck, 'investmentLimit') || 0;
     const { fields } = INVESTMENT_LIMITS_FORM;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="tiny" closeOnDimmerClick={false}>
@@ -54,18 +61,18 @@ class ChangeInvestmentLimit extends Component {
           <p>
             Ensure that your 12-month Investment Limit for Regulation Crowdfunding is up to date
             by providing your most recent Annual Income and Net Worth.&nbsp;
-            <Link target="_blank" to="/app/resources/faq">See FAQ on how your investment limit is calculated</Link>
+            <Link target="_blank" to="/resources/education-center/investor/faq">See FAQ on how your investment limit is calculated</Link>
           </p>
         </Modal.Header>
         <Modal.Content>
           <Statistic size="tiny">
             <Statistic.Label>Estimated investment limit</Statistic.Label>
-            <Statistic.Value>{Helper.CurrencyFormat(changedInvestmentLimit, 0)}</Statistic.Value>
+            <Statistic.Value>{Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}</Statistic.Value>
           </Statistic>
           <Divider clearing hidden />
           <Form error onSubmit={this.submit}>
-            {fields &&
-              ['annualIncome', 'netWorth', 'cfInvestments'].map(field => (
+            {fields
+              && ['annualIncome', 'netWorth', 'cfInvestments'].map(field => (
                 <MaskedInput
                   key={field}
                   name={field}
@@ -73,17 +80,18 @@ class ChangeInvestmentLimit extends Component {
                   prefix="$ "
                   value={fields[field].value}
                   fielddata={fields[field]}
-                  allowNegative={false}
                   // changed={maskingFieldChange}
                   changed={(values, name) => this.change(values, name)}
                 // onblur={investmentCalculate}
                 />
               ))
             }
-            {errors &&
-              <Message error className="mt-30">
-                <ListErrors errors={[errors]} />
-              </Message>
+            {errors
+              && (
+                <Message error className="mt-30">
+                  <ListErrors errors={[errors]} />
+                </Message>
+              )
             }
             <div className="center-align mt-30">
               <Button.Group>

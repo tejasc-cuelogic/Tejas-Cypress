@@ -13,39 +13,46 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 class InvestorSignup extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.authStore.setDefaultPwdType();
     const userRoleData = cookie.load('ROLE_VALUE');
     this.props.authStore.setUserRole(userRoleData || 'investor');
   }
+
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
+
   handleIsEmailExist = (email) => {
     this.props.authStore.checkEmailExistsPresignup(email);
   }
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     if (this.props.authStore.newPasswordRequired) {
-      this.props.history.push('/auth/change-password');
+      this.props.history.push('/change-password');
     } else {
       const { email, password, givenName } = this.props.authStore.SIGNUP_FRM.fields;
       this.props.uiStore.setProgress();
-      this.props.authStore.checkEmailExistsPresignup(email.value).then(() => {
-        this.props.uiStore.setProgress(false);
-        this.props.authStore.setCredentials({
-          email: email.value,
-          password: password.value,
-          givenName: givenName.value,
-        });
-        if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
-          this.props.identityStore.requestOtpWrapper(isMobile).then(() => {
-            this.props.history.push('/auth/confirm-email');
+      this.props.authStore.checkEmailExistsPresignup(email.value).then((res) => {
+        if (res) {
+          this.props.uiStore.setProgress(false);
+          this.props.authStore.setCredentials({
+            email: email.value,
+            password: password.value,
+            givenName: givenName.value,
           });
+          if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
+            this.props.identityStore.requestOtpWrapper(isMobile).then(() => {
+              this.props.history.push('/confirm-email');
+            });
+          }
         }
       });
     }
   };
+
   render() {
     const {
       SIGNUP_FRM, signupChange, pwdInputType, currentScore,
@@ -68,10 +75,9 @@ class InvestorSignup extends Component {
       >
         <Modal.Header className="center-align signup-header">
           <Header as="h3" className="mb-0">
-            Sign up as {' '}
-            {(SIGNUP_FRM.fields.role.value === '' || SIGNUP_FRM.fields.role.value === 'investor') ? 'an Investor' : 'Business Owner'}
+            Sign up as an Investor
           </Header>
-          <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
+          <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link>
         </Modal.Header>
         <Modal.Content className="signup-content">
           {/* <Form>
@@ -99,7 +105,7 @@ class InvestorSignup extends Component {
               name="email"
               fielddata={SIGNUP_FRM.fields.email}
               changed={signupChange}
-              onblur={this.handleIsEmailExist}
+              showerror
             />
             <FormPasswordStrength
               key="password"
@@ -129,18 +135,20 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.verify}
               changed={signupChange}
             />
-            {errors &&
-              <Message error textAlign="left" className="mt-30">
-                <ListErrors errors={[customError]} />
-              </Message>
+            {errors
+              && (
+                <Message error textAlign="left" className="mt-30">
+                  <ListErrors errors={[customError]} />
+                </Message>
+              )
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled} />
+              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled || inProgress} />
             </div>
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><b>Already have an account?</b> <Link to="/auth/login">Log in</Link></p>
+          <p><b>Already have an account?</b> <Link to="/login">Log in</Link></p>
         </Modal.Actions>
       </Modal>
     );

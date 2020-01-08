@@ -9,6 +9,7 @@ export default class ManageActivities extends Component {
       // search goes here..
     }
   }
+
   render() {
     const { match } = this.props;
     return (

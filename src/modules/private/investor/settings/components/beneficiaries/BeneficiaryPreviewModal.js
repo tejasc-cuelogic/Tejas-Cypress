@@ -9,12 +9,14 @@ import { ListErrors, DateTimeFormat, InlineLoader } from '../../../../../../them
 @withRouter
 @observer
 export default class BeneficiaryPreviewModal extends Component {
-  componentWillMount() {
-    if (this.props.beneficiaryStore.BENEFICIARY_META.fields.beneficiary.length === 0 ||
-      this.props.beneficiaryStore.BENEFICIARY_META.fields.beneficiary[0].firstName.value === '') {
+  constructor(props) {
+    super(props);
+    if (this.props.beneficiaryStore.BENEFICIARY_META.fields.beneficiary.length === 0
+      || this.props.beneficiaryStore.BENEFICIARY_META.fields.beneficiary[0].firstName.value === '') {
       this.props.history.push(this.props.refLink);
     }
   }
+
   submit = (e) => {
     e.preventDefault();
     this.props.beneficiaryStore.resetFormData('OTP_VERIFY_META');
@@ -41,8 +43,8 @@ export default class BeneficiaryPreviewModal extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content">
           {
-            BENEFICIARY_META.fields.beneficiary.length ?
-            BENEFICIARY_META.fields.beneficiary.map(beneficiary => (
+            BENEFICIARY_META.fields.beneficiary.length
+              ? BENEFICIARY_META.fields.beneficiary.map(beneficiary => (
               <Grid stackable celled="internally" padded="horizontally">
                 <Grid.Row>
                   <Grid.Column width={16}>
@@ -70,13 +72,15 @@ export default class BeneficiaryPreviewModal extends Component {
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
-            )) :
-            <InlineLoader />
+              ))
+              : <InlineLoader />
           }
-          {errors &&
-            <Message error>
+          {errors
+            && (
+<Message error>
               <ListErrors errors={[errors]} />
             </Message>
+            )
           }
           <div className="center-align mt-30">
             <Button color="red" content="Cancel" as={Link} to={this.props.refLink} />

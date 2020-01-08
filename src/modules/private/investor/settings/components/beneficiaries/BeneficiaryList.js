@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, Route } from 'react-router-dom';
-import Aux from 'react-aux';
 import startCase from 'lodash/startCase';
 import moment from 'moment';
 import { Card, Grid, Button, Header, Icon, Item, Divider } from 'semantic-ui-react';
@@ -26,8 +25,9 @@ const BeneficiaryList = (props) => {
               <Icon color="green" className={`ns-${title.toLowerCase()}-line`} />
               {`${title} Account beneficiaries`}
             </Header>
-            { showButton ?
-              <Aux>
+            { showButton
+              ? (
+<>
                 <div className="status">
                   <span className="time-stamp">{`Updated: ${moment(props.updatedDate.date).format('MM-DD-YYYY')}`}</span>
                   <Icon color={statusImg[0]} className={`ns-${statusImg[1]}-circle`} /> <span className="capitalize">{`${status}`}</span>
@@ -36,8 +36,8 @@ const BeneficiaryList = (props) => {
                 <Divider hidden />
                 <Item.Group>
                   {
-                    props.beneficiaries.recipients ?
-                    props.beneficiaries.recipients.map(beneficiary => (
+                    props.beneficiaries.recipients
+                      ? props.beneficiaries.recipients.map(beneficiary => (
                       <Item>
                         <Grid stackable celled="internally" padded="horizontally">
                           <Grid.Row>
@@ -77,12 +77,13 @@ const BeneficiaryList = (props) => {
                           </Grid.Row>
                         </Grid>
                       </Item>
-                    )) : <EmptyDataSet title="No data available for beneficiaries." />
+                      )) : <EmptyDataSet title="No data available for beneficiaries." />
                   }
-                </Item.Group>
-                <Button as={Link} to={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} color="green">Manage beneficiaries</Button>
-              </Aux> :
-              <p>{headerMsg}</p>
+                  </Item.Group>
+                  <Button as={Link} to={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} color="green">Manage beneficiaries</Button>
+                </>
+              )
+              : <p>{headerMsg}</p>
               }
             <Route path={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} render={props1 => <AddBeneficiary refLink={props.match.url} isDataAvailable accountId={props.accountId} {...props1} />} />
           </Card.Content>

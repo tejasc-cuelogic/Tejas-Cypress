@@ -1,23 +1,17 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
-import { Route, Switch } from 'react-router-dom';
-import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
+import { Route, Switch, Link } from 'react-router-dom';
+import { Item, Header, Button, Icon, Modal, Card, Confirm } from 'semantic-ui-react';
 import { intersection, isEmpty, includes, get } from 'lodash';
-import Loadable from 'react-loadable';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
+import { SuspenseBoundary, InlineLoader, lazyRetry, UserAvatar } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import UserTypeIcon from '../components/manage/UserTypeIcon';
 import ActivityHistory from '../../../shared/ActivityHistory';
+import UserEmailList from '../components/manage/userEmailListing';
 import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
-const getModule = component => Loadable({
-  loader: () => import(`../components/manage/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazyRetry(() => import(`../components/manage/${component}`));
 
 const navMeta = [
   {
@@ -33,44 +27,64 @@ const navMeta = [
     title: 'Entity', to: 'entity', component: 'AccountDetails', accessibleTo: ['entity'],
   },
   {
-    title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'], env: ['localhost', 'develop'],
+    title: 'Closed', to: 'closed', component: 'ClosedAccount', accessibleTo: ['investor'],
+  },
+  {
+    title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'], env: ['localhost', 'develop', 'dev'],
   },
   {
     title: 'Activity', to: 'activity', component: ActivityHistory, load: false,
   },
+  {
+    title: 'Emails', to: 'emails', component: UserEmailList, load: false,
+  },
 ];
 
-@inject('userStore', 'userDetailsStore', 'uiStore')
+@inject('userStore', 'userDetailsStore', 'uiStore', 'bankAccountStore', 'accountStore')
 @observer
 export default class AccountDetails extends Component {
-  state = {
-    errorMsg: '',
-    copied: false,
-  }
-  // state = { isActivity: false };
-  componentWillMount() {
-    if (this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId) {
+  constructor(props) {
+    super(props);
+    this.state = {
+      errorMsg: '',
+      copied: false,
+      showConfirm: false,
+    };
+    if ((this.props.userDetailsStore.selectedUserId !== this.props.match.params.userId)) {
       this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
+      this.props.accountStore.getInvestorCloseAccounts(this.props.match.params.userId);
     }
   }
+
   toggleState = (id, accountStatus) => {
     this.props.userDetailsStore.toggleState(id, accountStatus);
   }
-  handleDeleteProfile = () => {
-    this.props.userDetailsStore.deleteProfile().then(() => {
+
+  handleConfirmModal = (val) => {
+    this.setState({ showConfirm: val });
+  }
+
+  handleDeleteProfile = (isHardDelete = false) => {
+    this.handleConfirmModal(false);
+    this.props.userDetailsStore.deleteProfile(false, isHardDelete).then(() => {
+      this.props.userDetailsStore.setFieldValue('selectedUserId', null);
       this.props.history.push(this.props.refLink);
     }).catch((res) => {
       this.setState({ errorMsg: res });
     });
   }
-  // activityState = (state) => {
-  //   this.setState({ isActivity: state });
-  // }
-  handleCloseModal = () => this.props.history.push(this.props.refLink);
+
+  handleCloseModal = () => {
+    this.props.userDetailsStore.setFieldValue('selectedUserId', '');
+    this.props.bankAccountStore.resetRoutingNum();
+    this.props.history.push(sessionStorage.getItem('userDetailsRefUrl') || this.props.refLink);
+    sessionStorage.removeItem('userDetailsRefUrl');
+  }
 
   render() {
     const { match } = this.props;
     const { inProgressArray } = this.props.uiStore;
+    const { sortedNavAccounts } = this.props.accountStore;
     const {
       getDetailsOfUserLoading, getDetailsOfUser,
     } = this.props.userDetailsStore;
@@ -86,16 +100,18 @@ export default class AccountDetails extends Component {
     if (roles.includes('investor')) {
       roles = [...roles, ...details.roles.map(r => r.name)];
     }
-    const navItems = navMeta.filter(n =>
-      ((!n.accessibleTo || n.accessibleTo.length === 0 ||
-        intersection(n.accessibleTo, roles).length > 0)) &&
-      (!n.env || n.env.length === 0 || intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
+    let navItems = navMeta.filter(n => ((!n.accessibleTo || n.accessibleTo.length === 0
+        || intersection(n.accessibleTo, roles).length > 0))
+      && (!n.env || n.env.length === 0 || intersection(n.env, [REACT_APP_DEPLOY_ENV]).length > 0));
+    navItems = sortedNavAccounts.length === 0 ? navItems.filter(n => (n.component !== 'ClosedAccount')) : navItems;
     const { info } = details;
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles,
     };
+    const access = this.props.userStore.myAccessForModule('USERS');
+    const isFullUser = access.level === 'FULL';
     return (
-      <Aux>
+      <>
         {/* <Route exact path={`${match.url}/individual/investments/investment-details/:id`}
       render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} /> */}
         <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
@@ -115,55 +131,72 @@ export default class AccountDetails extends Component {
                         text={get(details, 'id')}
                         onCopy={() => this.setState({ copied: true })}
                       >
-                        <span> {this.state.copied ? get(details, 'id') : get(details.id.split('-'), '[0]')}</span>
+                        <span className="text-lowercase"> {this.state.copied ? get(details, 'id') : get(details.id.split('-'), '[0]')}</span>
                       </CopyToClipboard>
                     </Header.Subheader>
                   </Header>
                   <Button.Group floated="right">
-                    {!includes(details.status, 'DELETED') && details.status !== 'ADMIN' &&
-                      <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} onClick={this.handleDeleteProfile} content="Delete Profile" />
+                    {isFullUser
+                      && <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} as={Link} to={`${this.props.match.url}/delete/${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'}`} content={`${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'} Delete Profile`} />
                     }
+                    {/* <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} onClick={() => this.handleConfirmModal(true)} content={`${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'} Delete Profile`} /> */}
                     <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
                       <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
                     </Button>
                   </Button.Group>
                 </Item.Content>
               </Item>
-              {this.state.errorMsg &&
-                <p className="negative-text right-align"><small>{this.state.errorMsg}</small></p>
+              {this.state.errorMsg
+                && <p className="negative-text right-align"><small>{this.state.errorMsg}</small></p>
               }
             </Item.Group>
             <Card fluid>
               <SecondaryMenu match={match} navItems={navItems} />
               <div className="inner-content-spacer">
-                <Switch>
-                  {
-                    navItems.map((item) => {
-                      const CurrentModule = item.load === false ?
-                        item.component : getModule(item.component);
-                      return (
-                        <Route
-                          key={item.to}
-                          path={`${match.url}/${item.to}`}
-                          render={props => (
-                            <CurrentModule
-                              module={item.title === 'Activity' ? 'userDetails' : false}
-                              showFilters={item.title === 'Activity' ? ['activityType', 'activityUserType'] : false}
-                              {...props}
-                              adminActivity={item.title === 'Activity' ? 'adminActivity' : false}
-                              resourceId={details.id}
-                            />)
-                                }
-                        />
-                      );
-                    })
-                  }
-                </Switch>
+                <SuspenseBoundary>
+                  <Switch>
+                    {
+                      navItems.map((item) => {
+                        const CurrentModule = item.load === false
+                          ? item.component : getModule(item.component);
+                        return (
+                          <Route
+                            key={item.to}
+                            path={`${match.url}/${item.to}`}
+                            render={props => (
+                              <CurrentModule
+                                module={item.title === 'Activity' ? 'userDetails' : false}
+                                showFilters={item.title === 'Activity' ? ['activityType', 'activityUserType'] : false}
+                                {...props}
+                                adminActivity={item.title === 'Activity' ? 'adminActivity' : false}
+                                resourceId={details.id}
+                                stepName={details.roles.find(obj => obj.name === 'investor') ? 'INVESTOR_ACTIVITY_HISTORY' : ''}
+                                copied={this.state.copied}
+                                investorId={details.id}
+                                classes={item.title === 'Activity' ? 'user-detail-activity' : ''}
+                              />
+                            )
+                                  }
+                          />
+                        );
+                      })
+                    }
+                  </Switch>
+                </SuspenseBoundary>
               </div>
             </Card>
           </Modal.Content>
         </Modal>
-      </Aux>
+        <Confirm
+          header="Confirm"
+          content={`Are you sure you want to ${includes(details.status, 'DELETED') ? 'hard' : 'soft'} delete this user account?`}
+          open={this.state.showConfirm}
+          onCancel={() => this.handleConfirmModal(false)}
+          onConfirm={() => this.handleDeleteProfile(includes(details.status, 'DELETED'))}
+          size="mini"
+          className="deletion"
+        />
+      </>
     );
   }
 }

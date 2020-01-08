@@ -33,18 +33,20 @@ export const DELETED_ACCOUNT_STATUS = {
   PARTIAL: ['DELETED_INVESTOR_PARTIAL'],
   BASIC: ['DELETED_INVESTOR_BASIC'],
   FULL: ['DELETED_INVESTOR_FULL'],
-  FROZEN: [],
+  MIGRATION_PARTIAL: ['DELETED_INVESTOR_MIGRATION_PARTIAL'],
+  MIGRATION_FULL: ['DELETED_INVESTOR_MIGRATION_FULL'],
   LOCKED: [''],
   UNLOCKED: [''],
   ISSUER: ['DELETED_ISSUER_ISSUER'],
   ADMIN: ['DELETED_ADMIN_ADMIN'],
-  INVESTOR: ['DELETED_INVESTOR_PARTIAL', 'DELETED_INVESTOR_BASIC', 'DELETED_INVESTOR_FULL'],
+  INVESTOR: ['DELETED_INVESTOR_PARTIAL', 'DELETED_INVESTOR_BASIC', 'DELETED_INVESTOR_FULL', 'DELETED_INVESTOR_MIGRATION_PARTIAL', 'DELETED_INVESTOR_MIGRATION_FULL'],
 };
 
 export const FILTER_META = {
   accountType: [
     { text: 'Admin', value: 'ADMIN' },
     { text: 'Business', value: 'ISSUER' },
+    { text: 'Investor', value: 'INVESTOR' },
     { text: 'IRA', value: 'IRA' },
     { text: 'Individual', value: 'INDIVIDUAL' },
     { text: 'Entity', value: 'ENTITY' },
@@ -56,7 +58,8 @@ export const FILTER_META = {
     { text: 'Partial', value: 'PARTIAL', allowedDeleted: true },
     { text: 'Basic', value: 'BASIC', allowedDeleted: true },
     { text: 'Full', value: 'FULL', allowedDeleted: true },
-    { text: 'Frozen', value: 'FROZEN', allowedDeleted: false },
+    { text: 'Migration Partial', value: 'MIGRATION_PARTIAL', allowedDeleted: true },
+    { text: 'Migration Full', value: 'MIGRATION_FULL', allowedDeleted: true },
     { text: 'Locked', value: 'LOCKED', allowedDeleted: false },
     { text: 'Unlocked', value: 'UNLOCKED', allowedDeleted: false },
   ],
@@ -127,10 +130,20 @@ export const FILTER_META = {
   subType: [
     { text: 'None', value: null },
     { text: 'Users', value: 'USERS' },
+    { text: 'Users A', value: 'users_a' },
+    { text: 'Users B', value: 'users_b' },
     { text: 'Linked Bank', value: 'LINKED_BANK' },
+    { text: 'Linked Bank A', value: 'linkedbank_a' },
+    { text: 'Linked Bank B', value: 'linkedbank_b' },
     { text: 'Acceditation', value: 'ACCREDITATION' },
+    { text: 'Acceditation A', value: 'accreditations_a' },
+    { text: 'Acceditation B', value: 'accreditations_b' },
     { text: 'CrowdPay', value: 'CROWDPAY' },
+    { text: 'CrowdPay A', value: 'crowdpay_a' },
+    { text: 'CrowdPay B', value: 'crowdpay_b' },
     { text: 'Offering', value: 'OFFERING' },
+    { text: 'Offering A', value: 'offerings_a' },
+    { text: 'Offering B', value: 'offerings_b' },
   ],
 };
 
@@ -174,4 +187,4 @@ export const NEW_USER = {
 
 export const BENEFICIARY_STATUS = { PENDING: 'PENDING', APPROVED: 'APPROVED' };
 
-export const SIGNUP_REDIRECT_ROLEWISE = [{ role: 'admin', path: '/app/dashboard' }, { role: 'issuer', path: '/app/business-application/new/pre-qualification' }, { role: 'investor', path: '/app/summary/identity-verification/0' }];
+export const SIGNUP_REDIRECT_ROLEWISE = [{ role: 'admin', path: '/dashboard' }, { role: 'issuer', path: '/dashboard/business-application/new/pre-qualification' }, { role: 'investor', path: '/dashboard/setup/identity-verification/0' }];

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Icon, Confirm } from 'semantic-ui-react';
@@ -10,7 +9,8 @@ import ButtonGroup from '../ButtonGroup';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class OfferingCompany extends Component {
-  // componentWillMount() {
+  // constructor(props) {
+  //   super(props);
   //   if (!this.props.offeringCreationStore.initLoad.includes('OFFERING_COMPANY_FRM')) {
   //     this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
   //   }
@@ -21,6 +21,7 @@ export default class OfferingCompany extends Component {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName, arrayName);
   }
+
   handleFormSubmit = (isApproved = null) => {
     const {
       OFFERING_COMPANY_FRM,
@@ -29,12 +30,15 @@ export default class OfferingCompany extends Component {
     } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, OFFERING_COMPANY_FRM.fields, 'offering', 'about', true, undefined, isApproved);
   }
+
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
+
   editorChange =
   (field, value, form) => this.props.offeringCreationStore.rtEditorChange(field, value, form);
+
   render() {
     const {
       OFFERING_COMPANY_FRM, removeData,
@@ -46,16 +50,16 @@ export default class OfferingCompany extends Component {
     const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
-    const submitted = (offer && offer.offering && offer.offering.about &&
-      offer.offering.about.submitted) ? offer.offering.about.submitted : null;
-    const approved = (offer && offer.offering && offer.offering.about &&
-      offer.offering.about.approved) ? offer.offering.about.approved : null;
-    const issuerSubmitted = (offer && offer.offering && offer.offering.about &&
-      offer.offering.about.issuerSubmitted) ? offer.offering.about.issuerSubmitted : null;
-    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
-      (isManager && approved && approved.status));
+    const submitted = (offer && offer.offering && offer.offering.about
+      && offer.offering.about.submitted) ? offer.offering.about.submitted : null;
+    const approved = (offer && offer.offering && offer.offering.about
+      && offer.offering.about.approved) ? offer.offering.about.approved : null;
+    const issuerSubmitted = (offer && offer.offering && offer.offering.about
+      && offer.offering.about.issuerSubmitted) ? offer.offering.about.issuerSubmitted : null;
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer)
+      || (isManager && approved && approved.status));
     return (
-      <Aux>
+      <>
         <Form>
           <Header as="h4">About the Company</Header>
           <HtmlEditor
@@ -68,7 +72,7 @@ export default class OfferingCompany extends Component {
           />
           {
             ['businessModel', 'locationAnalysis'].map(field => (
-              <Aux>
+              <>
                 <Divider section />
                 <Header as="h6">{OFFERING_COMPANY_FRM.fields[field].label}</Header>
                 <HtmlEditor
@@ -79,24 +83,26 @@ export default class OfferingCompany extends Component {
                   form="OFFERING_COMPANY_FRM"
                   content={OFFERING_COMPANY_FRM.fields[field].value}
                 />
-              </Aux>
+              </>
             ))
           }
           <Divider section />
           <Header as="h4">
             History
-            {!isReadonly &&
-            <Link to={this.props.match.url} className="link" onClick={e => this.addNewMileStone(e, formName, 'history')}><small>+ Add another milestone</small></Link>
+            {!isReadonly
+            && <Link to={this.props.match.url} className="link" onClick={e => this.addNewMileStone(e, formName, 'history')}><small>+ Add another milestone</small></Link>
             }
           </Header>
           {
             OFFERING_COMPANY_FRM.fields.history.map((history, index) => (
-              <Aux>
+              <>
                 <Header as="h6">{`Milestone ${index + 1}`}
-                  {!isReadonly && OFFERING_COMPANY_FRM.fields.history.length > 1 &&
-                    <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'history')} >
+                  {!isReadonly && OFFERING_COMPANY_FRM.fields.history.length > 1
+                    && (
+<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'history')}>
                       <Icon className="ns-close-circle" color="grey" />
                     </Link>
+                    )
                     }
                 </Header>
                 <div className="featured-section">
@@ -114,7 +120,7 @@ export default class OfferingCompany extends Component {
                     containerclassname="secondary"
                   />
                 </div>
-              </Aux>
+              </>
             ))
           }
           <Divider hidden />
@@ -137,7 +143,7 @@ export default class OfferingCompany extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

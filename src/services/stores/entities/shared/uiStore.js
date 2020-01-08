@@ -2,25 +2,43 @@
 import { action, observable, computed } from 'mobx';
 import { REACT_APP_DEPLOY_ENV, NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
 
+const isMobile = document.documentElement.clientWidth < 768;
 export class UiStore {
   @observable
   modalStatus = false;
-  appLoader = false;
+
+  @observable appLoader = false;
+
   @observable layoutState = {
     leftPanel: true,
     leftPanelMobile: false,
     notificationPanel: false,
   };
+
   @observable submitButtonDisabled = false;
+
   @observable inProgress = false;
+
+  @observable resizeLoader = false;
+
+  @observable.struct responsiveVars = {};
+
   @observable inProgressArray = [];
+
   @observable loaderMessage = '';
+
   @observable errors = undefined;
+
   @observable success = undefined;
+
   @observable redirectURL = undefined;
+
   @observable passwordPreviewURL = null;
+
   @observable asyncCheckLoader = false;
-  @observable devBanner = !['production', 'prod', 'master', 'localhost'].includes(REACT_APP_DEPLOY_ENV);
+
+  @observable devBanner = !['production', 'prod', 'master', 'localhost', 'infosec'].includes(REACT_APP_DEPLOY_ENV);
+
   @observable confirmBox = {
     entity: '',
     refId: '',
@@ -30,31 +48,57 @@ export class UiStore {
       isAnyFilingXmlLocked: false,
     },
   };
+
   @observable openAccordion = [];
+
   @observable dropdownLoader = false;
+
   @observable authWizardStep = undefined;
+
   @observable dashboardStep = undefined;
+
   @observable editMode = false;
+
   @observable pwdInputType = 'password';
+
   @observable isEnterPressed = false;
+
   @observable showFireworkAnimation = false;
+
   @observable authRef = '';
+
   @observable htmlEditorImageLoading = false;
+
   @observable createAccountMessage = null;
+
   @observable defaultNavExpandedVal = + new Date();
+
+  @observable multiSteps = undefined;
+
+  @observable isFromBusinessApplication = false;
+
+  @observable appUpdated = false;
 
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
   }
+
+  @action
+  setAppUpdated() {
+    this.appUpdated = true;
+  }
+
   @action
   addMoreInProgressArray = (val) => {
     this.inProgressArray.push(val);
   }
+
   @action
   removeOneFromProgressArray = (val) => {
     this.inProgressArray.splice(this.inProgressArray.indexOf(val), 1);
   }
+
   @action
   setIsEnterPressed = (e) => {
     if (e.charCode === 13 && e.target.name !== 'investmentAmount' && e.target.name !== 'bankName') {
@@ -78,6 +122,7 @@ export class UiStore {
   }
 
   doNothing = k => k;
+
   @computed get defaultNavExpanded() {
     this.doNothing(this.defaultNavExpandedVal);
     return localStorage.getItem('defaultNavExpanded') || false;
@@ -127,6 +172,7 @@ export class UiStore {
   clearSuccess() {
     this.success = undefined;
   }
+
   @action
   setRedirectURL(url) {
     this.redirectURL = url;
@@ -166,6 +212,7 @@ export class UiStore {
   toggleAsyncCheckLoader() {
     this.asyncCheckLoader = !this.asyncCheckLoader;
   }
+
   @action
   setcreateAccountMessage= () => {
     this.createAccountMessage = 'Please wait...<br /><br /> We are finalizing your account. This can take up to a minute.';
@@ -241,10 +288,25 @@ export class UiStore {
     this.authRef = url || '';
   }
 
+  scrollIntoActiveInputFields = () => {
+    setTimeout(() => {
+      const allInputTags = document.getElementsByTagName('input');
+      let inputsArr = allInputTags ? Array.prototype.slice.call(allInputTags) : [];
+      inputsArr = inputsArr.filter(item => item.className !== 'hidden');
+      if (inputsArr[inputsArr.length - 1] && isMobile) {
+        inputsArr[inputsArr.length - 1].scrollIntoView({
+          block: 'start',
+          behavior: 'smooth',
+        });
+      }
+    }, 100);
+  }
+
   resetUIAccountCreationError = (err) => {
     this.resetcreateAccountMessage();
     this.setErrors(err);
     this.setProgress(false);
+    this.removeOneFromProgressArray('submitAccountLoader');
   }
 }
 

@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Grid, Form, Input, Breadcrumb, Divider } from 'semantic-ui-react';
 import { toJS } from 'mobx';
-import AccList from '../components/knowledgeBase/AccList';
-import Details from '../components/knowledgeBase/Details';
+import AccList from './knowledgeBase/AccList';
+import Details from './knowledgeBase/Details';
 import FaqsCombined from './FaqsCombined';
 import { InlineLoader } from '../../../../../theme/shared';
 
@@ -13,8 +12,9 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('educationStore', 'userStore')
 @observer
 export default class KnowledgeBase extends Component {
-  componentWillMount() {
-    const props = { isMkt: this.props.marketing, params: this.props.match.params };
+  constructor(props) {
+    super(props);
+    const params = { isMkt: this.props.marketing, params: this.props.match.params };
     const { currentUser } = this.props.userStore;
     let categoryType;
     if (this.props.match.params.for) {
@@ -22,14 +22,16 @@ export default class KnowledgeBase extends Component {
     } else if (currentUser) {
       categoryType = toJS(currentUser.roles)[0] === 'investor' ? 'INVESTOR_KB' : 'ISSUER_KB';
     }
-    this.props.educationStore.initRequest('KnowledgeBase', props, categoryType);
+    this.props.educationStore.initRequest('KnowledgeBase', params, categoryType);
   }
+
   search = (e) => {
     this.props.educationStore.setSrchParam(e.target.value);
-    if (this.props.location.pathname !== '/app/resources/knowledge-base') {
-      this.props.history.replace('/app/resources/knowledge-base');
+    if (this.props.location.pathname !== '/dashboard/resources/knowledge-base') {
+      this.props.history.replace('/dashboard/resources/knowledge-base');
     }
   }
+
   render() {
     const { match, location, marketing } = this.props;
     const {
@@ -40,7 +42,7 @@ export default class KnowledgeBase extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         {marketing && (
           <Breadcrumb className="mb-20">
             <Breadcrumb.Divider icon={{ className: 'ns-chevron-left' }} />
@@ -86,13 +88,12 @@ export default class KnowledgeBase extends Component {
               />
               <Route
                 path={`${match.url}/faq`}
-                render={props =>
-                  (
-                    <Aux>
-                      {isMobile && <Divider hidden />}
-                      <FaqsCombined marketing={marketing} params={match.params} {...props} />
-                    </Aux>
-                  )
+                render={props => (
+                  <>
+                    {isMobile && <Divider hidden />}
+                    <FaqsCombined marketing={marketing} params={match.params} {...props} />
+                  </>
+                )
                 }
               />
               <Route
@@ -102,7 +103,7 @@ export default class KnowledgeBase extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </Aux>
+      </>
     );
   }
 }

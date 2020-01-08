@@ -13,6 +13,8 @@ import Statements from '../../../../investor/accountDetails/containers/Statement
 import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
 import Helper from '../../../../../../helper/utility';
 import ConfirmModel from './accountDetails/ConfirmModel';
+import AddWithdrawFunds from './accountDetails/AddWithdrawFunds';
+import CancelInvestment from '../../../../investor/accountDetails/components/portfolio/CancelInvestment';
 
 const navMeta = [
   { title: 'Overview', to: 'overview' },
@@ -22,18 +24,26 @@ const navMeta = [
   { title: 'Activity', to: 'activity' },
 ];
 
-@inject('userDetailsStore', 'uiStore')
+@inject('userDetailsStore', 'uiStore', 'accountStore', 'transactionStore', 'portfolioStore')
 @withRouter
 @observer
 export default class AccountDetails extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    if (this.props.match.params.closedAccountId) {
+      this.props.accountStore.setSelectedClosedAccount(this.props.match.params.closedAccountId);
+    }
     const { setFieldValue } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
+    setFieldValue('isClosedAccount', !!this.props.match.params.closedAccountId);
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
+    this.props.portfolioStore.setFieldValue('apiCall', false);
+    this.props.transactionStore.setFieldValue('apiCall', false);
   }
+
   getUserStorageDetails = (e) => {
     e.preventDefault();
     const userId = get(this.props.userDetailsStore.getDetailsOfUser, 'id');
@@ -47,26 +57,34 @@ export default class AccountDetails extends Component {
       });
     }
   }
+
   render() {
-    const { match } = this.props;
+    const { match, investorId } = this.props;
     const { inProgress } = this.props.uiStore;
     const { currentActiveAccountDetailsOfSelectedUsers } = this.props.userDetailsStore;
-    const account = currentActiveAccountDetailsOfSelectedUsers;
+    const { selectedClosedAccount } = this.props.accountStore;
+    const account = currentActiveAccountDetailsOfSelectedUsers || selectedClosedAccount;
     return (
       <Grid>
         <Grid.Column widescreen={3} largeScreen={4} computer={4} tablet={4} mobile={16}>
           <SecondaryMenu secondary vertical match={match} navItems={navMeta} />
           <Divider hidden />
-          <Button color="blue" className="link-button" content={inProgress ? 'loading...' : 'Users Box Account'} onClick={this.getUserStorageDetails} />
+          <Button color="blue" className="link-button" content={inProgress === 'userBoxAccount' ? 'loading...' : 'Users Box Account'} onClick={this.getUserStorageDetails} />
         </Grid.Column>
         <Grid.Column widescreen={13} largeScreen={12} computer={12} tablet={12} mobile={16}>
           <Switch>
-            <Route exact path={`${match.url}/activity`} render={props => <ActivityHistory resourceId={get(account, 'details.accountId')} module="userDetails" showFilters={['activityType', 'activityUserType']} {...props} />} />
+            <Route exact path={`${match.url}/activity`} render={props => <ActivityHistory classes="account-detail-activity" stepName="INVESTOR_ACTIVITY_HISTORY" investorId={investorId} resourceId={get(account, 'details.accountId')} module="userDetails" showFilters={['activityType', 'activityUserType']} {...props} />} />
             <Route path={`${match.url}/statements`} render={props => <Statements isAdmin {...props} />} />
-            <Route exact path={`${match.url}/investments`} render={props => <Portfolio isAdmin {...props} />} />
-            <Route path={`${match.url}/investments/investment-details/:id`} render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} />
+            <Route exact path={`${match.url}/investments`} render={props => <Portfolio refLink={match.url} isAdmin {...props} />} />
+            <Route
+              isAdmin
+              path={`${match.url}/investments/cancel-investment/:id`}
+              render={props => <CancelInvestment isAdmin accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}
+            />
+            <Route path={`${match.url}/investments/investment-details/:offeringSlug`} render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} />
             <Route exact path={`${match.url}/transactions`} render={props => <Transactions isAdmin {...props} />} />
-            <Route exact path={`${match.url}/overview`} render={props => <Overview isAdmin {...props} />} />
+            <Route exact path={`${match.url}/transactions/:action`} render={props => <AddWithdrawFunds {...props} isAdmin userId={get(this.props.userDetailsStore.getDetailsOfUser, 'id')} accountId={get(account, 'details.accountId')} />} />
+            <Route exact path={`${match.url}/overview`} render={props => <Overview isAdmin copied={this.props.copied} {...props} />} />
             <Route exact path={`${match.url}/overview/:action`} render={props => <ConfirmModel {...props} userId={get(this.props.userDetailsStore.getDetailsOfUser, 'id')} refLink={`${match.url}/overview`} accountId={get(account, 'details.accountId')} />} />
           </Switch>
         </Grid.Column>

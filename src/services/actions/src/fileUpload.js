@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { get } from 'lodash';
 import { createUploadEntry, removeUploadedFile, createUploadEntryAccreditationAdmin } from '../../stores/queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';
 import { DataFormatter } from '../../../helper';
@@ -7,31 +8,32 @@ import { uiStore, commonStore } from '../../stores';
 import apiService from '../../../api/restApi';
 
 export class FileUpload {
-  setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '', tags = '') =>
-    new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: createUploadEntry,
-          variables: {
-            applicationId,
-            applicationIssuerId,
-            stepName,
-            userRole,
-            fileData,
-            offeringId,
-            tags,
-          },
-        })
-        .then((result) => {
-          resolve(result);
-          uiStore.setProgress(false);
-        })
-        .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-          uiStore.setProgress(false);
-        });
-    })
+  setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '', tags = '', params) => new Promise((resolve, reject) => {
+    const investorId = get(params, 'investorId');
+    client
+      .mutate({
+        mutation: createUploadEntry,
+        variables: {
+          applicationId,
+          applicationIssuerId,
+          stepName,
+          userRole,
+          fileData,
+          offeringId,
+          tags,
+          investorId,
+        },
+      })
+      .then((result) => {
+        resolve(result);
+        uiStore.setProgress(false);
+      })
+      .catch((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        reject(err);
+        uiStore.setProgress(false);
+      });
+  })
 
   removeUploadedData = (removeFileId) => {
     uiStore.setProgress();
@@ -73,7 +75,7 @@ export class FileUpload {
   }
 
   uploadToS3 = (fileObj, dir) => new Promise((resolve, reject) => {
-    const key = `${dir}/${moment().unix()}_${fileObj.name}`;
+    const key = `${dir}/${moment().unix()}_${Helper.sanitize(fileObj.name)}`;
     const dataToUpload = Helper.isBase64(fileObj.obj) ? Helper.b64toBlob(fileObj.obj)
       : fileObj.obj;
     commonStore.getCdnSignedUrl(key).then((res) => {
@@ -82,29 +84,28 @@ export class FileUpload {
     }).catch(err => reject(err));
   });
 
-  setAccreditationFileUploadData = (userRole, fileData, accountType, action, userId) =>
-    new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: createUploadEntryAccreditationAdmin,
-          variables: {
-            userRole,
-            fileData,
-            accountType,
-            action,
-            userId,
-          },
-        })
-        .then((result) => {
-          resolve(result);
-          uiStore.setProgress(false);
-        })
-        .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-          uiStore.setProgress(false);
-        });
-    })
+  setAccreditationFileUploadData = (userRole, fileData, accountType, action, userId) => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: createUploadEntryAccreditationAdmin,
+        variables: {
+          userRole,
+          fileData,
+          accountType,
+          action,
+          userId,
+        },
+      })
+      .then((result) => {
+        resolve(result);
+        uiStore.setProgress(false);
+      })
+      .catch((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        reject(err);
+        uiStore.setProgress(false);
+      });
+  })
 }
 
 export default new FileUpload();

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Button, Form, Grid, Modal, Divider } from 'semantic-ui-react';
 import { FormInput } from '../../../../theme/form';
@@ -11,7 +10,7 @@ const SubscribeFields = observer(({
     <Grid.Row>
       {
         Object.keys(NEWSLETTER_FRM.fields).map(field => (
-          <Grid.Column computer={4} tablet={5} mobile={16} key={field}>
+          <Grid.Column computer={12} tablet={12} mobile={16} key={field}>
             <FormInput
               key={field}
               type="text"
@@ -19,11 +18,12 @@ const SubscribeFields = observer(({
               fielddata={NEWSLETTER_FRM.fields[field]}
               changed={newsLetterChange}
               ishidelabel={!modal}
+              showerror
             />
           </Grid.Column>
         ))
       }
-      <Grid.Column computer={2} tablet={3} mobile={16}>
+      <Grid.Column computer={4} tablet={4} mobile={16}>
         <Button primary loading={inProgress} fluid>
             Subscribe
         </Button>
@@ -53,23 +53,30 @@ const ThanksNote = props => (
 @observer
 export default class SubscribeForNewsletter extends Component {
   state = { dialog: false };
+
   componentWillUnmount() {
     this.setState({ dialog: false });
+    this.props.authStore.resetForm('NEWSLETTER_FRM');
   }
+
   closeModal = () => this.setState({ dialog: false });
+
   submit = () => {
     this.props.authStore.subscribeToNewsletter().then(() => {
       this.setState({ dialog: true });
-      document.getElementsByName('subscriberName')[0].value = '';
+      // document.getElementsByName('subscriberName')[0].value = '';
       document.getElementsByName('emailAddress')[0].value = '';
+    }).catch(() => {
+      // do nothing
     });
   }
+
   render() {
     const { NEWSLETTER_FRM, newsLetterChange } = this.props.authStore;
     const { inProgress } = this.props.uiStore;
     const { dialog } = this.state;
     return (
-      <Aux>
+      <>
         <Form onSubmit={this.submit} className={this.props.className}>
           {this.props.modal ? (
             <SubscribeFields
@@ -88,7 +95,7 @@ export default class SubscribeForNewsletter extends Component {
           )}
         </Form>
         {dialog && <ThanksNote closeModal={this.closeModal} />}
-      </Aux>
+      </>
     );
   }
 }

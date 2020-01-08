@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Header, Form, Button, Grid, Divider, Icon, Card, Responsive } from 'semantic-ui-react';
@@ -14,7 +13,8 @@ const key = shortid.generate();
 @inject('businessStore', 'uiStore')
 @observer
 export default class EdgarForm extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { params } = this.props.match;
     if (params.filingId && params.businessId) {
       businessActions.fetchEdgarDetails(
@@ -38,7 +38,7 @@ export default class EdgarForm extends React.Component {
   handleSubmit = () => {
     businessActions.generateDocxFile()
       .then((data) => {
-        this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
+        this.props.history.push(`/dashboard/edgar/${this.props.match.params.businessId}`);
         Helper.toast(`.docx file with id ${data.body.requestId} created successfully`, 'success');
       })
       .finally(() => {
@@ -65,7 +65,7 @@ export default class EdgarForm extends React.Component {
       );
     }
     return (
-      <Aux>
+      <>
         <div className="page-header-section">
           <Grid>
             <Grid.Row>
@@ -74,7 +74,7 @@ export default class EdgarForm extends React.Component {
                   <Responsive
                     minWidth={Responsive.onlyLargeScreen.minWidth}
                     as={Link}
-                    to={`/app/edgar/${this.props.match.params.businessId}`}
+                    to={`/dashboard/edgar/${this.props.match.params.businessId}`}
                     className="back-link"
                   >
                     <Icon className="ns-arrow-left" />
@@ -101,7 +101,8 @@ export default class EdgarForm extends React.Component {
                       width={data.width || 8}
                       key={`${key}_${data.name}`}
                       disabled={data.name === 'name_of_business'}
-                    />))
+                    />
+                  ))
                   }
                 </Grid>
                 <Divider hidden section />
@@ -121,7 +122,7 @@ export default class EdgarForm extends React.Component {
             </Card.Content>
           </Card>
         </div>
-      </Aux>
+      </>
     );
   }
 }

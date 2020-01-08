@@ -1,22 +1,32 @@
 import React from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Table } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
-// import { ListErrors } from '../../../../../theme/shared';
+import Helper from '../../../../../helper/utility';
 
-@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore', 'accountStore', 'iraAccountStore', 'entityAccountStore')
+const isMobile = document.documentElement.clientWidth < 768;
+
+@inject('bankAccountStore', 'uiStore', 'accountStore')
 @withRouter
 @observer
 export default class LinkbankSummary extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.bankAccountStore.setLoaderForAccountBlank();
     this.props.bankAccountStore.fetchRoutingNumber();
   }
+
   componentDidUpdate() {
     this.props.bankAccountStore.setLoaderForAccountBlank();
     this.props.bankAccountStore.fetchRoutingNumber();
+  }
+
+  handleContinueCta = () => {
+    const { ACC_TYPE_MAPPING, INVESTMENT_ACC_TYPES } = this.props.accountStore;
+    const { store } = ACC_TYPE_MAPPING[INVESTMENT_ACC_TYPES.fields.accType.value];
+    const { stepToBeRendered, setStepToBeRendered } = store;
+    setStepToBeRendered(stepToBeRendered + 1);
   }
 
   render() {
@@ -27,33 +37,40 @@ export default class LinkbankSummary extends React.Component {
       changeLinkbank,
       routingNum,
     } = this.props.bankAccountStore;
-    const bankAccountNumber = !isEmpty(plaidAccDetails) ?
-      plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
+    const bankAccountNumber = !isEmpty(plaidAccDetails)
+      ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     return (
-      <Aux>
-        <Header as="h3" textAlign="center">Linked Bank</Header>
-        <p className="center-align mb-50">The bank account you have currently linked to this account is</p>
-        <div className="field-wrap">
+      <>
+        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Please confirm your linked bank account information</Header>
+        <div className={isMobile ? '' : 'field-wrap'}>
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
               <Table.Body>
-                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
-                  <Table.Row>
-                    <Table.Cell>Bank: </Table.Cell>
-                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
-                  </Table.Row>
+                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
+                  && (
+                    <Table.Row>
+                      <Table.Cell className="grey-header">Bank: </Table.Cell>
+                      <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                    </Table.Row>
+                  )
                 }
                 <Table.Row>
-                  <Table.Cell>Bank Account Number: </Table.Cell>
+                  <Table.Cell className="grey-header">Account Type: </Table.Cell>
+                  <Table.Cell>{Helper.caseify(plaidAccDetails.accountType || '')}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell className="grey-header">Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                { !isEmpty(routingNum) &&
-                  <Table.Row>
-                    <Table.Cell>Routing Number</Table.Cell>
-                    <Table.Cell>
-                      { routingNum || '' }
-                    </Table.Cell>
-                  </Table.Row>
+                {!isEmpty(routingNum)
+                  && (
+                    <Table.Row>
+                      <Table.Cell className="grey-header">Bank Routing Number: </Table.Cell>
+                      <Table.Cell>
+                        {routingNum || ''}
+                      </Table.Cell>
+                    </Table.Row>
+                  )
                 }
               </Table.Body>
             </Table>
@@ -71,10 +88,13 @@ export default class LinkbankSummary extends React.Component {
           content="Continue" onClick={() => this.handleSubmit()}
           disabled={errors || !bankAccountNumber} />
         </div> */}
-        <div className="center-align mt-30">
-          <Button color="green" className="link-button" content="or change linked bank" onClick={() => changeLinkbank()} />
+        <div className="center-align">
+          <Button onClick={this.handleContinueCta} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Confirm" />
         </div>
-      </Aux>
+        <div className={`${isMobile ? 'mb-30' : ''} center-align mt-30`}>
+          <Button color="green" className="link-button" content="Change link bank account" onClick={() => changeLinkbank()} />
+        </div>
+      </>
     );
   }
 }

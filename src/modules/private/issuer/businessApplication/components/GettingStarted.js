@@ -8,14 +8,18 @@ import { DataFormatter } from '../../../../../helper';
 @withRouter
 @observer
 export default class GettingStarted extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
   }
+
   handleCloseModal = () => {
-    this.props.offeringsStore.initRequest({ stage: 'active' });
-    this.props.history.push('/app/dashboard');
+    this.props.offeringsStore.initRequest({ stage: 'active' }, true);
+    this.props.history.push('/dashboard');
   }
+
   module = name => DataFormatter.upperCamelCase(name);
+
   render() {
     setTimeout(() => {
       this.props.uiStore.setFieldvalue('showFireworkAnimation', false);

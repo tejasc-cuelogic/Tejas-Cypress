@@ -7,14 +7,17 @@ import { ListErrors, InlineLoader } from '../../../../../theme/shared';
 @inject('uiStore', 'offeringsStore', 'offeringCreationStore', 'userListingStore')
 @observer
 export default class EditOffering extends React.Component {
-  componentWillMount() {
-    this.props.userListingStore.initiateSearch({ accountType: ['ADMIN', 'ISSUER'] }, true);
+  constructor(props) {
+    super(props);
+    this.props.userListingStore.initiateSearch({ accountType: ['ADMIN', 'ISSUER'], accountStatus: [] }, true);
     this.props.uiStore.clearErrors();
     this.props.offeringCreationStore.setFormData('POC_DETAILS_FRM', '');
   }
+
   handleCloseModal = () => {
     this.props.history.push(this.props.refLink);
   }
+
   handleSubmitForm = () => {
     const {
       updateOffering,
@@ -24,6 +27,7 @@ export default class EditOffering extends React.Component {
       this.props.history.push(this.props.refLink);
     });
   }
+
   render() {
     const { stage } = this.props;
     const {
@@ -34,47 +38,51 @@ export default class EditOffering extends React.Component {
     const { loading, usersOptionsForDropdown } = this.props.userListingStore;
     const { errors, inProgress } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={this.handleCloseModal}>
+      <Modal size="small" open closeIcon onClose={this.handleCloseModal}>
         <Modal.Header>Edit information</Modal.Header>
         <Modal.Content>
-          {loading ?
-            <InlineLoader />
-            :
-            <Form error onSubmit={() => this.handleSubmitForm()}>
-              {['issuerId', 'id'].map(field => (field === 'issuerId' || (stage === 'CREATION' && field === 'id')) && (
-                <FormDropDown
-                  search
-                  name={field}
-                  placeholder="Choose here"
-                  containerclassname="dropdown-field"
-                  fluid
-                  selection
-                  fielddata={POC_DETAILS_FRM.fields[field]}
-                  onChange={(e, result) => formChange(e, result, 'POC_DETAILS_FRM')}
-                  options={field === 'issuerId' ? usersOptionsForDropdown.issuer : usersOptionsForDropdown.admin}
-                />
-              ))}
-              {stage === 'CREATION' &&
-              <MaskedInput
-                name="targetDate"
-                fielddata={POC_DETAILS_FRM.fields.targetDate}
-                changed={(values, name) => maskChange(values, 'POC_DETAILS_FRM', name)}
-                dateOfBirth
-              />
-              }
-              {errors &&
-                <Message error textAlign="left" className="mt-30">
-                  <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-                </Message>
-              }
-              <div className="center-align mt-30">
-                <Button primary className="relaxed" content="Save Changes" loading={inProgress} disabled={!POC_DETAILS_FRM.meta.isValid} />
-              </div>
-            </Form>
+          {loading
+            ? <InlineLoader />
+            : (
+              <Form error onSubmit={() => this.handleSubmitForm()}>
+                {['issuerId', 'id'].map(field => (field === 'issuerId' || (stage === 'CREATION' && field === 'id')) && (
+                  <FormDropDown
+                    search
+                    name={field}
+                    placeholder="Choose here"
+                    containerclassname="dropdown-field"
+                    fluid
+                    selection
+                    fielddata={POC_DETAILS_FRM.fields[field]}
+                    onChange={(e, result) => formChange(e, result, 'POC_DETAILS_FRM')}
+                    options={field === 'issuerId' ? usersOptionsForDropdown.issuer : usersOptionsForDropdown.admin}
+                  />
+                ))}
+                {stage === 'CREATION'
+                  && (
+                    <MaskedInput
+                      name="targetDate"
+                      fielddata={POC_DETAILS_FRM.fields.targetDate}
+                      changed={(values, name) => maskChange(values, 'POC_DETAILS_FRM', name)}
+                      dateOfBirth
+                    />
+                  )
+                }
+                {errors
+                  && (
+                    <Message error textAlign="left" className="mt-30">
+                      <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+                    </Message>
+                  )
+                }
+                <div className="center-align mt-30">
+                  <Button primary className="relaxed" content="Save Changes" loading={inProgress} disabled={!POC_DETAILS_FRM.meta.isValid} />
+                </div>
+              </Form>
+            )
           }
         </Modal.Content>
       </Modal>
     );
   }
 }
-

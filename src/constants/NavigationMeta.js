@@ -10,6 +10,90 @@ const INVESTER_ACC_SUB_NAV_ITEMS = {
   ],
 };
 
+
+const INDIVIDUAL_ACC = {
+  icon: 'ns-individual',
+  title: 'Individual',
+  heading: 'Individual Account',
+  to: 'account-details/individual',
+  accessibleTo: ['individual'],
+  path: 'investor/accountDetails/containers/AccountDetails',
+  hideSubOnSideBar: true,
+  subPanel: 1,
+  ...INVESTER_ACC_SUB_NAV_ITEMS,
+};
+
+const IRA_ACC = {
+  icon: 'ns-ira',
+  title: 'IRA',
+  heading: 'IRA Account',
+  to: 'account-details/ira',
+  accessibleTo: ['ira'],
+  path: 'investor/accountDetails/containers/AccountDetails',
+  hideSubOnSideBar: true,
+  subPanel: 1,
+  ...INVESTER_ACC_SUB_NAV_ITEMS,
+};
+
+const ENTITY_ACC = {
+  icon: 'ns-entity',
+  title: 'Entity',
+  heading: 'Entity Account',
+  to: 'account-details/entity',
+  accessibleTo: ['entity'],
+  path: 'investor/accountDetails/containers/AccountDetails',
+  hideSubOnSideBar: true,
+  subPanel: 1,
+  ...INVESTER_ACC_SUB_NAV_ITEMS,
+};
+const NEW_OFFERING_LAYOUT = [
+  {
+    component: 'CampaignLayout', title: 'Highlights', to: '#top-things-to-know', useRefLink: true, defaultActive: true, key: 'hasTopThingToKnow',
+  },
+  {
+    title: 'Updates', to: '#updates', useRefLink: true, key: 'updates',
+  },
+  {
+    title: 'Investment Terms', to: '#key-terms', useRefLink: true, key: 'keyTerms',
+  },
+  {
+    title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true, key: 'useOfProcceds',
+  },
+  {
+    title: 'Company Description', to: '#company-description', useRefLink: true, key: 'companyDescription',
+  },
+  {
+    title: 'Business Model', to: '#business-model', useRefLink: true, key: 'businessModel',
+  },
+  {
+    title: 'Location Analysis', to: '#location-analysis', useRefLink: true, key: 'localAnalysis',
+  },
+  {
+    title: 'History', to: '#history', useRefLink: true, key: 'history',
+  },
+  {
+    title: 'The Team', to: '#team', useRefLink: true, key: 'team',
+  },
+  {
+    title: 'Bonus Rewards', to: '#bonus-rewards', useRefLink: true, key: 'isBonusReward',
+  },
+  {
+    title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallary',
+  },
+  {
+    title: 'Documents', to: '#data-room', useRefLink: true, key: 'dataRooms',
+  },
+  {
+    title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true, key: 'isRevenueShare',
+  },
+  {
+    title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true, key: 'isTermNote',
+  },
+  {
+    title: 'Comments', to: '#comments', useRefLink: true,
+  },
+];
+
 /*
 subPanel => 0: none, 1: subnavigation, 2: has search panel
 */
@@ -31,6 +115,8 @@ export const PRIVATE_NAV = [
       admin: 'admin/dashboard/Dashboard',
     },
     accessibleTo: ['issuer', 'admin'],
+    asRoot: true,
+    exact: true,
     subPanel: 0,
   },
   {
@@ -51,19 +137,27 @@ export const PRIVATE_NAV = [
     ],
   },
   {
-    icon: 'ns-dashboard',
-    title: 'Summary',
-    to: 'summary',
-    path: 'investor/summary',
-    accessibleTo: ['investor'],
+    title: 'Application',
+    to: 'application',
+    noNav: true,
+    path: 'issuer/dashboard/init',
+    accessibleTo: ['issuer'],
     subPanel: 0,
   },
   {
-    title: 'INVESTMENT ACCOUNTS',
-    accessibleTo: ['ira', 'individual', 'entity'],
-    to: 'summary',
-    path: 'investor/summary',
+    title: 'Accounts',
+    accessibleTo: ['investor'],
+    to: 'setup',
+    path: 'investor/setup',
     isMenuHeader: true,
+    subPanel: 0,
+  },
+  {
+    icon: 'ns-dashboard',
+    title: 'Setup',
+    to: 'setup',
+    path: 'investor/setup',
+    accessibleTo: ['investor'],
     subPanel: 0,
   },
   {
@@ -87,7 +181,7 @@ export const PRIVATE_NAV = [
         icon_color: { COMPLETE: 'green', IN_PROGRESS: 'orange' },
         title: 'Business Details',
         to: 'business-details',
-        accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED', 'APPLICATION_SUCCESSFUL'],
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED', 'APPLICATION_SUCCESSFUL', 'APPLICATION_OFFERED'],
         component: 'BusinessDetails',
         showIcon: true,
         toolTipTitle: 'This section is not complete, please fill out all the * fields.',
@@ -97,7 +191,7 @@ export const PRIVATE_NAV = [
         icon_color: { COMPLETE: 'green', IN_PROGRESS: 'orange' },
         title: 'Performance',
         to: 'performance',
-        accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED', 'APPLICATION_SUCCESSFUL'],
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED', 'APPLICATION_SUCCESSFUL', 'APPLICATION_OFFERED'],
         component: 'Performance',
         showIcon: true,
         toolTipTitle: 'This section is not complete, please fill out all the * fields.',
@@ -107,43 +201,16 @@ export const PRIVATE_NAV = [
         icon_color: { COMPLETE: 'green', IN_PROGRESS: 'orange' },
         title: 'Documentation',
         to: 'documentation',
-        accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED', 'APPLICATION_SUCCESSFUL'],
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED', 'APPLICATION_SUCCESSFUL', 'APPLICATION_OFFERED'],
         component: 'Documentation',
         showIcon: true,
         toolTipTitle: 'This section is not complete, please fill out all the * fields.',
       },
     ],
   },
-  {
-    icon: 'ns-individual',
-    title: 'Individual',
-    heading: 'Individual Account',
-    to: 'account-details/individual',
-    accessibleTo: ['individual'],
-    path: 'investor/accountDetails/containers/AccountDetails',
-    subPanel: 1,
-    ...INVESTER_ACC_SUB_NAV_ITEMS,
-  },
-  {
-    icon: 'ns-ira',
-    title: 'IRA',
-    heading: 'IRA Account',
-    to: 'account-details/ira',
-    accessibleTo: ['ira'],
-    path: 'investor/accountDetails/containers/AccountDetails',
-    subPanel: 1,
-    ...INVESTER_ACC_SUB_NAV_ITEMS,
-  },
-  {
-    icon: 'ns-entity',
-    title: 'Entity',
-    heading: 'Entity Account',
-    to: 'account-details/entity',
-    accessibleTo: ['entity'],
-    path: 'investor/accountDetails/containers/AccountDetails',
-    subPanel: 1,
-    ...INVESTER_ACC_SUB_NAV_ITEMS,
-  },
+  { ...INDIVIDUAL_ACC },
+  { ...IRA_ACC },
+  { ...ENTITY_ACC },
   // {
   //   icon: 'ns-wallet',
   //   title: 'Rewards wallet',
@@ -188,7 +255,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'gift',
     title: 'Offering',
-    to: 'offering/:id',
+    to: 'offering/:offeringSlug',
     accessibleTo: ['issuer'],
     path: 'issuer/offering',
     subPanel: 1,
@@ -208,34 +275,39 @@ export const PRIVATE_NAV = [
       { title: 'Comments', to: 'comments', accessFor: [2, 3] },
       { title: 'Updates', to: 'updates', accessFor: [2, 3, 4] },
       {
-        title: 'Close', to: 'close', accessFor: [2], accessibleTo: ['admin', 'manager', 'support'],
+        title: 'Close', to: 'close', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
       },
       { title: 'Bonus Rewards', to: 'bonus-rewards', accessFor: [1, 2, 3, 4] },
+      { title: 'Documents', to: 'documents', accessFor: [2, 3, 4], accessibleTo: ['issuer'], filterKey: 'closingBinder' },
       {
         title: 'Offering Creation', to: 'offering-creation', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
+      },
+      {
+        title: 'Watch List', to: 'watch-list', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
       },
       {
         title: 'Activity History', to: 'activity-history', accessFor: [1, 2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
       },
     ],
   },
-  {
-    icon: 'ns-article',
-    title: { issuer: 'Resources', investor: 'Education Center' },
-    to: 'resources',
-    accessibleTo: ['investor', 'issuer'],
-    subPanel: 1,
-    path: 'shared/education/containers/Education',
-    subNavigations: [
-      {
-        title: 'Welcome Packet', to: 'welcome-packet', component: 'WelcomePacket', accessibleTo: ['investor'],
-      },
-      { title: 'Knowledge Base', to: 'knowledge-base', component: 'KnowledgeBase' },
-      {
-        title: 'FAQ', to: 'faq', component: 'Faq', env: ['localhost', 'develop'],
-      },
-    ],
-  },
+  // {
+  //   icon: 'ns-article',
+  //   title: { issuer: 'Resources', investor: 'Education Center' },
+  //   hideSubOnSideBar: true,
+  //   to: 'resources',
+  //   accessibleTo: ['investor', 'issuer'],
+  //   subPanel: 1,
+  //   path: 'shared/education/containers/Education',
+  //   subNavigations: [
+  //     {
+  //       title: 'Welcome Packet', to: 'welcome-packet', component: 'WelcomePacket', accessibleTo: ['investor'],
+  //     },
+  //     { title: 'Knowledge Base', to: 'knowledge-base', component: 'KnowledgeBase' },
+  //     {
+  //       title: 'FAQ', to: 'faq', component: 'Faq', env: ['localhost', 'develop', 'dev'],
+  //     },
+  //   ],
+  // },
   // {
   //   icon: 'calendar',
   //   title: 'Events',
@@ -260,7 +332,7 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin'],
     subPanel: 0,
     subNavigations: [
-      { title: 'Overview', to: 'overview', env: ['localhost', 'develop'] },
+      { title: 'Overview', to: 'overview', env: ['localhost', 'develop', 'dev'] },
       { title: 'Creation', to: 'creation' },
       { title: 'Live', to: 'live' },
       { title: 'ᕕ( ᐛ )ᕗ', to: 'completed' },
@@ -367,11 +439,16 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'money',
-    title: 'Repayments',
+    title: 'Payments',
     capability: 'REPAYMENTS_ANY',
-    to: 'repayments',
+    to: 'payments',
     path: 'admin/repayments',
     accessibleTo: ['admin', 'manager', 'support'],
+    subNavigations: [
+      { title: 'Issuers', to: 'issuers' },
+      { title: 'Batches', to: 'batches' },
+      { title: 'Util', to: 'util' },
+    ],
   },
   {
     icon: 'dollar',
@@ -452,7 +529,8 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'payment',
-    title: 'Accreditation Requests',
+    title: 'Accredited Status',
+    heading: 'Accredited Status Request',
     capability: 'ACCREDITATION_ANY',
     to: 'accreditation',
     path: 'admin/accreditation',
@@ -472,6 +550,21 @@ export const PRIVATE_NAV = [
       },
       {
         title: 'Data', to: 'data', component: 'Data', capability: 'DATA_ANY',
+      },
+      {
+        title: 'Cron Factory', to: 'factory', component: 'Factory', capability: 'FACTORY_ANY',
+      },
+      {
+        title: 'Request Factory', to: 'request-factory', component: 'RequestFactory', capability: 'REQUEST_FACTORY_ANY',
+      },
+      {
+        title: 'Process Factory', to: 'process-factory', component: 'ProcessFactory', capability: 'PROCESS_FACTORY_ANY',
+      },
+      {
+        title: 'File Factory', to: 'file-factory', component: 'FileFactory', capability: 'FILE_FACTORY_ANY',
+      },
+      {
+        title: 'Email', to: 'email', component: 'Email', capability: 'EMAIL_ANY',
       },
     ],
   },
@@ -497,8 +590,22 @@ export const PUBLIC_NAV = [
     ],
   },
   {
-    title: 'Explore Campaigns',
-    to: 'offerings',
+    title: 'Investment opportunities',
+    to: 'offerings-v2/',
+    header: false,
+    headerMobile: false,
+    subNavigations: NEW_OFFERING_LAYOUT,
+  },
+  {
+    title: 'Investment opportunities',
+    to: 'offerings/',
+    subNavigations: NEW_OFFERING_LAYOUT,
+  },
+  {
+    title: 'Investment opportunities',
+    to: 'offerings-v1',
+    header: false,
+    headerMobile: false,
     subNavigations: [
       {
         defaultOpen: true,
@@ -509,19 +616,19 @@ export const PUBLIC_NAV = [
         clickable: true,
         subNavigations: [
           {
-            title: 'Top Things to Know', to: '#top-things-to-know', useRefLink: true, defaultActive: true,
+            title: 'Top Things to Know', to: '#top-things-to-know', useRefLink: true, defaultActive: true, key: 'hasTopThingToKnow',
           },
           {
-            title: 'Investment Highlights', to: '#investment-highlights', useRefLink: true,
+            title: 'Investment Highlights', to: '#investment-highlights', useRefLink: true, key: 'investmentHighlights',
           },
           {
-            title: 'Updates', to: '#updates', useRefLink: true,
+            title: 'Updates', to: '#updates', useRefLink: true, key: 'updates',
           },
           {
-            title: 'Gallery', to: '#gallery', useRefLink: true,
+            title: 'Gallery', to: '#gallery', useRefLink: true, key: 'gallary',
           },
           {
-            title: 'Issuer Statement', to: '#issuer-statement', useRefLink: true,
+            title: 'Issuer Statement', to: '#issuer-statement', useRefLink: true, key: 'issuerStatement',
           },
         ],
       },
@@ -533,19 +640,19 @@ export const PUBLIC_NAV = [
         clickable: true,
         subNavigations: [
           {
-            title: 'Overview', to: '#company-description', useRefLink: true, defaultActive: true,
+            title: 'Overview', to: '#company-description', useRefLink: true, defaultActive: true, key: 'companyDescription',
           },
           {
-            title: 'Business Model', to: '#business-model', useRefLink: true,
+            title: 'Business Model', to: '#business-model', useRefLink: true, key: 'businessModel',
           },
           {
-            title: 'Location Analysis', to: '#location-analysis', useRefLink: true,
+            title: 'Location Analysis', to: '#location-analysis', useRefLink: true, key: 'localAnalysis',
           },
           {
-            title: 'History', to: '#history', useRefLink: true,
+            title: 'History', to: '#history', useRefLink: true, key: 'history',
           },
           {
-            title: 'Team', to: '#team', useRefLink: true,
+            title: 'Team', to: '#team', useRefLink: true, key: 'team',
           },
         ],
       },
@@ -557,7 +664,7 @@ export const PUBLIC_NAV = [
         clickable: true,
         subNavigations: [
           {
-            title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true, defaultActive: true,
+            title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true, defaultActive: true, key: 'useOfProcceds',
           },
           {
             title: 'Key Terms', to: '#key-terms', useRefLink: true,
@@ -585,40 +692,14 @@ export const PUBLIC_NAV = [
     ],
   },
   {
-    title: 'How NextSeed Works',
-    to: 'business',
-    noNav: true,
-    exact: true,
-    subNavigations: [
-      { title: 'How it Works', to: 'how-it-works' },
-      { title: 'Funding Options', to: 'funding-options' },
-      { title: 'Process', to: 'process', component: 'InvestmentDetails' },
-      { title: 'All-Inclusive', to: 'all-inclusive', component: 'BonusRewards' },
-      // { title: 'Compare', to: 'compare', component: 'Disclosures' },
-    ],
-  },
-  {
-    title: 'Why NextSeed',
-    to: 'invest',
-    noNav: true,
-    exact: true,
-    subNavigations: [
-      { title: 'Why Nextseed', to: 'why-nextseed' },
-      { title: 'How it Works', to: 'how-it-works' },
-      { title: 'Account Types', to: 'account-types' },
-      { title: 'Security', to: 'security' },
-      { title: 'Track', to: 'track' },
-    ],
-  },
-  {
-    title: 'How NextSeed Works',
+    title: 'How It Works',
     to: '',
     subPanel: 1,
     exact: true,
     subNavigations: [
-      { title: 'Fundraising', to: 'business' },
-      { title: 'Investing', to: 'invest' },
-      { title: 'Education Center', to: 'resources/education-center' },
+      { title: 'For Investors', to: 'investors' },
+      { title: 'For Businesses', to: 'business' },
+      { title: 'Education Center', to: 'education-center' },
     ],
   },
   {
@@ -627,16 +708,29 @@ export const PUBLIC_NAV = [
     subPanel: 1,
     exact: true,
     subNavigations: [
-      { title: 'Mission', to: 'about/mission' },
-      { title: 'Team & Culture', to: 'about/team' },
-      { title: 'Careers', to: 'about/careers' },
-      { title: 'Insights', to: 'resources/insights' },
+      { title: 'Who We Are', to: 'about' },
+      // { title: 'Team & Culture', to: 'about/team' },
+      // { title: 'Careers', to: 'about/careers' },
+      { title: 'Insights', to: 'insights' },
       { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
     ],
   },
+  // {
+  //   title: 'My Account',
+  //   to: '',
+  //   subPanel: 1,
+  //   exact: true,
+  //   subNavigations: [
+  //     { title: 'Portfolio', to: 'app/setup' },
+  //     { title: 'Settings', to: 'app/account-settings' },
+  //     { title: 'Refer a Friend', to: 'app/referrals' },
+  //     { title: 'Log out', to: '' },
+  //     // { title: 'Press', to: 'press' },
+  //   ],
+  // },
   {
     title: 'Legal',
-    to: 'agreements/legal',
+    to: 'legal',
     exact: true,
     subPanel: 1,
     subNavigations: [
@@ -649,6 +743,41 @@ export const PUBLIC_NAV = [
   },
 ];
 
+export const MOBILE_NAV = [
+  {
+    title: INDIVIDUAL_ACC.title,
+    to: `app/${INDIVIDUAL_ACC.to}/portfolio`,
+    accessibleTo: INDIVIDUAL_ACC.accessibleTo,
+    isLoggedIn: true,
+  },
+  {
+    title: IRA_ACC.title,
+    to: `app/${IRA_ACC.to}/portfolio`,
+    accessibleTo: IRA_ACC.accessibleTo,
+    isLoggedIn: true,
+  },
+  {
+    title: ENTITY_ACC.title,
+    to: `app/${ENTITY_ACC.to}/portfolio`,
+    accessibleTo: ENTITY_ACC.accessibleTo,
+    isLoggedIn: true,
+  },
+  { title: 'Investment Opportunities', to: 'offerings', isLoggedIn: true },
+  {
+    title: 'Refer a Friend',
+    to: 'app/referrals',
+    accessibleTo: ['ira', 'individual', 'entity'],
+    isLoggedIn: true,
+  },
+  { title: 'Settings', to: 'app/account-settings', isLoggedIn: true },
+  { title: 'Add New Account', to: 'app/setup/account-creation', isLoggedIn: true },
+  { title: 'For Investors', to: 'investors' },
+  { title: 'For Businesses', to: 'business' },
+  { title: 'Education Center', to: 'education-center' },
+  { title: 'Who We Are', to: 'about' },
+  { title: 'Insights', to: 'insights' },
+  { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
+];
 
 export const FOOTER_NAV = [
   // {

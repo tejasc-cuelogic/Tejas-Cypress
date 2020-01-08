@@ -1,12 +1,11 @@
 import React from 'react';
-import moment from 'moment';
-import Aux from 'react-aux';
 import { get } from 'lodash';
 import Parser from 'html-react-parser';
 import { Link } from 'react-router-dom';
 import { Label, Item, Header, Icon } from 'semantic-ui-react';
 import { InlineLoader, UserAvatar } from '../../../../../../theme/shared';
 import { OFFERING_COMMENTS_SCOPE } from '../../../../../../constants/offering';
+import { DataFormatter } from '../../../../../../helper';
 
 const MsgContent = ({
   body, extra, edit, classes,
@@ -22,13 +21,15 @@ const Extra = ({
 }) => (
   <Item.Extra>
     <span className="time-stamp">{date}</span>
-    {scope === 'PUBLIC' && approved ?
-      <Label basic size="small" className="approve">
-        Approved
-        <Icon className="ns-check-circle" color="green" />
-      </Label>
-    : (scope === 'PUBLIC' && !approved) ? showApproval ? <Label circular basic size="mini" color="green">Approval Pending</Label> : null
-    : <Label circular size="mini" color={OFFERING_COMMENTS_SCOPE[scope].color}>{scope === 'ISSUER' ? isIssuer ? direction === 'to' ? OFFERING_COMMENTS_SCOPE[scope].titleITo : OFFERING_COMMENTS_SCOPE[scope].titleIFrom : direction === 'to' ? OFFERING_COMMENTS_SCOPE[scope].titleTo : OFFERING_COMMENTS_SCOPE[scope].titleFrom : OFFERING_COMMENTS_SCOPE[scope].title}</Label>
+    {scope === 'PUBLIC' && approved
+      ? (
+        <Label basic size="small" className="approve">
+          Approved
+          <Icon className="ns-check-circle" color="green" />
+        </Label>
+      )
+      : (scope === 'PUBLIC' && !approved) ? showApproval ? <Label circular basic size="mini" color="green">Approval Pending</Label> : null
+        : <Label circular size="mini" color={OFFERING_COMMENTS_SCOPE[scope].color}>{scope === 'ISSUER' ? isIssuer ? direction === 'to' ? OFFERING_COMMENTS_SCOPE[scope].titleITo : OFFERING_COMMENTS_SCOPE[scope].titleIFrom : direction === 'to' ? OFFERING_COMMENTS_SCOPE[scope].titleTo : OFFERING_COMMENTS_SCOPE[scope].titleFrom : OFFERING_COMMENTS_SCOPE[scope].title}</Label>
     }
   </Item.Extra>
 );
@@ -36,10 +37,10 @@ const Extra = ({
 const Body = props => (
   <div className="message-body">
     <Item.Group className="messages comments">
-      {props.thread && props.thread.length ?
-        props.thread.map((msg) => {
+      {props.thread && props.thread.length
+        ? props.thread.map((msg) => {
           const date = msg.updated ? msg.updated.date : msg.created.date;
-          const msgDate = moment(date).format('ll');
+          const msgDate = DataFormatter.getDateAsPerTimeZone(date, true, true);
           const userFullName = `${get(msg, 'createdUserInfo.info.firstName')} ${get(msg, 'createdUserInfo.info.lastName')}`;
           const userInfo = {
             firstName: get(msg, 'createdUserInfo.info.firstName'),
@@ -49,82 +50,90 @@ const Body = props => (
           };
           const classes = msg.scope === 'NEXTSEED' ? 'private' : (msg.scope === 'PUBLIC' && msg.approved ? 'approved' : ((msg.scope === 'PUBLIC' && !msg.approved && props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId) || (msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && !msg.approved)) ? 'approval-pending' : msg.scope === 'ISSUER' ? 'note-comment' : '');
           return (((props.isIssuer && msg.scope === 'NEXTSEED') || msg.isSample) ? false : get(msg, 'createdUserInfo.id') !== props.currentUserId ? (
-            <Aux>
+            <>
               <Item className="in">
                 <UserAvatar size="mini" UserInfo={userInfo} />
                 <MsgContent
                   classes={classes}
                   body={Parser(msg.comment)}
-                  extra={
-                    <Aux>
+                  extra={(
+                    <>
                       <Header as="h6">{userFullName}</Header>
                       <Extra
                         direction="from"
-                        showApproval={!props.isIssuer &&
-                          get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId}
+                        showApproval={!props.isIssuer
+                          && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId}
                         approved={msg.approved}
                         isIssuer={props.isIssuer}
                         date={msgDate}
                         scope={msg.scope}
                       />
-                    </Aux>
-                  }
-                  edit={
+                    </>
+                  )}
+                  edit={(
                     <div className="comment-actions">
-                      {msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && !msg.approved ?
-                        <Aux>
-                          <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
-                          <Link to="/" className="link" loading={props.buttonLoader === msg.id} onClick={e => props.approveComment(e, msg.id)}>Approve</Link>{' | '}
-                        </Aux>
-                      : msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && msg.approved &&
-                      <Aux>
-                        <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
-                      </Aux>
+                      {msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && !msg.approved
+                        ? (
+                          <>
+                            <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
+                            <Link to="/" className="link" onClick={e => props.deleteCommentHandler(e, msg.id, 'APPROVE')}>Approve</Link>{' | '}
+                          </>
+                        )
+                        : msg.scope === 'PUBLIC' && !props.isIssuer && get(msg, 'createdUserInfo.id') === props.currentOfferingIssuerId && msg.approved
+                        && (
+                          <>
+                            <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
+                          </>
+                        )
                       }
-                      {!props.isIssuer &&
-                        <Link to="/" className="link negative-text" onClick={e => props.deleteCommentHandler(e, msg.id)}>Delete</Link>
+                      {!props.isIssuer
+                        && <Link to="/" className="link negative-text" onClick={e => props.deleteCommentHandler(e, msg.id)}>Delete</Link>
                       }
                     </div>
-                  }
+                  )}
                 />
               </Item>
-            </Aux>
+            </>
           ) : (
-            <Aux>
-              <Item className="sent">
-                <MsgContent
-                  classes={classes}
-                  body={Parser(msg.comment)}
-                  extra={
-                    <Aux>
-                      <Header as="h6">{userFullName}</Header>
-                      <Extra
-                        direction="to"
-                        showApproval={props.isIssuer}
-                        approved={msg.approved}
-                        isIssuer={props.isIssuer}
-                        date={msgDate}
-                        scope={msg.scope}
-                      />
-                    </Aux>
-                  }
-                  edit={
-                    ((msg.scope === 'PUBLIC' && props.isIssuer && !msg.approved) || props.isAdmin) &&
-                    <div className="comment-actions">
-                      <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>
-                      {!props.isIssuer &&
-                      <Aux>{' | '}
-                        <Link to="/" className="link negative-text" onClick={e => props.deleteCommentHandler(e, msg.id)}>Delete</Link>
-                      </Aux>
-                      }
-                    </div>
-                  }
-                />
-                <UserAvatar size="mini" UserInfo={userInfo} />
-              </Item>
-            </Aux>
+              <>
+                <Item className="sent">
+                  <MsgContent
+                    classes={classes}
+                    body={Parser(msg.comment)}
+                    extra={(
+                      <>
+                        <Header as="h6">{userFullName}</Header>
+                        <Extra
+                          direction="to"
+                          showApproval={props.isIssuer}
+                          approved={msg.approved}
+                          isIssuer={props.isIssuer}
+                          date={msgDate}
+                          scope={msg.scope}
+                        />
+                      </>
+                    )}
+                    edit={
+                      ((msg.scope === 'PUBLIC' && props.isIssuer && !msg.approved) || props.isAdmin)
+                      && (
+                        <div className="comment-actions">
+                          <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>
+                          {!props.isIssuer
+                            && (
+                              <>{' | '}
+                                <Link to="/" className="link negative-text" onClick={e => props.deleteCommentHandler(e, msg.id)}>Delete</Link>
+                              </>
+                            )
+                          }
+                        </div>
+                      )
+                    }
+                  />
+                  <UserAvatar size="mini" UserInfo={userInfo} />
+                </Item>
+              </>
           ));
-        }) : <InlineLoader text="No data found." />
+        }) : <InlineLoader text="No comments yet." />
       }
     </Item.Group>
   </div>

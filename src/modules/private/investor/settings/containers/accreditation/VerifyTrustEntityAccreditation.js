@@ -5,12 +5,13 @@ import Verification from './shared/Verification';
 import IncomeEvidence from './shared/IncomeEvidence';
 import PopulateAccreditationSteps from './PopulateAccreditationSteps';
 
-@inject('accreditationStore')
+@inject('accreditationStore', 'uiStore')
 @withRouter
 @observer
 export default class VerifyTrustEntityAccreditation extends React.Component {
-  componentWillMount() {
-    const { accountType } = this.props.match.params;
+  constructor(props) {
+    super(props);
+    const { accountType } = this.props;
     this.props.accreditationStore.getUserAccreditation().then(() => {
       this.props.accreditationStore.setFormData('TRUST_ENTITY_ACCREDITATION_FRM', 'accreditation', accountType);
       this.props.accreditationStore.setFormData('NET_WORTH_FORM', 'accreditation', accountType);
@@ -23,11 +24,13 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
       }
     });
   }
+
   handleStepChange = (step) => {
     this.props.accreditationStore.setStepToBeRendered(step);
   }
+
   multiClickHandler = (step) => {
-    const { params } = this.props.match;
+    const { accountType } = this.props;
     if (step.formName === 'TRUST_ENTITY_ACCREDITATION_FRM' && this.props.accreditationStore[step.formName].fields.method.value !== 'ASSETS') {
       this.props.accreditationStore.setFieldVal('accType', 'trust');
       this.props.history.push(`${this.props.refLink}/falied`);
@@ -35,7 +38,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
     }
     if ((step.formName === 'TRUST_ENTITY_ACCREDITATION_FRM' && this.props.accreditationStore.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === 'ASSETS') || (step.formName !== 'TRUST_ENTITY_ACCREDITATION_FRM' && step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM')) {
       this.props.accreditationStore
-        .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase(), 3)
+        .updateAccreditation(step.formName, accountType.toUpperCase(), 3)
         .then(() => {
           this.handleStepChange(step.stepToBeRendered);
         });
@@ -43,13 +46,31 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
       this.handleStepChange(step.stepToBeRendered);
     }
   }
+
+  handleSubmitStep = () => { // only for mobile screens
+    const { stepToBeRendered } = this.props.accreditationStore;
+    const { multiSteps } = this.props.uiStore;
+    this.multiClickHandler(multiSteps[stepToBeRendered]);
+  }
+
   render() {
     const formArray = [
       { key: 'TRUST_ENTITY_ACCREDITATION_FRM' },
-      { key: 'INCOME_EVIDENCE_FORM', component: <IncomeEvidence isTrust /> },
+      {
+        key: 'INCOME_EVIDENCE_FORM',
+        component: <IncomeEvidence
+          isTrust
+          submitStep={this.handleSubmitStep}
+          {...this.props}
+        />,
+      },
       {
         key: 'VERIFICATION',
-        component: <Verification isEntity refLink={this.props.refLink} type={3} />,
+        component: <Verification
+          isEntity
+          type={3}
+          {...this.props}
+        />,
       },
     ];
     return (
@@ -57,6 +78,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
         multiClickHandler={this.multiClickHandler}
         formArray={formArray}
         formTitle="Verify your status"
+        {...this.props}
       />
     );
   }

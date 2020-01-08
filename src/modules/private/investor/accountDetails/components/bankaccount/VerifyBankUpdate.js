@@ -9,9 +9,10 @@ export default class VerifyBankUpdate extends Component {
   handleCloseModal = (e) => {
     e.stopPropagation();
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
-    const redirectUrl = `/app/account-details/${accountType}/bank-accounts`;
+    const redirectUrl = `/dashboard/account-details/${accountType}/bank-accounts`;
     this.props.history.push(redirectUrl);
   }
+
   render() {
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnDimmerClick={false}>

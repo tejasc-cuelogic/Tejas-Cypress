@@ -1,9 +1,8 @@
 import gql from 'graphql-tag';
 
 export const updateAccreditation = gql`
-  mutation _updateAccreditation($id: String!, $accountId: String!, $accountType: InvestorAccountTypeEnum!, $hasVerifier: Boolean, $userAccreditationDetails: UserAccreditationInput) {
+  mutation updateAccreditation($accountId: String!, $accountType: InvestorAccountTypeEnum!, $hasVerifier: Boolean, $userAccreditationDetails: UserAccreditationInput) {
   updateAccreditation (
-    id: $id
     accountId: $accountId
     accountType: $accountType
     hasVerifier: $hasVerifier
@@ -13,7 +12,7 @@ export const updateAccreditation = gql`
 `;
 
 export const approveOrDeclineForAccreditationRequest = gql`
-  mutation _approveOrDeclineForAccreditationRequest($userId: String!, $accountId: String, $accountType: InvestorAccountTypeEnum, $action: AccreditationStatus!, $justification: String, $expiration: String!, $message: String, $adminJustificationDocs: [FileInfoInput] ) {
+  mutation approveOrDeclineForAccreditationRequest($userId: String!, $accountId: String, $accountType: InvestorAccountTypeEnum, $action: AccreditationStatus!, $justification: String, $expiration: String!, $message: String, $adminJustificationDocs: [FileInfoInput] ) {
     approveOrDeclineForAccreditationRequest (
     userId: $userId
     accountId: $accountId
@@ -28,7 +27,12 @@ export const approveOrDeclineForAccreditationRequest = gql`
 `;
 
 export const listAccreditation = gql`
-  query listAccreditation($page: Int, $search: String, $method: FilterAccreditationMethodEnum, $type: UserAccreditationMethodEnum, $accountCreateFromDate: String, $accountCreateToDate: String, $status: AccreditationStatus, $limit: Int) {
+  query listAccreditation(
+    $page: Int, $search: String, $method: FilterAccreditationMethodEnum,
+    $type: UserAccreditationMethodEnum, $accountCreateFromDate: String,
+    $accountCreateToDate: String, $status: AccreditationStatus, $limit: Int,
+    $sortBy: AccreditationFilterSortByEnum,
+    $sortType: UserFilterSortTypeEnum) {
   listAccreditation (
     page: $page
     search: $search
@@ -38,6 +42,8 @@ export const listAccreditation = gql`
     accountCreateToDate: $accountCreateToDate
     status: $status
     limit: $limit
+    sortBy: $sortBy,
+    sortType: $sortType
   ) {
     accreditation {
       userId

@@ -1,59 +1,77 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, matchPath } from 'react-router-dom';
-import { Sidebar, Menu, Icon, Header, Button } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { Logo, SocialLinks } from '../shared';
-import { NavItems, NavigationItems } from './NavigationItems';
-import Footer from './../../theme/layout/Footer';
-import { GetNavMeta } from '../../theme/layout/SidebarNav';
-import { PUBLIC_NAV } from '../../constants/NavigationMeta';
+import { Logo } from '../shared';
+import { NavItems } from './NavigationItems';
+import Footer from './Footer';
+import { GetNavMeta } from './SidebarNav';
+// import { MOBILE_NAV } from '../../constants/NavigationMeta';
 // import NSImage from '../../modules/shared/NSImage';
 
 const hasFooter = ['/'];
 // const getLogo = path => (path.includes('/lendio') ? 'nextseed_and_lendio.svg' : 'logo.svg');
-@inject('uiStore', 'businessAppStore')
+@inject('uiStore', 'businessAppStore', 'navStore', 'userStore', 'userDetailsStore')
 @observer
 export default class NavBarMobile extends Component {
+  componentWillMount() {
+    if (this.props.userStore.isInvestor) {
+      this.props.navStore.setAccessParams('roles', this.props.currentUser.roles);
+      this.props.navStore.setAccessParams('currentNav', this.props.match.url);
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.userStore.isInvestor) {
+      this.props.navStore.setAccessParams('currentNav', this.props.match.url);
+    }
+  }
+
   setAuthRef = () => {
     this.props.uiStore.setAuthRef(this.props.location.pathname);
   }
+
   render() {
     const {
       onPusherClick, onToggle, visible,
       publicContent, location, isMobile,
       navStatus, currentUser, stepInRoute,
-      hasHeader,
+      hasHeader, userDetailsStore,
     } = this.props;
+    const isNewCampaign = location.pathname.startsWith('/offerings');
     const nav = GetNavMeta(location.pathname, [], true);
     let navTitle = nav ? nav.title : '';
     const logInSignUp = stepInRoute.to !== 'login' ? [
-      { to: 'login', title: 'Log In', className: 'basic' },
-      { to: 'register', title: 'Sign Up', className: 'secondary' },
-    ] :
-      [{ ...stepInRoute, className: 'secondary' }];
+      { to: 'login', title: 'Log In', className: 'basic primary' },
+      { to: 'register', title: 'Sign Up', className: 'primary' },
+    ]
+      : [{ ...stepInRoute, className: 'primary' }];
     if (location.pathname.startsWith('/invest')) {
-      navTitle = 'Investing';
+      navTitle = 'For Investors';
     } else if (location.pathname.startsWith('/business') && !location.pathname.startsWith('/business-application/')) {
-      navTitle = 'Fundraising';
-    } else if (location.pathname.startsWith('/resources/education-center')) {
-      navTitle = 'Education Center';
-    } else if (location.pathname.startsWith('/resources/insights')) {
+      navTitle = 'For Businesses';
+    } else if (location.pathname.startsWith('/education-center')) {
+      navTitle = 'Education';
+    } else if (location.pathname.startsWith('/insights')) {
       navTitle = 'Insights';
     } else if (location.pathname.startsWith('/offerings')) {
       navTitle = '';
-    } else if (location.pathname.startsWith('/agreements/legal')) {
+    } else if (location.pathname.startsWith('/legal')) {
       navTitle = 'Legal';
     }
+    const { signupStatus, pendingStep } = userDetailsStore;
+    const isAddNewAccount = signupStatus && !signupStatus.finalStatus && signupStatus.investorProfileCompleted && signupStatus.inActiveAccounts.length > 0;
+    const loggedInNavs = this.props.navStore.myMobileRoutes.filter(e => (e.isLoggedIn && this.props.userStore.isInvestor && (e.title !== 'Add New Account' || (e.title === 'Add New Account' && isAddNewAccount))));
+    const publicNav = this.props.navStore.myMobileRoutes.filter(e => !e.isLoggedIn || (!this.props.userStore.isInvestor && e.to === 'offerings'));
     // const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
     return (
-      <Aux>
+      <>
         <Sidebar.Pushable className={visible && 'show-pushable'}>
           {hasHeader && (
-            <Aux>
+            <>
               <div
-                className={`${location.pathname.startsWith('/business-application/') && 'business-hamburger'} full-logo`}
+                className={`${location.pathname.startsWith('/business-application/') && 'business-hamburger'} full-logo ${isNewCampaign ? 'full-logo-v2' : ''}`}
                 onClick={!visible ? onToggle : false}
                 onKeyPress={!visible ? onToggle : false}
                 role="button"
@@ -61,39 +79,50 @@ export default class NavBarMobile extends Component {
               >
                 <Icon className="ns-hamburger" role="button" tabIndex="0" />
               </div>
-              {location.pathname.startsWith('/business-application/') ?
-                <NavigationItems
-                  {...this.props}
-                  isMobBussinessApp
-                  isPrequalQulify={this.props.businessAppStore.isPrequalQulify}
-                /> :
-                <div
-                  className={`public-header-section ${visible ? 'active' : ''}
-                  ${navStatus === 'sub' ? 'slide-up' : ''}`}
-                >
-                  {navTitle === 'Home' || (location.pathname.startsWith('/offerings')) ?
-                    <Logo
-                      dataSrc="LogoGreenGrey"
-                      className="mobile-header-logo"
-                    /> :
-                    <Header as="h5">{navTitle}</Header>
-                  }
-                  {!currentUser ? (
-                    <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in neutral-text">
-                      {stepInRoute.title}
+              {/* {location.pathname.startsWith('/business-application/')
+                ? (
+                  <NavigationItems
+                    {...this.props}
+                    isMobBussinessApp
+                    isPrequalQulify={this.props.businessAppStore.isPrequalQulify}
+                  />
+                ) */}
+                {/* : ( */}
+                  <div className={`public-header-section ${isNewCampaign ? 'public-header-section-v2' : ''} ${visible ? 'active' : ''} ${navStatus === 'sub' ? 'slide-up' : ''}`}>
+                    {navTitle === 'Home' || (location.pathname.startsWith('/offerings') || this.props.userStore.isInvestor)
+                      ? (
+                        <Link to="/">
+                          <Logo
+                            dataSrc="LogoGreenGrey"
+                            className="mobile-header-logo"
+                          />
+                        </Link>
+                      )
+                      : (
+                        <Link to="/">
+                          <Logo
+                            dataSrc="LogoGreenGrey"
+                            className="mobile-header-logo"
+                          />
+                        </Link>
+                      )}
+                    {!currentUser ? (
+                      <Link onClick={this.setAuthRef} to={`/${stepInRoute.to}`} className="sign-in neutral-text">
+                        {stepInRoute.title}
+                      </Link>
+                    ) : ((this.props.userStore.isInvestor && !location.pathname.startsWith('/dashboard')) || !this.props.userStore.isInvestor) ? (
+                      <Link
+                        to={this.props.userStore.isInvestor ? pendingStep : '/dashboard'}
+                        className="sign-in neutral-text"
+                      >
+                        Dashboard
                     </Link>
-                  ) : (
-                    <Link
-                      to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
-                      className="sign-in neutral-text"
-                    >
-                      Dashboard
-                    </Link>
-                  )
-                  }
-                </div>
-              }
-            </Aux>
+                    ) : null
+                    }
+                  </div>
+                {/* )
+              } */}
+            </>
           )}
           <Sidebar
             as={Menu}
@@ -110,7 +139,29 @@ export default class NavBarMobile extends Component {
               renderThumbHorizontal={p => <div {...p} className="thumb-horizontal" />}
               renderView={p => <div {...p} className="view" />}
             >
-              <Icon onClick={onToggle} className="ns-close-light" />
+              <div className="sidebar-logo">
+                <Link onClick={onToggle} to="/" className="logo">
+                  <Logo
+                    dataSrc="LogoGreenGrey"
+                    className="mobile-header-logo"
+                  />
+                </Link>
+                <Icon onClick={onToggle} className="ns-close-light" />
+              </div>
+              {this.props.userStore.isInvestor
+                && (
+                  <div className="public-header-nav logged-in-nav">
+                    <NavItems
+                      refLoc="public"
+                      currentUser={currentUser}
+                      location={location}
+                      isMobile={isMobile}
+                      navStatus={navStatus}
+                      onToggle={onToggle}
+                      navItems={loggedInNavs}
+                    />
+                  </div>
+                )}
               <div className="public-header-nav">
                 <NavItems
                   refLoc="public"
@@ -119,47 +170,52 @@ export default class NavBarMobile extends Component {
                   isMobile={isMobile}
                   navStatus={navStatus}
                   onToggle={onToggle}
-                  navItems={PUBLIC_NAV}
+                  navItems={publicNav}
                 />
-                {/* <NavItems
-                  refLoc="public"
-                  currentUser={currentUser}
-                  location={location}
-                  isMobile={isMobile}
-                  navStatus={navStatus}
-                  onToggle={onToggle}
-                  navItems={FOOTER_NAV}
-                /> */}
-                <div className="public-action-nav mt-20">
+                <div className="public-action-nav mt-20 mb-20">
                   {!currentUser ? logInSignUp.map(route => (
                     <Menu.Item className="btn-item">
-                      <Button fluid as={Link} onClick={this.setAuthRef} to={`/auth/${route.to}`} className={`${route.className}`} compact>{route.title}</Button>
+                      <Button fluid as={Link} onClick={this.setAuthRef} to={`/${route.to}`} className={`${route.className}`} compact>{route.title}</Button>
                     </Menu.Item>
-                  )) :
-                  <Menu.Item className="btn-item">
-                    <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" basic compact>Logout</Button>
-                  </Menu.Item>
+                  ))
+                    : (
+                      <>
+                        {/* {this.props.userStore.isInvestor
+                          && signupStatus && signupStatus.finalStatus && signupStatus.investorProfileCompleted
+                          && signupStatus.inActiveAccounts.length > 0
+                          && (
+                            <Menu.Item className="btn-item mt-30">
+                              <Button fluid basic compact as={Link} to="/dashboard/setup/account-creation" content="Add New Account" />
+                            </Menu.Item>
+                          )
+                        } */}
+                        <Menu.Item className="btn-item">
+                          <Button fluid as={Link} onClick={this.props.handleLogOut} to="/" basic compact>Logout</Button>
+                        </Menu.Item>
+                      </>
+                    )
                   }
                 </div>
               </div>
             </Scrollbars>
           </Sidebar>
-          <div className="social-media">
+          {/* <div className="social-media">
             <Menu>
               <SocialLinks />
             </Menu>
-          </div>
+          </div> */}
           <Sidebar.Pusher
             dimmed={visible}
             onClick={onPusherClick}
-            className={`public-pusher ${!hasHeader && 'noheader'}`}
+            className={`public-pusher ${isNewCampaign ? 'public-pusher-v2' : ''} ${!hasHeader && 'noheader'} ${location.pathname.startsWith('/dashboard') ? 'private-pusher' : ''}`}
           >
             {publicContent}
-            {(hasFooter.find(item => matchPath(location.pathname, { path: item }))) &&
-            <Footer path={location.pathname} />}
+            {this.props.userStore.isInvestor && this.props.children}
+            {!location.pathname.startsWith('/dashboard') && (hasFooter.find(item => matchPath(location.pathname, { path: item })))
+              && <Footer path={location.pathname} />}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
-      </Aux>
+      </>
     );
   }
 }

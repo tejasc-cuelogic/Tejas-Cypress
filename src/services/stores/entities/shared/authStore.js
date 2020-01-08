@@ -8,36 +8,61 @@ import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS, NEWSLETTER,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
-import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup, checkMigrationByEmail } from '../../queries/profile';
+import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup } from '../../queries/profile';
 import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
+import { createAdminUser } from '../../queries/users';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '../../index';
+import { uiStore, navStore, identityStore, userDetailsStore, userStore, businessAppStore } from '../../index';
+import { validateOfferingPreviewPassword } from '../../queries/campagin';
 
 
 export class AuthStore {
   @observable hasSession = false;
+
   @observable isUserLoggedIn = false;
+
   @observable newPasswordRequired = false;
+
   @observable cognitoUserSession = null;
+
+  @observable isBoxApiChecked = false;
+
   @observable isOfferPreviewUrl = false;
+
   @observable capabilities = [];
+
   @observable userId = null;
+
+  @observable emailList = [];
+
   @observable devAuth = {
-    required: !['production', 'localhost', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV),
+    required: !['production', 'localhost', 'prod', 'master', 'infosec'].includes(REACT_APP_DEPLOY_ENV),
     authStatus: cookie.load('DEV_AUTH_TOKEN'),
   };
+
   @observable LOGIN_FRM = Validator.prepareFormObject(LOGIN);
+
   @observable SIGNUP_FRM = Validator.prepareFormObject(SIGNUP);
+
   @observable CONFIRM_FRM = Validator.prepareFormObject(CONFIRM);
+
   @observable CHANGE_PASS_FRM = Validator.prepareFormObject(CHANGE_PASS);
+
   @observable FORGOT_PASS_FRM = Validator.prepareFormObject(FORGOT_PASS);
+
   @observable RESET_PASS_FRM = Validator.prepareFormObject(RESET_PASS);
+
   @observable NEWSLETTER_FRM = Validator.prepareFormObject(NEWSLETTER);
+
   @observable confirmProgress = false;
+
   @observable pwdInputType = 'password';
+
   @observable currentScore = 0;
+
   @observable idleTimer = null;
+
   @observable checkEmail = false;
 
   @action
@@ -89,8 +114,7 @@ export class AuthStore {
       cookie.save('ROLE_VALUE', result.value, { maxAge: 1200 });
     }
     if (e.password || e.password === '') {
-      this.SIGNUP_FRM =
-        Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
+      this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
       if (this.SIGNUP_FRM.fields.password.value === this.SIGNUP_FRM.fields.verify.value) {
         this.SIGNUP_FRM.fields.verify.error = undefined;
       }
@@ -130,8 +154,7 @@ export class AuthStore {
         score: 'score',
       };
       const newObj = this.renameKeys(ojbNew, e);
-      this.CHANGE_PASS_FRM =
-        Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValuesForCangePassword(newObj, res));
+      this.CHANGE_PASS_FRM = Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValuesForCangePassword(newObj, res));
     } else {
       this.CHANGE_PASS_FRM = Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValues(e, res));
     }
@@ -148,8 +171,7 @@ export class AuthStore {
   @action
   resetPassChange = (e, res) => {
     if (e.password || e.password === '') {
-      this.RESET_PASS_FRM =
-        Validator.onChange(this.RESET_PASS_FRM, Validator.pullValuesForPassword(e, res));
+      this.RESET_PASS_FRM = Validator.onChange(this.RESET_PASS_FRM, Validator.pullValuesForPassword(e, res));
     } else {
       this.RESET_PASS_FRM = Validator.onChange(this.RESET_PASS_FRM, typeof e === 'string' ? { name: 'code', value: e } : Validator.pullValues(e, res));
     }
@@ -209,8 +231,9 @@ export class AuthStore {
     if (this.isUserLoggedIn) {
       const { password, email } = this.CONFIRM_FRM.fields;
       const userCredentials = {
-        email: email.value || localStorage.getItem('changedEmail') ||
-          get(userDetailsStore, 'userDetails.email.address') || '',
+        email: email.value
+        || get(userDetailsStore, 'userDetails.email.address')
+        || sessionStorage.getItem('changedEmail') || '',
         password: password.value,
         givenName: get(userDetailsStore, 'userDetails.info.firstName') || '',
       };
@@ -236,10 +259,11 @@ export class AuthStore {
   resetForm = (form, targetedFields = undefined) => {
     Validator.resetFormData(this[form], targetedFields);
   }
+
   @computed
   get canSubmitConfirmEmail() {
-    return !isEmpty(this.CONFIRM_FRM.fields.email.value) && !this.CONFIRM_FRM.fields.email.error &&
-      !isEmpty(this.CONFIRM_FRM.fields.code.value) && !this.CONFIRM_FRM.fields.code.error;
+    return !isEmpty(this.CONFIRM_FRM.fields.email.value) && !this.CONFIRM_FRM.fields.email.error
+      && !isEmpty(this.CONFIRM_FRM.fields.code.value) && !this.CONFIRM_FRM.fields.code.error;
   }
 
   @action
@@ -349,6 +373,8 @@ export class AuthStore {
     this.resetForm('FORGOT_PASS_FRM', null);
     this.resetForm('RESET_PASS_FRM', null);
     this.resetForm('NEWSLETTER_FRM', null);
+    this.newPasswordRequired = false;
+    this.isUserLoggedIn = false;
   }
 
   @action
@@ -356,9 +382,14 @@ export class AuthStore {
     this.capabilities = capabilities;
   }
 
+  isEmailExist = email => (this.emailList.find(e => e === email))
+
   @action
-  checkEmailExistsPresignup = email => new Promise((res, rej) => {
-    if (DataFormatter.validateEmail(email)) {
+  checkEmailExistsPresignup = (email, isBusinessApplication = false) => new Promise((res) => {
+    if (DataFormatter.validateEmail(email) && !this.isEmailExist(email)) {
+      if (isBusinessApplication) {
+        uiStore.setProgress();
+      }
       this.checkEmail = graphql({
         client: clientPublic,
         query: checkEmailExistsPresignup,
@@ -367,15 +398,23 @@ export class AuthStore {
         },
         onFetch: (data) => {
           uiStore.clearErrors();
-          if (!this.checkEmail.loading && data && data.checkEmailExistsPresignup) {
-            this.SIGNUP_FRM.fields.email.error = 'E-mail already exists, did you mean to log in?';
-            this.SIGNUP_FRM.meta.isValid = false;
+          if (!this.checkEmail.loading && get(data, 'checkEmailExistsPresignup.isEmailExits')) {
+            if (isBusinessApplication) {
+              businessAppStore.setFieldvalue('userRoles', get(data, 'checkEmailExistsPresignup.roles'));
+              businessAppStore.setFieldvalue('userExists', true);
+              businessAppStore.setBasicFormError(get(data, 'checkEmailExistsPresignup.roles') && get(data, 'checkEmailExistsPresignup.roles').includes('issuer') ? 'This email is already exists as an issuer. Please Log In' : `This email address is already exists as ${get(data, 'checkEmailExistsPresignup.roles').includes('admin') ? 'admin' : 'investor'}. Please try with differrent email.`);
+              res(true);
+            } else {
+              this.emailList.push(email);
+              this.SIGNUP_FRM.fields.email.error = 'Email already exists, did you mean to log in?';
+              this.SIGNUP_FRM.meta.isValid = false;
+              res(false);
+            }
             uiStore.setProgress(false);
-            rej();
-          } else if (!this.checkEmail.loading && data && !data.checkEmailExistsPresignup) {
+          } else if (!this.checkEmail.loading && !get(data, 'checkEmailExistsPresignup.isEmailExits')) {
             this.SIGNUP_FRM.fields.email.error = '';
             uiStore.setProgress(false);
-            res();
+            res(true);
           }
         },
         onError: (err) => {
@@ -384,37 +423,12 @@ export class AuthStore {
         },
         fetchPolicy: 'network-only',
       });
+    } else {
+      this.SIGNUP_FRM.fields.email.error = 'Email already exists, did you mean to log in?';
+      this.SIGNUP_FRM.meta.isValid = false;
+      uiStore.setProgress(false);
+      res(false);
     }
-  });
-
-  @action
-  checkMigrationByEmail = params => new Promise((res, rej) => {
-    uiStore.setProgress();
-    clientPublic.mutate({
-      mutation: checkMigrationByEmail,
-      variables: {
-        migrationByEmailData: params,
-      },
-    })
-      .then((data) => {
-        if (!data.data.checkMigrationByEmail) {
-          uiStore.setProgress(false);
-          uiStore.setErrors({
-            message: 'There was a problem with authentication',
-            code: 'checkMigrationByEmailFailed',
-          });
-        }
-        res(data.data.checkMigrationByEmail);
-      })
-      .catch((err) => {
-        uiStore.setProgress(false);
-        uiStore.setErrors({
-          message: 'There was a problem with authentication',
-          code: 'checkMigrationByEmailFailed',
-        });
-        rej(err);
-      })
-      .finally(() => { });
   });
 
   @action
@@ -439,8 +453,8 @@ export class AuthStore {
 
   @action
   subscribeToNewsletter = () => new Promise((res, rej) => {
+    this.NEWSLETTER_FRM = Validator.validateForm(this.NEWSLETTER_FRM, false, true);
     if (!this.NEWSLETTER_FRM.meta.isValid) {
-      this.resetForm('NEWSLETTER_FRM', null);
       rej();
     } else {
       uiStore.setProgress();
@@ -463,9 +477,29 @@ export class AuthStore {
     }
   });
 
+  IsInvalidException = (res) => {
+    if (get(res, 'graphQLErrors[0].message')) {
+      try {
+        const parsedError = JSON.parse(get(res, 'graphQLErrors[0].message'));
+        if (parsedError.code === 'OFFERING_EXCEPTION') {
+          return true;
+        }
+      } catch {
+        if (get(res, 'graphQLErrors[0].message').includes('OFFERING_EXCEPTION')) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   sendErrorMail = (res) => {
     const errors = {};
     const gqlErr = {};
+
+    if (this.IsInvalidException(res)) {
+      return;
+    }
 
     if (this.isUserLoggedIn) {
       errors.userEmailId = userStore.getUserEmailAddress();
@@ -487,8 +521,10 @@ export class AuthStore {
 
       errors.networkError = networkErr;
     }
-
-
+    if (window.FS && window.FS.getCurrentSessionURL) {
+      const fullStorySession = window.FS.getCurrentSessionURL(true);
+      errors.fullStoryUrl = fullStorySession;
+    }
     const params = {
       emailContent: JSON.stringify(errors),
     };
@@ -496,6 +532,45 @@ export class AuthStore {
       console.log('Error while calling notifyApplicationError', e);
     });
   }
+
+  @action
+  validateOfferingPreviewPassword = (offeringSlug, previewPassword) => new Promise((res, rej) => {
+    graphql({
+      client: clientPublic,
+      query: validateOfferingPreviewPassword,
+      variables: {
+        offeringSlug,
+        previewPassword,
+      },
+      onFetch: (data) => {
+        uiStore.clearErrors();
+        if (data) {
+          res(get(data, 'validateOfferingPreviewPassword'));
+        }
+      },
+      onError: (err) => {
+        uiStore.setErrors(err);
+        uiStore.setProgress(false);
+        Helper.toast('Something went wrong, please try again.', 'error');
+        rej();
+      },
+      fetchPolicy: 'network-only',
+    });
+  });
+
+  @action
+  createAdminUser = email => new Promise((res, rej) => {
+    client.mutate({
+      mutation: createAdminUser,
+      variables: { email },
+    })
+      .then((data) => {
+        res(data.createAdminUser);
+      })
+      .catch((err) => {
+        rej(err);
+      });
+  });
 }
 
 export default new AuthStore();

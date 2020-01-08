@@ -1,51 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
+import { Link, Route, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Grid, Button, Container, List, Item, Responsive, Divider } from 'semantic-ui-react';
-import { NsCarousel } from '../../../../theme/shared';
+import { Header, Grid, Container, Button, Divider, Responsive, Icon, Item, Segment, Card } from 'semantic-ui-react';
+import { NsCarousel, VideoModal } from '../../../../theme/shared';
 import NSImage from '../../../shared/NSImage';
 
-const highlights = [
-  {
-    title: 'Businesses you understand',
-    icon: 'icons/businesses.svg',
-    meta: `Investments in Main Street businesses and local properties 
-      generating real cash flow.`,
-  },
-  {
-    title: 'Impactful investments',
-    icon: 'icons/entrepreneurs.svg',
-    meta: `Local business owners, local jobs and local growth.
-    Create real impact in local communities nationwide`,
-  },
-  {
-    title: 'Pre-vetted opportunities',
-    icon: 'icons/prevetted.svg',
-    meta: (
-      <Aux>
-      Only the top 3% of businesses meet our
-    proprietary financial criteria.<sup>1</sup>
-      </Aux>),
-  },
-  {
-    title: 'Flexible amounts',
-    icon: 'icons/investments.svg',
-    meta: 'Never invest more than you can risk. Investments may start as low as $100.',
-  },
-  {
-    title: 'Exclusive deals',
-    icon: 'icons/ventures.svg',
-    meta: `Uncover opportunities that were once privately reserved for wealthy
-      and well-connected investors.`,
-  },
-  {
-    title: 'Returns processed for you',
-    icon: 'icons/returns.svg',
-    meta: `No need to chase payments from business owners. NextSeed facilitates
-     payment processing from your investments automatically.`,
-  },
-];
 const settings = {
   slidesToShow: 1,
   slidesToScroll: 1,
@@ -53,174 +12,222 @@ const settings = {
   dots: false,
 };
 const businesses = [
-  [
-    {
-      title: 'Houston, TX',
-      image: 'investors/img-2.png',
-      description: 'Bravery Chef Hall raised $1,000,000 from 539 investors ',
-    },
-    {
-      title: 'Seattle, WA',
-      image: 'investors/img.png',
-      description: 'Fair Isle Brewing raised $327,800 from 292 investors',
-    },
-    {
-      title: 'Austin, TX',
-      image: 'investors/img-1.png',
-      description: 'The Brewer’s Table raised $300,000 from 190 investors',
-    },
-  ],
-  [
-    {
-      title: 'San Diego, CA',
-      image: 'investors/img-5.png',
-      description: '619 Distillery & Tasting Room raised $191,600 from 238 investors',
-    },
-    {
-      title: 'Brooklyn, NY',
-      image: 'investors/img-3.png',
-      description: 'Oxalis raised $141,500 from 214 investors',
-    },
-    {
-      title: 'Salt Lake City, UT',
-      image: 'investors/img-4.png',
-      description: 'MOB Cycle raised $117,400 from 132 investors',
-    },
-  ],
+  {
+    title: 'Houston, TX',
+    image: 'investors/img-2.jpg',
+    description: '539 members invested $1,000,000 to open Bravery Chef Hall',
+  },
+  {
+    title: 'Seattle, WA',
+    image: 'investors/img-1.jpg',
+    description: '292 members invested $327,800 to launch Fair Isle Brewing',
+  },
+  {
+    title: 'Denver, CO',
+    image: 'investors/img.jpg',
+    description: '289 members invested $300,000 in Urban Putt’s second location',
+  },
 ];
-const isMobile = document.documentElement.clientWidth < 768;
-@inject('authStore')
+const highlights = [
+  {
+    title: 'Explore',
+    icon: 'icons/compass-icon.svg',
+    meta: 'Browse a curated selection of pre-vetted businesses that have passed our strict screening process.',
+    extra: 'Our vetting process',
+    link: '/resources/education-center/investor/business-survival',
+  },
+  {
+    title: 'Invest',
+    icon: 'icons/money-icon.svg',
+    meta: 'Invest with an Individual account, an Investment Entity, or a new Self-Directed IRA.',
+    extra: 'Our types of accounts offered',
+    link: '/resources/education-center/investor/account-opening-requirements-and-options',
+  },
+  {
+    title: 'Receive',
+    icon: 'icons/arrows-icon.svg',
+    meta: 'NextSeed collects and processes any payments directly into your investment account.',
+    extra: 'Our payments process',
+    link: '/resources/education-center/investor/payments',
+  },
+];
+@inject('uiStore', 'userStore')
+@withRouter
 @observer
 export default class WhyNextseed extends Component {
+  handleApplyCta = () => {
+    this.props.uiStore.setAuthRef('/investors');
+    this.props.history.push('/register-investor');
+  }
+
   render() {
-    const { authStore } = this.props;
+    const { responsiveVars } = this.props.uiStore;
+    const { userStore } = this.props;
     return (
-      <Aux>
-        <section className="why-nextseed-section">
-          <Container>
-            <Responsive maxWidth={767} as={Aux}>
-              <Header as="h2">
-               Get access to<br />pre-vetted, local<br />investments.
-              </Header>
-              <Button as={Link} to="/offerings" secondary>Explore Campaigns</Button>
-              <Divider section />
-            </Responsive>
-            <Header as="h2" className="mb-30" textAlign={isMobile ? 'left' : 'center'}>
-            Small business investing, made easy.
+      <>
+        <Container>
+          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+            <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-30'} textAlign={responsiveVars.uptoTablet ? 'left' : 'center'}>
+              Alternative investments, made simple
             </Header>
-            <Responsive as={Divider} hidden maxWidth={767} />
-            <Grid stackable centered className={!isMobile && 'mt-50'}>
-              <Grid.Column width={14}>
-                <Item.Group className="horizontal-items">
-                  {
+            <p className={responsiveVars.uptoTablet ? 'mb-30' : 'center-align mb-70'}>You can harness our cutting-edge technology and expertise in private investments to build your portfolio.</p>
+            <div className="how-it-works-steps">
+              <Item.Group className="horizontal-items home-page">
+                {
                   highlights.map(h => (
                     <Item>
                       <div className="ui mini image">
                         <NSImage path={h.icon} />
                       </div>
                       <Item.Content>
-                        <Item.Header as="h5">{h.title}</Item.Header>
+                        <Item.Header as="h6">{h.title}</Item.Header>
                         <Item.Meta>{h.meta}</Item.Meta>
+                        <Item.Extra>
+                          <Link to={h.link}>
+                            {h.extra}
+                            <Icon className="ns-chevron-right ml-10" color="green" />
+                          </Link>
+                        </Item.Extra>
                       </Item.Content>
                     </Item>
                   ))
                 }
-                </Item.Group>
-              </Grid.Column>
-            </Grid>
-            <div className="center-align mb-50">
-              { !authStore.isUserLoggedIn &&
-                <Button className={!isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
-              }
+              </Item.Group>
             </div>
-            <p className="note center-align mb-50">
-              <sup>1</sup>This represents the percent of businesses that began the application
-              process, passed NextSeed&apos;s objective diligence<Responsive minWidth={992} as="br" /> criteria, and launched an offering
-              on the platform since NextSeed&apos;s inception.
-            </p>
-            {/* <Grid className="business-learn-more mb-30">
-            <Grid.Row>
-              <Grid.Column className="center-align">
-                <List horizontal relaxed className="learn-more-list left-align">
-                  <List.Item>
-                    <List.Header>Learn more</List.Header>
-                    <List.Content>Why invest on <a href="/">NextSeed?</a></List.Content>
-                  </List.Item>
-                  <List.Item>
-                    {!isMobile &&
-                      <List.Header>&nbsp;</List.Header>
-                    }
-                    <List.Content>What are the <a href="/">risk of investing?</a></List.Content>
-                  </List.Item>
-                </List>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid> */}
-            <Divider fitted as={Container} />
-            <section>
-              <Container textAlign={isMobile ? 'left' : 'center'}>
-                <Header as="h2" className="mb-30">
-                Don’t just invest through Wall Street and Silicon Valley.{' '}
-                  <Responsive as={Aux} minWidth={1199}><br /></Responsive>
-                Be invested in the growth of local communities.
+            <Link to="/investors/video" className="no-decoration">
+              <Segment className={`${responsiveVars.uptoTablet ? 'mt-30' : 'mt-70'} video-segment`}>
+                <Header as={responsiveVars.uptoTablet ? 'h2' : 'h3'} textAlign="center">
+                  Watch our video
+                    <Icon size="large" color="green" className="ns-play play-icon ml-16" />
                 </Header>
-                <p className={isMobile ? 'mb-40' : 'mb-50'}>
-                NextSeed works with Main Street businesses like breweries, fitness studios,
-                restaurants and more.
-                </p>
-              </Container>
-              {!isMobile ?
+              </Segment>
+            </Link>
+          </section>
+          <Divider fitted as={!responsiveVars.uptoTablet && Container} />
+          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+            <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-30 center-align'}>Invest in the growth of local communities </Header>
+            <p className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-70 center-align'}>
+              Don{"'"}t just invest through Wall Street and Silicon Valley - put your capital to work with<Responsive minWidth={992} as="br" /> main street businesses, growing startups, experiential real estate, and more.
+            </p>
+            {!responsiveVars.uptoTablet
+              ? (
                 <Container>
-                  <Grid centered stackable className="vertical-gutter">
-                    {businesses.map((row, index) => (
-                      <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
-                        {
-                        row.map(b => (
-                          <Grid.Column textAlign="center" width={4}>
-                            <NSImage path={b.image} centered />
+                  <Card.Group itemsPerRow={3}>
+                    {
+                      businesses.map(b => (
+                        <Card className="bordered center-align">
+                          <NSImage path={b.image} centered />
+                          <Card.Content>
                             <Header as="h5">{b.title}</Header>
                             <p>{b.description}</p>
-                          </Grid.Column>
-                        ))
-                      }
-                      </Grid.Row>
-                    ))
-                  }
-                  </Grid>
-                </Container>
-            :
-                <Aux>
-                  <Container>
-                    <NsCarousel {...settings}>
-                      {businesses.map(row => (
-                        row.map(b => (
-                          <Grid.Row>
-                            <Grid.Column className="center-align">
-                              <NSImage path={b.image} centered />
-                              <Header as="h5">{b.title}</Header>
-                              <p>{b.description}</p>
-                            </Grid.Column>
-                          </Grid.Row>
-                        ))
+                          </Card.Content>
+                        </Card>
                       ))
                     }
+                  </Card.Group>
+                </Container>
+              )
+              : (
+                <>
+                  <Container>
+                    <NsCarousel {...settings} className="investor-slide">
+                      {businesses.map(b => (
+                        <Card className="bordered center-align">
+                          <NSImage path={b.image} centered />
+                          <Card.Content>
+                            <Header as="h5">{b.title}</Header>
+                            <p>{b.description}</p>
+                          </Card.Content>
+                        </Card>
+                      ))
+                      }
                     </NsCarousel>
                   </Container>
-                </Aux>
+                </>
+              )
             }
-            </section>
-            <Divider />
-            <List className="learn-more-list">
-              <List.Item>
-                <List.Content as={Link} to="/invest/how-it-works" className="text-uppercase" floated="right">
-                  <b>How it Works</b>
-                  <List.Icon className="ns-arrow-right" color="green" />
-                </List.Content>
-              </List.Item>
-            </List>
-          </Container>
-        </section>
-      </Aux>
+          </section>
+          <Divider fitted as={!responsiveVars.uptoTablet && Container} />
+          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+            <Grid>
+              <Grid.Row>
+                <Grid.Column widescreen={6} computer={6} tablet={16} mobile={16} verticalAlign="middle">
+                  <div>
+                    <Header as="h2">Your portfolio at<Responsive as="br" minWidth={768} /> your fingertips</Header>
+                    <p className="mb-30 mt-30">
+                      See how your investments are performing<Responsive as="br" minWidth={768} /> and reinvest any earnings effortlessly with<Responsive as="br" minWidth={768} /> our easy-to-use dashboard.</p>
+                    {!userStore.isInvestor && !userStore.isIssuer && !responsiveVars.isMobile
+                      && (
+                        <Button onClick={this.handleApplyCta} primary className="mb-30">Create a  Free Account</Button>
+                      )
+                    }
+                  </div>
+                </Grid.Column>
+                <Grid.Column widescreen={10} computer={10} tablet={16} mobile={16}>
+                  <NSImage path="investors/mackbook-mockup.png" />
+                  {!userStore.isInvestor && !userStore.isIssuer && responsiveVars.isMobile
+                    && (
+                      <Button fluid onClick={this.handleApplyCta} primary className="mt-30">Create a  Free Account</Button>
+                    )
+                  }
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </section>
+          <Divider fitted as={!responsiveVars.uptoTablet && Container} />
+          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'investor-priority-section pt-100'}>
+            <Grid>
+              <Grid.Row>
+                {!responsiveVars.isMobile
+                  && (
+                    <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16} />
+                  )
+                }
+                <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
+                  <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-50'}>Your security is our top priority</Header>
+                  {responsiveVars.isMobile
+                    && <NSImage path="investors/left-phone-mockup-mobile.png" className="mb-20" />
+                  }
+                  <Header as="h5" className="mb-10">Your funds stay safe and sound.</Header>
+                  <p className={responsiveVars.uptoTablet ? 'mb-14' : 'mb-20'}>
+                    The uninvested cash  in your account <sup>1</sup> is FDIC-insured up
+                    to $250,000.
+                  </p>
+                  <Header as="h5" className="mb-10">Keep your information protected.</Header>
+                  <p className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-50'}>We safeguard your information with bank-level security measures</p>
+                  <NSImage path="ssl.jpg" />
+                  <p className={`note ${responsiveVars.uptoTablet ? 'mt-30' : 'mt-50 mb-50'}`}>
+                    <sup>1</sup> NextSeed accounts are provided and held at our partner bank, Happy
+                    State Bank DBA GoldStar Trust Company (&quot;GoldStar&quot;), which provides FDIC
+                    insurance for uninvested cash in NextSeed accounts.
+                  </p>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </section>
+          <Divider fitted as={!responsiveVars.uptoTablet && Container} />
+          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+            <Grid centered reversed="mobile">
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
+                <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-50'}>Every investment comes <Responsive minWidth={992} as="br" />with risk and opportunity</Header>
+                <p>
+                  Remember, returns and bonus rewards are not guaranteed. Investments can be lost entirely.
+                  Be sure to do your own due diligence, review all offering documents carefully,
+                  and never invest more than you can afford to lose.
+                </p>
+                <Divider hidden />
+                <p>
+                  Businesses may fail, but those that succeed can make a lasting impact in your city.
+                </p>
+              </Grid.Column>
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right">
+                <NSImage path="investors/couple-pitch.jpg" fluid />
+              </Grid.Column>
+            </Grid>
+          </section>
+        </Container>
+        <Route path="/investors/video" render={props => <VideoModal {...props} videoDetails={{ embed: 307106547 }} />} />
+      </>
     );
   }
 }

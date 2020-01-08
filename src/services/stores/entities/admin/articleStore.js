@@ -1,7 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
-import { map, kebabCase, sortBy, remove, orderBy, filter, get } from 'lodash';
+import { map, kebabCase, sortBy, remove, orderBy, filter, get, join } from 'lodash';
 import isArray from 'lodash/isArray';
 import mapKeys from 'lodash/mapKeys';
 import mapValues from 'lodash/mapValues';
@@ -9,30 +9,44 @@ import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { ARTICLES, THUMBNAIL_EXTENSIONS } from '../../../constants/admin/article';
-import { getArticleDetailsBySlug, deleteArticle, allInsightArticles, getArticleDetails, getArticlesByCatId, getArticleById, createArticle, updateArticle, insightArticlesListByFilter } from '../../queries/insightArticle';
+import { getArticleDetailsBySlug, deleteArticle, allInsightArticles, getArticleDetails, getArticleById, createArticle, updateArticle, insightArticlesListByFilter } from '../../queries/insightArticle';
 import { getCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
-import { uiStore, commonStore } from '../../../../services/stores';
+import { uiStore, commonStore } from '../..';
 import { fileUpload } from '../../../actions';
 
 export class ArticleStore {
     @observable data = [];
+
     @observable Categories = [];
+
     @observable article = null;
+
     @observable ARTICLE_FRM = Validator.prepareFormObject(ARTICLES);
+
     @observable featuredData = [];
+
     @observable featuredCategoryId = '406735f5-f83f-43f5-8272-180a1ea570b0';
+
     @observable filters = false;
+
     @observable currentArticleId = null;
+
     @observable globalAction = '';
+
     @observable allInsightsList = [];
+
     @observable db = [];
+
     @observable selectedRecords= [];
+
     @observable isReadOnly = true;
+
     @observable requestState = {
       filters: false,
       search: {},
     };
+
     @observable sortOrder = {
       column: null,
       direction: 'asc',
@@ -43,6 +57,7 @@ export class ArticleStore {
       this.requestState.search = srchParams;
       this.initiateFilters();
     }
+
     @action
     setInitiateSrch = (name, value) => {
       const srchParams = { ...this.requestState.search };
@@ -59,11 +74,11 @@ export class ArticleStore {
     initiateFilters = () => {
       const { title } = this.requestState.search;
       if (title) {
-        this.setDb(this.allInsightsListing);
+        this.setDb(this.sortBydate(this.allInsightsListing));
         ClientDb.filterFromNestedObjs(['title', 'category', 'author'], title);
         this.db = ClientDb.getDatabase();
       } else {
-        this.setDb(this.allInsightsListing);
+        this.setDb(this.sortBydate(this.allInsightsListing));
       }
     }
 
@@ -71,6 +86,7 @@ export class ArticleStore {
     setGlobalAction = (name, globalAction) => {
       this[name] = globalAction;
     }
+
     @action
     toggleSearch = () => {
       this.filters = !this.filters;
@@ -88,16 +104,12 @@ export class ArticleStore {
     }
 
     @action
-    requestArticlesByCategoryId = (id) => {
-      this.data = graphql({ client: clientPublic, query: getArticlesByCatId, variables: { id } });
-    }
-
-    @action
     getSingleInsightAdmin = (id) => {
       this.article = graphql({
         client,
         query: getArticleById,
         variables: { id },
+        fetchPolicy: 'network-only',
         onFetch: (res) => {
           if (res && res.insightsArticle) {
             this.setForm(res.insightsArticle);
@@ -105,11 +117,11 @@ export class ArticleStore {
         },
       });
     }
+
     @action
     setFormData = (id) => {
       const formData = this.adminInsightList.find(obj => obj.id === id);
-      this.ARTICLE_FRM =
-      Validator.setFormData(
+      this.ARTICLE_FRM = Validator.setFormData(
         this.ARTICLE_FRM,
         formData,
       );
@@ -123,19 +135,20 @@ export class ArticleStore {
     @action
     setForm = (res) => {
       Validator.validateForm(this.ARTICLE_FRM);
-      if (!this.article.loading) {
-        Object.keys(this.ARTICLE_FRM.fields).map((key) => {
-          if (key === 'featuredImage') {
-            this.ARTICLE_FRM.fields[key].preSignedUrl = res[key];
-            this.ARTICLE_FRM.fields[key].value = res[key];
-          } else {
-            this.ARTICLE_FRM.fields[key].value = res[key];
-          }
+      // if (!this.article.loading) {
+      Object.keys(this.ARTICLE_FRM.fields).map((key) => {
+        if (key === 'featuredImage') {
+          this.ARTICLE_FRM.fields[key].preSignedUrl = res[key];
           this.ARTICLE_FRM.fields[key].value = res[key];
-          return null;
-        });
-        Validator.validateForm(this.ARTICLE_FRM);
-      }
+        } else if (key === 'tags') {
+          this.ARTICLE_FRM.fields[key].value = join(res.tags, ',');
+        } else {
+          this.ARTICLE_FRM.fields[key].value = res[key];
+        }
+        return null;
+      });
+      Validator.validateForm(this.ARTICLE_FRM);
+      // }
     }
 
     @action
@@ -144,47 +157,42 @@ export class ArticleStore {
     }
 
     @action
-    save = (id) => {
+    save = (id, status, isDraft = false) => new Promise((resolve, reject) => {
+      uiStore.setProgress();
+      this.ARTICLE_FRM.fields.articleStatus.value = status;
       const data = Validator.ExtractValues(this.ARTICLE_FRM.fields);
+      if (data.minuteRead === null || data.minuteRead === '') {
+        delete (data.minuteRead);
+      }
+      const payload = { ...data };
+      payload.tags = payload.tags.split(',').filter(tag => tag !== '');
       client
         .mutate({
           mutation: id === 'new' ? createArticle : updateArticle,
-          variables: id === 'new' ? { payload: data } :
-            { ...{ payload: data }, id },
-          refetchQueries: [{
-            query: insightArticlesListByFilter,
-          }],
+          variables: id === 'new' ? { payload, isPartial: isDraft } : { payload, id, isPartial: isDraft },
         }).then(() => {
           Helper.toast('Category Saved successfully.', 'success');
+          resolve();
         }).catch(() => {
           Helper.toast('Error while Saving Category', 'error');
+          reject();
         })
         .finally(() => {
           uiStore.setProgress(false);
         });
-    }
+    });
+
+    sortBydate = data => orderBy(data, o => (o.updated.date ? new Date(o.updated.date) : ''), ['desc'])
 
     @action
     sortArticlesByFilter = () => {
-      const {
-        articleStatus, categoryId, tags, author, title, endDate, startDate, slug,
-      } = this.requestState.search;
       this.allInsightsList = graphql({
         client,
         query: insightArticlesListByFilter,
-        variables: {
-          articleStatus,
-          categoryId,
-          tags,
-          author,
-          title,
-          fromDate: startDate,
-          toDate: endDate,
-          slug,
-        },
+        fetchPolicy: 'network-only',
         onFetch: (res) => {
           if (res && res.insightArticlesListByFilter) {
-            this.setDb(res.insightArticlesListByFilter);
+            this.setDb(this.sortBydate(res.insightArticlesListByFilter));
           }
         },
       });
@@ -200,10 +208,10 @@ export class ArticleStore {
       if (this.sortOrder.column && this.sortOrder.direction && this.db) {
         return orderBy(
           this.db,
-          [user => (this.sortOrder.column === 'updated' &&
-          user[this.sortOrder.column] && user[this.sortOrder.column].date
-            ? moment(user[this.sortOrder.column].date).unix() :
-            user[this.sortOrder.column] && user[this.sortOrder.column].toString().toLowerCase())],
+          [user => (this.sortOrder.column === 'updated'
+          && user[this.sortOrder.column] && user[this.sortOrder.column].date
+            ? moment(user[this.sortOrder.column].date).unix()
+            : user[this.sortOrder.column] && user[this.sortOrder.column].toString().toLowerCase())],
           [this.sortOrder.direction],
         );
       }
@@ -216,8 +224,8 @@ export class ArticleStore {
     }
 
     @computed get adminInsightArticleListing() {
-      return (this.allInsightsList && this.allInsightsList.data &&
-        this.allInsightsList.data.insightArticlesListByFilter) || [];
+      return (this.allInsightsList && this.allInsightsList.data
+        && this.allInsightsList.data.insightArticlesListByFilter) || [];
     }
 
     @computed get articleListingLoader() {
@@ -225,24 +233,20 @@ export class ArticleStore {
     }
 
     @action
-    deleteArticle = (id) => {
+    deleteArticle = id => new Promise((resolve, reject) => {
       uiStore.setProgress();
       client
         .mutate({
           mutation: deleteArticle,
           variables: { id },
-          refetchQueries: [{
-            query: insightArticlesListByFilter,
-          }],
         }).then(() => {
           Helper.toast('Category deleted successfully.', 'success');
+          resolve();
         }).catch(() => {
           Helper.toast('Error while Deleting Category', 'error');
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    }
+          reject();
+        }).finally(() => uiStore.setProgress(false));
+    });
 
     @action
     featuredRequestArticles = () => {
@@ -273,6 +277,7 @@ export class ArticleStore {
         || toJS(this.data.data.insightArticlesByCategoryId)
         || toJS(this.data.data.getInsightsArticles))) || [];
     }
+
     @computed get InsightFeaturedArticles() {
       const featured = get(this.featuredData, 'data.getInsightsArticles') || [];
       return filter(featured, a => a.isFeatured);
@@ -300,6 +305,7 @@ export class ArticleStore {
         fetchPolicy: 'network-only',
       });
     }
+
     @action
     getCategoryListByTypes = (isPublic = true, types) => {
       const apiClient = isPublic ? clientPublic : client;
@@ -328,6 +334,7 @@ export class ArticleStore {
       this.ARTICLE_FRM.fields[field].value = value;
       Validator.validateForm(this.ARTICLE_FRM);
     }
+
     @action
     articleChange = (e, result) => {
       if (result && result.type === 'checkbox') {
@@ -345,11 +352,12 @@ export class ArticleStore {
         this.creteSlug('ARTICLE_FRM', result.name);
       }
     };
+
     @action
     maskChange = (values, field) => {
       if (moment(values.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-        const isoDate = field === 'startDate' ? moment(new Date(values.formattedValue)).toISOString() :
-          moment(new Date(values.formattedValue)).add(1, 'day').toISOString();
+        const isoDate = field === 'startDate' ? moment(new Date(values.formattedValue)).toISOString()
+          : moment(new Date(values.formattedValue)).add(1, 'day').toISOString();
         this.setInitiateSrch(field, isoDate);
       } else {
         this.setInitiateSrch(field, values.value);
@@ -361,6 +369,7 @@ export class ArticleStore {
         );
       }
     }
+
     @action
     creteSlug = (formName, field) => {
       const { value } = this[formName].fields[field];
@@ -394,6 +403,7 @@ export class ArticleStore {
         this.selectedRecords.push(id);
       }
     }
+
     @action
     removeSelectedRecords = (id) => {
       remove(this.selectedRecords, e => e === id);
@@ -427,9 +437,9 @@ export class ArticleStore {
     }
 
     @computed get allInsightsListing() {
-      return (this.allInsightsList && this.allInsightsList.data &&
-        this.allInsightsList.data.insightArticlesListByFilter &&
-        toJS(sortBy(
+      return (this.allInsightsList && this.allInsightsList.data
+        && this.allInsightsList.data.insightArticlesListByFilter
+        && toJS(sortBy(
           this.allInsightsList.data.insightArticlesListByFilter,
           ['title'],
         ).slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
@@ -515,8 +525,8 @@ export class ArticleStore {
         this.ARTICLE_FRM.fields[field].preSignedUrl = fileObj.location;
         this.ARTICLE_FRM.fields[field].value = fileObj.location;
         this.ARTICLE_FRM.fields[field].fileId = `${Date.now()}_${fileObj.fileName}`;
-      } else if (RemoveIndex > -1 &&
-        Array.isArray(toJS(this.ARTICLE_FRM.fields[field].preSignedUrl))) {
+      } else if (RemoveIndex > -1
+        && Array.isArray(toJS(this.ARTICLE_FRM.fields[field].preSignedUrl))) {
         this.ARTICLE_FRM.fields[field].preSignedUrl.splice(RemoveIndex, 1);
         this.ARTICLE_FRM.fields[field].value.splice(RemoveIndex, 1);
       } else if (RemoveIndex === undefined) {

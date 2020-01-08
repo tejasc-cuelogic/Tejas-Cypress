@@ -1,7 +1,6 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Icon, Popup, Form } from 'semantic-ui-react';
 import { FieldError } from '../../shared';
 
@@ -30,7 +29,7 @@ const FormRadioGroup = observer((props) => {
           }
         </div>
       );
-    } else if (props.withtooltip) {
+    } if (props.withtooltip) {
       return (
         <div className={props.containerclassname || false}>
           <Form.Group className="vertical">
@@ -40,18 +39,20 @@ const FormRadioGroup = observer((props) => {
                   <div className={`ui radio checkbox ${value === radio.value ? 'checked' : ''}`}>
                     <input type="radio" value={radio.value} checked={value === radio.value} onChange={props.changed} {...props} />
                     <label>
-                      {radio.icon &&
-                        <Icon className={radio.icon} />
+                      {radio.icon
+                        && <Icon className={radio.icon} />
                       }
                       {radio.label}
-                      {radio.tooltip &&
-                        <Popup
-                          trigger={<Icon className="ns-help-circle" />}
-                          content={radio.tooltip}
-                          position="top center"
-                          className="center-align"
-                          wide
-                        />
+                      {radio.tooltip
+                        && (
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={radio.tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
+                        )
                       }
                     </label>
                   </div>
@@ -63,7 +64,7 @@ const FormRadioGroup = observer((props) => {
       );
     }
     return (
-      <Aux>
+      <>
         <Form.Group widths={props.widths} inline className={props.containerclassname || false}>
           {
             values.map(radio => (
@@ -80,10 +81,10 @@ const FormRadioGroup = observer((props) => {
             ))
           }
         </Form.Group>
-        {error && props.showerror &&
-          <FieldError className={props.classname || false} error={error} />
+        {error && props.showerror
+          && <FieldError className={props.classname || false} error={error} />
         }
-      </Aux>
+      </>
     );
   }
 
@@ -94,18 +95,20 @@ const FormRadioGroup = observer((props) => {
           <div className={`ui radio checkbox ${value === radio.value ? 'checked' : ''}`}>
             <input type="radio" readOnly value={radio.value} checked={value === radio.value} onChange={props.changed} {...props} />
             <label>
-              {radio.icon &&
-                <Icon className={radio.icon} />
+              {radio.icon
+                && <Icon className={radio.icon} />
               }
               {radio.label}
-              {tooltip &&
-                <Popup
-                  trigger={<Icon className="ns-help-circle" />}
-                  content={tooltip}
-                  position="top center"
-                  className="center-align"
-                  wide
-                />
+              {tooltip
+                && (
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
+                )
               }
             </label>
           </div>

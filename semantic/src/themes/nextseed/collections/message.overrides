@@ -22,6 +22,9 @@
         margin:@40px -@28px -@20px;
         box-shadow:0 -3px 0 @highlight-primary inset;
     }
+    &.no-shadow{
+        box-shadow: none;
+    }
 }
 
 .notification-panel{

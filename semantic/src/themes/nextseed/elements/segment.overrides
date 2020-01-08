@@ -41,6 +41,17 @@
         @media only screen and (max-width : @largestMobileScreen){
             padding: @20px;
         }
+        &.reward-block-v2{
+            h6.ui.header{
+                font-size: @13px!important;
+            }
+            h3.ui.header{
+                font-size: @28px!important;
+            }
+            .ui.label{
+                font-size: @10px;
+            }
+        }
     }
     .segment-container {
         max-height: 544px;
@@ -82,8 +93,20 @@
         }      
     }
 }
-.ui.segment.offering-comment {
-    padding: 0;
+.ui.segment{
+    &.offering-comment {
+        padding: 0;
+    }
+    &.video-segment{
+        padding: @30px;
+        box-shadow: 0px 1px 10px fade(@fullBlack, 10%);
+        border: 0;
+        .ui.header{
+            align-items: center;
+            justify-content: center;
+            display: flex;
+        }
+    }
 }
 .press-news {
 	.ui.segment {
@@ -91,6 +114,9 @@
 		border: 0;
 		box-shadow: none;
     }
+}
+a .ui.segment{
+    text-decoration: none;
 }
 //  Public page Ends
 

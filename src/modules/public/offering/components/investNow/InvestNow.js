@@ -9,13 +9,16 @@ import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
 // import Helper from '../../../../../helper/utility';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @withRouter
-@inject('uiStore', 'portfolioStore', 'campaignStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
+@inject('uiStore', 'portfolioStore', 'campaignStore', 'accountStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
 @observer
 export default class InvestNow extends React.Component {
   state = { submitLoading: false, isInvestmentUpdate: false };
 
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.campaignStore.isInvestBtnClicked) {
       this.props.history.push(this.props.refLink);
     }
@@ -27,19 +30,26 @@ export default class InvestNow extends React.Component {
     const { currentUser } = this.props.userStore;
     if (!isUserLoggedIn) {
       this.props.uiStore.setAuthRef((this.props.refLink));
-      this.props.history.push('/auth/login');
+      this.props.history.push('/login');
     } else if (!(isUserLoggedIn && currentUser.roles.includes('investor'))) {
       this.props.history.push(`${this.props.refLink}/confirm-invest-login`);
     }
     if (this.props.changeInvest) {
       const { offeringId } = this.props.match.params;
+      const matchURL = this.props.match.url;
       this.props.portfolioStore.setFieldValue('currentOfferingId', offeringId);
-      this.props.campaignStore.getCampaignDetails(offeringId, true);
+      this.props.campaignStore.getCampaignDetails(offeringId, true, true);
+
+      if (matchURL.includes('portfolio')) {
+        this.setState({ isInvestmentUpdate: true });
+      }
     }
   }
+
   componentDidMount() {
     window.addEventListener('message', this.handleIframeTask);
   }
+
   componentWillUnmount() {
     const { changeInvest } = this.props;
     const isUpdateScreen = changeInvest;
@@ -50,15 +60,18 @@ export default class InvestNow extends React.Component {
         this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
       }
       this.props.accreditationStore.resetAccreditationObject();
-      this.props.accreditationStore.setFieldVal('userAccredetiationState', null);
+      this.props.investmentStore.setFieldValue('isUpdateLimitReflect', false);
       if (!reflectedURL.includes('agreement')) {
+        this.props.accreditationStore.setFieldVal('userAccredetiationState', null);
         this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
       }
     }
   }
+
   handleIframeTask = (e) => {
     console.log(e.data);
   };
+
   handleMultiStepModalclose = () => {
     this.props.investmentStore.setStepToBeRendered(0);
     this.props.uiStore.clearErrors();
@@ -68,6 +81,7 @@ export default class InvestNow extends React.Component {
     this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push(this.props.refLink);
   }
+
   handleStepChange = (step) => {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
     if (step === 1) {
@@ -77,20 +91,26 @@ export default class InvestNow extends React.Component {
       this.props.investmentStore.resetData();
       this.props.investmentStore.setByDefaultRender(true);
       this.props.accreditationStore.resetUserAccreditatedStatus();
+      this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
+      this.setState({ isInvestmentUpdate: false });
+      this.props.investmentStore.accTypeChanged(null, { value: this.props.userDetailsStore.currentActiveAccount });
       this.handleStepChnageOnPreviousForAlert();
     }
     this.props.investmentStore.setFieldValue('isGetTransferRequestCall', false);
     this.props.investmentStore.setStepToBeRendered(step);
   }
+
   handleStepChangeForPartialAccounts = (step) => {
     this.props.investmentStore.setFieldValue('disableNextbtn', false);
     this.props.investmentStore.setFieldValue('disablePrevButton', false);
     this.props.investmentStore.setStepToBeRendered(step);
   }
+
   handleStepChnageOnPreviousForAlert = () => {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
-    this.props.accreditationStore.changeShowAccountListFlag(true);
+    this.props.accreditationStore.changeShowAccountListFlag(!this.props.changeInvest);
   }
+
   handleCancel = () => {
     const currentStep = this.props.investmentStore.stepToBeRendered;
     const stepRendered = currentStep && currentStep > 0 ? currentStep - 1 : 0;
@@ -149,19 +169,21 @@ export default class InvestNow extends React.Component {
       const offeringReuglation = campaign && campaign.regulation;
       const regulationType = offeringReuglation;
       const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C'
-        || offeringReuglation === 'BD_CF_506C'));
+        || offeringReuglation === 'BD_506B' || offeringReuglation === 'BD_CF_506C'));
       const {
         changeShowAccountListFlag,
         userAccredetiationState,
         selectedAccountStatus,
       } = this.props.accreditationStore;
       changeShowAccountListFlag(false);
-      if (selectedAccountStatus !== 'FROZEN' && userStatus === 'FULL' && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck)) {
+      if (!this.props.accountStore.isAccFrozen(selectedAccountStatus) && userStatus === 'FULL' && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && (['PENDING', 'INACTIVE', 'EXPIRED'].includes(userAccredetiationState))) || userAccredetiationState === undefined || !isRegulationCheck)) {
         this.props.investmentLimitStore
           .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
           .then((resp) => {
             const isDocumentUpload = get(resp, 'investNowHealthCheck.availabilityForNPAInOffering');
             if (!isDocumentUpload) {
+              this.handleStepChangeForPartialAccounts(0);
+            } else if (['INACTIVE', 'EXPIRED'].includes(userAccredetiationState)) {
               this.handleStepChangeForPartialAccounts(0);
             } else {
               this.handleStepChange(step.stepToBeRendered);
@@ -177,79 +199,95 @@ export default class InvestNow extends React.Component {
     }
   }
 
+  handleSubmitStep = () => { // only for mobile screens
+    const { stepToBeRendered } = this.props.investmentStore;
+    const { multiSteps } = this.props.uiStore;
+    this.multiClickHandler(multiSteps[stepToBeRendered]);
+  }
+
   render() {
     const { changeInvest, uiStore } = this.props;
     const { showAccountList } = this.props.accreditationStore;
     const { investAccTypes, stepToBeRendered } = this.props.investmentStore;
     const multipleAccountExsists = !!(investAccTypes && investAccTypes.values.length >= 2);
     const { campaign } = this.props.campaignStore;
+    const securityType = get(campaign, 'keyTerms.securities');
     const {
       getCurrentInvestNowHealthCheck, investNowHealthCheckDetails,
     } = this.props.investmentLimitStore;
-    if (stepToBeRendered === 1 && !this.state.isInvestmentUpdate &&
-      getCurrentInvestNowHealthCheck && getCurrentInvestNowHealthCheck.previousAmountInvested &&
-      !money.isZero(getCurrentInvestNowHealthCheck.previousAmountInvested)) {
+    if (stepToBeRendered === 1 && !this.state.isInvestmentUpdate
+      && getCurrentInvestNowHealthCheck && getCurrentInvestNowHealthCheck.previousAmountInvested
+      && !money.isZero(getCurrentInvestNowHealthCheck.previousAmountInvested)) {
       this.setState({ isInvestmentUpdate: true });
     }
     const {
-      inProgress,
+      inProgress, setFieldvalue,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
     } = uiStore;
-    const steps =
-      [
-        {
-          name: 'Account Type',
-          component: <AccountType
-            refLink={this.props.refLink}
-            changeInvest={changeInvest}
-            cancel={this.handleMultiStepModalclose}
-            inProgress={inProgress}
-          />,
-          isValid: '',
-          stepToBeRendered: 1,
-          isDirty: true,
-        },
-        {
-          name: 'Financial Info',
-          component: <FinancialInfo
-            refLink={this.props.refLink}
-            changeInvest={changeInvest || this.state.isInvestmentUpdate}
-            offeringDetails={this.state.isInvestmentUpdate && campaign}
-            isFromPublicPage={this.state.isInvestmentUpdate}
-          />,
-          isValid: '',
-          stepToBeRendered: 2,
-          isDirty: true,
-        },
-        {
-          name: 'TransferRequest',
-          component: <TransferRequest
-            changeInvest={changeInvest || this.state.isInvestmentUpdate}
-            confirm={this.handleConfirm}
-            cancel={this.handleCancel}
-          />,
-          isValid: '',
-          onlyDisableNextButton: true,
-        },
-      ];
+    const steps = [
+      {
+        name: 'Account Type',
+        component: <AccountType
+          refLink={this.props.refLink}
+          changeInvest={changeInvest}
+          cancel={this.handleMultiStepModalclose}
+          inProgress={inProgress}
+          submitStep={this.handleSubmitStep}
+          disableContinueButton={!this.props.investmentStore.disableNextbtn}
+          isFromPublicPage={this.state.isInvestmentUpdate}
+        />,
+        isValid: '',
+        disableNextButton: changeInvest,
+        disablePrevButton: changeInvest,
+        stepToBeRendered: 1,
+        isDirty: true,
+      },
+      {
+        name: 'Financial Info',
+        component: <FinancialInfo
+          refLink={this.props.refLink}
+          changeInvest={changeInvest || this.state.isInvestmentUpdate}
+          offeringDetails={this.state.isInvestmentUpdate && campaign}
+          isFromPublicPage={this.state.isInvestmentUpdate}
+          submitStep={this.handleSubmitStep}
+          disableContinueButton={!this.props.investmentStore.disableNextbtn}
+        />,
+        isValid: '',
+        stepToBeRendered: 2,
+        isDirty: true,
+      },
+      {
+        name: 'TransferRequest',
+        component: <TransferRequest
+          changeInvest={changeInvest || this.state.isInvestmentUpdate}
+          offeringSecurityType={securityType}
+          confirm={this.handleConfirm}
+          cancel={this.handleCancel}
+          refLink={this.props.refLink}
+        />,
+        isValid: '',
+        onlyDisableNextButton: true,
+      },
+    ];
     const isMultiStepButtonsVisible = !!showAccountList && multipleAccountExsists;
     const closeOnDimmerClickAction = false;
+    this.props.investmentStore.setFieldValue('disablePrevButton', true);
     return (
-      <div className="step-progress" >
+      <div className="step-progress">
         {
           <MultiStep
             loaderMsg={this.state.submitLoading ? `Please wait...<br /><br />
             We are generating your agreement. This can take up to a minute.` : ''}
-            inProgress={this.state.submitLoading ||
-              (inProgress && !investNowHealthCheckDetails.loading)}
+            inProgress={this.state.submitLoading
+              || (inProgress && !investNowHealthCheckDetails.loading)}
             createAccount={this.multiClickHandler}
             setIsEnterPressed={setIsEnterPressed}
             disableNxtbtn={this.props.investmentStore.disableNextbtn}
             isEnterPressed={isEnterPressed}
             resetEnterPressed={resetIsEnterPressed}
-            hideHeader
+            hideHeader={!isMobile}
             setStepTobeRendered={this.handleStepChange}
             setStepTobeRenderedForAlert={this.handleStepChnageOnPreviousForAlert}
             stepToBeRendered={this.props.investmentStore.stepToBeRendered}
@@ -258,6 +296,7 @@ export default class InvestNow extends React.Component {
             handleMultiStepModalclose={this.handleMultiStepModalclose}
             isStepButtonsVisible={isMultiStepButtonsVisible}
             closeOnDimmerClick={closeOnDimmerClickAction}
+            setUiStorevalue={setFieldvalue}
           />
         }
       </div>

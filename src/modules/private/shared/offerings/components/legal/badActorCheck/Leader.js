@@ -1,32 +1,32 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 import ButtonGroupType2 from '../../ButtonGroupType2';
 import { InlineLoader } from '../../../../../../../theme/shared';
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'uiStore', 'offeringsStore')
 @observer
 export default class Leader extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const {
       getLeadershipOfferingBac,
       currentOfferingId,
-      initLoad,
     } = this.props.offeringCreationStore;
-    if (!initLoad.includes('LEADER_FRM')) {
-      getLeadershipOfferingBac(currentOfferingId, 'LEADERSHIP');
-    }
+    getLeadershipOfferingBac(currentOfferingId, 'LEADERSHIP');
   }
-  handleSubmitIssuer = (leaderId, approved) => {
+
+  handleSubmitIssuer = (leaderId, approved, index = null, issuerNumber = null) => {
     const {
       createOrUpdateOfferingBac,
       LEADER_FRM,
     } = this.props.offeringCreationStore;
-    const leaderNumber = this.props.index;
-    createOrUpdateOfferingBac('LEADERSHIP', LEADER_FRM.fields, undefined, leaderNumber, leaderId, approved);
+    const leaderNumber = index;
+    createOrUpdateOfferingBac('LEADERSHIP', LEADER_FRM.fields, undefined, leaderNumber, leaderId, approved, issuerNumber);
   }
+
   render() {
     const {
       LEADER_FRM,
@@ -35,39 +35,47 @@ export default class Leader extends Component {
       leaderShipOfferingBacData,
     } = this.props.offeringCreationStore;
     const issuerNumber = this.props.index;
-    const index = issuerNumber || 0;
+    let index = issuerNumber || 0;
     const formName = 'LEADER_FRM';
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    const { match } = this.props;
+    const { match, offeringsStore, bacId, leadership } = this.props;
+    const { offer } = offeringsStore;
+    if (leadership) {
+      const id = bacId || '';
+      const bacIndex = LEADER_FRM.fields.getOfferingBac.findIndex(b => id === b.id.value);
+      index = bacIndex;
+    }
     const { isIssuer } = this.props.userStore;
     const isManager = access.asManager;
-    const submitted = (leaderShipOfferingBacData && leaderShipOfferingBacData.length &&
-      leaderShipOfferingBacData[index] && leaderShipOfferingBacData[index].submitted) ?
-      leaderShipOfferingBacData[index].submitted : null;
-    const approved = (leaderShipOfferingBacData && leaderShipOfferingBacData.length &&
-      leaderShipOfferingBacData[index] && leaderShipOfferingBacData[index].approved) ?
-      leaderShipOfferingBacData[index].approved : null;
+    const submitted = (leaderShipOfferingBacData && leaderShipOfferingBacData.length
+      && leaderShipOfferingBacData[index] && leaderShipOfferingBacData[index].submitted)
+      ? leaderShipOfferingBacData[index].submitted : null;
+    const approved = (leaderShipOfferingBacData && leaderShipOfferingBacData.length
+      && leaderShipOfferingBacData[index] && leaderShipOfferingBacData[index].approved)
+      ? leaderShipOfferingBacData[index].approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     let leaderId = '';
-    if (leaderShipOfferingBac.loading) {
+    if (leaderShipOfferingBac.loading || this.props.uiStore.inProgressArray.includes('getLeadershipOfferingBac')) {
       return <InlineLoader />;
     }
+    const otherEntities = LEADER_FRM.fields.getOfferingBac[index].otherEntities.value === '' ? get(offer, `leadership[${index}].otherEntities`) : false;
     leaderId = LEADER_FRM.fields.getOfferingBac[index].id.value;
     return (
       <Form className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'mt-20' : 'inner-content-spacer'}>
         <Header as="h4">Control Person Diligence</Header>
         {
-          ['controlPersonQuestionnaire', 'residenceTenYears'].map(field => (
-            <Aux>
+          ['otherEntities', 'controlPersonQuestionnaire', 'residenceTenYears'].map(field => (
+            <>
               <FormTextarea
                 readOnly={isReadonly}
                 key={field}
                 name={field}
+                defaultValue={(field === 'otherEntities' ? otherEntities : false)}
                 fielddata={LEADER_FRM.fields.getOfferingBac[index][field]}
                 changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
                 containerclassname="secondary"
               />
-            </Aux>
+            </>
           ))
         }
         <Divider section />
@@ -104,7 +112,7 @@ export default class Leader extends Component {
           isManager={access.asManager}
           formValid={LEADER_FRM.meta.isValid}
           approved={approved}
-          updateOffer={approved1 => this.handleSubmitIssuer(leaderId, approved1)}
+          updateOffer={approved1 => this.handleSubmitIssuer(leaderId, approved1, index, issuerNumber)}
         />
       </Form>
     );

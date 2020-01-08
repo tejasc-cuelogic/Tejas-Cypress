@@ -1,38 +1,52 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { mapValues, filter, find, map } from 'lodash';
+import { mapValues, filter, find } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { uiStore, userDetailsStore, campaignStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
-import { FormValidator as Validator } from '../../../../../helper';
+import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorTotalAmountInvested } from '../../../queries/investementLimits';
 import Helper from '../../../../../helper/utility';
 import { userDetailsQuery } from '../../../queries/users';
 
 export class InvestmentLimitStore {
   @observable INVESTEMENT_LIMIT_META = Validator.prepareFormObject(INVESTEMENT_LIMIT);
+
   @observable investmentLimit = {};
+
   @observable currentLimit = 0;
+
   @observable investorInvestmentLimit = {};
+
   @observable activeAccounts = null;
+
   @observable currentAccountType = null;
+
   @observable currentAccountId = null;
+
   @observable entityCurrentLimit = 0;
+
   @observable individualIRACurrentLimit = 0;
+
   @observable investedAmount = 0;
+
   @observable investNowHealthCheckDetails = {};
+
   @observable investNowError = false;
+
   @observable investorTotalAmountInvested = 0;
 
   @action
   setFieldValue = (field, value) => {
     this[field] = value;
   }
+
   @action
   setInvestNowErrorStatus = (status) => {
     this.investNowError = status;
   }
+
   @computed get getActiveAccountList() {
     let isIndividualAccount = false;
     const accList = filter(this.activeAccounts, (account) => {
@@ -43,16 +57,17 @@ export class InvestmentLimitStore {
   }
 
   @action
-  getInvestorInvestmentLimit = accountId => new Promise((resolve) => {
+  getInvestorInvestmentLimit = (accountId, isLoaderConsider = true) => new Promise((resolve) => {
     this.investorInvestmentLimit = graphql({
       client,
       query: getInvestorInvestmentLimit,
       variables: {
-        userId: userDetailsStore.currentUserId,
         accountId,
       },
       onFetch: (data) => {
-        if (data && !this.investorInvestmentLimit.loading) {
+        if (data && !isLoaderConsider) {
+          resolve(data);
+        } else if (data && !this.investorInvestmentLimit.loading) {
           resolve(data);
         }
       },
@@ -67,7 +82,6 @@ export class InvestmentLimitStore {
       client,
       query: getInvestNowHealthCheck,
       variables: {
-        userId: userDetailsStore.currentUserId,
         accountId,
         offeringId,
       },
@@ -88,8 +102,8 @@ export class InvestmentLimitStore {
   });
 
   @computed get getInvestorAmountInvestedValue() {
-    return (this.investorInvestmentLimit && this.investorInvestmentLimit.data &&
-      this.investorInvestmentLimit.data.getInvestorTotalAmountInvested) || 0;
+    return (this.investorInvestmentLimit && this.investorInvestmentLimit.data
+      && this.investorInvestmentLimit.data.getInvestorTotalAmountInvested) || 0;
   }
 
   @computed get getInvestorAmountInvestedLoading() {
@@ -97,13 +111,13 @@ export class InvestmentLimitStore {
   }
 
   @computed get getCurrentInForAccount() {
-    return (this.investorInvestmentLimit && this.investorInvestmentLimit.data &&
-      this.investorInvestmentLimit.data.getInvestorInvestmentLimit) || 0;
+    return (this.investorInvestmentLimit && this.investorInvestmentLimit.data
+      && this.investorInvestmentLimit.data.getInvestorInvestmentLimit) || 0;
   }
 
   @computed get getCurrentInvestNowHealthCheck() {
-    return (this.investNowHealthCheckDetails && this.investNowHealthCheckDetails.data &&
-      this.investNowHealthCheckDetails.data.investNowHealthCheck) || null;
+    return (this.investNowHealthCheckDetails && this.investNowHealthCheckDetails.data
+      && this.investNowHealthCheckDetails.data.investNowHealthCheck) || null;
   }
 
   //  Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
@@ -124,13 +138,13 @@ export class InvestmentLimitStore {
       // const calculatedLimit = (annualIncomeOrNetWorth * 5) / 100;
       // limit = (calculatedLimit < 2200) ? 2200 : calculatedLimit;
       limit = Math
-        .max(limitFloor, Math.floor(limitLowPCT *
-          Math.min((data.annualIncome || 0), data.netWorth || 0)));
+        .max(limitFloor, Math.floor(limitLowPCT
+          * Math.min((data.annualIncome || 0), data.netWorth || 0)));
     }
     // }
     limit = Math.min(limit, maxLimit);
-    const remainingAmount = limit -
-    ((data.cfInvestments || 0) + investedAmtFloat);
+    const remainingAmount = limit
+      - ((data.cfInvestments || 0) + investedAmtFloat);
     let remaining = Math.max(0, remainingAmount);
     if ((investedAmtFloat + data.cfInvestments || 0) >= maxLimit) {
       remaining = 0;
@@ -150,20 +164,38 @@ export class InvestmentLimitStore {
     );
   }
 
+  // @action
+  // setAccountsLimits = () => {
+  //   const { accountList } = this.getActiveAccountList;
+  //   accountList.forEach((account) => {
+  //     this.getInvestorInvestmentLimit(account.details.accountId).then((data) => {
+  //       if (data.getInvestorInvestmentLimit === '0.00') {
+  //         this.setInvestmentLimitInfo(account.name, account.details.accountId);
+  //       } else {
+  //         this.setFieldValue('currentLimit', data.getInvestorInvestmentLimit);
+  //       }
+  //       if (account.name === 'entity') {
+  //         this.setFieldValue('entityCurrentLimit', this.currentLimit);
+  //       } else {
+  //         this.setFieldValue('individualIRACurrentLimit', this.currentLimit);
+  //       }
+  //     });
+  //   });
+  // }
+
   @action
   setAccountsLimits = () => {
     const { accountList } = this.getActiveAccountList;
+    const isLoaderConsider = !(accountList.length > 1);
     accountList.forEach((account) => {
-      this.getInvestorInvestmentLimit(account.details.accountId).then((data) => {
+      this.getInvestorInvestmentLimit(account.details.accountId, isLoaderConsider).then((data) => {
         if (data.getInvestorInvestmentLimit === '0.00') {
           this.setInvestmentLimitInfo(account.name, account.details.accountId);
-        } else {
-          this.setFieldValue('currentLimit', data.getInvestorInvestmentLimit);
         }
         if (account.name === 'entity') {
-          this.setFieldValue('entityCurrentLimit', this.currentLimit);
+          this.setFieldValue('entityCurrentLimit', data.getInvestorInvestmentLimit);
         } else {
-          this.setFieldValue('individualIRACurrentLimit', this.currentLimit);
+          this.setFieldValue('individualIRACurrentLimit', data.getInvestorInvestmentLimit);
         }
       });
     });
@@ -188,8 +220,9 @@ export class InvestmentLimitStore {
         { name: field, value: fieldVal[field] ? fieldVal[field] : 0 },
       );
     });
-    const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
-    this.currentLimit = this.getInvestmentLimit(data);
+    // const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
+    // this.currentLimit = this.getInvestmentLimit(data);
+    this.currentLimit = (accountType === 'entity') ? this.entityCurrentLimit : this.individualIRACurrentLimit;
     this.INVESTEMENT_LIMIT_META = Validator.onChange(
       this.INVESTEMENT_LIMIT_META,
       { name: limitField, value: this.currentLimit },
@@ -210,10 +243,10 @@ export class InvestmentLimitStore {
   @action
   initiateInvestmentLimit = () => {
     this.activeAccounts = userDetailsStore.getActiveAccounts;
-    const activeAccountList = this.getActiveAccountList;
-    map(activeAccountList.accountList, (account) => {
-      this.setInvestmentLimitInfo(account.name);
-    });
+    // const activeAccountList = this.getActiveAccountList;
+    // map(activeAccountList.accountList, (account) => {
+    //   this.setInvestmentLimitInfo(account.name);
+    // });
   }
 
   @action
@@ -233,8 +266,7 @@ export class InvestmentLimitStore {
 
   @action
   updateInvestmentLimits = (
-    data, accountId, userId = null,
-    resetProgress = true, offeringId = undefined,
+    data, accountId, resetProgress = true, offeringId = undefined,
   ) => {
     uiStore.setProgress();
     const { campaign } = campaignStore;
@@ -244,7 +276,6 @@ export class InvestmentLimitStore {
         .mutate({
           mutation: updateInvestmentLimits,
           variables: {
-            userId: userId || userDetailsStore.currentUserId,
             accountId,
             annualIncome: data.annualIncome,
             netWorth: data.netWorth,
@@ -261,9 +292,6 @@ export class InvestmentLimitStore {
             // },
             {
               query: userDetailsQuery,
-              variables: {
-                userId: userId || userDetailsStore.currentUserId,
-              },
             }],
         })
         .then(() => {
@@ -287,17 +315,13 @@ export class InvestmentLimitStore {
   @action
   getInvestedAmount = () => {
     const { accountList, isIndAccExist } = this.getActiveAccountList;
-    // const dateFilterStart = moment().subtract(1, 'y').toISOString();
-    // const dateFilterStop = moment().toISOString();
-    const closeDateFilter = moment().subtract(1, 'y').toISOString();
-
+    const closeDateinCST = DataFormatter.getCurrentCSTMoment().subtract(1, 'y');
+    const closeDateinCSTFilter = moment(closeDateinCST).format('YYYY-MM-DD HH:mm:ss');
     accountList.forEach((account) => {
       if (account.name === this.currentAccountType) {
         this.getInvestorTotalAmountInvested(
           account.details.accountId,
-          // dateFilterStart,
-          // dateFilterStop,
-          closeDateFilter,
+          closeDateinCSTFilter,
         ).then((data) => {
           this.setFieldValue('investedAmount', parseFloat(data.getInvestorTotalAmountInvested.replace(/,/g, '') || 0));
         });
@@ -307,12 +331,10 @@ export class InvestmentLimitStore {
       const individualAccount = find(this.activeAccounts, acc => acc.name === 'individual');
       this.getInvestorTotalAmountInvested(
         individualAccount.details.accountId,
-        // dateFilterStart,
-        // dateFilterStop,
-        closeDateFilter,
+        closeDateinCSTFilter,
       ).then((data) => {
-        const investedAmount = parseFloat(data.getInvestorTotalAmountInvested.replace(/,/g, '') || 0) +
-          this.investedAmount;
+        const investedAmount = parseFloat(data.getInvestorTotalAmountInvested.replace(/,/g, '') || 0)
+          + this.investedAmount;
         this.setFieldValue('investedAmount', investedAmount);
       });
     }
@@ -325,10 +347,7 @@ export class InvestmentLimitStore {
         client,
         query: getInvestorTotalAmountInvested,
         variables: {
-          userId: userDetailsStore.currentUserId,
           accountId,
-          // dateFilterStart,
-          // dateFilterStop,
           closeDateFilter,
           includeTx: false,
         },

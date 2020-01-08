@@ -7,6 +7,7 @@ import { FormTextarea } from '../../../../../theme/form';
 @observer
 export default class Compose extends Component {
   send = () => this.props.messageStore.send();
+
   render() {
     const { MESSAGE_FRM, msgEleChange } = this.props.messageStore;
     return (

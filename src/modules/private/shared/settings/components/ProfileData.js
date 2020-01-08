@@ -7,21 +7,21 @@ import { Grid, Form, Card, Header, Button, Table } from 'semantic-ui-react';
 import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../../theme/form';
 import { US_STATES_FOR_INVESTOR } from '../../../../../constants/account';
 
-import UserVerifiedDetails from '../../../investor/settings/components/UserVerifiedDetails';
 import UserInvestorDetails from '../../../investor/settings/components/UserInvestorDetails';
 import NewPhoneNumber from './profileSettings/NewPhoneNumber';
 import NewEmailAddress from './profileSettings/NewEmailAddress';
-import ConfirmEmailAddress from '../../../../../modules/auth/containers/ConfirmEmailAddress';
+import ConfirmEmailAddress from '../../../../auth/containers/ConfirmEmailAddress';
 import UpdateProfilePhoto from './profileSettings/UpdateProfilePhoto';
 import Helper from '../../../../../helper/utility';
 import { InlineLoader, UserAvatar, Image64 } from '../../../../../theme/shared';
-import ConfirmPhoneNumber from './/profileSettings/ConfirmPhoneNumber';
+import ConfirmPhoneNumber from './profileSettings/ConfirmPhoneNumber';
 import EstablishProfile from '../../../investor/accountSetup/containers/establishProfile';
 
 @inject('userDetailsStore', 'userStore', 'identityStore', 'uiStore')
 @observer
 export default class ProfileData extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { ID_PROFILE_INFO, setStateValue } = this.props.identityStore;
     const selectedState = find(US_STATES_FOR_INVESTOR, { key: ID_PROFILE_INFO.fields.state.value });
     if (selectedState) {
@@ -29,9 +29,7 @@ export default class ProfileData extends Component {
     }
     this.props.uiStore.setProgress(false);
   }
-  navigateToNewPhoneNumber = () => {
-    this.props.history.replace(`${this.props.match.url}/new-phone-number`);
-  }
+
   handleUpdateProfileInfo = (e) => {
     e.preventDefault();
     const userRole = capitalize(this.props.userStore.currentUser.roles[0]);
@@ -40,11 +38,11 @@ export default class ProfileData extends Component {
     })
       .catch(() => { });
   }
+
   render() {
     const {
-      email, legalDetails, info, phone, investorProfileData, status,
+      email, info, phone, investorProfileData,
     } = this.props.userDetailsStore.userDetails;
-    const { signupStatus, validAccStatus } = this.props.userDetailsStore;
     const User = { ...this.props.userStore.currentUser };
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles: toJS(User.roles),
@@ -56,6 +54,7 @@ export default class ProfileData extends Component {
       profileInfoMaskedChange,
       setAddressFieldsForProfile,
     } = this.props.identityStore;
+    const { responsiveVars } = this.props.uiStore;
 
     if (isEmpty(this.props.userDetailsStore.userDetails) || !info) {
       return <InlineLoader />;
@@ -65,8 +64,7 @@ export default class ProfileData extends Component {
         <Route path={`${this.props.match.url}/new-phone-number`} render={() => <NewPhoneNumber refLink={this.props.match.url} />} />
         <Route
           path={`${this.props.match.url}/confirm`}
-          render={props =>
-            <ConfirmPhoneNumber newPhoneNumber refLink={this.props.match.url} {...props} />}
+          render={props => <ConfirmPhoneNumber newPhoneNumber refLink={this.props.match.url} {...props} />}
         />
         <Route path={`${this.props.match.url}/new-email-address`} render={() => <NewEmailAddress refLink={this.props.match.url} />} />
         <Route
@@ -85,20 +83,22 @@ export default class ProfileData extends Component {
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell rowSpan="2">
-                      <div className="profile-pic-wrapper">
-                        {userAvatar.avatarUrl ?
-                          <Image64
-                            avatar
-                            circular
-                            size=""
-                            srcUrl={userAvatar.avatarUrl}
-                          /> :
-                          <UserAvatar UserInfo={userAvatar} />
+                      <div className={`${responsiveVars.isMobile ? 'mb-20' : ''} profile-pic-wrapper`}>
+                        {userAvatar.avatarUrl
+                          ? (
+                            <Image64
+                              avatar
+                              circular
+                              size=""
+                              srcUrl={userAvatar.avatarUrl}
+                            />
+                          )
+                          : <UserAvatar UserInfo={userAvatar} />
                         }
                         <Button as={Link} to={`${this.props.match.url}/update-profile-photo`} circular icon={{ className: 'ns-pencil' }} className="change-profile-icon" color="green" />
                       </div>
                     </Table.Cell>
-                    <Table.Cell><b>E-mail Address</b></Table.Cell>
+                    <Table.Cell><b>Email Address</b></Table.Cell>
                     <Table.Cell>{email && email.address ? email.address : 'N/A'}</Table.Cell>
                     <Table.Cell><Link to={`${this.props.match.url}/new-email-address`}>Change Email</Link></Table.Cell>
                   </Table.Row>
@@ -163,26 +163,20 @@ export default class ProfileData extends Component {
             </Form>
           </Card>
         </Grid.Column>
-        {userAvatar.roles.includes('investor') &&
-          <Grid.Column widescreen={5} largeScreen={6} tablet={16} mobile={16}>
-            <Card.Group>
-              <UserVerifiedDetails
-                {...this.props}
-                email={email}
-                legalDetails={legalDetails}
-                status={status}
-                signupStatus={signupStatus}
-                validAccStatus={validAccStatus}
-              />
-            </Card.Group>
-            {investorProfileData && !investorProfileData.isPartialProfile &&
-              <UserInvestorDetails
-                {...this.props}
-                investorProfileData={investorProfileData}
-              />
-            }
-            <Route exact path={`${this.props.match.url}/establish-profile`} render={() => <EstablishProfile refUrl={this.props.match.url} />} />
-          </Grid.Column>
+        {userAvatar.roles.includes('investor')
+          && (
+            <Grid.Column widescreen={5} largeScreen={6} tablet={16} mobile={16}>
+              {investorProfileData && !investorProfileData.isPartialProfile
+                && (
+                  <UserInvestorDetails
+                    {...this.props}
+                    investorProfileData={investorProfileData}
+                  />
+                )
+              }
+              <Route exact path={`${this.props.match.url}/establish-profile`} render={() => <EstablishProfile refUrl={this.props.match.url} />} />
+            </Grid.Column>
+          )
         }
       </Grid>
     );

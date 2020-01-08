@@ -9,18 +9,28 @@ import Verification from '../shared/Verification';
 @inject('uiStore', 'accreditationStore')
 @observer
 export default class Accreditation extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.accreditationStore.setAccreditationMethod('assets');
   }
+
   handleMultiStepModalclose = () => {
-    this.props.history.push('/app/account-settings/investment-limits');
+    this.props.history.push('/dashboard/account-settings/investment-limits');
     const { INCOME_EVIDENCE_FORM, VERIFICATION_REQUEST_FORM } = this.props.accreditationStore;
     this.props.accreditationStore.resetAccreditation(VERIFICATION_REQUEST_FORM);
     this.props.accreditationStore.resetAccreditation(INCOME_EVIDENCE_FORM);
   }
+
   handleStepChange = (step) => {
     this.props.accreditationStore.setStepToBeRendered(step);
   }
+
+  handleSubmitStep = () => { // only for mobile screens
+    const { stepToBeRendered } = this.props.accreditationStore;
+    const { multiSteps } = this.props.uiStore;
+    this.multiClickHandler(multiSteps[stepToBeRendered]);
+  }
+
   render() {
     const {
       NET_WORTH_FORM,
@@ -28,11 +38,10 @@ export default class Accreditation extends React.Component {
       VERIFICATION_REQUEST_FORM,
       ASSETS_UPLOAD_DOC_FORM,
     } = this.props.accreditationStore;
-    const steps =
-    [
+    const steps = [
       {
         name: 'Net worth',
-        component: <NetWorth />,
+        component: <NetWorth submitStep={this.handleSubmitStep} />,
         isValid: NET_WORTH_FORM.meta.isFieldValid ? '' : 'error',
       },
       {
@@ -47,7 +56,7 @@ export default class Accreditation extends React.Component {
       },
     ];
     const {
-      inProgress,
+      inProgress, setFieldvalue,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
@@ -64,6 +73,7 @@ export default class Accreditation extends React.Component {
           inProgress={inProgress}
           handleMultiStepModalclose={this.handleMultiStepModalclose}
           setStepTobeRendered={this.handleStepChange}
+          setUiStorevalue={setFieldvalue}
         />
       </div>
     );

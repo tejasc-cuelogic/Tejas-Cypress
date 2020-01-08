@@ -11,14 +11,23 @@ import { FormValidator as Validator } from '../../../../../helper';
 
 export class BeneficiaryStore {
   @observable beneficiariesData = [];
+
   @observable BENEFICIARY_META = Validator.prepareFormObject(BENEFICIARY_FRM);
+
   @observable OTP_VERIFY_META = Validator.prepareFormObject(VERIFY_OTP);
+
   @observable removeBeneficiaryIndex = null;
+
   @observable beneficiaryModal = false;
+
   @observable isShareModalDataSet = false;
+
   @observable beneficiaryOtpRequestId = null;
+
   @observable currentSelectedAccountId = null;
+
   @observable beneficiaryDisplayPhoneNumber = null;
+
   @observable reSendVerificationCode = null;
 
   @action
@@ -46,8 +55,8 @@ export class BeneficiaryStore {
   updateBeneficiaryRules() {
     if (this.BENEFICIARY_META.fields.beneficiary.length) {
       forEach(this.BENEFICIARY_META.fields.beneficiary, (beneficiary, key) => {
-        this.BENEFICIARY_META.fields.beneficiary[key].share.rule = !this.isShareModalDataSet ?
-          'required|sharePercentage:share' : 'optional';
+        this.BENEFICIARY_META.fields.beneficiary[key].share.rule = !this.isShareModalDataSet
+          ? 'required|sharePercentage:share' : 'optional';
       });
       this.BENEFICIARY_META = Validator
         .onArrayFieldChange(this.BENEFICIARY_META, { name: 'firstName', value: this.BENEFICIARY_META.fields.beneficiary[0].firstName.value }, 'beneficiary', 0);
@@ -130,8 +139,8 @@ export class BeneficiaryStore {
   }
 
   @computed get getBeneficiariesData() {
-    return this.BENEFICIARY_META.fields.beneficiary.length ?
-      toJS(this.BENEFICIARY_META.fields.beneficiary).map(beneficiaries => ({
+    return this.BENEFICIARY_META.fields.beneficiary.length
+      ? toJS(this.BENEFICIARY_META.fields.beneficiary).map(beneficiaries => ({
         firstName: beneficiaries.firstName.value,
         lastName: beneficiaries.lastName.value,
         dob: moment(beneficiaries.dob.value).format('MM-DD-YYYY'),
@@ -148,8 +157,7 @@ export class BeneficiaryStore {
 
   @action
   setBeneficiariesInfo = () => {
-    const beneficiaryList = this.beneficiaries.filter(acc =>
-      acc.accountId === this.currentSelectedAccountId)[0];
+    const beneficiaryList = this.beneficiaries.filter(acc => acc.accountId === this.currentSelectedAccountId)[0];
     if (beneficiaryList.beneficiary) {
       forEach(beneficiaryList.beneficiary.recipients, (beneficiary, key) => {
         this.BENEFICIARY_META = Validator

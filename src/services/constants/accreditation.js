@@ -26,3 +26,13 @@ export const ACCREDITATION_NETWORTH_LABEL = {
   TWO_MILLION: '$2,000,000',
   ONE_MILLION: '$1,000,000',
 };
+
+export const ACCREDITATION_SORT_ENUMS = {
+  firstName: 'INVESTOR_NAME',
+  requestDate: 'REQUESTED_DATE',
+  accountType: 'ACCOUNT_TYPE',
+  type: 'TYPE',
+  status: 'STATUS',
+  expiration: 'EXPIRATION_DATE',
+  promotionCredits: 'PROMOTION_CREDITS',
+};

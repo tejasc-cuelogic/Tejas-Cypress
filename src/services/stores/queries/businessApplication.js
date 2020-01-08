@@ -1,43 +1,18 @@
 import gql from 'graphql-tag';
 
-export const allBusinessApplicationses = gql`
-query allBusinessApplicationses($filters: BusinessApplicationsFilter){
-  allBusinessApplicationses(filter: $filters){
-    id
-    applicationStatus
-    businessDetailsStatus
-    businessDocumentationStatus
-    businessName
-    businessPerformanceStatus
-    commentContent
-    commentDate
-    commentUser
-    createdDate
-    email
-    name
-    phone
-    ratings
-    updatedDate
-    failedReasons
-    status
-  }
-  _allBusinessApplicationsesMeta(filter: $filters){
-    count
-  }
-}
-`;
-
 export const getBusinessApplicationAdmin = gql`
-query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String){
+query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String, $lek: String){
   businessApplicationsAdmin(
     applicationType: $applicationType
     orderBy: $orderBy
     limit: $limit
     search: $search
+    lek: $lek
   ) {
     resultCount
     totalCount
     businessApplications
+    lek
   }  
 }
 `;
@@ -64,6 +39,7 @@ mutation updatePreQualInfo($preQualificationData: PreQualDetailsInput!) {
       status
       failReasons
     }
+    userRoles
   }
 }
 `;
@@ -72,6 +48,8 @@ export const createBusinessApplicationBasicInfo = gql`
 mutation createBasicInfo($basicInfo: BasicInfoInput!) {
   upsertPreQualBasicInfo(basicInfo: $basicInfo) {
     id
+    signupCode
+    utmSource
   }
 }
 `;
@@ -91,42 +69,16 @@ mutation helpAndQuestion($question: HelpAndQuestionInput!) {
 }
 `;
 
-export const upsertBusinessApplicationInformationBusinessDetails = gql`
-mutation _upsertBusinessApplicationInformationBusinessDetails($applicationId: ID!,
+export const upsertBusinessApplicationInformation = gql`
+mutation upsertBusinessApplicationInformation($applicationId: ID!,
   $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
-  $businessGoal: BusinessGoalEnum, $businessDetails: BusinessDetailsInput) {
+  $businessGoal: BusinessGoalEnum, $businessDetails: BusinessDetailsInput, $businessPerformance: businessPerformanceInput, $businessDocumentation: BusinessDocumentationInput, $targetIssuerId: String) {
   upsertBusinessApplicationInformation(
     applicationId: $applicationId, isPartialData: $isPartialData,
     applicationStep: $applicationStep, applicationType: $applicationType,
-    businessGoal: $businessGoal, businessDetails: $businessDetails) {
-      applicationId
-      applicationStatus
-  }
-}
-`;
-
-export const upsertBusinessApplicationInformationPerformance = gql`
-mutation _upsertBusinessApplicationInformationPerformance($applicationId: ID!,
-  $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
-  $businessGoal: BusinessGoalEnum, $businessPerformance: businessPerformanceInput) {
-  upsertBusinessApplicationInformation(
-    applicationId: $applicationId, isPartialData: $isPartialData,
-    applicationStep: $applicationStep, applicationType: $applicationType,
-    businessGoal: $businessGoal, businessPerformance: $businessPerformance) {
-      applicationId
-      applicationStatus
-  }
-}
-`;
-
-export const upsertBusinessApplicationInformationDocumentation = gql`
-mutation _upsertBusinessApplicationInformationDocumentation($applicationId: ID!,
-  $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
-  $businessGoal: BusinessGoalEnum, $businessDocumentation: BusinessDocumentationInput) {
-  upsertBusinessApplicationInformation(
-    applicationId: $applicationId, isPartialData: $isPartialData,
-    applicationStep: $applicationStep, applicationType: $applicationType,
-    businessGoal: $businessGoal, businessDocumentation: $businessDocumentation) {
+    businessGoal: $businessGoal, businessDetails: $businessDetails,
+    businessPerformance: $businessPerformance, businessDocumentation: $businessDocumentation, userId: $targetIssuerId
+  ) {
       applicationId
       applicationStatus
   }
@@ -134,7 +86,7 @@ mutation _upsertBusinessApplicationInformationDocumentation($applicationId: ID!,
 `;
 
 export const getBusinessApplications = gql`
-query _getBusinessApplications {
+query getBusinessApplications {
   businessApplications {
     userId
     applicationId
@@ -163,7 +115,7 @@ query _getBusinessApplications {
 `;
 
 export const getBusinessApplicationsById = gql`
-query _getBusinessApplicationById ($id: String!) {
+query getBusinessApplicationById ($id: String!) {
   businessApplication(
     applicationId: $id
   ){
@@ -179,7 +131,7 @@ query _getBusinessApplicationById ($id: String!) {
       date
     }
     prequalDetails {
-      businessModel
+      # businessModel
       businessGoal
       businessGeneralInfo {
         businessName
@@ -210,6 +162,7 @@ query _getBusinessApplicationById ($id: String!) {
         ageMonths
       }
       businessEntityStructure
+      companyTaxed
       legalConfirmations {
         label
         value
@@ -236,6 +189,7 @@ query _getBusinessApplicationById ($id: String!) {
           netIncome
         }
       }
+      businessSecurities
     }
     businessDetails {
       planDocs {
@@ -247,6 +201,10 @@ query _getBusinessApplicationById ($id: String!) {
         interestExpenses
         remainingPrincipal
         term
+        termStartDate
+        creditorName
+        existingLienOnBusiness
+        maturityDate
       }
       owners {
         fullLegalName
@@ -260,6 +218,14 @@ query _getBusinessApplicationById ($id: String!) {
           fileId
           fileName
         }
+      }
+      sources {
+        name
+        amount
+      }
+      uses {
+        name
+        amount
       }
       stepStatus
     }
@@ -421,6 +387,7 @@ mutation updateBusinessApplicationInformation(
   $businessName: String
   $signupCode: String
   $utmSource: String
+  $rating: Int
 ) {
   updateBusinessApplicationInformation(
     applicationId: $applicationId
@@ -428,10 +395,12 @@ mutation updateBusinessApplicationInformation(
     businessName: $businessName
     signupCode: $signupCode
     utmSource: $utmSource
+    rating: $rating
   ){
     applicationId
     signupCode
     utmSource
+    rating
   }
 }
 `;
@@ -439,7 +408,7 @@ mutation updateBusinessApplicationInformation(
 export const updateApplicationStatusAndReview = gql`
 mutation updateApplicationData(
   $applicationId: ID!
-  $userId: ID
+  $userId: String
   $actionType: AdminApplicationActionTypeEnum!
   $applicationFlag: BusinessApplicationUpdateStatusEnum
   $applicationStatus: ApplicationStatusEnum
@@ -449,6 +418,7 @@ mutation updateApplicationData(
   $offers: OffersReviewInput
   $comments: [BusinessApplicationCommentInput]
   $approvedStatus: ApprovedStatusEnum
+  $temporaryPassword: String
 ) {
   updateApplicationStatusAndReview(
     applicationId: $applicationId
@@ -462,30 +432,13 @@ mutation updateApplicationData(
     offers: $offers
     comments: $comments
     approvedStatus: $approvedStatus
+    temporaryPassword: $temporaryPassword
   )
 }
 `;
 
-export const updateBusinessApplicationInformationData = gql`
-mutation updateBusinessApplicationInformation(
-  $applicationId: String!
-  $issuerId: String!
-  $review: BusinessApplicationReviewInput
-  $offers: OffersReviewInput
-) {
-  updateBusinessApplicationInformation(
-    applicationId: $applicationId
-    issuerId: $issuerId
-    review: $review
-    offers: $offers
-  ){
-    applicationStatus
-  }
-}
-`;
-
 export const getBusinessApplicationOffers = gql`
-query _getBusinessApplicationById ($id: String!) {
+query getBusinessApplicationById ($id: String!) {
   businessApplication(
     applicationId: $id
   ){
@@ -499,7 +452,7 @@ query _getBusinessApplicationById ($id: String!) {
       date
     }
     prequalDetails {
-      businessModel
+      # businessModel
       businessGoal
       businessGeneralInfo {
         businessName
@@ -532,10 +485,9 @@ query _getBusinessApplicationById ($id: String!) {
 `;
 
 export const signPortalAgreement = gql`
-mutation _signPortalAgreement($applicationId: String!, $issuerId: String!, $selectedOffer: OfferInput!, $isSelectedOfferChanged: Boolean, $callbackUrl: String){
+mutation signPortalAgreement($applicationId: String!, $selectedOffer: OfferInput!, $isSelectedOfferChanged: Boolean, $callbackUrl: String){
   signPortalAgreement(
     applicationId: $applicationId
-    issuerId: $issuerId
     selectedOffer: $selectedOffer
     isSelectedOfferChanged: $isSelectedOfferChanged
     callbackUrl: $callbackUrl
@@ -544,16 +496,15 @@ mutation _signPortalAgreement($applicationId: String!, $issuerId: String!, $sele
 `;
 
 export const getPortalAgreementStatus = gql`
-query _getPortalAgreementStatus($applicationId: String!, $issuerId: String!){
+query getPortalAgreementStatus($applicationId: String!){
   getPortalAgreementStatus(
     applicationId: $applicationId
-    issuerId: $issuerId
   )
 }
 `;
 
 export const createOffering = gql`
-mutation _createOffering($applicationId: String!){
+mutation createOffering($applicationId: String!){
   createOffering(
     applicationId: $applicationId
   ){
@@ -563,7 +514,7 @@ mutation _createOffering($applicationId: String!){
 `;
 
 export const generatePortalAgreement = gql`
-mutation _generatePortalAgreement($applicationId: String!, $userId: String!){
+mutation generatePortalAgreement($applicationId: String!, $userId: String!){
   generatePortalAgreement(
     applicationId: $applicationId
     userId: $userId
@@ -577,5 +528,11 @@ mutation applicationDeclinedByIssuer($applicationId: String!, $comments: [Busine
     applicationId: $applicationId
     comments: $comments
   )
+}
+`;
+
+export const exportAllToEmail = gql`
+mutation exportAllToEmail($applicationType: ApplicationTypeEnum!) {
+  exportAllToEmail(applicationType: $applicationType)
 }
 `;

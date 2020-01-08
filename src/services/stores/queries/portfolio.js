@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const getInvestorAccountPortfolio = gql`
-query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlight: Boolean, $includeInterest: Boolean) {
+query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFlight: Boolean, $includeInterest: Boolean) {
   getInvestorAccountPortfolio(
     userId: $userId,
     accountId: $accountId,
@@ -32,6 +32,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             investmentMultiple
             interestRate
             regulation
+            minOfferingAmount506
+            maxOfferingAmount506
             minOfferingAmount506C
             maxOfferingAmount506C
             minOfferingAmountCF
@@ -47,6 +49,9 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             hardCloseDate
             disbursement {
               date
+            }
+            keyTerms {
+              maturityDate
             }
           }
         }
@@ -55,9 +60,14 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         investedAmount
         investmentDate
         regulation
+        netPaymentsReceived
+        remainingPrincipal
+        remainingPayment
+        realizedMultiple
         offering {
           id
           stage
+          offeringSlug
           keyTerms {
             shorthandBusinessName
             securities
@@ -68,6 +78,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             investmentMultiple
             interestRate
             regulation
+            minOfferingAmount506
+            maxOfferingAmount506
             minOfferingAmount506C
             maxOfferingAmount506C
             minOfferingAmountCF
@@ -83,6 +95,9 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             hardCloseDate
             disbursement {
               date
+            }
+            keyTerms {
+              maturityDate
             }
           }
         }
@@ -91,9 +106,12 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         investedAmount
         investmentDate
         regulation
+        netPaymentsReceived
+        realizedMultiple
         offering {
           id
           stage
+          offeringSlug
           keyTerms {
             shorthandBusinessName
             securities
@@ -104,6 +122,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             investmentMultiple
             interestRate
             regulation
+            minOfferingAmount506
+            maxOfferingAmount506
             minOfferingAmount506C
             maxOfferingAmount506C
             minOfferingAmountCF
@@ -119,6 +139,10 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             hardCloseDate
             disbursement {
               date
+            }
+            keyTerms {
+              multiple
+              maturityDate
             }
           }
         }
@@ -128,8 +152,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
 }
 `;
 
-export const getInvestorDetailsById = gql`
-query getInvestmentDetails($userId: String!, $accountId: String!, $offeringId: String!) {
+export const getInvestmentDetails = gql`
+query getInvestmentDetails($userId: String, $accountId: String!, $offeringId: String!) {
   getInvestmentDetails(
     userId: $userId,
     accountId: $accountId,
@@ -145,21 +169,12 @@ query getInvestmentDetails($userId: String!, $accountId: String!, $offeringId: S
 `;
 
 export const cancelAgreement = gql`
-  mutation cancelAgreement($agreementId: Int!) {
-    cancelAgreement(agreementId: $agreementId)
+  mutation cancelAgreement($agreementId: Int!, $userId: String, $voidReason: String, $voidType: AgreementVoidTypeEnum, $sendNotification: Boolean) {
+    cancelAgreement(agreementId: $agreementId, userId: $userId, voidReason: $voidReason, voidType: $voidType, sendNotification: $sendNotification)
   }`;
-export const withdrawFunds = gql`
-  mutation withdrawFunds($amount:  Float!, $accountId: String! ) {
-    withdrawFunds(amount: $amount, accountId: $accountId)
-  }`;
-export const addFunds = gql`
-  mutation addFunds($amount:  Float!, $accountId: String! ) {
-    addFunds(amount: $amount, accountId: $accountId)
-  }
-`;
 
 export const getMonthlyPaymentsToInvestorByOffering = gql`
-query _getMonthlyPaymentsToInvestorByOffering($userId:String, $accountId:String!, $offeringId:String!) {
+query getMonthlyPaymentsToInvestorByOffering($userId:String, $accountId:String!, $offeringId:String!) {
   getMonthlyPaymentsToInvestorByOffering (
     userId: $userId
     accountId: $accountId
@@ -174,7 +189,7 @@ query _getMonthlyPaymentsToInvestorByOffering($userId:String, $accountId:String!
 `;
 
 export const getUserAccountSummary = gql`
-  query _getUserAccountSummary($userId: String!) {
+  query getUserAccountSummary($userId: String) {
     getUserAccountSummary (userId: $userId) {
       totalInvested
       pendingInvestments

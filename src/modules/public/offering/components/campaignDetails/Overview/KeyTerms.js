@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
-import { get } from 'lodash';
+import { get, capitalize } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Popup, Table, Header, Button } from 'semantic-ui-react';
-import Helper from '../../../../../../helper/utility';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_REGULATION_DETAILED } from '../../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -18,13 +16,14 @@ class KeyTerms extends Component {
     e.preventDefault();
     this.props.history.push(`${this.props.refLink}/investment-details`);
   }
+
   render() {
     const { campaign } = this.props;
     const { offerStructure } = this.props.campaignStore;
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     return (
-      <Aux>
+      <>
         <Header as="h3" className={`${isMobile ? 'mb-10' : 'mb-30'} anchor-wrap`}>
           Investment Highlights
           <span className="anchor" id="investment-highlights" />
@@ -35,61 +34,64 @@ class KeyTerms extends Component {
               <Table.Cell><b>Issuer</b>
               </Table.Cell>
               <Table.Cell className="grey-header">
-                {get(campaign, 'keyTerms.legalBusinessName') ?
-                  get(campaign, 'keyTerms.legalBusinessName') : '-'}
+                {get(campaign, 'keyTerms.legalBusinessName')
+                  ? get(campaign, 'keyTerms.legalBusinessName') : '-'}
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Type of Offering {' '}</b>
-                { get(campaign, 'regulation') &&
-                  CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation] ?
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content={
+                { get(campaign, 'regulation')
+                  && CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
+                  ? (
+<Popup
+  trigger={<Icon name="help circle" color="green" />}
+  content={
                         CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
                       }
-                      hoverable
-                      position="top center"
-                    /> : ''
+  hoverable
+  position="top center"
+/>
+                  ) : ''
                 }
               </Table.Cell>
               <Table.Cell className="grey-header">
-                {get(campaign, 'regulation') ?
-                  CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : '-'}
+                {get(campaign, 'regulation')
+                  ? CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : '-'}
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Type of Securities</b></Table.Cell>
               <Table.Cell className="grey-header">
-                {offerStructure ?
-                  CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
-                  :
-                '-'}
+                {offerStructure
+                  ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
+                  : '-'}
               </Table.Cell>
             </Table.Row>
-            {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE &&
-            <Aux>
+            {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
+            && (
+            <>
               <Table.Row verticalAlign="top">
                 <Table.Cell width={5} className="neutral-text"><b>Interest Rate{' '}</b>
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content={`Interest payment is calculated at a gross annualized interest rate of ${campaign && campaign.keyTerms && campaign.keyTerms.interestRate ?
-                      `${campaign.keyTerms.interestRate}%` : 'NA'} each month on the remaining balance of your investment from the prior month.`}
+                    content={`Interest payment is calculated at a gross annualized interest rate of ${campaign && campaign.keyTerms && campaign.keyTerms.interestRate
+                      ? `${campaign.keyTerms.interestRate}%` : 'NA'} each month on the remaining balance of your investment from the prior month.`}
                     position="top center"
                   />
                 </Table.Cell>
                 <Table.Cell>
-                  {campaign && campaign.keyTerms && campaign.keyTerms.interestRate ?
-                  `${campaign.keyTerms.interestRate}%`
-                    :
-                    'NA'
+                  {campaign && campaign.keyTerms && campaign.keyTerms.interestRate
+                    ? `${campaign.keyTerms.interestRate}%`
+                    : 'NA'
                 }
                 </Table.Cell>
               </Table.Row>
-            </Aux>
+            </>
+            )
             }
-            {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE &&
-            <Aux>
+            {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE
+            && (
+            <>
               <Table.Row verticalAlign="top">
                 <Table.Cell><b>Multiple</b>{' '}
                   <Popup
@@ -112,14 +114,16 @@ class KeyTerms extends Component {
                     position="top center"
                   />
                 </Table.Cell>
-                <Table.Cell className="grey-header" >
+                <Table.Cell className="grey-header">
                   {campaign && campaign.keyTerms && campaign.keyTerms.revSharePercentage ? `${get(campaign, 'keyTerms.revSharePercentage')}${get(campaign, 'keyTerms.revSharePercentage').includes('%') ? '' : '%'}` : '-'}
                 </Table.Cell>
               </Table.Row>
-            </Aux>
+            </>
+            )
             }
-            {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ?
-              <Table.Row verticalAlign="top">
+            {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
+              ? (
+<Table.Row verticalAlign="top">
                 <Table.Cell width={5}><b>Maturity</b>{' '}
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
@@ -128,15 +132,16 @@ class KeyTerms extends Component {
                   />
                 </Table.Cell>
                 <Table.Cell className="grey-header">
-                  {maturityMonth ?
-                    `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
-                    :
-                    '-'
+                  {maturityMonth
+                    ? `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
+                    : '-'
                   }
                 </Table.Cell>
-              </Table.Row> :
-              <Aux>
-                {/* <Table.Row verticalAlign="top">
+              </Table.Row>
+              )
+              : (
+                <>
+                  {/* <Table.Row verticalAlign="top">
                   <Table.Cell width={5} className="neutral-text"><b>Total Round Size{' '}</b>
                   </Table.Cell>
                   <Table.Cell>
@@ -145,7 +150,7 @@ class KeyTerms extends Component {
                 </Table.Row> */}
                 {/* {get(campaign, 'keyTerms.premoneyValuation') &&
                 <Table.Row verticalAlign="top">
-                  <Table.Cell width={5} className="neutral-text"><b>Pre-Money valuation{' '}</b>
+                  <Table.Cell width={5} className="neutral-text"><b>Pre-Money Valuation{' '}</b>
                   </Table.Cell>
                   <Table.Cell>
                     <p>
@@ -156,25 +161,28 @@ class KeyTerms extends Component {
                   </Table.Cell>
                 </Table.Row>
                 } */}
-                {get(campaign, 'keyTerms.unitPrice') &&
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={5} className="neutral-text"><b>Share Price{' '}</b>
+                {get(campaign, 'keyTerms.priceCopy')
+                && (
+<Table.Row verticalAlign="top">
+                  <Table.Cell width={5} className="neutral-text"><b>{`${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price`}{' '}</b>
                   </Table.Cell>
                   <Table.Cell>
                     <p>
-                      {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice')) : ' NA'}
+                      {get(campaign, 'keyTerms.priceCopy') || ' NA'}
                     </p>
                   </Table.Cell>
                 </Table.Row>
+                )
                 }
-              </Aux>
+                </>
+              )
             }
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Offered By</b></Table.Cell>
               <Table.Cell className="grey-header">
-                {campaign && get(campaign, 'regulation') ?
-                  CAMPAIGN_OFFERED_BY[get(campaign, 'regulation')] :
-                  CAMPAIGN_OFFERED_BY[get(campaign, 'keyTerms.regulation')]}
+                {campaign && get(campaign, 'regulation')
+                  ? CAMPAIGN_OFFERED_BY[get(campaign, 'regulation')]
+                  : CAMPAIGN_OFFERED_BY[get(campaign, 'keyTerms.regulation')]}
               </Table.Cell>
             </Table.Row>
           </Table.Body>
@@ -183,7 +191,7 @@ class KeyTerms extends Component {
           View Investment Details
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>
-      </Aux>
+      </>
     );
   }
 }

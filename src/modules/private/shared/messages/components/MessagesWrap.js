@@ -7,7 +7,8 @@ import Compose from './Compose';
 @inject('messageStore', 'uiStore')
 @observer
 export default class MessagesWrap extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.props.messageStore.getMessageDetails(this.props.match.params.id);
   }
 
@@ -21,6 +22,7 @@ export default class MessagesWrap extends Component {
     this.props.messageStore.deleteMessage(this.props.match.params.id);
     this.props.uiStore.setConfirmBox('', '', '', false);
   }
+
   render() {
     const { uiStore, messageStore } = this.props;
     const { thread, tError, tLoading } = messageStore;

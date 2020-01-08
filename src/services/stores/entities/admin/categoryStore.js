@@ -6,19 +6,25 @@ import { getCategoriesList, createCategory, updateCategoryInfo, deleteCategory, 
 import { CATEGORY_DETAILS, CATEGORY_DATA } from '../../../constants/admin/categories';
 import { FormValidator as Validator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import { uiStore } from '../../../../services/stores';
+import { uiStore } from '../..';
 
 export class CategoryStore {
     @observable data = [];
+
     @observable CATEGORY_DETAILS_FRM = Validator.prepareFormObject(CATEGORY_DETAILS);
+
     @observable selectedCategoryState = {
       type: '',
       title: '',
       index: '',
     };
+
     @observable ifApiHitFirstTime = true;
+
     @observable currentCategoryIndex = null;
+
     @observable uniqueCategoryError = null;
+
     @observable allCategoriesData = [];
 
     @action
@@ -43,8 +49,7 @@ export class CategoryStore {
 
     @action
     setFormData = (id) => {
-      this.CATEGORY_DETAILS_FRM =
-      Validator.setFormData(this.CATEGORY_DETAILS_FRM, this.categories.find(obj => obj.id === id));
+      this.CATEGORY_DETAILS_FRM = Validator.setFormData(this.CATEGORY_DETAILS_FRM, this.categories.find(obj => obj.id === id));
       this.CATEGORY_DETAILS_FRM.fields.categoryType.value = this.selectedCategoryState.type;
       Validator.validateForm(this.CATEGORY_DETAILS_FRM);
     }
@@ -54,6 +59,7 @@ export class CategoryStore {
       this.CATEGORY_DETAILS_FRM = Validator.prepareFormObject(CATEGORY_DETAILS);
       this.CATEGORY_DETAILS_FRM.fields.categoryType.value = this.selectedCategoryState.type;
     }
+
     @action
     setAllCategoriesData = () => {
       const formattedData = [];
@@ -109,6 +115,7 @@ export class CategoryStore {
 
     @action
     saveCategories = (id, isPublished) => {
+      uiStore.setProgress();
       const mutation = id === 'new' ? createCategory : (isPublished === 'defaultPublished' ? updateCategoryInfo : updateCategoryStaus);
       const param = {};
       if (id !== 'new') {
@@ -121,21 +128,16 @@ export class CategoryStore {
       } else {
         param.categoryDetailsInput = Validator.evaluateFormData(this.CATEGORY_DETAILS_FRM.fields);
       }
-      const successMessage = id === 'new' ?
-        'Category created successfully.' :
-        (isPublished === 'defaultPublished' ?
-          'Category Updated successfully.' :
-          'Category Status Updated successfully.');
-      uiStore.setProgress();
+      const successMessage = id === 'new'
+        ? 'Category created successfully.'
+        : (isPublished === 'defaultPublished'
+          ? 'Category Updated successfully.'
+          : 'Category Status Updated successfully.');
       return new Promise((resolve, reject) => {
         client
           .mutate({
             mutation,
             variables: param,
-            refetchQueries: [{
-              query: getCategoriesList,
-              variables: { types: null },
-            }],
           })
           .then(() => {
             this.currentCategoryIndex = this.selectedCategoryState.index;
@@ -144,12 +146,13 @@ export class CategoryStore {
           })
           .catch((res) => {
             const error = res.graphQLErrors[0] ? res.graphQLErrors[0].message : '';
-            const customError = error && error.includes('already exists') ? 'This category name already exists' :
-              Helper.toast('Error while Performing the Operation', 'error');
+            const customError = error && error.includes('already exists') ? 'This category name already exists'
+              : Helper.toast('Error while Performing the Operation', 'error');
             uiStore.setErrors(customError);
             reject();
           })
           .finally(() => {
+            this.initRequest();
             uiStore.setProgress(false);
           });
       });

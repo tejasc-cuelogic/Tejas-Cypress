@@ -1,4 +1,4 @@
-@placeholderMaxWidth: 30rem;
+@placeholderMaxWidth: 100%;
 
 /* Key Content Sizing */
 @placeholderLineMargin: @relative12px;

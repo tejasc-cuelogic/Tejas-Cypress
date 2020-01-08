@@ -1,32 +1,26 @@
 import React, { Component } from 'react';
 import { Route, Switch, Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import Loadable from 'react-loadable';
 import { Menu } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import Helper from '../../../../../helper/utility';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
-import { Logo, InlineLoader } from '../../../../../theme/shared';
+import { SuspenseBoundary, lazyRetry } from '../../../../../theme/shared';
 import Failure from '../../../../shared/businessApplication/components/Failure';
 import Success from '../../../../shared/businessApplication/components/Success';
 import Application from '../../../../shared/businessApplication/components/lendio/Application';
 import ConfirmModal from '../../../../shared/businessApplication/components/confirmModal';
 import NeedHelpModal from '../../../../shared/businessApplication/components/NeedHelpModal';
 import LendioSuccess from '../../../../shared/businessApplication/components/lendio/LendioSuccess';
-import { HeaderButtons } from '../../../../shared/businessApplication/components/HeaderButtons';
 
-const getModule = component => Loadable({
-  loader: () => import(`../../../../shared/businessApplication/components//${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
+const getModule = component => lazyRetry(() => import(`../../../../shared/businessApplication/components/${component}`));
 
 @inject('businessAppStore', 'uiStore', 'navStore')
 @withRouter
 @observer
 export default class BusinessApplication extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const { match } = this.props;
     const { pathname } = this.props.location;
     const {
@@ -58,9 +52,10 @@ export default class BusinessApplication extends Component {
     e.preventDefault();
     this.props.businessAppStore.businessAppParitalSubmit().then(() => {
       Helper.toast('Business application saved!', 'success');
-      this.props.history.push('/app/dashboard');
+      this.props.history.push('/dashboard');
     });
   }
+
   submitHandler = (isRedirect = true) => {
     if (this.props.businessAppStore.formReadOnlyMode) {
       return;
@@ -68,21 +63,23 @@ export default class BusinessApplication extends Component {
     const {
       // checkFormisValid,
       currentApplicationId, applicationStep,
-      currentApplicationType, businessAppParitalSubmit, businessApplicationSubmitAction,
+      currentApplicationType, businessAppParitalSubmit, businessApplicationSubmitAction, apiCall,
     } = this.props.businessAppStore;
     // if (checkFormisValid(applicationStep, true)) {
     businessAppParitalSubmit().then((result) => {
-      if (isRedirect && result && this.props.businessAppStore.canSubmitApp) {
+      if (isRedirect && result && this.props.businessAppStore.canSubmitApp && !apiCall) {
         businessApplicationSubmitAction().then(() => {
           Helper.toast('Business application submitted successfully!', 'success');
-          this.props.history.push('/app/dashboard');
+          this.props.history.push('/dashboard');
+          window.location.reload();
         });
       } else if (isRedirect) {
-        this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${applicationStep}`);
+        this.props.history.push(`/dashboard/business-application/${currentApplicationType}/${currentApplicationId}/${applicationStep}`);
       }
     });
     // }
   }
+
   submit = (e) => {
     e.preventDefault();
     this.submitHandler();
@@ -98,10 +95,11 @@ export default class BusinessApplication extends Component {
           .then(() => {
             const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
             Helper.toast('Business pre-qualification request submitted!', 'success');
-            this.props.history.push(`/app/business-application/${url}`);
+            this.props.history.push(`/dashboard/business-application/${url}`);
           });
       });
   }
+
   navCustomClick = () => this.submitHandler(false);
 
   checkIncludes = (paths, pathname) => paths.some(val => pathname.includes(val));
@@ -109,17 +107,13 @@ export default class BusinessApplication extends Component {
   calculateShowSubNav = (paths, pathname, appStepsStatus) => (appStepsStatus === 'IN_PROGRESS' && pathname.includes('pre-qualification')) || this.checkIncludes(paths, pathname);
 
   render() {
-    const { inProgress } = this.props.uiStore;
     const { match } = this.props;
     const { pathname } = this.props.location;
     const {
-      canSubmitApp, appStepsStatus, isFileUploading,
-      BUSINESS_APP_FRM, formReadOnlyMode, ButtonTextToggle,
+      appStepsStatus, formReadOnlyMode,
     } = this.props.businessAppStore;
     const showSubNav = this.calculateShowSubNav(['failed', 'success', 'lendio'], pathname, appStepsStatus[0].status, formReadOnlyMode);
-    const preQualPage = pathname.includes('pre-qualification');
     const navItems = GetNavMeta(match.url).subNavigations;
-    const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendioWhite' : 'LogoWhiteGreen';
     return (
       <PrivateLayout
         navCustomClick={this.navCustomClick}
@@ -127,46 +121,23 @@ export default class BusinessApplication extends Component {
         subNav={!showSubNav}
         appStepsStatus={appStepsStatus}
         {...this.props}
-        P0={
-          <Link to="/app/dashboard">
-            <Logo
-              alt="NextSeed.com"
-              dataSrc={logoUrl}
-              style={this.getLogoStyle(this.props.location.pathname)}
-              verticalAlign="middle"
-              size="small"
-            />
-          </Link>
-        }
         buttonWidth={6}
-        P4={
-          <HeaderButtons
-            disabled={formReadOnlyMode}
-            saveContinue={this.saveContinue}
-            submitApp={this.submit}
-            showSubNav={showSubNav}
-            canSubmitApp={canSubmitApp}
-            ButtonTextToggle={ButtonTextToggle}
-            preQualSubmit={this.preQualSubmit}
-            inProgress={inProgress}
-            isFileUploading={isFileUploading}
-            preQualPage={preQualPage}
-            isValid={BUSINESS_APP_FRM.meta.isValid}
-          />
-        }
+        hideHeader
       >
-        <Switch>
-          <Route exact path={match.url} component={getModule(navItems[0].component)} />
-          <Route exact path={`${match.url}/failed/:reason?`} component={Failure} />
-          <Route exact path={`${match.url}/lendio`} render={props => <Application applicationId={match.params.applicationId} {...props} />} />
-          <Route exact path={`${match.url}/lendio/:condition`} component={LendioSuccess} />
-          <Route exact path={`${match.url}/success`} render={props => <Success refLink={match.url} applicationId={match.params.applicationId} {...props} />} />
-          {
-            navItems.map(item => (
-              <Route exact key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
-            ))
-          }
-        </Switch>
+        <SuspenseBoundary>
+          <Switch>
+            <Route exact path={match.url} component={getModule(navItems[0].component)} />
+            <Route exact path={`${match.url}/failed/:reason?`} component={Failure} />
+            <Route exact path={`${match.url}/lendio`} render={props => <Application applicationId={match.params.applicationId} {...props} />} />
+            <Route exact path={`${match.url}/lendio/:condition`} component={LendioSuccess} />
+            <Route exact path={`${match.url}/success`} render={props => <Success refLink={match.url} applicationId={match.params.applicationId} {...props} />} />
+            {
+              navItems.map(item => (
+                <Route exact key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
+              ))
+            }
+          </Switch>
+        </SuspenseBoundary>
         <Route exact path={`${match.url}/confirm`} render={() => <ConfirmModal partialSave={this.submitSaveContinue} stepLink={pathname} refLink={match.url} />} />
         <Route exact path={`${match.url}/need-help`} render={() => <NeedHelpModal />} />
       </PrivateLayout>

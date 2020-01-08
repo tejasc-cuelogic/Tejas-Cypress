@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Table, Icon, Button, Form, Confirm } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
@@ -23,8 +22,8 @@ const TableBody = ({
 }) => (
   <Table.Body>
     {
-    fields.length ?
-    fields.map((formData, index) => (
+    fields.length
+      ? fields.map((formData, index) => (
       <Table.Row verticalAlign="top">
         <Table.Cell width={5}>
           <FormInput
@@ -46,26 +45,32 @@ const TableBody = ({
             size="small"
           />
         </Table.Cell>
-        {!isReadonly &&
-        <Table.Cell collapsing>
-          {fields.length > 1 &&
-          <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, arrayName)} >
+        {!isReadonly
+        && (
+<Table.Cell collapsing>
+          {fields.length > 1
+          && (
+<Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, arrayName)}>
             <Icon className="ns-close-circle" color="grey" />
           </Link>
+          )
           }
         </Table.Cell>
+        )
         }
       </Table.Row>
-    )) : ''
+      )) : ''
     }
-    {!isReadonly &&
-    <Table.Row>
+    {!isReadonly
+    && (
+<Table.Row>
       <Table.Cell colSpan="3">
-        {fields.length < 5 &&
-        <Button size="small" color="blue" className="link-button" type="button" onClick={() => addMore(formName, arrayName)}>+ Add Contingency</Button>
+        {fields.length < 5
+        && <Button size="small" color="blue" className="link-button" type="button" onClick={() => addMore(formName, arrayName)}>+ Add Contingency</Button>
         }
       </Table.Cell>
     </Table.Row>
+    )
     }
   </Table.Body>
 );
@@ -73,22 +78,27 @@ const TableBody = ({
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Contingencies extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (!this.props.businessAppReviewStore.initLoad.includes('CONTINGENCY_FRM')) {
       this.props.businessAppReviewStore.setFormData('CONTINGENCY_FRM', 'review.contingencies');
     }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.contingencies.managerOverview');
   }
+
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     this.props.businessAppReviewStore.toggleConfirmModal(index, formName);
   }
+
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('CONTINGENCY_FRM');
   }
+
   submitWithApproval = (form, action) => {
     this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
+
   render() {
     const {
       CONTINGENCY_FRM, confirmModal, confirmModalName, addMore, formChangeWithIndex,
@@ -100,17 +110,17 @@ export default class Contingencies extends Component {
       businessApplicationDetailsAdmin, applicationReviewLoading,
     } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
-    const submitted = (review && review.contingencies && review.contingencies &&
-      review.contingencies.submitted) ? review.contingencies.submitted : null;
-    const approved = (review && review.contingencies && review.contingencies &&
-      review.contingencies.approved) ? review.contingencies.approved : null;
+    const submitted = (review && review.contingencies && review.contingencies
+      && review.contingencies.submitted) ? review.contingencies.submitted : null;
+    const approved = (review && review.contingencies && review.contingencies
+      && review.contingencies.approved) ? review.contingencies.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
     if (applicationReviewLoading) {
       return <InlineLoader />;
     }
     return (
-      <Aux>
+      <>
         <Form onSubmit={this.submit}>
           <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} formName="CONTINGENCY_FRM" approved={approved} isReadonly={isReadonly} isValid={CONTINGENCY_FRM.meta.isValid} />
           <Header as="h5">
@@ -147,7 +157,7 @@ export default class Contingencies extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </>
     );
   }
 }

@@ -20,14 +20,16 @@ const FormSelect = observer((props) => {
     <Form.Field error={error} width={width}>
       <label>
         {label}
-        {props.tooltip &&
-          <Popup
-            trigger={<Icon className="ns-help-circle" />}
-            content={props.tooltip}
-            position="top center"
-            className="center-align"
-            wide
-          />
+        {props.tooltip
+          && (
+<Popup
+  trigger={<Icon className="ns-help-circle" />}
+  content={props.tooltip}
+  position="top center"
+  className="center-align"
+  wide
+/>
+          )
         }
       </label>
       <Select
@@ -39,8 +41,8 @@ const FormSelect = observer((props) => {
         placeholder={(displayMode || readOnly) ? '' : placeHolder}
       />
       <div className="dropdown-effect">{props.fielddata.label}</div>
-      {error &&
-        <FieldError error={error} />
+      {error
+        && <FieldError error={error} />
       }
     </Form.Field>
   );

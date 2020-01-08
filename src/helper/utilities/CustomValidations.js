@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import Validator from 'validatorjs';
+import moment from 'moment';
 import { sumBy, forEach } from 'lodash';
 import { TARGETED_INVESTOR_IRR } from '../../constants/business';
 
@@ -13,28 +14,35 @@ class CustomValidations extends Component {
 
     /* Investment Type Check for target investor irr field validation register */
     Validator.register(
-      'investmentTypeCheck', value => value >= TARGETED_INVESTOR_IRR[currentForm.fields.investmentType.value]
-      , ':attribute percentages must be greater than entered value.',
+      'investmentTypeCheck', value => value >= TARGETED_INVESTOR_IRR[currentForm.fields.investmentType.value],
+      ':attribute percentages must be greater than entered value.',
     );
+
+    ['taxId', 'maskedSSN'].map(field => Validator.register(
+      field, (value) => {
+        // eslint-disable-next-line no-useless-escape
+        const regexp = new RegExp(/^(?!\b(\d)\1+\b)(?!123456789|219099999|078051120)(?!666|000|9\d{2})\d{3}(?!00)\d{2}(?!0{4})\d{4}$/);
+        return regexp.test(value);
+      },
+      `The :attribute is not in the format ${field === 'taxId' ? 'XX-XXXXXXX' : 'XXX-XX-XXXX'}.`,
+    ));
+
 
     /* Beneficiary share percentage validation register */
     Validator.register('sharePercentage', (value, requirement) => {
-      const total = sumBy(currentForm.fields.beneficiary, currentValue =>
-        parseInt(currentValue[requirement].value, 10));
+      const total = sumBy(currentForm.fields.beneficiary, currentValue => parseInt(currentValue[requirement].value, 10));
       forEach(currentForm.fields.beneficiary, (ele, key) => {
-        currentForm.fields.beneficiary[key][requirement].error = total === 100 ?
-          undefined : true;
+        currentForm.fields.beneficiary[key][requirement].error = total === 100
+          ? undefined : true;
       });
       return total === 100 && value > 0;
     }, 'The sum of :attribute percentages must be 100.');
     /* Business App owners percentage validation register */
     Validator.register('ownerPercentage', (value, requirement) => {
-      const total = sumBy(currentForm.fields.owners, currentValue =>
-        parseFloat(currentValue[requirement].value));
+      const total = sumBy(currentForm.fields.owners, currentValue => parseFloat(currentValue[requirement].value));
       forEach(currentForm.fields.owners, (ele, key) => {
-        currentForm.fields.owners[key][requirement].error =
-          value >= 20 && value <= 100 && total <= 100 ?
-            undefined : true;
+        currentForm.fields.owners[key][requirement].error = value >= 20 && value <= 100 && total <= 100
+          ? undefined : true;
       });
       return value >= 20 && value <= 100 && total <= 100;
     }, 'Minimum ownership should be 20% and max 100% or sum of all ownership percentage should not be greater than 100%');
@@ -55,10 +63,8 @@ class CustomValidations extends Component {
       return regex.test(value);
     }, 'Invalid ticker symbol, please verify and enter again.');
 
-    Validator.register('removeFrontAndTrailingSpaces', (value) => {
-      const regex = /^[a-zA-Z0-9!@#$&()\\-`.+,/"]+(?: +[a-zA-Z0-9!@#$&()\\-`.+,/"]+)*$/;
-      return regex.test(value);
-    }, 'Front or trailing spaces are not allowed.');
+    Validator.register('futureDate', value => moment(value, 'MM/DD/YYYY').isSameOrAfter(moment().format('MM/DD/YYYY')),
+      "The :attribute should not be less than today's date.");
   }
 }
 

@@ -1,12 +1,90 @@
 import gql from 'graphql-tag';
 
+const common = {
+  offeringBasics: `
+  isAvailablePublicly
+  keyTerms {
+    legalBusinessName
+    shorthandBusinessName
+    securities
+    regulation
+    offeringSize
+    preferredReturn
+    targetInvestmentPeriod
+    minOfferingAmountCF
+    maxOfferingAmountCF
+    minOfferingAmount506
+    maxOfferingAmount506
+    minOfferingAmount506C
+    maxOfferingAmount506C
+  }
+  leadDetails {
+    email {
+      address
+    }
+    info {
+      firstName
+      lastName
+    }
+    phone {
+      number
+    }
+  }
+  issuerDetails {
+    email {
+      address
+    }
+    info {
+      firstName
+      lastName
+    }
+    phone {
+      number
+    }
+  }
+  offering {
+    launch {
+      targetDate
+    }
+  }
+  issuerId
+  stage
+  created {
+    date
+  }
+  closureSummary {
+    processingDate
+    hardCloseDate
+    operationsDate
+    launchDate
+    totalInvestmentAmount
+    totalInvestorCount
+    repayment {
+      currentRepaidAmount
+      count
+    }
+  }
+  order`,
+};
 export const allOfferingsCompact = gql`
-  query _getOfferings($stage: [OfferingStageEnumType], $issuerId: String){
+  query getOfferings($stage: [OfferingStageEnumType], $issuerId: String){
     getOfferings(filters: { stage: $stage, issuerId: $issuerId }){
       id
+      offeringSlug
+      closureSummary {
+        hardCloseDate
+        launchDate
+        processingDate
+      }
       keyTerms {
         legalBusinessName
         shorthandBusinessName
+      }
+      offering {
+        launch {
+          targetDate
+          terminationDate
+        }
       }
       stage
       created {
@@ -19,68 +97,10 @@ export const allOfferingsCompact = gql`
 `;
 
 export const allOfferings = gql`
-  query _getOfferings($stage: [OfferingStageEnumType]){
+  query getOfferings($stage: [OfferingStageEnumType]){
     getOfferings(filters: { stage: $stage }){
       id
-      isAvailablePublicly
-      keyTerms {
-        legalBusinessName
-        shorthandBusinessName
-        securities
-        regulation
-      }
-      leadDetails {
-        id
-        email {
-          address
-        }
-        info {
-          firstName
-          lastName
-        }
-        phone {
-          number
-        }
-      }
-      issuerDetails {
-        id
-        email {
-          address
-        }
-        info {
-          firstName
-          lastName
-        }
-        phone {
-          number
-        }
-      }
-      offering {
-        launch {
-          targetDate
-          terminationDate
-        }
-      }
-      applicationId
-      issuerId
-      stage
-      created {
-        id
-        date
-      }
-      updated {
-        id
-        date
-      }
-      closureSummary {
-        processingDate
-        hardCloseDate
-        repayment {
-          currentRepaidAmount
-          count
-        }
-      }
-      order
+      ${common.offeringBasics}
     }
   }
 `;
@@ -94,13 +114,101 @@ export const deleteOffering = gql`
 `;
 
 export const getOfferingDetails = gql`
-  query _getOfferingById($id: String!) {
+  query getOfferingById($id: String!) {
     getOfferingById(id: $id) {
       id
       offeringSlug
       referralCode
       previewPassword
       regulation
+      rootFolderId
+      goldstar {
+        isin
+        contactId
+        esAccountNumber
+        sfAccountNumber
+        esAccountNumberRegD
+        isinRegD
+        sfAccountNumberRegD
+      }
+      closureProcess {
+        checkBalance {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        exportEnvelopes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        finalizeNotes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        fundEscrow {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        hardCloseNotification {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        issueCredits {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        processNotes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        softCloseNotification {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        validateNotes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        verifySecurityTransaction {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+      }
+      linkedBank {
+        accountNumber
+        routingNumber
+        bankName
+        accountHolderName
+      }
       leadDetails {
         id
         email {
@@ -128,7 +236,21 @@ export const getOfferingDetails = gql`
       }
       }
       keyTerms {
-        unitPrice
+        revShareSummaryUpload {
+          id
+          url
+          fileName
+          isPublic
+        }
+        discount
+        valuationCap
+        priceCopy
+        offeringSize
+        preferredReturn
+        targetInvestmentPeriod
+        totalRoundSize
+        equityClass
+        equityUnitType
         roundType
         premoneyValuation
         additionalKeyterms {
@@ -164,8 +286,10 @@ export const getOfferingDetails = gql`
         revSharePercentage
         interestRate
         minOfferingAmountCF
-        minOfferingAmount506C
+        minOfferingAmount506
         maxOfferingAmountCF
+        maxOfferingAmount506
+        minOfferingAmount506C
         maxOfferingAmount506C
         legalBusinessType
         nsMinFees
@@ -406,9 +530,8 @@ export const getOfferingDetails = gql`
           terminationDate
           expectedOpsDate
           issuerApprovedDate
-          escrowKey
-          escrowNumber
           edgarLink
+          investmentConfirmationTemplateName
           submitted {
             aliasId: id
             by
@@ -420,7 +543,6 @@ export const getOfferingDetails = gql`
             date
             status
           }
-          gsFees
         }
       }
       legal {
@@ -432,6 +554,7 @@ export const getOfferingDetails = gql`
           offeringDeadline
           employmentIdNumber
           numOfEmployees
+          taxedAs
           businessStreet
           businessCity
           businessState
@@ -693,6 +816,81 @@ export const getOfferingDetails = gql`
                 }
               }
             }
+            purchaseAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            specialPurposeEntityAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            llcAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            subscriptionAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            proxyAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
             disclosure {
               fileId
               fileName
@@ -783,6 +981,26 @@ export const getOfferingDetails = gql`
               fileId
               fileName
             }
+            purchaseAgreement {
+              fileId
+              fileName
+            }
+            proxyAgreement {
+              fileId
+              fileName
+            }
+            specialPurposeEntityAgreement {
+              fileId
+              fileName
+            }
+            llcAgreement {
+              fileId
+              fileName
+            }
+            subscriptionAgreement {
+              fileId
+              fileName
+            }
             disclosure {
               fileId
               fileName
@@ -807,6 +1025,7 @@ export const getOfferingDetails = gql`
           dateOfService
         }
         isPublic
+        isBeneficialOwnerDocGeneration
         firstName
         lastName
         email
@@ -827,6 +1046,10 @@ export const getOfferingDetails = gql`
           state
           zip
         }
+        dlLicenseNumber
+        dlState
+        dlIssuedDate
+        dlExpirationDate
         bio
         uploads {
           headshot {
@@ -869,6 +1092,18 @@ export const getOfferingDetails = gql`
           status
         }
       }
+      closingBinder {
+        name
+        aliasAccreditedOnly: isVisible
+        status
+        upload {
+          fileId
+          fileName
+          fileHandle {
+            boxFileId
+          }
+        }
+      }
       closureSummary {
         processingDate
         hardCloseDate
@@ -877,11 +1112,29 @@ export const getOfferingDetails = gql`
           date
           amount
         }
+        operationsDate
         keyTerms {
+          monthlyPayment
+          supplementalAgreements {
+            documents {
+              name
+              aliasAccreditedOnly: isVisible
+              upload {
+                fileId
+                fileName
+              }
+            }
+          }
+          priceCalculation
           multiple
           revSharePercentage
           interestRate
           businessOpenDate
+          nsPayment
+          investorFee
+          maturityDate
+          anticipatedPaymentStartDate
+          gsFees
         }
         repayment {
           startDate
@@ -892,6 +1145,9 @@ export const getOfferingDetails = gql`
         totalCommittedAmount
         totalInvestorCount
         totalInvestmentAmount
+        totalInvestmentAmountCf
+        totalInvestmentAmount506C
+        totalInvestmentAmount506B
         failedDate
       }
       bonusRewards{
@@ -951,9 +1207,10 @@ export const getOfferingDetails = gql`
 `;
 
 export const updateOffering = gql`
-mutation _updateOffering($id: String!, $issuerId: String, $adminId: String, $offeringDetails: OfferingInputType!) {
+mutation updateOffering($id: String!, $issuerId: String, $adminId: String, $offeringDetails: OfferingInputType!) {
   updateOffering(id: $id, issuerId: $issuerId, adminId: $adminId, offeringDetails: $offeringDetails) {
-    id
+    aliasId: id
+    ${common.offeringBasics}
   }
 }
 `;
@@ -962,12 +1219,13 @@ export const upsertOffering = gql`
 mutation upsertOffering($id: String, $offeringDetails: OfferingInputType!) {
   upsertOffering(id: $id, offeringDetails: $offeringDetails) {
     id
+    ${common.offeringBasics}
   }
 }
 `;
 
 export const getOfferingBac = gql`
-query _getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
+query getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
   getOfferingBac(
     offeringId: $offeringId
     filters: {
@@ -977,6 +1235,7 @@ query _getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
     id
     offeringId
     controlPersonQuestionnaire
+    otherEntities
     residenceTenYears
     legalName
     email
@@ -1030,16 +1289,8 @@ query _getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
 }
 `;
 
-export const createOffer = gql`
-  mutation _createOffering($applicationId: String!){
-    createOffering(applicationId: $applicationId) {
-      id
-    }
-  }
-`;
-
 export const createBac = gql`
-mutation _createBAC($offeringBacDetails: OfferingBacInputType!) {
+mutation createBAC($offeringBacDetails: OfferingBacInputType!) {
   createOfferingBac(offeringBacDetails: $offeringBacDetails) {
     id
   }
@@ -1047,7 +1298,7 @@ mutation _createBAC($offeringBacDetails: OfferingBacInputType!) {
 `;
 
 export const updateBac = gql`
-mutation _updateBac($id: String! $offeringBacDetails: OfferingBacInputType!) {
+mutation updateBac($id: String! $offeringBacDetails: OfferingBacInputType!) {
   updateOfferingBac(id: $id offeringBacDetails: $offeringBacDetails) {
     id
   }
@@ -1055,14 +1306,14 @@ mutation _updateBac($id: String! $offeringBacDetails: OfferingBacInputType!) {
 `;
 
 export const deleteBac = gql`
-mutation _deleteBac($id: String! $offeringId: String!){
+mutation deleteBac($id: String! $offeringId: String!){
   deleteOfferingBac(id: $id  offeringId: $offeringId) {
     id
   }
 }`;
 
 export const getOfferingFilingList = gql`
-  query _getOfferingFilingList($offeringId: ID! $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) {
+  query getOfferingFilingList($offeringId: ID! $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) {
     businessFilings(offeringId: $offeringId ) {
       offeringId
       filingId
@@ -1083,7 +1334,7 @@ export const getOfferingFilingList = gql`
 `;
 
 export const generateBusinessFiling = gql`
-  mutation _createBusinessFiling ($offeringId: String!) {
+  mutation createBusinessFiling ($offeringId: String!) {
     createBusinessFiling(offeringId: $offeringId) {
       filingId
       offeringId
@@ -1092,7 +1343,7 @@ export const generateBusinessFiling = gql`
 `;
 
 export const upsertBonusReward = gql`
-mutation _upsertBonusReward($id: String, $bonusRewardDetails: BonusRewardInputType!){
+mutation upsertBonusReward($id: String, $bonusRewardDetails: BonusRewardInputType!){
   upsertBonusReward(id: $id, bonusRewardDetails: $bonusRewardDetails){
     id
   }
@@ -1100,7 +1351,7 @@ mutation _upsertBonusReward($id: String, $bonusRewardDetails: BonusRewardInputTy
 `;
 
 export const getBonusRewards = gql`
-query _getBonusRewards($offeringId: String!){
+query getBonusRewards($offeringId: String!){
   getBonusRewards(offeringId: $offeringId){
     id
     offeringId
@@ -1123,7 +1374,7 @@ query _getBonusRewards($offeringId: String!){
 `;
 
 export const deleteBonusReward = gql`
-mutation _deleteBonusReward($id: String! $offeringId: String!){
+mutation deleteBonusReward($id: String! $offeringId: String!){
   deleteBonusReward(id: $id offeringId: $offeringId
   ){
     id
@@ -1138,18 +1389,27 @@ query getTotalAmount{
     amountRaisedUS
     amountRaisedTX
     totalInvestorsUS
-  }  
+  }
   }
   `;
 
 export const offerClose = gql`
-  mutation _offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType) {
-    offeringClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload)
+  mutation offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType, $service: OfferingCloseServiceEnum, $concurrency: Int) {
+    offeringClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload, service: $service, concurrency: $concurrency)
   }
 `;
 
 export const setOrderForOfferings = gql`
   mutation setOrderForOfferings($offeringOrderDetails:[OfferingOrderInput]){
     setOrderForOfferings(offeringOrderDetails: $offeringOrderDetails)
+  }
+`;
+
+export const initializeClosingBinder = gql`
+  mutation initializeClosingBinder($offeringId: String!){
+    initializeClosingBinder(offeringId: $offeringId) {
+      name
+      status
+    }
   }
 `;

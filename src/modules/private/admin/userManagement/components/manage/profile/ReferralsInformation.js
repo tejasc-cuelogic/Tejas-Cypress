@@ -1,9 +1,8 @@
 import React from 'react';
 import { Table, Header } from 'semantic-ui-react';
-import Aux from 'react-aux';
 
 const ReferralsInformation = ({ details }) => (
-  <Aux>
+  <>
     <Header as="h6">Referrals Information</Header>
     <div className="bg-offwhite">
       <div className="table-wrapper">
@@ -29,7 +28,7 @@ const ReferralsInformation = ({ details }) => (
         </Table>
       </div>
     </div>
-  </Aux>
+  </>
 );
 
 export default ReferralsInformation;

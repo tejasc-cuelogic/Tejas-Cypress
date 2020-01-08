@@ -1,6 +1,7 @@
 export const ACCREDITATION_STATUS_LABEL = {
   REQUESTED: 'Requested',
   CONFIRMED: 'Approved',
+  EXPIRED: 'Expired',
   INVALID: 'Invalid',
 };
 
@@ -11,9 +12,6 @@ export const INVESTEMENT_LIMIT = {
     error: undefined,
     rule: 'required',
     tooltip: 'Mention your Annual Income here',
-    customErrors: {
-      required: 'required.',
-    },
   },
   netWorth: {
     value: '',
@@ -21,9 +19,6 @@ export const INVESTEMENT_LIMIT = {
     error: undefined,
     rule: 'required',
     tooltip: 'Mention your Net Worth here',
-    customErrors: {
-      required: 'required.',
-    },
   },
   cfInvestments: {
     value: '',
@@ -31,9 +26,6 @@ export const INVESTEMENT_LIMIT = {
     error: undefined,
     rule: 'required',
     tooltip: 'Other Crowdfunding investments',
-    customErrors: {
-      required: 'required.',
-    },
   },
   currentLimitIndividualOrIra: {
     value: '',
@@ -199,7 +191,7 @@ export const VERIFICATION_REQUEST = {
     error: undefined,
     placeHolder: 'johndoe@contact.com',
     rule: 'required|email',
-    label: 'Verifier e-mail address',
+    label: 'Verifier email address',
     objRefOutput: 'verifier',
     objRef: 'verifier',
   },

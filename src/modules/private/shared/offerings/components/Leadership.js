@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Grid, Button, List } from 'semantic-ui-react';
 import { Switch, Route } from 'react-router-dom';
@@ -10,7 +9,8 @@ import Leader from './leadership/Leader';
 @inject('offeringCreationStore', 'userStore')
 @observer
 export default class Leadership extends Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/leader/1`);
     }
@@ -18,6 +18,7 @@ export default class Leadership extends Component {
       this.props.offeringCreationStore.setFormData('LEADERSHIP_FRM', false);
     }
   }
+
   addMore = (e, formName) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName, 'leadership');
@@ -25,6 +26,7 @@ export default class Leadership extends Component {
     const leaderCount = LEADERSHIP_FRM.fields.leadership.length;
     this.props.history.push(`${this.props.match.url}/leader/${leaderCount}`);
   }
+
   render() {
     const { match } = this.props;
     const { LEADERSHIP_FRM } = this.props.offeringCreationStore;
@@ -39,7 +41,7 @@ export default class Leadership extends Component {
         id: 1,
         title: 'Who does a “Control Person” include?',
         description: (
-          <Aux>
+          <>
             <List ordered>
               <List.Item>
                 An officer, director, general partner or managing member of the company
@@ -59,7 +61,7 @@ export default class Leadership extends Component {
               </List.Item>
               <List.Item>Any control person of the person described in (5).</List.Item>
             </List>
-          </Aux>
+          </>
         ),
       },
     ];
@@ -70,8 +72,8 @@ export default class Leadership extends Component {
           <Grid.Column widescreen={4} computer={4} tablet={3} mobile={16}>
             <div className="sticky-sidebar">
               <SecondaryMenu secondary vertical match={match} navItems={navItems} />
-              {LEADERSHIP_FRM.fields.leadership.length < 10 &&
-              <Button size="small" color="blue" className="link-button mt-20" onClick={e => this.addMore(e, formName)}>+ Add another leader</Button>
+              {LEADERSHIP_FRM.fields.leadership.length < 10
+              && <Button size="small" color="blue" className="link-button mt-20" onClick={e => this.addMore(e, formName)}>+ Add another leader</Button>
               }
               <FaqWidget fullHeading="FAQ" faqs={faqsOfModule} />
             </div>
@@ -81,8 +83,7 @@ export default class Leadership extends Component {
               <Route
                 exact
                 path={match.url}
-                render={props =>
-                  <Leader refLink={match.url} {...props} index={0} />}
+                render={props => <Leader refLink={match.url} {...props} index={0} />}
               />
               {
                 navItems.map((item, index) => (

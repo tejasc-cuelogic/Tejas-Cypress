@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Grid, Header } from 'semantic-ui-react';
 import PerformanceChart from './PerformanceChart';
 
 export default class PaymentPerformance extends Component {
   render() {
     return (
-      <Aux>
+      <>
         <Header as="h4">Payment Performance</Header>
         <Grid>
           <Grid.Row>
@@ -18,7 +17,7 @@ export default class PaymentPerformance extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </Aux>
+      </>
     );
   }
 }
