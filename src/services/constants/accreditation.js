@@ -8,8 +8,8 @@ export const ACCREDITATION_FILE_UPLOAD_ENUMS = {
 
 export const UPLOAD_ASSET_ENUMS = {
   statementDoc: 'ASSETS',
-  incomeDocSecondLastYear: `INCOME_${CURR_YEAR - 2}`,
   incomeDocLastYear: `INCOME_${CURR_YEAR - 1}`,
+  incomeDocSecondLastYear: `INCOME_${CURR_YEAR - 2}`,
   incomeDocThirdLastYear: `INCOME_${CURR_YEAR - 3}`,
 };
 

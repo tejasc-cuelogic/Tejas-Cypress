@@ -57,6 +57,7 @@ export default class Accreditation extends React.Component {
     const formArray = (ACCREDITATION_FORM.fields.method.value === 'INCOME' && INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') ? [
       { key: 'ACCREDITATION_FORM' },
       { key: 'INCOME_EVIDENCE_FORM' },
+      { key: 'FILLING_STATUS_FORM' },
       {
         key: 'VERIFICATION',
         component: <Verification
