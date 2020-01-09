@@ -125,6 +125,9 @@ export default class ApplicationsList extends Component {
                               {get(application, 'signupCode') && (<span>Sign-Up Code <b>{get(application, 'signupCode')}</b></span>)}
                               {get(application, 'utmSource') && (<span>Utm Source <b>{get(application, 'utmSource')}</b></span>)}
                               <span>
+                                Type{'  '}<b>{application.applicationType === 'BUSINESS' ? 'BA' : 'CRE'}</b>
+                              </span>
+                              <span>
                                 Started{' '}
                                 <b>
                                   {match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? DataFormatter.getDateAsPerTimeZone(` ${application.submittedDate}`, true, false, false) : '-') : (` ${get(application, 'created.date')}` ? DataFormatter.getDateAsPerTimeZone(` ${application.created.date}`, true, false, false) : '-')}
