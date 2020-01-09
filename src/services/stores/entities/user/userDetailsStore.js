@@ -334,6 +334,8 @@ export class UserDetailsStore {
     });
   })
 
+
+  // Requested / Confirmed & Not expired
   @computed
   get isInvestorAccreditated() {
     let entityAccreditation = null;

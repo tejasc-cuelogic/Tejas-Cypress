@@ -28,23 +28,25 @@ class Disclosure extends Component {
     const { currentUser, uiStore } = this.props;
     const { SELF_ACCREDITATION_FRM, formChange } = this.props.accreditationStore;
     const { inProgress } = uiStore;
+    const headerMsg = 'This document is only available to accredited investors.';
+    const paraMsg = 'Please confirm your accredited investor status to access this document.';
     return !this.state.isSelfAccredited ? (
       <section className={`no-updates center-align padded ${!currentUser ? 'pt-0 pb-0' : 'bg-offwhite'}`}>
         <Header as="h3" className="mb-20 mt-50">
-          This document is only available to accredited investors.
+          {headerMsg}
         </Header>
         {
           !currentUser
             ? <p>Please log in or create an account to view this document.</p>
-            : <p>Please confirm your accredited investor status to access this Document.</p>
+            : <p>{paraMsg}</p>
         }
         {
           !currentUser
             ? <Button as={Link} to="/login" primary content="Log in / Sign Up" className="mt-20 mb-50" />
             : (
             <>
-              <Button as={Link} to="/dashboard/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
-              <Button primary content="Self Accredited" className="mt-20 mb-50" onClick={this.selfAccreditedHandle} />
+              {/* <Button as={Link} to="/dashboard/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" /> */}
+              <Button primary content="Confirm Status" className="mt-20 mb-50" onClick={this.selfAccreditedHandle} />
             </>
               )}
       </section>
@@ -53,9 +55,9 @@ class Disclosure extends Component {
         <Grid columns="2">
           <Grid.Column>
             <Header as="h3" className="mb-20">
-              This document is only available to accredited investors.
+              {headerMsg}
             </Header>
-            <p>Please confirm your accredited investor status to access this Document.</p>
+            <p>{paraMsg}</p>
           </Grid.Column>
           <Grid.Column>
             <FormCheckbox
