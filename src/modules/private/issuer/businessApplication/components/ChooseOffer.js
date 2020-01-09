@@ -16,9 +16,11 @@ export default class ChooseOffer extends Component {
   constructor(props) {
     super(props);
     const { match, businessAppReviewStore } = this.props;
-    businessAppReviewStore.fetchApplicationOffers(match.params.applicationId).then(() => {
-      this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers', 'appReviewStore');
-    });
+    if (!businessAppReviewStore.fetchBusinessApplicationOffers) {
+      businessAppReviewStore.fetchApplicationOffers(match.params.applicationId).then(() => {
+        this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers', 'appReviewStore');
+      });
+    }
   }
 
   getBusinessName = res => ((res && res.prequalDetails) ? res.prequalDetails.businessGeneralInfo.businessName : '');
@@ -88,19 +90,19 @@ export default class ChooseOffer extends Component {
           {offerLoading
             ? <InlineLoader />
             : (
-<div className="ui form mt-20">
-              <OffersPanel
-                OFFERS_FRM={OFFERS_FRM}
-                formChangeWithIndex={formChangeWithIndex}
-                maskChangeWithIndex={maskChangeWithIndex}
-                isReadonly
-                match={this.props.match}
-                selectOffer={this.handleSetField}
-                refModule="issuer"
-                selectedOfferIndex={selectedOfferIndex}
-                isIssuer={isIssuer}
-              />
-            </div>
+              <div className="ui form mt-20">
+                <OffersPanel
+                  OFFERS_FRM={OFFERS_FRM}
+                  formChangeWithIndex={formChangeWithIndex}
+                  maskChangeWithIndex={maskChangeWithIndex}
+                  isReadonly
+                  match={this.props.match}
+                  selectOffer={this.handleSetField}
+                  refModule="issuer"
+                  selectedOfferIndex={selectedOfferIndex}
+                  isIssuer={isIssuer}
+                />
+              </div>
             )
           }
           {selectedOfferIndex !== null && !offerLoading
@@ -112,10 +114,10 @@ export default class ChooseOffer extends Component {
                   navItems={navItems}
                   rightLabel={(
                     <Menu.Item header position="right">
-Offer
+                      Offer
                       {String.fromCharCode('A'.charCodeAt() + selectedOfferIndex)}
                     </Menu.Item>
-)}
+                  )}
                 />
                 <div className="inner-content-spacer">
                   <SuspenseBoundary>
@@ -126,24 +128,24 @@ Offer
                         component={getModule(this.module(navItems[0].title))}
                       />
                       {
-                      navItems.map(item => (
-                        <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
-                      ))
-                    }
+                        navItems.map(item => (
+                          <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                        ))
+                      }
                     </Switch>
                   </SuspenseBoundary>
                 </div>
                 <Card.Content extra className="center-align">
-                  { fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL' ? ''
+                  {fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL' ? ''
                     : (
                       <Button.Group>
                         <Button color="red" disabled={this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} className="very relaxed" content="Decline NextSeed Offers" onClick={this.declineApplication} />
                         <Button primary disabled={this.props.uiStore.inProgress} loading={this.props.uiStore.inProgress} className="very relaxed" content="Sign Portal Agreement" onClick={this.signPortalAgreement} />
                       </Button.Group>
                     )
-                }
-              </Card.Content>
-            </Card>
+                  }
+                </Card.Content>
+              </Card>
             ) : null
           }
         </Modal.Content>
