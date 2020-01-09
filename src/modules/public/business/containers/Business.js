@@ -4,6 +4,7 @@ import { Responsive } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 import HowItWorks from '../components/HowItWorks';
+import MessageModal from '../../../../theme/shared/src/MessageModal';
 
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Learn how small business entrepreneurs are using debt crowdfunding on NextSeed to retain ownership in their breweries, restaurants, bars, fitness studios, and more.' },
@@ -27,18 +28,45 @@ const metaTagsData = [
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
 
-@inject('navStore', 'userStore')
+const modalContent = 'Investor accounts may not be used to apply for business funding. In order to apply to raise capital, log out of your investor account and submit your application with different email address';
+@inject('navStore', 'userStore', 'authStore', 'uiStore')
 @observer
 class Business extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isInvestorModal: false,
+    };
+  }
+
+  handleApplyCta = () => {
+    if (this.props.authStore.isUserLoggedIn
+      && this.props.userStore.isInvestor) {
+      this.setState({ isInvestorModal: true });
+    } else {
+      this.props.uiStore.setAuthRef('/business');
+      this.props.history.push('/register');
+    }
+  }
+
+  handleBack = () => {
+    this.setState({ isInvestorModal: false });
+    this.props.history.push('/business');
+  }
+
   render() {
     const { location } = this.props;
     return (
       <>
         <MetaTagGenerator pathName={location.pathname} metaTagsData={metaTagsData} />
-        {location.pathname === '/business' ? <Banner />
+        {location.pathname === '/business' ? <Banner handleApplyCta={this.handleApplyCta} />
           : <Responsive as="section" maxWidth={991} className={`banner ${location.pathname.split('/')[2]}`} />
         }
-        <HowItWorks />
+        <HowItWorks handleApplyCta={this.handleApplyCta} />
+        {
+          this.state.isInvestorModal
+          && <MessageModal size="small" refLink="/business" handleBack={this.handleBack} content={modalContent} />
+        }
       </>
     );
   }
