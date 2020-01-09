@@ -28,7 +28,7 @@ export default class CampaignSideBar extends Component {
     const {
       isClosed, isCreation, isInProcessing, collected, minFlagStatus, isBonusReward,
       minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, diffForProcessing,
-      earlyBird, isEarlyBirdRewards, bonusRewards, countDown, isInvestedInOffering,
+      earlyBird, isEarlyBirdRewards, bonusRewards, countDown, isInvestedInOffering, dataRooms,
     } = campaignStatus;
     const isCampaignLayout = newLayout;
     const showCounter = (!isClosed && diffForProcessing.value > 0 && !campaignStatus.isFund) || (!campaignStatus.isFund) || (earlyBird && earlyBird.available > 0
@@ -101,19 +101,19 @@ export default class CampaignSideBar extends Component {
                   <>
                     <p className={`${newLayout ? 'mt-10' : ''} mr-10`}>
                       {Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
-                        <Popup
-                          trigger={<Icon name="help circle" color="green" />}
-                          content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                          position="top center"
-                        />
+                      <Popup
+                        trigger={<Icon name="help circle" color="green" />}
+                        content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                        position="top center"
+                      />
                     </p>
                     <p className={`${newLayout ? 'mt-10' : ''} mr-10`}>
                       {Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
-                        <Popup
-                          trigger={<Icon name="help circle" color="green" />}
-                          content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
-                          position="top center"
-                        />
+                      <Popup
+                        trigger={<Icon name="help circle" color="green" />}
+                        content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                        position="top center"
+                      />
                     </p>
                   </>
                 )}
@@ -160,23 +160,37 @@ export default class CampaignSideBar extends Component {
               {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                 && (
                   <p className="raise-type mt-20 mb-0">
-                    {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
+                    {['REAL_ESTATE'].includes(offerStructure) ? 'Commercial Real Estate' : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
+                  </p>
+                )
+              }
+              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
+                && (
+                  <p className="mb-0">
+                    Asset Type: Hotel Development
+                        </p>
+                )
+              }
+              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE && dataRooms > 0
+                && (
+                  <p className="mb-0">
+                    Targeted IRR: <Link to={`${this.props.match.url}#data-room`}> View in Data Room</Link>
                   </p>
                 )
               }
               {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE
                 && (
                   <>
-                  {get(campaign, 'keyTerms.valuationCap') && (
-                    <p className="mb-0">
-                      Valuation Cap: {get(campaign, 'keyTerms.valuationCap')}
-                    </p>
-                  )}
-                  {get(campaign, 'keyTerms.discount') && (
-                    <p className="mb-0">
-                      Discount: {get(campaign, 'keyTerms.discount')}
-                    </p>
-                  )}
+                    {get(campaign, 'keyTerms.valuationCap') && (
+                      <p className="mb-0">
+                        Valuation Cap: {get(campaign, 'keyTerms.valuationCap')}
+                      </p>
+                    )}
+                    {get(campaign, 'keyTerms.discount') && (
+                      <p className="mb-0">
+                        Discount: {get(campaign, 'keyTerms.discount')}
+                      </p>
+                    )}
                   </>
                 )
               }
