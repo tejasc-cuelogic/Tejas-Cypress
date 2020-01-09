@@ -570,7 +570,7 @@ module.exports = (webpackEnv) => {
         https://github.com/NekR/offline-plugin/blob/66cde2c7784b5be8c84fecbb93c6f9f96faacdb5/docs/options.md
       */
       new OfflinePlugin({
-        // excludes: ['**/.*', '**/*.map', '**/*.jpg', '**/*.png', '**/*.gz', '**/google-fonts.*', '**/**/google-fonts.*'],
+        excludes: ['**/.*', '**/*.map', '**/*.jpg', '**/*.png', '**/*.gz', '**/google-fonts.*', '**/**/google-fonts.*'],
         autoUpdate: 1000 * 60 * 2, // check every 2 minute
         ServiceWorker: {
           events: true,

@@ -85,7 +85,7 @@ class Footer extends Component {
               </p>
               <p>
                 By accessing this site and any pages thereof, you agree to be bound by the <Link to="/agreements/legal/terms-of-use" target="_blank">Terms of Use</Link> and
-                {' '}<Link to="/agreements/legal/privacy-policy" target="_blank">Privacy Policy2.3</Link>.
+                {' '}<Link to="/agreements/legal/privacy-policy" target="_blank">Privacy Policy</Link>.
               </p>
             </Grid.Column>
           </Grid>
