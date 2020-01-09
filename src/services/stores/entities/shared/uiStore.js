@@ -85,8 +85,8 @@ export class UiStore {
   }
 
   @action
-  setAppUpdated() {
-    this.appUpdated = true;
+  setAppUpdated(value = true) {
+    this.appUpdated = value;
   }
 
   @action
