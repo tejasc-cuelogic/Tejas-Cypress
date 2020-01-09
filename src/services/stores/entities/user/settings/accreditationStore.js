@@ -65,7 +65,7 @@ export class AccreditationStore {
     },
   };
 
-  @observable isFilingAllowed = (new Date() < new Date(`04/15/${CURR_YEAR}`));
+  @observable isFilingAllowed = (new Date() < new Date(`04/16/${CURR_YEAR}`));
 
   @observable data = [];
 

@@ -55,6 +55,7 @@ export default class PopulateAccreditationSteps extends React.Component {
       name: 'Evidence',
       component: <FillingStatus />,
       formName: 'FILLING_STATUS_FORM',
+      isHideLabel: true,
       isDirty: true,
       isValid: true,
     },
