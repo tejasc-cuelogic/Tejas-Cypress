@@ -4,7 +4,7 @@ export const TEAM = FormHelper.generateMeta([
   ['title', 'Title', '', 'required', 'Title'],
   ['memberName', 'Member Name', '', 'required', 'Member Name'],
   ['story', '', '', '', 'Describe the story of the ambassador'],
-  ['order', 'Order', '', '', 'Order'],
+  ['order', 'Order', null, '', 'Order'],
   ['avatar', 'Avatar', '', '', '', { s3Upload: true, objRef: 'uploads', objRefOutput2: 'uploads' }],
   ['heroImage', 'Hero Image', '', '', '', { s3Upload: true, objRef: 'uploads', objRefOutput2: 'uploads' }],
   ['heroImage', 'Hero Image', '', '', '', { asIn: {} }],
