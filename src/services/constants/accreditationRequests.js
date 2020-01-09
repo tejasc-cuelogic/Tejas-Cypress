@@ -40,6 +40,22 @@ export const FILTER_META = {
   },
 };
 
+export const SELF_ACCREDITATION = {
+  status: {
+    value: [],
+    values: [
+      {
+        label: 'I meet the requirements to qualify as an accredited investor.', value: '1',
+      },
+      {
+        label: 'I understand that in order to make an investment in this offering, I will be required to provide documentation evidencing my accredited investor status.', value: '2',
+      },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
 export const CONFIRM_ACCREDITATION = {
   justifyDescription: {
     value: '',

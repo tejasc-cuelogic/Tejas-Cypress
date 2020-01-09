@@ -9,14 +9,16 @@ import { FormValidator as Validator, DataFormatter } from '../../../../../helper
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { uiStore, userDetailsStore, investmentStore } from '../../../index';
-import { updateAccreditation, listAccreditation, approveOrDeclineForAccreditationRequest, notifyVerifierForAccreditationRequestByEmail } from '../../../queries/accreditation';
-import { userAccreditationQuery } from '../../../queries/users';
+import { updateAccreditation, investorSelfVerifyAccreditedStatus, listAccreditation, approveOrDeclineForAccreditationRequest, notifyVerifierForAccreditationRequestByEmail } from '../../../queries/accreditation';
+import { userAccreditationQuery, userDetailsQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
 import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS, ACCREDITATION_SORT_ENUMS } from '../../../../constants/accreditation';
-import { FILTER_META, CONFIRM_ACCREDITATION } from '../../../../constants/accreditationRequests';
+import { FILTER_META, CONFIRM_ACCREDITATION, SELF_ACCREDITATION } from '../../../../constants/accreditationRequests';
 
 export class AccreditationStore {
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
+
+  @observable SELF_ACCREDITATION_FRM = Validator.prepareFormObject(SELF_ACCREDITATION);
 
   @observable CONFIRM_ACCREDITATION_FRM = Validator.prepareFormObject(CONFIRM_ACCREDITATION);
 
@@ -169,6 +171,11 @@ export class AccreditationStore {
   @action
   setFieldVal(field, val) {
     this[field] = val;
+  }
+
+  @action
+  setCheckbox = (e, res) => {
+    this.AGREEMENT_DETAILS_FORM = Validator.onChange(this.AGREEMENT_DETAILS_FORM, Validator.pullValues(e, res), 'checkbox');
   }
 
   @action
@@ -723,6 +730,33 @@ export class AccreditationStore {
       },
     });
   })
+
+  @action
+  investorSelfVerifyAccreditedStatus = (offeringId, documentId) => {
+    const payLoad = { offeringId, documentId };
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: investorSelfVerifyAccreditedStatus,
+          variables: payLoad,
+          refetchQueries: [{
+            query: userDetailsQuery,
+          }],
+        })
+        .then(() => {
+          Helper.toast('Self Verification of accreditation submitted.', 'success');
+          resolve();
+          uiStore.setProgress(false);
+        })
+        .catch((error) => {
+          uiStore.setProgress(false);
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject();
+        });
+    });
+  }
 
   @action
   emailVerifier = (userId, accountId, accountType) => {

@@ -349,6 +349,12 @@ export class UserDetailsStore {
     return (accreditation === 'CONFIRMED' || entityAccreditation === 'CONFIRMED');
   }
 
+  @computed
+  get isDataRoomDocsPermitted() {
+    const selfAccreditation = get(this.currentUser, 'data.user.accreditation.self');
+    return (this.isInvestorAccreditated || !isEmpty(selfAccreditation));
+  }
+
   @action
   getUserProfileDetails = userId => new Promise((resolve, rej) => {
     this.detailsOfUser = graphql({

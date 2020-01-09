@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { inject } from 'mobx-react';
 import { get } from 'lodash';
-import { withRouter, Link } from 'react-router-dom';
-import { Button, Header } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
 import { InlineLoader } from '../../../../../../theme/shared';
+import ModalSection from './ModalSection';
 
-@inject('campaignStore', 'accreditationStore', 'userDetailsStore', 'userStore', 'navStore')
+@inject('campaignStore', 'accreditationStore', 'userDetailsStore', 'userStore')
 @withRouter
 class Disclosure extends Component {
   state = {
@@ -32,30 +32,15 @@ class Disclosure extends Component {
     if (!doc || this.state.loading) {
       return <InlineLoader />;
     }
-    const { isInvestorAccreditated } = this.props.userDetailsStore;
-    const { stepInRoute } = this.props.navStore;
+    const { isDataRoomDocsPermitted } = this.props.userDetailsStore;
     if (doc.accreditedOnly
       && (!this.props.userStore.currentUser
       || (this.props.userStore.currentUser.roles.includes('issuer') && this.props.userStore.currentUser.sub !== campaignCreatedBy)
       || (this.props.userStore.currentUser && this.props.userStore.currentUser.roles
-      && this.props.userStore.currentUser.roles.includes('investor') && !isInvestorAccreditated
+      && this.props.userStore.currentUser.roles.includes('investor') && !isDataRoomDocsPermitted
       && !this.props.accreditationStore.isUserAccreditated))) {
       return (
-        <section className="no-updates center-align bg-offwhite padded">
-          <Header as="h3" className="mb-20 mt-50">
-            This document is only available to accredited investors.
-          </Header>
-          {
-            !this.props.userStore.currentUser
-              ? <p>Please log in to verify accredited investor status.</p>
-              : <p>Please confirm your accredited investor status to access this Document.</p>
-          }
-          {
-            !this.props.userStore.currentUser
-              ? <Button as={Link} to={`/${stepInRoute.to}`} primary content={stepInRoute.title} className="mt-20 mb-50" />
-              : <Button as={Link} to="/dashboard/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
-          }
-        </section>
+        <ModalSection doc={doc} currentUser={this.props.userStore.currentUser} />
       );
     }
     return (

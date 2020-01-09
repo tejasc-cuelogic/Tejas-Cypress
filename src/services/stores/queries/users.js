@@ -61,6 +61,9 @@ export const userDetailsQuery = gql`
       status
       accreditation {
         status
+        self {
+          offering
+        }
       }
       saasquatch {
         signupCode
@@ -276,6 +279,10 @@ export const selectedUserDetailsQuery = gql`
       status
       accreditation {
         status
+        self {
+          offering
+          document
+        }
       }
       saasquatch {
         signupCode
@@ -547,6 +554,9 @@ export const userAccreditationQuery = gql`
         status
         expiration
         requestDate
+        self {
+          offering
+        }
         reviewed {
           id
           by

@@ -91,3 +91,11 @@ mutation notifyVerifierForAccreditationRequestByEmail($userId: String!, $account
      accountType: $accountType
    )
  }`;
+
+export const investorSelfVerifyAccreditedStatus = gql`
+mutation investorSelfVerifyAccreditedStatus($offeringId: String!, $documentId: String!) {
+  investorSelfVerifyAccreditedStatus(
+      offeringId: $offeringId
+      documentId: $documentId
+   )
+ }`;
