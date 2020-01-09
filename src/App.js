@@ -9,7 +9,7 @@ import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
 import { DevBanner, Spinner, NotifyVersionUpdate } from './theme/shared';
 import Layout from './theme/layout/Layout';
-import Private from './modules/private';
+// import Private from './modules/private';
 import Public from './modules/public';
 import SecureGateway from './modules/public/shared/SecureGateway';
 import { authActions, activityActions } from './services/actions';
@@ -123,6 +123,7 @@ class App extends Component {
           this.props.history.push('/login');
         });
       }
+      console.log('this.props.uiStore.appUpdated', this.props.uiStore.appUpdated);
     });
 
     this.checkUserIdleStatus();
@@ -270,8 +271,8 @@ class App extends Component {
             <Layout>
               <Switch>
                 <Redirect from="/app/*" to="/dashboard/*" />
-                <Route exact path="/dashboard/*" component={Private} />
-                <Route exact path="/dashboard" component={Private} />
+                {/* <Route exact path="/dashboard/*" component={Private} />
+                <Route exact path="/dashboard" component={Private} /> */}
                 <Route path="/" component={Public} />
               </Switch>
             </Layout>
@@ -279,7 +280,7 @@ class App extends Component {
         }
         <ToastContainer className="toast-message" />
         {uiStore.appUpdated
-          && <NotifyVersionUpdate />
+          && <NotifyVersionUpdate setAppUpdated={uiStore.setAppUpdated} />
         }
         {uiStore.devBanner
           && <DevBanner toggle={this.playDevBanner} />

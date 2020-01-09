@@ -1,8 +1,11 @@
 import React from 'react';
 import { Button, Modal, Icon } from 'semantic-ui-react';
 
-const NotifyVersionUpdate = () => {
-  const update = () => window.location.reload();
+const NotifyVersionUpdate = (props) => {
+  const update = () => {
+    props.setAppUpdated(false);
+    window.location.reload();
+  };
   return (
     <Modal dimmer open size="tiny">
       <Modal.Content>
