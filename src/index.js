@@ -58,26 +58,33 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
-// temporarily disable install
-
-if (['disabled'].includes(REACT_APP_DEPLOY_ENV)) {
+// temporarily disable install for production env
+if (['localhost', 'develop', 'dev', 'predev'].includes(REACT_APP_DEPLOY_ENV)) {
   OfflinePluginRuntime.install({
     onInstalled: () => {
-      // console.log('[OfflinePlugin] onInstalled');
+      console.log('[OfflinePlugin] onInstalled');
     },
     onUpdating: () => {
       // console.log('[OfflinePlugin] onUpdating');
     },
     onUpdateReady: () => {
       OfflinePluginRuntime.applyUpdate();
-      // console.log('[OfflinePlugin] onUpdateReady');
+      console.log('[OfflinePlugin] onUpdateReady');
     },
     onUpdated: () => {
+      // let cacheKeys = [];
+      // caches.keys().then((keys) => {
+      //   cacheKeys = keys;
+      // });
       stores.uiStore.setAppUpdated();
-      // console.log('[OfflinePluginRuntime] new version is available');
+      console.log('[OfflinePluginRuntime] new version is available');
+      // setTimeout(() => {
+      //   console.log('cacheKeys', cacheKeys);
+      //   localStorage.setItem('last_updated', JSON.stringify(cacheKeys));
+      // }, 1000);
     },
     onUpdateFailed: () => {
-      // console.log('[OfflinePlugin] onUpdateFailed');
+      console.log('[OfflinePlugin] onUpdateFailed');
     },
   });
 }
