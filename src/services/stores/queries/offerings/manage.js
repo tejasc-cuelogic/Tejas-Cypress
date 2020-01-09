@@ -1333,6 +1333,27 @@ export const adminBusinessFilings = gql`
   }
 `;
 
+export const adminBusinessFiling = gql`
+  query adminBusinessFiling($offeringId: ID!, $filingId: ID!) {
+    adminBusinessFiling(offeringId: $offeringId, filingId: $filingId) {
+      folderId
+      submissions{
+        payload
+      }
+    }
+  }
+`;
+
+export const getXMLFiles = gql`
+  query getFiles($folderId: ID!, $accountType: BoxAccountTypeEnum) {
+    files(folderId: $folderId, accountType: $accountType) {
+      id
+      name
+    }
+  }
+`;
+
+
 export const adminCreateBusinessFiling = gql`
   mutation adminCreateBusinessFiling ($offeringId: String!) {
     adminCreateBusinessFiling(offeringId: $offeringId) {

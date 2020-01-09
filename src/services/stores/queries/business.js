@@ -91,3 +91,10 @@ export const adminCloneXmlSubmission = gql`
       xmlSubmissionId
     }
   }`;
+
+  export const adminDeleteBusinessFilingSubmission = gql`
+  mutation adminDeleteBusinessFilingSubmission($filingId: String!, $xmlSubmissionId: String!) {
+    adminDeleteBusinessFilingSubmission(filingId: $filingId, xmlSubmissionId: $xmlSubmissionId) {
+      xmlSubmissionId
+    }
+  }`;
