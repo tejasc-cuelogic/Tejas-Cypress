@@ -505,6 +505,8 @@ export const userAccreditationQuery = gql`
           ... on Investor {
             accreditation {
               status
+              filingStatus
+              estimateIncome
               expiration
               requestDate
               reviewed {
@@ -545,6 +547,8 @@ export const userAccreditationQuery = gql`
         }
       accreditation {
         status
+        filingStatus
+        estimateIncome
         expiration
         requestDate
         reviewed {
