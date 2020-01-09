@@ -66,7 +66,7 @@ class Disclosure extends Component {
               changed={(e, res) => formChange(e, res, 'SELF_ACCREDITATION_FRM')}
               disabled={inProgress}
             />
-            <Button loading={inProgress} primary content="Self Accredited" className="mt-20" disabled={SELF_ACCREDITATION_FRM.fields.status.value.length !== 2} onClick={this.investorSelfVerifyAccreditedStatus} />
+            <Button loading={inProgress} primary content="Submit" className="mt-20" disabled={SELF_ACCREDITATION_FRM.fields.status.value.length !== 2} onClick={this.investorSelfVerifyAccreditedStatus} />
           </Grid.Column>
         </Grid>
       </section>
