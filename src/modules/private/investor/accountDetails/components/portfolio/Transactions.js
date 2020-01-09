@@ -178,13 +178,13 @@ export default class Transactions extends Component {
               {!allPaymentHistoryData.length
                 ? <InlineLoader text="No Payments" />
                 : (
-                  <Table unstackable singleLine className="investment-details" textAlign="right">
+                  <Table unstackable singleLine className="investment-details">
                     <THeader columns={finalResult.columns} />
                     <Table.Body>
                       {
                         allPaymentHistoryData.map(row => (
                           <Table.Row key={Helper.guid()}>
-                            <Table.Cell collapsing textAlign="left">
+                            <Table.Cell collapsing>
                               <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(row.completeDate, true, false, false)} />
                             </Table.Cell>
                             <Table.Cell className="positive-text">{Helper.CurrencyFormat(row.grossTotalAmount)}</Table.Cell>
