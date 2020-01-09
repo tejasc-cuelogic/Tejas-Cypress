@@ -14,6 +14,7 @@ import { userAccreditationQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
 import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS, ACCREDITATION_SORT_ENUMS } from '../../../../constants/accreditation';
 import { FILTER_META, CONFIRM_ACCREDITATION } from '../../../../constants/accreditationRequests';
+import { CURR_YEAR } from '../../../../../constants/common';
 
 export class AccreditationStore {
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
@@ -63,6 +64,8 @@ export class AccreditationStore {
     search: {
     },
   };
+
+  @observable isFilingAllowed = (new Date() < new Date(`04/15/${CURR_YEAR}`));
 
   @observable data = [];
 
@@ -791,6 +794,9 @@ export class AccreditationStore {
       this.setFileFormData(appData.accreditation && appData.accreditation.assetsUpload);
       if (appData.accreditation.filingStatus !== null) {
         this.FILLING_STATUS_FORM.fields.method.value = appData.accreditation.filingStatus;
+      }
+      if (!this.isFilingAllowed) {
+        this.FILLING_STATUS_FORM.fields.method.value = true;
       }
       this.INCOME_UPLOAD_DOC_FORM.fields.estimateIncome.value = appData.accreditation.estimateIncome;
       this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);

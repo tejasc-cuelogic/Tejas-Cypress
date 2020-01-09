@@ -52,7 +52,7 @@ export default class Accreditation extends React.Component {
     const {
       ACCREDITATION_FORM,
       INCOME_EVIDENCE_FORM,
-      NETWORTH_QAL_FORM,
+      NETWORTH_QAL_FORM, isFilingAllowed,
     } = this.props.accreditationStore;
     const formArray = (ACCREDITATION_FORM.fields.method.value === 'INCOME' && INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') ? [
       { key: 'ACCREDITATION_FORM' },
@@ -108,7 +108,7 @@ export default class Accreditation extends React.Component {
     return (
       <PopulateAccreditationSteps
         multiClickHandler={this.multiClickHandler}
-        formArray={formArray}
+        formArray={!isFilingAllowed ? formArray.filter(i => i.key !== 'FILLING_STATUS_FORM') : formArray}
         {...this.props}
       />
     );

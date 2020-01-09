@@ -42,10 +42,12 @@ componentDidMount() {
     return (
       <div>
         <Header as="h3" textAlign="center">Upload documents</Header>
-        <p className={isMobile ? 'left-align' : 'center-align'}>Upload your W2, 1040, or other IRS or foreign tax authority documents containing your salary for the past 2 years, or a letter from your lawyer, CPA, investment advisor or investment broker verifying your income.</p>
+        <p className={isMobile ? 'left-align' : 'center-align'}>
+        Upload your tax returns, Form W-2s, or other IRS or foreign tax authority documents evidencing your income for the past 2 years, or a letter from your personal lawyer, CPA, investment advisor or investment broker verifying your income for such years.
+        </p>
         <Divider hidden />
         <Form>
-          <Grid stackable columns="equal">
+          <Grid stackable columns={2} centered>
             {
               docsToUpload.map(field => (
                 <Grid.Column key={field}>
@@ -60,17 +62,27 @@ componentDidMount() {
                 </Grid.Column>
               ))
             }
-          </Grid>
           {isFilling
           && (
-            <MaskedInput
-              name="estimateIncome"
-              fielddata={INCOME_UPLOAD_DOC_FORM.fields.estimateIncome}
-              changed={(values, name) => maskChange(values, 'INCOME_UPLOAD_DOC_FORM', name)}
-              currency
-              showerror
-              prefix="$"
-            />
+            <Grid.Column>
+              <MaskedInput
+                name="estimateIncome"
+                fielddata={INCOME_UPLOAD_DOC_FORM.fields.estimateIncome}
+                changed={(values, name) => maskChange(values, 'INCOME_UPLOAD_DOC_FORM', name)}
+                currency
+                showerror
+                prefix="$"
+              />
+            </Grid.Column>
+          )
+        }
+        </Grid>
+          <Divider hidden />
+          {isFilling
+          && (
+          <p className={isMobile ? 'left-align' : 'center-align'}>
+          <b>Note:</b> If you provide tax documents, W-2s, or other direct forms of income verification, your accredited investor status will be valid for the remainder of this calendar year. If you provide an upload of communication from a qualified advisor, your accredited investor status will be valid for 90 days from the date of your verifier`s confirmation.
+          </p>
           )
           }
           <Divider hidden />

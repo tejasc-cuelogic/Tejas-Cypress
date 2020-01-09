@@ -25,7 +25,6 @@ export default class PopulateAccreditationSteps extends React.Component {
   // }
 
   handleSubmitStep = () => { // only for mobile screens
-    console.log('asdas');
     const { stepToBeRendered } = this.props.accreditationStore;
     const { multiSteps } = this.props.uiStore;
     this.props.multiClickHandler(multiSteps[stepToBeRendered]);
