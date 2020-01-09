@@ -50,10 +50,15 @@
 	}
 }
 /** About Us **/
-.statistic-section.proven-result-section {
-	.ui.mini.statistic>.value {
-		@media only screen and (max-width : @largestMobileScreen){
-			font-size: @20px !important;
+@media only screen and (max-width : @largestMobileScreen){
+	.statistic-section.proven-result-section {
+		.ui.mini.statistic{
+			>.label {
+				font-size: @15px;
+			}
+			>.value {
+				font-size: @20px !important;
+			}
 		}
 	}
 }

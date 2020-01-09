@@ -118,9 +118,7 @@ class App extends Component {
     }
 
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        // console.log('Browser tab is hidden');
-      } else if (this.props.authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
+      if (!document.hidden && this.props.authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
         authActions.forceLogout('timeout').then(() => {
           this.props.history.push('/login');
         });

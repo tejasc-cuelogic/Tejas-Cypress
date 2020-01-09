@@ -3,7 +3,7 @@ import { includes, get, capitalize } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Table, Grid, Statistic, Button, Divider, Icon } from 'semantic-ui-react';
-import { AccTypeTitle, InlineLoader, IframeModal, PopUpModal } from '../../../../../../theme/shared';
+import { AccTypeTitle, InlineLoader, IframeModal, PopUpModal, DateTimeFormat } from '../../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
@@ -95,7 +95,7 @@ class Overview extends Component {
           }
         </div>
         {responsiveVars.isMobile
-        && <SecondaryMenu isPortfolio classname="no-shadow" bonusRewards isBonusReward refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+          && <SecondaryMenu classname="no-shadow" bonusRewards isBonusReward refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
         }
         <div className="inner-content-spacer">
           <Grid>
@@ -264,8 +264,20 @@ class Overview extends Component {
                           <Table.Cell>
                             {keyTerms && keyTerms.securitiesOwnershipPercentage
                               ? `${keyTerms.securitiesOwnershipPercentage}%
-                            equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities.`
+                          equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities.`
                               : 'N/A'
+                            }
+                          </Table.Cell>
+                        </Table.Row>
+                      ) : ''
+                    }
+
+                    {overviewToDisplay && overviewToDisplay === 'TERM' && get(offering, 'closureSummary.hardCloseDate')
+                      ? (
+                        <Table.Row verticalAlign="top">
+                          <Table.Cell>Close Date</Table.Cell>
+                          <Table.Cell>
+                            {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={get(offering, 'closureSummary.hardCloseDate')} /> : 'N/A'
                             }
                           </Table.Cell>
                         </Table.Row>
