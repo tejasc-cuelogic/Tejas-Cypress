@@ -57,7 +57,7 @@ export default class AccreditationsLimits extends Component {
                   <>
                     <Header as="h6">
                       Accreditation
-                      <Header.Subheader>Verify accreditation submission111</Header.Subheader>
+                      <Header.Subheader>Verify accreditation</Header.Subheader>
                     </Header>
                     <div className="bg-offwhite">
                       <dl className="dl-horizontal">
