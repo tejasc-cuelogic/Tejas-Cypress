@@ -148,7 +148,7 @@ export default class CampaignList extends Component {
                                           && (
                                             <Table.Row verticalAlign="top">
                                               <Table.Cell collapsing>{(row.label === 'Share Price') ? `${capitalize(get(offering, 'keyTerms.equityUnitType'))} Price` : (row.label === 'Security' && get(offering, row.key) && get(offering, row.key) === 'REAL_ESTATE') ? 'Type of Investment' : row.label}</Table.Cell>
-                                              <Table.Cell collapsing className={`${!isFunded && !row.for.includes('ALL') ? 'highlight-text' : ''} right-align`}>
+                                              <Table.Cell collapsing className={`${!isFunded && !row.for.includes('ALL') && row.value !== 'View in Data Room' ? 'highlight-text' : ''} right-align`}>
                                                 <b>
                                                   {((get(offering, row.key) !== undefined && get(offering, row.key) !== null) || row.value)
                                                     ? (
