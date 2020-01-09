@@ -698,8 +698,9 @@ query fetchEmails ($recipientId: String!, $subject: String, $fromDate: String, $
 `;
 
 export const createAdminUser = gql`
-  mutation createAdminUser($email: String!){
+  mutation createAdminUser($email: String!, $action: String){
   createAdminUser(
     email: $email
+    action: $action
   )
 }`;
