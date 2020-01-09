@@ -30,7 +30,7 @@
 /* Input */
 @inputFont: @pageFont;
 @inputWidth: 100%;
-@inputFontSize: 1em;
+@inputFontSize: 15px;
 @inputPadding: @inputVerticalPadding @inputHorizontalPadding;
 @inputBorder:none;
 @inputBorderRadius: @absoluteBorderRadius * 0;
