@@ -92,7 +92,7 @@ export default class Transactions extends Component {
             <List.Item>
               <List.Content floated="right">
                 {row.field === 'completeDate'
-                ? moment(new Date(recordData.completeDate).toLocaleDateString(), 'DD/MM/YYYY').format('MM-DD-YYYY')
+                ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(recordData.completeDate, true, false, false, 'MM-DD-YYYY', 'CST', false, 'ddd MMM DD YYYY HH:mm:ss')} />
                 : row.containsComma ? `$${recordData[row.field]}` : Helper.CurrencyFormat(recordData[row.field])
                 }
               </List.Content>
@@ -162,7 +162,7 @@ export default class Transactions extends Component {
                   <this.ViewTransactionDetails id={record.completeDate} />
                 </List.Content>
                 <List.Content>
-                  {moment(new Date(record.completeDate).toLocaleDateString(), 'DD/MM/YYYY').format('MM/DD/YYYY')}
+                <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(record.completeDate, true, false, false, 'MM-DD-YYYY', 'CST', false, 'ddd MMM DD YYYY HH:mm:ss')} />
                 </List.Content>
               </List.Item>
             ))
