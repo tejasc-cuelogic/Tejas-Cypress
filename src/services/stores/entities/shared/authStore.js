@@ -559,10 +559,11 @@ export class AuthStore {
   });
 
   @action
-  adminValidateCreateAdminUser = email => new Promise((res, rej) => {
+  adminValidateCreateAdminUser = (email, actionType = null) => new Promise((res, rej) => {
+    const variables = actionType ? { email, action: actionType } : { email };
     client.mutate({
       mutation: adminValidateCreateAdminUser,
-      variables: { email },
+      variables,
     })
       .then((data) => {
         res(data.adminValidateCreateAdminUser);

@@ -1,3 +1,5 @@
+import { CURR_YEAR } from '../../constants/common';
+
 export const ACCREDITATION_STATUS_LABEL = {
   REQUESTED: 'Requested',
   CONFIRMED: 'Approved',
@@ -198,7 +200,7 @@ export const VERIFICATION_REQUEST = {
 };
 
 export const INCOME_UPLOAD_DOCUMENTS = {
-  isAccepted: {
+  isAcceptedForfilling: {
     skipField: true,
     value: [],
     values: [
@@ -210,29 +212,65 @@ export const INCOME_UPLOAD_DOCUMENTS = {
     error: undefined,
     rule: 'required',
   },
-  incomeDocSecondLastYear: {
-    label: '2017 Income Documentation',
+  estimateIncome: {
     value: '',
+    label: `What is your estimated income in ${CURR_YEAR}`,
+    error: undefined,
+    rule: 'required',
+    placeHolder: '$',
+    customErrors: {
+      required: 'required.',
+    },
+  },
+  isAcceptedForUnfilling: {
+    skipField: true,
+    value: [],
+    values: [
+      {
+        label: 'There are not yet tax returns, Form W-2s, or other IRS or foreign tax authority documents that evidence my income for 2018. I hereby certify that my income in 2018 met or exceeded the requirement to be considered an accredited investor, and I have a reasonable expectation that my income will meet or exceed such requirement in 2019. I acknowledge that I must provide appropriate documentation for 2018 once it becomes available.',
+        value: 'ACCEPTED',
+      },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+  incomeDocThirdLastYear: {
+    label: `${CURR_YEAR - 3} Income Documentation`,
+    value: [],
     error: undefined,
     rule: 'required',
     showLoader: false,
-    preSignedUrl: '',
-    fileId: '',
-    fileData: '',
+    preSignedUrl: [],
+    fileId: [],
+    fileData: [],
+    customErrors: { required: 'required' },
+    objRef: 'assetsUpload',
+    objRefOutput: 'assetsUpload',
+    objType: 'FileObjectType',
+  },
+  incomeDocSecondLastYear: {
+    label: `${CURR_YEAR - 2} Income Documentation`,
+    value: [],
+    error: undefined,
+    rule: 'required',
+    showLoader: false,
+    preSignedUrl: [],
+    fileId: [],
+    fileData: [],
     customErrors: { required: 'required' },
     objRef: 'assetsUpload',
     objRefOutput: 'assetsUpload',
     objType: 'FileObjectType',
   },
   incomeDocLastYear: {
-    label: '2018 Income Documentation',
-    value: '',
+    label: `${CURR_YEAR - 1} Income Documentation`,
+    value: [],
     error: undefined,
     rule: 'required',
     showLoader: false,
-    preSignedUrl: '',
-    fileId: '',
-    fileData: '',
+    preSignedUrl: [],
+    fileId: [],
+    fileData: [],
     customErrors: { required: 'required' },
     objRefOutput: 'assetsUpload',
     objRef: 'assetsUpload',
@@ -297,6 +335,25 @@ export const ACCREDITATION_EXPIRY = {
         value: 'checked',
       },
     ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
+export const FILLING_STATUS = {
+  method: {
+    value: '',
+    values:
+      [
+        {
+          label: 'Yes',
+          value: true,
+        },
+        {
+          label: 'No',
+          value: false,
+        },
+      ],
     error: undefined,
     rule: 'required',
   },

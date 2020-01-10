@@ -11,6 +11,7 @@ import IncomeQualCheck from './shared/IncomeQualCheck';
 import NetWorthCheck from './shared/NetWorthQualCheck';
 import EntityAccreditationMethod from './shared/EntityAcceditationMethod';
 import TrustEntityAccreditationMethod from './shared/TrustEntityAccreditationMethod';
+import FillingStatus from './shared/FillingStatus';
 
 @inject('uiStore', 'accreditationStore')
 @withRouter
@@ -24,7 +25,6 @@ export default class PopulateAccreditationSteps extends React.Component {
   // }
 
   handleSubmitStep = () => { // only for mobile screens
-    console.log('asdas');
     const { stepToBeRendered } = this.props.accreditationStore;
     const { multiSteps } = this.props.uiStore;
     this.props.multiClickHandler(multiSteps[stepToBeRendered]);
@@ -50,6 +50,14 @@ export default class PopulateAccreditationSteps extends React.Component {
       component: <NetWorth submitStep={this.handleSubmitStep} {...this.props} />,
       formName: 'NET_WORTH_FORM',
       isDirty: true,
+    },
+    FILLING_STATUS_FORM: {
+      name: 'Evidence',
+      component: <FillingStatus />,
+      formName: 'FILLING_STATUS_FORM',
+      isHideLabel: true,
+      isDirty: true,
+      isValid: true,
     },
     INCOME_EVIDENCE_FORM: {
       name: 'Evidence',

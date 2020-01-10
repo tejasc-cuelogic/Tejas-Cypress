@@ -505,6 +505,8 @@ export const userAccreditationQuery = gql`
           ... on Investor {
             accreditation {
               status
+              filingStatus
+              estimateIncome
               expiration
               requestDate
               reviewed {
@@ -545,6 +547,8 @@ export const userAccreditationQuery = gql`
         }
       accreditation {
         status
+        filingStatus
+        estimateIncome
         expiration
         requestDate
         reviewed {
@@ -698,8 +702,9 @@ query adminFetchEmails ($recipientId: String!, $subject: String, $fromDate: Stri
 `;
 
 export const adminValidateCreateAdminUser = gql`
-  mutation adminValidateCreateAdminUser($email: String!){
+  mutation adminValidateCreateAdminUser($email: String!, $action: String){
   adminValidateCreateAdminUser(
     email: $email
+    action: $action
   )
 }`;
