@@ -166,13 +166,13 @@ class Comments extends Component {
               }
               <Form reply className="public-form clearfix">
                 {loggedInAsInvestor && !accountStatusFull
-                  ? <Link to="/dashboard/setup" className="ui button secondary">Finish Account Setup</Link>
-                  : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
+                  ? <Link to="/dashboard/setup" className="ui button primary">Finish Account Setup</Link>
+                  : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button primary">{get(loginOrSignup, 'title')}</Link>
                 }
               </Form>
             </section>
           )
-          : (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated)
+          : (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status)
             ? (
             <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
               <p>In order to leave comments, please confirm your accredited investor status.</p>

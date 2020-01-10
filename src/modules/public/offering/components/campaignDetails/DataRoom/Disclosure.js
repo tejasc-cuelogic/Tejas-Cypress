@@ -32,12 +32,12 @@ class Disclosure extends Component {
     if (!doc || this.state.loading) {
       return <InlineLoader />;
     }
-    const { isDataRoomDocsPermitted } = this.props.userDetailsStore;
+    const { isDataRoomDocsViewStatus } = this.props.userDetailsStore;
     if (doc.accreditedOnly
       && (!this.props.userStore.currentUser
       || (this.props.userStore.currentUser.roles.includes('issuer') && this.props.userStore.currentUser.sub !== campaignCreatedBy)
       || (this.props.userStore.currentUser && this.props.userStore.currentUser.roles
-      && this.props.userStore.currentUser.roles.includes('investor') && !isDataRoomDocsPermitted
+      && this.props.userStore.currentUser.roles.includes('investor') && !isDataRoomDocsViewStatus
       && !this.props.accreditationStore.isUserAccreditated))) {
       return (
         <ModalSection doc={doc} currentUser={this.props.userStore.currentUser} />

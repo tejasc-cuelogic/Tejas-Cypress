@@ -24,11 +24,6 @@ class Banner extends Component {
     }
   }
 
-  handleApplyCta = () => {
-    this.props.uiStore.setAuthRef('/business');
-    this.props.history.push('/register');
-  }
-
   render() {
     return (
       <section className="banner home-banner">
@@ -41,7 +36,7 @@ class Banner extends Component {
               </Header>
               {!this.props.userStore.isIssuer
               && (
-                <Button onClick={this.handleApplyCta} primary>Apply Online</Button>
+                <Button onClick={this.props.handleApplyCta} primary>Apply Online</Button>
               )
               }
             </div>

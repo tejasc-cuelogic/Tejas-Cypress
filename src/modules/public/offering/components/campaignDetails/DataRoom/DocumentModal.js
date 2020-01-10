@@ -43,7 +43,7 @@ export default class DocumentModal extends Component {
   }
   render() {
     const { docLoading } = this.props.campaignStore;
-    const { isDataRoomDocsPermitted } = this.props.userDetailsStore;
+    const { isDataRoomDocsViewStatus } = this.props.userDetailsStore;
     const doc = this.props.doc || this.state.paramsDoc;
     if (!doc || !get(doc, 'upload.fileHandle')) {
       return (<Modal open={this.state.openModal} closeIcon onClose={this.props.close || this.closeModal}>
@@ -60,12 +60,12 @@ export default class DocumentModal extends Component {
       && (!this.props.userStore.currentUser
       || (this.props.userStore.currentUser.roles.includes('issuer') && this.props.userStore.currentUser.sub !== campaignCreatedBy)
       || (this.props.userStore.currentUser && this.props.userStore.currentUser.roles
-      && this.props.userStore.currentUser.roles.includes('investor') && !isDataRoomDocsPermitted
+      && this.props.userStore.currentUser.roles.includes('investor') && !isDataRoomDocsViewStatus
       && !this.props.accreditationStore.isUserAccreditated))) {
       return (
         <Modal open={this.state.openModal} closeIcon onClose={this.props.close || this.closeModal}>
         <Modal.Content>
-        <ModalSection doc={doc} currentUser={this.props.userStore.currentUser} />
+        <ModalSection closeModal={this.closeModal} doc={doc} currentUser={this.props.userStore.currentUser} />
         </Modal.Content>
         </Modal>
       );

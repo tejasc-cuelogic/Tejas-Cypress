@@ -6,10 +6,9 @@ import { withRouter, Route, Link } from 'react-router-dom';
 import { Card, Table, Icon, Button, List } from 'semantic-ui-react';
 import ConfirmModel from './ConfirmModel';
 import Helper from '../../../../../helper/utility';
-import { InlineLoader, NsPagination } from '../../../../../theme/shared';
+import { InlineLoader, NsPagination, MessageModal } from '../../../../../theme/shared';
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import Actions from './Actions';
-import MessageModal from './MessageModal';
 import { DataFormatter } from '../../../../../helper';
 
 const statusDetails = {

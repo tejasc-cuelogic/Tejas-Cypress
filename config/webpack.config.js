@@ -571,9 +571,7 @@ module.exports = (webpackEnv) => {
       */
       new OfflinePlugin({
         excludes: ['**/.*', '**/*.map', '**/*.jpg', '**/*.png', '**/*.gz', '**/google-fonts.*', '**/**/google-fonts.*'],
-        updateStrategy: 'changed',
-        responseStrategy: 'network-first', // default: cache-first
-        autoUpdate: 1000 * 60 * 5, //check every 5 minute
+        autoUpdate: 1000 * 60 * 2, // check every 2 minute
         ServiceWorker: {
           events: true,
           navigateFallbackURL: '/',

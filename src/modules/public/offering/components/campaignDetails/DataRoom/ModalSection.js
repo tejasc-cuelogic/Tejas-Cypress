@@ -5,29 +5,39 @@ import { withRouter, Link } from 'react-router-dom';
 import { Button, Header, Grid } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../theme/form';
 
-@inject('accreditationStore', 'campaignStore', 'uiStore')
+@inject('accreditationStore', 'campaignStore')
 @withRouter
 @observer
 class Disclosure extends Component {
   state = {
     isSelfAccredited: false,
+    loading: false,
   };
+
+  constructor(props) {
+    super(props);
+    this.props.accreditationStore.resetForm('SELF_ACCREDITATION_FRM');
+  }
 
   selfAccreditedHandle = () => {
     this.setState({ isSelfAccredited: true });
   }
 
-  investorSelfVerifyAccreditedStatus = () => {
+  investorSelfVerifyAccreditedStatus = (e) => {
+    e.preventDefault();
+    this.setState({ loading: true });
     const { accreditationStore, doc, campaignStore } = this.props;
     const documentId = get(doc, 'upload.fileHandle.boxFileId');
     const offeringId = get(campaignStore.campaign, 'id');
-    accreditationStore.investorSelfVerifyAccreditedStatus(offeringId, documentId);
+    accreditationStore.investorSelfVerifyAccreditedStatus(offeringId, documentId).then(() => {
+      this.props.closeModal();
+      this.setState({ loading: false });
+    }).catch(() => this.setState({ loading: false }));
   }
 
   render() {
-    const { currentUser, uiStore } = this.props;
+    const { currentUser } = this.props;
     const { SELF_ACCREDITATION_FRM, formChange } = this.props.accreditationStore;
-    const { inProgress } = uiStore;
     const headerMsg = 'This document is only available to accredited investors.';
     const paraMsg = 'Please confirm your accredited investor status to access this document.';
     return !this.state.isSelfAccredited ? (
@@ -66,9 +76,9 @@ class Disclosure extends Component {
               name="status"
               containerclassname="ui very relaxed list"
               changed={(e, res) => formChange(e, res, 'SELF_ACCREDITATION_FRM')}
-              disabled={inProgress}
+              disabled={this.state.loading}
             />
-            <Button loading={inProgress} primary content="Submit" className="mt-20" disabled={SELF_ACCREDITATION_FRM.fields.status.value.length !== 2} onClick={this.investorSelfVerifyAccreditedStatus} />
+            <Button loading={this.state.loading} primary content="Submit" className="mt-20" disabled={SELF_ACCREDITATION_FRM.fields.status.value.length !== 2} onClick={e => this.investorSelfVerifyAccreditedStatus(e)} />
           </Grid.Column>
         </Grid>
       </section>
