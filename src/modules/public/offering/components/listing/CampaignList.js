@@ -25,6 +25,7 @@ const keyTermList = [
   { label: 'Share Price', key: 'keyTerms.priceCopy', type: '', for: ['PREFERRED_EQUITY_506C'] },
   { label: 'Valuation Cap', key: 'keyTerms.valuationCap', type: '', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
   { label: 'Discount', key: 'keyTerms.discount', type: '', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
+  { label: 'Targeted IRR ', value: 'View in Data Room', for: ['REAL_ESTATE'] },
   // { label: 'Total Payments to investors', forFunded: true, key: 'closureSummary.repayment.count', type: '', for: [''] },
   // { label: 'Total Paid to investors', forFunded: true, key: 'closureSummary.repayment.currentRepaidAmount', type: '$', for: [''] },
 ];
@@ -60,7 +61,7 @@ export default class CampaignList extends Component {
             && <Label color="grey">{realEstateBanner}</Label>
           }
           {bannerFirst
-          && <Label color={bannerFirst === 'Processing' ? 'grey' : bannerFirst === 'NEW' ? 'black' : 'green'}>{bannerFirst}</Label>
+          && <Label color={bannerFirst === 'Processing' ? 'grey' : bannerFirst === 'NEW' ? 'blue' : 'green'}>{bannerFirst}</Label>
           }
           {bannerSecond
             && <Label color={bannerFirst === 'Processing' ? 'grey' : 'green'}>{bannerSecond}</Label>
@@ -146,14 +147,14 @@ export default class CampaignList extends Component {
                                         {((isFunded || row.for.includes('ALL') || row.for.includes(offering.keyTerms.securities)) && ((get(offering, row.key) === 0 || get(offering, row.key)) || row.value))
                                           && (
                                             <Table.Row verticalAlign="top">
-                                              <Table.Cell collapsing>{(row.label === 'Share Price') ? `${capitalize(get(offering, 'keyTerms.equityUnitType'))} Price` : (row.label === 'Security' && get(offering, row.key) && get(offering, row.key) === 'REAL_ESTATE') ? ' Type of Investment' : row.label}</Table.Cell>
-                                              <Table.Cell collapsing className={`${!isFunded && !row.for.includes('ALL') ? 'highlight-text' : ''} right-align`}>
+                                              <Table.Cell collapsing>{(row.label === 'Share Price') ? `${capitalize(get(offering, 'keyTerms.equityUnitType'))} Price` : (row.label === 'Security' && get(offering, row.key) && get(offering, row.key) === 'REAL_ESTATE') ? 'Type of Investment' : row.label}</Table.Cell>
+                                              <Table.Cell collapsing className={`${!isFunded && !row.for.includes('ALL') && row.value !== 'View in Data Room' ? 'highlight-text' : ''} right-align`}>
                                                 <b>
                                                   {((get(offering, row.key) !== undefined && get(offering, row.key) !== null) || row.value)
                                                     ? (
                                                       <>
                                                         {typeof row.type === 'object' ? (
-                                                          row.type[get(offering, row.key)] && get(offering, row.key) === 'REAL_ESTATE' ? <>Real Estate Fund<br />(Qual. Opportunity Fund)</> : row.type[get(offering, row.key)] || '-'
+                                                          row.type[get(offering, row.key)] && get(offering, row.key) === 'REAL_ESTATE' ? <>Commercial Real Estate</> : row.type[get(offering, row.key)] || '-'
                                                         ) : row.type === '$' ? row.key ? Helper.CurrencyFormat(get(offering, row.key), 0) : row.value
                                                             : row.type === '%' ? row.key ? `${get(offering, row.key)}%` : row.value
                                                               : row.type === 'X' ? row.key ? `${get(offering, row.key)}x` : row.value

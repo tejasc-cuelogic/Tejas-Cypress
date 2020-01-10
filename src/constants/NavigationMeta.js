@@ -1,4 +1,3 @@
-
 const INVESTER_ACC_SUB_NAV_ITEMS = {
   subNavigations: [
     { title: 'Portfolio', to: 'portfolio', component: 'Portfolio' },
@@ -272,10 +271,10 @@ export const PRIVATE_NAV = [
       { title: 'Leadership', to: 'leadership', accessFor: [1], template: 1 },
       { title: 'Investors', to: 'investors', accessFor: [2, 3, 4], template: 1 },
       {
-        title: 'Transactions', to: 'transactions', accessFor: [3, 4], accessibleTo: ['admin', 'manager', 'support'], template: 1,
+        title: 'Transactions', to: 'transactions', accessFor: [3, 4], accessibleTo: ['admin', 'manager', 'support'], template: 1, env: ['localhost', 'predev', 'dev'],
       },
-      { title: 'Comments', to: 'comments', accessFor: [2, 3], template: 1 },
-      { title: 'Updates', to: 'updates', accessFor: [2, 3, 4], template: 1 },
+      { title: 'Comments', to: 'comments', accessFor: [2, 3] },
+      { title: 'Updates', to: 'updates', accessFor: [2, 3, 4] },
       {
         title: 'Close', to: 'close', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'], template: 1,
       },
