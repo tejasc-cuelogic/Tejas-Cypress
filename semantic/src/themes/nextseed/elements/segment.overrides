@@ -107,6 +107,9 @@
             display: flex;
         }
     }
+    &.no-shadow{
+        box-shadow: none;
+    }
 }
 .press-news {
 	.ui.segment {

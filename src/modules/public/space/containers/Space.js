@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Responsive, Grid, Divider, Header, Container, List, Icon, Button } from 'semantic-ui-react';
+import { Responsive, Grid, Divider, Header, Container, List, Icon, Button, Item, Segment, Card } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import NSImage from '../../../shared/NSImage';
 
@@ -10,6 +10,38 @@ class Space extends Component {
   render() {
     const { responsiveVars } = this.props.uiStore;
     const { location } = this.props;
+    const alumini = [
+      {
+        title: 'Breaking Bao',
+        image: 'space/breaking.jpg',
+        description: 'Fusion steamed buns featuring unique and compelling flavor combinations',
+        link: 'https://www.breakingbao.com',
+      },
+      {
+        title: 'Pura Vida',
+        image: 'space/pura-vida.jpg',
+        description: 'Cold bar serving fresh ceviche and homemade artisanal teas',
+        link: 'https://www.breakingbao.com',
+      },
+      {
+        title: 'The DoughCone',
+        image: 'space/theDoughCone.jpg',
+        description: 'Handmade Donut Cones & Ice Cream with unlimited toppings',
+        link: 'https://www.breakingbao.com',
+      },
+      {
+        title: 'Tlahuac',
+        image: 'space/tlahuac.jpg',
+        description: 'Central Mexican cuisine and pan dulce in Houston, TX',
+        link: 'https://www.breakingbao.com',
+      },
+      {
+        title: 'The Waffle Bus',
+        image: 'space/the-waffle-bus.jpg',
+        description: 'Zagat-rated chicken & waffles in Houston, TX',
+        link: 'https://www.breakingbao.com',
+      },
+    ];
     return (
       <>
         {location.pathname === '/space' ? <Banner />
@@ -29,8 +61,7 @@ class Space extends Component {
                 </p>
               </Grid.Column>
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right">
-                <NSImage path="space/img-1.jpg" className="mb-20" />
-                {/* <NSImage path="space/img-1.jpg" /> */}
+                <NSImage path="space/img-1.jpg" />
               </Grid.Column>
             </Grid>
           </section>
@@ -64,9 +95,67 @@ class Space extends Component {
                 <Button className="mt-40" secondary>Contact Us</Button>
               </Grid.Column>
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right">
-                <p className="quotes left-align">
+                <p className="quotes left-align space-quotes">
                   <sup><Icon size="tiny" color="blue" className="ns-quote-left" /></sup> One of the biggest hurdles for a small business is the build-out process. A talented chef or designer might be very skilled at their craft, but many other factors are critical to opening a storefront including the capital raise, lease negotiation, design, permitting, construction and marketing. Finding ways to assist the entrepreneur in reducing complexity and controlling risks at this juncture is critical. <sup><Icon size="tiny" color="blue" className="ns-quote-right" /></sup>
                 </p>
+                <Item.Group className="space-user">
+                  <Item>
+                    <NSImage path="space/monte-large.png" circular />
+                    <Item.Content>
+                      <Item.Header>Monte Large</Item.Header>
+                      <Item.Meta>NextSeed Space</Item.Meta>
+                    </Item.Content>
+                  </Item>
+                </Item.Group>
+              </Grid.Column>
+            </Grid>
+          </section>
+          <Divider fitted />
+          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+            <Header as="h2" className="mb-80 center-align">Currently at NextSeed Space</Header>
+            <Segment className="no-shadow">
+              <Grid stackable>
+                <Grid.Column width="5" className="plr-0 pt-0 pb-0">
+                  <NSImage path="space/chicken-and-rice.jpg" />
+                </Grid.Column>
+                <Grid.Column width="11" verticalAlign="middle" textAlign="center">
+                  <Header as="h3">The Chicken & Rice Guys</Header>
+                  <p>Boston{"'"}s original Halal-style street food has arrived in Houston</p>
+                  <Button className="mt-40" basic secondary>Visit at Greenway Plaza</Button>
+                </Grid.Column>
+              </Grid>
+            </Segment>
+          </section>
+          <Divider fitted />
+          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+            <Header as="h2" className="mb-80 center-align">Currently at NextSeed Space</Header>
+            <Card.Group itemsPerRow={3} stackable>
+              {
+                alumini.map(a => (
+                  <Card className="bordered center-align">
+                    <NSImage path={a.image} centered />
+                    <Card.Content className="pb-30 pt-30">
+                      <Header as="h5">{a.title}</Header>
+                      <p>{a.description}</p>
+                      <a href={a.link} className="secondary-link mt-30 display-block">Read More</a>
+                    </Card.Content>
+                  </Card>
+                ))
+              }
+            </Card.Group>
+          </section>
+          <Divider fitted />
+          <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
+            <Grid centered reversed="mobile">
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} floated="left">
+                <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-40'}>Interested in learning more<Responsive as="br" minWidth={768} /> about NextSeed Space?</Header>
+                <p>
+                  NextSeed Space is an initiative by NextSeed, a<Responsive as="br" minWidth={768} /> community-driven investment platform focused on<Responsive as="br" minWidth={768} /> local offerings.
+                </p>
+                <Button className="mt-60" secondary>Contact Us</Button>
+              </Grid.Column>
+              <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right">
+                <NSImage path="space/img-2.jpg" />
               </Grid.Column>
             </Grid>
           </section>

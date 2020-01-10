@@ -176,17 +176,14 @@ h6{
 .m-auto{
 	margin: 0 auto !important;
 }
-.pb-20{
-	padding-bottom: @20px !important;
-}
-.pb-40{
-	padding-bottom: @40px !important;
-}
 .pt-0{
 	padding-top:0 !important;
 }
 .pt-10{
 	padding-top:10px !important;
+}
+.pt-30{
+	padding-top:30px !important;
 }
 .pt-50{
 	padding-top:50px !important;
@@ -199,6 +196,12 @@ h6{
 }
 .pb-20{
 	padding-bottom: @20px !important;
+}
+.pb-30{
+	padding-bottom: @30px !important;
+}
+.pb-40{
+	padding-bottom: @40px !important;
 }
 .pb-50{
 	padding-bottom: @50px !important;
@@ -3218,16 +3221,16 @@ table.css-wu4c77-diff-container {
 		@media only screen and (max-width : @largestMobileScreen){
 			padding-left: @31px;
 		}
-		sup:first-child{
-			margin-left: -48px;
-			margin-right: 0;
-			@media only screen and (max-width : @largestMobileScreen){
-				position: absolute;
-				left: 0;
-				top: 14px;
-				width: 20px;
-				margin-left: 0;
-			}
+	}
+	sup:first-child{
+		margin-left: -48px;
+		margin-right: 0;
+		@media only screen and (max-width : @largestMobileScreen){
+			position: absolute;
+			left: 0;
+			top: 14px;
+			width: 20px;
+			margin-left: 0;
 		}
 	}
 	i.icon{
@@ -3241,6 +3244,23 @@ table.css-wu4c77-diff-container {
 		&.ns-quote-right{
 			margin-left: 11px !important;
 			margin-right: 0 !important;
+		}
+	}
+	&.space-quotes{
+		padding-left: 40px;
+		line-height: 36px;
+		@media only screen and (max-width : @largestMobileScreen){
+			padding-left: @31px;
+		}
+		i.icon{
+			font-size: @20px !important;
+		}
+		sup:first-child{
+			margin-left: -40px;
+			margin-right: 0;
+			@media only screen and (max-width : @largestMobileScreen){
+				margin-left: 0;
+			}
 		}
 	}
 }
