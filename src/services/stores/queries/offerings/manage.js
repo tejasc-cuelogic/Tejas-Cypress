@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 const common = {
   offeringBasics: `
   isAvailablePublicly
+  offeringSlug
   keyTerms {
     legalBusinessName
     shorthandBusinessName

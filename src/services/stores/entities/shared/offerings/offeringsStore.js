@@ -272,8 +272,6 @@ export class OfferingsStore {
   @action
   getOne = (id, loading = true) => {
     this.initLoad.push('getOne');
-    offeringCreationStore.setFieldValue('currentOfferingSlug', id);
-    offeringCreationStore.setFieldValue('currentOfferingId', id);
     if (loading) {
       this.offerLoading = true;
       this.oldOfferData = {};
@@ -290,7 +288,8 @@ export class OfferingsStore {
           this.currentId = id;
           this.offerLoading = false;
           this.oldOfferData = {};
-          const { setFormData, setCurrentOfferingId } = offeringCreationStore;
+          const { setFormData, setCurrentOfferingId, setFieldValue } = offeringCreationStore;
+          setFieldValue('currentOfferingSlug', id);
           setCurrentOfferingId(res.getOfferingDetailsBySlug.id);
           setFormData('OFFERING_DETAILS_FRM', false);
           setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);

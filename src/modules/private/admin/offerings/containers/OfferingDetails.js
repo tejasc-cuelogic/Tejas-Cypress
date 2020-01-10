@@ -27,7 +27,6 @@ export default class OfferingDetails extends Component {
       this.props.offeringsStore.getOne(this.props.match.params.offeringid);
     }
     this.props.navStore.setAccessParams('specificNav', '/dashboard/offering/2/overview');
-    this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.offeringid);
   }
 
   componentDidMount() {
@@ -54,10 +53,11 @@ export default class OfferingDetails extends Component {
   };
 
   render() {
-    const { match, offeringsStore, navStore } = this.props;
+    const { match, offeringsStore, navStore, offeringCreationStore } = this.props;
     let navItems = navStore.specificNavs.subNavigations;
     const { offerLoading, offerOld } = offeringsStore;
     let { offer } = offeringsStore;
+    const { currentOfferingId } = offeringCreationStore;
     const { offerStatus } = offeringsStore;
     offer = !offerLoading && offerOld.stage ? offerOld : offer;
     if (!get(offer, 'id') || (offerLoading && offer && !offer.stage)) {
@@ -113,13 +113,12 @@ export default class OfferingDetails extends Component {
                 <Route exact path={match.url} component={OfferingModule('overview')} />
                 {
                   navItems.map((item) => {
-                    const { offeringid } = this.props.match.params;
                     const CurrentModule = OfferingModule(item.to);
                     return (
                       <Route
                         key={item.to}
                         path={`${match.url}/${item.to}`}
-                        render={props => <CurrentModule classes={item.title === 'Activity History' ? 'offering-activity' : ''} module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} stepName="OFFERING_ACTIVITY_HISTORY" resourceId={offeringid} offeringId={offeringid} issuerId={offer.issuerId} applicationId={offer.applicationId} />}
+                        render={props => <CurrentModule classes={item.title === 'Activity History' ? 'offering-activity' : ''} module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} stepName="OFFERING_ACTIVITY_HISTORY" resourceId={currentOfferingId} offeringId={currentOfferingId} issuerId={offer.issuerId} applicationId={offer.applicationId} />}
                       />
                     );
                   })

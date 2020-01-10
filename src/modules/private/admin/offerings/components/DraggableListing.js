@@ -22,7 +22,7 @@ const SortableItem = SortableElement(({
     <div className="row-wrap striped-table">
       <div className="balance first-column">
         <DragHandle />
-        <Link to={`${refUrl}/edit/${offering.id}`}>
+        <Link to={`${refUrl}/edit/${offering.offeringSlug}`}>
           <b>
             {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
               ? offering.keyTerms.shorthandBusinessName : (
@@ -50,7 +50,7 @@ const SortableItem = SortableElement(({
           ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value === 0 ? get(offering, 'closureSummary.processingDate') : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label}` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A')
           : (get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false)} /> : 'N/A')}
       </div>
-      <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
+      <div className="balance" onClick={() => handleAction('Edit', offering)}>
         <p className="overflow-text">
           {offering.issuerDetails
             ? (
@@ -72,13 +72,13 @@ const SortableItem = SortableElement(({
         <Button.Group>
           {Object.keys(actions).map(action => (
             <Button icon className="link-button">
-              <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
+              <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => handleAction(actions[action].label, offering, !offering.isAvailablePublicly)} />
             </Button>
           ))}
           {['live'].includes(stage)
             && (
               <Button icon className="link-button">
-                <Icon className="ns-trash" onClick={() => handleAction('Delete', offering.id, !offering.isAvailablePublicly)} />
+                <Icon className="ns-trash" onClick={() => handleAction('Delete', offering, !offering.isAvailablePublicly)} />
               </Button>
             )
           }
@@ -129,14 +129,14 @@ export default class DraggableListing extends Component {
     }
   }
 
-  handleAction = (action, offeringId, isPublished = false) => {
+  handleAction = (action, offering, isPublished = false) => {
     if (action === 'Delete') {
-      this.props.uiStore.setConfirmBox(action, offeringId);
+      this.props.uiStore.setConfirmBox(action, offering.id);
     } else if (action === 'Edit') {
-      this.props.history.push(`${this.props.match.url}/edit/${offeringId}`);
+      this.props.history.push(`${this.props.match.url}/edit/${offering.offeringSlug}`);
     } else if (action === 'Publish') {
       this.setState({ isPublic: isPublished });
-      this.props.uiStore.setConfirmBox(action, offeringId, isPublished);
+      this.props.uiStore.setConfirmBox(action, offering.id, isPublished);
     }
   }
 
