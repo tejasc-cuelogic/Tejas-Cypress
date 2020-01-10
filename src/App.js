@@ -279,7 +279,7 @@ class App extends Component {
         }
         <ToastContainer className="toast-message" />
         {uiStore.appUpdated
-          && <NotifyVersionUpdate />
+          && <NotifyVersionUpdate setAppUpdated={uiStore.setAppUpdated} />
         }
         {uiStore.devBanner
           && <DevBanner toggle={this.playDevBanner} />
