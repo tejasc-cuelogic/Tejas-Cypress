@@ -857,24 +857,6 @@ export class AccreditationStore {
     this.accreditationData = accData;
   }
 
-  @computed get isUserAccreditated() {
-    let entityAccountDetails;
-    if (this.userData && this.userData.data && this.userData.data.user) {
-      if (this.userData.data.user.roles) {
-        entityAccountDetails = find(this.userData.data.user.roles, { name: 'entity' });
-      }
-      if ((this.userData.data.user.accreditation
-        && this.userData.data.user.accreditation.status === 'CONFIRMED')
-        || (entityAccountDetails && entityAccountDetails.details
-          && entityAccountDetails.details.accreditation
-          && entityAccountDetails.details.accreditation.status === 'CONFIRMED')
-      ) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   getKeyResult = (dataObj) => {
     const resultArr = [];
     if (dataObj) {

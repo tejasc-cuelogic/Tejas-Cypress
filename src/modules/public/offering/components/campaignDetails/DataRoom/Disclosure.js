@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { InlineLoader } from '../../../../../../theme/shared';
 import ModalSection from './ModalSection';
 
-@inject('campaignStore', 'accreditationStore', 'userDetailsStore', 'userStore')
+@inject('campaignStore', 'userDetailsStore', 'userStore')
 @withRouter
 class Disclosure extends Component {
   state = {
@@ -37,8 +37,7 @@ class Disclosure extends Component {
       && (!this.props.userStore.currentUser
       || (this.props.userStore.currentUser.roles.includes('issuer') && this.props.userStore.currentUser.sub !== campaignCreatedBy)
       || (this.props.userStore.currentUser && this.props.userStore.currentUser.roles
-      && this.props.userStore.currentUser.roles.includes('investor') && !isDataRoomDocsViewStatus
-      && !this.props.accreditationStore.isUserAccreditated))) {
+      && this.props.userStore.currentUser.roles.includes('investor') && !isDataRoomDocsViewStatus))) {
       return (
         <ModalSection doc={doc} currentUser={this.props.userStore.currentUser} />
       );

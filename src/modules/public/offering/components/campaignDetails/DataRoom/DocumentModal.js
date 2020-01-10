@@ -7,7 +7,7 @@ import { Header, Button, Modal } from 'semantic-ui-react';
 import { IframeModal } from '../../../../../../theme/shared';
 import ModalSection from './ModalSection';
 
-@inject('campaignStore', 'userStore', 'accreditationStore', 'userDetailsStore')
+@inject('campaignStore', 'userStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class DocumentModal extends Component {
@@ -60,8 +60,7 @@ export default class DocumentModal extends Component {
       && (!this.props.userStore.currentUser
       || (this.props.userStore.currentUser.roles.includes('issuer') && this.props.userStore.currentUser.sub !== campaignCreatedBy)
       || (this.props.userStore.currentUser && this.props.userStore.currentUser.roles
-      && this.props.userStore.currentUser.roles.includes('investor') && !isDataRoomDocsViewStatus
-      && !this.props.accreditationStore.isUserAccreditated))) {
+      && this.props.userStore.currentUser.roles.includes('investor') && !isDataRoomDocsViewStatus))) {
       return (
         <Modal open={this.state.openModal} closeIcon onClose={this.props.close || this.closeModal}>
         <Modal.Content>
