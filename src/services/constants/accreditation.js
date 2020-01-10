@@ -1,3 +1,5 @@
+import { CURR_YEAR } from '../../constants/common';
+
 export const ACCREDITATION_FILE_UPLOAD_ENUMS = {
   individual: 'PROFILE_ACCREDITATION_INDIVIDUAL_IRA_PROCESSING',
   ira: 'PROFILE_ACCREDITATION_INDIVIDUAL_IRA_PROCESSING',
@@ -6,9 +8,9 @@ export const ACCREDITATION_FILE_UPLOAD_ENUMS = {
 
 export const UPLOAD_ASSET_ENUMS = {
   statementDoc: 'ASSETS',
-  incomeDocSecondLastYear: 'INCOME_2017',
-  incomeDocLastYear: 'INCOME_2018',
-  incomeDocThirdLastYear: 'INCOME_2016',
+  incomeDocLastYear: `INCOME_${CURR_YEAR - 1}`,
+  incomeDocSecondLastYear: `INCOME_${CURR_YEAR - 2}`,
+  incomeDocThirdLastYear: `INCOME_${CURR_YEAR - 3}`,
 };
 
 export const ACCREDITATION_METHOD_ENUMS = {
