@@ -205,7 +205,7 @@ export const INCOME_UPLOAD_DOCUMENTS = {
     value: [],
     values: [
       {
-        label: 'I hereby certify that I have a reasonable expectation that my income will meet or exceed the requirement to be considered an accredited investor in 2019.',
+        label: 'I hereby certify that I have a reasonable expectation that my income will meet or exceed the requirement to be considered an accredited investor in 2020.',
         value: 'ACCEPTED',
       },
     ],
@@ -227,7 +227,7 @@ export const INCOME_UPLOAD_DOCUMENTS = {
     value: [],
     values: [
       {
-        label: 'There are not yet tax returns, Form W-2s, or other IRS or foreign tax authority documents that evidence my income for 2018. I hereby certify that my income in 2018 met or exceeded the requirement to be considered an accredited investor, and I have a reasonable expectation that my income will meet or exceed such requirement in 2019. I acknowledge that I must provide appropriate documentation for 2018 once it becomes available.',
+        label: 'There are not yet tax returns, Form W-2s, or other IRS or foreign tax authority documents that evidence my income for 2019. I hereby certify that my income in 2019 met or exceeded the requirement to be considered an accredited investor, and I have a reasonable expectation that my income will meet or exceed such requirement in 2020. I acknowledge that I must provide appropriate documentation for 2019 once it becomes available.',
         value: 'ACCEPTED',
       },
     ],
