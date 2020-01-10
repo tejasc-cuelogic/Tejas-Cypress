@@ -7,7 +7,7 @@ export const {
 } = process.env;
 
 export const {
-  REACT_APP_PUBLIC_API, REACT_APP_PUBLIC_API_KEY,
+  REACT_APP_PUBLIC_API, REACT_APP_PUBLIC_API_KEY, NODE_ENV,
 } = process.env;
 
 export const SOCIAL_URLS = {
