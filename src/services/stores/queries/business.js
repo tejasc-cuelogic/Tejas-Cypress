@@ -98,3 +98,20 @@ export const adminCloneXmlSubmission = gql`
       xmlSubmissionId
     }
   }`;
+
+  export const adminDeleteBusinessFiling = gql`
+  mutation adminDeleteBusinessFiling($offeringId: String!, $filingId: String!) {
+    adminDeleteBusinessFiling(offeringId: $offeringId, filingId: $filingId ) {
+      offeringId
+      created
+    }
+  }`;
+
+  export const adminLockBusinessFilingSubmission = gql`
+  mutation adminLockBusinessFilingSubmission($offeringId: String!, $filingId: String!, $xmlSubmissionId: String!, $lockedStatus: Boolean!) {
+    adminLockBusinessFilingSubmission(offeringId: $offeringId,filingId: $filingId, xmlSubmissionId: $xmlSubmissionId, lockedStatus: $lockedStatus) {
+      offeringId
+      xmlSubmissionId
+      lockedStatus
+    }
+  }`;

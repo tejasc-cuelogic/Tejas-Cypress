@@ -14,6 +14,8 @@ import {
   xmlSubmissionMutation,
   adminCloneXmlSubmission,
   adminDeleteBusinessFilingSubmission,
+  adminDeleteBusinessFiling,
+  adminLockBusinessFilingSubmission,
 } from '../../stores/queries/business';
 import { adminBusinessFiling, getXMLFiles } from '../../stores/queries/offerings/manage';
 import { businessStore, uiStore } from '../../stores';
@@ -593,6 +595,28 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Deleting Business Filing');
     const payload = {
+      mutation: adminDeleteBusinessFiling,
+      variables: {
+        offeringId,
+        filingId,
+      },
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate(payload)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+    });
+
+    /* const payload = {
       query: `mutation adminDeleteBusinessFiling($offeringId: String!, $filingId: String!) {
          adminDeleteBusinessFiling(offeringId: $offeringId, filingId: $filingId ){
            offeringId
@@ -612,7 +636,7 @@ export class Business {
           uiStore.setProgress(false);
           uiStore.clearLoaderMessage();
         });
-    });
+    }); */
   }
 
   /**
@@ -622,7 +646,29 @@ export class Business {
     const status = lockedStatus === false ? 'Unlocking' : 'Locking';
     uiStore.setProgress();
     uiStore.setLoaderMessage(`${status} XML Submission`);
+
     const payload = {
+      mutation: adminLockBusinessFilingSubmission,
+      variables: {
+        offeringId, filingId, xmlSubmissionId, lockedStatus,
+      },
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate(payload)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+    });
+
+    /* const payload = {
       query: `mutation adminLockBusinessFilingSubmission($offeringId: String!, $filingId: String!, $xmlSubmissionId: String!, $lockedStatus: Boolean!){
         adminLockBusinessFilingSubmission(offeringId: $offeringId,filingId: $filingId, xmlSubmissionId: $xmlSubmissionId, lockedStatus: $lockedStatus){
           offeringId xmlSubmissionId lockedStatus
@@ -640,7 +686,7 @@ export class Business {
           uiStore.setProgress(false);
           uiStore.clearLoaderMessage();
         });
-    });
+    }); */
   }
 
   /**
