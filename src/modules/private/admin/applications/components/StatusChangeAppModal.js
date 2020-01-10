@@ -89,7 +89,7 @@ export default class StatusChangeAppModal extends Component {
                   this.props.history.push('/dashboard/applications/in-progress');
                 });
             } else {
-              adminActions.createNewUser(userDetails, 'SUPPRESS', false).then(() => {
+              adminActions.createNewUser(userDetails, 'SUPPRESS', false, 'PROMOTE').then(() => {
                 // This timeout is added intentionally beacause of parellel mutation executes. Don't delete this
                 setTimeout(() => {
                   this.props.businessAppReviewStore
