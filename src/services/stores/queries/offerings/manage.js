@@ -114,8 +114,8 @@ export const deleteOffering = gql`
 `;
 
 export const getOfferingDetails = gql`
-  query getOfferingById($id: String!) {
-    getOfferingById(id: $id) {
+  query getOfferingDetailsBySlug($id: String!) {
+    getOfferingDetailsBySlug(offeringSlug: $id) {
       id
       offeringSlug
       referralCode
