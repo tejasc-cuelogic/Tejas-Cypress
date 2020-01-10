@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { get, startCase } from 'lodash';
-import { Header, Icon, Form, Divider } from 'semantic-ui-react';
+import { Header, Icon, Form, Divider, Table } from 'semantic-ui-react';
 import Helper from '../../../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../../../helper';
 import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../../../../../../../services/constants/accreditation';
@@ -56,7 +56,7 @@ export default class AccreditationsLimits extends Component {
                 && (
                   <>
                     <Header as="h6">
-                      Accreditation
+                      Accreditation Status
                       <Header.Subheader>Verify accreditation</Header.Subheader>
                     </Header>
                     <div className="bg-offwhite">
@@ -94,6 +94,33 @@ export default class AccreditationsLimits extends Component {
               }
             </>
           ))}
+        {(get(getDetailsOfUser, 'accreditation.self'))
+          && (
+            <>
+              <Header as="h6">Self Accreditation Status</Header>
+              <div className="bg-offwhite">
+                <div className="table-wrapper">
+                  <Table unstackable basic="very" fixed>
+                    <Table.Body>
+                      <Table.Row>
+                        <Table.Cell>Offering: </Table.Cell>
+                        <Table.Cell>{get(getDetailsOfUser, 'accreditation.self.offering') || 'N/A'}</Table.Cell>
+                      </Table.Row>
+                      <Table.Row>
+                        <Table.Cell>Document: </Table.Cell>
+                        <Table.Cell>{get(getDetailsOfUser, 'accreditation.self.document') || 'N/A'}</Table.Cell>
+                      </Table.Row>
+                      <Table.Row>
+                        <Table.Cell>Date: </Table.Cell>
+                        <Table.Cell>{get(getDetailsOfUser, 'accreditation.self.date') ? DataFormatter.getDateAsPerTimeZone(get(getDetailsOfUser, 'accreditation.self.date'), true, false, false) : 'N/A'}</Table.Cell>
+                      </Table.Row>
+                    </Table.Body>
+                  </Table>
+                </div>
+              </div>
+            </>
+          )
+        }
       </Form>
     );
   }

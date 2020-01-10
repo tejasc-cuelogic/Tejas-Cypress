@@ -282,6 +282,7 @@ export const selectedUserDetailsQuery = gql`
         self {
           offering
           document
+          date
         }
       }
       saasquatch {
