@@ -75,7 +75,7 @@ const handleActions = (data) => {
 };
 
 const INVESTMENT_CARD_META = [
-  { label: '', for: ['active', 'pending', 'completed'], children: data => <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />, isMobile: false, isDesktop: true, securityType: [] },
+  { label: '', for: ['active', 'pending', 'completed'], children: data => <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />, className: 'collapsing', isMobile: false, isDesktop: true, securityType: [] },
   { label: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], children: data => offeringName(data), isMobile: true, isDesktop: true, securityType: [] },
   { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: value => CAMPAIGN_KEYTERMS_SECURITIES[value], for: isMobile ? ['pending'] : ['pending', 'complete'], isMobile: true, isDesktop: true, securityType: [] },
   { label: 'Invested Amount', key: 'investedAmount', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], getRowValue: value => Helper.CurrencyFormat(value), children: data => investedAmount(data), isMobile: true, isDesktop: true, className: 'text-capitalize', securityType: [] },

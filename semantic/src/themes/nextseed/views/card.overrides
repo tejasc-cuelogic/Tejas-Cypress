@@ -625,23 +625,25 @@
                     align-items: flex-start;
                     justify-content: space-between;
                     font-weight: @normal;
+                    line-height: 18px;
                     .ui.header{
                         padding: 0;
                         font-size: @14px;
                         font-weight: @normal;
+                        padding-left: @30px;
                         .sub.header{
                             margin-left: @30px;
+                            margin-left: 0;
                         }
                     }
                     i.icon{
                         margin-right: @14px;
-                        @media only screen and (max-width : @largestMobileScreen){
-                            &:before{
-                                top: 50%;
-                                position: absolute;
-                                left: 0;
-                                transform: translate(0, -50%);
-                            }
+                        margin-left: -@30px;
+                        &:before{
+                            top: 50%;
+                            position: absolute;
+                            left: 0;
+                            transform: translate(0, -50%);
                         }
                     }
                 }
