@@ -61,6 +61,7 @@ export const userDetailsQuery = gql`
       status
       accreditation {
         status
+        expiration
         self {
           offering
         }
@@ -115,6 +116,7 @@ export const userDetailsQuery = gql`
           ... on Investor {
             accreditation {
               status
+              expiration
             }
             limits {
               income
