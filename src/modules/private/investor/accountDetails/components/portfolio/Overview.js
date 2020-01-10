@@ -357,7 +357,7 @@ class Overview extends Component {
             </>
           )
         }
-        {chartData.length > 0
+        {(chartData.length > 0 && !responsiveVars.isMobile && overviewToDisplay !== 'REVENUE')
           && (
             <>
               <Divider />

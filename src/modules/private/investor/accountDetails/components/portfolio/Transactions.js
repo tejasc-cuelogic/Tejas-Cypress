@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { isArray } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Form, Grid, Table, List, Button, Modal, Icon } from 'semantic-ui-react';
-import moment from 'moment';
 import { THeader } from '../../../../../../theme/table/NSTable';
 import { DropdownFilter } from '../../../../../../theme/form/Filters';
 import Helper from '../../../../../../helper/utility';
