@@ -31,7 +31,7 @@ export default class Listing extends Component {
     if (action === 'Delete') {
       this.props.uiStore.setConfirmBox(action, offering.id);
     } else if (action === 'Edit') {
-      this.props.history.push(`${this.props.match.url}/edit/${offering.offeringSlug}`);
+      this.props.history.push(`/dashboard/offering/edit/${offering.offeringSlug}`);
     } else if (action === 'Publish') {
       this.setState({ isPublic: isPublished, loadingOfferId: offering.id });
       this.props.uiStore.setConfirmBox(action, offering.id, isPublished);
@@ -245,7 +245,6 @@ export default class Listing extends Component {
           size="mini"
           className="deletion"
         />
-
       </Card>
     );
   }

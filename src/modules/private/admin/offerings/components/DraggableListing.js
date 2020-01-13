@@ -17,12 +17,12 @@ const actions = {
 };
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({
-  offering, handleAction, stage, refUrl,
+  offering, handleAction, stage,
 }) => (
     <div className="row-wrap striped-table">
       <div className="balance first-column">
         <DragHandle />
-        <Link to={`${refUrl}/edit/${offering.offeringSlug}`}>
+        <Link to={`/dashboard/offering/edit/${offering.offeringSlug}`}>
           <b>
             {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
               ? offering.keyTerms.shorthandBusinessName : (
@@ -87,7 +87,7 @@ const SortableItem = SortableElement(({
     </div>
 ));
 const SortableList = SortableContainer(({
-  allOfferingsList, handleAction, stage, refUrl, listIndex,
+  allOfferingsList, handleAction, stage, listIndex,
 }) => (
     <div className="tbody">
       {allOfferingsList.map((offering, index) => (
@@ -99,7 +99,6 @@ const SortableList = SortableContainer(({
           handleAction={handleAction}
           index={index}
           stage={stage}
-          refUrl={refUrl}
           listIndex={listIndex}
         />
       ))}
@@ -133,7 +132,7 @@ export default class DraggableListing extends Component {
     if (action === 'Delete') {
       this.props.uiStore.setConfirmBox(action, offering.id);
     } else if (action === 'Edit') {
-      this.props.history.push(`${this.props.match.url}/edit/${offering.offeringSlug}`);
+      this.props.history.push(`/dashboard/offering/edit/${offering.offeringSlug}`);
     } else if (action === 'Publish') {
       this.setState({ isPublic: isPublished });
       this.props.uiStore.setConfirmBox(action, offering.id, isPublished);
@@ -187,7 +186,6 @@ export default class DraggableListing extends Component {
               onSortEnd={e => this.onSortEnd(e)}
               stage={stage}
               lockAxis="y"
-              refUrl={this.props.match.url}
               useDragHandle
               listIndex={offeringListIndex}
             />

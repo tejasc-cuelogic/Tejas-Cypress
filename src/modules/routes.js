@@ -23,6 +23,8 @@ import XmlForm from './private/admin/edgar/containers/XmlForm';
 import BusinessDetails from './private/admin/edgar/containers/BusinessDetails';
 import UserManagement from './private/admin/userManagement';
 import DashboardCta from './shared/DashboardCta';
+import OfferingDetails from './private/admin/offerings/containers/OfferingDetails';
+
 
 import {
   AdminAuthorization,
@@ -175,6 +177,11 @@ export const privateRoutes = [
     component: Edgar,
     auth: BusinessAuthorization,
     exact: true,
+  },
+  {
+    path: '/dashboard/offering/edit/:offeringid',
+    component: OfferingDetails,
+    auth: AdminAuthorization,
   },
   {
     path: '/dashboard/users',

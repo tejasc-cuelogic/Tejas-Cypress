@@ -116,9 +116,8 @@ export default class AllRepayments extends PureComponent {
     this.props.paymentStore.setInitiateSrch(e.target.value);
   }
 
-  getLink = (offeringId, offeringStage) => {
-    const stage = ['CREATION'].includes(offeringStage) ? 'creation' : ['LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage) ? 'live' : ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULTED'].includes(offeringStage) ? 'completed' : 'failed';
-    return `/dashboard/offerings/${stage}/edit/${offeringId}`;
+  getLink = (offeringId) => {
+    return `/dashboard/offering/edit/${offeringId}`;
   }
 
   handleEditPayment = (id) => {

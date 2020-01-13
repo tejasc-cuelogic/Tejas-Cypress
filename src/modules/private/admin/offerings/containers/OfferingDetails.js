@@ -12,6 +12,7 @@ import EditOffering from '../components/EditOfferingModal';
 import EditPoc from '../components/EditPocModal';
 import { REACT_APP_DEPLOY_ENV, NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import Helper from '../../../../../helper/utility';
+import { STAGES } from '../../../../../services/constants/admin/offerings';
 
 
 @inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore', 'uiStore', 'businessAppStore')
@@ -39,7 +40,8 @@ export default class OfferingDetails extends Component {
     this.props.offeringCreationStore.resetAllForms();
     this.props.offeringCreationStore.resetOfferingId();
     this.props.businessAppStore.resetFirstLoad();
-    this.props.history.push(`${this.props.refLink}/${this.props.match.params.stage}`);
+    const { offer } = this.props.offeringsStore;
+    this.props.history.push(`/dashboard/offerings/${STAGES[offer.stage].ref}`);
     window.onpopstate = null;
   };
 
