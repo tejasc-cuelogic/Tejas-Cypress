@@ -1,4 +1,8 @@
+import React from 'react';
 import { CURR_YEAR } from '../../constants/common';
+import { PopUpModal } from '../../theme/shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 export const FILTER_META = {
   method: {
@@ -45,7 +49,7 @@ export const SELF_ACCREDITATION = {
     value: [],
     values: [
       {
-        label: 'I meet the requirements to qualify as an accredited investor.', value: '1',
+        label: <>I meet the requirements to qualify as an <PopUpModal showOnlyPopup={!isMobile} customTrigger={<span className="popup-label">accredited investor</span>} content="An accredited investor has an annual income of >$200k (or >$300k with a spouse) or has a net worth over $1 million." />.</>, value: '1',
       },
       {
         label: 'I understand that in order to make an investment in this offering, I will be required to provide documentation evidencing my accredited investor status.', value: '2',
