@@ -2,7 +2,7 @@ import React from 'react';
 import { toJS } from 'mobx';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { authActions } from '../../services/actions';
 import { privateRoutes } from '../routes';
 import { InlineLoader, SuspenseBoundary, lazyRetry, Spinner } from '../../theme/shared';
@@ -79,6 +79,9 @@ export default class Private extends React.Component {
     const { location } = this.props;
     if (userFirstLoad === false || this.props.uiStore.resizeLoader) {
       return <Spinner loaderMessage="Loading..." />;
+    }
+    if (this.props.userStore.isAdmin) {
+      return <Redirect from="/dashboard/offerings/edit/*" to="/dashboard/offerings/creation" />;
     }
     if (this.props.authStore.isUserLoggedIn) {
       return (

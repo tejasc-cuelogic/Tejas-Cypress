@@ -116,9 +116,7 @@ export default class AllRepayments extends PureComponent {
     this.props.paymentStore.setInitiateSrch(e.target.value);
   }
 
-  getLink = (offeringId) => {
-    return `/dashboard/offering/edit/${offeringId}`;
-  }
+  getLink = offeringId => `/dashboard/offering/edit/${offeringId}`
 
   handleEditPayment = (id) => {
     const { match } = this.props;
