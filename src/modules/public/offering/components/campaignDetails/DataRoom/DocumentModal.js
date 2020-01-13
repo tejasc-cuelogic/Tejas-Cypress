@@ -7,7 +7,7 @@ import { Header, Button, Modal } from 'semantic-ui-react';
 import { IframeModal } from '../../../../../../theme/shared';
 import ModalSection from './ModalSection';
 
-@inject('campaignStore', 'userStore', 'userDetailsStore')
+@inject('campaignStore', 'userStore', 'userDetailsStore', 'uiStore')
 @withRouter
 @observer
 export default class DocumentModal extends Component {
@@ -45,6 +45,7 @@ export default class DocumentModal extends Component {
     const { docLoading } = this.props.campaignStore;
     const { isDataRoomDocsViewStatus } = this.props.userDetailsStore;
     const doc = this.props.doc || this.state.paramsDoc;
+    const { responsiveVars } = this.props.uiStore;
     if (!doc || !get(doc, 'upload.fileHandle')) {
       return (<Modal open={this.state.openModal} closeIcon onClose={this.props.close || this.closeModal}>
         <Modal.Content>
@@ -62,7 +63,7 @@ export default class DocumentModal extends Component {
       || (this.props.userStore.currentUser && this.props.userStore.currentUser.roles
       && this.props.userStore.currentUser.roles.includes('investor') && !isDataRoomDocsViewStatus))) {
       return (
-        <Modal open={this.state.openModal} closeIcon onClose={this.props.close || this.closeModal}>
+        <Modal size="small" className={!responsiveVars.uptoTablet ? 'acc-investor-modal' : ''} open={this.state.openModal} closeIcon onClose={this.props.close || this.closeModal}>
         <Modal.Content>
         <ModalSection closeModal={this.closeModal} doc={doc} currentUser={this.props.userStore.currentUser} />
         </Modal.Content>

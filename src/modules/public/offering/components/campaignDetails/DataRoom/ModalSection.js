@@ -38,7 +38,7 @@ class Disclosure extends Component {
     const { currentUser } = this.props;
     const { SELF_ACCREDITATION_FRM, formChange } = this.props.accreditationStore;
     const headerMsg = 'This document is only available to accredited investors.';
-    const paraMsg = 'Please confirm your accredited investor status to access this document.';
+    const paraMsg = <span>Please confirm that you are an accredited<br /> investor to view this document.</span>;
     return (!this.state.isSelfAccredited || !currentUser) ? (
       <section className={`no-updates center-align padded ${!currentUser ? 'pt-0 pb-0' : 'bg-offwhite'}`}>
         <Header as="h3" className="mb-20 mt-50">
@@ -61,7 +61,7 @@ class Disclosure extends Component {
       </section>
     ) : (
       <section className="no-updates padded plr-0">
-        <Grid columns="2">
+        <Grid columns="2" stackable doubling>
           <Grid.Column>
             <Header as="h3" className="mb-20">
               {headerMsg}
