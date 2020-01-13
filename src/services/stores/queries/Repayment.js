@@ -7,6 +7,7 @@ export const paymentsIssuerList = gql`
       offering {
         id
         offeringStatus
+        offeringSlug
         stage
         keyTerms {
           securities

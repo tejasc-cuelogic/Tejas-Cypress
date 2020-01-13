@@ -53,7 +53,7 @@ export class PaymentStore extends DataModelStore {
     }
 
     getOfferingById = (id) => {
-      const res = this.data.find(payment => payment.offering.id === id);
+      const res = this.data.find(payment => payment.offering.offeringSlug === id);
       this.PAYMENT_FRM = Validator.setFormData(this.PAYMENT_FRM, res);
       this.validateForm('PAYMENT_FRM');
     }

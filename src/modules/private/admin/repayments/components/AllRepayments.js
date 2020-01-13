@@ -56,7 +56,7 @@ const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, ha
                     <Table.Cell key={h.key}>
                       {h.link
                         ? (
-                        <Link to={getLink(record.offering.id, record.offering.stage)}>
+                        <Link to={getLink(record.offering.offeringSlug, record.offering.stage)}>
                           <b>{get(record, h.key)}</b>
                         </Link>
                         ) : h.enum ? get(record, h.key) && CAMPAIGN_KEYTERMS_SECURITIES[get(record, h.key)]
@@ -68,7 +68,7 @@ const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, ha
                   ))}
                   <Table.Cell textAlign="center">
                     <Button icon className="link-button">
-                      <Icon className="ns-pencil" onClick={() => handleEditPayment(record.offering.id)} />
+                      <Icon className="ns-pencil" onClick={() => handleEditPayment(record.offering.offeringSlug)} />
                     </Button>
                   </Table.Cell>
                 </Table.Row>
