@@ -10,7 +10,7 @@ import { FormCheckbox } from '../../../../../../theme/form';
 @observer
 class Disclosure extends Component {
   state = {
-    isSelfAccredited: false,
+    isSelfAccredited: true,
     loading: false,
   };
 
@@ -30,7 +30,7 @@ class Disclosure extends Component {
     const documentId = `${get(doc, 'name')} (${get(doc, 'upload.fileHandle.boxFileId')})`;
     const offeringId = get(campaignStore.campaign, 'keyTerms.shorthandBusinessName');
     accreditationStore.investorSelfVerifyAccreditedStatus(offeringId, documentId).then(() => {
-      this.setState({ loading: false });
+      // this.setState({ loading: false });
     }).catch(() => this.setState({ loading: false }));
   }
 
@@ -39,7 +39,7 @@ class Disclosure extends Component {
     const { SELF_ACCREDITATION_FRM, formChange } = this.props.accreditationStore;
     const headerMsg = 'This document is only available to accredited investors.';
     const paraMsg = 'Please confirm your accredited investor status to access this document.';
-    return !this.state.isSelfAccredited ? (
+    return (!this.state.isSelfAccredited || !currentUser) ? (
       <section className={`no-updates center-align padded ${!currentUser ? 'pt-0 pb-0' : 'bg-offwhite'}`}>
         <Header as="h3" className="mb-20 mt-50">
           {headerMsg}
@@ -77,7 +77,7 @@ class Disclosure extends Component {
               changed={(e, res) => formChange(e, res, 'SELF_ACCREDITATION_FRM')}
               disabled={this.state.loading}
             />
-            <Button loading={this.state.loading} primary content="Submit" className="mt-20" disabled={SELF_ACCREDITATION_FRM.fields.status.value.length !== 2} onClick={e => this.investorSelfVerifyAccreditedStatus(e)} />
+            <Button loading={this.state.loading} primary content="Confirm" className="mt-20" disabled={SELF_ACCREDITATION_FRM.fields.status.value.length !== 2} onClick={e => this.investorSelfVerifyAccreditedStatus(e)} />
           </Grid.Column>
         </Grid>
       </section>
