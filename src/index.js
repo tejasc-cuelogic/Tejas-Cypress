@@ -11,7 +11,7 @@ import * as OfflinePluginRuntime from 'offline-plugin/runtime';
 import App from './App';
 import * as stores from './services/stores';
 import { ErrorBoundry as CustomErrorBoundry, Utilities as Utils } from './helper';
-import { REACT_APP_DEPLOY_ENV } from './constants/common';
+import { REACT_APP_DEPLOY_ENV, NODE_ENV } from './constants/common';
 
 // Set the default error boundry to the customErrorBoundry
 // and reassign it if one from Bugsnag is present
@@ -59,7 +59,7 @@ ReactDOM.render(
 );
 
 // temporarily disable install for production env
-if (['develop', 'dev', 'predev'].includes(REACT_APP_DEPLOY_ENV)) {
+if (NODE_ENV === 'production' && ['localhost', 'develop', 'dev', 'predev'].includes(REACT_APP_DEPLOY_ENV)) {
   OfflinePluginRuntime.install({
     onInstalled: () => {
       console.log('[OfflinePlugin] onInstalled');
