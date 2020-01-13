@@ -111,6 +111,8 @@ export class BusinessAppStore {
 
   @observable firstLoad = [];
 
+  @observable promoteActionInProcess = false;
+
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
@@ -983,10 +985,10 @@ export class BusinessAppStore {
         // businessModel: data.businessModel.value,
         businessSecurities: data.businessSecurities.value,
         legalConfirmations: [...preQualData.legalConfirmations,
-          {
-            label: 'HAS_NOT_RAISED_SECURITIES',
-            value: includes(data.legalConfirmation.value, 'HAS_NOT_RAISED_SECURITIES'),
-          }],
+        {
+          label: 'HAS_NOT_RAISED_SECURITIES',
+          value: includes(data.legalConfirmation.value, 'HAS_NOT_RAISED_SECURITIES'),
+        }],
       };
     } else {
       preQualData = {
