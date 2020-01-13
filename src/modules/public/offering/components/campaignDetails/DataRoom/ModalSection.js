@@ -27,10 +27,9 @@ class Disclosure extends Component {
     e.preventDefault();
     this.setState({ loading: true });
     const { accreditationStore, doc, campaignStore } = this.props;
-    const documentId = get(doc, 'upload.fileHandle.boxFileId');
-    const offeringId = get(campaignStore.campaign, 'id');
+    const documentId = `${get(doc, 'name')} (${get(doc, 'upload.fileHandle.boxFileId')})`;
+    const offeringId = get(campaignStore.campaign, 'keyTerms.shorthandBusinessName');
     accreditationStore.investorSelfVerifyAccreditedStatus(offeringId, documentId).then(() => {
-      this.props.closeModal();
       this.setState({ loading: false });
     }).catch(() => this.setState({ loading: false }));
   }
