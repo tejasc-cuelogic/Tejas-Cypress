@@ -9,13 +9,15 @@ export default class MessageModal extends Component {
   }
 
   render() {
+    const { content, additionalData, classExtra, size, handleBack } = this.props;
     return (
-      <Modal open closeOnDimmerClick={false} closeIcon onClose={this.props.handleBack || this.handleBack} size={this.props.size || 'mini'}>
+      <Modal open closeOnDimmerClick={false} closeIcon onClose={handleBack || this.handleBack} size={size || 'mini'}>
         <Modal.Content>
-          <Header as="h3" className="success-msg center-align mb-60 mt-50">
+          <Header as="h3" className={`success-msg center-align mb-60 mt-50 ${classExtra}`}>
             <br />
-              {this.props.content || 'This feature is currently unavailable.'}
+              {content || 'This feature is currently unavailable.'}
           </Header>
+          {additionalData}
         </Modal.Content>
       </Modal>
     );
