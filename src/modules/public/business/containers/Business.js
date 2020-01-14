@@ -29,7 +29,7 @@ const metaTagsData = [
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
 
-const modalContent = 'Investor accounts may not be used to apply for business funding. In order to apply to raise capital, log out of your investor account and submit your application with different email address.';
+const modalContent = 'Investor accounts may not be used to apply for business funding. In order to apply to raise capital, log out of your investor account and submit your application with a different email address.';
 @inject('navStore', 'userStore', 'authStore', 'uiStore')
 @observer
 class Business extends Component {
