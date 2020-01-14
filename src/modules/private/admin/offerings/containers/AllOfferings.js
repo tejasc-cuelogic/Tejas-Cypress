@@ -81,7 +81,7 @@ export default class Offerings extends Component {
                       </Button.Group>
                     </Grid.Column>
                   </>
-)}
+                )}
               />
             </Grid.Row>
           </Grid>

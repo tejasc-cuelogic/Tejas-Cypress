@@ -372,10 +372,13 @@ export class OfferingsStore {
   }
 
   @computed get issuerOfferings() {
-    const list = toJS(this.db[this.requestState.stage]);
-    const offeringList = list && list.length ? list : [];
-    const offeringListResult = this.orderedOfferingList(offeringList);
-    return offeringListResult;
+    if (userStore.isIssuer) {
+      const list = toJS(this.db[this.requestState.stage]);
+      const offeringList = list && list.length ? list : [];
+      const offeringListResult = this.orderedOfferingList(offeringList);
+      return offeringListResult;
+    }
+    return [];
   }
 
   @action
