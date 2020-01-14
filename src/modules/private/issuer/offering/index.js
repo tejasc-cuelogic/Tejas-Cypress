@@ -19,7 +19,13 @@ export default class Offering extends Component {
       this.props.history.replace(`${this.props.match.url}/${get(this.props.navStore, 'navMeta.subNavigations[0].to') || 'overview'}`);
     }
     if (props.offeringCreationStore.currentOfferingSlug !== props.match.params.offeringSlug) {
-      this.props.offeringsStore.getOne(props.match.params.offeringSlug, !this.isUuid());
+      if (this.isUuid()) {
+        this.props.campaignStore.getCampaignDetails(props.match.params.offeringSlug, true).then(() => {
+          this.props.offeringsStore.getOne(this.props.campaignStore.campaign.offeringSlug, false);
+        });
+      } else {
+        this.props.offeringsStore.getOne(props.match.params.offeringSlug, !this.isUuid());
+      }
     }
     this.props.navStore.setAccessParams('specificNav', '/dashboard/offering/2/overview');
   }
