@@ -16,19 +16,20 @@ const FormSelect = observer((props) => {
     width = props.containerwidth;
   }
   const { displayMode, readOnly } = props;
+  const fieldClass = `${props.containerclassname || ''} ${displayMode ? ' display-only' : ''}`;
   return (
-    <Form.Field error={error} width={width}>
+    <Form.Field error={error} width={width} className={fieldClass}>
       <label>
         {label}
         {props.tooltip
           && (
-<Popup
-  trigger={<Icon className="ns-help-circle" />}
-  content={props.tooltip}
-  position="top center"
-  className="center-align"
-  wide
-/>
+            <Popup
+              trigger={<Icon className="ns-help-circle" />}
+              content={props.tooltip}
+              position="top center"
+              className="center-align"
+              wide
+            />
           )
         }
       </label>
@@ -39,6 +40,7 @@ const FormSelect = observer((props) => {
         error={!!error}
         onChange={props.changed}
         placeholder={(displayMode || readOnly) ? '' : placeHolder}
+        disabled={displayMode}
       />
       <div className="dropdown-effect">{props.fielddata.label}</div>
       {error

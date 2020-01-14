@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
-import { Form, Divider, Header } from 'semantic-ui-react';
+import { withRouter, Link } from 'react-router-dom';
+import { Form, Divider, Header, Icon, Confirm } from 'semantic-ui-react';
 import OfferingButtonGroup from '../../OfferingButtonGroup';
 import BonusRewards from '../../BonusRewards';
-import Comments from '../../Comments';
-import Updates from '../../Updates';
+// import Comments from '../../Comments';
+// import Updates from '../../Updates';
 import DataRoom from '../../legal/DataRoom';
 import formHOC from '../../../../../../../theme/form/formHOC';
 
@@ -18,12 +18,27 @@ const metaInfo = {
 @withRouter
 @observer
 class OfferingContent extends Component {
+  state = {
+    editable: false,
+    showConfirm: false,
+  }
+
+  updateState = (val, key = 'editable') => {
+    this.setState({ [key]: val });
+  }
+
   handleFormSubmit = () => {
     const params = {
       keyName: false,
       forms: ['OFFERING_CONTENT_FRM'],
     };
     this.props.manageOfferingStore.updateOffering(params);
+  }
+
+  handleDeleteAction = () => {
+    this.props.manageOfferingStore.removeOne('OFFERING_CONTENT_FRM', 'content', this.props.index);
+    this.handleFormSubmit();
+    this.props.history.push(this.props.refLink);
   }
 
   render() {
@@ -34,36 +49,52 @@ class OfferingContent extends Component {
     return (
       <div className="inner-content-spacer">
         <Form>
+          <small className="pull-right">
+            {!this.state.editable
+              ? <Link to="/" onClick={(e) => { e.preventDefault(); this.updateState(true); }}><Icon className="ns-pencil" />Edit</Link>
+              : <Link to="/" className="text-link mr-10" onClick={(e) => { e.preventDefault(); this.updateState(false); }}>Cancel</Link>
+            }
+            <Link to="/" className="ml-10 negative-text" onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>
+          </small>
           <Form.Group widths={2}>
-            {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index] })}
-            {smartElement.Masked('order', { multiForm: [metaInfo.form, 'content', index] })}
-            {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index] })}
-            {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index] })}
+            {smartElement.Input('title', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
+            {smartElement.FormSelect('scope', { multiForm: [metaInfo.form, 'content', index], displayMode: !this.state.editable })}
+            {smartElement.Masked('order', { multiForm: [metaInfo.form, 'content', index], displayMode: true })}
+            {smartElement.FormSelect('contentType', { multiForm: [metaInfo.form, 'content', index], displayMode: true })}
           </Form.Group>
           <Divider hidden />
           {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'CUSTOM'
-          && (
-          <Form.Group widths={1}>
-            <Form.Field>
-              <Header as="h6">{OFFERING_CONTENT_FRM.fields.content[index].customValue.label}</Header>
-              {smartElement.HtmlEditor('customValue', { multiForm: [metaInfo.form, 'content', index], index, readOnly: isReadonly, imageUploadPath: `offerings/${currentOfferingId}` })}
-            </Form.Field>
-          </Form.Group>
-          )}
+            && (
+              <Form.Group widths={1}>
+                <Form.Field>
+                  <Header as="h6">{OFFERING_CONTENT_FRM.fields.content[index].customValue.label}</Header>
+                  {smartElement.HtmlEditor('customValue', { multiForm: [metaInfo.form, 'content', index], index, readOnly: isReadonly, imageUploadPath: `offerings/${currentOfferingId}` })}
+                </Form.Field>
+              </Form.Group>
+            )}
           <Divider hidden />
-          {/* {!['BONUS_REWARDS', 'DATA_ROOM'].includes(OFFERING_CONTENT_FRM.fields.content[index].contentType.value)
-          && ( */}
-          <OfferingButtonGroup
-            updateOffer={this.handleFormSubmit}
-          />
-          {/* )} */}
+          {this.state.editable
+            && (
+            <OfferingButtonGroup
+              updateOffer={this.handleFormSubmit}
+            />
+          )}
           <Divider section />
           {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'BONUS_REWARDS' && <BonusRewards {...this.props} />}
           {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'DATA_ROOM' && <DataRoom {...this.props} />}
-          {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'COMMENTS' && <Comments {...this.props} />}
-          {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'UPDATES' && <Updates {...this.props} />}
+          {/* {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'COMMENTS' && <Comments {...this.props} />}
+          {OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'UPDATES' && <Updates {...this.props} />} */}
           <Divider hidden />
         </Form>
+        <Confirm
+          header="Confirm"
+          content="Are you sure you want to remove this component?"
+          open={this.state.showConfirm}
+          onCancel={() => this.updateState(false, 'showConfirm')}
+          onConfirm={this.handleDeleteAction}
+          size="mini"
+          className="deletion"
+        />
       </div>
     );
   }

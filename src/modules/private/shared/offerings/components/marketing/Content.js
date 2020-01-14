@@ -4,11 +4,16 @@ import { withRouter, Switch, Route } from 'react-router-dom';
 import { Button, Grid } from 'semantic-ui-react';
 import OfferingContent from './Content/OfferingContent';
 import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
+import NewContentModal from './Content/NewContentModal';
 
 @inject('manageOfferingStore')
 @withRouter
 @observer
 export default class Content extends Component {
+  state = {
+    openModal: false,
+  }
+
   constructor(props) {
     super(props);
     if (props.isExact) {
@@ -19,9 +24,21 @@ export default class Content extends Component {
     }
   }
 
+  toggleModal = (val) => {
+    this.setState({ openModal: val });
+    if (!val) {
+      // remove last added
+    }
+  }
+
+  addMore = () => {
+    this.props.manageOfferingStore.addMore('OFFERING_CONTENT_FRM', 'content');
+    this.toggleModal(true);
+  }
+
   render() {
     const { match } = this.props;
-    const { OFFERING_CONTENT_FRM, addMore } = this.props.manageOfferingStore;
+    const { OFFERING_CONTENT_FRM } = this.props.manageOfferingStore;
     const navItems = [];
     OFFERING_CONTENT_FRM.fields.content.map((content, index) => {
       navItems.push({ title: `${content.title.value !== '' ? content.title.value : `Content ${index + 1}`}`, to: `${index + 1}`, index });
@@ -29,12 +46,13 @@ export default class Content extends Component {
     });
     return (
       <div className="inner-content-spacer">
+        {this.state.openModal && <NewContentModal refLink={match.url} toggleModal={this.toggleModal} index={OFFERING_CONTENT_FRM.fields.content.length - 1} />}
         <Grid>
           <Grid.Column widescreen={4} computer={4} tablet={3} mobile={16}>
             <div className="sticky-sidebar">
               <SecondaryMenu secondary vertical match={match} navItems={navItems} />
               {OFFERING_CONTENT_FRM.fields.content.length < 10
-              && <Button size="small" color="blue" className="link-button mt-20" onClick={() => addMore('OFFERING_CONTENT_FRM', 'content')}>+ Add another leader</Button>
+              && <Button size="small" color="blue" className="link-button mt-20" onClick={this.addMore}>+ Add another leader</Button>
               }
             </div>
           </Grid.Column>
