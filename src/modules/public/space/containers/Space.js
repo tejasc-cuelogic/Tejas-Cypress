@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Responsive, Grid, Divider, Header, Container, List, Icon, Button, Item, Segment, Card } from 'semantic-ui-react';
+import { Responsive, Grid, Divider, Header, Container, List, Icon, Button, Item, Segment, Card, Modal } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import NSImage from '../../../shared/NSImage';
 
@@ -15,31 +15,31 @@ class Space extends Component {
         title: 'Breaking Bao',
         image: 'space/breaking.jpg',
         description: 'Fusion steamed buns featuring unique and compelling flavor combinations',
-        link: 'https://www.breakingbao.com',
+        link: 'https://www.breakingbao.com/',
       },
       {
         title: 'Pura Vida',
         image: 'space/pura-vida.jpg',
         description: 'Cold bar serving fresh ceviche and homemade artisanal teas',
-        link: 'https://www.breakingbao.com',
+        link: 'https://houston.eater.com/2019/8/12/20802393/pura-vida-pop-up-nextseed-space-greenway-plaza',
       },
       {
         title: 'The DoughCone',
         image: 'space/theDoughCone.jpg',
         description: 'Handmade Donut Cones & Ice Cream with unlimited toppings',
-        link: 'https://www.breakingbao.com',
+        link: 'https://www.facebook.com/TheDoughCone/',
       },
       {
         title: 'Tlahuac',
         image: 'space/tlahuac.jpg',
         description: 'Central Mexican cuisine and pan dulce in Houston, TX',
-        link: 'https://www.breakingbao.com',
+        link: 'https://www.facebook.com/TlahuacHTX/',
       },
       {
         title: 'The Waffle Bus',
         image: 'space/the-waffle-bus.jpg',
         description: 'Zagat-rated chicken & waffles in Houston, TX',
-        link: 'https://www.breakingbao.com',
+        link: 'https://www.chron.com/entertainment/restaurants-bars/article/Waffle-Bus-getting-permanent-location-in-the-13221311.php',
       },
     ];
     return (
@@ -121,7 +121,24 @@ class Space extends Component {
                 <Grid.Column width="11" verticalAlign="middle" textAlign="center">
                   <Header as="h3">The Chicken & Rice Guys</Header>
                   <p>Boston{"'"}s original Halal-style street food has arrived in Houston</p>
-                  <Button className="mt-40" basic secondary>Visit at Greenway Plaza</Button>
+                  <Modal trigger={<Button className="mt-40" basic secondary>Visit at Greenway Plaza</Button>} closeIcon className="nss-modal">
+                    <Modal.Content image className="plr-0 pt-0 pb-0">
+                      <NSImage wrapped path="space/chicken-and-rice-portrait.jpg" />
+                      <Modal.Description>
+                        <Header as="h2">The Chicken<Responsive as="br" minWidth={992} /> & Rice Guys</Header>
+                        <Header as="h3" className="mb-0">Boston{"'"}s hit food truck,<Responsive as="br" minWidth={992} /> now in Houston!</Header>
+                        <Divider section />
+                        <p className="mb-20"><b>Come visit at Greenway Plaza</b></p>
+                        <p className="mb-0">
+                        The HUB at Greenway Plaza<Responsive as="br" minWidth={992} />
+                        5 Greenway Plaza - Suite C-615<Responsive as="br" minWidth={992} />
+                        Houston, TX 77046
+                        </p>
+                        <Divider section />
+                        <a className="primary-two-text mt-20" href="https://www.facebook.com/cnrguys/" target="_blank" rel="noopener noreferrer">Visit The Chicken & Rice Guys on Facebook</a>
+                      </Modal.Description>
+                    </Modal.Content>
+                  </Modal>
                 </Grid.Column>
               </Grid>
             </Segment>
@@ -137,7 +154,7 @@ class Space extends Component {
                     <Card.Content className="pb-30 pt-30">
                       <Header as="h5">{a.title}</Header>
                       <p>{a.description}</p>
-                      <a href={a.link} className="secondary-link mt-30 display-block">Read More</a>
+                      <a target="_blank" rel="noopener noreferrer" href={a.link} className="secondary-link mt-30 display-block">Read More</a>
                     </Card.Content>
                   </Card>
                 ))
@@ -160,6 +177,13 @@ class Space extends Component {
             </Grid>
           </section>
         </Container>
+        <Modal
+          size="small"
+          // open={this.props.uiStore.modalStatus === 'BusinessForm'}
+          closeIcon
+          onOpen={this.handleOpenModal}
+          onClose={this.handleCloseModal}
+        />
       </>
     );
   }

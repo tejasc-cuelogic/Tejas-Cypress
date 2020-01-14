@@ -8,11 +8,14 @@
         box-shadow:none;
     }
     &.basic {
-        border: none;
+        border: 1px solid @thumbBackground;
         box-shadow: none !important;
-        font-weight: @normal;
         &.highlight-text {
             color: @primary-one !important;
+            font-weight: @normal;
+        }
+        &.primary, &.secondary{
+            border: 0;
             font-weight: @normal;
         }
     }

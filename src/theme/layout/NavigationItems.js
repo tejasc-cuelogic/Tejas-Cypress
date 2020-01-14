@@ -124,7 +124,7 @@ export class NavItems extends Component {
                   <Menu.Menu>
                     {item.subNavigations.map(sn => (
                       sn.external ? (
-                        <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
+                        <a className="item" href={sn.to} rel="noopener noreferrer">NextSeed Space</a>
                       ) : (
                           <Menu.Item
                             key={sn.to}
@@ -165,7 +165,7 @@ export class NavItems extends Component {
               <Dropdown.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible' : ''}`}>
                 {item.subNavigations.map(sn => (
                   sn.external ? (
-                    <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
+                    <a className="item" href={sn.to} rel="noopener noreferrer">NextSeed Space</a>
                   ) : (
                       <Dropdown.Item
                         key={sn.to}
