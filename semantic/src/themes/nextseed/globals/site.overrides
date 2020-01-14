@@ -3244,3 +3244,10 @@ table.css-wu4c77-diff-container {
 		}
 	}
 }
+/* Message Modal */
+h3.ui.header.error-2{
+	font-size: @15px;
+	font-weight: @normal;
+	line-height: 24px;
+}
+/* Message Modal End */
