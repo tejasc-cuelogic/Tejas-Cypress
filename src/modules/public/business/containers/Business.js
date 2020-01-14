@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Responsive } from 'semantic-ui-react';
+import { Responsive, Button } from 'semantic-ui-react';
+import { authActions } from '../../../../services/actions';
 import Banner from '../components/Banner';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 import HowItWorks from '../components/HowItWorks';
@@ -28,7 +29,7 @@ const metaTagsData = [
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
 
-const modalContent = 'Investor accounts may not be used to apply for business funding. In order to apply to raise capital, log out of your investor account and submit your application with different email address';
+const modalContent = 'Investor accounts may not be used to apply for business funding. In order to apply to raise capital, log out of your investor account and submit your application with different email address.';
 @inject('navStore', 'userStore', 'authStore', 'uiStore')
 @observer
 class Business extends Component {
@@ -54,6 +55,14 @@ class Business extends Component {
     this.props.history.push('/business');
   }
 
+  // copied from private/index.js
+  handleLogOut = () => {
+    authActions.logout('user')
+      .then(() => {
+        this.props.history.push('/register');
+      }).catch(err => window.logger(err));
+  }
+
   render() {
     const { location } = this.props;
     return (
@@ -65,7 +74,18 @@ class Business extends Component {
         <HowItWorks handleApplyCta={this.handleApplyCta} />
         {
           this.state.isInvestorModal
-          && <MessageModal size="small" refLink="/business" handleBack={this.handleBack} content={modalContent} />
+          && (
+            <MessageModal
+              classExtra="error-2"
+              size="small"
+              refLink="/business"
+              handleBack={this.handleBack}
+              content={modalContent}
+              additionalData={
+                <Button onClick={this.handleLogOut} primary className="m-auto display-block">Logout</Button>
+              }
+            />
+          )
         }
       </>
     );
