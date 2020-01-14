@@ -3094,3 +3094,27 @@ export const OFFERING_CLOSE_COUNCURRENCY_OPTIONS = [
   { key: 9, value: 9, text: '9' },
   { key: 10, value: 10, text: '10' },
 ];
+
+export const OFFERING_CLOSE_EXPORT_ENVELOPES = {
+  documents: [
+    {
+      replacePage: {
+        label: 'Page in envelope to replace',
+        value: '',
+        error: undefined,
+        rule: 'optional',
+        placeHolder: 'Enter here',
+      },
+      upload: {
+        value: '',
+        label: '',
+        error: undefined,
+        rule: 'required',
+        showLoader: false,
+        preSignedUrl: '',
+        fileId: '',
+        fileData: '',
+        objType: 'FileObjectType',
+      },
+    }],
+};

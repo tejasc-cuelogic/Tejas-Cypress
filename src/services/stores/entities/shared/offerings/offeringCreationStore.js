@@ -11,7 +11,7 @@ import {
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
   ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS, CLOSING_BINDING,
-  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1,
+  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1, OFFERING_CLOSE_EXPORT_ENVELOPES,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { deleteBonusReward, updateOffering,
@@ -61,6 +61,8 @@ export class OfferingCreationStore {
   @observable OFFERING_CLOSE_3 = Validator.prepareFormObject(OFFERING_CLOSE_3);
 
   @observable OFFERING_CLOSE_4 = Validator.prepareFormObject(OFFERING_CLOSE_4);
+
+  @observable OFFERING_CLOSE_EXPORT_ENVELOPES_FRM = Validator.prepareFormObject(OFFERING_CLOSE_EXPORT_ENVELOPES);
 
   @observable MEDIA_FRM = Validator.prepareFormObject(MEDIA);
 
