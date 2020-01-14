@@ -25,7 +25,7 @@ export default class OfferingDetails extends Component {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
     if (!this.props.offeringsStore.initLoad.includes('getOne')) {
-      this.props.offeringsStore.getOne(this.props.match.params.offeringid);
+      this.props.offeringsStore.getOne(this.props.match.params.offeringSlug);
     }
     this.props.navStore.setAccessParams('specificNav', '/dashboard/offering/2/overview');
   }

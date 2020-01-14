@@ -22,7 +22,7 @@ const SortableItem = SortableElement(({
     <div className="row-wrap striped-table">
       <div className="balance first-column">
         <DragHandle />
-        <Link to={`/dashboard/offering/edit/${offering.offeringSlug}`}>
+        <Link to={`/dashboard/offering/${offering.offeringSlug}`}>
           <b>
             {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
               ? offering.keyTerms.shorthandBusinessName : (
@@ -132,7 +132,7 @@ export default class DraggableListing extends Component {
     if (action === 'Delete') {
       this.props.uiStore.setConfirmBox(action, offering.id);
     } else if (action === 'Edit') {
-      this.props.history.push(`/dashboard/offering/edit/${offering.offeringSlug}`);
+      this.props.history.push(`/dashboard/offering/${offering.offeringSlug}`);
     } else if (action === 'Publish') {
       this.setState({ isPublic: isPublished });
       this.props.uiStore.setConfirmBox(action, offering.id, isPublished);

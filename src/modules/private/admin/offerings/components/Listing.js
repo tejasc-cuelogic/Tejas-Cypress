@@ -31,7 +31,7 @@ export default class Listing extends Component {
     if (action === 'Delete') {
       this.props.uiStore.setConfirmBox(action, offering.id);
     } else if (action === 'Edit') {
-      this.props.history.push(`/dashboard/offering/edit/${offering.offeringSlug}`);
+      this.props.history.push(`/dashboard/offering/${offering.offeringSlug}`);
     } else if (action === 'Publish') {
       this.setState({ isPublic: isPublished, loadingOfferId: offering.id });
       this.props.uiStore.setConfirmBox(action, offering.id, isPublished);
@@ -114,7 +114,7 @@ export default class Listing extends Component {
                 <Table.Row><Table.Cell colSpan={8} textAlign="center">No Offering to display !</Table.Cell></Table.Row>
               )
                 : offeringList.map(offering => (
-                  <Table.Row key={offering.offeringSlug} className={this.props.uiStore.inProgressArray.length && offering.offeringSlug === this.state.loadingOfferId ? 'disabled' : ''}>
+                  <Table.Row key={offering.offeringSlug} className={this.props.uiStore.inProgressArray.length && offering.offeringId === this.state.loadingOfferId ? 'disabled' : ''}>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
                       <Link to={`${this.props.match.url}/edit/${offering.offeringSlug}`}>
                         <b>{((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
