@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import PrivateLayout from '../../shared/PrivateLayout';
 import AllOfferings from './containers/AllOfferings';
 import NewOffer from './components/NewOffer';
@@ -23,6 +23,7 @@ export default class Repayments extends Component {
         subNav
       >
         <Switch>
+          <Redirect from="/dashboard/offerings/edit/*" to="/dashboard/offerings/overview" />
           <Route exact path={`${match.url}/:stage`} component={AllOfferings} />
           <Route exact path={`${match.url}/creation/new`} component={NewOffer} />
         </Switch>

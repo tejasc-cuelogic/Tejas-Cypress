@@ -80,9 +80,7 @@ export default class Private extends React.Component {
     if (userFirstLoad === false || this.props.uiStore.resizeLoader) {
       return <Spinner loaderMessage="Loading..." />;
     }
-    // if (this.props.userStore.isAdmin) {
-    //   return <Redirect from="/dashboard/offerings/edit/*" to="/dashboard/offerings/creation" />;
-    // }
+
     if (this.props.authStore.isUserLoggedIn) {
       return (
         <>
