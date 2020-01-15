@@ -19,7 +19,7 @@ import {
   XML_SUBMISSION_TABS,
 } from '../../../../../constants/business';
 
-@inject('businessStore', 'uiStore', 'offeringsStore')
+@inject('businessStore', 'uiStore', 'offeringsStore', 'offeringCreationStore')
 @observer
 export default class XmlForm extends React.Component {
   state = {
@@ -330,9 +330,10 @@ export default class XmlForm extends React.Component {
   }
 
   handleXmlSubmissionSubmit = () => {
+    const { currentOfferingSlug } = this.props.offeringCreationStore;
     businessActions.submitXMLInformation('xmlSubmission')
       .then(() => {
-        this.props.history.push(`/dashboard/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`);
+        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/offering-creation/legal/generate-docs`);
         Helper.toast('XML form submitted successfully', 'success');
       })
       .catch((errors) => {
@@ -343,10 +344,10 @@ export default class XmlForm extends React.Component {
   handleXmlSubmissionCopy = () => {
     this.props.uiStore.setProgress();
     this.props.uiStore.setLoaderMessage('Copy the XML submission');
-
+    const { currentOfferingSlug } = this.props.offeringCreationStore;
     businessActions.copyXMLInformation()
       .then(() => {
-        this.props.history.push(`/dashboard/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`);
+        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/offering-creation/legal/generate-docs`);
         Helper.toast('Copy XML submission successfully', 'success');
       })
       .catch((error) => {
@@ -401,6 +402,7 @@ export default class XmlForm extends React.Component {
       );
     }
     const { offer } = this.props.offeringsStore;
+    const { currentOfferingSlug } = this.props.offeringCreationStore;
     return (
       <>
         <div className="page-header-section">
@@ -408,7 +410,7 @@ export default class XmlForm extends React.Component {
             <Responsive
               minWidth={Responsive.onlyLargeScreen.minWidth}
               as={Link}
-              to={`/dashboard/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`}
+              to={`/dashboard/offering/${currentOfferingSlug}/offering-creation/legal/generate-docs`}
               className="back-link"
             >
               <Icon name="ns-arrow-left" />

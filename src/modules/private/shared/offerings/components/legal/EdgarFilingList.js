@@ -45,12 +45,12 @@ export default class EdgarFilingList extends Component {
   }
 
   handleDeleteXMlSubmission = () => {
-    const { currentOfferingId } = this.props.offeringCreationStore;
+    const { currentOfferingSlug } = this.props.offeringCreationStore;
     const filingId = this.props.uiStore.confirmBox.refId;
     const xmlSubmissionId = this.props.uiStore.confirmBox.subRefId;
     businessActions.deleteXmlSubmission(filingId, xmlSubmissionId).then(() => {
       this.handleDeleteCancel();
-      this.props.history.push(`/dashboard/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
+      this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/offering-creation/legal/generate-docs`);
       Helper.toast('XML Submission deleted successfully', 'success');
     }).catch(() => {
       Helper.toast('Something went wrong while deleting XMl submission, Please try again.', 'error', { position: 'top-center' });
@@ -58,35 +58,35 @@ export default class EdgarFilingList extends Component {
   }
 
   handleXMLSubmissionLockUnlock = () => {
-    const { currentOfferingId } = this.props.offeringCreationStore;
+    const { currentOfferingSlug } = this.props.offeringCreationStore;
     const filingId = this.props.uiStore.confirmBox.refId;
     const xmlSubmissionId = this.props.uiStore.confirmBox.subRefId;
     const lockStatus = this.props.uiStore.confirmBox.metaData.lockedStatus;
     const status = lockStatus === false ? 'unlocked' : 'locked';
     businessActions.lockUnlockXmlSubmission(
-      currentOfferingId,
+      currentOfferingSlug,
       filingId,
       xmlSubmissionId,
       lockStatus,
     )
       .then(() => {
         this.handleDeleteCancel();
-        this.props.history.push(`/dashboard/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
+        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/offering-creation/legal/generate-docs`);
         Helper.toast(`XML submission ${status} successfully`, 'success');
       });
   }
 
   handleDeleteFiling = () => {
-    const { currentOfferingId } = this.props.offeringCreationStore;
+    const { currentOfferingSlug } = this.props.offeringCreationStore;
     if (this.props.uiStore.confirmBox.metaData.isAnyFilingLocked) {
       this.handleDeleteCancel();
-      this.props.history.push(`/dashboard/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
+      this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/offering-creation/legal/generate-docs`);
     } else {
       this.setState({ showLoader: true });
       const filingId = this.props.uiStore.confirmBox.subRefId;
       this.handleDeleteCancel();
-      this.props.history.push(`/dashboard/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
-      businessActions.deleteFiling(currentOfferingId, filingId)
+      this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/offering-creation/legal/generate-docs`);
+      businessActions.deleteFiling(currentOfferingSlug, filingId)
         .then(() => {
           this.setState({ showLoader: false });
           Helper.toast('Filing deleted successfully', 'success');
