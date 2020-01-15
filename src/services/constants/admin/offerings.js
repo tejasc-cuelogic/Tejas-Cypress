@@ -3109,7 +3109,7 @@ export const OFFERING_CLOSE_COUNCURRENCY_OPTIONS = [
 ];
 
 export const OFFERING_CLOSE_EXPORT_ENVELOPES = {
-  documents: [
+  fileSubstitution: [
     {
       replacePage: {
         label: 'Page in envelope to replace',

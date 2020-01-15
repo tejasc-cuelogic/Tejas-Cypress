@@ -3,25 +3,42 @@ import { observer, inject } from 'mobx-react';
 import { Form, Button, Icon, Header, Divider, Confirm } from 'semantic-ui-react';
 import { MaskedInput, DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 
-export default inject('offeringCreationStore')(observer(({ offeringCreationStore }) => {
+export default inject('offeringCreationStore')(observer(({ inProgress, offeringCreationStore, offeringId, handleUpdateOffering }) => {
+  const [loading, setLoading] = React.useState(false);
+  React.useEffect(() => {
+    offeringCreationStore.setFormData('OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'closureSummary.exportEnvelopes');
+  }, []);
   const {
     OFFERING_CLOSE_EXPORT_ENVELOPES_FRM, maskArrayChange, confirmModal, confirmModalName, removeData,
   } = offeringCreationStore;
 
   const onFileDrop = (files, name, index) => {
-    const uploadEnum = 'DOCUMENTS_LEGAL_DATAROOM';
-    offeringCreationStore.setFileUploadDataMulitple('OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'documents', name, files, uploadEnum, index, true);
+    offeringCreationStore.setFileUploadDataMulitple('OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'fileSubstitution', name, files, 'OFFERING_CLOSE_EXPORT_ENVELOPES', index, true);
   };
 
   const handleDelDoc = (field, index = undefined) => {
-    offeringCreationStore.removeUploadedDataMultiple('OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', field, index, 'documents');
+    offeringCreationStore.removeUploadedDataMultiple('OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', field, index, 'fileSubstitution');
   };
 
-  const addMore = () => offeringCreationStore.addMore('OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'documents');
+  const addMore = () => offeringCreationStore.addMore('OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'fileSubstitution');
 
   const toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     offeringCreationStore.toggleConfirmModal(index, formName);
+  };
+
+  const handleCloseOffering = async (scope) => {
+    setLoading(scope);
+    try {
+      await offeringCreationStore.offeringClose({ offeringId, process: 'EXPORT_ENVELOPES' }, 4, scope);
+      setLoading(false);
+    } catch {
+      setLoading(false);
+    }
+  };
+
+  const handleSave = () => {
+    handleUpdateOffering('update', 'EXPORT_ENVELOPES');
   };
 
   return (
@@ -29,7 +46,7 @@ export default inject('offeringCreationStore')(observer(({ offeringCreationStore
       <Form className="mt-30">
         <Header as="h4">
         Export Envelopes
-          {OFFERING_CLOSE_EXPORT_ENVELOPES_FRM.fields.documents.length !== 5
+          {OFFERING_CLOSE_EXPORT_ENVELOPES_FRM.fields.fileSubstitution.length !== 5
           && (
           <Button.Group size="mini" floated="right">
             <Button onClick={() => addMore()} primary compact content="Add" />
@@ -44,7 +61,7 @@ export default inject('offeringCreationStore')(observer(({ offeringCreationStore
             <div className="balance-half">Page in envelope to replace</div>
             <div className="action width-70">Actions</div>
           </div>
-          {OFFERING_CLOSE_EXPORT_ENVELOPES_FRM.fields.documents.map((document, docIndex) => (
+          {OFFERING_CLOSE_EXPORT_ENVELOPES_FRM.fields.fileSubstitution.map((document, docIndex) => (
             <div className="row-wrap">
               <div className="balance-half">
                 <DropZone
@@ -63,7 +80,7 @@ export default inject('offeringCreationStore')(observer(({ offeringCreationStore
                 <MaskedInput
                   hidelabel
                   size="small"
-                  changed={(values, name) => maskArrayChange(values, 'OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', name, 'documents', docIndex)}
+                  changed={(values, name) => maskArrayChange(values, 'OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', name, 'fileSubstitution', docIndex)}
                   ishidelabel
                   name="replacePage"
                   fielddata={document.replacePage}
@@ -71,7 +88,7 @@ export default inject('offeringCreationStore')(observer(({ offeringCreationStore
                 />
               </div>
               <div className="action">
-                <Button disabled={OFFERING_CLOSE_EXPORT_ENVELOPES_FRM.fields.documents.length === 1} icon className="link-button">
+                <Button disabled={OFFERING_CLOSE_EXPORT_ENVELOPES_FRM.fields.fileSubstitution.length === 1} icon className="link-button">
                   <Icon className="ns-trash" onClick={e => toggleConfirmModal(e, docIndex, 'OFFERING_CLOSE_EXPORT_ENVELOPES_FRM')} />
                 </Button>
               </div>
@@ -82,10 +99,10 @@ export default inject('offeringCreationStore')(observer(({ offeringCreationStore
         <Divider hidden />
         <div className="action width-100 right-align">
         <Button.Group compact>
-          {['Save', 'Send Text Export', 'Export Envelopes'].map(cta => (
-              <Button primary> {cta} </Button>))
-          }
-          </Button.Group>
+          <Button loading={inProgress} onClick={handleSave} primary content="Save" />
+          <Button loading={loading === 'ADMIN'} onClick={() => handleCloseOffering('ADMIN')} primary content="Send Text Export" />
+          <Button loading={loading === 'INVESTOR'} onClick={() => handleCloseOffering('INVESTOR')} primary content="Export Envelopes" />
+        </Button.Group>
         </div>
       </Form>
       <Confirm
@@ -93,7 +110,7 @@ export default inject('offeringCreationStore')(observer(({ offeringCreationStore
         content="Are you sure you want to remove this document?"
         open={confirmModal}
         onCancel={toggleConfirmModal}
-        onConfirm={() => removeData(confirmModalName, 'documents')}
+        onConfirm={() => removeData(confirmModalName, 'fileSubstitution')}
         size="mini"
         className="deletion"
       />

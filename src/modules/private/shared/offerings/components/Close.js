@@ -115,7 +115,7 @@ export default class Close extends Component {
         ).then((res) => {
           const setResponseFor = find(closingActions, a => a.enum === status);
           this.setState({ closureProcessObj: { ...this.state.closureProcessObj, [setResponseFor.statusKey]: res } });
-        });
+        }).catch(() => { });
       }
       this.setState({ confirmed: false, action: '', actionLabel });
     }
@@ -135,7 +135,7 @@ export default class Close extends Component {
           process: this.state.action,
         }, this.state.activeStep, 'ADMIN').then((res) => {
           this.setState({ closureProcessObj: { ...this.state.closureProcessObj, [setResponseFor.statusKey]: res } });
-        });
+        }).catch(() => { });
         this.handleCloseModal();
         break;
       case 'Send to Investors':
@@ -144,7 +144,7 @@ export default class Close extends Component {
           process: this.state.action,
         }, this.state.activeStep, 'INVESTOR').then((res) => {
           this.setState({ closureProcessObj: { ...this.state.closureProcessObj, [setResponseFor.statusKey]: res } });
-        });
+        }).catch(() => { });
         this.handleCloseModal();
         break;
       case 'Validate Envelope':
@@ -153,7 +153,7 @@ export default class Close extends Component {
           process: this.state.action,
         }, this.state.activeStep).then((res) => {
           this.setState({ closureProcessObj: { ...this.state.closureProcessObj, [setResponseFor.statusKey]: res } });
-        });
+        }).catch(() => { });
         this.handleCloseModal();
         resetForm('OFFERING_CLOSE_3', ['npaPageCount', 'pnPageCount', 'documentsCount']);
         this.handleCloseModal();
@@ -194,7 +194,7 @@ export default class Close extends Component {
         console.log(e);
         this.setState({ inProgress: false });
       });
-  }
+  };
 
   jsonModal = json => (
     <Modal closeIcon trigger={<Button className="link-button highlight-text" content={`Show ${this.state.actionLabel} Response`} />}>
@@ -662,7 +662,7 @@ export default class Close extends Component {
         </div>
         <Modal open={this.state.openModal} closeIcon size={this.state.action === 'EXPORT_ENVELOPES' ? 'large' : this.state.action === 'VALIDATE_NOTES' ? 'small' : 'tiny'} onClose={this.handleCloseModal}>
           {this.state.action === 'EXPORT_ENVELOPES'
-            ? <ExportEnvelopes />
+            ? <ExportEnvelopes inProgress={this.state.inProgress} handleUpdateOffering={this.handleUpdateOffering} offeringId={offer.id} />
             : (
               <>
                 <Modal.Header>
