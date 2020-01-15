@@ -9,7 +9,8 @@ export default inject('offeringCreationStore')(observer(({ inProgress, offeringC
     offeringCreationStore.setFormData('OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'closureSummary.exportEnvelopes');
   }, []);
   const {
-    OFFERING_CLOSE_EXPORT_ENVELOPES_FRM, maskArrayChange, confirmModal, confirmModalName, removeData,
+    OFFERING_CLOSE_EXPORT_ENVELOPES_FRM, maskArrayChange,
+    confirmModal, confirmModalName, removeData, isUploadingFile,
   } = offeringCreationStore;
 
   const onFileDrop = (files, name, index) => {
@@ -99,7 +100,7 @@ export default inject('offeringCreationStore')(observer(({ inProgress, offeringC
         <Divider hidden />
         <div className="action width-100 right-align">
         <Button.Group compact>
-          <Button loading={inProgress} onClick={handleSave} primary content="Save" />
+          <Button disabled={isUploadingFile} loading={inProgress} onClick={handleSave} primary content="Save" />
           <Button loading={loading === 'ADMIN'} onClick={() => handleCloseOffering('ADMIN')} primary content="Send Text Export" />
           <Button loading={loading === 'INVESTOR'} onClick={() => handleCloseOffering('INVESTOR')} primary content="Export Envelopes" />
         </Button.Group>

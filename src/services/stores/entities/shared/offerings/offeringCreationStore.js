@@ -645,7 +645,7 @@ export class OfferingCreationStore {
           this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
           fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
             const { fileId, preSignedUrl } = result.data.createUploadEntry;
-            fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => {
+            fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(action(() => {
               this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
               this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
               this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
@@ -653,19 +653,19 @@ export class OfferingCreationStore {
               this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
               this.checkFormValid(form, multiForm);
               this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
-              this.isUploadingFile = true;
-            }).catch((error) => {
+              this.isUploadingFile = false;
+            })).catch(action((error) => {
               Helper.toast('Something went wrong, please try again later.', 'error');
               uiStore.setErrors(error.message);
-              this.isUploadingFile = true;
+              this.isUploadingFile = false;
               this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
-            });
-          }).catch((error) => {
+            }));
+          }).catch(action((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
-            this.isUploadingFile = true;
+            this.isUploadingFile = false;
             this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
             uiStore.setErrors(error.message);
-          });
+          }));
         });
       }
     }
