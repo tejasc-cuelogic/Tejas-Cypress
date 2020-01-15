@@ -634,6 +634,12 @@
             left: 10px; 
         }
     }
+    &.nss-form .field{
+        margin-bottom: @25px;
+        .ui.input input{
+            font-size: @13px;
+        }
+    }
 }
 textarea{
 	font-family:@pageFont;

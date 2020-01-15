@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Responsive, Grid, Divider, Header, Container, List, Icon, Button, Item, Segment, Card, Modal } from 'semantic-ui-react';
+import { Switch, Route, Link } from 'react-router-dom';
+import { Responsive, Grid, Divider, Header, Container, List, Icon, Button, Item, Segment, Card } from 'semantic-ui-react';
 import Banner from '../components/Banner';
+import Contact from '../components/Contact';
+import ChickenAndRice from '../components/ChickenAndRice';
 import NSImage from '../../../shared/NSImage';
 
 @inject('navStore', 'userStore', 'uiStore')
@@ -10,7 +13,7 @@ class Space extends Component {
   render() {
     const { responsiveVars } = this.props.uiStore;
     const { location } = this.props;
-    const alumini = [
+    const alumni = [
       {
         title: 'Breaking Bao',
         image: 'space/breaking.jpg',
@@ -92,7 +95,7 @@ class Space extends Component {
                     Marketing support to drive business
                   </List.Item>
                 </List>
-                <Button className="mt-40" secondary>Contact Us</Button>
+                <Button as={Link} to="/space/contact" className="mt-40" secondary>Contact Us</Button>
               </Grid.Column>
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right">
                 <p className="quotes left-align space-quotes">
@@ -120,35 +123,18 @@ class Space extends Component {
                 </Grid.Column>
                 <Grid.Column width="11" verticalAlign="middle" textAlign="center">
                   <Header as="h3">The Chicken & Rice Guys</Header>
-                  <p>Boston{"'"}s original Halal-style street food has arrived in Houston</p>
-                  <Modal trigger={<Button className="mt-40" basic secondary>Visit at Greenway Plaza</Button>} closeIcon className="nss-modal">
-                    <Modal.Content image className="plr-0 pt-0 pb-0">
-                      <NSImage wrapped path="space/chicken-and-rice-portrait.jpg" />
-                      <Modal.Description>
-                        <Header as="h2">The Chicken<Responsive as="br" minWidth={992} /> & Rice Guys</Header>
-                        <Header as="h3" className="mb-0">Boston{"'"}s hit food truck,<Responsive as="br" minWidth={992} /> now in Houston!</Header>
-                        <Divider section />
-                        <p className="mb-20"><b>Come visit at Greenway Plaza</b></p>
-                        <p className="mb-0">
-                        The HUB at Greenway Plaza<Responsive as="br" minWidth={992} />
-                        5 Greenway Plaza - Suite C-615<Responsive as="br" minWidth={992} />
-                        Houston, TX 77046
-                        </p>
-                        <Divider section />
-                        <a className="primary-two-text mt-20" href="https://www.facebook.com/cnrguys/" target="_blank" rel="noopener noreferrer">Visit The Chicken & Rice Guys on Facebook</a>
-                      </Modal.Description>
-                    </Modal.Content>
-                  </Modal>
+                  <p>Boston{"'"}s original Halal-style street<Responsive as="br" minWidth={992} /> food has arrived in Houston</p>
+                  <Button className="mt-30 hoverable" basic secondary as={Link} to="/space/chicken-and-rice">Visit at Greenway Plaza</Button>
                 </Grid.Column>
               </Grid>
             </Segment>
           </section>
           <Divider fitted />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-            <Header as="h2" className="mb-80 center-align">Currently at NextSeed Space</Header>
+            <Header as="h2" className="mb-80 center-align">Alumni</Header>
             <Card.Group itemsPerRow={3} stackable>
               {
-                alumini.map(a => (
+                alumni.map(a => (
                   <Card className="bordered center-align">
                     <NSImage path={a.image} centered />
                     <Card.Content className="pb-30 pt-30">
@@ -169,7 +155,7 @@ class Space extends Component {
                 <p>
                   NextSeed Space is an initiative by NextSeed, a<Responsive as="br" minWidth={768} /> community-driven investment platform focused on<Responsive as="br" minWidth={768} /> local offerings.
                 </p>
-                <Button className="mt-60" secondary>Contact Us</Button>
+                <Button as={Link} to="/space/contact" className="mt-60" secondary>Contact Us</Button>
               </Grid.Column>
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right">
                 <NSImage path="space/img-2.jpg" />
@@ -177,13 +163,10 @@ class Space extends Component {
             </Grid>
           </section>
         </Container>
-        <Modal
-          size="small"
-          // open={this.props.uiStore.modalStatus === 'BusinessForm'}
-          closeIcon
-          onOpen={this.handleOpenModal}
-          onClose={this.handleCloseModal}
-        />
+        <Switch>
+          <Route exact path="/space/contact" component={Contact} />
+          <Route exact path="/space/chicken-and-rice" component={ChickenAndRice} />
+        </Switch>
       </>
     );
   }

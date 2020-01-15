@@ -18,6 +18,10 @@
             border: 0;
             font-weight: @normal;
         }
+        &.secondary.hoverable:hover{
+            background: @primary-two !important;
+            color: @white !important;
+        }
     }
 }
 //  Public Page Ends
