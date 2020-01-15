@@ -97,7 +97,7 @@ export default class AccreditationsLimits extends Component {
         {(get(getDetailsOfUser, 'accreditation.self'))
           && (
             <>
-              <Header as="h6">Self Accreditation Status</Header>
+              <Header as="h6">Self-verified Accredited Status</Header>
               <div className="bg-offwhite">
                 <div className="table-wrapper">
                   <Table unstackable basic="very" fixed>
@@ -112,7 +112,7 @@ export default class AccreditationsLimits extends Component {
                       </Table.Row>
                       <Table.Row>
                         <Table.Cell>Date: </Table.Cell>
-                        <Table.Cell>{get(getDetailsOfUser, 'accreditation.self.date') ? DataFormatter.getDateAsPerTimeZone(get(getDetailsOfUser, 'accreditation.self.date'), true, false, false) : 'N/A'}</Table.Cell>
+                        <Table.Cell>{get(getDetailsOfUser, 'accreditation.self.date') ? DataFormatter.getDateAsPerTimeZone(get(getDetailsOfUser, 'accreditation.self.date'), true, false, true) : 'N/A'}</Table.Cell>
                       </Table.Row>
                     </Table.Body>
                   </Table>

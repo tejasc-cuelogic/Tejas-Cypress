@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Button, Header, Grid } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../theme/form';
 
-@inject('accreditationStore', 'campaignStore')
+@inject('accreditationStore', 'campaignStore', 'uiStore')
 @withRouter
 @observer
 class Disclosure extends Component {
@@ -21,6 +21,11 @@ class Disclosure extends Component {
 
   selfAccreditedHandle = () => {
     this.setState({ isSelfAccredited: true });
+  }
+
+  handleLoginAction = () => {
+    this.props.uiStore.setAuthRef(this.props.location.pathname);
+    this.props.history.push('/login');
   }
 
   investorSelfVerifyAccreditedStatus = (e) => {
@@ -51,7 +56,7 @@ class Disclosure extends Component {
         }
         {
           !currentUser
-            ? <Button as={Link} to="/login" primary content="Log in / Sign Up" className="mt-20 mb-50" />
+            ? <Button primary content="Log in / Sign Up" className="mt-20 mb-50" onClick={this.handleLoginAction} />
             : (
             <>
               {/* <Button as={Link} to="/dashboard/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" /> */}
