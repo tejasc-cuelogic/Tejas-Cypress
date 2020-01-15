@@ -43,13 +43,17 @@ class Disclosure extends Component {
       return (
         <section className="no-updates center-align bg-offwhite padded">
           <Header as="h3" className="mb-20 mt-50">
-            This investment is only available to accredited investors.
+            This document is only available to accredited investors.
           </Header>
-          <p>Please confirm your accredited investor status to access the Data Room.</p>
+          {
+            !this.props.userStore.currentUser
+              ? <p>Please log in to verify accredited investor status.</p>
+              : <p>Please confirm your accredited investor status to access this Document.</p>
+          }
           {
             !this.props.userStore.currentUser
               ? <Button as={Link} to={`/${stepInRoute.to}`} primary content={stepInRoute.title} className="mt-20 mb-50" />
-              : <Button as={Link} to="/app/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
+              : <Button as={Link} to="/dashboard/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
           }
         </section>
       );

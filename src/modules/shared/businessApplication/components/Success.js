@@ -81,7 +81,7 @@ class Success extends Component {
         const roles = get(this.props.userStore, 'currentUser.roles');
         this.props.authStore.resetForm('LOGIN_FRM');
         if (roles && roles.includes('issuer')) {
-          const redirectUrl = `/app/business-application/${currentApplicationType}/${applicationId}/business-details`;
+          const redirectUrl = `/dashboard/business-application/${currentApplicationType}/${applicationId}/business-details`;
           this.props.history.push(redirectUrl);
         } else {
           this.props.businessAppStore.setFieldvalue('showUserError', true);
@@ -103,7 +103,7 @@ class Success extends Component {
     } = this.props.authStore;
     const { userExists, userRoles } = this.props.businessAppStore;
     const { fields } = SIGNUP_FRM;
-    const { errors } = this.props.uiStore;
+    const { errors, inProgress } = this.props.uiStore;
     return (
       <>
         <Grid container>
@@ -196,7 +196,7 @@ class Success extends Component {
               )
             }
             <Divider section hidden />
-            <Button primary size="large" className="very relaxed" content="Proceed" loading={this.props.uiStore.inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && (!SIGNUP_FRM.meta.isValid || !currentScore) && !userExists)} />
+            <Button primary size="large" className="very relaxed" content="Proceed" loading={inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && (!SIGNUP_FRM.meta.isValid || !currentScore) && !userExists) || inProgress} />
           </Grid.Column>
         </Grid>
         {this.state.showProgressLoader

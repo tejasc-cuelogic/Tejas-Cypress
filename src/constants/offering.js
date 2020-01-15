@@ -6,7 +6,8 @@ export const CAMPAIGN_KEYTERMS_SECURITIES = {
   PREFERRED_EQUITY_506C: 'Preferred Equity',
   CONVERTIBLE_NOTES: 'Convertible Notes',
   SAFE: 'SAFE',
-  REAL_ESTATE: 'Real Estate Fund',
+  REAL_ESTATE: 'LLC Membership Interests',
+  FUNDS: 'Funds - Limited Partner Interest',
 };
 export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
   TERM_NOTE: 'TERM_NOTE',
@@ -15,6 +16,7 @@ export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
   CONVERTIBLE_NOTES: 'CONVERTIBLE_NOTES',
   SAFE: 'SAFE',
   REAL_ESTATE: 'REAL_ESTATE',
+  FUNDS: 'FUNDS',
 };
 export const ROUND_TYPES_ENUM = {
   SEED: 'Seed',
@@ -83,6 +85,15 @@ export const CAMPAIGN_KEYTERMS_REGULATION = {
 export const CAMPAIGN_KEYTERMS_REGULATION_PARALLEL = {
   ...KEYTERMS_REGULATION_COMMON,
   BD_CF_506C: <>Parallel Offering<br />(Reg CF &amp; Reg D)</>,
+};
+
+export const CAMPAIGN_KEYTERMS_REGULATION_ENUM = {
+  FP_TX: 'FP_TX',
+  FP_CF: 'FP_CF',
+  BD_CF: 'BD_CF',
+  BD_506C: 'BD_506C',
+  BD_506B: 'BD_506B',
+  BD_CF_506C: 'BD_CF_506C',
 };
 
 export const CAMPAIGN_REGULATION_DETAILED = {

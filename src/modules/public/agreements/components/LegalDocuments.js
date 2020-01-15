@@ -36,7 +36,7 @@ const legalDocsMeta = [
 @withRouter
 @observer
 class LegalDoc extends Component {
-  state = { embedUrl: null };
+  state = { embedUrl: null, isPdf: false };
   constructor(props) {
     super(props);
     const { docKey } = props.match.params;
@@ -45,7 +45,7 @@ class LegalDoc extends Component {
     if (legalDoc) {
       if (sessionStorage.getItem('isBoxFirewalled') === 'true') {
         readPdfFile('', legalDoc.boxId).then((url) => {
-          props.agreementsStore.setField('S3DownloadLink', this.setState({ embedUrl: url }));
+          props.agreementsStore.setField('S3DownloadLink', this.setState({ embedUrl: url, isPdf: true }));
         });
       } else {
         this.getBoxUrl(legalDoc.boxId);
@@ -67,6 +67,7 @@ class LegalDoc extends Component {
     return (
       <IframeModal
         srcUrl={this.state.embedUrl}
+        isPdf={this.state.isPdf}
         loading={docIdsLoading || docLoading}
         open
         close={this.close}

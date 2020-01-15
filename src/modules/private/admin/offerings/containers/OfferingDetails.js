@@ -13,7 +13,8 @@ import EditPoc from '../components/EditPocModal';
 import { REACT_APP_DEPLOY_ENV, NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import Helper from '../../../../../helper/utility';
 
-@inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore', 'uiStore')
+
+@inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore', 'uiStore', 'businessAppStore')
 @observer
 export default class OfferingDetails extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ export default class OfferingDetails extends Component {
     if (!this.props.offeringsStore.initLoad.includes('getOne')) {
       this.props.offeringsStore.getOne(this.props.match.params.offeringid);
     }
-    this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
+    this.props.navStore.setAccessParams('specificNav', '/dashboard/offering/2/overview');
     this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.offeringid);
   }
 
@@ -38,6 +39,7 @@ export default class OfferingDetails extends Component {
     this.props.offeringCreationStore.resetAffiliatedIssuerForm();
     this.props.offeringCreationStore.resetAllForms();
     this.props.offeringCreationStore.resetOfferingId();
+    this.props.businessAppStore.resetFirstLoad();
     this.props.history.push(`${this.props.refLink}/${this.props.match.params.stage}`);
     window.onpopstate = null;
   };
@@ -74,6 +76,17 @@ export default class OfferingDetails extends Component {
     if (access.level !== 'FULL') {
       navItems = navItems.filter(n => (n.title !== 'Close'));
     }
+    // add business application after Bonus Rewards // offer.stage === 'CREATION' &&
+    if (offer.applicationId && !['WP_MIGRATION'].includes(offer.applicationId) && offer.issuerId) {
+      const pos = navItems.findIndex(n => n.to === 'overview');
+      navItems.splice(
+        (pos + 1),
+        0,
+        { to: 'applications', title: 'App' },
+      );
+    }
+    const offeringState = !['CREATION'].includes(offer.stage) ? 'OTHER' : offer.stage;
+    navItems = navStore.manageNavigationOrder(navItems, offeringState);
     const { responsiveVars } = this.props.uiStore;
     return (
       <>
@@ -103,11 +116,11 @@ export default class OfferingDetails extends Component {
                     const { offeringid } = this.props.match.params;
                     const CurrentModule = OfferingModule(item.to);
                     return (
-                        <Route
-                          key={item.to}
-                          path={`${match.url}/${item.to}`}
-                          render={props => <CurrentModule classes={item.title === 'Activity History' ? 'offering-activity' : ''} module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} stepName="OFFERING_ACTIVITY_HISTORY" resourceId={offeringid} offeringId={offeringid} />}
-                        />
+                      <Route
+                        key={item.to}
+                        path={`${match.url}/${item.to}`}
+                        render={props => <CurrentModule classes={item.title === 'Activity History' ? 'offering-activity' : ''} module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} stepName="OFFERING_ACTIVITY_HISTORY" resourceId={offeringid} offeringId={offeringid} issuerId={offer.issuerId} applicationId={offer.applicationId} />}
+                      />
                     );
                   })
                 }

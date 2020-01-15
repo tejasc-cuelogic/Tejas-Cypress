@@ -8,6 +8,8 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import { UserAvatar } from '../../../../theme/shared';
 import { allUsersQuery } from '../../queries/users';
 import { DELETED_ACCOUNT_STATUS } from '../../../../constants/user';
+import Helper from '../../../../helper/utility';
+
 
 export class UserListingStore {
   @observable usersData = [];
@@ -94,6 +96,7 @@ export class UserListingStore {
       query: allUsersQuery,
       variables: params,
       fetchPolicy: 'network-only',
+      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
     });
   }
 
@@ -243,7 +246,7 @@ export class UserListingStore {
     this.users.map((user) => {
       if (user.roles[0] && user.roles[0].scope && usersOptions[user.roles[0].scope]) {
         usersOptions[user.roles[0].scope].push({
-          text: `${capitalize(user.info.firstName)} ${capitalize(user.info.lastName)}`,
+          text: `${capitalize(user.info.firstName)} ${capitalize(user.info.lastName)} (${(user.email.address).toLowerCase()})`,
           value: user.id,
           icon:
             <UserAvatar

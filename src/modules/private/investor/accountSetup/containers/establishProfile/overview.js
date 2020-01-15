@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Divider, Button } from 'semantic-ui-react';
+import { Header, Divider, Button, Responsive } from 'semantic-ui-react';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('investorProfileStore', 'userDetailsStore')
 @withRouter
@@ -14,48 +16,50 @@ export default class Overview extends Component {
   render() {
     const finraLink = <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>;
     const { signupStatus } = this.props.userDetailsStore;
-    let overviewInfo = (
+    const overviewInfo = (
       <>
+        <Header as="h3">
+          {signupStatus.isMigratedFullAccount
+            ? <>Please establish your<Responsive minWidth={992}><br /></Responsive>investor profile</>
+            : <>Let{"'"}s get started</>
+          }
+        </Header>
+        {!isMobile && <Divider section className="small" hidden={!signupStatus.isMigratedFullAccount} />}
         <p>
-          Investment offerings on <a href="https://www.nextseed.com/" target="_blank" rel="noopener noreferrer">nextseed.com</a>
-          {' '}are facilitated by NextSeed US LLC (SEC-registered Funding Portal & member of{' '}
-          {finraLink})
-          and NextSeed Securities LLC (SEC-registered broker-dealer & member of{' '}
-          {finraLink}).
+          {signupStatus.isMigratedFullAccount
+            ? <>Investments are facilitated by NextSeed Securities LLC (SEC-registered broker-dealer & member of {finraLink}) and NextSeed US LLC (SEC-registered Funding Portal & member of {finraLink}).</>
+            : 'To begin making investments, you will need to complete your investor profile by answering a few basic questions.'
+          }
         </p>
-        <Divider hidden />
-        <p>
-          To begin making investments on the platform, you will need to answer a few more
-          questions to complete your investor profile.
-        </p>
+        {signupStatus.isMigratedFullAccount
+          ? (
+            <>
+              <Divider hidden />
+              <p>
+                As a registered broker-dealer, NextSeed Securities is required by SEC rules and r egulations to collect an investor profile. In order to gain full access to investments, please answer the following questions to complete your investor profile.
+              </p>
+            </>
+          )
+          : <Divider section hidden />
+        }
       </>
     );
-    if (signupStatus.isMigratedFullAccount) {
-      overviewInfo = (
-        <>
-          <p>
-            We{"'"}re pleased to share that certain new investments will now be facilitated
-            by NextSeed Securities LLC (SEC-registered broker-dealer & member of{' '}
-            {finraLink}),
-            an affiliate of NextSeed US LLC (SEC-registered Funding Portal & member of {finraLink}).
-          </p>
-          <Divider hidden />
-          <p>
-            As a registered broker-dealer, NextSeed Securities is required by SEC rules and
-            regulations to collect an investor profile. In order to gain full access to
-            investments, please answer the following questions to complete your investor
-            profile.
-          </p>
-        </>
-      );
-    }
     return (
-      <div className="center-align">
-        <Header as="h3">Please establish your investor profile</Header>
-        <Divider section className="small" />
-        <p className="mb-50">{overviewInfo}</p>
-        <Button primary size="large" className="very relaxed" content="Continue" onClick={this.handleChangeStep} />
-        <p className="mt-30"><Link to={`${this.props.match.url}/confirm`}>I’ll do it later</Link></p>
+      <div className={isMobile ? '' : 'center-align'}>
+        {overviewInfo}
+        <div className="center-align">
+          <Button fluid={isMobile} primary size="large" className="very relaxed" content="Continue" onClick={this.handleChangeStep} />
+          <p className="mt-30"><Link to={`${this.props.match.url}/confirm`}>I’ll do it later</Link></p>
+        </div>
+        {!signupStatus.isMigratedFullAccount
+          && (
+            <>
+              <Divider section hidden />
+              <p className="note">
+                Investment offerings on nextseed.com are facilitated by NextSeed LLC (SEC-registered Funding Portal & member of {finraLink}) and NextSeed Securities LLC (SEC-registered broker-dealer & membcer of {finraLink}).
+              </p>
+            </>
+          )}
       </div>
     );
   }

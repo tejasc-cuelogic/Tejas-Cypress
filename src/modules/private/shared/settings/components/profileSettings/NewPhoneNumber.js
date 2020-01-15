@@ -29,18 +29,18 @@ export default class NewPhoneNumber extends Component {
     this.props.identityStore.resetFormData('ID_VERIFICATION_FRM');
   }
 
-  handleChangePhoneNumber = () => {
+  handleChangePhoneNumber = async () => {
     const { resetFormData, ID_VERIFICATION_FRM } = this.props.identityStore;
     resetFormData('ID_PHONE_VERIFICATION');
     const { phoneNumber, mfaMethod } = ID_VERIFICATION_FRM.fields;
     const phoneNumberValue = phoneNumber.value;
     const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
-    this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile).then(() => {
+    const res = await this.props.identityStore.startPhoneVerification(type, phoneNumberValue, isMobile);
+    if (res) {
       this.props.identityStore.setIsOptConfirmed(false);
       this.props.uiStore.clearErrors();
       this.props.history.push(`${this.props.refLink}/confirm`);
-    })
-      .catch(() => {});
+    }
   }
 
   render() {

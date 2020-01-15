@@ -5,15 +5,15 @@ import { inject, observer } from 'mobx-react';
 import { Card, Header, Divider, Form, Button } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
 import { INVESTMENT_EXPERIENCE_LIST, EMPLOYMENT_LIST, BROKERAGE_EMPLOYMENT_LIST, PUBLIC_COMPANY_REL_LIST, INVESTOR_PROFILE_LIST } from '../../../../../constants/account';
-import formHOC from '../../../../../theme/form/formHOC';
+import { FormInput, MaskedInput, FormDropDown, FormCheckbox } from '../../../../../theme/form';
 
-const metaInfo = {
-  store: 'investorProfileStore',
-  form: 'INVESTOR_PROFILE_FULL',
-};
-@inject('investorProfileStore', 'userDetailsStore')
+@inject('investorProfileStore', 'userDetailsStore', 'uiStore')
 @observer
-class UserInvestorDetails extends Component {
+export default class UserInvestorDetails extends Component {
+  state = {
+    displayOnly: true,
+  }
+
   constructor(props) {
     super(props);
     const { investorProfileData } = this.props;
@@ -24,7 +24,6 @@ class UserInvestorDetails extends Component {
     } else {
       setInvestorDetailInfo(investorProfileData);
     }
-    this.state = { displayOnly: true };
   }
 
   toogleField = (e) => {
@@ -32,6 +31,7 @@ class UserInvestorDetails extends Component {
     const { investorProfileData } = this.props;
     const {
       setInvestorDetailInfo,
+      setIsInvestmentExperienceValidStatus,
     } = this.props.investorProfileStore;
     if (this.props.isAdmin) {
       const investorProfileDataAdmin = get(this.props.userDetailsStore, 'getDetailsOfUser.investorProfileData');
@@ -39,6 +39,7 @@ class UserInvestorDetails extends Component {
     } else {
       setInvestorDetailInfo(investorProfileData);
     }
+    setIsInvestmentExperienceValidStatus(true);
     this.setState({ displayOnly: !this.state.displayOnly });
   }
 
@@ -50,43 +51,20 @@ class UserInvestorDetails extends Component {
   }
 
   render() {
+    const formName = 'INVESTOR_PROFILE_FULL';
     const {
       INVESTOR_PROFILE_FULL,
+      formChange, maskChange,
+      experiencesEditChange,
       isInvestmentExperienceValid,
     } = this.props.investorProfileStore;
     const yearValues = Helper.getLastThreeYearsLabel();
-    const { smartElement } = this.props;
-
-    const commonProps = {
-      readOnly: get(this.state, 'displayOnly'),
-      ishidelabel: true,
-    };
-    const dropDownProps = {
-      containerclassname: get(this.state, 'displayOnly') ? '' : 'dropdown-field',
-      className: get(this.state, 'displayOnly') ? 'display-only' : '',
-      compact: true,
-      selection: true,
-      ...commonProps,
-    };
-
-    const formInputProps = {
-      containerclassname: get(this.state, 'displayOnly') ? 'display-only' : '',
-      className: 'compact',
-      ...commonProps,
-    };
-
-    const MaskedInputProps = {
-      wrapperClass: 'ui input compact',
-      prefix: '$',
-      hidelabel: true,
-      readOnly: get(this.state, 'displayOnly'),
-    };
-
+    const { responsiveVars } = this.props.uiStore;
     return (
-      <Card fluid className="form-card">
+      <Card fluid className="form-card disabled">
         <Form>
-          <Header as="h5">Investor Profile
-            {!this.props.isAdmin && (get(this.state, 'displayOnly')
+          <Header as="h5" className={responsiveVars.isMobile && 'plr-0'}>Investor Profile
+            {!this.props.isAdmin && (this.state.displayOnly
               ? <Link to={`${this.props.match.url}`} className="link pull-right regular-text" onClick={this.toogleField}><small>Edit information</small></Link>
               : (
                 <Button.Group floated="right" size="mini" compact>
@@ -102,84 +80,205 @@ class UserInvestorDetails extends Component {
               ))
             }
           </Header>
-          <dl className="dl-horizontal">
-            <dt>Employment status</dt>
-            <dd className={!get(this.state, 'displayOnly') ? 'visible-dropdown' : ''}>
-              {smartElement.FormDropDown('status', { options: EMPLOYMENT_LIST, ...dropDownProps })}
+          <dl className="dl-horizontal profile-data">
+            <dt className="neutral-text">Employment status</dt>
+            <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
+              <FormDropDown
+                readOnly={this.state.displayOnly}
+                fielddata={INVESTOR_PROFILE_FULL.fields.status}
+                compact
+                selection
+                ishidelabel
+                containerclassname={this.state.displayOnly ? '' : 'dropdown-field'}
+                className={this.state.displayOnly ? 'display-only' : ''}
+                value={INVESTOR_PROFILE_FULL.fields.status.value}
+                name="status"
+                options={EMPLOYMENT_LIST}
+                onChange={(e, result) => formChange(e, result, formName)}
+              />
             </dd>
             {INVESTOR_PROFILE_FULL.fields.status.value === 'EMPLOYED'
               && (
                 <>
                   <dt className="regular-text">Employer</dt>
                   <dd>
-                    {smartElement.Input('employer', { ...formInputProps })}
+                    <FormInput
+                      containerclassname={this.state.displayOnly ? 'display-only' : ''}
+                      className="compact"
+                      readOnly={this.state.displayOnly}
+                      name="employer"
+                      fielddata={INVESTOR_PROFILE_FULL.fields.employer}
+                      value={INVESTOR_PROFILE_FULL.fields.employer.value}
+                      changed={(e, result) => formChange(e, result, formName)}
+                      ishidelabel
+                    />
                   </dd>
                   <dt className="regular-text">Position</dt>
                   <dd>
-                    {smartElement.Input('position', { ...formInputProps })}
+                    <FormInput
+                      containerclassname={this.state.displayOnly ? 'display-only' : ''}
+                      className="compact"
+                      readOnly={this.state.displayOnly}
+                      name="position"
+                      fielddata={INVESTOR_PROFILE_FULL.fields.position}
+                      value={INVESTOR_PROFILE_FULL.fields.position.value}
+                      changed={(e, result) => formChange(e, result, formName)}
+                      ishidelabel
+                    />
                   </dd>
                 </>
               )
             }
             <Divider hidden />
-            <dt>Brokerage employment</dt>
-            <dd className={!get(this.state, 'displayOnly') ? 'visible-dropdown' : ''}>
-              {smartElement.FormDropDown('brokerageEmployment', { options: BROKERAGE_EMPLOYMENT_LIST, ...dropDownProps })}
+            <dt className="neutral-text">Brokerage employment</dt>
+            <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
+              <FormDropDown
+                readOnly={this.state.displayOnly}
+                fielddata={INVESTOR_PROFILE_FULL.fields.brokerageEmployment}
+                compact
+                selection
+                ishidelabel
+                containerclassname={this.state.displayOnly ? '' : 'dropdown-field'}
+                className={this.state.displayOnly ? 'display-only' : ''}
+                value={INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value}
+                name="brokerageEmployment"
+                options={BROKERAGE_EMPLOYMENT_LIST}
+                onChange={(e, result) => formChange(e, result, formName)}
+              />
             </dd>
             {INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value === 'yes'
               && (
                 <>
                   <dt className="regular-text">Member Firm Name</dt>
                   <dd>
-                    {smartElement.Input('brokerageFirmName', { ...formInputProps })}
+                    <FormInput
+                      containerclassname={this.state.displayOnly ? 'display-only' : ''}
+                      className="compact"
+                      readOnly={this.state.displayOnly}
+                      name="brokerageFirmName"
+                      fielddata={INVESTOR_PROFILE_FULL.fields.brokerageFirmName}
+                      value={INVESTOR_PROFILE_FULL.fields.brokerageFirmName.value}
+                      changed={(e, result) => formChange(e, result, formName)}
+                      ishidelabel
+                    />
                   </dd>
                 </>
               )
             }
             <Divider hidden />
-            <dt>Public Company Relations</dt>
-            <dd className={!get(this.state, 'displayOnly') ? 'visible-dropdown' : ''}>
-              {smartElement.FormDropDown('publicCompanyRel', { options: PUBLIC_COMPANY_REL_LIST, ...dropDownProps })}
+            <dt className="neutral-text">Public Company Relations</dt>
+            <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
+              <FormDropDown
+                readOnly={this.state.displayOnly}
+                fielddata={INVESTOR_PROFILE_FULL.fields.publicCompanyRel}
+                compact
+                selection
+                ishidelabel
+                containerclassname={this.state.displayOnly ? '' : 'dropdown-field'}
+                className={this.state.displayOnly ? 'display-only' : ''}
+                value={INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value}
+                name="publicCompanyRel"
+                options={PUBLIC_COMPANY_REL_LIST}
+                onChange={(e, result) => formChange(e, result, formName)}
+              />
             </dd>
             {INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value === 'yes'
               && (
                 <>
                   <dt className="regular-text">Ticker Symbol</dt>
                   <dd>
-                    {smartElement.Input('position', { ...formInputProps })}
+                    <FormInput
+                      containerclassname={this.state.displayOnly ? 'display-only' : ''}
+                      className="compact"
+                      readOnly={this.state.displayOnly}
+                      name="publicCompanyTicker"
+                      fielddata={INVESTOR_PROFILE_FULL.fields.publicCompanyTicker}
+                      value={INVESTOR_PROFILE_FULL.fields.publicCompanyTicker.value}
+                      changed={(e, result) => formChange(e, result, formName)}
+                      ishidelabel
+                    />
                   </dd>
                 </>
               )
             }
             <Divider hidden />
-            <dt>Financial status</dt>
-            <dd className={!get(this.state, 'displayOnly') ? 'visible-dropdown' : ''}>
-              {smartElement.FormDropDown('taxFilingAs', { options: INVESTOR_PROFILE_LIST, ...dropDownProps })}
+            <dt className="neutral-text">Financial status</dt>
+            <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
+              <FormDropDown
+                readOnly={this.state.displayOnly}
+                fielddata={INVESTOR_PROFILE_FULL.fields.taxFilingAs}
+                selection
+                compact
+                ishidelabel
+                containerclassname={this.state.displayOnly ? '' : 'dropdown-field'}
+                className={this.state.displayOnly ? 'display-only' : ''}
+                value={INVESTOR_PROFILE_FULL.fields.taxFilingAs.value}
+                name="taxFilingAs"
+                options={INVESTOR_PROFILE_LIST}
+                onChange={(e, result) => formChange(e, result, formName)}
+              />
             </dd>
             <dt className="regular-text">Net Worth</dt>
             <dd>
-              {smartElement.Masked('netWorth', { ...MaskedInputProps })}
+              <MaskedInput
+                displayMode={this.state.displayOnly}
+                name="netWorth"
+                wrapperClass="ui input compact"
+                fielddata={INVESTOR_PROFILE_FULL.fields.netWorth}
+                changed={(values, name) => maskChange(values, formName, name)}
+                currency
+                prefix="$"
+                hidelabel
+              />
             </dd>
             {map(yearValues.annualIncomePreviousYear, (year, key) => (
               <>
                 <dt className="regular-text">Annual Income {year}</dt>
                 <dd>
-                  {smartElement.Masked(key, { ...MaskedInputProps })}
+                  <MaskedInput
+                    displayMode={this.state.displayOnly}
+                    name={key}
+                    wrapperClass="ui input compact"
+                    fielddata={INVESTOR_PROFILE_FULL.fields[key]}
+                    changed={(values, name) => maskChange(values, formName, name)}
+                    currency
+                    prefix="$"
+                    hidelabel
+                  />
                 </dd>
               </>
             ))
             }
             <Divider hidden />
-            <dt>Investment experience</dt>
-            <dd className={!get(this.state, 'displayOnly') ? 'visible-dropdown' : ''}>
-              {smartElement.FormDropDown('experienceLevel', { options: INVESTMENT_EXPERIENCE_LIST, ...dropDownProps })}
+            <dt className="neutral-text">Investment experience</dt>
+            <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
+              <FormDropDown
+                readOnly={this.state.displayOnly}
+                fielddata={INVESTOR_PROFILE_FULL.fields.experienceLevel}
+                compact
+                selection
+                ishidelabel
+                containerclassname={this.state.displayOnly ? '' : 'dropdown-field'}
+                className={this.state.displayOnly ? 'display-only' : ''}
+                value={INVESTOR_PROFILE_FULL.fields.experienceLevel.value}
+                name="experienceLevel"
+                options={INVESTMENT_EXPERIENCE_LIST}
+                onChange={(e, result) => formChange(e, result, formName)}
+              />
             </dd>
           </dl>
           {['isComfortable', 'isRiskTaker'].map(field => (
-            smartElement.FormCheckBox(field, { readOnly: get(this.state, 'displayOnly'), defaults: true, containerclassname: 'ui relaxed list' })
+            <FormCheckbox
+              readOnly={this.state.displayOnly}
+              fielddata={INVESTOR_PROFILE_FULL.fields[field]}
+              name={field}
+              changed={experiencesEditChange}
+              defaults
+              containerclassname="ui relaxed list"
+            />
           ))
           }
-          {!get(this.state, 'displayOnly') && !isInvestmentExperienceValid
+          {!this.state.displayOnly && !isInvestmentExperienceValid
             && (
               <p className="negative-text">
                 NextSeed investments are suitable for experienced investors
@@ -188,10 +287,10 @@ class UserInvestorDetails extends Component {
             </p>
             )
           }
-          {!get(this.state, 'displayOnly') && !isInvestmentExperienceValid
+          {!this.state.displayOnly && !isInvestmentExperienceValid
             && (
               <p className="negative-text">
-                Otherwise, please reference our <Link to="/app/resources/welcome-packet">Education Center </Link>
+                Otherwise, please reference our <Link to="/resources/education-center/investor">Education Center </Link>
                 to learn more about investing on NextSeed.
             </p>
             )
@@ -201,4 +300,3 @@ class UserInvestorDetails extends Component {
     );
   }
 }
-export default formHOC(UserInvestorDetails, metaInfo);

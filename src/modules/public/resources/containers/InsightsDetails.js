@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import { Header, Container, Grid, Breadcrumb } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../theme/shared';
+import Helper from '../../../../helper/utility';
 import HtmlEditor from '../../../shared/HtmlEditor';
 
 @inject('articleStore')
@@ -26,12 +27,12 @@ export default class InsightsDetails extends Component {
     return (
       <>
         <Helmet>
-          <title>{ArticlesDetails.title} - NextSeed</title>
+          <title>{Helper.pageTitle(`${ArticlesDetails.title} - NextSeed`)}</title>
         </Helmet>
         <Container>
           <section className="insight-post">
             <Breadcrumb className="mb-30">
-              <Breadcrumb.Section as={Link} to="/resources/insights">Insights</Breadcrumb.Section>
+              <Breadcrumb.Section as={Link} to="/insights">Insights</Breadcrumb.Section>
               <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
               <Breadcrumb.Section active>{ArticlesDetails.title}</Breadcrumb.Section>
             </Breadcrumb>

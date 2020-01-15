@@ -191,7 +191,7 @@
 
 /* Basic */
 @basicBorderRadius: @borderRadius;
-@basicBorderSize: 2px;
+@basicBorderSize: 1px;
 @basicTextColor: @textColor;
 @basicColoredBorderSize: 1px;
 
@@ -254,7 +254,7 @@
 
 /* Colors */
 @coloredBackgroundImage: none;
-@coloredBoxShadow: @boxShadow;
+@coloredBoxShadow: none; // @boxShadow;
 
 /* Colored */
 @brownTextColor: @invertedTextColor;

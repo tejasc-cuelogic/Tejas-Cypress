@@ -145,7 +145,6 @@ export class InvestorProfileStore extends DataModelStore {
     }
   }
 
-
   setFormData = (form, data) => {
     if (['BROKERAGE_EMPLOYMENT_FRM', 'PUBLIC_COMPANY_REL_FRM'].includes(form)) {
       const { textField, radioField } = this.textRadioFieldData(this[form].fields);
@@ -182,6 +181,11 @@ export class InvestorProfileStore extends DataModelStore {
         });
       }
     }
+  }
+
+  get isInvExperienceValid() {
+    const { isComfortable, isRiskTaker, experienceLevel } = Validator.ExtractValues(this.INVESTMENT_EXP_FORM.fields);
+    return isComfortable.length !== 0 && isRiskTaker.length !== 0 && experienceLevel !== 'NONE';
   }
 }
 

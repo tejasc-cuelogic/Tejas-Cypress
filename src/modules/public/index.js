@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch, matchPath } from 'react-router-dom';
+import { Route, Switch, matchPath, withRouter, Redirect } from 'react-router-dom';
 import { Responsive } from 'semantic-ui-react';
 import { publicRoutes } from '../routes';
 import NavBarMobile from '../../theme/layout/NavBarMobile';
@@ -13,8 +13,10 @@ import NotFound from '../shared/NotFound';
 import RedirectManager from '../shared/RedirectManager';
 import Helper from '../../helper/utility';
 import Firework from './offering/components/investNow/agreement/components/FireworkAnimation';
+import { Spinner } from '../../theme/shared';
 
 @inject('uiStore', 'navStore', 'userStore', 'businessAppStore', 'campaignStore')
+@withRouter
 @observer
 export default class Public extends React.Component {
   state = {
@@ -23,15 +25,30 @@ export default class Public extends React.Component {
 
   constructor(props) {
     super(props);
+    this.props.uiStore.addMoreInProgressArray('publicLoading');
     this.props.navStore.setNavStatus({}, 'main');
+    if (this.props.location.pathname === '/how-it-works') {
+      this.props.history.push('/investors');
+    }
   }
 
-  componentWillUpdate() {
+  componentDidMount() {
+    setTimeout(() => {
+      this.props.uiStore.removeOneFromProgressArray('publicLoading');
+    }, 500);
+  }
+
+  componentDidUpdate() {
     this.props.navStore.setNavStatus({}, 'main');
   }
 
   getRoutes = (isAuthLocation = false) => (
     <Switch>
+      <Redirect from="/resources/*" to="/*" />
+      <Redirect from="/about/*" to="/about" />
+      <Redirect from="/agreements/legal/*" to="/legal/*" />
+      <Redirect from="/invest/*" to="/investors" />
+      <Redirect from="/business/*" to="/business" />
       {publicRoutes.map((route) => {
         const CurrentComponent = route.auth ? route.auth(route.component, this.props) : route.component;
         return (
@@ -63,7 +80,7 @@ export default class Public extends React.Component {
         if (isToggle) {
           this.handleToggle();
         }
-      });
+      }).catch(err => window.logger(err));
   }
 
   preQualSubmit = (e) => {
@@ -84,7 +101,7 @@ export default class Public extends React.Component {
 
   render() {
     const { location, match } = this.props;
-    const { BUSINESS_APP_FRM, isPrequalQulify } = this.props.businessAppStore;
+    const { BUSINESS_APP_FRM, isPrequalQulify, appSubmitLoading } = this.props.businessAppStore;
     const { isValid } = BUSINESS_APP_FRM.meta;
     const { inProgress } = this.props.uiStore;
     // const NoFooter = [
@@ -95,6 +112,9 @@ export default class Public extends React.Component {
     const { visible } = this.state;
     const authAllowed = ['login', 'register', 'register-investor', 'confirm-email', 'change-password', 'reset-password', 'forgot-password', 'welcome-email'];
     const isAuthLocation = (authAllowed.find(item => matchPath(location.pathname, { path: `/${item}` })));
+    if (this.props.uiStore.inProgressArray.includes('publicLoading')) {
+      return <Spinner loaderMessage="Loading..." />;
+    }
     return (
       <>
         {this.props.campaignStore.showFireworkAnimation
@@ -110,7 +130,7 @@ export default class Public extends React.Component {
               canSubmitApp={isValid}
               isPrequalQulify={isPrequalQulify}
               preQualSubmit={this.preQualSubmit}
-              loading={inProgress}
+              loading={inProgress || appSubmitLoading}
             />
           )}
           {this.getRoutes(isAuthLocation)}

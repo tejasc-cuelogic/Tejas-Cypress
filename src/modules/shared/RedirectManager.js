@@ -15,7 +15,7 @@ export default class RedirectManager extends React.PureComponent {
     this.processRedirection();
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     const { viaProtect } = this.state;
     if (viaProtect) {
       this.processRedirection(false);
@@ -86,7 +86,7 @@ export default class RedirectManager extends React.PureComponent {
         this.setState({ found: 2 });
         if (this.props.authStore.isUserLoggedIn) {
           this.props.commonStore
-            .updateUserReferralCode(this.props.userStore.currentUser.sub, data.referralCode);
+            .updateUserReferralCode(data.referralCode);
         } else {
           window.localStorage.setItem('ISSUER_REFERRAL_CODE', data.referralCode);
         }

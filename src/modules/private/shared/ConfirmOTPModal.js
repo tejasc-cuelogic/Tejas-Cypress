@@ -74,7 +74,7 @@ export default class ConfirmOTPModal extends Component {
             )
           }
           <p>
-            <Link to="/app/account-settings/security" className="link">See Multi-Factor Authentication Settings</Link>
+            <Link to="/dashboard/account-settings/security" className="link">See Multi-Factor Authentication Settings</Link>
           </p>
           <Form error onSubmit={formSubmit}>
             <Form.Field className="otp-wrap">

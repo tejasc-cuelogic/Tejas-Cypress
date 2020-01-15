@@ -50,7 +50,7 @@ export default class EdgarFilingList extends Component {
     const xmlSubmissionId = this.props.uiStore.confirmBox.subRefId;
     businessActions.deleteXmlSubmission(filingId, xmlSubmissionId).then(() => {
       this.handleDeleteCancel();
-      this.props.history.push(`/app/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
+      this.props.history.push(`/dashboard/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
       Helper.toast('XML Submission deleted successfully', 'success');
     }).catch(() => {
       Helper.toast('Something went wrong while deleting XMl submission, Please try again.', 'error', { position: 'top-center' });
@@ -71,7 +71,7 @@ export default class EdgarFilingList extends Component {
     )
       .then(() => {
         this.handleDeleteCancel();
-        this.props.history.push(`/app/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
+        this.props.history.push(`/dashboard/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
         Helper.toast(`XML submission ${status} successfully`, 'success');
       });
   }
@@ -80,12 +80,12 @@ export default class EdgarFilingList extends Component {
     const { currentOfferingId } = this.props.offeringCreationStore;
     if (this.props.uiStore.confirmBox.metaData.isAnyFilingLocked) {
       this.handleDeleteCancel();
-      this.props.history.push(`/app/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
+      this.props.history.push(`/dashboard/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
     } else {
       this.setState({ showLoader: true });
       const filingId = this.props.uiStore.confirmBox.subRefId;
       this.handleDeleteCancel();
-      this.props.history.push(`/app/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
+      this.props.history.push(`/dashboard/offerings/creation/edit/${currentOfferingId}/legal/generate-docs`);
       businessActions.deleteFiling(currentOfferingId, filingId)
         .then(() => {
           this.setState({ showLoader: false });

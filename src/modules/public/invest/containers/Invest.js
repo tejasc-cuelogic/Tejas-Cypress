@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import queryString from 'query-string';
-import { Visibility, Responsive } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
-import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
-import Banner from '../components/Banner';
-import { PublicSubNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 import { REDIRECT_META } from '../../../../constants/redirect';
+import WhyNextseed from '../components/WhyNextseed';
 
-const getModule = component => lazyRetry(() => import(`../components/${component}`));
 
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses.' },
@@ -23,15 +18,15 @@ const metaTagsData = [
   { type: 'ogTag', property: 'og:site_name', content: 'NextSeed' },
   { type: 'ogTag', property: 'article:publisher', content: 'https://www.facebook.com/thenextseed' },
   { type: 'ogTag', property: 'fb:app_id', content: '1806635959569619' },
-  { type: 'ogTag', property: 'og:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
-  { type: 'ogTag', property: 'og:image:secure_url', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
+  { type: 'ogTag', property: 'og:image', content: 'https://cdn.nextseed.co/dashboard/uploads/IMG_2710.jpg' },
+  { type: 'ogTag', property: 'og:image:secure_url', content: 'https://cdn.nextseed.co/dashboard/uploads/IMG_2710.jpg' },
   { type: 'ogTag', property: 'og:image:width', content: '1600' },
   { type: 'ogTag', property: 'og:image:height', content: '1067' },
   { type: 'meta', name: 'twitter:card', content: 'summary_large_image' },
   { type: 'meta', name: 'twitter:description', content: 'Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses.' },
   { type: 'meta', name: 'twitter:title', content: 'Exclusive Access to New Local Investments | NextSeed' },
   { type: 'meta', name: 'twitter:site', content: '@thenextseed' },
-  { type: 'meta', name: 'twitter:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
+  { type: 'meta', name: 'twitter:image', content: 'https://cdn.nextseed.co/dashboard/uploads/IMG_2710.jpg' },
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
 
@@ -52,15 +47,6 @@ class Invest extends Component {
         }
       });
     }
-    if (props.match.isExact) {
-      props.history.replace(`${props.match.url}/why-nextseed`);
-    }
-  }
-
-  componentWillUpdate() {
-    if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/why-nextseed`);
-    }
   }
 
   module = name => DataFormatter.upperCamelCase(name);
@@ -68,41 +54,11 @@ class Invest extends Component {
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
 
   render() {
-    const { match, location, navStore } = this.props;
-    const navItems = GetNavMeta(match.url, [], true).subNavigations;
+    const { location } = this.props;
     return (
       <>
         <MetaTagGenerator pathName={location.pathname} metaTagsData={metaTagsData} />
-        {location.pathname === '/invest/why-nextseed' || location.pathname === '/invest' ? <Banner />
-          : <Responsive as="section" maxWidth={767} className={`banner ${location.pathname.split('/')[2]}`} />
-        }
-        <Visibility
-          onUpdate={this.handleUpdate}
-          continuous
-          className={`slide-down ${location.pathname.split('/')[2]}`}
-        >
-          <PublicSubNav
-            stepInRoute={navStore.stepInRoute}
-            location={location}
-            currentUser={this.props.userStore.currentUser}
-            navItems={navItems}
-            title="Investing"
-          />
-          <SuspenseBoundary>
-            <Switch>
-              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
-              {
-                navItems.map(item => (
-                  <Route
-                    key={item.to}
-                    path={`${match.url}/${item.to}`}
-                    component={getModule(this.module(item.title))}
-                  />
-                ))
-              }
-            </Switch>
-          </SuspenseBoundary>
-        </Visibility>
+        <WhyNextseed />
       </>
     );
   }

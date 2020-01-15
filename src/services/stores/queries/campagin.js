@@ -1,10 +1,11 @@
 import gql from 'graphql-tag';
 
 export const allOfferings = gql`
-query getOfferingList($filters: OfferingFilterInputType, $userId: String){
+query getOfferingList($filters: OfferingListFilterInputType){
     getOfferingList(filters: $filters) {
       id
-      watchListStatus(userId: $userId)
+      isAvailablePublicly
+      watchListStatus
       offeringSlug
       stage
       media {
@@ -83,7 +84,7 @@ query checkEarlyBirdByInvestorAccountAndOfferingId($offeringId: String!, $accoun
 }`;
 
 export const getOfferingsReferral = gql`
-query getOfferingList($filters: OfferingFilterInputType){
+query getOfferingList($filters: OfferingListFilterInputType){
     getOfferingList(filters: $filters) {
       id
       stage
@@ -119,15 +120,10 @@ export const getOfferingById = gql`
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
       id
+      isInvestedInOffering
       isAvailablePublicly
       stage
     }
-  }
-`;
-
-export const isValidInvestorInOffering = gql`
-  query isValidInvestorInOffering ($offeringId: String!, $userId: String!, $offeringStage: OfferingStageEnumType!) {
-    isValidInvestorInOffering (offeringId: $offeringId, userId: $userId, offeringStage: $offeringStage)
   }
 `;
 
@@ -135,6 +131,7 @@ export const campaignDetailsQuery = gql`
   query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
+    isInvestedInOffering
     watchListStatus
     stage
     offeringSlug
@@ -481,6 +478,21 @@ query getOfferingById($id: String!) {
         expectedOpsDate
         terminationDate
         edgarLink
+      }
+    }
+    legal {
+      dataroom {
+        documents {
+          name
+          accreditedOnly
+          upload {
+            fileId
+            fileName
+            fileHandle {
+              boxFileId
+            }
+          }
+        }
       }
     }
     selectedOffer {

@@ -9,7 +9,14 @@ html,body{
 }
 //	iOS cursor position on keypad-in fix
 body{
-	color:@neutral-middark;
+	color:@neutral;
+	font-size: @17px;
+	line-height: 26px;
+	font-weight: @normal;
+	@media only screen and (max-width : @largestMobileScreen){
+		font-size: @15px;
+		line-height: 24px;
+	}
 }
 .public-pages {
 	background: @white;
@@ -105,6 +112,9 @@ h6{
 .mb-60{
 	margin-bottom:@60px !important;
 }
+.mb-70{
+	margin-bottom:@70px !important;
+}
 .mb-80 {
 	margin-bottom: @80px !important;
 }
@@ -113,6 +123,9 @@ h6{
 }
 .mt-10 {
 	margin-top: @10px !important;
+}
+.mt-14{
+	margin-top:@14px !important;
 }
 .mt-20 {
 	margin-top: @20px !important;
@@ -125,6 +138,12 @@ h6{
 }
 .mt-50 {
 	margin-top: @50px !important;
+}
+.mt-60{
+	margin-top:@60px !important;
+}
+.mt-70{
+	margin-top:@70px !important;
 }
 .mt-74 {
 	margin-top: @74px;
@@ -144,14 +163,48 @@ h6{
 .ml-10 {
 	margin-left: @10px !important;
 }
+.ml-16 {
+	margin-left: @16px !important;
+}
+.ml-18 {
+	margin-left: @18px !important;
+}
+.mlr-0{
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
+.m-auto{
+	margin: 0 auto !important;
+}
 .pb-20{
 	padding-bottom: @20px !important;
+}
+.pb-40{
+	padding-bottom: @40px !important;
 }
 .pt-0{
 	padding-top:0 !important;
 }
+.pt-10{
+	padding-top:10px !important;
+}
+.pt-50{
+	padding-top:50px !important;
+}
+.pt-100{
+	padding-top: 100px !important;
+}
 .pb-0{
 	padding-bottom:0 !important;
+}
+.pb-20{
+	padding-bottom: @20px !important;
+}
+.pb-50{
+	padding-bottom: @50px !important;
+}
+.pb-100{
+	padding-bottom: 100px !important;
 }
 .pl-50{
 	padding-left: @50px !important;
@@ -159,13 +212,12 @@ h6{
 .pl-60{
 	padding-left: @60px !important;
 }
-.mlr-0{
-	margin-left: 0 !important;
-	margin-right: 0 !important;
-}
 .plr-0{
 	padding-left: 0 !important;
 	padding-right: 0 !important;
+}
+.display-block{
+	display: block !important;
 }
 .pull-left{
 	float:left !important;
@@ -190,6 +242,7 @@ h6{
 .note{
 	color:@neutral-middark !important;
 	font-size: @12px;
+	line-height: 18px;
 }
 .justify-text {
 	text-align: justify;
@@ -239,10 +292,16 @@ h6{
 .grey-header {
 	color: @neutral-middark !important;
 }
+.grey-label{
+	color: @neutral !important;
+	opacity: 0.4;
+	font-weight: @fontMedium !important;
+}
 .caption-note{
-	font-size:@12px;
+	font-size:@12px !important;
 	font-style:italic;
 	margin:@7px 0;
+	line-height: 18px;
 	&:first-child{
 		margin-top:0px;
 	}
@@ -266,10 +325,21 @@ h6{
 	word-break: normal !important;
 }
 .full-width{
-	width: 100%;
+	width: 100% !important;
 }
 .show-top{
 	z-index: 99999 !important;
+}
+.error{
+	font-style: normal;
+}
+.mobile-bottom-notes{
+	position: absolute;
+	width: calc(100% - 30px);
+    top: 90%;
+	left: 50%;
+    transform: translate(-50%, 0);
+	padding-bottom: @30px;
 }
 .d-flex{
 	display: flex !important;
@@ -324,6 +394,12 @@ a{
 	&.green-hover:hover{
 		color: @primary-one !important;
 	}
+	&.no-decoration:hover{
+		text-decoration: none;
+	}
+}
+.display-block {
+	display: block !important;
 }
 .green-hover.ui.button.link-button.grey:hover {
 	color: @primary-one !important;
@@ -334,6 +410,9 @@ a{
 .bg-offwhite {
 	background-color: @neutral-offwhite !important;
 	// padding:@14px @20px;       commented to resolve on public homepage
+}
+.bg-white {
+	background-color: @white !important;
 }
 .bg-midwhite{
 	background-color: @neutral-midwhite;
@@ -459,10 +538,10 @@ footer{
 			}
 			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
 				justify-content: center;
+				align-items: center;
 			}
 			img.ui.image {
 				display: inline-block;
-				margin-right: @38px;
 				~a img.ui.image{
 					margin-right: 0;
 				}
@@ -471,6 +550,7 @@ footer{
 	}
 	.footer-social {
 		flex-grow: 0;
+		font-size: @15px;
 		@media only screen and (max-width : @largestMobileScreen){
 			text-align: center;
 		}
@@ -487,7 +567,7 @@ footer{
 		}
 		p {
 			display: inline-block;
-			margin-left: 60px;
+			margin-left: @40px;
 			@media only screen and (max-width : @largestMobileScreen){
 				display: block;
 				margin-left: 0;
@@ -504,8 +584,10 @@ footer{
 	}
 	.copyright-info{
 		flex-grow: 1;
-		font-size:@13px;
-		line-height:@22px;
+		p{
+			font-size:@13px;
+			line-height:@20px;
+		}
 		@media only screen and (max-width : @largestMobileScreen){
 			float:none;
 		}
@@ -547,6 +629,15 @@ footer{
 		@media only screen and (max-width : @largestMobileScreen){
 			font-size: @15px;
 			margin-bottom: @20px;
+		}
+	}
+	.ui.header.coming-soon-header{
+		position: relative;
+		i.icon{
+			position: absolute;
+			right: 0;
+			cursor: pointer;
+			font-size: @30px;
 		}
 	}
 }
@@ -852,68 +943,79 @@ footer{
 		}
 	}
 }
-.content-spacer {
-	.column.side-section {
-		background-color:@invertedMutedTextColor;
-		padding-bottom: @40px;
-		padding-top: @40px;
-		@media only screen and (min-width: @tabletBreakpoint) {
-			min-height:~"calc(100vh - 424px)";
-		}
-		@media only screen and (max-width : @largestMobileScreen){
-			padding-bottom: @30px;
-			padding-top: @30px;
-		}
-		.ui.header{
-			margin-bottom:@4px;
-		}
-		p {
-			line-height: 24px;
-			margin-bottom:@24px;
-			&.note{
-				font-size:@12px;
-				line-height:@18px;
+.column.side-section {
+	&.process-right-section {
+		counter-reset: section;
+		.ui.list {
+			border: 0;
+			background-color: transparent;
+			box-shadow: none;
+			@media only screen and (max-width : @largestMobileScreen){
+				padding:0 0 30px !important;
 			}
-		}
-		&.process-right-section {
-			counter-reset: section;
-			.ui.card {
-				border: 0;
-				background-color: transparent;
+			&:hover {
 				box-shadow: none;
+			}
+			>.item {
+				text-align: left;
+				padding: 0 0 0 147px;
+				position: relative;
 				@media only screen and (max-width : @largestMobileScreen){
-					padding:0 0 30px !important;
+					padding-left: @58px;
 				}
-				&:hover {
-					box-shadow: none;
-				}
-				>.content {
-					text-align: left;
-					padding: 0 0 0 40px;
-					position: relative;
-					&:before {
-						counter-increment: section;
-						content: counter(section);
-						position: absolute;
-						left: 0;
-						top: 5px;
-						font-weight: 500;
-						line-height: 24px;
-						font-size: @40px;
-						color: @primary-one;
+				&:before {
+					counter-increment: section;
+					content: counter(section);
+					position: absolute;
+					left: 0;
+					top: 0;
+					font-weight: 500;
+					line-height: 66px;
+					font-size: @28px;
+					color: @primary-one;
+					height: 66px;
+					width: 66px;
+					border-radius: 50%;
+					border: 1px solid @primary-one;
+					text-align: center;
+					background: @white;
+					z-index: 1;
+					@media only screen and (max-width : @largestMobileScreen){
+						height: @45px;
+						width: @45px;
+						font-size: @20px;
+						line-height: 45px;
 					}
 				}
+				&:after{
+					content: '';
+					height: 100%;
+					width: 1px;
+					background: @primary-one;
+					position: absolute;
+					left: 33px;
+					top: 33px;
+					z-index: 0;
+					visibility: visible;
+					@media only screen and (max-width : @largestMobileScreen){
+						left: 22.5px;
+						top: 45px;
+					}
+				}
+				&:last-child:after{
+					display: none;
+				}
 			}
 		}
-		&.track-left-section {
-			display: flex !important;
-			justify-content: center;
-			@media only screen and (max-width : @largestMobileScreen){
-				justify-content: flex-start;
-			}
-			@media only screen and (max-width : @largestTabletScreen){
-				min-height: auto;
-			}
+	}
+	&.track-left-section {
+		display: flex !important;
+		justify-content: center;
+		@media only screen and (max-width : @largestMobileScreen){
+			justify-content: flex-start;
+		}
+		@media only screen and (max-width : @largestTabletScreen){
+			min-height: auto;
 		}
 	}
 }
@@ -1017,6 +1119,19 @@ footer{
 			}
 		}
 	}
+	&.investor-slide{
+		@media only screen and (max-width : @largestMobileScreen) {
+			.slick-slide{
+				padding: 0 @30px;
+			}
+			.slick-prev{
+				left:-20px;
+			}
+			.slick-next{
+				right:-20px;
+			}
+		}
+	}
 }
 //	Investor homepage
 .how-it-works-steps {
@@ -1055,10 +1170,13 @@ footer{
 	&.ui.grid {
 		margin: 0;
 		>.column {
-			padding: 0 !important;
+			padding: @17px !important;
+			@media only screen and (max-width : @largestMobileScreen){
+				padding: 0 !important;
+			}
 			&:last-child {
-				padding: @70px @20px !important;
-				@media only screen and (max-width : @largestSmallMonitor){
+				// padding: @70px @20px !important;
+				@media only screen and (max-width : @largestMobileScreen){
 					padding: @56px 0 !important;
 				}
 				a {
@@ -1536,11 +1654,17 @@ a.icon-link {
 	padding:@20px @40px;
 	@media only screen and (max-width : @largestSmallMonitor){
 		min-height:auto;
-		padding:@20px @60px;
+		padding: @14px;
 	}
 	@media only screen and (max-width : @largestMobileScreen){
 		~ .secondary-menu{
 			padding:0 @20px @14px;
+		}
+	}
+	&.investor{
+		background: transparent;
+		h3.ui.header{
+			position:relative;
 		}
 	}
 	h1.ui.header{
@@ -1995,6 +2119,15 @@ dl.dl-horizontal{
 			font-weight:@normal !important;
 		}
 	}
+	&.profile-data{
+		dt{
+			width:130px;
+			white-space: normal;
+		}
+		dd{
+			margin-left: 140px;
+		}
+	}
 }
 
 //	Multistep modal navigation
@@ -2013,6 +2146,7 @@ ol.progtrckr{
 		font-weight:@fontMedium;
 		line-height:@16px;
 		text-align:center;
+		text-transform: capitalize;
 		cursor:pointer;
 		position:relative;
 		&:after{
@@ -2163,7 +2297,64 @@ ol.progtrckr{
 svg:not(:root).recharts-surface{
 	overflow:visible;
 }
+.portfolio-allocation{
+	@media only screen and (max-width : @largestMobileScreen){
+		background: @white;
+		padding: @24px;
+		&:first-child{
+			border-bottom: 1px solid @neutral-darkwhite;
+		}
+	}
+}
 .donut-chart, .portfolio-allocation{
+	.recharts-legend-wrapper{
+		@media only screen and (max-width : @largestMobileScreen){
+			height: 100% !important;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+		.chartLegends{
+			li{
+				font-size:@22px;
+				line-height: 30px;
+				margin: 0 @10px 0 0;
+				@media only screen and (max-width : @largestMobileScreen){
+					font-size: @14px;
+					line-height: 18px;
+				}
+				span{
+					font-size:@13px;
+					color:@fullBlack;
+					@media only screen and (max-width : @largestMobileScreen){
+						font-size: @10px;
+					}
+					i {
+						color: @neutral-offdark;
+					}
+				}
+			}
+		}
+	}
+
+	// .recharts-legend-wrapper .chartLegends li{
+	// 	font-size:@22px;
+	// 	line-height: 30px;
+	// 	margin: 0 @10px 0 0;
+	// 	@media only screen and (max-width : @largestMobileScreen){
+	// 		line-height: 14px;
+	// 	}
+	// 	span{
+	// 		font-size:@13px;
+	// 		color:@fullBlack;
+	// 		@media only screen and (max-width : @largestMobileScreen){
+	// 			font-size: @10px;
+	// 		}
+	// 		i {
+	// 			color: @neutral-offdark;
+	// 		}
+	// 	}
+	// }
 	.recharts-wrapper{
 		.recharts-legend-wrapper{
 			z-index:-1;
@@ -2171,10 +2362,16 @@ svg:not(:root).recharts-surface{
 		.recharts-pie-sector .datavalue{
 			font-size:@20px;
 			font-weight:@fontMedium;
+			@media only screen and (max-width : @largestMobileScreen){
+				font-size: @10px;
+			}
 		}
 		tspan{
 			font-size:@18px;
 			font-weight:@fontMedium;
+			@media only screen and (max-width : @largestMobileScreen){
+				font-size: @14px;
+			}
 		}
 		.chartLegends li{
 			font-size:@22px;
@@ -2202,7 +2399,7 @@ svg:not(:root).recharts-surface{
 	}
 }
 .boanusreward-chart .recharts-wrapper tspan{
-	font-size: 28px;
+	font-size: @28px;
 	line-height: 38px;
 	fill: @primary-one;
 	font-weight: @fontMedium;
@@ -2395,14 +2592,14 @@ p.check-extra-info{
 		font-weight:@fontMedium;
 		border-radius:100%;
 	}
-	&.admin{
-		background-color:@highlight-primary;
-	}
-	&.issuer{
-		background-color:@fullBlack;
-	}
-	&.investor{
-		background-color:@highlight-tertiary;
+	// &.admin{
+	// 	background-color:@highlight-primary;
+	// }
+	// &.issuer{
+	// 	background-color:@fullBlack;
+	// }
+	&.investor .sb-avatar__text{
+		color: @neutral-offdark;
 	}
 }
 
@@ -2543,6 +2740,9 @@ p.check-extra-info{
 	.ui.image.logo {
 		height: @25px;
 		width: auto;
+	}
+	.icon.ns-hamburger{
+		color: @neutral-middark !important;
 	}
 	&.public-header-section-v2 .sign-in{
 		right: 22px;
@@ -2730,7 +2930,7 @@ input[type='range']::-webkit-slider-thumb {
 }
 //	IRA account creation
 .promitional-offer-block {
-	border: 1px solid @primary-one;
+	border: 1px solid @neutral-darkwhite;
 	padding: @10px;
 	h5.ui.header {
 		margin: 0;
@@ -2769,7 +2969,7 @@ input[type='range']::-webkit-slider-thumb {
 	}
 }
 //	IRA account creation
-.highlight-text, .negative-text {
+.highlight-text, .negative-text, .grey-header {
 	&.large {
 		font-size: @20px;
 		font-weight: @fontMedium;
@@ -2935,9 +3135,25 @@ input[type='range']::-webkit-slider-thumb {
 	}
 }
 .testimonial .slick-slider {
+	.slick-list{
+		margin: 0 @50px;
+		@media only screen and (max-width : @largestMobileScreen){
+			margin: 0 @30px;
+			.testimonial-user-details{
+				.ui.image{
+					float: left;
+					height: @45px;
+					width: @45px;
+				}
+			}
+			.ui.items>.item>.content{
+				padding-left: 0;
+			}
+		}
+	}
 	.slick-prev, .slick-next {
 		@media only screen and (max-width : @largestMobileScreen){
-			top: 20%;
+			top: 50%;
 		}
 	}
 }
@@ -2958,7 +3174,6 @@ table.css-wu4c77-diff-container {
 		}
 	}
 }
-
 // Offering new design - 1972 - Start
 //Public comment section
 .custom-segment{
@@ -2997,3 +3212,45 @@ table.css-wu4c77-diff-container {
     margin: auto;
 }
 // HTML editor images placeholder end
+.quotes{
+	&.ui.header{
+		padding-left: 48px;
+		@media only screen and (max-width : @largestMobileScreen){
+			padding-left: @31px;
+		}
+		sup:first-child{
+			margin-left: -48px;
+			margin-right: 0;
+			@media only screen and (max-width : @largestMobileScreen){
+				position: absolute;
+				left: 0;
+				top: 14px;
+				width: 20px;
+				margin-left: 0;
+			}
+		}
+	}
+	i.icon{
+		font-size: @24px !important;
+		@media only screen and (max-width : @largestMobileScreen){
+			font-size: @15px !important;
+		}
+		&.ns-quote-left{
+			margin-right: 11px !important;
+		}
+		&.ns-quote-right{
+			margin-left: 11px !important;
+			margin-right: 0 !important;
+		}
+	}
+}
+/* Message Modal */
+h3.ui.header.error-2{
+	font-size: @15px;
+	font-weight: @normal;
+	line-height: 24px;
+	@media only screen and (max-width : @largestMobileScreen){
+		font-size: @15px !important;
+	}
+}
+/* Message Modal End */

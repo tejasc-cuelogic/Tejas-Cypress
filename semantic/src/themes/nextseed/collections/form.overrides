@@ -65,6 +65,11 @@
         }
         >label{
             line-height:@18px;
+            &.dotted-tooltip {
+                border-bottom: 1px dotted;
+                display: inline-block;
+                cursor: pointer;
+            }
         }
         > .ui.label{
             background:transparent;
@@ -619,6 +624,14 @@
             textarea{
                 min-height:100%;
             }
+        }
+    }
+    .search-field input[type=text]{
+        border-bottom: none;
+        border: 1px solid @neutral-darkwhite;
+        border-radius: 4px;
+        ~i.icon{
+            left: 10px; 
         }
     }
 }

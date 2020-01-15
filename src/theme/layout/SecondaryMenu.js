@@ -4,7 +4,6 @@ import { get } from 'lodash';
 import { Responsive, Menu, Dropdown, Icon, Header, Popup } from 'semantic-ui-react';
 import { MobileDropDownNav } from '../shared';
 
-// const iMap = { to: 'key', title: 'text' };
 const NavItems = ({
   isActive, location, navItems, navClick, match, stepsStatus, addon, navCustomClick,
 }) => navItems.map((item, key) => (
@@ -33,7 +32,7 @@ const NavItems = ({
           </Dropdown.Menu>
         </Dropdown>
       ) : (
-        <Menu.Item key={item.to} onClick={navCustomClick} as={NavLink} to={`${match.url}/${item.to}`}>
+        <Menu.Item target={item.forced ? '_blank' : false} key={item.to} onClick={navCustomClick} as={NavLink} to={item.forced || `${match.url}/${item.to}`}>
           {item.showIcon
             ? stepsStatus[key].status === 'IN_PROGRESS'
               ? (
@@ -84,10 +83,9 @@ class SecondaryMenu extends Component {
     const showMoreMenuLength = (get(responsiveVars, 'isTabletLand') || get(responsiveVars, 'isSmallScreen')) ? 5 : 8;
     const showMoreMenu = !get(responsiveVars, 'isMobile') && this.props.offering && navItems && navItems.length > showMoreMenuLength;
     if (showMoreMenu) {
-      const dropOptions = navItems.splice(showMoreMenuLength - 1, navItems.length - showMoreMenuLength);
+      const dropOptions = navItems.splice(showMoreMenuLength, navItems.length - showMoreMenuLength);
       options = dropOptions.map(o => ({ key: o.to, text: o.title, value: o.to }));
     }
-    // const mobNavItems = map(navItemList, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
       <>
         <Responsive minWidth={768} as={React.Fragment}>
@@ -118,7 +116,7 @@ class SecondaryMenu extends Component {
           </Menu>
         </Responsive>
         <Responsive className="secondary-menu" maxWidth={767} as={React.Fragment}>
-          {match.url === '/agreements/legal'
+          {match.url === '/legal'
             ? (
               <MobileDropDownNav
                 inverted

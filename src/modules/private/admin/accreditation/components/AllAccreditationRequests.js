@@ -129,7 +129,7 @@ export default class AllAccreditationRequests extends Component {
                 : accreditations.map(accreditation => (
                   <Table.Row key={accreditation.id}>
                     <Table.Cell>
-                      <Link to={`/app/users/${accreditation.userId}/profile-data`}><p><b>{`${accreditation.firstName} ${accreditation.lastName}`}</b></p></Link>
+                      <Link onClick={() => sessionStorage.setItem('userDetailsRefUrl', match.url)} to={`/dashboard/users/${accreditation.userId}/profile-data`}><p><b>{`${accreditation.firstName} ${accreditation.lastName}`}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
                       {accreditation.requestDate ? DataFormatter.getDateAsPerTimeZone(moment.unix(accreditation.requestDate), false, false, false) : <p className="note">N/A</p>}
@@ -204,7 +204,7 @@ export default class AllAccreditationRequests extends Component {
                           <p className={checkIsAccreditationExpiredAsperTimeZone(get(accreditation, 'expiration'), true) === 'EXPIRED' ? 'negative-text' : `${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : accreditation.accreditationStatus === 'REQUESTED' ? 'warning' : 'negative'}-text`}>
                             {checkIsAccreditationExpiredAsperTimeZone(get(accreditation, 'expiration'), true) === 'EXPIRED'
                               ? (
-                                <b>Expired on {get(accreditation, 'expiration') ? DataFormatter.getDateAsPerTimeZone(moment.unix(get(accreditation, 'expiration')), false, false, false, false) : '-'}</b>
+                                <b>Expired on {get(accreditation, 'expiration') ? DataFormatter.getDateAsPerTimeZone(moment.unix(get(accreditation, 'expiration')), false, false, false, false, 'CST', true) : '-'}</b>
                               )
                               : (
                                 <>

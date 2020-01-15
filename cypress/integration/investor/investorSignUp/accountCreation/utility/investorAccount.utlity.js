@@ -5,24 +5,21 @@ import { registerApiCall, clickRadioAndNext, btnClickAndWait, uploadFile, enterC
 
 export const investorFlowProcess = () => {
   cy.visit('/', { failOnStatusCode: false, timeout: 100000 });
-  cy.wait(3000);
   cy.applicationUnlock();
-  cy.wait(1000);
   fillSignUpFormAndProceed();
-  enterCodeAndConfirm();
+  enterCodeAndConfirm('confirmEmail');
   confirmEmailAddressScreen();
   fillLegalFormAndProceed();
-  enterCodeAndConfirm();
+  enterCodeAndConfirm('confirmPhone');
   confirmPhoneNumberScreen();
   completeInvestorProfile();
 };
 
 export const individualManualLinkbankProcess = () => {
   registerApiCall('manualAccount', '/dev/graphql');
-  cy.get('input[name="accType"]').check('0', { force: true });
-  cy.get('button.next').click();
-  cy.wait(2000);
-  cy.get('div.content').get('div.center-align > button.link-button').contains('Or enter it manually').click();
+  cy.get('.dimmer-visible').should('not.be.visible')
+  cy.get('div.content').get('div.center-align > button.link-button').contains('Change link bank account').click();
+  cy.get('div.content').get('div.center-align > button.link-button').contains('Link bank account').click();
   cy.get('input[name="accountNumber"]').type('0000000008');
   cy.get('input[name="routingNumber"]').type('122105278');
   cy.get('input[name="accountType"]').check('SAVINGS', { force: true });
@@ -30,13 +27,18 @@ export const individualManualLinkbankProcess = () => {
   cy.wait('@manualAccount');
 };
 
-export const addFunds = (amount) => {
-  cy.get('form').within(() => {
-    registerApiCall('addFunds', '**/graphql');
-    cy.get('input[name="value"]').type(amount);
-    cy.get('button').contains('Confirm').click();
-    cy.wait('@addFunds');
-  });
+export const addFunds = (amount, doNotDeposit = true) => {
+  registerApiCall('addFunds', '/dev/graphql');
+  if (doNotDeposit) {
+    cy.get('div.content').get('div.center-align > button.link-button').contains('I don’t want to deposit any money now').click();
+  } else {
+    cy.get('form').within(() => {
+      cy.get('input[name="value"]').type(amount);
+      cy.get('button').contains('Confirm').click();
+    });
+  }
+  cy.wait('@addFunds');
+  cy.wait('@addFunds');
 }
 
 export const entityGeneralStep = () => {
@@ -116,7 +118,6 @@ export const entityAccountCreation = () => {
 
 export const iraAccountCreation = () => {
   cy.get('.dimmer-visible').should('not.be.visible')
-  cy.wait(200);
   registerApiCall('upsertInvestorAccount', '/dev/graphql');
   cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
     cy.log('step value', text);
@@ -172,7 +173,10 @@ export const entityFormationDocStep = () => {
   registerApiCall('upsertInvestorAccount');
 }
 
+
 export const individualPlaidProcess = (progressStep, count) => {
+  cy.get('input[name="accType"]').check('0', { force: true });
+  cy.get('button.next').click();
   cy.get('.dimmer-visible').should('not.be.visible')
   cy.get(`.multistep-modal > ol.progtrckr > ${progressStep}`).click({ force: true }).invoke('text').then((step) => {
     cy.log('bank step', step.toUpperCase());
@@ -184,18 +188,17 @@ export const individualPlaidProcess = (progressStep, count) => {
         const $body = $iframe.contents().find('body');
         cy.log('body', $iframe.contents().find('body'));
         let stripe = cy.wrap($body);
-        stripe.find('button').contains('Continue').click({ force: true });
+        stripe.find('button[type="button"]').contains('Continue').click({ force: true });
         stripe = cy.wrap($body);
         stripe.find('input[name="username"]').type('user_good');
         stripe = cy.wrap($body);
-        stripe.find('input[name="password"]').type('pass_good');
+        stripe.find('input[name="password"]').type('pass_good', { force: true });
         stripe = cy.wrap($body);
         stripe.find('button[type="submit"]').click();
-        cy.wait(5000);
         stripe = cy.wrap($body);
-        stripe.find('div.SelectAccountPane__account-list:first').click();
+        stripe.find('div.AccountItem:first').click({ force: true });
         stripe = cy.wrap($body);
-        stripe.find('button').contains('Continue').click();
+        stripe.find('button').contains('Continue').click({ force: true });
         cy.wait('@plaidAccount');
       });
     }

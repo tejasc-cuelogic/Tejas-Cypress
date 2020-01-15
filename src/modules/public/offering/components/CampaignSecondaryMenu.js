@@ -4,7 +4,7 @@ import { Container, Button, Visibility, List } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import Helper from '../../../../helper/utility';
-import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 992;
 
@@ -25,7 +25,7 @@ export default class CampaignSecondaryMenu extends Component {
     const { campaign, campaignStatus } = this.props.campaignStore;
     const {
       isClosed, isInProcessing, collected, maxFlagStatus,
-      countDown, diffForProcessing,
+      countDown, diffForProcessing, isInvestedInOffering,
     } = campaignStatus;
     const { navStatus, subNavStatus } = this.props.navStore;
     const { newLayout } = this.props;
@@ -49,7 +49,7 @@ export default class CampaignSecondaryMenu extends Component {
                 )
             }
               {!isClosed
-                && <Button compact primary={!isInProcessing} content={`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus || isInProcessing} onClick={this.handleInvestNowClick} />
+                && <Button compact primary={!isInProcessing} content={`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : isInvestedInOffering ? 'Change Investment' : 'Invest Now'}`} disabled={maxFlagStatus || isInProcessing} onClick={this.handleInvestNowClick} />
               }
             </List>
             <List size={isMobile && 'tiny'} bulleted={!isMobile} horizontal={!isMobile}>
@@ -63,7 +63,7 @@ export default class CampaignSecondaryMenu extends Component {
                 </List.Header>
               </List.Item>
               {!isMobile
-              && <List.Item>{get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE ? CAMPAIGN_KEYTERMS_SECURITIES.REAL_ESTATE : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? `${get(campaign, 'keyTerms.interestRate') || ''}% Interest Rate` : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ? `${get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : ''} Pre-Money Valuation` : `${get(campaign, 'keyTerms.investmentMultiple') || ''} Investment Multiple`}</List.Item>
+              && <List.Item>{get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE ? 'Commercial Real Estate' : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE ? `${get(campaign, 'keyTerms.valuationCap') || ''} Valuation Cap` : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? `${get(campaign, 'keyTerms.interestRate') || ''}% Interest Rate` : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ? `${get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : ''} Pre-Money Valuation` : `${get(campaign, 'keyTerms.investmentMultiple') || ''} Investment Multiple`}</List.Item>
             }
             </List>
           </Container>

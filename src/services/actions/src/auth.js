@@ -23,6 +23,7 @@ import {
   investmentStore,
   accreditationStore,
   transactionStore,
+  offeringsStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -202,7 +203,7 @@ export class Auth {
       userStore.setCurrentUser(this.parseRoles(this.adjustRoles(idToken.payload)));
       userDetailsStore.getUser(userStore.currentUser.sub).then((data) => {
         if (window.localStorage.getItem('ISSUER_REFERRAL_CODE') && window.localStorage.getItem('ISSUER_REFERRAL_CODE') !== undefined) {
-          commonStore.updateUserReferralCode(userStore.currentUser.sub, window.localStorage.getItem('ISSUER_REFERRAL_CODE')).then(() => {
+          commonStore.updateUserReferralCode(window.localStorage.getItem('ISSUER_REFERRAL_CODE')).then(() => {
             window.localStorage.removeItem('ISSUER_REFERRAL_CODE');
           });
         }
@@ -460,6 +461,7 @@ export class Auth {
     entityAccountStore.resetStoreData();
     bankAccountStore.resetStoreData();
     individualAccountStore.resetStoreData();
+    offeringsStore.resetStoreData();
     portfolioStore.resetPortfolioData();
     userDetailsStore.setPartialInvestmenSession();
     investmentStore.resetData();

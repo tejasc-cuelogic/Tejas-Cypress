@@ -9,6 +9,8 @@ import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
 // import Helper from '../../../../../helper/utility';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @withRouter
 @inject('uiStore', 'portfolioStore', 'campaignStore', 'accountStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
 @observer
@@ -89,6 +91,9 @@ export default class InvestNow extends React.Component {
       this.props.investmentStore.resetData();
       this.props.investmentStore.setByDefaultRender(true);
       this.props.accreditationStore.resetUserAccreditatedStatus();
+      this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
+      this.setState({ isInvestmentUpdate: false });
+      this.props.investmentStore.accTypeChanged(null, { value: this.props.userDetailsStore.currentActiveAccount });
       this.handleStepChnageOnPreviousForAlert();
     }
     this.props.investmentStore.setFieldValue('isGetTransferRequestCall', false);
@@ -103,7 +108,7 @@ export default class InvestNow extends React.Component {
 
   handleStepChnageOnPreviousForAlert = () => {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
-    this.props.accreditationStore.changeShowAccountListFlag(true);
+    this.props.accreditationStore.changeShowAccountListFlag(!this.props.changeInvest);
   }
 
   handleCancel = () => {
@@ -171,12 +176,14 @@ export default class InvestNow extends React.Component {
         selectedAccountStatus,
       } = this.props.accreditationStore;
       changeShowAccountListFlag(false);
-      if (!this.props.accountStore.isAccFrozen(selectedAccountStatus) && userStatus === 'FULL' && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck)) {
+      if (!this.props.accountStore.isAccFrozen(selectedAccountStatus) && userStatus === 'FULL' && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && (['PENDING', 'INACTIVE', 'EXPIRED'].includes(userAccredetiationState))) || userAccredetiationState === undefined || !isRegulationCheck)) {
         this.props.investmentLimitStore
           .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
           .then((resp) => {
             const isDocumentUpload = get(resp, 'investNowHealthCheck.availabilityForNPAInOffering');
             if (!isDocumentUpload) {
+              this.handleStepChangeForPartialAccounts(0);
+            } else if (['INACTIVE', 'EXPIRED'].includes(userAccredetiationState)) {
               this.handleStepChangeForPartialAccounts(0);
             } else {
               this.handleStepChange(step.stepToBeRendered);
@@ -190,6 +197,12 @@ export default class InvestNow extends React.Component {
       changeShowAccountListFlag(false);
       this.handleStepChangeForPartialAccounts(0);
     }
+  }
+
+  handleSubmitStep = () => { // only for mobile screens
+    const { stepToBeRendered } = this.props.investmentStore;
+    const { multiSteps } = this.props.uiStore;
+    this.multiClickHandler(multiSteps[stepToBeRendered]);
   }
 
   render() {
@@ -208,7 +221,7 @@ export default class InvestNow extends React.Component {
       this.setState({ isInvestmentUpdate: true });
     }
     const {
-      inProgress,
+      inProgress, setFieldvalue,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
@@ -221,8 +234,13 @@ export default class InvestNow extends React.Component {
           changeInvest={changeInvest}
           cancel={this.handleMultiStepModalclose}
           inProgress={inProgress}
+          submitStep={this.handleSubmitStep}
+          disableContinueButton={!this.props.investmentStore.disableNextbtn}
+          isFromPublicPage={this.state.isInvestmentUpdate}
         />,
         isValid: '',
+        disableNextButton: changeInvest,
+        disablePrevButton: changeInvest,
         stepToBeRendered: 1,
         isDirty: true,
       },
@@ -233,6 +251,8 @@ export default class InvestNow extends React.Component {
           changeInvest={changeInvest || this.state.isInvestmentUpdate}
           offeringDetails={this.state.isInvestmentUpdate && campaign}
           isFromPublicPage={this.state.isInvestmentUpdate}
+          submitStep={this.handleSubmitStep}
+          disableContinueButton={!this.props.investmentStore.disableNextbtn}
         />,
         isValid: '',
         stepToBeRendered: 2,
@@ -245,6 +265,7 @@ export default class InvestNow extends React.Component {
           offeringSecurityType={securityType}
           confirm={this.handleConfirm}
           cancel={this.handleCancel}
+          refLink={this.props.refLink}
         />,
         isValid: '',
         onlyDisableNextButton: true,
@@ -252,6 +273,7 @@ export default class InvestNow extends React.Component {
     ];
     const isMultiStepButtonsVisible = !!showAccountList && multipleAccountExsists;
     const closeOnDimmerClickAction = false;
+    this.props.investmentStore.setFieldValue('disablePrevButton', true);
     return (
       <div className="step-progress">
         {
@@ -265,7 +287,7 @@ export default class InvestNow extends React.Component {
             disableNxtbtn={this.props.investmentStore.disableNextbtn}
             isEnterPressed={isEnterPressed}
             resetEnterPressed={resetIsEnterPressed}
-            hideHeader
+            hideHeader={!isMobile}
             setStepTobeRendered={this.handleStepChange}
             setStepTobeRenderedForAlert={this.handleStepChnageOnPreviousForAlert}
             stepToBeRendered={this.props.investmentStore.stepToBeRendered}
@@ -274,6 +296,7 @@ export default class InvestNow extends React.Component {
             handleMultiStepModalclose={this.handleMultiStepModalclose}
             isStepButtonsVisible={isMultiStepButtonsVisible}
             closeOnDimmerClick={closeOnDimmerClickAction}
+            setUiStorevalue={setFieldvalue}
           />
         }
       </div>

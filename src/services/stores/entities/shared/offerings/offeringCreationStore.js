@@ -25,6 +25,7 @@ import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
 import { INDUSTRY_TYPES } from '../../../../../constants/offering';
 import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../../constants/common';
+import { US_STATES } from '../../../../../constants/account';
 
 export class OfferingCreationStore {
   @observable NEW_OFFER_FRM = Validator.prepareFormObject(NEW_OFFER);
@@ -118,6 +119,8 @@ export class OfferingCreationStore {
   @observable initLoad = [];
 
   @observable currentOfferingId = null;
+
+  @observable currentOfferingSlug = null;
 
   @observable issuerOfferingBac = {};
 
@@ -862,7 +865,7 @@ export class OfferingCreationStore {
 
   @action
   setAddressFields = (place, index) => {
-    Validator.setAddressFieldsIndex(place, this.LEADERSHIP_FRM, 'LEADERSHIP_FRM', 'leadership', index);
+    Validator.setAddressFieldsIndex(place, this.LEADERSHIP_FRM, 'LEADERSHIP_FRM', 'leadership', index, true, US_STATES);
   }
 
 
@@ -899,7 +902,7 @@ export class OfferingCreationStore {
       this.KEY_TERMS_FRM.fields.regulation.value = offer.regulation;
     }
     if (form === 'COMPANY_LAUNCH_FRM' && get(offer, 'goldstar')) {
-      ['contactId', 'esAccountNumber', 'isin', 'sfAccountNumber'].forEach((f) => {
+      ['contactId', 'esAccountNumber', 'isin', 'sfAccountNumber', 'esAccountNumberRegD', 'isinRegD', 'sfAccountNumberRegD'].forEach((f) => {
         this.COMPANY_LAUNCH_FRM.fields[f].value = get(offer, `goldstar.${f}`);
       });
     }

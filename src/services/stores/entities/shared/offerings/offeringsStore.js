@@ -2,7 +2,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
-import { pickBy, mapValues, values, map, sortBy, remove, findIndex, get, includes } from 'lodash';
+import { pickBy, mapValues, values, map, sortBy, remove, findIndex, get, includes, orderBy } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../../api/publicApi';
 import { STAGES } from '../../../../constants/admin/offerings';
@@ -10,7 +10,7 @@ import {
   allOfferings, allOfferingsCompact, updateOffering,
   deleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings,
 } from '../../../queries/offerings/manage';
-import { offeringCreationStore, userStore, uiStore } from '../../../index';
+import { offeringCreationStore, userStore, uiStore, campaignStore } from '../../../index';
 import { ClientDb, DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -50,6 +50,8 @@ export class OfferingsStore {
 
   @observable totalRaisedAmount = [];
 
+  @observable orderedActiveLiveList = [];
+
   @action
   initRequest = (props, forceResetDb = false) => {
     const {
@@ -68,6 +70,9 @@ export class OfferingsStore {
           this.requestState.page = 1;
           this.requestState.skip = 0;
           this.setDb(res.getOfferings, stage);
+          if (stage === 'live') {
+            this.orderedActiveListArr();
+          }
         }
       },
       onError: (err) => {
@@ -84,6 +89,7 @@ export class OfferingsStore {
 
   @action
   updateOfferingPublicaly = (id, isAvailablePublicly) => {
+    const { stage } = this.requestState;
     uiStore.addMoreInProgressArray('publish');
     const variables = {
       id,
@@ -95,7 +101,7 @@ export class OfferingsStore {
         variables,
       }).then(() => {
         uiStore.removeOneFromProgressArray('publish');
-        this.changePublicFlagForOffer(id, isAvailablePublicly);
+        this.changePublicFlagForOffer(id, isAvailablePublicly, stage);
         Helper.toast('Offering updated successfully.', 'success');
       }).catch(() => {
         uiStore.removeOneFromProgressArray('publish');
@@ -148,6 +154,9 @@ export class OfferingsStore {
     } else {
       this.setDb(this.allOfferingsList);
     }
+    if (this.requestState.stage === 'live') {
+      this.orderedActiveListArr();
+    }
   }
 
   @action
@@ -178,7 +187,7 @@ export class OfferingsStore {
   }
 
   @action
-  changePublicFlagForOffer = (id, isAvailablePublicly) => {
+  changePublicFlagForOffer = (id, isAvailablePublicly, stage) => {
     const db = { ...toJS(this.db) };
     const offer = db[this.requestState.stage].find(o => o.id === id);
     offer.isAvailablePublicly = isAvailablePublicly;
@@ -187,6 +196,9 @@ export class OfferingsStore {
     const offerInData = data[this.requestState.stage].data.getOfferings.find(o => o.id === id);
     offerInData.isAvailablePublicly = isAvailablePublicly;
     this.data = { ...data };
+    if (stage && stage === 'live') {
+      this.orderedActiveListArr();
+    }
   }
 
   @action
@@ -205,6 +217,9 @@ export class OfferingsStore {
       remove(data.overview.data.getOfferings, i => i.id === id);
     }
     this.data = { ...data };
+    if (stage === 'live') {
+      this.orderedActiveListArr();
+    }
   }
 
   @action
@@ -243,6 +258,9 @@ export class OfferingsStore {
         db[this.requestState.stage][offerIndex] = { ...db[this.requestState.stage][offerIndex], ...payload };
         ClientDb.initiateDb(db);
         this.db = { ...db };
+        if (this.requestState.stage === 'live') {
+          this.orderedActiveListArr();
+        }
       }
       if (offerIndexInData !== -1) {
         data[this.requestState.stage].data.getOfferings[offerIndexInData] = { ...data[this.requestState.stage].data.getOfferings[offerIndexInData], ...payload };
@@ -273,7 +291,6 @@ export class OfferingsStore {
         setFormData('OFFERING_DETAILS_FRM', false);
         setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
         setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
-        // offeringCreationStore.resetInitLoad();
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -282,7 +299,7 @@ export class OfferingsStore {
   }
 
   @action
-  setOrderForOfferings = (newArr, stage) => {
+  setOrderForOfferings = (newArr, stage, isMerge = false, indexVal) => {
     const offeringOrderDetails = [];
     newArr.forEach((item, index) => {
       offeringOrderDetails.push({
@@ -292,7 +309,11 @@ export class OfferingsStore {
       // eslint-disable-next-line no-param-reassign
       newArr[index].order = index + 1;
     });
-    this.setDb(newArr);
+    if (isMerge) {
+      this.orderedActiveLiveList[indexVal].offerings = newArr;
+    } else {
+      this.setDb(newArr);
+    }
     client
       .mutate({
         mutation: setOrderForOfferings,
@@ -324,12 +345,19 @@ export class OfferingsStore {
 
   @computed get allOfferingsSorted() {
     return this.db[this.requestState.stage]
-    && this.db[this.requestState.stage].length ? toJS(sortBy(this.db[this.requestState.stage], ['order'])) : [];
+      && this.db[this.requestState.stage].length ? toJS(sortBy(this.db[this.requestState.stage], ['order'])) : [];
+  }
+
+  @action
+  orderedActiveListArr = () => {
+    const liveOfferingList = this.db.live
+      && this.db.live.length ? toJS(this.db.live) : [];
+    this.orderedActiveLiveList = campaignStore.generateBanner(liveOfferingList, true, true);
   }
 
   @computed get allOfferings() {
     return this.db[this.requestState.stage]
-    && this.db[this.requestState.stage].length ? this.db[this.requestState.stage] : [];
+      && this.db[this.requestState.stage].length ? this.db[this.requestState.stage] : [];
   }
 
   @computed get offerings() {
@@ -337,6 +365,13 @@ export class OfferingsStore {
     return (list && list.length
       && list
         .slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+  }
+
+  @computed get issuerOfferings() {
+    const list = toJS(this.db[this.requestState.stage]);
+    const offeringList = list && list.length ? list : [];
+    const offeringListResult = this.orderedOfferingList(offeringList);
+    return offeringListResult;
   }
 
   @action
@@ -374,6 +409,15 @@ export class OfferingsStore {
     this.initLoad = [];
   }
 
+  @action
+  resetStoreData = () => {
+    this.data = {};
+    this.offerData = {};
+    this.oldOfferData = {};
+    this.db = {};
+    this.initLoad = [];
+  }
+
   @computed get closingBinderDocs() {
     const closingBinder = get(this.offer, 'closingBinder') || [];
     const filteredData = closingBinder.filter(c => c.aliasAccreditedOnly).map(c => ({ name: c.name, documentId: get(c, 'upload.fileHandle.boxFileId') }));
@@ -397,6 +441,42 @@ export class OfferingsStore {
     offerStatus.offeringLiveTitle = offerStatus.diff < 0 || offerStatus.diffForProcessing.value === 0 ? 'Close Date' : offerStatus.diffForProcessing.value < 48 ? `${offerStatus.diffForProcessing.label} Till Close` : 'Days Till Close';
     offerStatus.offeringLiveContent = closeDate ? offerStatus.diff < 0 || offerStatus.diffForProcessing.value === 0 ? closeDate : offerStatus.diffForProcessing.value < 48 ? `${offerStatus.diffForProcessing.value} ${offerStatus.diffForProcessing.label}` : DataFormatter.diffInDaysHoursMin(closeDate).diffText : 'N/A';
     return offerStatus;
+  }
+
+  orderedOfferingList = (offeringDetailsList) => {
+    let offeringCreationArr = [];
+    let offeringLiveArr = [];
+    let offeringStartupArr = [];
+    let offeringCompletedArr = [];
+    let offeringFaildArr = [];
+
+    offeringDetailsList.map((offeringDetails) => {
+      if (offeringDetails.stage === 'CREATION') {
+        return offeringCreationArr.push(offeringDetails);
+      } if (offeringDetails.stage === 'LIVE') {
+        return offeringLiveArr.push(offeringDetails);
+      } if (offeringDetails.stage === 'STARTUP_PERIOD') {
+        return offeringStartupArr.push(offeringDetails);
+      } if (offeringDetails.stage === 'COMPLETE') {
+        return offeringCompletedArr.push(offeringDetails);
+      }
+      return offeringFaildArr.push(offeringDetails);
+    });
+
+    offeringCreationArr = orderBy(offeringCreationArr, ['keyTerms.shorthandBusinessName'], ['asc']);
+    offeringLiveArr = orderBy(offeringLiveArr, ['keyTerms.shorthandBusinessName'], ['asc']);
+    offeringStartupArr = orderBy(offeringStartupArr, ['keyTerms.shorthandBusinessName'], ['asc']);
+    offeringCompletedArr = orderBy(offeringCompletedArr, ['keyTerms.shorthandBusinessName'], ['asc']);
+    offeringFaildArr = orderBy(offeringFaildArr, ['keyTerms.shorthandBusinessName'], ['asc']);
+
+    const sortedResultObject = [
+      ...offeringCreationArr,
+      ...offeringLiveArr,
+      ...offeringStartupArr,
+      ...offeringCompletedArr,
+      ...offeringFaildArr,
+    ];
+    return sortedResultObject;
   }
 }
 

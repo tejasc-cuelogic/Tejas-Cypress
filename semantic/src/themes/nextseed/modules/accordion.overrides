@@ -231,8 +231,17 @@
 			&.categories-acc {
 				padding: @30px @40px;
 			}
+			.ui.header.investment-list{
+				margin: 0 0 @14px 75px;
+				padding-top: @14px;
+			}
 		}
-
+		&.portfolio-list .title{
+			font-size: @16px;
+			>.icon{
+				margin-right: @40px;
+			}
+		}
 	}
 	.row-wrap:last-child{
 		border-radius:0 0 @styledBorderRadius @styledBorderRadius;
@@ -304,6 +313,7 @@
 			border-top: 0;
 			color: @neutral-middark;
 			background: @neutral-offwhite;
+			font-size: @15px;
 			&.active, &:hover {
 				color: @primary-one;
 				font-weight: @bold;

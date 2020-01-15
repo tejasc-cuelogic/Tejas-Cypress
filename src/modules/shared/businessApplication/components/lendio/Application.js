@@ -40,7 +40,7 @@ export default class Application extends Component {
         } = data;
         const { params } = this.props.match;
         const redirectParam = (status === LENDIO.LENDIO_SUCCESS) ? 'yes' : 'no';
-        const redirectUrl = this.props.isPublic ? `/business-application/${params.applicationType}/${params.id}/lendio/${redirectParam}` : `/app/business-application/${params.applicationType}/${params.id}/lendio/${redirectParam}`;
+        const redirectUrl = this.props.isPublic ? `/business-application/${params.applicationType}/${params.id}/lendio/${redirectParam}` : `/dashboard/business-application/${params.applicationType}/${params.id}/lendio/${redirectParam}`;
         this.props.history.push(redirectUrl);
         this.props.businessAppLendioStore.setLendioUrl(url);
       })

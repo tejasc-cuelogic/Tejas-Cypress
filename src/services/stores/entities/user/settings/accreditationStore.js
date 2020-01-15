@@ -1,10 +1,10 @@
 /* eslint-disable radix */
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize, findKey, includes, get } from 'lodash';
+import { forEach, isArray, find, forOwn, filter, capitalize, findKey, includes, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
-import { INCOME_QAL, INCOME_EVIDENCE, NETWORTH_QAL, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION, ACCREDITATION_EXPIRY } from '../../../../constants/investmentLimit';
+import { INCOME_QAL, INCOME_EVIDENCE, NETWORTH_QAL, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION, ACCREDITATION_EXPIRY, FILLING_STATUS } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -14,6 +14,7 @@ import { userAccreditationQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
 import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS, ACCREDITATION_SORT_ENUMS } from '../../../../constants/accreditation';
 import { FILTER_META, CONFIRM_ACCREDITATION } from '../../../../constants/accreditationRequests';
+import { CURR_YEAR } from '../../../../../constants/common';
 
 export class AccreditationStore {
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
@@ -32,6 +33,8 @@ export class AccreditationStore {
 
   @observable ACCREDITATION_FORM = Validator.prepareFormObject(INCOME_QAL);
 
+  @observable FILLING_STATUS_FORM = Validator.prepareFormObject(FILLING_STATUS);
+
   @observable VERIFICATION_REQUEST_FORM = Validator.prepareFormObject(VERIFICATION_REQUEST);
 
   @observable INCOME_UPLOAD_DOC_FORM = Validator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
@@ -44,7 +47,7 @@ export class AccreditationStore {
 
   @observable removeFileIdsList = [];
 
-  @observable stepToBeRendered = '';
+  @observable stepToBeRendered = 0;
 
   @observable filters = false;
 
@@ -62,6 +65,8 @@ export class AccreditationStore {
     },
   };
 
+  @observable isFilingAllowed = (new Date() < new Date(`04/16/${CURR_YEAR}`));
+
   @observable data = [];
 
   @observable accreditaionMethod = null;
@@ -69,6 +74,8 @@ export class AccreditationStore {
   @observable accreditationDetails = {};
 
   @observable userAccredetiationState = null;
+
+  @observable accountAccreditationStatus = null;
 
   @observable selectedAccountStatus = undefined;
 
@@ -229,7 +236,7 @@ export class AccreditationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '', accountId) => {
+  setFileUploadData = (form, field, files, accountType, accreditationMethod = '', actionValue = '', targetUserId = '') => {
     const stepName = this.getFileUploadEnum(accountType, accreditationMethod);
     const tags = [accreditationMethod];
     if (accreditationMethod === 'Income') {
@@ -246,8 +253,9 @@ export class AccreditationStore {
             fileUpload.putUploadedFileOnS3({
               preSignedUrl, fileData: file, fileType: fileData.fileType,
             }).then(() => {
-              this.updateAccreditation(form, accountId, accountType.toUpperCase()).then(() => {
+              this.updateAccreditation(form, accountType.toUpperCase()).then(() => {
                 this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
+                this.checkFormValid(form, false, false);
               });
             }).catch(() => {
               Helper.toast('Something went wrong, please try again later.', 'error');
@@ -309,7 +317,7 @@ export class AccreditationStore {
         }).catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
-          reject();
+          reject(error);
         });
       });
     } else {
@@ -318,7 +326,8 @@ export class AccreditationStore {
   });
 
   @action
-  removeUploadedData = (form, field, index = null, accountType, accountId) => {
+  removeUploadedData = (form, field, index = null, accountType) => {
+    const accountId = userDetailsStore.getIdByAccountType(accountType.toLowerCase());
     let removeFileId = '';
     if (index != null) {
       const fileId = this[form].fields[field].fileId.splice(index, 1);
@@ -332,12 +341,9 @@ export class AccreditationStore {
       this.setFormFileArray(form, field, 'value', '');
       this.setFormFileArray(form, field, 'preSignedUrl', '');
     }
-    if (form === 'INCOME_UPLOAD_DOC_FORM') {
-      this[form].fields.isAccepted.value = [];
-    }
     if (accountType && accountId) {
       fileUpload.removeUploadedData(removeFileId).then(() => {
-        this.updateAccreditation(form, accountId, accountType.toUpperCase()).then(() => {
+        this.updateAccreditation(form, accountType.toUpperCase()).then(() => {
           this.setFormFileArray(form, field, 'showLoader', false);
         }).catch(() => {
           Helper.toast('Something went wrong, please try again later.', 'error');
@@ -349,13 +355,14 @@ export class AccreditationStore {
     }
     this.setFormFileArray(form, field, 'error', undefined);
     this.setFormFileArray(form, field, 'showLoader', false);
+    this.checkFormValid(form, false, false);
   }
 
   @action
   setFormFileArray = (formName, field, getField, value, scope) => {
     if (scope !== 'Admin' && getField === 'showLoader') {
       this.setFieldVal('showLoader', value);
-    } else if (formName === 'ASSETS_UPLOAD_DOC_FORM' && field === 'statementDoc' && getField !== 'showLoader' && getField !== 'error') {
+    } else if ((formName === 'ASSETS_UPLOAD_DOC_FORM' || formName === 'INCOME_UPLOAD_DOC_FORM') && getField !== 'showLoader' && getField !== 'error') {
       this[formName].fields[field][getField].push(value);
     } else {
       this[formName].fields[field][getField] = value;
@@ -383,7 +390,7 @@ export class AccreditationStore {
 
   @action
   resetAllForms = () => {
-    const forms = ['NETWORTH_QAL_FORM', 'ACCREDITATION_FORM', 'FILTER_FRM', 'CONFIRM_ACCREDITATION_FRM', 'ENTITY_ACCREDITATION_FORM', 'INCOME_EVIDENCE_FORM', 'TRUST_ENTITY_ACCREDITATION_FRM', 'VERIFICATION_REQUEST_FORM', 'INCOME_UPLOAD_DOC_FORM', 'ASSETS_UPLOAD_DOC_FORM', 'NET_WORTH_FORM'];
+    const forms = ['NETWORTH_QAL_FORM', 'FILLING_STATUS_FORM', 'ACCREDITATION_FORM', 'FILTER_FRM', 'CONFIRM_ACCREDITATION_FRM', 'ENTITY_ACCREDITATION_FORM', 'INCOME_EVIDENCE_FORM', 'TRUST_ENTITY_ACCREDITATION_FRM', 'VERIFICATION_REQUEST_FORM', 'INCOME_UPLOAD_DOC_FORM', 'ASSETS_UPLOAD_DOC_FORM', 'NET_WORTH_FORM'];
     forms.forEach((formName) => {
       Validator.resetFormData(this[formName]);
     });
@@ -469,6 +476,7 @@ export class AccreditationStore {
       ASSETS_UPLOAD_DOC_FORM: [4, 6, 8, 10],
       INCOME_UPLOAD_DOC_FORM: [2, 12],
       ENTITY_ACCREDITATION_FORM: [],
+      FILLING_STATUS_FORM: [],
       TRUST_ENTITY_ACCREDITATION_FRM: [7, 8, 9, 10, 11, 12],
     };
     const formList = [];
@@ -530,8 +538,9 @@ export class AccreditationStore {
   }
 
   @action
-  updateAccreditation = (form, accountId, accountType, formType = 0) => {
+  updateAccreditation = (form, accountType, formType = 0) => {
     uiStore.setProgress();
+    const accountId = userDetailsStore.getIdByAccountType(accountType.toLowerCase());
     let hasVerifier = null;
     let userAccreditationDetails = '';
     if (form === 'ENTITY_ACCREDITATION_FORM') {
@@ -542,6 +551,9 @@ export class AccreditationStore {
       userAccreditationDetails = Validator.evaluateFormData(this[form].fields);
     }
     if (form === 'INCOME_UPLOAD_DOC_FORM' || form === 'ASSETS_UPLOAD_DOC_FORM') {
+      if (!userAccreditationDetails.estimateIncome) {
+        delete userAccreditationDetails.estimateIncome;
+      }
       const fileUploadData = userAccreditationDetails.assetsUpload;
       userAccreditationDetails.assetsUpload = [];
       forEach(fileUploadData, (file, key) => {
@@ -550,6 +562,13 @@ export class AccreditationStore {
           fileObj.type = UPLOAD_ASSET_ENUMS[key];
           fileObj.fileInfo = file;
           userAccreditationDetails.assetsUpload.push(fileObj);
+        } else if (Array.isArray(file)) {
+          file.forEach((f) => {
+            const fileObj = {};
+            fileObj.type = UPLOAD_ASSET_ENUMS[key];
+            fileObj.fileInfo = f;
+            userAccreditationDetails.assetsUpload.push(fileObj);
+          });
         }
       });
       this.VERIFICATION_REQUEST_FORM = Validator.prepareFormObject(VERIFICATION_REQUEST);
@@ -561,11 +580,14 @@ export class AccreditationStore {
     }
     if (formType && (form === 'INCOME_UPLOAD_DOC_FORM' || form === 'ASSETS_UPLOAD_DOC_FORM' || form === 'VERIFICATION_REQUEST_FORM')) {
       userAccreditationDetails.isPartialProfile = !this.isAllFormValidCheck(this.formType(formType));
+    } else if (form === 'FILLING_STATUS_FORM') {
+      userAccreditationDetails = {};
+      userAccreditationDetails.filingStatus = this.FILLING_STATUS_FORM.fields.method.value;
+      userAccreditationDetails.isPartialProfile = true;
     } else {
       userAccreditationDetails.isPartialProfile = true;
     }
     const payLoad = {
-      id: userDetailsStore.currentUserId,
       accountId,
       accountType,
       userAccreditationDetails,
@@ -575,9 +597,6 @@ export class AccreditationStore {
     }
     const refetchQueries = formType ? [{
       query: userAccreditationQuery,
-      variables: {
-        userId: userDetailsStore.currentUserId,
-      },
     }] : [];
     return new Promise((resolve, reject) => {
       client
@@ -630,7 +649,7 @@ export class AccreditationStore {
           });
       }).catch((error) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        uiStore.setErrors(error.message);
+        uiStore.setErrors(error ? error.message : '');
         reject();
         uiStore.setProgress(false);
       });
@@ -643,21 +662,18 @@ export class AccreditationStore {
       this.INCOME_UPLOAD_DOC_FORM = Validator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
       this.ASSETS_UPLOAD_DOC_FORM = Validator.prepareFormObject(ASSETS_UPLOAD_DOCUMENTS);
       if (filesData) {
-        this.INCOME_UPLOAD_DOC_FORM.fields.isAccepted.value = ['ACCEPTED'];
+        this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling.value = ['ACCEPTED'];
+        this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling.value = ['ACCEPTED'];
         this.ASSETS_UPLOAD_DOC_FORM.fields.isAccepted.value = ['ACCEPTED'];
       }
       forEach(filesData, (file) => {
         const field = findKey(UPLOAD_ASSET_ENUMS, obj => obj === file.type);
         if (file.fileInfo) {
-          if (file.type === 'ASSETS') {
-            forEach(file.fileInfo, (f) => {
-              this.ASSETS_UPLOAD_DOC_FORM.fields[field].fileId.push(f.fileId);
-              this.ASSETS_UPLOAD_DOC_FORM.fields[field].value.push(f.fileName);
-            });
-          } else {
-            this.INCOME_UPLOAD_DOC_FORM.fields[field].fileId = file.fileInfo && file.fileInfo.length && file.fileInfo[0].fileId;
-            this.INCOME_UPLOAD_DOC_FORM.fields[field].value = file.fileInfo && file.fileInfo.length && file.fileInfo[0].fileName;
-          }
+          forEach(file.fileInfo, (f) => {
+            const formName = file.type.includes('INCOME') ? 'INCOME_UPLOAD_DOC_FORM' : 'ASSETS_UPLOAD_DOC_FORM';
+            this[formName].fields[field].fileId.push(f.fileId);
+            this[formName].fields[field].value.push(f.fileName);
+          });
         }
       });
     }
@@ -698,30 +714,28 @@ export class AccreditationStore {
     if (setInProgressArray) {
       uiStore.addMoreInProgressArray('getUserAccreditation');
     }
-    if (userId || userDetailsStore.currentUserId) {
-      this.userData = graphql({
-        client,
-        query: userAccreditationQuery,
-        fetchPolicy: 'network-only',
-        variables: { userId: userId || userDetailsStore.currentUserId },
-        onFetch: () => {
-          if (!this.userData.loading) {
-            if (setInProgressArray) {
-              uiStore.removeOneFromProgressArray('getUserAccreditation');
-            }
-            uiStore.setProgress(false);
-            res();
-          }
-        },
-        onError: () => {
-          uiStore.setProgress(false);
+    this.userData = graphql({
+      client,
+      query: userAccreditationQuery,
+      fetchPolicy: 'network-only',
+      variables: userId ? { userId } : { },
+      onFetch: () => {
+        if (!this.userData.loading) {
           if (setInProgressArray) {
             uiStore.removeOneFromProgressArray('getUserAccreditation');
           }
-          Helper.toast('Something went wrong, please try again later.', 'error');
-        },
-      });
-    }
+          uiStore.setProgress(false);
+          res();
+        }
+      },
+      onError: () => {
+        uiStore.setProgress(false);
+        if (setInProgressArray) {
+          uiStore.removeOneFromProgressArray('getUserAccreditation');
+        }
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
   })
 
   @action
@@ -735,9 +749,6 @@ export class AccreditationStore {
           variables: payLoad,
           refetchQueries: [{
             query: userAccreditationQuery,
-            variables: {
-              userId: userDetailsStore.currentUserId,
-            },
           }],
         })
         .then(() => {
@@ -781,6 +792,13 @@ export class AccreditationStore {
       }
     } else {
       this.setFileFormData(appData.accreditation && appData.accreditation.assetsUpload);
+      if (appData.accreditation.filingStatus !== null) {
+        this.FILLING_STATUS_FORM.fields.method.value = appData.accreditation.filingStatus;
+      }
+      if (!this.isFilingAllowed) {
+        this.FILLING_STATUS_FORM.fields.method.value = true;
+      }
+      this.INCOME_UPLOAD_DOC_FORM.fields.estimateIncome.value = appData.accreditation.estimateIncome;
       this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ASSETS_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ENTITY_ACCREDITATION_FORM', false, false);
@@ -821,22 +839,6 @@ export class AccreditationStore {
     return false;
   }
 
-  // Not usable below function, check and remove
-  @action
-  accreditatedAccounts = () => {
-    const aggreditationDetails = this.accreditationData;
-    const inactiveResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === null));
-    const pendingResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'REQUESTED'));
-    const notEligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'DECLINED'));
-    const eligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'CONFIRMED'));
-    const expiredResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && (a.status === 'EXPIRED' || this.checkIsAccreditationExpired(a.expiration) === 'EXPIRED')));
-    this.accreditationDetails.inactiveAccreditation = inactiveResult;
-    this.accreditationDetails.pendingAccreditation = pendingResult;
-    this.accreditationDetails.notEligibleAccreditation = notEligibalResult;
-    this.accreditationDetails.eligibleAccreditation = eligibalResult;
-    this.accreditationDetails.expiredAccreditation = expiredResult;
-  }
-
   getKeyResult = (dataObj) => {
     const resultArr = [];
     if (dataObj) {
@@ -871,6 +873,7 @@ export class AccreditationStore {
         ? (currentAcitveObject.status === 'EXPIRED' || this.checkIsAccreditationExpired(currentAcitveObject.expiration)
           === 'EXPIRED') ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' && currentAcitveObject && currentAcitveObject.status && includes(validAccreditationStatus, currentAcitveObject.status) ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
       investmentType = regulationType && regulationType === 'BD_CF_506C' && accountStatus !== 'EXPIRED' && currentAcitveObject && currentAcitveObject.status && includes(['REQUESTED', 'CONFIRMED'], currentAcitveObject.status) ? 'BD_506C' : regulationType && regulationType === 'BD_506C' ? 'BD_506C' : regulationType && regulationType === 'BD_506B' ? 'BD_506B' : 'CF';
+      this.setFieldVal('accountAccreditationStatus', accountStatus);
       switch (accountStatus) {
         case 'REQUESTED':
           this.setFieldVal('userAccredetiationState', 'PENDING');
@@ -913,9 +916,12 @@ export class AccreditationStore {
       partialAccounts,
       processingAccounts,
     } = userDetailsStore.signupStatus;
-    const { details } = userDetailsStore.userDetails.roles.find(r => r.name === selectedAccount);
+    if (!userDetailsStore.userDetails.roles) {
+      return '';
+    }
     let accountStatusFound = '';
     if (selectedAccount) {
+      const { details } = userDetailsStore.userDetails.roles.find(r => r.name === selectedAccount);
       const activeArr = activeAccounts.length
         ? filter(activeAccounts, o => o === selectedAccount) : activeAccounts;
       const frozenArr = frozenAccounts.length
@@ -939,29 +945,6 @@ export class AccreditationStore {
       accountStatusFound = 'PARTIAL';
     }
     return accountStatusFound;
-  }
-
-  // Not usable below function, check and remove
-  @action
-  validInvestmentAccounts = () => {
-    const { eligibleAccreditation, pendingAccreditation } = this.accreditationDetails;
-    let validAccreditedArr = [];
-    const investAccountArr = investmentStore.investAccTypes.values;
-    let resultArr = [];
-    if (this.userAccredetiationState === 'ELGIBLE' && eligibleAccreditation.length) {
-      validAccreditedArr = [...eligibleAccreditation];
-    } else if (this.userAccredetiationState === 'PENDING' && pendingAccreditation.length) {
-      validAccreditedArr = [...pendingAccreditation];
-    }
-    if (validAccreditedArr
-      && validAccreditedArr.length
-      && investmentStore.investAccTypes.values.length) {
-      forEach(validAccreditedArr, (account) => {
-        const tempArr = remove(investAccountArr, { value: account });
-        resultArr = [...resultArr, ...tempArr];
-      });
-      investmentStore.investAccTypes.values = resultArr;
-    }
   }
 
   @action
@@ -990,7 +973,7 @@ export class AccreditationStore {
     if (expirationDate) {
       const date = (isUnix && typeof expirationDate === 'string') ? parseInt(expirationDate) : expirationDate;
       dateDiff = DataFormatter.getDateDifferenceInHoursOrMinutes(DataFormatter.formatedDate(date, isUnix), true);
-      return dateDiff < 0 ? 'EXPIRED' : 'ACTIVE';
+      return dateDiff <= 0 ? 'EXPIRED' : 'ACTIVE';
     }
     return dateDiff;
   }
@@ -1010,13 +993,7 @@ export class AccreditationStore {
     this.showAccountList = statusValue;
   }
 
-  pendingStepForAccreditation = (selectedAccountName) => {
-    const userCreatedAccountList = userDetailsStore.userDetails.roles;
-    const selectedAccountDetails = find(userCreatedAccountList, { name: selectedAccountName });
-    const selectedAccountId = selectedAccountDetails.details.accountId;
-    const urlToReturn = selectedAccountName === 'entity' ? `/app/account-settings/investment-limits/verify-entity-accreditation/${selectedAccountId}/entity` : `/app/account-settings/investment-limits/verify-accreditation/${selectedAccountId}/${selectedAccountName}`;
-    return urlToReturn;
-  }
+  pendingStepForAccreditation = selectedAccountName => (`/dashboard/account-settings/investment-limits/verify-accreditation/${selectedAccountName}`);
 
   offeringAccreditatoinStatusMessage = (
     currentStatus, accreditedStatus, isRegulationCheck = false,
@@ -1135,6 +1112,20 @@ export class AccreditationStore {
     this.sortOrder.column = column;
     this.sortOrder.direction = direction;
     this.initRequest();
+  }
+
+  @action
+  changeRuleAsPerFilingStatus = (isFilingTrue) => {
+    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling.rule = isFilingTrue ? 'optional' : 'required';
+    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling.rule = isFilingTrue ? 'required' : 'optional';
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.rule = isFilingTrue ? 'optional' : 'required';
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.rule = isFilingTrue ? 'required' : 'optional';
+    this.INCOME_UPLOAD_DOC_FORM.fields.estimateIncome.rule = isFilingTrue ? 'required' : 'optional';
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.skipField = isFilingTrue;
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.skipField = !isFilingTrue;
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value = isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value;
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.value = !isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.value;
+    this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
   }
 }
 export default new AccreditationStore();

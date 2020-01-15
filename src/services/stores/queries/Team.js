@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const allTeamMembers = gql`
-  query _getMembers {
+  query getMembers {
     teamMembers {
       id
       memberName
@@ -78,24 +78,6 @@ export const editTeamMember = gql`
       }
       order
       isPublished
-    }
-  }
-`;
-
-export const filteredTeamMembers = gql`
-  query filterTeamMemberByMemberName ($memberName: String){
-    filterTeamMemberByMemberName (memberName: $memberName){
-      id
-      memberName
-      avatar
-      story
-      title
-      heroImage
-      social {
-        type
-        url
-      }
-      order
     }
   }
 `;

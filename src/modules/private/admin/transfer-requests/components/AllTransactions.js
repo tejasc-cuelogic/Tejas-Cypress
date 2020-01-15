@@ -46,9 +46,9 @@ export default class AllTransactions extends Component {
     <span className="user-name">
       {userId !== undefined
         ? (
-        <Link to={`/app/users/${userId}/profile-data`}>
-          {`${info ? info.firstName : ''} ${info ? info.lastName : ''}`}
-        </Link>
+          <Link onClick={() => sessionStorage.setItem('userDetailsRefUrl', this.props.match.url)} to={`/dashboard/users/${userId}/profile-data`}>
+            {`${info ? info.firstName : ''} ${info ? info.lastName : ''}`}
+          </Link>
         ) : ''}
     </span>
   )
@@ -57,7 +57,7 @@ export default class AllTransactions extends Component {
 
   render() {
     const { transactionsStore, match, accountStore } = this.props;
-    const { isAccFrozen } = accountStore;
+    const { isAccFrozen, isAccHardFrozen } = accountStore;
     const { statusType } = this.props.match.params;
     const {
       allRecords, loading, btnLoader,
@@ -84,89 +84,92 @@ export default class AllTransactions extends Component {
                       </Table.HeaderCell>
                     ))
                   }
-                  { (has(STATUS_MAPPING[statusType], 'syncCta') || has(STATUS_MAPPING[statusType], 'affirmativeCta') || has(STATUS_MAPPING[statusType], 'failedCta'))
+                  {(has(STATUS_MAPPING[statusType], 'syncCta') || has(STATUS_MAPPING[statusType], 'affirmativeCta') || has(STATUS_MAPPING[statusType], 'failedCta'))
                     && (
-                    <Table.HeaderCell key="actions">
-                      &nbsp;
+                      <Table.HeaderCell key="actions">
+                        &nbsp;
                     </Table.HeaderCell>
                     )
                   }
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                { allRecords.length === 0 ? (
+                {allRecords.length === 0 ? (
                   <NoR cols={columns.length} msg="No record to display" />
                 )
-                  : allRecords.map(row => (
-                    <Table.Row key={row.id}>
-                      {
-                        columns.map(col => (
-                          <Table.Cell key={col.field} textAlign={col.textAlign} collapsing={col.field === 'userName'}>
-                            {['amount'].includes(col.field) ? Helper.CurrencyFormat(row[col.field])
-                              : ['startDate', 'failDate', 'estDateAvailable'].includes(col.field)
-                                ? row[col.field] !== null ? DataFormatter.getDateAsPerTimeZone(moment.unix(row[col.field]), false, false, false, false) : '' : col.field === 'userName'
-                                  ? this.getUserName(get(row, col.fieldLocation) || {}, get(row, col.fieldId)) : col.field === 'userId' ? get(row, col.fieldLocation)
-                                    : col.field === 'amount' ? Helper.MoneyMathDisplayCurrency(row[col.field])
-                                      : col.field === 'direction' ? capitalize(row[col.field]) : col.field === 'accountType'
-                                        ? (
-                                          <>
-                                            {get(row, 'investorAccountInfo.accountType')
-                                              ? <Icon size="large" className={`ns-${lowerCase(get(row, 'investorAccountInfo.accountType'))}-line`} color="green" /> : 'N/A'
-                                            }
-                                          </>
-                                        )
-                                        : col.field === 'cpAccountId'
-                                          && get(row, 'accountId')
-                                          ? (this.state.GsAccountNum[get(row, 'accountId')] && this.state.GsAccountNum[get(row, 'accountId')].decGsAccNumber
-                                            ? this.state.GsAccountNum[get(row, 'accountId')].decGsAccNumber
-                                            : this.state.GsAccountNum[get(row, 'accountId')] && this.state.GsAccountNum[get(row, 'accountId')].loading
-                                              ? <p>Loading...</p>
-                                              : (
-                                                <Button color="blue" onClick={e => this.getGsAccountNumber(e, get(row, 'accountId'), get(row, 'userInfo.id'))} className="link-button">
-                                                  Click to Show
-                                                </Button>
-                                              )
+                  : allRecords.map((row) => {
+                    const isApproveDisabled = (statusType === 'pending' && ((row.direction === 'DEPOSIT' && isAccFrozen(get(row, 'investorAccountInfo.accountStatus'))) || (row.direction === 'WITHDRAWAL' && isAccHardFrozen(get(row, 'investorAccountInfo.accountStatus')))));
+                    return (
+                      <Table.Row key={row.id}>
+                        {
+                          columns.map(col => (
+                            <Table.Cell key={col.field} textAlign={col.textAlign} collapsing={col.field === 'userName'}>
+                              {['amount'].includes(col.field) ? Helper.CurrencyFormat(row[col.field])
+                                : ['startDate', 'failDate', 'estDateAvailable'].includes(col.field)
+                                  ? row[col.field] !== null ? DataFormatter.getDateAsPerTimeZone(moment.unix(row[col.field]), false, false, false, false) : '' : col.field === 'userName'
+                                    ? this.getUserName(get(row, col.fieldLocation) || {}, get(row, col.fieldId)) : col.field === 'userId' ? get(row, col.fieldLocation)
+                                      : col.field === 'amount' ? Helper.MoneyMathDisplayCurrency(row[col.field])
+                                        : col.field === 'direction' ? capitalize(row[col.field]) : col.field === 'accountType'
+                                          ? (
+                                            <>
+                                              {get(row, 'investorAccountInfo.accountType')
+                                                ? <Icon size="large" className={`ns-${lowerCase(get(row, 'investorAccountInfo.accountType'))}-line`} color="green" /> : 'N/A'
+                                              }
+                                            </>
                                           )
-                                          : get(row, col.field) === undefined ? 'N/A' : row[col.field]
-                            }
-                          </Table.Cell>
-                        ))
-                      }
-                      <Table.Cell width={row.failDesc ? '2' : ''}>
-                        {row.failDesc
-                          ? (
-                          <Button disabled>
-                            Pending Bank Change
-                          </Button>
-                          )
-                          : (
-                          <Button.Group vertical compact size="mini">
-                            {(has(STATUS_MAPPING[statusType], 'syncCta') && row.gsProcessId && !row.gsTransactionId)
-                              ? (
-                              <Button loading={btnLoader.includes(row.requestId)} color="blue" onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].syncCta.action, row.direction)}>
-                                {STATUS_MAPPING[statusType].syncCta.title}
-                              </Button>
-                              )
-                              : has(STATUS_MAPPING[statusType], 'affirmativeCta')
-                              && (
-                              <Button loading={btnLoader.includes(row.requestId)} color={`${statusType === 'pending' && isAccFrozen(get(row, 'investorAccountInfo.accountStatus')) ? 'gray' : 'blue'}`} disabled={(statusType === 'pending' && isAccFrozen(get(row, 'investorAccountInfo.accountStatus'))) || row.failDesc || DataFormatter.getCurrentCSTMoment().isBefore(moment(row.estDateAvailable * 1000))} onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action, row.direction)}>
-                                {STATUS_MAPPING[statusType].affirmativeCta.title}
-                              </Button>
-                              )
-                            }
-                            { has(STATUS_MAPPING[statusType], 'failedCta')
-                              && (
-                              <Button as={Link} to={`${match.url}/${row.requestId}`} inverted color="red">
-                                {STATUS_MAPPING[statusType].failedCta.title}
-                              </Button>
-                              )
-                            }
-                          </Button.Group>
-                          )
+                                          : col.field === 'cpAccountId'
+                                            && get(row, 'accountId')
+                                            ? (this.state.GsAccountNum[get(row, 'accountId')] && this.state.GsAccountNum[get(row, 'accountId')].decGsAccNumber
+                                              ? this.state.GsAccountNum[get(row, 'accountId')].decGsAccNumber
+                                              : this.state.GsAccountNum[get(row, 'accountId')] && this.state.GsAccountNum[get(row, 'accountId')].loading
+                                                ? <p>Loading...</p>
+                                                : (
+                                                  <Button color="blue" onClick={e => this.getGsAccountNumber(e, get(row, 'accountId'), get(row, 'userInfo.id'))} className="link-button">
+                                                    Click to Show
+                                                </Button>
+                                                )
+                                            )
+                                            : get(row, col.field) === undefined ? 'N/A' : row[col.field]
+                              }
+                            </Table.Cell>
+                          ))
                         }
-                      </Table.Cell>
-                    </Table.Row>
-                  ))
+                        <Table.Cell width={row.failDesc ? '2' : ''}>
+                          {row.failDesc
+                            ? (
+                              <Button disabled>
+                                Pending Bank Change
+                          </Button>
+                            )
+                            : (
+                              <Button.Group vertical compact size="mini">
+                                {(has(STATUS_MAPPING[statusType], 'syncCta') && row.gsProcessId && !row.gsTransactionId)
+                                  ? (
+                                    <Button loading={btnLoader.includes(row.requestId)} color="blue" onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].syncCta.action, row.direction)}>
+                                      {STATUS_MAPPING[statusType].syncCta.title}
+                                    </Button>
+                                  )
+                                  : has(STATUS_MAPPING[statusType], 'affirmativeCta')
+                                  && (
+                                    <Button loading={btnLoader.includes(row.requestId)} color={`${isApproveDisabled ? 'gray' : 'blue'}`} disabled={(isApproveDisabled || row.failDesc || DataFormatter.getCurrentCSTMoment().isBefore(moment(row.estDateAvailable * 1000)))} onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action, row.direction)}>
+                                      {STATUS_MAPPING[statusType].affirmativeCta.title}
+                                    </Button>
+                                  )
+                                }
+                                {has(STATUS_MAPPING[statusType], 'failedCta')
+                                  && (
+                                    <Button as={Link} to={`${match.url}/${row.requestId}`} inverted color="red">
+                                      {STATUS_MAPPING[statusType].failedCta.title}
+                                    </Button>
+                                  )
+                                }
+                              </Button.Group>
+                            )
+                          }
+                        </Table.Cell>
+                      </Table.Row>
+                    );
+                  })
                 }
               </Table.Body>
             </Table>

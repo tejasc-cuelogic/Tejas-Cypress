@@ -60,7 +60,7 @@ export default class CancelInvestment extends Component {
   }
 
   render() {
-    const { inProgress, errors } = this.props.uiStore;
+    const { inProgress, errors, responsiveVars } = this.props.uiStore;
     const {
       isCancelShowLink,
       getInvestorAccounts,
@@ -87,11 +87,11 @@ export default class CancelInvestment extends Component {
                 {this.props.isAdmin
                   ? (
                       <>
-                        <Header className="mb-half" as="h6">Void Type</Header>
+                        <Header className="mb-half left-align" as="h6">Void Type</Header>
                         <FormDropDown
                           ishidelabel
                           fielddata={CANCEL_INVESTMENT_FRM.fields.voidType}
-                          className="secondary"
+                          className="secondary left-align"
                           name="voidType"
                           placeholder="Choose"
                           fluid
@@ -100,13 +100,13 @@ export default class CancelInvestment extends Component {
                           onChange={(e, result) => formChange(e, result, 'CANCEL_INVESTMENT_FRM')}
                         />
                         <FormTextarea
-                          containerclassname="secondary"
+                          containerclassname="secondary left-align"
                           name="voidReason"
                           fielddata={CANCEL_INVESTMENT_FRM.fields.voidReason}
                           changed={(e, result) => formChange(e, result, 'CANCEL_INVESTMENT_FRM')}
                         />
                         <Checkbox
-                          className="field"
+                          className="field left-align"
                           label={CANCEL_INVESTMENT_FRM.fields.sendNotification.label}
                           name="sendNotification"
                           checked={CANCEL_INVESTMENT_FRM.fields.sendNotification.value}
@@ -123,14 +123,16 @@ export default class CancelInvestment extends Component {
                   )
                 }
                 <div className="center-align mt-30">
-                  <Button color="green" id="btnNotCancel" onClick={() => { this.handleClick('btnNotCancel'); }}>No, keep investment</Button>
-                  <Button loading={inProgress} color="red" id="btnCancel" onClick={() => { this.handleClick('btnCancel'); }}>Yes, cancel investment</Button>
+                  <Button.Group vertical={responsiveVars.isMobile}>
+                    <Button color="green" id="btnNotCancel" onClick={() => { this.handleClick('btnNotCancel'); }}>No, keep investment</Button>
+                    <Button loading={inProgress} color="red" id="btnCancel" onClick={() => { this.handleClick('btnCancel'); }}>Yes, cancel investment</Button>
+                  </Button.Group>
                 </div>
               </Form>
             )
             : (
               <div className="center-align mt-30">
-                <Link to={this.props.isAdmin ? `${this.props.refLink}/investments` : '/app/account-details/individual/portfolio'} className="back-link"><Icon className="ns-arrow-right" />Go to My Dashboard</Link>
+                <Link to={this.props.isAdmin ? `${this.props.refLink}/investments` : '/dashboard/account-details/individual/portfolio'} className="back-link"><Icon className="ns-arrow-right" />Go to My Dashboard</Link>
               </div>
             )
           }

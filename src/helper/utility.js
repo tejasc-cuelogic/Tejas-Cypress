@@ -9,7 +9,7 @@ import money from 'money-math';
 import sanitizeHtml from 'sanitize-html';
 import { Parser } from 'json2csv';
 import apiService from '../api/restApi';
-import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS } from '../constants/common';
+import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS, REACT_APP_DEPLOY_ENV } from '../constants/common';
 import authStore from '../services/stores/entities/shared/authStore';
 import userStore from '../services/stores/entities/userStore';
 
@@ -293,25 +293,32 @@ export class Utility {
     }
   };
 
-  logger = (params, type = 'log') => {
+  logger = (params, type = 'log', email = false, error = '') => {
     if (isLoggingEnabled) {
       // eslint-disable-next-line no-unused-expressions
       type === 'info' ? console.info(params)
         : type === 'warn' ? console.warn(params)
           : type === 'clear' ? console.clear()
             : console.log(params);
+      if (email) {
+        this.sendAlertEmail(params, type, error);
+      }
     } else if (!isLoggingEnabled && (type === 'warn' || type === 'info')) {
       // Send an email for these two type;
-      const email = {
-        graphqlError: { operationName: `Logging ${type === 'warn' ? 'Warning' : type === 'info' ? 'Information' : ''}` },
-        urlLocation: window.location.href,
-        message: { ...params },
-      };
-      const emailParams = {
-        emailContent: JSON.stringify(email),
-      };
-      authStore.notifyApplicationError(emailParams);
+      this.sendAlertEmail(params, type, error);
     }
+  }
+
+  sendAlertEmail = (params, type, error) => {
+    const emailP = {
+      graphqlError: { operationName: `Logging ${type === 'warn' ? 'Warning' : type === 'info' ? 'Information' : 'error'} - ${params}` },
+      urlLocation: window.location.href,
+      message: _.get(error, 'stack'),
+    };
+    const emailParams = {
+      emailContent: JSON.stringify(emailP),
+    };
+    authStore.notifyApplicationError(emailParams);
   }
 
   processImageFileName = (originalFileName, deviceInfo) => {
@@ -354,6 +361,14 @@ export class Utility {
     const modal = document.querySelector(`.${searchClass}`).closest('.page');
     modal.classList.add(addClass);
   }
+
+  pageTitle = (t = '') => {
+    try {
+      return (!['production', 'prod', 'master'].includes(REACT_APP_DEPLOY_ENV) ? `[${REACT_APP_DEPLOY_ENV}] | ${t}` : t);
+    } catch (e) {
+      return 'Alternative Investments Made Simple - NextSeed';
+    }
+  };
 }
 
 export default new Utility();

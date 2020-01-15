@@ -10,6 +10,7 @@ import {
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup } from '../../queries/profile';
 import { subscribeToNewsLetter, notifyAdmins } from '../../queries/common';
+import { createAdminUser } from '../../queries/users';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { uiStore, navStore, identityStore, userDetailsStore, userStore, businessAppStore } from '../../index';
@@ -476,9 +477,29 @@ export class AuthStore {
     }
   });
 
+  IsInvalidException = (res) => {
+    if (get(res, 'graphQLErrors[0].message')) {
+      try {
+        const parsedError = JSON.parse(get(res, 'graphQLErrors[0].message'));
+        if (parsedError.code === 'OFFERING_EXCEPTION') {
+          return true;
+        }
+      } catch {
+        if (get(res, 'graphQLErrors[0].message').includes('OFFERING_EXCEPTION')) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   sendErrorMail = (res) => {
     const errors = {};
     const gqlErr = {};
+
+    if (this.IsInvalidException(res)) {
+      return;
+    }
 
     if (this.isUserLoggedIn) {
       errors.userEmailId = userStore.getUserEmailAddress();
@@ -535,6 +556,21 @@ export class AuthStore {
       },
       fetchPolicy: 'network-only',
     });
+  });
+
+  @action
+  createAdminUser = (email, actionType = null) => new Promise((res, rej) => {
+    const variables = actionType ? { email, action: actionType } : { email };
+    client.mutate({
+      mutation: createAdminUser,
+      variables,
+    })
+      .then((data) => {
+        res(data.createAdminUser);
+      })
+      .catch((err) => {
+        rej(err);
+      });
   });
 }
 

@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { forEach, includes, find, isEmpty, get } from 'lodash';
+import { forEach, includes, find, isEmpty, get, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { FormValidator as Validator } from '../../../../helper';
@@ -32,9 +32,7 @@ import {
   getBusinessApplications,
   createBusinessApplicationPrequalificaiton,
   createBusinessApplicationBasicInfo,
-  upsertBusinessApplicationInformationPerformance,
-  upsertBusinessApplicationInformationBusinessDetails,
-  upsertBusinessApplicationInformationDocumentation,
+  upsertBusinessApplicationInformation,
   submitApplication,
   helpAndQuestion,
 } from '../../queries/businessApplication';
@@ -43,13 +41,13 @@ import { fileUpload } from '../../../actions';
 
 export class BusinessAppStore {
   @observable BUSINESS_APP_FRM_BASIC =
-  Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_BASIC);
+    Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_BASIC);
 
   @observable BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
 
   @observable NEED_HELP_FRM = Validator.prepareFormObject(NEED_HELP);
 
-  @observable BUSINESS_ACCOUNT =Validator.prepareFormObject(BUSINESS_SIGNUP);
+  @observable BUSINESS_ACCOUNT = Validator.prepareFormObject(BUSINESS_SIGNUP);
 
   @observable BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
 
@@ -93,6 +91,8 @@ export class BusinessAppStore {
 
   @observable userExists = false;
 
+  @observable appSubmitLoading = false;
+
   @observable userRoles = [];
 
   @observable businessAppDataById = null;
@@ -101,11 +101,17 @@ export class BusinessAppStore {
 
   @observable enableSave = false;
 
+  @observable apiCall = false;
+
   @observable showUserError = false;
 
   @observable sourcesTotal = 0;
 
   @observable usesTotal = 0;
+
+  @observable firstLoad = [];
+
+  @observable promoteActionInProcess = false;
 
   @action
   setFieldvalue = (field, value) => {
@@ -115,6 +121,11 @@ export class BusinessAppStore {
   @action
   setAppStepsStatus = (index, key, value) => {
     this.appStepsStatus[index][key] = value;
+  }
+
+  @action
+  resetFirstLoad = () => {
+    this.firstLoad = [];
   }
 
   @action
@@ -131,7 +142,7 @@ export class BusinessAppStore {
     this.BUSINESS_DOC_FRM = Validator.onChange(this.BUSINESS_DOC_FRM, Validator.pullValues(e, res));
     this.BUSINESS_DOC_FRM.meta.isValid = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value
       ? Boolean(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length
-      && this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
+        && this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
   };
 
   @computed get getInvestmentTypeTooltip() {
@@ -223,6 +234,7 @@ export class BusinessAppStore {
     }
     this.setFieldvalue('applicationId', appId);
     this.setFieldvalue('applicationIssuerId', userId);
+    this.firstLoad.push('getOne');
     const applicationType = appType === 'prequal-failed' ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     let payLoad = {
       applicationId: appId,
@@ -247,7 +259,7 @@ export class BusinessAppStore {
           businessAppAdminStore
             .setBusinessDetails(
               ((businessGeneralInfo && businessGeneralInfo.businessName)
-              || (prequalDetails.businessGeneralInfo.businessName)),
+                || (prequalDetails.businessGeneralInfo.businessName)),
               signupCode, utmSource,
             );
           this.setBusinessApplicationData(false, data.businessApplicationsDetailsAdmin);
@@ -305,9 +317,9 @@ export class BusinessAppStore {
         if (((data.applicationStatus || data.prequalStatus)
           === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED)
           || ((data.applicationStatus || data.prequalStatus)
-          === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)
+            === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)
           || ((data.applicationStatus || data.prequalStatus)
-          === BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED)) {
+            === BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED)) {
           this.formReadOnlyMode = true;
         } else if ((data.applicationStatus || data.prequalStatus)
           === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
@@ -415,7 +427,7 @@ export class BusinessAppStore {
     if (data) {
       this.appStepsStatus[1].status = data.stepStatus;
       data.debts.forEach((ele, key) => {
-        ['amount', 'interestExpenses', 'remainingPrincipal', 'term', 'maturityDate', 'termStartDate'].forEach((field) => {
+        ['amount', 'interestExpenses', 'remainingPrincipal', 'term', 'maturityDate', 'termStartDate', 'creditorName', 'existingLienOnBusiness'].forEach((field) => {
           this.BUSINESS_DETAILS_FRM.fields.debts[key][field].value = ele[field];
         });
         if (key < data.debts.length - 1) {
@@ -573,7 +585,7 @@ export class BusinessAppStore {
     this.BUSINESS_DOC_FRM = Validator.validateForm(this.BUSINESS_DOC_FRM);
     this.BUSINESS_DOC_FRM.meta.isValid = this.currentApplicationType === 'business' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value
       ? (this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length
-      && this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
+        && this.BUSINESS_DOC_FRM.meta.isValid) : this.BUSINESS_DOC_FRM.meta.isValid;
   }
 
   @computed get fetchBusinessApplicationsDataById() {
@@ -602,10 +614,12 @@ export class BusinessAppStore {
   }
 
   @computed get fetchBusinessApplication() {
-    return (this.businessApplicationsList && this.businessApplicationsList.data
+    const businessList = (this.businessApplicationsList && this.businessApplicationsList.data
       && this.businessApplicationsList.data.businessApplications
       && toJS(this.businessApplicationsList.data.businessApplications)
     ) || [];
+    const orderedBusinessList = this.orderedBusinessList(businessList);
+    return orderedBusinessList;
   }
 
   @action
@@ -752,6 +766,8 @@ export class BusinessAppStore {
         term: this.getValidDataForInt(item.term),
         termStartDate: item.termStartDate.value ? moment(item.termStartDate.value).format('MM/DD/YYYY') : null,
         maturityDate: item.maturityDate.value ? moment(item.maturityDate.value).format('MM/DD/YYYY') : null,
+        creditorName: item.creditorName.value,
+        existingLienOnBusiness: item.existingLienOnBusiness.value,
       })),
       owners: data.owners.map(item => ({
         fullLegalName: this.getValidDataForString(item.fullLegalName),
@@ -969,10 +985,10 @@ export class BusinessAppStore {
         // businessModel: data.businessModel.value,
         businessSecurities: data.businessSecurities.value,
         legalConfirmations: [...preQualData.legalConfirmations,
-          {
-            label: 'HAS_NOT_RAISED_SECURITIES',
-            value: includes(data.legalConfirmation.value, 'HAS_NOT_RAISED_SECURITIES'),
-          }],
+        {
+          label: 'HAS_NOT_RAISED_SECURITIES',
+          value: includes(data.legalConfirmation.value, 'HAS_NOT_RAISED_SECURITIES'),
+        }],
       };
     } else {
       preQualData = {
@@ -1069,10 +1085,10 @@ export class BusinessAppStore {
           this.setFieldvalue('isFetchedData', null);
           this.setFieldvalue('applicationId', applicationId);
           if (this.BUSINESS_APP_STATUS
-              === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED) {
+            === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED) {
             this.setFieldvalue('BUSINESS_APP_STEP_URL', `${this.currentApplicationType}/${applicationId}/success`);
           } else if (this.BUSINESS_APP_STATUS
-              === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+            === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
             const url = (isEmpty(lendioPartners) || lendioPartners.status === LENDIO.LENDIO_PRE_QUALIFICATION_FAILED) ? `${this.currentApplicationType}/${applicationId}/failed` : `${this.currentApplicationType}/${applicationId}/failed/lendio`;
             this.setFieldvalue('BUSINESS_APP_STEP_URL', url);
             resolve(true);
@@ -1121,6 +1137,7 @@ export class BusinessAppStore {
   @action
   businessApplicationSubmitAction = () => {
     uiStore.setProgress();
+    this.setFieldvalue('apiCall', true);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -1131,15 +1148,17 @@ export class BusinessAppStore {
           refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
+          uiStore.setProgress(false);
+          this.setFieldvalue('apiCall', false);
           resolve(result);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
-          reject(error);
-        })
-        .finally(() => {
           uiStore.setProgress(false);
+          this.setFieldvalue('appSubmitLoading', false);
+          this.setFieldvalue('apiCall', false);
+          reject(error);
         });
     });
   }
@@ -1170,7 +1189,6 @@ export class BusinessAppStore {
       key = 3;
     }
     stepStatus = isPartialDataFlag ? 'IN_PROGRESS' : 'COMPLETE';
-    let mutationQuery = upsertBusinessApplicationInformationBusinessDetails;
     let variableData = {
       applicationId: isApplicationManager ? this.applicationId : this.currentApplicationId,
       applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE',
@@ -1194,14 +1212,12 @@ export class BusinessAppStore {
         ...variableData,
         businessPerformance: data,
       };
-      mutationQuery = upsertBusinessApplicationInformationPerformance;
     } else if (stepName === 'DOCUMENTATION') {
       data = this.getFormatedDocumentationData;
       variableData = {
         ...variableData,
         businessDocumentation: data,
       };
-      mutationQuery = upsertBusinessApplicationInformationDocumentation;
     }
     if (isApplicationManager) {
       variableData.targetIssuerId = this.businessApplicationDetailsAdmin.userId;
@@ -1210,7 +1226,7 @@ export class BusinessAppStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: mutationQuery,
+          mutation: upsertBusinessApplicationInformation,
           variables: variableData,
           refetchQueries: [
             {
@@ -1229,7 +1245,7 @@ export class BusinessAppStore {
             if (this.canSubmitApp && this.businessApplicationDetailsAdmin.applicationStage === 'IN_PROGRESS') {
               this.businessApplicationSubmitAction().then(() => {
                 Helper.toast('Business application submitted successfully!', 'success');
-                this.props.history.push('/app/dashboard');
+                this.props.history.push('/dashboard');
                 resolve(result);
               });
             } else {
@@ -1242,6 +1258,7 @@ export class BusinessAppStore {
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
+          this.setFieldvalue('appSubmitLoading', false);
           reject(error);
         })
         .finally(() => {
@@ -1426,7 +1443,7 @@ export class BusinessAppStore {
 
   @computed get notificationCard() {
     const card = find(BUSINESS_APPLICATION_NOTIFICATION_CARD.applicationStatus, e => find(this.fetchBusinessApplication, a => (a.applicationStatus === e.applicationStatus
-        || (a.applicationStage && a.applicationStage === e.applicationStage))))
+      || (a.applicationStage && a.applicationStage === e.applicationStage))))
       || find(BUSINESS_APPLICATION_NOTIFICATION_CARD.offeringStage, e => find(get(offeringsStore, 'data.data.getOfferings') || [], a => e.offeringStage.includes(a.stage)));
     if (!card) {
       return BUSINESS_APPLICATION_NOTIFICATION_CARD.applicationStatus.find(a => a.applicationStage === 'IN_PROGRESS');
@@ -1447,6 +1464,51 @@ export class BusinessAppStore {
   @action
   setBasicFormError = (error) => {
     this.BUSINESS_APP_FRM_BASIC.fields.email.error = error;
+  }
+
+  orderedBusinessList = (businessDetailsList) => {
+    let businessInprogress = [];
+    let businessPending = [];
+    let businessExtended = [];
+    let businessDeclined = [];
+    let businessSigned = [];
+    let businessOthers = [];
+    const businessList = businessDetailsList || [];
+    if (businessList.length > 0) {
+      businessList.map((businessDetails) => {
+        if (businessDetails.applicationStatus === 'PRE_QUALIFICATION_SUBMITTED') {
+          return businessInprogress.push(businessDetails);
+        } if (businessDetails.applicationStatus === 'APPLICATION_SUBMITTED') {
+          return businessPending.push(businessDetails);
+        } if (businessDetails.applicationStatus === 'APPLICATION_OFFERED') {
+          return businessExtended.push(businessDetails);
+        } if (businessDetails.applicationStatus === 'REVIEW_FAILED') {
+          return businessDeclined.push(businessDetails);
+        } if (businessDetails.applicationStatus === 'APPLICATION_SUCCESSFUL') {
+          return businessSigned.push(businessDetails);
+        }
+        return businessOthers.push(businessDetails);
+      });
+
+      businessInprogress = orderBy(businessInprogress, ['prequalDetails.businessGeneralInfo.businessName'], ['asc']);
+      businessPending = orderBy(businessPending, ['prequalDetails.businessGeneralInfo.businessName'], ['asc']);
+      businessExtended = orderBy(businessExtended, ['prequalDetails.businessGeneralInfo.businessName'], ['asc']);
+      businessDeclined = orderBy(businessDeclined, ['prequalDetails.businessGeneralInfo.businessName'], ['asc']);
+      businessSigned = orderBy(businessSigned, ['prequalDetails.businessGeneralInfo.businessName'], ['asc']);
+      businessOthers = orderBy(businessOthers, ['prequalDetails.businessGeneralInfo.businessName'], ['asc']);
+
+      const sortedResultObject = [
+        ...businessInprogress,
+        ...businessPending,
+        ...businessExtended,
+        ...businessDeclined,
+        ...businessSigned,
+        ...businessOthers,
+      ];
+
+      return sortedResultObject;
+    }
+    return [];
   }
 }
 

@@ -19,14 +19,14 @@ export default class CreateNew extends Component {
     e.preventDefault();
     adminActions.createNewUser()
       .then(() => {
-        this.props.history.push('/app/users');
+        this.props.history.push('/dashboard/users');
       })
       .catch((err) => {
         console.log(err, 'Error:');
       });
   }
 
-  handleCloseModal = () => this.props.history.push('/app/users');
+  handleCloseModal = () => this.props.history.push('/dashboard/users');
 
   render() {
     const { USR_FRM, userEleChange, capabilitiesMeta } = this.props.userStore;
@@ -92,7 +92,7 @@ export default class CreateNew extends Component {
               )}
               <div className="center-align mt-30">
                 <Button primary className="relaxed" content="Submit" loading={inProgress} disabled={!USR_FRM.meta.isValid} />
-                <p className="field-error">{USR_FRM.meta.error}</p>
+                <p className="field-error mt-10">{USR_FRM.meta.error}</p>
               </div>
             </Form>
           </Card>

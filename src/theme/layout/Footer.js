@@ -9,14 +9,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
 class Footer extends Component {
-  state = { fShowHide: false };
-
   componentDidMount() {
-    if (this.props.path === '/') {
-      this.setState({ fShowHide: true });
-    } else {
-      this.setState({ fShowHide: false });
-    }
     setTimeout(() => {
       if (this.props.location.hash === '#site-footer') {
         document.querySelector(`${this.props.location.hash}`).scrollIntoView({
@@ -25,16 +18,6 @@ class Footer extends Component {
       }
     }, 500);
   }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.path === '/') {
-      this.setState({ fShowHide: true });
-    } else {
-      this.setState({ fShowHide: false });
-    }
-  }
-
-  toggleShowHide = () => this.setState({ fShowHide: !this.state.fShowHide });
 
   render() {
     const { path } = this.props;
@@ -50,7 +33,7 @@ class Footer extends Component {
                 <Menu
                   text
                   vertical
-                  className={isTablet ? 'center-align' : ''}
+                  className={isTablet ? 'center-align m-auto' : ''}
                 >
                   <Menu.Item header>Legal</Menu.Item>
                   <Menu.Item as={Link} to="/agreements/legal/terms-of-use">Terms of Use</Menu.Item>
@@ -65,12 +48,12 @@ class Footer extends Component {
                   </div>
                 </>
               </div>
-              <div className="footer-social">
+              <div className="footer-social grey-header">
                 <SocialLinks />
                 <p className={isMobile && 'mt-20'}>© 2019 NextSeed Technologies LLC</p>
               </div>
             </Grid.Column>
-            <Grid.Column computer={10} tablet={16} mobile={16} className="copyright-info">
+            <Grid.Column computer={10} tablet={16} mobile={16} className="copyright-info grey-header">
               <p>
                 This site is operated by NextSeed Services LLC ({'"'}NextSeed{'"'}), which is
                 neither a registered broker-dealer nor funding portal.
@@ -98,11 +81,7 @@ class Footer extends Component {
                 <b>See general risk factors{' '}
                   <a href="https://nextseed.com/agreements/legal/general-risk-factors" target="_blank" rel="noopener noreferrer">here</a>
                 </b>.
-                NextSeed does not verify the adequacy, accuracy or completeness of any
-                information. Neither NextSeed nor any of its officers, directors, agents and
-                employees makes any warranty, express or implied, of any kind whatsoever related
-                to the adequacy, accuracy or completeness of any information on this site or the
-                use of information on this site. See additional general disclosures <Link to="/agreements/legal/general-disclosures" target="_blank">here</Link>.
+                See additional general disclosures <Link to="/agreements/legal/general-disclosures" target="_blank">here</Link>.
               </p>
               <p>
                 By accessing this site and any pages thereof, you agree to be bound by the <Link to="/agreements/legal/terms-of-use" target="_blank">Terms of Use</Link> and

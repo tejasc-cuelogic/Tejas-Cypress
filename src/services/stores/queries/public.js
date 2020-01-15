@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const getJobListing = gql`
-query _getJobListing{
+query getJobListing{
     getJobListing
     {
     POSITION

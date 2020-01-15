@@ -43,7 +43,7 @@ export const checkRegulationAndAccreditation = () => {
     cy.wait(1000);
     cy.get('.multistep').find('h3.ui.center').invoke('text')
       .then(($text1) => {
-        if ($text1.includes('This investment is only available to accredited investors.')) {
+        if ($text1.includes('This document is only available to accredited investors.')) {
           proceedForAccreditationRequest()
             .then((resp) => {
               resolve(true);
