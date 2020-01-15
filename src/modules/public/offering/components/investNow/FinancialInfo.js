@@ -155,6 +155,7 @@ class FinancialInfo extends Component {
                           fielddata={PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares}
                           changed={values => investMoneyChangeForEquity(values, 'shares')}
                           autoFocus
+                          showerror
                           allowNegative={false}
                           hidelabel
                           className="right-align-placeholder"
@@ -213,7 +214,6 @@ class FinancialInfo extends Component {
                 name="investmentAmount"
                 currency
                 prefix="$ "
-                showerror
                 fielddata={INVESTMONEY_FORM.fields.investmentAmount}
                 changed={values => investMoneyChange(values, 'investmentAmount')}
                 onkeyup={validateMaskedInputForAmount}
