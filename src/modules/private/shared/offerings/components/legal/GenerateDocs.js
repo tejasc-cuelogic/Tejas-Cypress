@@ -49,6 +49,7 @@ export default class GenerateDocs extends Component {
     documentLists = [CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE, CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE].includes(securities) ? [...documentLists, 'npa'] : [...documentLists];
     documentLists = securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ? [...documentLists, 'purchaseAgreement', 'proxyAgreement'] : [...documentLists];
     documentLists = securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE ? [...documentLists, 'llcAgreement', 'subscriptionAgreement', 'specialPurposeEntityAgreement'] : [...documentLists];
+    documentLists = securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE ? [...documentLists, 'safeNote'] : [...documentLists];
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
         <Form>

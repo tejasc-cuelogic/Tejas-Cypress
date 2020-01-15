@@ -891,6 +891,21 @@ export const getOfferingDetails = gql`
                 }
               }
             }
+            safeNote {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
             disclosure {
               fileId
               fileName
@@ -986,6 +1001,10 @@ export const getOfferingDetails = gql`
               fileName
             }
             proxyAgreement {
+              fileId
+              fileName
+            }
+            safeNote {
               fileId
               fileName
             }
