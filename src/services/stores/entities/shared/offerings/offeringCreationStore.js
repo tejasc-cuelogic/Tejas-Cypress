@@ -418,7 +418,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  uploadFileToS3 = (form, name, files, key, index) => {
+  uploadFileToS3 = (form, name, files, key, index, fullPath = false) => {
     let fileField = '';
     if (key) {
       fileField = this[form].fields[key][index][name];
@@ -430,7 +430,7 @@ export class OfferingCreationStore {
       obj: files[0],
       name: Helper.sanitize(files[0].name),
     };
-    fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`)
+    fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`, fullPath)
       .then(action((res) => {
         Helper.toast('file uploaded successfully', 'success');
         fileField.value = files[0].name;

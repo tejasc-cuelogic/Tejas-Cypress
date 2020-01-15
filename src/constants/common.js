@@ -81,3 +81,5 @@ export const RETRY_CONFIG = {
 };
 
 export const CURR_YEAR = new Date().getFullYear();
+
+export const S3_BUCKET_URL = `https://${process.env.REACT_APP_UPLOADS_BUCKET}`;
