@@ -150,8 +150,8 @@ class FinancialInfo extends Component {
                           data-cy="shares"
                           name="shares"
                           asterisk="true"
+                          type="tel"
                           number
-                          showerror
                           fielddata={PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares}
                           changed={values => investMoneyChangeForEquity(values, 'shares')}
                           autoFocus
