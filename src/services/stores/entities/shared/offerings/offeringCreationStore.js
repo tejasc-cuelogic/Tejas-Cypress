@@ -11,7 +11,7 @@ import {
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
   ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS, CLOSING_BINDING,
-  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1,
+  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1, OFFERING_CLOSE_EXPORT_ENVELOPES,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { deleteBonusReward, updateOffering,
@@ -61,6 +61,8 @@ export class OfferingCreationStore {
   @observable OFFERING_CLOSE_3 = Validator.prepareFormObject(OFFERING_CLOSE_3);
 
   @observable OFFERING_CLOSE_4 = Validator.prepareFormObject(OFFERING_CLOSE_4);
+
+  @observable OFFERING_CLOSE_EXPORT_ENVELOPES_FRM = Validator.prepareFormObject(OFFERING_CLOSE_EXPORT_ENVELOPES);
 
   @observable MEDIA_FRM = Validator.prepareFormObject(MEDIA);
 
@@ -264,7 +266,7 @@ export class OfferingCreationStore {
   resetAllForms = () => {
     offeringInvestorStore.setData('db', undefined);
     offeringInvestorStore.setData('data', []);
-    const forms = ['KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'CLOSURE_SUMMARY_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM'];
+    const forms = ['OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'CLOSURE_SUMMARY_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM'];
     forms.forEach((f) => {
       this[f] = Validator.resetFormData(this[f]);
     });
@@ -477,7 +479,7 @@ export class OfferingCreationStore {
   removeData = (formName, subForm = 'data', isApiDelete = false) => {
     const subArray = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : subForm;
     if (!isApiDelete) {
-      if (formName === 'CLOSING_BINDER_FRM' || formName === 'DATA_ROOM_FRM') {
+      if (['OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'CLOSING_BINDER_FRM', 'DATA_ROOM_FRM'].includes(formName)) {
         let removeFileIds = '';
         const { fileId } = this[formName].fields[subArray][this.removeIndex].upload;
         removeFileIds = fileId;
@@ -643,7 +645,7 @@ export class OfferingCreationStore {
           this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
           fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
             const { fileId, preSignedUrl } = result.data.createUploadEntry;
-            fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(() => {
+            fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(action(() => {
               this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
               this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
               this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
@@ -651,19 +653,19 @@ export class OfferingCreationStore {
               this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
               this.checkFormValid(form, multiForm);
               this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
-              this.isUploadingFile = true;
-            }).catch((error) => {
+              this.isUploadingFile = false;
+            })).catch(action((error) => {
               Helper.toast('Something went wrong, please try again later.', 'error');
               uiStore.setErrors(error.message);
-              this.isUploadingFile = true;
+              this.isUploadingFile = false;
               this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
-            });
-          }).catch((error) => {
+            }));
+          }).catch(action((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
-            this.isUploadingFile = true;
+            this.isUploadingFile = false;
             this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
             uiStore.setErrors(error.message);
-          });
+          }));
         });
       }
     }
@@ -704,7 +706,8 @@ export class OfferingCreationStore {
     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
-    this.checkFormValid(form, (form === 'LEADERSHIP_FRM' || form === 'DATA_ROOM_FRM' || form === 'KEY_TERMS_FRM'));
+    const multiForm = this.getActionType(form, 'isMultiForm');
+    this.checkFormValid(form, multiForm);
   }
 
   @action
@@ -967,6 +970,7 @@ export class OfferingCreationStore {
       CLOSING_BINDER_FRM: { isMultiForm: true },
       POC_DETAILS_FRM: { isMultiForm: false },
       OFFERING_CLOSE_1: { isMultiForm: false },
+      OFFERING_CLOSE_EXPORT_ENVELOPES_FRM: { isMultiForm: true },
     };
     return metaDataMapping[formName][getField];
   }
@@ -1620,7 +1624,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  offeringClose = (params, step, scope) => new Promise((res) => {
+  offeringClose = (params, step, scope) => new Promise((res, rej) => {
     uiStore.setProgress(params.process);
     this.setFieldValue('outputMsg', null);
     let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
@@ -1654,6 +1658,7 @@ export class OfferingCreationStore {
         this.setFieldValue('outputMsg', { type: 'error', data: get(err, 'message') });
         console.log(err);
         Helper.toast('Something went wrong.', 'error');
+        rej();
       });
   });
 
@@ -1947,6 +1952,9 @@ export class OfferingCreationStore {
       const closerBinderDocs = Validator.evaluateFormData(this.CLOSING_BINDER_FRM.fields).closingBinder || [];
       const filteredCloserBinderDocs = closerBinderDocs.filter(d => d.name !== '' && d.upload.fileId !== '');
       obj.closingBinder = [...filteredCloserBinderDocs];
+    } else if (type === 'EXPORT_ENVELOPES') {
+      const fileSubstitution = Validator.evaluateFormData(this.OFFERING_CLOSE_EXPORT_ENVELOPES_FRM.fields).fileSubstitution || [];
+      obj.closureSummary = { exportEnvelopes: { fileSubstitution } };
     } else {
       const supplementalAgreementsDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
       const filteredSupplementalAgreementsDocs = supplementalAgreementsDocs.filter(d => d.name !== '' && d.upload.fileId !== '');
