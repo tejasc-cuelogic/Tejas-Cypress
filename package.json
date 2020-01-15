@@ -162,7 +162,7 @@
     "build-js": "node --max_old_space_size=7500 scripts/build.js",
     "build-js:prod": "node --max_old_space_size=14000 scripts/build.js",
     "build": "npm-run-all build-assets build-js",
-    "build:prod": "npm-run-all build-assets build-js:prod",
+    "build:prod": "GENERATE_SOURCEMAP=false npm-run-all build-assets build-js:prod",
     "cypress:open": "./node_modules/.bin/cypress open",
     "cypress:run-investment": "./node_modules/.bin/cypress run --spec 'cypress/integration/investNow/**/*'",
     "cypress:run": "./node_modules/.bin/cypress run",
