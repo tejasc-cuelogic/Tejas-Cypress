@@ -2803,6 +2803,19 @@ export const ADMIN_DOCUMENTATION = {
     stepName: 'DOCUMENTS_LEGAL_PROMISSORY_NOTE',
     lastModifiedDate: '',
   },
+  safeNote: {
+    value: '',
+    label: 'Safe Note',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    stepName: 'DOCUMENTS_LEGAL_SAFE_NOTE',
+    lastModifiedDate: '',
+  },
 };
 
 const DATA_ROOM_COMMON = {
