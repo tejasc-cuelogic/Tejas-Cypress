@@ -937,9 +937,9 @@ export class AccreditationStore {
     if (!userDetailsStore.userDetails.roles) {
       return '';
     }
-    const { details } = userDetailsStore.userDetails.roles.find(r => r.name === selectedAccount);
     let accountStatusFound = '';
     if (selectedAccount) {
+      const { details } = userDetailsStore.userDetails.roles.find(r => r.name === selectedAccount);
       const activeArr = activeAccounts.length
         ? filter(activeAccounts, o => o === selectedAccount) : activeAccounts;
       const frozenArr = frozenAccounts.length
