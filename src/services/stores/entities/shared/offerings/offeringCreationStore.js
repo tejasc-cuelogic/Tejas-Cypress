@@ -1087,7 +1087,7 @@ export class OfferingCreationStore {
     payload, keyName, notify = true,
     successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false, approvedObj, emptyPayload = null,
   ) => {
-    // uiStore.setProgress(approvedObj && approvedObj.status ? approvedObj.status : 'save');
+    uiStore.setProgress(approvedObj && approvedObj.status ? approvedObj.status : 'save');
     const variables = {
       id,
       offeringDetails: payload,
@@ -1137,7 +1137,7 @@ export class OfferingCreationStore {
         rej();
       })
       .finally(() => {
-        // uiStore.setProgress(false);
+        uiStore.setProgress(false);
       });
   }
 
