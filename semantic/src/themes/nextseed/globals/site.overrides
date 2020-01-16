@@ -3250,7 +3250,11 @@ table.css-wu4c77-diff-container {
 		padding-left: 40px;
 		line-height: 36px;
 		@media only screen and (max-width : @largestMobileScreen){
-			padding-left: @31px;
+			padding-left: 0;
+			line-height: 26px;
+			span{
+				font-size: @20px;
+			}
 		}
 		i.icon{
 			font-size: @20px !important;
@@ -3258,9 +3262,6 @@ table.css-wu4c77-diff-container {
 		sup:first-child{
 			margin-left: -40px;
 			margin-right: 0;
-			@media only screen and (max-width : @largestMobileScreen){
-				margin-left: 0;
-			}
 		}
 	}
 }

@@ -356,6 +356,14 @@
                 margin: 0;
             }
         }
+        @media only screen and (max-width :@largestMobileScreen){
+            margin: @20px 0 0;
+            &.unstackable>.item{
+                >.image{
+                    width: auto !important;
+                }
+            }
+        }
     }
 }
 .slick-list .ui.items>.item >.content{

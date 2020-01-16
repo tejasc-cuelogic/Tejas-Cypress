@@ -54,7 +54,7 @@ class Space extends Component {
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
             <Grid centered reversed="mobile">
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="left">
-                <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-50'}>Not your average retail</Header>
+                <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-20' : 'mb-50'}>Not your average retail</Header>
                 <p>
                   NextSeed Space enables entrepreneurs to test and grow concepts with move-in ready, short-term leases.
                 </p>
@@ -64,7 +64,7 @@ class Space extends Component {
                 </p>
               </Grid.Column>
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right">
-                <NSImage path="space/img-1.jpg" />
+                <NSImage path="space/img-1.jpg" className={responsiveVars.uptoTablet ? 'mt-20' : ''} />
               </Grid.Column>
             </Grid>
           </section>
@@ -78,30 +78,31 @@ class Space extends Component {
                 </p>
                 <Divider hidden />
                 <List className="space-list">
-                  <List.Item className={responsiveVars.isMobile ? 'mt-0' : 'mb-20'}>
+                  <List.Item className={`${responsiveVars.isMobile ? 'pb-0 mt-0' : ''} mb-20`}>
                     <Icon className="ns-tick" color="grey" size="large" />
                     Move-in ready kitchen and storefront
                   </List.Item>
-                  <List.Item className={responsiveVars.isMobile ? 'mt-14' : 'mb-20'}>
+                  <List.Item className={`${responsiveVars.isMobile ? 'pb-0 mt-0' : ''} mb-20`}>
                     <Icon className="ns-tick" color="grey" size="large" />
                     Permitting and lease negotiations
                   </List.Item>
-                  <List.Item className={responsiveVars.isMobile ? 'mt-0' : 'mb-20'}>
+                  <List.Item className={`${responsiveVars.isMobile ? 'pb-0 mt-0' : ''} mb-20`}>
                     <Icon className="ns-tick" color="grey" size="large" />
                     The latest point-of-sale technology
                   </List.Item>
-                  <List.Item className={responsiveVars.isMobile ? 'mt-14' : 'mb-20'}>
+                  <List.Item className={responsiveVars.isMobile ? 'pb-0 mt-0' : 'mb-20'}>
                     <Icon className="ns-tick" color="grey" size="large" />
                     Marketing support to drive business
                   </List.Item>
                 </List>
-                <Button as={Link} to="/space/contact" className="mt-40" secondary>Contact Us</Button>
+                {!responsiveVars.isMobile
+                && <Button as={Link} to="/space/contact" className="mt-40" secondary>Contact Us</Button>}
               </Grid.Column>
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right">
                 <p className="quotes left-align space-quotes">
-                  <sup><Icon size="tiny" color="blue" className="ns-quote-left" /></sup> One of the biggest hurdles for a small business is the build-out process. A talented chef or designer might be very skilled at their craft, but many other factors are critical to opening a storefront including the capital raise, lease negotiation, design, permitting, construction and marketing. Finding ways to assist the entrepreneur in reducing complexity and controlling risks at this juncture is critical. <sup><Icon size="tiny" color="blue" className="ns-quote-right" /></sup>
+      {responsiveVars.isMobile ? <span>&ldquo;</span> : <sup><Icon size="tiny" color="blue" className="ns-quote-left" /></sup>} One of the biggest hurdles for a small business is the build-out process. A talented chef or designer might be very skilled at their craft, but many other factors are critical to opening a storefront including the capital raise, lease negotiation, design, permitting, construction and marketing. Finding ways to assist the entrepreneur in reducing complexity and controlling risks at this juncture is critical. {responsiveVars.isMobile ? <span>&rdquo;</span> : <sup><Icon size="tiny" color="blue" className="ns-quote-right" /></sup>}
                 </p>
-                <Item.Group className="space-user">
+                <Item.Group unstackable className="space-user">
                   <Item>
                     <NSImage path="space/monte-large.png" circular />
                     <Item.Content>
@@ -110,6 +111,8 @@ class Space extends Component {
                     </Item.Content>
                   </Item>
                 </Item.Group>
+                {responsiveVars.isMobile
+                && <Button fluid as={Link} to="/space/contact" className="mt-20" secondary>Contact Us</Button>}
               </Grid.Column>
             </Grid>
           </section>

@@ -636,8 +636,11 @@
     }
     &.nss-form .field{
         margin-bottom: @25px;
-        .ui.input input{
+        .ui.input input, .ui.selection.dropdown>.text{
             font-size: @13px;
+        }
+        .ui.selection.dropdown{
+            padding: @10px @15px @10px 0;
         }
     }
 }

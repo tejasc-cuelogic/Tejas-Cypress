@@ -1,11 +1,34 @@
 import React from 'react';
-import { Modal, Header, Divider, Grid, Form, Responsive, Button } from 'semantic-ui-react';
+import { Modal, Header, Divider, Grid, Form, Responsive, Button, Select } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
 
 
 const handleCloseModal = (history) => {
     history.push('/space');
 };
+const currentOperation = [
+  { key: 'sk', text: 'Shared kitchen', value: 'Shared kitchen' },
+  { key: 'h', text: 'Home', value: 'Home' },
+  { key: 'ft', text: 'Food Truck', value: 'Food Truck' },
+  { key: 'sk', text: 'Food Hall', value: 'Food Hall' },
+  { key: 'no', text: 'Not operational yet', value: 'Not operational yet' },
+  { key: 'c', text: 'Co-working', value: 'Co-working' },
+  { key: 'p', text: 'Pop-ups', value: 'Pop-ups' },
+  { key: 'on', text: 'Online', value: 'Online' },
+  { key: 'o', text: 'Other', value: 'Other' },
+];
+const industry = [
+  { key: 'b', text: 'Brewery', value: 'Brewery' },
+  { key: 'rb', text: 'Restaurant & Bar', value: 'Restaurant & Bar' },
+  { key: 'pf', text: 'Packaged Foods & Beverage', value: 'Packaged Foods & Beverage' },
+  { key: 'fr', text: 'Fashion Retail', value: 'Fashion Retail' },
+  { key: 'fu', text: 'Furniture', value: 'Furniture' },
+  { key: 'om', text: 'Other Manufacturing', value: 'Other Manufacturing' },
+  { key: 'j', text: 'Jewelry', value: 'Jewelry' },
+  { key: 'f', text: 'Fitness', value: 'Fitness' },
+  { key: 'hw', text: 'Health & Wellness', value: 'Health & Wellness' },
+  { key: 'o', text: 'Other', value: 'Other' },
+];
 
 const Contact = ({ history }) => (
     <Modal open closeIcon onClose={() => handleCloseModal(history)} size="large">
@@ -26,14 +49,28 @@ const Contact = ({ history }) => (
                 </Form.Group>
                 <Form.Group widths="equal">
                   <Form.Input fluid label="Business Name" placeholder="Business Name" />
-                  <Form.Input fluid label="Industry" placeholder="Industry" />
+                  <Form.Field
+                    control={Select}
+                    options={industry}
+                    label={{ children: 'Industry', htmlFor: 'industry' }}
+                    placeholder="Pick One"
+                    search
+                    searchInput={{ id: 'industry' }}
+                  />
                 </Form.Group>
                 <Form.Group widths="equal">
-                  <Form.Input fluid label="Where are you currently operating?" placeholder="Where are you currently operating?" />
+                  <Form.Field
+                    control={Select}
+                    options={currentOperation}
+                    label={{ children: 'Where are you currently operating?', htmlFor: 'current-operation' }}
+                    placeholder="Pick One"
+                    search
+                    searchInput={{ id: 'current-operation' }}
+                  />
                   <Form.Input fluid label="Website URL" placeholder="Website URL" />
                 </Form.Group>
                 <Form.Group widths="equal">
-                  <Form.Input fluid label="Phone Number" placeholder="Phone Number" />
+                  <Form.Input fluid label="Phone Number" placeholder="123-456-7891" />
                   <Form.Input fluid label="Email" placeholder="Email" />
                 </Form.Group>
                 <Form.TextArea className="secondary mt-20 mb-20" fluid label="How can we help?" placeholder="" />
