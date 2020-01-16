@@ -1161,7 +1161,8 @@ export const LEADERSHIP = {
       value: '',
       label: 'Email address',
       error: undefined,
-      rule: 'optional',
+      rule: 'email',
+      customErrors: { email: 'email is not valid' },
       placeHolder: 'john.doe@contact.com',
     },
     number: {
