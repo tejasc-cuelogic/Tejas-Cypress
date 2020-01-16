@@ -150,7 +150,6 @@ class FinancialInfo extends Component {
                           data-cy="shares"
                           name="shares"
                           asterisk="true"
-                          type="tel"
                           number
                           fielddata={PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares}
                           changed={values => investMoneyChangeForEquity(values, 'shares')}
