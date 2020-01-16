@@ -58,7 +58,7 @@ export default class StatusChangeAppModal extends Component {
     this.props.businessAppStore
       .fetchAdminApplicationById(params.appId, appType, params.userId, true)
       .then((data) => {
-        const prequalData = (data && data.businessApplicationsDetailsAdmin) || null;
+        const prequalData = (data && data.adminBusinessApplicationsDetails) || null;
         const { PROMOTE_APPLICATION_STATUS_PASSWORD_FRM, PROMOTE_APPLICATION_STATUS_EMAIL_FRM } = this.props.businessAppReviewStore;
         const { applicationRoles } = this.props.businessAppStore;
         if (prequalData) {

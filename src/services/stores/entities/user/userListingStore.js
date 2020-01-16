@@ -6,7 +6,7 @@ import moment from 'moment';
 import { capitalize, isArray, uniq } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { UserAvatar } from '../../../../theme/shared';
-import { allUsersQuery } from '../../queries/users';
+import { adminListUsers } from '../../queries/users';
 import { DELETED_ACCOUNT_STATUS } from '../../../../constants/user';
 import Helper from '../../../../helper/utility';
 
@@ -93,7 +93,7 @@ export class UserListingStore {
     }
     this.usersData = graphql({
       client,
-      query: allUsersQuery,
+      query: adminListUsers,
       variables: params,
       fetchPolicy: 'network-only',
       onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
@@ -117,8 +117,8 @@ export class UserListingStore {
 
   @computed get users() {
     return (this.allUsers.data
-      && this.allUsers.data.listUsers
-      && toJS(this.allUsers.data.listUsers.users)
+      && this.allUsers.data.adminListUsers
+      && toJS(this.allUsers.data.adminListUsers.users)
     ) || [];
   }
 
@@ -146,8 +146,8 @@ export class UserListingStore {
 
   @computed get count() {
     return (this.allUsers.data
-      && this.allUsers.data.listUsers
-      && toJS(this.allUsers.data.listUsers.resultCount)
+      && this.allUsers.data.adminListUsers
+      && toJS(this.allUsers.data.adminListUsers.resultCount)
     ) || 0;
   }
 

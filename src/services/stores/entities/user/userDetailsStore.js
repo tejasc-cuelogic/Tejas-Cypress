@@ -20,7 +20,7 @@ import {
   userListingStore,
   userStore,
 } from '../../index';
-import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressOrPhoneValidationCheck, frozenEmailToAdmin, freezeAccount, getEmailList } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminUserHardDelete, adminUpdateUserStatus, adminSkipAddressOrPhoneValidationCheck, frozenAccountActiivtyDetected, adminFreezeAccount, adminFetchEmails } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE, US_STATES } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -266,16 +266,16 @@ export class UserDetailsStore {
   }
 
   @action
-  skipAddressOrPhoneValidationCheck = type => new Promise(async (resolve, reject) => {
+  adminSkipAddressOrPhoneValidationCheck = type => new Promise(async (resolve, reject) => {
     const shouldSkip = type === 'PHONE' ? !this.isPhoneSkip : !this.isAddressSkip;
     const payLoad = { userId: this.selectedUserId, shouldSkip, type };
     client
       .mutate({
-        mutation: skipAddressOrPhoneValidationCheck,
+        mutation: adminSkipAddressOrPhoneValidationCheck,
         variables: payLoad,
       })
       .then(action((res) => {
-        this.setFieldValue(type === 'PHONE' ? 'isPhoneSkip' : 'isAddressSkip', get(res, 'data.skipAddressOrPhoneValidationCheck'));
+        this.setFieldValue(type === 'PHONE' ? 'isPhoneSkip' : 'isAddressSkip', get(res, 'data.adminSkipAddressOrPhoneValidationCheck'));
         resolve();
       })).catch(() => reject());
   });
@@ -287,20 +287,21 @@ export class UserDetailsStore {
     try {
       const res = await client
         .mutate({
-          mutation: !isHardDelete ? deleteProfile : adminHardDeleteUser,
+          mutation: !isHardDelete ? deleteProfile : adminUserHardDelete,
           variables: !isInvestor ? { userId: this.selectedUserId, reason } : {},
         });
       uiStore.removeOneFromProgressArray('deleteProfile');
-      if (get(res, 'data.adminDeleteInvestorOrIssuerUser.status') || get(res, 'data.adminHardDeleteUser.status')) {
+      if (get(res, 'data.deleteInvestorOrIssuerUser.status') || get(res, 'data.adminUserHardDelete.status')) {
         userStore.setFieldValue('confirmDelete', true);
         Helper.toast('User Profile Deleted Successfully!', 'success');
         resolve();
       } else {
-        reject(!isHardDelete ? get(res, 'data.adminDeleteInvestorOrIssuerUser.message') : get(res, 'data.adminHardDeleteUser.message'));
+        reject(!isHardDelete ? get(res, 'data.deleteInvestorOrIssuerUser.message') : get(res, 'data.adminUserHardDelete.message'));
       }
     } catch (error) {
       uiStore.removeOneFromProgressArray('deleteProfile');
       Helper.toast('Something went wrong, please try again in sometime', 'error');
+      reject(error.message);
     }
   });
 
@@ -428,7 +429,7 @@ export class UserDetailsStore {
     const params = { accountStatus, id };
     client
       .mutate({
-        mutation: toggleUserAccount,
+        mutation: adminUpdateUserStatus,
         variables: params,
       })
       .then(() => {
@@ -449,7 +450,7 @@ export class UserDetailsStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: freezeAccount,
+          mutation: adminFreezeAccount,
           variables: {
             userId,
             accountId,
@@ -806,11 +807,11 @@ export class UserDetailsStore {
     };
     client
       .mutate({
-        mutation: frozenEmailToAdmin,
+        mutation: frozenAccountActiivtyDetected,
         variables: payLoad,
       })
       .then((res) => {
-        if (res.data.notifyAdminFrozenAccountActivity) {
+        if (res.data.frozenAccountActiivtyDetected) {
           // const offeringId = campaignStore.campaign && campaignStore.campaign.id;
           const offeringDetailObj = { offeringId, isEmailSent: true };
           cookie.save('ADMIN_FROZEN_EMAIL', offeringDetailObj, { maxAge: 3600 });
@@ -942,10 +943,10 @@ export class UserDetailsStore {
     variables.recipientId = get(this.getDetailsOfUser, 'id');
     this.emailListArr = graphql({
       client,
-      query: getEmailList,
+      query: adminFetchEmails,
       variables,
       onFetch: (res) => {
-        if (get(res, 'fetchEmails.emails') && !this.emailListArr.loading) {
+        if (get(res, 'adminFetchEmails.emails') && !this.emailListArr.loading) {
           resolve();
         }
       },
@@ -961,7 +962,7 @@ export class UserDetailsStore {
   }
 
   @computed get userEmails() {
-    return this.emailListArr && this.emailListArr.data.fetchEmails && this.emailListArr.data.fetchEmails.emails;
+    return this.emailListArr && this.emailListArr.data.adminFetchEmails && this.emailListArr.data.adminFetchEmails.emails;
   }
 }
 

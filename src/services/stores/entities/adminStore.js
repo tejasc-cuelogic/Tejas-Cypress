@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import { GqlClient as client } from '../../../api/gqlApi';
-import { adminAddUser } from '../queries/users';
+import { adminCreateUser } from '../queries/users';
 import Helper from '../../../helper/utility';
 
 // TODO: Remove this store as this store is role based, remove ovservables from here
@@ -35,7 +35,7 @@ export class AdminStore {
   pushToDb = (user) => {
     client
       .mutate({
-        mutation: adminAddUser,
+        mutation: adminCreateUser,
         variables: { userDetails: user },
       })
       .then(() => {

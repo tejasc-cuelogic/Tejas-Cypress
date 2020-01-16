@@ -82,7 +82,7 @@ function EmailList(props) {
       />
       <Card fluid className="elastic-search">
         <Card.Description>
-          <EmailsListing loading={loadingArray.includes('getEmailList')} emailList={emailList} displyNoEmails={displyNoEmails} handleModel={handleModel} />
+          <EmailsListing loading={loadingArray.includes('adminFetchEmails')} emailList={emailList} displyNoEmails={displyNoEmails} handleModel={handleModel} />
         </Card.Description>
       </Card>
     </>
