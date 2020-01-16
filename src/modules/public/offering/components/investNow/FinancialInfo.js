@@ -212,6 +212,7 @@ class FinancialInfo extends Component {
                 data-cy="investmentAmount"
                 hidelabel
                 name="investmentAmount"
+                type="tel"
                 currency
                 prefix="$ "
                 fielddata={INVESTMONEY_FORM.fields.investmentAmount}
