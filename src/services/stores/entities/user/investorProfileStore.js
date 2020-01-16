@@ -302,9 +302,7 @@ class InvestorProfileStore {
           reject(err);
         })
         .finally(() => {
-          if (currentStep.form !== 'INVESTMENT_EXP_FORM') {
             uiStore.setProgress(false);
-          }
         });
     });
   }
