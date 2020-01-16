@@ -58,13 +58,13 @@ export default class EdgarFilingList extends Component {
   }
 
   handleXMLSubmissionLockUnlock = () => {
-    const { currentOfferingSlug } = this.props.offeringCreationStore;
+    const { currentOfferingSlug, currentOfferingId } = this.props.offeringCreationStore;
     const filingId = this.props.uiStore.confirmBox.refId;
     const xmlSubmissionId = this.props.uiStore.confirmBox.subRefId;
     const lockStatus = this.props.uiStore.confirmBox.metaData.lockedStatus;
     const status = lockStatus === false ? 'unlocked' : 'locked';
     businessActions.lockUnlockXmlSubmission(
-      currentOfferingSlug,
+      currentOfferingId,
       filingId,
       xmlSubmissionId,
       lockStatus,
@@ -77,7 +77,7 @@ export default class EdgarFilingList extends Component {
   }
 
   handleDeleteFiling = () => {
-    const { currentOfferingSlug } = this.props.offeringCreationStore;
+    const { currentOfferingSlug, currentOfferingId } = this.props.offeringCreationStore;
     if (this.props.uiStore.confirmBox.metaData.isAnyFilingLocked) {
       this.handleDeleteCancel();
       this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/offering-creation/legal/generate-docs`);
@@ -86,7 +86,7 @@ export default class EdgarFilingList extends Component {
       const filingId = this.props.uiStore.confirmBox.subRefId;
       this.handleDeleteCancel();
       this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/offering-creation/legal/generate-docs`);
-      businessActions.deleteFiling(currentOfferingSlug, filingId)
+      businessActions.deleteFiling(currentOfferingId, filingId)
         .then(() => {
           this.setState({ showLoader: false });
           Helper.toast('Filing deleted successfully', 'success');
