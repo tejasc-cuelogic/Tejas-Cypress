@@ -1104,6 +1104,9 @@ export class OfferingCreationStore {
       })
       .then((result) => {
         let upatedOffering = null;
+        if (has(payload, 'offeringSlug')) {
+          this.setFieldValue('currentOfferingSlug', payload.offeringSlug);
+        }
         if (get(result, 'data.updateOffering')) {
           upatedOffering = Helper.replaceKeysDeep(toJS(get(result, 'data.updateOffering')), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
           offeringsStore.updateOfferingList(id, upatedOffering, keyName);

@@ -169,6 +169,7 @@ export default class Close extends Component {
     const {
       updateOfferingMutation,
       currentOfferingId,
+      currentOfferingSlug,
       getClosureObject,
     } = this.props.offeringCreationStore;
     new Promise((res, rej) => {
@@ -187,7 +188,7 @@ export default class Close extends Component {
       .then(() => {
         this.setState({ inProgress: false });
         if (status === 'close') {
-          this.props.history.push(`/dashboard/offerings/completed/edit/${currentOfferingId}/overview`);
+          this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/overview`);
         }
       }).catch((e) => {
         console.log(e);
