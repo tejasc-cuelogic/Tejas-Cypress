@@ -92,7 +92,7 @@ function RequestFactoryLogs(props) {
               totalRecords={totalRecords}
               FILTER_FRM={REQUESTFACTORY_LOG_FRM}
             />
-            {loadingArray.includes('fetchRequestFactoryLogs') ? <InlineLoader />
+            {loadingArray.includes('adminFetchRequestFactoryLogs') ? <InlineLoader />
               : (
                 <div className="table-wrapper">
                   <Table unstackable striped className="application-list">

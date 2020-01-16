@@ -1,13 +1,13 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
-import { getEmailList } from '../../queries/users';
+import { adminFetchEmails } from '../../queries/users';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { EMAILLIST_META } from '../../../constants/admin/data';
 
 export class EmailStore extends DataModelStore {
   constructor() {
-    super({ getEmailList });
+    super({ adminFetchEmails });
   }
 
   EMAIL_LIST_FRM = Validator.prepareFormObject(EMAILLIST_META);
@@ -40,13 +40,13 @@ export class EmailStore extends DataModelStore {
 
       const data = await this.executeQuery({
         client: 'PRIVATE',
-        query: 'getEmailList',
+        query: 'adminFetchEmails',
         variables: params,
-        setLoader: 'getEmailList',
+        setLoader: 'adminFetchEmails',
         fetchPolicy: 'network-only',
       });
       this.setFieldValue('emailLogList', data);
-      const { lek } = data.fetchEmails;
+      const { lek } = data.adminFetchEmails;
       const requestStateObj = {
         ...this.requestState,
         lek: {
@@ -61,14 +61,14 @@ export class EmailStore extends DataModelStore {
   }
 
   get emailList() {
-    return (this.emailLogList && this.emailLogList.fetchEmails
-      && toJS(this.emailLogList.fetchEmails.emails)
+    return (this.emailLogList && this.emailLogList.adminFetchEmails
+      && toJS(this.emailLogList.adminFetchEmails.emails)
     ) || [];
   }
 
   get count() {
-    return (this.emailLogList && this.emailLogList.fetchEmails
-      && toJS(this.emailLogList.fetchEmails.resultCount)
+    return (this.emailLogList && this.emailLogList.adminFetchEmails
+      && toJS(this.emailLogList.adminFetchEmails.resultCount)
     ) || 0;
   }
 }

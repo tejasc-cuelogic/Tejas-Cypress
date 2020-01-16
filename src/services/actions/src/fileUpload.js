@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { get } from 'lodash';
-import { createUploadEntry, removeUploadedFile, createUploadEntryAccreditationAdmin } from '../../stores/queries/common';
+import { createUploadEntry, removeUploadedFile, adminAccreditedStatusUploadEntry } from '../../stores/queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';
 import { DataFormatter } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -88,7 +88,7 @@ export class FileUpload {
   setAccreditationFileUploadData = (userRole, fileData, accountType, action, userId) => new Promise((resolve, reject) => {
     client
       .mutate({
-        mutation: createUploadEntryAccreditationAdmin,
+        mutation: adminAccreditedStatusUploadEntry,
         variables: {
           userRole,
           fileData,

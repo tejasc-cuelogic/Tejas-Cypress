@@ -62,13 +62,13 @@ export default class ConfirmModel extends Component {
     } else {
       const { CLOSE_ACCOUNT_FRM } = this.props.accountStore;
       const account = this.props.userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
-      this.props.accountStore.closeInvestorAccount(
+      this.props.accountStore.adminCloseInvestorAccount(
         userId,
         accountId,
         get(account, 'name') ? get(account, 'name').toUpperCase() : '',
         CLOSE_ACCOUNT_FRM.fields.reason.value,
       ).then((res) => {
-        if (!get(res, 'data.closeInvestorAccount.errorMessage')) {
+        if (!get(res, 'data.adminCloseInvestorAccount.errorMessage')) {
           this.props.userDetailsStore.getUserProfileDetails(this.props.userId);
           this.props.history.push(`/dashboard/users/${this.props.userId}/profile-data/basic`);
         } else {

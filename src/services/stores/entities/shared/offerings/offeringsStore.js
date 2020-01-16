@@ -8,7 +8,7 @@ import { GqlClient as clientPublic } from '../../../../../api/publicApi';
 import { STAGES } from '../../../../constants/admin/offerings';
 import {
   allOfferings, allOfferingsCompact, updateOffering,
-  deleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings,
+  adminDeleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings,
 } from '../../../queries/offerings/manage';
 import { offeringCreationStore, userStore, uiStore, campaignStore } from '../../../index';
 import { ClientDb, DataFormatter } from '../../../../../helper';
@@ -170,7 +170,7 @@ export class OfferingsStore {
     uiStore.addMoreInProgressArray('delete');
     client
       .mutate({
-        mutation: deleteOffering,
+        mutation: adminDeleteOffering,
         variables: {
           id,
         },

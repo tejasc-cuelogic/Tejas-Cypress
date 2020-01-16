@@ -6,7 +6,7 @@ import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as clientPrivate } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import { allTeamMembers, getTeamMemberById, deleteTeamMemberById, newTeamMember, editTeamMember, setMemberOrderInTeam } from '../../queries/Team';
+import { allTeamMembers, adminGetTeamMemberById, adminDeleteTeamMember, adminCreateTeamMember, adminUpdateTeamMemberInfo, adminSetMemberOrderInTeam } from '../../queries/Team';
 import { TEAM } from '../../../constants/team';
 import { uiStore } from '../../index';
 import { fileUpload } from '../../../actions';
@@ -81,11 +81,11 @@ export class TeamStore {
     uiStore.setProgress();
     this.currentUpdate = graphql({
       client: clientPrivate,
-      query: getTeamMemberById,
+      query: adminGetTeamMemberById,
       variables: { id },
       onFetch: (res) => {
-        if (res && res.getTeamMemberById) {
-          this.setFormData(res.getTeamMemberById);
+        if (res && res.adminGetTeamMemberById) {
+          this.setFormData(res.adminGetTeamMemberById);
         }
         uiStore.setProgress(false);
       },
@@ -165,7 +165,7 @@ export class TeamStore {
     uiStore.setProgress();
     clientPrivate
       .mutate({
-        mutation: deleteTeamMemberById,
+        mutation: adminDeleteTeamMember,
         variables: {
           id,
         },
@@ -200,7 +200,7 @@ export class TeamStore {
     }
     clientPrivate
       .mutate({
-        mutation: id === 'new' ? newTeamMember : editTeamMember,
+        mutation: id === 'new' ? adminCreateTeamMember : adminUpdateTeamMemberInfo,
         variables: id === 'new' ? { teamMemberDetailsInput: data } : { id, teamMemberDetailsInput: data },
         refetchQueries: [{ query: allTeamMembers }],
       })
@@ -373,7 +373,7 @@ export class TeamStore {
     uiStore.setProgress();
     clientPrivate
       .mutate({
-        mutation: setMemberOrderInTeam,
+        mutation: adminSetMemberOrderInTeam,
         variables: { teamDetails },
         refetchQueries: [{ query: allTeamMembers }],
       }).then(() => {
