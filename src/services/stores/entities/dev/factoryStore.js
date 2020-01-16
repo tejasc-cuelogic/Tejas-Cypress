@@ -1,14 +1,14 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
 import { get, isEmpty, forEach, find, includes, keyBy } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
-import { listFilePlugins, getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger, fetchRequestFactoryLogs, fetchProcessLogs, fileFactoryPluginTrigger } from '../../queries/data';
+import { adminListFilePlugins, getPluginList, adminInvokeRequest, adminFetchCronLogs, adminInvokeProcessorDriver, adminFetchRequestFactoryLogs, adminFetchProcessLogs, adminGenerateFile } from '../../queries/data';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { REQUESTFACTORY_META, CRONFACTORY_META, PROCESSFACTORY_META, REQUESTFACTORY_LOG__META, PROCESSFACTORY_LOG__META, FILEFACTORY_META } from '../../../constants/admin/data';
 
 export class FactoryStore extends DataModelStore {
   constructor() {
-    super({ listFilePlugins, getPluginList, requestFactoryPluginTrigger, fetchCronLogs, processFactoryPluginTrigger, fetchRequestFactoryLogs, fetchProcessLogs, fileFactoryPluginTrigger });
+    super({ adminListFilePlugins, getPluginList, adminInvokeRequest, adminFetchCronLogs, adminInvokeProcessorDriver, adminFetchRequestFactoryLogs, adminFetchProcessLogs, adminGenerateFile });
   }
 
   REQUESTFACTORY_FRM = Validator.prepareFormObject(REQUESTFACTORY_META);
@@ -100,14 +100,14 @@ export class FactoryStore extends DataModelStore {
 
       const data = await this.executeQuery({
         client: 'PRIVATE',
-        query: this.selectedFactory === 'CRON' ? 'fetchCronLogs' : this.selectedFactory === 'REQUEST' ? 'fetchRequestFactoryLogs' : 'fetchProcessLogs',
+        query: this.selectedFactory === 'CRON' ? 'adminFetchCronLogs' : this.selectedFactory === 'REQUEST' ? 'adminFetchRequestFactoryLogs' : 'adminFetchProcessLogs',
         variables: params,
-        setLoader: this.selectedFactory === 'CRON' ? 'fetchCronLogs' : this.selectedFactory === 'REQUEST' ? 'fetchRequestFactoryLogs' : 'fetchProcessLogs',
+        setLoader: this.selectedFactory === 'CRON' ? 'adminFetchCronLogs' : this.selectedFactory === 'REQUEST' ? 'adminFetchRequestFactoryLogs' : 'adminFetchProcessLogs',
         fetchPolicy: 'network-only',
       });
       const dataList = this.selectedFactory === 'CRON' ? 'cronLogList' : 'requestLogList';
       this.setFieldValue(dataList, data);
-      const { lek } = this.selectedFactory === 'CRON' ? data.fetchCronLogs : this.selectedFactory === 'REQUEST' ? data.fetchRequestFactoryLogs : data.fetchProcessLogs;
+      const { lek } = this.selectedFactory === 'CRON' ? data.adminFetchCronLogs : this.selectedFactory === 'REQUEST' ? data.adminFetchRequestFactoryLogs : data.adminFetchProcessLogs;
       const requestStateObj = {
         ...this.requestState,
         lek: {
@@ -148,7 +148,7 @@ export class FactoryStore extends DataModelStore {
         setLoader: 'getPluginList',
         fetchPolicy: 'cache-first',
       });
-      if ((get(res, 'listRequestPlugins.plugins') || get(res, 'listCronPlugins.plugins') || get(res, 'listProcessorPlugins.plugins'))) {
+      if ((get(res, 'adminListRequestPlugins.plugins') || get(res, 'adminListCronPlugins.plugins') || get(res, 'adminListProcessorPlugins.plugins'))) {
         this.setFieldValue('pluginListArr', res);
         this.setPluginDropDown();
       }
@@ -161,14 +161,14 @@ export class FactoryStore extends DataModelStore {
     try {
       const res = await this.executeQuery({
         client: 'PRIVATE',
-        query: 'listFilePlugins',
-        setLoader: 'listFilePlugins',
+        query: 'adminListFilePlugins',
+        setLoader: 'adminListFilePlugins',
         fetchPolicy: 'cache-first',
       });
-      if (get(res, 'listFilePlugins')) {
-        const fileData = { listFilePlugins: { plugins: get(res, 'listFilePlugins') } };
+      if (get(res, 'adminListFilePlugins')) {
+        const fileData = { adminListFilePlugins: { plugins: get(res, 'adminListFilePlugins') } };
         this.setFieldValue('pluginListArr', fileData);
-        this.setFieldValue('FILEFACTORY_FRM', this.dropDownValuesForPlugin('listFilePlugins'), 'fields.method.values');
+        this.setFieldValue('FILEFACTORY_FRM', this.dropDownValuesForPlugin('adminListFilePlugins'), 'fields.method.values');
       }
     } catch (error) {
       Helper.toast('Something went wrong, please try again later.', 'error');
@@ -177,13 +177,13 @@ export class FactoryStore extends DataModelStore {
 
 
   get cronLogs() {
-    return (this.cronLogList && this.cronLogList.fetchCronLogs
-      && toJS(this.cronLogList.fetchCronLogs.cronLog)
+    return (this.cronLogList && this.cronLogList.adminFetchCronLogs
+      && toJS(this.cronLogList.adminFetchCronLogs.cronLog)
     ) || [];
   }
 
   get requestLogs() {
-    const currentFactory = this.selectedFactory === 'REQUEST' ? 'fetchRequestFactoryLogs' : 'fetchProcessLogs';
+    const currentFactory = this.selectedFactory === 'REQUEST' ? 'adminFetchRequestFactoryLogs' : 'adminFetchProcessLogs';
     const currentFactoryLog = this.selectedFactory === 'REQUEST' ? 'requestLogs' : 'processLogs';
     return (this.requestLogList && this.requestLogList[currentFactory]
       && toJS(this.requestLogList[currentFactory][currentFactoryLog])
@@ -203,13 +203,13 @@ export class FactoryStore extends DataModelStore {
   }
 
   get count() {
-    return (this.cronLogList && this.cronLogList.fetchCronLogs
-      && toJS(this.cronLogList.fetchCronLogs.resultCount)
+    return (this.cronLogList && this.cronLogList.adminFetchCronLogs
+      && toJS(this.cronLogList.adminFetchCronLogs.resultCount)
     ) || 0;
   }
 
   get requestCount() {
-    const currentFactory = this.selectedFactory === 'REQUEST' ? 'fetchRequestFactoryLogs' : 'fetchProcessLogs';
+    const currentFactory = this.selectedFactory === 'REQUEST' ? 'adminFetchRequestFactoryLogs' : 'adminFetchProcessLogs';
     return (this.requestLogList && this.requestLogList[currentFactory]
       && toJS(this.requestLogList[currentFactory].resultCount)
     ) || 0;
@@ -237,9 +237,9 @@ export class FactoryStore extends DataModelStore {
           variables.payload = TestformData;
         }
         const result = await this.executeMutation({
-          mutation: 'requestFactoryPluginTrigger',
+          mutation: 'adminInvokeRequest',
           variables: { ...variables },
-          setLoader: requestFactoryPluginTrigger,
+          setLoader: adminInvokeRequest,
         });
         Helper.toast('Your request is processed.', 'success');
         if (result.imageProcessing) {
@@ -255,11 +255,11 @@ export class FactoryStore extends DataModelStore {
   });
 
   setPluginDropDown = () => {
-    this.REQUESTFACTORY_FRM.fields.plugin.values = this.dropDownValuesForPlugin('listRequestPlugins');
-    this.REQUESTFACTORY_LOG_FRM.fields.plugin.values = this.dropDownValuesForPlugin('listRequestPlugins');
-    this.CRONFACTORY_FRM.fields.cron.values = this.dropDownValuesForPlugin('listCronPlugins');
-    this.PROCESSFACTORY_FRM.fields.method.values = this.dropDownValuesForPlugin('listProcessorPlugins');
-    this.PROCESSFACTORY_LOG_FRM.fields.plugin.values = this.dropDownValuesForPlugin('listProcessorPlugins');
+    this.REQUESTFACTORY_FRM.fields.plugin.values = this.dropDownValuesForPlugin('adminListRequestPlugins');
+    this.REQUESTFACTORY_LOG_FRM.fields.plugin.values = this.dropDownValuesForPlugin('adminListRequestPlugins');
+    this.CRONFACTORY_FRM.fields.cron.values = this.dropDownValuesForPlugin('adminListCronPlugins');
+    this.PROCESSFACTORY_FRM.fields.method.values = this.dropDownValuesForPlugin('adminListProcessorPlugins');
+    this.PROCESSFACTORY_LOG_FRM.fields.plugin.values = this.dropDownValuesForPlugin('adminListProcessorPlugins');
   }
 
   isValidJson = (json) => {
@@ -308,14 +308,14 @@ export class FactoryStore extends DataModelStore {
           variables.payload = TestformData;
         }
         const result = await this.executeMutation({
-          mutation: 'processFactoryPluginTrigger',
+          mutation: 'adminInvokeProcessorDriver',
           variables: { ...variables },
-          setLoader: processFactoryPluginTrigger,
+          setLoader: adminInvokeProcessorDriver,
         });
         Helper.toast('Your request is processed.', 'success');
-        if (result.data.invokeProcessorDriver) {
-          this.setFieldValue('processFactoryResponse', result.data.invokeProcessorDriver);
-          resolve(result.data.invokeProcessorDriver);
+        if (result.data.adminInvokeProcessorDriver) {
+          this.setFieldValue('processFactoryResponse', result.data.adminInvokeProcessorDriver);
+          resolve(result.data.adminInvokeProcessorDriver);
         }
       }
     } catch (error) {
@@ -337,9 +337,9 @@ export class FactoryStore extends DataModelStore {
       try {
         this.setFieldValue('inProgress', true, 'fileFactory');
         const result = await this.executeMutation({
-          mutation: 'fileFactoryPluginTrigger',
+          mutation: 'adminGenerateFile',
           variables: { ...TestformData },
-          setLoader: fileFactoryPluginTrigger,
+          setLoader: adminGenerateFile,
           message: { error: 'Something went wrong, please try again later.' },
         });
         if (get(result, 'data.generateFile')) {
