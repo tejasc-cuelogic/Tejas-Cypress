@@ -387,6 +387,14 @@
             }
         }
     }
+    &.alumni-card{
+        padding: 0 !important;
+        margin-bottom: @20px;
+        .ui.header,p, a{
+            font-size: @17px;
+            line-height: 26px;
+        }
+    }
 }
 
 .ui.card.flexible{

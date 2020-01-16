@@ -44,6 +44,15 @@
             border-radius: 0;
         }
         &.nss-modal{
+            >.content{
+                p{
+                    font-size: @17px;
+                    line-height: 26px;
+                    b{
+                        line-height: 34px;
+                    }
+                }
+            }
             @media only screen and (min-width:@computerBreakpoint){
                 width: 800px;
                 >.content{
@@ -58,6 +67,11 @@
                         justify-content: center;
                         text-align: center;
                     }
+                }
+            }
+            @media only screen and (max-width:@largestMobileScreen){
+                >.content>.description{
+                    padding: 40px 7px 10px!important;
                 }
             }
         }

@@ -17,31 +17,31 @@ class Space extends Component {
       {
         title: 'Breaking Bao',
         image: 'space/breaking.jpg',
-        description: 'Fusion steamed buns featuring unique and compelling flavor combinations',
+        description: <>Fusion steamed buns featuring<Responsive as="br" maxWidth={767} /> unique and compelling flavor<Responsive as="br" maxWidth={767} /> combinations</>,
         link: 'https://www.breakingbao.com/',
       },
       {
         title: 'Pura Vida',
         image: 'space/pura-vida.jpg',
-        description: 'Cold bar serving fresh ceviche and homemade artisanal teas',
+        description: <>Cold bar serving fresh ceviche and<Responsive as="br" maxWidth={767} /> homemade artisanal teas</>,
         link: 'https://houston.eater.com/2019/8/12/20802393/pura-vida-pop-up-nextseed-space-greenway-plaza',
       },
       {
         title: 'The DoughCone',
         image: 'space/theDoughCone.jpg',
-        description: 'Handmade Donut Cones & Ice Cream with unlimited toppings',
+        description: <>Handmade Donut Cones & Ice<Responsive as="br" maxWidth={767} /> Cream with unlimited toppings</>,
         link: 'https://www.facebook.com/TheDoughCone/',
       },
       {
         title: 'Tlahuac',
         image: 'space/tlahuac.jpg',
-        description: 'Central Mexican cuisine and pan dulce in Houston, TX',
+        description: <>Central Mexican cuisine and<Responsive as="br" maxWidth={767} /> pan dulce in Houston, TX</>,
         link: 'https://www.facebook.com/TlahuacHTX/',
       },
       {
         title: 'The Waffle Bus',
         image: 'space/the-waffle-bus.jpg',
-        description: 'Zagat-rated chicken & waffles in Houston, TX',
+        description: <>Zagat-rated chicken & waffles in<Responsive as="br" maxWidth={767} /> Houston, TX</>,
         link: 'https://www.chron.com/entertainment/restaurants-bars/article/Waffle-Bus-getting-permanent-location-in-the-13221311.php',
       },
     ];
@@ -112,38 +112,38 @@ class Space extends Component {
                   </Item>
                 </Item.Group>
                 {responsiveVars.isMobile
-                && <Button fluid as={Link} to="/space/contact" className="mt-20" secondary>Contact Us</Button>}
+                && <Button fluid as={Link} to="/space/contact" className="mt-30" secondary>Contact Us</Button>}
               </Grid.Column>
             </Grid>
           </section>
           <Divider fitted />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-            <Header as="h2" className="mb-80 center-align">Currently at NextSeed Space</Header>
-            <Segment className="no-shadow">
+            <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-80 center-align'}>Currently at NextSeed Space</Header>
+            <Segment className={`${responsiveVars.isMobile ? 'plr-0 pt-0 pb-0' : ''} no-shadow`}>
               <Grid stackable>
                 <Grid.Column width="5" className="plr-0 pt-0 pb-0">
-                  <NSImage path="space/chicken-and-rice.jpg" />
+                  <NSImage path="space/chicken-and-rice.jpg" fluid={responsiveVars.isMobile} />
                 </Grid.Column>
                 <Grid.Column width="11" verticalAlign="middle" textAlign="center">
-                  <Header as="h3">The Chicken & Rice Guys</Header>
-                  <p>Boston{"'"}s original Halal-style street<Responsive as="br" minWidth={992} /> food has arrived in Houston</p>
-                  <Button className="mt-30 hoverable" basic secondary as={Link} to="/space/chicken-and-rice">Visit at Greenway Plaza</Button>
+                  <Header as="h3" className="space-header">The Chicken & Rice Guys</Header>
+                  <p>Boston{"'"}s original Halal-style street<br /> food has arrived in Houston</p>
+                  <Button fluid={responsiveVars.isMobile} className={`${responsiveVars.isMobile ? 'mb-30 mt-20 space-visit-btn' : ' mt-30'} hoverable`} basic secondary as={Link} to="/space/chicken-and-rice">Visit at Greenway Plaza</Button>
                 </Grid.Column>
               </Grid>
             </Segment>
           </section>
           <Divider fitted />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
-            <Header as="h2" className="mb-80 center-align">Alumni</Header>
+            <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-50' : 'mb-80 center-align'}>Alumni</Header>
             <Card.Group itemsPerRow={3} stackable>
               {
                 alumni.map(a => (
-                  <Card className="bordered center-align">
-                    <NSImage path={a.image} centered />
+                  <Card className={`${responsiveVars.isMobile ? 'alumni-card' : ''} bordered center-align`}>
+                    <NSImage path={a.image} centered fluid={responsiveVars.isMobile} />
                     <Card.Content className="pb-30 pt-30">
                       <Header as="h5">{a.title}</Header>
                       <p>{a.description}</p>
-                      <a target="_blank" rel="noopener noreferrer" href={a.link} className="secondary-link mt-30 display-block">Read More</a>
+                      <a target="_blank" rel="noopener noreferrer" href={a.link} className={`${responsiveVars.isMobile ? 'mt-20' : 'mt-30'} secondary-link display-block`}>Read More</a>
                     </Card.Content>
                   </Card>
                 ))
@@ -154,14 +154,17 @@ class Space extends Component {
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
             <Grid centered reversed="mobile">
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 8} floated="left">
-                <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-40'}>Interested in learning more<Responsive as="br" minWidth={768} /> about NextSeed Space?</Header>
+                <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-40'}>Interested in learning more<Responsive as="br" minWidth={992} /> about NextSeed Space?</Header>
                 <p>
                   NextSeed Space is an initiative by NextSeed, a<Responsive as="br" minWidth={768} /> community-driven investment platform focused on<Responsive as="br" minWidth={768} /> local offerings.
                 </p>
-                <Button as={Link} to="/space/contact" className="mt-60" secondary>Contact Us</Button>
+                {!responsiveVars.isMobile
+                && <Button as={Link} to="/space/contact" className="mt-60" secondary>Contact Us</Button>}
               </Grid.Column>
               <Grid.Column width={responsiveVars.uptoTablet ? 16 : 7} floated="right">
                 <NSImage path="space/img-2.jpg" />
+                {responsiveVars.isMobile
+                && <Button fluid as={Link} to="/space/contact" className="mt-40" secondary>Contact Us</Button>}
               </Grid.Column>
             </Grid>
           </section>

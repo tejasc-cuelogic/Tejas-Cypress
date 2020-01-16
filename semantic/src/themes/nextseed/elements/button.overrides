@@ -18,9 +18,15 @@
             border: 0;
             font-weight: @normal;
         }
-        &.secondary.hoverable:hover{
-            background: @primary-two !important;
-            color: @white !important;
+        &.secondary.hoverable{
+            &.space-visit-btn{
+                width: calc(100% - 40px);
+                margin: 0 @20px;
+            }
+            &:hover, &:active, &:focus{
+                background: @primary-two !important;
+                color: @white !important;
+            }
         }
     }
 }
