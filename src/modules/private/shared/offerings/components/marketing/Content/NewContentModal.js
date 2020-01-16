@@ -27,7 +27,7 @@ class NewContentModal extends Component {
     const { smartElement, index, toggleModal, uiStore } = this.props;
     const { inProgress } = uiStore;
     return (
-      <Modal open closeIcon size="small" onClose={() => toggleModal(false)} closeOnDimmerClick={false}>
+      <Modal open closeIcon size="small" onClose={() => toggleModal(false, index)} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Add new component</Header>
         </Modal.Header>
@@ -44,7 +44,7 @@ class NewContentModal extends Component {
             </Form>
             <div className="center-align">
               <Button loading={inProgress} primary content="Save" onClick={this.handleFormSubmit} />
-              <Button content="Close" onClick={() => toggleModal(false)} />
+              <Button content="Close" onClick={() => toggleModal(false, index)} />
             </div>
           </Modal.Content>
         }

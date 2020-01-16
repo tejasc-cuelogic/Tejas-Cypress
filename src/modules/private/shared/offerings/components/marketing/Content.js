@@ -24,10 +24,10 @@ export default class Content extends Component {
     }
   }
 
-  toggleModal = (val) => {
+  toggleModal = (val, index = false) => {
     this.setState({ openModal: val });
-    if (!val) {
-      // remove last added
+    if (index) {
+      this.props.manageOfferingStore.removeOne('OFFERING_CONTENT_FRM', 'content', index);
     }
   }
 
@@ -52,7 +52,7 @@ export default class Content extends Component {
             <div className="sticky-sidebar">
               <SecondaryMenu secondary vertical match={match} navItems={navItems} />
               {OFFERING_CONTENT_FRM.fields.content.length < 10
-              && <Button size="small" color="blue" className="link-button mt-20" onClick={this.addMore}>+ Add another leader</Button>
+              && <Button size="small" color="blue" className="link-button mt-20" onClick={this.addMore}>+ Add another component</Button>
               }
             </div>
           </Grid.Column>
