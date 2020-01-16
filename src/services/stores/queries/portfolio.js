@@ -14,6 +14,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
     tnar
     investments {
       pending {
+        tranche
         agreementId
         investmentDate
         investedAmount
