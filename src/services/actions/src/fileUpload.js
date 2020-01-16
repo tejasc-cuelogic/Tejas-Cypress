@@ -1,11 +1,12 @@
 import moment from 'moment';
 import { get } from 'lodash';
-import { createUploadEntry, removeUploadedFile, createUploadEntryAccreditationAdmin } from '../../stores/queries/common';
+import { createUploadEntry, removeUploadedFile, adminAccreditedStatusUploadEntry } from '../../stores/queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';
 import { DataFormatter } from '../../../helper';
 import Helper from '../../../helper/utility';
 import { uiStore, commonStore } from '../../stores';
 import apiService from '../../../api/restApi';
+import { S3_BUCKET_URL } from '../../../constants/common';
 
 export class FileUpload {
   setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '', tags = '', params) => new Promise((resolve, reject) => {
@@ -74,12 +75,12 @@ export class FileUpload {
     field.rule = 'required';
   }
 
-  uploadToS3 = (fileObj, dir) => new Promise((resolve, reject) => {
+  uploadToS3 = (fileObj, dir, fullUrl = false) => new Promise((resolve, reject) => {
     const key = `${dir}/${moment().unix()}_${Helper.sanitize(fileObj.name)}`;
     const dataToUpload = Helper.isBase64(fileObj.obj) ? Helper.b64toBlob(fileObj.obj)
       : fileObj.obj;
     commonStore.getCdnSignedUrl(key).then((res) => {
-      apiService.uploadOnS3(res.data.createCdnSignedUrl, dataToUpload, fileObj.type).then(() => resolve(`${key}`))
+      apiService.uploadOnS3(res.data.createCdnSignedUrl, dataToUpload, fileObj.type).then(() => resolve(fullUrl ? `${S3_BUCKET_URL}/${key}` : `${key}`))
         .catch(err => reject(err));
     }).catch(err => reject(err));
   });
@@ -87,7 +88,7 @@ export class FileUpload {
   setAccreditationFileUploadData = (userRole, fileData, accountType, action, userId) => new Promise((resolve, reject) => {
     client
       .mutate({
-        mutation: createUploadEntryAccreditationAdmin,
+        mutation: adminAccreditedStatusUploadEntry,
         variables: {
           userRole,
           fileData,

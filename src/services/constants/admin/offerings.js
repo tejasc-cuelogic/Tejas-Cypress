@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
 
-export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement', 'closingBinder'];
+export const OFFERING_CREATION_ARRAY_KEY_LIST = ['fileSubstitution', 'additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement', 'closingBinder'];
 
 export const STAGES = {
   CREATION: { ref: 'creation', publicRef: 'creation', accessKey: 1, label: 'Creation' },
@@ -3106,3 +3106,27 @@ export const OFFERING_CLOSE_COUNCURRENCY_OPTIONS = [
   { key: 9, value: 9, text: '9' },
   { key: 10, value: 10, text: '10' },
 ];
+
+export const OFFERING_CLOSE_EXPORT_ENVELOPES = {
+  fileSubstitution: [
+    {
+      replacePage: {
+        label: 'Page in envelope to replace',
+        value: '',
+        error: undefined,
+        rule: 'optional',
+        placeHolder: 'Enter here',
+      },
+      upload: {
+        value: '',
+        label: '',
+        error: undefined,
+        rule: 'required',
+        showLoader: false,
+        preSignedUrl: '',
+        fileId: '',
+        fileData: '',
+        objType: 'FileObjectType',
+      },
+    }],
+};

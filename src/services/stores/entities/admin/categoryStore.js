@@ -2,7 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { sortBy, filter } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { getCategoriesList, createCategory, updateCategoryInfo, deleteCategory, updateCategoryStaus, setCategoryOrderForCategoryType } from '../../queries/category';
+import { adminCategories, adminCreateCategory, adminUpdateCategoryInfo, adminDeleteCategory, adminUpdateCategoryStaus, adminSetCategoryOrderForCategoryType } from '../../queries/category';
 import { CATEGORY_DETAILS, CATEGORY_DATA } from '../../../constants/admin/categories';
 import { FormValidator as Validator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
@@ -36,7 +36,7 @@ export class CategoryStore {
     initRequest = () => {
       this.data = graphql({
         client,
-        query: getCategoriesList,
+        query: adminCategories,
         fetchPolicy: 'network-only',
         variables: { types: null },
         onFetch: () => {
@@ -76,7 +76,7 @@ export class CategoryStore {
     }
 
     @computed get categories() {
-      return (this.data.data && sortBy(toJS(this.data.data.categories), ['order'])) || [];
+      return (this.data.data && sortBy(toJS(this.data.data.adminCategories), ['order'])) || [];
     }
 
     @computed get loading() {
@@ -97,10 +97,10 @@ export class CategoryStore {
       uiStore.setProgress();
       client
         .mutate({
-          mutation: deleteCategory,
+          mutation: adminDeleteCategory,
           variables: { id },
           refetchQueries: [{
-            query: getCategoriesList,
+            query: adminCategories,
             variables: { types: null },
           }],
         }).then(() => {
@@ -116,7 +116,7 @@ export class CategoryStore {
     @action
     saveCategories = (id, isPublished) => {
       uiStore.setProgress();
-      const mutation = id === 'new' ? createCategory : (isPublished === 'defaultPublished' ? updateCategoryInfo : updateCategoryStaus);
+      const mutation = id === 'new' ? adminCreateCategory : (isPublished === 'defaultPublished' ? adminUpdateCategoryInfo : adminUpdateCategoryStaus);
       const param = {};
       if (id !== 'new') {
         param.id = id;
@@ -171,7 +171,7 @@ export class CategoryStore {
       uiStore.setProgress();
       client
         .mutate({
-          mutation: setCategoryOrderForCategoryType,
+          mutation: adminSetCategoryOrderForCategoryType,
           variables: { categoryDetails },
         }).then(() => {
           Helper.toast('Category Order Changed successfully.', 'success');

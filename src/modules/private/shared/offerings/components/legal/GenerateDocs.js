@@ -33,7 +33,7 @@ export default class GenerateDocs extends Component {
 
   createBusinessFiling = (e) => {
     e.stopPropagation();
-    this.props.offeringCreationStore.generateBusinessFiling();
+    this.props.offeringCreationStore.adminCreateBusinessFiling();
   }
 
   render() {

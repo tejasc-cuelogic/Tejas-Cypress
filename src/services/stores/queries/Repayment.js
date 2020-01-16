@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
-export const paymentsIssuerList = gql`
-  query paymentsIssuerList{
-    paymentsIssuerList {
+export const adminPaymentsIssuerList = gql`
+  query adminPaymentsIssuerList{
+    adminPaymentsIssuerList {
       sinkingFundBalance
       offering {
         id

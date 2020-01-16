@@ -91,7 +91,7 @@ function ProcessFactoryLogs(props) {
               totalRecords={totalRecords}
               FILTER_FRM={PROCESSFACTORY_LOG_FRM}
             />
-            {loadingArray.includes('fetchProcessLogs') ? <InlineLoader />
+            {loadingArray.includes('adminFetchProcessLogs') ? <InlineLoader />
               : (
                 <div className="table-wrapper">
                   <Table unstackable striped className="application-list">
