@@ -137,7 +137,7 @@ export default class XmlForm extends React.Component {
     this.redirectToNextstep(params.nextTabName);
     this.props.businessStore.setXmlSubStepsStatus(params.currentStepName, true);
     if (this.props.businessStore.xmlSubmissionId === undefined) {
-      const { xmlSubmissionId } = params.data.upsertXmlInformation;
+      const { xmlSubmissionId } = params.data.adminUpsertXmlInformation;
       this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
     }
   };

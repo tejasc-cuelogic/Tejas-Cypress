@@ -291,20 +291,20 @@ class InvestorProfileStore {
             if (data.data.createInvestorProfile && data.data.createInvestorProfile.status) {
               userDetailsStore.setUserStatus(data.data.createInvestorProfile.status);
             }
-            userDetailsStore.getUser(userStore.currentUser.sub).then(() => resolve());
+            userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
+              uiStore.setProgress(false);
+              resolve();
+            });
           } else {
             this.setStepToBeRendered(currentStep.stepToBeRendered);
+            uiStore.setProgress(false);
             resolve();
           }
         }))
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
-        })
-        .finally(() => {
-          if (currentStep.form !== 'INVESTMENT_EXP_FORM') {
-            uiStore.setProgress(false);
-          }
+          uiStore.setProgress(false);
         });
     });
   }
