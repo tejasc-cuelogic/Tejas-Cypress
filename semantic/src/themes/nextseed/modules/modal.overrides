@@ -42,6 +42,12 @@
             width: 100% !important;
             margin: 0;
             border-radius: 0;
+            >.content{
+                background: @white !important;
+            }
+            >:last-child{
+                border-radius: 0;
+            }
         }
         &.nss-modal{
             >.content{
@@ -862,6 +868,21 @@
     >.content{
         padding:@35px 0;
         background-color:transparent;
+    }
+    &.fullscreen.full-screen-modal{
+        >.close{
+            background:@white;
+            opacity:1;
+            color:@neutral-middark;
+        }
+        @media only screen and (max-width:@largestMobileScreen){
+            >.content{
+                font-size: @15px;
+                p{
+                    line-height: 24px;
+                }
+            }
+        }
     }
 }
 .transaction-details{

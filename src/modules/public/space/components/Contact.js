@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Header, Divider, Grid, Form, Responsive, Button, Select } from 'semantic-ui-react';
+import { inject, observer } from 'mobx-react';
 import NSImage from '../../../shared/NSImage';
 
 
@@ -30,10 +31,10 @@ const industry = [
   { key: 'o', text: 'Other', value: 'Other' },
 ];
 
-const Contact = ({ history }) => (
-    <Modal open closeIcon onClose={() => handleCloseModal(history)} size="large">
+const Contact = ({ history, uiStore }) => (
+    <Modal dimmer={uiStore.responsiveVars.isMobile ? 'inverted' : ''} className={uiStore.responsiveVars.isMobile ? 'full-screen-modal' : ''} open closeIcon onClose={() => handleCloseModal(history)} size={uiStore.responsiveVars.isMobile ? 'fullscreen' : 'large'}>
       <Modal.Content>
-        <section className="padded">
+        <section className={!uiStore.responsiveVars.isMobile ? 'padded' : ''}>
           <Grid columns="equal" stackable>
             <Grid.Column only="computer">
               <Header as="h3">Interested in learning more<Responsive as="br" minWidth={992} /> about NextSeed Space?</Header>
@@ -42,6 +43,13 @@ const Contact = ({ history }) => (
               <NSImage path="space/crowd-hero.jpg" />
             </Grid.Column>
             <Grid.Column>
+              {uiStore.responsiveVars.isMobile
+              && (
+                <>
+                  <Header as="h3">Interested in learning about<br /> NextSeed Space?</Header>
+                  <p className="mb-30">Let us know how we can support you and we’ll be<br /> in touch.</p>
+                </>
+              )}
               <Form className="nss-form">
                 <Form.Group widths="equal">
                   <Form.Input fluid label="First Name" placeholder="First Name" />
@@ -83,4 +91,4 @@ const Contact = ({ history }) => (
     </Modal>
   );
 
-export default Contact;
+export default inject('uiStore')(observer(Contact));
