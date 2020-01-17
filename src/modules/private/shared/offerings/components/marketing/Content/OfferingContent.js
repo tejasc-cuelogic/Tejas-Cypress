@@ -27,17 +27,20 @@ class OfferingContent extends Component {
     this.setState({ [key]: val });
   }
 
-  handleFormSubmit = () => {
+  handleFormSubmit = (reOrder = false) => {
     const params = {
       keyName: false,
       forms: ['OFFERING_CONTENT_FRM'],
     };
+    if (reOrder) {
+      this.props.manageOfferingStore.reOrderHandle(this.props.manageOfferingStore.OFFERING_CONTENT_FRM.fields.content);
+    }
     this.props.manageOfferingStore.updateOffering(params);
   }
 
   handleDeleteAction = () => {
     this.props.manageOfferingStore.removeOne('OFFERING_CONTENT_FRM', 'content', this.props.index);
-    this.handleFormSubmit();
+    this.handleFormSubmit(true);
     this.props.history.push(this.props.refLink);
   }
 
