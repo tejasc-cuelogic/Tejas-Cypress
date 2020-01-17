@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Card } from 'semantic-ui-react';
+import { Modal, Card, Icon } from 'semantic-ui-react';
 import moment from 'moment';
 import { includes, get } from 'lodash';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
@@ -54,6 +54,7 @@ class InvestmentDetails extends PureComponent {
       { title: 'Documents', to: 'documents', component: Documents, load: false },
     ];
     const { campaign, details, dataRoomDocs } = this.props.campaignStore;
+    const { responsiveVars } = this.props.uiStore;
     const hardCloseDate = moment(new Date(`${get(campaign, 'closureSummary.hardCloseDate')} 23:59:59`)).format('MM/DD/YYYY HH:mm:ss');
     const summaryDetails = {
       accountType: 'individual',
@@ -82,19 +83,29 @@ class InvestmentDetails extends PureComponent {
       navItems = navItems.filter(f => f.title !== 'Documents');
     }
     return (
-      <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
-        <Modal.Content className="transaction-details">
+      <Modal closeOnDimmerClick={false} closeIcon={!responsiveVars.isMobile} size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
+        {responsiveVars.isMobile && (
+        <div className="mob-header">
+          <Icon className="ns-close-circle" color="grey" onClick={this.handleCloseModal} />
+        </div>
+        )}
+        <Modal.Content className={`${responsiveVars.isMobile ? 'mt-30' : ''} transaction-details`}>
           {details.loading || loadingInvestDetails ? <InlineLoader /> : (
             <>
               <SummaryHeader details={summaryDetails} loading={details.loading || loadingInvestDetails} />
-              <Card fluid>
-                <SecondaryMenu match={match} navItems={navItems} />
+              <Card fluid className={responsiveVars.isMobile ? 'mt-0' : ''}>
+                {!responsiveVars.isMobile
+                && <SecondaryMenu match={match} navItems={navItems} />
+                }
                 <SuspenseBoundary>
                   <Switch>
                     <Route
                       exact
                       path={match.url}
-                      component={getModule(navItems[0].component)}
+                      render={(props) => {
+                        const FirstComponent = getModule(navItems[0].component);
+                        return (<FirstComponent {...props} refMatch={JSON.parse(JSON.stringify(match))} MobileNavItems={navItems} />);
+                      }}
                     />
                     {
                       navItems.map((item) => {
@@ -109,6 +120,8 @@ class InvestmentDetails extends PureComponent {
                                 isAdmin={this.props.isAdmin}
                                 portfolioSection
                                 {...props}
+                                MobileNavItems={navItems}
+                                refMatch={JSON.parse(JSON.stringify(match))}
                               />
                             )
                           }

@@ -256,6 +256,18 @@
                 border-top: none;
             }
         }
+        &.without-border-shadow tr{
+            box-shadow: none !important;
+            &:last-child{
+                border: 0;
+            }
+            td>.ui.buttons>.ui.button{
+                margin: @14px 0 !important;
+                &:last-child{
+                    margin-bottom: 0 !important;
+                }
+            }
+        }
     }
     &.basic.form-table {
         background: @neutral-offwhite;

@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { uiStore, userDetailsStore, userStore } from '../../../index';
+import { uiStore, userDetailsStore } from '../../../index';
 import { MFA_MODE_TYPES } from '../../../../constants/multiFactorAuth';
 import { FormValidator as Validator } from '../../../../../helper';
 import { updateUserMFA } from '../../../queries/mfaModes';
@@ -48,7 +48,6 @@ export class MultiFactorAuthStore {
         .then(action(() => {
           userDetailsStore.setUserMfaMode(mfaModeType);
           Helper.toast('Multi-factor autentitaction updated successfully.', 'success');
-          userDetailsStore.getUser(userStore.currentUser.sub);
           resolve();
         }))
         .catch(() => {

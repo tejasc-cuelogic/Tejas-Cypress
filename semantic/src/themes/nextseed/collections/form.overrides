@@ -634,6 +634,15 @@
             left: 10px; 
         }
     }
+    &.nss-form .field{
+        margin-bottom: @25px;
+        .ui.input input, .ui.selection.dropdown>.text, input[type=tel]{
+            font-size: @13px;
+        }
+        .ui.selection.dropdown{
+            padding: @10px @15px @10px 0;
+        }
+    }
 }
 textarea{
 	font-family:@pageFont;
@@ -811,7 +820,7 @@ textarea{
         color:@fullBlack;
     }
     input[type=file]{
-        opacity:0;
+        opacity:0 !important;
         width:100%;
         position:absolute;
         top:0;

@@ -346,6 +346,25 @@
             }
         }
     }
+    &.space-user{
+        margin-left: @40px;
+        margin-top: @60px;
+        >.item>.content{
+            .header:not(.ui), .meta{
+                font-size: @17px;
+                line-height: 24px;
+                margin: 0;
+            }
+        }
+        @media only screen and (max-width :@largestMobileScreen){
+            margin: @20px 0 0;
+            &.unstackable>.item{
+                >.image{
+                    width: auto !important;
+                }
+            }
+        }
+    }
 }
 .slick-list .ui.items>.item >.content{
     padding-left:@60px;
