@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import DataRoom from './legal/DataRoom';
+import DataRoom from '../legal/DataRoom';
 
 @inject('uiStore', 'offeringCreationStore')
 @observer

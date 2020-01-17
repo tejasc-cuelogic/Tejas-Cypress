@@ -7,7 +7,7 @@ export const {
 } = process.env;
 
 export const {
-  REACT_APP_PUBLIC_API, REACT_APP_PUBLIC_API_KEY,
+  REACT_APP_PUBLIC_API, REACT_APP_PUBLIC_API_KEY, NODE_ENV,
 } = process.env;
 
 export const SOCIAL_URLS = {
@@ -81,3 +81,5 @@ export const RETRY_CONFIG = {
 };
 
 export const CURR_YEAR = new Date().getFullYear();
+
+export const S3_BUCKET_URL = `https://${process.env.REACT_APP_UPLOADS_BUCKET}`;

@@ -254,9 +254,27 @@ Cypress.Commands.add('deleteUser', (userType='Investor') => {
     registerApiCall('listUsers', '/dev/graphql');
     cy.wait('@listUsers');
 
-    deleteUserCtaAction('Hard Delete Profile');
-    registerApiCall('adminHardDeleteUser', '/dev/graphql');
-    cy.wait('@adminHardDeleteUser');
+    const splitEmail = investorEmail.split('@');
+    const deletedEmail = `DeletedAccounts+${userType}-${splitEmail[0]}ATnextseedDOTcom@${splitEmail[1]}`;
+
+    cy.get('form').within(() => {
+      cy.get('button.link-button').click();
+    });
+    cy.get('div.more.search-filters ').within(() => {
+      cy.get('input[type="checkbox"]').check({ force: true });
+    });
+    cy.get('input[placeholder="Search by name"]').type(deletedEmail).type('{enter}');
+
+    cy.get('span.user-name').within(() => {
+      cy.get('a').click({ force: true });
+    })
+    registerApiCall('getUserDetails', '/dev/graphql');
+    cy.wait('@getUserDetails');
+    cy.get('div.floated.buttons').get('button.button').contains('Hard Delete Profile').click({ force: true });
+    cy.get('div.modal.deletion').get('div.actions').get('button.button').contains('OK').click({ force: true });
+
+    registerApiCall('adminUserHardDelete', '/dev/graphql');
+    cy.wait('@adminUserHardDelete');
     cy.Logout();
   });
 })

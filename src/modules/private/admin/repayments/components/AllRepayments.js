@@ -130,7 +130,7 @@ export default class AllRepayments extends PureComponent {
 
   render() {
     const { repayments, sortOrderRP, startupPeriod, sortOrderSP } = this.props.paymentStore;
-    if (this.props.nsUiStore.loadingArray.includes('paymentsIssuerList')) {
+    if (this.props.nsUiStore.loadingArray.includes('adminPaymentsIssuerList')) {
       return <InlineLoader />;
     }
     return (

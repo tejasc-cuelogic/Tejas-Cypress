@@ -169,6 +169,15 @@ export class CampaignStore {
   }
 
   @action
+  concatOfferingComments = (newData) => {
+    if (newData && this.campaign && get(this.campaign, 'id') === get(newData, 'id')) {
+      const campaignData = toJS(this.details);
+      campaignData.data.getOfferingDetailsBySlug.comments = get(newData, 'comments');
+      this.details = campaignData;
+    }
+  }
+
+  @action
   getIssuerIdForOffering = id => new Promise((resolve, reject) => {
     this.details = graphql({
       client: clientPublic,
