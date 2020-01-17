@@ -119,10 +119,10 @@ class Space extends Component {
           <Divider fitted />
           <section className={responsiveVars.uptoTablet ? 'pt-50 pb-50' : 'pt-100 pb-100'}>
             <Header as="h2" className={responsiveVars.uptoTablet ? 'mb-30' : 'mb-80 center-align'}>Currently at NextSeed Space</Header>
-            <Segment className={`${responsiveVars.isMobile ? 'plr-0 pt-0 pb-0' : ''} no-shadow`}>
+            <Segment className={`${responsiveVars.isMobile ? 'plr-0 pt-0 pb-0' : ''} no-shadow space-segment`}>
               <Grid stackable>
                 <Grid.Column width="5" className="plr-0 pt-0 pb-0">
-                  <NSImage path="space/chicken-and-rice.jpg" fluid={responsiveVars.isMobile} />
+                  <NSImage path={`space/chicken-and-rice${responsiveVars.isMobile ? '-landscape.jpg' : '.jpg'}`} fluid={responsiveVars.isMobile} />
                 </Grid.Column>
                 <Grid.Column width="11" verticalAlign="middle" textAlign="center">
                   <Header as="h3" className="space-header">The Chicken & Rice Guys</Header>
@@ -141,7 +141,7 @@ class Space extends Component {
                   <Card className={`${responsiveVars.isMobile ? 'alumni-card' : ''} bordered center-align`}>
                     <NSImage path={a.image} centered fluid={responsiveVars.isMobile} />
                     <Card.Content className="pb-30 pt-30">
-                      <Header as="h5">{a.title}</Header>
+                      <Header as="h5" className={responsiveVars.isMobile ? 'mb-half' : ''}>{a.title}</Header>
                       <p>{a.description}</p>
                       <a target="_blank" rel="noopener noreferrer" href={a.link} className={`${responsiveVars.isMobile ? 'mt-20' : 'mt-30'} secondary-link display-block`}>Read More</a>
                     </Card.Content>

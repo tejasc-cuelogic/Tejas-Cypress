@@ -116,6 +116,17 @@
             line-height: 26px;
         }
     }
+    &.space-segment{
+        @media only screen and (max-width :@largestMobileScreen){
+            p{
+                font-size: @17px;
+            }
+            .ui.button{
+                font-size: @16px;
+                line-height: 24px;
+            }
+        }
+    }
 }
 .press-news {
 	.ui.segment {
