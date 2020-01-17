@@ -44,7 +44,7 @@ class OfferingContent extends Component {
   render() {
     const { smartElement, index, offeringCreationStore, manageOfferingStore } = this.props;
     const { currentOfferingId } = offeringCreationStore;
-    const { OFFERING_CONTENT_FRM } = manageOfferingStore;
+    const { OFFERING_CONTENT_FRM, onDragSaveEnable } = manageOfferingStore;
     const isReadonly = false;
     return (
       <div className="inner-content-spacer">
@@ -73,7 +73,7 @@ class OfferingContent extends Component {
               </Form.Group>
             )}
           <Divider hidden />
-          {this.state.editable
+          {(this.state.editable || OFFERING_CONTENT_FRM.fields.content[index].contentType.value === 'CUSTOM' || onDragSaveEnable)
             && (
             <OfferingButtonGroup
               updateOffer={this.handleFormSubmit}

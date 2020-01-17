@@ -616,6 +616,17 @@
             }
         }
     }
+    &.drag-menu{
+        &:first-child{
+            border-top: 0;
+        }
+        i.icon{
+            cursor: grab;
+        }
+        a.item{
+            width: calc(100% - @33px);
+        }
+    }
 }
 /* Drag-and-Drop effect styles in action */
 body > .row-wrap{

@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter, Switch, Route } from 'react-router-dom';
 import { Button, Grid } from 'semantic-ui-react';
+import { arrayMove } from 'react-sortable-hoc';
 import OfferingContent from './Content/OfferingContent';
-import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
+import DraggableMenu from '../../../../../../theme/layout/DraggableMenu';
 import NewContentModal from './Content/NewContentModal';
 
 @inject('manageOfferingStore')
@@ -36,6 +37,12 @@ export default class Content extends Component {
     this.toggleModal(true);
   }
 
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    const docs = [...this.props.manageOfferingStore.OFFERING_CONTENT_FRM.fields.content];
+    this.props.manageOfferingStore.reOrderHandle(arrayMove(docs, oldIndex, newIndex));
+    this.props.manageOfferingStore.setFieldValue('onDragSaveEnable', true);
+};
+
   render() {
     const { match } = this.props;
     const { OFFERING_CONTENT_FRM } = this.props.manageOfferingStore;
@@ -50,7 +57,7 @@ export default class Content extends Component {
         <Grid>
           <Grid.Column widescreen={4} computer={4} tablet={3} mobile={16}>
             <div className="sticky-sidebar">
-              <SecondaryMenu secondary vertical match={match} navItems={navItems} />
+              <DraggableMenu secondary vertical match={match} onSortEnd={this.onSortEnd} navItems={navItems} />
               {OFFERING_CONTENT_FRM.fields.content.length < 10
               && <Button size="small" color="blue" className="link-button mt-20" onClick={this.addMore}>+ Add another component</Button>
               }

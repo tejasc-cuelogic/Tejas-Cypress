@@ -1,4 +1,4 @@
-import { decorate, observable, action, computed } from 'mobx';
+import { decorate, observable, action, computed, toJS } from 'mobx';
 import { startCase, get, includes } from 'lodash';
 import money from 'money-math';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
@@ -21,6 +21,8 @@ export class ManageOfferingStore extends DataModelStore {
   OFFERING_CONTENT_FRM = Validator.prepareFormObject(OFFERING_CONTENT);
 
   OFFERING_MISC_FRM = Validator.prepareFormObject(OFFERING_MISC);
+
+  onDragSaveEnable = false;
 
   get campaignStatus() {
     console.log(this.TOMBSTONE_BASIC_FRM);
@@ -131,11 +133,12 @@ export class ManageOfferingStore extends DataModelStore {
         variables,
       })
       .then(() => {
+        this.setFieldValue('onDragSaveEnable', false);
         this.removeUploadedFiles(fromS3);
         if (successMsg) {
           Helper.toast(successMsg, msgType || 'success');
         } else if (notify) {
-          Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
+          Helper.toast(`${keyName ? startCase(keyName) : 'Offering'} has been saved successfully.`, 'success');
         }
         offeringsStore.getOne(id, false);
         uiStore.setProgress(false);
@@ -159,6 +162,11 @@ export class ManageOfferingStore extends DataModelStore {
     return metaDataMapping[formName][getField];
   }
 
+  reOrderHandle = (orderedForm) => {
+    const content = toJS(orderedForm).map((d, index) => ({ ...d, order: { ...d.order, value: index + 1 } }));
+    this.setFieldValue('OFFERING_CONTENT_FRM', content, 'fields.content');
+  }
+
   setFormData = (form, ref, keepAtLeastOne) => {
     Validator.resetFormData(this[form]);
     this.initLoad.push(form);
@@ -176,11 +184,13 @@ export class ManageOfferingStore extends DataModelStore {
   decorate(ManageOfferingStore, {
     ...dataModelStore.decorateDefault,
     TOMBSTONE_BASIC_FRM: observable,
+    onDragSaveEnable: observable,
     OFFERING_CONTENT_FRM: observable,
     TOMBSTONE_HEADER_META_FRM: observable,
     HEADER_BASIC_FRM: observable,
     OFFERING_MISC_FRM: observable,
     uploadMedia: action,
+    reOrderHandle: action,
     updateOffering: action,
     uploadFileToS3: action,
     updateOfferingMutation: action,

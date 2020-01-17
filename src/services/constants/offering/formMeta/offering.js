@@ -49,7 +49,7 @@ export const OFFERING_CONTENT = {
       label: 'Title',
       value: '',
       error: undefined,
-      rule: 'optional',
+      rule: 'required',
       placeHolder: 'e.g. Investment Term',
     },
     order: {
@@ -63,7 +63,7 @@ export const OFFERING_CONTENT = {
       label: 'Scope',
       value: '',
       error: undefined,
-      rule: 'optional',
+      rule: 'required',
       options: [
         { key: 'PUBLIC', value: 'PUBLIC', text: 'Public' },
         { key: 'ACCREDITED_HIDDEN', value: 'ACCREDITED_HIDDEN', text: 'Accredited Hidden' },
@@ -76,7 +76,7 @@ export const OFFERING_CONTENT = {
       label: 'Content Type',
       value: '',
       error: undefined,
-      rule: 'optional',
+      rule: 'required',
       options: [
         { key: 'CUSTOM', value: 'CUSTOM', text: 'Custom' },
         { key: 'INVESTMENT_DETAILS', value: 'INVESTMENT_DETAILS', text: 'Investment Details' },
