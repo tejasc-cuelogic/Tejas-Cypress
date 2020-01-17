@@ -14,9 +14,19 @@
             color: @primary-one !important;
             font-weight: @normal;
         }
-        &.primary{
+        &.primary, &.secondary{
             border: 0;
             font-weight: @normal;
+        }
+        &.secondary.hoverable{
+            &.space-visit-btn{
+                width: calc(100% - 40px);
+                margin: 0 @20px;
+            }
+            &:hover, &:active, &:focus{
+                background: @primary-two !important;
+                color: @white !important;
+            }
         }
     }
 }
