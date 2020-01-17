@@ -411,7 +411,7 @@ export class TransactionStore {
   requestOtpForManageTransactions = (isLinkedBankChange = false) => {
     uiStore.setProgress();
     const { userDetails } = userDetailsStore;
-    const otpType = userDetails.mfaMode === 'PHONE' ? userDetails.phone.type || 'TEXT' : 'EMAIL';
+    const otpType = ['TEXT', 'CALL', 'PHONE'].includes(userDetails.mfaMode) ? userDetails.mfaMode === 'PHONE' ? 'TEXT' : userDetails.mfaMode : 'EMAIL';
     const { number } = userDetails.phone;
     const { address } = userDetails.email;
     return new Promise((resolve, reject) => {
