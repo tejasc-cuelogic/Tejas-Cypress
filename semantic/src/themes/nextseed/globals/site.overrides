@@ -516,6 +516,10 @@ i.icon.right {
 		}
 	}
 }
+// render popup on label//
+.popup-label{
+	border-bottom: 1px dashed @neutral-offdark !important;
+}
 //	Helper Classes Ends
 
 // Footer Styles
@@ -3212,6 +3216,17 @@ table.css-wu4c77-diff-container {
     margin: auto;
 }
 // HTML editor images placeholder end
+.card-bottom-button{
+	background: @neutral-offwhite;
+	padding: 0 @20px;
+}
+.transaction-year{
+	padding: @8px @20px;
+	font-size: @13px;
+	font-weight: @bold;
+	line-height: 20px;
+	color: @neutral;
+}
 .quotes{
 	&.ui.header{
 		padding-left: 48px;
