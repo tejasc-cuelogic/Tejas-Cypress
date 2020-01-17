@@ -12,3 +12,9 @@ query getJobListing{
     }
     }
 `;
+
+export const spaceHelpAndQuestion = gql`
+mutation _spaceHelpAndQuestion($spaceDetails : SpaceHelpAndQuestionInput) {
+    spaceHelpAndQuestion (spaceDetails: $spaceDetails)
+  }
+`;

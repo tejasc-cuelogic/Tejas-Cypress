@@ -1,37 +1,29 @@
 import React from 'react';
+import { observer, inject } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Form, Responsive, Button, Select } from 'semantic-ui-react';
 import NSImage from '../../../shared/NSImage';
+import formHOC from '../../../../theme/form/formHOC';
+import { CURRENT_OPERATIONS, INDUSTRIES } from '../../../../services/constants/space';
 
-
-const handleCloseModal = (history) => {
-    history.push('/space');
+const metaInfo = {
+  store: 'spaceStore',
+  form: 'CONTACT_FRM',
 };
-const currentOperation = [
-  { key: 'sk', text: 'Shared kitchen', value: 'Shared kitchen' },
-  { key: 'h', text: 'Home', value: 'Home' },
-  { key: 'ft', text: 'Food Truck', value: 'Food Truck' },
-  { key: 'sk', text: 'Food Hall', value: 'Food Hall' },
-  { key: 'no', text: 'Not operational yet', value: 'Not operational yet' },
-  { key: 'c', text: 'Co-working', value: 'Co-working' },
-  { key: 'p', text: 'Pop-ups', value: 'Pop-ups' },
-  { key: 'on', text: 'Online', value: 'Online' },
-  { key: 'o', text: 'Other', value: 'Other' },
-];
-const industry = [
-  { key: 'b', text: 'Brewery', value: 'Brewery' },
-  { key: 'rb', text: 'Restaurant & Bar', value: 'Restaurant & Bar' },
-  { key: 'pf', text: 'Packaged Foods & Beverage', value: 'Packaged Foods & Beverage' },
-  { key: 'fr', text: 'Fashion Retail', value: 'Fashion Retail' },
-  { key: 'fu', text: 'Furniture', value: 'Furniture' },
-  { key: 'om', text: 'Other Manufacturing', value: 'Other Manufacturing' },
-  { key: 'j', text: 'Jewelry', value: 'Jewelry' },
-  { key: 'f', text: 'Fitness', value: 'Fitness' },
-  { key: 'hw', text: 'Health & Wellness', value: 'Health & Wellness' },
-  { key: 'o', text: 'Other', value: 'Other' },
-];
 
-const Contact = ({ history }) => (
-    <Modal open closeIcon onClose={() => handleCloseModal(history)} size="large">
+
+const Contact = ({ history, smartElement, spaceStore, nsUiStore }) => {
+  const handleCloseModal = () => {
+    history.push('/space');
+  };
+
+  const handleSubmit = () => {
+    spaceStore.spaceHelpAndQuestion().then(() => {
+      handleCloseModal();
+    }).catch(() => { });
+  };
+
+  return (
+    <Modal open closeIcon onClose={() => handleCloseModal()} size="large">
       <Modal.Content>
         <section className="padded">
           <Grid columns="equal" stackable>
@@ -44,37 +36,37 @@ const Contact = ({ history }) => (
             <Grid.Column>
               <Form className="nss-form">
                 <Form.Group widths="equal">
-                  <Form.Input fluid label="First Name" placeholder="First Name" />
-                  <Form.Input fluid label="Last Name" placeholder="Last Name" />
+                  {['firstName', 'lastName'].map(field => (smartElement.Input(field)))}
                 </Form.Group>
                 <Form.Group widths="equal">
-                  <Form.Input fluid label="Business Name" placeholder="Business Name" />
-                  <Form.Field
-                    control={Select}
-                    options={industry}
-                    label={{ children: 'Industry', htmlFor: 'industry' }}
-                    placeholder="Pick One"
-                    search
-                    searchInput={{ id: 'industry' }}
-                  />
+                  {smartElement.Input('businessName')}
+                  {smartElement.FormDropDown('industry', {
+                    onChange: (e, result) => spaceStore.formChange(e, result, 'CONTACT_FRM'),
+                    placeholder: 'Pick One',
+                    options: INDUSTRIES,
+                    control: Select,
+                    search: true,
+                    searchInput: { id: 'industry' },
+                    label: { children: 'Industry', htmlFor: 'industry' },
+                  })}
                 </Form.Group>
                 <Form.Group widths="equal">
-                  <Form.Field
-                    control={Select}
-                    options={currentOperation}
-                    label={{ children: 'Where are you currently operating?', htmlFor: 'current-operation' }}
-                    placeholder="Pick One"
-                    search
-                    searchInput={{ id: 'current-operation' }}
-                  />
-                  <Form.Input fluid label="Website URL" placeholder="Website URL" />
+                  {smartElement.FormDropDown('currentlyOperating', {
+                    onChange: (e, result) => spaceStore.formChange(e, result, 'CONTACT_FRM'),
+                    placeholder: 'Pick One',
+                    options: CURRENT_OPERATIONS,
+                    control: Select,
+                    search: true,
+                    searchInput: { id: 'currentlyOperating' },
+                    label: { children: 'currentlyOperating', htmlFor: 'currentlyOperating' },
+                  })}
+                  {smartElement.Input('webURL')}
                 </Form.Group>
                 <Form.Group widths="equal">
-                  <Form.Input fluid label="Phone Number" placeholder="123-456-7891" />
-                  <Form.Input fluid label="Email" placeholder="Email" />
+                  {['phone', 'emailAddress'].map(field => (field === 'phone' ? smartElement.Masked(field, { format: '(###) ###-####', phoneNumber: true }) : smartElement.Input(field)))}
                 </Form.Group>
-                <Form.TextArea className="secondary mt-20 mb-20" fluid label="How can we help?" placeholder="" />
-                <Button secondary fluid content="Let’s Talk" />
+                {smartElement.TextArea('question', { containerclassname: 'secondary mt-20 mb-20', fluid: true, placeholder: '' })}
+                <Button loading={nsUiStore.loadingArray.includes('spaceHelpAndQuestion')} disabled={!spaceStore.CONTACT_FRM.meta.isValid} onClick={handleSubmit} secondary fluid content="Let’s Talk" />
               </Form>
             </Grid.Column>
           </Grid>
@@ -82,5 +74,6 @@ const Contact = ({ history }) => (
       </Modal.Content>
     </Modal>
   );
+};
 
-export default Contact;
+export default inject('nsUiStore', 'spaceStore')(formHOC(observer(Contact), metaInfo));
