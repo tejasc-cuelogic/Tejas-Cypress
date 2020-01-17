@@ -15,9 +15,9 @@ import {
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { deleteBonusReward, updateOffering,
-  getOfferingDetails, getOfferingBac, createBac, updateBac, offerClose, deleteBac, upsertBonusReward,
-  getBonusRewards, getOfferingFilingList, initializeClosingBinder,
-  generateBusinessFiling, upsertOffering } from '../../../queries/offerings/manage';
+  getOfferingDetails, getOfferingBac, createBac, updateBac, adminOfferingClose, deleteBac, upsertBonusReward,
+  getBonusRewards, adminBusinessFilings, initializeClosingBinder,
+  adminCreateBusinessFiling, adminUpsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore, offeringInvestorStore } from '../../../index';
@@ -1066,13 +1066,13 @@ export class OfferingCreationStore {
     uiStore.addMoreInProgressArray('upsert');
     client
       .mutate({
-        mutation: upsertOffering,
+        mutation: adminUpsertOffering,
         variables: { offeringDetails },
       })
       .then((res) => {
         uiStore.removeOneFromProgressArray(false);
-        offeringsStore.addNewOne(res.data.upsertOffering, 'creation');
-        this.generateActivityHistory(res.data.upsertOffering.id, ACTIVITY_HISTORY_TYPES.CREATION, 'Application Created by Admin.', 'STARTED');
+        offeringsStore.addNewOne(res.data.adminUpsertOffering, 'creation');
+        this.generateActivityHistory(res.data.adminUpsertOffering.id, ACTIVITY_HISTORY_TYPES.CREATION, 'Application Created by Admin.', 'STARTED');
         Helper.toast('Offering created successfully.', 'success');
       })
       .catch(() => {
@@ -1647,7 +1647,7 @@ export class OfferingCreationStore {
     }
     client
       .mutate({
-        mutation: offerClose,
+        mutation: adminOfferingClose,
         variables: { ...params, ...formData },
       }).then((data) => {
         uiStore.setProgress(false);
@@ -1859,15 +1859,15 @@ export class OfferingCreationStore {
     this.filingListApiRes = graphql({
       client,
       fetchPolicy: 'network-only',
-      query: getOfferingFilingList,
+      query: adminBusinessFilings,
       variables: {
         offeringId,
         orderByBusinessFilingSubmission: params,
       },
       onFetch: (res) => {
         this.offeringFilingList = {};
-        if (res && res.businessFilings) {
-          this.offeringFilingList = res.businessFilings;
+        if (res && res.adminBusinessFilings) {
+          this.offeringFilingList = res.adminBusinessFilings;
           filter(this.offeringFilingList, (filing) => {
             map(filing.submissions, (submission) => {
               if (submission.xmlSubmissionStatus === XML_STATUSES.created) {
@@ -1880,11 +1880,11 @@ export class OfferingCreationStore {
     });
   }
 
-  generateBusinessFiling = () => {
+  adminCreateBusinessFiling = () => {
     uiStore.setProgress();
     client
       .mutate({
-        mutation: generateBusinessFiling,
+        mutation: adminCreateBusinessFiling,
         variables: {
           offeringId: this.currentOfferingId,
         },

@@ -66,8 +66,9 @@ export default class Leader extends Component {
   }
 
   handleFormSubmit = (isApproved = null, successMsg) => {
-    const { LEADERSHIP_FRM, updateOffering, currentOfferingId, checkFormValid, validateLeadership } = this.props.offeringCreationStore;
-    const res = validateLeadership();
+    const { LEADERSHIP_FRM, updateOffering, currentOfferingId, checkFormValid } = this.props.offeringCreationStore;
+    // const res = validateLeadership();
+    const res = false;
     if (!res) {
       this.setState({ leaderFormInvalid: false });
       checkFormValid('LEADERSHIP_FRM', true, true);
@@ -195,7 +196,7 @@ export default class Leader extends Component {
             {
               ['firstName', 'lastName', 'email'].map(field => (
                 <FormInput
-                  triggerError={field === 'email'}
+                  // triggerError={field === 'email'}
                   displayMode={isReadonly}
                   name={field}
                   fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
@@ -508,7 +509,7 @@ export default class Leader extends Component {
           }
           <Divider hidden />
           <ButtonGroup
-            leaderFormErrorMsg={LEADERSHIP_FRM.meta.error || 'Leader e-mail address field is required.'}
+            leaderFormErrorMsg={LEADERSHIP_FRM.meta.error}
             isIssuer={isIssuer}
             submitted={submitted}
             isManager={isManager}

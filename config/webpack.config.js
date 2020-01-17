@@ -254,6 +254,7 @@ module.exports = (webpackEnv) => {
               // Pending futher investigation:
               // https://github.com/terser-js/terser/issues/120
               inline: 2,
+              drop_console: (['production', 'master', 'prod', 'demo', 'infosec', 'staging'].includes(process.env.REACT_APP_DEPLOY_ENV)),
             },
             mangle: {
               safari10: true,

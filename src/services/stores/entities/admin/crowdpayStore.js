@@ -5,7 +5,7 @@ import cleanDeep from 'clean-deep';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
-import { getCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountDecline, crowdPayAccountValidate, getDecryptedGoldstarAccountNumber } from '../../queries/CrowdPay';
+import { adminGetCrowdPayUsers, adminCrowdPayProcess, adminCrowdPayReview, adminCrowdPayDecline, adminCrowdPayValidate, adminDecrypteGoldstarAccountNumber } from '../../queries/CrowdPay';
 import { crowdPayAccountNotifyGs, submitInvestorAccount } from '../../queries/account';
 import { FILTER_META, CROWDPAY_FILTERS, CONFIRM_CROWDPAY, CROWDPAY_ACCOUNTS_STATUS } from '../../../constants/crowdpayAccounts';
 import Helper from '../../../../helper/utility';
@@ -55,12 +55,12 @@ export class CrowdpayStore {
   @observable loadingCrowdPayIds = [];
 
   getMutation = {
-    GSPROCESS: crowdPayAccountProcess,
+    GSPROCESS: adminCrowdPayProcess,
     EMAIL: crowdPayAccountNotifyGs,
-    APPROVE: crowdPayAccountReview,
-    DECLINE: crowdPayAccountReview,
-    ACCOUNT_DECLINE: crowdPayAccountDecline,
-    VALIDATE: crowdPayAccountValidate,
+    APPROVE: adminCrowdPayReview,
+    DECLINE: adminCrowdPayReview,
+    ACCOUNT_DECLINE: adminCrowdPayDecline,
+    VALIDATE: adminCrowdPayValidate,
     CREATEACCOUNT: submitInvestorAccount,
   }
 
@@ -150,7 +150,7 @@ export class CrowdpayStore {
     const { requestTriggerPage, limit } = this.requestState;
     this.data = graphql({
       client,
-      query: getCrowdPayUsers,
+      query: adminGetCrowdPayUsers,
       variables: { ...params, limit, page: requestTriggerPage },
       fetchPolicy: 'network-only',
       onFetch: () => {
@@ -159,7 +159,7 @@ export class CrowdpayStore {
             this.resetPagination();
             this.allCrowdpayData = [];
           }
-          this.requestState.resultCount = get(this.data, 'data.getCrowdPayUsers.resultCount');
+          this.requestState.resultCount = get(this.data, 'data.adminGetCrowdPayUsers.resultCount');
           this.setData('isLazyLoading', this.canTriggerNextPage);
           this.appendCrowdPayData();
           this.requestState.search.accountType = accountType;
@@ -300,7 +300,7 @@ export class CrowdpayStore {
           variables,
         })
         .then(action((data) => {
-          if (!get(data, 'data.crowdPayAccountValidate') && ctaAction === 'VALIDATE') {
+          if (!get(data, 'data.adminCrowdPayValidate') && ctaAction === 'VALIDATE') {
             this.requestState.oldType = this.requestState.type;
             Helper.toast('CIP is not satisfied.', 'error');
             this.removeLoadingCrowdPayId(accountId);
@@ -365,8 +365,8 @@ export class CrowdpayStore {
   }
 
   @computed get getCrowdPayData() {
-    return (this.data.data && toJS(this.data.data.getCrowdPayUsers
-      && this.data.data.getCrowdPayUsers.crowdPayList)) || [];
+    return (this.data.data && toJS(this.data.data.adminGetCrowdPayUsers
+      && this.data.data.adminGetCrowdPayUsers.crowdPayList)) || [];
   }
 
   @computed get accounts() {
@@ -435,13 +435,13 @@ export class CrowdpayStore {
   getDecryptedRoutingNum = (accountId, userId) => new Promise((resolve, reject) => {
     client
       .mutate({
-        mutation: getDecryptedGoldstarAccountNumber,
+        mutation: adminDecrypteGoldstarAccountNumber,
         variables: {
           userId,
           accountId,
         },
       })
-      .then(res => resolve(res.data.getDecryptedGoldstarAccountNumber))
+      .then(res => resolve(res.data.adminDecrypteGoldstarAccountNumber))
       .catch(() => {
         Helper.toast('Something went wrong, please try again later.', 'error');
         reject();
