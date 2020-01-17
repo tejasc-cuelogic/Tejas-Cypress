@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
 import { capitalize } from 'lodash';
 import { FormTextarea, FormInput } from '../../../../../theme/form';
-import { ListErrors } from '../../../../../theme/shared';
+import { ListErrors, InlineLoader } from '../../../../../theme/shared';
 import { adminActions } from '../../../../../services/actions';
 import Helper from '../../../../../helper/utility';
 
@@ -53,10 +53,12 @@ export default class StatusChangeAppModal extends Component {
     const { match } = this.props;
     const { params } = match;
     const appType = 'prequal-failed';
+    this.props.uiStore.setProgress(true);
+    this.props.businessAppStore.setFieldvalue('promoteActionInProcess', true);
     this.props.businessAppStore
       .fetchAdminApplicationById(params.appId, appType, params.userId, true)
       .then((data) => {
-        const prequalData = (data && data.businessApplicationsDetailsAdmin) || null;
+        const prequalData = (data && data.adminBusinessApplicationsDetails) || null;
         const { PROMOTE_APPLICATION_STATUS_PASSWORD_FRM, PROMOTE_APPLICATION_STATUS_EMAIL_FRM } = this.props.businessAppReviewStore;
         const { applicationRoles } = this.props.businessAppStore;
         if (prequalData) {
@@ -83,6 +85,7 @@ export default class StatusChangeAppModal extends Component {
                 ).then(() => {
                   this.props.uiStore.setErrors(null);
                   this.props.uiStore.setProgress(false);
+                  this.props.businessAppStore.setFieldvalue('promoteActionInProcess', false);
                   this.props.history.push('/dashboard/applications/in-progress');
                 });
             } else {
@@ -101,11 +104,13 @@ export default class StatusChangeAppModal extends Component {
                     ).then(() => {
                       this.props.uiStore.setErrors(null);
                       this.props.uiStore.setProgress(false);
+                      this.props.businessAppStore.setFieldvalue('promoteActionInProcess', false);
                       this.props.history.push('/dashboard/applications/in-progress');
                     });
                 }, 5000);
               }).catch(() => {
                 this.props.uiStore.setProgress(false);
+                this.props.businessAppStore.setFieldvalue('promoteActionInProcess', false);
                 Helper.toast('Something went wrong. Please try again after sometime', 'error');
               });
             }
@@ -122,7 +127,7 @@ export default class StatusChangeAppModal extends Component {
       PROMOTE_APPLICATION_STATUS_PASSWORD_FRM,
       PROMOTE_APPLICATION_STATUS_EMAIL_FRM,
     } = businessAppReviewStore;
-    const { applicationRoles } = this.props.businessAppStore;
+    const { applicationRoles, promoteActionInProcess } = this.props.businessAppStore;
     const { fields } = APPLICATION_STATUS_COMMENT_FRM;
     const { inProgress } = uiStore;
     const { errors } = uiStore;
@@ -133,6 +138,9 @@ export default class StatusChangeAppModal extends Component {
         && PROMOTE_APPLICATION_STATUS_PASSWORD_FRM.meta.isValid);
     } else {
       isValid = !APPLICATION_STATUS_COMMENT_FRM.meta.isValid;
+    }
+    if (promoteActionInProcess || inProgress) {
+      return <InlineLoader />;
     }
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>

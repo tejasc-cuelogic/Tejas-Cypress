@@ -380,6 +380,7 @@
     }
     &.key-terms-table:not(.striped) {
         color: @neutral-middark;
+        font-size: @15px;
         tr:last-child td{
             border-bottom: 1px solid @neutral-darkwhite;
         }

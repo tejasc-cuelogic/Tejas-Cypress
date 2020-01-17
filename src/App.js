@@ -118,10 +118,16 @@ class App extends Component {
     }
 
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && this.props.authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
-        authActions.forceLogout('timeout').then(() => {
-          this.props.history.push('/login');
-        });
+      const { authStore, location, uiStore, history } = this.props;
+      if (!document.hidden) {
+        if (authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
+          authActions.forceLogout('timeout').then(() => {
+            uiStore.setAuthRef(location.pathname);
+            history.push('/login');
+          });
+        } else if (window.localStorage.getItem('jwt') && location.pathname === '/login' && uiStore.authRef.includes('/dashboard')) {
+          window.location = uiStore.authRef || '/';
+        }
       }
     });
 
@@ -278,7 +284,7 @@ class App extends Component {
           )
         }
         <ToastContainer className="toast-message" />
-        {uiStore.appUpdated
+        {uiStore.appUpdated && location.pathname !== '/login'
           && <NotifyVersionUpdate setAppUpdated={uiStore.setAppUpdated} />
         }
         {uiStore.devBanner
