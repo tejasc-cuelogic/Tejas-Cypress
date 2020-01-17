@@ -43,6 +43,32 @@
             margin: 0;
             border-radius: 0;
         }
+        &.view-transaction-details{
+            width: 100% !important;
+            border-radius: 0;
+            margin: 0;
+            background: @neutral-offwhite;
+            height: 100%;
+            .header{
+                border: 0;
+            }
+            .transaction-mob{
+                background: @white;
+                margin: 0;
+                .item{
+                    padding: @14px;
+                }
+            }
+        }
+        .mob-header{
+            position: absolute;
+            right: 0;
+            top: -@12px;
+            font-size: @25px;
+            i.icon{
+                margin-right: 0;
+            }
+        }
     }
     @media only screen and (max-width:@largestMobileScreen){
         // background: @white;
@@ -842,11 +868,23 @@
         }
     }
     .ui.card{
+        @media only screen and (max-width : @largestMobileScreen ){
+            width: calc(100% + 44px);
+            margin-left: -22px;
+            margin-right: -22px;
+            border-radius: 0;
+            border: 0;
+            box-shadow: none;
+        }
         .private-dropdown{
             @media only screen and (max-width : @largestMobileScreen ){
                 position: static;
                 .ui.menu.mobile-dropdown-menu{
                     overflow: visible;
+                }
+                &.sticky{
+                    position: sticky;
+                    top: 0;
                 }
             }
         }
