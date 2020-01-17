@@ -51,12 +51,12 @@ export default class Finances extends Component {
                 <MaskedInput
                   key={field}
                   name={field}
+                  type="tel"
                   currency
                   fielddata={FINANCES_FORM.fields[field]}
                   changed={financesChange}
                   prefix="$ "
                   number
-                  showerror
                   disableDecimal
                   maxlength={13}
                 />
@@ -64,18 +64,18 @@ export default class Finances extends Component {
             </Form.Group>
           </div>
           {errors
-          && (
-<Message error className="mt-30">
-            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-          </Message>
-          )
+            && (
+              <Message error className="mt-30">
+                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+              </Message>
+            )
           }
         </Form>
         <p className="tertiary-text note mt-10 mb-30">
           We will never share your personal information with third parties without your consent
         </p>
         {isMobile
-        && <Button primary size="large" onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mt-30' : 'mb-20'} relaxed`} disabled={!FINANCES_FORM.meta.isValid} content="Continue" />
+          && <Button primary size="large" onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mt-30' : 'mb-20'} relaxed`} disabled={!FINANCES_FORM.meta.isValid} content="Continue" />
         }
       </div>
     );

@@ -69,6 +69,12 @@
             font-weight: @bold;
         }       
     }
+    &.transaction-mob{
+        margin: 0 @20px;
+        .item{
+            padding: @14px 0;
+        }
+    }
     &.capital-list{
         column-count: 2;
     }
@@ -76,6 +82,19 @@
         .header, .content{
             line-height: 26px;
             font-weight: @normal;
+        }
+    }
+    &.space-list{
+        column-count: 2;
+        @media only screen and (max-width : @largestMobileScreen){
+            column-count: 1;
+        }
+        > .item{
+            padding-left: @30px;
+            padding-top: 0;
+            >i.icon{
+                margin-left: -@30px;
+            }
         }
     }
 }
