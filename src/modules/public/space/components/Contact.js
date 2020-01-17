@@ -11,7 +11,7 @@ const metaInfo = {
 };
 
 
-const Contact = ({ history, smartElement, spaceStore, nsUiStore }) => {
+const Contact = ({ history, smartElement, spaceStore, nsUiStore, uiStore }) => {
   const handleCloseModal = () => {
     history.push('/space');
   };
@@ -23,9 +23,9 @@ const Contact = ({ history, smartElement, spaceStore, nsUiStore }) => {
   };
 
   return (
-    <Modal open closeIcon onClose={() => handleCloseModal()} size="large">
+    <Modal dimmer={uiStore.responsiveVars.isMobile ? 'inverted' : ''} className={uiStore.responsiveVars.isMobile ? 'full-screen-modal' : ''} open closeIcon onClose={() => handleCloseModal()} size={uiStore.responsiveVars.isMobile ? 'fullscreen' : 'large'}>
       <Modal.Content>
-        <section className="padded">
+        <section className={!uiStore.responsiveVars.isMobile ? 'padded' : ''}>
           <Grid columns="equal" stackable>
             <Grid.Column only="computer">
               <Header as="h3">Interested in learning more<Responsive as="br" minWidth={992} /> about NextSeed Space?</Header>
@@ -34,6 +34,13 @@ const Contact = ({ history, smartElement, spaceStore, nsUiStore }) => {
               <NSImage path="space/crowd-hero.jpg" />
             </Grid.Column>
             <Grid.Column>
+              {uiStore.responsiveVars.isMobile
+              && (
+                <>
+                  <Header as="h3">Interested in learning about<br /> NextSeed Space?</Header>
+                  <p className="mb-30">Let us know how we can support you and we’ll be<br /> in touch.</p>
+                </>
+              )}
               <Form className="nss-form">
                 <Form.Group widths="equal">
                   {['firstName', 'lastName'].map(field => (smartElement.Input(field)))}
@@ -76,4 +83,4 @@ const Contact = ({ history, smartElement, spaceStore, nsUiStore }) => {
   );
 };
 
-export default inject('nsUiStore', 'spaceStore')(formHOC(observer(Contact), metaInfo));
+export default inject('nsUiStore', 'spaceStore', 'uiStore')(formHOC(observer(Contact), metaInfo));
