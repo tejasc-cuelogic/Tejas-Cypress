@@ -387,6 +387,11 @@
             }
         }
     }
+    &.mob-reward-list{
+        padding: @18px !important;
+        border-radius: @4px;
+        margin-bottom: 0;
+    }
 }
 
 .ui.card.flexible{
@@ -632,23 +637,25 @@
                     align-items: flex-start;
                     justify-content: space-between;
                     font-weight: @normal;
+                    line-height: 18px;
                     .ui.header{
                         padding: 0;
                         font-size: @14px;
                         font-weight: @normal;
+                        padding-left: @30px;
                         .sub.header{
                             margin-left: @30px;
+                            margin-left: 0;
                         }
                     }
                     i.icon{
                         margin-right: @14px;
-                        @media only screen and (max-width : @largestMobileScreen){
-                            &:before{
-                                top: 50%;
-                                position: absolute;
-                                left: 0;
-                                transform: translate(0, -50%);
-                            }
+                        margin-left: -@30px;
+                        &:before{
+                            top: 50%;
+                            position: absolute;
+                            left: 0;
+                            transform: translate(0, -50%);
                         }
                     }
                 }
@@ -871,6 +878,18 @@
         max-width: 100%;
         @media only screen and (max-width : @largestTabletScreen){
             margin: 0 0 @28px;
+        }
+    }
+}
+
+.mob-reward-list.ui.card{
+    box-shadow: 0px 1px 8px fade(@fullBlack, 25%) !important;
+    >.content{
+        padding: 0;
+        >.header:not(.ui){
+            font-size: @15px;
+            line-height: 24px;
+            margin-bottom: @5px;
         }
     }
 }

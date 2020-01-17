@@ -32,6 +32,7 @@
             padding:0;
             background-color:transparent !important;
             box-shadow:none !important;
+            border-radius: 0;
             &:hover, &:focus, &:active{
                 box-shadow:none !important;
             }

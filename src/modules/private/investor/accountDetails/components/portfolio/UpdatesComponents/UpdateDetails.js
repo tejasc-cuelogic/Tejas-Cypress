@@ -10,7 +10,7 @@ import HtmlEditor from '../../../../../../shared/HtmlEditor';
 @observer
 class UpdateDetails extends Component {
   render() {
-    const indexId = this.props.match.params.id ? this.props.match.params.id : 0;
+    const indexId = this.props.id || (this.props.match.params.id ? this.props.match.params.id : 0);
     const { updates } = this.props.updateStore;
     const filteredUpdates = (updates && updates.length) ? updates.filter(d => d.isVisible) : [];
     const update = filteredUpdates.length ? filteredUpdates[indexId] : null;
