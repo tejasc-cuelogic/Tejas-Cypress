@@ -9,7 +9,7 @@ import { FormValidator as Validator, DataFormatter } from '../../../../../helper
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { uiStore, userDetailsStore, investmentStore } from '../../../index';
-import { updateAccreditation, listAccreditation, approveOrDeclineForAccreditationRequest, notifyVerifierForAccreditationRequestByEmail } from '../../../queries/accreditation';
+import { updateAccreditation, adminListAccreditation, adminAccreditedStatusApproveDeclineRequest, adminAccreditedStatusNotifyVerify } from '../../../queries/accreditation';
 import { userAccreditationQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
 import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS, ACCREDITATION_SORT_ENUMS } from '../../../../constants/accreditation';
@@ -148,7 +148,7 @@ export class AccreditationStore {
     }
     this.data = graphql({
       client,
-      query: listAccreditation,
+      query: adminListAccreditation,
       variables: params,
       fetchPolicy: 'network-only',
     });
@@ -161,8 +161,8 @@ export class AccreditationStore {
 
   @computed get count() {
     return (this.data.data
-      && this.data.data.listAccreditation
-      && toJS(this.data.data.listAccreditation.resultCount)
+      && this.data.data.adminListAccreditation
+      && toJS(this.data.data.adminListAccreditation.resultCount)
     ) || 0;
   }
 
@@ -273,7 +273,7 @@ export class AccreditationStore {
           });
         } else {
           fileUpload.setAccreditationFileUploadData('INVESTOR', fileData, accountType.toUpperCase(), actionValue, targetUserId).then((result) => {
-            const { fileId, preSignedUrl } = result.data.createUploadEntryAccreditationAdmin;
+            const { fileId, preSignedUrl } = result.data.adminAccreditedStatusUploadEntry;
             this.putUploadedFileOnS3(
               form, field, preSignedUrl, file, fileData, fileId,
               accreditationMethod,
@@ -446,7 +446,7 @@ export class AccreditationStore {
   }
 
   @computed get accreditations() {
-    return (this.data && get(this.data, 'data.listAccreditation.accreditation')) || [];
+    return (this.data && get(this.data, 'data.adminListAccreditation.accreditation')) || [];
   }
 
   @action
@@ -627,7 +627,7 @@ export class AccreditationStore {
       this.uploadAllDocs().then(() => {
         client
           .mutate({
-            mutation: approveOrDeclineForAccreditationRequest,
+            mutation: adminAccreditedStatusApproveDeclineRequest,
             variables: {
               action: accreditationAction,
               accountId,
@@ -638,7 +638,7 @@ export class AccreditationStore {
               message: data.declinedMessage,
               adminJustificationDocs: fileData,
             },
-            refetchQueries: [{ query: listAccreditation, variables: { page: 1 } }],
+            refetchQueries: [{ query: adminListAccreditation, variables: { page: 1 } }],
           })
           .then(() => resolve())
           .catch((error) => {
@@ -745,7 +745,7 @@ export class AccreditationStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: notifyVerifierForAccreditationRequestByEmail,
+          mutation: adminAccreditedStatusNotifyVerify,
           variables: payLoad,
           refetchQueries: [{
             query: userAccreditationQuery,
@@ -919,9 +919,9 @@ export class AccreditationStore {
     if (!userDetailsStore.userDetails.roles) {
       return '';
     }
-    const { details } = userDetailsStore.userDetails.roles.find(r => r.name === selectedAccount);
     let accountStatusFound = '';
     if (selectedAccount) {
+      const { details } = userDetailsStore.userDetails.roles.find(r => r.name === selectedAccount);
       const activeArr = activeAccounts.length
         ? filter(activeAccounts, o => o === selectedAccount) : activeAccounts;
       const frozenArr = frozenAccounts.length

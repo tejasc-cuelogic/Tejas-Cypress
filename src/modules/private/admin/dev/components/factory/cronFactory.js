@@ -70,7 +70,7 @@ class CronFactory extends Component {
               totalRecords={totalRecords}
               FILTER_FRM={CRONFACTORY_FRM}
             />
-            {loadingArray.includes('fetchCronLogs') ? <InlineLoader />
+            {loadingArray.includes('adminFetchCronLogs') ? <InlineLoader />
               : (
             <div className="table-wrapper">
               <Table unstackable striped className="application-list">

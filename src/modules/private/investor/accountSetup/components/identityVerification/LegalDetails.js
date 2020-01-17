@@ -120,7 +120,6 @@ class LegalDetails extends React.Component {
                 fielddata={form.fields.zipCode}
                 changed={maskChange}
                 zipCode
-                showerror
               />
               <MaskedInput
                 name="phoneNumber"
@@ -129,22 +128,20 @@ class LegalDetails extends React.Component {
                 format="(###) ###-####"
                 changed={maskChange}
                 phoneNumber
-                showerror
               />
               <MaskedInput
                 name="dateOfBirth"
                 fielddata={form.fields.dateOfBirth}
+                type="tel"
                 format="##/##/####"
                 changed={maskChange}
                 dateOfBirth
-                showerror
               />
               <MaskedInput
                 name="ssn"
                 fielddata={this.handleEncryptedSsn(form.fields.ssn)}
                 ssn
                 changed={maskChange}
-                showerror
               />
             </Form.Group>
             <p className="note center-align">

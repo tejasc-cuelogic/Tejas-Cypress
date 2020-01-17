@@ -3,7 +3,7 @@ import { orderBy, get, findIndex } from 'lodash';
 import moment from 'moment';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { paymentsIssuerList, updatePaymentIssuer } from '../../queries/Repayment';
+import { adminPaymentsIssuerList, updatePaymentIssuer } from '../../queries/Repayment';
 import { PAYMENT } from '../../../constants/payment';
 import { uiStore } from '../../index';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
@@ -11,7 +11,7 @@ import Helper from '../../../../helper/utility';
 
 export class PaymentStore extends DataModelStore {
   constructor() {
-    super({ paymentsIssuerList, updatePaymentIssuer });
+    super({ adminPaymentsIssuerList, updatePaymentIssuer });
   }
 
     data = [];
@@ -40,10 +40,10 @@ export class PaymentStore extends DataModelStore {
     initRequest = () => {
       this.executeQuery({
         client: 'PRIVATE',
-        query: 'paymentsIssuerList',
-        setLoader: 'paymentsIssuerList',
+        query: 'adminPaymentsIssuerList',
+        setLoader: 'adminPaymentsIssuerList',
       }).then((res) => {
-        this.setDb(res.paymentsIssuerList);
+        this.setDb(res.adminPaymentsIssuerList);
       });
     };
 
