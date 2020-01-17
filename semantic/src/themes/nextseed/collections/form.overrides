@@ -811,7 +811,7 @@ textarea{
         color:@fullBlack;
     }
     input[type=file]{
-        opacity:0;
+        opacity:0 !important;
         width:100%;
         position:absolute;
         top:0;

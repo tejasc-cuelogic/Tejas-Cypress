@@ -128,13 +128,14 @@ class SecondaryMenu extends Component {
             )
             : (
               <MobileDropDownNav
-                className="private-secondary-menu"
+                className={`${this.props.classname} private-secondary-menu`}
                 refMatch={refMatch || match}
                 navItems={navItems}
                 location={location}
                 useIsActive
                 isBonusReward={this.props.isBonusReward}
                 bonusRewards={this.props.bonusRewards}
+                isPortfolio={this.props.isPortfolio}
               />
             )
           }

@@ -80,6 +80,7 @@ export class NewMessage {
             this.setDataValue('currentMessageId', this.currentMessageId);
           } else {
             this.setDataValue('currentMessageId', data.offeringCommentsByOfferId[0].id);
+            this.updateCommentList(data.offeringCommentsByOfferId, offeringCreationStore.currentOfferingId);
           }
         }
       },
@@ -91,7 +92,6 @@ export class NewMessage {
     this.setDataValue('buttonLoader', scope);
     this.currentMessageId = currentMessageId;
     const data = Validator.ExtractValues(this.MESSAGE_FRM.fields);
-
     const payload = {
       commentInput: {
         offeringId: campaignId || (offeringCreationStore.currentOfferingId || this.currentOfferingId),
@@ -215,6 +215,15 @@ export class NewMessage {
   msgEleChange = (e, result) => {
     this.MESSAGE_FRM = Validator.onChange(this.MESSAGE_FRM, Validator.pullValues(e, result));
   };
+
+  updateCommentList = (newData, offeringId) => {
+    const coampaignDetails = { comments: [], id: '' };
+    if (newData) {
+      coampaignDetails.comments = newData;
+      coampaignDetails.id = offeringId;
+      campaignStore.concatOfferingComments(coampaignDetails);
+    }
+  }
 }
 
 export default new NewMessage();

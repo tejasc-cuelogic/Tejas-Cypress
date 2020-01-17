@@ -232,6 +232,7 @@ export const campaignDetailsQuery = gql`
       launch {
         targetDate
         edgarLink
+        expectedOpsDate
       }
       misc {
         additionalBonusRewardsContent
@@ -318,6 +319,7 @@ export const campaignDetailsQuery = gql`
       keyTerms {
         multiple
         priceCalculation
+        revSharePercentage
       }
     }
     earlyBirdsCount
