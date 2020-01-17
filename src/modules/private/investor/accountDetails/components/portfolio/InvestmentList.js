@@ -31,9 +31,6 @@ const offeringName = (data) => {
 const investedAmount = data => (
   <>
     {Helper.CurrencyFormat(data.investedAmount)}
-    <p className="date-stamp">
-      <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} />
-    </p>
   </>
 );
 
@@ -77,11 +74,11 @@ const handleActions = (data) => {
 const INVESTMENT_CARD_META = [
   { label: '', for: ['active', 'pending', 'completed'], children: data => <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />, isMobile: false, isDesktop: true, securityType: [] },
   { label: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], children: data => offeringName(data), isMobile: true, isDesktop: true, securityType: [] },
-  { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: value => CAMPAIGN_KEYTERMS_SECURITIES[value], for: isMobile ? ['pending'] : ['pending', 'complete'], isMobile: true, isDesktop: true, securityType: [] },
+  { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: value => CAMPAIGN_KEYTERMS_SECURITIES[value], for: isMobile ? ['pending'] : ['pending', 'completed'], isMobile: true, isDesktop: true, securityType: [] },
   { label: 'Investment Amount', key: 'investedAmount', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], getRowValue: value => Helper.CurrencyFormat(value), children: data => investedAmount(data), isMobile: true, isDesktop: true, className: 'text-capitalize', securityType: [] },
   { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], children: data => closeDate(data), isMobile: true, isDesktop: true, securityType: [] },
-  { label: 'Investment Multiple', key: 'offering.keyTerms.investmentMultiple', for: ['active'], getRowValue: value => `${value}x`, isMobile: true, isDesktop: true, securityType: ['Revenue Sharing Note'] },
-  { label: 'Status', key: 'offering.stage', for: isMobile ? ['pending', 'completed'] : ['active', 'pending', 'completed'], getRowValue: value => STAGES[value].label, children: data => stageLabel(data), isMobile: true, isDesktop: true, securityType: [] },
+  { label: 'Investment Multiple', key: 'offering.keyTerms.investmentMultiple', for: ['active'], getRowValue: value => `${value}`, isMobile: true, isDesktop: true, securityType: ['Revenue Sharing Note'] },
+  { label: 'Status', key: 'offering.stage', for: isMobile ? ['pending', 'completed'] : ['pending', 'completed'], getRowValue: value => STAGES[value].label, children: data => stageLabel(data), isMobile: true, isDesktop: true, securityType: [] },
   {
     label: 'Days to close',
     key: 'offering.closureSummary.processingDate',
@@ -91,7 +88,7 @@ const INVESTMENT_CARD_META = [
     securityType: [],
     getRowValue: value => ((DataFormatter.diffDays(value, false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value === 0 ? '' : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value < 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label}` : DataFormatter.diffInDaysHoursMin(value).diffText)) || 'N/A',
   },
-  { label: 'Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%`, isMobile: true, isDesktop: false, securityType: ['Term Note'] },
+  { label: 'Annualized Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%`, isMobile: true, isDesktop: true, securityType: ['Term Note'] },
   { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months`, isMobile: true, isDesktop: true, securityType: [] },
   { label: 'Net Payments Received', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: [] },
   { label: 'Principal Remaining', key: 'remainingPrincipal', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['Term Note'] }, // pending
