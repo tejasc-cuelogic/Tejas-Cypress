@@ -387,7 +387,6 @@
             }
         }
     }
-<<<<<<< HEAD
     &.alumni-card{
         padding: 0 !important;
         margin-bottom: @20px;
@@ -395,12 +394,11 @@
             font-size: @17px;
             line-height: 26px;
         }
-=======
+    }
     &.mob-reward-list{
         padding: @18px !important;
         border-radius: @4px;
         margin-bottom: 0;
->>>>>>> e597a35c0afc2223f5ba6ca83676d97f06c2d4fe
     }
 }
 

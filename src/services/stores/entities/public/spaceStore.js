@@ -23,6 +23,7 @@ export class SpaceStore extends DataModelStore {
               setLoader: 'spaceHelpAndQuestion',
             });
             Helper.toast('Your response is Submitted successfully.', 'success');
+            this.resetForm('CONTACT_FRM');
             Promise.resolve();
           } catch (error) {
             Helper.toast('Something went wrong. Please try again in some time.', 'error');

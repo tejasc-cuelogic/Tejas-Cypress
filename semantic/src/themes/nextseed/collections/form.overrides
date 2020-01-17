@@ -636,7 +636,7 @@
     }
     &.nss-form .field{
         margin-bottom: @25px;
-        .ui.input input, .ui.selection.dropdown>.text{
+        .ui.input input, .ui.selection.dropdown>.text, input[type=tel]{
             font-size: @13px;
         }
         .ui.selection.dropdown{
