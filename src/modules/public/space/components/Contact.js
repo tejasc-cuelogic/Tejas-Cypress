@@ -47,6 +47,9 @@ const Contact = ({ history, smartElement, spaceStore, nsUiStore, uiStore }) => {
                 </Form.Group>
                 <Form.Group widths="equal">
                   {smartElement.Input('businessName')}
+                  {smartElement.Input('webURL')}
+                </Form.Group>
+                <Form.Group widths="equal">
                   {smartElement.FormDropDown('industry', {
                     onChange: (e, result) => spaceStore.formChange(e, result, 'CONTACT_FRM'),
                     placeholder: 'Pick One',
@@ -56,8 +59,6 @@ const Contact = ({ history, smartElement, spaceStore, nsUiStore, uiStore }) => {
                     searchInput: { id: 'industry' },
                     label: { children: 'Industry', htmlFor: 'industry' },
                   })}
-                </Form.Group>
-                <Form.Group widths="equal">
                   {smartElement.FormDropDown('currentlyOperating', {
                     onChange: (e, result) => spaceStore.formChange(e, result, 'CONTACT_FRM'),
                     placeholder: 'Pick One',
@@ -67,7 +68,6 @@ const Contact = ({ history, smartElement, spaceStore, nsUiStore, uiStore }) => {
                     searchInput: { id: 'currentlyOperating' },
                     label: { children: 'currentlyOperating', htmlFor: 'currentlyOperating' },
                   })}
-                  {smartElement.Input('webURL')}
                 </Form.Group>
                 <Form.Group widths="equal">
                   {['phone', 'emailAddress'].map(field => (field === 'phone' ? smartElement.Masked(field, { format: '(###) ###-####', phoneNumber: true }) : smartElement.Input(field)))}
