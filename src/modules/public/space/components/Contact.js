@@ -14,9 +14,13 @@ const metaInfo = {
 
 const Contact = ({ history, smartElement, spaceStore, nsUiStore, uiStore }) => {
   const [showModal, setModalValue] = React.useState(false);
+  const [scrollValue] = React.useState(window.scrollY);
 
   const handleCloseModal = () => {
     history.push('/space');
+    setTimeout(() => {
+      window.scrollTo(0, scrollValue);
+    }, 100);
   };
 
   const handleSubmit = () => {
