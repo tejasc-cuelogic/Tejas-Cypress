@@ -255,8 +255,11 @@ export const PRIVATE_NAV = [
     icon: 'gift',
     title: 'Offering',
     to: 'offering/:offeringSlug',
-    accessibleTo: ['issuer'],
-    path: 'issuer/offering',
+    path: {
+      issuer: 'issuer/offering',
+      admin: 'admin/offerings/containers/OfferingDetails',
+    },
+    accessibleTo: ['issuer', 'admin'],
     subPanel: 1,
     subNavigations: [
       { title: 'Overview', to: 'overview', accessFor: [1, 2, 3, 4] },

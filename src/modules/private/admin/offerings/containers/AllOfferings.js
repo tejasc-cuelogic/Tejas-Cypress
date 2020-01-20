@@ -9,7 +9,6 @@ import DraggableListing from '../components/DraggableListing';
 import AllLiveOfferings from '../components/allLiveOfferings';
 import { REACT_APP_DEPLOY_ENV } from '../../../../../constants/common';
 
-
 @inject('uiStore', 'navStore', 'offeringsStore')
 @observer
 export default class Offerings extends Component {
@@ -82,7 +81,7 @@ export default class Offerings extends Component {
                       </Button.Group>
                     </Grid.Column>
                   </>
-)}
+                )}
               />
             </Grid.Row>
           </Grid>

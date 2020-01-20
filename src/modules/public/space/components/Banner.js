@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject } from 'mobx-react';
 import { Header, Container } from 'semantic-ui-react';
-import { Logo } from '../../../../theme/shared';
+import NSImage from '../../../shared/NSImage';
 
 @inject('uiStore')
 class Banner extends Component {
@@ -12,7 +12,7 @@ class Banner extends Component {
         <section className="banner space-banner">
           <Container>
             <div className="banner-caption">
-              <Logo alt="nextseed.com/space" dataSrc="LogoNss" />
+              <NSImage alt="nextseed.com/space" path="nss-logo.svg" />
               <Header as="h2" className={responsiveVars.isMobile ? 'mt-30' : 'mt-50'}>
                 Pop-up retail space for <br />your growing business
               </Header>
