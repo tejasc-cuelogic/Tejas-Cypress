@@ -88,12 +88,13 @@ export default class EdgarFilingList extends Component {
       this.setState({ showLoader: true });
       const filingId = this.props.uiStore.confirmBox.subRefId;
       this.handleDeleteCancel();
-      this.props.history.push(`/dashboard/offering/${currentOfferingSlug}${offer.stage === 'CREATION' ? '' : '/offering-creation'}/legal/generate-docs`);
       businessActions.deleteFiling(currentOfferingId, filingId)
         .then(() => {
           this.setState({ showLoader: false });
           Helper.toast('Filing deleted successfully', 'success');
+          this.props.history.push(`/dashboard/offering/${currentOfferingSlug}${offer.stage === 'CREATION' ? '' : '/offering-creation'}/legal/generate-docs`);
         }).catch(() => {
+          this.props.history.push(`/dashboard/offering/${currentOfferingSlug}${offer.stage === 'CREATION' ? '' : '/offering-creation'}/legal/generate-docs`);
           this.setState({ showLoader: false });
           Helper.toast('Something went wrong while deleting filing Please try again.', 'error', { position: 'top-center' });
         });
