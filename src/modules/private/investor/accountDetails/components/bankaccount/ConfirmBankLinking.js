@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { includes } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import Helper from '../../../../../../helper/utility';
+import { InlineLoader } from '../../../../../../theme/shared';
 import ConfirmOTPModal from '../../../../shared/ConfirmOTPModal';
 
 @inject('transactionStore', 'bankAccountStore', 'uiStore', 'userDetailsStore')
@@ -60,7 +61,11 @@ export default class ConfirmBankLinking extends Component {
       OTP_VERIFY_META,
       verifyVerificationCodeChange,
     } = this.props.transactionStore;
-    const { userDetails } = this.props.userDetailsStore;
+    const { userDetails, currentUser } = this.props.userDetailsStore;
+
+    if (currentUser.loading) {
+      return <InlineLoader />;
+    }
     return (
       <ConfirmOTPModal
         OTPData={
@@ -70,8 +75,8 @@ export default class ConfirmBankLinking extends Component {
           }
         }
         refLinkListVal={this.props.refLink}
-        maskedPhoneNumber={this.props.transactionStore.transactionDisplayPhoneNumber}
-        otpConfirmemailAddress={this.props.transactionStore.confirmEmailAdress}
+        maskedPhoneNumber={userDetails.phone.number}
+        otpConfirmemailAddress={userDetails.email.address}
         reSendVerificationCode={this.props.transactionStore.reSendVerificationCode}
         resendVerification={this.resendVerification}
         formSubmit={this.submit}

@@ -137,7 +137,7 @@ class News extends Component {
                             asterisk="true"
                             key={field}
                             type="text"
-                            autoFocus={field === 'givenName'}
+                            autoFocus={!isMobile && field === 'givenName'}
                             name={field}
                             fielddata={SIGNUP_FRM.fields[field]}
                             changed={signupChange}

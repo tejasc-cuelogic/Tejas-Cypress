@@ -57,7 +57,7 @@ class InvestorSignup extends Component {
     const {
       SIGNUP_FRM, signupChange, pwdInputType, currentScore,
     } = this.props.authStore;
-    const { errors, inProgress } = this.props.uiStore;
+    const { errors, inProgress, responsiveVars } = this.props.uiStore;
     const isDisabled = !([undefined, ''].includes(SIGNUP_FRM.fields.email.error)) || !SIGNUP_FRM.meta.isValid || !currentScore;
     const customError = errors && errors.code === 'UsernameExistsException'
       ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
@@ -91,7 +91,7 @@ class InvestorSignup extends Component {
                   <FormInput
                     key={field}
                     type="text"
-                    autoFocus={field === 'givenName'}
+                    autoFocus={!responsiveVars.isMobile && field === 'givenName'}
                     name={field}
                     fielddata={SIGNUP_FRM.fields[field]}
                     changed={signupChange}

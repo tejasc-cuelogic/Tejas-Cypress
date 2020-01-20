@@ -79,7 +79,7 @@ class Login extends Component {
   }
 
   render() {
-    const { errors, inProgress, inProgressArray } = this.props.uiStore;
+    const { errors, inProgress, inProgressArray, responsiveVars } = this.props.uiStore;
     if (this.props.authStore.isUserLoggedIn
         && !this.props.userDetailsStore.userFirstLoad
         && (isEmpty(inProgressArray) || !inProgressArray.includes('login'))
@@ -125,7 +125,7 @@ class Login extends Component {
                   type={field === 'password' ? pwdInputType : 'email'}
                   icon={field === 'password' ? togglePasswordType() : null}
                   name={field}
-                  autoFocus={field === 'email'}
+                  autoFocus={!responsiveVars.isMobile && field === 'email'}
                   fielddata={LOGIN_FRM.fields[field]}
                   changed={LoginChange}
                 />

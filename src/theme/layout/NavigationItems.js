@@ -92,8 +92,9 @@ export class NavItems extends Component {
   render() {
     const { activeIndex } = this.state;
     const {
-      location, isApp, roles, match, isMobile, onToggle, refLink, newLayout, userDetailsStore,
+      location, isApp, roles, refMatch, isMobile, onToggle, refLink, newLayout, userDetailsStore,
     } = this.props;
+    let { match } = this.props;
     const { signupStatus, hasAnyAccount } = userDetailsStore;
     const app = (isApp) ? 'dashboard' : '';
     const myNavItems = this.props.navItems.filter(n => (n.headerMobile !== false && n.title === 'My Account' ? this.props.userStore.isInvestor : n.headerMobile !== false && n.noNav !== true));
@@ -101,6 +102,7 @@ export class NavItems extends Component {
     const hasMoreThanOneAcc = investorAccounts.length > 1;
     const hideSetupNav = signupStatus.investorProfileCompleted && (hasAnyAccount);
     const isPrivateApp = location.pathname.includes('/dashboard');
+    match = refMatch || match;
     return myNavItems.map((item, key) => (
       <>
         {item.subPanel === 1 && item.subNavigations && isMobile && !isApp ? (
@@ -124,7 +126,7 @@ export class NavItems extends Component {
                   <Menu.Menu>
                     {item.subNavigations.map(sn => (
                       sn.external ? (
-                        <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
+                        <a className="item" href={sn.to} rel="noopener noreferrer">NextSeed Space</a>
                       ) : (
                           <Menu.Item
                             key={sn.to}
@@ -165,7 +167,7 @@ export class NavItems extends Component {
               <Dropdown.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible' : ''}`}>
                 {item.subNavigations.map(sn => (
                   sn.external ? (
-                    <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
+                    <a className="item" href={sn.to} rel="noopener noreferrer">NextSeed Space</a>
                   ) : (
                       <Dropdown.Item
                         key={sn.to}

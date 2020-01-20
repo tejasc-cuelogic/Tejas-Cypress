@@ -6,6 +6,7 @@ import { observer, inject } from 'mobx-react';
 import { Header, Grid, Segment, Button, Divider } from 'semantic-ui-react';
 import DocumentModal from './DataRoom/DocumentModal';
 import { InlineLoader } from '../../../../../theme/shared';
+import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
 const isTablet = document.documentElement.clientWidth < 992;
 @inject('campaignStore', 'uiStore', 'accreditationStore', 'authStore')
@@ -33,7 +34,12 @@ export default class Documents extends Component {
     if (loading && this.props.portfolioSection) {
       return <InlineLoader />;
     }
+    const { responsiveVars } = this.props.uiStore;
     return (
+      <>
+      {this.props.portfolioSection && responsiveVars.isMobile
+      && <SecondaryMenu refMatch={this.props.refMatch} navItems={this.props.MobileNavItems} />
+      }
       <div className={this.props.portfolioSection ? 'content-spacer' : ''}>
         {(dataRoomDocs.length && ['LIVE', 'CREATION'].includes(get(campaign, 'stage')))
           ? (
@@ -69,6 +75,7 @@ export default class Documents extends Component {
           <DocumentModal doc={this.state.doc} close={this.close} />
         }
       </div>
+      </>
     );
   }
 }

@@ -714,7 +714,7 @@ export const PUBLIC_NAV = [
       // { title: 'Team & Culture', to: 'about/team' },
       // { title: 'Careers', to: 'about/careers' },
       { title: 'Insights', to: 'insights' },
-      { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
+      { title: 'NextSeed Space', to: 'space' },
     ],
   },
   // {
@@ -778,7 +778,7 @@ export const MOBILE_NAV = [
   { title: 'Education Center', to: 'education-center' },
   { title: 'Who We Are', to: 'about' },
   { title: 'Insights', to: 'insights' },
-  { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
+  { title: 'NextSeed Space', to: 'space' },
 ];
 
 export const FOOTER_NAV = [
