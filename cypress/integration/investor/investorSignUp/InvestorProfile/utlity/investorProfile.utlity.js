@@ -41,7 +41,6 @@ export const completeInvestorProfile = () => {
         cy.get('div[role="listitem"]').get('[type="checkbox"]').parent()
           .click({ multiple: true });
         cy.wait(500);
-        registerApiCall('upsertProfile');
         cy.get('.center-align > button').contains('Continue to Account').click({ force: true });
         cy.wait('@upsertProfile');
         break;

@@ -56,7 +56,7 @@ const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, ha
                     <Table.Cell key={h.key}>
                       {h.link
                         ? (
-                        <Link to={getLink(record.offering.id, record.offering.stage)}>
+                        <Link to={getLink(record.offering.offeringSlug, record.offering.stage)}>
                           <b>{get(record, h.key)}</b>
                         </Link>
                         ) : h.enum ? get(record, h.key) && CAMPAIGN_KEYTERMS_SECURITIES[get(record, h.key)]
@@ -68,7 +68,7 @@ const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, ha
                   ))}
                   <Table.Cell textAlign="center">
                     <Button icon className="link-button">
-                      <Icon className="ns-pencil" onClick={() => handleEditPayment(record.offering.id)} />
+                      <Icon className="ns-pencil" onClick={() => handleEditPayment(record.offering.offeringSlug)} />
                     </Button>
                   </Table.Cell>
                 </Table.Row>
@@ -116,10 +116,7 @@ export default class AllRepayments extends PureComponent {
     this.props.paymentStore.setInitiateSrch(e.target.value);
   }
 
-  getLink = (offeringId, offeringStage) => {
-    const stage = ['CREATION'].includes(offeringStage) ? 'creation' : ['LIVE', 'LOCK', 'PROCESSING'].includes(offeringStage) ? 'live' : ['STARTUP_PERIOD', 'IN_REPAYMENT', 'COMPLETE', 'DEFAULTED'].includes(offeringStage) ? 'completed' : 'failed';
-    return `/dashboard/offerings/${stage}/edit/${offeringId}`;
-  }
+  getLink = offeringId => `/dashboard/offering/${offeringId}`
 
   handleEditPayment = (id) => {
     const { match } = this.props;

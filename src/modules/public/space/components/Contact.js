@@ -1,6 +1,7 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Form, Responsive, Button, Select } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import NSImage from '../../../shared/NSImage';
 import formHOC from '../../../../theme/form/formHOC';
 import { CURRENT_OPERATIONS, INDUSTRIES } from '../../../../services/constants/space';
@@ -12,15 +13,35 @@ const metaInfo = {
 
 
 const Contact = ({ history, smartElement, spaceStore, nsUiStore, uiStore }) => {
+  const [showModal, setModalValue] = React.useState(false);
+  const [scrollValue] = React.useState(window.scrollY);
+
   const handleCloseModal = () => {
     history.push('/space');
+    setTimeout(() => {
+      window.scrollTo(0, scrollValue);
+    }, 100);
   };
 
   const handleSubmit = () => {
     spaceStore.spaceHelpAndQuestion().then(() => {
-      handleCloseModal();
+      setModalValue(true);
     }).catch(() => { });
   };
+
+  if (showModal) {
+    return (
+      <Modal size="tiny" open closeIcon onClose={handleCloseModal}>
+        <Modal.Content className="center-align pt-50 pb-50">
+          <Header as="h3"> Thank you! </Header>
+          <p>The Nextseed Space team will be in touch shortly.</p>
+          <p>In the meantime, check out the other ways in which Nextseed can support your growing business about
+            {' '}<Link to="/" className="primary-two-text">Nextseed.com</Link>
+          </p>
+        </Modal.Content>
+      </Modal>
+    );
+  }
 
   return (
     <Modal dimmer={uiStore.responsiveVars.isMobile ? 'inverted' : ''} className={uiStore.responsiveVars.isMobile ? 'full-screen-modal' : ''} open closeIcon onClose={() => handleCloseModal()} size={uiStore.responsiveVars.isMobile ? 'fullscreen' : 'large'}>
@@ -35,18 +56,21 @@ const Contact = ({ history, smartElement, spaceStore, nsUiStore, uiStore }) => {
             </Grid.Column>
             <Grid.Column>
               {uiStore.responsiveVars.isMobile
-              && (
-                <>
-                  <Header as="h3">Interested in learning about<br /> NextSeed Space?</Header>
-                  <p className="mb-30">Let us know how we can support you and we’ll be<br /> in touch.</p>
-                </>
-              )}
+                && (
+                  <>
+                    <Header as="h3">Interested in learning about<br /> NextSeed Space?</Header>
+                    <p className="mb-30">Let us know how we can support you and we’ll be<br /> in touch.</p>
+                  </>
+                )}
               <Form className="nss-form">
                 <Form.Group widths="equal">
                   {['firstName', 'lastName'].map(field => (smartElement.Input(field)))}
                 </Form.Group>
                 <Form.Group widths="equal">
                   {smartElement.Input('businessName')}
+                  {smartElement.Input('webURL')}
+                </Form.Group>
+                <Form.Group widths="equal">
                   {smartElement.FormDropDown('industry', {
                     onChange: (e, result) => spaceStore.formChange(e, result, 'CONTACT_FRM'),
                     placeholder: 'Pick One',
@@ -56,8 +80,6 @@ const Contact = ({ history, smartElement, spaceStore, nsUiStore, uiStore }) => {
                     searchInput: { id: 'industry' },
                     label: { children: 'Industry', htmlFor: 'industry' },
                   })}
-                </Form.Group>
-                <Form.Group widths="equal">
                   {smartElement.FormDropDown('currentlyOperating', {
                     onChange: (e, result) => spaceStore.formChange(e, result, 'CONTACT_FRM'),
                     placeholder: 'Pick One',
@@ -67,7 +89,6 @@ const Contact = ({ history, smartElement, spaceStore, nsUiStore, uiStore }) => {
                     searchInput: { id: 'currentlyOperating' },
                     label: { children: 'currentlyOperating', htmlFor: 'currentlyOperating' },
                   })}
-                  {smartElement.Input('webURL')}
                 </Form.Group>
                 <Form.Group widths="equal">
                   {['phone', 'emailAddress'].map(field => (field === 'phone' ? smartElement.Masked(field, { format: '(###) ###-####', phoneNumber: true }) : smartElement.Input(field)))}

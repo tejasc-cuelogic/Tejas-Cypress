@@ -80,6 +80,7 @@ export default class Private extends React.Component {
     if (userFirstLoad === false || this.props.uiStore.resizeLoader) {
       return <Spinner loaderMessage="Loading..." />;
     }
+
     if (this.props.authStore.isUserLoggedIn) {
       return (
         <>
