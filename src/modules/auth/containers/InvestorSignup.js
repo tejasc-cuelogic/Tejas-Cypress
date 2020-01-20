@@ -105,7 +105,6 @@ class InvestorSignup extends Component {
               name="email"
               fielddata={SIGNUP_FRM.fields.email}
               changed={signupChange}
-              showerror
             />
             <FormPasswordStrength
               key="password"
