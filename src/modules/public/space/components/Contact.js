@@ -27,14 +27,12 @@ const Contact = ({ history, smartElement, spaceStore, nsUiStore, uiStore }) => {
 
   if (showModal) {
     return (
-      <Modal size="mini" open closeIcon onClose={handleCloseModal}>
-        <Modal.Content className="center-align">
+      <Modal size="tiny" open closeIcon onClose={handleCloseModal}>
+        <Modal.Content className="center-align pt-50 pb-50">
           <Header as="h3"> Thank you! </Header>
-          <Divider hidden />
           <p>The Nextseed Space team will be in touch shortly.</p>
-          <Divider hidden />
           <p>In the meantime, check out the other ways in which Nextseed can support your growing business about
-            {' '}<Link to="/">Nextseed.com</Link>
+            {' '}<Link to="/" className="primary-two-text">Nextseed.com</Link>
           </p>
         </Modal.Content>
       </Modal>
