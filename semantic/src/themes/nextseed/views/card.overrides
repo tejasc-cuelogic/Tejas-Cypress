@@ -626,6 +626,10 @@
                 line-height: 22px;
                 padding: @17px @22px 0;
                 font-weight: @bold;
+                >.icon.ns-help-circle{
+                    line-height: 1;
+                    vertical-align: middle;
+                }
             }
             .content{
                 border-top: 0;

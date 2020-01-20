@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Icon, Table, Accordion, Button, Card, Header } from 'semantic-ui-react';
+import { Icon, Table, Accordion, Button, Card, Header, Popup } from 'semantic-ui-react';
 import { get, includes } from 'lodash';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
 import { STAGES } from '../../../../../../services/constants/admin/offerings';
 import { INDUSTRY_TYPES_ICONS, CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
-import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
+import { DateTimeFormat, InlineLoader, PopUpModal } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -166,7 +166,7 @@ const InvestmentList = (props) => {
   } = props;
   const ListTable = ({ listData, header }) => (
     <div className="table-wrapper">
-      <Table unstackable singleLine selectable className={`investment-details ${props.listOf !== 'pending' ? 'clickable' : ''}`}>
+      <Table verticalAlign="middle" unstackable singleLine selectable className={`investment-details ${props.listOf !== 'pending' ? 'clickable' : ''}`}>
         <Table.Header>
           <Table.Row>
             {
@@ -181,7 +181,7 @@ const InvestmentList = (props) => {
             {listData.map(data => (
               <Table.Row key={data.investmentDate} onClick={() => { if (!isMobile) { handleViewInvestment(!['active', 'pending'].includes(props.listOf) ? get(data, 'offering.offeringSlug') : ''); } }}>
                 {header.map(row => (
-                  <Table.Cell className={row.className}>
+                  <Table.Cell verticalAlign="middle" className={row.className}>
                     {row.children ? row.children(data)
                       : row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key)) : 'N/A'
                         : get(data, row.key) || 'N/A'
@@ -226,7 +226,12 @@ const InvestmentList = (props) => {
       {isMobile ? (
         <>
           <Card className="investment-summary investment-card">
-            <Card.Header className="text-capitalize">{`${props.listOf} (${props.listOfCount})`}</Card.Header>
+            <Card.Header className="text-capitalize">{`${props.listOf} (${props.listOfCount})`}
+            {props.listOf === 'pending'
+              && (
+                <PopUpModal content="These are your investments in Live or Processing campaigns. Your investment has been reserved and will move to Active when the campaign has been closed." customTrigger={<Icon className="ns-help-circle ml-10" />} />
+              )}
+            </Card.Header>
             <Card.Content>
               {investments.map(data => (
                 <InvestmentCard data={data} {...props} />
@@ -241,6 +246,15 @@ const InvestmentList = (props) => {
             <Accordion.Title onClick={() => props.toggleAccordion(props.listOf)} active={isActive} className="text-capitalize">
               <Icon className={`ns-chevron-${isActive ? 'up' : 'right'}`} />
               {`${props.listOf} (${props.listOfCount})`}
+              {props.listOf === 'pending'
+              && (
+                <Popup
+                  trigger={<Icon color="grey" className="ns-help-circle ml-10" />}
+                  content="These are your investments in Live or Processing campaigns. Your investment has been reserved and will move to Active when the campaign has been closed."
+                  position="top center"
+                  className="center-align"
+                />
+              )}
             </Accordion.Title>
             <Accordion.Content className="bg-offwhite" active={!props.inActiveItems.includes(props.listOf)}>
               {!investments || !investments.length
