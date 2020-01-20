@@ -2130,9 +2130,11 @@ dl.dl-horizontal{
 		dt{
 			width:130px;
 			white-space: normal;
+			line-height: 20px;
 		}
 		dd{
 			margin-left: 140px;
+			margin-bottom: 0;
 		}
 	}
 }

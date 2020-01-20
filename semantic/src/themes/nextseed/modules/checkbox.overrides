@@ -239,6 +239,12 @@
 .ui.read-only.checkbox{
 	label{
 		color: @neutral-offdark !important;
+		&:hover{
+			cursor: not-allowed;
+			&::before{
+				border-color: @neutral;
+			}
+		}
 	}
 	input:checked~label{
 		&:after{
