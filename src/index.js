@@ -76,6 +76,7 @@ if (NODE_ENV === 'production' && ['localhost', 'develop', 'dev', 'predev'].inclu
       // caches.keys().then((keys) => {
       //   cacheKeys = keys;
       // });
+      // changed
       stores.uiStore.setAppUpdated();
       console.log('[OfflinePluginRuntime] new version is available');
       // setTimeout(() => {
