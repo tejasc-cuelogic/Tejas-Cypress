@@ -120,7 +120,7 @@ export class Utility {
 
   encrypSsnNumberByForm = (form) => {
     const formData = _.cloneDeep(toJS({ ...form }));
-    formData.ssn.value = this.encryptNumberWithX(formData.ssn.value);
+    formData.ssn.value = this.encryptNumberWithX(formData.ssn.value).replace(/(.{3})(.{2})/, '$1-$2-');
     return formData;
   }
 

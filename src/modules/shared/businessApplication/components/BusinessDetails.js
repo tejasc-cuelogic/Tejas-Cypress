@@ -22,6 +22,7 @@ export default class BusinessDetails extends Component {
       currentForm: '',
       currentIndex: 0,
       legalNoteToggle: false,
+      isSsnDirty: [],
     };
     this.props.businessAppStore.setFieldvalue('applicationStep', 'business-details');
     const {
@@ -51,6 +52,14 @@ export default class BusinessDetails extends Component {
       currentForm: formName,
       currentIndex: index,
     });
+  }
+
+  handleSsnChange = (e, res, subForm, index) => {
+    e.preventDefault();
+    this.props.businessAppStore.businessDetailsChange(e, { name: 'ssn', value: '' }, subForm, index);
+    const a = this.state.isSsnDirty.slice();
+    a[index] = true;
+    this.setState({ isSsnDirty: a });
   }
 
   handleLearnMore = () => {
@@ -409,117 +418,121 @@ export default class BusinessDetails extends Component {
               )
             }
             {BUSINESS_DETAILS_FRM.fields.owners.length
-              && BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => (
-                <Grid>
-                  <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
-                    <Header as={hideFields ? 'h6' : 'h5'}>Owner {index + 1}
-                      {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length > 1
-                        && (
-                          <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
-                            <Icon color="red" size="small" className="ns-trash" />
-                          </Button>
-                        )
-                      }
-                    </Header>
-                    <div className="field-wrap">
-                      <Form.Group widths="equal">
-                        {
-                          ['fullLegalName', 'title'].map(field => (
-                            <FormInput
-                              readOnly={formReadOnlyMode}
-                              containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                              key={field}
-                              type="text"
-                              asterisk="true"
-                              name={field}
-                              fielddata={owner[field]}
-                              changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
-                            />
-                          ))
-                        }
-                      </Form.Group>
-                      <Form.Group widths="equal">
-                        <MaskedInput
-                          readOnly={formReadOnlyMode}
-                          containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                          number
-                          type="text"
-                          name="yearsOfExp"
-                          asterisk="true"
-                          fielddata={owner.yearsOfExp}
-                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
-                        />
-                        <MaskedInput
-                          readOnly={formReadOnlyMode}
-                          containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                          percentage
-                          type="text"
-                          asterisk="true"
-                          name="companyOwnerShip"
-                          fielddata={owner.companyOwnerShip}
-                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
-                        />
-                      </Form.Group>
-                      <Form.Group widths="equal">
-                        <MaskedInput
-                          name="dateOfService"
-                          readOnly={formReadOnlyMode}
-                          containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                          fielddata={owner.dateOfService}
-                          asterisk="true"
-                          format="##/##/####"
-                          label={currentApplicationType === 'business' ? 'Start Date with the Business' : owner.dateOfService.label}
-                          changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}
-                          dateOfBirth
-                        />
-                        {formReadOnlyMode
-                          ? (
-                            <FormInput
-                              key="ssn"
-                              name="ssn"
-                              fielddata={Helper.encrypSsnNumberByForm(owner).ssn}
-                              displayMode={formReadOnlyMode}
-                            />
+              && BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => {
+                const ssnData = owner.ssn.value !== null && owner.ssn.value.length === 9 ? Helper.encrypSsnNumberByForm(owner).ssn : owner.ssn;
+                return (
+                  <Grid>
+                    <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
+                      <Header as={hideFields ? 'h6' : 'h5'}>Owner {index + 1}
+                        {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length > 1
+                          && (
+                            <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
+                              <Icon color="red" size="small" className="ns-trash" />
+                            </Button>
                           )
-                          : (
-                            <MaskedInput
-                              readOnly={formReadOnlyMode}
-                              containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                              ssn
-                              type="text"
-                              name="ssn"
-                              asterisk="true"
-                              fielddata={owner.ssn}
-                              changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
-                            />
-                          )}
-                      </Form.Group>
-                      <Form.Group widths="equal">
-                        <FormInput
-                          readOnly={formReadOnlyMode}
-                          containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                          type="text"
-                          name="linkedInUrl"
-                          fielddata={owner.linkedInUrl}
-                          changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
-                        />
-                        <Form.Field>
-                          <DropZone
-                            sharableLink
-                            hideFields={hideFields}
-                            disabled={formReadOnlyMode && disableFileUpload}
-                            name="resume"
+                        }
+                      </Header>
+                      <div className="field-wrap">
+                        <Form.Group widths="equal">
+                          {
+                            ['fullLegalName', 'title'].map(field => (
+                              <FormInput
+                                readOnly={formReadOnlyMode}
+                                containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                                key={field}
+                                type="text"
+                                asterisk="true"
+                                name={field}
+                                fielddata={owner[field]}
+                                changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
+                              />
+                            ))
+                          }
+                        </Form.Group>
+                        <Form.Group widths="equal">
+                          <MaskedInput
+                            readOnly={formReadOnlyMode}
+                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                            number
+                            type="text"
+                            name="yearsOfExp"
                             asterisk="true"
-                            fielddata={owner.resume}
-                            ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index, this.props.userStore.isApplicationManager)}
-                            onremove={fieldName => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
+                            fielddata={owner.yearsOfExp}
+                            changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                           />
-                        </Form.Field>
-                      </Form.Group>
-                    </div>
-                  </Grid.Column>
-                </Grid>
-              ))
+                          <MaskedInput
+                            readOnly={formReadOnlyMode}
+                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                            percentage
+                            type="text"
+                            asterisk="true"
+                            name="companyOwnerShip"
+                            fielddata={owner.companyOwnerShip}
+                            changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
+                          />
+                        </Form.Group>
+                        <Form.Group widths="equal">
+                          <MaskedInput
+                            name="dateOfService"
+                            readOnly={formReadOnlyMode}
+                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                            fielddata={owner.dateOfService}
+                            asterisk="true"
+                            format="##/##/####"
+                            label={currentApplicationType === 'business' ? 'Start Date with the Business' : owner.dateOfService.label}
+                            changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}
+                            dateOfBirth
+                          />
+                          {ssnData.value && ssnData.value.includes('X') && !this.state.isSsnDirty[index]
+                            ? (
+                              <FormInput
+                                key="ssn"
+                                name="ssn"
+                                fielddata={Helper.encrypSsnNumberByForm(owner).ssn}
+                                displayMode={formReadOnlyMode}
+                                asterisk={formReadOnlyMode ? 'false' : 'true'}
+                                onChange={(e, res) => this.handleSsnChange(e, res, 'owners', index)}
+                              />
+                            )
+                            : (
+                              <MaskedInput
+                                readOnly={formReadOnlyMode}
+                                containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                                ssn
+                                name="ssn"
+                                asterisk="true"
+                                fielddata={owner.ssn}
+                                changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
+                              />
+                            )}
+                        </Form.Group>
+                        <Form.Group widths="equal">
+                          <FormInput
+                            readOnly={formReadOnlyMode}
+                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                            type="text"
+                            name="linkedInUrl"
+                            fielddata={owner.linkedInUrl}
+                            changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
+                          />
+                          <Form.Field>
+                            <DropZone
+                              sharableLink
+                              hideFields={hideFields}
+                              disabled={formReadOnlyMode && disableFileUpload}
+                              name="resume"
+                              asterisk="true"
+                              fielddata={owner.resume}
+                              ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index, this.props.userStore.isApplicationManager)}
+                              onremove={fieldName => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
+                            />
+                          </Form.Field>
+                        </Form.Group>
+                      </div>
+                    </Grid.Column>
+                  </Grid>
+                );
+              })
             }
             {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length !== 5
               && (
