@@ -483,36 +483,27 @@ export default class BusinessDetails extends Component {
                             changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}
                             dateOfBirth
                           />
-                          {formReadOnlyMode
+                          {ssnData.value && ssnData.value.includes('X') && !this.state.isSsnDirty[index]
                             ? (
                               <FormInput
                                 key="ssn"
                                 name="ssn"
                                 fielddata={Helper.encrypSsnNumberByForm(owner).ssn}
                                 displayMode={formReadOnlyMode}
+                                asterisk={formReadOnlyMode ? 'false' : 'true'}
+                                onChange={(e, res) => this.handleSsnChange(e, res, 'owners', index)}
                               />
                             )
                             : (
-                              ssnData.value && ssnData.value.includes('X') && !this.state.isSsnDirty[index]
-                                ? (
-                                  <FormInput
-                                    key="ssn"
-                                    name="ssn"
-                                    fielddata={ssnData}
-                                    onChange={(e, res) => this.handleSsnChange(e, res, 'owners', index)}
-                                  />
-                                )
-                                : (
-                                  <MaskedInput
-                                    readOnly={formReadOnlyMode}
-                                    containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                                    ssn
-                                    name="ssn"
-                                    asterisk="true"
-                                    fielddata={owner.ssn}
-                                    changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
-                                  />
-                                )
+                              <MaskedInput
+                                readOnly={formReadOnlyMode}
+                                containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                                ssn
+                                name="ssn"
+                                asterisk="true"
+                                fielddata={owner.ssn}
+                                changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
+                              />
                             )}
                         </Form.Group>
                         <Form.Group widths="equal">
