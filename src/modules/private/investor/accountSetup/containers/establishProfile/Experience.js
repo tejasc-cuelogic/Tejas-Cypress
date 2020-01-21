@@ -108,7 +108,7 @@ export default class Experience extends Component {
           </p>
         )
         }
-        <Form error={!isInvExperienceValid}>
+        <Form error={(!isInvExperienceValid && noExperience) || errors}>
           {isExperiencedTypeSelected ? (
             <CheckBoxes />
           )
