@@ -58,11 +58,28 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
+const setVersionRef = () => {
+  setTimeout(() => {
+    if (window.caches) {
+      window.caches.keys().then((keys) => {
+        const matching = keys.find(k => k.startsWith('webpack-offline:'));
+        if (matching) {
+          const appVersion = matching.split('webpack-offline:');
+          localStorage.setItem('swAppVersion', appVersion[1]);
+          sessionStorage.setItem('swAppVersion', appVersion[1]);
+        }
+      });
+    }
+  }, 4000);
+};
+
 // temporarily disable install for production env
 if (NODE_ENV === 'production' && ['localhost', 'develop', 'dev', 'predev'].includes(REACT_APP_DEPLOY_ENV)) {
+  setVersionRef();
   OfflinePluginRuntime.install({
     onInstalled: () => {
       console.log('[OfflinePlugin] onInstalled');
+      setVersionRef();
     },
     onUpdating: () => {
       // console.log('[OfflinePlugin] onUpdating');
@@ -72,17 +89,9 @@ if (NODE_ENV === 'production' && ['localhost', 'develop', 'dev', 'predev'].inclu
       console.log('[OfflinePlugin] onUpdateReady');
     },
     onUpdated: () => {
-      // let cacheKeys = [];
-      // caches.keys().then((keys) => {
-      //   cacheKeys = keys;
-      // });
       // changed
       stores.uiStore.setAppUpdated();
       console.log('[OfflinePluginRuntime] new version is available');
-      // setTimeout(() => {
-      //   console.log('cacheKeys', cacheKeys);
-      //   localStorage.setItem('last_updated', JSON.stringify(cacheKeys));
-      // }, 1000);
     },
     onUpdateFailed: () => {
       console.log('[OfflinePlugin] onUpdateFailed');
