@@ -44,9 +44,9 @@ mutation adminUpdateCategoryInfo($id: ID!, $categoryDetailsInput: CategoryInput!
  }
 `;
 
-export const adminUpdateCategoryStaus = gql`
-mutation adminUpdateCategoryStaus($id: ID!, $isPublished: Boolean) {
-  adminUpdateCategoryStaus(id: $id, isPublished: $isPublished) {
+export const adminUpdateCategoryStatus = gql`
+mutation adminUpdateCategoryStatus($id: ID!, $isPublished: Boolean) {
+  adminUpdateCategoryStatus(id: $id, isPublished: $isPublished) {
     id
   }
 }

@@ -2,7 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { sortBy, filter } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { adminCategories, adminCreateCategory, adminUpdateCategoryInfo, adminDeleteCategory, adminUpdateCategoryStaus, adminSetCategoryOrderForCategoryType } from '../../queries/category';
+import { adminCategories, adminCreateCategory, adminUpdateCategoryInfo, adminDeleteCategory, adminUpdateCategoryStatus, adminSetCategoryOrderForCategoryType } from '../../queries/category';
 import { CATEGORY_DETAILS, CATEGORY_DATA } from '../../../constants/admin/categories';
 import { FormValidator as Validator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
@@ -116,7 +116,7 @@ export class CategoryStore {
     @action
     saveCategories = (id, isPublished) => {
       uiStore.setProgress();
-      const mutation = id === 'new' ? adminCreateCategory : (isPublished === 'defaultPublished' ? adminUpdateCategoryInfo : adminUpdateCategoryStaus);
+      const mutation = id === 'new' ? adminCreateCategory : (isPublished === 'defaultPublished' ? adminUpdateCategoryInfo : adminUpdateCategoryStatus);
       const param = {};
       if (id !== 'new') {
         param.id = id;
