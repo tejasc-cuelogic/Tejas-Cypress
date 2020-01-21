@@ -91,10 +91,10 @@ const Contact = ({ history, smartElement, spaceStore, nsUiStore, uiStore }) => {
                   })}
                 </Form.Group>
                 <Form.Group widths="equal">
-                  {['emailAddress', 'phone'].map(field => (field === 'phone' ? smartElement.Masked(field, { format: '(###) ###-####', phoneNumber: true }) : smartElement.Input(field)))}
+                  {['phone', 'emailAddress'].map(field => (field === 'phone' ? smartElement.Masked(field, { format: '(###) ###-####', phoneNumber: true }) : smartElement.Input(field)))}
                 </Form.Group>
                 {smartElement.TextArea('question', { containerclassname: 'secondary mt-20 mb-20', fluid: true, placeholder: '' })}
-                <Button loading={nsUiStore.loadingArray.includes('spaceHelpAndQuestion')} disabled={!spaceStore.CONTACT_FRM.meta.isValid} onClick={handleSubmit} secondary fluid content="Let’s Talk" />
+                <Button loading={nsUiStore.loadingArray.includes('spaceHelpAndQuestion')} disabled={!spaceStore.CONTACT_FRM.meta.isValid || nsUiStore.loadingArray.includes('spaceHelpAndQuestion')} onClick={handleSubmit} secondary fluid content="Let’s Talk" />
               </Form>
             </Grid.Column>
           </Grid>
