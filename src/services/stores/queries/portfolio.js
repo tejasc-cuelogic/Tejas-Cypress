@@ -99,6 +99,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
             }
             keyTerms {
               maturityDate
+              multiple
             }
           }
         }
