@@ -75,7 +75,7 @@ const setVersionRef = () => {
 
 // temporarily disable install for production env
 // && ['localhost', 'develop', 'dev', 'predev'].includes(REACT_APP_DEPLOY_ENV)
-if (NODE_ENV === 'production') {
+if (NODE_ENV === 'production' && ['localhost', 'qa', 'develop', 'dev', 'predev'].includes(REACT_APP_DEPLOY_ENV)) {
   setVersionRef();
   OfflinePluginRuntime.install({
     onInstalled: () => {
