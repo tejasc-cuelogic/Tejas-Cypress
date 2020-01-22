@@ -80,8 +80,8 @@ export class NewMessage {
             this.setDataValue('currentMessageId', this.currentMessageId);
           } else {
             this.setDataValue('currentMessageId', data.offeringCommentsByOfferId[0].id);
-            this.updateCommentList(data.offeringCommentsByOfferId, offeringCreationStore.currentOfferingId);
           }
+          this.updateCommentList(data.offeringCommentsByOfferId, offeringCreationStore.currentOfferingId);
         }
       },
     });
