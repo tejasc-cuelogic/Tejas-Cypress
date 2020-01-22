@@ -122,7 +122,7 @@ class Mission extends Component {
                 </Card.Content>
                 <Card.Content className="bg-offwhite">
                   <Statistic color="green" size="mini" className="basic">
-                    <Statistic.Value>$10.6 million</Statistic.Value>
+                    <Statistic.Value>$12 million</Statistic.Value>
                     <Statistic.Label className="neutral-text">Invested in women and minority-owned businesses<sup>3</sup></Statistic.Label>
                     <Statistic.Value>&gt;75% </Statistic.Value>
                     <Statistic.Label className="neutral-text">Investment dollars go to women or minority-owned businesses<sup>4</sup></Statistic.Label>
@@ -141,7 +141,7 @@ class Mission extends Component {
               guarantee of future results of another business.
             </p>
             <p className={`${responsiveVars.isMobile ? '' : 'center-align'} note`}>
-              <sup>3,4</sup> Data reflects figures from offerings conducted by NextSeed TX LLC, NextSeed UC LLC and NextSeed Securities, LLC as of November 2019.
+              <sup>3,4</sup> Data reflects figures from offerings conducted by NextSeed TX LLC, NextSeed UC LLC and NextSeed Securities, LLC as of December 2019.
             </p>
           </Container>
         </section>
