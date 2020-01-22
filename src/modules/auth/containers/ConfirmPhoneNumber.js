@@ -63,7 +63,7 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.identityStore.confirmPhoneNumber().then(() => {
         // Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.identityStore.setIsOptConfirmed(true);
-      })  
+      })
         .catch(() => { });
     }
   }
