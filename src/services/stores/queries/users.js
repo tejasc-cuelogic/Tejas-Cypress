@@ -98,14 +98,6 @@ export const userDetailsQuery = gql`
           name
           url
         }
-        preferred @include(if: $includePrefInfo) {
-            name
-            street
-            streetTwo
-            city
-            state
-            zipCode
-        }
       }
       email {
         address

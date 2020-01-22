@@ -184,8 +184,12 @@ export class InvestorProfileStore extends DataModelStore {
   }
 
   get isInvExperienceValid() {
-    const { isComfortable, isRiskTaker, experienceLevel } = Validator.ExtractValues(this.INVESTMENT_EXP_FORM.fields);
+    const { isComfortable, isRiskTaker, experienceLevel } = Validator.ExtractValues(this.INVESTMENT_EXP_FRM.fields);
     return isComfortable.length !== 0 && isRiskTaker.length !== 0 && experienceLevel !== 'NONE';
+  }
+
+  get isValidInvestorProfileForm() {
+    return ![...this.invProfileForms, ...['INVESTMENT_EXP_FRM']].find(form => !this[form].meta.isValid);
   }
 }
 
@@ -203,6 +207,7 @@ decorate(InvestorProfileStore, {
   updateInvestorEditProfileData: action,
   setFormData: action,
   isInvestmentExperienceValid: computed,
+  isValidInvestorProfileForm: computed,
 });
 
 export default new InvestorProfileStore();

@@ -2,21 +2,21 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
-import { FormRadioGroup, FormCheckbox, FormArrowButton } from '../../../../../../theme/form';
+import { FormArrowButton } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
-// import formHOC from '../../../../../../theme/form/formHOC';
+import formHOC from '../../../../../../theme/form/formHOC';
 
-// const metaInfo = {
-//   store: 'investorProfileStore',
-//   form: 'INVESTMENT_EXP_FRM',
-// };
+const metaInfo = {
+  store: 'investorProfileStore',
+  form: 'INVESTMENT_EXP_FRM',
+};
 
 const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('investorProfileStore', 'userDetailsStore', 'uiStore')
 @withRouter
 @observer
-export default class Experience extends Component {
+class Experience extends Component {
   state = {
     errorMessage: '',
     ctaErrors: { for: '', errorMsg: '' },
@@ -24,20 +24,20 @@ export default class Experience extends Component {
 
   handleSubmitInvestmentExperience = () => {
     const {
-      INVESTMENT_EXP_FORM,
-      updateInvestorProfileData,
+      INVESTMENT_EXP_FRM,
+      upsertInvestorProfile,
       isValidInvestorProfileForm,
     } = this.props.investorProfileStore;
-    if (INVESTMENT_EXP_FORM.meta.isValid
+    if (INVESTMENT_EXP_FRM.meta.isValid
       && this.props.investorProfileStore.isInvExperienceValid) {
       if (isValidInvestorProfileForm) {
         this.props.uiStore.setErrors(undefined);
         const currentStep = {
           name: 'Investment Experience',
-          form: 'INVESTMENT_EXP_FORM',
+          form: 'INVESTMENT_EXP_FRM',
           stepToBeRendered: 6,
         };
-        updateInvestorProfileData(currentStep).then(() => {
+        upsertInvestorProfile(currentStep).then(() => {
           const { signupStatus, userStatus, hasAnyAccount, getInvestorAccountsRoute } = this.props.userDetailsStore;
           if (signupStatus.isMigratedFullAccount
             || (userStatus && userStatus.includes('FULL'))) {
@@ -69,25 +69,20 @@ export default class Experience extends Component {
   }
 
   render() {
+    const { smartElement, investorProfileStore, uiStore } = this.props;
     const {
-      INVESTMENT_EXP_FORM,
+      INVESTMENT_EXP_FRM,
       isInvExperienceValid,
-      experiencesChange,
-    } = this.props.investorProfileStore;
-    const { inProgressArray, errors } = this.props.uiStore;
+      formChange,
+    } = investorProfileStore;
+    const { inProgressArray, errors } = uiStore;
     const { errorMessage } = this.state;
-    const noExperience = INVESTMENT_EXP_FORM.fields.experienceLevel.value === 'NONE';
+    const noExperience = INVESTMENT_EXP_FRM.fields.experienceLevel.value === 'NONE';
     const isExperiencedTypeSelected = inProgressArray.includes('EXPERIENCED'); // only for mobile screen
     const CheckBoxes = () => (
       <>
         {['isRiskTaker', 'isComfortable'].map(field => (
-          <FormCheckbox
-            fielddata={INVESTMENT_EXP_FORM.fields[field]}
-            name={field}
-            changed={experiencesChange}
-            defaults
-            containerclassname="ui relaxed list"
-          />
+          smartElement.FormCheckBox(field)
         ))}
       </>
     );
@@ -123,11 +118,11 @@ export default class Experience extends Component {
                 {isMobile
                   ? (
                     <FormArrowButton
-                      fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}
+                      fielddata={INVESTMENT_EXP_FRM.fields.experienceLevel}
                       name="experienceLevel"
                       changed={
                         (e, result) => {
-                          experiencesChange(e, result);
+                          formChange(e, result, metaInfo.form);
                           this.handleOnClick(e, result);
                         }
                       }
@@ -135,13 +130,11 @@ export default class Experience extends Component {
                     />
                   ) : (
                     <>
-                      <FormRadioGroup
-                        fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}
-                        name="experienceLevel"
-                        changed={experiencesChange}
-                        containerclassname="two wide button-radio center-align mb-50"
-                        showerror
-                      />
+                      {
+                        smartElement.RadioGroup('experienceLevel', {
+                          containerclassname: 'two wide button-radio center-align mb-50',
+                        })
+                      }
                       <CheckBoxes />
                     </>
                   )
@@ -171,9 +164,9 @@ export default class Experience extends Component {
               <Button fluid={isMobile} primary className="relaxed" content="Continue to Account" disabled={!isInvExperienceValid} onClick={this.handleSubmitInvestmentExperience} />
               {!isInvExperienceValid && noExperience
                 && (
-                <p className="negative-text mt-20">
-                  Otherwise, please reference our{' '}
-                  <Link to="/resources/education-center/investor">Education Center </Link> to learn more about investing on NextSeed.
+                  <p className="negative-text mt-20">
+                    Otherwise, please reference our{' '}
+                    <Link to="/resources/education-center/investor">Education Center </Link> to learn more about investing on NextSeed.
                 </p>
                 )}
             </div>
@@ -188,11 +181,11 @@ export default class Experience extends Component {
                   && (<RequestMsg />)
                 }
               </>
-          )
+            )
           }
         </Form>
       </>
     );
   }
 }
-// export default formHOC(Experience, metaInfo);
+export default formHOC(Experience, metaInfo);
