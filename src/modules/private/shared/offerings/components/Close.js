@@ -189,6 +189,8 @@ export default class Close extends Component {
         this.setState({ inProgress: false });
         if (status === 'close') {
           this.props.history.push(`/dashboard/offerings/completed/edit/${currentOfferingId}/overview`);
+        } else if (type === 'EXPORT_ENVELOPES') {
+          this.setState({ action: '' });
         }
       }).catch((e) => {
         console.log(e);
