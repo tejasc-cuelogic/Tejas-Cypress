@@ -2,7 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import { get, sortBy, includes } from 'lodash';
 import graphql from 'mobx-apollo';
 import * as elasticSearchQueries from '../../queries/elasticSearch';
-import { generateInvestorFolderStructure, storageDetailsForInvestor, syncEsDocument } from '../../queries/data';
+import { adminGenerateInvestorFolderStructure, storageDetailsForInvestor, adminSyncEsDocument } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
@@ -32,11 +32,11 @@ export class ElasticSearchStore {
   @observable swapIndex = null;
 
   @observable mutations = {
-    USERS: ['userDeleteIndices', 'userPopulateIndex'],
-    CROWDPAY: ['crowdPayDeleteIndices', 'crowdPayPopulateIndex'],
-    ACCREDITATIONS: ['accreditationDeleteIndices', 'accreditationPopulateIndex'],
-    LINKEDBANK: ['linkedBankDeleteIndices', 'linkedBankPopulateIndex'],
-    OFFERINGS: ['offeringsDeleteIndices', 'offeringsPopulateIndex'],
+    USERS: ['adminDeleteUserIndices', 'adminPopulateUserIndex'],
+    CROWDPAY: ['adminDeleteCrowdPayIndices', 'adminPopulateCrowdPayIndex'],
+    ACCREDITATIONS: ['adminDeleteAccreditationIndices', 'adminPopulateAccreditationIndex'],
+    LINKEDBANK: ['adminDeleteLinkedBankIndices', 'adminPopulateLinkedBankIndex'],
+    OFFERINGS: ['adminDeleteOfferingIndices', 'adminPopulateOfferingIndices'],
   }
 
   @action
@@ -103,15 +103,15 @@ export class ElasticSearchStore {
   swapIndexAliases = indexAliasName => new Promise((resolve, reject) => {
     client
       .mutate({
-        mutation: elasticSearchQueries.swapIndexOnAlias,
+        mutation: elasticSearchQueries.adminSwapIndexOnAlias,
         variables: { indexAliasName },
         refetchQueries: [{ query: elasticSearchQueries.getESAuditList }],
       })
       .then((result) => {
-        if (get(result, 'data.swapIndexOnAlias.success')) {
+        if (get(result, 'data.adminSwapIndexOnAlias.success')) {
           Helper.toast('Your request is processed successfully.', 'success');
         } else {
-          Helper.toast(get(result, 'data.swapIndexOnAlias.message'), 'error');
+          Helper.toast(get(result, 'data.adminSwapIndexOnAlias.message'), 'error');
         }
         resolve(result);
         this.setFieldValue('inProgress', false);
@@ -124,16 +124,16 @@ export class ElasticSearchStore {
   });
 
   @action
-  syncEsDocument = (params) => {
+  adminSyncEsDocument = (params) => {
     this.setFieldValue('inProgress', params.targetIndex);
     const syncESVarible = params.indexAliasName === 'ACCREDITATIONS' ? { documentId: params.documentId, targetIndex: params.targetIndex, userId: params.userId, accountType: params.accountType } : includes(['CROWDPAY', 'LINKEDBANK'], params.indexAliasName) ? { documentId: params.documentId, targetIndex: params.targetIndex, userId: params.userId } : { documentId: params.documentId, targetIndex: params.targetIndex };
     const getESVariable = { indexAliasName: params.indexAliasName, random: params.documentId };
     client
       .mutate({
-        mutation: syncEsDocument,
+        mutation: adminSyncEsDocument,
         variables: syncESVarible,
         refetchQueries: [{
-          query: elasticSearchQueries.getESAudit,
+          query: elasticSearchQueries.adminGetESAudit,
           variables: getESVariable,
         }],
       })
@@ -160,7 +160,7 @@ export class ElasticSearchStore {
     this.esAuditOutput = graphql({
       client,
       fetchPolicy: 'network-only',
-      query: elasticSearchQueries.getESAudit,
+      query: elasticSearchQueries.adminGetESAudit,
       variables,
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -169,13 +169,13 @@ export class ElasticSearchStore {
   }
 
   @computed get eSAudit() {
-    return get(this.esAudit, 'data.getESAudit.indices[0]')
-      ? sortBy(toJS(get(this.esAudit, 'data.getESAudit.indices')), ['alias']) : [];
+    return get(this.esAudit, 'data.adminGetESAudit.indices[0]')
+      ? sortBy(toJS(get(this.esAudit, 'data.adminGetESAudit.indices')), ['alias']) : [];
   }
 
   @computed get esAuditParaOutput() {
-    return get(this.esAuditOutput, 'data.getESAudit.indices[0]')
-      ? toJS(get(this.esAuditOutput, 'data.getESAudit.indices[0]')) : [];
+    return get(this.esAuditOutput, 'data.adminGetESAudit.indices[0]')
+      ? toJS(get(this.esAuditOutput, 'data.adminGetESAudit.indices[0]')) : [];
   }
 
   @computed get eSAuditLoading() {
@@ -194,18 +194,18 @@ export class ElasticSearchStore {
     return new Promise((res, rej) => {
       client
         .mutate({
-          mutation: generateInvestorFolderStructure,
+          mutation: adminGenerateInvestorFolderStructure,
           variables: { userId },
         })
         .then(action((result) => {
-          if (result.data.generateInvestorFolderStructure.includes('True')) {
+          if (result.data.adminGenerateInvestorFolderStructure.includes('True')) {
             Helper.toast('Box folder details not found, creation has been initiated, please check after some time.', 'success');
             this.resetForm('STORAGE_DETAILS_SYNC_FRM');
             document.getElementsByName('userId')[0].value = '';
           } else {
             const tempobj = { ...this.STORAGE_DETAILS_SYNC_FRM };
             tempobj.fields.userId.value = '';
-            tempobj.fields.userId.error = result.data.generateInvestorFolderStructure;
+            tempobj.fields.userId.error = result.data.adminGenerateInvestorFolderStructure;
             this.setFieldValue('STORAGE_DETAILS_SYNC_FRM', tempobj);
           }
           uiStore.setProgress(false);

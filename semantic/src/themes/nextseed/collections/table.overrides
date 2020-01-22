@@ -176,7 +176,8 @@
                 width: 150px;
                 white-space: nowrap;
                 overflow: hidden;
-                color: @primary-one;;
+                color: @primary-one;
+                vertical-align: middle;
                 a{
                     color: @primary-one !important;
                 }
@@ -191,6 +192,9 @@
             }
             td.wrap-text{
                 white-space: normal;
+            }
+            .ui.buttons{
+                vertical-align: middle;
             }
         }
         i.ns-individual-line, i.ns-ira-line, i.ns-entity-line{
@@ -254,6 +258,18 @@
                 padding-top: 0;
                 padding-bottom: 0;
                 border-top: none;
+            }
+        }
+        &.without-border-shadow tr{
+            box-shadow: none !important;
+            &:last-child{
+                border: 0;
+            }
+            td>.ui.buttons>.ui.button{
+                margin: @14px 0 !important;
+                &:last-child{
+                    margin-bottom: 0 !important;
+                }
             }
         }
     }

@@ -13,6 +13,7 @@ const imgMap = {
   LogoNsAndLendioWhite: 'nextseed_and_lendio_white.svg',
   LogoBlack: 'logo_black.svg',
   LogoGreenGrey: 'logo.svg',
+  LogoNss: 'nss-logo.svg',
 };
 
 @inject('uiStore')

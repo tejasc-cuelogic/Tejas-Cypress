@@ -68,7 +68,7 @@ export default class Experience extends Component {
       isInvExperienceValid,
       experiencesChange,
     } = this.props.investorProfileStore;
-    const { inProgressArray } = this.props.uiStore;
+    const { inProgressArray, errors } = this.props.uiStore;
     const { errorMessage } = this.state;
     const noExperience = INVESTMENT_EXP_FORM.fields.experienceLevel.value === 'NONE';
     const isExperiencedTypeSelected = inProgressArray.includes('EXPERIENCED'); // only for mobile screen
@@ -108,7 +108,7 @@ export default class Experience extends Component {
           </p>
         )
         }
-        <Form error={!isInvExperienceValid}>
+        <Form error={(!isInvExperienceValid && noExperience) || errors}>
           {isExperiencedTypeSelected ? (
             <CheckBoxes />
           )
@@ -143,10 +143,10 @@ export default class Experience extends Component {
               </>
             )
           }
-          {errorMessage
+          {(errorMessage || errors)
             && (
-              <Message error className="mt-20">
-                <ListErrors errors={errorMessage ? [errorMessage] : ['']} />
+              <Message error className="mt-20 display-block">
+                <ListErrors errors={errors && errors.message ? [errors.message] : errorMessage !== '' ? [errorMessage] : ['']} />
               </Message>
             )
           }

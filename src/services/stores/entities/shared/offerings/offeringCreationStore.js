@@ -15,9 +15,9 @@ import {
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { deleteBonusReward, updateOffering,
-  getOfferingDetails, getOfferingBac, createBac, updateBac, offerClose, deleteBac, upsertBonusReward,
-  getBonusRewards, getOfferingFilingList, initializeClosingBinder,
-  generateBusinessFiling, upsertOffering } from '../../../queries/offerings/manage';
+  getOfferingDetails, getOfferingBac, createBac, updateBac, adminOfferingClose, deleteBac, upsertBonusReward,
+  getBonusRewards, adminBusinessFilings, initializeClosingBinder,
+  adminCreateBusinessFiling, adminUpsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore, offeringInvestorStore } from '../../../index';
@@ -1066,13 +1066,13 @@ export class OfferingCreationStore {
     uiStore.addMoreInProgressArray('upsert');
     client
       .mutate({
-        mutation: upsertOffering,
+        mutation: adminUpsertOffering,
         variables: { offeringDetails },
       })
       .then((res) => {
         uiStore.removeOneFromProgressArray(false);
-        offeringsStore.addNewOne(res.data.upsertOffering, 'creation');
-        this.generateActivityHistory(res.data.upsertOffering.id, ACTIVITY_HISTORY_TYPES.CREATION, 'Application Created by Admin.', 'STARTED');
+        offeringsStore.addNewOne(res.data.adminUpsertOffering, 'creation');
+        this.generateActivityHistory(res.data.adminUpsertOffering.id, ACTIVITY_HISTORY_TYPES.CREATION, 'Application Created by Admin.', 'STARTED');
         Helper.toast('Offering created successfully.', 'success');
       })
       .catch(() => {
@@ -1108,6 +1108,9 @@ export class OfferingCreationStore {
       })
       .then((result) => {
         let upatedOffering = null;
+        if (has(payload, 'offeringSlug')) {
+          this.setFieldValue('currentOfferingSlug', payload.offeringSlug);
+        }
         if (get(result, 'data.updateOffering')) {
           upatedOffering = Helper.replaceKeysDeep(toJS(get(result, 'data.updateOffering')), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
           offeringsStore.updateOfferingList(id, upatedOffering, keyName);
@@ -1118,7 +1121,7 @@ export class OfferingCreationStore {
         } else if (notify) {
           Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
         }
-        offeringsStore.getOne(id, false);
+        offeringsStore.getOne(this.currentOfferingSlug, false);
         if (keyName === 'contingencies' && successMsg === null) {
           const activityTitle = isLaunchContingency ? 'All launch contingencies have been signed off' : 'All close contingencies have been signed off';
           this.generateActivityHistory(id, ACTIVITY_HISTORY_TYPES.OFFERING, activityTitle, isLaunchContingency ? 'LAUNCH_CONTINGENCIES' : 'CLOSE_CONTINGENCIES');
@@ -1157,11 +1160,11 @@ export class OfferingCreationStore {
     approvedObj, fromS3 = false, leaderIndex,
     msgType = 'success', isLaunchContingency = false,
   ) => new Promise((res, rej) => {
-    let { getOfferingById } = offeringsStore.offerData.data;
-    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
+    let { getOfferingDetailsBySlug } = offeringsStore.offerData.data;
+    getOfferingDetailsBySlug = Helper.replaceKeysDeep(toJS(getOfferingDetailsBySlug), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
     let payloadData = {
-      applicationId: getOfferingById.applicationId,
-      issuerId: getOfferingById.issuerId,
+      applicationId: getOfferingDetailsBySlug.applicationId,
+      issuerId: getOfferingDetailsBySlug.issuerId,
     };
     const { firstName, lastName } = userDetailsStore.userDetails.info;
     if (keyName) {
@@ -1194,12 +1197,12 @@ export class OfferingCreationStore {
           ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
         };
         if (subKey === 'launch') {
-          const closureSummary = { ...getOfferingById.closureSummary };
+          const closureSummary = { ...getOfferingDetailsBySlug.closureSummary };
           closureSummary.processingDate = get(payloadData[keyName].launch, 'terminationDate') || null;
           closureSummary.launchDate = get(payloadData[keyName].launch, 'targetDate') || null;
           payloadData.closureSummary = closureSummary;
           payloadData.closureSummary = mergeWith(
-            toJS(getOfferingById.closureSummary),
+            toJS(getOfferingDetailsBySlug.closureSummary),
             payloadData.closureSummary,
             this.mergeCustomize,
           );
@@ -1226,12 +1229,12 @@ export class OfferingCreationStore {
           keyTerms: Validator.evaluateFormData(this.KEY_TERMS_FRM.fields),
         };
         payloadData.keyTerms = mergeWith(
-          toJS(getOfferingById.keyTerms),
+          toJS(getOfferingDetailsBySlug.keyTerms),
           payloadData.keyTerms,
           this.mergeCustomize,
         );
         payloadData.closureSummary = mergeWith(
-          toJS(getOfferingById.closureSummary),
+          toJS(getOfferingDetailsBySlug.closureSummary),
           payloadData.closureSummary,
           this.mergeCustomize,
         );
@@ -1240,11 +1243,11 @@ export class OfferingCreationStore {
         payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
         payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
       } else if (keyName === 'editPocForm') {
-        if (get(getOfferingById, 'stage') === 'CREATION' && this.POC_DETAILS_FRM.fields.targetDate.value) {
+        if (get(getOfferingDetailsBySlug, 'stage') === 'CREATION' && this.POC_DETAILS_FRM.fields.targetDate.value) {
           payloadData.closureSummary = {};
           payloadData.closureSummary.launchDate = this.POC_DETAILS_FRM.fields.targetDate.value;
           payloadData.closureSummary = mergeWith(
-            toJS(getOfferingById.closureSummary),
+            toJS(getOfferingDetailsBySlug.closureSummary),
             payloadData.closureSummary,
             this.mergeCustomize,
           );
@@ -1252,7 +1255,7 @@ export class OfferingCreationStore {
           payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
         }
       } else if (keyName === 'BonusRewardTier') {
-        const rewardsTiersData = getOfferingById.rewardsTiers || [];
+        const rewardsTiersData = getOfferingDetailsBySlug.rewardsTiers || [];
         const isEarlyBirds = fields.isEarlyBirds.value;
         if (!subKey) {
           if (isEarlyBirds.length) {
@@ -1278,12 +1281,12 @@ export class OfferingCreationStore {
     }
     if (keyName === 'keyTerms') {
       payloadData.regulation = this.KEY_TERMS_FRM.fields.regulation.value;
-      const closureSummary = { ...getOfferingById.closureSummary };
+      const closureSummary = { ...getOfferingDetailsBySlug.closureSummary };
       const keyTerms = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
       closureSummary.keyTerms = { ...closureSummary.keyTerms, priceCalculation: keyTerms.priceCalculation, multiple: keyTerms.multiple, interestRate: get(payloadData, 'keyTerms.interestRate') };
       payloadData.closureSummary = closureSummary;
       payloadData.closureSummary = mergeWith(
-        toJS(getOfferingById.closureSummary),
+        toJS(getOfferingDetailsBySlug.closureSummary),
         payloadData.closureSummary,
         this.mergeCustomize,
       );
@@ -1345,8 +1348,8 @@ export class OfferingCreationStore {
           forEach(payloadData[keyName], (ele, index) => {
             if (!this.removeIndex || this.removeIndex !== index) {
               leaders.push(mergeWith(
-                toJS(getOfferingById[keyName] && getOfferingById[keyName].length
-                  > index ? getOfferingById[keyName][index] : {}),
+                toJS(getOfferingDetailsBySlug[keyName] && getOfferingDetailsBySlug[keyName].length
+                  > index ? getOfferingDetailsBySlug[keyName][index] : {}),
                 payloadData[keyName][index],
                 this.mergeCustomize,
               ));
@@ -1357,7 +1360,7 @@ export class OfferingCreationStore {
           payloadData[keyName] = leaders;
         } else {
           payloadData[keyName] = mergeWith(
-            getOfferingById[keyName],
+            getOfferingDetailsBySlug[keyName],
             payloadData[keyName],
             this.mergeCustomize,
           );
@@ -1467,10 +1470,10 @@ export class OfferingCreationStore {
     approvedObj,
     index = undefined,
   ) => {
-    const { getOfferingById } = offeringsStore.offerData.data;
-    const issuerBacId = getOfferingById.legal && getOfferingById.legal.issuerBacId;
+    const { getOfferingDetailsBySlug } = offeringsStore.offerData.data;
+    const issuerBacId = getOfferingDetailsBySlug.legal && getOfferingDetailsBySlug.legal.issuerBacId;
     const offeringBacDetails = Validator.evaluateFormData(fields);
-    offeringBacDetails.offeringId = getOfferingById.id;
+    offeringBacDetails.offeringId = getOfferingDetailsBySlug.id;
     offeringBacDetails.bacType = bacType;
     let mutation = issuerBacId ? updateBac : createBac;
     let variables = {
@@ -1485,7 +1488,7 @@ export class OfferingCreationStore {
     }
     if (issuerNumber !== undefined) {
       const payload = { ...offeringBacDetails.getOfferingBac[issuerNumber] };
-      payload.offeringId = getOfferingById.id;
+      payload.offeringId = getOfferingDetailsBySlug.id;
       payload.bacType = bacType;
       if (!afIssuerId) {
         mutation = createBac;
@@ -1502,9 +1505,9 @@ export class OfferingCreationStore {
     }
     if (leaderNumber !== undefined) {
       const payload = { ...offeringBacDetails.getOfferingBac[leaderNumber] };
-      payload.offeringId = getOfferingById.id;
+      payload.offeringId = getOfferingDetailsBySlug.id;
       payload.bacType = bacType;
-      const { leadership } = getOfferingById;
+      const { leadership } = getOfferingDetailsBySlug;
       if (!afIssuerId) {
         mutation = createBac;
         payload.email = leadership[index].email;
@@ -1556,21 +1559,21 @@ export class OfferingCreationStore {
         variables,
         refetchQueries: [{
           query: getOfferingDetails,
-          variables: { id: getOfferingById.id },
+          variables: { id: getOfferingDetailsBySlug.id },
         },
         {
           query: getOfferingBac,
-          variables: { offeringId: getOfferingById.id, bacType: 'AFFILIATED_ISSUER' },
+          variables: { offeringId: getOfferingDetailsBySlug.id, bacType: 'AFFILIATED_ISSUER' },
         },
         {
           query: getOfferingBac,
-          variables: { offeringId: getOfferingById.id, bacType: 'ISSUER' },
+          variables: { offeringId: getOfferingDetailsBySlug.id, bacType: 'ISSUER' },
         },
         ],
       })
       .then(() => {
         this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
-        offeringsStore.getOne(getOfferingById.id);
+        offeringsStore.getOne(getOfferingDetailsBySlug.id);
         if (bacType === 'LEADERSHIP') {
           this.initLoad.splice(this.initLoad.indexOf('LEADER_FRM'), 1);
           this.getLeadershipOfferingBac(this.currentOfferingId, 'LEADERSHIP');
@@ -1647,7 +1650,7 @@ export class OfferingCreationStore {
     }
     client
       .mutate({
-        mutation: offerClose,
+        mutation: adminOfferingClose,
         variables: { ...params, ...formData },
       }).then((data) => {
         uiStore.setProgress(false);
@@ -1859,15 +1862,15 @@ export class OfferingCreationStore {
     this.filingListApiRes = graphql({
       client,
       fetchPolicy: 'network-only',
-      query: getOfferingFilingList,
+      query: adminBusinessFilings,
       variables: {
         offeringId,
         orderByBusinessFilingSubmission: params,
       },
       onFetch: (res) => {
         this.offeringFilingList = {};
-        if (res && res.businessFilings) {
-          this.offeringFilingList = res.businessFilings;
+        if (res && res.adminBusinessFilings) {
+          this.offeringFilingList = res.adminBusinessFilings;
           filter(this.offeringFilingList, (filing) => {
             map(filing.submissions, (submission) => {
               if (submission.xmlSubmissionStatus === XML_STATUSES.created) {
@@ -1880,11 +1883,11 @@ export class OfferingCreationStore {
     });
   }
 
-  generateBusinessFiling = () => {
+  adminCreateBusinessFiling = () => {
     uiStore.setProgress();
     client
       .mutate({
-        mutation: generateBusinessFiling,
+        mutation: adminCreateBusinessFiling,
         variables: {
           offeringId: this.currentOfferingId,
         },
@@ -1945,7 +1948,7 @@ export class OfferingCreationStore {
   }
 
   getClosureObject = (type) => {
-    let { getOfferingById } = offeringsStore.offerData.data;
+    let { getOfferingDetailsBySlug } = offeringsStore.offerData.data;
     let obj = {};
     if (type === 'CLOSING_BINDER') {
       obj = Validator.evaluateFormData(this.OFFERING_CLOSE_1.fields);
@@ -1960,10 +1963,10 @@ export class OfferingCreationStore {
       const filteredSupplementalAgreementsDocs = supplementalAgreementsDocs.filter(d => d.name !== '' && d.upload.fileId !== '');
       set(obj, 'closureSummary.keyTerms.supplementalAgreements', { documents: filteredSupplementalAgreementsDocs });
     }
-    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
+    getOfferingDetailsBySlug = Helper.replaceKeysDeep(toJS(getOfferingDetailsBySlug), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
     obj = Helper.replaceKeysDeep(obj, { accreditedOnly: 'isVisible' });
     obj.closureSummary = mergeWith(
-      toJS(getOfferingById.closureSummary),
+      toJS(getOfferingDetailsBySlug.closureSummary),
       obj.closureSummary,
       this.mergeCustomize,
     );

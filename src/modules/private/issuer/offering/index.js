@@ -19,7 +19,13 @@ export default class Offering extends Component {
       this.props.history.replace(`${this.props.match.url}/${get(this.props.navStore, 'navMeta.subNavigations[0].to') || 'overview'}`);
     }
     if (props.offeringCreationStore.currentOfferingSlug !== props.match.params.offeringSlug) {
-      this.props.campaignStore.getCampaignDetails(props.match.params.offeringSlug, this.isUuid());
+      if (this.isUuid()) {
+        this.props.campaignStore.getCampaignDetails(props.match.params.offeringSlug, true).then(() => {
+          this.props.offeringsStore.getOne(this.props.campaignStore.campaign.offeringSlug, false);
+        });
+      } else {
+        this.props.offeringsStore.getOne(props.match.params.offeringSlug, !this.isUuid());
+      }
     }
     this.props.navStore.setAccessParams('specificNav', '/dashboard/offering/2/overview');
   }
@@ -30,28 +36,28 @@ export default class Offering extends Component {
     .match(new RegExp(/([a-fA-F0-9]{8}-(?:[a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}){1}/)) !== null
 
   render() {
-    const { match, campaignStore } = this.props;
-    const { campaign } = campaignStore;
-    if (!campaign.id) {
+    const { match, offeringsStore } = this.props;
+    const { offer, offerLoading } = offeringsStore;
+    if (offerLoading || (offer && !offer.stage)) {
       return <InlineLoader />;
     }
 
-    if (this.isUuid() && campaign.id) {
-      return <Redirect from={`/dashboard/offering/${this.props.match.params.offeringSlug}/comments`} to={`/dashboard/offering/${campaign.offeringSlug}/comments`} />;
+    if (this.isUuid() && offer.id) {
+      return <Redirect from={`/dashboard/offering/${this.props.match.params.offeringSlug}/comments`} to={`/dashboard/offering/${offer.offeringSlug}/comments`} />;
     }
     let navItems = this.props.navStore.navMeta.subNavigations;
-    if (campaign.stage === 'LIVE') {
+    if (offer.stage === 'LIVE') {
       navItems = navItems.filter(n => (n.title !== 'Investors'));
     }
     return (
       <>
         <Helmet>
-          <title>{Helper.pageTitle(`${get(campaign, 'keyTerms.shorthandBusinessName' || 'Alternative Investments Made Simple')} - NextSeed`)}</title>
+          <title>{Helper.pageTitle(`${get(offer, 'keyTerms.shorthandBusinessName' || 'Alternative Investments Made Simple')} - NextSeed`)}</title>
         </Helmet>
         <PrivateLayout
           {...this.props}
-          offeringSlug={campaign.offeringSlug}
-          rightLabel={<Menu.Item position="right"><Link target="_blank" to={`/offerings/preview/${campaign.offeringSlug}`}><Icon className="ns-view" /><b>View Offering</b></Link></Menu.Item>}
+          offeringSlug={offer.offeringSlug}
+          rightLabel={<Menu.Item position="right"><Link target="_blank" to={`/offerings/preview/${offer.offeringSlug}`}><Icon className="ns-view" /><b>View Offering</b></Link></Menu.Item>}
         >
           <Switch>
             <Route exact path={match.url} component={OfferingModule('overview')} />
@@ -62,7 +68,7 @@ export default class Offering extends Component {
                   <Route
                     key={item.to}
                     path={`${match.url}/${item.to}`}
-                    render={props => <CurrentModule {...props} offeringId={campaign.id} />}
+                    render={props => <CurrentModule {...props} offeringId={offer.id} />}
                   />
                 );
               })

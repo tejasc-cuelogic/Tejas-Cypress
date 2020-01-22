@@ -27,14 +27,14 @@ export default class Listing extends Component {
     this.props.offeringsStore.resetPagination();
   }
 
-  handleAction = (action, offeringId, isPublished = false) => {
+  handleAction = (action, offering, isPublished = false) => {
     if (action === 'Delete') {
-      this.props.uiStore.setConfirmBox(action, offeringId);
+      this.props.uiStore.setConfirmBox(action, offering.id);
     } else if (action === 'Edit') {
-      this.props.history.push(`${this.props.match.url}/edit/${offeringId}`);
+      this.props.history.push(`/dashboard/offering/${offering.offeringSlug}`);
     } else if (action === 'Publish') {
-      this.setState({ isPublic: isPublished, loadingOfferId: offeringId });
-      this.props.uiStore.setConfirmBox(action, offeringId, isPublished);
+      this.setState({ isPublic: isPublished, loadingOfferId: offering.id });
+      this.props.uiStore.setConfirmBox(action, offering.id, isPublished);
     }
   }
 
@@ -114,9 +114,9 @@ export default class Listing extends Component {
                 <Table.Row><Table.Cell colSpan={8} textAlign="center">No Offering to display !</Table.Cell></Table.Row>
               )
                 : offeringList.map(offering => (
-                  <Table.Row key={offering.id} className={this.props.uiStore.inProgressArray.length && offering.id === this.state.loadingOfferId ? 'disabled' : ''}>
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
-                      <Link to={`${this.props.match.url}/edit/${offering.id}`}>
+                  <Table.Row key={offering.offeringSlug} className={this.props.uiStore.inProgressArray.length && offering.offeringId === this.state.loadingOfferId ? 'disabled' : ''}>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
+                      <Link to={`/dashboard/offering/${offering.offeringSlug}`}>
                         <b>{((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
                           ? offering.keyTerms.shorthandBusinessName : (
                             (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
@@ -152,30 +152,29 @@ export default class Listing extends Component {
                         stage !== 'engagement'
                           ? (
                             <>
-                              <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}</Table.Cell>
-                              <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
+                              <Table.Cell onClick={() => this.handleAction('Edit', offering)}>{get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}</Table.Cell>
+                              <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
                                 {get(offering, 'closureSummary.launchDate')
                                   ? DataFormatter.diffDays(get(offering, 'closureSummary.launchDate'), false, true) < 0 ? DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), false, false, false) : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.launchDate')).diffText : 'N/A'
                                 }
                               </Table.Cell>
                             </>
                           )
-                          : <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}</Table.Cell>
+                          : <Table.Cell onClick={() => this.handleAction('Edit', offering)}>{get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}</Table.Cell>
 
                       )}
                     {/* {stage !== 'engagement'
                       ? (
                         <>
-                          <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}</Table.Cell>
-                          <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
-                            {offering.offering && offering.offering.launch
+                          <Table.Cell onClick={() => this.handleAction('Edit', offeringfering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}</Table.Cell>
+                          <Table.Cell onClick={() => this.handleAction('Edit', offer                      {offering.offering && offering.offering.launch
                               && offering.closureSummary.launchDate
                               ? DataFormatter.diffDays(get(offering, 'closureSummary.launchDate'), false, true) < 0 ? DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), false, false, false) : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.launchDate')).diffText : 'N/A'
                             }
                           </Table.Cell>
                         </>
                       )
-                      : <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}</Table.Cell>
+                      : <Table.Cell onClick={() => this.handleAction('Edit', offeringfering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), false, false, false)} /> : 'N/A'}</Table.Cell>
                     }
                     {stage === 'live'
                       && (
@@ -187,9 +186,9 @@ export default class Listing extends Component {
                       )
                     } */}
                     {stage !== 'engagement'
-                      && <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>
+                      && <Table.Cell onClick={() => this.handleAction('Edit', offering)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>
                     }
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
                       <p>
                         {offering.issuerDetails
                           ? (
@@ -207,14 +206,14 @@ export default class Listing extends Component {
                         }
                       </p>
                     </Table.Cell>
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
                       {(() => {
                         const security = SECURITIES_VALUES.find(s => s.value === get(offering, 'keyTerms.securities'));
                         return security ? security.text : 'N/A';
                       })()}
                     </Table.Cell>
                     {stage === 'engagement'
-                      && <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering && get(offering, 'closureSummary.repayment.currentRepaidAmount') ? `${Helper.CurrencyFormat(get(offering, 'closureSummary.repayment.currentRepaidAmount'))} (${get(offering, 'closureSummary.repayment.count')})` : 'N/A'}</Table.Cell>
+                      && <Table.Cell onClick={() => this.handleAction('Edit', offering)}>{offering && get(offering, 'closureSummary.repayment.currentRepaidAmount') ? `${Helper.CurrencyFormat(get(offering, 'closureSummary.repayment.currentRepaidAmount'))} (${get(offering, 'closureSummary.repayment.count')})` : 'N/A'}</Table.Cell>
                     }
                     <Table.Cell collapsing textAlign="center">
                       <Button.Group>
@@ -222,7 +221,7 @@ export default class Listing extends Component {
                           action.label === 'Delete' && stage === 'engagement' ? ''
                             : (
                               <Button icon className="link-button">
-                                <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
+                                <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering, !offering.isAvailablePublicly)} />
                               </Button>
                             )
                         ))}
@@ -246,7 +245,6 @@ export default class Listing extends Component {
           size="mini"
           className="deletion"
         />
-
       </Card>
     );
   }

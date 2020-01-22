@@ -56,17 +56,17 @@ mutation subscribeToNewsLetterNotifyAdmin($subscriberName: String, $emailAddress
 `;
 
 export const notifyAdmins = gql`
-mutation sendAlertToAdminFromClient($emailContent: String!){
-  sendAlertToAdminFromClient(
+mutation adminSendAlertToAdminFromClient($emailContent: String!){
+  adminSendAlertToAdminFromClient(
     type: BUG
     emailContent: $emailContent
   )
 }
 `;
 
-export const createUploadEntryAccreditationAdmin = gql`
-  mutation createUploadEntryAccreditationAdmin($userRole: UserRoleEnum!, $fileData: UploadFileMetaInput!, $accountType:InvestorAccountTypeEnum!, $action:AccreditationStatus!, $userId: String!) {
-    createUploadEntryAccreditationAdmin(userRole: $userRole, fileData: $fileData, accountType: $accountType, action: $action, userId: $userId) {
+export const adminAccreditedStatusUploadEntry = gql`
+  mutation adminAccreditedStatusUploadEntry($userRole: UserRoleEnum!, $fileData: UploadFileMetaInput!, $accountType:InvestorAccountTypeEnum!, $action:AccreditationStatus!, $userId: String!) {
+    adminAccreditedStatusUploadEntry(userRole: $userRole, fileData: $fileData, accountType: $accountType, action: $action, userId: $userId) {
       preSignedUrl
       fileId
     }
