@@ -16,7 +16,9 @@ export default class Overview extends Component {
       updateOffering,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, OFFERING_DETAILS_FRM.fields);
+    updateOffering(currentOfferingId, OFFERING_DETAILS_FRM.fields).then(() => {
+      this.props.history.push(`/dashboard/offering/${OFFERING_DETAILS_FRM.fields.offeringSlug.value}/overview`);
+    });
   }
 
   render() {

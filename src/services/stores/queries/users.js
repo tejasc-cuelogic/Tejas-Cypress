@@ -638,9 +638,9 @@ mutation adminUserHardDelete($userId: String!, $reason: String) {
   }
  }`;
 
-export const frozenAccountActiivtyDetected = gql`
-mutation frozenAccountActiivtyDetected($accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
-  frozenAccountActiivtyDetected(
+export const frozenAccountActivityDetected = gql`
+mutation frozenAccountActivityDetected($accountId: String!, $activity: FreezeAccountActivityEnum!, $offeringId: String!) {
+  frozenAccountActivityDetected(
      accountId: $accountId
      activity: $activity
      offeringId: $offeringId

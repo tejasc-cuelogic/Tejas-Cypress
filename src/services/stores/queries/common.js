@@ -56,8 +56,8 @@ mutation subscribeToNewsLetterNotifyAdmin($subscriberName: String, $emailAddress
 `;
 
 export const notifyAdmins = gql`
-mutation sendAlertToAdminFromClient($emailContent: String!){
-  sendAlertToAdminFromClient(
+mutation adminSendAlertToAdminFromClient($emailContent: String!){
+  adminSendAlertToAdminFromClient(
     type: BUG
     emailContent: $emailContent
   )

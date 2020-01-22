@@ -2535,8 +2535,8 @@ svg:not(:root).recharts-surface{
 				flex-direction:column;
 			}
 			textarea{
-				min-height:42px;
-				max-height:120px;
+				min-height:160px;
+				// max-height:200px;
 			}
 		}
 	}
