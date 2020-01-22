@@ -3,8 +3,8 @@ import { Icon, Modal, Popup } from 'semantic-ui-react';
 
 const PopUpModal = (props) => {
   const { label, content, iconName, showOnlyPopup, customTrigger } = props;
-  return (showOnlyPopup
-    ? (
+  if (showOnlyPopup) {
+    return (
       <Popup
         trigger={customTrigger || <Icon className="ns-help-circle" />}
         content={content}
@@ -13,14 +13,21 @@ const PopUpModal = (props) => {
         hoverable
         color="grey"
       />
-    ) : (
-      <Modal size="tiny" className="mobile-tooltip" trigger={customTrigger || <Icon className={iconName || 'help circle'} color="green" />} closeIcon>
-        <Modal.Content>
-          {label ? <h5>{label}</h5> : null}
-          {content ? <span>{content}</span> : null}
-        </Modal.Content>
-      </Modal>
-    )
+    );
+  }
+  return (
+    <Modal size="tiny" className="mobile-tooltip" trigger={customTrigger || <Icon className={iconName || 'help circle'} color="green" />} closeIcon>
+      <Modal.Content>
+        {label && (
+          <h5>
+            {label}
+          </h5>
+        )
+
+        }
+        <span>{content}</span>
+      </Modal.Content>
+    </Modal>
   );
 };
 
