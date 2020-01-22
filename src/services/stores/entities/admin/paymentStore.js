@@ -52,8 +52,8 @@ export class PaymentStore extends DataModelStore {
       this.setFieldValue('data', ClientDb.initiateDb(data, true));
     }
 
-    getOffering = (id) => {
-      const res = this.data.find(payment => payment.offering.id === id);
+    getOfferingBySlug = (id) => {
+      const res = this.data.find(payment => payment.offering.offeringSlug === id);
       this.PAYMENT_FRM = Validator.setFormData(this.PAYMENT_FRM, res);
       this.validateForm('PAYMENT_FRM');
     }
@@ -130,7 +130,7 @@ decorate(PaymentStore, {
   sortOrderRP: observable,
   setSortingOrder: action,
   initRequest: action,
-  getOffering: action,
+  getOfferingBySlug: action,
   updatePayment: action,
   updatePaymentList: action,
   setInitiateSrch: action,

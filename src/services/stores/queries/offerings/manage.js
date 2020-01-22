@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 const common = {
   offeringBasics: `
   isAvailablePublicly
+  offeringSlug
   keyTerms {
     legalBusinessName
     shorthandBusinessName
@@ -177,8 +178,8 @@ export const adminDeleteOffering = gql`
 `;
 
 export const getOfferingDetails = gql`
-  query getOffering($id: String!) {
-    getOffering(id: $id) {
+  query getOfferingDetailsBySlug($id: String!) {
+    getOfferingDetailsBySlug(offeringSlug: $id) {
       id
       offeringSlug
       referralCode

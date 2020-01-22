@@ -41,6 +41,7 @@ export default class OfferingLaunch extends Component {
   launch = () => {
     const {
       updateOfferingMutation,
+      currentOfferingSlug,
       currentOfferingId,
     } = this.props.offeringCreationStore;
     new Promise((res, rej) => {
@@ -50,7 +51,7 @@ export default class OfferingLaunch extends Component {
       );
     })
       .then(() => {
-        this.props.history.push(`/dashboard/offerings/live/edit/${currentOfferingId}/offering-creation/offering/launch`);
+        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/offering-creation/offering/launch`);
       });
   }
 

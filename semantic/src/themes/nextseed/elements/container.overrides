@@ -119,6 +119,14 @@ section{
                 justify-content: center;
             }
         }
+        &.space-banner{
+            background:url(../../assets/images/banners/space-banner.jpg) top center no-repeat;
+            position: relative;
+            @media only screen and (max-width : @largestMobileScreen){
+                background:url(../../assets/images/banners/space-banner-mobile.jpg) center center no-repeat;
+                background-size: cover;
+            }
+        }
     }
     &.modalbg-banner{
         height:100vh;

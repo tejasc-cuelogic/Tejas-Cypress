@@ -34,6 +34,23 @@ function formHoc(WrappedComponent, metaInfo) {
       );
     }
 
+    TextArea = (name, props) => {
+      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
+      return (
+        <FormTextarea
+          name={name}
+          key={name}
+          type="text"
+          format={get(fieldData, 'format')}
+          fielddata={fieldData}
+          onblur={get(props, 'handleBlur') || false}
+          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
+          label={get(props, 'label') || false}
+          {...props}
+        />
+      );
+    }
+
     RadioGroup = (name, props) => {
       const fieldData = this.fieldData[name];
       return (
@@ -314,6 +331,7 @@ function formHoc(WrappedComponent, metaInfo) {
         FormTextarea: this.FormTextarea,
         ImageCropper: this.ImageCropper,
         HtmlEditor: this.HtmlEditor,
+        TextArea: this.TextArea,
       };
       return (
         <WrappedComponent

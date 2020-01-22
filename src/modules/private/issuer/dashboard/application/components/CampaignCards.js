@@ -24,7 +24,7 @@ const CampaignCards = (props) => {
       <Card.Group stackable itemsPerRow={isTablet ? '2' : '3'} className="application-cards">
         {offeringsStore.issuerOfferings.map(campaign => (
           <Card fluid key={campaign.id}>
-            <Card.Content style={{ cursor: 'pointer' }} onClick={() => handleHeaderClick(campaign.id)}>
+            <Card.Content style={{ cursor: 'pointer' }} onClick={() => handleHeaderClick(campaign.offeringSlug)}>
               <Header as="h4">
                 <Icon color="green" name="ns-reload-circle-line" />
                 {getCampaignName(campaign)}</Header>
@@ -79,7 +79,7 @@ const CampaignCards = (props) => {
               </dl>
               <Button inverted color="green" as={Link} to={`/offerings/${campaign.offeringSlug}`}>View Campaign</Button>
               {['CREATION', 'STARTUP_PERIOD', 'LIVE', 'COMPLETE'].includes(campaign.stage)
-              && <Button inverted color="green" onClick={() => handleHeaderClick(campaign.id)}>Manage</Button>
+              && <Button inverted color="green" onClick={() => handleHeaderClick(campaign.offeringSlug)}>Manage</Button>
               }
             </Card.Content>
           </Card>

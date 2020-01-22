@@ -1109,6 +1109,9 @@ export class OfferingCreationStore {
       })
       .then((result) => {
         let upatedOffering = null;
+        if (has(payload, 'offeringSlug')) {
+          this.setFieldValue('currentOfferingSlug', payload.offeringSlug);
+        }
         if (get(result, 'data.updateOffering')) {
           upatedOffering = Helper.replaceKeysDeep(toJS(get(result, 'data.updateOffering')), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
           offeringsStore.updateOfferingList(id, upatedOffering, keyName);
@@ -1119,7 +1122,7 @@ export class OfferingCreationStore {
         } else if (notify) {
           Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
         }
-        offeringsStore.getOne(id, false);
+        offeringsStore.getOne(this.currentOfferingSlug, false);
         if (keyName === 'contingencies' && successMsg === null) {
           const activityTitle = isLaunchContingency ? 'All launch contingencies have been signed off' : 'All close contingencies have been signed off';
           this.generateActivityHistory(id, ACTIVITY_HISTORY_TYPES.OFFERING, activityTitle, isLaunchContingency ? 'LAUNCH_CONTINGENCIES' : 'CLOSE_CONTINGENCIES');
@@ -1158,11 +1161,11 @@ export class OfferingCreationStore {
     approvedObj, fromS3 = false, leaderIndex,
     msgType = 'success', isLaunchContingency = false,
   ) => new Promise((res, rej) => {
-    let { getOffering } = offeringsStore.offerData.data;
-    getOffering = Helper.replaceKeysDeep(toJS(getOffering), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
+    let { getOfferingDetailsBySlug } = offeringsStore.offerData.data;
+    getOfferingDetailsBySlug = Helper.replaceKeysDeep(toJS(getOfferingDetailsBySlug), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
     let payloadData = {
-      applicationId: getOffering.applicationId,
-      issuerId: getOffering.issuerId,
+      applicationId: getOfferingDetailsBySlug.applicationId,
+      issuerId: getOfferingDetailsBySlug.issuerId,
     };
     const { firstName, lastName } = userDetailsStore.userDetails.info;
     if (keyName) {
@@ -1195,12 +1198,12 @@ export class OfferingCreationStore {
           ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
         };
         if (subKey === 'launch') {
-          const closureSummary = { ...getOffering.closureSummary };
+          const closureSummary = { ...getOfferingDetailsBySlug.closureSummary };
           closureSummary.processingDate = get(payloadData[keyName].launch, 'terminationDate') || null;
           closureSummary.launchDate = get(payloadData[keyName].launch, 'targetDate') || null;
           payloadData.closureSummary = closureSummary;
           payloadData.closureSummary = mergeWith(
-            toJS(getOffering.closureSummary),
+            toJS(getOfferingDetailsBySlug.closureSummary),
             payloadData.closureSummary,
             this.mergeCustomize,
           );
@@ -1227,12 +1230,12 @@ export class OfferingCreationStore {
           keyTerms: Validator.evaluateFormData(this.KEY_TERMS_FRM.fields),
         };
         payloadData.keyTerms = mergeWith(
-          toJS(getOffering.keyTerms),
+          toJS(getOfferingDetailsBySlug.keyTerms),
           payloadData.keyTerms,
           this.mergeCustomize,
         );
         payloadData.closureSummary = mergeWith(
-          toJS(getOffering.closureSummary),
+          toJS(getOfferingDetailsBySlug.closureSummary),
           payloadData.closureSummary,
           this.mergeCustomize,
         );
@@ -1241,11 +1244,11 @@ export class OfferingCreationStore {
         payloadData.closureSummary = omitDeep(payloadData.closureSummary, ['__typename', 'fileHandle']);
         payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
       } else if (keyName === 'editPocForm') {
-        if (get(getOffering, 'stage') === 'CREATION' && this.POC_DETAILS_FRM.fields.targetDate.value) {
+        if (get(getOfferingDetailsBySlug, 'stage') === 'CREATION' && this.POC_DETAILS_FRM.fields.targetDate.value) {
           payloadData.closureSummary = {};
           payloadData.closureSummary.launchDate = this.POC_DETAILS_FRM.fields.targetDate.value;
           payloadData.closureSummary = mergeWith(
-            toJS(getOffering.closureSummary),
+            toJS(getOfferingDetailsBySlug.closureSummary),
             payloadData.closureSummary,
             this.mergeCustomize,
           );
@@ -1253,7 +1256,7 @@ export class OfferingCreationStore {
           payloadData.closureSummary = cleanDeep(payloadData.closureSummary);
         }
       } else if (keyName === 'BonusRewardTier') {
-        const rewardsTiersData = getOffering.rewardsTiers || [];
+        const rewardsTiersData = getOfferingDetailsBySlug.rewardsTiers || [];
         const isEarlyBirds = fields.isEarlyBirds.value;
         if (!subKey) {
           if (isEarlyBirds.length) {
@@ -1279,12 +1282,12 @@ export class OfferingCreationStore {
     }
     if (keyName === 'keyTerms') {
       payloadData.regulation = this.KEY_TERMS_FRM.fields.regulation.value;
-      const closureSummary = { ...getOffering.closureSummary };
+      const closureSummary = { ...getOfferingDetailsBySlug.closureSummary };
       const keyTerms = Validator.evaluateFormData(this.CLOSURE_SUMMARY_FRM.fields);
       closureSummary.keyTerms = { ...closureSummary.keyTerms, priceCalculation: keyTerms.priceCalculation, multiple: keyTerms.multiple, interestRate: get(payloadData, 'keyTerms.interestRate') };
       payloadData.closureSummary = closureSummary;
       payloadData.closureSummary = mergeWith(
-        toJS(getOffering.closureSummary),
+        toJS(getOfferingDetailsBySlug.closureSummary),
         payloadData.closureSummary,
         this.mergeCustomize,
       );
@@ -1346,8 +1349,8 @@ export class OfferingCreationStore {
           forEach(payloadData[keyName], (ele, index) => {
             if (!this.removeIndex || this.removeIndex !== index) {
               leaders.push(mergeWith(
-                toJS(getOffering[keyName] && getOffering[keyName].length
-                  > index ? getOffering[keyName][index] : {}),
+                toJS(getOfferingDetailsBySlug[keyName] && getOfferingDetailsBySlug[keyName].length
+                  > index ? getOfferingDetailsBySlug[keyName][index] : {}),
                 payloadData[keyName][index],
                 this.mergeCustomize,
               ));
@@ -1358,7 +1361,7 @@ export class OfferingCreationStore {
           payloadData[keyName] = leaders;
         } else {
           payloadData[keyName] = mergeWith(
-            getOffering[keyName],
+            getOfferingDetailsBySlug[keyName],
             payloadData[keyName],
             this.mergeCustomize,
           );
@@ -1468,10 +1471,10 @@ export class OfferingCreationStore {
     approvedObj,
     index = undefined,
   ) => {
-    const { getOffering } = offeringsStore.offerData.data;
-    const issuerBacId = getOffering.legal && getOffering.legal.issuerBacId;
+    const { getOfferingDetailsBySlug } = offeringsStore.offerData.data;
+    const issuerBacId = getOfferingDetailsBySlug.legal && getOfferingDetailsBySlug.legal.issuerBacId;
     const offeringBacDetails = Validator.evaluateFormData(fields);
-    offeringBacDetails.offeringId = getOffering.id;
+    offeringBacDetails.offeringId = getOfferingDetailsBySlug.id;
     offeringBacDetails.bacType = bacType;
     let mutation = issuerBacId ? updateBac : createBac;
     let variables = {
@@ -1486,7 +1489,7 @@ export class OfferingCreationStore {
     }
     if (issuerNumber !== undefined) {
       const payload = { ...offeringBacDetails.getOfferingBac[issuerNumber] };
-      payload.offeringId = getOffering.id;
+      payload.offeringId = getOfferingDetailsBySlug.id;
       payload.bacType = bacType;
       if (!afIssuerId) {
         mutation = createBac;
@@ -1503,9 +1506,9 @@ export class OfferingCreationStore {
     }
     if (leaderNumber !== undefined) {
       const payload = { ...offeringBacDetails.getOfferingBac[leaderNumber] };
-      payload.offeringId = getOffering.id;
+      payload.offeringId = getOfferingDetailsBySlug.id;
       payload.bacType = bacType;
-      const { leadership } = getOffering;
+      const { leadership } = getOfferingDetailsBySlug;
       if (!afIssuerId) {
         mutation = createBac;
         payload.email = leadership[index].email;
@@ -1557,21 +1560,21 @@ export class OfferingCreationStore {
         variables,
         refetchQueries: [{
           query: getOfferingDetails,
-          variables: { id: getOffering.id },
+          variables: { id: getOfferingDetailsBySlug.id },
         },
         {
           query: getOfferingBac,
-          variables: { offeringId: getOffering.id, bacType: 'AFFILIATED_ISSUER' },
+          variables: { offeringId: getOfferingDetailsBySlug.id, bacType: 'AFFILIATED_ISSUER' },
         },
         {
           query: getOfferingBac,
-          variables: { offeringId: getOffering.id, bacType: 'ISSUER' },
+          variables: { offeringId: getOfferingDetailsBySlug.id, bacType: 'ISSUER' },
         },
         ],
       })
       .then(() => {
         this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
-        offeringsStore.getOne(getOffering.id);
+        offeringsStore.getOne(getOfferingDetailsBySlug.id);
         if (bacType === 'LEADERSHIP') {
           this.initLoad.splice(this.initLoad.indexOf('LEADER_FRM'), 1);
           this.getLeadershipOfferingBac(this.currentOfferingId, 'LEADERSHIP');
@@ -1946,7 +1949,7 @@ export class OfferingCreationStore {
   }
 
   getClosureObject = (type) => {
-    let { getOffering } = offeringsStore.offerData.data;
+    let { getOfferingDetailsBySlug } = offeringsStore.offerData.data;
     let obj = {};
     if (type === 'CLOSING_BINDER') {
       obj = Validator.evaluateFormData(this.OFFERING_CLOSE_1.fields);
@@ -1961,10 +1964,10 @@ export class OfferingCreationStore {
       const filteredSupplementalAgreementsDocs = supplementalAgreementsDocs.filter(d => d.name !== '' && d.upload.fileId !== '');
       set(obj, 'closureSummary.keyTerms.supplementalAgreements', { documents: filteredSupplementalAgreementsDocs });
     }
-    getOffering = Helper.replaceKeysDeep(toJS(getOffering), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
+    getOfferingDetailsBySlug = Helper.replaceKeysDeep(toJS(getOfferingDetailsBySlug), { aliasId: 'id', aliasAccreditedOnly: 'isVisible' });
     obj = Helper.replaceKeysDeep(obj, { accreditedOnly: 'isVisible' });
     obj.closureSummary = mergeWith(
-      toJS(getOffering.closureSummary),
+      toJS(getOfferingDetailsBySlug.closureSummary),
       obj.closureSummary,
       this.mergeCustomize,
     );

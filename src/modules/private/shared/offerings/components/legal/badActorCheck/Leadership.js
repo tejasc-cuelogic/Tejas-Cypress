@@ -19,10 +19,10 @@ export default class Leadership extends Component {
   }
 
   render() {
-    const { getOffering } = this.props.offeringsStore.offerData.data;
+    const { getOfferingDetailsBySlug } = this.props.offeringsStore.offerData.data;
     const navItems = [];
-    if (getOffering.leadership) {
-      getOffering.leadership.map((leader, index) => {
+    if (getOfferingDetailsBySlug.leadership) {
+      getOfferingDetailsBySlug.leadership.map((leader, index) => {
         navItems.push({ title: get(leader, 'firstName') || `Leader ${index + 1}`, to: `leader/${index + 1}`, bacId: leader.leaderBacId });
         return navItems;
       });
