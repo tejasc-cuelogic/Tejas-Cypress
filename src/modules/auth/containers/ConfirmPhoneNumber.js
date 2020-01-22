@@ -25,6 +25,10 @@ export default class ConfirmPhoneNumber extends Component {
       const fieldValue = userDetailsStore.userDetails.phone.type;
       identityStore.phoneTypeChange(fieldValue);
     }
+
+    if (Object.keys(this.props.identityStore.requestOtpResponse).length === 0) {
+      this.props.identityStore.startPhoneVerification();
+    }
   }
 
   componentDidMount() {
@@ -59,7 +63,7 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.identityStore.confirmPhoneNumber().then(() => {
         // Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.identityStore.setIsOptConfirmed(true);
-      })
+      })  
         .catch(() => { });
     }
   }
