@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { find, get } from 'lodash';
 import { Modal, Card, Header, Icon } from 'semantic-ui-react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { InlineLoader } from '../../../../../theme/shared';
 import LiveSummary from '../components/LiveSummary';
@@ -94,20 +95,25 @@ export default class OfferingDetails extends Component {
       <>
         <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
           <Modal.Content className="transaction-details">
-            <Header as="h3">
-              {((offer.keyTerms && offer.keyTerms.shorthandBusinessName)
-                ? offer.keyTerms.shorthandBusinessName : (
-                  (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
-                ))}
-              <Header.Subheader className="mt-10">
-                <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}`}>
-                  <Icon className="ns-view" /><b>Preview the offering page</b>
-                </Link>
-                {offer.stage === 'CREATION'
-                  && <Link to={`${match.url}/editPoc`} className="pull-right"><Icon className="ns-pencil" />Edit</Link>
-                }
-              </Header.Subheader>
-            </Header>
+            <CopyToClipboard
+              text={currentOfferingId}
+              onCopy={() => console.log('copied')}
+            >
+              <Header as="h3">
+                {((offer.keyTerms && offer.keyTerms.shorthandBusinessName)
+                  ? offer.keyTerms.shorthandBusinessName : (
+                    (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
+                  ))}
+                <Header.Subheader className="mt-10">
+                  <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}`}>
+                    <Icon className="ns-view" /><b>Preview the offering page</b>
+                  </Link>
+                  {offer.stage === 'CREATION'
+                    && <Link to={`${match.url}/editPoc`} className="pull-right"><Icon className="ns-pencil" />Edit</Link>
+                  }
+                </Header.Subheader>
+              </Header>
+            </CopyToClipboard>
             {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} offerStatus={offerStatus} />}
             <Card fluid>
               <SecondaryMenu isBonusReward bonusRewards className="offer-details" offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
