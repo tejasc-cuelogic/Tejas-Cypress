@@ -1,13 +1,12 @@
 import gql from 'graphql-tag';
 
-export const getCategories = isPublic => gql`
-query getCategories($types: ${isPublic ? '[CategoryTypeEnum]' : '[CategoryTypesEnum]'}) {
+export const getCategories = gql`
+query getCategories($types: [CategoryTypeEnum]) {
   categories(categoryType: $types) {
       id
       categoryName
       description
       categoryType
-      ${isPublic ? '' : 'isPublished created { date }'}
       order
     }
   }`;
