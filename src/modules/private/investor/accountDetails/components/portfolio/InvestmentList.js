@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Icon, Table, Accordion, Button, Card, Header } from 'semantic-ui-react';
+import { Icon, Table, Accordion, Button, Card, Header, Popup } from 'semantic-ui-react';
 import { get, includes } from 'lodash';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
 import { STAGES } from '../../../../../../services/constants/admin/offerings';
 import { INDUSTRY_TYPES_ICONS, CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
-import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
+import { DateTimeFormat, InlineLoader, PopUpModal } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -31,9 +31,6 @@ const offeringName = (data) => {
 const investedAmount = data => (
   <>
     {Helper.CurrencyFormat(data.investedAmount)}
-    <p className="date-stamp">
-      <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(data.investmentDate, true, false, false)} />
-    </p>
   </>
 );
 
@@ -54,10 +51,10 @@ const handleActions = (data) => {
       {viewAgreement && data.agreementId} {
         <Button className="link-button mr-10" onClick={() => viewAgreement(data.agreementId)} content="View Agreement" />
       }
-      {!investmentProps.isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0)))
+      {((!get(data, 'tranche') || get(data, 'tranche') < 1) && !investmentProps.isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0))))
         && <Button onClick={e => handleInvestNowClick(e, data.offering.id)} primary content="Change" />
       }
-      {(isAdmin || (get(data, 'offering.keyTerms.securities') !== 'REAL_ESTATE' && (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)))))
+      {((!get(data, 'tranche') || get(data, 'tranche') < 1) && (isAdmin || (get(data, 'offering.keyTerms.securities') !== 'REAL_ESTATE' && (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod))))))
         && <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} basic content="Cancel" />
       }
       {(!isAdmin && (get(data.offering, 'closureSummary.processingDate') && (DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0 || (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)))
@@ -75,11 +72,13 @@ const handleActions = (data) => {
 };
 
 const INVESTMENT_CARD_META = [
-  { label: '', for: ['active', 'pending', 'completed'], children: data => <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />, isMobile: false, isDesktop: true, securityType: [] },
+  { label: '', for: ['active', 'pending', 'completed'], children: data => <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />, className: 'collapsing', isMobile: false, isDesktop: true, securityType: [] },
   { label: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], children: data => offeringName(data), isMobile: true, isDesktop: true, securityType: [] },
-  { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: value => CAMPAIGN_KEYTERMS_SECURITIES[value], for: isMobile ? ['pending'] : ['pending', 'complete'], isMobile: true, isDesktop: true, securityType: [] },
-  { label: 'Invested Amount', key: 'investedAmount', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], getRowValue: value => Helper.CurrencyFormat(value), children: data => investedAmount(data), isMobile: true, isDesktop: true, className: 'text-capitalize', securityType: [] },
-  { label: 'Status', key: 'offering.stage', for: isMobile ? ['pending', 'completed'] : ['active', 'pending', 'completed'], getRowValue: value => STAGES[value].label, children: data => stageLabel(data), isMobile: true, isDesktop: true, securityType: [] },
+  { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: value => CAMPAIGN_KEYTERMS_SECURITIES[value], for: isMobile ? ['pending'] : ['pending', 'completed'], isMobile: true, isDesktop: true, securityType: [] },
+  { label: 'Investment Amount', key: 'investedAmount', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], getRowValue: value => Helper.CurrencyFormat(value), children: data => investedAmount(data), isMobile: true, isDesktop: true, className: 'text-capitalize', securityType: [] },
+  { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], children: data => closeDate(data), isMobile: true, isDesktop: true, securityType: [] },
+  { label: 'Investment Multiple', key: 'offering.closureSummary.keyTerms.multiple', for: ['active'], getRowValue: value => `${value}x`, isMobile: true, isDesktop: true, securityType: ['Revenue Sharing Note'] },
+  { label: 'Status', key: 'offering.stage', for: isMobile ? ['pending', 'completed'] : ['pending', 'completed'], getRowValue: value => STAGES[value].label, children: data => stageLabel(data), isMobile: true, isDesktop: true, securityType: [] },
   {
     label: 'Days to close',
     key: 'offering.closureSummary.processingDate',
@@ -89,9 +88,8 @@ const INVESTMENT_CARD_META = [
     securityType: [],
     getRowValue: value => ((DataFormatter.diffDays(value, false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value === 0 ? '' : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value < 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(value, true, true).label}` : DataFormatter.diffInDaysHoursMin(value).diffText)) || 'N/A',
   },
-  { label: 'Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%`, isMobile: true, isDesktop: false, securityType: ['Term Note'] },
+  { label: 'Annualized Interest Rate', key: 'offering.keyTerms.interestRate', for: ['active'], getRowValue: value => `${value}%`, isMobile: true, isDesktop: true, securityType: ['Term Note'] },
   { label: 'Term', key: 'offering.keyTerms.maturity', for: ['active'], getRowValue: value => `${value} months`, isMobile: true, isDesktop: true, securityType: [] },
-  { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], children: data => closeDate(data), isMobile: true, isDesktop: true, securityType: [] },
   { label: 'Net Payments Received', key: 'netPaymentsReceived', for: ['completed', 'active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: [] },
   { label: 'Principal Remaining', key: 'remainingPrincipal', for: ['active'], getRowValue: value => `$${value}`, isMobile: true, isDesktop: true, securityType: ['Term Note'] }, // pending
   { label: 'Realized Multiple', key: 'realizedMultiple', getRowValue: value => `${value}x`, for: ['completed', 'active'], isMobile: true, isDesktop: true, securityType: ['Preferred Equity'] },
@@ -141,18 +139,18 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
                 <Button className="mt-30 link-button" fluid content="View Agreement" onClick={() => viewAgreement(data.agreementId)} />
               )
             }
-            {!isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0)))
+            {((!get(data, 'tranche') || get(data, 'tranche') < 1) && !isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0))))
               && <Button className="mt-20" primary fluid onClick={e => handleInvestNowClick(e, data.offering.id)} content="Change Investment Amount" />
             }
-            {(isAdmin || (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod))))
+            {((!get(data, 'tranche') || get(data, 'tranche') < 1) && (isAdmin || (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)))))
               && <Button className="mt-20 mb-30" basic fluid as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} content="Cancel" />
             }
           </>
         )}
         <br />
-        {['active', 'completed'].includes(listOf) && false
+        {['active', 'completed'].includes(listOf)
           && (
-            <Button className="mt-20 mb-30" primary fluid content="Open Offering Details" as={Link} to={`${match.url}/investment-details/${data.offering.id}`} />
+            <Button className="mt-20 mb-30" primary fluid content="Open Offering Details" as={Link} to={`${match.url}/investment-details/${get(data, 'offering.offeringSlug') || ''}`} />
           )
         }
       </Accordion.Content>
@@ -168,7 +166,7 @@ const InvestmentList = (props) => {
   } = props;
   const ListTable = ({ listData, header }) => (
     <div className="table-wrapper">
-      <Table unstackable singleLine selectable className={`investment-details ${props.listOf !== 'pending' ? 'clickable' : ''}`}>
+      <Table verticalAlign="middle" unstackable singleLine selectable className={`investment-details ${props.listOf !== 'pending' ? 'clickable' : ''}`}>
         <Table.Header>
           <Table.Row>
             {
@@ -183,7 +181,7 @@ const InvestmentList = (props) => {
             {listData.map(data => (
               <Table.Row key={data.investmentDate} onClick={() => { if (!isMobile) { handleViewInvestment(!['active', 'pending'].includes(props.listOf) ? get(data, 'offering.offeringSlug') : ''); } }}>
                 {header.map(row => (
-                  <Table.Cell className={row.className}>
+                  <Table.Cell verticalAlign="middle" className={row.className}>
                     {row.children ? row.children(data)
                       : row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key)) : 'N/A'
                         : get(data, row.key) || 'N/A'
@@ -228,7 +226,12 @@ const InvestmentList = (props) => {
       {isMobile ? (
         <>
           <Card className="investment-summary investment-card">
-            <Card.Header className="text-capitalize">{`${props.listOf} (${props.listOfCount})`}</Card.Header>
+            <Card.Header className="text-capitalize">{`${props.listOf} (${props.listOfCount})`}
+            {props.listOf === 'pending'
+              && (
+                <PopUpModal content="These are your investments in Live or Processing campaigns. Your investment has been reserved and will move to Active when the campaign has been closed." customTrigger={<Icon className="ns-help-circle ml-10" />} />
+              )}
+            </Card.Header>
             <Card.Content>
               {investments.map(data => (
                 <InvestmentCard data={data} {...props} />
@@ -243,6 +246,15 @@ const InvestmentList = (props) => {
             <Accordion.Title onClick={() => props.toggleAccordion(props.listOf)} active={isActive} className="text-capitalize">
               <Icon className={`ns-chevron-${isActive ? 'up' : 'right'}`} />
               {`${props.listOf} (${props.listOfCount})`}
+              {props.listOf === 'pending'
+              && (
+                <Popup
+                  trigger={<Icon color="grey" className="ns-help-circle ml-10" />}
+                  content="These are your investments in Live or Processing campaigns. Your investment has been reserved and will move to Active when the campaign has been closed."
+                  position="top center"
+                  className="center-align"
+                />
+              )}
             </Accordion.Title>
             <Accordion.Content className="bg-offwhite" active={!props.inActiveItems.includes(props.listOf)}>
               {!investments || !investments.length

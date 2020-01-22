@@ -11,9 +11,9 @@ export const updateAccreditation = gql`
 }
 `;
 
-export const approveOrDeclineForAccreditationRequest = gql`
-  mutation approveOrDeclineForAccreditationRequest($userId: String!, $accountId: String, $accountType: InvestorAccountTypeEnum, $action: AccreditationStatus!, $justification: String, $expiration: String!, $message: String, $adminJustificationDocs: [FileInfoInput] ) {
-    approveOrDeclineForAccreditationRequest (
+export const adminAccreditedStatusApproveDeclineRequest = gql`
+  mutation adminAccreditedStatusApproveDeclineRequest($userId: String!, $accountId: String, $accountType: InvestorAccountTypeEnum, $action: AccreditationStatus!, $justification: String, $expiration: String!, $message: String, $adminJustificationDocs: [FileInfoInput] ) {
+    adminAccreditedStatusApproveDeclineRequest (
     userId: $userId
     accountId: $accountId
     accountType: $accountType
@@ -26,14 +26,14 @@ export const approveOrDeclineForAccreditationRequest = gql`
 }
 `;
 
-export const listAccreditation = gql`
-  query listAccreditation(
+export const adminListAccreditation = gql`
+  query adminListAccreditation(
     $page: Int, $search: String, $method: FilterAccreditationMethodEnum,
     $type: UserAccreditationMethodEnum, $accountCreateFromDate: String,
     $accountCreateToDate: String, $status: AccreditationStatus, $limit: Int,
     $sortBy: AccreditationFilterSortByEnum,
     $sortType: UserFilterSortTypeEnum) {
-  listAccreditation (
+  adminListAccreditation (
     page: $page
     search: $search
     method: $method
@@ -83,9 +83,9 @@ export const listAccreditation = gql`
 }
 `;
 
-export const notifyVerifierForAccreditationRequestByEmail = gql`
-mutation notifyVerifierForAccreditationRequestByEmail($userId: String!, $accountId: String, $accountType: InvestorAccountTypeEnum!) {
-  notifyVerifierForAccreditationRequestByEmail(
+export const adminAccreditedStatusNotifyVerify = gql`
+mutation adminAccreditedStatusNotifyVerify($userId: String!, $accountId: String, $accountType: InvestorAccountTypeEnum!) {
+  adminAccreditedStatusNotifyVerify(
      userId: $userId
      accountId: $accountId
      accountType: $accountType

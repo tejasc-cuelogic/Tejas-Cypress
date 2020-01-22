@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 export const getCategories = isPublic => gql`
 query getCategories($types: ${isPublic ? '[CategoryTypeEnum]' : '[CategoryTypesEnum]'}) {
-    categories(categoryType: $types) {
+  categories(categoryType: $types) {
       id
       categoryName
       description
@@ -12,9 +12,9 @@ query getCategories($types: ${isPublic ? '[CategoryTypeEnum]' : '[CategoryTypesE
     }
   }`;
 
-export const getCategoriesList = gql`
-query getCategories($types: [CategoryTypesEnum]) {
-    categories(categoryType: $types) {
+export const adminCategories = gql`
+query adminCategories($types: [CategoryTypesEnum]) {
+    adminCategories(categoryType: $types) {
       id
       categoryName
       description
@@ -28,38 +28,38 @@ query getCategories($types: [CategoryTypesEnum]) {
   }`;
 
 
-export const createCategory = gql`
-mutation createCategory($categoryDetailsInput: CategoryInput!) {
-  createCategory(categoryDetailsInput: $categoryDetailsInput){
+export const adminCreateCategory = gql`
+mutation adminCreateCategory($categoryDetailsInput: CategoryInput!) {
+  adminCreateCategory(categoryDetailsInput: $categoryDetailsInput){
     id
   }
 }
 `;
 
-export const updateCategoryInfo = gql`
-mutation updateCategoryInfo($id: ID!, $categoryDetailsInput: CategoryInput!) {
-  updateCategoryInfo(id: $id, categoryDetailsInput: $categoryDetailsInput) {
+export const adminUpdateCategoryInfo = gql`
+mutation adminUpdateCategoryInfo($id: ID!, $categoryDetailsInput: CategoryInput!) {
+  adminUpdateCategoryInfo(id: $id, categoryDetailsInput: $categoryDetailsInput) {
      id: id,
    }
  }
 `;
 
-export const updateCategoryStaus = gql`
-mutation updateCategoryStaus($id: ID!, $isPublished: Boolean) {
-  updateCategoryStaus(id: $id, isPublished: $isPublished) {
+export const adminUpdateCategoryStatus = gql`
+mutation adminUpdateCategoryStatus($id: ID!, $isPublished: Boolean) {
+  adminUpdateCategoryStatus(id: $id, isPublished: $isPublished) {
     id
   }
 }
 `;
 
-export const deleteCategory = gql`
-mutation deleteCat($id: ID!) {
-  deleteCategory(id: $id) 
+export const adminDeleteCategory = gql`
+mutation adminDeleteCategory($id: ID!) {
+  adminDeleteCategory(id: $id) 
 }
 `;
 
-export const setCategoryOrderForCategoryType = gql`
-mutation setCategoryOrderForCategoryType($categoryDetails: [CategoryOrderInput]) {
-  setCategoryOrderForCategoryType(categoryDetails: $categoryDetails)
+export const adminSetCategoryOrderForCategoryType = gql`
+mutation adminSetCategoryOrderForCategoryType($categoryDetails: [CategoryOrderInput]) {
+  adminSetCategoryOrderForCategoryType(categoryDetails: $categoryDetails)
 }
 `;

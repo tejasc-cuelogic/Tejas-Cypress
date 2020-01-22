@@ -5,7 +5,7 @@ import { forEach, map, sortBy, kebabCase } from 'lodash';
 import { GqlClient as clientPrivate } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import { faqs, getFaqById, upsertFaq, deleteFaq } from '../../queries/faq';
+import { faqs, adminGetFaqById, adminUpsertFaq, adminDeleteFaq } from '../../queries/faq';
 import { FAQ } from '../../../constants/faq';
 import { uiStore } from '../../index';
 
@@ -97,7 +97,7 @@ export class FaqStore {
   deleteRecords = id => new Promise((resolve, reject) => {
     uiStore.setProgress();
     clientPrivate.mutate({
-      mutation: deleteFaq,
+      mutation: adminDeleteFaq,
       variables: {
         ids: id.isArray ? id : [id],
       },
@@ -159,11 +159,11 @@ export class FaqStore {
     uiStore.setProgress();
     this.currentUpdate = graphql({
       client: clientPrivate,
-      query: getFaqById,
+      query: adminGetFaqById,
       variables: { id },
       onFetch: (res) => {
-        if (res && res.getFaqById) {
-          this.setFormData(res.getFaqById);
+        if (res && res.adminGetFaqById) {
+          this.setFormData(res.adminGetFaqById);
           uiStore.setProgress(false);
         }
       },
@@ -260,7 +260,7 @@ export class FaqStore {
     data = id === 'new' ? data : { ...data, id };
     clientPrivate
       .mutate({
-        mutation: upsertFaq,
+        mutation: adminUpsertFaq,
         variables: id === 'new' ? { faqInput: data } : { faqInput: data, isPartial: isDraft },
       })
       .then(() => {

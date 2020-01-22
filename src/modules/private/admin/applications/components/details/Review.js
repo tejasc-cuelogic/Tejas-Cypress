@@ -52,7 +52,7 @@ export default class Review extends Component {
     const { match, businessAppReviewStore, appType } = this.props;
     const {
       subNavPresentation, updateStatuses, paBoxFolderId,
-      generatePortalAgreement, showGeneratePA, inProgress,
+      adminGeneratePortalAgreement, showGeneratePA, inProgress,
     } = businessAppReviewStore;
     updateStatuses(navItems);
     return (
@@ -71,7 +71,7 @@ export default class Review extends Component {
               {showGeneratePA
               && (
 <Button.Group size="mini">
-                <Button color="blue" content="Generate PA" loading={inProgress === 'GENERATE_PA'} onClick={generatePortalAgreement} />
+                <Button color="blue" content="Generate PA" loading={inProgress === 'GENERATE_PA'} onClick={adminGeneratePortalAgreement} />
                 {paBoxFolderId
                 && <Button color="blue" className="link-button" content="PA BOX Link" onClick={() => window.open(`${NEXTSEED_SECURITIES_BOX_URL}folder/${paBoxFolderId}`, '_blank')} />
                 }

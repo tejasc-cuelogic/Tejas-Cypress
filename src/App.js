@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter, Switch, Route, matchPath, Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
+import moment from 'moment';
 import { get, isEmpty } from 'lodash';
 import queryString from 'query-string';
 import IdleTimer from 'react-idle-timer';
@@ -41,7 +42,7 @@ const metaTagsData = [
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
 const isMobile = document.documentElement.clientWidth < 768;
-const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/', '/insights/category/', '/dashboard/resources/knowledge-base/'];
+const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/', '/insights/category/', '/dashboard/resources/knowledge-base/', '/space/'];
 @inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
@@ -118,10 +119,22 @@ class App extends Component {
     }
 
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && this.props.authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
-        authActions.forceLogout('timeout').then(() => {
-          this.props.history.push('/login');
-        });
+      const { authStore, location, uiStore, history } = this.props;
+      if (!document.hidden) {
+        if (authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
+          authActions.forceLogout('timeout').then(() => {
+            uiStore.setAuthRef(location.pathname);
+            history.push('/login');
+          });
+        } else if (window.localStorage.getItem('jwt') && location.pathname === '/login' && uiStore.authRef.includes('/dashboard')) {
+          window.location = uiStore.authRef || '/';
+        } else {
+          const swAppVersionL = localStorage.getItem('swAppVersion'); // from local storage
+          const swAppVersionS = sessionStorage.getItem('swAppVersion'); // from session storage
+          if (moment(swAppVersionL).isValid() && moment(swAppVersionS).isValid() && swAppVersionL !== swAppVersionS && uiStore.appUpdated && location.pathname !== '/login') {
+            window.location.reload();
+          }
+        }
       }
     });
 
@@ -278,7 +291,7 @@ class App extends Component {
           )
         }
         <ToastContainer className="toast-message" />
-        {uiStore.appUpdated
+        {uiStore.appUpdated && location.pathname !== '/login'
           && <NotifyVersionUpdate setAppUpdated={uiStore.setAppUpdated} />
         }
         {uiStore.devBanner

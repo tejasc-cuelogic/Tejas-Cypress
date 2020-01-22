@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { isEmpty, get } from 'lodash';
+import queryString from 'query-string';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
@@ -14,6 +15,10 @@ import { ListErrors } from '../../../theme/shared';
 class Login extends Component {
   constructor(props) {
     super(props);
+    const urlParameter = queryString.parse(this.props.location.search);
+    if (urlParameter && urlParameter.ref) {
+      this.props.uiStore.setAuthRef(atob(urlParameter.ref));
+    }
     this.props.uiStore.clearErrors();
     this.props.uiStore.setProgress(false);
     this.props.authStore.resetForm('LOGIN_FRM');
@@ -56,7 +61,12 @@ class Login extends Component {
             && !userHasOneFullAccount
             ? pendingStep : this.props.uiStore.authRef;
           this.props.uiStore.removeOneFromProgressArray('login');
-          this.props.history.push(redirectUrl || '/');
+          if (this.props.uiStore.appUpdated) {
+            this.props.uiStore.setAppUpdated(false);
+            window.location = redirectUrl || '/';
+          } else {
+            this.props.history.push(redirectUrl || '/');
+          }
         }
       }).catch((err) => {
         console.log(err);
@@ -69,7 +79,7 @@ class Login extends Component {
   }
 
   render() {
-    const { errors, inProgress, inProgressArray } = this.props.uiStore;
+    const { errors, inProgress, inProgressArray, responsiveVars } = this.props.uiStore;
     if (this.props.authStore.isUserLoggedIn
         && !this.props.userDetailsStore.userFirstLoad
         && (isEmpty(inProgressArray) || !inProgressArray.includes('login'))
@@ -115,7 +125,7 @@ class Login extends Component {
                   type={field === 'password' ? pwdInputType : 'email'}
                   icon={field === 'password' ? togglePasswordType() : null}
                   name={field}
-                  autoFocus={field === 'email'}
+                  autoFocus={!responsiveVars.isMobile && field === 'email'}
                   fielddata={LOGIN_FRM.fields[field]}
                   changed={LoginChange}
                 />

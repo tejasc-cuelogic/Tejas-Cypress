@@ -193,7 +193,7 @@ class Comments extends Component {
                       changed={msgEleChange}
                       containerclassname="secondary"
                     />
-                    <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} primary compact content="Post Comment" />
+                    <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null, campaignId)} disabled={!MESSAGE_FRM.meta.isValid || buttonLoader === 'PUBLIC'} primary compact content="Post Comment" />
                   </Form>
                 ) : ''
               }
@@ -256,10 +256,10 @@ class Comments extends Component {
                                     changed={msgEleChange}
                                     containerclassname="secondary"
                                   />
-                                  <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(c.id)}>
+                                  <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(c.id)} disabled={buttonLoader === 'PUBLIC'}>
                                     Cancel Reply
                                 </Button>
-                                  <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Post Comment" />
+                                  <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid || buttonLoader === 'PUBLIC'} primary content="Post Comment" />
                                 </Form>
                                 <Divider hidden />
                                 <p>
