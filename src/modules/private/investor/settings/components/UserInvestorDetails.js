@@ -149,6 +149,7 @@ export default class UserInvestorDetails extends Component {
             {INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value === 'yes'
               && (
               <>
+                <Divider hidden />
                 <dt className="regular-text">Member Firm Name</dt>
                 <dd>
                   <FormInput
@@ -185,6 +186,7 @@ export default class UserInvestorDetails extends Component {
             {INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value === 'yes'
               && (
               <>
+                <Divider hidden />
                 <dt className="regular-text">Ticker Symbol</dt>
                 <dd>
                   <FormInput
