@@ -17,7 +17,7 @@ export default class OfferingOverview extends Component {
   //   }
   // }
   onFileDrop = (files, name) => {
-    this.props.offeringCreationStore.uploadFileToS3('OFFERING_OVERVIEW_FRM', name, files);
+    this.props.offeringCreationStore.uploadFileToS3('OFFERING_OVERVIEW_FRM', name, files, false, false, true);
   }
 
   handleDelDoc = (field) => {

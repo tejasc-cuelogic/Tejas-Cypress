@@ -5,7 +5,7 @@ import { forEach, sortBy, get, times } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { CANCEL_INVESTMENT } from '../../../constants/investment';
-import { getInvestorAccountPortfolio, getInvestmentDetails, cancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
+import { getInvestorAccountPortfolio, getInvestmentDetails, investNowCancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
 import { userDetailsStore, uiStore, offeringCreationStore } from '../../index';
 import Helper from '../../../../helper/utility';
 
@@ -336,7 +336,7 @@ export class PortfolioStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: cancelAgreement,
+          mutation: investNowCancelAgreement,
           variables,
           refetchQueries: [{
             query: getInvestorAccountPortfolio,

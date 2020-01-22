@@ -107,21 +107,21 @@ export default class ManualForm extends Component {
           <div className={`${isMobile ? '' : 'field-wrap'} left-align`}>
             <MaskedInput
               name="accountNumber"
+              type="tel"
               fielddata={formLinkBankManually.fields.accountNumber}
               changed={linkBankManuallyChange}
               value={isAccNumberEncrypted ? '' : formLinkBankManually.fields.accountNumber.value}
               accountNumber
               className="fs-block"
-              showerror
             />
             <MaskedInput
               name="routingNumber"
+              type="tel"
               fielddata={formLinkBankManually.fields.routingNumber}
               changed={linkBankManuallyChange}
               value={isEncrypted(formLinkBankManually.fields.routingNumber.value) ? '' : formLinkBankManually.fields.routingNumber.value}
               routingNumber
               className="fs-block"
-              showerror
             />
           </div>
           {errors

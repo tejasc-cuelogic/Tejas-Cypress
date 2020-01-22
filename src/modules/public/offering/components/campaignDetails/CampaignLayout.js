@@ -120,7 +120,8 @@ class CampaignLayout extends Component {
     const rect = el.getBoundingClientRect();
     const elemTop = rect.top - 110;
     const elemBottom = rect.bottom;
-    const isVisible = (elemTop >= 0) && ((elemBottom - window.innerHeight) <= window.innerHeight);
+    // const isVisible = (elemTop >= 0) && ((elemBottom - window.innerHeight) <= window.innerHeight);
+    const isVisible = ((elemBottom <= 0) && ((elemTop - window.innerHeight) <= window.innerHeight)) || ((elemTop >= 0) && ((elemBottom - window.innerHeight) <= window.innerHeight));
     return isVisible;
   }
 

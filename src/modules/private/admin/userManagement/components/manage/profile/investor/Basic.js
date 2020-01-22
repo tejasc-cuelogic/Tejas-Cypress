@@ -60,9 +60,9 @@ export default class Basic extends Component {
       }).catch(() => { });
   }
 
-  skipAddressOrPhoneValidationCheck = (type) => {
+  adminSkipAddressOrPhoneValidationCheck = (type) => {
     this.setState({ [type === 'PHONE' ? 'phoneCheckLoading' : 'addressCheckLoading']: true });
-    this.props.userDetailsStore.skipAddressOrPhoneValidationCheck(type).then(() => this.setState({ [type === 'PHONE' ? 'phoneCheckLoading' : 'addressCheckLoading']: false })).catch(() => this.setState({ [type === 'PHONE' ? 'phoneCheckLoading' : 'addressCheckLoading']: false }));
+    this.props.userDetailsStore.adminSkipAddressOrPhoneValidationCheck(type).then(() => this.setState({ [type === 'PHONE' ? 'phoneCheckLoading' : 'addressCheckLoading']: false })).catch(() => this.setState({ [type === 'PHONE' ? 'phoneCheckLoading' : 'addressCheckLoading']: false }));
   }
 
   render() {
@@ -91,8 +91,8 @@ export default class Basic extends Component {
                 </>
               )
             }
-            <Button loading={this.state.addressCheckLoading} compact onClick={() => this.skipAddressOrPhoneValidationCheck('ADDRESS')} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
-            <Button loading={this.state.phoneCheckLoading} compact onClick={() => this.skipAddressOrPhoneValidationCheck('PHONE')} color={isPhoneSkip ? 'green' : 'blue'}>{isPhoneSkip ? 'Force VoIP Check' : 'Skip VoIP Check'}</Button>
+            <Button loading={this.state.addressCheckLoading} compact onClick={() => this.adminSkipAddressOrPhoneValidationCheck('ADDRESS')} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
+            <Button loading={this.state.phoneCheckLoading} compact onClick={() => this.adminSkipAddressOrPhoneValidationCheck('PHONE')} color={isPhoneSkip ? 'green' : 'blue'}>{isPhoneSkip ? 'Force VoIP Check' : 'Skip VoIP Check'}</Button>
           </Button.Group>
         </Header>
         {get(details, 'locked.lock') === 'LOCKED'

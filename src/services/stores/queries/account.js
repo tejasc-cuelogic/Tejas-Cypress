@@ -70,9 +70,9 @@ export const createIndividualGoldStarInvestor = gql`
   }
 `;
 
-export const getInvestorCloseAccounts = gql`
-query getInvestorCloseAccounts($userId: String!) {
-  getInvestorCloseAccounts(
+export const adminGetUserClosedAccounts = gql`
+query adminGetUserClosedAccounts($userId: String!) {
+  adminGetUserClosedAccounts(
     userId: $userId
   ){
     userId
@@ -107,9 +107,9 @@ query getInvestorCloseAccounts($userId: String!) {
   }
 }`;
 
-export const closeInvestorAccount = gql`
-mutation closeInvestorAccount($userId: String!, $accountId: String!, $accountType: InvestorAccountTypeEnum!, $reason: String) {
-  closeInvestorAccount (
+export const adminCloseInvestorAccount = gql`
+mutation adminCloseInvestorAccount($userId: String!, $accountId: String!, $accountType: InvestorAccountTypeEnum!, $reason: String) {
+  adminCloseInvestorAccount (
     userId: $userId
     accountId: $accountId
     accountType: $accountType

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
-export const getBusinessApplicationAdmin = gql`
-query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String, $lek: String){
-  businessApplicationsAdmin(
+export const adminBusinessApplications = gql`
+query adminBusinessApplications($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String, $lek: String){
+  adminBusinessApplications(
     applicationType: $applicationType
     orderBy: $orderBy
     limit: $limit
@@ -17,9 +17,9 @@ query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $order
 }
 `;
 
-export const getBusinessApplicationSummary = gql`
-query getBusinessApplicationSummary{
-  businessApplicationsSummary {
+export const adminBusinessApplicationsSummary = gql`
+query adminBusinessApplicationsSummary{
+  adminBusinessApplicationsSummary {
     prequalFaild
     inProgress
     completed
@@ -304,9 +304,9 @@ query getBusinessApplicationById ($id: String!) {
 }
 `;
 
-export const getBusinessApplicationsDetailsAdmin = gql`
-query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: String, $applicationType: ViewBusinessApplicationTypeEnum!) {
-  businessApplicationsDetailsAdmin(
+export const adminBusinessApplicationsDetails = gql`
+query adminBusinessApplicationsDetails ($applicationId: String!, $userId: String, $applicationType: ViewBusinessApplicationTypeEnum!) {
+  adminBusinessApplicationsDetails(
     applicationId: $applicationId
     applicationType: $applicationType
     userId: $userId
@@ -405,8 +405,8 @@ mutation updateBusinessApplicationInformation(
 }
 `;
 
-export const updateApplicationStatusAndReview = gql`
-mutation updateApplicationData(
+export const adminUpdateApplicationStatusAndReview = gql`
+mutation adminUpdateApplicationStatusAndReview(
   $applicationId: ID!
   $userId: String
   $actionType: AdminApplicationActionTypeEnum!
@@ -420,7 +420,7 @@ mutation updateApplicationData(
   $approvedStatus: ApprovedStatusEnum
   $temporaryPassword: String
 ) {
-  updateApplicationStatusAndReview(
+  adminUpdateApplicationStatusAndReview(
     applicationId: $applicationId
     userId: $userId
     actionType: $actionType
@@ -513,9 +513,9 @@ mutation createOffering($applicationId: String!){
 }
 `;
 
-export const generatePortalAgreement = gql`
-mutation generatePortalAgreement($applicationId: String!, $userId: String!){
-  generatePortalAgreement(
+export const adminGeneratePortalAgreement = gql`
+mutation adminGeneratePortalAgreement($applicationId: String!, $userId: String!){
+  adminGeneratePortalAgreement(
     applicationId: $applicationId
     userId: $userId
   )
@@ -531,8 +531,8 @@ mutation applicationDeclinedByIssuer($applicationId: String!, $comments: [Busine
 }
 `;
 
-export const exportAllToEmail = gql`
-mutation exportAllToEmail($applicationType: ApplicationTypeEnum!) {
-  exportAllToEmail(applicationType: $applicationType)
+export const adminExportAllToEmail = gql`
+mutation adminExportAllToEmail($applicationType: ApplicationTypeEnum!) {
+  adminExportAllToEmail(applicationType: $applicationType)
 }
 `;

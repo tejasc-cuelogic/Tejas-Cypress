@@ -51,12 +51,12 @@ export default class Finances extends Component {
                 <MaskedInput
                   key={field}
                   name={field}
+                  type="tel"
                   currency
                   fielddata={FINANCES_FORM.fields[field]}
                   changed={financesChange}
                   prefix="$ "
                   number
-                  showerror
                   disableDecimal
                   maxlength={13}
                 />

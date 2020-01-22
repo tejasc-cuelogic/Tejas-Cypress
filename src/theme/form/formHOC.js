@@ -2,7 +2,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { get, pick } from 'lodash';
 import ReactCodeInput from 'react-code-input';
-import { FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown } from '.';
+import { FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown, FormTextarea } from '.';
 import Address from './src/Address';
 
 function formHoc(WrappedComponent, metaInfo) {
@@ -12,6 +12,23 @@ function formHoc(WrappedComponent, metaInfo) {
       const fieldData = this.props[metaInfo.store][metaInfo.form].fields[name];
       return (
         <FormInput
+          name={name}
+          key={name}
+          type="text"
+          format={get(fieldData, 'format')}
+          fielddata={fieldData}
+          onblur={get(props, 'handleBlur') || false}
+          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
+          label={get(props, 'label') || false}
+          {...props}
+        />
+      );
+    }
+
+    TextArea = (name, props) => {
+      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
+      return (
+        <FormTextarea
           name={name}
           key={name}
           type="text"
@@ -201,6 +218,7 @@ function formHoc(WrappedComponent, metaInfo) {
         RadioGroup: this.RadioGroup,
         FormCheckBox: this.FormCheckBox,
         FormDropDown: this.FormDropDown,
+        TextArea: this.TextArea,
       };
       return (
         <WrappedComponent

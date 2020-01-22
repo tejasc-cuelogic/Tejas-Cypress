@@ -148,21 +148,22 @@ export default class UserInvestorDetails extends Component {
             </dd>
             {INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value === 'yes'
               && (
-                <>
-                  <dt className="regular-text">Member Firm Name</dt>
-                  <dd>
-                    <FormInput
-                      containerclassname={this.state.displayOnly ? 'display-only' : ''}
-                      className="compact"
-                      readOnly={this.state.displayOnly}
-                      name="brokerageFirmName"
-                      fielddata={INVESTOR_PROFILE_FULL.fields.brokerageFirmName}
-                      value={INVESTOR_PROFILE_FULL.fields.brokerageFirmName.value}
-                      changed={(e, result) => formChange(e, result, formName)}
-                      ishidelabel
-                    />
-                  </dd>
-                </>
+              <>
+                <Divider hidden />
+                <dt className="regular-text">Member Firm Name</dt>
+                <dd>
+                  <FormInput
+                    containerclassname={this.state.displayOnly ? 'display-only' : ''}
+                    className="compact"
+                    readOnly={this.state.displayOnly}
+                    name="brokerageFirmName"
+                    fielddata={INVESTOR_PROFILE_FULL.fields.brokerageFirmName}
+                    value={INVESTOR_PROFILE_FULL.fields.brokerageFirmName.value}
+                    changed={(e, result) => formChange(e, result, formName)}
+                    ishidelabel
+                  />
+                </dd>
+              </>
               )
             }
             <Divider hidden />
@@ -184,21 +185,22 @@ export default class UserInvestorDetails extends Component {
             </dd>
             {INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value === 'yes'
               && (
-                <>
-                  <dt className="regular-text">Ticker Symbol</dt>
-                  <dd>
-                    <FormInput
-                      containerclassname={this.state.displayOnly ? 'display-only' : ''}
-                      className="compact"
-                      readOnly={this.state.displayOnly}
-                      name="publicCompanyTicker"
-                      fielddata={INVESTOR_PROFILE_FULL.fields.publicCompanyTicker}
-                      value={INVESTOR_PROFILE_FULL.fields.publicCompanyTicker.value}
-                      changed={(e, result) => formChange(e, result, formName)}
-                      ishidelabel
-                    />
-                  </dd>
-                </>
+              <>
+                <Divider hidden />
+                <dt className="regular-text">Ticker Symbol</dt>
+                <dd>
+                  <FormInput
+                    containerclassname={this.state.displayOnly ? 'display-only' : ''}
+                    className="compact"
+                    readOnly={this.state.displayOnly}
+                    name="publicCompanyTicker"
+                    fielddata={INVESTOR_PROFILE_FULL.fields.publicCompanyTicker}
+                    value={INVESTOR_PROFILE_FULL.fields.publicCompanyTicker.value}
+                    changed={(e, result) => formChange(e, result, formName)}
+                    ishidelabel
+                  />
+                </dd>
+              </>
               )
             }
             <Divider hidden />

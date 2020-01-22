@@ -25,7 +25,7 @@ export default class Repayments extends Component {
       >
         <Switch>
           <Route exact path={`${match.url}/:paymentType`} component={AllRepayments} />
-          <Route exact path={`${match.url}/:paymentType/:id`} render={props => <PaymentDetails {...props} refLink={this.props.match.url} />} />
+          <Route exact path={`${match.url}/:paymentType/:offeringSlug`} render={props => <PaymentDetails {...props} refLink={this.props.match.url} />} />
         </Switch>
       </PrivateLayout>
     );

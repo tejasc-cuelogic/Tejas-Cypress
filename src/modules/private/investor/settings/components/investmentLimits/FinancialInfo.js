@@ -146,7 +146,7 @@ export default class FinancialInfo extends Component {
                               </Header>
                               <dl className="dl-horizontal">
                                 <dt>Status :</dt>
-                                <dd className={`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'warning' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'positive' : 'negative'}-text`}><b>{this.getStatus(accreditationData[account.name])}</b></dd>
+                                <dd className={`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'warning' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'positive' : 'negative'}-text`}>{this.getStatus(accreditationData[account.name])}</dd>
                                 {accreditationData[account.name].status === 'INVALID'
                                   ? (
                                     <>
