@@ -116,7 +116,7 @@ export default class Listing extends Component {
                 : offeringList.map(offering => (
                   <Table.Row key={offering.offeringSlug} className={this.props.uiStore.inProgressArray.length && offering.offeringId === this.state.loadingOfferId ? 'disabled' : ''}>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
-                      <Link to={`${this.props.match.url}/edit/${offering.offeringSlug}`}>
+                      <Link to={`/dashboard/offering/${offering.offeringSlug}`}>
                         <b>{((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
                           ? offering.keyTerms.shorthandBusinessName : (
                             (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
