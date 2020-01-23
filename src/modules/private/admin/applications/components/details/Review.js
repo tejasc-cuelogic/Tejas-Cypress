@@ -28,6 +28,7 @@ const navItems = [
     ],
   },
   { title: 'Offer', to: 'offer' },
+  { title: 'Offering', to: 'offering' },
 ];
 
 @inject('businessAppReviewStore')
