@@ -24,7 +24,7 @@ class Disclosure extends Component {
   }
 
   handleLoginAction = () => {
-    this.props.uiStore.setAuthRef(this.props.location.pathname);
+    this.props.uiStore.setAuthRef(this.props.location.pathname, this.props.location.hash);
     this.props.history.push('/login');
   }
 

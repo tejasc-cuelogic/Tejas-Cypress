@@ -1,5 +1,5 @@
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, forOwn, filter, capitalize, findKey, includes, get } from 'lodash';
+import { forEach, isArray, find, forOwn, filter, capitalize, findKey, includes, get, set } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
@@ -101,6 +101,18 @@ export class AccreditationStore {
   @observable sortOrder = {
     column: null,
     direction: 'asc',
+  }
+
+  @observable docReference = null;
+
+  @action
+  setFieldValue = (field, value, objRef = false) => {
+    if (objRef) {
+      const tempRef = this[field];
+      this[field] = set(tempRef, objRef, value);
+    } else {
+      this[field] = value;
+    }
   }
 
   @action
