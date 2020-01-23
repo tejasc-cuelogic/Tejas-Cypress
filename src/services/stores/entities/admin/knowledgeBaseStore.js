@@ -8,7 +8,7 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { KNOWLEDGE_BASE, CATEGORY_TYPES } from '../../../constants/admin/knowledgeBase';
 import { getKnowledgeBaseDetails, adminKnowledgeBaseById, adminCreateKnowledgeBaseItem, adminUpdateKnowledgeBaseItem, adminDeleteKnowledgeBaseItems, adminFilterKnowledgeBase, adminSetOrderForKnowledgeBase } from '../../queries/knowledgeBase';
-import { getCategories } from '../../queries/category';
+import { getCategories, adminCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
 import { uiStore } from '../../index';
 
@@ -222,7 +222,7 @@ export class KnowledgeBaseStore {
     const apiClient = isPublic ? clientPublic : client;
     this.Categories = graphql({
       client: apiClient,
-      query: getCategories(isPublic),
+      query: isPublic ? getCategories : adminCategories,
       variables: { types: ['INVESTOR_KB', 'ISSUER_KB'] },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
