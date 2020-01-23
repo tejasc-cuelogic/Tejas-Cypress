@@ -47,7 +47,7 @@
             box-shadow:1px 0 0 0 @celledBorderColor, 0 1px 0 0 @celledBorderColor !important;
             @media only screen and (max-width:@largestMobileScreen){
                 border:none;
-                padding:@consecutiveGridDistance !important;
+                padding:@consecutiveGridDistance @22px !important;
             }
         }
     }
@@ -131,11 +131,22 @@
                 margin-right: 0 !important;
                 border-bottom: 1px solid @neutral-darkwhite;
                 margin-bottom: 0;
+                &.key-terms{
+                    margin-left: -@14px !important;
+                    margin-right: -@14px !important;
+                    width: calc(100% + @28px) !important;
+                    >.column:not(.row){
+                        padding: @14px @14px!important;
+                    }
+                }
             }
         }
     }
     &.team-list {
         margin: 0;
+        @media only screen and (max-width : @largestMobileScreen){
+            margin: 0 -@17px;
+        }
         >.column {
             padding: 0;
         }
@@ -163,7 +174,7 @@
 			counter-increment: section;
 			content: "0"counter(section);  
 			top: 50px;
-			left: -11%;
+			left: -9%;
 			position: absolute;
 			font-size: 270px;
 			color: @neutral-darkwhite;
@@ -181,7 +192,7 @@
             }
         }
         >.row>.column {
-            padding: 60px;
+            padding: 54px;
             @media only screen and (max-width: @largestTabletScreen) {
                 padding: @20px;
             }

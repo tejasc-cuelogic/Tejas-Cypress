@@ -225,6 +225,9 @@
 @ns-no-view: "\e999";
 @ns-off-shoot-business: "\e960";
 @ns-offering: "\e92e";
+@ns-offer-declined: "\e9a5";
+@ns-offer-extended: "\e9a6";
+@ns-offer-pending: "\e9a7";
 @ns-other: "\e99b";
 @ns-paper-plane: "\e961";
 @ns-partnership: "\e962";
@@ -236,6 +239,8 @@
 @ns-play: "\e992";
 @ns-plus-square: "\e987";
 @ns-proprietor: "\e963";
+@ns-quote-left: "\e9a9";
+@ns-quote-right: "\e9a8";
 @ns-real-estate: "\e964";
 @ns-reload-circle: "\e978";
 @ns-reload-circle-line: "\e979";

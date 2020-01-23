@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { includes, orderBy, get, filter } from 'lodash';
 import { inject, observer } from 'mobx-react';
@@ -18,14 +18,17 @@ import Congratulation from '../../../../public/offering/components/investNow/agr
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
 import AccountHeader from '../../../admin/userManagement/components/manage/accountDetails/AccountHeader';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+import StickyNotification from '../../setup/components/stickyNotification';
 
-@inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore', 'referralsStore')
+const isTablet = document.documentElement.clientWidth < 992;
+@inject('portfolioStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'campaignStore', 'referralsStore', 'investmentStore', 'accreditationStore')
 @observer
-export default class Portfolio extends Component {
+export default class Portfolio extends PureComponent {
   state = {
     open: false,
     embedUrl: '',
     inActiveItems: [],
+    showSticky: true,
   };
 
   constructor(props) {
@@ -33,9 +36,16 @@ export default class Portfolio extends Component {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { setFieldValue } = this.props.userDetailsStore;
     setFieldValue('currentActiveAccount', accountType);
+    this.props.investmentStore.accTypeChanged(null, { value: accountType });
+    this.props.accreditationStore.changeShowAccountListFlag(false);
+    if (!this.props.isAdmin && !this.props.accreditationStore.accreditationData.ira) {
+      this.props.accreditationStore.getUserAccreditation().then(() => {
+        this.props.accreditationStore.initiateAccreditation();
+      });
+    }
     this.props.portfolioStore.setFieldValue('isAdmin', this.props.isAdmin);
     if (!this.props.isAdmin
-    || (this.props.isAdmin && !this.props.portfolioStore.apiCall)) {
+      || (this.props.isAdmin && !this.props.portfolioStore.apiCall)) {
       this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
     }
     this.props.portfolioStore.calculateInvestmentType();
@@ -64,6 +74,11 @@ export default class Portfolio extends Component {
     this.setState({ open: false });
   }
 
+  onCloseSticky = () => {
+    this.setState({ showSticky: false });
+    localStorage.setItem('hideNotifications', true);
+  }
+
   toggleAccordion = (of) => {
     const { inActiveItems } = this.state;
     const updatedList = inActiveItems.includes(of) ? inActiveItems.filter(i => i !== of)
@@ -90,9 +105,10 @@ export default class Portfolio extends Component {
     return (
       <Switch>
         <Route
-          path={`${match.url}/investment-details/:id`}
+          path={`${match.url}/investment-details/:offeringSlug`}
           render={props => <InvestmentDetails refLink={match.url} {...props} />}
         />
+        <Route exact path={`${match.url}/:offeringId/invest-now/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={match.params.offeringId} refLink={match.url} {...props} />} />
         <Route
           path={`${match.url}/:offeringId/invest-now`}
           render={props => <InvestNow changeInvest refLink={match.url} {...props} />}
@@ -110,6 +126,9 @@ export default class Portfolio extends Component {
 
   render() {
     const { match, portfolioStore, userDetailsStore, refLink } = this.props;
+    const {
+      multipleUserAccounts,
+    } = userDetailsStore;
     const isUserAccountFrozen = userDetailsStore.isAccountFrozen;
     const { referralData } = this.props.referralsStore;
     const { getActiveAccounts } = userDetailsStore;
@@ -122,7 +141,7 @@ export default class Portfolio extends Component {
       );
     }
     const { getInvestorAccounts, getPieChartData, portfolioError } = portfolioStore;
-    const totalPortfolioBalance = getInvestorAccounts && getInvestorAccounts.totalBalance ? money.isNegative(getInvestorAccounts.totalBalance) ? '0.00' : getInvestorAccounts.totalBalance : '0.00';
+    const totalPortfolioBalance = getInvestorAccounts && getInvestorAccounts.totalBalance ? !this.props.isAdmin && money.isNegative(getInvestorAccounts.totalBalance) ? '0.00' : getInvestorAccounts.totalBalance : '0.00';
     const ERROR_MSG = `Sorry, this page is not loading correctly. We've notified the team.<br />
       Please check back again later, and contact us at
       <a href="mailto:support@nextseed.com">support@nextseed.com</a> with any questions.`;
@@ -136,6 +155,17 @@ export default class Portfolio extends Component {
         </div>
       );
     }
+    const notificationCard = {
+      message:
+  <span>
+    <p>
+        Are you an accredited investor? Go through the steps to verify your status
+        today, and for a limited time, we will add a $100 credit to your account.
+    </p>
+    <a target="_blank" href="/agreements/Accredited-Investor-Verification-Incentive-Program-Terms-and-Conditions">See Rules</a>
+  </span>,
+      header: 'Earn $100 by verifying your accredited investor status',
+    };
     // const tnarValue = get(getInvestorAccounts, 'tnar');
     const summaryDetails = {
       isAccountFrozen: isUserAccountFrozen,
@@ -170,16 +200,29 @@ export default class Portfolio extends Component {
     const activeSorted = getInvestorAccounts && getInvestorAccounts.investments.active.length ? orderBy(getInvestorAccounts.investments.active, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     let completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     completedSorted = filter(completedSorted, o => !includes(['TERMINATED', 'FAILED', 'REJECTED'], get(o, 'offering.stage')));
+    const hideNotifications = localStorage.getItem('hideNotifications');
     return (
       <>
         {this.props.isAdmin
           && <AccountHeader module="Investments" pathname={this.props.location.pathname} />
         }
+        {!get(multipleUserAccounts, 'noAccounts') && this.state.showSticky && !hideNotifications
+        && (
+          <StickyNotification
+            {...this.props}
+            notificationCard={notificationCard}
+            onCloseSticky={this.onCloseSticky}
+            multipleAccounts={get(multipleUserAccounts, 'multipleAccounts') || null}
+            accountId={get(multipleUserAccounts, 'accountId') || null}
+            accountType={get(multipleUserAccounts, 'accountType') || null}
+          />
+        )
+        }
         <SummaryHeader refLink={refLink} isAdmin={this.props.isAdmin} details={summaryDetails} />
         {(getPieChartData.investmentType.length || getPieChartData.industry.length)
           ? <PortfolioAllocations isAdmin={this.props.isAdmin} pieChart={getPieChartData} /> : ''
         }
-        <Header as="h4">My Investments</Header>
+        <Header as={isTablet ? 'h5' : 'h4'}>My Investments</Header>
         {pendingSorted.length
           ? <InvestmentList isAdmin={this.props.isAdmin} handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} viewAgreement={this.viewLoanAgreement} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={pendingSorted} listOf="pending" listOfCount={pendingSorted.length} match={match} /> : null
         }
@@ -190,14 +233,14 @@ export default class Portfolio extends Component {
           ? <InvestmentList isAdmin={this.props.isAdmin} handleInvestNowClick={this.handleInvestNowOnChangeClick} handleViewInvestment={this.handleViewInvestment} isAccountFrozen={isUserAccountFrozen} inActiveItems={this.state.inActiveItems} toggleAccordion={this.toggleAccordion} investments={completedSorted} listOf="completed" listOfCount={completedSorted.length} match={match} /> : null
         }
         {getInvestorAccounts && !getInvestorAccounts.investments.pending.length
-        && !getInvestorAccounts.investments.active.length
-        && !getInvestorAccounts.investments.completed.length
+          && !getInvestorAccounts.investments.active.length
+          && !getInvestorAccounts.investments.completed.length
           ? (
             <>
               <p>No investments or reservations pending.</p>
               <Card>
                 <Card.Content>
-                  <Header as="h4">Browse the latest investment opportunities.</Header>
+                  <Header as={isTablet ? 'h5' : 'h4'}>Browse the latest investment opportunities.</Header>
                   <Button as={Link} target="_blank" to="/offerings" className={isUserAccountFrozen ? 'disabled' : ''} size="medium" color="green">Start investing now</Button>
                 </Card.Content>
               </Card>

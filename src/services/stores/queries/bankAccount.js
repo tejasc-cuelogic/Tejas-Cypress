@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
-export const getlistLinkedBankUsers = gql`
-query getlistLinkedBankUsers($page: Int, $limit: Int!, $status: [ChangeBankRequestStatusEnum]) {
-    listLinkedBankUsers (page: $page, limit: $limit, status: $status){
+export const adminListLinkedBankUsers = gql`
+query adminListLinkedBankUsers($page: Int, $limit: Int!, $status: [ChangeBankRequestStatusEnum]) {
+    adminListLinkedBankUsers (page: $page, limit: $limit, status: $status){
      linkedBankList {
       userId
       accountId
@@ -39,27 +39,13 @@ export const isValidOpeningDepositAmount = gql`
     )
   }`;
 
-export const linkBankRequestApprove = gql`
-mutation linkBankRequestApprove($accountId: String!, $userId: String!, $justification: String!) {
-  linkBankRequestApprove(
+export const adminLinkedBankApprove = gql`
+mutation adminLinkedBankApprove($accountId: String!, $userId: String!, $justification: String!) {
+  adminLinkedBankApprove(
     userId: $userId
     accountId: $accountId
     justification: $justification
   ){
-    verified
-    message
-  }
-}`;
-
-// TODO: remove this after declineBankChangeRequest works fine
-export const linkBankRequestDeny = gql`
-mutation linkBankRequestDeny($accountId: String!, $userId: String!, $justification: String!) {
-  linkBankRequestDeny(
-    userId: $userId
-    accountId: $accountId
-    justification: $justification
-  )
-  {
     verified
     message
   }

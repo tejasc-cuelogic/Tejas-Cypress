@@ -1,5 +1,5 @@
 import React from 'react';
-import { get } from 'lodash';
+import { get, startCase, capitalize } from 'lodash';
 import { Table, Header } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../../../helper';
 
@@ -15,7 +15,7 @@ const LockedInformation = ({ details, account }) => (
               <>
                 <Table.Row>
                   <Table.Cell>Account Status: </Table.Cell>
-                  <Table.Cell>{get(details, 'details.accountStatus') || 'N/A'}</Table.Cell>
+                  <Table.Cell>{get(details, 'details.accountStatus') ? capitalize(startCase(get(details, 'details.accountStatus'))) : 'N/A'}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Frozen By: </Table.Cell>

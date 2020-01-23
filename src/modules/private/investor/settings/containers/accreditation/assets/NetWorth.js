@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Header, Form } from 'semantic-ui-react';
+import { Header, Form, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { FormRadioGroup } from '../../../../../../../theme/form';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('accreditationStore')
 @withRouter
 @observer
@@ -27,6 +28,11 @@ export default class NetWorth extends Component {
             containerclassname="button-radio center-align"
           />
         </Form>
+        {isMobile
+          && (
+            <Button onClick={this.props.submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+          )
+          }
       </div>
     );
   }

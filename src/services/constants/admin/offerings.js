@@ -1,8 +1,7 @@
-import React from 'react';
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
 
-export const OFFERING_CREATION_ARRAY_KEY_LIST = ['additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement', 'closingBinder'];
+export const OFFERING_CREATION_ARRAY_KEY_LIST = ['fileSubstitution', 'additionalKeyterms', 'leadership', 'social', 'documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement', 'closingBinder'];
 
 export const STAGES = {
   CREATION: { ref: 'creation', publicRef: 'creation', accessKey: 1, label: 'Creation' },
@@ -146,7 +145,7 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
-    fieldType: 'String',
+    fieldType: 'string',
   },
   maxOfferingAmountCF: {
     value: null,
@@ -154,7 +153,7 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
-    fieldType: 'String',
+    fieldType: 'string',
   },
   minOfferingAmount506C: {
     value: null,
@@ -162,7 +161,7 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
-    fieldType: 'String',
+    fieldType: 'string',
   },
   maxOfferingAmount506C: {
     value: null,
@@ -514,6 +513,7 @@ export const SECURITIES_VALUES = [
   { key: 'Convertible Notes', value: 'CONVERTIBLE_NOTES', text: 'Convertible Notes' },
   { key: 'SAFE', value: 'SAFE', text: 'SAFE' },
   { key: 'Real Estate', value: 'REAL_ESTATE', text: 'Real Estate' },
+  { key: 'Funds - Limited Partner Interest', value: 'FUNDS', text: 'Funds - Limited Partner Interest' },
 ];
 
 export const ROUND_TYPE_VALUES = [
@@ -841,6 +841,13 @@ export const COMPANY_LAUNCH = {
     rule: 'optional',
     placeHolder: 'Enter here',
   },
+  investmentConfirmationTemplateName: {
+    value: '',
+    label: 'Investment Confirmation Template',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
   isin: {
     value: '',
     label: 'GoldStar ISIN',
@@ -871,6 +878,33 @@ export const COMPANY_LAUNCH = {
   sfAccountNumber: {
     value: '',
     label: 'GoldStar Sink Fund Account Number',
+    error: undefined,
+    rule: 'optional',
+    objRefOutput: 'goldstar',
+    objRef: 'goldstar',
+    placeHolder: 'Enter here',
+  },
+  esAccountNumberRegD: {
+    value: '',
+    label: 'Reg D GoldStar Escrow Account Number',
+    error: undefined,
+    rule: 'optional',
+    objRefOutput: 'goldstar',
+    objRef: 'goldstar',
+    placeHolder: 'Enter here',
+  },
+  isinRegD: {
+    value: '',
+    label: 'Reg D GoldStar ISIN',
+    error: undefined,
+    rule: 'optional',
+    objRefOutput: 'goldstar',
+    objRef: 'goldstar',
+    placeHolder: 'Enter here',
+  },
+  sfAccountNumberRegD: {
+    value: '',
+    label: 'Reg D GoldStar Sink Account Number',
     error: undefined,
     rule: 'optional',
     objRefOutput: 'goldstar',
@@ -1153,6 +1187,7 @@ export const LEADERSHIP = {
       placeHolder: '(123) 456-7890',
       objRef: 'phone',
       objRefOutput2: 'phone',
+      fieldType: 'string',
       customErrors: {
         required: '* required.',
       },
@@ -1243,6 +1278,7 @@ export const LEADERSHIP = {
       placeHolder: 'e.g. 10001',
       objRef: 'address',
       objRefOutput2: 'address',
+      fieldType: 'string',
     },
     dlLicenseNumber: {
       value: '',
@@ -1427,7 +1463,6 @@ export const GENERAL = {
     error: undefined,
     rule: 'optional',
     placeHolder: 'e.g. http://simplebits.com',
-    tooltip: 'Enter Issuer’s Website',
   },
   monthLaunch: {
     label: 'Month of Offering Launch',
@@ -1456,7 +1491,18 @@ export const GENERAL = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
+    fieldType: 'string',
     tooltip: 'Including owners/officers of the company',
+  },
+  taxedAs: {
+    label: 'Taxed As',
+    value: 'CORPORATION',
+    error: undefined,
+    rule: 'string',
+    values: [
+      { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
+      { key: 'Partnership', value: 'PARTNERSHIP', text: 'Partnership' },
+    ],
   },
   businessStreet: {
     label: 'Business Street Address',
@@ -1484,6 +1530,7 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   number: {
@@ -1491,6 +1538,7 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
     objRef: 'legal.general.businessPhone',
     objType: 'businessPhone',
@@ -1519,6 +1567,7 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   accountNumber: {
@@ -1526,6 +1575,7 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   businessCapitalization: {
@@ -1623,7 +1673,6 @@ export const GENERAL = {
       error: undefined,
       rule: 'string',
       placeHolder: 'Type your text here...',
-      tooltip: (<span>See this link <a href="https://www.sec.gov/smallbusiness/exemptofferings" target="_blank" rel="noopener noreferrer">https://www.sec.gov/smallbusiness/exemptofferings</a> for more information from the SEC</span>),
     },
     securitiesOffered: {
       label: 'Securities Offered',
@@ -1667,6 +1716,7 @@ export const GENERAL = {
       value: null,
       error: undefined,
       rule: 'numeric',
+      fieldType: 'float',
       placeHolder: '10.0%',
     },
     maturityDate: {
@@ -2480,7 +2530,7 @@ export const ADD_NEW_TIER = {
     value: '',
     error: undefined,
     rule: 'numeric|required_if:isEarlyBirds,EARLY_BIRDS',
-    placeHolder: 'e.g. Invitation to the Launch Party',
+    placeHolder: '$ amount',
   },
   earlyBirdQuantity: {
     label: 'Quantity of Early Birds available',
@@ -2684,6 +2734,45 @@ export const ADMIN_DOCUMENTATION = {
     stepName: 'DOCUMENTS_LEGAL_PROXY_AGREEMENT',
     lastModifiedDate: '',
   },
+  specialPurposeEntityAgreement: {
+    value: '',
+    label: 'LLC Agreement - Special Purpose Entity Agreement',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    stepName: 'DOCUMENTS_LEGAL_SPECIAL_PURPOSE_ENTITY_AGREEMENT',
+    lastModifiedDate: '',
+  },
+  llcAgreement: {
+    value: '',
+    label: 'LLC Agreement',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    stepName: 'DOCUMENTS_LEGAL_LLC_AGREEMENT',
+    lastModifiedDate: '',
+  },
+  subscriptionAgreement: {
+    value: '',
+    label: 'Subscription Agreement',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    stepName: 'DOCUMENTS_LEGAL_SUBSCRIPTION_AGREEMENT',
+    lastModifiedDate: '',
+  },
   disclosure: {
     value: '',
     label: 'Disclosure Statement',
@@ -2734,6 +2823,19 @@ export const ADMIN_DOCUMENTATION = {
     fileData: '',
     objType: 'FileObjectType',
     stepName: 'DOCUMENTS_LEGAL_PROMISSORY_NOTE',
+    lastModifiedDate: '',
+  },
+  safeNote: {
+    value: '',
+    label: 'Safe Note',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    stepName: 'DOCUMENTS_LEGAL_SAFE_NOTE',
     lastModifiedDate: '',
   },
 };
@@ -2807,19 +2909,39 @@ export const POC_DETAILS = {
   },
 };
 
-const LIMIT = {
-  value: '',
-  label: 'Limit',
-  error: undefined,
-  rule: 'required',
+const OFFERING_CLOSE_COMMON = {
+  LIMIT: {
+    value: '',
+    label: 'Limit',
+    error: undefined,
+    rule: 'required',
+  },
+  SERVICE: {
+    value: 'PROCESS_FACTORY',
+    label: 'Service',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Choose here',
+  },
+  concurrency: {
+    value: 1,
+    label: 'Concurrency',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Choose here',
+  },
 };
 
 export const OFFERING_CLOSE_2 = {
-  queueLimit: { ...LIMIT },
+  queueLimit: { ...OFFERING_CLOSE_COMMON.LIMIT },
+  service: { ...OFFERING_CLOSE_COMMON.SERVICE },
+  concurrency: { ...OFFERING_CLOSE_COMMON.concurrency },
 };
 
 export const OFFERING_CLOSE_3 = {
-  queueLimit: { ...LIMIT },
+  queueLimit: { ...OFFERING_CLOSE_COMMON.LIMIT },
+  service: { ...OFFERING_CLOSE_COMMON.SERVICE },
+  concurrency: { ...OFFERING_CLOSE_COMMON.concurrency },
   notePurchaseDate: {
     value: '',
     label: 'Note Purchase Date',
@@ -2863,6 +2985,7 @@ export const OFFERING_CLOSE_1 = {
     objRefOutput: 'closureSummary.keyTerms',
     objRef: 'closureSummary.keyTerms',
     rule: 'optional',
+    fieldType: 'string',
     placeHolder: 'Up to $',
   },
   investorFee: {
@@ -2872,6 +2995,7 @@ export const OFFERING_CLOSE_1 = {
     objRefOutput: 'closureSummary.keyTerms',
     objRef: 'closureSummary.keyTerms',
     rule: 'optional',
+    fieldType: 'string',
     placeHolder: 'Up to $',
   },
   maturityDate: {
@@ -2908,6 +3032,7 @@ export const OFFERING_CLOSE_1 = {
     objRef: 'closureSummary.keyTerms',
     error: undefined,
     rule: 'optional',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   multiple: {
@@ -2935,6 +3060,7 @@ export const OFFERING_CLOSE_1 = {
     objRef: 'closureSummary.keyTerms',
     error: undefined,
     rule: 'optional',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   nsFee: {
@@ -2985,5 +3111,49 @@ export const OFFERING_CLOSE_1 = {
 };
 
 export const OFFERING_CLOSE_4 = {
-  queueLimit: { ...LIMIT },
+  queueLimit: { ...OFFERING_CLOSE_COMMON.LIMIT },
+  service: { ...OFFERING_CLOSE_COMMON.SERVICE },
+  concurrency: { ...OFFERING_CLOSE_COMMON.concurrency },
+};
+
+export const OFFERING_CLOSE_SERVICE_OPTIONS = [
+  { key: 'PROCESS_FACTORY', value: 'PROCESS_FACTORY', text: 'Process Factory' },
+  { key: 'CLOSE_PROCESSOR', value: 'CLOSE_PROCESSOR', text: 'Close Processor' },
+];
+
+export const OFFERING_CLOSE_COUNCURRENCY_OPTIONS = [
+  { key: 1, value: 1, text: '1' },
+  { key: 2, value: 2, text: '2' },
+  { key: 3, value: 3, text: '3' },
+  { key: 4, value: 4, text: '4' },
+  { key: 5, value: 5, text: '5' },
+  { key: 6, value: 6, text: '6' },
+  { key: 7, value: 7, text: '7' },
+  { key: 8, value: 8, text: '8' },
+  { key: 9, value: 9, text: '9' },
+  { key: 10, value: 10, text: '10' },
+];
+
+export const OFFERING_CLOSE_EXPORT_ENVELOPES = {
+  fileSubstitution: [
+    {
+      replacePage: {
+        label: 'Page in envelope to replace',
+        value: '',
+        error: undefined,
+        rule: 'optional',
+        placeHolder: 'Enter here',
+      },
+      upload: {
+        value: '',
+        label: '',
+        error: undefined,
+        rule: 'required',
+        showLoader: false,
+        preSignedUrl: '',
+        fileId: '',
+        fileData: '',
+        objType: 'FileObjectType',
+      },
+    }],
 };

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const allTransactions = gql`
-  query getAccountTransactions($userId: String!, $accountId: String!, $transactionDirection: [TransactionDirectionEnum], $dateFilterStart: String, $dateFilterStop: String, $offset: Int, $orderBy: OrderStatusEnum, $limit: Int) {
+  query getAccountTransactions($userId: String, $accountId: String!, $transactionDirection: [TransactionDirectionEnum], $dateFilterStart: String, $dateFilterStop: String, $offset: Int, $orderBy: OrderStatusEnum, $limit: Int) {
     getAccountTransactions(
       userId: $userId,
       accountId: $accountId,
@@ -25,45 +25,20 @@ export const allTransactions = gql`
   }
 `;
 
-export const CreateTransaction = gql`
-mutation CreateTransaction($transactionType: String!, $description: String!, $amount: Float!){
-    createTransaction(
-      transactionType: $transactionType,
-      description: $description,
-      amount:$amount
-    ) {
-      id
-      createdAt
-      amount,
-      description
-      transactionType
-    }
-  } 
-`;
-
 export const addFundMutation = gql`
-  mutation _addFunds($userId: String, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int, $sendInvestorNotification: Boolean) {
+  mutation addFunds($userId: String, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int, $sendInvestorNotification: Boolean) {
     addFunds(userId: $userId, amount: $amount, accountId: $accountId, description: $description, agreementId: $agreementId, sendInvestorNotification: $sendInvestorNotification)
   }
 `;
 
-export const requestOptForTransaction = gql`
-  mutation _requestOtp($scopeType: mfaEnum!, $method: PhoneVerificationMethodsEnum!) {
-    requestOtp(scopeType: $scopeType, method: $method) {
-      requestId
-      phoneNumber
-    }
-  }
-`;
-
 export const withdrawFundMutation = gql`
-  mutation _withdrawFunds($userId: String, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int, $sendInvestorNotification: Boolean) {
+  mutation withdrawFunds($userId: String, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int, $sendInvestorNotification: Boolean) {
     withdrawFunds(userId: $userId, amount: $amount, accountId: $accountId, description: $description, agreementId: $agreementId, sendInvestorNotification: $sendInvestorNotification)
   }
 `;
 
 export const paymentHistory = gql`
-  query _getPaymentHistory($investmentId: Int!, $offeringId: String!){
+  query getPaymentHistory($investmentId: Int!, $offeringId: String!){
     getPaymentHistory(
       investmentId: $investmentId,
       offeringId: $offeringId
@@ -82,7 +57,7 @@ export const paymentHistory = gql`
 `;
 
 export const getInvestmentsByUserIdAndOfferingId = gql`
-  query getInvestmentsByUserIdAndOfferingId($offeringId: String!, $userId: String!) {
+  query getInvestmentsByUserIdAndOfferingId($offeringId: String!, $userId: String) {
     getInvestmentsByUserIdAndOfferingId(offeringId: $offeringId, userId: $userId) {
       investmentId
       accountId
@@ -95,9 +70,9 @@ export const getInvestmentsByUserIdAndOfferingId = gql`
   }
 `;
 
-export const getTransactions = gql`
-query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $direction: TransactionDirectionEnum, $limit: Int, $minAmount: Int, $maxAmount: Int, $dateFilterStart: String, $dateFilterStop: String) {
-  getTransactions(
+export const adminGetTransactions = gql`
+query adminGetTransactions($status: [TransactionStatusEnum], $offset: Int, $direction: TransactionDirectionEnum, $limit: Int, $minAmount: Int, $maxAmount: Int, $dateFilterStart: String, $dateFilterStop: String) {
+  adminGetTransactions(
     status: $status, 
     offset: $offset, 
     direction: $direction,
@@ -149,31 +124,32 @@ query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $directio
 `;
 
 
-export const transferRequestAdminApprove = gql`
-  mutation transferRequestAdminApprove($id: Int!){
-    transferRequestAdminApprove(
+export const adminTransferRequestApprove = gql`
+  mutation adminTransferRequestApprove($id: Int!){
+    adminTransferRequestApprove(
     id: $id
     )
   }`;
 
-export const transferRequestAdminVerified = gql`
-  mutation transferRequestAdminVerified($id: Int!){
-    transferRequestAdminVerified(
+export const adminTransferRequestVerified = gql`
+  mutation adminTransferRequestVerified($id: Int!){
+    adminTransferRequestVerified(
     id: $id
     )
   }`;
 
-export const declineTransferRequest = gql`
-  mutation declineTransferRequest($id: Int!, $reason: String){
-    declineTransferRequest(
+export const adminDeclineTransferRequest = gql`
+  mutation adminDeclineTransferRequest($id: Int!, $reason: String, $cancelInvestment: Boolean){
+    adminDeclineTransferRequest(
     id: $id
     reason: $reason
+    cancelInvestment: $cancelInvestment
     )
   }`;
 
-export const transferRequestAdminSync = gql`
-mutation transferRequestAdminSync($id: Int!){
-  transferRequestAdminSync(
+export const adminTransferRequestSync = gql`
+mutation adminTransferRequestSync($id: Int!){
+  adminTransferRequestSync(
   id: $id
   )
 }`;

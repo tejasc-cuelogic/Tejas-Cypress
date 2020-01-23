@@ -17,83 +17,92 @@ const actions = {
 };
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({
-  offering, handleAction, stage, refUrl,
+  offering, handleAction, stage,
 }) => (
-  <div className="row-wrap striped-table">
-    <div className="balance first-column">
-      <DragHandle />
-      <Link to={`${refUrl}/edit/${offering.id}`}>
-        <b>
-          {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
-            ? offering.keyTerms.shorthandBusinessName : (
-              (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
-            ))}
-        </b>
-        <br />
-        {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`} {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
-      </Link>
-    </div>
-    <div className="balance width-130">
-      {offering && offering.stage
-        ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 0
-          ? STAGES.PROCESSING.label
-          : stage === 'live' && get(offering, 'closureSummary.processingDate') && ((includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)
-            ? STAGES.LOCK.label
-            : STAGES[offering.stage].label
-        : STAGES[offering.stage].label
-      }
-    </div>
-    <div className="balance width-250">
-      Create: {get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}<br />
-      Launched: {get(offering, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), true, false, false)} /> : 'N/A'}<br />
-      Closed: {get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false)} /> : 'N/A'}
-    </div>
-    <div className="balance" onClick={() => handleAction('Edit', offering.id)}>
-      <p className="overflow-text">
-        {offering.issuerDetails
-          ? (
-            <>
-              <b>
-                {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
-              </b>
-              <br />
-              {get(offering, 'issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
-              <br />
-              {get(offering, 'issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'issuerDetails.phone.number')) : ''}
-            </>
-          )
-          : <b>N/A</b>
+    <div className="row-wrap striped-table">
+      <div className="balance first-column">
+        <DragHandle />
+        <Link to={`/dashboard/offering/${offering.offeringSlug}`}>
+          <b>
+            {((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
+              ? offering.keyTerms.shorthandBusinessName : (
+                (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
+              ))}
+          </b>
+          <br />
+          {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`} {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
+        </Link>
+      </div>
+      <div className="balance width-130">
+        {offering && offering.stage
+          ? stage === 'live' && get(offering, 'closureSummary.processingDate') && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 0
+            ? STAGES.PROCESSING.label
+            : stage === 'live' && get(offering, 'closureSummary.processingDate') && ((includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)
+              ? STAGES.LOCK.label
+              : STAGES[offering.stage].label
+          : STAGES[offering.stage].label
         }
-      </p>
+      </div>
+      <div className="balance width-250">
+        Create: {get(offering, 'created.date') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'created.date'), true, false, false)} /> : 'N/A'}<br />
+        Launched: {get(offering, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.launchDate'), true, false, false)} /> : 'N/A'}<br />
+        {stage === 'live' ? 'Days till close' : 'Closed'}: {stage === 'live' ? (offering.closureSummary && offering.closureSummary.processingDate
+          ? DataFormatter.diffDays(get(offering, 'closureSummary.processingDate'), false, true) < 0 || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value === 0 ? get(offering, 'closureSummary.processingDate') : (includes(['Minute Left', 'Minutes Left'], DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label) && DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value > 0) || DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value <= 48 ? `${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).value} ${DataFormatter.getDateDifferenceInHoursOrMinutes(get(offering, 'closureSummary.processingDate'), true, true).label}` : DataFormatter.diffInDaysHoursMin(get(offering, 'closureSummary.processingDate')).diffText : 'N/A')
+          : (get(offering, 'closureSummary.hardCloseDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false)} /> : 'N/A')}
+      </div>
+      <div className="balance" onClick={() => handleAction('Edit', offering)}>
+        <p className="overflow-text">
+          {offering.issuerDetails
+            ? (
+              <>
+                <b>
+                  {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
+                </b>
+                <br />
+                {get(offering, 'issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
+                <br />
+                {get(offering, 'issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'issuerDetails.phone.number')) : ''}
+              </>
+            )
+            : <b>N/A</b>
+          }
+        </p>
+      </div>
+      <div className="action right-align width-70">
+        <Button.Group>
+          {Object.keys(actions).map(action => (
+            <Button icon className="link-button">
+              <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => handleAction(actions[action].label, offering, !offering.isAvailablePublicly)} />
+            </Button>
+          ))}
+          {['live'].includes(stage)
+            && (
+              <Button icon className="link-button">
+                <Icon className="ns-trash" onClick={() => handleAction('Delete', offering, !offering.isAvailablePublicly)} />
+              </Button>
+            )
+          }
+        </Button.Group>
+      </div>
     </div>
-    <div className="action right-align width-70">
-      <Button.Group>
-        {Object.keys(actions).map(action => (
-          <Button icon className="link-button">
-            <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
-          </Button>
-        ))}
-      </Button.Group>
-    </div>
-  </div>
 ));
 const SortableList = SortableContainer(({
-  allOfferingsList, handleAction, stage, refUrl,
+  allOfferingsList, handleAction, stage, listIndex,
 }) => (
-  <div className="tbody">
-    {allOfferingsList.map((offering, index) => (
-      <SortableItem
-        // eslint-disable-next-line react/no-array-index-key
-        key={`item-${index}`}
-        docIndx={index}
-        offering={offering}
-        handleAction={handleAction}
-        index={index}
-        stage={stage}
-        refUrl={refUrl}
-      />
-    ))}
-  </div>
+    <div className="tbody">
+      {allOfferingsList.map((offering, index) => (
+        <SortableItem
+          // eslint-disable-next-line react/no-array-index-key
+          key={`item-${index}`}
+          docIndx={index}
+          offering={offering}
+          handleAction={handleAction}
+          index={index}
+          stage={stage}
+          listIndex={listIndex}
+        />
+      ))}
+    </div>
 ));
 @inject('uiStore', 'offeringsStore', 'offeringCreationStore')
 @withRouter
@@ -111,23 +120,24 @@ export default class DraggableListing extends Component {
 
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { allOfferingsSorted, setOrderForOfferings } = this.props.offeringsStore;
+    const { allLiveOfferingsList, stage } = this.props;
+    const offeringList = stage === 'live' && allLiveOfferingsList ? allLiveOfferingsList : allOfferingsSorted;
+    const isArrayNeedToMerge = !!(stage === 'live' && allLiveOfferingsList);
     if (oldIndex !== newIndex) {
-      setOrderForOfferings(arrayMove(allOfferingsSorted, oldIndex, newIndex), this.props.stage);
+      setOrderForOfferings(arrayMove(offeringList, oldIndex, newIndex), this.props.stage, isArrayNeedToMerge, this.props.offeringListIndex);
     }
   }
 
-  handleAction = (action, offeringId, isPublished = false) => {
+  handleAction = (action, offering, isPublished = false) => {
     if (action === 'Delete') {
-      this.props.uiStore.setConfirmBox(action, offeringId);
+      this.props.uiStore.setConfirmBox(action, offering.id);
     } else if (action === 'Edit') {
-      this.props.history.push(`${this.props.match.url}/edit/${offeringId}`);
+      this.props.history.push(`/dashboard/offering/${offering.offeringSlug}`);
     } else if (action === 'Publish') {
       this.setState({ isPublic: isPublished });
-      this.props.uiStore.setConfirmBox(action, offeringId, isPublished);
+      this.props.uiStore.setConfirmBox(action, offering.id, isPublished);
     }
   }
-
-  paginate = params => this.props.offeringsStore.pageRequest(params);
 
   handleDeleteCancel = () => {
     this.props.uiStore.setConfirmBox('');
@@ -140,14 +150,18 @@ export default class DraggableListing extends Component {
   }
 
   handleDeleteOffering = () => {
-    const { offeringsStore, uiStore } = this.props;
-    offeringsStore.deleteOffering(uiStore.confirmBox.refId);
+    const { offeringsStore, uiStore, stage, listIndex } = this.props;
+    if (stage && stage === 'live') {
+      offeringsStore.deleteOffering(uiStore.confirmBox.refId, listIndex);
+    } else {
+      offeringsStore.deleteOffering(uiStore.confirmBox.refId);
+    }
     this.props.uiStore.setConfirmBox('');
   }
 
   render() {
     const {
-      uiStore, offeringsStore, stage,
+      uiStore, offeringsStore, stage, allLiveOfferingsList, offeringListIndex,
     } = this.props;
     const { allOfferingsSorted, loading } = offeringsStore;
     const { confirmBox, inProgress } = uiStore;
@@ -166,14 +180,14 @@ export default class DraggableListing extends Component {
               <div className="action right-align width-70" />
             </div>
             <SortableList
-              allOfferingsList={allOfferingsSorted}
+              allOfferingsList={stage === 'live' && allLiveOfferingsList ? allLiveOfferingsList : allOfferingsSorted}
               pressDelay={100}
               handleAction={this.handleAction}
               onSortEnd={e => this.onSortEnd(e)}
               stage={stage}
               lockAxis="y"
-              refUrl={this.props.match.url}
               useDragHandle
+              listIndex={offeringListIndex}
             />
           </div>
         </div>

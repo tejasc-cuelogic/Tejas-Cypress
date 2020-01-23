@@ -11,7 +11,7 @@ import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
-import { applicationDeclinedByIssuer, getBusinessApplications, generatePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
+import { applicationDeclinedByIssuer, getBusinessApplications, adminGeneratePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, adminUpdateApplicationStatusAndReview, adminBusinessApplicationsDetails, getBusinessApplicationOffers } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore, userStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { allOfferingsCompact } from '../../../queries/offerings/manage';
@@ -425,10 +425,10 @@ export class BusinessAppReviewStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: updateApplicationStatusAndReview,
+          mutation: adminUpdateApplicationStatusAndReview,
           variables: payload,
           refetchQueries:
-              [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
+              [{ query: adminBusinessApplicationsDetails, variables: reFetchPayLoad }],
         })
         .then((result) => {
           Helper.toast('Application status updated successfully.', 'success');
@@ -525,10 +525,10 @@ export class BusinessAppReviewStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: updateApplicationStatusAndReview,
+          mutation: adminUpdateApplicationStatusAndReview,
           variables: payload,
           refetchQueries:
-            [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
+            [{ query: adminBusinessApplicationsDetails, variables: reFetchPayLoad }],
         })
         .then((result) => {
           this.removeUploadedFiles();
@@ -666,7 +666,6 @@ export class BusinessAppReviewStore {
     uiStore.setProgress();
     let payLoad = {
       applicationId: offerData.applicationId,
-      issuerId: offerData.userId,
       selectedOffer: offer,
       callbackUrl: `${window.location.origin}/secure-gateway`,
     };
@@ -731,7 +730,6 @@ export class BusinessAppReviewStore {
       query: getPortalAgreementStatus,
       variables: {
         applicationId: offerData.applicationId,
-        issuerId: offerData.userId,
       },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
@@ -747,7 +745,7 @@ export class BusinessAppReviewStore {
   });
 
   @action
-  generatePortalAgreement = () => {
+  adminGeneratePortalAgreement = () => {
     this.setFieldvalue('inProgress', 'GENERATE_PA');
     this.saveReviewForms('OFFERS_FRM', '', true, false).then(() => {
       const { businessApplicationDetailsAdmin } = businessAppStore;
@@ -761,13 +759,13 @@ export class BusinessAppReviewStore {
       return new Promise((resolve, reject) => {
         client
           .mutate({
-            mutation: generatePortalAgreement,
+            mutation: adminGeneratePortalAgreement,
             variables: {
               applicationId,
               userId,
             },
             refetchQueries:
-              [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
+              [{ query: adminBusinessApplicationsDetails, variables: reFetchPayLoad }],
           })
           .then((result) => {
             Helper.toast('Portal agreement generated successfully.', 'success');

@@ -13,8 +13,9 @@ const NO_PERMISSION_MSG = `Please contact
   to request a transfer of your IRA funds.`;
 
 const NO_LINKED_BANK_MSG = `No Linked Bank available to Transfer Fund, go to
-  <a href='/app/account-details/ira/bank-accounts'>Bank Accounts<a>`;
+  <a href='/dashboard/account-details/ira/bank-accounts'>Bank Accounts<a>`;
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('educationStore', 'transactionStore', 'userDetailsStore', 'uiStore', 'accountStore')
 @withRouter
 @observer
@@ -31,7 +32,7 @@ export default class TransferFunds extends Component {
   }
 
   render() {
-    const { userDetails, isAccountFrozen } = this.props.userDetailsStore;
+    const { userDetails, isAccountFrozen, isAccountHardFrozen } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     const { cash, cashAvailable } = this.props.transactionStore;
     const { setFieldValue, showAccountFrozenModal } = this.props.accountStore;
@@ -48,18 +49,20 @@ export default class TransferFunds extends Component {
     });
     return (
       <div>
-        { !isEmpty(linkedBank) && accountType !== 'ira'
+        {!isEmpty(linkedBank) && accountType !== 'ira'
           ? (
             <>
-              <Header as="h4">Transfer funds</Header>
+              {!isMobile ? <Header as="h4">Transfer Funds</Header> : ''}
               <Grid>
                 <Grid.Row>
                   <Grid.Column widescreen={7} largeScreen={10} computer={10} tablet={16} mobile={16}>
                     <AvailableCashTransfer
                       match={this.props.match}
                       isAccountFrozen={isAccountFrozen}
+                      isAccountHardFrozen={isAccountHardFrozen}
                       cash={cashAmount || '0.00'}
                       setFieldValue={setFieldValue}
+                      account={accountType}
                       showAccountFrozenModal={showAccountFrozenModal}
                     />
                   </Grid.Column>
@@ -68,18 +71,18 @@ export default class TransferFunds extends Component {
             </>
           ) : accountType === 'ira'
             ? (
-<section className="center-align">
-              <h4 style={{ color: '#31333d7d' }}>
-                <HtmlEditor readOnly content={NO_PERMISSION_MSG} />
-              </h4>
-            </section>
+              <section className="center-align">
+                <h4 style={{ color: '#31333d7d' }}>
+                  <HtmlEditor readOnly content={NO_PERMISSION_MSG} />
+                </h4>
+              </section>
             )
             : (
-<section className="center-align">
-              <h4 style={{ color: '#31333d7d' }}>
-                <HtmlEditor readOnly content={NO_LINKED_BANK_MSG} />
-              </h4>
-            </section>
+              <section className="center-align">
+                <h4 style={{ color: '#31333d7d' }}>
+                  <HtmlEditor readOnly content={NO_LINKED_BANK_MSG} />
+                </h4>
+              </section>
             )
         }
       </div>

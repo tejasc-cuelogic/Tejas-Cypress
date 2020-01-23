@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Icon, Label } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../../../../theme/form';
 import ButtonGroupType2 from '../ButtonGroupType2';
 import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
 import { DataFormatter } from '../../../../../../helper';
+import { CAMPAIGN_KEYTERMS_REGULATION_ENUM } from '../../../../../../constants/offering';
 
 @inject('offeringCreationStore', 'userStore', 'offeringsStore', 'commonStore')
 @observer
@@ -39,6 +41,7 @@ export default class OfferingLaunch extends Component {
   launch = () => {
     const {
       updateOfferingMutation,
+      currentOfferingSlug,
       currentOfferingId,
     } = this.props.offeringCreationStore;
     new Promise((res, rej) => {
@@ -48,7 +51,7 @@ export default class OfferingLaunch extends Component {
       );
     })
       .then(() => {
-        this.props.history.push(`/app/offerings/live/edit/${currentOfferingId}/offering-creation/offering/launch`);
+        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/offering-creation/offering/launch`);
       });
   }
 
@@ -71,6 +74,9 @@ export default class OfferingLaunch extends Component {
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     const legalDocs = offer && offer.legal && offer.legal.documentation
     && offer.legal.documentation.admin;
+    const regulation = get(offer, 'regulation');
+    let goldStartFields = ['contactId', 'isin', 'esAccountNumber', 'sfAccountNumber'];
+    goldStartFields = regulation === CAMPAIGN_KEYTERMS_REGULATION_ENUM.BD_CF_506C ? [...goldStartFields, 'esAccountNumberRegD', 'isinRegD', 'sfAccountNumberRegD'] : goldStartFields;
     return (
       <Form>
         <Header as="h4">Launch Timeline</Header>
@@ -116,8 +122,8 @@ export default class OfferingLaunch extends Component {
         </Form.Group>
         <Divider section />
         <Header as="h4">GoldStar</Header>
-        <Form.Group widths="equal">
-          {['isin', 'contactId', 'esAccountNumber', 'sfAccountNumber'].map(field => (
+        <Form.Group widths={goldStartFields.length === 4 ? 'equal' : 4}>
+          {goldStartFields.map(field => (
             <FormInput
               displayMode={isReadonly}
               key={field}
@@ -131,12 +137,14 @@ export default class OfferingLaunch extends Component {
           }
         </Form.Group>
         <Header as="h4">Edgar Link</Header>
-        <FormInput
-          displayMode={isReadonly}
-          name="edgarLink"
-          fielddata={COMPANY_LAUNCH_FRM.fields.edgarLink}
-          changed={(e, result) => formChange(e, result, formName)}
-        />
+        {['edgarLink', 'investmentConfirmationTemplateName'].map(field => (
+          <FormInput
+            displayMode={isReadonly}
+            name={field}
+            fielddata={COMPANY_LAUNCH_FRM.fields[field]}
+            changed={(e, result) => formChange(e, result, formName)}
+          />
+        ))}
         <Divider hidden />
         <ButtonGroupType2
           submitted={submitted}

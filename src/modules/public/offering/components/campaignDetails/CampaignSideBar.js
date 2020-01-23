@@ -28,9 +28,11 @@ export default class CampaignSideBar extends Component {
     const {
       isClosed, isCreation, isInProcessing, collected, minFlagStatus, isBonusReward,
       minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, diffForProcessing,
-      earlyBird, isEarlyBirdRewards, bonusRewards, countDown,
+      earlyBird, isEarlyBirdRewards, bonusRewards, countDown, isInvestedInOffering, dataRooms,
     } = campaignStatus;
     const isCampaignLayout = newLayout;
+    const showCounter = (!isClosed && diffForProcessing.value > 0 && !campaignStatus.isFund) || (!campaignStatus.isFund) || (earlyBird && earlyBird.available > 0
+      && isEarlyBirdRewards && !isClosed && bonusRewards);
     return (
       <>
         <div className={`${campaignSideBarShow ? '' : 'collapse'} ${isMobile ? 'mobile-campain-header' : 'sticky-sidebar'} ${isCampaignLayout ? 'offering-layout-menu' : ''} offering-side-menu `}>
@@ -74,74 +76,128 @@ export default class CampaignSideBar extends Component {
                   )
                 }
               </Statistic>
-              {!isClosed
-                ? <Progress className={`${(newLayout && isMobile) ? 'mt-40' : ''} mb-0`} percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
-                : <Progress className={`${(newLayout && isMobile) ? 'mt-40' : ''} mb-0`} percent="100" size="tiny" color="green" />
+              {!campaignStatus.isFund
+                ? (
+                  !isClosed
+                    ? <Progress className={`${(newLayout && isMobile) ? 'mt-40' : ''} mb-0`} percent={minFlagStatus ? percent : 0} size="tiny" color="green"><span className="sub-progress" style={{ width: `${minFlagStatus ? percentBefore : percent}%` }} /></Progress>
+                    : <Progress className={`${(newLayout && isMobile) ? 'mt-40' : ''} mb-0`} percent="100" size="tiny" color="green" />
+                ) : null
               }
-              <p className={newLayout ? 'mt-10' : ''}>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
-                {isMobile
-                  ? (<PopUpModal label={minFlagStatus ? 'Max target' : 'Min target'} content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account." />)
-                  : (
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                      position="top center"
-                    />
-                  )
-                }
-              </p>
-              <div className="offer-stats">
-                <Statistic.Group>
-                  {!isClosed && diffForProcessing.value > 0
-                    && (
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
-                        <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
-                      </Statistic>
-                    )
-                  }
-                  <Statistic size="mini" className="basic">
-                    <Statistic.Value>
-                      {get(campaign, 'closureSummary.totalInvestorCount') || 0}
-                    </Statistic.Value>
-                    <Statistic.Label>Investors</Statistic.Label>
-                  </Statistic>
-                  {earlyBird && earlyBird.available > 0
-                    && isEarlyBirdRewards && !isClosed
-                    && bonusRewards
-                    ? (
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Value>
-                          {get(campaign, 'earlyBird.available') || 0}
-                        </Statistic.Value>
-                        <Statistic.Label>Early Bird Rewards</Statistic.Label>
-                      </Statistic>
-                    ) : ''
-                  }
-                </Statistic.Group>
-              </div>
-              {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
-                && (
-                  <p className="raise-type mt-20 mb-0">
-                    <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
+              {!campaignStatus.isFund
+                ? (
+                  <p className={newLayout ? 'mt-10' : ''}>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                     {isMobile
-                      ? (<PopUpModal label={CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} content={(<span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)} />)
+                      ? (<PopUpModal label={minFlagStatus ? 'Max target' : 'Min target'} content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account." />)
                       : (
                         <Popup
-                          hoverable
                           trigger={<Icon name="help circle" color="green" />}
-                          content={(<span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
+                          content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
                           position="top center"
                         />
                       )
                     }
                   </p>
+                ) : (
+                  <>
+                    <p className={`${newLayout ? 'mt-10' : ''} mr-10`}>
+                      {Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
+                      <Popup
+                        trigger={<Icon name="help circle" color="green" />}
+                        content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                        position="top center"
+                      />
+                    </p>
+                    <p className={`${newLayout ? 'mt-10' : ''} mr-10`}>
+                      {Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
+                      <Popup
+                        trigger={<Icon name="help circle" color="green" />}
+                        content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                        position="top center"
+                      />
+                    </p>
+                  </>
+                )}
+              {showCounter
+                && (
+                  <div className="offer-stats">
+                    <Statistic.Group>
+                      {!campaignStatus.isFund
+                        ? (
+                          <>
+                            {!isClosed && diffForProcessing.value > 0
+                              && (
+                                <Statistic size="mini" className="basic">
+                                  <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
+                                  <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
+                                </Statistic>
+                              )
+                            }
+                            <Statistic size="mini" className="basic">
+                              <Statistic.Value>
+                                {get(campaign, 'closureSummary.totalInvestorCount') || 0}
+                              </Statistic.Value>
+                              <Statistic.Label>Investors</Statistic.Label>
+                            </Statistic>
+                          </>
+                        )
+                        : null
+                      }
+                      {earlyBird && earlyBird.available > 0
+                        && isEarlyBirdRewards && !isClosed
+                        && bonusRewards
+                        ? (
+                          <Statistic size="mini" className="basic">
+                            <Statistic.Value>
+                              {get(campaign, 'earlyBird.available') || 0}
+                            </Statistic.Value>
+                            <Statistic.Label>Early Bird Rewards</Statistic.Label>
+                          </Statistic>
+                        ) : ''
+                      }
+                    </Statistic.Group>
+                  </div>
+                )}
+              {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
+                && (
+                  <p className="raise-type mt-20 mb-0">
+                    {['REAL_ESTATE'].includes(offerStructure) ? 'Commercial Real Estate' : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
+                  </p>
+                )
+              }
+              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
+                && (
+                  <p className="mb-0">
+                    Asset Type: Hotel Development
+                        </p>
+                )
+              }
+              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE && dataRooms > 0
+                && (
+                  <p className="mb-0">
+                    Targeted IRR: <Link to={`${this.props.match.url}#data-room`}> View in Data Room</Link>
+                  </p>
+                )
+              }
+              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE
+                && (
+                  <>
+                    {get(campaign, 'keyTerms.valuationCap') && (
+                      <p className="mb-0">
+                        Valuation Cap: {get(campaign, 'keyTerms.valuationCap')}
+                      </p>
+                    )}
+                    {get(campaign, 'keyTerms.discount') && (
+                      <p className="mb-0">
+                        Discount: {get(campaign, 'keyTerms.discount')}
+                      </p>
+                    )}
+                  </>
                 )
               }
               {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
                 && (
                   <p className="mb-0">
-                    Interest Rate : {get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-'}
+                    Interest Rate: {get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-'}
                   </p>
                 )
               }
@@ -152,13 +208,13 @@ export default class CampaignSideBar extends Component {
                   </p>
                 )
               }
-              {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
+              {[CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE, CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE].includes(offerStructure)
                 ? (
                   <p className="mb-0">
                     Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
                 </p>
                 )
-                : (
+                : offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ? (
                   <>
                     <p className="mb-0">
                       Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : '-'}
@@ -168,6 +224,7 @@ export default class CampaignSideBar extends Component {
                     </p>
                   </>
                 )
+                  : null
               }
               <Divider hidden />
               {isCreation
@@ -184,7 +241,7 @@ export default class CampaignSideBar extends Component {
                         onClick={this.handleInvestNowClick}
                         fluid
                       >
-                        {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}
+                        {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : isInvestedInOffering ? 'Change Investment' : 'Invest Now'}`}
                       </Button>
                       <p className="mt-10">
                         {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment

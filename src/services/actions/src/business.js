@@ -3,7 +3,8 @@ import moment from 'moment';
 import shortid from 'shortid';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../api/gqlApi';
-import { getXmlDetails,
+import {
+  adminBusinessFilingSubmission,
   filerInformationMutation,
   issuerInformationMutation,
   offeringInformationMutation,
@@ -11,7 +12,12 @@ import { getXmlDetails,
   signatureMutation,
   documentListMutation,
   xmlSubmissionMutation,
-  cloneXmlSubmissionMutation } from '../../stores/queries/business';
+  adminCloneXmlSubmission,
+  adminDeleteBusinessFilingSubmission,
+  adminDeleteBusinessFiling,
+  adminLockBusinessFilingSubmission,
+} from '../../stores/queries/business';
+import { adminBusinessFiling, getXMLFiles } from '../../stores/queries/offerings/manage';
 import { businessStore, uiStore } from '../../stores';
 import {
   EDGAR_URL,
@@ -103,7 +109,7 @@ export class Business {
         variables: {
           ...ids,
           annualReportDisclosureRequirements:
-          this.getFormattedInformation(formAnnualInfo.fields),
+            this.getFormattedInformation(formAnnualInfo.fields),
         },
       };
     } else if (action === 'signature') {
@@ -157,7 +163,7 @@ export class Business {
     } = businessStore;
 
     const payload = {
-      mutation: cloneXmlSubmissionMutation,
+      mutation: adminCloneXmlSubmission,
       variables: {
         filingId,
         xmlSubmissionId,
@@ -324,17 +330,38 @@ export class Business {
   fetchEdgarDetails = (businessId, filingId) => {
     uiStore.setActionLoader('Fetching Edgar data');
     uiStore.addMoreInProgressArray('fetchEdgarDetails');
-    const payload = {
-      query: `query fetchFilingById { businessFiling(businessId: "${businessId}", `
-        + `filingId: "${filingId}") { filingPayload } }`,
-    };
-    ApiService.post(GRAPHQL, payload)
-      .then(data => businessStore.setTemplateVariable(data.body.data.businessFiling.filingPayload))
-      .catch(err => console.log(err))
-      .finally(() => {
+    graphql({
+      client,
+      query: adminBusinessFiling,
+      fetchPolicy: 'network-only',
+      variables: {
+        offeringId: businessId,
+        filingId,
+      },
+      onFetch: (data) => {
+        if (_.get(data, 'adminBusinessFiling.submissions')) {
+          businessStore.setTemplateVariable(_.get(data, 'adminBusinessFiling.submissions.payload'));
+          uiStore.removeOneFromProgressArray('fetchEdgarDetails');
+          uiStore.clearActionLoader();
+        }
+      },
+      onError: (err) => {
+        console.log(err);
         uiStore.removeOneFromProgressArray('fetchEdgarDetails');
         uiStore.clearActionLoader();
-      });
+      },
+    });
+    // const payload = {
+    //   query: `query adminBusinessFiling { adminBusinessFiling(businessId: "${businessId}", `
+    //     + `filingId: "${filingId}") { filingPayload } }`,
+    // };
+    // ApiService.post(GRAPHQL, payload)
+    //   .then(data => businessStore.setTemplateVariable(data.body.data.adminBusinessFiling.filingPayload))
+    //   .catch(err => console.log(err))
+    //   .finally(() => {
+    //     uiStore.removeOneFromProgressArray('fetchEdgarDetails');
+    //     uiStore.clearActionLoader();
+    //   });
   }
 
   fetchBusinessName = (businessId) => {
@@ -355,31 +382,54 @@ export class Business {
       });
   }
 
-  getFiles = ({ offeringId, filingId }, accountType) => {
+  getFiles = ({ offeringId, filingId }, accountType) => new Promise((resolve, rej) => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching details');
     const accountTypeToPass = accountType && accountType === 'SECURITIES' ? accountType : 'SERVICES';
-    const payload = {
-      query: 'query fetchFilingById($offeringId: ID!, $filingId: ID!){businessFiling(offeringId: '
-        + '$offeringId, filingId: $filingId) { folderId } }',
+    graphql({
+      client,
+      query: adminBusinessFiling,
+      fetchPolicy: 'network-only',
       variables: {
         offeringId,
         filingId,
       },
-    };
-    return new Promise((resolve, reject) => {
-      ApiService.post(GRAPHQL, payload)
-        .then((data) => {
-          this.fetchAttachedFiles(data.body.data.businessFiling.folderId, accountTypeToPass)
-            .then(() => resolve(data.body.data.businessFiling.folderId));
-        })
-        .catch(err => reject(err))
-        .finally(() => {
+      onFetch: (data) => {
+        if (data && data.adminBusinessFiling && data.adminBusinessFiling.folderId) {
+          this.fetchAttachedFiles(data.adminBusinessFiling.folderId, accountTypeToPass)
+            .then(() => resolve(data.adminBusinessFiling.folderId));
           uiStore.setProgress(false);
           uiStore.clearLoaderMessage();
-        });
+        }
+      },
+      onError: (err) => {
+        console.log(err);
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+        rej(err);
+      },
     });
-  }
+    // const payload = {
+    //   query: 'query adminBusinessFiling($offeringId: ID!, $filingId: ID!){adminBusinessFiling(offeringId: '
+    //     + '$offeringId, filingId: $filingId) { folderId } }',
+    //   variables: {
+    //     offeringId,
+    //     filingId,
+    //   },
+    // };
+    // return new Promise((resolve, reject) => {
+    //   ApiService.post(GRAPHQL, payload)
+    //     .then((data) => {
+    //       this.fetchAttachedFiles(data.body.data.adminBusinessFiling.folderId, accountTypeToPass)
+    //         .then(() => resolve(data.body.data.adminBusinessFiling.folderId));
+    //     })
+    //     .catch(err => reject(err))
+    //     .finally(() => {
+    //       uiStore.setProgress(false);
+    //       uiStore.clearLoaderMessage();
+    //     });
+    // });
+  });
 
   /**
    * @desc This method fetches XML
@@ -389,16 +439,16 @@ export class Business {
     uiStore.setLoaderMessage('Fetching XML Data');
     graphql({
       client,
-      query: getXmlDetails,
+      query: adminBusinessFilingSubmission,
       fetchPolicy: 'network-only',
       variables: {
         filingId,
         xmlSubmissionId: xmlId,
       },
       onFetch: (data) => {
-        if (data && data.businessFilingSubmission) {
+        if (data && data.adminBusinessFilingSubmission) {
           uiStore.removeOneFromProgressArray('fetchXmlDetails');
-          this.setXmlPayload(data.businessFilingSubmission);
+          this.setXmlPayload(data.adminBusinessFilingSubmission);
         }
       },
       onError: (err) => {
@@ -411,34 +461,60 @@ export class Business {
   /**
    *
    */
-  fetchAttachedFiles = (folderId, accountType) => {
+  fetchAttachedFiles = (folderId, accountType) => new Promise((resolve, rej) => {
     uiStore.setProgress();
     uiStore.addMoreInProgressArray('fetchAttachedFiles');
     uiStore.setLoaderMessage('Fetching available files');
     const accountTypeToPass = accountType && accountType === 'SECURITIES' ? accountType : 'SERVICES';
-    const payload = {
-      query: 'query getFIles($folderId: ID!, $accountType: BoxAccountTypeEnum) { files(folderId: $folderId, accountType: $accountType) { id name } }',
+
+    graphql({
+      client,
+      query: getXMLFiles,
+      fetchPolicy: 'network-only',
       variables: {
         folderId,
         accountType: accountTypeToPass,
       },
-    };
-    return new Promise((resolve, reject) => {
-      ApiService.post(GRAPHQL, payload)
-        .then((data) => {
-          this.setDocumentList(data.body.data.files);
-          resolve();
-        })
-        .catch((err) => {
-          reject(err);
-        })
-        .finally(() => {
+      onFetch: (data) => {
+        if (data && data.files) {
+          this.setDocumentList(data.files);
           uiStore.removeOneFromProgressArray('fetchAttachedFiles');
           uiStore.setProgress(false);
           uiStore.clearLoaderMessage();
-        });
+          resolve();
+        }
+      },
+      onError: (err) => {
+        uiStore.removeOneFromProgressArray('fetchAttachedFiles');
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+        rej(err);
+      },
     });
-  }
+
+    // const payload = {
+    //   query: 'query getFIles($folderId: ID!, $accountType: BoxAccountTypeEnum) { files(folderId: $folderId, accountType: $accountType) { id name } }',
+    //   variables: {
+    //     folderId,
+    //     accountType: accountTypeToPass,
+    //   },
+    // };
+    // return new Promise((resolve, reject) => {
+    //   ApiService.post(GRAPHQL, payload)
+    //     .then((data) => {
+    //       this.setDocumentList(data.body.data.files);
+    //       resolve();
+    //     })
+    //     .catch((err) => {
+    //       reject(err);
+    //     })
+    //     .finally(() => {
+    //       uiStore.removeOneFromProgressArray('fetchAttachedFiles');
+    //       uiStore.setProgress(false);
+    //       uiStore.clearLoaderMessage();
+    //     });
+    // });
+  });
 
   /**
    *
@@ -470,24 +546,46 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Deleting XML Submission');
     const payload = {
-      query: `mutation deleteXmlSubmissionById($filingId: String!, $xmlSubmissionId: String!) {
-        deleteBusinessFilingSubmission(filingId: $filingId, xmlSubmissionId: $xmlSubmissionId){
-          xmlSubmissionId
-        }
-      }`,
+      mutation: adminDeleteBusinessFilingSubmission,
       variables: {
         filingId, xmlSubmissionId,
       },
     };
-    return new Promise((res, rej) => {
-      ApiService.post(GRAPHQL, payload)
-        .then(data => res(data))
-        .catch(err => rej(err))
-        .finally(() => {
-          uiStore.setProgress(false);
-          uiStore.clearLoaderMessage();
-        });
+    return new Promise((resolve, reject) => {
+      client
+        .mutate(payload)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
     });
+
+    // const payload = {
+    //   query: `mutation adminDeleteBusinessFilingSubmission($filingId: String!, $xmlSubmissionId: String!) {
+    //     adminDeleteBusinessFilingSubmission(filingId: $filingId, xmlSubmissionId: $xmlSubmissionId){
+    //       xmlSubmissionId
+    //     }
+    //   }`,
+    //   variables: {
+    //     filingId, xmlSubmissionId,
+    //   },
+    // };
+
+    // return new Promise((res, rej) => {
+    //   ApiService.post(GRAPHQL, payload)
+    //     .then(data => res(data))
+    //     .catch(err => rej(err))
+    //     .finally(() => {
+    //       uiStore.setProgress(false);
+    //       uiStore.clearLoaderMessage();
+    //     });
+    // });
   }
 
   /**
@@ -497,8 +595,30 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Deleting Business Filing');
     const payload = {
-      query: `mutation deleteBusinessFiling($offeringId: String!, $filingId: String!) {
-         deleteBusinessFiling(offeringId: $offeringId, filingId: $filingId ){
+      mutation: adminDeleteBusinessFiling,
+      variables: {
+        offeringId,
+        filingId,
+      },
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate(payload)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+    });
+
+    /* const payload = {
+      query: `mutation adminDeleteBusinessFiling($offeringId: String!, $filingId: String!) {
+         adminDeleteBusinessFiling(offeringId: $offeringId, filingId: $filingId ){
            offeringId
            created
           }
@@ -516,7 +636,7 @@ export class Business {
           uiStore.setProgress(false);
           uiStore.clearLoaderMessage();
         });
-    });
+    }); */
   }
 
   /**
@@ -526,9 +646,31 @@ export class Business {
     const status = lockedStatus === false ? 'Unlocking' : 'Locking';
     uiStore.setProgress();
     uiStore.setLoaderMessage(`${status} XML Submission`);
+
     const payload = {
-      query: `mutation lockUnlockBusinessFilingSubmission($offeringId: String!, $filingId: String!, $xmlSubmissionId: String!, $lockedStatus: Boolean!){
-        lockBusinessFilingSubmission(offeringId: $offeringId,filingId: $filingId, xmlSubmissionId: $xmlSubmissionId, lockedStatus: $lockedStatus){
+      mutation: adminLockBusinessFilingSubmission,
+      variables: {
+        offeringId, filingId, xmlSubmissionId, lockedStatus,
+      },
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate(payload)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+    });
+
+    /* const payload = {
+      query: `mutation adminLockBusinessFilingSubmission($offeringId: String!, $filingId: String!, $xmlSubmissionId: String!, $lockedStatus: Boolean!){
+        adminLockBusinessFilingSubmission(offeringId: $offeringId,filingId: $filingId, xmlSubmissionId: $xmlSubmissionId, lockedStatus: $lockedStatus){
           offeringId xmlSubmissionId lockedStatus
         }
       }`,
@@ -544,35 +686,7 @@ export class Business {
           uiStore.setProgress(false);
           uiStore.clearLoaderMessage();
         });
-    });
-  }
-
-  /**
-   * @desc To lock/unlock filing
-   */
-  lockUnlockFiling = (businessId, filingId, lockedStatus) => {
-    const status = lockedStatus === false ? 'Unlocking' : 'Locking';
-    uiStore.setProgress();
-    uiStore.setLoaderMessage(`${status} filing`);
-    const payload = {
-      query: `mutation lockUnlockBusinessFiling($businessId: String!, $filingId: String!, $lockedStatus: Boolean!){
-        lockBusinessFiling(businessId: $businessId, filingId: $filingId, lockedStatus: $lockedStatus){
-          filingId
-        }
-      }`,
-      variables: {
-        businessId, filingId, lockedStatus,
-      },
-    };
-    return new Promise((res, rej) => {
-      ApiService.post(GRAPHQL, payload)
-        .then(data => res(data))
-        .catch(err => rej(err))
-        .finally(() => {
-          uiStore.setProgress(false);
-          uiStore.clearLoaderMessage();
-        });
-    });
+    }); */
   }
 
   /**
@@ -678,7 +792,7 @@ export class Business {
       });
       _.map(data.payload.offeringInformation, (value, key) => {
         if (dateFields.includes(key)) {
-          businessStore.setOfferingInfo(key,  DataFormatter.getDateAsPerTimeZone(value, true, false, false, 'MM-DD-YYYY'));
+          businessStore.setOfferingInfo(key, DataFormatter.getDateAsPerTimeZone(value, true, false, false, 'MM-DD-YYYY'));
         } else {
           businessStore.setOfferingInfo(key, (value || ''))
         }
@@ -695,7 +809,7 @@ export class Business {
       businessStore.setNewPersonalSignature([]);
 
       if (data.payload.signature) {
-         _.map(data.payload.signature.signaturePersons, (signature) => {
+        _.map(data.payload.signature.signaturePersons, (signature) => {
           const id = this.addPersonalSignature();
           _.map(signature, (value, key) => {
             if (dateFields.includes(key)) {
@@ -808,15 +922,15 @@ export class Business {
       // check form is valid or not
       if (businessStore.canSubmitSigntureForm ||
         _.includes(businessStore.canSubmitSignaturePersonsForm, true)) {
-          businessStore.setXmlSubStepsStatus('signature', true);
-          businessStore.updateStatusFlag('formSignatureInfo', 'meta', true);
+        businessStore.setXmlSubStepsStatus('signature', true);
+        businessStore.updateStatusFlag('formSignatureInfo', 'meta', true);
       } else {
         businessStore.clearSignature();
       }
     }
   }
 
-  validateDocumentList = (documentList, setError = true) => {
+  validateDocumentList = (documentList = [], setError = true) => {
     const documentCount = documentList.length;
     let documnetCurrentCount = 0;
     _.map(documentList, (document) => {
@@ -827,7 +941,7 @@ export class Business {
 
     if (documentCount === documnetCurrentCount) {
       const errorMessage = {
-        documentListError:'Please select at least one document.'
+        documentListError: 'Please select at least one document.'
       };
       if (setError) {
         businessStore.setXmlError(errorMessage);
@@ -842,7 +956,7 @@ export class Business {
     if (isMultiple) {
       let errors = {};
       _.map(data, (key) => {
-        errors = _.mapValues(key, input =>  input.error);
+        errors = _.mapValues(key, input => input.error);
         _.merge(xmlErrors, errors);
       })
       return xmlErrors;

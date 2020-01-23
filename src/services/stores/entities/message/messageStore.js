@@ -10,7 +10,8 @@ import {
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { DRAFT_NEW } from '../../../constants/messages';
-import { offeringCreationStore, campaignStore, offeringsStore, userDetailsStore } from '../../index';
+import { offeringCreationStore, campaignStore, userDetailsStore } from '../../index';
+import uiStore from '../shared/uiStore';
 
 export class NewMessage {
   @observable MESSAGE_FRM = Validator.prepareFormObject(DRAFT_NEW);
@@ -22,8 +23,6 @@ export class NewMessage {
   @observable currentMessageId = null;
 
   @observable currentOfferingId = null;
-
-  @observable currentOfferingIssuerId = get(offeringsStore.offerData, 'data.getOfferingById.issuerId');
 
   @observable editMessageId = null;
 
@@ -82,6 +81,7 @@ export class NewMessage {
           } else {
             this.setDataValue('currentMessageId', data.offeringCommentsByOfferId[0].id);
           }
+          this.updateCommentList(data.offeringCommentsByOfferId, offeringCreationStore.currentOfferingId);
         }
       },
     });
@@ -92,7 +92,6 @@ export class NewMessage {
     this.setDataValue('buttonLoader', scope);
     this.currentMessageId = currentMessageId;
     const data = Validator.ExtractValues(this.MESSAGE_FRM.fields);
-
     const payload = {
       commentInput: {
         offeringId: campaignId || (offeringCreationStore.currentOfferingId || this.currentOfferingId),
@@ -120,7 +119,10 @@ export class NewMessage {
         this.resetMessageForm();
         Helper.toast('Message sent.', 'success');
       })
-      .catch(() => Helper.toast('Something went wrong please try again after sometime.', 'error'))
+      .catch((error) => {
+        Helper.toast('Something went wrong please try again after sometime.', 'error');
+        uiStore.setErrors(error.message);
+      })
       .finally(() => this.setDataValue('buttonLoader', false));
   }
 
@@ -213,6 +215,15 @@ export class NewMessage {
   msgEleChange = (e, result) => {
     this.MESSAGE_FRM = Validator.onChange(this.MESSAGE_FRM, Validator.pullValues(e, result));
   };
+
+  updateCommentList = (newData, offeringId) => {
+    const coampaignDetails = { comments: [], id: '' };
+    if (newData) {
+      coampaignDetails.comments = newData;
+      coampaignDetails.id = offeringId;
+      campaignStore.concatOfferingComments(coampaignDetails);
+    }
+  }
 }
 
 export default new NewMessage();

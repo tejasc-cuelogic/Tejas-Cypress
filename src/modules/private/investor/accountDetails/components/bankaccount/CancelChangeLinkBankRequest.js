@@ -21,6 +21,7 @@ export default class CancelChangeLinkBankRequest extends Component {
 
   submit = (e) => {
     const { declineBankChangeRequest } = this.props.bankAccountStore;
+    this.props.uiStore.setProgress();
     declineBankChangeRequest().then(() => {
       this.handleCloseModal(e);
     });
@@ -28,6 +29,7 @@ export default class CancelChangeLinkBankRequest extends Component {
 
   render() {
     const { hasPendingRequest } = this.props.bankAccountStore;
+    const { inProgress } = this.props.uiStore;
     return (
     <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
       <Modal.Header className="center-align signup-header">
@@ -37,7 +39,7 @@ export default class CancelChangeLinkBankRequest extends Component {
       <Modal.Content>
         <div className="center-align">
           <Button className="very relaxed red" content="No" onClick={this.handleCloseModal} />
-          <Button primary className="very relaxed" content="Yes" onClick={e => this.submit(e)} />
+          <Button primary loading={inProgress} className="very relaxed" content="Yes" onClick={e => this.submit(e)} />
         </div>
       </Modal.Content>
     </Modal>

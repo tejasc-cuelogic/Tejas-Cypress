@@ -102,9 +102,9 @@
 			height:100%;
 		}
 		input:checked ~ label{
-			background-color:@primary-one;
+			// background-color:@primary-one;
 			border-color:@primary-one;
-			color:@white;
+			color:@neutral;
 			>.icon {
 				color: @white;
 			}
@@ -113,6 +113,14 @@
 	.field.error .ui.radio.checkbox label, .field.error .ui.checkbox label{
 		color:@neutral !important;
 		border-color:@highlight-primary;
+	}
+	&.horizontal{
+		.field{
+			padding-right: @7px !important;
+		}
+		.ui.radio.checkbox label{
+			min-width: 150px;
+		}
 	}
 }
 .ui.form .fields.radio-basic{
@@ -226,4 +234,27 @@
 
 .error .ui.checkbox:not(.radio) label:before{
 	border-color:@highlight-primary;
+}
+
+.ui.read-only.checkbox{
+	label{
+		color: @neutral-offdark !important;
+		&:hover, &:active, &:focus{
+			cursor: not-allowed;
+			&::before{
+				border-color: @neutral;
+				background: transparent;
+			}
+		}
+	}
+	input:checked~label{
+		&:after{
+			color: @neutral;
+		}
+		&:before{
+			color: @neutral-offdark;
+			background: @neutral-offdark;
+			border-color: @neutral-offdark;
+		}
+	}
 }

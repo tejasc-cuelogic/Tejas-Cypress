@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
-export const generateInvestorFolderStructure = gql`
-mutation generateInvestorFolderStructure($userId: String!){
-    generateInvestorFolderStructure(userId: $userId)  
+export const adminGenerateInvestorFolderStructure = gql`
+mutation adminGenerateInvestorFolderStructure($userId: String!){
+    adminGenerateInvestorFolderStructure(userId: $userId)  
 }`;
 
 
@@ -23,9 +23,9 @@ mutation updateOfferingRepaymentsMeta($audit: Boolean!, $offeringId: String){
     }  
 }`;
 
-export const processFullInvestorAccount = gql`
-mutation processFullInvestorAccount($userId: String!, $accountId: String!, $createRSAccount: Boolean!, $createInitialDeposit: Boolean!, $sendEmailToInvestor: Boolean!, $createGsContactAccount: Boolean!, $createAccountPdf: Boolean!, $sendCrowdPayEmailToGS: Boolean!, $skipFullAccountValidation: Boolean!) {
-  processFullInvestorAccount(
+export const adminProcessFullInvestorAccount = gql`
+mutation adminProcessFullInvestorAccount($userId: String!, $accountId: String!, $createRSAccount: Boolean!, $createInitialDeposit: Boolean!, $sendEmailToInvestor: Boolean!, $createGsContactAccount: Boolean!, $createAccountPdf: Boolean!, $sendCrowdPayEmailToGS: Boolean!, $skipFullAccountValidation: Boolean!) {
+  adminProcessFullInvestorAccount(
     userId: $userId,
     accountId: $accountId,
     createRSAccount: $createRSAccount, 
@@ -37,9 +37,9 @@ mutation processFullInvestorAccount($userId: String!, $accountId: String!, $crea
     skipFullAccountValidation: $skipFullAccountValidation,
   )
 }`;
-export const adminProcessCip = gql`
-mutation adminProcessCip($userId: String!, $accountId: String!) {
-  adminProcessCip(
+export const adminCrowdPayProcessCip = gql`
+mutation adminCrowdPayProcessCip($userId: String!, $accountId: String!) {
+  adminCrowdPayProcessCip(
     userId: $userId,
     accountId: $accountId,
   )
@@ -51,15 +51,15 @@ mutation adminProcessInvestorAccount($userId: String!, $accountId: String!) {
     accountId: $accountId,
   )
 }`;
-export const processTransferRequest = gql`
-mutation processTransferRequest($transferId: Int!) {
-  processTransferRequest(
+export const adminProcessTransferRequest = gql`
+mutation adminProcessTransferRequest($transferId: Int!) {
+  adminProcessTransferRequest(
     transferId: $transferId,
   )
 }`;
-export const encryptOrDecryptUtility = gql`
-query _encryptOrDecryptValue($userId: String!, $text: String!, $type: EncryptDecryptEnum!){
-  encryptOrDecryptValue(
+export const adminEncryptOrDecryptValue = gql`
+query adminEncryptOrDecryptValue($userId: String!, $text: String!, $type: EncryptDecryptEnum!){
+  adminEncryptOrDecryptValue(
    userId: $userId
    text: $text
    type: $type
@@ -90,14 +90,14 @@ query getListOfPartialOrCIPProcessingAccount {
   }
 }`;
 
-export const syncEsDocument = gql`
-mutation syncEsDocument($documentId: String!, $targetIndex: String!, $userId: String, $accountType: [InvestorAccountTypeEnum]){
-  syncEsDocument(documentId: $documentId, targetIndex: $targetIndex, userId: $userId, accountType: $accountType)
+export const adminSyncEsDocument = gql`
+mutation adminSyncEsDocument($documentId: String!, $targetIndex: String!, $userId: String, $accountType: [InvestorAccountTypeEnum]){
+  adminSyncEsDocument(documentId: $documentId, targetIndex: $targetIndex, userId: $userId, accountType: $accountType)
 }`;
 
 export const getPluginList = gql`
-query _listRequestPlugins {
-  listRequestPlugins {
+query adminListRequestPlugins {
+  adminListRequestPlugins {
     plugins{
       name
       plugin
@@ -111,7 +111,7 @@ query _listRequestPlugins {
       }
     }
   }
-  listCronPlugins
+  adminListCronPlugins
   {
     plugins{   
       name   
@@ -126,7 +126,7 @@ query _listRequestPlugins {
       }
     }     
   }
-  listProcessorPlugins
+  adminListProcessorPlugins
   {
     plugins{
       name
@@ -149,18 +149,35 @@ query _listRequestPlugins {
 }
 `;
 
-export const requestFactoryPluginTrigger = gql`
-mutation invokeRequest($plugin: String!, $payload: String, $invocationType: RequestInvocationEnum) {
-  invokeRequest(
+export const adminListFilePlugins = gql`
+query adminListFilePlugins {
+  adminListFilePlugins {
+    name
+    plugin
+    pluginInputs {
+      label
+      type
+      key
+      value
+      rule
+      defaultValue
+    }
+  }
+} 
+`;
+
+export const adminInvokeRequest = gql`
+mutation adminInvokeRequest($plugin: String!, $payload: String, $invocationType: RequestInvocationEnum) {
+  adminInvokeRequest(
     plugin: $plugin,
     payload: $payload
     invocationType: $invocationType
   )
 }`;
 
-export const fetchCronLogs = gql`
-query _fetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaTypeEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
-  fetchCronLogs(
+export const adminFetchCronLogs = gql`
+query adminFetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaTypeEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+  adminFetchCronLogs(
     cron: $cron,
     jobId: $jobId
     cronMetaType: $cronMetaType
@@ -183,17 +200,17 @@ query _fetchCronLogs($cron: String!, $jobId: String, $cronMetaType: cronMetaType
   }
 }`;
 
-export const processFactoryPluginTrigger = gql`
-mutation _invokeProcessorDriver($method: DevAuditTypeEnum, $payload: String) {
-  invokeProcessorDriver(
+export const adminInvokeProcessorDriver = gql`
+mutation adminInvokeProcessorDriver($method: DevAuditTypeEnum, $payload: String) {
+  adminInvokeProcessorDriver(
     method: $method,
     payload: $payload
   )
 }`;
 
-export const fetchRequestFactoryLogs = gql`
-query _fetchRequestFactoryLogs($plugin: String!, $status: RequestRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
-  fetchRequestFactoryLogs(
+export const adminFetchRequestFactoryLogs = gql`
+query adminFetchRequestFactoryLogs($plugin: String!, $status: RequestRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+  adminFetchRequestFactoryLogs(
     plugin: $plugin,
     status: $status
     fromDate: $fromDate
@@ -226,9 +243,9 @@ query _fetchRequestFactoryLogs($plugin: String!, $status: RequestRunLogStatusEnu
   }
 }`;
 
-export const fetchProcessLogs = gql`
-query _fetchProcessLogs($plugin: String!, $status: ProcessRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
-  fetchProcessLogs(
+export const adminFetchProcessLogs = gql`
+query adminFetchProcessLogs($plugin: String!, $status: ProcessRunLogStatusEnum, $fromDate: String, $toDate: String, $lek: String, $limit: Int) {
+  adminFetchProcessLogs(
     plugin: $plugin,
     status: $status
     fromDate: $fromDate
@@ -250,9 +267,9 @@ query _fetchProcessLogs($plugin: String!, $status: ProcessRunLogStatusEnum, $fro
   }
 }`;
 
-export const fileFactoryPluginTrigger = gql`
-mutation _generateFile($identifier: String!, $ownerId: String!, $resourceId: String!, $account: String, $payload: String) {
-  generateFile(
+export const adminGenerateFile = gql`
+mutation adminGenerateFile($identifier: String!, $ownerId: String!, $resourceId: String!, $account: String, $payload: String) {
+  adminGenerateFile(
     identifier: $identifier,
     ownerId: $ownerId,
     resourceId: $resourceId,

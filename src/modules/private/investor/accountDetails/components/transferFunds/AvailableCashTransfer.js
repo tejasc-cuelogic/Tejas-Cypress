@@ -12,19 +12,19 @@ class AvailableCashTransfer extends Component {
   transferCtaInfo = () => ([
     {
       url: `${this.props.match.url}/withdraw`,
-      content: 'Withdraw funds',
+      content: 'Withdraw Funds',
     },
     {
       url: `${this.props.match.url}/add`,
-      content: 'Add funds',
+      content: 'Add Funds',
     },
   ]);
 
-  handleTransferFunds = (url) => {
-    if (this.props.isAccountFrozen) {
+  handleTransferFunds = (transInfo) => {
+    if ((this.props.isAccountFrozen && transInfo.content === 'Add Funds') || (this.props.isAccountHardFrozen && transInfo.content === 'Withdraw Funds')) {
       this.props.setFieldValue('showAccountFrozenModal', true);
     } else {
-      this.props.history.push(url);
+      this.props.history.push(transInfo.url);
     }
   }
 
@@ -70,7 +70,7 @@ class AvailableCashTransfer extends Component {
                     <>
                       {
                         this.transferCtaInfo().map(info => (
-                          <Button inverted color="green" content={info.content} onClick={() => this.handleTransferFunds(info.url)} />
+                          <Button inverted color="green" content={info.content} onClick={() => this.handleTransferFunds(info)} />
                         ))
                       }
                     </>
@@ -89,10 +89,10 @@ class AvailableCashTransfer extends Component {
           exact
           path={`${this.props.match.url}/:action/verify`}
           render={() => (
-<TransferFundVerifyModal
-  refLink={this.props.refLink}
-  refLinkList={this.props.match.url}
-/>
+            <TransferFundVerifyModal
+              refLink={this.props.refLink}
+              refLinkList={this.props.match.url}
+            />
           )
           }
         />

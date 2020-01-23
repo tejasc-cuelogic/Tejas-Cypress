@@ -1,9 +1,9 @@
 import { observable, action } from 'mobx';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { uiStore, userDetailsStore, userStore } from '../../../index';
+import { uiStore, userDetailsStore } from '../../../index';
 import { MFA_MODE_TYPES } from '../../../../constants/multiFactorAuth';
 import { FormValidator as Validator } from '../../../../../helper';
-import { updateMfaModeType } from '../../../queries/mfaModes';
+import { updateUserMFA } from '../../../queries/mfaModes';
 import Helper from '../../../../../helper/utility';
 
 export class MultiFactorAuthStore {
@@ -33,14 +33,14 @@ export class MultiFactorAuthStore {
   }
 
   @action
-  updateMfaModeType = () => {
+  updateUserMFA = () => {
     uiStore.setProgress();
     const { fields } = this.MFA_MODE_TYPE_META;
     const mfaModeType = fields.mfaModeTypes.value;
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: updateMfaModeType,
+          mutation: updateUserMFA,
           variables: {
             mfaMode: mfaModeType,
           },
@@ -48,7 +48,6 @@ export class MultiFactorAuthStore {
         .then(action(() => {
           userDetailsStore.setUserMfaMode(mfaModeType);
           Helper.toast('Multi-factor autentitaction updated successfully.', 'success');
-          userDetailsStore.getUser(userStore.currentUser.sub);
           resolve();
         }))
         .catch(() => {

@@ -12,6 +12,10 @@
       margin-top:@7px;
     }
   }
+  &.inverted .ui.loader {
+    color: @white
+  }
+
 }
 .scrolling .ui.modals.active{
   overflow:auto;

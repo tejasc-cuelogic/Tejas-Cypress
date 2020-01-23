@@ -98,3 +98,33 @@ export const BUSINESS_INDUSTRIES = [
     content: 'Other', value: 'OTHER', text: 'Other', iconName: 'ellipsis horizontal',
   },
 ];
+
+export const USER_REWARDS_META = [
+  {
+    id: 'cjicstk6f0gaf0136nxmoo85k',
+    name: 'MuHu Hot Pot',
+    rewards: [
+      {
+        id: 'cjict4vih0jhr0126yirl8eo3',
+        name: '$50 Gift Card',
+        description: '$50 Gift Card description',
+        expiry: '2018-05-26T00:00:00.000Z',
+        status: 'Available',
+        redeemDate: null,
+      },
+      {
+        id: 'cjictb8wv0lip0136nmtetgu2',
+        name: 'VIP Access Card',
+        description: 'VIP Access Card description',
+        expiry: '2020-05-26T00:00:00.000Z',
+        status: 'Available',
+        redeemDate: null,
+      },
+    ],
+  },
+  {
+    id: 'cjicsu0ps0f8b0100ra7pyg0x',
+    name: 'The Brewers Table',
+    rewards: [],
+  },
+];

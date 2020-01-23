@@ -2,11 +2,12 @@
 import { action, observable, computed } from 'mobx';
 import { REACT_APP_DEPLOY_ENV, NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
 
+const isMobile = document.documentElement.clientWidth < 768;
 export class UiStore {
   @observable
   modalStatus = false;
 
-  appLoader = false;
+  @observable appLoader = false;
 
   @observable layoutState = {
     leftPanel: true,
@@ -17,6 +18,8 @@ export class UiStore {
   @observable submitButtonDisabled = false;
 
   @observable inProgress = false;
+
+  @observable resizeLoader = false;
 
   @observable.struct responsiveVars = {};
 
@@ -70,11 +73,20 @@ export class UiStore {
 
   @observable defaultNavExpandedVal = + new Date();
 
+  @observable multiSteps = undefined;
+
   @observable isFromBusinessApplication = false;
+
+  @observable appUpdated = false;
 
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
+  }
+
+  @action
+  setAppUpdated(value = true) {
+    this.appUpdated = value;
   }
 
   @action
@@ -274,6 +286,20 @@ export class UiStore {
   @action
   setAuthRef = (url) => {
     this.authRef = url || '';
+  }
+
+  scrollIntoActiveInputFields = () => {
+    setTimeout(() => {
+      const allInputTags = document.getElementsByTagName('input');
+      let inputsArr = allInputTags ? Array.prototype.slice.call(allInputTags) : [];
+      inputsArr = inputsArr.filter(item => item.className !== 'hidden');
+      if (inputsArr[inputsArr.length - 1] && isMobile) {
+        inputsArr[inputsArr.length - 1].scrollIntoView({
+          block: 'start',
+          behavior: 'smooth',
+        });
+      }
+    }, 100);
   }
 
   resetUIAccountCreationError = (err) => {

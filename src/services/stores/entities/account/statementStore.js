@@ -4,7 +4,7 @@ import { orderBy, find, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { downloadFile, generateMonthlyStatementsPdf } from '../../queries/statement';
-import { uiStore, userDetailsStore, transactionStore } from '../../index';
+import { uiStore, userDetailsStore, transactionStore, accountStore } from '../../index';
 import { DataFormatter } from '../../../../helper';
 
 
@@ -65,17 +65,18 @@ export class StatementStore {
     const account = this.isAdmin
       ? userDetailsStore.currentActiveAccountDetailsOfSelectedUsers
       : userDetailsStore.currentActiveAccountDetails;
-    const { userDetails, getDetailsOfUser } = userDetailsStore;
+    const { getDetailsOfUser } = userDetailsStore;
+    let params = {
+      year,
+      month,
+      accountId: account.details.accountId,
+    };
+    params = this.isAdmin ? { ...params, userId: getDetailsOfUser.id } : { ...params };
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: generateMonthlyStatementsPdf,
-          variables: {
-            year,
-            month,
-            userId: this.isAdmin ? getDetailsOfUser.id : userDetails.id,
-            accountId: account.details.accountId,
-          },
+          variables: params,
         })
         .then((result) => {
           if (result.data) {
@@ -184,7 +185,7 @@ export class StatementStore {
     const accDetails = find(userDetailsStore.userDetails.roles, account => account.name === accountType
       && account.name !== 'investor'
       && account && account.details
-      && (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
+      && (account.details.accountStatus === 'FULL' || accountStore.isAccFrozen(account.details.accountStatus)));
     const taxStatement = get(accDetails, 'details.taxStatement');
     return (taxStatement && taxStatement.length) || 0;
   }

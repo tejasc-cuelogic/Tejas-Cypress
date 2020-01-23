@@ -1,13 +1,13 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find, get, isNull } from 'lodash';
-import { bankAccountStore, uiStore, userDetailsStore, userStore } from '../../index';
+import { bankAccountStore, uiStore, userDetailsStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { submitinvestorAccount, upsertInvestorAccount, createIndividualGoldStarInvestor } from '../../queries/account';
+import { submitInvestorAccount, upsertInvestorAccount, createIndividualGoldStarInvestor } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-// import userStore from '../userStore';
+
 
 class IndividualAccountStore {
   @observable stepToBeRendered = 0;
@@ -38,20 +38,23 @@ class IndividualAccountStore {
     this.stepToBeRendered = step;
   }
 
-  createIndividualGoldStarInvestor = (accountId, userId = userStore.currentUser.sub) => new Promise((resolve, reject) => {
-    client
-      .mutate({
-        mutation: createIndividualGoldStarInvestor,
-        variables: {
-          userId,
-          accountId,
-        },
-      })
-      .then(res => resolve(res))
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  createIndividualGoldStarInvestor = (accountId, userId = false) => {
+    let variables = {
+      accountId,
+    };
+    variables = userId ? { ...variables, userId } : { ...variables };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: createIndividualGoldStarInvestor,
+          variables,
+        })
+        .then(res => resolve(res))
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  };
 
   submitAccount = () => {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
@@ -63,7 +66,7 @@ class IndividualAccountStore {
       uiStore.setProgress();
       client
         .mutate({
-          mutation: submitinvestorAccount,
+          mutation: submitInvestorAccount,
           variables: payLoad,
         })
         .then((res1) => {
@@ -108,7 +111,6 @@ class IndividualAccountStore {
       }
       resolve();
     }).catch((err) => {
-      console.log('Error', err);
       if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {
         if (this.retryGoldStar < 1) {
           this.retryGoldStar += 1;
@@ -165,6 +167,7 @@ class IndividualAccountStore {
               bankAccountStore.setPlaidAccDetails(linkedBank);
               this.setFieldValue('apiCall', false);
             }
+            this.setStepToBeRendered(currentStep.stepToBeRendered);
             uiStore.setErrors(null);
             uiStore.setProgress(false);
             resolve(result);

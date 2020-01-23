@@ -65,6 +65,11 @@
         }
         >label{
             line-height:@18px;
+            &.dotted-tooltip {
+                border-bottom: 1px dotted;
+                display: inline-block;
+                cursor: pointer;
+            }
         }
         > .ui.label{
             background:transparent;
@@ -207,6 +212,9 @@
     }
     .otp-wrap{
         margin:@32px 0 @42px 0;
+        @media only screen and (max-width : @largestMobileScreen){
+            margin:@15px 0 @15px 0;
+        }
         >label{
             width:100%;
         }
@@ -618,6 +626,23 @@
             }
         }
     }
+    .search-field input[type=text]{
+        border-bottom: none;
+        border: 1px solid @neutral-darkwhite;
+        border-radius: 4px;
+        ~i.icon{
+            left: 10px; 
+        }
+    }
+    &.nss-form .field{
+        margin-bottom: @25px;
+        .ui.input input, .ui.selection.dropdown>.text, input[type=tel]{
+            font-size: @13px;
+        }
+        .ui.selection.dropdown{
+            padding: @10px @15px @10px 0;
+        }
+    }
 }
 textarea{
 	font-family:@pageFont;
@@ -795,7 +820,7 @@ textarea{
         color:@fullBlack;
     }
     input[type=file]{
-        opacity:0;
+        opacity:0 !important;
         width:100%;
         position:absolute;
         top:0;

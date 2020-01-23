@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { Route, withRouter, Link } from 'react-router-dom';
-import { Header, Form, Popup, Icon, Divider, Table, Message } from 'semantic-ui-react';
+import { Header, Form, Popup, Icon, Divider, Table, Message, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { get, includes, capitalize } from 'lodash';
 import { MaskedInput } from '../../../../../theme/form';
 import InvestmentLimit from './financialInfo/InvestmentLimit';
 import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 import Helper from '../../../../../helper/utility';
-import { Spinner, FieldError } from '../../../../../theme/shared';
+import { Spinner, ListErrors } from '../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @inject('investmentStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
 @observer
@@ -35,16 +36,11 @@ class FinancialInfo extends Component {
       const investorTotalAmountInvested = get(this.props.investmentLimitStore.getCurrentInvestNowHealthCheck, 'investorTotalAmountInvested') || '0';
       this.props.investmentLimitStore.setFieldValue('investorTotalAmountInvested', investorTotalAmountInvested);
     }
-    // if (this.props.match.isExact && this.props.investmentStore.getSelectedAccountTypeId) {
-    //   this.props.investmentLimitStore
-    //     .getInvestorTotalAmountInvested(this.props.investmentStore.getSelectedAccountTypeId);
-    // }
   }
 
   render() {
     const {
       investmentAmount,
-      // isValidInvestAmtInOffering,
       INVESTMONEY_FORM,
       PREFERRED_EQUITY_INVESTMONEY_FORM,
       investMoneyChange,
@@ -62,7 +58,7 @@ class FinancialInfo extends Component {
     const validBonusRewards = investmentBonusRewards(investmentAmount);
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
-    const { match, refLink, offeringDetails } = this.props;
+    const { match, refLink, offeringDetails, submitStep, disableContinueButton } = this.props;
     const currentInvestmentLimit = getCurrentInvestNowHealthCheck
       && getCurrentInvestNowHealthCheck.investmentLimit
       ? getCurrentInvestNowHealthCheck.investmentLimit : 0;
@@ -114,13 +110,14 @@ class FinancialInfo extends Component {
                           in Reg CF offerings over a 12-month period.
                            This limit is calculated based on your
             annual income and net worth. <Link to={`${refLink}/investment-details/#total-payment-calculator`}>Click here</Link> for how this is calculated. If you believe
-            your limit is innacurate, please update your <Link to="/app/account-settings/profile-data">Investor Profile</Link>
+            your limit is innacurate, please update your <Link to="/dashboard/account-settings/profile-data">Investor Profile</Link>
                         </span>
                       )}
                       position="top center"
                       hoverable
                     />
-                    <Link to={this.props.changeInvest && !this.props.isFromPublicPage ? 'change-investment-limit' : `${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
+                    {/* <Link to={this.props.changeInvest && !this.props.isFromPublicPage ? 'change-investment-limit' : `${match.url}/change-investment-limit`} className="link"><small>Update</small></Link> */}
+                    <Link to={`${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
                   </p>
                 )
               }
@@ -154,15 +151,20 @@ class FinancialInfo extends Component {
                           name="shares"
                           asterisk="true"
                           number
-                          showerror
                           fielddata={PREFERRED_EQUITY_INVESTMONEY_FORM.fields.shares}
                           changed={values => investMoneyChangeForEquity(values, 'shares')}
                           autoFocus
+                          showerror
                           allowNegative={false}
                           hidelabel
                           className="right-align-placeholder"
                           containerclassname="right-align"
                         />
+                        {isMobile
+                          && (
+                            <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+                          )
+                        }
                       </Table.Cell>
                     </Table.Row>
                     <Table.Row>
@@ -181,12 +183,17 @@ class FinancialInfo extends Component {
                   && INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00'
                   ? <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{isOfferingPreferredEquity ? Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0) : Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
                 }
+
                 {investmentFlowEquityErrorMessage
-                  && (<FieldError error={investmentFlowEquityErrorMessage} />)
+                  && (
+                    <Message error className="mt-30">
+                      <ListErrors errors={investmentFlowEquityErrorMessage ? [investmentFlowEquityErrorMessage] : [investmentFlowEquityErrorMessage]} />
+                    </Message>
+                  )
                 }
                 {validBonusRewards && validBonusRewards.length > 0
                   && (
-                    <Message className="bg-offwhite no-shadow">
+                    <Message className="bg-offwhite no-shadow no-wrap">
                       <Message.Header>Bonus Rewards to be Received:</Message.Header>
                       {validBonusRewards.map(reward => (
                         <p>+ {reward.title}</p>
@@ -199,19 +206,26 @@ class FinancialInfo extends Component {
               </>
             )
             : (
+              <>
               <MaskedInput
                 data-cy="investmentAmount"
                 hidelabel
                 name="investmentAmount"
+                type="tel"
                 currency
                 prefix="$ "
-                showerror
                 fielddata={INVESTMONEY_FORM.fields.investmentAmount}
                 changed={values => investMoneyChange(values, 'investmentAmount')}
                 onkeyup={validateMaskedInputForAmount}
                 autoFocus
                 allowNegative={false}
               />
+              {isMobile
+                && (
+                  <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+                )
+              }
+              </>
             )}
         </Form>
         {this.props.changeInvest && !includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) && getDiffInvestmentLimitAmount

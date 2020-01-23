@@ -13,6 +13,10 @@ import Business from './public/business/containers/Business';
 import Resources from './public/resources';
 import Partners from './public/partners';
 import News from './public/news';
+import Insights from './public/resources/containers/Insights';
+import InsightsDetails from './public/resources/containers/InsightsDetails';
+import EducationCenter from './public/resources/containers/EducationCenter';
+import Space from './public/space/containers/Space';
 
 import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
@@ -34,13 +38,8 @@ export const publicRoutes = [
     exact: true,
   },
   {
-    path: '/dashboard',
+    path: '/init-dashboard',
     component: DashboardCta,
-    exact: true,
-  },
-  {
-    path: '/subscribe/newsletter',
-    component: Home,
     exact: true,
   },
   {
@@ -56,11 +55,11 @@ export const publicRoutes = [
     component: IraPromotionTerms,
   },
   {
-    path: '/agreements/:section',
+    path: '/legal',
     component: Agreements,
   },
   {
-    path: '/about',
+    path: '/about/:section?', // optional section to support old urls
     component: About,
   },
   {
@@ -68,7 +67,7 @@ export const publicRoutes = [
     component: News,
   },
   {
-    path: '/invest',
+    path: '/investors',
     component: Invest,
   },
   {
@@ -116,6 +115,22 @@ export const publicRoutes = [
     component: Business,
   },
   {
+    path: '/insights/category/:id',
+    component: Insights,
+  },
+  {
+    path: '/insights/:slug',
+    component: InsightsDetails,
+  },
+  {
+    path: '/insights',
+    component: Insights,
+  },
+  {
+    path: '/education-center',
+    component: EducationCenter,
+  },
+  {
     path: '/resources',
     component: Resources,
   },
@@ -128,42 +143,46 @@ export const publicRoutes = [
     component: BusinessSignup,
     // exact: true,
   },
+  {
+    path: '/space',
+    component: Space,
+  },
 ];
 
 export const privateRoutes = [
   {
-    path: '/app/edgar/:offeringId/edgar/:filingId',
+    path: '/dashboard/edgar/:offeringId/edgar/:filingId',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/edgar/:offeringId/edgar',
+    path: '/dashboard/edgar/:offeringId/edgar',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/edgar/:offeringId/filing/:filingId/xml/:xmlId',
+    path: '/dashboard/edgar/:offeringId/filing/:filingId/xml/:xmlId',
     component: XmlForm,
     auth: AdminAuthorization,
   },
   {
-    path: '/app/edgar/:offeringId/filing/:filingId/xml',
+    path: '/dashboard/edgar/:offeringId/filing/:filingId/xml',
     component: XmlForm,
     auth: AdminAuthorization,
   },
   {
-    path: '/app/edgar/:offeringId',
+    path: '/dashboard/edgar/:offeringId',
     component: BusinessDetails,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/edgar',
+    path: '/dashboard/edgar',
     component: Edgar,
     auth: BusinessAuthorization,
     exact: true,
   },
   {
-    path: '/app/users',
+    path: '/dashboard/users',
     component: UserManagement,
     auth: AdminAuthorization,
   },

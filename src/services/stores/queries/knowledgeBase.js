@@ -33,8 +33,8 @@ export const allFaqQuery = gql`query getListOfFAQsAndKnowledgeBase($categoryType
 }
 `;
 
-export const getAllKnowledgeBaseByFilters = gql`query knowledgeBaseByFilters($title: String, $categoryId: String, $itemStatus: ArticleStatusEnum, $authorName: String){
-    knowledgeBaseByFilters(title: $title, categoryId: $categoryId, itemStatus: $itemStatus, authorName: $authorName){
+export const adminFilterKnowledgeBase = gql`query adminFilterKnowledgeBase($title: String, $categoryId: String, $itemStatus: ArticleStatusEnum, $authorName: String){
+    adminFilterKnowledgeBase(title: $title, categoryId: $categoryId, itemStatus: $itemStatus, authorName: $authorName){
       title
       id
       userType
@@ -51,44 +51,9 @@ export const getAllKnowledgeBaseByFilters = gql`query knowledgeBaseByFilters($ti
   }  
 `;
 
-export const getAllKnowledgeBase = gql`query{
-  knowledgeBaseItems{
-    title
-    id
-    userType
-    itemStatus
-    slug      
-    updated{
-      date
-    }
-  }
-}
-`;
-
-export const getArticlesByCatId = gql`
-query _getArticleByCategoryId($id:ID! ) {
-  insightArticlesByCategoryId (
-    id: $id
-  ) {
-    id
-    content
-    featuredImage
-    minuteRead
-    title
-    authorId
-    updated {
-      date
-    }
-    created {
-      date
-    }
-    banner
-  }
-}
-`;
-export const getKnowledgeBaseById = gql`
-query knowledgeBaseById($id: ID!) {
-  knowledgeBaseById(id: $id) {
+export const adminKnowledgeBaseById = gql`
+query adminKnowledgeBaseById($id: ID!) {
+  adminKnowledgeBaseById(id: $id) {
       id
       title
       content
@@ -104,8 +69,8 @@ query knowledgeBaseById($id: ID!) {
 `;
 
 export const getKnowledgeBaseDetails = gql`
-query knowledgeBaseById ($id: ID!) {
-    knowledgeBaseById (id: $id) {
+query adminKnowledgeBaseById ($id: ID!) {
+    adminKnowledgeBaseById (id: $id) {
       id
       title
       content
@@ -116,20 +81,9 @@ query knowledgeBaseById ($id: ID!) {
   }
 `;
 
-export const createArticle = gql`
-mutation createArticle($payload:  InsightsArticleInput!, $isPartial: Boolean) {
-  createArticle(articleDetailsInput: $payload, isPartialData: $isPartial) {
-    id
-    title
-    articleStatus
-    category
-  }
-}
-`;
-
-export const createKnowledgeBase = gql`
-mutation createKnowledgeBaseItem($payload:  KnowledgeBaseItem!, $isPartial: Boolean) {
-  createKnowledgeBaseItem(knowledgeBaseDetailsInput: $payload, isPartialData: $isPartial) {
+export const adminCreateKnowledgeBaseItem = gql`
+mutation adminCreateKnowledgeBaseItem($payload:  KnowledgeBaseItem!, $isPartial: Boolean) {
+  adminCreateKnowledgeBaseItem(knowledgeBaseDetailsInput: $payload, isPartialData: $isPartial) {
     id
     title
     content
@@ -143,9 +97,9 @@ mutation createKnowledgeBaseItem($payload:  KnowledgeBaseItem!, $isPartial: Bool
 }
 `;
 
-export const updateKnowledgeBase = gql`
-mutation updateKnowledgeBaseItem($id:ID!,$payload:  KnowledgeBaseItem!, $isPartial: Boolean) {
-  updateKnowledgeBaseItem(id:$id,knowledgeBaseDetailsInput: $payload, isPartialData: $isPartial) {
+export const adminUpdateKnowledgeBaseItem = gql`
+mutation adminUpdateKnowledgeBaseItem($id:ID!,$payload:  KnowledgeBaseItem!, $isPartial: Boolean) {
+  adminUpdateKnowledgeBaseItem(id:$id,knowledgeBaseDetailsInput: $payload, isPartialData: $isPartial) {
     id
     title
     content
@@ -159,23 +113,13 @@ mutation updateKnowledgeBaseItem($id:ID!,$payload:  KnowledgeBaseItem!, $isParti
 }
 `;
 
-export const deleteKBById = gql`
-  mutation deleteKnowledgeBaseItems($id: [ID]){
-    deleteKnowledgeBaseItems(id: $id)
+export const adminDeleteKnowledgeBaseItems = gql`
+  mutation adminDeleteKnowledgeBaseItems($id: [ID]){
+    adminDeleteKnowledgeBaseItems(id: $id)
   }
 `;
 
-export const updateKnowledgeBaseItem = gql`mutation updateKnowledgeBaseStatus($id: [ID], $status:ArticleStatusEnum!){
-  updateKnowledgeBaseStatus(id: $id, status:$status)
-}  
-`;
-
-export const deleteKnowledgeBaseItem = gql`mutation deleteKnowledgeBaseItems($id: [ID]){
-  deleteKnowledgeBaseItems(id: $id)
-}  
-`;
-
-export const setOrderForKnowledgeBase = gql`mutation setOrderForKnowledgeBase($knowledgeBaseItemsList: [KnowledgeBaseOrderInput]) {
-  setOrderForKnowledgeBase(knowledgeBaseItemsList: $knowledgeBaseItemsList)
+export const adminSetOrderForKnowledgeBase = gql`mutation adminSetOrderForKnowledgeBase($knowledgeBaseItemsList: [KnowledgeBaseOrderInput]) {
+  adminSetOrderForKnowledgeBase(knowledgeBaseItemsList: $knowledgeBaseItemsList)
 }
 `;

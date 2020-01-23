@@ -55,7 +55,7 @@ class KeyTermsDetails extends Component {
     // const maxOfferingAmountD = get(keyTerms, 'maxOfferingAmount506') ? get(keyTerms, 'maxOfferingAmount506') : get(keyTerms, 'maxOfferingAmount506C');
     return (
       <>
-        <Grid columns={3} divided stackable className="vertical-gutter neutral-text">
+        <Grid columns={3} divided stackable className="key-terms vertical-gutter neutral-text">
           <Grid.Column>
             <p><b className={newLayout ? 'neutral-text' : ''}>Issuer</b><br />{get(keyTerms, 'legalBusinessName') || 'NA'}</p>
           </Grid.Column>
@@ -129,31 +129,34 @@ class KeyTermsDetails extends Component {
               </React.Fragment>
             ))
             }
-            <KeyTermsFieldHoc
-              data={campaign}
-              field="closureSummary.totalInvestmentAmount"
-              title="Raised to date"
-              noBgOffWhite
-              content={(
-                <>
-                  <p>
-                    {Helper.CurrencyFormat(totalInvestmentAmount, 0)}
-                  </p>
-                  {get(keyTerms, 'regulation') === 'BD_CF_506C'
-                    && (
-                      <>
-                        <p>
-                          <i>{`${Helper.CurrencyFormat(totalInvestmentAmountCf, 0)} (under Regulation Crowdfunding)`}</i>
-                        </p>
-                        <p>
-                          <i>{`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}</i>
-                        </p>
-                      </>
-                    )
-                  }
-                </>
+            {!campaignStatus.isFund
+              && (
+              <KeyTermsFieldHoc
+                data={campaign}
+                field="closureSummary.totalInvestmentAmount"
+                title="Raised to date"
+                noBgOffWhite
+                content={(
+                  <>
+                    <p>
+                      {Helper.CurrencyFormat(totalInvestmentAmount, 0)}
+                    </p>
+                    {get(keyTerms, 'regulation') === 'BD_CF_506C'
+                      && (
+                        <>
+                          <p>
+                            <i>{`${Helper.CurrencyFormat(totalInvestmentAmountCf, 0)} (under Regulation Crowdfunding)`}</i>
+                          </p>
+                          <p>
+                            <i>{`${Helper.CurrencyFormat(totalInvestmentAmount506C, 0)} (under Regulation D)`}</i>
+                          </p>
+                        </>
+                      )
+                    }
+                  </>
+                )}
+              />
               )}
-            />
             <KeyTermsFieldHoc
               data={keyTerms}
               field="securities"
@@ -293,7 +296,7 @@ class KeyTermsDetails extends Component {
               title={`${capitalize(keyTerms.equityUnitType)} Price`}
               content={(
                 <p>
-                  {keyTerms.priceCopy }
+                  {keyTerms.priceCopy}
                 </p>
               )}
             />

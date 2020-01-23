@@ -16,19 +16,21 @@ export default class Insights extends Component {
 
   constructor(props) {
     super(props);
+    if (!this.props.articleStore.InsightCategories.length) {
+      this.props.articleStore.getCategoryList(true);
+      this.props.articleStore.featuredRequestArticles();
+    }
     if (this.props.match.params && this.props.match.params.id) {
       const id = this.props.match.params.id === 'all' ? null : this.props.match.params.id;
       this.props.articleStore.requestAllArticles(true, false, id);
     } else {
       this.props.articleStore.requestAllArticles(true, false);
-      this.props.articleStore.featuredRequestArticles();
-      this.props.articleStore.getCategoryList(true);
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.match.params && nextProps.match.params.id) {
-      const id = nextProps.match.params.id === 'all' ? null : nextProps.match.params.id;
+  componentDidUpdate(prevProps) {
+    if (this.props.match.params && this.props.match.params.id !== prevProps.match.params.id) {
+      const id = this.props.match.params.id === 'all' ? null : this.props.match.params.id;
       this.props.articleStore
         .requestAllArticles(true, this.state.sortAsc, id);
     }
@@ -37,7 +39,7 @@ export default class Insights extends Component {
   activeText = () => {
     const { InsightCategories } = this.props.articleStore;
     const { location } = this.props;
-    const refMatch = { url: '/resources/insights' };
+    const refMatch = { url: '/insights' };
     if (InsightCategories.length !== 0) {
       const active = InsightCategories.find((i) => {
         const path = `${refMatch.url}/${i.to}`;
@@ -80,7 +82,7 @@ export default class Insights extends Component {
                   key={i}
                   fluid
                 />
-                <Link to={`/resources/insights/${i.slug}`} className="image-caption">
+                <Link to={`/insights/${i.slug}`} className="image-caption">
                   <p className="news-category">
                     Featured
                   </p>
@@ -95,10 +97,10 @@ export default class Insights extends Component {
         <Responsive secondary minWidth={1200} as={Menu} className="menu-secondary-fixed insight-menu">
           <Container>
             <Menu.Menu secondary className="menu-secondary">
-              <Menu.Item as={Link} to="/resources/insights/category/all">All</Menu.Item>
+              <Menu.Item as={Link} to="/insights/category/all">All</Menu.Item>
               {InsightCategories
                 && InsightCategories.map(item => (
-                  <Menu.Item as={NavLink} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
+                  <Menu.Item as={NavLink} to={`/insights/${item.to}`}>{item.title}</Menu.Item>
                 ))}
             </Menu.Menu>
             <Menu.Item position="right">
@@ -129,10 +131,10 @@ export default class Insights extends Component {
         <Responsive maxWidth={1199} as={Menu} className={`${sliderInsightFeaturedArticles.length === 0 ? 'mt-30' : ''} mobile-dropdown-menu container`}>
           <Dropdown item text={this.activeText()}>
             <Dropdown.Menu>
-              <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>
+              <Menu.Item as={Link} to="/insights">All</Menu.Item>
               {InsightCategories
                 && InsightCategories.map(item => (
-                  <Menu.Item as={NavLink} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
+                  <Menu.Item as={NavLink} to={`/insights/${item.to}`}>{item.title}</Menu.Item>
                 ))}
             </Dropdown.Menu>
           </Dropdown>

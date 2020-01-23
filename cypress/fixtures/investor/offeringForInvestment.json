@@ -1,14 +1,14 @@
 {
   "offeringCF": {
-    "id": "129baa50-5a17-11e9-b77a-d5dea5ee1649"
+    "slug": "parallel-offering1"
   },
   "offering506C": {
-    "id": "b3bdfbb0-67fd-11e9-a6d5-e7775494aa08"
+    "slug": "ui-offering"
   },
   "offering506B": {
-    "id": "d1886720-8841-11e9-abc1-4dcdddd19ac1"
+    "slug": "new-reg-b-offering"
   },
   "parallelOffering": {
-    "id": "216c4b80-9bfc-11e9-939d-2fdf94b098c9"
+    "slug": "new-parallel"
   }
 }

@@ -62,12 +62,12 @@ export default class Security extends Component {
                           <Table.Cell collapsing>
                             {userDetails.email && userDetails.email.address}
                           </Table.Cell>
-                          <Table.Cell><Link className="link" to="/app/account-settings/security/new-email-address">Update</Link></Table.Cell>
+                          <Table.Cell><Link className="link" to="/dashboard/account-settings/security/new-email-address">Update</Link></Table.Cell>
                         </Table.Row>
                         <Table.Row>
                           <Table.Cell collapsing><b>Phone</b> {getUserMfaMode && getUserMfaMode !== 'EMAIL' && <Label color="green" size="mini">Selected</Label> }</Table.Cell>
                           <Table.Cell collapsing>{userDetails.phone && userDetails.phone.number ? Helper.phoneNumberFormatter(userDetails.phone.number) : '--'}</Table.Cell>
-                          <Table.Cell><Link className="link" to="/app/account-settings/security/new-phone-number">Update</Link></Table.Cell>
+                          <Table.Cell><Link className="link" to="/dashboard/account-settings/security/new-phone-number">Update</Link></Table.Cell>
                         </Table.Row>
                       </Table.Body>
                     </Table>
@@ -89,7 +89,7 @@ export default class Security extends Component {
                       <Button
                         disabled={(section.action[0] === 'mfa' && !getUserMfaMode)}
                         as={Link}
-                        to={section.action[0] === 'mfa' && !userDetails.phone ? '/app/account-settings/security/new-phone-number' : `${match.url}/${section.action[0]}`}
+                        to={section.action[0] === 'mfa' && !userDetails.phone ? '/dashboard/account-settings/security/new-phone-number' : `${match.url}/${section.action[0]}`}
                         inverted
                         color="green"
                         content={section.action[1]}

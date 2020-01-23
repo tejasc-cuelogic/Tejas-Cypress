@@ -1,5 +1,6 @@
 import React from 'react';
 import Parser from 'html-react-parser';
+import { get } from 'lodash';
 
 const cleanMsg = (msg) => {
   try {
@@ -14,7 +15,7 @@ class ListErrors extends React.Component {
     if (errors) {
       return (
         errors.length === 1 ? (
-          <p>{Parser(cleanMsg(typeof errors[0] !== 'string' ? errors[0].message : errors[0]) || '')}</p>
+          <p>{Parser(cleanMsg(get(errors, '[0].message') || errors[0]) || '')}</p>
         ) : (
           <ul className="error-messages">
             {Object.keys(errors).map(key => <li key={key}>{cleanMsg(errors[key])}</li>)}

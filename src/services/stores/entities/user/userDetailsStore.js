@@ -20,7 +20,7 @@ import {
   userListingStore,
   userStore,
 } from '../../index';
-import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminHardDeleteUser, toggleUserAccount, skipAddressOrPhoneValidationCheck, frozenEmailToAdmin, freezeAccount, getEmailList } from '../../queries/users';
+import { userDetailsQuery, selectedUserDetailsQuery, userDetailsQueryForBoxFolder, deleteProfile, adminUserHardDelete, adminUpdateUserStatus, adminSkipAddressOrPhoneValidationCheck, frozenAccountActivityDetected, adminFreezeAccount, adminFetchEmails } from '../../queries/users';
 import { updateUserProfileData } from '../../queries/profile';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE, DELETE_MESSAGE, US_STATES } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
@@ -149,7 +149,8 @@ export class UserDetailsStore {
     if (this.userDetails) {
       accDetails = filter(this.userDetails.roles, account => account.name !== 'investor'
         && account.details
-        && (account.details.accountStatus === 'FULL' || account.details.accountStatus === 'FROZEN'));
+        && (account.details.accountStatus === 'FULL'
+        || accountStore.isAccFrozen(account.details.accountStatus)));
     }
     return accDetails;
   }
@@ -186,6 +187,16 @@ export class UserDetailsStore {
 
   @computed get isAccountFrozen() {
     const isFrozonAccountExists = findIndex(this.signupStatus.frozenAccounts, o => o === this.currentActiveAccount);
+    return isFrozonAccountExists >= 0;
+  }
+
+  @computed get isAccountSoftFrozen() {
+    const isFrozonAccountExists = findIndex(this.signupStatus.softFrozenAccounts, o => o === this.currentActiveAccount);
+    return isFrozonAccountExists >= 0;
+  }
+
+  @computed get isAccountHardFrozen() {
+    const isFrozonAccountExists = findIndex(this.signupStatus.hardFrozenAccounts, o => o === this.currentActiveAccount);
     return isFrozonAccountExists >= 0;
   }
 
@@ -255,16 +266,16 @@ export class UserDetailsStore {
   }
 
   @action
-  skipAddressOrPhoneValidationCheck = type => new Promise(async (resolve, reject) => {
+  adminSkipAddressOrPhoneValidationCheck = type => new Promise(async (resolve, reject) => {
     const shouldSkip = type === 'PHONE' ? !this.isPhoneSkip : !this.isAddressSkip;
     const payLoad = { userId: this.selectedUserId, shouldSkip, type };
     client
       .mutate({
-        mutation: skipAddressOrPhoneValidationCheck,
+        mutation: adminSkipAddressOrPhoneValidationCheck,
         variables: payLoad,
       })
       .then(action((res) => {
-        this.setFieldValue(type === 'PHONE' ? 'isPhoneSkip' : 'isAddressSkip', get(res, 'data.skipAddressOrPhoneValidationCheck'));
+        this.setFieldValue(type === 'PHONE' ? 'isPhoneSkip' : 'isAddressSkip', get(res, 'data.adminSkipAddressOrPhoneValidationCheck'));
         resolve();
       })).catch(() => reject());
   });
@@ -276,30 +287,30 @@ export class UserDetailsStore {
     try {
       const res = await client
         .mutate({
-          mutation: !isHardDelete ? deleteProfile : adminHardDeleteUser,
+          mutation: !isHardDelete ? deleteProfile : adminUserHardDelete,
           variables: !isInvestor ? { userId: this.selectedUserId, reason } : {},
         });
       uiStore.removeOneFromProgressArray('deleteProfile');
-      if (get(res, 'data.adminDeleteInvestorOrIssuerUser.status') || get(res, 'data.adminHardDeleteUser.status')) {
+      if (get(res, 'data.deleteInvestorOrIssuerUser.status') || get(res, 'data.adminUserHardDelete.status')) {
         userStore.setFieldValue('confirmDelete', true);
         Helper.toast('User Profile Deleted Successfully!', 'success');
         resolve();
       } else {
-        reject(!isHardDelete ? get(res, 'data.adminDeleteInvestorOrIssuerUser.message') : get(res, 'data.adminHardDeleteUser.message'));
+        reject(!isHardDelete ? get(res, 'data.deleteInvestorOrIssuerUser.message') : get(res, 'data.adminUserHardDelete.message'));
       }
     } catch (error) {
       uiStore.removeOneFromProgressArray('deleteProfile');
       Helper.toast('Something went wrong, please try again in sometime', 'error');
+      reject(error.message);
     }
   });
 
   @action
-  getUser = userId => new Promise((res) => {
+  getUser = () => new Promise((res) => {
     this.currentUser = graphql({
       client,
       query: userDetailsQuery,
       fetchPolicy: 'network-only',
-      variables: { userId },
       onFetch: (result) => {
         if (!this.currentUser.loading) {
           identityStore.setProfileInfo(this.userDetails);
@@ -418,7 +429,7 @@ export class UserDetailsStore {
     const params = { accountStatus, id };
     client
       .mutate({
-        mutation: toggleUserAccount,
+        mutation: adminUpdateUserStatus,
         variables: params,
       })
       .then(() => {
@@ -439,7 +450,7 @@ export class UserDetailsStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: freezeAccount,
+          mutation: adminFreezeAccount,
           variables: {
             userId,
             accountId,
@@ -486,7 +497,7 @@ export class UserDetailsStore {
       ) ? this.userDetails.legalDetails.status : 'FAIL';
       details.roles = mapValues(this.userDetails.roles, (a) => {
         const data = {
-          accountId: a.accountId,
+          accountId: get(a, 'details.accountId'),
           name: a.name,
           status: a.details ? a.details.accountStatus : null,
         };
@@ -499,7 +510,9 @@ export class UserDetailsStore {
       details.inActiveAccounts = difference(validAccTypes, accTypes);
       details.partialAccounts = map(filter(details.roles, a => a.status === 'PARTIAL'), 'name');
       details.activeAccounts = map(filter(details.roles, a => a.status === 'FULL'), 'name');
-      details.frozenAccounts = map(filter(details.roles, a => a.status === 'FROZEN'), 'name');
+      details.frozenAccounts = map(filter(details.roles, a => accountStore.isAccFrozen(a.status)), 'name');
+      details.softFrozenAccounts = map(filter(details.roles, a => accountStore.isAccSoftFrozen(a.status)), 'name');
+      details.hardFrozenAccounts = map(filter(details.roles, a => accountStore.isAccHardFrozen(a.status)), 'name');
       details.processingAccounts = map(filter(details.roles, a => (a.status ? a.status.endsWith('PROCESSING') : null)), 'name');
       details.inprogressAccounts = map(filter(details.roles, a => a.name !== 'investor' && a.status !== 'FULL'), 'name');
       details.phoneVerification = this.userDetails.phone
@@ -573,6 +586,10 @@ export class UserDetailsStore {
         || this.signupStatus.processingAccounts.length > 0));
   }
 
+  @computed get hasAnyAccount() {
+    return (this.signupStatus.activeAccounts.length > 0 || this.signupStatus.partialAccounts.length > 0 || this.signupStatus.inprogressAccounts.length > 0);
+  }
+
   @computed get isLegalDocsPresent() {
     return get(this.userDetails.legalDetails, 'verificationDocs.addressProof.fileId')
       || get(this.userDetails.legalDetails, 'verificationDocs.idProof.fileId');
@@ -583,6 +600,11 @@ export class UserDetailsStore {
     this.deleting = status;
   }
 
+  getIdByAccountType = (type) => {
+    const role = this.userDetails.roles.find(i => i.name === type);
+    return role ? get(role, 'details.accountId') : '';
+  }
+
   @computed get isCipExpirationInProgress() {
     return get(this.userDetails, 'cip.expiration')
     && this.signupStatus.investorProfileCompleted && !this.isUserVerified && !this.isLegalDocsPresent && this.signupStatus.partialAccounts.length;
@@ -590,7 +612,7 @@ export class UserDetailsStore {
 
   @computed
   get pendingStep() {
-    let routingUrl = '/app/summary';
+    let routingUrl = '/dashboard/setup';
     const selectedAccountType = investmentStore
       && investmentStore.investAccTypes && investmentStore.investAccTypes.value;
     const investorAccountCreatedList = map(filter(this.signupStatus.roles, a => a.name !== 'investor'), 'name');
@@ -600,36 +622,36 @@ export class UserDetailsStore {
         this.setSignUpDataForMigratedUser(this.userDetails);
         routingUrl = '/welcome-email';
       } else if (!this.signupStatus.isMigratedFullAccount && !get(this.userDetails, 'cip.requestId')) {
-        routingUrl = '/app/summary/identity-verification/0';
+        routingUrl = '/dashboard/setup/identity-verification/0';
       } else if ((get(this.userDetails, 'cip.requestId'))) {
         if (this.signupStatus.phoneVerification !== 'DONE') {
-          routingUrl = '/app/summary/identity-verification/3';
+          routingUrl = '/dashboard/setup/identity-verification/3';
         } else if (!this.signupStatus.investorProfileCompleted) {
-          routingUrl = '/app/summary/establish-profile';
+          routingUrl = '/dashboard/setup/establish-profile';
         }
       }
     } else if (this.isCipExpirationInProgress) {
-      routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
+      routingUrl = `/dashboard/setup/account-creation/${this.signupStatus.partialAccounts[0]}`;
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)
       && this.signupStatus.idVerification !== 'OFFLINE'
       && this.signupStatus.activeAccounts.length === 0
       && this.signupStatus.processingAccounts.length === 0) {
-      routingUrl = '/app/summary/identity-verification/0';
+      routingUrl = '/dashboard/setup/identity-verification/0';
     } else if (this.signupStatus.phoneVerification !== 'DONE') {
-      routingUrl = '/app/summary/identity-verification/3';
+      routingUrl = '/dashboard/setup/identity-verification/3';
     } else if (!this.signupStatus.investorProfileCompleted) {
-      routingUrl = '/app/summary/establish-profile';
+      routingUrl = '/dashboard/setup/establish-profile';
     } else if (isEmpty(investorAccountCreatedList)) {
-      routingUrl = '/app/summary/account-creation';
+      routingUrl = '/dashboard/setup/account-creation';
     } else if (this.partialInvestNowSessionURL && this.signupStatus.partialAccounts.length > 0) {
       const redirectAccount = selectedAccountType || this.signupStatus.partialAccounts[0];
-      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
+      routingUrl = `/dashboard/setup/account-creation/${redirectAccount}`;
     } else if (this.signupStatus.activeAccounts.length > 0
-      || this.signupStatus.frozenAccounts.length > 0) {
-      const redirectAccount = this.signupStatus.activeAccounts[0] || this.signupStatus.frozenAccounts[0];
-      routingUrl = `/app/account-details/${redirectAccount}/portfolio`;
+      || this.signupStatus.frozenAccounts.length > 0 || this.signupStatus.partialAccounts.length > 0) {
+      const redirectAccount = this.signupStatus.activeAccounts[0] || this.signupStatus.frozenAccounts[0] || this.signupStatus.partialAccounts[0];
+      routingUrl = `/dashboard/account-details/${redirectAccount}/portfolio`;
     } else {
-      routingUrl = '/app/summary';
+      routingUrl = '/dashboard/setup';
     }
     return routingUrl;
   }
@@ -780,18 +802,16 @@ export class UserDetailsStore {
   @action sendAdminEmailOfFrozenAccount = (activity, offeringId) => {
     const selectedAccount = this.currentActiveAccountDetails;
     const forzenAccountId = get(selectedAccount, 'details.accountId');
-    // selectedAccount && selectedAccount.details && selectedAccount.details.accountId ?
-    //  selectedAccount.details.accountId : '537fd0c0-1fc3-11e9-9cfb-1b268dcc26c4';
     const payLoad = {
-      userId: this.currentUserId, accountId: forzenAccountId, activity, offeringId,
+      accountId: forzenAccountId, activity, offeringId,
     };
     client
       .mutate({
-        mutation: frozenEmailToAdmin,
+        mutation: frozenAccountActivityDetected,
         variables: payLoad,
       })
       .then((res) => {
-        if (res.data.notifyAdminFrozenAccountActivity) {
+        if (res.data.frozenAccountActivityDetected) {
           // const offeringId = campaignStore.campaign && campaignStore.campaign.id;
           const offeringDetailObj = { offeringId, isEmailSent: true };
           cookie.save('ADMIN_FROZEN_EMAIL', offeringDetailObj, { maxAge: 3600 });
@@ -801,21 +821,21 @@ export class UserDetailsStore {
 
   @computed
   get pendingStepForPartialAndProcessingAccount() {
-    let routingUrl = '/app/summary';
+    let routingUrl = '/dashboard/setup';
     const selectedAccountType = investmentStore
       && investmentStore.investAccTypes && investmentStore.investAccTypes.value;
     if (this.signupStatus.partialAccounts.length > 0) {
       const redirectAccount = selectedAccountType || this.signupStatus.partialAccounts[0];
       const accValue = findKey(INVESTMENT_ACCOUNT_TYPES, val => val === redirectAccount);
       accountStore.setAccTypeChange(accValue);
-      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
+      routingUrl = `/dashboard/setup/account-creation/${redirectAccount}`;
     } else if (this.signupStatus.inActiveAccounts.length > 0) {
       const redirectAccount = selectedAccountType || this.signupStatus.inActiveAccounts[0];
       const accValue = findKey(INVESTMENT_ACCOUNT_TYPES, val => val === redirectAccount);
       accountStore.setAccTypeChange(accValue);
-      routingUrl = `/app/summary/account-creation/${redirectAccount}`;
+      routingUrl = `/dashboard/setup/account-creation/${redirectAccount}`;
     } else {
-      routingUrl = '/app/summary';
+      routingUrl = '/dashboard/setup';
     }
     return routingUrl;
   }
@@ -910,21 +930,27 @@ export class UserDetailsStore {
     });
   }
 
+  getInvestorAccountsRoute = (accType) => {
+    if (this.signupStatus.activeAccounts.includes(accType) || this.signupStatus.partialAccounts.includes(accType) || this.signupStatus.inprogressAccounts.includes(accType)) {
+      return accType;
+    }
+    return this.signupStatus.activeAccounts[0] || this.signupStatus.partialAccounts[0] || this.signupStatus.inprogressAccounts[0] || false;
+  }
+
   @action
   getEmailList = () => new Promise((resolve, reject) => {
     const variables = {};
     variables.recipientId = get(this.getDetailsOfUser, 'id');
     this.emailListArr = graphql({
       client,
-      query: getEmailList,
+      query: adminFetchEmails,
       variables,
       onFetch: (res) => {
-        if (get(res, 'fetchEmails.emails') && !this.emailListArr.loading) {
+        if (get(res, 'adminFetchEmails.emails') && !this.emailListArr.loading) {
           resolve();
         }
       },
-      onError: (error) => {
-        console.log(error);
+      onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
         reject();
       },
@@ -936,7 +962,7 @@ export class UserDetailsStore {
   }
 
   @computed get userEmails() {
-    return this.emailListArr && this.emailListArr.data.fetchEmails && this.emailListArr.data.fetchEmails.emails;
+    return this.emailListArr && this.emailListArr.data.adminFetchEmails && this.emailListArr.data.adminFetchEmails.emails;
   }
 }
 

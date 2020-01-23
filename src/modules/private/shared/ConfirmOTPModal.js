@@ -1,13 +1,15 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { get } from 'lodash';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
+import ManageMultiFactorAuth from './settings/components/profileSettings/ManageMultiFactorAuth';
 import { FormInput } from '../../../theme/form';
+
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -15,8 +17,16 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class ConfirmOTPModal extends Component {
+  state = {
+    changeMfa: false,
+  };
+
   componentDidMount() {
     Helper.otpShield();
+  }
+
+  handleChangeMfa = () => {
+    this.setState({ changeMfa: true });
   }
 
   getMaskedPhoneNumber = () => {
@@ -47,6 +57,9 @@ export default class ConfirmOTPModal extends Component {
     const { errors } = this.props.uiStore;
     const headerMessageToShow = actionToPerform;
     const formattedPhoneNumber = get(this.props, 'maskedPhoneNumber') ? Helper.phoneNumberFormatter(this.props.maskedPhoneNumber) : '';
+    if (this.state.changeMfa) {
+      return <ManageMultiFactorAuth refLink={this.props.match.url} />;
+    }
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -58,23 +71,23 @@ export default class ConfirmOTPModal extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          {mfaMode && mfaMode === 'PHONE'
+          {['TEXT', 'CALL', 'PHONE'].includes(mfaMode)
             ? <p className="display-only">{formattedPhoneNumber}</p>
             : (
-<FormInput
-  ishidelabel
-  type="email"
-  size="huge"
-  name="email"
-  fielddata={{ value: this.getOTPEmailAddress() }}
-  readOnly
-  displayMode
-  className="display-only"
-/>
+              <FormInput
+                ishidelabel
+                type="email"
+                size="huge"
+                name="email"
+                fielddata={{ value: this.getOTPEmailAddress() }}
+                readOnly
+                displayMode
+                className="display-only"
+              />
             )
           }
           <p>
-            <Link to="/app/account-settings/security" className="link">See Multi-Factor Authentication Settings</Link>
+          <Button color="green" className="link-button mt-30" content="See Multi-Factor Authentication Settings" onClick={this.handleChangeMfa} />
           </p>
           <Form error onSubmit={formSubmit}>
             <Form.Field className="otp-wrap">
@@ -90,16 +103,16 @@ export default class ConfirmOTPModal extends Component {
                 fielddata={OTPVerifyMeta.fields.code}
                 onChange={VerificationChange}
               />
-              <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" onClick={e => resendVerification(e)} />
+              <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend code" onClick={e => resendVerification(e)} />
             </Form.Field>
             {errors
               && (
-<Message error className="mb-40">
-                <ListErrors errors={[errors]} />
-              </Message>
+                <Message error className="mb-40">
+                  <ListErrors errors={[errors]} />
+                </Message>
               )
             }
-            <Button type="submit" primary size="large" className="very relaxed" content="Submit to approval" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTPVerifyMeta.meta.isValid} />
+            <Button type="submit" primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTPVerifyMeta.meta.isValid} />
           </Form>
         </Modal.Content>
       </Modal>

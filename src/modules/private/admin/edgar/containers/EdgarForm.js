@@ -38,7 +38,7 @@ export default class EdgarForm extends React.Component {
   handleSubmit = () => {
     businessActions.generateDocxFile()
       .then((data) => {
-        this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
+        this.props.history.push(`/dashboard/edgar/${this.props.match.params.businessId}`);
         Helper.toast(`.docx file with id ${data.body.requestId} created successfully`, 'success');
       })
       .finally(() => {
@@ -74,7 +74,7 @@ export default class EdgarForm extends React.Component {
                   <Responsive
                     minWidth={Responsive.onlyLargeScreen.minWidth}
                     as={Link}
-                    to={`/app/edgar/${this.props.match.params.businessId}`}
+                    to={`/dashboard/edgar/${this.props.match.params.businessId}`}
                     className="back-link"
                   >
                     <Icon className="ns-arrow-left" />

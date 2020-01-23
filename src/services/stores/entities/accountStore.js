@@ -7,7 +7,7 @@ import { FormValidator, DataFormatter } from '../../../helper';
 import { bankAccountStore, individualAccountStore, iraAccountStore, userStore, entityAccountStore, userDetailsStore, uiStore, identityStore } from '../index';
 import { GqlClient as client } from '../../../api/gqlApi';
 // eslint-disable-next-line import/named
-import { getInvestorCloseAccounts, closeInvestorAccount, updateToAccountProcessing } from '../queries/account';
+import { adminGetUserClosedAccounts, adminCloseInvestorAccount, updateToAccountProcessing } from '../queries/account';
 import Helper from '../../../helper/utility';
 import {
   INVESTMENT_ACCOUNT_TYPES,
@@ -36,12 +36,15 @@ export class AccountStore {
       linkbankValue: 0,
     },
     1: {
-      store: iraAccountStore, location: 3, accountId: 'iraAccountId', name: 'ira', linkbankValue: 3,
-
+      store: iraAccountStore,
+      location: 5,
+      accountId: 'iraAccountId',
+      name: 'ira',
+      linkbankValue: 4,
     },
     2: {
       store: entityAccountStore,
-      location: 5,
+      location: 6,
       accountId: 'entityAccountId',
       name: 'entity',
       linkbankValue: 5,
@@ -83,30 +86,30 @@ export class AccountStore {
   getInvestorCloseAccounts = (userId = undefined) => {
     this.closedAccounts = graphql({
       client,
-      query: getInvestorCloseAccounts,
+      query: adminGetUserClosedAccounts,
       fetchPolicy: 'network-only',
       variables: { userId: userId || userDetailsStore.getDetailsOfUser.id },
     });
   }
 
   @action
-  closeInvestorAccount = (userId, accountId, accountType, reason) => {
+  adminCloseInvestorAccount = (userId, accountId, accountType, reason) => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: closeInvestorAccount,
+          mutation: adminCloseInvestorAccount,
           variables: {
             userId,
             accountId,
             accountType,
             reason,
           },
-          refetchQueries: [{ query: getInvestorCloseAccounts, variables: { userId } }],
+          refetchQueries: [{ query: adminGetUserClosedAccounts, variables: { userId } }],
         })
         .then((res) => {
-          if (get(res, 'data.closeInvestorAccount.errorMessage')) {
-            Helper.toast(get(res, 'data.closeInvestorAccount.errorMessage'), 'error');
+          if (get(res, 'data.adminCloseInvestorAccount.errorMessage')) {
+            Helper.toast(get(res, 'data.adminCloseInvestorAccount.errorMessage'), 'error');
           } else {
             Helper.toast(`${accountType === 'IRA' ? accountType : accountType.toLowerCase()} account closed successfully.`, 'success');
           }
@@ -124,7 +127,7 @@ export class AccountStore {
     const accountId = get(accountDetails, 'details.accountId') || store[`${accountType}AccountId`];
     await this.updateToAccountProcessing(accountId, accountvalue);
     window.sessionStorage.removeItem('cipErrorMessage');
-    const url = store.showProcessingModal ? `${match.url}/${accountType}/processing` : '/app/summary';
+    const url = store.showProcessingModal ? `${match.url}/${accountType}/processing` : '/dashboard/setup';
     store.setFieldValue('showProcessingModal', false);
     return url;
   }
@@ -159,8 +162,8 @@ export class AccountStore {
   @computed
   get sortedAccounts() {
     const filteredAccounts = ['individual', 'ira', 'entity'].map((accType) => {
-      if (get(this.closedAccounts, 'data.getInvestorCloseAccounts')) {
-        const closedAccounts = this.closedAccounts.data.getInvestorCloseAccounts.filter(closedAccount => closedAccount.accountType === accType.toUpperCase());
+      if (get(this.closedAccounts, 'data.adminGetUserClosedAccounts')) {
+        const closedAccounts = this.closedAccounts.data.adminGetUserClosedAccounts.filter(closedAccount => closedAccount.accountType === accType.toUpperCase());
         const sortAccBydate = orderBy(closedAccounts, o => (o.closed.date ? moment(new Date(o.closed.date)).unix() : ''), ['desc']);
         return sortAccBydate.map((closedAccount, index) => (
           { details: {
@@ -226,5 +229,11 @@ export class AccountStore {
   closeAccountForm = () => {
     this.CLOSE_ACCOUNT_FRM = FormValidator.prepareFormObject(CLOSE_INVESTOR_ACCOUNT);
   }
+
+  isAccFrozen = status => ['HARD_FREEZE', 'SOFT_FREEZE'].includes(status)
+
+  isAccHardFrozen = status => ['HARD_FREEZE'].includes(status)
+
+  isAccSoftFrozen = status => ['SOFT_FREEZE'].includes(status)
 }
 export default new AccountStore();

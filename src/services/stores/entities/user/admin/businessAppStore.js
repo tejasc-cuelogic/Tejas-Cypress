@@ -5,7 +5,7 @@ import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FILTER_META } from '../../../../../constants/user';
 import { BUSINESS_DETAILS_EDIT_META } from '../../../../constants/businessApplication';
-import { getBusinessApplicationsDetailsAdmin, getBusinessApplicationAdmin, getBusinessApplicationSummary, updateBusinessApplicationInformation, exportAllToEmail } from '../../../queries/businessApplication';
+import { adminBusinessApplicationsDetails, adminBusinessApplications, adminBusinessApplicationsSummary, updateBusinessApplicationInformation, adminExportAllToEmail } from '../../../queries/businessApplication';
 import Helper from '../../../../../helper/utility';
 import { uiStore } from '../../../index';
 
@@ -91,8 +91,8 @@ export class BusinessAppStore {
 
   @computed get getBusinessApplication() {
     return (this.businessApplicationsList && this.businessApplicationsList.data
-      && this.businessApplicationsList.data.businessApplicationsAdmin
-      && toJS(this.businessApplicationsList.data.businessApplicationsAdmin.businessApplications)
+      && this.businessApplicationsList.data.adminBusinessApplications
+      && toJS(this.businessApplicationsList.data.adminBusinessApplications.businessApplications)
     ) || [];
   }
 
@@ -115,10 +115,10 @@ export class BusinessAppStore {
   getBusinessApplicationSummary = () => {
     graphql({
       client,
-      query: getBusinessApplicationSummary,
+      query: adminBusinessApplicationsSummary,
       onFetch: (data) => {
         if (data) {
-          const { prequalFaild, inProgress, completed } = data.businessApplicationsSummary;
+          const { prequalFaild, inProgress, completed } = data.adminBusinessApplicationsSummary;
           this.summary = { 'prequal-failed': prequalFaild, 'in-progress': inProgress, completed };
         }
       },
@@ -148,10 +148,10 @@ export class BusinessAppStore {
   filterByAppStatus = () => {
     const { applicationStatus } = this.requestState.search;
     const { data } = this.businessApplicationsList;
-    if (applicationStatus && applicationStatus.length && data && data.businessApplicationsAdmin) {
-      data.businessApplicationsAdmin.businessApplications = filter(this.backup, app => includes(toJS(applicationStatus), app.applicationStatus));
-    } else if (data && data.businessApplicationsAdmin) {
-      data.businessApplicationsAdmin.businessApplications = this.backup;
+    if (applicationStatus && applicationStatus.length && data && data.adminBusinessApplications) {
+      data.adminBusinessApplications.businessApplications = filter(this.backup, app => includes(toJS(applicationStatus), app.applicationStatus));
+    } else if (data && data.adminBusinessApplications) {
+      data.adminBusinessApplications.businessApplications = this.backup;
     }
   }
 
@@ -181,12 +181,12 @@ export class BusinessAppStore {
       ? { ...filterParams, lek: this.requestState.lek[`page-${this.requestState.page}`] } : { ...filterParams };
     this.businessApplicationsList = graphql({
       client,
-      query: getBusinessApplicationAdmin,
+      query: adminBusinessApplications,
       variables: filterParams,
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data && !this.businessApplicationsList.loading) {
-          const { lek, businessApplications } = data.businessApplicationsAdmin;
+          const { lek, businessApplications } = data.adminBusinessApplications;
           this.requestState = {
             ...this.requestState,
             lek: {
@@ -244,7 +244,7 @@ export class BusinessAppStore {
             ...additionalVariables,
           },
           refetchQueries: !rating ? [{
-            query: getBusinessApplicationsDetailsAdmin,
+            query: adminBusinessApplicationsDetails,
             variables: refetchPayLoad,
           }] : null,
         })
@@ -268,7 +268,7 @@ export class BusinessAppStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: exportAllToEmail,
+          mutation: adminExportAllToEmail,
           variables: {
             applicationType: applicationType === 'prequal-failed' ? 'PRE_QUALIFICATION_FAILED' : applicationType === 'in-progress' ? 'IN_PROGRESS' : 'COMPLETED',
           },

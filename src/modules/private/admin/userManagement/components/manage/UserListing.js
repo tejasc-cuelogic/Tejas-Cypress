@@ -73,7 +73,7 @@ class UserListing extends Component {
                     }
                   </Table.Cell>
                   <Table.Cell className="user-status">
-                    <span className="user-name">{isManager ? <Link to={`/app/users/${user.id}/profile-data`}><b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b></Link> : <b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b>}</span>
+                    <span className="user-name">{isManager ? <Link to={`/dashboard/users/${user.id}/profile-data`}><b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b></Link> : <b>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</b>}</span>
                     {user.email ? user.email.address : ''}
                   </Table.Cell>
                   <Table.Cell>
@@ -95,7 +95,7 @@ class UserListing extends Component {
                     }
                   </Table.Cell>
                   {isManager
-                    && <Table.Cell><Link to={`/app/users/${user.id}/profile-data`} className="action">view profile</Link></Table.Cell>
+                    && <Table.Cell><Link to={`/dashboard/users/${user.id}/profile-data`} className="action">view profile</Link></Table.Cell>
                   }
                 </Table.Row>
               ))}

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Button, Comment, Form, Segment, Header, Label, Divider } from 'semantic-ui-react';
+import { Button, Comment, Form, Segment, Header, Label, Divider, Message, Modal } from 'semantic-ui-react';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
 import { FormTextarea } from '../../../../../theme/form';
 import HtmlEditor from '../../../../shared/HtmlEditor';
+import { ListErrors } from '../../../../../theme/shared';
 import { DataFormatter } from '../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -17,7 +18,7 @@ const isTablet = document.documentElement.clientWidth < 992;
 @observer
 class Comments extends Component {
   state = {
-    readMore: false, readMoreInner: false, visible: false, commentId: null, visiblePost: true,
+    readMore: false, readMoreInner: false, visible: false, commentId: null, visiblePost: true, accreditationModel: false,
   }
 
   constructor(props) {
@@ -84,21 +85,29 @@ class Comments extends Component {
 
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }
 
+  handleAccreditatonModel = (e, stateValue) => {
+    e.preventDefault();
+    this.setState({ accreditationModel: stateValue });
+  }
+
+  closeAccreditationModel = () => this.setState({ accreditationModel: false });
+
   render() {
     const { visible, visiblePost } = this.state;
     const { isUserLoggedIn } = this.props.authStore;
     const loginOrSignup = this.props.navStore.stepInRoute;
     const { currentUser } = this.props.userStore;
-    const { idVerification, activeAccounts } = this.props.userDetailsStore.signupStatus;
+    const { errors } = this.props.uiStore;
+    const { idVerification, activeAccounts, frozenAccounts } = this.props.userDetailsStore.signupStatus;
     const loggedInAsInvestor = isUserLoggedIn && currentUser.roles.includes('investor');
-    const accountStatusFull = idVerification === 'PASS' || activeAccounts.length;
+    const accountStatusFull = ['PASS', 'MANUAL_VERIFICATION_PENDING'].includes(idVerification) && activeAccounts.length;
     const isRightToPostComment = isUserLoggedIn && (currentUser.roles.includes('investor') && accountStatusFull);
     const readMoreLength = 250;
     const { campaign, commentsMainThreadCount } = this.props.campaignStore;
     const campaignStage = get(campaign, 'stage');
     // const passedProcessingDate = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true) <= 0;
     const passedProcessingDate = DataFormatter.getDateDifferenceInHoursOrMinutes(get(campaign, 'closureSummary.processingDate'), true, true).value <= 0;
-    const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull;
+    const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull || frozenAccounts.length;
     let comments = campaign && campaign.comments;
     const campaignId = campaign && campaign.id;
     const campaignSlug = campaign && campaign.offeringSlug;
@@ -107,10 +116,23 @@ class Comments extends Component {
       MESSAGE_FRM, msgEleChange, buttonLoader,
     } = this.props.messageStore;
     const { showOnlyOne, newLayout } = this.props;
-    comments = showOnlyOne ? [get(comments, '[0]')] : comments;
+    comments = showOnlyOne ? [get(commentsMainThreadCount, '[0]')] : comments;
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
+    const { isInvestorAccreditated } = this.props.userDetailsStore;
+    const offeringRegulation = get(campaign, 'keyTerms.regulation');
     return (
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
+        <Modal open={this.state.accreditationModel} closeIcon onClose={this.closeAccreditationModel}>
+          <Modal.Content>
+            <section className="no-updates center-align bg-offwhite padded">
+              <Header as="h3" className="mb-20 mt-50">
+                Post comment is only available to accredited investors.
+              </Header>
+              <p>Please confirm your accredited investor status to post comment.</p>
+              <Button as={Link} to="/dashboard/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
+            </section>
+          </Modal.Content>
+        </Modal>
         <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
           Comments
           <span className="anchor" id="comments" />
@@ -135,7 +157,7 @@ class Comments extends Component {
         </p>
             </>
           )}
-        {!isRightToPostComment
+        {!isRightToPostComment && !frozenAccounts.length
           ? (
             <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
               {loggedInAsInvestor && !accountStatusFull
@@ -144,13 +166,22 @@ class Comments extends Component {
               }
               <Form reply className="public-form clearfix">
                 {loggedInAsInvestor && !accountStatusFull
-                  ? <Link to="/app/summary" className="ui button secondary">Finish Account Setup</Link>
-                  : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
+                  ? <Link to="/dashboard/setup" className="ui button primary">Finish Account Setup</Link>
+                  : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button primary">{get(loginOrSignup, 'title')}</Link>
                 }
               </Form>
             </section>
           )
-          : (!disablePostComment)
+          : (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated)
+            ? (
+            <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
+              <p>In order to leave comments, please confirm your accredited investor status.</p>
+              <Form reply className="public-form clearfix">
+              <Link to="/" onClick={e => this.handleAccreditatonModel(e, true)} className="ui button primary">Confirm Status</Link>
+              </Form>
+            </section>
+            )
+            : (!disablePostComment)
           && (
             <>
               {visiblePost
@@ -162,14 +193,21 @@ class Comments extends Component {
                       changed={msgEleChange}
                       containerclassname="secondary"
                     />
-                    <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
+                    <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null, campaignId)} disabled={!MESSAGE_FRM.meta.isValid || buttonLoader === 'PUBLIC'} primary compact content="Post Comment" />
                   </Form>
                 ) : ''
               }
             </>
           )
         }
-        {comments && commentsMainThreadCount
+        {errors
+          && (
+            <Message error className="mt-30">
+              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+            </Message>
+          )
+        }
+        {(comments && commentsMainThreadCount.length)
           ? (
             <>
               <div color="green" className={`${newLayout ? 'mt-30' : 'mt-50'} offering-comment`}>
@@ -218,10 +256,10 @@ class Comments extends Component {
                                     changed={msgEleChange}
                                     containerclassname="secondary"
                                   />
-                                  <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(c.id)}>
+                                  <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(c.id)} disabled={buttonLoader === 'PUBLIC'}>
                                     Cancel Reply
                                 </Button>
-                                  <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
+                                  <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid || buttonLoader === 'PUBLIC'} primary content="Post Comment" />
                                 </Form>
                                 <Divider hidden />
                                 <p>
@@ -239,11 +277,11 @@ class Comments extends Component {
                               </>
                             ) : ''}
                           </Comment.Content>
-                          {c.threadComment.length !== 0
+                          {(c.threadComments && c.threadComments.length !== 0)
                             && (
                               <Comment.Group className="reply-comments">
-                                {c.threadComment
-                                  && c.threadComment.map(tc => ((tc.createdUserInfo && tc.createdUserInfo.id === issuerId
+                                {c.threadComments
+                                  && c.threadComments.map(tc => ((tc.createdUserInfo && tc.createdUserInfo.id === issuerId
                                     && tc.approved)
                                     || (tc.createdUserInfo && tc.createdUserInfo.id !== issuerId)) && tc.scope === 'PUBLIC' && (
                                       <Comment key={tc.id} className={`${((get(tc, 'createdUserInfo.id') === issuerId) || get(tc, 'createdUserInfo.roles[0].name') === 'admin') ? 'issuer-comment' : ''}`}>

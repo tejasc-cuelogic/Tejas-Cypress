@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Card } from 'semantic-ui-react';
+import { get } from 'lodash';
 import MessagesList from './comments/MessagesList';
 import MessagesWrap from './comments/MessagesWrap';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -20,13 +21,15 @@ export default class Comments extends Component {
 
   render() {
     const {
-      match, messageStore, userStore,
+      match, messageStore, userStore, offeringsStore,
     } = this.props;
     const {
       messages, currentMessageId, loading, error, threadUsersList, newPostComment, threadMsgCount,
     } = messageStore;
+    const { offer } = offeringsStore;
     const { isIssuer, isAdmin } = userStore;
     const passedProcessingDate = false;
+    const currentOfferingIssuerId = get(offer, 'issuerId');
     if (loading) {
       return <InlineLoader />;
     }
@@ -56,6 +59,7 @@ export default class Comments extends Component {
           passedProcessingDate={passedProcessingDate}
           isIssuer={isIssuer}
           isAdmin={isAdmin}
+          currentOfferingIssuerId={currentOfferingIssuerId}
         />
       </Card>
     );

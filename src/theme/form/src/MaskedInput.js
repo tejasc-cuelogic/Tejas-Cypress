@@ -1,18 +1,21 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon, Button } from 'semantic-ui-react';
+import { Form, Popup, Icon, Button, Modal, Header } from 'semantic-ui-react';
 import { has } from 'lodash';
 import NumberFormat from 'react-number-format';
 import InputMask from 'react-input-mask';
 import { Link } from 'react-router-dom';
 import { FieldError } from '../../shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const NumberFormatWrapped = props => (
   <div className={props.wrapperClass}>
     <NumberFormat {...props} />
   </div>
 );
+
+
 @observer
 export default class MaskedInput extends Component {
   state = { showError: false };
@@ -37,40 +40,63 @@ export default class MaskedInput extends Component {
       placeholder: (displayMode || readOnly) ? 'N/A' : placeHolder,
     };
     const fieldClass = `${props.containerclassname || ''} ${displayMode ? 'display-only' : ''}`;
+    const CustomToolTip = ({ trigger }) => (
+      <>
+      {isMobile ? (
+        <Modal style={{ top: '50%', transform: 'translate(0, -50%)' }} className="mobile-tooltip" size="tiny" trigger={trigger} closeIcon>
+          <Modal.Content>
+            <Header as="h5">
+              {label}
+            </Header>
+            <span>{tooltip}</span>
+          </Modal.Content>
+        </Modal>
+      )
+        : (
+        <Popup
+          on={props.toolTipOnLabel ? 'click' : 'hover'}
+          hoverable={props.toolTipOnLabel ? false : props.hoverable}
+          trigger={trigger}
+          position={isMobile ? 'bottom center' : 'top center'}
+          className={props.containerClassname}
+          wide
+        >
+          <Popup.Content>
+            {tooltip}
+          </Popup.Content>
+        </Popup>
+        )
+    }
+    {props.removed
+      && (
+        <Link to={props.linkto} onClick={e => props.removed(e)}>
+          <Icon className="ns-close-circle" color="grey" />
+        </Link>
+      )
+    }
+    </>
+    );
+    const fieldLabel = (props.label
+      && (props.asterisk && props.asterisk === 'true'
+        ? `${props.label}*` : props.label))
+        || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label);
     return (
       <Form.Field
-        error={(!!error && this.state.showError) || (!!error && props.showerror)}
+        error={this.props.forceError || (!!error && this.state.showError) || (!!error && props.showerror)}
         className={fieldClass}
         width={props.containerwidth || false}
       >
 
         {!props.hidelabel
           && (
-            <label>
-              {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
-              {tooltip
+            <label className={props.toolTipOnLabel ? 'dotted-tooltip' : ''}>
+              {props.toolTipOnLabel ? <CustomToolTip trigger={<span>{fieldLabel}</span>} /> : fieldLabel}
+              {!props.toolTipOnLabel && tooltip
                 && (
-                  <Popup
-                    hoverable={props.hoverable}
-                    trigger={<Icon className="ns-help-circle" />}
-                    // content={tooltip}
-                    position="top center"
-                    className={props.containerClassname}
-                    wide
-                  >
-                    <Popup.Content>
-                      {tooltip}
-                    </Popup.Content>
-                  </Popup>
-                )
-              }
-              {props.removed
-                && (
-                  <Link to={props.linkto} onClick={e => props.removed(e)}>
-                    <Icon className="ns-close-circle" color="grey" />
-                  </Link>
-                )
-              }
+                  <>
+                  <CustomToolTip trigger={<Icon className="ns-help-circle" />} />
+                </>
+                )}
             </label>
           )
         }

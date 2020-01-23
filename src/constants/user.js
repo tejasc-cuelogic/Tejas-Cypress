@@ -35,7 +35,6 @@ export const DELETED_ACCOUNT_STATUS = {
   FULL: ['DELETED_INVESTOR_FULL'],
   MIGRATION_PARTIAL: ['DELETED_INVESTOR_MIGRATION_PARTIAL'],
   MIGRATION_FULL: ['DELETED_INVESTOR_MIGRATION_FULL'],
-  FROZEN: [],
   LOCKED: [''],
   UNLOCKED: [''],
   ISSUER: ['DELETED_ISSUER_ISSUER'],
@@ -61,7 +60,6 @@ export const FILTER_META = {
     { text: 'Full', value: 'FULL', allowedDeleted: true },
     { text: 'Migration Partial', value: 'MIGRATION_PARTIAL', allowedDeleted: true },
     { text: 'Migration Full', value: 'MIGRATION_FULL', allowedDeleted: true },
-    { text: 'Frozen', value: 'FROZEN', allowedDeleted: false },
     { text: 'Locked', value: 'LOCKED', allowedDeleted: false },
     { text: 'Unlocked', value: 'UNLOCKED', allowedDeleted: false },
   ],
@@ -189,4 +187,4 @@ export const NEW_USER = {
 
 export const BENEFICIARY_STATUS = { PENDING: 'PENDING', APPROVED: 'APPROVED' };
 
-export const SIGNUP_REDIRECT_ROLEWISE = [{ role: 'admin', path: '/app/dashboard' }, { role: 'issuer', path: '/app/business-application/new/pre-qualification' }, { role: 'investor', path: '/app/summary/identity-verification/0' }];
+export const SIGNUP_REDIRECT_ROLEWISE = [{ role: 'admin', path: '/dashboard' }, { role: 'issuer', path: '/dashboard/business-application/new/pre-qualification' }, { role: 'investor', path: '/dashboard/setup/identity-verification/0' }];

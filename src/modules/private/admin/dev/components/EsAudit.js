@@ -29,7 +29,7 @@ export default class EsAudit extends Component {
   }
 
   handleSync = (params) => {
-    this.props.elasticSearchStore.syncEsDocument(params);
+    this.props.elasticSearchStore.adminSyncEsDocument(params);
   }
 
   renderTitle = title => capitalize(title.replace('_', ' '));
@@ -42,6 +42,8 @@ export default class EsAudit extends Component {
     const userIdExsist = get(esAuditParaOutput, 'index_a.record.userId') ? get(esAuditParaOutput, 'index_a.record.userId') : get(esAuditParaOutput, 'index_b.record.userId') ? get(esAuditParaOutput, 'index_b.record.userId') : '';
     const accountTypeListObtained = get(esAuditParaOutput, 'index_a.record.accountType') ? get(esAuditParaOutput, 'index_a.record.accountType') : get(esAuditParaOutput, 'index_b.record.userId') ? get(esAuditParaOutput, 'index_b.record.userId') : '';
     const accountTypeExsist = isArray(accountTypeListObtained) && accountTypeListObtained.length > 0 ? map(accountTypeListObtained, val => val.toUpperCase()) : [];
+    const esDocumentIdExsist = get(esAuditParaOutput, 'index_a.record.id') || get(esAuditParaOutput, 'index_b.record.id');
+    const documentIdToSend = ES_AUDIT_FRM.fields.random.value && !['', 'RANDOM'].includes(ES_AUDIT_FRM.fields.random.value) ? ES_AUDIT_FRM.fields.random.value : esDocumentIdExsist;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="large" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -61,8 +63,8 @@ export default class EsAudit extends Component {
                   />
                   <Form.Field width={6}>
                     <Button type="button" primary onClick={this.onSubmit} content="Submit" />
-                    <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_a.indexName')} onClick={() => this.handleSync({ documentId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_a.indexName') || '', indexAliasName: get(esAuditParaOutput, 'alias') || '', userId: userIdExsist, accountType: accountTypeExsist })} content="Sync a" />
-                    <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_b.indexName')} onClick={() => this.handleSync({ documentId: ES_AUDIT_FRM.fields.random.value || '', targetIndex: get(esAuditParaOutput, 'index_b.indexName') || '', indexAliasName: get(esAuditParaOutput, 'alias') || '', userId: userIdExsist, accountType: accountTypeExsist })} content="Sync b" />
+                    <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_a.indexName')} onClick={() => this.handleSync({ documentId: documentIdToSend || '', targetIndex: get(esAuditParaOutput, 'index_a.indexName') || '', indexAliasName: get(esAuditParaOutput, 'alias') || '', userId: userIdExsist, accountType: accountTypeExsist })} content="Sync a" />
+                    <Button type="button" primary loading={inProgress === get(esAuditParaOutput, 'index_b.indexName')} onClick={() => this.handleSync({ documentId: documentIdToSend || '', targetIndex: get(esAuditParaOutput, 'index_b.indexName') || '', indexAliasName: get(esAuditParaOutput, 'alias') || '', userId: userIdExsist, accountType: accountTypeExsist })} content="Sync b" />
                   </Form.Field>
                 </Form.Group>
                 <Grid>

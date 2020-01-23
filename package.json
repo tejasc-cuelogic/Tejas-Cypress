@@ -30,12 +30,13 @@
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
     "amortizejs": "^1.0.3",
-    "apollo-boost": "^0.3.1",
     "apollo-cache-inmemory": "^1.5.1",
+    "apollo-client": "2.6.0",
     "apollo-link": "^1.2.1",
     "apollo-link-context": "^1.0.8",
     "apollo-link-error": "^1.1.10",
     "apollo-link-http": "1.5.5",
+    "apollo-link-retry": "^2.2.15",
     "apollo-link-ws": "^1.0.7",
     "apollo-utilities": "^1.0.10",
     "autoprefixer": "7.1.2",
@@ -151,7 +152,8 @@
     "webpack-dashboard": "^3.0.7",
     "webpack-dev-server": "3.7.1",
     "webpack-manifest-plugin": "2.0.4",
-    "workbox-webpack-plugin": "4.3.1"
+    "workbox-webpack-plugin": "4.3.1",
+    "offline-plugin": "5.0.7"
   },
   "scripts": {
     "build-assets": "cd ./semantic && gulp build &&  cd ..",
@@ -160,7 +162,7 @@
     "build-js": "node --max_old_space_size=7500 scripts/build.js",
     "build-js:prod": "node --max_old_space_size=14000 scripts/build.js",
     "build": "npm-run-all build-assets build-js",
-    "build:prod": "npm-run-all build-assets build-js:prod",
+    "build:prod": "GENERATE_SOURCEMAP=false npm-run-all build-assets build-js:prod",
     "cypress:open": "./node_modules/.bin/cypress open",
     "cypress:run-investment": "./node_modules/.bin/cypress run --spec 'cypress/integration/investNow/**/*'",
     "cypress:run": "./node_modules/.bin/cypress run",

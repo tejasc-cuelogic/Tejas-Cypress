@@ -25,30 +25,9 @@ query insights($sortByCreationDateAsc: Boolean!, $categoryId: String){
 }
 `;
 
-export const getArticlesByCatId = gql`
-query _getArticleByCategoryId($id:ID! ) {
-  insightArticlesByCategoryId (
-    id: $id
-  ) {
-    id
-    content
-    featuredImage
-    minuteRead
-    title
-    updated {
-      date
-    }
-    created {
-      date
-    }
-    banner
-  }
-}
-`;
-
-export const getArticleById = gql`
-query insight($id: ID!) {
-  insightsArticle(id: $id) {
+export const adminInsightsArticle = gql`
+query adminInsightsArticle($id: ID!) {
+  adminInsightsArticle(id: $id) {
     id
     minuteRead
     title
@@ -60,27 +39,6 @@ query insight($id: ID!) {
     tags
     author
     slug
-    articleStatus
-    updated {
-      by
-      date
-      __typename
-    }
-    __typename
-  }
-}
-`;
-
-export const getInsightById = gql`
-query insight($id: ID!) {
-  insightsArticle(id: $id) {
-    id
-    title
-    featuredImage
-    content
-    category
-    tags
-    author
     articleStatus
     updated {
       by
@@ -116,9 +74,9 @@ query insightArticleBySlug($slug:String ) {
 }
 `;
 
-export const createArticle = gql`
-mutation createArticle($payload:  InsightsArticleInput!, $isPartial: Boolean) {
-  createArticle(articleDetailsInput: $payload, isPartialData: $isPartial) {
+export const adminCreateArticle = gql`
+mutation adminCreateArticle($payload:  InsightsArticleInput!, $isPartial: Boolean) {
+  adminCreateArticle(articleDetailsInput: $payload, isPartialData: $isPartial) {
     id
     title
     articleStatus
@@ -129,9 +87,9 @@ mutation createArticle($payload:  InsightsArticleInput!, $isPartial: Boolean) {
 }
 `;
 
-export const updateArticle = gql`
-mutation updateArticleInfo($id: ID!, $payload:  InsightsArticleInput!, $isPartial: Boolean) {
-  updateArticleInfo(id:$id, articleDetailsInput: $payload, isPartialData: $isPartial) {
+export const adminUpdateArticleInfo = gql`
+mutation adminUpdateArticleInfo($id: ID!, $payload:  InsightsArticleInput!, $isPartial: Boolean) {
+  adminUpdateArticleInfo(id:$id, articleDetailsInput: $payload, isPartialData: $isPartial) {
     id
     title
     articleStatus
@@ -141,15 +99,15 @@ mutation updateArticleInfo($id: ID!, $payload:  InsightsArticleInput!, $isPartia
 }
 `;
 
-export const deleteArticle = gql`
-mutation deleteArticle($id: [ID]) {
-  deleteArticle(id: $id) 
+export const adminDeleteArticle = gql`
+mutation adminDeleteArticle($id: [ID]) {
+  adminDeleteArticle(id: $id) 
 }
 `;
 
-export const insightArticlesListByFilter = gql`
-query insightArticlesListByFilter($categoryId: String, $articleStatus: ArticleStatusEnum, $title: String, $tags: [String], $author: String, $fromDate: String, $toDate: String){
-  insightArticlesListByFilter(categoryId: $categoryId, articleStatus: $articleStatus, title: $title, tags: $tags, author: $author, fromDate: $fromDate, toDate: $toDate){
+export const adminInsightArticlesListByFilter = gql`
+query adminInsightArticlesListByFilter($categoryId: String, $articleStatus: ArticleStatusEnum, $title: String, $tags: [String], $author: String, $fromDate: String, $toDate: String){
+  adminInsightArticlesListByFilter(categoryId: $categoryId, articleStatus: $articleStatus, title: $title, tags: $tags, author: $author, fromDate: $fromDate, toDate: $toDate){
     id
     slug
     content

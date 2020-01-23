@@ -68,7 +68,7 @@ export default class Agreement extends React.Component {
     if (this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid) {
       this.setState({ showError: false });
       this.props.investmentStore.setFieldValue('investmentFlowErrorMessage', null);
-      this.props.investmentStore.finishInvestment().then((investmentStatus) => {
+      this.props.investmentStore.investNowSubmit().then((investmentStatus) => {
         if (investmentStatus) {
           console.log(this.props);
           this.props.history.push('congratulation');
@@ -135,7 +135,7 @@ export default class Agreement extends React.Component {
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
     const offeringSecurityType = get(campaign, 'keyTerms.securities');
-    const agreementStatement = includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) ? 'Purchase Agreement and Investor Proxy Agreement' : 'Note Purchase Agreement';
+    const agreementStatement = includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) ? 'Purchase Agreement and Investor Proxy Agreement' : includes(['REAL_ESTATE'], offeringSecurityType) ? 'LLC Agreement and Subscription Agreement' : includes(['SAFE'], offeringSecurityType) ? 'Safe Note' : 'Note Purchase Agreement';
     const isOfferingPreferredEquity = !!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType);
 
     return (
@@ -155,7 +155,7 @@ export default class Agreement extends React.Component {
             </div>
           </Modal.Content>
         </Modal>
-        <Modal size="large" className="confirm-investment" open closeIcon closeOnRootNodeClick={false} closeOnDimmerClick={false} onClose={e => this.handleCloseModal(e)}>
+        <Modal size="large" className="confirm-investment" open closeIcon={!agreementDetails} closeOnRootNodeClick={false} closeOnDimmerClick={false} onClose={e => this.handleCloseModal(e)}>
           <Modal.Content className="signup-content">
             <div style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
               <div className="pdf-viewer">
@@ -204,6 +204,7 @@ export default class Agreement extends React.Component {
                           name={field}
                           containerclassname={`ui very relaxed list ${this.state.showError && !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid ? 'error' : ''}`}
                           changed={setCheckbox}
+                          disabled={inProgress}
                           customLabel={(
                             <>
                               I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">{agreementStatement}</Link>.
@@ -212,12 +213,12 @@ export default class Agreement extends React.Component {
                           conditionalCustomLabel={(
                             startsWith(offeringRegulationType, 'BD_')
                               ? (
-                                <>
-                                  I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
-                                  the entire amount of my investment may be lost,
-                                  and confirm that I am in a
-                                  financial condition to bear the loss.
-                                  I have read and agree to the terms of
+<>
+                                I have reviewed NextSeed’s <Link target="_blank" to="/resources/education-center/investor">educational materials</Link>, understand that
+                                the entire amount of my investment may be lost,
+                                and confirm that I am in a
+                                financial condition to bear the loss.
+                                I have read and agree to the terms of
                                 the <Link onClick={e => this.agreementPDFLoader(e, true, 'cCAgreement', 'SERVICES')} to="/">CrowdPay Custodial Account Agreement</Link>,
                                 the <Link onClick={e => this.agreementPDFLoader(e, true, 'irsCertification', 'SERVICES')} to="/">Substitute IRS Form W-9 Certification</Link>,
                                 and <Link onClick={e => this.agreementPDFLoader(e, true, 'bDIAgreemnt', 'SERVICES')} to="/">NextSeed Securities LLC Investor Agreement</Link>
@@ -225,7 +226,7 @@ export default class Agreement extends React.Component {
                               )
                               : (
                                 <>
-                                  I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
+                                  I have reviewed NextSeed’s <Link target="_blank" to="/resources/education-center/investor">educational materials</Link>, understand that
                                   the entire amount of my investment may be lost,
                                   and confirm that I am in a
                                   financial condition to bear the loss.
@@ -268,8 +269,8 @@ export default class Agreement extends React.Component {
                 </Grid>
                 <div className="center-align mt-30">
                   <Button.Group widths="2" className="inline">
-                    <Button type="button" color="gray" content="Cancel" onClick={this.handleCancelAgreement} />
-                    <Button primary content="Invest" loading={inProgress} onClick={this.submit} />
+                    <Button type="button" color="gray" disabled={inProgress} content="Cancel" onClick={this.handleCancelAgreement} />
+                    <Button primary content="Invest" disabled={inProgress} loading={inProgress} onClick={this.submit} />
                   </Button.Group>
                 </div>
                 {!this.state.showError && investmentFlowErrorMessage

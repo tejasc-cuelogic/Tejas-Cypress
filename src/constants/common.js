@@ -7,7 +7,7 @@ export const {
 } = process.env;
 
 export const {
-  REACT_APP_PUBLIC_API, REACT_APP_PUBLIC_API_KEY,
+  REACT_APP_PUBLIC_API, REACT_APP_PUBLIC_API_KEY, NODE_ENV,
 } = process.env;
 
 export const SOCIAL_URLS = {
@@ -69,3 +69,17 @@ export const DEV_FEATURE_ONLY = ['localhost', 'develop', 'dev', 'review'].includ
 export const ELIGIBLE_TAGS = ['CJEVENT'];
 
 export const isProduction = ['production', 'prod'].includes(REACT_APP_DEPLOY_ENV);
+
+export const RETRY_CONFIG = {
+  delay: {
+    initial: 100, max: 3000, jitter: false,
+  },
+  attempts: {
+    max: 5,
+    retryIf: error => !!error && error.message === 'Failed to fetch',
+  },
+};
+
+export const CURR_YEAR = new Date().getFullYear();
+
+export const S3_BUCKET_URL = `https://${process.env.REACT_APP_UPLOADS_BUCKET}`;

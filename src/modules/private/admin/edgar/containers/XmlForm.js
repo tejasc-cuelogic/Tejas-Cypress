@@ -19,7 +19,7 @@ import {
   XML_SUBMISSION_TABS,
 } from '../../../../../constants/business';
 
-@inject('businessStore', 'uiStore', 'offeringsStore')
+@inject('businessStore', 'uiStore', 'offeringsStore', 'offeringCreationStore')
 @observer
 export default class XmlForm extends React.Component {
   state = {
@@ -137,7 +137,7 @@ export default class XmlForm extends React.Component {
     this.redirectToNextstep(params.nextTabName);
     this.props.businessStore.setXmlSubStepsStatus(params.currentStepName, true);
     if (this.props.businessStore.xmlSubmissionId === undefined) {
-      const { xmlSubmissionId } = params.data.upsertXmlInformation;
+      const { xmlSubmissionId } = params.data.adminUpsertXmlInformation;
       this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
     }
   };
@@ -330,9 +330,11 @@ export default class XmlForm extends React.Component {
   }
 
   handleXmlSubmissionSubmit = () => {
+    const { currentOfferingSlug } = this.props.offeringCreationStore;
+    const { offer } = this.props.offeringsStore;
     businessActions.submitXMLInformation('xmlSubmission')
       .then(() => {
-        this.props.history.push(`/app/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`);
+        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}${offer.stage === 'CREATION' ? '' : '/offering-creation'}/legal/generate-docs`);
         Helper.toast('XML form submitted successfully', 'success');
       })
       .catch((errors) => {
@@ -343,10 +345,11 @@ export default class XmlForm extends React.Component {
   handleXmlSubmissionCopy = () => {
     this.props.uiStore.setProgress();
     this.props.uiStore.setLoaderMessage('Copy the XML submission');
-
+    const { currentOfferingSlug } = this.props.offeringCreationStore;
+    const { offer } = this.props.offeringsStore;
     businessActions.copyXMLInformation()
       .then(() => {
-        this.props.history.push(`/app/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`);
+        this.props.history.push(`/dashboard/offering/${currentOfferingSlug}${offer.stage === 'CREATION' ? '' : '/offering-creation'}/legal/generate-docs`);
         Helper.toast('Copy XML submission successfully', 'success');
       })
       .catch((error) => {
@@ -401,6 +404,7 @@ export default class XmlForm extends React.Component {
       );
     }
     const { offer } = this.props.offeringsStore;
+    const { currentOfferingSlug } = this.props.offeringCreationStore;
     return (
       <>
         <div className="page-header-section">
@@ -408,7 +412,7 @@ export default class XmlForm extends React.Component {
             <Responsive
               minWidth={Responsive.onlyLargeScreen.minWidth}
               as={Link}
-              to={`/app/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`}
+              to={`/dashboard/offering/${currentOfferingSlug}${offer.stage === 'CREATION' ? '' : '/offering-creation'}/legal/generate-docs`}
               className="back-link"
             >
               <Icon name="ns-arrow-left" />
@@ -418,35 +422,35 @@ export default class XmlForm extends React.Component {
               {
                 xmlSubmissionStatus === XML_STATUSES.completed
                 && (
-<Button
-  color="green"
-  onClick={this.handleXmlSubmissionCopy}
->
-                  Copy XML Submission
+                  <Button
+                    color="green"
+                    onClick={this.handleXmlSubmissionCopy}
+                  >
+                    Copy XML Submission
                 </Button>
                 )
               }
               {
                 xmlSubmissionStatus === XML_STATUSES.draft
                 && (
-<Button
-  color="green"
-  disabled={this.checkStepWiseStatus(xmlActiveTabName)}
-  onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
->
-                  Save
+                  <Button
+                    color="green"
+                    disabled={this.checkStepWiseStatus(xmlActiveTabName)}
+                    onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
+                  >
+                    Save
                 </Button>
                 )
               }
               {
                 xmlSubmissionStatus === XML_STATUSES.draft
                 && (
-<Button
-  color="red"
-  disabled={!this.props.businessStore.checkStepsStatus}
-  onClick={this.handleXmlSubmissionSubmit}
->
-                  Submit
+                  <Button
+                    color="red"
+                    disabled={!this.props.businessStore.checkStepsStatus}
+                    onClick={this.handleXmlSubmissionSubmit}
+                  >
+                    Submit
                 </Button>
                 )
               }

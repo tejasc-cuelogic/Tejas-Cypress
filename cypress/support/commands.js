@@ -1,8 +1,8 @@
-import { API_ROOT } from '../../src/constants/common';
 import Amplify from '@aws-amplify/core';
 import AmplifyAuth from '@aws-amplify/auth';
 import { isEmpty, forIn } from 'lodash';
-import { registerApiCall } from '../integration/common.utility';
+import { registerApiCall, prepRequest } from '../integration/common.utility';
+import { cleanUpTestUsers } from '../fixtures/userQueries';
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -105,11 +105,6 @@ Cypress.Commands.add('applicationUnlock', () => {
   cy.get('input[name="password"]').type(Cypress.env('appPassword'));
     cy.get('div.content').get('button.button').contains('Log in').click({ force: true });
 });
-// Cypress.Commands.add('itterativeWait', (itteration, alias) => {
-//   for (let i = 0; i < itteration; i++) {
-//     cy.wait(`@${alias}`)
-//   }
-// });
 
 Cypress.Commands.add('formFill', (dataSet, parentSelector) => {
   if (!isEmpty(dataSet)) {
@@ -150,16 +145,16 @@ Cypress.Commands.add('clearFormField', (dataSet, parentSelector = false) => {
   }
 });
 
-Cypress.Commands.add('getOffering', (offeirId) => {
+Cypress.Commands.add('getOffering', (offeringSlug) => {
   let retries = -1
   function searchForOffering() {
     retries++;
     cy.get('.campaign-list-wrapper').find('.container').find('.stackable')
       .then(($parent) => {
         try {
-          if ($parent.find(`div[data-cy=${offeirId}]`).length) {
+          if ($parent.find(`div[data-cy=${offeringSlug}]`).length) {
             cy.log('Find offering...');
-            cy.wrap($parent.find(`div[data-cy=${offeirId}]`)).click();
+            cy.wrap($parent.find(`div[data-cy=${offeringSlug}]`)).click();
           } else {
             cy.log('Move for Read More...');
             cy.get('body').then(($body) => {
@@ -195,14 +190,37 @@ Cypress.Commands.add('addWindowLocalStorageKey', (KEY_NAME, VALUE= false) => {
 });
 
 Cypress.Commands.add('Logout', () => {
-  cy.visit('/app/dashboard');
+  cy.visit('/dashboard', { failOnStatusCode: false, timeout: 100000 });
+  cy.applicationUnlock();
   cy.get('div.menu').get('div.ns-scrollbar').find('span').contains('Logout').click();
+});
+
+const deleteUserCtaAction = (ctaName) => {
+  cy.get('div.floated.buttons').get('a.button').contains(ctaName).click({ force: true });
+  cy.get('div.signup-content.content > form > div.field.secondary').get('textarea[name="message"]').type('Test User delete')
+  cy.get('div.signup-content.content > form').get('button.button').contains('Submit').click();
+}
+
+
+Cypress.Commands.add('cleanUpUser', () => {
+  const investorEmail = window.localStorage.getItem('investorEmail');
+  cy.Logout();
+  cy.login(investorEmail, Cypress.env('commonPassword')).then((user) => {
+    if (user.signInUserSession) {
+      if (user.signInUserSession.idToken && user.signInUserSession.idToken.jwtToken) {
+        const authToken = user.signInUserSession.idToken.jwtToken;
+        cy.request(
+          prepRequest(cleanUpTestUsers(user.attributes.sub), authToken)
+        )
+      }
+    }
+  })
 });
 
 Cypress.Commands.add('deleteUser', (userType='Investor') => {
   const investorEmail = window.localStorage.getItem('investorEmail');
-  cy.Logout();
   console.log('investorEmail====', investorEmail);
+  cy.Logout();
   cy.visit('/');
   // cy.applicationUnlock();
   cy.get('.header-wrap').get('.menu-button').contains('Log In').click({ force: true });
@@ -229,9 +247,8 @@ Cypress.Commands.add('deleteUser', (userType='Investor') => {
     cy.get('span.user-name').within(() => {
       cy.get('a').click({ force: true });
     });
-    cy.get('div.floated.buttons').get('button.button').contains('Soft Delete Profile').click({ force: true });
-    cy.get('div.modal.deletion').get('div.actions').get('button.button').contains('OK').click({ force: true })
 
+    deleteUserCtaAction('Soft Delete Profile');
     registerApiCall('adminDeleteInvestorOrIssuerUser', '/dev/graphql');
     cy.wait('@adminDeleteInvestorOrIssuerUser');
     registerApiCall('listUsers', '/dev/graphql');
@@ -256,8 +273,8 @@ Cypress.Commands.add('deleteUser', (userType='Investor') => {
     cy.get('div.floated.buttons').get('button.button').contains('Hard Delete Profile').click({ force: true });
     cy.get('div.modal.deletion').get('div.actions').get('button.button').contains('OK').click({ force: true });
 
-    registerApiCall('adminHardDeleteUser', '/dev/graphql');
-    cy.wait('@adminHardDeleteUser');
+    registerApiCall('adminUserHardDelete', '/dev/graphql');
+    cy.wait('@adminUserHardDelete');
     cy.Logout();
   });
 })

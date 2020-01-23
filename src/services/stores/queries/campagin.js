@@ -1,10 +1,11 @@
 import gql from 'graphql-tag';
 
 export const allOfferings = gql`
-query getOfferingList($filters: OfferingFilterInputType, $userId: String){
+query getOfferingList($filters: OfferingListFilterInputType){
     getOfferingList(filters: $filters) {
       id
-      watchListStatus(userId: $userId)
+      isAvailablePublicly
+      watchListStatus
       offeringSlug
       stage
       media {
@@ -83,7 +84,7 @@ query checkEarlyBirdByInvestorAccountAndOfferingId($offeringId: String!, $accoun
 }`;
 
 export const getOfferingsReferral = gql`
-query getOfferingList($filters: OfferingFilterInputType){
+query getOfferingList($filters: OfferingListFilterInputType){
     getOfferingList(filters: $filters) {
       id
       stage
@@ -115,26 +116,23 @@ query offeringWatchList($offeringId: String){
 `;
 
 export const getOfferingById = gql`
-  query getOfferingDetailsBySlug($id: String) {
+  query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
       id
+      isInvestedInOffering
       isAvailablePublicly
       stage
     }
   }
 `;
 
-export const isValidInvestorInOffering = gql`
-  query isValidInvestorInOffering ($offeringId: String!, $userId: String!, $offeringStage: OfferingStageEnumType!) {
-    isValidInvestorInOffering (offeringId: $offeringId, userId: $userId, offeringStage: $offeringStage)
-  }
-`;
-
 export const campaignDetailsQuery = gql`
-  query getOfferingDetailsBySlug($id: String) {
-    getOfferingDetailsBySlug (offeringSlug: $id) {
+  query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
+    getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
+    isInvestedInOffering
+    watchListStatus
     stage
     offeringSlug
     issuerId
@@ -234,6 +232,7 @@ export const campaignDetailsQuery = gql`
       launch {
         targetDate
         edgarLink
+        expectedOpsDate
       }
       misc {
         additionalBonusRewardsContent
@@ -320,6 +319,7 @@ export const campaignDetailsQuery = gql`
       keyTerms {
         multiple
         priceCalculation
+        revSharePercentage
       }
     }
     earlyBirdsCount
@@ -328,8 +328,8 @@ export const campaignDetailsQuery = gql`
 `;
 
 export const campaignDetailsAdditionalQuery = gql`
-  query getOfferingDetailsBySlug($id: String) {
-    getOfferingDetailsBySlug (offeringSlug: $id) {
+  query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
+    getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
     comments {
       id
@@ -354,7 +354,7 @@ export const campaignDetailsAdditionalQuery = gql`
           name
         }
       }
-      threadComment {
+      threadComments {
         id
         scope
         comment
@@ -405,8 +405,8 @@ export const campaignDetailsAdditionalQuery = gql`
 `;
 
 export const campaignDetailsForInvestmentQuery = gql`
-query getOfferingById($id: ID) {
-  getOfferingDetailsById (id: $id) {
+query getOfferingById($id: String!) {
+  getOfferingById (id: $id) {
     id
     offeringSlug
     isAvailablePublicly
@@ -421,7 +421,6 @@ query getOfferingById($id: ID) {
         completeDate
       }
       keyTerms {
-        maturityDate
         supplementalAgreements {
           documents {
             name
@@ -478,8 +477,24 @@ query getOfferingById($id: ID) {
     offering {
       launch {
         targetDate
-        edgarLink
+        expectedOpsDate
         terminationDate
+        edgarLink
+      }
+    }
+    legal {
+      dataroom {
+        documents {
+          name
+          accreditedOnly
+          upload {
+            fileId
+            fileName
+            fileHandle {
+              boxFileId
+            }
+          }
+        }
       }
     }
     selectedOffer {
@@ -553,8 +568,8 @@ query getOfferingById($id: ID) {
 `;
 
 export const validateOfferingPreviewPassword = gql`
-query _validateOfferingPreviewPassword($offeringId: String!, $previewPassword: String!) {
-  validateOfferingPreviewPassword (offeringId: $offeringId, previewPassword: $previewPassword)
+query validateOfferingPreviewPassword($offeringSlug: String!, $previewPassword: String!) {
+  validateOfferingPreviewPassword (offeringSlug: $offeringSlug, previewPassword: $previewPassword)
 }`;
 
 export const addUserToOfferingWatchlist = gql`
@@ -568,8 +583,3 @@ export const removeUserFromOfferingWatchlist = gql`
     removeUserFromOfferingWatchlist(userId: $userId, offeringId: $offeringId)
   }
 `;
-
-export const isWatchingOffering = gql`
-query isWatchingOffering($userId: String, $offeringId: String){
-  isWatchingOffering(userId: $userId, offeringId: $offeringId)
-}`;

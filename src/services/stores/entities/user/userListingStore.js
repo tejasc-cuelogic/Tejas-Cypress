@@ -6,8 +6,10 @@ import moment from 'moment';
 import { capitalize, isArray, uniq } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { UserAvatar } from '../../../../theme/shared';
-import { allUsersQuery } from '../../queries/users';
+import { adminListUsers } from '../../queries/users';
 import { DELETED_ACCOUNT_STATUS } from '../../../../constants/user';
+import Helper from '../../../../helper/utility';
+
 
 export class UserListingStore {
   @observable usersData = [];
@@ -52,7 +54,7 @@ export class UserListingStore {
     delete filters.keyword;
     let deletedAccountStatus = [];
     const allAccountTypes = ['ADMIN', 'ISSUER', 'INVESTOR', 'IRA', 'INDIVIDUAL', 'ENTITY'];
-    const allAccountStatus = ['PARTIAL', 'BASIC', 'FULL', 'MIGRATION_PARTIAL', 'MIGRATION_FULL', 'FROZEN', 'LOCKED', 'UNLOCKED'];
+    const allAccountStatus = ['PARTIAL', 'BASIC', 'FULL', 'MIGRATION_PARTIAL', 'MIGRATION_FULL', 'LOCKED', 'UNLOCKED'];
     if (isDeleted) {
       if (accountType && accountType.length && !accountStatus) {
         accountType.forEach((s) => {
@@ -91,9 +93,10 @@ export class UserListingStore {
     }
     this.usersData = graphql({
       client,
-      query: allUsersQuery,
+      query: adminListUsers,
       variables: params,
       fetchPolicy: 'network-only',
+      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
     });
   }
 
@@ -114,8 +117,8 @@ export class UserListingStore {
 
   @computed get users() {
     return (this.allUsers.data
-      && this.allUsers.data.listUsers
-      && toJS(this.allUsers.data.listUsers.users)
+      && this.allUsers.data.adminListUsers
+      && toJS(this.allUsers.data.adminListUsers.users)
     ) || [];
   }
 
@@ -143,8 +146,8 @@ export class UserListingStore {
 
   @computed get count() {
     return (this.allUsers.data
-      && this.allUsers.data.listUsers
-      && toJS(this.allUsers.data.listUsers.resultCount)
+      && this.allUsers.data.adminListUsers
+      && toJS(this.allUsers.data.adminListUsers.resultCount)
     ) || 0;
   }
 
@@ -179,7 +182,7 @@ export class UserListingStore {
         srchParams[name] = value;
       } else if (type === 'checkbox') {
         srchParams[name] = value;
-        if (name === 'isDeleted' && ['FROZEN', 'LOCKED', 'UNLOCKED'].includes(srchParams.accountStatus)) {
+        if (name === 'isDeleted' && ['HARD_FREEZE', 'SOFT_FREEZE', 'LOCKED', 'UNLOCKED'].includes(srchParams.accountStatus)) {
           delete srchParams.accountStatus;
         }
       } else {
@@ -243,7 +246,7 @@ export class UserListingStore {
     this.users.map((user) => {
       if (user.roles[0] && user.roles[0].scope && usersOptions[user.roles[0].scope]) {
         usersOptions[user.roles[0].scope].push({
-          text: `${capitalize(user.info.firstName)} ${capitalize(user.info.lastName)}`,
+          text: `${capitalize(user.info.firstName)} ${capitalize(user.info.lastName)} (${(user.email.address).toLowerCase()})`,
           value: user.id,
           icon:
             <UserAvatar

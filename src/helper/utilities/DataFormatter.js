@@ -119,10 +119,10 @@ class DataFormatter {
     return result.trim();
   }
 
-  getDateAsPerTimeZone = (dataParam, isISOString = false, isLLFormat = false, showTime = true, isCustomFormat = undefined, timeZone = 'CST') => {
+  getDateAsPerTimeZone = (dataParam, isISOString = false, isLLFormat = false, showTime = true, isCustomFormat = undefined, timeZone = 'CST', addOne = false, inputFormat = undefined) => {
     // const localTimeZone = timeZone === 'local' ? momentZone.tz.guess(true) : timeZone;
     const localTimeZone = timeZone === 'CST' ? DEFAULT_TIME_ZONE_TO_DISPLAY : timeZone === 'local' ? momentZone.tz.guess(true) : timeZone;
-    const dataVal = isISOString ? dataParam ? moment(dataParam) : moment() : dataParam;
+    const dataVal = isISOString ? dataParam ? moment(dataParam, inputFormat) : moment() : addOne ? moment(dataParam).add(1, 'days') : dataParam;
     const utcCutoff = moment.utc(dataVal, 'MM/DD/YYYY HH:mm:ss');
     const displayCutoff = utcCutoff.clone().tz(localTimeZone);
     return isLLFormat ? displayCutoff.format('ll') : isCustomFormat ? displayCutoff.format(isCustomFormat) : showTime ? displayCutoff.format('MM/DD/YYYY HH:mm:ssa') : displayCutoff.format('MM/DD/YYYY');
@@ -157,8 +157,7 @@ class DataFormatter {
   }
 
   mapDatesToType = (data, keys, dateType = 'iso') => data.map((d) => {
-    // const convertedDates = keys.map(k => ({ [k]: this.convertDateType(d[k], dateType) }));
-    const convertedDates = keys.map(k => ({ [k]: this.convertDateType(this.getDateAsPerTimeZone(d[k], true, false, false), dateType) }));
+    const convertedDates = keys.map(k => ({ [k]: this.convertDateType(d[k], dateType) }));
     const filterInvalidDates = convertedDates
       .filter(obj => moment(Object.values(obj)[0]).isValid());
     const convDatesObj = reduce(filterInvalidDates, (old, current) => assign(old, current), {});

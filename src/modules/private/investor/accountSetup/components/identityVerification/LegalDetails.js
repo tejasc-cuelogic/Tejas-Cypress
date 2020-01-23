@@ -16,7 +16,7 @@ class LegalDetails extends React.Component {
     if ((this.props.userDetailsStore.signupStatus.isMigratedFullAccount
       && this.props.match.url !== this.props.userDetailsStore.pendingStep)
       || this.props.userDetailsStore.isLegaLVerificationDone) {
-      this.props.history.push('/app/summary');
+      this.props.history.push('/dashboard/setup');
     }
   }
 
@@ -32,7 +32,7 @@ class LegalDetails extends React.Component {
     const state = US_STATES.find(s => s.text === form.fields.state.value.toUpperCase());
     const stateValue = state ? state.key : form.fields.state.value;
     return (
-      <Modal size="mini" open closeIcon onClose={close} closeOnEscape={false} closeOnDimmerClick={false}>
+      <Modal className={this.props.inProgress && 'dimmer-visible'} size="mini" open closeIcon onClose={close} closeOnEscape={false} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3" title={name} className="greeting">Welcome {name}</Header>
           <p>Let’s create your NextSeed investment account.</p>
@@ -120,7 +120,6 @@ class LegalDetails extends React.Component {
                 fielddata={form.fields.zipCode}
                 changed={maskChange}
                 zipCode
-                showerror
               />
               <MaskedInput
                 name="phoneNumber"
@@ -129,22 +128,20 @@ class LegalDetails extends React.Component {
                 format="(###) ###-####"
                 changed={maskChange}
                 phoneNumber
-                showerror
               />
               <MaskedInput
                 name="dateOfBirth"
                 fielddata={form.fields.dateOfBirth}
+                type="tel"
                 format="##/##/####"
                 changed={maskChange}
                 dateOfBirth
-                showerror
               />
               <MaskedInput
                 name="ssn"
                 fielddata={this.handleEncryptedSsn(form.fields.ssn)}
                 ssn
                 changed={maskChange}
-                showerror
               />
             </Form.Group>
             <p className="note center-align">
@@ -168,12 +165,12 @@ class LegalDetails extends React.Component {
               )
             }
             <div className="center-align mt-30">
-              <Button primary size="large" className="very relaxed" content="Verify my identity" disabled={inProgress} />
+              <Button primary size="large" className="very relaxed" content="Verify my identity" disabled={!form.meta.isValid || inProgress} />
             </div>
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><Link to="/app/summary" onClick={close}>I’ll finish this later</Link></p>
+          <p><Link to="/dashboard/setup" onClick={close}>I’ll finish this later</Link></p>
         </Modal.Actions>
       </Modal>
     );

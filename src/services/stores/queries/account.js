@@ -1,23 +1,7 @@
 import gql from 'graphql-tag';
 
-export const createAccount = gql`
-  mutation _createAccount($accountAttributes: AccountInputType! $accountStatus: InvestorAccountStatusEnum! $accountType: UserAccountTypeEnum!) {
-    createInvestorAccount(
-      accountAttributes: $accountAttributes
-      accountStatus: $accountStatus
-      accountType: $accountType
-    ) {
-      accountId
-      accountType
-      accountStatus
-      startedDate
-      finishedDate
-      accountDetails
-    }
-  }`;
-
 export const upsertInvestorAccount = gql`
-  mutation _upsertInvestorAccount($accountId: String $accountAttributes: AccountInputType! $accountType: InvestorAccountTypeEnum!) {
+  mutation upsertInvestorAccount($accountId: String $accountAttributes: AccountInputType! $accountType: InvestorAccountTypeEnum!) {
     upsertInvestorAccount(
       accountId: $accountId
       accountAttributes: $accountAttributes
@@ -35,16 +19,17 @@ export const upsertInvestorAccount = gql`
     }
   }`;
 
-export const submitinvestorAccount = gql`
-  mutation _submitInvestorAccount($accountId: String!, $accountType: InvestorAccountTypeEnum!){
+export const submitInvestorAccount = gql`
+  mutation submitInvestorAccount($userId: String, $accountId: String!, $accountType: InvestorAccountTypeEnum!){
     submitInvestorAccount(
+      userId: $userId,
       accountId: $accountId,
       accountType: $accountType
     )
   }`;
 
 export const updateInvestorProfileData = gql`
-  mutation _updateInvestorProfileData($isPartialProfile: Boolean! $employment: EmploymentStatusInput $brokerageFirmName: String $publicCompanyTicker: String $netWorth: Int $annualIncome: [InvestorAnnualIncome] $experienceLevel: InvestorExperienceLevelTypeEnum $isRiskTaker: Boolean $isComfortable: Boolean $taxFilingAs: InvestorProfileTypeEnum) {
+  mutation updateInvestorProfileData($isPartialProfile: Boolean! $employment: EmploymentStatusInput $brokerageFirmName: String $publicCompanyTicker: String $netWorth: Int $annualIncome: [InvestorAnnualIncome] $experienceLevel: InvestorExperienceLevelTypeEnum $isRiskTaker: Boolean $isComfortable: Boolean $taxFilingAs: InvestorProfileTypeEnum) {
     createInvestorProfile(
       employmentStatusInfo: $employment
       brokerageFirmName: $brokerageFirmName
@@ -69,29 +54,15 @@ query isUniqueTaxId($taxId: String!) {
   }
 }`;
 
-export const createIndividual = gql`
-  mutation createIndividiaul($accountAttributes: AccountInputType!, $accountStatus: InvestorAccountStatusEnum!, $accountType: InvestorAccountTypeEnum!){
-    createInvestorAccount(accountAttributes: $accountAttributes, accountStatus: $accountStatus, accountType: $accountType){
-      userId
-      accountId
-      linkedBank {
-        accountNumber
-        routingNumber
-        bankName
-      }
-      accountType
-    }
-  }`;
-
 export const crowdPayAccountNotifyGs = gql`
-  mutation _crowdPayAccountNotifyGS($userId: String, $accountId: String!) {
+  mutation crowdPayAccountNotifyGS($userId: String!, $accountId: String!) {
     crowdPayAccountNotifyGS(
       userId: $userId
       accountId: $accountId
     )
   }`;
 export const createIndividualGoldStarInvestor = gql`
-  mutation createIndividualGoldStarInvestor($userId: String!, $accountId: String!) {
+  mutation createIndividualGoldStarInvestor($userId: String, $accountId: String!) {
     createIndividualGoldStarInvestor(
       userId: $userId
       accountId: $accountId
@@ -99,9 +70,9 @@ export const createIndividualGoldStarInvestor = gql`
   }
 `;
 
-export const getInvestorCloseAccounts = gql`
-query getInvestorCloseAccounts($userId: String!) {
-  getInvestorCloseAccounts(
+export const adminGetUserClosedAccounts = gql`
+query adminGetUserClosedAccounts($userId: String!) {
+  adminGetUserClosedAccounts(
     userId: $userId
   ){
     userId
@@ -136,9 +107,9 @@ query getInvestorCloseAccounts($userId: String!) {
   }
 }`;
 
-export const closeInvestorAccount = gql`
-mutation _closeInvestorAccount($userId: String!, $accountId: String!, $accountType: InvestorAccountTypeEnum!, $reason: String) {
-  closeInvestorAccount (
+export const adminCloseInvestorAccount = gql`
+mutation adminCloseInvestorAccount($userId: String!, $accountId: String!, $accountType: InvestorAccountTypeEnum!, $reason: String) {
+  adminCloseInvestorAccount (
     userId: $userId
     accountId: $accountId
     accountType: $accountType
@@ -151,7 +122,7 @@ mutation _closeInvestorAccount($userId: String!, $accountId: String!, $accountTy
 }`;
 
 export const updateToAccountProcessing = gql`
-mutation _updateToAccountProcessing ($accountId: String!, $error: String!){
+mutation updateToAccountProcessing ($accountId: String!, $error: String!){
   updateToAccountProcessing (
     accountId: $accountId
     error: $error

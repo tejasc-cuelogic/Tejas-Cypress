@@ -4,11 +4,11 @@ import { Header, Form, Button, Icon, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import cookie from 'react-cookies';
-import { FormRadioGroup } from '../../../../../theme/form';
+import { FormRadioGroup, FormArrowButton } from '../../../../../theme/form';
 import { Spinner } from '../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
-@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'userStore', 'campaignStore', 'accreditationStore', 'portfolioStore')
+@inject('investmentStore', 'userDetailsStore', 'accountStore', 'investmentLimitStore', 'userStore', 'campaignStore', 'accreditationStore', 'portfolioStore')
 @withRouter
 @observer
 class AccountType extends Component {
@@ -57,6 +57,7 @@ class AccountType extends Component {
     const userStatusFound = userSelectedAccountStatus(investAccTypes.value);
     setUserSelectedAccountStatus(userStatusFound);
     resetAccreditationExpirayForm('ACCREDITATION_EXPIRY_FORM');
+    userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
     if ((activeAccounts.length && (investAccTypes.values.length === 1 || this.props.changeInvest))
       || (investAccTypes.values.length > 1 && !getCurrentInvestNowHealthCheck)) {
       if (this.props.investmentStore.getSelectedAccountTypeId && !getCurrentInvestNowHealthCheck) {
@@ -69,7 +70,7 @@ class AccountType extends Component {
     }
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if ((this.props.changeInvest && regulationType && regulationType !== 'BD_CF_506C') || (accountToConsider
+    } else if ((this.props.changeInvest && regulationType) || (accountToConsider
       && accountToConsider.length === 1 && isDocumentUpload === true)) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
@@ -93,7 +94,8 @@ class AccountType extends Component {
       }
     }
     setPartialInvestmenSession();
-    if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
+    if (frozenAccounts.length && this.props.accountStore.isAccFrozen(selectedAccountStatus)) {
+      this.props.userDetailsStore.setFieldValue('currentActiveAccount', frozenAccounts[0]);
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
         // send email to admin
         sendAdminEmailOfFrozenAccount('INVESTMENT', offeringId);
@@ -119,8 +121,8 @@ class AccountType extends Component {
       userAccredetiationState,
       selectedAccountStatus,
       userAccreditatedStatus,
-      userDetails,
-      // showAccountList,
+      // userDetails,
+      accountAccreditationStatus,
     } = this.props.accreditationStore;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
     // if (!showAccountList && !getCurrentInvestNowHealthCheck) {
@@ -130,6 +132,7 @@ class AccountType extends Component {
     const { activeAccounts, inprogressAccounts } = this.props.userDetailsStore.signupStatus;
     const userInfoDetails = this.props.userDetailsStore.userDetails;
     const userStatus = userInfoDetails && userInfoDetails.status;
+
     const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0)
       ? [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0)
         ? activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
@@ -151,12 +154,11 @@ class AccountType extends Component {
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if (accountToConsider && accountToConsider.length === 1 && isDocumentUpload === true) {
+    } else if ((accountToConsider && accountToConsider.length === 1 && isDocumentUpload === true) || (this.props.changeInvest && regulationType)) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         if (this.props.changeInvest) {
-          // const { getInvestorAccountById } = this.props.portfolioStore;
-          // const offeringRegulation = get(getInvestorAccountById, 'offering.keyTerms.regulation');
-          const accreditationStatus = get(userDetails, 'accreditation.status');
+          // const accreditationStatus = get(userDetails, 'accreditation.status');
+          const accreditationStatus = accountAccreditationStatus;
           const isParallelOfferingModelToShow = !!((userAccredetiationState === 'EXPIRED') || (offeringReuglation && offeringReuglation === 'BD_CF_506C' && !includes(['REQUESTED', 'CONFIRMED'], accreditationStatus)));
           if (!isParallelOfferingModelToShow) {
             setFieldValue('disableNextbtn', false);
@@ -260,6 +262,7 @@ class AccountType extends Component {
     const { getCurrentInvestNowHealthCheck, investNowError } = this.props.investmentLimitStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { campaign } = this.props.campaignStore;
+    const { submitStep } = this.props;
     const offeringId = get(campaign, 'id');
     // const offeringDetailObj =
     //  this.props.changeInvest ? get(getInvestorAccountById, 'offering') : campaign;
@@ -301,6 +304,7 @@ class AccountType extends Component {
       offeringAccreditatoinStatusMessage,
       // setHeaderAndSubHeader,
     } = this.props.accreditationStore;
+    const { isAccFrozen } = this.props.accountStore;
     if (investNowError) {
       this.props.cancel();
     }
@@ -321,7 +325,7 @@ class AccountType extends Component {
     let redirectURL = '';
     if (!showAccountList || investAccTypes.values.length <= 1 || this.props.changeInvest) {
       redirectURL = (!isRegulationCheck || (isRegulationCheck && selectedAccountStatus !== 'FULL') || !isAccountCreated) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') && userProfileFullStatus !== 'FULL'
-        ? `${this.props.userDetailsStore.pendingStep}` : (currentUser && currentUser.roles && currentUser.roles.includes('investor') && selectedAccountStatus === 'PARTIAL') ? `${this.props.userDetailsStore.pendingStepForPartialAndProcessingAccount}` : '/app/summary' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
+        ? `${this.props.userDetailsStore.pendingStep}` : (currentUser && currentUser.roles && currentUser.roles.includes('investor') && selectedAccountStatus === 'PARTIAL') ? `${this.props.userDetailsStore.pendingStepForPartialAndProcessingAccount}` : '/dashboard/setup' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
     }
     if ((isRegulationCheck && selectedAccountStatus === 'FULL' && !userAccredetiationState) || this.props.inProgress) {
       return <Spinner loaderMessage="Loading.." />;
@@ -333,7 +337,8 @@ class AccountType extends Component {
       isRegulationCheck, investAccTypes, showAccountList, isDocumentUpload,
       offeringReuglation, offeringDetailsObj,
     );
-    if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
+    if (frozenAccounts.length && isAccFrozen(selectedAccountStatus)) {
+      this.props.userDetailsStore.setFieldValue('currentActiveAccount', frozenAccounts[0]);
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
         // send email to admin:
         sendAdminEmailOfFrozenAccount('INVESTMENT', offeringId);
@@ -353,12 +358,23 @@ class AccountType extends Component {
                   ? (
                     <>
                       <p className="center-align">{headerSubheaderObj.subHeader}</p>
-                      <FormRadioGroup
-                        name="investAccountType"
-                        containerclassname="button-radio center-align"
-                        fielddata={investAccTypes}
-                        changed={accTypeChanged}
-                      />
+                      {isMobile
+                        ? (
+                        <FormArrowButton
+                          fielddata={investAccTypes}
+                          name="investAccountType"
+                          changed={accTypeChanged}
+                          action={submitStep}
+                        />
+                        )
+                        : (
+                        <FormRadioGroup
+                          name="investAccountType"
+                          containerclassname="button-radio center-align"
+                          fielddata={investAccTypes}
+                          changed={accTypeChanged}
+                        />
+                        )}
                     </>
                   )
                   : (
@@ -449,7 +465,7 @@ class AccountType extends Component {
                           )
                           : (
                             <div className="center-align">
-                              {selectedAccountStatus && selectedAccountStatus === 'FROZEN'
+                              {selectedAccountStatus && isAccFrozen(selectedAccountStatus)
                                 ? (
                                   <>
                                     <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.</p>
@@ -486,7 +502,7 @@ class AccountType extends Component {
             )
             : (
               <div className="center-align">
-                {selectedAccountStatus && selectedAccountStatus === 'FROZEN'
+                {selectedAccountStatus && isAccFrozen(selectedAccountStatus)
                   ? (
                     <>
                       <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.</p>

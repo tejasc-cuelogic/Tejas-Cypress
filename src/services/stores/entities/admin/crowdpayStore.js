@@ -1,12 +1,12 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { isArray, get, filter as lodashFilter, findIndex, find, omit, has } from 'lodash';
+import { isArray, get, filter as lodashFilter, findIndex, find, omit, has, intersection } from 'lodash';
 import cleanDeep from 'clean-deep';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
-import { getCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountDecline, crowdPayAccountValidate, createIndividualAccount, getDecryptedGoldstarAccountNumber } from '../../queries/CrowdPay';
-import { crowdPayAccountNotifyGs } from '../../queries/account';
+import { adminGetCrowdPayUsers, adminCrowdPayProcess, adminCrowdPayReview, adminCrowdPayDecline, adminCrowdPayValidate, adminDecrypteGoldstarAccountNumber } from '../../queries/CrowdPay';
+import { crowdPayAccountNotifyGs, submitInvestorAccount } from '../../queries/account';
 import { FILTER_META, CROWDPAY_FILTERS, CONFIRM_CROWDPAY, CROWDPAY_ACCOUNTS_STATUS } from '../../../constants/crowdpayAccounts';
 import Helper from '../../../../helper/utility';
 import { uiStore, individualAccountStore } from '../../index';
@@ -55,13 +55,13 @@ export class CrowdpayStore {
   @observable loadingCrowdPayIds = [];
 
   getMutation = {
-    GSPROCESS: crowdPayAccountProcess,
+    GSPROCESS: adminCrowdPayProcess,
     EMAIL: crowdPayAccountNotifyGs,
-    APPROVE: crowdPayAccountReview,
-    DECLINE: crowdPayAccountReview,
-    ACCOUNT_DECLINE: crowdPayAccountDecline,
-    VALIDATE: crowdPayAccountValidate,
-    CREATEACCOUNT: createIndividualAccount,
+    APPROVE: adminCrowdPayReview,
+    DECLINE: adminCrowdPayReview,
+    ACCOUNT_DECLINE: adminCrowdPayDecline,
+    VALIDATE: adminCrowdPayValidate,
+    CREATEACCOUNT: submitInvestorAccount,
   }
 
   @action
@@ -80,7 +80,7 @@ export class CrowdpayStore {
       const index = findIndex(this.allCrowdpayData, crowdPayAccount => crowdPayAccount.accountId === id);
       const crowdPayAccount = find(this.allCrowdpayData, account => account.accountId === id);
       crowdPayAccount.accountStatus = accountStatus;
-      if (accountStatus === CROWDPAY_ACCOUNTS_STATUS.FROZEN) {
+      if (Array.isArray(accountStatus)) {
         crowdPayAccount.declined = { by: 'ADMIN' };
       }
       this.allCrowdpayData[index] = crowdPayAccount;
@@ -150,7 +150,7 @@ export class CrowdpayStore {
     const { requestTriggerPage, limit } = this.requestState;
     this.data = graphql({
       client,
-      query: getCrowdPayUsers,
+      query: adminGetCrowdPayUsers,
       variables: { ...params, limit, page: requestTriggerPage },
       fetchPolicy: 'network-only',
       onFetch: () => {
@@ -159,7 +159,7 @@ export class CrowdpayStore {
             this.resetPagination();
             this.allCrowdpayData = [];
           }
-          this.requestState.resultCount = get(this.data, 'data.getCrowdPayUsers.resultCount');
+          this.requestState.resultCount = get(this.data, 'data.adminGetCrowdPayUsers.resultCount');
           this.setData('isLazyLoading', this.canTriggerNextPage);
           this.appendCrowdPayData();
           this.requestState.search.accountType = accountType;
@@ -206,8 +206,8 @@ export class CrowdpayStore {
     } = this.requestState.search;
     const accountStatus2 = this.requestState.type === 'review' && !accountStatus ? ['FULL'] : accountStatus;
     if (accountStatus2) {
-      if (this.requestState.type === 'review' && accountStatus2.includes(CROWDPAY_ACCOUNTS_STATUS.DECLINED)) {
-        ClientDb.filterData('accountStatus', [CROWDPAY_ACCOUNTS_STATUS.FROZEN], 'like');
+      if (this.requestState.type === 'review' && intersection(accountStatus2, CROWDPAY_ACCOUNTS_STATUS.DECLINED).length > 0) {
+        ClientDb.filterData('accountStatus', CROWDPAY_ACCOUNTS_STATUS.FROZEN, 'like');
         ClientDb.filterByObjExist('declined');
       } else {
         ClientDb.filterData('accountStatus', accountStatus2, 'like');
@@ -300,7 +300,7 @@ export class CrowdpayStore {
           variables,
         })
         .then(action((data) => {
-          if (!get(data, 'data.crowdPayAccountValidate') && ctaAction === 'VALIDATE') {
+          if (!get(data, 'data.adminCrowdPayValidate') && ctaAction === 'VALIDATE') {
             this.requestState.oldType = this.requestState.type;
             Helper.toast('CIP is not satisfied.', 'error');
             this.removeLoadingCrowdPayId(accountId);
@@ -365,8 +365,8 @@ export class CrowdpayStore {
   }
 
   @computed get getCrowdPayData() {
-    return (this.data.data && toJS(this.data.data.getCrowdPayUsers
-      && this.data.data.getCrowdPayUsers.crowdPayList)) || [];
+    return (this.data.data && toJS(this.data.data.adminGetCrowdPayUsers
+      && this.data.data.adminGetCrowdPayUsers.crowdPayList)) || [];
   }
 
   @computed get accounts() {
@@ -435,13 +435,13 @@ export class CrowdpayStore {
   getDecryptedRoutingNum = (accountId, userId) => new Promise((resolve, reject) => {
     client
       .mutate({
-        mutation: getDecryptedGoldstarAccountNumber,
+        mutation: adminDecrypteGoldstarAccountNumber,
         variables: {
           userId,
           accountId,
         },
       })
-      .then(res => resolve(res.data.getDecryptedGoldstarAccountNumber))
+      .then(res => resolve(res.data.adminDecrypteGoldstarAccountNumber))
       .catch(() => {
         Helper.toast('Something went wrong, please try again later.', 'error');
         reject();

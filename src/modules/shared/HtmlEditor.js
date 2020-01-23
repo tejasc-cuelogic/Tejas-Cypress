@@ -1,20 +1,11 @@
-/* eslint-disable react/jsx-curly-brace-presence */
-/* eslint-disable no-template-curly-in-string */
-/* eslint-disable camelcase */
-/* eslint-disable func-names */
 /* eslint-disable import/no-extraneous-dependencies  */
 import React from 'react';
 import $ from 'jquery';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
-// import Parser from 'html-react-parser';
 import 'froala-editor/js/froala_editor.pkgd.min';
-
-// Require Editor CSS files.
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
-
-// Require Font Awesome.
 import 'font-awesome/css/font-awesome.css';
 
 import { Confirm } from 'semantic-ui-react';
@@ -90,7 +81,7 @@ export default class HtmlEditor extends React.Component {
               type: file.type,
               name: fileName,
             };
-            const fileExt = get(fileName.split('.'), `[${fileName.split('.').length - 1}]`);
+            const fileExt = (fileName && typeof fileName === 'string') ? get(fileName.split('.'), `[${fileName.split('.').length - 1}]`) : '';
             const validate = Helper.validateImageExtension(fileExt);
             if (!validate.isInvalid) {
               fileUpload.uploadToS3(fileObj, this.props.imageUploadPath || 'RichTextEditor').then((res) => {
@@ -99,20 +90,18 @@ export default class HtmlEditor extends React.Component {
                   editor.edit.off();
                   const imgUrl = `https://${UPLOADS_CONFIG.bucket}/${res}`;
                   editor.edit.off();
-                  // editor.image.get().attr('src', imgUrl);
                   editor.image.insert(imgUrl, null, null, editor.image.get());
                   this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
                   editor.edit.on();
                 } else {
                   editor.edit.off();
-                  console.log('else block');
                   this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
                 }
                 editor.edit.off();
                 return false;
-              }).catch((err) => {
+              }).catch((error) => {
                 editor.edit.on();
-                console.log('catch image', err);
+                console.log(error);
                 this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
                 return false;
               });
@@ -138,9 +127,6 @@ export default class HtmlEditor extends React.Component {
 
   render() {
     const { keyStart, readOnly } = this.props;
-    // if (readOnly) {
-    //   return <div>{Parser(this.props.content || '')}</div>;
-    // }
     if (readOnly) {
       return <div className="parsed-data"><FroalaEditorView model={this.props.content} /></div>;
     }

@@ -10,7 +10,7 @@ import IraSummary from './IraSummary';
 import EntitySummary from './EntitySummary';
 import Helper from '../../../../../../../helper/utility';
 import LockedInformation from '../profile/LockedInformation';
-import CashMovement from '../../../../../investor/summary/components/CashMovement';
+import CashMovement from '../../../../../investor/setup/components/CashMovement';
 import { DataFormatter } from '../../../../../../../helper';
 
 const CopyToClipboardAccountId = ({ account }) => (
@@ -74,7 +74,7 @@ export default class Overview extends Component {
         {this.props.isAdmin
           && <AccountHeader showFreezeCTA={!isClosedAccount} pathname={this.props.location.pathname} />
         }
-        {get(account, 'details.accountStatus') === 'FROZEN'
+        {this.props.accountStore.isAccFrozen(get(account, 'details.accountStatus'))
           && (
             <>
               <LockedInformation account details={account} />

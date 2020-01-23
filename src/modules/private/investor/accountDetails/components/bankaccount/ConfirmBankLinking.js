@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { includes } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import Helper from '../../../../../../helper/utility';
+import { InlineLoader } from '../../../../../../theme/shared';
 import ConfirmOTPModal from '../../../../shared/ConfirmOTPModal';
 
 @inject('transactionStore', 'bankAccountStore', 'uiStore', 'userDetailsStore')
@@ -26,11 +27,11 @@ export default class ConfirmBankLinking extends Component {
         isLinkedBankCancelRequest,
       } = this.props.bankAccountStore;
       const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
-      const redirectUrl = `/app/account-details/${accountType}/bank-accounts/link-bank-account/verify-update`;
+      const redirectUrl = `/dashboard/account-details/${accountType}/bank-accounts/link-bank-account/verify-update`;
 
       if (isLinkedBankCancelRequest) {
         declineBankChangeRequest().then(() => {
-          const redirectCancelUrl = `/app/account-details/${accountType}/bank-accounts`;
+          const redirectCancelUrl = `/dashboard/account-details/${accountType}/bank-accounts`;
           Helper.toast('Cancel linked bank successfully.', 'success');
           this.props.history.push(redirectCancelUrl);
         });
@@ -60,7 +61,11 @@ export default class ConfirmBankLinking extends Component {
       OTP_VERIFY_META,
       verifyVerificationCodeChange,
     } = this.props.transactionStore;
-    const { userDetails } = this.props.userDetailsStore;
+    const { userDetails, currentUser } = this.props.userDetailsStore;
+
+    if (currentUser.loading) {
+      return <InlineLoader />;
+    }
     return (
       <ConfirmOTPModal
         OTPData={
@@ -70,8 +75,8 @@ export default class ConfirmBankLinking extends Component {
           }
         }
         refLinkListVal={this.props.refLink}
-        maskedPhoneNumber={this.props.transactionStore.transactionDisplayPhoneNumber}
-        otpConfirmemailAddress={this.props.transactionStore.confirmEmailAdress}
+        maskedPhoneNumber={userDetails.phone.number}
+        otpConfirmemailAddress={userDetails.email.address}
         reSendVerificationCode={this.props.transactionStore.reSendVerificationCode}
         resendVerification={this.resendVerification}
         formSubmit={this.submit}

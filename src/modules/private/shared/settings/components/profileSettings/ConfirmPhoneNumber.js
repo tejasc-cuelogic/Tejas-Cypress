@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
@@ -41,7 +40,7 @@ export default class ConfirmPhoneNumber extends Component {
     if (this.props.refLink) {
       this.props.identityStore.verifyAndUpdatePhoneNumber().then(() => {
         if (setMfaMode) {
-          this.props.multiFactorAuthStore.updateMfaModeType();
+          this.props.multiFactorAuthStore.updateUserMFA();
         }
         Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.identityStore.setIsOptConfirmed(true);
@@ -66,10 +65,10 @@ export default class ConfirmPhoneNumber extends Component {
     }
   }
 
-  startPhoneVerification = () => {
+  startPhoneVerification = async () => {
     this.props.identityStore.setReSendVerificationCode(true);
-    this.props.identityStore.startPhoneVerification('', undefined, isMobile);
-    if (!this.props.refLink) {
+    const res = await this.props.identityStore.startPhoneVerification('', undefined, isMobile);
+    if (res && !this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }
   }
@@ -98,20 +97,20 @@ export default class ConfirmPhoneNumber extends Component {
       phoneVerificationChange,
       isOptConfirmed,
     } = this.props.identityStore;
-    const { errors, editMode } = this.props.uiStore;
+    const { errors, editMode, responsiveVars } = this.props.uiStore;
     if (isOptConfirmed) {
       return <SuccessScreen successMsg="Your phone number has been updated." handleContinue={this.handleContinue} />;
     }
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">Confirm your phone number</Header>
-          <p>
+          <Header as="h3" className={responsiveVars.isMobile ? 'mb-10' : ''}>Confirm your phone number</Header>
+          <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
             We&#39;re introducing Multi-Factor Authentication (MFA) to
             increase the security of your NextSeed account
           </p>
-          <Divider section />
-          <p>Please confirm the 6-digit verification code sent to your phone</p>
+          <Divider section={!responsiveVars.isMobile} />
+          <p className={responsiveVars.isMobile ? 'mb-half' : ''}>Please confirm the 6-digit verification code sent to your phone</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <MaskedInput
@@ -130,7 +129,7 @@ export default class ConfirmPhoneNumber extends Component {
           />
           {editMode
             ? <Link className="grey-link green-hover" to={this.props.match.url} onClick={this.startPhoneVerification}>Confirm Phone number</Link>
-            : <Link className="grey-link green-hover" to="/app/account-settings/profile-data/new-phone-number" onClick={this.handleChangePhoneNumber}>Change phone number</Link>
+            : <Link className="grey-link green-hover" to="/dashboard/account-settings/profile-data/new-phone-number" onClick={this.handleChangePhoneNumber}>Change phone number</Link>
           }
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
             <Form.Field className="otp-wrap">

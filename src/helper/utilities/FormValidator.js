@@ -155,6 +155,7 @@ class FormValidator {
       let currentFormRelative;
       let fieldName = element.name;
       let customErrMsg = {};
+
       if (formIndex > -1 && formName) {
         currentFormRelative = currentForm.fields[formName][formIndex];
         fieldName = `${formName}.${formIndex}.${element.name}`;
@@ -164,6 +165,12 @@ class FormValidator {
       } else {
         currentFormRelative = currentForm.fields;
       }
+
+      if (element && element.name) {
+        // eslint-disable-next-line no-param-reassign
+        element.value = currentFormRelative[element.name].fieldType === 'string' && get(element, 'value') ? element.value.toString() : get(element, 'value');
+      }
+
       if (element.name) {
         if (type === 'checkbox' || (Array.isArray(toJS(currentFormRelative[element.name].value)) && type !== 'dropdown')) {
           const index = currentFormRelative[element.name]
@@ -271,15 +278,20 @@ class FormValidator {
     this.onChange(currentForm, { name: 'zipCode', value: data.zipCode || '' });
   }
 
-  setAddressFieldsIndex = (place, form, formName, subForm = 'data', index) => {
+  setAddressFieldsIndex = (place, form, formName, subForm = 'data', index, action = false, US_STATES = false) => {
     const currentForm = form;
     const data = Helper.gAddressClean(place);
+    let stateValue = '';
+    if (US_STATES) {
+      const state = US_STATES.find(s => s.text === data.state.toUpperCase());
+      stateValue = state ? state.key : '';
+    }
     if (currentForm.fields[subForm][index].street) {
       this.onArrayFieldChange(currentForm, { name: 'street', value: data.residentalStreet }, subForm, index);
     } else {
       this.onArrayFieldChange(currentForm, { name: 'residentalStreet', value: data.residentalStreet }, subForm, index);
     }
-    this.onArrayFieldChange(currentForm, { name: 'state', value: data.state }, subForm, index);
+    this.onArrayFieldChange(currentForm, { name: 'state', value: action ? stateValue : data.state }, subForm, index);
     this.onArrayFieldChange(currentForm, { name: 'city', value: data.city }, subForm, index);
     this.onArrayFieldChange(currentForm, { name: 'zip', value: data.zipCode }, subForm, index);
   }

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const getJobListing = gql`
-query _getJobListing{
+query getJobListing{
     getJobListing
     {
     POSITION
@@ -11,4 +11,10 @@ query _getJobListing{
     STATUS
     }
     }
+`;
+
+export const spaceHelpAndQuestion = gql`
+mutation _spaceHelpAndQuestion($spaceDetails : SpaceHelpAndQuestionInput) {
+    spaceHelpAndQuestion (spaceDetails: $spaceDetails)
+  }
 `;

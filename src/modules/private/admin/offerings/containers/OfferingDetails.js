@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { find, get } from 'lodash';
 import { Modal, Card, Header, Icon } from 'semantic-ui-react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { InlineLoader } from '../../../../../theme/shared';
 import LiveSummary from '../components/LiveSummary';
@@ -12,8 +13,10 @@ import EditOffering from '../components/EditOfferingModal';
 import EditPoc from '../components/EditPocModal';
 import { REACT_APP_DEPLOY_ENV, NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import Helper from '../../../../../helper/utility';
+import { STAGES } from '../../../../../services/constants/admin/offerings';
 
-@inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore', 'uiStore')
+
+@inject('navStore', 'offeringsStore', 'offeringCreationStore', 'userStore', 'uiStore', 'businessAppStore')
 @observer
 export default class OfferingDetails extends Component {
   constructor(props) {
@@ -23,10 +26,9 @@ export default class OfferingDetails extends Component {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
     if (!this.props.offeringsStore.initLoad.includes('getOne')) {
-      this.props.offeringsStore.getOne(this.props.match.params.offeringid);
+      this.props.offeringsStore.getOne(this.props.match.params.offeringSlug);
     }
-    this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
-    this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.offeringid);
+    this.props.navStore.setAccessParams('specificNav', '/dashboard/offering/2/overview');
   }
 
   componentDidMount() {
@@ -38,7 +40,9 @@ export default class OfferingDetails extends Component {
     this.props.offeringCreationStore.resetAffiliatedIssuerForm();
     this.props.offeringCreationStore.resetAllForms();
     this.props.offeringCreationStore.resetOfferingId();
-    this.props.history.push(`${this.props.refLink}/${this.props.match.params.stage}`);
+    this.props.businessAppStore.resetFirstLoad();
+    const { offer } = this.props.offeringsStore;
+    this.props.history.push(`/dashboard/offerings/${STAGES[offer.stage].ref}`);
     window.onpopstate = null;
   };
 
@@ -52,10 +56,11 @@ export default class OfferingDetails extends Component {
   };
 
   render() {
-    const { match, offeringsStore, navStore } = this.props;
+    const { match, offeringsStore, navStore, offeringCreationStore } = this.props;
     let navItems = navStore.specificNavs.subNavigations;
     const { offerLoading, offerOld } = offeringsStore;
     let { offer } = offeringsStore;
+    const { currentOfferingId } = offeringCreationStore;
     const { offerStatus } = offeringsStore;
     offer = !offerLoading && offerOld.stage ? offerOld : offer;
     if (!get(offer, 'id') || (offerLoading && offer && !offer.stage)) {
@@ -74,25 +79,41 @@ export default class OfferingDetails extends Component {
     if (access.level !== 'FULL') {
       navItems = navItems.filter(n => (n.title !== 'Close'));
     }
+    // add business application after Bonus Rewards // offer.stage === 'CREATION' &&
+    if (offer.applicationId && !['WP_MIGRATION'].includes(offer.applicationId) && offer.issuerId) {
+      const pos = navItems.findIndex(n => n.to === 'overview');
+      navItems.splice(
+        (pos + 1),
+        0,
+        { to: 'applications', title: 'App' },
+      );
+    }
+    const offeringState = !['CREATION'].includes(offer.stage) ? 'OTHER' : offer.stage;
+    navItems = navStore.manageNavigationOrder(navItems, offeringState);
     const { responsiveVars } = this.props.uiStore;
     return (
       <>
         <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeOnEscape={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
           <Modal.Content className="transaction-details">
-            <Header as="h3">
-              {((offer.keyTerms && offer.keyTerms.shorthandBusinessName)
-                ? offer.keyTerms.shorthandBusinessName : (
-                  (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
-                ))}
-              <Header.Subheader className="mt-10">
-                <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}`}>
-                  <Icon className="ns-view" /><b>Preview the offering page</b>
-                </Link>
-                {offer.stage === 'CREATION'
-                  && <Link to={`${match.url}/editPoc`} className="pull-right"><Icon className="ns-pencil" />Edit</Link>
-                }
-              </Header.Subheader>
-            </Header>
+            <CopyToClipboard
+              text={currentOfferingId}
+              onCopy={() => console.log('copied')}
+            >
+              <Header as="h3">
+                {((offer.keyTerms && offer.keyTerms.shorthandBusinessName)
+                  ? offer.keyTerms.shorthandBusinessName : (
+                    (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
+                  ))}
+                <Header.Subheader className="mt-10">
+                  <Link target="_blank" to={`/offerings/${offer.stage === 'CREATION' ? 'preview/' : ''}${offer.offeringSlug}`}>
+                    <Icon className="ns-view" /><b>Preview the offering page</b>
+                  </Link>
+                  {offer.stage === 'CREATION'
+                    && <Link to={`${match.url}/editPoc`} className="pull-right"><Icon className="ns-pencil" />Edit</Link>
+                  }
+                </Header.Subheader>
+              </Header>
+            </CopyToClipboard>
             {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} refLink={this.props.match.url} onClick={e => this.openBoxLink(e, offer.rootFolderId)} offerStatus={offerStatus} />}
             <Card fluid>
               <SecondaryMenu isBonusReward bonusRewards className="offer-details" offering match={match} navItems={navItems} responsiveVars={responsiveVars} />
@@ -100,14 +121,13 @@ export default class OfferingDetails extends Component {
                 <Route exact path={match.url} component={OfferingModule('overview')} />
                 {
                   navItems.map((item) => {
-                    const { offeringid } = this.props.match.params;
                     const CurrentModule = OfferingModule(item.to);
                     return (
-                        <Route
-                          key={item.to}
-                          path={`${match.url}/${item.to}`}
-                          render={props => <CurrentModule classes={item.title === 'Activity History' ? 'offering-activity' : ''} module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} stepName="OFFERING_ACTIVITY_HISTORY" resourceId={offeringid} offeringId={offeringid} />}
-                        />
+                      <Route
+                        key={item.to}
+                        path={`${match.url}/${item.to}`}
+                        render={props => <CurrentModule classes={item.title === 'Activity History' ? 'offering-activity' : ''} module={item.title === 'Activity History' ? 'offeringDetails' : false} showFilters={item.title === 'Activity History' ? ['activityType', 'activityUserType'] : false} {...props} stepName="OFFERING_ACTIVITY_HISTORY" resourceId={currentOfferingId} offeringId={currentOfferingId} issuerId={offer.issuerId} applicationId={offer.applicationId} />}
+                      />
                     );
                   })
                 }

@@ -34,3 +34,4 @@ Thanks to the following projects that have helped form the base of NextSeed V2 C
 - run `npm install --vs2015 -g windows-build-tools`
 - use ` npm install --python=python2.7`
 
+

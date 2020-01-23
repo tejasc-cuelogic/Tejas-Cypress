@@ -1,88 +1,8 @@
 import gql from 'graphql-tag';
 
-export const listCrowdPayUsers = gql`
-query listCrowdPayUsers($limit: Int) {
-  listCrowdPayUsers(limit: $limit) {
-        resultCount
-        crowdPayList {
-          userId
-          accountId
-          firstName
-          lastName
-          email
-          accountStatus
-          accountType
-          phone
-          status
-          cip {
-            failType
-            failReason {
-              key
-              message
-            }
-          }
-          legalDetails {
-            verificationStartDate
-            verificationDocs {
-              idProof {
-                fileName
-                fileHandle {
-                  boxFolderId
-                  boxFileId
-                }
-              }
-              addressProof {
-                 fileName
-                fileHandle {
-                  boxFolderId
-                  boxFileId
-                }
-              }
-            }
-          }
-          created {
-            by
-            date
-          }
-          updated {
-            by
-            date
-          }
-          approved {
-            by
-            date
-          }
-          declined {
-            by
-            date
-          }
-          deleted {
-            by
-            date
-          }
-          storageDetails
-          frozen {
-            by
-            date
-          }
-          processing {
-            gs {
-              date
-              by
-            }
-          }
-          investorProfileData {
-            brokerageFirmName
-            publicCompanyTicker
-          }
-      }
-  }
-}
-`;
-
-export const getCrowdPayUsers = gql`
-query getCrowdPayUsers($limit: Int, $page: Int, $search: String, $accountType: InvestorAccountTypeEnum, $accountStatus: [InvestorAccountStatusEnum], $accountCreateFromDate: String, $accountCreateToDate: String) {
-  getCrowdPayUsers(limit: $limit,page: $page, search: $search, accountType: $accountType, accountStatus: $accountStatus, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate) {
+export const adminGetCrowdPayUsers = gql`
+query adminGetCrowdPayUsers($limit: Int, $page: Int, $search: String, $accountType: InvestorAccountTypeEnum, $accountStatus: [InvestorAccountStatusEnum], $accountCreateFromDate: String, $accountCreateToDate: String) {
+  adminGetCrowdPayUsers(limit: $limit,page: $page, search: $search, accountType: $accountType, accountStatus: $accountStatus, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate) {
         resultCount
         crowdPayList {
           userId
@@ -162,9 +82,9 @@ query getCrowdPayUsers($limit: Int, $page: Int, $search: String, $accountType: I
 }
 `;
 
-export const crowdPayAccountReview = gql`
-mutation _crowdPayAccountReview($userId: String!, $accountId: String!, $action: ActionTypeEnum!, $comment: String!) {
-  crowdPayAccountReview(
+export const adminCrowdPayReview = gql`
+mutation adminCrowdPayReview($userId: String!, $accountId: String!, $action: ActionTypeEnum!, $comment: String!) {
+  adminCrowdPayReview(
     userId: $userId
     accountId: $accountId
     action: $action
@@ -175,9 +95,9 @@ mutation _crowdPayAccountReview($userId: String!, $accountId: String!, $action: 
 }
 `;
 
-export const crowdPayAccountProcess = gql`
-mutation crowdPayAccountProcess($userId: String!, $accountId: String!, $reason:String! ) {
-  crowdPayAccountProcess(
+export const adminCrowdPayProcess = gql`
+mutation adminCrowdPayProcess($userId: String!, $accountId: String!, $reason:String! ) {
+  adminCrowdPayProcess(
     userId: $userId
     accountId: $accountId
     reason: $reason
@@ -185,9 +105,9 @@ mutation crowdPayAccountProcess($userId: String!, $accountId: String!, $reason:S
 }
 `;
 
-export const crowdPayAccountValidate = gql`
-mutation _crowdPayAccountValidate($userId: String!, $accountId: String!, $skipCip: Boolean) {
-  crowdPayAccountValidate(
+export const adminCrowdPayValidate = gql`
+mutation adminCrowdPayValidate($userId: String!, $accountId: String!, $skipCip: Boolean) {
+  adminCrowdPayValidate(
     userId: $userId
     accountId: $accountId
     skipCip: $skipCip
@@ -195,23 +115,14 @@ mutation _crowdPayAccountValidate($userId: String!, $accountId: String!, $skipCi
 }
 `;
 
-export const createIndividualAccount = gql`
-mutation _submitInvestorAccount($userId: String,$accountId: String!, $accountType: InvestorAccountTypeEnum!){
-  submitInvestorAccount(
-    userId: $userId,
-    accountId: $accountId,
-    accountType: $accountType
-  )
+export const adminDecrypteGoldstarAccountNumber = gql`
+mutation adminDecrypteGoldstarAccountNumber($userId:String!, $accountId: String!){
+  adminDecrypteGoldstarAccountNumber(userId: $userId , accountId: $accountId )
 }`;
 
-export const getDecryptedGoldstarAccountNumber = gql`
-mutation _getDecryptedGoldstarAccountNumber($userId:String!, $accountId: String!){
-  getDecryptedGoldstarAccountNumber(userId: $userId , accountId: $accountId )
-}`;
-
-export const crowdPayAccountDecline = gql`
-mutation crowdPayAccountDecline($userId:String!, $accountId: String!,$reason: String! ){
-  crowdPayAccountDecline(userId: $userId , accountId: $accountId, reason: $reason ) {
+export const adminCrowdPayDecline = gql`
+mutation adminCrowdPayDecline($userId:String!, $accountId: String!,$reason: String! ){
+  adminCrowdPayDecline(userId: $userId , accountId: $accountId, reason: $reason ) {
     status
     errorMessage
   }

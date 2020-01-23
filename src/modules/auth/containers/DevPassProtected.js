@@ -33,7 +33,7 @@ class DevPassProtected extends Component {
 
   authPreviewOffer = () => {
     this.setState({ previewPassLoader: true });
-    this.props.authStore.validateOfferingPreviewPassword(this.props.offeringId, this.state.password).then((status) => {
+    this.props.authStore.validateOfferingPreviewPassword(this.props.offeringSlug, this.state.password).then((status) => {
       if (status) {
         this.props.authPreviewOffer(true, this.state.password);
       } else {

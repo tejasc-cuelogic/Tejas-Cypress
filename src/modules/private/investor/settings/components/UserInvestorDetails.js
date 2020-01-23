@@ -7,7 +7,7 @@ import Helper from '../../../../../helper/utility';
 import { INVESTMENT_EXPERIENCE_LIST, EMPLOYMENT_LIST, BROKERAGE_EMPLOYMENT_LIST, PUBLIC_COMPANY_REL_LIST, INVESTOR_PROFILE_LIST } from '../../../../../constants/account';
 import { FormInput, MaskedInput, FormDropDown, FormCheckbox } from '../../../../../theme/form';
 
-@inject('investorProfileStore', 'userDetailsStore')
+@inject('investorProfileStore', 'userDetailsStore', 'uiStore')
 @observer
 export default class UserInvestorDetails extends Component {
   state = {
@@ -59,10 +59,11 @@ export default class UserInvestorDetails extends Component {
       isInvestmentExperienceValid,
     } = this.props.investorProfileStore;
     const yearValues = Helper.getLastThreeYearsLabel();
+    const { responsiveVars } = this.props.uiStore;
     return (
-      <Card fluid className="form-card">
+      <Card fluid className="form-card disabled">
         <Form>
-          <Header as="h5">Investor Profile
+          <Header as="h5" className={responsiveVars.isMobile && 'plr-0'}>Investor Profile
             {!this.props.isAdmin && (this.state.displayOnly
               ? <Link to={`${this.props.match.url}`} className="link pull-right regular-text" onClick={this.toogleField}><small>Edit information</small></Link>
               : (
@@ -79,8 +80,8 @@ export default class UserInvestorDetails extends Component {
               ))
             }
           </Header>
-          <dl className="dl-horizontal">
-            <dt>Employment status</dt>
+          <dl className="dl-horizontal profile-data">
+            <dt className="neutral-text">Employment status</dt>
             <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
               <FormDropDown
                 readOnly={this.state.displayOnly}
@@ -129,7 +130,7 @@ export default class UserInvestorDetails extends Component {
               )
             }
             <Divider hidden />
-            <dt>Brokerage employment</dt>
+            <dt className="neutral-text">Brokerage employment</dt>
             <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
               <FormDropDown
                 readOnly={this.state.displayOnly}
@@ -148,6 +149,7 @@ export default class UserInvestorDetails extends Component {
             {INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value === 'yes'
               && (
               <>
+                <Divider hidden />
                 <dt className="regular-text">Member Firm Name</dt>
                 <dd>
                   <FormInput
@@ -165,7 +167,7 @@ export default class UserInvestorDetails extends Component {
               )
             }
             <Divider hidden />
-            <dt>Public Company Relations</dt>
+            <dt className="neutral-text">Public Company Relations</dt>
             <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
               <FormDropDown
                 readOnly={this.state.displayOnly}
@@ -184,6 +186,7 @@ export default class UserInvestorDetails extends Component {
             {INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value === 'yes'
               && (
               <>
+                <Divider hidden />
                 <dt className="regular-text">Ticker Symbol</dt>
                 <dd>
                   <FormInput
@@ -201,7 +204,7 @@ export default class UserInvestorDetails extends Component {
               )
             }
             <Divider hidden />
-            <dt>Financial status</dt>
+            <dt className="neutral-text">Financial status</dt>
             <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
               <FormDropDown
                 readOnly={this.state.displayOnly}
@@ -249,7 +252,7 @@ export default class UserInvestorDetails extends Component {
             ))
             }
             <Divider hidden />
-            <dt>Investment experience</dt>
+            <dt className="neutral-text">Investment experience</dt>
             <dd className={!this.state.displayOnly ? 'visible-dropdown' : ''}>
               <FormDropDown
                 readOnly={this.state.displayOnly}
@@ -289,7 +292,7 @@ export default class UserInvestorDetails extends Component {
           {!this.state.displayOnly && !isInvestmentExperienceValid
             && (
 <p className="negative-text">
-              Otherwise, please reference our <Link to="/app/resources/welcome-packet">Education Center </Link>
+              Otherwise, please reference our <Link to="/resources/education-center/investor">Education Center </Link>
               to learn more about investing on NextSeed.
             </p>
             )

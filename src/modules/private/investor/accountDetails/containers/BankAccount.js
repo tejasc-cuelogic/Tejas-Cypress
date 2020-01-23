@@ -10,6 +10,8 @@ import VerifyBankUpdate from '../components/bankaccount/VerifyBankUpdate';
 import LinkBankAccount from './LinkBankAccount';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('bankAccountStore', 'educationStore', 'userDetailsStore')
 export default class BankAccount extends Component {
   constructor(props) {
@@ -27,17 +29,9 @@ export default class BankAccount extends Component {
     const NO_PERMISSION_MSG = `Please contact
   <a href="mailto:support@nextseed.com">support@nextseed.com</a>
   to request a transfer of your IRA funds.`;
-    // const { userDetails } = this.props.userDetailsStore;
     const pendingAccoungDetails = plaidAccDetails && plaidAccDetails.changeRequest
       && plaidAccDetails.changeRequest.status !== 'REQUEST_CANCELLATION' ? plaidAccDetails.changeRequest : null;
-    // let isCheckedIra = false;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
-    // get(userDetails, 'roles').map((role) => {
-    //   if (get(role, 'details.fundingType') === 'check' && accountType === 'ira') {
-    //     isCheckedIra = true;
-    //   }
-    //   return null;
-    // });
     return (
       <div>
         <Switch>
@@ -63,7 +57,7 @@ export default class BankAccount extends Component {
         {accountType !== 'ira'
           ? (
             <>
-              <Header as="h4">Bank Account</Header>
+              {!isMobile ? <Header as="h4">Bank Account</Header> : ''}
               <Grid>
                 {isEmpty(plaidAccDetails)
                 && (
