@@ -124,10 +124,14 @@ class App extends Component {
         if (authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
           authActions.forceLogout('timeout').then(() => {
             uiStore.setAuthRef(location.pathname);
-            history.push('/login');
+            if (location.pathname.includes('/dashboard/')) {
+              history.push('/login');
+            }
           });
         } else if (window.localStorage.getItem('jwt') && location.pathname === '/login' && uiStore.authRef.includes('/dashboard')) {
           window.location = uiStore.authRef || '/';
+        } else if (window.localStorage.getItem('jwt') && !authStore.isUserLoggedIn) {
+          window.location.reload();
         } else {
           const swAppVersionL = localStorage.getItem('swAppVersion'); // from local storage
           const swAppVersionS = sessionStorage.getItem('swAppVersion'); // from session storage
