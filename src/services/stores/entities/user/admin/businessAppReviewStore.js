@@ -6,7 +6,7 @@ import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { Calculator } from 'amortizejs';
 import money from 'money-math';
-import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, PROMOTE_APPLICATION_STATUS_PASSWORD, PROMOTE_APPLICATION_STATUS_EMAIL } from '../../../../constants/admin/businessApplication';
+import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, PROMOTE_APPLICATION_STATUS_PASSWORD, PROMOTE_APPLICATION_STATUS_EMAIL, APPLICATION_MAPPED_OFFERING } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -53,6 +53,8 @@ export class BusinessAppReviewStore {
   @observable MODEL_VARIABLES_FRM = Validator.prepareFormObject(MODEL_VARIABLES);
 
   @observable RESULTS_FRM = Validator.prepareFormObject(MODEL_RESULTS);
+
+  @observable APPLICATION_MAPPED_OFFERING_FORM = Validator.prepareFormObject(APPLICATION_MAPPED_OFFERING);
 
   @observable businessApplicationOffers = null;
 
@@ -134,6 +136,7 @@ export class BusinessAppReviewStore {
       DOCUMENTATION_FRM: { actionType: 'REVIEW_DOCUMENTATION', isMultiForm: false },
       OFFERS_FRM: { actionType: 'REVIEW_OFFER', isMultiForm: true },
       MANAGERS_FRM: { formData: MANAGERS, isMultiForm: false },
+      APPLICATION_MAPPED_OFFERING_FORM: { isMultiForm: true },
     };
     return metaDataMapping[formName][getField];
   }
@@ -392,10 +395,10 @@ export class BusinessAppReviewStore {
     this.PROMOTE_APPLICATION_STATUS_EMAIL_FRM.fields.emailAddress.value = businessApplicationDetailsAdmin ? businessApplicationDetailsAdmin.email : '';
   }
 
- @action
+  @action
   updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag = '', comment = '', applicationStatus = '', temporaryPassword = '') => {
     const applicationSource = applStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_IN_PROGRESS ? 'APPLICATION_IN_PROGRESS' : applStatus
-    === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
+      === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     const formInputData = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
     uiStore.setProgress();
     let payload = {
@@ -428,7 +431,7 @@ export class BusinessAppReviewStore {
           mutation: adminUpdateApplicationStatusAndReview,
           variables: payload,
           refetchQueries:
-              [{ query: adminBusinessApplicationsDetails, variables: reFetchPayLoad }],
+            [{ query: adminBusinessApplicationsDetails, variables: reFetchPayLoad }],
         })
         .then((result) => {
           Helper.toast('Application status updated successfully.', 'success');
@@ -846,6 +849,30 @@ export class BusinessAppReviewStore {
     if (this.fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL') {
       offersToShow = data.find(obj => obj.isAccepted === true);
       this.OFFERS_FRM = Validator.setFormData(this.OFFERS_FRM, { offer: [offersToShow] });
+    }
+  }
+
+  @action
+  formArrayChange = (e, result, form, subForm = '', index, index2) => {
+    if (result && (result.type === 'checkbox')) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        Validator.pullValues(e, result),
+        subForm,
+        index,
+        '',
+        { value: result.checked },
+      );
+    } else {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        Validator.pullValues(e, result),
+        subForm,
+        index,
+      );
+      if (form === 'LEADERSHIP_EXP_FRM') {
+        this.leadershipExperience[index2] = this[form];
+      }
     }
   }
 }

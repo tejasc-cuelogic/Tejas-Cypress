@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import BusinessApplicationMapping from './applicationMapping/businessApplicationMapping';
-import LegalDocumentUpload from './applicationMapping/legalDocumentUpload';
+// import LegalDocumentUpload from './applicationMapping/legalDocumentUpload';
 import { InlineLoader } from '../../../../../../../theme/shared';
 
 
@@ -20,7 +20,7 @@ export default class Offerings extends Component {
         ? <InlineLoader />
         : (
           <>
-            <LegalDocumentUpload />
+            {/* <LegalDocumentUpload /> */}
             <BusinessApplicationMapping />
           </>
         )
