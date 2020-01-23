@@ -650,7 +650,9 @@ export class TransactionStore {
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (!this.loanAgreementData.loading) {
-          resolve(data.viewLoanAgreement.docuSignViewURL);
+          const agreementURL = get(data, 'viewLoanAgreement.boxFileId') ? data.viewLoanAgreement.npaViewUrl : data.viewLoanAgreement.docuSignViewURL;
+          resolve(agreementURL);
+          // resolve(data.viewLoanAgreement.docuSignViewURL);
         }
       },
       onError: () => {

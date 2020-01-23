@@ -190,6 +190,9 @@ export default class Close extends Component {
         this.setState({ inProgress: false });
         if (status === 'close') {
           this.props.history.push(`/dashboard/offering/${currentOfferingSlug}/overview`);
+        } else if (type === 'EXPORT_ENVELOPES') {
+          this.setState({ action: '' });
+          this.handleCloseModal();
         }
       }).catch((e) => {
         console.log(e);
@@ -663,7 +666,7 @@ export default class Close extends Component {
         </div>
         <Modal open={this.state.openModal} closeIcon size={this.state.action === 'EXPORT_ENVELOPES' ? 'large' : this.state.action === 'VALIDATE_NOTES' ? 'small' : 'tiny'} onClose={this.handleCloseModal}>
           {this.state.action === 'EXPORT_ENVELOPES'
-            ? <ExportEnvelopes inProgress={this.state.inProgress} handleUpdateOffering={this.handleUpdateOffering} offeringId={offer.id} />
+            ? <ExportEnvelopes handleCloseModal={this.handleCloseModal} inProgress={this.state.inProgress} handleUpdateOffering={this.handleUpdateOffering} offeringId={offer.id} />
             : (
               <>
                 <Modal.Header>

@@ -159,6 +159,7 @@ export const viewLoanAgreement = gql`
     viewLoanAgreement(agreementId: $agreementId, callbackUrl: $callbackUrl) {
       agreementId
       envelopeId
+      boxFileId
       docuSignViewURL
       npaViewUrl
     }
