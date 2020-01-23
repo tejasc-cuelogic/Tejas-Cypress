@@ -3,7 +3,7 @@ import { observer, inject } from 'mobx-react';
 import { Form, Button, Icon, Header, Divider, Confirm } from 'semantic-ui-react';
 import { MaskedInput, DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 
-export default inject('offeringCreationStore')(observer(({ inProgress, offeringCreationStore, offeringId, handleUpdateOffering }) => {
+export default inject('offeringCreationStore')(observer(({ handleCloseModal, inProgress, offeringCreationStore, offeringId, handleUpdateOffering }) => {
   const [loading, setLoading] = React.useState(false);
   React.useEffect(() => {
     offeringCreationStore.setFormData('OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'closureSummary.exportEnvelopes');
@@ -33,8 +33,10 @@ export default inject('offeringCreationStore')(observer(({ inProgress, offeringC
     try {
       await offeringCreationStore.offeringClose({ offeringId, process: 'EXPORT_ENVELOPES' }, 4, scope);
       setLoading(false);
+      handleCloseModal();
     } catch {
       setLoading(false);
+      handleCloseModal();
     }
   };
 
