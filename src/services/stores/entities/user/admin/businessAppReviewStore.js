@@ -853,7 +853,7 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  formArrayChange = (e, result, form, subForm = '', index, index2) => {
+  formArrayChange = (e, result, form, subForm = '', index, index2, type = undefined) => {
     if (result && (result.type === 'checkbox')) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
@@ -862,6 +862,12 @@ export class BusinessAppReviewStore {
         index,
         '',
         { value: result.checked },
+      );
+    } else if (form === 'APPLICATION_MAPPED_OFFERING_FORM' && type && (type === 'dropdown')) {
+      Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+        type,
       );
     } else {
       this[form] = Validator.onArrayFieldChange(
@@ -875,5 +881,51 @@ export class BusinessAppReviewStore {
       }
     }
   }
+
+  @action
+  businessDetailsDateChange = (field, date, index = -1, form, subFormName = '') => {
+    this[form] = Validator.onArrayFieldChange(
+      this[form],
+      { name: field, value: date },
+      subFormName,
+      index,
+    );
+  }
+
+  @action
+  businessDetailsMaskingChange = (field, values, form, subFormName = '', index = -1) => {
+    const val = field === 'ssn' ? values.value : values.floatValue;
+    if (subFormName) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: val },
+        subFormName,
+        index,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        { name: field, value: val },
+      );
+    }
+  };
+
+  @action
+  businessDetailsChange = (e, res, form, subFormName = '', index = -1) => {
+    if (subFormName) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        Validator.pullValues(e, res),
+        subFormName,
+        index,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, res),
+      );
+    }
+  };
 }
+
 export default new BusinessAppReviewStore();

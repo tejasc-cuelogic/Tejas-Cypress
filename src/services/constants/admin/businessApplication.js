@@ -1889,16 +1889,16 @@ export const APPLICATION_MAPPED_OFFERING = {
   },
   fundUsage: {
     label: 'Use of Proceeds',
-    value: [],
+    value: '',
     values: [
-      { label: 'Renovations', icon: 'ns-renovations', value: 'RENOVATIONS' },
-      { label: 'Equipment Purchase', icon: 'ns-equipment-purchase', value: 'EQUIPMENT_PURCHASE' },
-      { label: 'Working Capital', icon: 'ns-working-capital', value: 'WORKING_CAPITAL' },
-      { label: 'Inventory', icon: 'ns-inventory', value: 'INVENTORY' },
-      { label: 'New Product Line', icon: 'ns-new-product', value: 'NEW_PRODUCT_LINE' },
-      { label: 'New Location', icon: 'ns-new-location', value: 'NEW_LOCATION' },
-      { label: 'Restructuring / Recapitalization', icon: 'ns-restructure-debt', value: 'RESTRUCTURE_DEBT' },
-      { label: 'Other use of funds', value: 'OTHER' },
+      { text: 'Renovations', value: 'RENOVATIONS', key: 'RENOVATIONS' },
+      { text: 'Equipment Purchase', value: 'EQUIPMENT_PURCHASE', key: 'EQUIPMENT_PURCHASE' },
+      { text: 'Working Capital', value: 'WORKING_CAPITAL', key: 'WORKING_CAPITAL' },
+      { text: 'Inventory', value: 'INVENTORY', key: 'INVENTORY' },
+      { text: 'New Product Line', value: 'NEW_PRODUCT_LINE', key: 'NEW_PRODUCT_LINE' },
+      { text: 'New Location', value: 'NEW_LOCATION', key: 'NEW_LOCATION' },
+      { text: 'Restructuring / Recapitalization', value: 'RESTRUCTURE_DEBT', key: 'RESTRUCTURE_DEBT' },
+      { text: 'Other use of funds', value: 'OTHER', key: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
@@ -1918,26 +1918,27 @@ export const APPLICATION_MAPPED_OFFERING = {
   },
   debts: [{
     amount: {
-      value: null, label: 'Principal Amount', error: undefined, rule: 'optional', placeHolder: '$500,000', customErrors: { required: 'required' }, objRef: 'businessDetails',
+      value: null, label: 'Principal Amount', error: undefined, rule: 'optional', placeHolder: '$500,000', customErrors: { required: 'required' },
     },
     remainingPrincipal: {
-      value: null, label: 'Remaining Principal', error: undefined, rule: 'optional', placeHolder: '$150,000', customErrors: { required: 'required' }, objRef: 'businessDetails',
+      value: null, label: 'Remaining Principal', error: undefined, rule: 'optional', placeHolder: '$150,000', customErrors: { required: 'required' },
     },
     interestExpenses: {
-      value: null, label: 'Interest Rate', error: undefined, rule: 'optional|max:100', placeHolder: '10%', customErrors: { max: 'The Interest Expenses should be less than 100%.' }, objRef: 'businessDetails',
+      value: null, label: 'Interest Rate', error: undefined, rule: 'optional|max:100', placeHolder: '10%', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
     },
     termStartDate: {
-      value: null, label: 'Term Start Date', error: undefined, rule: 'optional|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' }, objRef: 'businessDetails',
+      value: null, label: 'Term Start Date', error: undefined, rule: 'optional|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
     },
     maturityDate: {
-      value: null, label: 'Maturity Date', error: undefined, rule: 'optional|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' }, objRef: 'businessDetails',
+      value: null, label: 'Maturity Date', error: undefined, rule: 'optional|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
     },
     creditorName: {
-      value: null, label: 'Creditor Name', error: undefined, rule: 'optional', placeHolder: 'ex. Creditor Name', objRef: 'businessDetails',
+      value: null, label: 'Creditor Name', error: undefined, rule: 'optional', placeHolder: 'ex. Creditor Name',
     },
     existingLienOnBusiness: {
-      value: null, label: 'Existing Lien on Business', error: undefined, rule: 'optional', placeHolder: 'ex Yes', objRef: 'businessDetails',
+      value: null, label: 'Existing Lien on Business', error: undefined, rule: 'optional', placeHolder: 'ex Yes',
     },
+    objRef: 'businessDetails',
   }],
   owners: [{
     fullLegalName: {
