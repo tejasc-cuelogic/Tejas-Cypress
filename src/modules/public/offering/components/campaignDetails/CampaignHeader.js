@@ -23,10 +23,10 @@ export default class CampaignHeader extends Component {
     const {
       isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
-      percentBefore, diffForProcessing, countDown, isInvestedInOffering,
+      percentBefore, diffForProcessing, countDown, isInvestedInOffering, dataRooms,
     } = campaignStatus;
     const showCounter = (!isClosed && diffForProcessing.value > 0 && !campaignStatus.isFund) || (!campaignStatus.isFund) || (isClosed && get(campaign, 'closureSummary.repayment.count') > 0) || (earlyBird && earlyBird.available > 0
-    && isEarlyBirdRewards && !isClosed && bonusRewards);
+      && isEarlyBirdRewards && !isClosed && bonusRewards);
     return (
       <>
         <div className="campaign-banner">
@@ -59,54 +59,54 @@ export default class CampaignHeader extends Component {
                       )
                     }
                     {showCounter
-                    && (
-                    <div className="offer-stats">
-                      <Statistic.Group>
-                        {!campaignStatus.isFund
-                          ? (
-                            <>
-                              {!isClosed && diffForProcessing.value > 0
-                                && (
+                      && (
+                        <div className="offer-stats">
+                          <Statistic.Group>
+                            {!campaignStatus.isFund
+                              ? (
+                                <>
+                                  {!isClosed && diffForProcessing.value > 0
+                                    && (
+                                      <Statistic size="mini" className="basic">
+                                        <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
+                                        <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
+                                      </Statistic>
+                                    )}
                                   <Statistic size="mini" className="basic">
-                                    <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
-                                    <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
+                                    <Statistic.Value>
+                                      {get(campaign, 'closureSummary.totalInvestorCount') || 0}
+                                    </Statistic.Value>
+                                    <Statistic.Label>Investors</Statistic.Label>
                                   </Statistic>
-                                )}
-                              <Statistic size="mini" className="basic">
-                                <Statistic.Value>
-                                  {get(campaign, 'closureSummary.totalInvestorCount') || 0}
-                                </Statistic.Value>
-                                <Statistic.Label>Investors</Statistic.Label>
-                              </Statistic>
-                            </>
-                          )
-                          : null
-                        }
-                        {isClosed && get(campaign, 'closureSummary.repayment.count') > 0
-                          && (
-                            <Statistic size="mini" className="basic">
-                              <Statistic.Value>
-                                {get(campaign, 'closureSummary.repayment.count') || 0}
-                              </Statistic.Value>
-                              <Statistic.Label>Payments made</Statistic.Label>
-                            </Statistic>
-                          )
-                        }
-                        {earlyBird && earlyBird.available > 0
-                          && isEarlyBirdRewards && !isClosed
-                          && bonusRewards
-                          ? (
-                            <Statistic size="mini" className="basic">
-                              <Statistic.Value>
-                                {get(campaign, 'earlyBird.available') || 0}
-                              </Statistic.Value>
-                              <Statistic.Label>Early Bird Rewards</Statistic.Label>
-                            </Statistic>
-                          ) : ''
-                        }
-                      </Statistic.Group>
-                    </div>
-                    )}
+                                </>
+                              )
+                              : null
+                            }
+                            {isClosed && get(campaign, 'closureSummary.repayment.count') > 0
+                              && (
+                                <Statistic size="mini" className="basic">
+                                  <Statistic.Value>
+                                    {get(campaign, 'closureSummary.repayment.count') || 0}
+                                  </Statistic.Value>
+                                  <Statistic.Label>Payments made</Statistic.Label>
+                                </Statistic>
+                              )
+                            }
+                            {earlyBird && earlyBird.available > 0
+                              && isEarlyBirdRewards && !isClosed
+                              && bonusRewards
+                              ? (
+                                <Statistic size="mini" className="basic">
+                                  <Statistic.Value>
+                                    {get(campaign, 'earlyBird.available') || 0}
+                                  </Statistic.Value>
+                                  <Statistic.Label>Early Bird Rewards</Statistic.Label>
+                                </Statistic>
+                              ) : ''
+                            }
+                          </Statistic.Group>
+                        </div>
+                      )}
                   </div>
                   <div className="clearfix social-links mt-10">
                     {campaign && get(campaign, 'offering.overview.social')
@@ -159,11 +159,11 @@ export default class CampaignHeader extends Component {
                       <>
                         <p>
                           <span className="mr-10">{Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                            position="top center"
-                          />
+                            <Popup
+                              trigger={<Icon name="help circle" color="green" />}
+                              content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                              position="top center"
+                            />
                           </span>
                           |
                           <span className="ml-10">{Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
@@ -179,7 +179,7 @@ export default class CampaignHeader extends Component {
                   {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                     && (
                       <p className="raise-type mb-0">
-                        {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
+                        {['REAL_ESTATE'].includes(offerStructure) ? 'Commercial Real Estate' : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
                         {/* <Popup
                           hoverable
                           trigger={<Icon name="help circle" color="green" />}
@@ -189,6 +189,20 @@ export default class CampaignHeader extends Component {
                           position="top center"
                         /> */}
                       </p>
+                    )
+                  }
+                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
+                    && (
+                      <p className="mb-0">
+                        Asset Type: Hotel Development
+                        </p>
+                    )
+                  }
+                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE && dataRooms > 0
+                    && (
+                      <p className="mb-0">
+                        Targeted IRR: <Link to={`${this.props.match.url}#data-room`}> View in Data Room</Link>
+                          </p>
                     )
                   }
                   {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
@@ -227,16 +241,16 @@ export default class CampaignHeader extends Component {
                   {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE
                     && (
                       <>
-                      {get(campaign, 'keyTerms.valuationCap') && (
-                        <p className="mb-0">
-                          Valuation Cap: {get(campaign, 'keyTerms.valuationCap')}
-                        </p>
-                      )}
-                      {get(campaign, 'keyTerms.discount') && (
-                        <p className="mb-0">
-                          Discount: {get(campaign, 'keyTerms.discount')}
-                        </p>
-                      )}
+                        {get(campaign, 'keyTerms.valuationCap') && (
+                          <p className="mb-0">
+                            Valuation Cap: {get(campaign, 'keyTerms.valuationCap')}
+                          </p>
+                        )}
+                        {get(campaign, 'keyTerms.discount') && (
+                          <p className="mb-0">
+                            Discount: {get(campaign, 'keyTerms.discount')}
+                          </p>
+                        )}
                       </>
                     )
                   }
@@ -263,7 +277,7 @@ export default class CampaignHeader extends Component {
                           <Grid>
                             <Grid.Column width={followBtn ? '10' : ''} className="center-align">
                               <Button
-                                secondary={!isInProcessing}
+                                primary={!isInProcessing}
                                 disabled={maxFlagStatus || isInProcessing}
                                 onClick={this.handleInvestNowClick}
                                 fluid

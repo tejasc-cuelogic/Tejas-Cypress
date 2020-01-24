@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 const common = {
   offeringBasics: `
   isAvailablePublicly
+  offeringSlug
   keyTerms {
     legalBusinessName
     shorthandBusinessName
@@ -105,17 +106,17 @@ export const allOfferings = gql`
   }
 `;
 
-export const deleteOffering = gql`
-  mutation deleteOffering($id: String!) {
-    deleteOffering(id: $id) {
+export const adminDeleteOffering = gql`
+  mutation adminDeleteOffering($id: String!) {
+    adminDeleteOffering(id: $id) {
       id
     }
   }
 `;
 
 export const getOfferingDetails = gql`
-  query getOfferingById($id: String!) {
-    getOfferingById(id: $id) {
+  query getOfferingDetailsBySlug($id: String!) {
+    getOfferingDetailsBySlug(offeringSlug: $id) {
       id
       offeringSlug
       referralCode
@@ -891,6 +892,21 @@ export const getOfferingDetails = gql`
                 }
               }
             }
+            safeNote {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
             disclosure {
               fileId
               fileName
@@ -986,6 +1002,10 @@ export const getOfferingDetails = gql`
               fileName
             }
             proxyAgreement {
+              fileId
+              fileName
+            }
+            safeNote {
               fileId
               fileName
             }
@@ -1105,6 +1125,15 @@ export const getOfferingDetails = gql`
         }
       }
       closureSummary {
+        exportEnvelopes {
+          fileSubstitution {
+            upload {
+              fileId
+              fileName
+            }
+            replacePage
+          }
+        }
         processingDate
         hardCloseDate
         launchDate
@@ -1215,9 +1244,9 @@ mutation updateOffering($id: String!, $issuerId: String, $adminId: String, $offe
 }
 `;
 
-export const upsertOffering = gql`
-mutation upsertOffering($id: String, $offeringDetails: OfferingInputType!) {
-  upsertOffering(id: $id, offeringDetails: $offeringDetails) {
+export const adminUpsertOffering = gql`
+mutation adminUpsertOffering($id: String, $offeringDetails: OfferingInputType!) {
+  adminUpsertOffering(id: $id, offeringDetails: $offeringDetails) {
     id
     ${common.offeringBasics}
   }
@@ -1312,9 +1341,9 @@ mutation deleteBac($id: String! $offeringId: String!){
   }
 }`;
 
-export const getOfferingFilingList = gql`
-  query getOfferingFilingList($offeringId: ID! $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) {
-    businessFilings(offeringId: $offeringId ) {
+export const adminBusinessFilings = gql`
+  query adminBusinessFilings($offeringId: ID! $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) {
+    adminBusinessFilings(offeringId: $offeringId ) {
       offeringId
       filingId
       filingFolderName
@@ -1333,9 +1362,30 @@ export const getOfferingFilingList = gql`
   }
 `;
 
-export const generateBusinessFiling = gql`
-  mutation createBusinessFiling ($offeringId: String!) {
-    createBusinessFiling(offeringId: $offeringId) {
+export const adminBusinessFiling = gql`
+  query adminBusinessFiling($offeringId: ID!, $filingId: ID!) {
+    adminBusinessFiling(offeringId: $offeringId, filingId: $filingId) {
+      folderId
+      submissions{
+        payload
+      }
+    }
+  }
+`;
+
+export const getXMLFiles = gql`
+  query getFiles($folderId: ID!, $accountType: BoxAccountTypeEnum) {
+    files(folderId: $folderId, accountType: $accountType) {
+      id
+      name
+    }
+  }
+`;
+
+
+export const adminCreateBusinessFiling = gql`
+  mutation adminCreateBusinessFiling ($offeringId: String!) {
+    adminCreateBusinessFiling(offeringId: $offeringId) {
       filingId
       offeringId
     }
@@ -1393,9 +1443,9 @@ query getTotalAmount{
   }
   `;
 
-export const offerClose = gql`
-  mutation offeringClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType, $service: OfferingCloseServiceEnum, $concurrency: Int) {
-    offeringClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload, service: $service, concurrency: $concurrency)
+export const adminOfferingClose = gql`
+  mutation adminOfferingClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType, $service: OfferingCloseServiceEnum, $concurrency: Int) {
+    adminOfferingClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload, service: $service, concurrency: $concurrency)
   }
 `;
 

@@ -92,8 +92,9 @@ export class NavItems extends Component {
   render() {
     const { activeIndex } = this.state;
     const {
-      location, isApp, roles, match, isMobile, onToggle, refLink, newLayout, userDetailsStore,
+      location, isApp, roles, refMatch, isMobile, onToggle, refLink, newLayout, userDetailsStore,
     } = this.props;
+    let { match } = this.props;
     const { signupStatus, hasAnyAccount } = userDetailsStore;
     const app = (isApp) ? 'dashboard' : '';
     const myNavItems = this.props.navItems.filter(n => (n.headerMobile !== false && n.title === 'My Account' ? this.props.userStore.isInvestor : n.headerMobile !== false && n.noNav !== true));
@@ -101,6 +102,7 @@ export class NavItems extends Component {
     const hasMoreThanOneAcc = investorAccounts.length > 1;
     const hideSetupNav = signupStatus.investorProfileCompleted && (hasAnyAccount);
     const isPrivateApp = location.pathname.includes('/dashboard');
+    match = refMatch || match;
     return myNavItems.map((item, key) => (
       <>
         {item.subPanel === 1 && item.subNavigations && isMobile && !isApp ? (
@@ -124,7 +126,7 @@ export class NavItems extends Component {
                   <Menu.Menu>
                     {item.subNavigations.map(sn => (
                       sn.external ? (
-                        <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
+                        <a className="item" href={sn.to} rel="noopener noreferrer">NextSeed Space</a>
                       ) : (
                           <Menu.Item
                             key={sn.to}
@@ -151,7 +153,7 @@ export class NavItems extends Component {
               item
               defaultOpen={item.defaultOpen}
               key={item.to}
-              className={`${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible hide-dropdown' : ''}`}
+              className={`${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible hide-dropdown' : this.isActive(item.to, location, app, item.subNavigations) ? 'active' : ''}`}
               name={item.to}
               // disabled={isMobile && item.title === 'How NextSeed Works'}
               onClick={(isMobile || isApp) ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
@@ -165,7 +167,7 @@ export class NavItems extends Component {
               <Dropdown.Menu className={`${this.isActive(item.to, location, app, item.subNavigations) && (isMobile || isApp) ? 'visible' : ''} ${(investorAccounts.length && item.to.includes('account-details') && !hasMoreThanOneAcc) ? 'visible' : ''}`}>
                 {item.subNavigations.map(sn => (
                   sn.external ? (
-                    <a className="item" href={sn.to} rel="noopener noreferrer" target="_blank">NextSeed Space</a>
+                    <a className="item" href={sn.to} rel="noopener noreferrer">NextSeed Space</a>
                   ) : (
                       <Dropdown.Item
                         key={sn.to}
@@ -208,13 +210,14 @@ export class NavItems extends Component {
                                 className={`${((isMobile && item.title === 'Home' && location.pathname !== '/') || (!isMobile && item.title === 'Dashboard' && location.pathname !== '/dashboard')) ? 'no-active' : `${((item.defaultActive && this.isActiveSubMenu(`${item.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(item.to, location) ? 'active' : ''}`} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''} ${(newLayout && ((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) ? 'hasLabel' : '')}`}
                                 as={NavLink}
                                 onClick={isMobile ? this.mobileMenuClick : this.doNothing}
-                                to={`${(isApp) ? '/dashboard' : (this.props.sub ? match.url : '')}${(item.useRefLink || item.asRoot) ? '' : '/'}${item.asRoot ? '' : item.to}`}
+                                target={item.forced ? '_blank' : false}
+                                to={item.forced || `${(isApp) ? '/dashboard' : (this.props.sub ? match.url : '')}${(item.useRefLink || item.asRoot) ? '' : '/'}${item.asRoot ? '' : item.to}`}
                               >
                                 {item.icon && <Icon className={item.icon} />}
                                 {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
                                 {(item.title !== 'Updates' || (item.title === 'Updates' && item.to.includes('updates') && this.props.countData) || isPrivateApp) ? <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span> : ''}
                                 {((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) && this.props.countData
-                                  ? <Label circular color="blue" size="small">{this.props.countData[item.to === '#updates' ? 'updates' : item.to === '#comments' ? 'comments' : item.to]}</Label> : null
+                                  ? <Label circular color="green" size="small">{this.props.countData[item.to === '#updates' ? 'updates' : item.to === '#comments' ? 'comments' : item.to]}</Label> : null
                                 }
                               </Menu.Item>
                               {this.props.userStore.isInvestor && item.title === 'Setup' && !investorAccounts.length
@@ -257,10 +260,10 @@ export class NavigationItems extends Component {
     } = this.props;
     const { navStatus, subNavStatus } = navStore;
     const logInSignUp = stepInRoute.to !== 'login' ? [
-      { to: 'login', title: 'Log In', className: 'basic' },
-      { to: 'register', title: 'Sign Up', className: 'secondary' },
+      { to: 'login', title: 'Log In', className: 'basic primary' },
+      { to: 'register', title: 'Sign Up', className: 'primary' },
     ]
-      : [{ ...stepInRoute, className: 'secondary' }];
+      : [{ ...stepInRoute, className: 'primary basic' }];
     return (
       <Menu
         stackable={!isMobBussinessApp}
@@ -296,7 +299,7 @@ export class NavigationItems extends Component {
             ? (
               <Menu.Item position={isMobBussinessApp ? 'right' : ''}>
                 <Button.Group>
-                  <Button as={Link} to="/business/how-it-works" loading={loading} disabled={loading} inverted color="red">Cancel</Button>
+                  <Button as={Link} to="/business" loading={loading} inverted color="red">Cancel</Button>
                   {(isPrequalQulify || location.pathname.endsWith('/pre-qualification'))
                     && (
                       <SubmitButton
@@ -326,7 +329,7 @@ export class NavigationItems extends Component {
                     <Button
                       loading={this.props.userDetailsStore.currentUser.loading}
                       disabled={this.props.userDetailsStore.currentUser.loading}
-                      secondary
+                      primary
                     >Dashboard
                   </Button>
                   </Menu.Item>

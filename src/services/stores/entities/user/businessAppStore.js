@@ -27,7 +27,7 @@ import Helper from '../../../../helper/utility';
 import {
   getPreQualificationById,
   getBusinessApplicationsById,
-  getBusinessApplicationsDetailsAdmin,
+  adminBusinessApplicationsDetails,
   getPrequalBusinessApplicationsById,
   getBusinessApplications,
   createBusinessApplicationPrequalificaiton,
@@ -109,6 +109,10 @@ export class BusinessAppStore {
 
   @observable usesTotal = 0;
 
+  @observable firstLoad = [];
+
+  @observable promoteActionInProcess = false;
+
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
@@ -117,6 +121,11 @@ export class BusinessAppStore {
   @action
   setAppStepsStatus = (index, key, value) => {
     this.appStepsStatus[index][key] = value;
+  }
+
+  @action
+  resetFirstLoad = () => {
+    this.firstLoad = [];
   }
 
   @action
@@ -225,6 +234,7 @@ export class BusinessAppStore {
     }
     this.setFieldvalue('applicationId', appId);
     this.setFieldvalue('applicationIssuerId', userId);
+    this.firstLoad.push('getOne');
     const applicationType = appType === 'prequal-failed' ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     let payLoad = {
       applicationId: appId,
@@ -237,22 +247,22 @@ export class BusinessAppStore {
     uiStore.setLoaderMessage('Getting application data');
     this.businessApplicationsDataById = graphql({
       client,
-      query: getBusinessApplicationsDetailsAdmin,
+      query: adminBusinessApplicationsDetails,
       variables: payLoad,
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data && !this.businessApplicationsDataById.loading) {
-          this.setFieldvalue('currentApplicationType', data.businessApplicationsDetailsAdmin.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
+          this.setFieldvalue('currentApplicationType', data.adminBusinessApplicationsDetails.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
           const {
             prequalDetails, signupCode, businessGeneralInfo, utmSource,
-          } = data.businessApplicationsDetailsAdmin;
+          } = data.adminBusinessApplicationsDetails;
           businessAppAdminStore
             .setBusinessDetails(
               ((businessGeneralInfo && businessGeneralInfo.businessName)
                 || (prequalDetails.businessGeneralInfo.businessName)),
               signupCode, utmSource,
             );
-          this.setBusinessApplicationData(false, data.businessApplicationsDetailsAdmin);
+          this.setBusinessApplicationData(false, data.adminBusinessApplicationsDetails);
           uiStore.setAppLoader(false);
           resolve(data);
         }
@@ -587,8 +597,8 @@ export class BusinessAppStore {
 
   @computed get businessApplicationDetailsAdmin() {
     return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
-      && this.businessApplicationsDataById.data.businessApplicationsDetailsAdmin
-      && toJS(this.businessApplicationsDataById.data.businessApplicationsDetailsAdmin)
+      && this.businessApplicationsDataById.data.adminBusinessApplicationsDetails
+      && toJS(this.businessApplicationsDataById.data.adminBusinessApplicationsDetails)
     ) || null;
   }
 
@@ -975,10 +985,10 @@ export class BusinessAppStore {
         // businessModel: data.businessModel.value,
         businessSecurities: data.businessSecurities.value,
         legalConfirmations: [...preQualData.legalConfirmations,
-          {
-            label: 'HAS_NOT_RAISED_SECURITIES',
-            value: includes(data.legalConfirmation.value, 'HAS_NOT_RAISED_SECURITIES'),
-          }],
+        {
+          label: 'HAS_NOT_RAISED_SECURITIES',
+          value: includes(data.legalConfirmation.value, 'HAS_NOT_RAISED_SECURITIES'),
+        }],
       };
     } else {
       preQualData = {

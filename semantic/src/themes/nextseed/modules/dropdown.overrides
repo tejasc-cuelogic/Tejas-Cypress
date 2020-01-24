@@ -160,6 +160,7 @@
         width:100%;
         display:block;
         line-height:@17px;
+        font-size: @15px;
     }
     &.compact{
         min-height:auto;

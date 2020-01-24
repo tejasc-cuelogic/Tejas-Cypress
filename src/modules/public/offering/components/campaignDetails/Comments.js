@@ -166,8 +166,8 @@ class Comments extends Component {
               }
               <Form reply className="public-form clearfix">
                 {loggedInAsInvestor && !accountStatusFull
-                  ? <Link to="/dashboard/setup" className="ui button secondary">Finish Account Setup</Link>
-                  : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
+                  ? <Link to="/dashboard/setup" className="ui button primary">Finish Account Setup</Link>
+                  : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button primary">{get(loginOrSignup, 'title')}</Link>
                 }
               </Form>
             </section>
@@ -177,7 +177,7 @@ class Comments extends Component {
             <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
               <p>In order to leave comments, please confirm your accredited investor status.</p>
               <Form reply className="public-form clearfix">
-              <Link to="/" onClick={e => this.handleAccreditatonModel(e, true)} className="ui button secondary">Confirm Status</Link>
+              <Link to="/" onClick={e => this.handleAccreditatonModel(e, true)} className="ui button primary">Confirm Status</Link>
               </Form>
             </section>
             )
@@ -193,7 +193,7 @@ class Comments extends Component {
                       changed={msgEleChange}
                       containerclassname="secondary"
                     />
-                    <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
+                    <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null, campaignId)} disabled={!MESSAGE_FRM.meta.isValid || buttonLoader === 'PUBLIC'} primary compact content="Post Comment" />
                   </Form>
                 ) : ''
               }
@@ -256,10 +256,10 @@ class Comments extends Component {
                                     changed={msgEleChange}
                                     containerclassname="secondary"
                                   />
-                                  <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(c.id)}>
+                                  <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(c.id)} disabled={buttonLoader === 'PUBLIC'}>
                                     Cancel Reply
                                 </Button>
-                                  <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
+                                  <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id, campaignId)} disabled={!MESSAGE_FRM.meta.isValid || buttonLoader === 'PUBLIC'} primary content="Post Comment" />
                                 </Form>
                                 <Divider hidden />
                                 <p>

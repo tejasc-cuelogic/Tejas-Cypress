@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, matchPath } from 'react-router-dom';
-import { Sidebar, Menu, Icon, Header, Button } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { Logo } from '../shared';
-import { NavItems, NavigationItems } from './NavigationItems';
+import { NavItems } from './NavigationItems';
 import Footer from './Footer';
 import { GetNavMeta } from './SidebarNav';
 // import { MOBILE_NAV } from '../../constants/NavigationMeta';
@@ -43,21 +43,21 @@ export default class NavBarMobile extends Component {
     const nav = GetNavMeta(location.pathname, [], true);
     let navTitle = nav ? nav.title : '';
     const logInSignUp = stepInRoute.to !== 'login' ? [
-      { to: 'login', title: 'Log In', className: 'basic' },
-      { to: 'register', title: 'Sign Up', className: 'secondary' },
+      { to: 'login', title: 'Log In', className: 'basic primary' },
+      { to: 'register', title: 'Sign Up', className: 'primary' },
     ]
-      : [{ ...stepInRoute, className: 'secondary' }];
+      : [{ ...stepInRoute, className: 'primary' }];
     if (location.pathname.startsWith('/invest')) {
-      navTitle = 'Investing';
+      navTitle = 'For Investors';
     } else if (location.pathname.startsWith('/business') && !location.pathname.startsWith('/business-application/')) {
-      navTitle = 'Fundraising';
-    } else if (location.pathname.startsWith('/resources/education-center')) {
-      navTitle = 'Education Center';
-    } else if (location.pathname.startsWith('/resources/insights')) {
+      navTitle = 'For Businesses';
+    } else if (location.pathname.startsWith('/education-center')) {
+      navTitle = 'Education';
+    } else if (location.pathname.startsWith('/insights')) {
       navTitle = 'Insights';
     } else if (location.pathname.startsWith('/offerings')) {
       navTitle = '';
-    } else if (location.pathname.startsWith('/agreements/legal')) {
+    } else if (location.pathname.startsWith('/legal')) {
       navTitle = 'Legal';
     }
     const { signupStatus, pendingStep } = userDetailsStore;
@@ -79,16 +79,16 @@ export default class NavBarMobile extends Component {
               >
                 <Icon className="ns-hamburger" role="button" tabIndex="0" />
               </div>
-              {location.pathname.startsWith('/business-application/')
+              {/* {location.pathname.startsWith('/business-application/')
                 ? (
                   <NavigationItems
                     {...this.props}
                     isMobBussinessApp
                     isPrequalQulify={this.props.businessAppStore.isPrequalQulify}
                   />
-                )
-                : (
-<div className={`public-header-section ${isNewCampaign ? 'public-header-section-v2' : ''} ${visible ? 'active' : ''} ${navStatus === 'sub' ? 'slide-up' : ''}`}>
+                ) */}
+                {/* : ( */}
+                  <div className={`public-header-section ${isNewCampaign ? 'public-header-section-v2' : ''} ${visible ? 'active' : ''} ${navStatus === 'sub' ? 'slide-up' : ''}`}>
                     {navTitle === 'Home' || (location.pathname.startsWith('/offerings') || this.props.userStore.isInvestor)
                       ? (
                         <Link to="/">
@@ -98,8 +98,14 @@ export default class NavBarMobile extends Component {
                           />
                         </Link>
                       )
-                      : <Header as="h5">{navTitle}</Header>
-                    }
+                      : (
+                        <Link to="/">
+                          <Logo
+                            dataSrc="LogoGreenGrey"
+                            className="mobile-header-logo"
+                          />
+                        </Link>
+                      )}
                     {!currentUser ? (
                       <Link onClick={this.setAuthRef} to={`/${stepInRoute.to}`} className="sign-in neutral-text">
                         {stepInRoute.title}
@@ -114,8 +120,8 @@ export default class NavBarMobile extends Component {
                     ) : null
                     }
                   </div>
-                )
-              }
+                {/* )
+              } */}
             </>
           )}
           <Sidebar
@@ -134,10 +140,12 @@ export default class NavBarMobile extends Component {
               renderView={p => <div {...p} className="view" />}
             >
               <div className="sidebar-logo">
-                <Logo
-                  dataSrc="LogoGreenGrey"
-                  className="mobile-header-logo"
-                />
+                <Link onClick={onToggle} to="/" className="logo">
+                  <Logo
+                    dataSrc="LogoGreenGrey"
+                    className="mobile-header-logo"
+                  />
+                </Link>
                 <Icon onClick={onToggle} className="ns-close-light" />
               </div>
               {this.props.userStore.isInvestor

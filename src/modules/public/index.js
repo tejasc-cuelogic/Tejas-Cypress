@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch, matchPath, withRouter } from 'react-router-dom';
+import { Route, Switch, matchPath, withRouter, Redirect } from 'react-router-dom';
 import { Responsive } from 'semantic-ui-react';
 import { publicRoutes } from '../routes';
 import NavBarMobile from '../../theme/layout/NavBarMobile';
@@ -27,6 +27,9 @@ export default class Public extends React.Component {
     super(props);
     this.props.uiStore.addMoreInProgressArray('publicLoading');
     this.props.navStore.setNavStatus({}, 'main');
+    if (this.props.location.pathname === '/how-it-works') {
+      this.props.history.push('/investors');
+    }
   }
 
   componentDidMount() {
@@ -41,6 +44,11 @@ export default class Public extends React.Component {
 
   getRoutes = (isAuthLocation = false) => (
     <Switch>
+      <Redirect from="/resources/*" to="/*" />
+      <Redirect from="/about/*" to="/about" />
+      <Redirect from="/agreements/legal/*" to="/legal/*" />
+      <Redirect from="/invest/*" to="/investors" />
+      <Redirect from="/business/*" to="/business" />
       {publicRoutes.map((route) => {
         const CurrentComponent = route.auth ? route.auth(route.component, this.props) : route.component;
         return (
@@ -72,7 +80,7 @@ export default class Public extends React.Component {
         if (isToggle) {
           this.handleToggle();
         }
-      });
+      }).catch(err => window.logger(err));
   }
 
   preQualSubmit = (e) => {

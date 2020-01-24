@@ -5,6 +5,7 @@
 .ui.card{
     &.campaign{ 
         box-shadow:none;
+        padding-bottom: 73px;
         &:hover, &:focus {
             text-decoration: none;
             box-shadow: none; //@cardHoverShadow;
@@ -17,11 +18,17 @@
             }
             .campaign-card-details{
                 margin-top: 0;
-                min-height: 392px;
-                max-height: 392px;
+                min-height: 450px;
+                max-height: 450px;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
                 @media only screen and (max-width : @monitorBreakpoint){
                     min-height: auto;
                     max-height: 100%;
+                }
+                .content .description{
+                    min-height:63px;
+                    max-height:63px;
                 }
             }
             .ui.labels, .icon.heart{
@@ -45,7 +52,7 @@
                 padding-top:66.66%;
                 border-radius:@6px @6px 0 0;
                 overflow:hidden;
-                transition: all 0.5s ease-in-out;
+                transition: all 0.3s ease-in-out;
                 @media only screen and (max-width : @monitorBreakpoint){
                     transition: none;
                 }
@@ -69,7 +76,7 @@
             top:12px;
             left:12px;
             display: inline-block;
-            transition: all 0.5s ease-in-out;
+            transition: all 0.3s ease-in-out;
             @media only screen and (max-width : @monitorBreakpoint){
                 transition: none;
             }
@@ -77,7 +84,7 @@
                 border:none;
                 text-transform:uppercase;
                 box-shadow:@commonShadow;
-                transition: all 0.5s ease-in-out;
+                transition: all 0.3s ease-in-out;
                 @media only screen and (max-width : @monitorBreakpoint){
                     transition: none;
                 }
@@ -95,7 +102,7 @@
             top:12px;
             right:12px;
             display: block;
-            transition: all 0.5s ease-in-out;
+            transition: all 0.3s ease-in-out;
             &.outline{
                 color:@white;
             }
@@ -103,10 +110,10 @@
         .campaign-card-details{
             position: relative;
             width: 100%;
-            min-height: 155px;
-            max-height: 155px;
+            min-height: 213px;
+            max-height: 213px;
             overflow: hidden;
-            transition: all 0.5s ease-in-out;
+            transition: all 0.3s ease-in-out;
             background: @white;
             @media only screen and (max-width : @monitorBreakpoint){
                 min-height: auto;
@@ -115,7 +122,7 @@
             }
             .content{
                 padding:@21px @28px;
-                transition: all 0.5s ease-in-out;
+                transition: all 0.3s ease-in-out;
                 @media only screen and (max-width : @monitorBreakpoint){
                     transition: none;
                 }
@@ -145,14 +152,14 @@
                     text-transform:none;
                 }
                 .description{
-                    min-height:63px;
-                    max-height:63px;
+                    min-height:120px;
+                    max-height:120px;
                     margin:@14px 0 0;
                     overflow:hidden;
                     font-size:@15px;
                     line-height:@20px;
                     color: @neutral;
-                    transition: all 0.5s ease-in-out;
+                    transition: all 0.3s ease-in-out;
                 }
                 .campaign-card-table-wrapper{
                     min-height: 115px;
@@ -176,6 +183,11 @@
         >.content.extra {
             padding:0 @28px @21px;
             border-top: 0!important;
+            position: absolute;
+            bottom: 0;
+            top: auto;
+            width: 100%;
+            background: @white;
             @media only screen and (max-width : @largestMobileScreen){
                 padding:0 @22px @20px;
             }
@@ -283,6 +295,10 @@
             }
         }
     }
+    &.bordered{
+        box-shadow: none;
+        border-radius: @4px;
+    }
 }
 //  Public page Ends
 
@@ -331,7 +347,20 @@
         border:@neutral-darkwhite 1px solid;
     }
     dl.dl-horizontal dd {
-        color: @neutral;
+        color: @neutral-middark !important;
+    }
+    &.disabled{
+        .ui.form .field>.selection.dropdown[readonly]{
+            border-bottom: none;
+            color: @neutral-middark !important;
+            pointer-events: none;
+            i.icon{
+                color: @neutral-middark;
+            }
+        }
+        .ui.input>input[readonly]{
+            color: @neutral-middark;
+        }
     }
 }
 .ui.stackable.cards>.card{
@@ -357,6 +386,19 @@
                 }
             }
         }
+    }
+    &.alumni-card{
+        padding: 0 !important;
+        margin-bottom: @20px;
+        .ui.header,p, a{
+            font-size: @17px;
+            line-height: 26px;
+        }
+    }
+    &.mob-reward-list{
+        padding: @18px !important;
+        border-radius: @4px;
+        margin-bottom: 0;
     }
 }
 
@@ -584,6 +626,10 @@
                 line-height: 22px;
                 padding: @17px @22px 0;
                 font-weight: @bold;
+                >.icon.ns-help-circle{
+                    line-height: 1;
+                    vertical-align: middle;
+                }
             }
             .content{
                 border-top: 0;
@@ -603,23 +649,25 @@
                     align-items: flex-start;
                     justify-content: space-between;
                     font-weight: @normal;
+                    line-height: 18px;
                     .ui.header{
                         padding: 0;
                         font-size: @14px;
                         font-weight: @normal;
+                        padding-left: @30px;
                         .sub.header{
                             margin-left: @30px;
+                            margin-left: 0;
                         }
                     }
                     i.icon{
                         margin-right: @14px;
-                        @media only screen and (max-width : @largestMobileScreen){
-                            &:before{
-                                top: 50%;
-                                position: absolute;
-                                left: 0;
-                                transform: translate(0, -50%);
-                            }
+                        margin-left: -@30px;
+                        &:before{
+                            top: 50%;
+                            position: absolute;
+                            left: 0;
+                            transform: translate(0, -50%);
                         }
                     }
                 }
@@ -739,6 +787,23 @@
             }
         }
     }
+    &.statistic-section .ui.card{
+        @media only screen and (min-width : @computerBreakpoint){
+        width: calc(33.33333333% - 28px);
+        margin-left: @14px;
+        margin-right: @14px;
+        }
+        .content{
+            padding: @30px @40px;
+            border-top: 0 !important;
+        }
+        >.extra{
+            min-height: 200px !important;
+            @media only screen and (max-width : @largestMobileScreen){
+                min-height: auto !important;
+            }
+        }
+    }
 }
 
 .ui.card.verification{
@@ -825,6 +890,18 @@
         max-width: 100%;
         @media only screen and (max-width : @largestTabletScreen){
             margin: 0 0 @28px;
+        }
+    }
+}
+
+.mob-reward-list.ui.card{
+    box-shadow: 0px 1px 8px fade(@fullBlack, 25%) !important;
+    >.content{
+        padding: 0;
+        >.header:not(.ui){
+            font-size: @15px;
+            line-height: 24px;
+            margin-bottom: @5px;
         }
     }
 }

@@ -232,14 +232,18 @@
 				padding: @30px @40px;
 			}
 			.ui.header.investment-list{
-				margin: 0 0 @14px 67px;
+				margin: 0 0 @14px 75px;
 				padding-top: @14px;
 			}
 		}
 		&.portfolio-list .title{
 			font-size: @16px;
 			>.icon{
-				margin-right: @35px;
+				margin-right: @40px;
+				&.ns-help-circle{
+					line-height: 1;
+					vertical-align: middle;
+				}
 			}
 		}
 	}
@@ -313,6 +317,7 @@
 			border-top: 0;
 			color: @neutral-middark;
 			background: @neutral-offwhite;
+			font-size: @15px;
 			&.active, &:hover {
 				color: @primary-one;
 				font-weight: @bold;

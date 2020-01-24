@@ -12,7 +12,7 @@ import { SECURITIES_VALUES } from '../../../../../services/constants/admin/offer
 export default class PaymentDetails extends Component {
   constructor(props) {
     super(props);
-    this.props.paymentStore.getOfferingById(get(this.props, 'match.params.id'));
+    this.props.paymentStore.getOfferingBySlug(get(this.props, 'match.params.offeringSlug'));
   }
 
   handleCloseModal = () => {

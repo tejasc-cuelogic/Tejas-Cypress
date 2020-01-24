@@ -7,10 +7,11 @@ import { BrowserRouter } from 'react-router-dom';
 import promiseFinally from 'promise.prototype.finally';
 import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
+import * as OfflinePluginRuntime from 'offline-plugin/runtime';
 import App from './App';
 import * as stores from './services/stores';
 import { ErrorBoundry as CustomErrorBoundry, Utilities as Utils } from './helper';
-import { REACT_APP_DEPLOY_ENV } from './constants/common';
+import { REACT_APP_DEPLOY_ENV, NODE_ENV } from './constants/common';
 
 // Set the default error boundry to the customErrorBoundry
 // and reassign it if one from Bugsnag is present
@@ -56,3 +57,45 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root'),
 );
+
+const setVersionRef = () => {
+  setTimeout(() => {
+    if (window.caches) {
+      window.caches.keys().then((keys) => {
+        const matching = keys.find(k => k.startsWith('webpack-offline:'));
+        if (matching) {
+          const appVersion = matching.split('webpack-offline:');
+          localStorage.setItem('swAppVersion', appVersion[1]);
+          sessionStorage.setItem('swAppVersion', appVersion[1]);
+        }
+      });
+    }
+  }, 4000);
+};
+
+// temporarily disable install for production env
+// && ['localhost', 'develop', 'dev', 'predev'].includes(REACT_APP_DEPLOY_ENV)
+if (NODE_ENV === 'production') {
+  setVersionRef();
+  OfflinePluginRuntime.install({
+    onInstalled: () => {
+      console.log('[OfflinePlugin] onInstalled');
+      setVersionRef();
+    },
+    onUpdating: () => {
+      // console.log('[OfflinePlugin] onUpdating');
+    },
+    onUpdateReady: () => {
+      OfflinePluginRuntime.applyUpdate();
+      console.log('[OfflinePlugin] onUpdateReady');
+    },
+    onUpdated: () => {
+      // changed
+      stores.uiStore.setAppUpdated();
+      console.log('[OfflinePluginRuntime] new version is available');
+    },
+    onUpdateFailed: () => {
+      console.log('[OfflinePlugin] onUpdateFailed');
+    },
+  });
+}

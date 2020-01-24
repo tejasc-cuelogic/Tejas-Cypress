@@ -272,36 +272,97 @@
     &.update-items > .item{
         display: block;
     }
-}
-.horizontal-items.ui.items{
-    display:flex;
-    flex-wrap:wrap;
-    margin-left:-@14px;
-    margin-right:-@14px;
-    >.item{
-        width:43%;
-        @media only screen and (max-width :@largestMobileScreen){
-            width:100%;
-        }
-        margin:0 auto @30px;
-        padding-left:@14px;
-        padding-right:@14px;
-        .ui.mini.image{
-            width:45px;
+    &.horizontal-items{
+        display:flex;
+        flex-wrap:wrap;
+        margin-left:-@14px;
+        margin-right:-@14px;
+        >.item{
+            width:45%;
+            margin:0 auto @30px;
+            padding-left:@14px;
+            padding-right:@14px;
             @media only screen and (max-width :@largestMobileScreen){
-                padding-left:0;
+                width:100%;
+            }
+            .ui.mini.image{
+                width:45px;
+                margin-right: @20px;
+                @media only screen and (max-width :@largestMobileScreen){
+                    padding-left:0;
+                    margin:0;
+                }
+                +.content{
+                    padding-left:@10px;
+                    @media only screen and (max-width :@largestMobileScreen){
+                        padding:@14px 0 0;
+                    }
+                }
+            }
+            .content>.header:not(.ui){
+                font-size: @17px;
+                margin-bottom: @10px;
+            }
+            .meta{
+                line-height:26px;
                 margin:0;
             }
-            +.content{
-                padding-left:@10px;
+            .extra a{
+                text-decoration: none;
+                display: inline-flex;
+            }
+            >.ui.image+.content{
+                padding-left:@20px;
                 @media only screen and (max-width :@largestMobileScreen){
-                    padding:14px 0 0;
+                    padding-left:0;
                 }
             }
         }
-        .meta{
-            line-height:24px;
-            margin:0;
+        &.home-page{
+            &:not(.unstackable)>.item{
+                @media only screen and (max-width :@largestMobileScreen){
+                    flex-direction: row;
+                    margin-bottom: @17px;
+                    >.content{
+                        padding-top: 0 !important;
+                    }
+                }
+            }
+            >.item{
+                width: 33%;
+                @media only screen and (max-width :@largestMobileScreen){
+                    width:100%;
+                }
+                .ui.mini.image{
+                    width: @31px !important;
+                    margin-right: @15px;
+                }
+                >.content{
+                    .meta{
+                        font-size: @17px;
+                        color: @neutral;
+                    }
+                }
+            }
+        }
+    }
+    &.space-user{
+        margin-left: @40px;
+        margin-top: @60px;
+        >.item>.content{
+            .header:not(.ui), .meta{
+                font-size: @17px;
+                line-height: 24px;
+                margin: 0;
+            }
+        }
+        @media only screen and (max-width :@largestMobileScreen){
+            margin: @20px 0 0;
+            &.unstackable>.item{
+                >.image{
+                    width: auto !important;
+                }
+            }
         }
     }
 }
@@ -313,14 +374,16 @@
     h2.header:not(.ui){
         font-size:@40px;
         margin:0;
+        font-weight: @fontMedium;
         @media only screen and (max-width :@largestMobileScreen){
             font-size:@20px;
             line-height:24px;
         }
     }
     .description{
-        font-size:@28px;
-        line-height:38px;
+        font-size:@17px;
+        line-height:30px;
+        color: @neutral;
         @media only screen and (max-width :@largestMobileScreen){
             font-size:@15px;
             line-height:24px;
@@ -334,7 +397,7 @@
         }
         span{
             line-height:@24px;
-            color:@primary-one;
+            color:@neutral;
             font-weight:@bold;
         }
     }

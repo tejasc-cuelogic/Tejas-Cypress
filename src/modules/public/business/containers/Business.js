@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch } from 'react-router-dom';
-import { Responsive, Visibility } from 'semantic-ui-react';
-import { DataFormatter } from '../../../../helper';
-import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
+import { Responsive, Button } from 'semantic-ui-react';
+import { authActions } from '../../../../services/actions';
 import Banner from '../components/Banner';
-import { PublicSubNav, SuspenseBoundary, lazyRetry } from '../../../../theme/shared';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
-import ConfirmLoginModal from '../components/ConfirmLoginModal';
+import HowItWorks from '../components/HowItWorks';
+import MessageModal from '../../../../theme/shared/src/MessageModal';
 
-const getModule = component => lazyRetry(() => import(`../components/${component}`));
 const metaTagsData = [
   { type: 'meta', name: 'description', content: 'Learn how small business entrepreneurs are using debt crowdfunding on NextSeed to retain ownership in their breweries, restaurants, bars, fitness studios, and more.' },
   { type: 'ogTag', property: 'og:locale', content: 'en_US' },
@@ -32,56 +29,64 @@ const metaTagsData = [
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
 
-@inject('navStore', 'userStore')
+const modalContent = 'Investor accounts may not be used to apply for business funding. In order to apply to raise capital, log out of your investor account and submit your application with a different email address.';
+@inject('navStore', 'userStore', 'authStore', 'uiStore')
 @observer
 class Business extends Component {
   constructor(props) {
     super(props);
-    if (props.match.isExact) {
-      props.history.replace(`${props.match.url}/how-it-works`);
+    this.state = {
+      isInvestorModal: false,
+    };
+  }
+
+  handleApplyCta = () => {
+    if (this.props.authStore.isUserLoggedIn
+      && this.props.userStore.isInvestor) {
+      this.setState({ isInvestorModal: true });
+    } else {
+      this.props.uiStore.setAuthRef('/business');
+      this.props.history.push('/register');
     }
   }
 
-  module = name => DataFormatter.upperCamelCase(name);
+  handleBack = () => {
+    this.setState({ isInvestorModal: false });
+    this.props.history.push('/business');
+  }
+
+  // copied from private/index.js
+  handleLogOut = () => {
+    authActions.logout('user')
+      .then(() => {
+        this.props.history.push('/register');
+      }).catch(err => window.logger(err));
+  }
 
   render() {
-    const { location, match, navStore } = this.props;
-    const navItems = GetNavMeta(match.url, [], true).subNavigations;
+    const { location } = this.props;
     return (
       <>
         <MetaTagGenerator pathName={location.pathname} metaTagsData={metaTagsData} />
-        {location.pathname === '/business/how-it-works'
-          || location.pathname === '/business' ? <Banner />
+        {location.pathname === '/business' ? <Banner handleApplyCta={this.handleApplyCta} />
           : <Responsive as="section" maxWidth={991} className={`banner ${location.pathname.split('/')[2]}`} />
         }
-        <Visibility
-          onUpdate={this.handleUpdate}
-          continuous
-          className={`slide-down ${location.pathname.split('/')[2]}`}
-        >
-          <PublicSubNav
-            stepInRoute={navStore.stepInRoute}
-            location={location}
-            currentUser={this.props.userStore.currentUser}
-            navItems={navItems}
-            title="Fundraising"
-          />
-          <SuspenseBoundary>
-            <Switch>
-              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
-              {
-                navItems.map(item => (
-                  <Route
-                    key={item.to}
-                    path={`${match.url}/${item.to}`}
-                    component={getModule(this.module(item.title))}
-                  />
-                ))
+        <HowItWorks handleApplyCta={this.handleApplyCta} />
+        {
+          this.state.isInvestorModal
+          && (
+            <MessageModal
+              classExtra="error-2"
+              size="small"
+              refLink="/business"
+              handleBack={this.handleBack}
+              content={modalContent}
+              additionalData={
+                <Button onClick={this.handleLogOut} primary className="m-auto display-block">Logout</Button>
               }
-              <Route path={`${this.props.match.url}/confirm-login`} render={() => <ConfirmLoginModal refLink={`${this.props.match.url}/how-it-works`} />} />
-            </Switch>
-          </SuspenseBoundary>
-        </Visibility>
+            />
+          )
+        }
       </>
     );
   }

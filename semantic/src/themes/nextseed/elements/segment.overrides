@@ -93,8 +93,40 @@
         }      
     }
 }
-.ui.segment.offering-comment {
-    padding: 0;
+.ui.segment{
+    &.offering-comment {
+        padding: 0;
+    }
+    &.video-segment{
+        padding: @30px;
+        box-shadow: 0px 1px 10px fade(@fullBlack, 10%);
+        border: 0;
+        .ui.header{
+            align-items: center;
+            justify-content: center;
+            display: flex;
+        }
+    }
+    &.no-shadow{
+        box-shadow: none;
+    }
+    .ui.header.space-header{
+        @media only screen and (max-width :@largestMobileScreen){
+            font-size: @17px !important;
+            line-height: 26px;
+        }
+    }
+    &.space-segment{
+        @media only screen and (max-width :@largestMobileScreen){
+            p{
+                font-size: @17px;
+            }
+            .ui.button{
+                font-size: @16px;
+                line-height: 24px;
+            }
+        }
+    }
 }
 .press-news {
 	.ui.segment {
@@ -102,6 +134,9 @@
 		border: 0;
 		box-shadow: none;
     }
+}
+a .ui.segment{
+    text-decoration: none;
 }
 //  Public page Ends
 

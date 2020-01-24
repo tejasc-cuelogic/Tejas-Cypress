@@ -59,7 +59,7 @@ export default class Private extends React.Component {
     authActions.logout('user')
       .then(() => {
         this.props.history.push('/');
-      });
+      }).catch(err => window.logger(err));
   }
 
   render() {
@@ -80,7 +80,7 @@ export default class Private extends React.Component {
     if (userFirstLoad === false || this.props.uiStore.resizeLoader) {
       return <Spinner loaderMessage="Loading..." />;
     }
-    console.log('im here...');
+
     if (this.props.authStore.isUserLoggedIn) {
       return (
         <>

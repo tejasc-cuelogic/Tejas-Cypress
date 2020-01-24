@@ -3,15 +3,30 @@
 *******************************/
 //  Public page Starts
 .ui.button{
+    box-shadow: none;
     &:hover{
-        box-shadow:@buttonHoverShadow;
+        box-shadow:none;
     }
     &.basic {
         border: 1px solid @thumbBackground;
         box-shadow: none !important;
         &.highlight-text {
             color: @primary-one !important;
-            font-weight: @fontMedium;
+            font-weight: @normal;
+        }
+        &.primary, &.secondary{
+            border: 0;
+            font-weight: @normal;
+        }
+        &.secondary.hoverable{
+            &.space-visit-btn{
+                width: calc(100% - 40px);
+                margin: 0 @20px;
+            }
+            &:hover, &:active, &:focus{
+                background: @primary-two !important;
+                color: @white !important;
+            }
         }
     }
 }
@@ -27,6 +42,7 @@
             padding:0;
             background-color:transparent !important;
             box-shadow:none !important;
+            border-radius: 0;
             &:hover, &:focus, &:active{
                 box-shadow:none !important;
             }
@@ -122,6 +138,9 @@
             &.note {
                 font-weight: @normal;
             }
+        }
+        &.primary{
+            font-weight: @normal;
         }
     }
     &.vertical.buttons{

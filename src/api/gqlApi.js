@@ -60,8 +60,8 @@ export const GqlClient = new ApolloClient({
       }
       if (get(res, 'networkError.statusCode') === 401 || get(res, 'networkError.result.message') === 'The incoming token has expired') {
         authActions.logout('timeout').then(() => {
-          window.location = '/login';
-        });
+          window.location = `/login?ref=${btoa(window.location.pathname)}`;
+        }).catch(err => window.logger(err));
       }
     }),
     httpLink,

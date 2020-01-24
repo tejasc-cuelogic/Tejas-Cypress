@@ -15,7 +15,7 @@ export class Admin {
   /**
    * @desc Creates New user from parameters that have been stored in store
    */
-  createNewUser = (userDetails = null, messageAction = '', resetLoader = true) => {
+  createNewUser = (userDetails = null, messageAction = '', resetLoader = true, action = null) => {
     if (resetLoader) {
       uiStore.reset();
       uiStore.setProgress();
@@ -26,7 +26,7 @@ export class Admin {
     if (user.email) {
       user.email = user.email.toLowerCase();
     }
-    return authStore.createAdminUser(user.email).then(() => {
+    return authStore.adminValidateCreateAdminUser(user.email, action).then(() => {
       const attributes = [];
       const mapKey = { role: 'custom:roles', capabilities: 'custom:user_capabilities' };
       Object.keys(user).map((item) => {

@@ -13,7 +13,7 @@ import DraggableListing from './DraggableListing';
 @withRouter
 @observer
 export default class AllLiveOfferings extends Component {
-  state = { activeIndex: [] }
+  state = { activeIndex: [0, 1] }
 
   toggleAccordianContent = (categoryIndex = null) => {
     const index = categoryIndex;

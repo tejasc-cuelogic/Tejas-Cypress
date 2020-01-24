@@ -70,9 +70,9 @@ export const getInvestmentsByUserIdAndOfferingId = gql`
   }
 `;
 
-export const getTransactions = gql`
-query getTransactions($status: [TransactionStatusEnum], $offset: Int, $direction: TransactionDirectionEnum, $limit: Int, $minAmount: Int, $maxAmount: Int, $dateFilterStart: String, $dateFilterStop: String) {
-  getTransactions(
+export const adminGetTransactions = gql`
+query adminGetTransactions($status: [TransactionStatusEnum], $offset: Int, $direction: TransactionDirectionEnum, $limit: Int, $minAmount: Int, $maxAmount: Int, $dateFilterStart: String, $dateFilterStop: String) {
+  adminGetTransactions(
     status: $status, 
     offset: $offset, 
     direction: $direction,
@@ -124,32 +124,32 @@ query getTransactions($status: [TransactionStatusEnum], $offset: Int, $direction
 `;
 
 
-export const transferRequestAdminApprove = gql`
-  mutation transferRequestAdminApprove($id: Int!){
-    transferRequestAdminApprove(
+export const adminTransferRequestApprove = gql`
+  mutation adminTransferRequestApprove($id: Int!){
+    adminTransferRequestApprove(
     id: $id
     )
   }`;
 
-export const transferRequestAdminVerified = gql`
-  mutation transferRequestAdminVerified($id: Int!){
-    transferRequestAdminVerified(
+export const adminTransferRequestVerified = gql`
+  mutation adminTransferRequestVerified($id: Int!){
+    adminTransferRequestVerified(
     id: $id
     )
   }`;
 
-export const declineTransferRequest = gql`
-  mutation declineTransferRequest($id: Int!, $reason: String, $cancelInvestment: Boolean){
-    declineTransferRequest(
+export const adminDeclineTransferRequest = gql`
+  mutation adminDeclineTransferRequest($id: Int!, $reason: String, $cancelInvestment: Boolean){
+    adminDeclineTransferRequest(
     id: $id
     reason: $reason
     cancelInvestment: $cancelInvestment
     )
   }`;
 
-export const transferRequestAdminSync = gql`
-mutation transferRequestAdminSync($id: Int!){
-  transferRequestAdminSync(
+export const adminTransferRequestSync = gql`
+mutation adminTransferRequestSync($id: Int!){
+  adminTransferRequestSync(
   id: $id
   )
 }`;
@@ -159,6 +159,7 @@ export const viewLoanAgreement = gql`
     viewLoanAgreement(agreementId: $agreementId, callbackUrl: $callbackUrl) {
       agreementId
       envelopeId
+      boxFileId
       docuSignViewURL
       npaViewUrl
     }

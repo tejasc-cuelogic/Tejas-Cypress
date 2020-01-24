@@ -21,9 +21,9 @@ export const faqs = gql`
   }
 `;
 
-export const getFaqById = gql`
-  query getFaqById ($id: String!) {
-    getFaqById (id: $id) {
+export const adminGetFaqById = gql`
+  query adminGetFaqById ($id: String!) {
+    adminGetFaqById (id: $id) {
       id
       slug
       author
@@ -42,15 +42,15 @@ export const getFaqById = gql`
   }
 `;
 
-export const deleteFaq = gql`
-  mutation deleteFaq($ids: [String]){
-    deleteFaq(ids: $ids)
+export const adminDeleteFaq = gql`
+  mutation adminDeleteFaq($ids: [String]){
+    adminDeleteFaq(ids: $ids)
   }
 `;
 
-export const upsertFaq = gql`
-  mutation upsertFaq ($faqInput: FaqItemInput) {
-    upsertFaq ( faqInput: $faqInput ) {
+export const adminUpsertFaq = gql`
+  mutation adminUpsertFaq ($faqInput: FaqItemInput) {
+    adminUpsertFaq ( faqInput: $faqInput ) {
       id
       slug
       author
@@ -67,3 +67,28 @@ export const upsertFaq = gql`
     }
   }
 `;
+
+export const adminFaqsListByFilters = gql`
+  query adminFaqsListByFilters ($question: String, $faqType: FaqTypesEnum, $categoryId: String, $itemStatus: ArticleStatusEnum){
+    adminFaqsListByFilters (question: $question, faqType: $faqType, categoryId: $categoryId, itemStatus: $itemStatus){
+      id
+      slug
+      author
+      question
+      categoryName
+      answer
+      order
+      faqType
+      itemStatus
+      updated{
+        by
+        date
+      }
+    }
+  }
+`;
+
+export const adminSetOrderForFAQ = gql`
+mutation adminSetOrderForFAQ($faqItemsList: [FaqOrderInput]) {
+  adminSetOrderForFAQ(faqItemsList: $faqItemsList)
+}`;

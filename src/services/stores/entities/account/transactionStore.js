@@ -149,6 +149,23 @@ export class TransactionStore {
       ? orderBy(this.paymentHistoryData.data.getPaymentHistory, o => (o.completeDate ? moment(new Date(o.completeDate)).unix() : ''), ['desc']) : [];
   }
 
+  @computed get allPaymentHistoryAsPerYears() {
+    if (!this.allPaymentHistoryData.length) {
+      return {};
+    }
+    const recordsAsPeryear = {};
+    this.allPaymentHistoryData.forEach((record) => {
+      const year = new Date(record.completeDate).getFullYear();
+      if (recordsAsPeryear[year]) {
+        recordsAsPeryear[year].push(record);
+      } else {
+        recordsAsPeryear[year] = [];
+        recordsAsPeryear[year].push(record);
+      }
+    });
+    return recordsAsPeryear;
+  }
+
   @computed get loading() {
     return this.data.loading || this.investmentsByOffering.loading
       || this.paymentHistoryData.loading || this.loanAgreementData.loading;
@@ -394,7 +411,7 @@ export class TransactionStore {
   requestOtpForManageTransactions = (isLinkedBankChange = false) => {
     uiStore.setProgress();
     const { userDetails } = userDetailsStore;
-    const otpType = userDetails.mfaMode === 'PHONE' ? userDetails.phone.type || 'TEXT' : 'EMAIL';
+    const otpType = ['TEXT', 'CALL', 'PHONE'].includes(userDetails.mfaMode) ? userDetails.mfaMode === 'PHONE' ? 'TEXT' : userDetails.mfaMode : 'EMAIL';
     const { number } = userDetails.phone;
     const { address } = userDetails.email;
     return new Promise((resolve, reject) => {
@@ -633,7 +650,9 @@ export class TransactionStore {
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (!this.loanAgreementData.loading) {
-          resolve(data.viewLoanAgreement.docuSignViewURL);
+          const agreementURL = get(data, 'viewLoanAgreement.boxFileId') ? data.viewLoanAgreement.npaViewUrl : data.viewLoanAgreement.docuSignViewURL;
+          resolve(agreementURL);
+          // resolve(data.viewLoanAgreement.docuSignViewURL);
         }
       },
       onError: () => {

@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { withRouter, Switch, Route, matchPath, Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
+import moment from 'moment';
 import { get, isEmpty } from 'lodash';
 import queryString from 'query-string';
 import IdleTimer from 'react-idle-timer';
 import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
-import { DevBanner, Spinner } from './theme/shared';
+import { DevBanner, Spinner, NotifyVersionUpdate } from './theme/shared';
 import Layout from './theme/layout/Layout';
 import Private from './modules/private';
 import Public from './modules/public';
@@ -41,7 +42,7 @@ const metaTagsData = [
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
 const isMobile = document.documentElement.clientWidth < 768;
-const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/', '/resources/insights/category/', '/dashboard/resources/knowledge-base/'];
+const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/', '/insights/category/', '/dashboard/resources/knowledge-base/', '/space/'];
 @inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
@@ -68,7 +69,7 @@ class App extends Component {
   componentDidMount() {
     const { location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
-    if (location.pathname.endsWith('/') && !this.props.location.hash) { // resolved trailing slash issue with this...
+    if (location.pathname.endsWith('/') && !this.props.location.hash) { // resolved trailing slash issue.
       history.push(location.pathname.replace(/\/+$/, ''));
     }
     this.checkForPasswordProtect();
@@ -118,12 +119,26 @@ class App extends Component {
     }
 
     document.addEventListener('visibilitychange', () => {
+      const { authStore, location, uiStore, history } = this.props;
       if (!document.hidden) {
-        // console.log('Browser tab is hidden');
-      } else if (this.props.authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
-        authActions.forceLogout('timeout').then(() => {
-          this.props.history.push('/login');
-        });
+        if (authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
+          authActions.forceLogout('timeout').then(() => {
+            uiStore.setAuthRef(location.pathname);
+            if (location.pathname.includes('/dashboard/')) {
+              history.push('/login');
+            }
+          });
+        } else if (window.localStorage.getItem('jwt') && location.pathname === '/login' && uiStore.authRef.includes('/dashboard')) {
+          window.location = uiStore.authRef || '/';
+        } else if (window.localStorage.getItem('jwt') && !authStore.isUserLoggedIn) {
+          window.location.reload();
+        } else {
+          const swAppVersionL = localStorage.getItem('swAppVersion'); // from local storage
+          const swAppVersionS = sessionStorage.getItem('swAppVersion'); // from session storage
+          if (moment(swAppVersionL).isValid() && moment(swAppVersionS).isValid() && swAppVersionL !== swAppVersionS && uiStore.appUpdated && location.pathname !== '/login') {
+            window.location.reload();
+          }
+        }
       }
     });
 
@@ -150,11 +165,10 @@ class App extends Component {
       this.props.navStore.setNavStatus(calculations, 'main');
     }
 
-    if ((sessionStorage.getItem('isBoxFirewalled') !== 'true' && !this.props.authStore.isBoxApiChecked)) {
-      sessionStorage.setItem('isBoxFirewalled', false);
-      this.isBoxFirewalled().catch(() => {
-        sessionStorage.setItem('isBoxFirewalled', true);
-      });
+    if ((sessionStorage.getItem('isBoxFirewalled') !== 'true') && !this.props.authStore.isBoxApiChecked) {
+      this.isBoxFirewalled()
+      .then(() => sessionStorage.setItem('isBoxFirewalled', false))
+      .catch(() => sessionStorage.setItem('isBoxFirewalled', true));
       this.props.authStore.setFieldvalue('isBoxApiChecked', true);
     }
   }
@@ -165,6 +179,7 @@ class App extends Component {
 
   getSizes = () => ({
     isMobile: document.documentElement.clientWidth < 768,
+    uptoTablet: document.documentElement.clientWidth < 992,
     isTablet: document.documentElement.clientWidth >= 768
       && document.documentElement.clientWidth < 992,
     isTabletLand: document.documentElement.clientWidth >= 768
@@ -180,13 +195,12 @@ class App extends Component {
   isBoxFirewalled = () => new Promise((resolve, reject) => {
     const testURL = NEXTSEED_BOX_URL;
     const myInit = {
-      method: 'HEAD',
       mode: 'no-cors',
     };
     const myRequest = new Request(testURL, myInit);
-    fetch(myRequest).catch(() => {
-      reject();
-    });
+    fetch(myRequest)
+    .then(() => resolve())
+    .catch(() => reject());
   });
 
   onIdle = () => {
@@ -195,7 +209,7 @@ class App extends Component {
         if (this.props.location.pathname.includes('/dashboard/')) {
           this.props.history.push('/login');
         }
-      });
+      }).catch(err => window.logger(err));
     }
   }
 
@@ -233,32 +247,32 @@ class App extends Component {
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
 
   render() {
-    const { location } = this.props;
+    const { location, uiStore, userStore, authStore } = this.props;
     const { authChecked } = this.state;
-    const { isTablet } = this.props.uiStore.responsiveVars;
+    const { isTablet } = uiStore.responsiveVars;
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {
       return (
         <Route path="/secure-gateway" component={SecureGateway} />
       );
     }
-    if (this.props.uiStore.appLoader || !authChecked) {
+    if (uiStore.appLoader || !authChecked) {
       return (
-        <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
+        <Spinner loaderMessage={uiStore.loaderMessage} />
       );
     }
-    const { isInvestor } = this.props.userStore;
+    const { isInvestor } = userStore;
     return (
       <div className={(isInvestor || !matchPath(location.pathname, { path: '/dashboard' })) ? 'public-pages' : ''}>
-        {this.props.authStore.isUserLoggedIn
+        {authStore.isUserLoggedIn
           && (
             <IdleTimer
-              ref={(ref) => { this.props.authStore.idleTimer = ref; }}
+              ref={(ref) => { authStore.idleTimer = ref; }}
               element={document}
               events={['mousedown', 'touchmove', 'MSPointerMove', 'MSPointerDown']}
               onIdle={this.onIdle}
               onAction={() => {
-                if (this.props.authStore.idleTimer) {
-                  localStorage.setItem('lastActiveTime', this.props.authStore.idleTimer.getLastActiveTime());
+                if (authStore.idleTimer) {
+                  localStorage.setItem('lastActiveTime', authStore.idleTimer.getLastActiveTime());
                 }
               }}
               debounce={250}
@@ -268,7 +282,7 @@ class App extends Component {
           )
         }
         <MetaTagGenerator pathName={location.pathname} isTablet={isTablet} metaTagsData={metaTagsData} />
-        {this.props.authStore.devPasswdProtection
+        {authStore.devPasswdProtection
           ? <Route exact path="/password-protected" component={DevPassProtected} /> : (
             <Layout>
               <Switch>
@@ -281,7 +295,10 @@ class App extends Component {
           )
         }
         <ToastContainer className="toast-message" />
-        {this.props.uiStore.devBanner
+        {uiStore.appUpdated && location.pathname !== '/login'
+          && <NotifyVersionUpdate setAppUpdated={uiStore.setAppUpdated} />
+        }
+        {uiStore.devBanner
           && <DevBanner toggle={this.playDevBanner} />
         }
       </div>

@@ -3,11 +3,11 @@ import React from 'react';
 import { Card } from 'semantic-ui-react';
 import HtmlEditor from '../../../../../../shared/HtmlEditor';
 
-const RewardList = ({ list, earlyBird }) => (
-  <Card.Group stackable itemsPerRow={3}>
+const RewardList = ({ list, earlyBird, classname, cardClass }) => (
+  <Card.Group stackable itemsPerRow={3} className={`${classname} mb-14`} doubling>
     {
       list.map(card => (
-        <Card key={card.id}>
+        <Card key={card.id} className={cardClass}>
           <Card.Content>
             {
             earlyBird

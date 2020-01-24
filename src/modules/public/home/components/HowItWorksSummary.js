@@ -1,43 +1,122 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Container, Button, Grid } from 'semantic-ui-react';
+import { Header, Container, Button, Grid, Item, Divider, Responsive } from 'semantic-ui-react';
+import { inject, observer } from 'mobx-react';
 import NSImage from '../../../shared/NSImage';
 
-const HowItWorksSummary = props => (
+const highlights = [
+  {
+    title: 'Pre-vetted opportunities',
+    icon: 'icons/compass.svg',
+    meta: (
+      <>
+      Only the top 3% of businesses meet our
+    proprietary financial criteria.<sup>1</sup>
+      </>),
+  },
+  {
+    title: 'Businesses you understand',
+    icon: 'icons/checked.svg',
+    meta: `Investments in growing businesses across industries. Access the right
+      ones for you.`,
+  },
+  {
+    title: 'Flexible amounts',
+    icon: 'icons/graph.svg',
+    meta: 'Never invest more than you can risk. Investments may start as low as $100.',
+  },
+  {
+    title: 'Exclusive deals',
+    icon: 'icons/deals.svg',
+    meta: `Opportunities that were once privately reserved for wealthy
+    and well-connected investors.`,
+  },
+  {
+    title: 'Impactful investments',
+    icon: 'icons/heart.svg',
+    meta: `Growing businesses that create jobs and drive growth.
+    Create real impact in local communities.`,
+  },
+  {
+    title: 'Returns processed for you',
+    icon: 'icons/return.svg',
+    meta: `No need to chase payments from business owners. NextSeed facilitates
+      any payments from your investments automatically.`,
+  },
+];
+
+const HowItWorksSummary = ({ uiStore, authStore }) => (
+  <>
   <section>
-    <Container textAlign={props.isMobile ? 'left' : 'center'}>
-      <Header as="h2" className="mb-30">A new way to invest in local businesses.</Header>
-      <p className="mb-80">
-        Local entrepreneurs and investors are reshaping the face of Main Street.
-        NextSeed offers the opportunity <br /> to invest in restaurants, fitness studios,
-        craft breweries and a variety of growing concepts.
+    <Container className={uiStore.responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'} textAlign={uiStore.responsiveVars.isMobile ? 'left' : 'center'}>
+      <Header as="h2" className={uiStore.responsiveVars.isMobile ? 'mb-40' : 'mb-60'}>Small business investing, made easy</Header>
+      <Grid stackable centered className={!uiStore.responsiveVars.isMobile && 'mt-40'}>
+        <Grid.Column width={14}>
+          <Item.Group className="horizontal-items home-page">
+            {
+            highlights.map(h => (
+              <Item>
+                <div className="ui mini image">
+                  <NSImage path={h.icon} />
+                </div>
+                <Item.Content>
+                  <Item.Header as="h6">{h.title}</Item.Header>
+                  <Item.Meta>{h.meta}</Item.Meta>
+                </Item.Content>
+              </Item>
+            ))
+          }
+          </Item.Group>
+        </Grid.Column>
+      </Grid>
+      <div className="center-align mb-50">
+        { !authStore.isUserLoggedIn
+          && <Button fluid={uiStore.responsiveVars.isMobile} className={!uiStore.responsiveVars.isMobile ? 'mt-50' : 'mt-40'} as={Link} to="/register-investor" primary>Create a  Free Account</Button>
+        }
+      </div>
+      <p className={`${uiStore.responsiveVars.isMobile ? '' : 'center-align'} note`}>
+        <sup>1</sup>This represents the percent of businesses that began the application
+        process, passed NextSeed&apos;s objective diligence criteria, and launched an offering on the platform since NextSeed&apos;s inception.
       </p>
     </Container>
-    <Container>
-      <Grid centered relaxed="very">
-        <Grid.Column textAlign="center" computer={6} tablet={6} mobile={16} className={`info-card home-summary ${props.isMobile && 'mb-50'}`}>
-          <NSImage path="icons/bizowner.svg" centered />
-          <Header as="h5">Business Owners</Header>
-          <p>
-            Raise capital to expand or open a new concept.
-            We make it easy to accept investments from friends and fans,
-            and put your story in front of thousands of local investors.
-          </p>
-          <Button as={Link} to="/business/how-it-works" primary content="SMB Fundraising" className="mt-20" />
-        </Grid.Column>
-        <Grid.Column textAlign="center" computer={6} tablet={6} mobile={16} className="info-card home-summary">
-          <NSImage path="icons/investors.svg" centered />
-          <Header as="h5">Investors</Header>
-          <p>
-            Access unique, pre-vetted investment opportunities.
-            Put your money to work in businesses you understand and
-            projects that create jobs.
-          </p>
-          <Button as={Link} to="/invest/why-nextseed" primary content="Investing" className="mt-20" />
-        </Grid.Column>
+  </section>
+  <Divider as={Container} fitted />
+  <section>
+    <Container className={uiStore.responsiveVars.isMobile ? 'mb-20 mt-20' : 'mt-50 mb-50'}>
+      <Grid>
+        <Grid.Row>
+          <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
+            <Header as="h2" className={uiStore.responsiveVars.uptoTablet ? 'mb-30' : 'mb-40'}>We’ve built an alternative<Responsive minWidth={768} as="br" /> investment platform<Responsive minWidth={768} as="br" /> from the ground up.</Header>
+            <p className={`${uiStore.responsiveVars.uptoTablet ? 'mb-14' : 'mb-50'} neutral-text`}>
+            Browse highly vetted companies and invest <Responsive minWidth={768} as="br" />
+            in just a few clicks, on any device.
+            </p>
+            {!authStore.isUserLoggedIn && !uiStore.responsiveVars.isMobile
+              && (
+                <Button as={Link} to="/register-investor" primary className="mb-30">Create a  Free Account</Button>
+              )
+            }
+            {uiStore.responsiveVars.isMobile
+             && <NSImage path="phones-mockup.png" className="mb-20" />
+            }
+          </Grid.Column>
+          <Grid.Column widescreen={8} computer={8} tablet={16} mobile={16}>
+            {!uiStore.responsiveVars.isMobile
+             && <NSImage path="phones-mockup.png" className="mb-20" />
+            }
+            {!authStore.isUserLoggedIn && uiStore.responsiveVars.isMobile
+              && (
+                <Button fluid as={Link} to="/register-investor" primary>Create a  Free Account</Button>
+              )
+            }
+          </Grid.Column>
+        </Grid.Row>
       </Grid>
     </Container>
   </section>
+  <Divider as={Container} fitted />
+  </>
 );
 
-export default HowItWorksSummary;
+// export default HowItWorksSummary;
+export default inject('uiStore', 'authStore')(observer(HowItWorksSummary));

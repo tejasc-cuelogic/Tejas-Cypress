@@ -8,7 +8,7 @@ import { GqlClient as clientPublic } from '../../../../../api/publicApi';
 import { STAGES } from '../../../../constants/admin/offerings';
 import {
   allOfferings, allOfferingsCompact, updateOffering,
-  deleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings,
+  adminDeleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings,
 } from '../../../queries/offerings/manage';
 import { offeringCreationStore, userStore, uiStore, campaignStore } from '../../../index';
 import { ClientDb, DataFormatter } from '../../../../../helper';
@@ -170,7 +170,7 @@ export class OfferingsStore {
     uiStore.addMoreInProgressArray('delete');
     client
       .mutate({
-        mutation: deleteOffering,
+        mutation: adminDeleteOffering,
         variables: {
           id,
         },
@@ -258,6 +258,9 @@ export class OfferingsStore {
         db[this.requestState.stage][offerIndex] = { ...db[this.requestState.stage][offerIndex], ...payload };
         ClientDb.initiateDb(db);
         this.db = { ...db };
+        if (this.requestState.stage === 'live') {
+          this.orderedActiveListArr();
+        }
       }
       if (offerIndexInData !== -1) {
         data[this.requestState.stage].data.getOfferings[offerIndexInData] = { ...data[this.requestState.stage].data.getOfferings[offerIndexInData], ...payload };
@@ -280,14 +283,18 @@ export class OfferingsStore {
       query: getOfferingDetails,
       fetchPolicy: 'no-cache',
       variables: { id },
-      onFetch: () => {
-        this.currentId = id;
-        this.offerLoading = false;
-        this.oldOfferData = {};
-        const { setFormData } = offeringCreationStore;
-        setFormData('OFFERING_DETAILS_FRM', false);
-        setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
-        setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
+      onFetch: (res) => {
+        if (!this.offerData.loading) {
+          this.currentId = id;
+          this.offerLoading = false;
+          this.oldOfferData = {};
+          const { setFormData, setCurrentOfferingId, setFieldValue } = offeringCreationStore;
+          setFieldValue('currentOfferingSlug', id);
+          setCurrentOfferingId(res.getOfferingDetailsBySlug.id);
+          setFormData('OFFERING_DETAILS_FRM', false);
+          setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
+          setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
+        }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -365,10 +372,13 @@ export class OfferingsStore {
   }
 
   @computed get issuerOfferings() {
-    const list = toJS(this.db[this.requestState.stage]);
-    const offeringList = list && list.length ? list : [];
-    const offeringListResult = this.orderedOfferingList(offeringList);
-    return offeringListResult;
+    if (userStore.isIssuer) {
+      const list = toJS(this.db[this.requestState.stage]);
+      const offeringList = list && list.length ? list : [];
+      const offeringListResult = this.orderedOfferingList(offeringList);
+      return offeringListResult;
+    }
+    return [];
   }
 
   @action
@@ -391,11 +401,11 @@ export class OfferingsStore {
   }
 
   @computed get offer() {
-    return (this.offerData.data && toJS(this.offerData.data.getOfferingById)) || {};
+    return (this.offerData.data && toJS(this.offerData.data.getOfferingDetailsBySlug)) || {};
   }
 
   @computed get offerOld() {
-    return (this.oldOfferData.data && toJS(this.oldOfferData.data.getOfferingById)) || {};
+    return (this.oldOfferData.data && toJS(this.oldOfferData.data.getOfferingDetailsBySlug)) || {};
   }
 
   @computed get loading() {
@@ -403,6 +413,15 @@ export class OfferingsStore {
   }
 
   @action resetInitLoad() {
+    this.initLoad = [];
+  }
+
+  @action
+  resetStoreData = () => {
+    this.data = {};
+    this.offerData = {};
+    this.oldOfferData = {};
+    this.db = {};
     this.initLoad = [];
   }
 

@@ -1,4 +1,3 @@
-
 const INVESTER_ACC_SUB_NAV_ITEMS = {
   subNavigations: [
     { title: 'Portfolio', to: 'portfolio', component: 'Portfolio' },
@@ -256,8 +255,11 @@ export const PRIVATE_NAV = [
     icon: 'gift',
     title: 'Offering',
     to: 'offering/:offeringSlug',
-    accessibleTo: ['issuer'],
-    path: 'issuer/offering',
+    path: {
+      issuer: 'issuer/offering',
+      admin: 'admin/offerings/containers/OfferingDetails',
+    },
+    accessibleTo: ['issuer', 'admin'],
     subPanel: 1,
     subNavigations: [
       { title: 'Overview', to: 'overview', accessFor: [1, 2, 3, 4] },
@@ -270,7 +272,7 @@ export const PRIVATE_NAV = [
       { title: 'Leadership', to: 'leadership', accessFor: [1] },
       { title: 'Investors', to: 'investors', accessFor: [2, 3, 4] },
       {
-        title: 'Transactions', to: 'transactions', accessFor: [3, 4], accessibleTo: ['admin', 'manager', 'support'],
+        title: 'Transactions', to: 'transactions', accessFor: [3, 4], accessibleTo: ['admin', 'manager', 'support'], env: ['localhost', 'predev', 'dev'],
       },
       { title: 'Comments', to: 'comments', accessFor: [2, 3] },
       { title: 'Updates', to: 'updates', accessFor: [2, 3, 4] },
@@ -283,10 +285,10 @@ export const PRIVATE_NAV = [
         title: 'Offering Creation', to: 'offering-creation', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
       },
       {
-        title: 'Activity History', to: 'activity-history', accessFor: [1, 2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
+        title: 'Watch List', to: 'watch-list', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
       },
       {
-        title: 'Watch List', to: 'watch-list', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
+        title: 'Activity History', to: 'activity-history', accessFor: [1, 2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
       },
     ],
   },
@@ -590,19 +592,19 @@ export const PUBLIC_NAV = [
     ],
   },
   {
-    title: 'Explore Campaigns',
+    title: 'Investment opportunities',
     to: 'offerings-v2/',
     header: false,
     headerMobile: false,
     subNavigations: NEW_OFFERING_LAYOUT,
   },
   {
-    title: 'Explore Campaigns',
+    title: 'Investment opportunities',
     to: 'offerings/',
     subNavigations: NEW_OFFERING_LAYOUT,
   },
   {
-    title: 'Explore Campaigns',
+    title: 'Investment opportunities',
     to: 'offerings-v1',
     header: false,
     headerMobile: false,
@@ -692,40 +694,14 @@ export const PUBLIC_NAV = [
     ],
   },
   {
-    title: 'How NextSeed Works',
-    to: 'business',
-    noNav: true,
-    exact: true,
-    subNavigations: [
-      { title: 'How it Works', to: 'how-it-works' },
-      { title: 'Funding Options', to: 'funding-options' },
-      { title: 'Process', to: 'process', component: 'InvestmentDetails' },
-      { title: 'All-Inclusive', to: 'all-inclusive', component: 'BonusRewards' },
-      // { title: 'Compare', to: 'compare', component: 'Disclosures' },
-    ],
-  },
-  {
-    title: 'Why NextSeed',
-    to: 'invest',
-    noNav: true,
-    exact: true,
-    subNavigations: [
-      { title: 'Why Nextseed', to: 'why-nextseed' },
-      { title: 'How it Works', to: 'how-it-works' },
-      { title: 'Account Types', to: 'account-types' },
-      { title: 'Security', to: 'security' },
-      { title: 'Track', to: 'track' },
-    ],
-  },
-  {
-    title: 'How NextSeed Works',
+    title: 'How It Works',
     to: '',
     subPanel: 1,
     exact: true,
     subNavigations: [
-      { title: 'Fundraising', to: 'business' },
-      { title: 'Investing', to: 'invest' },
-      { title: 'Education Center', to: 'resources/education-center' },
+      { title: 'For Investors', to: 'investors' },
+      { title: 'For Businesses', to: 'business' },
+      { title: 'Education Center', to: 'education-center' },
     ],
   },
   {
@@ -734,11 +710,11 @@ export const PUBLIC_NAV = [
     subPanel: 1,
     exact: true,
     subNavigations: [
-      { title: 'Mission', to: 'about/mission' },
-      { title: 'Team & Culture', to: 'about/team' },
-      { title: 'Careers', to: 'about/careers' },
-      { title: 'Insights', to: 'resources/insights' },
-      { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
+      { title: 'Who We Are', to: 'about' },
+      // { title: 'Team & Culture', to: 'about/team' },
+      // { title: 'Careers', to: 'about/careers' },
+      { title: 'Insights', to: 'insights' },
+      { title: 'NextSeed Space', to: 'space' },
     ],
   },
   // {
@@ -756,7 +732,7 @@ export const PUBLIC_NAV = [
   // },
   {
     title: 'Legal',
-    to: 'agreements/legal',
+    to: 'legal',
     exact: true,
     subPanel: 1,
     subNavigations: [
@@ -788,7 +764,7 @@ export const MOBILE_NAV = [
     accessibleTo: ENTITY_ACC.accessibleTo,
     isLoggedIn: true,
   },
-  { title: 'Explore', to: 'offerings', isLoggedIn: true },
+  { title: 'Investment Opportunities', to: 'offerings', isLoggedIn: true },
   {
     title: 'Refer a Friend',
     to: 'app/referrals',
@@ -797,12 +773,12 @@ export const MOBILE_NAV = [
   },
   { title: 'Settings', to: 'app/account-settings', isLoggedIn: true },
   { title: 'Add New Account', to: 'app/setup/account-creation', isLoggedIn: true },
-  { title: 'How it Works Investor', to: 'invest' },
-  { title: 'How it Works Business', to: 'business' },
-  { title: 'Education Center', to: 'resources/education-center' },
-  { title: 'About Us', to: 'about' },
-  { title: 'Insights', to: 'resources/insights' },
-  { title: 'NextSeed Space', external: true, to: 'https://space.nextseed.com/' },
+  { title: 'For Investors', to: 'investors' },
+  { title: 'For Businesses', to: 'business' },
+  { title: 'Education Center', to: 'education-center' },
+  { title: 'Who We Are', to: 'about' },
+  { title: 'Insights', to: 'insights' },
+  { title: 'NextSeed Space', to: 'space' },
 ];
 
 export const FOOTER_NAV = [

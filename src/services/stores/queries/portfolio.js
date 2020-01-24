@@ -14,6 +14,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
     tnar
     investments {
       pending {
+        tranche
         agreementId
         investmentDate
         investedAmount
@@ -62,6 +63,8 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
         regulation
         netPaymentsReceived
         remainingPrincipal
+        remainingPayment
+        realizedMultiple
         offering {
           id
           stage
@@ -96,6 +99,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
             }
             keyTerms {
               maturityDate
+              multiple
             }
           }
         }
@@ -105,6 +109,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
         investmentDate
         regulation
         netPaymentsReceived
+        realizedMultiple
         offering {
           id
           stage
@@ -165,9 +170,9 @@ query getInvestmentDetails($userId: String, $accountId: String!, $offeringId: St
 }
 `;
 
-export const cancelAgreement = gql`
-  mutation cancelAgreement($agreementId: Int!, $userId: String, $voidReason: String, $voidType: AgreementVoidTypeEnum, $sendNotification: Boolean) {
-    cancelAgreement(agreementId: $agreementId, userId: $userId, voidReason: $voidReason, voidType: $voidType, sendNotification: $sendNotification)
+export const investNowCancelAgreement = gql`
+  mutation investNowCancelAgreement($agreementId: Int!, $userId: String, $voidReason: String, $voidType: AgreementVoidTypeEnum, $sendNotification: Boolean) {
+    investNowCancelAgreement(agreementId: $agreementId, userId: $userId, voidReason: $voidReason, voidType: $voidType, sendNotification: $sendNotification)
   }`;
 
 export const getMonthlyPaymentsToInvestorByOffering = gql`
