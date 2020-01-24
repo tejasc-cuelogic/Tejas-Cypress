@@ -178,6 +178,16 @@ class CampaignLayout extends Component {
     document.querySelector(processAction).scrollIntoView(true);
   }
 
+  processScroll = () => {
+    if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
+      this.props.navStore.setFieldValue('currentActiveHash', null);
+      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+        block: 'start',
+        // behavior: 'smooth',
+      });
+    }
+  }
+
   render() {
     const { campaign, campaignStatus, dataRoomDocs } = this.props.campaignStore;
     let updates = campaign && campaign.updates;
@@ -234,6 +244,7 @@ class CampaignLayout extends Component {
         {campaignStatus.gallary !== 0 && !campaignStatus.isFund ? (
           <>
             <Gallery
+              processScroll={this.processScroll}
               newLayout
               galleryUrl={this.props.match.url}
               campaign={campaign}
