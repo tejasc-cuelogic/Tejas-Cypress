@@ -10,7 +10,7 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { ARTICLES, THUMBNAIL_EXTENSIONS } from '../../../constants/admin/article';
 import { getArticleDetailsBySlug, adminDeleteArticle, allInsightArticles, getArticleDetails, adminInsightsArticle, adminCreateArticle, adminUpdateArticleInfo, adminInsightArticlesListByFilter } from '../../queries/insightArticle';
-import { getCategories } from '../../queries/category';
+import { getCategories, adminCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
 import { uiStore, commonStore } from '../..';
 import { fileUpload } from '../../../actions';
@@ -294,22 +294,11 @@ export class ArticleStore {
     }
 
     @action
-    getCategoryList = (isPublic = true) => {
+    getCategoryList = (isPublic = true, types = ['INSIGHTS']) => {
       const apiClient = isPublic ? clientPublic : client;
       this.Categories = graphql({
         client: apiClient,
-        query: getCategories(isPublic),
-        variables: { types: ['INSIGHTS'] },
-        fetchPolicy: 'network-only',
-      });
-    }
-
-    @action
-    getCategoryListByTypes = (isPublic = true, types) => {
-      const apiClient = isPublic ? clientPublic : client;
-      this.Categories = graphql({
-        client: apiClient,
-        query: getCategories(isPublic),
+        query: isPublic ? getCategories : adminCategories,
         variables: { types },
         fetchPolicy: 'network-only',
       });
@@ -445,8 +434,8 @@ export class ArticleStore {
 
     @computed get categoriesDropdown() {
       const categoriesArray = [];
-      if (this.Categories.data && this.Categories.data.categories) {
-        this.Categories.data.categories.map((ele) => {
+      if (this.Categories.data && this.Categories.data.adminCategories) {
+        this.Categories.data.adminCategories.map((ele) => {
           categoriesArray.push({ key: ele.categoryName, value: ele.id, text: ele.categoryName });
           return categoriesArray;
         });

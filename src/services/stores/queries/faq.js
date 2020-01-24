@@ -67,3 +67,28 @@ export const adminUpsertFaq = gql`
     }
   }
 `;
+
+export const adminFaqsListByFilters = gql`
+  query adminFaqsListByFilters ($question: String, $faqType: FaqTypesEnum, $categoryId: String, $itemStatus: ArticleStatusEnum){
+    adminFaqsListByFilters (question: $question, faqType: $faqType, categoryId: $categoryId, itemStatus: $itemStatus){
+      id
+      slug
+      author
+      question
+      categoryName
+      answer
+      order
+      faqType
+      itemStatus
+      updated{
+        by
+        date
+      }
+    }
+  }
+`;
+
+export const adminSetOrderForFAQ = gql`
+mutation adminSetOrderForFAQ($faqItemsList: [FaqOrderInput]) {
+  adminSetOrderForFAQ(faqItemsList: $faqItemsList)
+}`;

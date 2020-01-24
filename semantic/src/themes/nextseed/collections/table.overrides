@@ -176,7 +176,8 @@
                 width: 150px;
                 white-space: nowrap;
                 overflow: hidden;
-                color: @primary-one;;
+                color: @primary-one;
+                vertical-align: middle;
                 a{
                     color: @primary-one !important;
                 }
@@ -191,6 +192,9 @@
             }
             td.wrap-text{
                 white-space: normal;
+            }
+            .ui.buttons{
+                vertical-align: middle;
             }
         }
         i.ns-individual-line, i.ns-ira-line, i.ns-entity-line{

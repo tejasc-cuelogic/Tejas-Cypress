@@ -25,6 +25,10 @@ export default class ConfirmPhoneNumber extends Component {
       const fieldValue = userDetailsStore.userDetails.phone.type;
       identityStore.phoneTypeChange(fieldValue);
     }
+
+    if (Object.keys(this.props.identityStore.requestOtpResponse).length === 0) {
+      this.props.identityStore.startPhoneVerification();
+    }
   }
 
   componentDidMount() {
