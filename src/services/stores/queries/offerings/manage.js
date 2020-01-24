@@ -1125,15 +1125,15 @@ export const getOfferingDetails = gql`
         }
       }
       closureSummary {
-        # exportEnvelopes {
-        #   fileSubstitution {
-        #     upload {
-        #       fileId
-        #       fileName
-        #     }
-        #     replacePage
-        #   }
-        # }
+        exportEnvelopes {
+          fileSubstitution {
+            upload {
+              fileId
+              fileName
+            }
+            replacePage
+          }
+        }
         processingDate
         hardCloseDate
         launchDate
