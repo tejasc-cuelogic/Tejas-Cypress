@@ -11,6 +11,12 @@ const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
 @observer
 class Gallery extends Component {
+  componentDidMount() {
+    setTimeout(() => {
+      this.props.processScroll();
+    }, 10);
+  }
+
   handleViewGallary = (e, index) => {
     e.preventDefault();
     this.props.campaignStore.setFieldValue('gallarySelectedImageIndex', index);

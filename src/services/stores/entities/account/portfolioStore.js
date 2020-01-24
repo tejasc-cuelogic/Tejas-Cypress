@@ -51,7 +51,7 @@ export class PortfolioStore {
         REVENUE_SHARING_NOTE: { name: 'Rev Share', value: 0 },
         PREFERRED_EQUITY_506C: { name: 'Preferred Equity', value: 0 },
         CONVERTIBLE_NOTES: { name: 'Convertible Notes', value: 0 },
-        SAFE: { name: 'Safe', value: 0 },
+        SAFE: { name: 'SAFE', value: 0 },
         REAL_ESTATE: { name: 'LLC Membership Interests', value: 0 },
         FUNDS: { name: 'Funds - Limited Partner Interest', value: 0 },
       },
