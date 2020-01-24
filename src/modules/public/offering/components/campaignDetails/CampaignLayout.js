@@ -62,13 +62,7 @@ class CampaignLayout extends Component {
       console.log(err);
       window.logger('soft failed for lazyload image', 'warn', true, err);
     }
-    if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
-      this.props.navStore.setFieldValue('currentActiveHash', null);
-      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
-        block: 'start',
-        // behavior: 'smooth',
-      });
-    }
+    this.processScroll();
     Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore');
     this.processLazyLoadImages();
   }
