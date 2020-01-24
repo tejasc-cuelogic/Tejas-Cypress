@@ -54,7 +54,7 @@ export default class BusinessDetails extends Component {
     });
   }
 
-  handleSsnChange = (e, res, subForm, index) => {
+  handleSsnChange = (e, subForm, index) => {
     e.preventDefault();
     this.props.businessAppStore.businessDetailsChange(e, { name: 'ssn', value: '' }, subForm, index);
     const a = this.state.isSsnDirty.slice();
@@ -491,7 +491,7 @@ export default class BusinessDetails extends Component {
                                 fielddata={Helper.encrypSsnNumberByForm(owner).ssn}
                                 displayMode={formReadOnlyMode}
                                 asterisk={formReadOnlyMode ? 'false' : 'true'}
-                                onChange={(e, res) => this.handleSsnChange(e, res, 'owners', index)}
+                                onChange={e => this.handleSsnChange(e, 'owners', index)}
                               />
                             )
                             : (

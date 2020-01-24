@@ -11,6 +11,11 @@ import { S3_BUCKET_URL } from '../../../constants/common';
 export class FileUpload {
   setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '', tags = '', params) => new Promise((resolve, reject) => {
     const investorId = get(params, 'investorId');
+    if (fileData.fileSize) {
+      // eslint-disable-next-line no-param-reassign
+      fileData.fileSize = fileData.fileSize.toString();
+    }
+
     client
       .mutate({
         mutation: createUploadEntry,
