@@ -5,7 +5,7 @@ import { forEach, map, sortBy, kebabCase } from 'lodash';
 import { GqlClient as clientPrivate } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import { faqs, adminGetFaqById, adminUpsertFaq, adminDeleteFaq } from '../../queries/faq';
+import { faqs, adminGetFaqById, adminUpsertFaq, adminDeleteFaq, adminFaqsListByFilters, adminSetOrderForFAQ } from '../../queries/faq';
 import { FAQ } from '../../../constants/faq';
 import { uiStore } from '../../index';
 
@@ -303,6 +303,57 @@ export class FaqStore {
     if (keyword !== 'keyword') {
       this.faqListByFilter();
     }
+  }
+
+  @action
+  faqListByFilter = () => {
+    const data = this.requestState.search;
+    uiStore.setProgress();
+    this.data = graphql({
+      client: clientPrivate,
+      query: adminFaqsListByFilters,
+      fetchPolicy: 'network-only',
+      variables: {
+        question: data.keyword,
+        faqType: data.type !== 'All' ? data.type : undefined,
+        categoryId: data.categoryName,
+        itemStatus: data.status !== 'All' ? data.status : undefined,
+      },
+      onFetch: (res) => {
+        if (res && res.adminFaqsListByFilters) {
+          this.resetSelectedRecords();
+          uiStore.setProgress(false);
+          this.setDb(res.adminFaqsListByFilters);
+        }
+      },
+    });
+  }
+
+  @action
+  setFaqOrder = (newArr) => {
+    uiStore.setProgress();
+    const data = [];
+    newArr.forEach((item, index) => {
+      if (item) {
+        data.push({
+          id: item.id,
+          order: index + 1,
+        });
+        // eslint-disable-next-line no-param-reassign
+        newArr[index].order = index + 1;
+      }
+    });
+    clientPrivate
+      .mutate({
+        mutation: adminSetOrderForFAQ,
+        variables: { faqItemsList: data },
+      }).then(() => {
+        this.initRequest();
+        Helper.toast('Order updated successfully.', 'success');
+      }).catch(() => {
+        uiStore.setProgress(false);
+        Helper.toast('Error while updating order', 'error');
+      });
   }
 
   @computed get selectedCount() {
