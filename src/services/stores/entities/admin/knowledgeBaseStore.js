@@ -284,7 +284,8 @@ export class KnowledgeBaseStore {
 
   @computed get categoriesList() {
     return (this.Categories.data && this.Categories.data.categories
-      && toJS(this.Categories.data.categories)) || [];
+      && toJS(this.Categories.data.categories)) || (this.Categories.data && this.Categories.data.adminCategories
+        && toJS(this.Categories.data.adminCategories)) || [];
   }
 
   @computed get getCategories() {
@@ -294,8 +295,8 @@ export class KnowledgeBaseStore {
 
   @computed get categoriesDropdown() {
     const categoriesArray = [];
-    if (this.Categories.data && this.Categories.data.categories) {
-      this.Categories.data.categories.map((ele) => {
+    if (this.categoriesList) {
+      this.categoriesList.map((ele) => {
         categoriesArray.push({ key: ele.categoryName, value: ele.id, text: ele.categoryName });
         return categoriesArray;
       });
