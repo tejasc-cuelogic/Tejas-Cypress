@@ -234,7 +234,7 @@ class FinancialInfo extends Component {
         }
         <Divider hidden />
         {// isValidInvestAmtInOffering &&
-          estReturnVal && estReturnVal !== '-'
+          !includes(['SAFE'], offeringSecurityType) && estReturnVal && estReturnVal !== '-'
             && investmentAmount
             ? (
               <Header as="h4">Total Investment Return: Up to {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
