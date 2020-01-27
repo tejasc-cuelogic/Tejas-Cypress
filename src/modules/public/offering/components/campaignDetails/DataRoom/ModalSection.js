@@ -71,7 +71,7 @@ class Disclosure extends Component {
             <Header as="h3" className="mb-20">
               {headerMsg}
             </Header>
-            <p>{paraMsg}</p>
+            <p className="line-height-24">{paraMsg}</p>
           </Grid.Column>
           <Grid.Column>
             <FormCheckbox
