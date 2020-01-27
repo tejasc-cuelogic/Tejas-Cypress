@@ -708,3 +708,8 @@ export const adminValidateCreateAdminUser = gql`
     action: $action
   )
 }`;
+
+export const adminListEmailType = gql`
+  query adminListEmailType {
+  adminListEmailType
+}`;
