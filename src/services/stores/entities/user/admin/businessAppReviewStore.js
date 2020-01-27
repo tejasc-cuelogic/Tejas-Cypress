@@ -415,6 +415,7 @@ export class BusinessAppReviewStore {
     let reFetchPayLoad = {
       applicationId,
       applicationType: applicationSource,
+      userId,
     };
     if (applicationSource === 'APPLICATION_COMPLETED') {
       reFetchPayLoad = { ...reFetchPayLoad, userId };
