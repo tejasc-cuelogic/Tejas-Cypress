@@ -212,6 +212,16 @@ export const INCOME_UPLOAD_DOCUMENTS = {
     error: undefined,
     rule: 'required',
   },
+  previousEstimateIncome: {
+    value: '',
+    label: `What is your estimated income in ${CURR_YEAR - 1}`,
+    error: undefined,
+    rule: 'required',
+    placeHolder: '$',
+    customErrors: {
+      required: 'required.',
+    },
+  },
   estimateIncome: {
     value: '',
     label: `What is your estimated income in ${CURR_YEAR}`,

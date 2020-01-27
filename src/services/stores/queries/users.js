@@ -507,6 +507,7 @@ export const userAccreditationQuery = gql`
               status
               filingStatus
               estimateIncome
+              previousEstimateIncome
               expiration
               requestDate
               reviewed {
@@ -549,6 +550,7 @@ export const userAccreditationQuery = gql`
         status
         filingStatus
         estimateIncome
+        previousEstimateIncome
         expiration
         requestDate
         reviewed {
@@ -707,4 +709,9 @@ export const adminValidateCreateAdminUser = gql`
     email: $email
     action: $action
   )
+}`;
+
+export const adminListEmailType = gql`
+  query adminListEmailType {
+  adminListEmailType
 }`;

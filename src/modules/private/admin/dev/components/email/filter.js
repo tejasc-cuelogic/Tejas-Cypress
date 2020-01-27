@@ -9,10 +9,10 @@ import { NsPaginationHookType } from '../../../../../../theme/shared';
 export default class Filters extends Component {
   render() {
     const {
-      setSearchParam, change, filters, FILTER_FRM,
+      setSearchParam, change, filters,
       paginate, totalRecords,
     } = this.props;
-    const { requestState } = this.props.emailStore;
+    const { requestState, listEmailTypes } = this.props.emailStore;
     return (
       <div className={`more ${!filters ? 'collapsed' : ''}`}>
         <Form>
@@ -22,7 +22,7 @@ export default class Filters extends Component {
                 <DateRangeFilter filters={requestState.search} label="Date" name="createdAt" change={change} />
               </Grid.Column>
               <Grid.Column width={3}>
-                <DropdownFilter value={requestState.search.emailType} label="Email Type" name="emailType" change={setSearchParam} options={FILTER_FRM.fields.emailType.values} />
+                <DropdownFilter value={requestState.search.emailType} label="Email Type" name="emailType" change={setSearchParam} options={listEmailTypes} />
               </Grid.Column>
               <Grid.Column width={9}>
                 <NsPaginationHookType floated="right" initRequest={({ first, page }) => paginate({ first, page, noFilter: true })} meta={{ totalRecords, requestState }} />
