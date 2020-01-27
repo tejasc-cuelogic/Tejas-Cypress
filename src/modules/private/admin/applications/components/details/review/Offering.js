@@ -21,7 +21,7 @@ export default class Offerings extends Component {
         : (
           <>
             {/* <LegalDocumentUpload /> */}
-            <BusinessApplicationMapping />
+            <BusinessApplicationMapping {...this.props} />
           </>
         )
     );

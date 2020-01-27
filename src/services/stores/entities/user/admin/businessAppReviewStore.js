@@ -6,7 +6,7 @@ import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { Calculator } from 'amortizejs';
 import money from 'money-math';
-import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, PROMOTE_APPLICATION_STATUS_PASSWORD, PROMOTE_APPLICATION_STATUS_EMAIL, APPLICATION_MAPPED_OFFERING } from '../../../../constants/admin/businessApplication';
+import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, PROMOTE_APPLICATION_STATUS_PASSWORD, PROMOTE_APPLICATION_STATUS_EMAIL, APPLICATION_MAPPED_OFFERING, APPLICATION_OFFERING_MAPPING_KEY_VALUE } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -926,6 +926,17 @@ export class BusinessAppReviewStore {
       );
     }
   };
+
+  @action
+  createBusinessOffering = (formName) => {
+    const formInputData = Validator.evaluateFormData(this[formName].fields);
+    const contingenyInputData = Validator.evaluateFormData(this.CONTINGENCY_FRM.fields);
+    const rusultFormInputData = { ...formInputData, ...contingenyInputData };
+    const evaluatedFormData = Helper.replaceKeysDeep(rusultFormInputData, APPLICATION_OFFERING_MAPPING_KEY_VALUE);
+    console.table([rusultFormInputData]);
+    console.table([evaluatedFormData]);
+    console.table([resultObj]);
+  }
 }
 
 export default new BusinessAppReviewStore();

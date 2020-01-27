@@ -1820,6 +1820,7 @@ export const APPLICATION_MAPPED_OFFERING = {
     rule: 'string|required',
     placeHolder: 'Enter here',
     objRef: 'prequalDetails.businessGeneralInfo',
+    objRefOutput: 'keyTerms',
   },
   businessEntityStructure: {
     value: '',
@@ -1828,6 +1829,7 @@ export const APPLICATION_MAPPED_OFFERING = {
     rule: 'string',
     placeHolder: 'Choose here',
     objRef: 'prequalDetails',
+    objRefOutput: 'keyTerms',
   },
   regulation: {
     value: '',
@@ -1835,6 +1837,7 @@ export const APPLICATION_MAPPED_OFFERING = {
     error: undefined,
     rule: 'optional',
     placeHolder: 'Enter here',
+    objRefOutput: 'keyTerms',
   },
   website: {
     label: 'Website',
@@ -1843,6 +1846,7 @@ export const APPLICATION_MAPPED_OFFERING = {
     rule: 'optional',
     placeHolder: 'e.g. http://simplebits.com',
     objRef: 'prequalDetails.businessGeneralInfo',
+    objRefOutput: 'legal.general',
   },
   number: {
     label: 'Phone Number',
@@ -1852,7 +1856,7 @@ export const APPLICATION_MAPPED_OFFERING = {
     placeHolder: 'Enter here',
     objRef: 'prequalDetails.businessGeneralInfo.contactDetails.phone',
     objType: 'businessPhone',
-    objRefOutput: 'businessPhone',
+    objRefOutput: 'legal.general.businessPhone',
 
   },
   street: {
@@ -1862,6 +1866,7 @@ export const APPLICATION_MAPPED_OFFERING = {
     rule: 'string',
     placeHolder: 'Enter here',
     objRef: 'prequalDetails.businessGeneralInfo.address',
+    objRefOutput: 'legal.general',
   },
   city: {
     label: 'City',
@@ -1870,6 +1875,7 @@ export const APPLICATION_MAPPED_OFFERING = {
     rule: 'string',
     placeHolder: 'Enter here',
     objRef: 'prequalDetails.businessGeneralInfo.address',
+    objRefOutput: 'legal.general',
   },
   state: {
     label: 'State',
@@ -1878,6 +1884,7 @@ export const APPLICATION_MAPPED_OFFERING = {
     rule: 'string',
     placeHolder: 'Enter here',
     objRef: 'prequalDetails.businessGeneralInfo.address',
+    objRefOutput: 'legal.general',
   },
   zipCode: {
     label: 'Zip Code',
@@ -1886,6 +1893,7 @@ export const APPLICATION_MAPPED_OFFERING = {
     rule: 'numeric',
     placeHolder: 'Enter here',
     objRef: 'prequalDetails.businessGeneralInfo.address',
+    objRefOutput: 'legal.general',
   },
   fundUsage: {
     label: 'Use of Proceeds',
@@ -1904,6 +1912,7 @@ export const APPLICATION_MAPPED_OFFERING = {
     rule: 'required',
     customErrors: { required: 'required' },
     objRef: 'prequalDetails',
+    objRefOutput: 'legal.general.useOfProceeds',
   },
   companyTaxed: {
     label: 'Taxed As',
@@ -1915,52 +1924,77 @@ export const APPLICATION_MAPPED_OFFERING = {
       { key: 'Partnership', value: 'PARTNERSHIP', text: 'Partnership' },
     ],
     objRef: 'prequalDetails',
+    objRefOutput: 'legal.general',
   },
   debts: [{
     amount: {
-      value: null, label: 'Principal Amount', error: undefined, rule: 'optional', placeHolder: '$500,000', customErrors: { required: 'required' },
+      value: null, label: 'Principal Amount', error: undefined, rule: 'optional', placeHolder: '$500,000', customErrors: { required: 'required' }, objRefOutput: 'legal.general',
     },
     remainingPrincipal: {
-      value: null, label: 'Remaining Principal', error: undefined, rule: 'optional', placeHolder: '$150,000', customErrors: { required: 'required' },
+      value: null, label: 'Remaining Principal', error: undefined, rule: 'optional', placeHolder: '$150,000', customErrors: { required: 'required' }, objRefOutput: 'legal.general',
     },
     interestExpenses: {
-      value: null, label: 'Interest Rate', error: undefined, rule: 'optional|max:100', placeHolder: '10%', customErrors: { max: 'The Interest Expenses should be less than 100%.' },
+      value: null, label: 'Interest Rate', error: undefined, rule: 'optional|max:100', placeHolder: '10%', customErrors: { max: 'The Interest Expenses should be less than 100%.' }, objRefOutput: 'legal.general',
     },
     termStartDate: {
-      value: null, label: 'Term Start Date', error: undefined, rule: 'optional|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
+      value: null, label: 'Term Start Date', error: undefined, rule: 'optional|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' }, objRefOutput: 'legal.general',
     },
     maturityDate: {
-      value: null, label: 'Maturity Date', error: undefined, rule: 'optional|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
+      value: null, label: 'Maturity Date', error: undefined, rule: 'optional|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' }, objRefOutput: 'legal.general',
     },
     creditorName: {
-      value: null, label: 'Creditor Name', error: undefined, rule: 'optional', placeHolder: 'ex. Creditor Name',
+      value: null, label: 'Creditor Name', error: undefined, rule: 'optional', placeHolder: 'ex. Creditor Name', objRefOutput: 'legal.general',
     },
     existingLienOnBusiness: {
-      value: null, label: 'Existing Lien on Business', error: undefined, rule: 'optional', placeHolder: 'ex Yes',
+      value: null, label: 'Existing Lien on Business', error: undefined, rule: 'optional', placeHolder: 'ex Yes', objRefOutput: 'legal.general',
     },
     objRef: 'businessDetails',
   }],
   owners: [{
     fullLegalName: {
-      value: '', label: 'Full Legal Name', error: undefined, rule: 'required', placeHolder: 'John Doe', customErrors: { required: 'required' }, objRef: 'businessDetails',
+      value: '', label: 'Full Legal Name', error: undefined, rule: 'required', placeHolder: 'John Doe', customErrors: { required: 'required' },
     },
     yearsOfExp: {
-      value: '', label: 'Years Experience', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' }, objRef: 'businessDetails',
+      value: '', label: 'Years Experience', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' },
     },
     ssn: {
-      value: '', label: 'SSN', error: undefined, rule: 'required|maskedField:9', placeHolder: '123-46-7890', customErrors: { required: 'required', maskedField: 'required' }, objRef: 'businessDetails',
+      value: '', label: 'SSN', error: undefined, rule: 'required|maskedField:9', placeHolder: '123-46-7890', customErrors: { required: 'required', maskedField: 'required' },
     },
     companyOwnerShip: {
-      value: '', label: 'Ownership of Company', error: undefined, rule: 'required|ownerPercentage:companyOwnerShip', placeHolder: '40.0%', customErrors: { required: 'required' }, objRef: 'businessDetails',
+      value: '', label: 'Ownership of Company', error: undefined, rule: 'required|ownerPercentage:companyOwnerShip', placeHolder: '40.0%', customErrors: { required: 'required' },
     },
     dateOfService: {
-      value: null, label: 'Date of Service', error: undefined, rule: 'required|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' }, objRef: 'businessDetails',
+      value: null, label: 'Date of Service', error: undefined, rule: 'required|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
     },
     linkedInUrl: {
-      value: '', label: 'LinkedIn URL', error: undefined, rule: 'optional', placeHolder: 'http://linkedin.com/username', customErrors: { required: 'required', url: 'Please enter valid URL.' }, objRef: 'businessDetails',
+      value: '', label: 'LinkedIn URL', error: undefined, rule: 'optional', placeHolder: 'http://linkedin.com/username', customErrors: { required: 'required', url: 'Please enter valid URL.' },
     },
     title: {
-      value: '', label: 'Title', error: undefined, rule: 'optional', placeHolder: 'e.g. CEO', customErrors: { required: 'required' }, objRef: 'businessDetails',
+      value: '', label: 'Title', error: undefined, rule: 'optional', placeHolder: 'e.g. CEO', customErrors: { required: 'required' },
     },
+    objRef: 'businessDetails',
   }],
+};
+
+export const APPLICATION_OFFERING_MAPPING_KEY_VALUE = {
+  businessName: 'legalBusinessName',
+  businessEntityStructure: 'legalBusinessType',
+  website: 'websiteUrl',
+  street: 'businessStreet:',
+  city: 'businessCity',
+  state: 'businessState',
+  zipCode: 'businessZip',
+  fundUsage: 'offeringExpenseAmountDescription',
+  companyTaxed: 'taxedAs',
+  amount: 'otherTerms',
+  termStartDate: 'paymentSchedule',
+  remainingPrincipal: 'amountOutstanding',
+  interestExpenses: 'interestRate',
+  // existingLienOnBusiness: 'otherTerms',
+  title: 'companyPosition',
+  yearsOfExp: 'bio',
+  companyOwnerShip: 'percentOwned',
+  linkedInUrl: 'linkedin',
+  debts: 'materialIndebtedness',
+  owners: 'leadership',
 };

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Header, Form, Accordion, Icon } from 'semantic-ui-react';
+import { Header, Form, Accordion, Icon, Button } from 'semantic-ui-react';
 import { startsWith } from 'lodash';
 import { FormInput, FormDropDown, MaskedInput } from '../../../../../../../../theme/form';
-// import FormElementWrap from '../../../../../../../shared/businessApplication/components/FormElementWrap';
 import { REGULATION_VALUES, BD_REGULATION_VALUES, FP_REGULATION_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../../../../services/constants/admin/offerings';
+import Helper from '../../../../../../../../helper/utility';
+import Contingencies from '../Contingencies';
 
 export const options = [
   { key: 'Yes', value: 'YES', text: 'Yes' },
@@ -14,7 +15,7 @@ export const options = [
 @inject('businessAppReviewStore')
 @observer
 export default class BusinessApplicationMapping extends Component {
-  state = { activeIndex: [0, 1] };
+  state = { activeIndex: [0, 1, 2, 3], isSsnDirty: [] };
 
   constructor(props) {
     super(props);
@@ -36,6 +37,18 @@ export default class BusinessApplicationMapping extends Component {
     this.setState({ activeIndex: newIndex });
   };
 
+  handleSsnChange = (e, res, formName, subForm, index) => {
+    e.preventDefault();
+    this.props.businessAppReviewStore.businessDetailsChange(e, { name: 'ssn', value: '' }, formName, subForm, index);
+    const a = this.state.isSsnDirty.slice();
+    a[index] = true;
+    this.setState({ isSsnDirty: a });
+  }
+
+  submit = () => {
+    this.props.businessAppReviewStore.createBusinessOffering('APPLICATION_MAPPED_OFFERING_FORM');
+  }
+
   render() {
     const { activeIndex } = this.state;
     const formName = 'APPLICATION_MAPPED_OFFERING_FORM';
@@ -55,7 +68,7 @@ export default class BusinessApplicationMapping extends Component {
     }
     return (
       <>
-        <Form>
+        <Form onSubmit={this.submit}>
           <Header as="h4">Business Application Mapping</Header>
           <Accordion exclusive={false} fluid styled className="card-style mt-20 overflow-visible">
             <Accordion.Title onClick={() => this.toggleAccordianContent(0)}>
@@ -206,6 +219,110 @@ export default class BusinessApplicationMapping extends Component {
               />
             </Accordion.Content>
           </Accordion>
+          <Accordion exclusive={false} fluid styled className="card-style">
+            <Accordion.Title onClick={() => this.toggleAccordianContent(2)}>
+              <Icon className={activeIndex.includes(2) ? 'ns-chevron-up' : 'ns-chevron-down'} />
+              Leadership
+          </Accordion.Title>
+            <Accordion.Content active={activeIndex.includes(2)} className="categories-acc">
+              <Form.Group widths={2}>
+                {APPLICATION_MAPPED_OFFERING_FORM.fields.owners.length
+                  && APPLICATION_MAPPED_OFFERING_FORM.fields.owners.map((owner, index) => {
+                    const ssnData = owner.ssn.value !== null && owner.ssn.value.length === 9 ? Helper.encrypSsnNumberByForm(owner).ssn : owner.ssn;
+                    return (
+                      <>
+                        {['fullLegalName', 'title'].map(field => (
+                          <FormInput
+                            // readOnly={formReadOnlyMode}
+                            // containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                            key={field}
+                            type="text"
+                            asterisk="true"
+                            name={field}
+                            fielddata={owner[field]}
+                            changed={(e, res) => businessDetailsChange(e, res, formName, 'owners', index)}
+                          />
+                        ))}
+                        <MaskedInput
+                          // readOnly={formReadOnlyMode}
+                          // containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                          number
+                          type="text"
+                          name="yearsOfExp"
+                          asterisk="true"
+                          fielddata={owner.yearsOfExp}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'owners', index)}
+                        />
+                        <MaskedInput
+                          // readOnly={formReadOnlyMode}
+                          // containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                          percentage
+                          type="text"
+                          asterisk="true"
+                          name="companyOwnerShip"
+                          fielddata={owner.companyOwnerShip}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'owners', index)}
+                        />
+                        <MaskedInput
+                          // readOnly={formReadOnlyMode}
+                          // containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                          name="dateOfService"
+                          fielddata={owner.dateOfService}
+                          asterisk="true"
+                          format="##/##/####"
+                          label="Start Date with the Business"
+                          changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index, formName, 'owners')}
+                          dateOfBirth
+                        />
+                        {ssnData.value && ssnData.value.includes('X') && !this.state.isSsnDirty[index]
+                          ? (
+                            <FormInput
+                              // displayMode={formReadOnlyMode}
+                              // asterisk={formReadOnlyMode ? 'false' : 'true'}
+                              key="ssn"
+                              name="ssn"
+                              fielddata={Helper.encrypSsnNumberByForm(owner).ssn}
+                              onChange={(e, res) => this.handleSsnChange(e, res, formName, 'owners', index)}
+                            />
+                          )
+                          : (
+                            <MaskedInput
+                              // readOnly={formReadOnlyMode}
+                              // containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                              ssn
+                              name="ssn"
+                              asterisk="true"
+                              fielddata={owner.ssn}
+                              changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'owners', index)}
+                            />
+                          )}
+                        <FormInput
+                          // readOnly={formReadOnlyMode}
+                          // containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                          type="text"
+                          name="linkedInUrl"
+                          fielddata={owner.linkedInUrl}
+                          changed={(e, res) => businessDetailsChange(e, res, formName, 'owners', index)}
+                        />
+                      </>
+                    );
+                  })
+                }
+              </Form.Group>
+            </Accordion.Content>
+          </Accordion>
+          <Accordion exclusive={false} fluid styled className="card-style">
+            <Accordion.Title onClick={() => this.toggleAccordianContent(3)}>
+              <Icon className={activeIndex.includes(3) ? 'ns-chevron-up' : 'ns-chevron-down'} />
+              Contingencies
+            </Accordion.Title>
+            <Accordion.Content active={activeIndex.includes(3)} className="categories-acc">
+              <Contingencies {...this.props} hideButtonGroup />
+            </Accordion.Content>
+          </Accordion>
+          <div className="right-align mt-20">
+            <Button disabled={!APPLICATION_MAPPED_OFFERING_FORM.meta.isValid} primary className="relaxed" type="submit">Create Offering</Button>
+          </div>
         </Form>
       </>
     );
