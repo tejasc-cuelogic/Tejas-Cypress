@@ -12,7 +12,7 @@ import AboutCompany from './AboutCompany';
 import LatestUpdates from './Overview/LatestUpdates';
 import Updates from './Updates';
 import VideoModal from './Overview/VideoModal';
-import TotalPaymentCalculator from './investmentDetails/totalPaymentCalculator';
+// import TotalPaymentCalculator from './investmentDetails/totalPaymentCalculator';
 import RevenueSharingSummary from './investmentDetails/revenueSharingSummary';
 import AboutPhotoGallery from './AboutPhotoGallery';
 import Gallery from './AboutCompany/Gallery';
@@ -255,7 +255,8 @@ class CampaignLayout extends Component {
           ) : null
         }
         <>
-          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary newLayout {...this.props} />) : campaignStatus.isTermNote && (<TotalPaymentCalculator newLayout {...this.props} />)
+          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary newLayout {...this.props} />) : null
+          // campaignStatus.isTermNote && (<TotalPaymentCalculator newLayout {...this.props} />)
           }
           <Divider hidden section />
           <Comments refLink={this.props.match.url} newLayout showOnlyOne={!this.state.expandComments} />
