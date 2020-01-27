@@ -682,9 +682,9 @@ export class CampaignStore {
             if (existanceResult.length) {
               remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
             }
-            temNavList.push({
-              title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
-            });
+            // temNavList.push({
+            //   title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
+            // });
           } else if (existanceResult.length) {
             remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
           }
