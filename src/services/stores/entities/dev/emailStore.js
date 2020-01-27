@@ -1,13 +1,14 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
+import { startCase } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
-import { adminFetchEmails } from '../../queries/users';
+import { adminFetchEmails, adminListEmailType } from '../../queries/users';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { EMAILLIST_META } from '../../../constants/admin/data';
 
 export class EmailStore extends DataModelStore {
   constructor() {
-    super({ adminFetchEmails });
+    super({ adminFetchEmails, adminListEmailType });
   }
 
   EMAIL_LIST_FRM = Validator.prepareFormObject(EMAILLIST_META);
@@ -15,6 +16,8 @@ export class EmailStore extends DataModelStore {
   filters = true;
 
   emailLogList = [];
+
+  listEmailTypes = [];
 
   initRequest = async (reqParams) => {
     try {
@@ -60,6 +63,26 @@ export class EmailStore extends DataModelStore {
     }
   }
 
+  fetchAdminListEmailTypes = async () => {
+    try {
+      const data = await this.executeQuery({
+        client: 'PRIVATE',
+        query: 'adminListEmailType',
+        variables: {},
+        setLoader: 'adminListEmailType',
+      });
+      const listEmailType = [];
+      if (data.adminListEmailType && data.adminListEmailType.length) {
+        data.adminListEmailType.forEach((e) => {
+          listEmailType.push({ key: e, value: e, text: startCase(e) });
+        });
+      }
+      this.setFieldValue('listEmailTypes', listEmailType);
+    } catch (error) {
+      Helper.toast('Something went wrong, please try again later.', 'error');
+    }
+  }
+
   get emailList() {
     return (this.emailLogList && this.emailLogList.adminFetchEmails
       && toJS(this.emailLogList.adminFetchEmails.emails)
@@ -76,7 +99,9 @@ export class EmailStore extends DataModelStore {
 decorate(EmailStore, {
   ...decorateDefault,
   EMAIL_LIST_FRM: observable,
+  listEmailTypes: observable,
   initRequest: action,
+  fetchAdminListEmailTypes: action,
   emailList: computed,
   count: computed,
   emailLogList: observable,
