@@ -507,6 +507,7 @@ export const userAccreditationQuery = gql`
               status
               filingStatus
               estimateIncome
+              previousEstimateIncome
               expiration
               requestDate
               reviewed {
@@ -549,6 +550,7 @@ export const userAccreditationQuery = gql`
         status
         filingStatus
         estimateIncome
+        previousEstimateIncome
         expiration
         requestDate
         reviewed {
