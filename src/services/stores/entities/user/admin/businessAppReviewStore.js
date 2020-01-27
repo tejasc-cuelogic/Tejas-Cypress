@@ -935,7 +935,7 @@ export class BusinessAppReviewStore {
     const evaluatedFormData = Helper.replaceKeysDeep(rusultFormInputData, APPLICATION_OFFERING_MAPPING_KEY_VALUE);
     console.table([rusultFormInputData]);
     console.table([evaluatedFormData]);
-    console.table([resultObj]);
+    // console.table([resultObj]);
   }
 }
 
