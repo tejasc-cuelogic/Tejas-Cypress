@@ -12,7 +12,7 @@ import AboutCompany from './AboutCompany';
 import LatestUpdates from './Overview/LatestUpdates';
 import Updates from './Updates';
 import VideoModal from './Overview/VideoModal';
-import TotalPaymentCalculator from './investmentDetails/totalPaymentCalculator';
+// import TotalPaymentCalculator from './investmentDetails/totalPaymentCalculator';
 import RevenueSharingSummary from './investmentDetails/revenueSharingSummary';
 import AboutPhotoGallery from './AboutPhotoGallery';
 import Gallery from './AboutCompany/Gallery';
@@ -62,13 +62,7 @@ class CampaignLayout extends Component {
       console.log(err);
       window.logger('soft failed for lazyload image', 'warn', true, err);
     }
-    if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
-      this.props.navStore.setFieldValue('currentActiveHash', null);
-      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
-        block: 'start',
-        // behavior: 'smooth',
-      });
-    }
+    this.processScroll();
     Helper.eventListnerHandler('toggleReadMore', 'toggleReadMore');
     this.processLazyLoadImages();
   }
@@ -121,7 +115,8 @@ class CampaignLayout extends Component {
     const elemTop = rect.top - 110;
     const elemBottom = rect.bottom;
     // const isVisible = (elemTop >= 0) && ((elemBottom - window.innerHeight) <= window.innerHeight);
-    const isVisible = ((elemBottom <= 0) && ((elemTop - window.innerHeight) <= window.innerHeight)) || ((elemTop >= 0) && ((elemBottom - window.innerHeight) <= window.innerHeight));
+    // const isVisible = ((elemBottom <= 0) && ((elemTop - window.innerHeight) <= window.innerHeight)) || ((elemTop >= 0) && ((elemBottom - window.innerHeight) <= window.innerHeight));
+    const isVisible = (((elemBottom <= 0) && (elemTop + 200) >= 0) && ((elemBottom - window.innerHeight) <= window.innerHeight)) || ((elemTop >= 0) && ((elemBottom - window.innerHeight) <= window.innerHeight));
     return isVisible;
   }
 
@@ -175,6 +170,16 @@ class CampaignLayout extends Component {
   handleCollapseExpand = (name, processAction) => {
     this.setState({ [name]: !this.state[name] });
     document.querySelector(processAction).scrollIntoView(true);
+  }
+
+  processScroll = () => {
+    if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
+      this.props.navStore.setFieldValue('currentActiveHash', null);
+      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+        block: 'start',
+        // behavior: 'smooth',
+      });
+    }
   }
 
   render() {
@@ -233,6 +238,7 @@ class CampaignLayout extends Component {
         {campaignStatus.gallary !== 0 && !campaignStatus.isFund ? (
           <>
             <Gallery
+              processScroll={this.processScroll}
               newLayout
               galleryUrl={this.props.match.url}
               campaign={campaign}
@@ -249,7 +255,8 @@ class CampaignLayout extends Component {
           ) : null
         }
         <>
-          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary newLayout {...this.props} />) : campaignStatus.isTermNote && (<TotalPaymentCalculator newLayout {...this.props} />)
+          {campaignStatus.isRevenueShare ? (<RevenueSharingSummary newLayout {...this.props} />) : null
+          // campaignStatus.isTermNote && (<TotalPaymentCalculator newLayout {...this.props} />)
           }
           <Divider hidden section />
           <Comments refLink={this.props.match.url} newLayout showOnlyOne={!this.state.expandComments} />

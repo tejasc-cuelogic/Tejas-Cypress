@@ -161,7 +161,7 @@ class Experience extends Component {
                   </>
                 )
               }
-              <Button fluid={isMobile} primary className="relaxed" content="Continue to Account" disabled={!isInvExperienceValid} onClick={this.handleSubmitInvestmentExperience} />
+              <Button fluid={isMobile} primary className="relaxed" content="Continue to Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FORM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
               {!isInvExperienceValid && noExperience
                 && (
                   <p className="negative-text mt-20">
@@ -174,7 +174,7 @@ class Experience extends Component {
               <>
                 {isExperiencedTypeSelected && (
                   <div className="center-align mt-20">
-                    <Button fluid={isMobile} primary className="relaxed" content="Create Account" disabled={!isInvExperienceValid} onClick={this.handleSubmitInvestmentExperience} />
+                    <Button fluid={isMobile} primary className="relaxed" content="Create Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FORM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
                   </div>
                 )}
                 {isExperiencedTypeSelected && !isInvExperienceValid

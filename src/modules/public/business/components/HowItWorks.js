@@ -408,13 +408,13 @@ class HowItWorks extends Component {
                   <Grid.Row>
                     <Grid.Column>
                       <Statistic color="green" size="mini" className="basic">
-                        <Statistic.Value>$10M+</Statistic.Value>
+                        <Statistic.Value>$14M+</Statistic.Value>
                         <Statistic.Label className="neutral-text">Capital deployed by<br />NextSeed investors</Statistic.Label>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column>
                       <Statistic color="green" size="mini" className="basic">
-                        <Statistic.Value>40+</Statistic.Value>
+                        <Statistic.Value>55+</Statistic.Value>
                         <Statistic.Label className="neutral-text">Businesses<br />funded</Statistic.Label>
                       </Statistic>
                     </Grid.Column>
