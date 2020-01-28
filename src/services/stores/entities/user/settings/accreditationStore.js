@@ -253,6 +253,10 @@ export class AccreditationStore {
             fileUpload.putUploadedFileOnS3({
               preSignedUrl, fileData: file, fileType: fileData.fileType,
             }).then(() => {
+              this.putUploadedFileOnS3(
+                form, field, preSignedUrl, file, fileData, fileId,
+                accreditationMethod,
+              );
               this.updateAccreditation(form, accountType.toUpperCase()).then(() => {
                 this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
                 this.checkFormValid(form, false, false);
@@ -261,10 +265,6 @@ export class AccreditationStore {
               Helper.toast('Something went wrong, please try again later.', 'error');
               this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
             });
-            this.putUploadedFileOnS3(
-              form, field, preSignedUrl, file, fileData, fileId,
-              accreditationMethod,
-            );
           }).catch((error) => {
             this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
             // this.setFieldVal('showLoader', false);
@@ -297,10 +297,11 @@ export class AccreditationStore {
       });
       this.setFormFileArray(form, field, 'showLoader', false, scope);
     }
-    this.setFormFileArray(form, field, 'fileData', file);
+    const { fileName } = fileData;
+    this.setFormFileArray(form, field, 'fileData', { fileId, fileName });
     this.setFormFileArray(form, field, 'preSignedUrl', preSignedUrl);
     this.setFormFileArray(form, field, 'fileId', fileId);
-    this.setFormFileArray(form, field, 'value', fileData.fileName);
+    this.setFormFileArray(form, field, 'value', fileName);
     this.setFormFileArray(form, field, 'error', undefined);
   }
 
@@ -676,6 +677,7 @@ export class AccreditationStore {
           forEach(file.fileInfo, (f) => {
             const formName = file.type.includes('INCOME') ? 'INCOME_UPLOAD_DOC_FORM' : 'ASSETS_UPLOAD_DOC_FORM';
             this[formName].fields[field].fileId.push(f.fileId);
+            // this[formName].fields[field].fileData.push(f);
             this[formName].fields[field].value.push(f.fileName);
           });
         }
@@ -804,7 +806,7 @@ export class AccreditationStore {
       }
       this.INCOME_UPLOAD_DOC_FORM.fields.estimateIncome.value = appData.accreditation.estimateIncome;
       this.INCOME_UPLOAD_DOC_FORM.fields.previousEstimateIncome.value = appData.accreditation.previousEstimateIncome;
-      this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
+      // this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ASSETS_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ENTITY_ACCREDITATION_FORM', false, false);
     }
@@ -1128,8 +1130,12 @@ export class AccreditationStore {
     this.INCOME_UPLOAD_DOC_FORM.fields.previousEstimateIncome.rule = !isFilingTrue ? 'required' : 'optional';
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.skipField = isFilingTrue;
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.skipField = !isFilingTrue;
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value = isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value;
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.value = !isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.value;
+    ['fileData', 'fileId', 'value'].map((field) => {
+      this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear[field] = isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear[field];
+      this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear[field] = !isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear[field];
+      return null;
+    });
+
     this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
   }
 }
