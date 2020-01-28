@@ -229,7 +229,7 @@ export class CampaignStore {
   }
 
   @computed get creation() {
-    const creationList = this.creationList.slice();
+    const creationList = orderBy(this.creationList.slice(), c => get(c, 'updated.date'), ['desc']);
     return creationList.splice(0, this.creationToDisplay);
   }
 
