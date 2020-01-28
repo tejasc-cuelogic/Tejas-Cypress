@@ -420,7 +420,7 @@ export class BusinessAppReviewStore {
       applicationType: applicationSource,
     };
     if (applicationSource === 'APPLICATION_COMPLETED') {
-      reFetchPayLoad = { ...reFetchPayLoad, userId };
+      reFetchPayLoad = { ...reFetchPayLoad };
     }
     if (temporaryPassword) {
       payload = { ...payload, temporaryPassword };
@@ -519,7 +519,7 @@ export class BusinessAppReviewStore {
       applicationType: applicationSource,
     };
     if (applicationSource === 'APPLICATION_COMPLETED') {
-      reFetchPayLoad = { ...reFetchPayLoad, userId };
+      reFetchPayLoad = { ...reFetchPayLoad };
     }
     const progressButton = approveOrSubmitted === 'REVIEW_APPROVED' ? approvedStatus ? 'REVIEW_APPROVED' : 'REVIEW_DECLINED' : approveOrSubmitted === 'REVIEW_SUBMITTED' ? 'REVIEW_SUBMITTED' : approveOrSubmitted === 'REVIEW_FAILED' ? 'REVIEW_FAILED' : 'SAVE';
     if (showLoader) {
@@ -756,7 +756,7 @@ export class BusinessAppReviewStore {
       const reFetchPayLoad = {
         applicationId,
         applicationType: 'APPLICATION_COMPLETED',
-        userId,
+        // userId,
       };
       this.setFieldvalue('inProgress', 'GENERATE_PA');
       return new Promise((resolve, reject) => {
