@@ -1,7 +1,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { map, forEach, filter, get, ceil, times } from 'lodash';
+import { map, forEach, filter, get, ceil, times, kebabCase } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { Calculator } from 'amortizejs';
@@ -818,6 +818,9 @@ export class BusinessAppReviewStore {
         this.showSingleOfferForSigned(get(appData, 'offers.offer'));
       }
     }
+    if (form === 'APPLICATION_MAPPED_OFFERING_FORM') {
+      this.offerCreateChange(form, 'businessName');
+    }
     return false;
   }
 
@@ -928,6 +931,17 @@ export class BusinessAppReviewStore {
   };
 
   @action
+  offerCreateChange = (formName, field) => {
+    if (field !== 'offeringSlug') {
+      const { value } = this[formName].fields[field];
+      if (field === 'legalBusinessName' || field === 'businessName') {
+        this[formName].fields.shorthandBusinessName.value = value;
+      }
+      this[formName].fields.offeringSlug.value = kebabCase(value);
+    }
+  }
+
+  @action
   createBusinessOffering = (formName) => {
     const formInputData = Validator.evaluateFormData(this[formName].fields);
     // const contingenyInputData = Validator.evaluateFormData(this.CONTINGENCY_FRM.fields);
@@ -950,7 +964,7 @@ export class BusinessAppReviewStore {
         delete evaluatedFormData[key][0].fullLegalName;
       } else if (key === 'legal') {
         const legalGeneralMaterialDetails = get(evaluatedFormData, 'legal.general.materialIndebtedness');
-        const concaatedOtherTermValue = `${legalGeneralMaterialDetails[0].amount } ${ legalGeneralMaterialDetails[0].existingLienOnBusiness}`;
+        const concaatedOtherTermValue = `${legalGeneralMaterialDetails[0].amount} ${legalGeneralMaterialDetails[0].existingLienOnBusiness}`;
         evaluatedFormData[key].general.materialIndebtedness[0].otherTerms = concaatedOtherTermValue;
         delete evaluatedFormData[key].general.materialIndebtedness[0].amount;
         delete evaluatedFormData[key].general.materialIndebtedness[0].existingLienOnBusiness;

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Header, Form, Accordion, Icon, Button } from 'semantic-ui-react';
-import { startsWith } from 'lodash';
 import { FormInput, FormDropDown, MaskedInput } from '../../../../../../../../theme/form';
-import { REGULATION_VALUES, BD_REGULATION_VALUES, FP_REGULATION_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../../../../services/constants/admin/offerings';
+import { BD_REGULATION_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../../../../services/constants/admin/offerings';
 import Helper from '../../../../../../../../helper/utility';
 import Contingencies from '../Contingencies';
 
@@ -45,6 +44,11 @@ export default class BusinessApplicationMapping extends Component {
     this.setState({ isSsnDirty: a });
   }
 
+  change = (e, result, formName, field) => {
+    this.props.businessAppReviewStore.formArrayChange(e, result, formName);
+    this.props.businessAppReviewStore.offerCreateChange(formName, field);
+  }
+
   submit = () => {
     this.props.businessAppReviewStore.createBusinessOffering('APPLICATION_MAPPED_OFFERING_FORM');
   }
@@ -62,13 +66,14 @@ export default class BusinessApplicationMapping extends Component {
     let MODIFIED_REGULATION_VALUES = null;
     if (APPLICATION_MAPPED_OFFERING_FORM && APPLICATION_MAPPED_OFFERING_FORM.fields && APPLICATION_MAPPED_OFFERING_FORM.fields.regulation
       && APPLICATION_MAPPED_OFFERING_FORM.fields.regulation.value) {
-      MODIFIED_REGULATION_VALUES = startsWith(APPLICATION_MAPPED_OFFERING_FORM.fields.regulation.value, 'BD_') ? BD_REGULATION_VALUES : FP_REGULATION_VALUES;
+      MODIFIED_REGULATION_VALUES = BD_REGULATION_VALUES;
     } else {
-      MODIFIED_REGULATION_VALUES = REGULATION_VALUES;
+      // MODIFIED_REGULATION_VALUES = REGULATION_VALUES;
+      MODIFIED_REGULATION_VALUES = BD_REGULATION_VALUES;
     }
     return (
       <>
-        <Form onSubmit={this.submit}>
+        <Form onSubmit={this.submit} className="mt-50">
           <Header as="h4">Business Application Mapping</Header>
           <Accordion exclusive={false} fluid styled className="card-style mt-20 overflow-visible">
             <Accordion.Title onClick={() => this.toggleAccordianContent(0)}>
@@ -77,12 +82,16 @@ export default class BusinessApplicationMapping extends Component {
           </Accordion.Title>
             <Accordion.Content active={activeIndex.includes(0)} className="categories-acc">
               <Form.Group widths={2}>
-                <FormInput
-                  key="businessName"
-                  name="businessName"
-                  fielddata={APPLICATION_MAPPED_OFFERING_FORM.fields.businessName}
-                  changed={(e, result) => formArrayChange(e, result, formName)}
-                />
+                {
+                  ['businessName', 'shorthandBusinessName', 'offeringSlug'].map(field => (
+                    <FormInput
+                      key={field}
+                      name={field}
+                      fielddata={APPLICATION_MAPPED_OFFERING_FORM.fields[field]}
+                      changed={(e, result) => this.change(e, result, formName, field)}
+                    />
+                  ))
+                }
                 <FormDropDown
                   // containerclassname={isReadonly ? 'display-only' : ''}
                   // className={isReadonly ? 'display-only' : ''}

@@ -25,22 +25,22 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
         />
       </div>
       <div className="balance-half">
-      {closingBinder && ['PENDING', 'FAILED'].includes(document.status.value) ?
-        document.status.value
-        :
-        <DropZone
-          disabled={isReadonly}
-          size="small"
-          className="secondary"
-          name="upload"
-          sharableLink
-          hideFields
-          fielddata={document.upload}
-          uploadtitle="Upload"
-          ondrop={(files, name) => onFileDrop(files, name, docIndx)}
-          onremove={fieldName => handleDelDoc(fieldName, docIndx)}
-        />
-      }
+        {closingBinder && ['PENDING', 'FAILED'].includes(document.status.value) ?
+          document.status.value
+          :
+          <DropZone
+            disabled={isReadonly}
+            size="small"
+            className="secondary"
+            name="upload"
+            sharableLink
+            hideFields
+            fielddata={document.upload}
+            uploadtitle="Upload"
+            ondrop={(files, name) => onFileDrop(files, name, docIndx)}
+            onremove={fieldName => handleDelDoc(fieldName, docIndx)}
+          />
+        }
       </div>
       <div className="action">
         <Button disabled={isReadonly} icon circular color={!offeringClose ? document.accreditedOnly.value ? 'red' : 'green' : ''} className="link-button">
@@ -114,6 +114,13 @@ export default class DataRoom extends Component {
     const { DATA_ROOM_FRM, CLOSING_BINDER_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, this.props.closingBinder ? CLOSING_BINDER_FRM.fields : DATA_ROOM_FRM.fields, 'legal', 'dataroom', true, undefined, isApproved);
   }
+
+  handleFormSubmitForBusinessApplication = (isApproved = null) => {
+    const { DATA_ROOM_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
+    console.log('submited form==> ', DATA_ROOM_FRM);
+    // updateOffering(currentOfferingId, this.props.closingBinder ? CLOSING_BINDER_FRM.fields : DATA_ROOM_FRM.fields, 'legal', 'dataroom', true, undefined, isApproved);
+  }
+
   onSortEnd = ({ oldIndex, newIndex }, isReadonly) => {
     if (!isReadonly) {
       const docs = [...this.props.offeringCreationStore.DATA_ROOM_FRM.fields.documents];
@@ -121,7 +128,7 @@ export default class DataRoom extends Component {
     }
   };
   render() {
-    const { match, offeringClose, closingBinder, uiStore } = this.props;
+    const { match, offeringClose, closingBinder, uiStore, referenceFrom } = this.props;
     const { inProgress } = uiStore;
     const { isIssuer } = this.props.userStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -146,7 +153,7 @@ export default class DataRoom extends Component {
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form>
           <Header as="h4" className={offeringClose ? 'offering-close-header' : ''}>
-          {!offeringClose ? 'Data Room Documents' : ''}
+            {referenceFrom && referenceFrom === 'BUSINESS_APPLICATION' ? 'Final Legal Document Upload' : !offeringClose ? 'Data Room Documents' : ''}
             {!isReadonly &&
               <Button.Group size="mini" floated="right">
                 <Button onClick={e => this.addMore(e, formName)} primary compact content="Add" />
@@ -178,16 +185,24 @@ export default class DataRoom extends Component {
             />
           </div>
           <Divider hidden />
-          {!offeringClose
-          &&
-          (
-            <ButtonGroupType2
-              submitted={submitted}
-              isManager={isManager}
-              approved={approved}
-              updateOffer={this.handleFormSubmit}
-            />
-          )
+          {!offeringClose && (!referenceFrom || (referenceFrom !== 'BUSINESS_APPLICATION'))
+            &&
+            (
+              <ButtonGroupType2
+                submitted={submitted}
+                isManager={isManager}
+                approved={approved}
+                updateOffer={this.handleFormSubmit}
+              />
+            )
+          }
+          {referenceFrom && referenceFrom === 'BUSINESS_APPLICATION'
+            &&
+            (
+              <div className="right-align mt-20">
+                <Button loading={inProgress === 'save'} primary className="relaxed" onClick={this.handleFormSubmitForBusinessApplication} >Save</Button>
+              </div>
+            )
           }
         </Form>
         <Confirm
