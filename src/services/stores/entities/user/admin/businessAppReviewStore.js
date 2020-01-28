@@ -930,8 +930,9 @@ export class BusinessAppReviewStore {
   @action
   createBusinessOffering = (formName) => {
     const formInputData = Validator.evaluateFormData(this[formName].fields);
-    const contingenyInputData = Validator.evaluateFormData(this.CONTINGENCY_FRM.fields);
-    const rusultFormInputData = { ...formInputData, ...contingenyInputData };
+    // const contingenyInputData = Validator.evaluateFormData(this.CONTINGENCY_FRM.fields);
+    // const rusultFormInputData = { ...formInputData, ...contingenyInputData };
+    const rusultFormInputData = { ...formInputData };
     const evaluatedFormData = Helper.replaceKeysDeep(rusultFormInputData, APPLICATION_OFFERING_MAPPING_KEY_VALUE);
     map(evaluatedFormData, (value, key) => {
       if (key === 'leadership') {
@@ -956,25 +957,10 @@ export class BusinessAppReviewStore {
         delete evaluatedFormData[key].general.materialIndebtedness[0].objRef;
       }
     });
+    this.saveReviewForms('CONTINGENCY_FRM');
     // console.table([rusultFormInputData]);
     console.table([evaluatedFormData]);
   }
-
-  // modifyObject = (objectData, objectKey) => {
-  //   switch (objectKey) {
-  //     case 'leadership':
-  //       console.log(objectData);
-  //       forIn(objectData[0], (val, key) => {
-  //         if (key === 'linkedin') {
-  //           // eslint-disable-next-line no-param-reassign
-  //           objectData = { ...objectData[0], social: { key: val } };
-  //         }
-  //       });
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
 }
 
 export default new BusinessAppReviewStore();
