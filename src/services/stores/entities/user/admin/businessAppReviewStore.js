@@ -953,10 +953,10 @@ export class BusinessAppReviewStore {
         evaluatedFormData[key].general.materialIndebtedness[0].otherTerms = concaatedOtherTermValue;
         delete evaluatedFormData[key].general.materialIndebtedness[0].amount;
         delete evaluatedFormData[key].general.materialIndebtedness[0].existingLienOnBusiness;
-        delete evaluatedFormData[key][0].objRef;
+        delete evaluatedFormData[key].general.materialIndebtedness[0].objRef;
       }
     });
-    console.table([rusultFormInputData]);
+    // console.table([rusultFormInputData]);
     console.table([evaluatedFormData]);
   }
 
