@@ -554,9 +554,13 @@ export class AccreditationStore {
       userAccreditationDetails = Validator.evaluateFormData(this[form].fields);
     }
     if (form === 'INCOME_UPLOAD_DOC_FORM' || form === 'ASSETS_UPLOAD_DOC_FORM') {
-      if (!userAccreditationDetails.estimateIncome) {
-        delete userAccreditationDetails.estimateIncome;
-      }
+      ['previousEstimateIncome', 'estimateIncome'].map((field) => {
+        if ((this.FILLING_STATUS_FORM.fields.method.value && field === 'previousEstimateIncome')
+          || !userAccreditationDetails[field]) {
+          delete userAccreditationDetails[field];
+        }
+        return null;
+      });
       const fileUploadData = userAccreditationDetails.assetsUpload;
       userAccreditationDetails.assetsUpload = [];
       forEach(fileUploadData, (file, key) => {
@@ -802,6 +806,7 @@ export class AccreditationStore {
         this.FILLING_STATUS_FORM.fields.method.value = true;
       }
       this.INCOME_UPLOAD_DOC_FORM.fields.estimateIncome.value = appData.accreditation.estimateIncome;
+      this.INCOME_UPLOAD_DOC_FORM.fields.previousEstimateIncome.value = appData.accreditation.previousEstimateIncome;
       this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ASSETS_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ENTITY_ACCREDITATION_FORM', false, false);
@@ -1126,7 +1131,7 @@ export class AccreditationStore {
     this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling.rule = isFilingTrue ? 'required' : 'optional';
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.rule = isFilingTrue ? 'optional' : 'required';
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.rule = isFilingTrue ? 'required' : 'optional';
-    this.INCOME_UPLOAD_DOC_FORM.fields.estimateIncome.rule = isFilingTrue ? 'required' : 'optional';
+    this.INCOME_UPLOAD_DOC_FORM.fields.previousEstimateIncome.rule = !isFilingTrue ? 'required' : 'optional';
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.skipField = isFilingTrue;
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.skipField = !isFilingTrue;
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value = isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value;
