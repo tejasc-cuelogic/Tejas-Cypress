@@ -86,7 +86,7 @@ const NEW_OFFERING_LAYOUT = [
     title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true, key: 'isRevenueShare',
   },
   {
-    title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true, key: 'isTermNote',
+    title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true, key: 'isTermNote1',
   },
   {
     title: 'Comments', to: '#comments', useRefLink: true,
