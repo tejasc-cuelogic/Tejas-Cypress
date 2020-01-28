@@ -305,11 +305,10 @@ query getBusinessApplicationById ($id: String!) {
 `;
 
 export const adminBusinessApplicationsDetails = gql`
-query adminBusinessApplicationsDetails ($applicationId: String!, $userId: String, $applicationType: ViewBusinessApplicationTypeEnum!) {
+query adminBusinessApplicationsDetails ($applicationId: String!, $applicationType: ViewBusinessApplicationTypeEnum!) {
   adminBusinessApplicationsDetails(
     applicationId: $applicationId
     applicationType: $applicationType
-    userId: $userId
   )
 }
 `;
