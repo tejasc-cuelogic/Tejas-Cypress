@@ -221,7 +221,7 @@ export class BusinessAppStore {
     const payload = Validator.ExtractValues(this.BUSINESS_DETAILS_EDIT_FRM.fields);
     const refetchPayLoad = {
       applicationId: appId,
-      userId: issuerId,
+      // userId: issuerId,
       applicationType: appType === 'PRE_QUALIFICATION_FAILED' ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED',
     };
     if (!rating) {

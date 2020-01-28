@@ -241,7 +241,7 @@ export class BusinessAppStore {
       applicationType,
     };
     if (applicationType === 'APPLICATION_COMPLETED') {
-      payLoad = { ...payLoad, userId };
+      payLoad = { ...payLoad };
     }
     uiStore.setAppLoader(true);
     uiStore.setLoaderMessage('Getting application data');
