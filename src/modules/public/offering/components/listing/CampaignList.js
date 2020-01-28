@@ -124,9 +124,9 @@ export default class CampaignList extends Component {
                               {(get(offering, 'keyTerms.city') || get(offering, 'keyTerms.state'))
                               && (
                               <Card.Meta>
-                                {get(offering, 'keyTerms.city') || '-'}
-                                {get(offering, 'keyTerms.city') ? ', ' : ''}
-                                {get(offering, 'keyTerms.state') || '-'}
+                                {get(offering, 'keyTerms.city') || ''}
+                                {get(offering, 'keyTerms.city') && get(offering, 'keyTerms.state') ? ', ' : ''}
+                                {get(offering, 'keyTerms.state') || ''}
                               </Card.Meta>
                               )}
                               <Card.Description>
