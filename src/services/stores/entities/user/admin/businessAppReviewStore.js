@@ -933,10 +933,48 @@ export class BusinessAppReviewStore {
     const contingenyInputData = Validator.evaluateFormData(this.CONTINGENCY_FRM.fields);
     const rusultFormInputData = { ...formInputData, ...contingenyInputData };
     const evaluatedFormData = Helper.replaceKeysDeep(rusultFormInputData, APPLICATION_OFFERING_MAPPING_KEY_VALUE);
+    map(evaluatedFormData, (value, key) => {
+      if (key === 'leadership') {
+        evaluatedFormData[key][0].social = { linkedin: evaluatedFormData[key][0].linkedin };
+        delete evaluatedFormData[key][0].linkedin;
+        if (evaluatedFormData[key][0].objRef === undefined) {
+          delete evaluatedFormData[key][0].objRef;
+        }
+        const fullName = evaluatedFormData[key][0].fullLegalName;
+        const nameArr = fullName.trim().split(' ');
+        // eslint-disable-next-line prefer-destructuring
+        evaluatedFormData[key][0].firstName = nameArr[0];
+        // eslint-disable-next-line prefer-destructuring
+        evaluatedFormData[key][0].lastName = nameArr[1];
+        delete evaluatedFormData[key][0].fullLegalName;
+      } else if (key === 'legal') {
+        const legalGeneralMaterialDetails = get(evaluatedFormData, 'legal.general.materialIndebtedness');
+        const concaatedOtherTermValue = `${legalGeneralMaterialDetails[0].amount } ${ legalGeneralMaterialDetails[0].existingLienOnBusiness}`;
+        evaluatedFormData[key].general.materialIndebtedness[0].otherTerms = concaatedOtherTermValue;
+        delete evaluatedFormData[key].general.materialIndebtedness[0].amount;
+        delete evaluatedFormData[key].general.materialIndebtedness[0].existingLienOnBusiness;
+        delete evaluatedFormData[key][0].objRef;
+      }
+    });
     console.table([rusultFormInputData]);
     console.table([evaluatedFormData]);
-    // console.table([resultObj]);
   }
+
+  // modifyObject = (objectData, objectKey) => {
+  //   switch (objectKey) {
+  //     case 'leadership':
+  //       console.log(objectData);
+  //       forIn(objectData[0], (val, key) => {
+  //         if (key === 'linkedin') {
+  //           // eslint-disable-next-line no-param-reassign
+  //           objectData = { ...objectData[0], social: { key: val } };
+  //         }
+  //       });
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
 }
 
 export default new BusinessAppReviewStore();

@@ -1986,7 +1986,7 @@ export const APPLICATION_OFFERING_MAPPING_KEY_VALUE = {
   zipCode: 'businessZip',
   fundUsage: 'offeringExpenseAmountDescription',
   companyTaxed: 'taxedAs',
-  amount: 'otherTerms',
+  // amount: 'otherTerms',
   termStartDate: 'paymentSchedule',
   remainingPrincipal: 'amountOutstanding',
   interestExpenses: 'interestRate',
