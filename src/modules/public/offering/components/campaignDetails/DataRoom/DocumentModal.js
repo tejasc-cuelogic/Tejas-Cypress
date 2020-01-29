@@ -5,8 +5,9 @@ import { withRouter, Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { Header, Button, Modal } from 'semantic-ui-react';
 import { IframeModal } from '../../../../../../theme/shared';
+import ModalSection from './ModalSection';
 
-@inject('campaignStore', 'userStore', 'accreditationStore', 'userDetailsStore', 'navStore')
+@inject('campaignStore', 'userStore', 'userDetailsStore', 'uiStore')
 @withRouter
 @observer
 export default class DocumentModal extends Component {
@@ -42,9 +43,9 @@ export default class DocumentModal extends Component {
   }
   render() {
     const { docLoading } = this.props.campaignStore;
-    const { isInvestorAccreditated } = this.props.userDetailsStore;
-    const { stepInRoute } = this.props.navStore;
+    const { isDataRoomDocsViewStatus } = this.props.userDetailsStore;
     const doc = this.props.doc || this.state.paramsDoc;
+    const { responsiveVars } = this.props.uiStore;
     if (!doc || !get(doc, 'upload.fileHandle')) {
       return (<Modal open={this.state.openModal} closeIcon onClose={this.props.close || this.closeModal}>
         <Modal.Content>
@@ -60,26 +61,11 @@ export default class DocumentModal extends Component {
       && (!this.props.userStore.currentUser
       || (this.props.userStore.currentUser.roles.includes('issuer') && this.props.userStore.currentUser.sub !== campaignCreatedBy)
       || (this.props.userStore.currentUser && this.props.userStore.currentUser.roles
-      && this.props.userStore.currentUser.roles.includes('investor') && !isInvestorAccreditated
-      && !this.props.accreditationStore.isUserAccreditated))) {
+      && this.props.userStore.currentUser.roles.includes('investor') && !isDataRoomDocsViewStatus))) {
       return (
-        <Modal open={this.state.openModal} closeIcon onClose={this.props.close || this.closeModal}>
+        <Modal size="small" className={!responsiveVars.uptoTablet && this.props.userStore.currentUser ? 'acc-investor-modal' : ''} open={this.state.openModal} closeIcon onClose={this.props.close || this.closeModal}>
         <Modal.Content>
-        <section className="no-updates center-align bg-offwhite padded">
-          <Header as="h3" className="mb-20 mt-50">
-            This document is only available to accredited investors.
-          </Header>
-          {
-            !this.props.userStore.currentUser
-              ? <p>Please log in to verify accredited investor status.</p>
-              : <p>Please confirm your accredited investor status to access this Document.</p>
-          }
-          {
-            !this.props.userStore.currentUser
-              ? <Button as={Link} to={`/${stepInRoute.to}`} primary content={stepInRoute.title} className="mt-20 mb-50" />
-              : <Button as={Link} to="/dashboard/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
-          }
-        </section>
+        <ModalSection closeModal={this.closeModal} doc={doc} currentUser={this.props.userStore.currentUser} />
         </Modal.Content>
         </Modal>
       );

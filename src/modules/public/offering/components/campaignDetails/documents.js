@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React, { Component } from 'react';
+import { toJS } from 'mobx';
 import { isEmpty, get } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
@@ -13,21 +14,34 @@ const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
 @observer
 export default class Documents extends Component {
-  state = {
-    doc: null,
-  }
   constructor(props) {
     super(props);
+    let document = null;
+    if (this.props.authStore.isUserLoggedIn && this.props.accreditationStore.docReference) {
+      document = toJS(this.props.accreditationStore.docReference);
+    }
+    this.state = {
+      doc: document,
+    }
     if (this.props.authStore.isUserLoggedIn
       && isEmpty(this.props.accreditationStore.userData)) {
       this.props.accreditationStore.getUserAccreditation();
     }
   }
+
   openDocument = (doc) => {
     this.setState({ doc });
+    if (!this.props.authStore.isUserLoggedIn) {
+      this.props.accreditationStore.setFieldValue('docReference', doc);
+    } else {
+      this.props.accreditationStore.setFieldValue('docReference', null);
+    }
   }
 
-  close = () => this.setState({ doc: null });
+  close = () => {
+    this.setState({ doc: null });
+    this.props.accreditationStore.setFieldValue('docReference', null);
+  }
 
   render() {
     const { campaign, dataRoomDocs, loading } = this.props.campaignStore;

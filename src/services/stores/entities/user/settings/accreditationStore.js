@@ -1,6 +1,5 @@
-/* eslint-disable radix */
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, forOwn, filter, capitalize, findKey, includes, get } from 'lodash';
+import { forEach, isArray, find, forOwn, filter, capitalize, findKey, includes, get, set } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import cleanDeep from 'clean-deep';
@@ -9,15 +8,17 @@ import { FormValidator as Validator, DataFormatter } from '../../../../../helper
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { uiStore, userDetailsStore, investmentStore } from '../../../index';
-import { updateAccreditation, adminListAccreditation, adminAccreditedStatusApproveDeclineRequest, adminAccreditedStatusNotifyVerify } from '../../../queries/accreditation';
-import { userAccreditationQuery } from '../../../queries/users';
+import { updateAccreditation, investorSelfVerifyAccreditedStatus, adminListAccreditation, adminAccreditedStatusApproveDeclineRequest, adminAccreditedStatusNotifyVerify } from '../../../queries/accreditation';
+import { userAccreditationQuery, userDetailsQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
 import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS, ACCREDITATION_SORT_ENUMS } from '../../../../constants/accreditation';
-import { FILTER_META, CONFIRM_ACCREDITATION } from '../../../../constants/accreditationRequests';
+import { FILTER_META, CONFIRM_ACCREDITATION, SELF_ACCREDITATION } from '../../../../constants/accreditationRequests';
 import { CURR_YEAR } from '../../../../../constants/common';
 
 export class AccreditationStore {
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
+
+  @observable SELF_ACCREDITATION_FRM = Validator.prepareFormObject(SELF_ACCREDITATION);
 
   @observable CONFIRM_ACCREDITATION_FRM = Validator.prepareFormObject(CONFIRM_ACCREDITATION);
 
@@ -54,6 +55,8 @@ export class AccreditationStore {
   @observable firstInit = '';
 
   @observable userData = {};
+
+  disableElement = false;
 
   @observable accreditationData = { ira: null, individual: null, entity: null };
 
@@ -100,6 +103,18 @@ export class AccreditationStore {
   @observable sortOrder = {
     column: null,
     direction: 'asc',
+  }
+
+  @observable docReference = null;
+
+  @action
+  setFieldValue = (field, value, objRef = false) => {
+    if (objRef) {
+      const tempRef = this[field];
+      this[field] = set(tempRef, objRef, value);
+    } else {
+      this[field] = value;
+    }
   }
 
   @action
@@ -174,6 +189,11 @@ export class AccreditationStore {
   @action
   setFieldVal(field, val) {
     this[field] = val;
+  }
+
+  @action
+  setCheckbox = (e, res) => {
+    this.AGREEMENT_DETAILS_FORM = Validator.onChange(this.AGREEMENT_DETAILS_FORM, Validator.pullValues(e, res), 'checkbox');
   }
 
   @action
@@ -253,6 +273,10 @@ export class AccreditationStore {
             fileUpload.putUploadedFileOnS3({
               preSignedUrl, fileData: file, fileType: fileData.fileType,
             }).then(() => {
+              this.putUploadedFileOnS3(
+                form, field, preSignedUrl, file, fileData, fileId,
+                accreditationMethod,
+              );
               this.updateAccreditation(form, accountType.toUpperCase()).then(() => {
                 this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
                 this.checkFormValid(form, false, false);
@@ -261,10 +285,6 @@ export class AccreditationStore {
               Helper.toast('Something went wrong, please try again later.', 'error');
               this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
             });
-            this.putUploadedFileOnS3(
-              form, field, preSignedUrl, file, fileData, fileId,
-              accreditationMethod,
-            );
           }).catch((error) => {
             this.setFormFileArray(form, field, 'showLoader', false, accreditationMethod);
             // this.setFieldVal('showLoader', false);
@@ -297,10 +317,11 @@ export class AccreditationStore {
       });
       this.setFormFileArray(form, field, 'showLoader', false, scope);
     }
-    this.setFormFileArray(form, field, 'fileData', file);
+    const { fileName } = fileData;
+    this.setFormFileArray(form, field, 'fileData', { fileId, fileName });
     this.setFormFileArray(form, field, 'preSignedUrl', preSignedUrl);
     this.setFormFileArray(form, field, 'fileId', fileId);
-    this.setFormFileArray(form, field, 'value', fileData.fileName);
+    this.setFormFileArray(form, field, 'value', fileName);
     this.setFormFileArray(form, field, 'error', undefined);
   }
 
@@ -389,12 +410,18 @@ export class AccreditationStore {
   }
 
   @action
+  resetForm = (form) => {
+    Validator.resetFormData(this[form]);
+  }
+
+  @action
   resetAllForms = () => {
     const forms = ['NETWORTH_QAL_FORM', 'FILLING_STATUS_FORM', 'ACCREDITATION_FORM', 'FILTER_FRM', 'CONFIRM_ACCREDITATION_FRM', 'ENTITY_ACCREDITATION_FORM', 'INCOME_EVIDENCE_FORM', 'TRUST_ENTITY_ACCREDITATION_FRM', 'VERIFICATION_REQUEST_FORM', 'INCOME_UPLOAD_DOC_FORM', 'ASSETS_UPLOAD_DOC_FORM', 'NET_WORTH_FORM'];
     forms.forEach((formName) => {
       Validator.resetFormData(this[formName]);
     });
     this.setStepToBeRendered(0);
+    this.setFieldVal('disableElement', true);
     this.docsToUpload = [];
     this.firstInit = '';
   }
@@ -676,6 +703,7 @@ export class AccreditationStore {
           forEach(file.fileInfo, (f) => {
             const formName = file.type.includes('INCOME') ? 'INCOME_UPLOAD_DOC_FORM' : 'ASSETS_UPLOAD_DOC_FORM';
             this[formName].fields[field].fileId.push(f.fileId);
+            // this[formName].fields[field].fileData.push(f);
             this[formName].fields[field].value.push(f.fileName);
           });
         }
@@ -743,6 +771,31 @@ export class AccreditationStore {
   })
 
   @action
+  investorSelfVerifyAccreditedStatus = (offeringId, documentId) => new Promise((resolve, reject) => {
+    const payLoad = { offeringId, documentId };
+    // uiStore.setProgress();
+    client
+      .mutate({
+        mutation: investorSelfVerifyAccreditedStatus,
+        variables: payLoad,
+        refetchQueries: [{
+          query: userDetailsQuery,
+        }],
+      })
+      .then(() => {
+        Helper.toast('Self Verification of accreditation submitted.', 'success');
+        resolve();
+        // uiStore.setProgress(false);
+      })
+      .catch((error) => {
+        // uiStore.setProgress(false);
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setErrors(error.message);
+        reject();
+      });
+  });
+
+  @action
   emailVerifier = (userId, accountId, accountType) => {
     this.addLoadingUserId(userId);
     const payLoad = { userId, accountId, accountType };
@@ -804,7 +857,7 @@ export class AccreditationStore {
       }
       this.INCOME_UPLOAD_DOC_FORM.fields.estimateIncome.value = appData.accreditation.estimateIncome;
       this.INCOME_UPLOAD_DOC_FORM.fields.previousEstimateIncome.value = appData.accreditation.previousEstimateIncome;
-      this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
+      // this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ASSETS_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ENTITY_ACCREDITATION_FORM', false, false);
     }
@@ -824,24 +877,6 @@ export class AccreditationStore {
         && entityAccreditation.details.accreditation,
     };
     this.accreditationData = accData;
-  }
-
-  @computed get isUserAccreditated() {
-    let entityAccountDetails;
-    if (this.userData && this.userData.data && this.userData.data.user) {
-      if (this.userData.data.user.roles) {
-        entityAccountDetails = find(this.userData.data.user.roles, { name: 'entity' });
-      }
-      if ((this.userData.data.user.accreditation
-        && this.userData.data.user.accreditation.status === 'CONFIRMED')
-        || (entityAccountDetails && entityAccountDetails.details
-          && entityAccountDetails.details.accreditation
-          && entityAccountDetails.details.accreditation.status === 'CONFIRMED')
-      ) {
-        return true;
-      }
-    }
-    return false;
   }
 
   getKeyResult = (dataObj) => {
@@ -966,7 +1001,7 @@ export class AccreditationStore {
   checkIsAccreditationExpired = (expirationDate, isUnix = false) => {
     let dateDiff = '';
     if (expirationDate) {
-      const date = (isUnix && typeof expirationDate === 'string') ? parseInt(expirationDate) : expirationDate;
+      const date = (isUnix && typeof expirationDate === 'string') ? parseInt(expirationDate, 10) : expirationDate;
       dateDiff = DataFormatter.diffDays(DataFormatter.formatedDate(date, isUnix), false, true);
       return dateDiff < 0 ? 'EXPIRED' : 'ACTIVE';
     }
@@ -976,7 +1011,7 @@ export class AccreditationStore {
   checkIsAccreditationExpiredAsperTimeZone = (expirationDate, isUnix = false) => {
     let dateDiff = '';
     if (expirationDate) {
-      const date = (isUnix && typeof expirationDate === 'string') ? parseInt(expirationDate) : expirationDate;
+      const date = (isUnix && typeof expirationDate === 'string') ? parseInt(expirationDate, 10) : expirationDate;
       dateDiff = DataFormatter.getDateDifferenceInHoursOrMinutes(DataFormatter.formatedDate(date, isUnix), true);
       return dateDiff <= 0 ? 'EXPIRED' : 'ACTIVE';
     }
@@ -1077,6 +1112,9 @@ export class AccreditationStore {
       }
     }
     // return headerSubheaderTextObj;
+    if (headerSubheaderTextObj.header !== '' || headerSubheaderTextObj.subHeader !== '') {
+      this.setFieldVal('disableElement', true);
+    }
     this.setHeaderAndSubHeader(headerSubheaderTextObj);
   }
 
@@ -1128,8 +1166,12 @@ export class AccreditationStore {
     this.INCOME_UPLOAD_DOC_FORM.fields.previousEstimateIncome.rule = !isFilingTrue ? 'required' : 'optional';
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.skipField = isFilingTrue;
     this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.skipField = !isFilingTrue;
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value = isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value;
-    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.value = !isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.value;
+    ['fileData', 'fileId', 'value'].map((field) => {
+      this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear[field] = isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear[field];
+      this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear[field] = !isFilingTrue ? [] : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear[field];
+      return null;
+    });
+
     this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
   }
 }
