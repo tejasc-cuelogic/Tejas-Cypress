@@ -1652,7 +1652,7 @@ export class OfferingCreationStore {
       })
       .then(() => {
         this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
-        offeringsStore.getOne(getOfferingDetailsBySlug.id);
+        offeringsStore.getOne(this.currentOfferingSlug);
         if (bacType === 'LEADERSHIP') {
           this.initLoad.splice(this.initLoad.indexOf('LEADER_FRM'), 1);
           this.getLeadershipOfferingBac(this.currentOfferingId, 'LEADERSHIP');
@@ -2085,7 +2085,7 @@ export class OfferingCreationStore {
         },
       })
       .then(() => {
-        offeringsStore.getOne(this.currentOfferingId, false);
+        offeringsStore.getOne(this.currentOfferingSlug, false);
         Helper.toast('Closing binder initiated.', 'success');
       })
       .catch(action((err) => {

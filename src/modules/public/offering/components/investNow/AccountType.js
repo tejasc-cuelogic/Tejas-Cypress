@@ -437,7 +437,7 @@ class AccountType extends Component {
                                       <div className="mt-30">
                                         <Button
                                           as={Link}
-                                          to={redirectURL}
+                                          to={userAccredetiationState === 'PENDING' ? `/offerings/${campaign.offeringSlug}` : redirectURL}
                                           primary
                                           className="relaxed"
                                           content={userAccredetiationState === 'PENDING' ? 'OK' : 'Confirm Status'}
