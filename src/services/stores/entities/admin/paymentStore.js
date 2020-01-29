@@ -30,6 +30,8 @@ export class PaymentStore extends DataModelStore {
       direction: 'asc',
     }
 
+    selectedOffering = '';
+
     setSortingOrder = (column = null, direction = null, key) => {
       this[key] = {
         column,
@@ -54,6 +56,7 @@ export class PaymentStore extends DataModelStore {
 
     getOfferingBySlug = (id) => {
       const res = this.data.find(payment => payment.offering.offeringSlug === id);
+      this.selectedOffering = get(res, 'offering.id');
       this.PAYMENT_FRM = Validator.setFormData(this.PAYMENT_FRM, res);
       this.validateForm('PAYMENT_FRM');
     }
@@ -124,6 +127,7 @@ export class PaymentStore extends DataModelStore {
 decorate(PaymentStore, {
   ...decorateDefault,
   data: observable,
+  selectedOffering: observable,
   PAYMENT_FRM: observable,
   initialData: observable,
   sortOrderSP: observable,
