@@ -159,7 +159,7 @@ export class BankAccountStore {
 
   @action
   addFundChange = (values, field) => {
-    this[this.addFundsByAccType] = Validator.onChange(this.addFundsByAccType, { name: field, value: values.floatValue });
+    this[this.addFundsByAccType] = Validator.onChange(this.addFundsByAccType, { name: field, value: values.value });
   };
 
   @action

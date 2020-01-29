@@ -58,7 +58,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'optional',
     placeHolder: 'Enter here',
-    fieldType: 'string',
   },
   startupPeriod: {
     value: '',
@@ -101,7 +100,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
-    fieldType: 'string',
   },
   investmentMultiple: {
     value: '',
@@ -145,7 +143,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
-    fieldType: 'string',
   },
   maxOfferingAmountCF: {
     value: null,
@@ -153,7 +150,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
-    fieldType: 'string',
   },
   minOfferingAmount506C: {
     value: null,
@@ -161,7 +157,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
-    fieldType: 'string',
   },
   maxOfferingAmount506C: {
     value: null,
@@ -169,7 +164,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
-    fieldType: 'string',
   },
   minOfferingAmount506: {
     value: null,
@@ -177,7 +171,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
-    fieldType: 'string',
   },
   maxOfferingAmount506: {
     value: null,
@@ -185,7 +178,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
-    fieldType: 'string',
   },
   legalBusinessType: {
     value: '',
@@ -200,7 +192,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Up to $',
-    fieldType: 'string',
   },
   nsMaxFees: {
     value: null,
@@ -208,7 +199,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Up to $',
-    fieldType: 'string',
   },
   stockType: {
     value: '',
@@ -251,7 +241,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
-    fieldType: 'string',
   },
   appendixATitle: {
     value: null,
@@ -444,7 +433,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
-    fieldType: 'string',
   },
   raisedThroughSaleOfEquity: {
     value: null,
@@ -452,7 +440,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Up to $',
-    fieldType: 'string',
   },
   nsFeePercentage: {
     value: '',
@@ -481,7 +468,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'optional',
     placeHolder: 'Enter here',
-    fieldType: 'string',
   },
 };
 
