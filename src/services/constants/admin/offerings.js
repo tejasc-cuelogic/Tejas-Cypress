@@ -57,6 +57,7 @@ export const KEY_TERMS = {
     label: 'Maturity',
     error: undefined,
     rule: 'optional',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   startupPeriod: {
@@ -99,6 +100,7 @@ export const KEY_TERMS = {
     label: 'Ownership % Represented by Securities',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   investmentMultiple: {
@@ -142,6 +144,7 @@ export const KEY_TERMS = {
     label: 'Minimum Offering Amount CF',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   maxOfferingAmountCF: {
@@ -149,6 +152,7 @@ export const KEY_TERMS = {
     label: 'Maximum Offering Amount CF',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   minOfferingAmount506C: {
@@ -156,6 +160,7 @@ export const KEY_TERMS = {
     label: 'Minimum Offering Amount Reg D',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   maxOfferingAmount506C: {
@@ -163,6 +168,7 @@ export const KEY_TERMS = {
     label: 'Maximum Offering Amount Reg D',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   minOfferingAmount506: {
@@ -170,6 +176,7 @@ export const KEY_TERMS = {
     label: 'Minimum Offering Amount Reg D',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   maxOfferingAmount506: {
@@ -177,6 +184,7 @@ export const KEY_TERMS = {
     label: 'Maximum Offering Amount Reg D',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   legalBusinessType: {
@@ -191,6 +199,7 @@ export const KEY_TERMS = {
     label: 'NS Fees if Min Offering Amount is Raised',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Up to $',
   },
   nsMaxFees: {
@@ -198,6 +207,7 @@ export const KEY_TERMS = {
     label: 'NS Fees if Max Offering Amount is Raised',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Up to $',
   },
   stockType: {
@@ -240,6 +250,7 @@ export const KEY_TERMS = {
     label: 'Min Investment Amount',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   appendixATitle: {
@@ -432,6 +443,7 @@ export const KEY_TERMS = {
     label: 'Total project cost',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   raisedThroughSaleOfEquity: {
@@ -439,6 +451,7 @@ export const KEY_TERMS = {
     label: 'Raised through sale of Equity',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Up to $',
   },
   nsFeePercentage: {
@@ -467,6 +480,7 @@ export const KEY_TERMS = {
     label: 'Targeted Investment Period',
     error: undefined,
     rule: 'optional',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
 };
@@ -1173,7 +1187,6 @@ export const LEADERSHIP = {
       placeHolder: '(123) 456-7890',
       objRef: 'phone',
       objRefOutput2: 'phone',
-      fieldType: 'string',
       customErrors: {
         required: '* required.',
       },
@@ -1264,7 +1277,6 @@ export const LEADERSHIP = {
       placeHolder: 'e.g. 10001',
       objRef: 'address',
       objRefOutput2: 'address',
-      fieldType: 'string',
     },
     dlLicenseNumber: {
       value: '',
