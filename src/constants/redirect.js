@@ -11,6 +11,7 @@ const COMMON = [
   { from: 'blog', live: true, to: '/insights' },
   { from: 'blog/:param1', live: true, to: '/insights/:param1' },
   { from: 'railway', live: true, to: '/teamrailway' },
+  { from: 'edisonwedges', live: true, to: '/edison' },
 ];
 export const PRODUCTION_REDIRECT_META = [
   ...COMMON,
