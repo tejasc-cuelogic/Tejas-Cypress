@@ -827,6 +827,15 @@
             }
         }
     }
+    &.content-close .multistep.content{
+        .ui.button.close-btn{
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            opacity: .5;
+            color: #676a73;
+        }
+    }
 }
 .field-wrap{
     margin:@30px auto;
