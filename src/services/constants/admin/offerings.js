@@ -1207,6 +1207,7 @@ export const LEADERSHIP = {
       placeHolder: 'XXX-XXX-XXXX',
       error: undefined,
       rule: 'maskedSSN',
+      fieldType: 'string',
       customErrors: { maskedSSN: 'SSN is not valid' },
     },
     citizenship: {

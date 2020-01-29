@@ -55,7 +55,7 @@ export default class Summary extends React.Component {
       formLinkBankManually,
       routingNum,
       isAccountPresent,
-      accountAttributes,
+      depositAmount,
     } = this.props.bankAccountStore;
     const { setStepToBeRendered } = this.props.individualAccountStore;
     const { userDetails } = this.props.userDetailsStore;
@@ -102,9 +102,7 @@ export default class Summary extends React.Component {
                 <Table.Row>
                   <Table.Cell className="grey-header">Your Initial Deposit</Table.Cell>
                   <Table.Cell>
-                    {[-1, ''].includes(accountAttributes.initialDepositAmount)
-                      ? Helper.CurrencyFormat(0)
-                      : Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
+                      {depositAmount}
                       <span className="pull-right">
                         <Button className="link-button highlight-text" onClick={() => setStepToBeRendered(1)}>Change</Button>
                       </span>
