@@ -1831,14 +1831,6 @@ export const APPLICATION_MAPPED_OFFERING = {
     objRef: 'prequalDetails',
     objRefOutput: 'keyTerms',
   },
-  // legalBusinessName: {
-  //   value: '',
-  //   label: 'Legal Name of Business',
-  //   error: undefined,
-  //   rule: 'string|required',
-  //   placeHolder: 'Enter here',
-  //   objRefOutput: 'keyTerms',
-  // },
   shorthandBusinessName: {
     value: '',
     label: 'Short hand Name of Business',

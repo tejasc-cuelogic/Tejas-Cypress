@@ -18,6 +18,7 @@ import { deleteBonusReward, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, adminOfferingClose, deleteBac, upsertBonusReward,
   getBonusRewards, adminBusinessFilings, initializeClosingBinder,
   adminCreateBusinessFiling, adminUpsertOffering } from '../../../queries/offerings/manage';
+import { updateBusinessApplicationInformation } from '../../../queries/businessApplication';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore, offeringInvestorStore, businessAppStore } from '../../../index';
@@ -669,6 +670,25 @@ export class OfferingCreationStore {
         });
       }
     }
+
+  @action
+  setFileUploadDataMulitpleVartually =
+    (form, arrayName, field, files, stepName, index = null, multiForm = false) => {
+      if (typeof files !== 'undefined' && files.length) {
+        forEach(files, (file) => {
+          const fileData = Helper.getFormattedFileData(file);
+          this.isUploadingFile = true;
+          this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
+          this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
+          this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
+          this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+          this.checkFormValid(form, multiForm);
+          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+          this.isUploadingFile = false;
+        });
+      }
+    }
+
 
   @action
   removeUploadedDataMultiple = (form, field, index = null, arrayName, fromS3 = false) => {
@@ -1404,6 +1424,56 @@ export class OfferingCreationStore {
   });
 
   @action
+  updateApplication = (uploadDocumentArr = undefined) => {
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    uiStore.setProgress('save');
+    this.bulkFileUpload('DATA_ROOM_FRM', 'documents', 'upload', uploadDocumentArr, 'AGREEMENTS').then(() => {
+      const dataRoomDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
+      const finalDataRoomDocs = [];
+      const payloadData = {
+        applicationId: businessApplicationDetailsAdmin.applicationId,
+        issuerId: businessApplicationDetailsAdmin.userId,
+      };
+      dataRoomDocs.map((data, index) => {
+        if (data.name !== '' || data.upload.fileId !== '') {
+          data.status = 'UPLOADED';
+          finalDataRoomDocs.push(data);
+        }
+        return finalDataRoomDocs;
+      });
+      payloadData.agreements = finalDataRoomDocs;
+      console.log('agreement payload==>', payloadData);
+      this.updateDcoumentForApplication(payloadData);
+    }).catch(action((error) => {
+      console.log(error);
+      uiStore.setProgress(false);
+    }));
+  }
+
+  @action
+  updateDcoumentForApplication = (payloadObject) => {
+    uiStore.setProgress('save');
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateBusinessApplicationInformation,
+          variables: payloadObject,
+        })
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
   getOfferingBac = (offeringId, bacType) => {
     this.issuerOfferingBac = graphql({
       client,
@@ -1815,7 +1885,7 @@ export class OfferingCreationStore {
     const tiers = [];
     map(fields, ((field) => {
       if ((field.key)
-      && field.value.length && field.value.includes(field.key)) {
+        && field.value.length && field.value.includes(field.key)) {
         tiers.push(field.key);
       }
     }));
@@ -2025,6 +2095,50 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   }
+
+  bulkFileUpload = (form, arrayName, field, files, stepName) => new Promise((resolve, reject) => {
+    if (typeof files !== 'undefined' && files.length) {
+      const funcArray = [];
+      forEach(files, (file, index) => {
+        const fileData = Helper.getFormattedFileData(file);
+        this.isUploadingFile = true;
+        funcArray.push(this.uploadFiles(form, arrayName, field, file, stepName, fileData, index));
+      });
+      Promise.all(funcArray).then((responseArr) => {
+        console.log(responseArr);
+        this.isUploadingFile = false;
+        resolve();
+      }).catch((err) => {
+        reject(err);
+      });
+    }
+  });
+
+  uploadFiles = (form, arrayName, field, file, stepName, fileData, index) => new Promise((resolve, reject) => {
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    const businessApplicationId = businessApplicationDetailsAdmin.applicationId;
+    const issuerId = businessApplicationDetailsAdmin.userId;
+    fileUpload.setFileUploadData(businessApplicationId, fileData, stepName, 'ADMIN', issuerId, this.currentOfferingId).then((result) => {
+      const { fileId, preSignedUrl } = result.data.createUploadEntry;
+      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(action(() => {
+        this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
+        this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
+        resolve(result);
+      })).catch(action((error) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setErrors(error.message);
+        this.isUploadingFile = false;
+        this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+        reject(error);
+      }));
+    }).catch(action((error) => {
+      Helper.toast('Something went wrong, please try again later.', 'error');
+      this.isUploadingFile = false;
+      this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+      uiStore.setErrors(error.message);
+      reject(error);
+    }));
+  });
 }
 
 export default new OfferingCreationStore();

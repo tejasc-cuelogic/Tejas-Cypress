@@ -120,7 +120,7 @@ export default class BusinessApplicationMapping extends Component {
               </Form.Group>
             </Accordion.Content>
           </Accordion>
-          <Accordion exclusive={false} fluid styled className="card-style">
+          <Accordion exclusive={false} fluid styled className="card-style overflow-visible">
             <Accordion.Title onClick={() => this.toggleAccordianContent(1)}>
               <Icon className={activeIndex.includes(1) ? 'ns-chevron-up' : 'ns-chevron-down'} />
               Legal

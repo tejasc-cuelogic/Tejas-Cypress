@@ -7,6 +7,7 @@ import { get } from 'lodash';
 import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 import ButtonGroupType2 from '../ButtonGroupType2';
 
+const uploadFileArr = [];
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder mr-10" />);
 const SortableItem = SortableElement(({ closingBinder, offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length }) => {
   return (
@@ -90,9 +91,15 @@ export default class DataRoom extends Component {
   //   setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
   // }
   onFileDrop = (files, name, index) => {
-    const { closingBinder, supplementalAgreements } = this.props;
-    const uploadEnum = closingBinder ? 'OFFERING_CLOSING_BINDER' : supplementalAgreements ? 'OFFERING_SUPPLEMENTAL_AGREEMENT' : 'DOCUMENTS_LEGAL_DATAROOM';
-    this.props.offeringCreationStore.setFileUploadDataMulitple(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', closingBinder ? 'closingBinder' : 'documents', name, files, uploadEnum, index, true);
+    const { closingBinder, supplementalAgreements, referenceFrom } = this.props;
+    const uploadEnum = referenceFrom && referenceFrom === 'BUSINESS_APPLICATION' ? 'AGREEMENTS' : closingBinder ? 'OFFERING_CLOSING_BINDER' : supplementalAgreements ? 'OFFERING_SUPPLEMENTAL_AGREEMENT' : 'DOCUMENTS_LEGAL_DATAROOM';
+    const businessApplicationFlag = !!(referenceFrom && referenceFrom === 'BUSINESS_APPLICATION');
+    if (businessApplicationFlag) {
+      this.props.offeringCreationStore.setFileUploadDataMulitpleVartually(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', closingBinder ? 'closingBinder' : 'documents', name, files, uploadEnum, index, true);
+      uploadFileArr.push(files[0]);
+    } else {
+      this.props.offeringCreationStore.setFileUploadDataMulitple(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', closingBinder ? 'closingBinder' : 'documents', name, files, uploadEnum, index, true);
+    }
   }
   handleDelDoc = (field, index = undefined) => {
     const { closingBinder } = this.props;
@@ -116,9 +123,8 @@ export default class DataRoom extends Component {
   }
 
   handleFormSubmitForBusinessApplication = (isApproved = null) => {
-    const { DATA_ROOM_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    console.log('submited form==> ', DATA_ROOM_FRM);
-    // updateOffering(currentOfferingId, this.props.closingBinder ? CLOSING_BINDER_FRM.fields : DATA_ROOM_FRM.fields, 'legal', 'dataroom', true, undefined, isApproved);
+    const { updateApplication } = this.props.offeringCreationStore;
+    updateApplication(uploadFileArr);
   }
 
   onSortEnd = ({ oldIndex, newIndex }, isReadonly) => {

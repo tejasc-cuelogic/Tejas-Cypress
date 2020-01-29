@@ -387,6 +387,7 @@ mutation updateBusinessApplicationInformation(
   $signupCode: String
   $utmSource: String
   $rating: Int
+  $agreements: [AgreementsInput]
 ) {
   updateBusinessApplicationInformation(
     applicationId: $applicationId
@@ -395,6 +396,7 @@ mutation updateBusinessApplicationInformation(
     signupCode: $signupCode
     utmSource: $utmSource
     rating: $rating
+    agreements: $agreements
   ){
     applicationId
     signupCode
