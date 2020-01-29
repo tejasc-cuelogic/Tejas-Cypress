@@ -207,7 +207,7 @@ export default class InvestNow extends React.Component {
 
   render() {
     const { changeInvest, uiStore } = this.props;
-    const { showAccountList } = this.props.accreditationStore;
+    const { showAccountList, disableElement } = this.props.accreditationStore;
     const { investAccTypes, stepToBeRendered } = this.props.investmentStore;
     const multipleAccountExsists = !!(investAccTypes && investAccTypes.values.length >= 2);
     const { campaign } = this.props.campaignStore;
@@ -240,7 +240,7 @@ export default class InvestNow extends React.Component {
         />,
         isValid: '',
         disableNextButton: changeInvest,
-        disablePrevButton: changeInvest,
+        disablePrevButton: changeInvest || disableElement,
         stepToBeRendered: 1,
         isDirty: true,
       },
@@ -292,6 +292,7 @@ export default class InvestNow extends React.Component {
             setStepTobeRenderedForAlert={this.handleStepChnageOnPreviousForAlert}
             stepToBeRendered={this.props.investmentStore.stepToBeRendered}
             steps={steps}
+            disableCloseIcon={disableElement}
             formTitle="Entity Account Creation"
             handleMultiStepModalclose={this.handleMultiStepModalclose}
             isStepButtonsVisible={isMultiStepButtonsVisible}
