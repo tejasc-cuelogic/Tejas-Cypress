@@ -13,8 +13,8 @@ const NotifyVersionUpdate = (props) => {
           <Icon name="sync alternate" size="huge" />
           <h2>Let{"'"}s Refresh</h2>
           <h5 style={{ fontWeight: 'normal' }}>
-            There{"'"}s new version of this website available, please<br />
-            reload your browser to see the latest version.
+            There{"'"}s a new version of this website available.<br />
+            Please reload your browser to see the latest version.
           </h5>
           <br />
           <Button positive content="Refresh" onClick={update} />
