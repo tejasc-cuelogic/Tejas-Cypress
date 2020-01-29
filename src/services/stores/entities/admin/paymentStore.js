@@ -70,10 +70,14 @@ export class PaymentStore extends DataModelStore {
           variables: { offeringId: id, paymentIssuerDetailsInput: { ...variables } },
         })
         .then((res) => {
+          Helper.toast('Payment updated successfully.', 'success');
           this.updatePaymentList(id, res.updatePaymentIssuer);
           resolve();
         })
-        .catch(() => reject())
+        .catch(() => {
+          Helper.toast('Error while updating payment.', 'error');
+          reject();
+        })
         .finally(() => {
           uiStore.setProgress(false);
         });
