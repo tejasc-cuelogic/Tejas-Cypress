@@ -2,7 +2,7 @@ import React from 'react';
 import { toJS } from 'mobx';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { authActions } from '../../services/actions';
 import { privateRoutes } from '../routes';
 import { InlineLoader, SuspenseBoundary, lazyRetry, Spinner } from '../../theme/shared';
@@ -107,6 +107,8 @@ export default class Private extends React.Component {
         >
           <SuspenseBoundary fallback={<InlineLoader styledAs={{ marginTop: '100px' }} />}>
             <Switch>
+              {['overview', 'creation', 'live', 'completed', 'failed'].map(stage => <Redirect from={`/dashboard/offerings/${stage}/edit/*`} to="/dashboard/offering/*" />)
+              }
               {privateRoutes.map(route => (
                 <Route
                   exact={route.exact ? route.exact : false}
