@@ -144,7 +144,7 @@ class Overview extends Component {
                         </Table.Row>
                       ) : ''
                     }
-                    {get(campaign, 'closureSummary.keyTerms.interestRate') || get(campaign, 'closureSummary.keyTerms.multiple')
+                    {get(campaign, 'keyTerms.interestRate') || get(campaign, 'closureSummary.keyTerms.multiple')
                       ? (
                         <Table.Row verticalAlign="top">
                           <Table.Cell>
@@ -166,8 +166,8 @@ class Overview extends Component {
                             )
                             : (
                               <Table.Cell>
-                                {campaign && get(campaign, 'closureSummary.keyTerms.interestRate')
-                                  ? `${get(campaign, 'closureSummary.keyTerms.interestRate')}%` : 'N/A'
+                                {campaign && get(campaign, 'keyTerms.interestRate')
+                                  ? `${get(campaign, 'keyTerms.interestRate')}%` : 'N/A'
                                 }
                               </Table.Cell>
                             )
