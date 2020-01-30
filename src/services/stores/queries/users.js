@@ -726,10 +726,8 @@ export const adminValidateCreateAdminUser = gql`
 }`;
 
 export const fetchAdminListEmailTypesAndIdentifier = gql`
-  query adminListEmailType {
+  query fetchAdminListEmailTypesAndIdentifier {
   adminListEmailType
-}
-query adminListEmailPluginsByIndex {
   adminListEmailPluginsByIndex {
     emailIdentifier
   }

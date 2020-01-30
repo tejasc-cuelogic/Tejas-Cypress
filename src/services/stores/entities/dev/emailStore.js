@@ -76,12 +76,14 @@ export class EmailStore extends DataModelStore {
       });
       const listEmailType = [];
       if (data.adminListEmailType && data.adminListEmailType.length) {
+          listEmailType.push({ key: 'SELECT', value: null, text: 'SELECT' });
         data.adminListEmailType.forEach((e) => {
           listEmailType.push({ key: e, value: e, text: startCase(e) });
         });
       }
       const listEmailIdentifiers = [];
       if (data.adminListEmailPluginsByIndex && data.adminListEmailPluginsByIndex.length) {
+        listEmailIdentifiers.push({ key: 'SELECT', value: null, text: 'SELECT' });
         data.adminListEmailPluginsByIndex.forEach((e) => {
           listEmailIdentifiers.push({ key: e.emailIdentifier, value: e.emailIdentifier, text: e.emailIdentifier });
         });
@@ -89,6 +91,7 @@ export class EmailStore extends DataModelStore {
       this.setFieldValue('listEmailTypes', listEmailType);
       this.setFieldValue('listEmailIdentifiers', listEmailIdentifiers);
     } catch (error) {
+      console.log(error);
       Helper.toast('Something went wrong, please try again later.', 'error');
     }
   }
