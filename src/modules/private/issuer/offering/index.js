@@ -20,8 +20,8 @@ export default class Offering extends Component {
     }
     if (props.offeringCreationStore.currentOfferingSlug !== props.match.params.offeringSlug) {
       if (this.isUuid()) {
-        this.props.campaignStore.getCampaignDetails(props.match.params.offeringSlug, true).then(() => {
-          this.props.offeringsStore.getOne(this.props.campaignStore.campaign.offeringSlug, false);
+        this.props.offeringsStore.getofferingById(props.match.params.offeringSlug).then((offeringSlug) => {
+          this.props.offeringsStore.getOne(offeringSlug, false);
         });
       } else {
         this.props.offeringsStore.getOne(props.match.params.offeringSlug, !this.isUuid());

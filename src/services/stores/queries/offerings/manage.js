@@ -114,6 +114,14 @@ export const adminDeleteOffering = gql`
   }
 `;
 
+export const getofferingById = gql`
+  query getOfferingById($id: String!) {
+    getOfferingById(id: $id) {
+      offeringSlug
+    }
+  }
+`;
+
 export const getOfferingDetails = gql`
   query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug(offeringSlug: $id) {
