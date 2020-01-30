@@ -682,9 +682,10 @@ query investorAccountDeleteProcess {
 `;
 
 export const adminFetchEmails = gql`
-query adminFetchEmails ($recipientId: String!, $subject: String, $fromDate: String, $toDate: String, $limit: Int, $lek: String){
+query adminFetchEmails ($recipientId: String!, $emailIdentifier: String, $subject: String, $fromDate: String, $toDate: String, $limit: Int, $lek: String){
   adminFetchEmails(
     recipientId: $recipientId
+    emailIdentifier: $emailIdentifier
     subject: $subject
     fromDate: $fromDate
     toDate: $toDate
@@ -724,7 +725,13 @@ export const adminValidateCreateAdminUser = gql`
   )
 }`;
 
-export const adminListEmailType = gql`
+export const fetchAdminListEmailTypesAndIdentifier = gql`
   query adminListEmailType {
   adminListEmailType
-}`;
+}
+query adminListEmailPluginsByIndex {
+  adminListEmailPluginsByIndex {
+    emailIdentifier
+  }
+}
+`;

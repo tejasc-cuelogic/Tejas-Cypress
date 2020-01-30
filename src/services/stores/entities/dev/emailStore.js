@@ -1,14 +1,14 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
 import { startCase } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
-import { adminFetchEmails, adminListEmailType } from '../../queries/users';
+import { adminFetchEmails, fetchAdminListEmailTypesAndIdentifier } from '../../queries/users';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { EMAILLIST_META } from '../../../constants/admin/data';
 
 export class EmailStore extends DataModelStore {
   constructor() {
-    super({ adminFetchEmails, adminListEmailType });
+    super({ adminFetchEmails, fetchAdminListEmailTypesAndIdentifier });
   }
 
   EMAIL_LIST_FRM = Validator.prepareFormObject(EMAILLIST_META);
@@ -19,9 +19,11 @@ export class EmailStore extends DataModelStore {
 
   listEmailTypes = [];
 
+  listEmailIdentifiers = [];
+
   initRequest = async (reqParams) => {
     try {
-      const { emailType, keyword, startDate, endDate } = this.requestState.search;
+      const { emailType, emailIdentifier, keyword, startDate, endDate } = this.requestState.search;
       const filters = toJS({ ...this.requestState.search });
       delete filters.keyword;
       this.requestState.page = (reqParams && reqParams.page) || this.requestState.page;
@@ -31,6 +33,7 @@ export class EmailStore extends DataModelStore {
         recipientId: emailType || 'DEV',
         limit: this.requestState.perPage,
       };
+      params = emailIdentifier ? { ...params, emailIdentifier } : { ...params };
       params = this.requestState.lek[`page-${this.requestState.page}`]
         ? { ...params, lek: this.requestState.lek[`page-${this.requestState.page}`] } : { ...params };
 
@@ -63,11 +66,11 @@ export class EmailStore extends DataModelStore {
     }
   }
 
-  fetchAdminListEmailTypes = async () => {
+  fetchAdminListEmailTypesAndIdentifier = async () => {
     try {
       const data = await this.executeQuery({
         client: 'PRIVATE',
-        query: 'adminListEmailType',
+        query: 'fetchAdminListEmailTypesAndIdentifier',
         variables: {},
         setLoader: 'adminListEmailType',
       });
@@ -77,7 +80,14 @@ export class EmailStore extends DataModelStore {
           listEmailType.push({ key: e, value: e, text: startCase(e) });
         });
       }
+      const listEmailIdentifiers = [];
+      if (data.adminListEmailPluginsByIndex && data.adminListEmailPluginsByIndex.length) {
+        data.adminListEmailPluginsByIndex.forEach((e) => {
+          listEmailIdentifiers.push({ key: e.emailIdentifier, value: e.emailIdentifier, text: e.emailIdentifier });
+        });
+      }
       this.setFieldValue('listEmailTypes', listEmailType);
+      this.setFieldValue('listEmailIdentifiers', listEmailIdentifiers);
     } catch (error) {
       Helper.toast('Something went wrong, please try again later.', 'error');
     }
@@ -100,8 +110,9 @@ decorate(EmailStore, {
   ...decorateDefault,
   EMAIL_LIST_FRM: observable,
   listEmailTypes: observable,
+  listEmailIdentifiers: observable,
   initRequest: action,
-  fetchAdminListEmailTypes: action,
+  fetchAdminListEmailTypesAndIdentifier: action,
   emailList: computed,
   count: computed,
   emailLogList: observable,
