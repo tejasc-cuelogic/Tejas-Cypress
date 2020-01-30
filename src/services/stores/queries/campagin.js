@@ -132,54 +132,11 @@ export const campaignDetailsQuery = gql`
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
     isInvestedInOffering
-    isAvailablePublicly
     watchListStatus
     stage
     offeringSlug
     issuerId
     regulation
-    updates {
-      id
-      offeringId
-      title
-      content
-      status
-      scope
-      tiers
-      notificationSent {
-        by
-        date
-        to
-      }
-      approved {
-        by
-        date
-      }
-      updated {
-        by
-        date
-      }
-      deleted {
-        by
-        date
-      }
-      actingUserInfo {
-        id
-        info {
-          firstName
-          lastName
-          avatar {
-            url
-            name
-          }
-        }
-      }
-    }
-    updated {
-      id
-      by
-      date
-    }
     created {
       id
     }
@@ -189,9 +146,6 @@ export const campaignDetailsQuery = gql`
         url
         isPublic
       }
-      industry
-      locationRiskFactors
-      isTX
       priceCopy
       discount
       valuationCap
@@ -236,16 +190,12 @@ export const campaignDetailsQuery = gql`
     }
     bonusRewards {
       id
-      offeringId
-      rewardStatus
-      expirationDate
       title
       description
       earlyBirdQuantity
       tiers
       created {
         by
-        id
         date
       }
     }
@@ -283,7 +233,6 @@ export const campaignDetailsQuery = gql`
         targetDate
         edgarLink
         expectedOpsDate
-        terminationDate
       }
       misc {
         additionalBonusRewardsContent
@@ -356,9 +305,6 @@ export const campaignDetailsQuery = gql`
         }
       }
     }
-    selectedOffer {
-      structure
-    }
     closureSummary {
       processingDate
       hardCloseDate
@@ -369,14 +315,11 @@ export const campaignDetailsQuery = gql`
       totalInvestorCount
       repayment {
         count
-        completeDate
       }
       keyTerms {
         multiple
         priceCalculation
         revSharePercentage
-        interestRate
-        businessOpenDate
         supplementalAgreements {
           documents {
             name
