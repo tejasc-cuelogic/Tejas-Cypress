@@ -67,6 +67,8 @@ export class UiStore {
 
   @observable authRef = '';
 
+  @observable authRefHash = '';
+
   @observable htmlEditorImageLoading = false;
 
   @observable createAccountMessage = null;
@@ -284,8 +286,9 @@ export class UiStore {
   }
 
   @action
-  setAuthRef = (url) => {
+  setAuthRef = (url, hash = '') => {
     this.authRef = url || '';
+    this.authRefHash = hash;
   }
 
   scrollIntoActiveInputFields = () => {
