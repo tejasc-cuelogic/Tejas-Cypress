@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import find from 'lodash/find';
-import { FormRadioGroup, FormArrowButton } from '../../../../../../../theme/form';
+import { FormArrowButton } from '../../../../../../../theme/form';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -24,18 +24,18 @@ export default class Funding extends Component {
     const { FUNDING_FRM, fundingChange } = this.props.iraAccountStore;
     return (
       <div>
-        <Header as="h3" textAlign={isMobile ? 'mb-20' : 'center'}>How would you like to fund your [Traditional/Roth] IRA?</Header>
+        <Header as="h4">How would you like to fund your [Traditional/Roth] IRA?</Header>
         {!isMobile && <Divider section hidden />}
         <Form error className={isMobile ? '' : 'account-type-tab'}>
-          {isMobile
-            ? (
+          {/* {isMobile
+            ? ( */}
           <FormArrowButton
             fielddata={FUNDING_FRM.fields.fundingType}
             name="fundingType"
             changed={fundingChange}
             action={this.handleArrowButtonClick}
           />
-            )
+            {/* )
             : (
           <>
           <FormRadioGroup
@@ -70,7 +70,7 @@ export default class Funding extends Component {
           </div>
           </>
             )
-          }
+          } */}
         </Form>
       </div>
     );

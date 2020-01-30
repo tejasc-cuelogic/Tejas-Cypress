@@ -1,8 +1,9 @@
 import React from 'react';
 import _ from 'lodash';
 import Parser from 'html-react-parser';
-import { Modal, Header, Button, Dimmer, Loader, Progress } from 'semantic-ui-react';
+import { Modal, Button, Dimmer, Loader, Progress, Grid } from 'semantic-ui-react';
 import Helper from '../utility';
+import { Logo } from '../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const hasData = compState => compState.validForm;
@@ -27,8 +28,8 @@ export default class MultiStep extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showPreviousBtn: false,
-      showNextBtn: true,
+      // showPreviousBtn: false,
+      // showNextBtn: true,
       compState: this.props.stepToBeRendered || 0,
       navState: getNavStates(
         (this.props.stepToBeRendered || 0), this.props.steps.length,
@@ -52,9 +53,9 @@ export default class MultiStep extends React.Component {
     if (typeof this.props.stepToBeRendered !== 'undefined' && this.props.stepToBeRendered !== '') {
       this.setNavState(this.props.stepToBeRendered);
     }
-    if (this.props.stepToBeRendered > -1 && _.has(this.props.steps[this.props.stepToBeRendered], 'disableNxtBtn')) {
-      this.setState({ showNextBtn: !this.props.steps[this.props.stepToBeRendered].disableNxtBtn });
-    }
+    // if (this.props.stepToBeRendered > -1 && _.has(this.props.steps[this.props.stepToBeRendered], 'disableNxtBtn')) {
+    //   this.setState({ showNextBtn: !this.props.steps[this.props.stepToBeRendered].disableNxtBtn });
+    // }
   }
 
   static getDerivedStateFromProps(nextProps) {
@@ -114,18 +115,18 @@ export default class MultiStep extends React.Component {
   checkNavState(currentStep) {
     if (currentStep > 0 && currentStep < this.props.steps.length - 1) {
       this.setState({
-        showPreviousBtn: true,
-        showNextBtn: true,
+        // showPreviousBtn: true,
+        // showNextBtn: true,
       });
     } else if (currentStep === 0) {
       this.setState({
-        showPreviousBtn: !this.props.disablePrevBtn,
-        showNextBtn: true,
+        // showPreviousBtn: !this.props.disablePrevBtn,
+        // showNextBtn: true,
       });
     } else {
       this.setState({
-        showPreviousBtn: true,
-        showNextBtn: false,
+        // showPreviousBtn: true,
+        // showNextBtn: false,
       });
     }
   }
@@ -263,30 +264,43 @@ export default class MultiStep extends React.Component {
           onKeyPress={event => this.props.setIsEnterPressed(event)}
           basic
           open
-          closeIcon={!isMobile && !this.props.disableCloseIcon}
+          closeIcon={!this.props.disableCloseIcon}
           className={`${isMobile && 'bg-white'} ${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
           closeOnDimmerClick={closeDimmerClickAction}
           onClose={() => this.props.handleMultiStepModalclose()}
           id="multistep-modal"
-          dimmer={isMobile && 'inverted'}
-          centered={!isMobile}
+          dimmer="inverted"
+          size="large"
+          // centered={!isMobile}
         >
-          {!this.props.hideHeader
+          {/* {!this.props.hideHeader
             && (
-              <>
+              <> */}
                 {!isMobile
                   ? (
-                    <>
-                      <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
-                      <ol className="progtrckr">
-                        {!currentStep.isHideLabel
-                          && this.renderSteps()
-                        }
-                      </ol>
-                    </>
+                    <Modal.Header className="text-uppercase">
+                      <div className="multistep-header">
+                        <Logo dataSrc="LogoGreenGrey" size="small" />
+                        <span className="vertical-divider">|</span>
+                        <span className="display-block ml-16">
+                          {!currentStep.isHideName
+                            ? currentStep.name : ''
+                          }
+                        </span>
+                      </div>
+                      {isMobile
+                      && (
+                      <Button
+                        icon={{ className: 'ns-close-light' }}
+                        className="link-button pull-right multistep__btn"
+                        onClick={this.props.handleMultiStepModalclose}
+                      />
+                      )}
+                      <Progress className={(currentStep.name === '' || currentStep.isHideName) ? 'no-header' : ''} percent={((this.state.compState + 1) / (this.props.steps.length + 1)) * 100} attached="bottom" color="green" />
+                    </Modal.Header>
                   )
                   : (
-                    <Modal.Header className="text-uppercase">
+                  <Modal.Header className="text-uppercase">
                       {!currentStep.disablePrevButton
                         && (
                           <Button
@@ -306,19 +320,28 @@ export default class MultiStep extends React.Component {
                       />
                       <Progress className={(currentStep.name === '' || currentStep.isHideName) ? 'no-header' : ''} percent={((this.state.compState + 1) / (this.props.steps.length + 1)) * 100} attached="bottom" color="green" />
                     </Modal.Header>
-                  )
+                    )
                 }
-              </>
+              {/* </>
             )
-          }
+          } */}
           <Dimmer active={this.props.inProgress} className={this.props.inProgress && 'fullscreen' ? 'fullscreen' : ''}>
             <Loader active={this.props.inProgress}>
               {this.props.loaderMsg ? Parser(this.props.loaderMsg) : ''}
             </Loader>
           </Dimmer>
           <Modal.Content className="multistep">
-            {currentStep.component}
-            {!currentStep.disablePrevButton && !isMobile
+            {!isMobile
+            ? (
+              <Grid centered>
+                <Grid.Column width="8">
+                  {currentStep.component}
+                </Grid.Column>
+              </Grid>
+            )
+            : <>{currentStep.component}</>
+          }
+            {/* {!currentStep.disablePrevButton && !isMobile
               && (
                 <Button
                   circular
@@ -327,8 +350,8 @@ export default class MultiStep extends React.Component {
                   onClick={this.previous}
                 />
               )
-            }
-            {(this.props.isStepButtonsVisible === undefined || this.state.compState !== 0
+            } */}
+            {/* {(this.props.isStepButtonsVisible === undefined || this.state.compState !== 0
               || (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true)) && !isMobile
               ? (
                 <>
@@ -358,7 +381,7 @@ export default class MultiStep extends React.Component {
                 </>
               )
               : null
-            }
+            } */}
           </Modal.Content>
           {/* {(this.props.isStepButtonsVisible === undefined || this.state.compState !== 0
               || (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true)) && isMobile
