@@ -16,7 +16,7 @@ import SecureGateway from './modules/public/shared/SecureGateway';
 import { authActions, activityActions } from './services/actions';
 import MetaTagGenerator from './modules/shared/MetaTagGenerator';
 import { userIdleTime, NEXTSEED_BOX_URL } from './constants/common';
-import { DataFormatter } from './helper';
+import { DataFormatter, UpdateHelper } from './helper';
 /**
  * Main App
  */
@@ -295,7 +295,7 @@ class App extends Component {
           )
         }
         <ToastContainer className="toast-message" />
-        {uiStore.appUpdated && location.pathname !== '/login'
+        {uiStore.appUpdated && (location.pathname !== '/login') && UpdateHelper.showUpdateModal(location.pathname)
           && <NotifyVersionUpdate setAppUpdated={uiStore.setAppUpdated} />
         }
         {uiStore.devBanner
