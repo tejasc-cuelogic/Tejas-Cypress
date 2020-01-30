@@ -61,6 +61,10 @@ export const userDetailsQuery = gql`
       status
       accreditation {
         status
+        expiration
+        self {
+          offering
+        }
       }
       saasquatch {
         signupCode
@@ -112,6 +116,7 @@ export const userDetailsQuery = gql`
           ... on Investor {
             accreditation {
               status
+              expiration
             }
             limits {
               income
@@ -276,6 +281,11 @@ export const selectedUserDetailsQuery = gql`
       status
       accreditation {
         status
+        self {
+          offering
+          document
+          date
+        }
       }
       saasquatch {
         signupCode
@@ -553,6 +563,9 @@ export const userAccreditationQuery = gql`
         previousEstimateIncome
         expiration
         requestDate
+        self {
+          offering
+        }
         reviewed {
           id
           by
