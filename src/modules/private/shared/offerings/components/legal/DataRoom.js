@@ -102,8 +102,9 @@ export default class DataRoom extends Component {
     }
   }
   handleDelDoc = (field, index = undefined) => {
-    const { closingBinder } = this.props;
-    this.props.offeringCreationStore.removeUploadedDataMultiple(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', field, index, closingBinder ? 'closingBinder' : 'documents');
+    const { closingBinder, referenceFrom } = this.props;
+    const businessApplicationFlag = !!(referenceFrom && referenceFrom === 'BUSINESS_APPLICATION');
+    this.props.offeringCreationStore.removeUploadedDataMultiple(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', field, index, closingBinder ? 'closingBinder' : 'documents', false, businessApplicationFlag);
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();

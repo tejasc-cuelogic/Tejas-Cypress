@@ -168,6 +168,10 @@ export class OfferingCreationStore {
 
   @observable outputMsg = null;
 
+  @observable removedFileData = {
+    documents: [],
+  };
+
   @action
   setFieldValue = (field, value, field2 = false, objRef = false) => {
     if (objRef) {
@@ -691,7 +695,7 @@ export class OfferingCreationStore {
 
 
   @action
-  removeUploadedDataMultiple = (form, field, index = null, arrayName, fromS3 = false) => {
+  removeUploadedDataMultiple = (form, field, index = null, arrayName, fromS3 = false, isForBusinessApplication = false) => {
     if (fromS3) {
       let removeFileNames = '';
       if (index !== null && arrayName) {
@@ -708,7 +712,12 @@ export class OfferingCreationStore {
       this.setFormFileArray(form, arrayName, field, 'fileName', '', index);
     } else {
       let removeFileIds = '';
+      let removedArr = [];
       if (index !== null && arrayName) {
+        if (isForBusinessApplication) {
+          const removeListArr = this[form].fields[arrayName][index];
+          removedArr = removeListArr;
+        }
         const { fileId } = this[form].fields[arrayName][index][field];
         removeFileIds = fileId;
       } else if (index !== null) {
@@ -719,7 +728,11 @@ export class OfferingCreationStore {
         removeFileIds = fileId;
       }
       this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
-      this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
+      if (isForBusinessApplication) {
+        this.removedFileData.documents = [...this.removedFileData.documents, { ...removedArr, removedFileId: { value: removeFileIds } }];
+      } else {
+        this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
+      }
     }
     this.setFormFileArray(form, arrayName, field, 'fileData', '', index);
     this.setFormFileArray(form, arrayName, field, 'value', '', index);
@@ -957,8 +970,10 @@ export class OfferingCreationStore {
   @action
   setFormDataForBusinessUploadDocuments = (form, ref) => {
     this.resetForm(form);
+    this.setFieldValue('removedFileData', [], 'documents');
     const { businessApplicationDetailsAdmin } = businessAppStore;
-    this[form] = Validator.setFormData(this[form], businessApplicationDetailsAdmin, ref);
+    const evaluatedFormData = Helper.replaceKeysDeep(businessApplicationDetailsAdmin, { agreements: 'documents' });
+    this[form] = Validator.setFormData(this[form], evaluatedFormData, ref);
     this.checkFormValid(form, true, false);
     return false;
   }
@@ -1424,30 +1439,65 @@ export class OfferingCreationStore {
   });
 
   @action
-  updateApplication = (uploadDocumentArr = undefined) => {
+  updateApplication = (uploadDocumentArr = undefined, fromS3 = false) => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     uiStore.setProgress('save');
     this.bulkFileUpload('DATA_ROOM_FRM', 'documents', 'upload', uploadDocumentArr, 'AGREEMENTS').then(() => {
       const dataRoomDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
+      const removedDataRoomsDocs = Validator.evaluateFormData(this.removedFileData).documents || [];
+      const removedIds = this.removeFileIdsList;
       const finalDataRoomDocs = [];
+      const removedDataFooms = [];
       const payloadData = {
         applicationId: businessApplicationDetailsAdmin.applicationId,
         issuerId: businessApplicationDetailsAdmin.userId,
       };
       dataRoomDocs.map((data, index) => {
+        if (data.accreditedOnly !== undefined) {
+          delete data.accreditedOnly;
+        }
         if (data.name !== '' || data.upload.fileId !== '') {
           data.status = 'UPLOADED';
           finalDataRoomDocs.push(data);
         }
         return finalDataRoomDocs;
       });
-      payloadData.agreements = finalDataRoomDocs;
+
+      if (removedDataRoomsDocs.length > 0) {
+        removedDataRoomsDocs.map((data, index) => {
+          if (data.accreditedOnly !== undefined) {
+            delete data.accreditedOnly;
+          }
+          if (data.name !== '' || data.removedFileId !== '') {
+            data.status = 'DELETED';
+            // this.setRemoveDocFieldValue('removedFileData', index, 'upload.fileId', data.removedFileId, 'documents');
+            data.upload.fileId = data.removedFileId;
+            delete data.removedFileId;
+            removedDataFooms.push(data);
+          }
+          return removedDataFooms;
+        });
+      }
+      payloadData.agreements = [...finalDataRoomDocs, ...removedDataFooms];
       console.log('agreement payload==>', payloadData);
-      this.updateDcoumentForApplication(payloadData);
+      this.updateDcoumentForApplication(payloadData)
+        .then(() => {
+          this.removeUploadedFiles(fromS3);
+          Helper.toast('Document has been saved successfully.', 'success');
+        });
     }).catch(action((error) => {
       console.log(error);
       uiStore.setProgress(false);
     }));
+  }
+
+  @action
+  setRemoveDocFieldValue = (field, index, objRef, value, field2 = false) => {
+    if (field2) {
+      set(this[field][field2][index], objRef, value);
+    } else {
+      set(this[field][index], objRef, value);
+    }
   }
 
   @action
@@ -1469,6 +1519,7 @@ export class OfferingCreationStore {
         })
         .finally(() => {
           uiStore.setProgress(false);
+          this.setFieldValue('removedFileData', [], 'documents');
         });
     });
   }
@@ -2111,6 +2162,8 @@ export class OfferingCreationStore {
       }).catch((err) => {
         reject(err);
       });
+    } else {
+      resolve();
     }
   });
 
