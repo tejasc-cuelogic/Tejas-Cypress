@@ -112,6 +112,12 @@
                 margin-right: 0;
             }
         }
+        &.acc-investor-modal{
+            width: 835px;
+            .content{
+                padding: @20px 70px;
+            }
+        }
     }
     @media only screen and (max-width:@largestMobileScreen){
         // background: @white;

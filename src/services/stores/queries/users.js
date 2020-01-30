@@ -61,6 +61,10 @@ export const userDetailsQuery = gql`
       status
       accreditation {
         status
+        expiration
+        self {
+          offering
+        }
       }
       saasquatch {
         signupCode
@@ -112,6 +116,7 @@ export const userDetailsQuery = gql`
           ... on Investor {
             accreditation {
               status
+              expiration
             }
             limits {
               income
@@ -276,6 +281,11 @@ export const selectedUserDetailsQuery = gql`
       status
       accreditation {
         status
+        self {
+          offering
+          document
+          date
+        }
       }
       saasquatch {
         signupCode
@@ -553,6 +563,9 @@ export const userAccreditationQuery = gql`
         previousEstimateIncome
         expiration
         requestDate
+        self {
+          offering
+        }
         reviewed {
           id
           by
@@ -669,9 +682,10 @@ query investorAccountDeleteProcess {
 `;
 
 export const adminFetchEmails = gql`
-query adminFetchEmails ($recipientId: String!, $subject: String, $fromDate: String, $toDate: String, $limit: Int, $lek: String){
+query adminFetchEmails ($recipientId: String!, $emailIdentifier: String, $subject: String, $fromDate: String, $toDate: String, $limit: Int, $lek: String){
   adminFetchEmails(
     recipientId: $recipientId
+    emailIdentifier: $emailIdentifier
     subject: $subject
     fromDate: $fromDate
     toDate: $toDate
@@ -711,7 +725,11 @@ export const adminValidateCreateAdminUser = gql`
   )
 }`;
 
-export const adminListEmailType = gql`
-  query adminListEmailType {
+export const fetchAdminListEmailTypesAndIdentifier = gql`
+  query fetchAdminListEmailTypesAndIdentifier {
   adminListEmailType
-}`;
+  adminListEmailPluginsByIndex {
+    emailIdentifier
+  }
+}
+`;
