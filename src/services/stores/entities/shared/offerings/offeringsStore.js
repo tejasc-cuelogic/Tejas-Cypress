@@ -8,7 +8,7 @@ import { GqlClient as clientPublic } from '../../../../../api/publicApi';
 import { STAGES } from '../../../../constants/admin/offerings';
 import {
   allOfferings, allOfferingsCompact, updateOffering,
-  adminDeleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings,
+  adminDeleteOffering, getOfferingDetails, getTotalAmount, setOrderForOfferings, getofferingById,
 } from '../../../queries/offerings/manage';
 import { offeringCreationStore, userStore, uiStore, campaignStore } from '../../../index';
 import { ClientDb, DataFormatter } from '../../../../../helper';
@@ -301,6 +301,25 @@ export class OfferingsStore {
       },
     });
   }
+
+  @action
+  getofferingById = id => new Promise((resolve) => {
+    this.offerData = graphql({
+      client,
+      query: getofferingById,
+      fetchPolicy: 'no-cache',
+      variables: { id },
+      onFetch: (res) => {
+        if (!this.offerData.loading) {
+          resolve(res.getOfferingById.offeringSlug);
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
+  });
+
 
   @action
   setOrderForOfferings = (newArr, stage, isMerge = false, indexVal) => {
