@@ -238,7 +238,7 @@ class Overview extends Component {
                       ? (
                         <Table.Row verticalAlign="top">
                           <Table.Cell width={5}>{' '}
-                            <PopUpModal content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`} customTrigger={<span className="popup-label">Maturity</span>} showOnlyPopup={!isMobile} />
+                            <PopUpModal position="top left" content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`} customTrigger={<span className="popup-label">Maturity</span>} showOnlyPopup={!isMobile} />
                           </Table.Cell>
                           <Table.Cell>
                             {maturityMonth
