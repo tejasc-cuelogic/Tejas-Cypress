@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, arrow-body-style, max-len, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { includes, sortBy, get, has, map, startCase, set, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
+import { includes, sortBy, get, has, map, startCase, set, filter, forEach, find, orderBy, kebabCase, mergeWith, isEqual } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -18,7 +18,7 @@ import { deleteBonusReward, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, adminOfferingClose, deleteBac, upsertBonusReward,
   getBonusRewards, adminBusinessFilings, initializeClosingBinder,
   adminCreateBusinessFiling, adminUpsertOffering } from '../../../queries/offerings/manage';
-import { updateBusinessApplicationInformation } from '../../../queries/businessApplication';
+import { updateBusinessApplicationInformation, adminBusinessApplicationsDetails } from '../../../queries/businessApplication';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore, offeringInvestorStore, businessAppStore } from '../../../index';
@@ -172,6 +172,8 @@ export class OfferingCreationStore {
     documents: [],
   };
 
+  @observable oldFormDetails = {}
+
   @action
   setFieldValue = (field, value, field2 = false, objRef = false) => {
     if (objRef) {
@@ -265,6 +267,7 @@ export class OfferingCreationStore {
   @action
   resetForm = (form, targetedFields = []) => {
     Validator.resetFormData(this[form], targetedFields);
+    this.setFieldValue('oldFormDetails', {});
   }
 
   @action
@@ -730,9 +733,8 @@ export class OfferingCreationStore {
       this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
       if (isForBusinessApplication) {
         this.removedFileData.documents = [...this.removedFileData.documents, { ...removedArr, removedFileId: { value: removeFileIds } }];
-      } else {
-        this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
       }
+      this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
     }
     this.setFormFileArray(form, arrayName, field, 'fileData', '', index);
     this.setFormFileArray(form, arrayName, field, 'value', '', index);
@@ -973,7 +975,9 @@ export class OfferingCreationStore {
     this.setFieldValue('removedFileData', [], 'documents');
     const { businessApplicationDetailsAdmin } = businessAppStore;
     const evaluatedFormData = Helper.replaceKeysDeep(businessApplicationDetailsAdmin, { agreements: 'documents' });
-    this[form] = Validator.setFormData(this[form], evaluatedFormData, ref);
+    const formDetails = Validator.setFormData(this[form], evaluatedFormData, ref);
+    this[form] = formDetails;
+    this.setFieldValue('oldFormDetails', formDetails.fields);
     this.checkFormValid(form, true, false);
     return false;
   }
@@ -1445,7 +1449,7 @@ export class OfferingCreationStore {
     this.bulkFileUpload('DATA_ROOM_FRM', 'documents', 'upload', uploadDocumentArr, 'AGREEMENTS').then(() => {
       const dataRoomDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
       const removedDataRoomsDocs = Validator.evaluateFormData(this.removedFileData).documents || [];
-      const removedIds = this.removeFileIdsList;
+      const oldDataRoomDocs = Validator.evaluateFormData(this.oldFormDetails).documents;
       const finalDataRoomDocs = [];
       const removedDataFooms = [];
       const payloadData = {
@@ -1453,11 +1457,13 @@ export class OfferingCreationStore {
         issuerId: businessApplicationDetailsAdmin.userId,
       };
       dataRoomDocs.map((data, index) => {
+        const isEquality = isEqual(data, oldDataRoomDocs[index]);
+        const isEqualityForUpload = isEqual(data.upload, oldDataRoomDocs[index].upload);
         if (data.accreditedOnly !== undefined) {
           delete data.accreditedOnly;
         }
         if (data.name !== '' || data.upload.fileId !== '') {
-          data.status = 'UPLOADED';
+          data.status = isEquality ? 'EXISTS' : isEqualityForUpload ? 'UPDATED' : 'UPLOADED';
           finalDataRoomDocs.push(data);
         }
         return finalDataRoomDocs;
@@ -1468,9 +1474,8 @@ export class OfferingCreationStore {
           if (data.accreditedOnly !== undefined) {
             delete data.accreditedOnly;
           }
-          if (data.name !== '' || data.removedFileId !== '') {
+          if (data.name !== '' || (data.removedFileId && data.removedFileId !== '')) {
             data.status = 'DELETED';
-            // this.setRemoveDocFieldValue('removedFileData', index, 'upload.fileId', data.removedFileId, 'documents');
             data.upload.fileId = data.removedFileId;
             delete data.removedFileId;
             removedDataFooms.push(data);
@@ -1479,6 +1484,7 @@ export class OfferingCreationStore {
         });
       }
       payloadData.agreements = [...finalDataRoomDocs, ...removedDataFooms];
+      payloadData.agreements = cleanDeep(payloadData.agreements);
       console.log('agreement payload==>', payloadData);
       this.updateDcoumentForApplication(payloadData)
         .then(() => {
@@ -1503,11 +1509,17 @@ export class OfferingCreationStore {
   @action
   updateDcoumentForApplication = (payloadObject) => {
     uiStore.setProgress('save');
+    const reFetchPayLoad = {
+      applicationId: payloadObject.applicationId,
+      applicationType: 'APPLICATION_COMPLETED',
+    };
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: updateBusinessApplicationInformation,
           variables: payloadObject,
+          refetchQueries:
+            [{ query: adminBusinessApplicationsDetails, variables: reFetchPayLoad }],
         })
         .then(() => {
           resolve();
@@ -2148,12 +2160,13 @@ export class OfferingCreationStore {
   }
 
   bulkFileUpload = (form, arrayName, field, files, stepName) => new Promise((resolve, reject) => {
+    // resolve();
     if (typeof files !== 'undefined' && files.length) {
       const funcArray = [];
       forEach(files, (file, index) => {
         const fileData = Helper.getFormattedFileData(file);
         this.isUploadingFile = true;
-        funcArray.push(this.uploadFiles(form, arrayName, field, file, stepName, fileData, index));
+        funcArray.push(this.uploadFiles(form, arrayName, field, file, stepName, fileData, file.currentIndex));
       });
       Promise.all(funcArray).then((responseArr) => {
         console.log(responseArr);

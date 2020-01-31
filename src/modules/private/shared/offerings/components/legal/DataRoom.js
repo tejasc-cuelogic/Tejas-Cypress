@@ -7,9 +7,9 @@ import { get } from 'lodash';
 import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 import ButtonGroupType2 from '../ButtonGroupType2';
 
-const uploadFileArr = [];
+let uploadFileArr = [];
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder mr-10" />);
-const SortableItem = SortableElement(({ closingBinder, offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length }) => {
+const SortableItem = SortableElement(({ closingBinder, offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length, showLockActivity }) => {
   return (
     <div className="row-wrap">
       <div className="balance-half simple-drag-row-title">
@@ -44,9 +44,11 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
         }
       </div>
       <div className="action">
-        <Button disabled={isReadonly} icon circular color={!offeringClose ? document.accreditedOnly.value ? 'red' : 'green' : ''} className="link-button">
-          <Icon className={!offeringClose ? document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock' : document.accreditedOnly.value ? 'ns-view' : 'ns-no-view'} onClick={() => handleLockUnlock(docIndx)} />
-        </Button>
+        {showLockActivity
+          && (<Button disabled={isReadonly} icon circular color={!offeringClose ? document.accreditedOnly.value ? 'red' : 'green' : ''} className="link-button">
+            <Icon className={!offeringClose ? document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock' : document.accreditedOnly.value ? 'ns-view' : 'ns-no-view'} onClick={() => handleLockUnlock(docIndx)} />
+          </Button>)
+        }
         <Button disabled={isReadonly || length === 1} icon circular className="link-button">
           <Icon className="ns-trash" onClick={e => toggleConfirmModal(e, docIndx, formName)} />
         </Button>
@@ -55,7 +57,7 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
   );
 });
 
-const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName }) => {
+const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName, showLockActivity }) => {
   return (
     <div>
       {docs.map((doc, index) => (
@@ -74,6 +76,7 @@ const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, is
           formName={formName}
           length={docs.length}
           index={index}
+          showLockActivity={showLockActivity}
         />
       ))}
     </div>
@@ -95,8 +98,12 @@ export default class DataRoom extends Component {
     const uploadEnum = referenceFrom && referenceFrom === 'BUSINESS_APPLICATION' ? 'AGREEMENTS' : closingBinder ? 'OFFERING_CLOSING_BINDER' : supplementalAgreements ? 'OFFERING_SUPPLEMENTAL_AGREEMENT' : 'DOCUMENTS_LEGAL_DATAROOM';
     const businessApplicationFlag = !!(referenceFrom && referenceFrom === 'BUSINESS_APPLICATION');
     if (businessApplicationFlag) {
+      let fileArr = '';
       this.props.offeringCreationStore.setFileUploadDataMulitpleVartually(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', closingBinder ? 'closingBinder' : 'documents', name, files, uploadEnum, index, true);
-      uploadFileArr.push(files[0]);
+      fileArr = files[0];
+      fileArr.currentIndex = index
+      uploadFileArr.push(fileArr);
+      // uploadFileArr.push({ fileDetails: files[0], currentIndex: index });
     } else {
       this.props.offeringCreationStore.setFileUploadDataMulitple(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', closingBinder ? 'closingBinder' : 'documents', name, files, uploadEnum, index, true);
     }
@@ -126,6 +133,7 @@ export default class DataRoom extends Component {
   handleFormSubmitForBusinessApplication = (isApproved = null) => {
     const { updateApplication } = this.props.offeringCreationStore;
     updateApplication(uploadFileArr);
+    uploadFileArr = [];
   }
 
   onSortEnd = ({ oldIndex, newIndex }, isReadonly) => {
@@ -156,6 +164,7 @@ export default class DataRoom extends Component {
     } = this.props.offeringCreationStore;
     const formName = closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM';
     const docs = [...(closingBinder ? CLOSING_BINDER_FRM.fields.closingBinder : DATA_ROOM_FRM.fields.documents)];
+    const businessApplicationFlag = !!(referenceFrom && referenceFrom === 'BUSINESS_APPLICATION');
     return (
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form>
@@ -189,6 +198,7 @@ export default class DataRoom extends Component {
               formName={formName}
               lockAxis="y"
               useDragHandle
+              showLockActivity={!(businessApplicationFlag)}
             />
           </div>
           <Divider hidden />
