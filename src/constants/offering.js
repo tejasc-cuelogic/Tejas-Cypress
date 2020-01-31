@@ -131,7 +131,7 @@ export const CAMPAIGN_OFFERED_BY = {
   BD_CF_506C: 'NextSeed Securities, LLC',
 };
 export const OFFERING_COMMENTS_SCOPE = {
-  NEXTSEED: { title: 'Private Note', color: 'orange' },
+  NEXTSEED: { title: 'Internal Note', color: 'orange' },
   PUBLIC: { title: 'Public', color: 'green' },
   ISSUER: {
     titleITo: 'Note to NextSeed', titleIFrom: 'Note from NextSeed', titleTo: 'Note to Issuer', titleFrom: 'Note from Issuer', color: 'blue',
