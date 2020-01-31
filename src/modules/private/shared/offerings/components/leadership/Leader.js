@@ -154,7 +154,7 @@ export default class Leader extends Component {
     } = this.props.offeringCreationStore;
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
-    const { offer } = this.props.offeringsStore;
+    const { offer, offerData } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
     const submitted = (offer && offer.leadership && offer.leadership[index]
@@ -512,6 +512,7 @@ export default class Leader extends Component {
             leaderFormErrorMsg={LEADERSHIP_FRM.meta.error}
             isIssuer={isIssuer}
             submitted={submitted}
+            loading={offerData.loading}
             isManager={isManager}
             approved={approved}
             updateOffer={isApproved => this.handleFormSubmit(isApproved, 'Leadership has been Updated Successfully')}

@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import Validator from 'validatorjs';
 import moment from 'moment';
-import { sumBy, forEach } from 'lodash';
+import { get, sumBy, forEach } from 'lodash';
 import { TARGETED_INVESTOR_IRR } from '../../constants/business';
 
 class CustomValidations extends Component {
@@ -15,7 +15,7 @@ class CustomValidations extends Component {
     /* Investment Type Check for target investor irr field validation register */
     Validator.register(
       'investmentTypeCheck', value => value >= TARGETED_INVESTOR_IRR[currentForm.fields.investmentType.value],
-      ':attribute percentages must be greater than entered value.',
+      get(currentForm, 'fields.investmentType.value') ? ':attribute percentages must be greater than entered value.' : 'Please select an Investment Type from the section above.',
     );
 
     ['taxId', 'maskedSSN'].map(field => Validator.register(

@@ -23,6 +23,7 @@ export default class BusinessDetails extends Component {
       currentIndex: 0,
       legalNoteToggle: false,
       isSsnDirty: [],
+      ssnVisibilityStatus: false,
     };
     this.props.businessAppStore.setFieldvalue('applicationStep', 'business-details');
     const {
@@ -69,6 +70,10 @@ export default class BusinessDetails extends Component {
       setField('docLoading', false);
       window.open(res.data.getBoxEmbedLink, '_blank');
     });
+  }
+
+  setSsnVisibilityStatus = () => {
+    this.setState({ ssnVisibilityStatus: !this.state.ssnVisibilityStatus });
   }
 
   render() {
@@ -488,7 +493,12 @@ export default class BusinessDetails extends Component {
                               <FormInput
                                 key="ssn"
                                 name="ssn"
-                                fielddata={Helper.encrypSsnNumberByForm(owner).ssn}
+                                fielddata={this.state.ssnVisibilityStatus ? owner.ssn : Helper.encrypSsnNumberByForm(owner).ssn}
+                                icon={this.props.userStore.isAdmin ? {
+                                  className: this.state.ssnVisibilityStatus ? 'ns-view active' : 'ns-view',
+                                  link: true,
+                                  onClick: () => this.setSsnVisibilityStatus(),
+                                } : null}
                                 displayMode={formReadOnlyMode}
                                 asterisk={formReadOnlyMode ? 'false' : 'true'}
                                 onChange={(e, res) => this.handleSsnChange(e, res, 'owners', index)}

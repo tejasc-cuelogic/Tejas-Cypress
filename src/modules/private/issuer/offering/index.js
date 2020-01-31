@@ -19,21 +19,18 @@ export default class Offering extends Component {
       this.props.history.replace(`${this.props.match.url}/${get(this.props.navStore, 'navMeta.subNavigations[0].to') || 'overview'}`);
     }
     if (props.offeringCreationStore.currentOfferingSlug !== props.match.params.offeringSlug) {
-      if (this.isUuid()) {
+      if (Helper.isUuid(this.props.match.params.offeringSlug)) {
         this.props.offeringsStore.getofferingById(props.match.params.offeringSlug).then((offeringSlug) => {
           this.props.offeringsStore.getOne(offeringSlug, false);
         });
       } else {
-        this.props.offeringsStore.getOne(props.match.params.offeringSlug, !this.isUuid());
+        this.props.offeringsStore.getOne(props.match.params.offeringSlug, !Helper.isUuid(this.props.match.params.offeringSlug));
       }
     }
     this.props.navStore.setAccessParams('specificNav', '/dashboard/offering/2/overview');
   }
 
   module = name => DataFormatter.upperCamelCase(name);
-
-  isUuid = () => this.props.match.params.offeringSlug
-    .match(new RegExp(/([a-fA-F0-9]{8}-(?:[a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}){1}/)) !== null
 
   render() {
     const { match, offeringsStore } = this.props;
@@ -42,9 +39,10 @@ export default class Offering extends Component {
       return <InlineLoader />;
     }
 
-    if (this.isUuid() && offer.id) {
+    if (Helper.isUuid(this.props.match.params.offeringSlug) && offer.id) {
       return <Redirect from={`/dashboard/offering/${this.props.match.params.offeringSlug}/comments`} to={`/dashboard/offering/${offer.offeringSlug}/comments`} />;
     }
+
     let navItems = this.props.navStore.navMeta.subNavigations;
     if (offer.stage === 'LIVE') {
       navItems = navItems.filter(n => (n.title !== 'Investors'));
