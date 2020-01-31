@@ -46,7 +46,7 @@ export default class Compose extends Component {
                 ? (
 <Button.Group compact vertical size="small">
                 {!isPrivate
-                && <Button loading={buttonLoader === 'ISSUER'} onClick={() => this.send('ISSUER', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} content="Internal note" secondary />
+                && <Button loading={buttonLoader === 'ISSUER'} onClick={() => this.send('ISSUER', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} content="Note to NextSeed" secondary />
                 }
                 {isPublic
                 && <Button loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Post Comment" />
@@ -55,7 +55,7 @@ export default class Compose extends Component {
                 )
                 : (
 <Button.Group compact vertical size="small">
-                <Button loading={buttonLoader === 'NEXTSEED'} onClick={() => this.send('NEXTSEED', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} color="orange" content="Internal note" />
+                <Button loading={buttonLoader === 'NEXTSEED'} onClick={() => this.send('NEXTSEED', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} color="orange" content="Internal Note" />
                 {!isPrivate
                 && <Button loading={buttonLoader === 'ISSUER'} onClick={() => this.send('ISSUER', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Note to Issuer" />
                 }
