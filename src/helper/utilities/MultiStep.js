@@ -266,7 +266,7 @@ export default class MultiStep extends React.Component {
           onKeyPress={event => this.props.setIsEnterPressed(event)}
           basic
           open
-          closeIcon={!isMobile && (!this.props.disableCloseIcon || (!(location.pathname.includes('/invest-now') || location.pathname.includes('/investment-limits'))))}
+          closeIcon={!isMobile && (!this.props.disableCloseIcon && (!(location.pathname.includes('/invest-now') || location.pathname.includes('/investment-limits'))))}
           className={`${(location.pathname.includes('/invest-now') || location.pathname.includes('/investment-limits')) && 'content-close'} ${isMobile && 'bg-white'} ${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
           closeOnDimmerClick={closeDimmerClickAction}
           onClose={() => this.props.handleMultiStepModalclose()}
