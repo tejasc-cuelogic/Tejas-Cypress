@@ -488,12 +488,12 @@ export default class BusinessDetails extends Component {
                             changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}
                             dateOfBirth
                           />
-                          {ssnData.value && ssnData.value.includes('X') && !this.state.isSsnDirty[index]
+                          {!this.state.ssnVisibilityStatus && ssnData.value && ssnData.value.includes('X') && !this.state.isSsnDirty[index]
                             ? (
                               <FormInput
                                 key="ssn"
                                 name="ssn"
-                                fielddata={this.state.ssnVisibilityStatus ? owner.ssn : Helper.encrypSsnNumberByForm(owner).ssn}
+                                fielddata={Helper.encrypSsnNumberByForm(owner).ssn}
                                 icon={this.props.userStore.isAdmin ? {
                                   className: this.state.ssnVisibilityStatus ? 'ns-view active' : 'ns-view',
                                   link: true,
@@ -511,6 +511,11 @@ export default class BusinessDetails extends Component {
                                 ssn
                                 name="ssn"
                                 asterisk="true"
+                                icon={this.props.userStore.isAdmin ? {
+                                  className: this.state.ssnVisibilityStatus ? 'ns-view active' : 'ns-view',
+                                  link: true,
+                                  onClick: () => this.setSsnVisibilityStatus(),
+                                } : null}
                                 fielddata={owner.ssn}
                                 changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                               />
