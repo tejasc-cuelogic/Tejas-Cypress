@@ -50,8 +50,13 @@ class Overview extends Component {
   }
 
   handleViewSuppAgreement = (aggrementId) => {
+    const { campaign } = this.props.campaignStore;
+    const regulation = get(campaign, 'regulation');
+    const offeringRegulationArr = (regulation && regulation.split('_')) || '';
+    const regulationType = get(offeringRegulationArr, '[0]');
+    const accountType = regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
     this.setState({ loadingDoc: aggrementId });
-    this.props.campaignStore.getBoxLink(aggrementId).then((res) => {
+    this.props.campaignStore.getBoxLink(aggrementId, accountType).then((res) => {
       this.setState({ open: true, embedUrl: res, loadingDoc: '' });
     });
   }
