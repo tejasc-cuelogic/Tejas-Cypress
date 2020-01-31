@@ -18,13 +18,13 @@ export default class Overview extends Component {
     const { signupStatus } = this.props.userDetailsStore;
     const overviewInfo = (
       <>
-        <Header as="h3">
+        <Header as="h4">
           {signupStatus.isMigratedFullAccount
             ? <>Please establish your<Responsive minWidth={992}><br /></Responsive>investor profile</>
             : <>Let{"'"}s get started</>
           }
         </Header>
-        {!isMobile && <Divider section className="small" hidden={!signupStatus.isMigratedFullAccount} />}
+        {!isMobile && <Divider hidden={!signupStatus.isMigratedFullAccount} />}
         <p>
           {signupStatus.isMigratedFullAccount
             ? <>Investments are facilitated by NextSeed Securities LLC (SEC-registered broker-dealer & member of {finraLink}) and NextSeed US LLC (SEC-registered Funding Portal & member of {finraLink}).</>
@@ -45,9 +45,9 @@ export default class Overview extends Component {
       </>
     );
     return (
-      <div className={isMobile ? '' : 'center-align'}>
+      <>
         {overviewInfo}
-        <div className="center-align">
+        <div className={!isMobile ? '' : 'center-align'}>
           <Button fluid={isMobile} primary size="large" className="very relaxed" content="Continue" onClick={this.handleChangeStep} />
           <p className="mt-30"><Link to={`${this.props.match.url}/confirm`}>I’ll do it later</Link></p>
         </div>
@@ -60,7 +60,7 @@ export default class Overview extends Component {
               </p>
             </>
           )}
-      </div>
+      </>
     );
   }
 }

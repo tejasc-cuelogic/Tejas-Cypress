@@ -266,33 +266,26 @@
 }
 
 .ui.button.multistep__btn{
-    background:@white;
-    color:@primary-one;
+    color:@neutral-middark;
     letter-spacing:0;
-    box-shadow:0 0 16px 2px fade(@fullBlack, 15%) !important;
     margin:0;
     position:absolute;
-    top:50%;
     @media only screen and (max-width:@largestMobileScreen){
         box-shadow: none !important;
-        background: transparent;
+        background: transparent !important;
     }
     &.disabled{
-        background:@border-light;
         color:@border-color;
         opacity:1 !important;
-        @media only screen and (max-width:@largestMobileScreen){
-            box-shadow: none !important;
-            background: transparent;
-        }
     }
     >.icon{
         width:auto;
     }
     &.prev{
         left:0;
-        transform:translate(-50%, -50%);
         @media only screen and (max-width:@largestMobileScreen){
+            top: 50%;
+            transform:translate(-50%, -50%);
             left: @20px;
             color: @neutral-middark;
             &.disabled{
