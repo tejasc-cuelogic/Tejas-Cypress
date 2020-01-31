@@ -1458,7 +1458,7 @@ export class OfferingCreationStore {
       };
       dataRoomDocs.map((data, index) => {
         const isEquality = isEqual(data, oldDataRoomDocs[index]);
-        const isEqualityForUpload = isEqual(data.upload, oldDataRoomDocs[index].upload);
+        const isEqualityForUpload = oldDataRoomDocs[index] ? isEqual(data.upload, oldDataRoomDocs[index].upload) : false;
         if (data.accreditedOnly !== undefined) {
           delete data.accreditedOnly;
         }
