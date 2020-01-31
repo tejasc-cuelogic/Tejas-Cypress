@@ -46,21 +46,21 @@ export default class Compose extends Component {
                 ? (
 <Button.Group compact vertical size="small">
                 {!isPrivate
-                && <Button loading={buttonLoader === 'ISSUER'} onClick={() => this.send('ISSUER', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} content="Note to NS" secondary />
+                && <Button loading={buttonLoader === 'ISSUER'} onClick={() => this.send('ISSUER', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} content="Internal note" secondary />
                 }
                 {isPublic
-                && <Button loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Submit for Review" />
+                && <Button loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Post Comment" />
                 }
               </Button.Group>
                 )
                 : (
 <Button.Group compact vertical size="small">
-                <Button loading={buttonLoader === 'NEXTSEED'} onClick={() => this.send('NEXTSEED', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} color="orange" content="Note to NS" />
+                <Button loading={buttonLoader === 'NEXTSEED'} onClick={() => this.send('NEXTSEED', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} color="orange" content="Internal note" />
                 {!isPrivate
                 && <Button loading={buttonLoader === 'ISSUER'} onClick={() => this.send('ISSUER', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Note to Issuer" />
                 }
                 {isPublic
-                && <Button loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Publish to Public" />
+                && <Button loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Publish Comment" />
                 }
               </Button.Group>
                 )

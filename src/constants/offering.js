@@ -134,7 +134,7 @@ export const OFFERING_COMMENTS_SCOPE = {
   NEXTSEED: { title: 'Private Note', color: 'orange' },
   PUBLIC: { title: 'Public', color: 'green' },
   ISSUER: {
-    titleITo: 'Note to NS', titleIFrom: 'Note from NS', titleTo: 'Note to Issuer', titleFrom: 'Note from Issuer', color: 'blue',
+    titleITo: 'Note to NextSeed', titleIFrom: 'Note from NextSeed', titleTo: 'Note to Issuer', titleFrom: 'Note from Issuer', color: 'blue',
   },
 };
 export const OFFERING_ACCRDITATION_STATUS_MESSAGE = {
