@@ -31,7 +31,7 @@ export default class OfferingDetails extends Component {
           this.props.offeringsStore.getOne(offeringSlug, false);
         });
       } else {
-        this.props.offeringsStore.getOne(props.match.params.offeringSlug, !Helper.isUuid(this.props.match.params.offeringSlug));
+        this.props.offeringsStore.getOne(props.match.params.offeringSlug);
       }
     }
     this.props.navStore.setAccessParams('specificNav', '/dashboard/offering/2/overview');
