@@ -11,7 +11,7 @@ const watchListMeta = [
   { headerText: 'Public Watchers', status: 'WATCHING' },
   { headerText: 'Deleted Watchers', status: 'DELETED' },
 ];
-@inject('watchListStore', 'offeringsStore', 'nsUiStore', 'userStore')
+@inject('watchListStore', 'offeringCreationStore', 'nsUiStore', 'userStore')
 @withRouter
 @observer
 export default class WatchList extends Component {
@@ -22,7 +22,7 @@ export default class WatchList extends Component {
   }
 
   componentDidMount() {
-    this.props.watchListStore.offeringWatchList(this.props.offeringsStore.currentId);
+    this.props.watchListStore.offeringWatchList(this.props.offeringCreationStore.currentOfferingId);
   }
 
   componentWillUnmount() {

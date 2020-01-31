@@ -335,6 +335,8 @@ export class UserDetailsStore {
     });
   })
 
+
+  // Requested / Confirmed & Not expired
   @computed
   get isInvestorAccreditated() {
     let entityAccreditation = null;
@@ -342,12 +344,21 @@ export class UserDetailsStore {
       && this.currentUser.data.user
       && this.currentUser.data.user.roles.map((role) => {
         if (role.name === 'entity') {
-          entityAccreditation = get(role, 'details.accreditation.status') || null;
+          entityAccreditation = get(role, 'details.accreditation.status');
+          entityAccreditation = entityAccreditation === 'CONFIRMED' ? Helper.checkAccreditationExpiryStatus(get(role, 'details.accreditation.expiration')) === 'ACTIVE' ? 'CONFIRMED' : 'EXPIRED' : entityAccreditation;
         }
         return null;
       });
-    const accreditation = get(this.currentUser, 'data.user.accreditation.status');
-    return (accreditation === 'CONFIRMED' || entityAccreditation === 'CONFIRMED');
+    let accreditation = get(this.currentUser, 'data.user.accreditation.status');
+    accreditation = accreditation === 'CONFIRMED' ? Helper.checkAccreditationExpiryStatus(get(this.currentUser, 'data.user.accreditation.expiration')) === 'ACTIVE' ? 'CONFIRMED' : 'EXPIRED' : accreditation;
+    const status = (accreditation === 'CONFIRMED' || entityAccreditation === 'CONFIRMED');
+    return { status, dataRoomStatus: (status || (accreditation === 'REQUESTED' || entityAccreditation === 'REQUESTED')) };
+  }
+
+  @computed
+  get isDataRoomDocsViewStatus() {
+    const selfAccreditation = get(this.currentUser, 'data.user.accreditation.self');
+    return (this.isInvestorAccreditated.dataRoomStatus || !isEmpty(selfAccreditation));
   }
 
   @action

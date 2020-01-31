@@ -6,6 +6,9 @@ export const adminPaymentsIssuerList = gql`
       sinkingFundBalance
       offering {
         id
+        contact {
+          payments
+        }
         offeringStatus
         offeringSlug
         stage
