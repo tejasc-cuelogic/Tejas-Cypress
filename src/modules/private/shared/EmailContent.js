@@ -22,8 +22,8 @@ function EmailContent(props) {
       requestDate: requestDate || match.params.requestDate,
     };
     setLoading(true);
-    commonStore.getEmail(params).then((res) => {
-      setEmailContent(get(res, 'getEmail'));
+    commonStore.adminEmailContent(params).then((res) => {
+      setEmailContent(get(res, 'adminEmailContent'));
       setLoading(false);
     }).catch((e) => {
       setLoading(false);

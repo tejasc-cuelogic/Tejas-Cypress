@@ -115,7 +115,7 @@ export default class CampaignList extends Component {
                               <Icon name="heart" />
                             )
                           }
-                          <div className="campaign-card-details">
+                          <div className={`campaign-card-details ${!get(offering, 'isAvailablePublicly') ? 'disabled' : ''}`}>
                             <Card.Content>
                               <Card.Header>{offering && offering.keyTerms
                                 && offering.keyTerms.shorthandBusinessName ? offering.keyTerms.shorthandBusinessName : ''
@@ -180,7 +180,7 @@ export default class CampaignList extends Component {
                               <Button className="mt-30" as={Link} to={`/offerings/${offering.offeringSlug}`} primary fluid content="View" />
                             </Card.Content>
                           </div>
-                          <Card.Content extra>
+                          <Card.Content extra className={!get(offering, 'isAvailablePublicly') ? 'disabled' : ''}>
                             <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} {get(offering, 'keyTerms.securities') !== 'FUNDS' ? `from ${get(offering, 'closureSummary.totalInvestorCount') || 0} investors` : ''}</b></p>
                             {isFunded
                               && (

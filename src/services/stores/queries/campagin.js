@@ -323,6 +323,19 @@ export const campaignDetailsQuery = gql`
         multiple
         priceCalculation
         revSharePercentage
+        supplementalAgreements {
+          documents {
+            name
+            isVisible
+            upload {
+              fileId
+              fileName
+              fileHandle {
+                boxFileId
+              }
+            }
+          }
+        }
       }
     }
     earlyBirdsCount
