@@ -28,7 +28,7 @@ export default class OfferingDetails extends Component {
     if (!this.props.offeringsStore.initLoad.includes('getOne')) {
       if (Helper.isUuid(this.props.match.params.offeringSlug)) {
         this.props.offeringsStore.getofferingById(props.match.params.offeringSlug).then((offeringSlug) => {
-          this.props.offeringsStore.getOne(offeringSlug, false);
+          this.props.offeringsStore.getOne(offeringSlug);
         });
       } else {
         this.props.offeringsStore.getOne(props.match.params.offeringSlug);
