@@ -133,7 +133,7 @@ class Overview extends Component {
                     {offering && offering.launch && offering.launch.expectedOpsDate
                       ? (
                         <Table.Row verticalAlign="top">
-                          <Table.Cell>{overviewToDisplay && overviewToDisplay === 'REVENUE' ? 'Anticipated Opening' : 'Original Anticipated Opening Date'}</Table.Cell>
+                          <Table.Cell>Anticipated Opening Date</Table.Cell>
                           <Table.Cell>
                             {offering && offering.launch
                               && offering.launch.expectedOpsDate

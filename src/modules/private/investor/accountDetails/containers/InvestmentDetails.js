@@ -55,6 +55,7 @@ class InvestmentDetails extends PureComponent {
     ];
     const { campaign, details, dataRoomDocs } = this.props.campaignStore;
     const { responsiveVars } = this.props.uiStore;
+    let filterLabel = '';
     const hardCloseDate = moment(new Date(`${get(campaign, 'closureSummary.hardCloseDate')} 23:59:59`)).format('MM/DD/YYYY HH:mm:ss');
     const summaryDetails = {
       accountType: 'individual',
@@ -73,6 +74,12 @@ class InvestmentDetails extends PureComponent {
         {
           title: 'Net Payments Received', content: get(getInvestor, 'netPaymentsReceived') || 'N/A', type: 1, info: 'Payments received to date from this investment, minus NextSeed fees.',
         },
+        {
+          title: 'Principal Remaining', content: get(getInvestor, 'remainingPrincipal') || 'N/A',
+        },
+        {
+          title: 'Payments Remaining', content: get(getInvestor, 'remainingPayment') || 'N/A',
+        },
       ],
     };
 
@@ -82,6 +89,12 @@ class InvestmentDetails extends PureComponent {
     if (dataRoomDocs.length === 0) {
       navItems = navItems.filter(f => f.title !== 'Documents');
     }
+
+    if (![details.loading, loadingInvestDetails].includes(undefined) && (!details.loading || !loadingInvestDetails)) {
+      filterLabel = details.data.getOfferingDetailsBySlug.keyTerms.securities === 'TERM_NOTE' ? 'Payments Remaining' : 'Principal Remaining';
+      summaryDetails.summary = summaryDetails.summary.filter(sum => sum.title !== filterLabel);
+    }
+
     return (
       <Modal closeOnDimmerClick={false} closeIcon={!responsiveVars.isMobile} size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         {responsiveVars.isMobile && (
@@ -90,7 +103,7 @@ class InvestmentDetails extends PureComponent {
         </div>
         )}
         <Modal.Content className={`${responsiveVars.isMobile ? 'mt-30' : ''} transaction-details`}>
-          {details.loading || loadingInvestDetails ? <InlineLoader /> : (
+          {[details.loading, loadingInvestDetails].includes(undefined) || details.loading || loadingInvestDetails ? <InlineLoader /> : (
             <>
               <SummaryHeader details={summaryDetails} loading={details.loading || loadingInvestDetails} />
               <Card fluid className={responsiveVars.isMobile ? 'mt-0' : ''}>
