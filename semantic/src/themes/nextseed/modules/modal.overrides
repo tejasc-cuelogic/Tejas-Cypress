@@ -528,9 +528,7 @@
             padding:@50px @70px;
         }
         .option-details{
-            padding:@14px 0;
             line-height:@22px;
-            text-align:center;
             @media only screen and (max-width : @largestMobileScreen){
 				padding:@14px;
 			}
