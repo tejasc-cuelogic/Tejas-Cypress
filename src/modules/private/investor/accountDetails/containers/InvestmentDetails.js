@@ -75,10 +75,10 @@ class InvestmentDetails extends PureComponent {
           title: 'Net Payments Received', content: get(getInvestor, 'netPaymentsReceived') || 'N/A', type: 1, info: 'Payments received to date from this investment, minus NextSeed fees.',
         },
         {
-          title: 'Principal Remaining', content: get(getInvestor, 'remainingPrincipal') || 'N/A',
+          title: 'Principal Remaining', content: get(getInvestor, 'remainingPrincipal') || 'N/A', type: 1,
         },
         {
-          title: 'Payments Remaining', content: get(getInvestor, 'remainingPayment') || 'N/A',
+          title: 'Payments Remaining', content: get(getInvestor, 'remainingPayment') || 'N/A', type: 1,
         },
       ],
     };
