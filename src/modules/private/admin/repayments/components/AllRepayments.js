@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Card, Table, Button, Grid, Form, Icon, Header } from 'semantic-ui-react';
+import { Card, Table, Button, Grid, Form, Icon, Header, Popup } from 'semantic-ui-react';
 import moment from 'moment';
 import { get } from 'lodash';
 import Helper from '../../../../../helper/utility';
@@ -25,61 +25,72 @@ const repaymentMeta = [
 
 const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, handleEditPayment, validDate, getLink, sortKey, toggleVisibilityStatus, stateToggle }) => (
   <>
-  <Header as="h3">{`${headerTitle} (${repayments.length}) `} <Icon onClick={() => toggleVisibilityStatus(type)} className={`ns-chevron-${stateToggle === true ? 'up' : 'down'}-compact right`} color="blue" /></Header>
-  {stateToggle
-  && (
-    <Card fluid>
-      <div className="table-wrapper">
-        <Table sortable unstackable singleLine className="application-list clickable">
-          <Table.Header>
-            <Table.Row>
-            {repaymentMeta.map(h => h.applicable.includes(type) && (
-              <Table.HeaderCell
-                key={h.key}
-                sorted={sortOrder.column === h.key && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
-                onClick={() => handleSort(h.key, sortKey)}
-              >{h.title}</Table.HeaderCell>
-            ))}
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {
-              !repayments.length
-                ? (
-                  <Table.Row>
-                    <Table.Cell textAlign="center" colspan="10">No records found</Table.Cell>
-                  </Table.Row>
-                )
-                : repayments.map(record => (
-                <Table.Row key={record.id}>
+    <Header as="h3">{`${headerTitle} (${repayments.length}) `} <Icon onClick={() => toggleVisibilityStatus(type)} className={`ns-chevron-${stateToggle === true ? 'up' : 'down'}-compact right`} color="blue" /></Header>
+    {stateToggle
+      && (
+        <Card fluid>
+          <div className="table-wrapper">
+            <Table sortable unstackable singleLine className="application-list clickable">
+              <Table.Header>
+                <Table.Row>
                   {repaymentMeta.map(h => h.applicable.includes(type) && (
-                    <Table.Cell key={h.key}>
-                      {h.link
-                        ? (
-                        <Link to={getLink(record.offering.offeringSlug, record.offering.stage)}>
-                          <b>{get(record, h.key)}</b>
-                        </Link>
-                        ) : h.enum ? get(record, h.key) && CAMPAIGN_KEYTERMS_SECURITIES[get(record, h.key)]
-                          : h.validate ? validDate(record, h.key)
-                            : h.maturity ? validDate(record, h.key) ? `${validDate(record, h.key)} (${moment(moment(get(record, h.key))).diff(moment(), 'months') >= 0 ? moment(moment(get(record, h.key))).diff(moment(), 'months') : '0'})` : ''
-                              : h.currency ? Helper.CurrencyFormat(get(record, h.key) || 0) : 'N/A'
-                      }
-                    </Table.Cell>
+                    <Table.HeaderCell
+                      key={h.key}
+                      sorted={sortOrder.column === h.key && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
+                      onClick={() => handleSort(h.key, sortKey)}
+                    >{h.title}</Table.HeaderCell>
                   ))}
-                  <Table.Cell textAlign="center">
-                    <Button icon className="link-button">
-                      <Icon className="ns-pencil" onClick={() => handleEditPayment(record.offering.offeringSlug)} />
-                    </Button>
-                  </Table.Cell>
                 </Table.Row>
-                ))
-            }
-          </Table.Body>
-        </Table>
-      </div>
-    </Card>
-  )
-  }
+              </Table.Header>
+              <Table.Body>
+                {
+                  !repayments.length
+                    ? (
+                      <Table.Row>
+                        <Table.Cell textAlign="center" colspan="10">No records found</Table.Cell>
+                      </Table.Row>
+                    )
+                    : repayments.map(record => (
+                      <Table.Row key={record.id}>
+                        {repaymentMeta.map(h => h.applicable.includes(type) && (
+                          <Table.Cell key={h.key}>
+                            {h.link
+                              ? (
+                                <>
+                                  <Link to={getLink(record.offering.offeringSlug, record.offering.stage)}>
+                                    <b>{get(record, h.key)}</b>
+                                  </Link>
+                                  {get(record, 'offering.contact.payments')
+                                  && (
+                                  <Popup
+                                    trigger={<span> @</span>}
+                                    content={get(record, 'offering.contact.payments')}
+                                    hoverable
+                                    position="top center"
+                                  />
+                                  )}
+                                </>
+                              ) : h.enum ? get(record, h.key) && CAMPAIGN_KEYTERMS_SECURITIES[get(record, h.key)]
+                                : h.validate ? validDate(record, h.key)
+                                  : h.maturity ? validDate(record, h.key) ? `${validDate(record, h.key)} (${moment(moment(get(record, h.key))).diff(moment(), 'months') >= 0 ? moment(moment(get(record, h.key))).diff(moment(), 'months') : '0'})` : ''
+                                    : h.currency ? Helper.CurrencyFormat(get(record, h.key) || 0) : 'N/A'
+                            }
+                          </Table.Cell>
+                        ))}
+                        <Table.Cell textAlign="center">
+                          <Button icon className="link-button">
+                            <Icon className="ns-pencil" onClick={() => handleEditPayment(record.offering.offeringSlug)} />
+                          </Button>
+                        </Table.Cell>
+                      </Table.Row>
+                    ))
+                }
+              </Table.Body>
+            </Table>
+          </div>
+        </Card>
+      )
+    }
   </>
 );
 
@@ -142,11 +153,11 @@ export default class AllRepayments extends PureComponent {
                 more="no"
                 addon={(DEV_FEATURE_ONLY
                   && (
-                  <Grid.Column width={5} textAlign="right">
-                    <Button color="green" as={Link} floated="right" to="/dashboard/payments">
-                      Add New Repayment
+                    <Grid.Column width={5} textAlign="right">
+                      <Button color="green" as={Link} floated="right" to="/dashboard/payments">
+                        Add New Repayment
                     </Button>
-                  </Grid.Column>
+                    </Grid.Column>
                   )
                 )}
               />
