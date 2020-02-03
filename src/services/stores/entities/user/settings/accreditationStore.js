@@ -56,7 +56,7 @@ export class AccreditationStore {
 
   @observable userData = {};
 
-  disableElement = false;
+  @observable disableElement = false;
 
   @observable accreditationData = { ira: null, individual: null, entity: null };
 
@@ -1109,13 +1109,12 @@ export class AccreditationStore {
             headerSubheaderTextObj.subHeader = '';
             break;
         }
-        if (headerSubheaderTextObj.header !== '' || headerSubheaderTextObj.subHeader !== '') {
-          this.setFieldVal('disableElement', true);
-        }
+      }
+      if (userCurrentState !== 'NOT_ELGIBLE' && (headerSubheaderTextObj.header !== '' || headerSubheaderTextObj.subHeader !== '')) {
+        this.setFieldVal('disableElement', true);
       }
     }
     // return headerSubheaderTextObj;
-
     this.setHeaderAndSubHeader(headerSubheaderTextObj);
   }
 

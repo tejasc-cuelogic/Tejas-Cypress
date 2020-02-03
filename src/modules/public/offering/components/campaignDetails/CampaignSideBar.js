@@ -16,6 +16,7 @@ const isMobile = document.documentElement.clientWidth < 992;
 @observer
 export default class CampaignSideBar extends Component {
   handleInvestNowClick = () => {
+    this.props.accreditationStore.setFieldVal('disabeleElement', false);
     this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
     this.props.history.push(`${this.props.match.url}/invest-now`);
   }
