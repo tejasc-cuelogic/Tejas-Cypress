@@ -132,7 +132,7 @@ export class ManageOfferingStore extends DataModelStore {
         mutation: offeringUpsert,
         variables,
       })
-      .then(() => {
+      .then((data) => {
         this.setFieldValue('onDragSaveEnable', false);
         this.removeUploadedFiles(fromS3);
         if (successMsg) {
@@ -140,7 +140,7 @@ export class ManageOfferingStore extends DataModelStore {
         } else if (notify) {
           Helper.toast(`${keyName ? startCase(keyName) : 'Offering'} has been saved successfully.`, 'success');
         }
-        offeringsStore.getOne(id, false);
+        offeringsStore.getOne(get(data, 'data.offeringUpsert.offeringSlug'), false);
         uiStore.setProgress(false);
         res();
       })
