@@ -162,6 +162,8 @@ query getInvestmentDetails($userId: String, $accountId: String!, $offeringId: St
     offeringId: $offeringId,
     ) {
       totalRaisedAmount
+      remainingPayment
+      remainingPrincipal
       fundedDate
       myInvestment
       netPaymentsReceived
