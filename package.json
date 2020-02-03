@@ -144,7 +144,7 @@
     "style-loader": "0.23.1",
     "superagent": "^3.6.0",
     "superagent-promise": "^1.1.0",
-    "taffy": "^2.6.2",
+    "taffydb": "2.7.3",
     "terser-webpack-plugin": "1.2.3",
     "url-loader": "1.1.2",
     "validatorjs": "3.14.2",
