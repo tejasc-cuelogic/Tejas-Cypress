@@ -31,6 +31,7 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
           :
           <DropZone
             disabled={isReadonly}
+            blockDownload={isReadonly}
             size="small"
             className="secondary"
             name="upload"
@@ -153,7 +154,8 @@ export default class DataRoom extends Component {
       offer.legal.dataroom.submitted) ? offer.legal.dataroom.submitted : null;
     const approved = (offer && offer.legal && offer.legal.dataroom &&
       offer.legal.dataroom.approved) ? offer.legal.dataroom.approved : null;
-    const isReadonly = (!offeringClose && ((submitted && !isManager) || (isManager && approved && approved.status)));
+    const businessApplicationFlag = !!(referenceFrom && referenceFrom === 'BUSINESS_APPLICATION');
+    const isReadonly = (!offeringClose && ((submitted && !isManager) || (isManager && approved && approved.status)) || (!!(this.props.isReadOnlyFlag && businessApplicationFlag)));
     const {
       DATA_ROOM_FRM,
       CLOSING_BINDER_FRM,
@@ -164,7 +166,7 @@ export default class DataRoom extends Component {
     } = this.props.offeringCreationStore;
     const formName = closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM';
     const docs = [...(closingBinder ? CLOSING_BINDER_FRM.fields.closingBinder : DATA_ROOM_FRM.fields.documents)];
-    const businessApplicationFlag = !!(referenceFrom && referenceFrom === 'BUSINESS_APPLICATION');
+    // const businessApplicationReadOnlyStatus = !!(this.props.isReadOnlyFlag && businessApplicationFlag);
     return (
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form>
@@ -213,11 +215,11 @@ export default class DataRoom extends Component {
               />
             )
           }
-          {referenceFrom && referenceFrom === 'BUSINESS_APPLICATION'
+          {!isReadonly && referenceFrom && referenceFrom === 'BUSINESS_APPLICATION'
             &&
             (
               <div className="right-align mt-20">
-                <Button loading={inProgress === 'save'} primary className="relaxed" onClick={this.handleFormSubmitForBusinessApplication} >Save</Button>
+                <Button disabled={!DATA_ROOM_FRM.meta.isValid} loading={inProgress === 'save'} primary className="relaxed" onClick={this.handleFormSubmitForBusinessApplication} >Save</Button>
               </div>
             )
           }
@@ -227,7 +229,7 @@ export default class DataRoom extends Component {
           content="Are you sure you want to remove this document?"
           open={confirmModal}
           onCancel={this.toggleConfirmModal}
-          onConfirm={() => removeData(confirmModalName, 'documents')}
+          onConfirm={() => removeData(confirmModalName, 'documents', false, !!(referenceFrom && referenceFrom === 'BUSINESS_APPLICATION'))}
           size="mini"
           className="deletion"
         />

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
+import { get } from 'lodash';
 import BusinessApplicationMapping from './applicationMapping/businessApplicationMapping';
 // import LegalDocumentUpload from './applicationMapping/legalDocumentUpload';
 import { InlineLoader } from '../../../../../../../theme/shared';
@@ -18,13 +19,14 @@ export default class Offerings extends Component {
     } = this.props.businessAppStore;
     const { setFormDataForBusinessUploadDocuments } = this.props.offeringCreationStore;
     setFormDataForBusinessUploadDocuments('DATA_ROOM_FRM', '');
+    const businessAppReadOnly = !!get(businessApplicationDetailsAdmin, 'offeringId');
     return (
       (loadingArray.includes('getPluginList') || !businessApplicationDetailsAdmin)
         ? <InlineLoader />
         : (
           <>
-            <DataRoom referenceFrom="BUSINESS_APPLICATION" documentUpload="AGREEMENTS" />
-            <BusinessApplicationMapping {...this.props} />
+            <DataRoom referenceFrom="BUSINESS_APPLICATION" documentUpload="AGREEMENTS" isReadOnlyFlag={businessAppReadOnly} />
+            <BusinessApplicationMapping {...this.props} isReadOnlyFlag={businessAppReadOnly} />
           </>
         )
     );

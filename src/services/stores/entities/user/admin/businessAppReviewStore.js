@@ -11,7 +11,7 @@ import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
-import { applicationDeclinedByIssuer, getBusinessApplications, adminGeneratePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, adminUpdateApplicationStatusAndReview, adminBusinessApplicationsDetails, getBusinessApplicationOffers } from '../../../queries/businessApplication';
+import { applicationDeclinedByIssuer, getBusinessApplications, adminGeneratePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, adminUpdateApplicationStatusAndReview, adminBusinessApplicationsDetails, getBusinessApplicationOffers, adminCreateOffering } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore, userStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { allOfferingsCompact } from '../../../queries/offerings/manage';
@@ -943,12 +943,12 @@ export class BusinessAppReviewStore {
 
   @action
   createBusinessOffering = (formName) => {
+    uiStore.setProgress();
     const formInputData = Validator.evaluateFormData(this[formName].fields);
-    // const contingenyInputData = Validator.evaluateFormData(this.CONTINGENCY_FRM.fields);
-    // const rusultFormInputData = { ...formInputData, ...contingenyInputData };
+    const { applicationId, userId } = businessAppStore.businessApplicationDetailsAdmin;
     const rusultFormInputData = { ...formInputData };
-    const evaluatedFormData = Helper.replaceKeysDeep(rusultFormInputData, APPLICATION_OFFERING_MAPPING_KEY_VALUE);
-    map(evaluatedFormData, (value, key) => {
+    const evaluatedFormData = Helper.replaceKeysDeep(JSON.parse(JSON.stringify({ ...rusultFormInputData })), APPLICATION_OFFERING_MAPPING_KEY_VALUE);
+    forEach(evaluatedFormData, (value, key) => {
       if (key === 'leadership') {
         evaluatedFormData[key][0].social = { linkedin: evaluatedFormData[key][0].linkedin };
         delete evaluatedFormData[key][0].linkedin;
@@ -971,9 +971,40 @@ export class BusinessAppReviewStore {
         delete evaluatedFormData[key].general.materialIndebtedness[0].objRef;
       }
     });
-    this.saveReviewForms('CONTINGENCY_FRM');
-    // console.table([rusultFormInputData]);
+    this.confirmModal = !this.confirmModal;
+    this.confirmModalName = null;
+    const payload = {
+      applicationId,
+      issuerId: userId,
+      offeringDetailsInput: evaluatedFormData,
+    };
+    const reFetchPayLoad = {
+      applicationId,
+      applicationType: 'APPLICATION_COMPLETED',
+    };
+    this.saveReviewForms('CONTINGENCY_FRM', '', true, false);
     console.table([evaluatedFormData]);
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: adminCreateOffering,
+          variables: payload,
+          refetchQueries:
+            [{ query: adminBusinessApplicationsDetails, variables: reFetchPayLoad }],
+        })
+        .then((result) => {
+          Helper.toast('Offering created successfully.', 'success');
+          resolve(result);
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
   }
 }
 

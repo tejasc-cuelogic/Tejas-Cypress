@@ -537,3 +537,12 @@ mutation adminExportAllToEmail($applicationType: ApplicationTypeEnum!) {
   adminExportAllToEmail(applicationType: $applicationType)
 }
 `;
+
+export const adminCreateOffering = gql`
+mutation adminCreateOffering($issuerId: String!, $applicationId: String!, $offeringDetailsInput: OfferingInputType!) {
+  adminCreateOffering(issuerId: $issuerId, applicationId: $applicationId, offeringDetailsInput: $offeringDetailsInput)
+  {
+    id
+ }
+}
+`;

@@ -484,14 +484,22 @@ export class OfferingCreationStore {
   }
 
   @action
-  removeData = (formName, subForm = 'data', isApiDelete = false) => {
+  removeData = (formName, subForm = 'data', isApiDelete = false, isForBusinessApplication = false) => {
     const subArray = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : subForm;
     if (!isApiDelete) {
       if (['OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'CLOSING_BINDER_FRM', 'DATA_ROOM_FRM'].includes(formName)) {
         let removeFileIds = '';
+        let removedArr = [];
+        if (isForBusinessApplication) {
+          const removeListArr = this[formName].fields[subArray][this.removeIndex];
+          removedArr = removeListArr;
+        }
         const { fileId } = this[formName].fields[subArray][this.removeIndex].upload;
         removeFileIds = fileId;
         this.removeFileIdsList = removeFileIds ? [...this.removeFileIdsList, removeFileIds] : [...this.removeFileIdsList];
+        if (isForBusinessApplication) {
+          this.removedFileData.documents = [...this.removedFileData.documents, { ...removedArr, removedFileId: { value: removeFileIds } }];
+        }
       }
       this[formName].fields[subArray].splice(this.removeIndex, 1);
     }
@@ -715,12 +723,12 @@ export class OfferingCreationStore {
       this.setFormFileArray(form, arrayName, field, 'fileName', '', index);
     } else {
       let removeFileIds = '';
-      let removedArr = [];
+      // let removedArr = [];
       if (index !== null && arrayName) {
-        if (isForBusinessApplication) {
-          const removeListArr = this[form].fields[arrayName][index];
-          removedArr = removeListArr;
-        }
+        // if (isForBusinessApplication) {
+        //   const removeListArr = this[form].fields[arrayName][index];
+        //   removedArr = removeListArr;
+        // }
         const { fileId } = this[form].fields[arrayName][index][field];
         removeFileIds = fileId;
       } else if (index !== null) {
@@ -731,10 +739,10 @@ export class OfferingCreationStore {
         removeFileIds = fileId;
       }
       this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
-      if (isForBusinessApplication) {
-        this.removedFileData.documents = [...this.removedFileData.documents, { ...removedArr, removedFileId: { value: removeFileIds } }];
-      }
       this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
+        // if (isForBusinessApplication) {
+        //   this.removedFileData.documents = [...this.removedFileData.documents, { ...removedArr, removedFileId: { value: removeFileIds } }];
+        // }
     }
     this.setFormFileArray(form, arrayName, field, 'fileData', '', index);
     this.setFormFileArray(form, arrayName, field, 'value', '', index);

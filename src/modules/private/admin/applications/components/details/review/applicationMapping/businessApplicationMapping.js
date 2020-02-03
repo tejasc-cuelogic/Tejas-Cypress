@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Header, Form, Accordion, Icon, Button } from 'semantic-ui-react';
+import { Header, Form, Accordion, Icon, Button, Confirm } from 'semantic-ui-react';
 import { FormInput, FormDropDown, MaskedInput } from '../../../../../../../../theme/form';
 import { BD_REGULATION_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../../../../services/constants/admin/offerings';
 import Helper from '../../../../../../../../helper/utility';
@@ -11,7 +11,7 @@ export const options = [
   { key: 'No', value: 'NO', text: 'No' },
 ];
 
-@inject('businessAppReviewStore')
+@inject('businessAppReviewStore', 'uiStore')
 @observer
 export default class BusinessApplicationMapping extends Component {
   state = { activeIndex: [0, 1, 2, 3], isSsnDirty: [] };
@@ -53,15 +53,22 @@ export default class BusinessApplicationMapping extends Component {
     this.props.businessAppReviewStore.createBusinessOffering('APPLICATION_MAPPED_OFFERING_FORM');
   }
 
+  toggleConfirmModal = (e, formName) => {
+    e.preventDefault();
+    this.props.businessAppReviewStore.toggleConfirmModal(null, formName);
+  }
+
   render() {
     const { activeIndex } = this.state;
     const formName = 'APPLICATION_MAPPED_OFFERING_FORM';
+    const { inProgress } = this.props.uiStore;
     const {
       APPLICATION_MAPPED_OFFERING_FORM,
       formArrayChange,
       businessDetailsDateChange,
       businessDetailsChange,
       businessDetailsMaskingChange,
+      confirmModal,
     } = this.props.businessAppReviewStore;
     let MODIFIED_REGULATION_VALUES = null;
     if (APPLICATION_MAPPED_OFFERING_FORM && APPLICATION_MAPPED_OFFERING_FORM.fields && APPLICATION_MAPPED_OFFERING_FORM.fields.regulation
@@ -71,9 +78,13 @@ export default class BusinessApplicationMapping extends Component {
       // MODIFIED_REGULATION_VALUES = REGULATION_VALUES;
       MODIFIED_REGULATION_VALUES = BD_REGULATION_VALUES;
     }
+    const isReadonly = this.props.isReadOnlyFlag;
+    if (isReadonly) {
+       return null;
+    }
     return (
       <>
-        <Form onSubmit={this.submit} className="mt-50">
+        <Form className="mt-50">
           <Header as="h4">Business Application Mapping</Header>
           <Accordion exclusive={false} fluid styled className="card-style mt-20 overflow-visible">
             <Accordion.Title onClick={() => this.toggleAccordianContent(0)}>
@@ -330,9 +341,19 @@ export default class BusinessApplicationMapping extends Component {
             </Accordion.Content>
           </Accordion>
           <div className="right-align mt-20">
-            <Button disabled={!APPLICATION_MAPPED_OFFERING_FORM.meta.isValid} primary className="relaxed" type="submit">Create Offering</Button>
+            <Button disabled={!APPLICATION_MAPPED_OFFERING_FORM.meta.isValid} loading={inProgress} primary className="relaxed" onClick={e => this.toggleConfirmModal(e, formName)}>Create Offering</Button>
           </div>
         </Form>
+        <Confirm
+          header="Confirm"
+          content="This action can only be triggered once, and will be created with the values
+          currently defined. Are you sure you want to create this offering at this time?"
+          open={confirmModal}
+          onCancel={this.toggleConfirmModal}
+          onConfirm={() => this.submit()}
+          size="mini"
+          className="deletion"
+        />
       </>
     );
   }

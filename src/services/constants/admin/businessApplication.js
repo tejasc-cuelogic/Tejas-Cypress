@@ -1845,7 +1845,7 @@ export const APPLICATION_MAPPED_OFFERING = {
     error: undefined,
     rule: 'required',
     placeHolder: 'Enter here',
-    objRefOutput: 'keyTerms',
+    // objRefOutput: 'keyTerms',
   },
   regulation: {
     value: '',
@@ -1853,7 +1853,7 @@ export const APPLICATION_MAPPED_OFFERING = {
     error: undefined,
     rule: 'optional',
     placeHolder: 'Enter here',
-    objRefOutput: 'keyTerms',
+    // objRefOutput: 'keyTerms',
   },
   website: {
     label: 'Website',
@@ -1996,7 +1996,7 @@ export const APPLICATION_OFFERING_MAPPING_KEY_VALUE = {
   businessName: 'legalBusinessName',
   businessEntityStructure: 'legalBusinessType',
   website: 'websiteUrl',
-  street: 'businessStreet:',
+  street: 'businessStreet',
   city: 'businessCity',
   state: 'businessState',
   zipCode: 'businessZip',
