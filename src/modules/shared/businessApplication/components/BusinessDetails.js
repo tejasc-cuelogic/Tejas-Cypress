@@ -500,7 +500,7 @@ export default class BusinessDetails extends Component {
                                   onClick: () => this.setSsnVisibilityStatus(),
                                 } : null}
                                 displayMode={formReadOnlyMode}
-                                asterisk={formReadOnlyMode ? 'false' : 'true'}
+                                asterisk="true"
                                 onChange={(e, res) => this.handleSsnChange(e, res, 'owners', index)}
                               />
                             )
