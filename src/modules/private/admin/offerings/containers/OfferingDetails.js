@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Switch, Route, Link } from 'react-router-dom';
+import { Switch, Route, Link, Redirect } from 'react-router-dom';
 import { find, get } from 'lodash';
 import { Modal, Card, Header, Icon } from 'semantic-ui-react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -26,7 +26,13 @@ export default class OfferingDetails extends Component {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
     if (!this.props.offeringsStore.initLoad.includes('getOne')) {
-      this.props.offeringsStore.getOne(this.props.match.params.offeringSlug);
+      if (Helper.isUuid(this.props.match.params.offeringSlug)) {
+        this.props.offeringsStore.getofferingById(props.match.params.offeringSlug).then((offeringSlug) => {
+          this.props.offeringsStore.getOne(offeringSlug);
+        });
+      } else {
+        this.props.offeringsStore.getOne(props.match.params.offeringSlug);
+      }
     }
     this.props.navStore.setAccessParams('specificNav', '/dashboard/offering/2/overview');
   }
@@ -72,6 +78,10 @@ export default class OfferingDetails extends Component {
       navItems,
       get(find(offeringsStore.phases, (s, i) => i === offer.stage), 'accessKey'),
     );
+
+    if (Helper.isUuid(this.props.match.params.offeringSlug) && offer.id) {
+      return <Redirect from={`/dashboard/offering/${this.props.match.params.offeringSlug}/comments`} to={`/dashboard/offering/${offer.offeringSlug}/comments`} />;
+    }
 
     if (this.props.match.params.stage === 'engagement' && !isDev) {
       navItems = navItems.filter(n => (n.title !== 'Transactions'));

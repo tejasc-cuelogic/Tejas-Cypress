@@ -9,10 +9,10 @@ const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 @observer
 export default class UploadDocument extends Component {
-componentDidMount() {
+  componentDidMount() {
     const { changeRuleAsPerFilingStatus, FILLING_STATUS_FORM } = this.props.accreditationStore;
     changeRuleAsPerFilingStatus(FILLING_STATUS_FORM.fields.method.value);
-}
+  }
 
   onFileDrop = (files, field) => {
     this.props.accreditationStore.setFileUploadData('INCOME_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Income', '', '', '');
@@ -43,7 +43,7 @@ componentDidMount() {
       <div>
         <Header as="h3" textAlign="center">Upload documents</Header>
         <p className={isMobile ? 'left-align' : 'center-align'}>
-        Upload your tax returns, Form W-2s, or other IRS or foreign tax authority documents evidencing your income for the past 2 years, or a letter from your personal lawyer, CPA, investment advisor or investment broker verifying your income for such years.
+          Upload your tax returns, Form W-2s, or other IRS or foreign tax authority documents evidencing your income for the past 2 years, or a letter from your personal lawyer, CPA, investment advisor or investment broker verifying your income for such years.
         </p>
         <Divider hidden />
         <Form>
@@ -62,35 +62,38 @@ componentDidMount() {
                 </Grid.Column>
               ))
             }
-          {isFilling
-          && (
-            <Grid.Column>
-              <MaskedInput
-                name="estimateIncome"
-                fielddata={INCOME_UPLOAD_DOC_FORM.fields.estimateIncome}
-                changed={(values, name) => maskChange(values, 'INCOME_UPLOAD_DOC_FORM', name)}
-                currency
-                showerror
-                prefix="$"
-              />
-            </Grid.Column>
-          )
-        }
-        </Grid>
+            {
+              ['previousEstimateIncome', 'estimateIncome'].map(field => (
+                ((!isFilling && field === 'previousEstimateIncome')
+                  || field === 'estimateIncome') && (
+                  <Grid.Column key={field}>
+                    <MaskedInput
+                      name={field}
+                      fielddata={INCOME_UPLOAD_DOC_FORM.fields[field]}
+                      changed={(values, name) => maskChange(values, 'INCOME_UPLOAD_DOC_FORM', name)}
+                      currency
+                      showerror
+                      prefix="$"
+                    />
+                  </Grid.Column>
+                )
+              ))
+            }
+          </Grid>
           <Divider hidden />
           {isFilling
-          && (
-          <p className={isMobile ? 'left-align' : 'center-align'}>
-          <b>Note:</b> If you provide tax documents, W-2s, or other direct forms of income verification, your accredited investor status will be valid for the remainder of this calendar year. If you provide an upload of communication from a qualified advisor, your accredited investor status will be valid for 90 days from the date of your verifier`s confirmation.
+            && (
+              <p className={isMobile ? 'left-align' : 'center-align'}>
+                <b>Note:</b> If you provide tax documents, W-2s, or other direct forms of income verification, your accredited investor status will be valid for the remainder of this calendar year. If you provide an upload of communication from a qualified advisor, your accredited investor status will be valid for 90 days from the date of your verifier`s confirmation.
           </p>
-          )
+            )
           }
           <Divider hidden />
           <FormCheckbox
             fielddata={
               FILLING_STATUS_FORM.fields.method.value
-              ? INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling
-              : INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling
+                ? INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling
+                : INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling
             }
             name={FILLING_STATUS_FORM.fields.method.value ? 'isAcceptedForfilling' : 'isAcceptedForUnfilling'}
             changed={(e, result) => formChange(e, result, 'INCOME_UPLOAD_DOC_FORM')}

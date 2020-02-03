@@ -28,7 +28,7 @@ export default class PaymentDetails extends Component {
   }
 
   render() {
-    const { PAYMENT_FRM, maskChange } = this.props.paymentStore;
+    const { PAYMENT_FRM, maskChange, selectedOffering, formChange } = this.props.paymentStore;
     const { inProgress } = this.props.uiStore;
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
@@ -83,10 +83,17 @@ export default class PaymentDetails extends Component {
                 name="sinkingFundBalance"
                 fielddata={PAYMENT_FRM.fields.sinkingFundBalance}
               />
+              <FormInput
+                fluid
+                type="text"
+                name="paymentsContactEmail"
+                fielddata={PAYMENT_FRM.fields.paymentsContactEmail}
+                changed={(e, result) => formChange(e, result, 'PAYMENT_FRM', 'formatted')}
+              />
             </Form.Group>
             <div className="center-align mt-20">
               <Button className="very relaxed red" content="Cancel" onClick={this.handleCloseModal} />
-              <Button primary className="very relaxed" disabled={!PAYMENT_FRM.meta.isValid} loading={inProgress} content="Save" onClick={() => this.handleUpdatePayment(get(this.props, 'match.params.id'))} />
+              <Button primary className="very relaxed" disabled={!PAYMENT_FRM.meta.isValid} loading={inProgress} content="Save" onClick={() => this.handleUpdatePayment(selectedOffering)} />
             </div>
           </Form>
         </Modal.Content>

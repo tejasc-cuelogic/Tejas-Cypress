@@ -12,6 +12,7 @@ import apiService from '../api/restApi';
 import { isLoggingEnabled, IMAGE_UPLOAD_ALLOWED_EXTENSIONS, DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS, REACT_APP_DEPLOY_ENV } from '../constants/common';
 import authStore from '../services/stores/entities/shared/authStore';
 import userStore from '../services/stores/entities/userStore';
+import DataFormatter from './utilities/DataFormatter';
 
 export class Utility {
   // Default options for the toast
@@ -104,6 +105,9 @@ export class Utility {
     const formattedSSNNumber = `${cyrptedSSNNumber.substr(0, 3)}-${cyrptedSSNNumber.substr(3, 2)}-${cyrptedSSNNumber.substr(5, 4)}`;
     return formattedSSNNumber;
   }
+
+  isUuid = value => value
+  .match(new RegExp(/([a-fA-F0-9]{8}-(?:[a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}){1}/)) !== null
 
   encryptNumber = (number) => {
     if (!number) return null;
@@ -376,6 +380,16 @@ export class Utility {
     }
     return value;
   };
+
+  checkAccreditationExpiryStatus = (expirationDate, isUnix = false) => {
+    let dateDiff = '';
+    if (expirationDate) {
+      const date = (isUnix && typeof expirationDate === 'string') ? parseInt(expirationDate, 10) : expirationDate;
+      dateDiff = DataFormatter.diffDays(DataFormatter.formatedDate(date, isUnix), false, true);
+      return dateDiff < 0 ? 'EXPIRED' : 'ACTIVE';
+    }
+    return dateDiff;
+  }
 }
 
 export default new Utility();
