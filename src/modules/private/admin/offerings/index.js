@@ -23,7 +23,7 @@ export default class Repayments extends Component {
         subNav
       >
         <Switch>
-          <Redirect from="/dashboard/offerings/edit/*" to="/dashboard/offerings/overview" />
+          <Redirect from="/dashboard/offerings/:stage/edit/*" to="/dashboard/offering/*" />
           <Route exact path={`${match.url}/:stage`} component={AllOfferings} />
           <Route exact path={`${match.url}/creation/new`} component={NewOffer} />
         </Switch>
