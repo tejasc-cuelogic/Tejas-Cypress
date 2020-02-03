@@ -495,7 +495,7 @@ export default class BusinessDetails extends Component {
                                 name="ssn"
                                 fielddata={Helper.encrypSsnNumberByForm(owner).ssn}
                                 icon={this.props.userStore.isAdmin ? {
-                                  className: this.state.ssnVisibilityStatus ? 'ns-view active' : 'ns-view',
+                                  className: this.state.ssnVisibilityStatus ? 'ns-view active' : 'ns-no-view',
                                   link: true,
                                   onClick: () => this.setSsnVisibilityStatus(),
                                 } : null}
@@ -507,12 +507,12 @@ export default class BusinessDetails extends Component {
                             : (
                               <MaskedInput
                                 readOnly={formReadOnlyMode}
-                                containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                                containerclassname={`${formReadOnlyMode ? 'display-only' : ''} ${this.state.ssnVisibilityStatus ? 'ssn-visible' : ''}`}
                                 ssn
                                 name="ssn"
                                 asterisk="true"
                                 icon={this.props.userStore.isAdmin ? {
-                                  className: this.state.ssnVisibilityStatus ? 'ns-view active' : 'ns-view',
+                                  className: this.state.ssnVisibilityStatus ? 'ns-view active' : 'ns-no-view',
                                   link: true,
                                   onClick: () => this.setSsnVisibilityStatus(),
                                 } : null}
