@@ -1455,6 +1455,15 @@ export const setOrderForOfferings = gql`
   }
 `;
 
+export const getofferingById = gql`
+  query getOfferingById($id: String!) {
+    getOfferingById(id: $id) {
+      offeringSlug
+    }
+  }
+`;
+
+
 export const initializeClosingBinder = gql`
   mutation initializeClosingBinder($offeringId: String!){
     initializeClosingBinder(offeringId: $offeringId) {

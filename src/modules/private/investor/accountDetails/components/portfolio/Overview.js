@@ -138,7 +138,7 @@ class Overview extends Component {
                     {offering && offering.launch && offering.launch.expectedOpsDate
                       ? (
                         <Table.Row verticalAlign="top">
-                          <Table.Cell>{overviewToDisplay && overviewToDisplay === 'REVENUE' ? 'Anticipated Opening' : 'Original Anticipated Opening Date'}</Table.Cell>
+                          <Table.Cell>Anticipated Opening Date</Table.Cell>
                           <Table.Cell>
                             {offering && offering.launch
                               && offering.launch.expectedOpsDate
@@ -149,7 +149,7 @@ class Overview extends Component {
                         </Table.Row>
                       ) : ''
                     }
-                    {get(campaign, 'closureSummary.keyTerms.interestRate') || get(campaign, 'closureSummary.keyTerms.multiple')
+                    {get(campaign, 'keyTerms.interestRate') || get(campaign, 'closureSummary.keyTerms.multiple')
                       ? (
                         <Table.Row verticalAlign="top">
                           <Table.Cell>
@@ -171,8 +171,8 @@ class Overview extends Component {
                             )
                             : (
                               <Table.Cell>
-                                {campaign && get(campaign, 'closureSummary.keyTerms.interestRate')
-                                  ? `${get(campaign, 'closureSummary.keyTerms.interestRate')}%` : 'N/A'
+                                {campaign && get(campaign, 'keyTerms.interestRate')
+                                  ? `${get(campaign, 'keyTerms.interestRate')}%` : 'N/A'
                                 }
                               </Table.Cell>
                             )
@@ -238,7 +238,7 @@ class Overview extends Component {
                       ? (
                         <Table.Row verticalAlign="top">
                           <Table.Cell width={5}>{' '}
-                            <PopUpModal content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`} customTrigger={<span className="popup-label">Maturity</span>} showOnlyPopup={!isMobile} />
+                            <PopUpModal position="top left" content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`} customTrigger={<span className="popup-label">Maturity</span>} showOnlyPopup={!isMobile} />
                           </Table.Cell>
                           <Table.Cell>
                             {maturityMonth

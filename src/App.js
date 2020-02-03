@@ -306,4 +306,6 @@ class App extends Component {
   }
 }
 
+// && UpdateHelper.showUpdateModal(location.pathname)
+
 export default App;

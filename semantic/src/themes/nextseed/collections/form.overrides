@@ -157,6 +157,14 @@
                     padding-bottom:0;
                 }
             }
+            &.ssn-visible{
+                position: relative;
+                i.icon.ns-view.active{
+                    position: absolute;
+                    right: @10px;
+                    color: @primary-one;
+                }
+            }
         }
         &.secondary textarea{
             background-color:@white;
