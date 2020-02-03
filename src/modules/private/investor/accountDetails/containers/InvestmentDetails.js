@@ -55,7 +55,7 @@ class InvestmentDetails extends PureComponent {
     ];
     const { campaign, details, dataRoomDocs } = this.props.campaignStore;
     const { responsiveVars } = this.props.uiStore;
-    let filterLabel = '';
+    let filterLabel;
     const hardCloseDate = moment(new Date(`${get(campaign, 'closureSummary.hardCloseDate')} 23:59:59`)).format('MM/DD/YYYY HH:mm:ss');
     const summaryDetails = {
       accountType: 'individual',
@@ -91,16 +91,19 @@ class InvestmentDetails extends PureComponent {
     }
 
     if (![details.loading, loadingInvestDetails, details.data].includes(undefined) && (!details.loading || !loadingInvestDetails)) {
-      filterLabel = details.data.getOfferingDetailsBySlug.keyTerms.securities === 'TERM_NOTE' ? 'Payments Remaining' : 'Principal Remaining';
-      summaryDetails.summary = summaryDetails.summary.filter(sum => sum.title !== filterLabel);
+      const { securities } = get(details, 'data.getOfferingDetailsBySlug.keyTerms');
+      filterLabel = securities === 'TERM_NOTE' ? 'Payments Remaining' : securities === 'REVENUE_SHARING_NOTE' ? 'Principal Remaining' : undefined;
+      summaryDetails.summary = summaryDetails.summary.filter(sum => (filterLabel === undefined
+        ? !['Principal Remaining', 'Payments Remaining'].includes(sum.title)
+        : filterLabel !== sum.title));
     }
 
     return (
       <Modal closeOnDimmerClick={false} closeIcon={!responsiveVars.isMobile} size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         {responsiveVars.isMobile && (
-        <div className="mob-header">
-          <Icon className="ns-close-circle" color="grey" onClick={this.handleCloseModal} />
-        </div>
+          <div className="mob-header">
+            <Icon className="ns-close-circle" color="grey" onClick={this.handleCloseModal} />
+          </div>
         )}
         <Modal.Content className={`${responsiveVars.isMobile ? 'mt-30' : ''} transaction-details`}>
           {[details.loading, loadingInvestDetails].includes(undefined) || details.loading || loadingInvestDetails ? <InlineLoader /> : (
@@ -108,7 +111,7 @@ class InvestmentDetails extends PureComponent {
               <SummaryHeader details={summaryDetails} loading={details.loading || loadingInvestDetails} />
               <Card fluid className={responsiveVars.isMobile ? 'mt-0' : ''}>
                 {!responsiveVars.isMobile
-                && <SecondaryMenu match={match} navItems={navItems} />
+                  && <SecondaryMenu match={match} navItems={navItems} />
                 }
                 <SuspenseBoundary>
                   <Switch>
@@ -137,7 +140,7 @@ class InvestmentDetails extends PureComponent {
                                 refMatch={JSON.parse(JSON.stringify(match))}
                               />
                             )
-                          }
+                            }
                           />
                         );
                       })
