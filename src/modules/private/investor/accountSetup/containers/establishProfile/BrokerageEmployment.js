@@ -20,64 +20,24 @@ export default class BrokerageEmployment extends Component {
   render() {
     const { BROKERAGE_EMPLOYMENT_FORM, employmentChange, updateInvestorProfileData, stepToBeRendered } = this.props.investorProfileStore;
     const { errors, multiSteps, inProgressArray } = this.props.uiStore;
-    if (inProgressArray.includes('BROKERAGE_EMPLOYMENT') && isMobile) {
-      return (
-        <>
-          <Form onSubmit={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} error className="mb-30">
-            <Form.Group widths="equal">
-              <FormInput
-                key="brokerageFirmName"
-                fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageFirmName}
-                name="brokerageFirmName"
-                changed={(e, result) => employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result)}
-                showerror
-              />
-              <Button className={`${isMobile ? 'mt-60' : ''} relaxed`} primary size="large" fluid content="Continue" disabled={!BROKERAGE_EMPLOYMENT_FORM.meta.isValid} />
-            </Form.Group>
-          </Form>
-          <Divider section hidden className="mb-60" />
-          <p className="note mobile-bottom-notes">
-            You will not be able to make investments on NextSeed until we receive a 407 letter from your firm approving the opening of your account. Please ask your firm to send the letter to <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
-          </p>
-        </>
-      );
-    }
     return (
-      <div className={isMobile ? '' : 'center-align'}>
-        {/* <Header as="h3">Brokerage employment</Header> */}
-        <Header as="h3">Do you (or an immediate family member) work for a US-based securities brokerage firm?</Header>
+      <>
+        <Header as="h4">Do you (or an immediate family member) work for a US-based securities brokerage firm?</Header>
         {!isMobile && <Divider hidden />}
-        {/* <p>
-          Do you (or an immediate family member) work for a US-based
-          {' '}
-          <Responsive as={Aux} minWidth={1200}><br /></Responsive>
-securities brokerage firm?
-        </p>
-        <Divider hidden /> */}
         <p className="mb-40">If you do not know what this means, it likely does not apply to you.</p>
-        <Form error className={isMobile ? ' mb-30' : ''}>
-          {/* <FormRadioGroup
-            fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment}
-            name="brokerageEmployment"
-            changed={(e, result) => {
-              employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result);
-              this.props.uiStore.scrollIntoActiveInputFields();
-            }}
-            containerclassname="three wide button-radio center-align"
-            showerror
-          /> */}
+        <Form onSubmit={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} error className={isMobile ? ' mb-30' : ''}>
           {!inProgressArray.includes('BROKERAGE_EMPLOYMENT')
           && (
-            <Button.Group vertical>
-            <Button primary size="large" onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mb-30' : 'mb-20'} relaxed`} content="No" />
-            <Button className="link-button" onClick={this.handleShowFields} color="green" content="Yes" />
+            <Button.Group vertical={isMobile}>
+              <Button basic={!isMobile} primary size={isMobile && 'large'} onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={isMobile ? 'mb-30 relaxed' : ''} content="No" />
+              <Button className={isMobile ? 'link-button' : ''} onClick={this.handleShowFields} color="green" content="Yes" />
             </Button.Group>
           )
           }
-          {inProgressArray.includes('BROKERAGE_EMPLOYMENT') && !isMobile
+          {inProgressArray.includes('BROKERAGE_EMPLOYMENT')
           && (
             <>
-              <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
+              <div className={!isMobile ? 'mt-30' : ''}>
                 <Form.Group widths="equal">
                   <FormInput
                     key="brokerageFirmName"
@@ -88,10 +48,14 @@ securities brokerage firm?
                   />
                 </Form.Group>
               </div>
+              <Button className={`${isMobile ? 'mt-60' : 'mt-30'} relaxed`} primary size="large" fluid={isMobile} content="Continue" disabled={!BROKERAGE_EMPLOYMENT_FORM.meta.isValid} />
               <Divider section hidden />
-              <p className="note">
-              You will not be able to make investments on NextSeed until we receive a 407 letter from your firm approving the opening of your account. Please ask your firm to send the letter to <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
-              </p>
+              {!isMobile
+              && (
+                <p className="note">
+                  You will not be able to make investments on NextSeed until we receive a 407 letter from your firm approving the opening of your account. Please ask your firm to send the letter to <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
+                </p>
+              )}
             </>
           )
           }
@@ -103,7 +67,13 @@ securities brokerage firm?
           )
           }
         </Form>
-      </div>
+        {inProgressArray.includes('BROKERAGE_EMPLOYMENT') && isMobile
+        && (
+          <p className="mobile-bottom-notes note">
+            You will not be able to make investments on NextSeed until we receive a 407 letter from your firm approving the opening of your account. Please ask your firm to send the letter to <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
+          </p>
+        )}
+      </>
     );
   }
 }

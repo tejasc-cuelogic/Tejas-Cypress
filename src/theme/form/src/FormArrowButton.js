@@ -44,7 +44,7 @@ const FormArrowButton = observer((props) => {
     <Icon className="ns-chevron-right" color="grey" />
   </Button>
   {(ctaErrors && ctaErrors.for === field.value) ? (
-    <p className="negative-text mt-14 mb-14 more-info center-align">
+    <p className="negative-text mt-14 mb-14 more-info">
       {ctaErrors.errorMsg}
     </p>
   ) : ''
