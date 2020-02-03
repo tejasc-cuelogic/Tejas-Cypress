@@ -2,13 +2,13 @@ import React from 'react';
 import { Icon, Modal, Popup } from 'semantic-ui-react';
 
 const PopUpModal = (props) => {
-  const { label, content, iconName, showOnlyPopup, customTrigger } = props;
+  const { label, content, iconName, showOnlyPopup, customTrigger, position } = props;
   if (showOnlyPopup) {
     return (
       <Popup
         trigger={customTrigger || <Icon className="ns-help-circle" />}
         content={content}
-        position="top center"
+        position={position || 'top center'}
         wide
         hoverable
         color="grey"
