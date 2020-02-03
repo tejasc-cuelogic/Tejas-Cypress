@@ -11,7 +11,7 @@ import { Spinner, ListErrors } from '../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
-@inject('investmentStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore')
+@inject('investmentStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
 @observer
 class FinancialInfo extends Component {
   constructor(props) {

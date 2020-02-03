@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import money from 'money-math';
 import Helper from '../../../../../helper/utility';
 
-@inject('investmentStore', 'investmentLimitStore', 'uiStore')
+@inject('investmentStore', 'investmentLimitStore', 'uiStore', 'accreditationStore')
 @withRouter
 @observer
 class TransferRequest extends Component {
