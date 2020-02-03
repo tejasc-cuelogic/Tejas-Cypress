@@ -295,7 +295,7 @@ class App extends Component {
           )
         }
         <ToastContainer className="toast-message" />
-        {uiStore.appUpdated && (location.pathname !== '/login')
+        {uiStore.appUpdated && location.pathname !== '/login'
           && <NotifyVersionUpdate setAppUpdated={uiStore.setAppUpdated} />
         }
         {uiStore.devBanner
