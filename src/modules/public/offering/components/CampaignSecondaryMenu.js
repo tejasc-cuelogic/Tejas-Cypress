@@ -8,7 +8,7 @@ import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offerin
 
 const isMobile = document.documentElement.clientWidth < 992;
 
-@inject('campaignStore', 'navStore')
+@inject('campaignStore', 'navStore', 'accreditationStore')
 @withRouter
 @observer
 export default class CampaignSecondaryMenu extends Component {

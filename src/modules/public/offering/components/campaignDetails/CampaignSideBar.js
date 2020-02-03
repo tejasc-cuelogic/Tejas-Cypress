@@ -11,7 +11,7 @@ import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from 
 
 const isMobile = document.documentElement.clientWidth < 992;
 
-@inject('campaignStore', 'authStore')
+@inject('campaignStore', 'authStore', 'accreditationStore')
 @withRouter
 @observer
 export default class CampaignSideBar extends Component {

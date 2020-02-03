@@ -421,7 +421,7 @@ export class AccreditationStore {
       Validator.resetFormData(this[formName]);
     });
     this.setStepToBeRendered(0);
-    this.setFieldVal('disableElement', true);
+    this.setFieldVal('disableElement', false);
     this.docsToUpload = [];
     this.firstInit = '';
   }
@@ -1109,12 +1109,13 @@ export class AccreditationStore {
             headerSubheaderTextObj.subHeader = '';
             break;
         }
+        if (headerSubheaderTextObj.header !== '' || headerSubheaderTextObj.subHeader !== '') {
+          this.setFieldVal('disableElement', true);
+        }
       }
     }
     // return headerSubheaderTextObj;
-    if (headerSubheaderTextObj.header !== '' || headerSubheaderTextObj.subHeader !== '') {
-      this.setFieldVal('disableElement', true);
-    }
+
     this.setHeaderAndSubHeader(headerSubheaderTextObj);
   }
 

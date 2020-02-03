@@ -8,7 +8,7 @@ import { Image64 } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 992;
-@inject('campaignStore', 'authStore')
+@inject('campaignStore', 'authStore', 'accreditationStore')
 @withRouter
 @observer
 export default class CampaignHeader extends Component {
