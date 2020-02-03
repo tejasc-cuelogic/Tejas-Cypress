@@ -90,7 +90,7 @@ class InvestmentDetails extends PureComponent {
       navItems = navItems.filter(f => f.title !== 'Documents');
     }
 
-    if (![details.loading, loadingInvestDetails, details.data].includes(undefined) && (!details.loading || !loadingInvestDetails)) {
+    if (![details.loading, loadingInvestDetails, get(details, 'data')].includes(undefined) && (!details.loading || !loadingInvestDetails)) {
       const { securities } = get(details, 'data.getOfferingDetailsBySlug.keyTerms');
       filterLabel = securities === 'TERM_NOTE' ? 'Payments Remaining' : securities === 'REVENUE_SHARING_NOTE' ? 'Principal Remaining' : undefined;
       summaryDetails.summary = summaryDetails.summary.filter(sum => (filterLabel === undefined
