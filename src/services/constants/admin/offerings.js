@@ -137,6 +137,7 @@ export const KEY_TERMS = {
     label: 'Interest Rate',
     error: undefined,
     rule: 'string',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   minOfferingAmountCF: {
