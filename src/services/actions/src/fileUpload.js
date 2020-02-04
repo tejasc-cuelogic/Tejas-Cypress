@@ -91,6 +91,10 @@ export class FileUpload {
   });
 
   setAccreditationFileUploadData = (userRole, fileData, accountType, action, userId) => new Promise((resolve, reject) => {
+    if (fileData.fileSize) {
+      // eslint-disable-next-line no-param-reassign
+      fileData.fileSize = fileData.fileSize.toString();
+    }
     client
       .mutate({
         mutation: adminAccreditedStatusUploadEntry,

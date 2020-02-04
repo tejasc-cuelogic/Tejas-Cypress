@@ -47,10 +47,10 @@ class FormValidator {
           convertedValue = element.value.toString();
           break;
         case 'integer':
-          convertedValue = parseInt(element.value, 0);
+          convertedValue = parseInt(element.value, 10);
           break;
         case 'float':
-          convertedValue = parseFloat(element.value, 0).toFixed(2);
+          convertedValue = parseFloat(element.value.toFixed(2), 10);
           break;
         default:
           convertedValue = element.value;

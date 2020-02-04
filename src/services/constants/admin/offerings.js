@@ -1716,7 +1716,6 @@ export const GENERAL = {
       value: null,
       error: undefined,
       rule: 'numeric',
-      fieldType: 'float',
       placeHolder: '10.0%',
     },
     maturityDate: {
