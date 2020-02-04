@@ -42,12 +42,14 @@ export default class Public extends React.Component {
     this.props.navStore.setNavStatus({}, 'main');
   }
 
-  getRoutes = (isAuthLocation = false) => (
+  getRoutes = (isAuthLocation = false, location) => (
     <Switch>
       <Redirect from="/resources/*" to="/*" />
       <Redirect from="/about/*" to="/about" />
       <Redirect from="/agreements/legal/*" to="/legal/*" />
-      <Redirect from="/invest/*" to="/investors" />
+      {location.pathname !== '/invest/get-started' && (
+        <Redirect from="/invest/*" to="/investors" />
+      )}
       <Redirect from="/business/*" to="/business" />
       {publicRoutes.map((route) => {
         const CurrentComponent = route.auth ? route.auth(route.component, this.props) : route.component;
@@ -133,7 +135,7 @@ export default class Public extends React.Component {
               loading={inProgress || appSubmitLoading}
             />
           )}
-          {this.getRoutes(isAuthLocation)}
+          {this.getRoutes(isAuthLocation, location)}
           <Footer path={location.pathname} />
         </Responsive>
         <Responsive maxWidth={991} as={React.Fragment}>
@@ -147,7 +149,7 @@ export default class Public extends React.Component {
             isMobile
             stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}
-            publicContent={this.getRoutes(isAuthLocation)}
+            publicContent={this.getRoutes(isAuthLocation, location)}
             hasHeader={hasHeader}
           />
         </Responsive>
