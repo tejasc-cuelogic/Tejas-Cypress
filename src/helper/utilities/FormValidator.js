@@ -62,12 +62,10 @@ class FormValidator {
 
   onChange = (form, element, type, isDirty = true, checked = undefined) => {
     const currentForm = form;
-    if (element && element.name) {
-      element.value = this.convertValueByFieldType(currentForm.fields[element.name].fieldType, element);
-    }
     CustomValidations.loadCustomValidations(form);
     let customErrMsg = {};
     if (element && element.name) {
+      element.value = this.convertValueByFieldType(currentForm.fields[element.name].fieldType, element);
       if (type === 'checkbox' || (Array.isArray(toJS(currentForm.fields[element.name].value)) && type !== 'dropdown')) {
         const index = currentForm.fields[element.name].value.indexOf(element.value);
         if (index === -1) {
@@ -189,9 +187,6 @@ class FormValidator {
 
       if (element && element.name) {
         element.value = this.convertValueByFieldType(currentFormRelative[element.name].fieldType, element);
-      }
-
-      if (element.name) {
         if (type === 'checkbox' || (Array.isArray(toJS(currentFormRelative[element.name].value)) && type !== 'dropdown')) {
           const index = currentFormRelative[element.name]
             .value.indexOf(element.value);
