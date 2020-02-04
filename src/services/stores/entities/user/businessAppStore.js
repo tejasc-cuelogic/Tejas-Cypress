@@ -191,7 +191,7 @@ export class BusinessAppStore {
       client: isPartialApp ? clientPublic : client,
       query: isPartialApp ? getPrequalBusinessApplicationsById : getBusinessApplicationsById,
       variables: {
-        id: null,
+        id: applicationId,
       },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
