@@ -184,30 +184,37 @@ export class BusinessAppStore {
 
   @action
   fetchApplicationDataById = (applicationId, isPartialApp = false) => new Promise((resolve) => {
-    uiStore.setProgress(true);
-    uiStore.setAppLoader(true);
-    uiStore.setLoaderMessage('Getting application data');
-    this.businessApplicationsDataById = graphql({
-      client: isPartialApp ? clientPublic : client,
-      query: isPartialApp ? getPrequalBusinessApplicationsById : getBusinessApplicationsById,
-      variables: {
-        id: applicationId,
-      },
-      fetchPolicy: 'network-only',
-      onFetch: (data) => {
-        if ((data && data.businessApplication && !this.businessApplicationsDataById.loading) || (data && data.getPreQualificationById && !this.businessApplicationsDataById.loading)) {
-          this.setBusinessApplicationData(isPartialApp);
+    if (!this.apiCall) {
+      uiStore.setProgress(true);
+      uiStore.setAppLoader(true);
+      uiStore.setLoaderMessage('Getting application data');
+      this.setFieldvalue('apiCall', true);
+      this.businessApplicationsDataById = graphql({
+        client: isPartialApp ? clientPublic : client,
+        query: isPartialApp ? getPrequalBusinessApplicationsById : getBusinessApplicationsById,
+        variables: {
+          id: applicationId,
+        },
+        fetchPolicy: 'network-only',
+        onFetch: (data) => {
+          if ((data && data.businessApplication && !this.businessApplicationsDataById.loading) || (data && data.getPreQualificationById && !this.businessApplicationsDataById.loading)) {
+            this.setBusinessApplicationData(isPartialApp);
+            uiStore.setProgress(false);
+            uiStore.setAppLoader(false);
+            uiStore.setLoaderMessage(undefined);
+            this.setFieldvalue('apiCall', false);
+            resolve();
+          }
+        },
+        onError: () => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setProgress(false);
           uiStore.setAppLoader(false);
-          resolve();
-        }
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-        uiStore.setProgress(false);
-        uiStore.setAppLoader(false);
-      },
-    });
+          uiStore.setLoaderMessage(undefined);
+          this.setFieldvalue('apiCall', false);
+        },
+      });
+    }
   });
 
   @action
