@@ -79,41 +79,35 @@ export default class AddFunds extends Component {
     const isInValid = this.isValidFund(addFundsByAccType);
     return (
       <>
-        <div className={isMobile ? '' : 'center-align'}>
-          <Header as="h3">How much would you like to deposit?</Header>
-          <p>
-            We
-          {"'"}
-            ll transfer funds directly from the bank account you just linked.
-          </p>
-          <Form error onSubmit={this.handleSubmitForm}>
-            <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
-              <MaskedInput
-                name="value"
-                type="tel"
-                currency
-                placeholder="$2,200"
-                fielddata={addFundsByAccType.fields.value}
-                changed={values => addFundChange(values, 'value')}
-                maxLength={addFundsByAccType.fields.value.maxLength}
-                prefix="$ "
-                showerror
-              />
-            </div>
-            {errors
-              && (
-                <Message error className="mb-30">
-                  <ListErrors errors={[errors.message]} />
-                </Message>
-              )
-            }
-            <Button primary size="large" fluid={isMobile} className={`${isMobile ? 'mt-30' : ''} relaxed`} content="Confirm" disabled={isInValid || !isAccountPresent || inProgress} />
-          </Form>
-          <div className="center-align">
-            {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])
-              && <Button color="green" className="link-button mt-30" disabled={!isAccountPresent || inProgress} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
-            }
+        <Header as="h4">How much would you like to deposit?</Header>
+        <p>We{"'"}ll transfer funds directly from the bank account you just linked.</p>
+        <Form error onSubmit={this.handleSubmitForm}>
+          <div className="mt-30 left-align">
+            <MaskedInput
+              name="value"
+              type="tel"
+              currency
+              placeholder="$2,200"
+              fielddata={addFundsByAccType.fields.value}
+              changed={values => addFundChange(values, 'value')}
+              maxLength={addFundsByAccType.fields.value.maxLength}
+              prefix="$ "
+              showerror
+            />
           </div>
+          {errors
+            && (
+              <Message error className="mb-30">
+                <ListErrors errors={[errors.message]} />
+              </Message>
+            )
+          }
+          <Button primary size="large" fluid={isMobile} className="mt-30 relaxed" content="Confirm" disabled={isInValid || !isAccountPresent || inProgress} />
+        </Form>
+        <div className={isMobile && 'center-align'}>
+          {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])
+            && <Button color="green" className="link-button mt-30" disabled={!isAccountPresent || inProgress} content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
+          }
         </div>
       </>
     );
