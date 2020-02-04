@@ -199,6 +199,8 @@ export class BusinessAppStore {
           this.setBusinessApplicationData(isPartialApp);
           uiStore.setProgress(false);
           uiStore.setAppLoader(false);
+          uiStore.setLoaderMessage(undefined);
+          this.setFieldvalue('apiCall', true);
           resolve();
         }
       },
@@ -206,6 +208,8 @@ export class BusinessAppStore {
         Helper.toast('Something went wrong, please try again later.', 'error');
         uiStore.setProgress(false);
         uiStore.setAppLoader(false);
+        uiStore.setLoaderMessage(undefined);
+        this.setFieldvalue('apiCall', true);
       },
     });
   });
