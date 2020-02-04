@@ -4,7 +4,7 @@
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
 import moment from 'moment';
-import { mapValues, set, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach, get } from 'lodash';
+import { mapValues, set, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach, get, isUndefined } from 'lodash';
 import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
@@ -41,7 +41,7 @@ class FormValidator {
 
   convertValueByFieldType = (fieldType, element) => {
     let convertedValue;
-    if (get(element, 'value')) {
+    if (!isUndefined(element.value)) {
       switch (fieldType) {
         case 'string':
           convertedValue = element.value.toString();
