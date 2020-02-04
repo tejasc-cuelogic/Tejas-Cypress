@@ -1,7 +1,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { map, forEach, filter, get, ceil, times, kebabCase, set } from 'lodash';
+import { map, forEach, filter, get, ceil, times, kebabCase, set, head, last } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { Calculator } from 'amortizejs';
@@ -960,9 +960,9 @@ export class BusinessAppReviewStore {
         const fullName = evaluatedFormData[key][0].fullLegalName;
         const nameArr = fullName.trim().split(' ');
         // eslint-disable-next-line prefer-destructuring
-        evaluatedFormData[key][0].firstName = nameArr[0];
+        evaluatedFormData[key][0].firstName = head(nameArr);
         // eslint-disable-next-line prefer-destructuring
-        evaluatedFormData[key][0].lastName = nameArr[1];
+        evaluatedFormData[key][0].lastName = last(nameArr);
         delete evaluatedFormData[key][0].fullLegalName;
         const yearOfExpStr = `<p>Year of Experience: ${evaluatedFormData[key][0].bio}</p>`;
         evaluatedFormData[key][0].bio = yearOfExpStr;
