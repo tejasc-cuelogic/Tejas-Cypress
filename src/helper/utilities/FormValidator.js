@@ -181,7 +181,6 @@ class FormValidator {
       }
       const formData = this.ExtractFormValues(toJS(currentForm.fields));
       const formRules = pickBy(this.ExtractFormRules(toJS(currentForm.fields)), identity);
-      // const formRules = pickBy(this.ExtractFormRules(JSON.parse(JSON.stringify({ ...currentForm.fields }))), identity);
       // formRules = pickBy(formRules, identity);
       const validation = new Validator(
         formData,
