@@ -36,17 +36,17 @@ const settings = {
 const businesses = [
   {
     title: 'Houston, TX',
-    image: 'investors/img-2.jpg',
+    image: 'news/img.png',
     description: 'The Sugar Refinery raised $273,800 from 213 investors',
   },
   {
     title: 'San Francisco, CA',
-    image: 'investors/img.jpg',
+    image: 'news/img-1.png',
     description: 'Rambler raised $150,000 from 131 investors',
   },
   {
     title: 'Austin, TX',
-    image: 'investors/img-1.jpg',
+    image: 'news/img-2.png',
     description: 'The Brewer’s Table raised $3000,000 from 190 investors',
   },
 ];
