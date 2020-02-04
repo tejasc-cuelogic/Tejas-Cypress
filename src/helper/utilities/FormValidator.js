@@ -181,6 +181,7 @@ class FormValidator {
       }
       const formData = this.ExtractFormValues(toJS(currentForm.fields));
       const formRules = pickBy(this.ExtractFormRules(toJS(currentForm.fields)), identity);
+      // const formRules = pickBy(this.ExtractFormRules(JSON.parse(JSON.stringify({ ...currentForm.fields }))), identity);
       // formRules = pickBy(formRules, identity);
       const validation = new Validator(
         formData,
@@ -200,7 +201,7 @@ class FormValidator {
     : f.value));
 
   ExtractFormRules = fields => reduce(mapValues(fields, (f, key) => (isArray(f) ? mapKeys(mapValues(f[0], k => k.rule), (s, v) => `${key}.*.${v}`)
-    : mapKeys(v => `${key}.${v.rule}`))), (a, b) => Object.assign(a, b));
+    : { [key]: f.rule })), (a, b) => Object.assign(a, b));
 
   resetFormData = (form, targetedFields) => {
     const currentForm = form;

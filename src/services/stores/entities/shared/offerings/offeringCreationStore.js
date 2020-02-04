@@ -723,12 +723,12 @@ export class OfferingCreationStore {
       this.setFormFileArray(form, arrayName, field, 'fileName', '', index);
     } else {
       let removeFileIds = '';
-      // let removedArr = [];
+      let removedArr = [];
       if (index !== null && arrayName) {
-        // if (isForBusinessApplication) {
-        //   const removeListArr = this[form].fields[arrayName][index];
-        //   removedArr = removeListArr;
-        // }
+        if (isForBusinessApplication) {
+          const removeListArr = this[form].fields[arrayName][index];
+          removedArr = removeListArr;
+        }
         const { fileId } = this[form].fields[arrayName][index][field];
         removeFileIds = fileId;
       } else if (index !== null) {
@@ -739,10 +739,10 @@ export class OfferingCreationStore {
         removeFileIds = fileId;
       }
       this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
+      if (isForBusinessApplication) {
+        this.removedFileData.documents = [...this.removedFileData.documents, { ...removedArr, removedFileId: { value: removeFileIds } }];
+      }
       this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
-        // if (isForBusinessApplication) {
-        //   this.removedFileData.documents = [...this.removedFileData.documents, { ...removedArr, removedFileId: { value: removeFileIds } }];
-        // }
     }
     this.setFormFileArray(form, arrayName, field, 'fileData', '', index);
     this.setFormFileArray(form, arrayName, field, 'value', '', index);
@@ -1498,6 +1498,7 @@ export class OfferingCreationStore {
         .then(() => {
           this.removeUploadedFiles(fromS3);
           Helper.toast('Document has been saved successfully.', 'success');
+          uiStore.setProgress(false);
         });
     }).catch(action((error) => {
       console.log(error);

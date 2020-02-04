@@ -341,7 +341,7 @@ export default class BusinessApplicationMapping extends Component {
             </Accordion.Content>
           </Accordion>
           <div className="right-align mt-20">
-            <Button disabled={!APPLICATION_MAPPED_OFFERING_FORM.meta.isValid} loading={inProgress} primary className="relaxed" onClick={e => this.toggleConfirmModal(e, formName)}>Create Offering</Button>
+            <Button disabled={!APPLICATION_MAPPED_OFFERING_FORM.meta.isValid || inProgress} loading={inProgress} primary className="relaxed" onClick={e => this.toggleConfirmModal(e, formName)}>Create Offering</Button>
           </div>
         </Form>
         <Confirm

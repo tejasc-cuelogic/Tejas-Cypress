@@ -1,7 +1,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { map, forEach, filter, get, ceil, times, kebabCase } from 'lodash';
+import { map, forEach, filter, get, ceil, times, kebabCase, set } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { Calculator } from 'amortizejs';
@@ -945,8 +945,10 @@ export class BusinessAppReviewStore {
   createBusinessOffering = (formName) => {
     uiStore.setProgress();
     const formInputData = Validator.evaluateFormData(this[formName].fields);
+    const formInputDataForContingencies = Validator.evaluateFormData(this.CONTINGENCY_FRM.fields);
+    formInputDataForContingencies.contingencies = cleanDeep(formInputDataForContingencies.contingencies);
     const { applicationId, userId } = businessAppStore.businessApplicationDetailsAdmin;
-    const rusultFormInputData = { ...formInputData };
+    const rusultFormInputData = { ...formInputData, ...formInputDataForContingencies };
     const evaluatedFormData = Helper.replaceKeysDeep(JSON.parse(JSON.stringify({ ...rusultFormInputData })), APPLICATION_OFFERING_MAPPING_KEY_VALUE);
     forEach(evaluatedFormData, (value, key) => {
       if (key === 'leadership') {
@@ -962,10 +964,15 @@ export class BusinessAppReviewStore {
         // eslint-disable-next-line prefer-destructuring
         evaluatedFormData[key][0].lastName = nameArr[1];
         delete evaluatedFormData[key][0].fullLegalName;
+        const yearOfExpStr = `<p>Year of Experience: ${evaluatedFormData[key][0].bio}</p>`;
+        evaluatedFormData[key][0].bio = yearOfExpStr;
       } else if (key === 'legal') {
         const legalGeneralMaterialDetails = get(evaluatedFormData, 'legal.general.materialIndebtedness');
-        const concaatedOtherTermValue = `${legalGeneralMaterialDetails[0].amount} ${legalGeneralMaterialDetails[0].existingLienOnBusiness}`;
+        const concaatedOtherTermValue = `<p>Principal Amount: ${legalGeneralMaterialDetails[0].amount}</p><p>Existing Lien on Business: ${legalGeneralMaterialDetails[0].existingLienOnBusiness}</p>`;
         evaluatedFormData[key].general.materialIndebtedness[0].otherTerms = concaatedOtherTermValue;
+        const useOfProceeds = get(evaluatedFormData, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
+        const formatedUseOfProceeds = this.formatUseOfProceeds(useOfProceeds);
+        set(evaluatedFormData, 'legal.general.useOfProceeds.offeringExpenseAmountDescription', formatedUseOfProceeds);
         delete evaluatedFormData[key].general.materialIndebtedness[0].amount;
         delete evaluatedFormData[key].general.materialIndebtedness[0].existingLienOnBusiness;
         delete evaluatedFormData[key].general.materialIndebtedness[0].objRef;
@@ -982,7 +989,7 @@ export class BusinessAppReviewStore {
       applicationId,
       applicationType: 'APPLICATION_COMPLETED',
     };
-    this.saveReviewForms('CONTINGENCY_FRM', '', true, false);
+    // this.saveReviewForms('CONTINGENCY_FRM', '', true, false);
     console.table([evaluatedFormData]);
     return new Promise((resolve, reject) => {
       client
@@ -1005,6 +1012,14 @@ export class BusinessAppReviewStore {
           uiStore.setProgress(false);
         });
     });
+  }
+
+  formatUseOfProceeds = (useOfProceedsArray) => {
+    let concatedStr = '';
+    forEach(useOfProceedsArray, (value) => {
+      concatedStr += `<p>${value}</p>`;
+    });
+    return concatedStr;
   }
 }
 

@@ -31,7 +31,6 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
           :
           <DropZone
             disabled={isReadonly}
-            blockDownload={isReadonly}
             size="small"
             className="secondary"
             name="upload"
@@ -155,7 +154,7 @@ export default class DataRoom extends Component {
     const approved = (offer && offer.legal && offer.legal.dataroom &&
       offer.legal.dataroom.approved) ? offer.legal.dataroom.approved : null;
     const businessApplicationFlag = !!(referenceFrom && referenceFrom === 'BUSINESS_APPLICATION');
-    const isReadonly = (!offeringClose && ((submitted && !isManager) || (isManager && approved && approved.status)) || (!!(this.props.isReadOnlyFlag && businessApplicationFlag)));
+    const isReadonly = (!offeringClose && ((submitted && !isManager) || (isManager && approved && approved.status)));
     const {
       DATA_ROOM_FRM,
       CLOSING_BINDER_FRM,
@@ -215,11 +214,11 @@ export default class DataRoom extends Component {
               />
             )
           }
-          {!isReadonly && referenceFrom && referenceFrom === 'BUSINESS_APPLICATION'
+          {referenceFrom && referenceFrom === 'BUSINESS_APPLICATION'
             &&
             (
               <div className="right-align mt-20">
-                <Button disabled={!DATA_ROOM_FRM.meta.isValid} loading={inProgress === 'save'} primary className="relaxed" onClick={this.handleFormSubmitForBusinessApplication} >Save</Button>
+                <Button disabled={!DATA_ROOM_FRM.meta.isValid || inProgress === 'save'} loading={inProgress === 'save'} primary className="relaxed" onClick={this.handleFormSubmitForBusinessApplication} >Save</Button>
               </div>
             )
           }
