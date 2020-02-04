@@ -28,7 +28,7 @@ export default class AccountType extends Component {
 
     const isTrustSelected = inProgressArray.includes('TRUST'); // only for mobile screen
     const TrustDateInput = () => (
-      <div className={isMobile ? '' : 'field-wrap'}>
+      <div className={isMobile ? '' : 'mt-60'}>
         <MaskedInput
           name="trustDate"
           fielddata={TRUST_INFO_FRM.fields.trustDate}
@@ -43,7 +43,7 @@ export default class AccountType extends Component {
     return (
       <div>
         {!isTrustSelected && (
-        <Header as="h3" textAlign={isMobile ? 'mb-20' : 'center'}>Is this entity a trust?</Header>)
+        <Header as="h4">Is this entity a trust?</Header>)
         }
         <Form error className={`${isMobile ? 'mb-30 mt-0' : ''} account-type-tab`}>
           <>
@@ -74,11 +74,16 @@ export default class AccountType extends Component {
                           fielddata={TRUST_INFO_FRM.fields.isTrust}
                           name="isTrust"
                           changed={trustInfoChange}
-                          containerclassname={`${isMobile ? 'two wide' : ''} button-radio center-align`}
+                          containerclassname={`${isMobile ? 'two wide' : ''} button-radio`}
                         />
                         {TRUST_INFO_FRM.fields.isTrust.value
-                          && (<TrustDateInput />)
-                        }
+                          && (
+                            <>
+                              <TrustDateInput />
+                              <Divider hidden />
+                              <Button primary className="relaxed" content="Continue" disabled={!TRUST_INFO_FRM.meta.isValid} onClick={this.handleSubmitAccount} />
+                            </>
+                          )}
                       </>
                   )
                   }
