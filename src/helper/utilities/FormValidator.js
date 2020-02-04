@@ -39,10 +39,31 @@ class FormValidator {
     value: e.newPasswd,
   });
 
+  convertValueByFieldType = (fieldType, element) => {
+    let convertedValue;
+    if (get(element, 'value')) {
+      switch (fieldType) {
+        case 'string':
+          convertedValue = element.value.toString();
+          break;
+        case 'integer':
+          convertedValue = parseInt(element.value, 0);
+          break;
+        case 'float':
+          convertedValue = parseFloat(element.value, 0).toFixed(2);
+          break;
+        default:
+          convertedValue = element.value;
+          break;
+      }
+    }
+    return convertedValue;
+  }
+
   onChange = (form, element, type, isDirty = true, checked = undefined) => {
     const currentForm = form;
     if (element && element.name) {
-      element.value = currentForm.fields[element.name].fieldType === 'string' && get(element, 'value') ? element.value.toString() : get(element, 'value');
+      element.value = this.convertValueByFieldType(currentForm.fields[element.name].fieldType, element);
     }
     CustomValidations.loadCustomValidations(form);
     let customErrMsg = {};
@@ -151,11 +172,6 @@ class FormValidator {
   onArrayFieldChange =
     (form, element, formName = null, formIndex = -1, type, checked = undefined) => {
       const currentForm = form;
-      if (element && element.name && formIndex > -1 && formName) {
-        element.value = currentForm.fields[formName][formIndex][element.name].fieldType === 'string' && get(element, 'value') ? element.value.toString() : get(element, 'value');
-      } else {
-        element.value = currentForm.fields[element.name].fieldType === 'string' && get(element, 'value') ? element.value.toString() : get(element, 'value');
-      }
       CustomValidations.loadCustomValidations(form);
       let currentFormRelative;
       let fieldName = element.name;
@@ -172,8 +188,7 @@ class FormValidator {
       }
 
       if (element && element.name) {
-        // eslint-disable-next-line no-param-reassign
-        element.value = currentFormRelative[element.name].fieldType === 'string' && get(element, 'value') ? element.value.toString() : get(element, 'value');
+        element.value = this.convertValueByFieldType(currentFormRelative[element.name].fieldType, element);
       }
 
       if (element.name) {

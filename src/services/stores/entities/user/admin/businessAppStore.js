@@ -174,7 +174,7 @@ export class BusinessAppStore {
     let filterParams = {
       applicationType: applicationTypeFilter,
       orderBy: { field: appType === 'prequal-failed' ? 'updatedDate' : field, sort: direction || 'desc' },
-      limit: this.requestState.perPage.toString(),
+      limit: this.requestState.perPage,
       search: keyword,
     };
     filterParams = this.requestState.lek[`page-${this.requestState.page}`]
