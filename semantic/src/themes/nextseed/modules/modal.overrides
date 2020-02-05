@@ -707,8 +707,10 @@
             height: @6px;
             border-radius: 50px;
             background-color: @neutral-darkwhite;
-            &.no-header{
-                bottom: -35px;
+            @media only screen and (max-width:@largestMobileScreen){
+                &.no-header{
+                    bottom: -35px;
+                }
             }
             .bar{
                 height: @6px;

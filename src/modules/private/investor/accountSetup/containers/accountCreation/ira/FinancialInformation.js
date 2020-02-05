@@ -29,40 +29,38 @@ export default class FinancialInformation extends React.Component {
     const { FIN_INFO_FRM, finInfoChange } = this.props.iraAccountStore;
     return (
       <>
-        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Calculating your investment limit</Header>
-        <p className={isMobile ? '' : 'center-align'}>
+        <Header as="h4">Calculating your investment limit</Header>
+        <p>
           Your net worth and annual income are used to determine your 12-month investment limit under Regulation Crowdfunding.
         </p>
         <Form error>
-          <div className={isMobile ? '' : 'field-wrap'}>
-            {
-              ['netWorth', 'income'].map(field => (
-                <MaskedInput
-                  key={field}
-                  type="tel"
-                  fielddata={FIN_INFO_FRM.fields[field]}
-                  name={field}
-                  changed={values => finInfoChange(values, field)}
-                  prefix="$ "
-                  hoverable={field === 'netWorth'}
-                  maxLength={FIN_INFO_FRM.fields[field].maxLength}
-                  currency
-                  showerror
-                  toolTipOnLabel
-                />
-              ))
-            }
-            <Divider hidden />
-            <p className="grey-header">Your investment limit:
-              <span className="large ml-10 highlight-text">
-                {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
-              </span>
-            </p>
-            <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20' : ''} link`}>How is this calculated?</a>
+          {
+            ['netWorth', 'income'].map(field => (
+              <MaskedInput
+                key={field}
+                type="tel"
+                fielddata={FIN_INFO_FRM.fields[field]}
+                name={field}
+                changed={values => finInfoChange(values, field)}
+                prefix="$ "
+                hoverable={field === 'netWorth'}
+                maxLength={FIN_INFO_FRM.fields[field].maxLength}
+                currency
+                showerror
+                toolTipOnLabel
+              />
+            ))
+          }
+          <Divider hidden />
+          <p className="grey-header">Your investment limit:
+            <span className="large ml-10 highlight-text">
+              {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
+            </span>
+          </p>
+          <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20' : ''} link`}>How is this calculated?</a>
+          <div className="mt-20">
+            <Button fluid={isMobile} primary className="relaxed" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
           </div>
-          {isMobile && (
-            <Button fluid primary className="relaxed mt-20" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
-          )}
         </Form>
       </>
     );

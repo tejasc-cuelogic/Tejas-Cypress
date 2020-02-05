@@ -30,11 +30,11 @@ export default class Identity extends Component {
     const { errors } = this.props.uiStore;
     return (
       <>
-        <Header as="h3" textAlign={isMobile ? '' : 'center'}>Confirm your identity</Header>
+        <Header as="h4">Confirm your identity</Header>
         {!isMobile && <Divider section hidden />}
         <Form className={!isMobile ? 'file-uploader-large' : ''}>
           <div className="field">
-            <label className={`${isMobile ? 'mb-30' : 'center-align'} grey-header`}>Upload a Photo ID (Upload your Driver’s License, state-issued ID, or U.S. passport)</label>
+            <label className={`${isMobile ? 'mb-30' : ''} grey-header`}>Upload a Photo ID (Upload your Driver’s License, state-issued ID, or U.S. passport)</label>
           </div>
           {isMobile
             ? (
@@ -67,10 +67,8 @@ export default class Identity extends Component {
             </Message>
           )
         }
-        {isMobile
-          && <Button fluid primary className="relaxed mt-60" content="Continue" disabled={!IDENTITY_FRM.meta.isValid} onClick={this.handleContinueButton} />
-        }
-        <p className={`${isMobile ? 'mobile-bottom-notes' : 'center-align mt-80'} grey-header`}>NextSeed is a regulated financial services company operating in the US. To comply with KYC/AML regulations, we need to verify your identity in order to set up your account.</p>
+        <Button fluid={isMobile} primary className="relaxed mt-60" content="Continue" disabled={!IDENTITY_FRM.meta.isValid} onClick={this.handleContinueButton} />
+        <p className={`${isMobile ? 'mobile-bottom-notes' : 'mt-80'} grey-header`}>NextSeed is a regulated financial services company operating in the US. To comply with KYC/AML regulations, we need to verify your identity in order to set up your account.</p>
       </>
     );
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Form, Divider } from 'semantic-ui-react';
+import { Header, Form, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import find from 'lodash/find';
 import { FormRadioGroup, FormArrowButton } from '../../../../../../../theme/form';
@@ -24,9 +24,9 @@ export default class AccountType extends Component {
     const { ACC_TYPES_FRM, accTypesChange } = this.props.iraAccountStore;
     return (
       <div>
-        <Header as="h3" textAlign={isMobile ? 'mb-20' : 'center'}>Which type of IRA account would you like to open?</Header>
-        {!isMobile && <Divider section hidden />}
-        <Form error className={isMobile ? '' : 'account-type-tab'}>
+        <Header as="h4">Which type of IRA account would you like to open?</Header>
+        {!isMobile && <Divider hidden />}
+        <Form error>
           {isMobile
             ? (
             <FormArrowButton
@@ -42,11 +42,15 @@ export default class AccountType extends Component {
                   fielddata={ACC_TYPES_FRM.fields.iraAccountType}
                   name="iraAccountType"
                   changed={accTypesChange}
-                  containerclassname={`${isMobile ? 'two wide' : ''} button-radio center-align`}
+                  containerclassname={`${isMobile ? 'two wide' : ''} button-radio`}
                 />
                 {!isMobile && <Divider section hidden />}
                 <div className={`${isMobile ? '' : 'option-details'} grey-header`}>
                   {this.getOptionDetails()}
+                </div>
+                {!isMobile && <Divider section hidden />}
+                <div className="mt-20">
+                  <Button fluid={isMobile} primary className="relaxed" content="Continue" disabled={!ACC_TYPES_FRM.meta.isValid} onClick={this.handleArrowButtonClick} />
                 </div>
               </>
             )

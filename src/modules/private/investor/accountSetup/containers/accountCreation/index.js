@@ -11,7 +11,7 @@ import Helper from '../../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const successMessage = 'Check out some of the investment opportunities now available to you as a member of the NextSeed community.';
-const processingMessage = 'While we set up your account, check out some of the investment opportunities now available to you as a member of the NextSeed community.';
+const processingMessage = <span>While we set up your account, check out some of the investment <br />opportunities now available to you as a member of the NextSeed <br />community.</span>;
 @inject('identityStore', 'accountStore', 'bankAccountStore', 'uiStore', 'userDetailsStore', 'userStore', 'iraAccountStore', 'entityAccountStore', 'individualAccountStore')
 @withRouter
 @observer
