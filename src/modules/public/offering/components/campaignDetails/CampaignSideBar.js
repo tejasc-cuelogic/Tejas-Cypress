@@ -41,7 +41,7 @@ export default class CampaignSideBar extends Component {
             <div className={`${newLayout && isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`}>
               <Header as="h4" inverted>
                 {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
-                <Header.Subheader>{address}</Header.Subheader>
+                {!campaignStatus.isFund && address && <Header.Subheader>{address}</Header.Subheader>}
               </Header>
               <div className="video-wrapper campaign">
                 {campaign && campaign.media
@@ -67,7 +67,7 @@ export default class CampaignSideBar extends Component {
               </div>
               <Statistic inverted size="tiny" className={`${isMobile && 'mt-30'} basic mb-0`}>
                 <Statistic.Value>
-                  <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
+                  <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> {!campaignStatus.isFund ? 'raised' : 'invested'}
                 </Statistic.Value>
                 {minFlagStatus
                   && (
