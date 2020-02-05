@@ -126,11 +126,11 @@ export default class CampaignHeader extends Component {
                 <Grid.Column width={6}>
                   <Header as="h3" inverted>
                     {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
-                    {address && <Header.Subheader>{address}</Header.Subheader>}
+                    {!campaignStatus.isFund && address && <Header.Subheader>{address}</Header.Subheader>}
                   </Header>
                   <Statistic inverted size="tiny" className={`${isMobile && 'mt-40'} basic mb-0`}>
                     <Statistic.Value>
-                      <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
+                        <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> {!campaignStatus.isFund ? 'raised' : 'invested'}
                     </Statistic.Value>
                     {minFlagStatus
                       && (

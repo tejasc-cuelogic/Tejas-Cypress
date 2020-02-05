@@ -7,7 +7,7 @@ import { Container, Card, Grid, Label, Icon, Button, Divider, Table } from 'sema
 // import { IonIcon } from '@ionic/react';
 // import { heart } from 'ionicons/icons';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_REGULATION_PARALLEL } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_REGULATION_PARALLEL } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 import NSImage from '../../../../shared/NSImage';
 import HtmlEditor from '../../../../shared/HtmlEditor';
@@ -121,7 +121,7 @@ export default class CampaignList extends Component {
                                 && offering.keyTerms.shorthandBusinessName ? offering.keyTerms.shorthandBusinessName : ''
                               }
                               </Card.Header>
-                              {(get(offering, 'keyTerms.city') || get(offering, 'keyTerms.state'))
+                              {get(offering, 'keyTerms.securities') !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS && (get(offering, 'keyTerms.city') || get(offering, 'keyTerms.state'))
                               && (
                               <Card.Meta>
                                 {get(offering, 'keyTerms.city') || ''}
