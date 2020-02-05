@@ -8,11 +8,12 @@ import { Image64 } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 992;
-@inject('campaignStore', 'authStore')
+@inject('campaignStore', 'authStore', 'accreditationStore')
 @withRouter
 @observer
 export default class CampaignHeader extends Component {
   handleInvestNowClick = () => {
+    this.props.accreditationStore.setFieldVal('disabeleElement', false);
     this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
     this.props.history.push(`${this.props.match.url}/invest-now`);
   }
@@ -125,11 +126,11 @@ export default class CampaignHeader extends Component {
                 <Grid.Column width={6}>
                   <Header as="h3" inverted>
                     {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
-                    <Header.Subheader>{address}</Header.Subheader>
+                    {!campaignStatus.isFund && address && <Header.Subheader>{address}</Header.Subheader>}
                   </Header>
                   <Statistic inverted size="tiny" className={`${isMobile && 'mt-40'} basic mb-0`}>
                     <Statistic.Value>
-                      <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
+                        <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> {!campaignStatus.isFund ? 'raised' : 'invested'}
                     </Statistic.Value>
                     {minFlagStatus
                       && (
@@ -158,21 +159,20 @@ export default class CampaignHeader extends Component {
                     : (
                       <>
                         <p>
-                          <span className="mr-10">{Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
-                            <Popup
-                              trigger={<Icon name="help circle" color="green" />}
-                              content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                              position="top center"
-                            />
-                          </span>
-                          |
-                          <span className="ml-10">{Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
-                            <Popup
-                              trigger={<Icon name="help circle" color="green" />}
-                              content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
-                              position="top center"
-                            />
-                          </span>
+                          {Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
+                          <Popup
+                            trigger={<Icon name="help circle" color="green" />}
+                            content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                            position="top center"
+                          />
+                        </p>
+                        <p>
+                          {Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
+                          <Popup
+                            trigger={<Icon name="help circle" color="green" />}
+                            content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                            position="top center"
+                          />
                         </p>
                       </>
                     )}
@@ -202,7 +202,7 @@ export default class CampaignHeader extends Component {
                     && (
                       <p className="mb-0">
                         Targeted IRR: <Link to={`${this.props.match.url}#data-room`}> View in Data Room</Link>
-                          </p>
+                      </p>
                     )
                   }
                   {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE

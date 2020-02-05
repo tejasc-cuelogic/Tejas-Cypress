@@ -9,11 +9,11 @@ const isMobile = document.documentElement.clientWidth < 992;
 @observer
 class BusinessModel extends Component {
   render() {
-    const { campaign } = this.props.campaignStore;
+    const { campaign, campaignStatus } = this.props.campaignStore;
     return (
       <>
         <Header as="h3" className={`${(this.props.newLayout && isMobile) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
-          Business Model
+          {campaignStatus.isFund ? 'Investment Strategy' : 'Business Model'}
           <span className="anchor" id="business-model" />
         </Header>
         {campaign && campaign.offering && campaign.offering.about

@@ -73,7 +73,7 @@ class InvestmentDetails extends Component {
         && (
         <>
         <Header as="h3" className={`${this.props.newLayout ? 'mt-40 mb-30' : ''} ${!isMobile ? 'mb-40' : 'mb-20'} anchor-wrap`}>
-          Investment Terms
+          {campaignStatus.isFund ? 'Summary of Terms' : 'Investment Terms'}
           <span className="anchor" id="key-terms" />
         </Header>
         <KeytermsDetails

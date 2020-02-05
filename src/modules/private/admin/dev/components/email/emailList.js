@@ -21,7 +21,9 @@ function EmailList(props) {
   const [requestDate, setRequestDate] = useState(false);
 
   useEffect(() => {
-    props.emailStore.fetchAdminListEmailTypesAndIdentifier();
+    props.emailStore.fetchAdminListEmailTypesAndIdentifier().then(() => {
+      props.emailStore.initRequest();
+    });
     props.emailStore.resetForm('EMAIL_LIST_FRM');
     return () => {
       props.emailStore.resetFilters();

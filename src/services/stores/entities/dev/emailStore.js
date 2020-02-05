@@ -76,7 +76,6 @@ export class EmailStore extends DataModelStore {
       });
       const listEmailType = [];
       if (data.adminListEmailType && data.adminListEmailType.length) {
-          listEmailType.push({ key: 'SELECT', value: null, text: 'SELECT' });
         data.adminListEmailType.forEach((e) => {
           listEmailType.push({ key: e, value: e, text: startCase(e) });
         });

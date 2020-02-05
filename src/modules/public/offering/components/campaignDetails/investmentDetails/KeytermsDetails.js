@@ -57,11 +57,11 @@ class KeyTermsDetails extends Component {
       <>
         <Grid columns={3} divided stackable className="key-terms vertical-gutter neutral-text">
           <Grid.Column>
-            <p><b className={newLayout ? 'neutral-text' : ''}>Issuer</b><br />{get(keyTerms, 'legalBusinessName') || 'NA'}</p>
+            <p><b className={newLayout ? 'neutral-text' : ''}>{campaignStatus.isFund ? 'Fund' : 'Issuer'}</b><br />{get(keyTerms, 'legalBusinessName') || 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
             <p>
-              <b className={newLayout ? 'neutral-text' : ''}>Type of Offering</b>
+              <b className={newLayout ? 'neutral-text' : ''}>{campaignStatus.isFund ? 'Type of Fund' : 'Type of Offering'}</b>
               {get(campaign, 'regulation')
                 && CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
                 ? isMobile

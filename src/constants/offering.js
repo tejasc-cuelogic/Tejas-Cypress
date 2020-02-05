@@ -7,7 +7,7 @@ export const CAMPAIGN_KEYTERMS_SECURITIES = {
   CONVERTIBLE_NOTES: 'Convertible Notes',
   SAFE: 'SAFE',
   REAL_ESTATE: 'LLC Membership Interests',
-  FUNDS: 'Funds - Limited Partner Interest',
+  FUNDS: 'Funds - Limited Partnership Interests',
 };
 export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
   TERM_NOTE: 'TERM_NOTE',
