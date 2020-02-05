@@ -819,6 +819,7 @@ export class BusinessAppReviewStore {
       }
     }
     if (form === 'APPLICATION_MAPPED_OFFERING_FORM') {
+      this.setBusinessDetailsForOfferingMap(form, businessApplicationDetailsAdmin.businessDetails);
       this.offerCreateChange(form, 'businessName');
     }
     return false;
@@ -853,6 +854,50 @@ export class BusinessAppReviewStore {
       offersToShow = data.find(obj => obj.isAccepted === true);
       this.OFFERS_FRM = Validator.setFormData(this.OFFERS_FRM, { offer: [offersToShow] });
     }
+  }
+
+  @action
+  setBusinessDetailsForOfferingMap = (form, data) => {
+    if (data) {
+      data.debts.forEach((ele, key) => {
+        ['amount', 'interestExpenses', 'remainingPrincipal', 'maturityDate', 'termStartDate', 'creditorName', 'existingLienOnBusiness'].forEach((field) => {
+          this[form].fields.debts[key][field].value = ele[field];
+        });
+        if (key < data.debts.length - 1) {
+          this.addMoreForms(null, 'APPLICATION_MAPPED_OFFERING_FORM', 'debts');
+        }
+      });
+      data.owners.forEach((ele, key) => {
+        ['companyOwnerShip', 'fullLegalName', 'linkedInUrl', 'ssn', 'dateOfService', 'yearsOfExp', 'title'].forEach((field) => {
+          this[form].fields.owners[key][field].value = ele[field];
+        });
+        if (key < data.owners.length - 1) {
+          this.addMoreForms(null, 'APPLICATION_MAPPED_OFFERING_FORM', 'owners');
+        }
+      });
+    }
+    this[form] = Validator.validateForm(this[form], true);
+  }
+
+  @action
+  addMoreForms = (e = null, formName, subForm) => {
+    if (e) {
+      e.preventDefault();
+    }
+    this[formName] = {
+      ...this[formName],
+      fields: {
+        ...this[formName].fields,
+        [subForm]: [
+          ...this[formName].fields[subForm],
+          APPLICATION_MAPPED_OFFERING[subForm][0],
+        ],
+      },
+      meta: {
+        ...this[formName].meta,
+        isValid: false,
+      },
+    };
   }
 
   @action
@@ -952,30 +997,35 @@ export class BusinessAppReviewStore {
     const evaluatedFormData = Helper.replaceKeysDeep(JSON.parse(JSON.stringify({ ...rusultFormInputData })), APPLICATION_OFFERING_MAPPING_KEY_VALUE);
     forEach(evaluatedFormData, (value, key) => {
       if (key === 'leadership') {
-        evaluatedFormData[key][0].social = { linkedin: evaluatedFormData[key][0].linkedin };
-        delete evaluatedFormData[key][0].linkedin;
-        if (evaluatedFormData[key][0].objRef === undefined) {
-          delete evaluatedFormData[key][0].objRef;
-        }
-        const fullName = evaluatedFormData[key][0].fullLegalName;
-        const nameArr = fullName.trim().split(' ');
-        // eslint-disable-next-line prefer-destructuring
-        evaluatedFormData[key][0].firstName = head(nameArr);
-        // eslint-disable-next-line prefer-destructuring
-        evaluatedFormData[key][0].lastName = last(nameArr);
-        delete evaluatedFormData[key][0].fullLegalName;
-        const yearOfExpStr = `<p>Year of Experience: ${evaluatedFormData[key][0].bio}</p>`;
-        evaluatedFormData[key][0].bio = yearOfExpStr;
+        forEach(evaluatedFormData[key], (val, index) => {
+          evaluatedFormData[key][index].social = { linkedin: evaluatedFormData[key][index].linkedin };
+          delete evaluatedFormData[key][index].linkedin;
+          if (evaluatedFormData[key][index].objRef === undefined) {
+            delete evaluatedFormData[key][index].objRef;
+          }
+          const fullName = evaluatedFormData[key][index].fullLegalName;
+          const nameArr = fullName.trim().split(' ');
+          // eslint-disable-next-line prefer-destructuring
+          evaluatedFormData[key][index].firstName = head(nameArr);
+          // eslint-disable-next-line prefer-destructuring
+          evaluatedFormData[key][index].lastName = last(nameArr);
+          delete evaluatedFormData[key][index].fullLegalName;
+          const yearOfExpStr = `<p>Year of Experience: ${evaluatedFormData[key][index].bio}</p>`;
+          evaluatedFormData[key][index].bio = yearOfExpStr;
+        });
       } else if (key === 'legal') {
         const legalGeneralMaterialDetails = get(evaluatedFormData, 'legal.general.materialIndebtedness');
-        const concaatedOtherTermValue = `<p>Principal Amount: ${legalGeneralMaterialDetails[0].amount}</p><p>Existing Lien on Business: ${legalGeneralMaterialDetails[0].existingLienOnBusiness}</p>`;
-        evaluatedFormData[key].general.materialIndebtedness[0].otherTerms = concaatedOtherTermValue;
+        forEach(legalGeneralMaterialDetails, (val, index) => {
+          // const concaatedOtherTermValue = `<p>Principal Amount: ${legalGeneralMaterialDetails[0].amount}</p><p>Existing Lien on Business: ${legalGeneralMaterialDetails[0].existingLienOnBusiness}</p>`;
+          const concaatedOtherTermValue = `<p>Principal Amount: ${val.amount}</p><p>Existing Lien on Business: ${val.existingLienOnBusiness}</p>`;
+          evaluatedFormData[key].general.materialIndebtedness[index].otherTerms = concaatedOtherTermValue;
+          delete evaluatedFormData[key].general.materialIndebtedness[index].amount;
+          delete evaluatedFormData[key].general.materialIndebtedness[index].existingLienOnBusiness;
+          delete evaluatedFormData[key].general.materialIndebtedness[index].objRef;
+        });
         const useOfProceeds = get(evaluatedFormData, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
         const formatedUseOfProceeds = this.formatUseOfProceeds(useOfProceeds);
         set(evaluatedFormData, 'legal.general.useOfProceeds.offeringExpenseAmountDescription', formatedUseOfProceeds);
-        delete evaluatedFormData[key].general.materialIndebtedness[0].amount;
-        delete evaluatedFormData[key].general.materialIndebtedness[0].existingLienOnBusiness;
-        delete evaluatedFormData[key].general.materialIndebtedness[0].objRef;
       }
     });
     this.confirmModal = !this.confirmModal;
@@ -989,7 +1039,6 @@ export class BusinessAppReviewStore {
       applicationId,
       applicationType: 'APPLICATION_COMPLETED',
     };
-    // this.saveReviewForms('CONTINGENCY_FRM', '', true, false);
     console.table([evaluatedFormData]);
     return new Promise((resolve, reject) => {
       client

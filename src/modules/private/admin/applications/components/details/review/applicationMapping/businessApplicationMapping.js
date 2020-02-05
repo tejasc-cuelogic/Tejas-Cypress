@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Header, Form, Accordion, Icon, Button, Confirm } from 'semantic-ui-react';
+import { Header, Form, Accordion, Icon, Button, Confirm, Divider } from 'semantic-ui-react';
 import { FormInput, FormDropDown, MaskedInput } from '../../../../../../../../theme/form';
 import { BD_REGULATION_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../../../../services/constants/admin/offerings';
 import Helper from '../../../../../../../../helper/utility';
@@ -104,22 +104,15 @@ export default class BusinessApplicationMapping extends Component {
                   ))
                 }
                 <FormDropDown
-                  // containerclassname={isReadonly ? 'display-only' : ''}
-                  // className={isReadonly ? 'display-only' : ''}
-                  // disabled={isReadonly}
                   fielddata={APPLICATION_MAPPED_OFFERING_FORM.fields.businessEntityStructure}
                   selection
                   value={APPLICATION_MAPPED_OFFERING_FORM.fields.businessEntityStructure.value}
                   name="businessEntityStructure"
-                  // placeholder={isReadonly ? 'N/A' : 'Choose here'}
                   placeholder="Choose here"
                   options={BUSINESS_TYPE_VALUES}
                   onChange={(e, result) => formArrayChange(e, result, formName)}
                 />
                 <FormDropDown
-                  // containerclassname={isReadonly ? 'display-only' : ''}
-                  // className={isReadonly ? 'display-only' : ''}
-                  // disabled={isReadonly}
                   fielddata={APPLICATION_MAPPED_OFFERING_FORM.fields.regulation}
                   selection
                   value={APPLICATION_MAPPED_OFFERING_FORM.fields.regulation.value}
@@ -138,10 +131,8 @@ export default class BusinessApplicationMapping extends Component {
           </Accordion.Title>
             <Accordion.Content active={activeIndex.includes(1)} className="categories-acc">
               <Form.Group widths={2}>
-                {/* Legal Section Goes Here... */}
                 {['website', 'number', 'street', 'city', 'state', 'zipCode'].map(field => (
                   <FormInput
-                    // displayMode={isReadonly}
                     key={field}
                     name={field}
                     fielddata={APPLICATION_MAPPED_OFFERING_FORM.fields[field]}
@@ -149,9 +140,6 @@ export default class BusinessApplicationMapping extends Component {
                   />
                 ))}
                 <FormDropDown
-                  // containerclassname={isReadonly ? 'display-only' : ''}
-                  // className={isReadonly ? 'display-only' : ''}
-                  // disabled={isReadonly}
                   fielddata={APPLICATION_MAPPED_OFFERING_FORM.fields.companyTaxed}
                   selection
                   value={APPLICATION_MAPPED_OFFERING_FORM.fields.companyTaxed.value}
@@ -160,74 +148,64 @@ export default class BusinessApplicationMapping extends Component {
                   options={APPLICATION_MAPPED_OFFERING_FORM.fields.companyTaxed.values}
                   onChange={(e, result) => formArrayChange(e, result, formName)}
                 />
+                </Form.Group>
+                <Divider hidden />
                 {APPLICATION_MAPPED_OFFERING_FORM.fields.debts.length
                   && APPLICATION_MAPPED_OFFERING_FORM.fields.debts.map((debt, index) => (
                     <>
-                      {['termStartDate', 'maturityDate'].map(field => (
-                        <MaskedInput
-                          name={field}
-                          // readOnly={formReadOnlyMode}
-                          // containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                          fielddata={debt[field]}
-                          format="##/##/####"
-                          changed={values => businessDetailsDateChange(field, values.formattedValue, index, formName, 'debts')}
-                          dateOfBirth
+                    <Header as="h3">{`Existing Debt ${index + 1}`}</Header>
+                      <Form.Group widths={2}>
+                        {['termStartDate', 'maturityDate'].map(field => (
+                          <MaskedInput
+                            name={field}
+                            fielddata={debt[field]}
+                            format="##/##/####"
+                            changed={values => businessDetailsDateChange(field, values.formattedValue, index, formName, 'debts')}
+                            dateOfBirth
+                          />
+                        ))}
+                        <FormInput
+                          name="creditorName"
+                          fielddata={debt.creditorName}
+                          changed={(e, res) => businessDetailsChange(e, res, formName, 'debts', index)}
                         />
-                      ))}
-                      <FormInput
-                        // readOnly={formReadOnlyMode}
-                        // containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                        name="creditorName"
-                        fielddata={debt.creditorName}
-                        changed={(e, res) => businessDetailsChange(e, res, formName, 'debts', index)}
-                      />
-                      <FormDropDown
-                        // className={formReadOnlyMode ? 'display-only' : ''}
-                        // displayMode={formReadOnlyMode}
-                        name="existingLienOnBusiness"
-                        placeholder="Choose here"
-                        fluid
-                        selection
-                        fielddata={debt.existingLienOnBusiness}
-                        options={options}
-                        onChange={(e, result) => formArrayChange(e, result, formName, 'debts', index)}
-                      />
-                      <MaskedInput
-                        // readOnly={formReadOnlyMode}
-                        // containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                        prefix="$ "
-                        currency
-                        type="text"
-                        name="amount"
-                        fielddata={debt.amount}
-                        changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'debts', index)}
-                      />
-                      <MaskedInput
-                        // readOnly={formReadOnlyMode}
-                        // containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                        prefix="$ "
-                        currency
-                        type="text"
-                        name="remainingPrincipal"
-                        fielddata={debt.remainingPrincipal}
-                        changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'debts', index)}
-                      />
-                      <MaskedInput
-                        // readOnly={formReadOnlyMode}
-                        // containerclassname={formReadOnlyMode ? 'display-only' : ''}
-                        percentage
-                        type="text"
-                        name="interestExpenses"
-                        fielddata={debt.interestExpenses}
-                        changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'debts', index)}
-                      />
+                        <FormDropDown
+                          name="existingLienOnBusiness"
+                          placeholder="Choose here"
+                          fluid
+                          selection
+                          fielddata={debt.existingLienOnBusiness}
+                          options={options}
+                          onChange={(e, result) => formArrayChange(e, result, formName, 'debts', index)}
+                        />
+                        <MaskedInput
+                          prefix="$ "
+                          currency
+                          type="text"
+                          name="amount"
+                          fielddata={debt.amount}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'debts', index)}
+                        />
+                        <MaskedInput
+                          prefix="$ "
+                          currency
+                          type="text"
+                          name="remainingPrincipal"
+                          fielddata={debt.remainingPrincipal}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'debts', index)}
+                        />
+                        <MaskedInput
+                          percentage
+                          type="text"
+                          name="interestExpenses"
+                          fielddata={debt.interestExpenses}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'debts', index)}
+                        />
+                      </Form.Group>
+                    <Divider hidden />
                     </>
                   ))}
-              </Form.Group>
               <FormDropDown
-                // containerclassname={isReadonly ? 'display-only' : ''}
-                // className={isReadonly ? 'display-only' : ''}
-                // disabled={isReadonly}
                 fielddata={APPLICATION_MAPPED_OFFERING_FORM.fields.fundUsage}
                 multiple
                 selection
@@ -245,12 +223,13 @@ export default class BusinessApplicationMapping extends Component {
               Leadership
           </Accordion.Title>
             <Accordion.Content active={activeIndex.includes(2)} className="categories-acc">
-              <Form.Group widths={2}>
                 {APPLICATION_MAPPED_OFFERING_FORM.fields.owners.length
                   && APPLICATION_MAPPED_OFFERING_FORM.fields.owners.map((owner, index) => {
                     const ssnData = owner.ssn.value !== null && owner.ssn.value.length === 9 ? Helper.encrypSsnNumberByForm(owner).ssn : owner.ssn;
                     return (
-                      <>
+                    <>
+                      <Header as="h3">{`Owner ${index + 1}`}</Header>
+                        <Form.Group widths={2}>
                         {['fullLegalName', 'title'].map(field => (
                           <FormInput
                             // readOnly={formReadOnlyMode}
@@ -324,11 +303,11 @@ export default class BusinessApplicationMapping extends Component {
                           fielddata={owner.linkedInUrl}
                           changed={(e, res) => businessDetailsChange(e, res, formName, 'owners', index)}
                         />
+                      </Form.Group>
                       </>
                     );
                   })
                 }
-              </Form.Group>
             </Accordion.Content>
           </Accordion>
           <Accordion exclusive={false} fluid styled className="card-style">

@@ -200,7 +200,7 @@ export class BusinessAppStore {
           uiStore.setProgress(false);
           uiStore.setAppLoader(false);
           uiStore.setLoaderMessage(undefined);
-          this.setFieldvalue('apiCall', true);
+          // this.setFieldvalue('apiCall', true);
           resolve();
         }
       },
@@ -209,7 +209,7 @@ export class BusinessAppStore {
         uiStore.setProgress(false);
         uiStore.setAppLoader(false);
         uiStore.setLoaderMessage(undefined);
-        this.setFieldvalue('apiCall', true);
+        // this.setFieldvalue('apiCall', true);
       },
     });
   });
