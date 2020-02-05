@@ -101,6 +101,8 @@ export class BusinessAppStore {
 
   @observable enableSave = false;
 
+  @observable apiCall = false;
+
   @observable fetchApplicationCall = false;
 
   @observable showUserError = false;
