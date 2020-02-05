@@ -15,7 +15,7 @@ class AboutTheCompany extends Component {
   }
 
   render() {
-    const { campaign, newLayout } = this.props;
+    const { campaign, newLayout, isFund } = this.props;
     const elevatorPitch = (campaign && campaign.offering && campaign.offering.overview
       && campaign.offering.overview.elevatorPitch)
       || (campaign && campaign.offering && campaign.offering.overview
@@ -23,7 +23,7 @@ class AboutTheCompany extends Component {
     return (
       <>
         <Header as="h3" className={`mt-20 anchor-wrap ${newLayout && isTablet ? 'mb-20' : 'mb-30'}`}>
-          {newLayout ? 'Highlights' : 'Top Things to Know'}
+          {newLayout ? isFund ? 'Executive Summary' : 'Highlights' : 'Top Things to Know'}
           <span className="anchor" id="top-things-to-know" />
         </Header>
         {

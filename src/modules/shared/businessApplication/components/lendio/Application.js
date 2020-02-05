@@ -23,11 +23,15 @@ export default class Application extends Component {
       setFieldvalue('currentApplicationType', match.params.applicationType);
       formReset();
       setFieldvalue('isFetchedData', match.params.id);
-      if (!this.props.businessAppStore.apiCall) {
+      if (!this.props.businessAppStore.fetchApplicationCall) {
         fetchApplicationDataById(match.params.id, true).then(() => {
         });
       }
     }
+  }
+
+  componentWillUnmount() {
+    this.props.businessAppStore.setFieldvalue('fetchApplicationCall', false);
   }
 
   submit = (e) => {
