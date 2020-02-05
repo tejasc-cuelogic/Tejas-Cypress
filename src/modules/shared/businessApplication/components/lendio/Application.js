@@ -30,6 +30,10 @@ export default class Application extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.businessAppStore.setFieldvalue('fetchApplicationCall', false);
+  }
+
   submit = (e) => {
     e.preventDefault();
     this.props.businessAppLendioStore.businessLendioPreQual(this.props.match.params.id)

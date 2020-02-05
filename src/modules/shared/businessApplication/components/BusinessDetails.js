@@ -424,7 +424,7 @@ export default class BusinessDetails extends Component {
             }
             {BUSINESS_DETAILS_FRM.fields.owners.length
               && BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => {
-                const ssnData = owner.ssn.value !== null && owner.ssn.value.length === 9 && formReadOnlyMode ? Helper.encrypSsnNumberByForm(owner).ssn : owner.ssn;
+                const ssnData = owner.ssn.value !== null && formReadOnlyMode ? Helper.encrypSsnNumberByForm(owner).ssn : owner.ssn;
                 return (
                   <Grid>
                     <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
