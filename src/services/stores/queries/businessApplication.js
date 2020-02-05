@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const adminBusinessApplications = gql`
-query adminBusinessApplications($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String, $lek: String){
+query adminBusinessApplications($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit: Int, $search: String, $lek: String){
   adminBusinessApplications(
     applicationType: $applicationType
     orderBy: $orderBy
