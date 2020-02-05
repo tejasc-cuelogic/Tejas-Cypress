@@ -101,7 +101,7 @@ export class BusinessAppStore {
 
   @observable enableSave = false;
 
-  @observable apiCall = false;
+  @observable fetchApplicationCall = false;
 
   @observable showUserError = false;
 
@@ -200,7 +200,7 @@ export class BusinessAppStore {
           uiStore.setProgress(false);
           uiStore.setAppLoader(false);
           uiStore.setLoaderMessage(undefined);
-          this.setFieldvalue('apiCall', true);
+          this.setFieldvalue('fetchApplicationCall', true);
           resolve();
         }
       },
@@ -209,7 +209,7 @@ export class BusinessAppStore {
         uiStore.setProgress(false);
         uiStore.setAppLoader(false);
         uiStore.setLoaderMessage(undefined);
-        this.setFieldvalue('apiCall', true);
+        this.setFieldvalue('fetchApplicationCall', true);
       },
     });
   });
