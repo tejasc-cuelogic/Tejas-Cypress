@@ -149,11 +149,21 @@ export default class BusinessApplicationMapping extends Component {
                   onChange={(e, result) => formArrayChange(e, result, formName)}
                 />
                 </Form.Group>
+                <FormDropDown
+                  fielddata={APPLICATION_MAPPED_OFFERING_FORM.fields.fundUsage}
+                  multiple
+                  selection
+                  fluid
+                  name="fundUsage"
+                  containerclassname="dropdown-field"
+                  options={APPLICATION_MAPPED_OFFERING_FORM.fields.fundUsage.values}
+                  onChange={(e, result) => formArrayChange(e, result, formName, '', '', undefined, 'dropdown')}
+                />
                 <Divider hidden />
                 {APPLICATION_MAPPED_OFFERING_FORM.fields.debts.length
                   && APPLICATION_MAPPED_OFFERING_FORM.fields.debts.map((debt, index) => (
                     <>
-                    <Header as="h3">{`Existing Debt ${index + 1}`}</Header>
+                    <Header as="h4">{`Existing Debt ${index + 1}`}</Header>
                       <Form.Group widths={2}>
                         {['termStartDate', 'maturityDate'].map(field => (
                           <MaskedInput
@@ -205,16 +215,6 @@ export default class BusinessApplicationMapping extends Component {
                     <Divider hidden />
                     </>
                   ))}
-              <FormDropDown
-                fielddata={APPLICATION_MAPPED_OFFERING_FORM.fields.fundUsage}
-                multiple
-                selection
-                fluid
-                name="fundUsage"
-                containerclassname="dropdown-field"
-                options={APPLICATION_MAPPED_OFFERING_FORM.fields.fundUsage.values}
-                onChange={(e, result) => formArrayChange(e, result, formName, '', '', undefined, 'dropdown')}
-              />
             </Accordion.Content>
           </Accordion>
           <Accordion exclusive={false} fluid styled className="card-style">
@@ -228,7 +228,7 @@ export default class BusinessApplicationMapping extends Component {
                     const ssnData = owner.ssn.value !== null && owner.ssn.value.length === 9 ? Helper.encrypSsnNumberByForm(owner).ssn : owner.ssn;
                     return (
                     <>
-                      <Header as="h3">{`Owner ${index + 1}`}</Header>
+                      <Header as="h4">{`Leader ${index + 1}`}</Header>
                         <Form.Group widths={2}>
                         {['fullLegalName', 'title'].map(field => (
                           <FormInput
