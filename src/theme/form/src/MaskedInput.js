@@ -153,6 +153,7 @@ export default class MaskedInput extends Component {
           || (error && props.showerror && !props.showErrorOnField))
           && <FieldError error={error} />
         }
+        {props.icon && <Icon {...props.icon} />}
       </Form.Field>
     );
   }

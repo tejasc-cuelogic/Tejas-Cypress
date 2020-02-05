@@ -135,6 +135,7 @@ export const campaignDetailsQuery = gql`
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
     isInvestedInOffering
+    isAvailablePublicly
     watchListStatus
     stage
     offeringSlug

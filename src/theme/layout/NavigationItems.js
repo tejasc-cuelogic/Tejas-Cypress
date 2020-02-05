@@ -92,7 +92,7 @@ export class NavItems extends Component {
   render() {
     const { activeIndex } = this.state;
     const {
-      location, isApp, roles, refMatch, isMobile, onToggle, refLink, newLayout, userDetailsStore,
+      location, isApp, roles, refMatch, isMobile, onToggle, refLink, newLayout, userDetailsStore, needNavLink,
     } = this.props;
     let { match } = this.props;
     const { signupStatus, hasAnyAccount } = userDetailsStore;
@@ -208,7 +208,7 @@ export class NavItems extends Component {
                                 name={item.to}
                                 id={(newLayout && isTablet) ? `${item.to.slice(1)}-mob-nav` : ''}
                                 className={`${((isMobile && item.title === 'Home' && location.pathname !== '/') || (!isMobile && item.title === 'Dashboard' && location.pathname !== '/dashboard')) ? 'no-active' : `${((item.defaultActive && this.isActiveSubMenu(`${item.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(item.to, location) ? 'active' : ''}`} ${(item.title === 'Account Settings' && hasMoreThanOneAcc) ? 'mt-10' : ''} ${(newLayout && ((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) ? 'hasLabel' : '')}`}
-                                as={NavLink}
+                                as={needNavLink ? Link : NavLink}
                                 onClick={isMobile ? this.mobileMenuClick : this.doNothing}
                                 target={item.forced ? '_blank' : false}
                                 to={item.forced || `${(isApp) ? '/dashboard' : (this.props.sub ? match.url : '')}${(item.useRefLink || item.asRoot) ? '' : '/'}${item.asRoot ? '' : item.to}`}
