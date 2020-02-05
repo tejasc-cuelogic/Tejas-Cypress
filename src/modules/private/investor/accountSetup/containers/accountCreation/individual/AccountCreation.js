@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { MultiStep } from '../../../../../../../helper';
 import { Plaid, AddFunds } from '../../../../../shared/bankAccount';
 import Summary from './Summary';
+import { ThankYouStep } from '../../../components/confirmModal';
 
 @inject('uiStore', 'accountStore', 'bankAccountStore', 'individualAccountStore', 'userStore', 'userDetailsStore')
 @observer
@@ -101,6 +102,10 @@ export default class AccountCreation extends React.Component {
         component: <Summary handleCreateAccount={this.props.handleCreateAccount} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
         disableNextButton: true,
         isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : stepToBeRendered > 2 ? 'error' : '',
+      },
+      {
+        ...ThankYouStep,
+        stepToBeRendered: 3,
       },
     ];
     return (

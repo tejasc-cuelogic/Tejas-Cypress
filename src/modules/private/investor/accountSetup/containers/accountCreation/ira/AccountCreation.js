@@ -9,6 +9,7 @@ import Summary from './Summary';
 import { validationActions } from '../../../../../../../services/actions';
 import { Plaid, AddFunds } from '../../../../../shared/bankAccount';
 import AboutIra from './AboutIra';
+import { ThankYouStep } from '../../../components/confirmModal';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -167,6 +168,10 @@ export default class AccountCreation extends React.Component {
           disableNextButton: true,
           component: <Summary handleCreateAccount={this.props.handleCreateAccount} handleLegalDocsBeforeSubmit={this.props.handleLegalDocsBeforeSubmit} />,
         },
+        {
+          ...ThankYouStep,
+          stepToBeRendered: 8,
+        },
       ];
     } else {
       steps = [
@@ -230,6 +235,10 @@ export default class AccountCreation extends React.Component {
           disableNextButton: true,
           isValid: isValidIraForm ? '' : stepToBeRendered > 5 ? 'error' : '',
           validForm: isValidIraForm,
+        },
+        {
+          ...ThankYouStep,
+          stepToBeRendered: 6,
         },
       ];
     }

@@ -280,12 +280,12 @@ export default class MultiStep extends React.Component {
                     && (
                       <div className="multistep-header">
                         <Logo dataSrc="LogoGreenGrey" size="small" />
-                        <span className="vertical-divider">|</span>
-                        <span className="display-block ml-16">
-                          {!currentStep.isHideName
-                            ? currentStep.name : ''
-                          }
-                        </span>
+                        {!currentStep.isHideName && (
+                          <>
+                            <span className="vertical-divider">|</span>
+                            <span className="display-block ml-16">{currentStep.name}</span>
+                          </>
+                        )}
                       </div>
                     )}
                   {isMobile
@@ -310,7 +310,7 @@ export default class MultiStep extends React.Component {
                         />
                       </>
                     )}
-                  <Progress className={(currentStep.name === '' || currentStep.isHideName) ? 'no-header' : ''} percent={((this.state.compState + 1) / (this.props.steps.length + 1)) * 100} attached="bottom" color="green" />
+                  <Progress className={(currentStep.name === '' || currentStep.isHideName) ? 'no-header' : ''} percent={((this.state.compState + 1) / (this.props.steps.length)) * 100} attached="bottom" color="green" />
                 </Modal.Header>
               </>
             )

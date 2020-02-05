@@ -9,6 +9,7 @@ import PersonalInformation from './PersonalInformation';
 import FormationDocuments from './FormationDocuments';
 import { Plaid, AddFunds } from '../../../../../shared/bankAccount';
 import Summary from './Summary';
+import { ThankYouStep } from '../../../components/confirmModal';
 
 @inject('uiStore', 'accountStore', 'bankAccountStore', 'entityAccountStore', 'userDetailsStore', 'userStore', 'investmentLimitStore')
 @observer
@@ -165,6 +166,10 @@ export default class AccountCreation extends React.Component {
         isValid: isValidEntityForm ? '' : stepToBeRendered > 8 ? 'error' : '',
         // validForm: isValidEntityForm,
         disableNextButton: true,
+      },
+      {
+        ...ThankYouStep,
+        stepToBeRendered: 8,
       },
     ];
     return (
