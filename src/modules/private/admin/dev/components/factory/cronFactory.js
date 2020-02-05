@@ -19,6 +19,7 @@ class CronFactory extends Component {
     this.props.factoryStore.resetForm('CRONFACTORY_FRM');
     this.props.factoryStore.inProgress.cronFactory = false;
     this.props.factoryStore.setFieldValue('selectedFactory', 'CRON');
+    this.props.factoryStore.initRequest();
   }
 
   componentWillUnmount() {

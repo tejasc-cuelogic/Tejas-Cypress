@@ -191,7 +191,7 @@ class CampaignLayout extends Component {
       <div className="campaign-content-wrapper v-2">
         {campaignStatus.hasTopThingToKnow ? (
           <>
-            <AboutTheCompany newLayout refLink={this.props.refLink} campaign={campaign} />
+            <AboutTheCompany isFund={campaignStatus.isFund} newLayout refLink={this.props.refLink} campaign={campaign} />
             <Divider hidden section />
           </>
         ) : null}
@@ -259,7 +259,7 @@ class CampaignLayout extends Component {
           // campaignStatus.isTermNote && (<TotalPaymentCalculator newLayout {...this.props} />)
           }
           <Divider hidden section />
-          <Comments refLink={this.props.match.url} newLayout showOnlyOne={!this.state.expandComments} />
+          {!campaignStatus.isFund && <Comments refLink={this.props.match.url} newLayout showOnlyOne={!this.state.expandComments} />}
           {postedComments.length > 1
             && (
               <Button onClick={() => this.handleCollapseExpand('expandComments', '#comments')} className="link-button highlight-text mt-40">
