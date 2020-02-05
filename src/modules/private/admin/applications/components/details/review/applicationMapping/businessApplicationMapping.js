@@ -11,10 +11,10 @@ export const options = [
   { key: 'No', value: 'NO', text: 'No' },
 ];
 
-@inject('businessAppReviewStore', 'uiStore')
+@inject('businessAppReviewStore', 'uiStore', 'userStore')
 @observer
 export default class BusinessApplicationMapping extends Component {
-  state = { activeIndex: [0, 1, 2, 3], isSsnDirty: [] };
+  state = { activeIndex: [0, 1, 2, 3], isSsnDirty: [], ssnVisibilityStatus: false };
 
   constructor(props) {
     super(props);
@@ -56,6 +56,10 @@ export default class BusinessApplicationMapping extends Component {
   toggleConfirmModal = (e, formName) => {
     e.preventDefault();
     this.props.businessAppReviewStore.toggleConfirmModal(null, formName);
+  }
+
+  setSsnVisibilityStatus = () => {
+    this.setState({ ssnVisibilityStatus: !this.state.ssnVisibilityStatus });
   }
 
   render() {
@@ -165,28 +169,10 @@ export default class BusinessApplicationMapping extends Component {
                     <>
                     <Header as="h4">{`Existing Debt ${index + 1}`}</Header>
                       <Form.Group widths={2}>
-                        {['termStartDate', 'maturityDate'].map(field => (
-                          <MaskedInput
-                            name={field}
-                            fielddata={debt[field]}
-                            format="##/##/####"
-                            changed={values => businessDetailsDateChange(field, values.formattedValue, index, formName, 'debts')}
-                            dateOfBirth
-                          />
-                        ))}
                         <FormInput
                           name="creditorName"
                           fielddata={debt.creditorName}
                           changed={(e, res) => businessDetailsChange(e, res, formName, 'debts', index)}
-                        />
-                        <FormDropDown
-                          name="existingLienOnBusiness"
-                          placeholder="Choose here"
-                          fluid
-                          selection
-                          fielddata={debt.existingLienOnBusiness}
-                          options={options}
-                          onChange={(e, result) => formArrayChange(e, result, formName, 'debts', index)}
                         />
                         <MaskedInput
                           prefix="$ "
@@ -197,6 +183,22 @@ export default class BusinessApplicationMapping extends Component {
                           changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'debts', index)}
                         />
                         <MaskedInput
+                          percentage
+                          type="text"
+                          name="interestExpenses"
+                          fielddata={debt.interestExpenses}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'debts', index)}
+                        />
+                        {['termStartDate', 'maturityDate'].map(field => (
+                          <MaskedInput
+                            name={field}
+                            fielddata={debt[field]}
+                            format="##/##/####"
+                            changed={values => businessDetailsDateChange(field, values.formattedValue, index, formName, 'debts')}
+                            dateOfBirth
+                          />
+                        ))}
+                        <MaskedInput
                           prefix="$ "
                           currency
                           type="text"
@@ -204,12 +206,14 @@ export default class BusinessApplicationMapping extends Component {
                           fielddata={debt.remainingPrincipal}
                           changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'debts', index)}
                         />
-                        <MaskedInput
-                          percentage
-                          type="text"
-                          name="interestExpenses"
-                          fielddata={debt.interestExpenses}
-                          changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'debts', index)}
+                        <FormDropDown
+                          name="existingLienOnBusiness"
+                          placeholder="Choose here"
+                          fluid
+                          selection
+                          fielddata={debt.existingLienOnBusiness}
+                          options={options}
+                          onChange={(e, result) => formArrayChange(e, result, formName, 'debts', index)}
                         />
                       </Form.Group>
                     <Divider hidden />
@@ -273,7 +277,7 @@ export default class BusinessApplicationMapping extends Component {
                           changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index, formName, 'owners')}
                           dateOfBirth
                         />
-                        {ssnData.value && ssnData.value.includes('X') && !this.state.isSsnDirty[index]
+                        {!this.state.ssnVisibilityStatus && ssnData.value && ssnData.value.includes('X') && !this.state.isSsnDirty[index]
                           ? (
                             <FormInput
                               // displayMode={formReadOnlyMode}
@@ -281,16 +285,26 @@ export default class BusinessApplicationMapping extends Component {
                               key="ssn"
                               name="ssn"
                               fielddata={Helper.encrypSsnNumberByForm(owner).ssn}
+                              icon={this.props.userStore.isAdmin ? {
+                                className: this.state.ssnVisibilityStatus ? 'ns-view active' : 'ns-no-view',
+                                link: true,
+                                onClick: () => this.setSsnVisibilityStatus(),
+                              } : null}
                               onChange={(e, res) => this.handleSsnChange(e, res, formName, 'owners', index)}
                             />
                           )
                           : (
                             <MaskedInput
                               // readOnly={formReadOnlyMode}
-                              // containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                              containerclassname={`${this.state.ssnVisibilityStatus ? 'ssn-visible' : ''}`}
                               ssn
                               name="ssn"
                               asterisk="true"
+                              icon={this.props.userStore.isAdmin ? {
+                                className: this.state.ssnVisibilityStatus ? 'ns-view active' : 'ns-no-view',
+                                link: true,
+                                onClick: () => this.setSsnVisibilityStatus(),
+                              } : null}
                               fielddata={owner.ssn}
                               changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'owners', index)}
                             />
