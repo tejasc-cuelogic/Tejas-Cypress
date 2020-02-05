@@ -68,7 +68,7 @@ const CampaignCards = (props) => {
                             ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'closureSummary.processingDate'), true, false, false)} />
                             : get(campaign, 'offering.launch.terminationDate')
                               ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'offering.launch.terminationDate'), true, false, false)} />
-                              : ['FAILED', 'COMPLETE', 'IN_REPAYMENT', 'STARTUP_PERIOD', 'TERMINATED', 'DEFAULTED', 'CREATION'].includes(campaign.stage) && get(campaign, 'closureSummary.hardCloseDate')
+                              : ['FAILED', 'COMPLETE', 'IN_REPAYMENT', 'STARTUP_PERIOD', 'TERMINATED', 'DEFAULTED'].includes(campaign.stage) && get(campaign, 'closureSummary.hardCloseDate')
                                 ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'closureSummary.hardCloseDate'), true, false, false)} />
                                 : '--' : '--'
                         }
