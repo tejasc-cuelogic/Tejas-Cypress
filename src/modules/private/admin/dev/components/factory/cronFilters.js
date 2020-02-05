@@ -22,7 +22,7 @@ export default class Filters extends Component {
                 <ByKeyword w={[8]} name="jobId" executeSearch={executeSearch} more="no" />
               </Grid.Column>
               <Grid.Column width={3}>
-                <DropdownFilter value={requestState.search.cron} name="Cron" change={setSearchParam} options={FILTER_FRM.fields.cron.values} />
+                <DropdownFilter value={requestState.search.cron || 'GOLDSTAR_HEALTHCHECK'} name="Cron" change={setSearchParam} options={FILTER_FRM.fields.cron.values} />
               </Grid.Column>
               <Grid.Column width={3}>
                 <DropdownFilter value={requestState.search.cronMetaType} label="Cron Meta Type" name="cronMetaType" change={setSearchParam} options={FILTER_FRM.fields.cronMetaType.values} />
