@@ -8,6 +8,9 @@ query getOfferingList($filters: OfferingListFilterInputType){
       watchListStatus
       offeringSlug
       stage
+      updated {
+        date
+      }
       media {
         tombstoneImage {
           id
