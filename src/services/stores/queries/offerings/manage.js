@@ -114,6 +114,14 @@ export const adminDeleteOffering = gql`
   }
 `;
 
+export const getofferingById = gql`
+  query getOfferingById($id: String!) {
+    getOfferingById(id: $id) {
+      offeringSlug
+    }
+  }
+`;
+
 export const getOfferingDetails = gql`
   query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug(offeringSlug: $id) {
@@ -1453,14 +1461,6 @@ export const adminOfferingClose = gql`
 export const setOrderForOfferings = gql`
   mutation setOrderForOfferings($offeringOrderDetails:[OfferingOrderInput]){
     setOrderForOfferings(offeringOrderDetails: $offeringOrderDetails)
-  }
-`;
-
-export const getofferingById = gql`
-  query getOfferingById($id: String!) {
-    getOfferingById(id: $id) {
-      offeringSlug
-    }
   }
 `;
 

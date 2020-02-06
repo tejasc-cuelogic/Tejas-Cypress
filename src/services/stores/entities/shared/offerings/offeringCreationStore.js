@@ -1561,7 +1561,7 @@ export class OfferingCreationStore {
         variables,
         refetchQueries: [{
           query: getOfferingDetails,
-          variables: { id: getOfferingDetailsBySlug.id },
+          variables: { id: getOfferingDetailsBySlug.offeringSlug },
         },
         {
           query: getOfferingBac,
@@ -1755,7 +1755,7 @@ export class OfferingCreationStore {
         },
         refetchQueries: [{
           query: getOfferingDetails,
-          variables: { id: this.currentOfferingId },
+          variables: { id: this.currentOfferingSlug },
         },
         {
           query: getBonusRewards,
@@ -1834,7 +1834,7 @@ export class OfferingCreationStore {
         variables: payloadData,
         refetchQueries: [{
           query: getOfferingDetails,
-          variables: { id: this.currentOfferingId },
+          variables: { id: this.currentOfferingSlug },
         },
         {
           query: getBonusRewards,
