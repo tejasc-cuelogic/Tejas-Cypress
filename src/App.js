@@ -16,7 +16,7 @@ import SecureGateway from './modules/public/shared/SecureGateway';
 import { authActions, activityActions } from './services/actions';
 import MetaTagGenerator from './modules/shared/MetaTagGenerator';
 import { userIdleTime, NEXTSEED_BOX_URL } from './constants/common';
-import { DataFormatter, UpdateHelper } from './helper';
+import { DataFormatter } from './helper';
 /**
  * Main App
  */
@@ -281,6 +281,9 @@ class App extends Component {
             />
           )
         }
+        {uiStore.appUpdated
+          && <NotifyVersionUpdate setAppUpdated={uiStore.setAppUpdated} />
+        }
         <MetaTagGenerator pathName={location.pathname} isTablet={isTablet} metaTagsData={metaTagsData} />
         {authStore.devPasswdProtection
           ? <Route exact path="/password-protected" component={DevPassProtected} /> : (
@@ -295,9 +298,6 @@ class App extends Component {
           )
         }
         <ToastContainer className="toast-message" />
-        {uiStore.appUpdated && UpdateHelper.showUpdateModal(location.pathname)
-          && <NotifyVersionUpdate setAppUpdated={uiStore.setAppUpdated} />
-        }
         {uiStore.devBanner
           && <DevBanner toggle={this.playDevBanner} />
         }
