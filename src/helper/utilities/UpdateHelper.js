@@ -7,7 +7,7 @@ const LIST = [
 ];
 
 const UpdateHelper = {
-  showUpdateModal: path => true || LIST.find(i => matchPath(path, { path: i })),
+  showUpdateModal: path => LIST.find(i => matchPath(path, { path: i })),
 };
 
 export default UpdateHelper;
