@@ -320,7 +320,6 @@ export class OfferingsStore {
     });
   });
 
-
   @action
   setOrderForOfferings = (newArr, stage, isMerge = false, indexVal) => {
     const offeringOrderDetails = [];
