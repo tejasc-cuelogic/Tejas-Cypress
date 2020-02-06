@@ -15,6 +15,7 @@ import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offe
 import SupplementalAgreements from './SupplementalAgreements';
 import ClosingBinder from './close/ClosingBinder';
 import ExportEnvelopes from './close/ExportEnvelopes';
+import Default from './close/Default';
 import { OFFERING_CLOSE_SERVICE_OPTIONS, OFFERING_CLOSE_COUNCURRENCY_OPTIONS } from '../../../../../services/constants/admin/offerings';
 
 const closingActions = {
@@ -35,6 +36,9 @@ const closingActions = {
   },
   ENUM12: {
     label: 'Export Envelopes', keyToEnable: false, ref: 4, enum: 'EXPORT_ENVELOPES', statusKey: 'exportEnvelopes',
+  },
+  ENUM13: {
+    label: 'Default Offering', enum: 'DEFAULT', keyToEnable: false, ref: 4, statusKey: 'exportEnvelopes', btnColor: 'red',
   },
 };
 
@@ -100,7 +104,7 @@ export default class Close extends Component {
     const confirmFor = find(closingActions, a => a.enum === status && a.confirm === true);
     if (confirmFor && confirmed === false && forced === false) {
       this.showConfirmBox(confirmFor);
-    } else if (['SOFT_CLOSE_NOTIFICATION', 'HARD_CLOSE_NOTIFICATION', 'PROCESS_NOTES', 'VALIDATE_NOTES', 'EXPORT_ENVELOPES'].includes(status)) {
+    } else if (['DEFAULT', 'SOFT_CLOSE_NOTIFICATION', 'HARD_CLOSE_NOTIFICATION', 'PROCESS_NOTES', 'VALIDATE_NOTES', 'EXPORT_ENVELOPES'].includes(status)) {
       this.setState({ openModal: true, action: status, actionLabel });
     } else {
       if (status === 'close' || status === 'update') {
@@ -237,6 +241,8 @@ export default class Close extends Component {
       maskChange, outputMsg,
       formArrayChange, formChange,
       initializeClosingBinder,
+      adminSetOfferingAsDefaulted,
+      OFFERING_DEFAULT_FRM,
     } = this.props.offeringCreationStore;
     const { inProgress } = this.props.uiStore;
     const formName = 'OFFERING_CLOSE_FRM';
@@ -248,6 +254,7 @@ export default class Close extends Component {
     const hoursToClose = DataFormatter.diffDays(closeDate, true) + 24;
     const dynamicFields = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? ['interestRate'] : ['revSharePercentage', 'multiple'];
     const modalHeader = find(closingActions, a => a.enum === this.state.action) ? find(closingActions, a => a.enum === this.state.action).label : '';
+    const showDefaultOfferingCTA = !['CREATION', 'COMPLETE', 'LIVE'].includes(get(offer, 'stage'));
     const ServiceDropDown = props => (
       <>
         <FormDropDown
@@ -490,12 +497,13 @@ export default class Close extends Component {
                         )
                       }
                       <Button.Group>
-                        {filter(closingActions, a => a.ref === 4).map(fA => (
+                        {filter(closingActions, a => a.ref === 4).map(fA => ((showDefaultOfferingCTA && fA.enum === 'DEFAULT') || (fA.enum !== 'DEFAULT')) && (
                           <Button
                             loading={inProgress === fA.enum}
                             disabled={fA.keyToEnable !== false && !(fA.keyToEnable ? get(closureProcess, fA.keyToEnable) === 'COMPLETE' : false)}
                             onClick={() => this.closeAction(fA.enum, 4, false, fA.label)}
-                            primary
+                            primary={fA.btnColor !== 'red'}
+                            color={fA.btnColor || false}
                           >
                             {fA.label}
                           </Button>
@@ -665,7 +673,9 @@ export default class Close extends Component {
           />
         </div>
         <Modal open={this.state.openModal} closeIcon size={this.state.action === 'EXPORT_ENVELOPES' ? 'large' : this.state.action === 'VALIDATE_NOTES' ? 'small' : 'tiny'} onClose={this.handleCloseModal}>
-          {this.state.action === 'EXPORT_ENVELOPES'
+          {this.state.action === 'DEFAULT'
+          ? <Default inProgress={inProgress} formChange={formChange} OFFERING_DEFAULT_FRM={OFFERING_DEFAULT_FRM} adminSetOfferingAsDefaulted={adminSetOfferingAsDefaulted} shorthandBusinessName={get(offer, 'keyTerms.shorthandBusinessName')} handleCloseModal={this.handleCloseModal} />
+           : this.state.action === 'EXPORT_ENVELOPES'
             ? <ExportEnvelopes handleCloseModal={this.handleCloseModal} inProgress={this.state.inProgress} handleUpdateOffering={this.handleUpdateOffering} offeringId={offer.id} />
             : (
               <>

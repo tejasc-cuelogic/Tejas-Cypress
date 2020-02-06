@@ -1125,6 +1125,7 @@ export const getOfferingDetails = gql`
         }
       }
       closureSummary {
+        defaultedDate
         exportEnvelopes {
           fileSubstitution {
             upload {
@@ -1463,12 +1464,19 @@ export const getofferingById = gql`
   }
 `;
 
-
 export const initializeClosingBinder = gql`
   mutation initializeClosingBinder($offeringId: String!){
     initializeClosingBinder(offeringId: $offeringId) {
       name
       status
+    }
+  }
+`;
+
+export const adminSetOfferingAsDefaulted = gql`
+  mutation adminSetOfferingAsDefaulted($offeringId: String!, $reason: String!){
+    adminSetOfferingAsDefaulted(offeringId: $offeringId, reason: $reason) {
+      stage
     }
   }
 `;
