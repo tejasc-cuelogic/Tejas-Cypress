@@ -7,7 +7,7 @@ export const CAMPAIGN_KEYTERMS_SECURITIES = {
   CONVERTIBLE_NOTES: 'Convertible Notes',
   SAFE: 'SAFE',
   REAL_ESTATE: 'LLC Membership Interests',
-  FUNDS: 'Funds - Limited Partner Interest',
+  FUNDS: 'Funds - Limited Partnership Interests',
 };
 export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
   TERM_NOTE: 'TERM_NOTE',
@@ -131,10 +131,10 @@ export const CAMPAIGN_OFFERED_BY = {
   BD_CF_506C: 'NextSeed Securities, LLC',
 };
 export const OFFERING_COMMENTS_SCOPE = {
-  NEXTSEED: { title: 'Private Note', color: 'orange' },
+  NEXTSEED: { title: 'Internal Note', color: 'orange' },
   PUBLIC: { title: 'Public', color: 'green' },
   ISSUER: {
-    titleITo: 'Note to NS', titleIFrom: 'Note from NS', titleTo: 'Note to Issuer', titleFrom: 'Note from Issuer', color: 'blue',
+    titleITo: 'Note to NextSeed', titleIFrom: 'Note from NextSeed', titleTo: 'Note to Issuer', titleFrom: 'Note from Issuer', color: 'blue',
   },
 };
 export const OFFERING_ACCRDITATION_STATUS_MESSAGE = {

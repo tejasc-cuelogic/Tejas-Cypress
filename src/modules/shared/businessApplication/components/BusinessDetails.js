@@ -23,6 +23,7 @@ export default class BusinessDetails extends Component {
       currentIndex: 0,
       legalNoteToggle: false,
       isSsnDirty: [],
+      ssnVisibilityStatus: false,
     };
     this.props.businessAppStore.setFieldvalue('applicationStep', 'business-details');
     const {
@@ -69,6 +70,10 @@ export default class BusinessDetails extends Component {
       setField('docLoading', false);
       window.open(res.data.getBoxEmbedLink, '_blank');
     });
+  }
+
+  setSsnVisibilityStatus = () => {
+    this.setState({ ssnVisibilityStatus: !this.state.ssnVisibilityStatus });
   }
 
   render() {
@@ -419,7 +424,7 @@ export default class BusinessDetails extends Component {
             }
             {BUSINESS_DETAILS_FRM.fields.owners.length
               && BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => {
-                const ssnData = owner.ssn.value !== null && owner.ssn.value.length === 9 ? Helper.encrypSsnNumberByForm(owner).ssn : owner.ssn;
+                const ssnData = owner.ssn.value !== null && formReadOnlyMode ? Helper.encrypSsnNumberByForm(owner).ssn : owner.ssn;
                 return (
                   <Grid>
                     <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
@@ -483,24 +488,34 @@ export default class BusinessDetails extends Component {
                             changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}
                             dateOfBirth
                           />
-                          {ssnData.value && ssnData.value.includes('X') && !this.state.isSsnDirty[index]
+                          {!this.state.ssnVisibilityStatus && ssnData.value && ssnData.value.includes('X') && !this.state.isSsnDirty[index]
                             ? (
                               <FormInput
                                 key="ssn"
                                 name="ssn"
                                 fielddata={Helper.encrypSsnNumberByForm(owner).ssn}
+                                icon={this.props.userStore.isAdmin ? {
+                                  className: this.state.ssnVisibilityStatus ? 'ns-view active' : 'ns-no-view',
+                                  link: true,
+                                  onClick: () => this.setSsnVisibilityStatus(),
+                                } : null}
                                 displayMode={formReadOnlyMode}
-                                asterisk={formReadOnlyMode ? 'false' : 'true'}
+                                asterisk="true"
                                 onChange={(e, res) => this.handleSsnChange(e, res, 'owners', index)}
                               />
                             )
                             : (
                               <MaskedInput
                                 readOnly={formReadOnlyMode}
-                                containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                                containerclassname={`${formReadOnlyMode ? 'display-only' : ''} ${this.state.ssnVisibilityStatus ? 'ssn-visible' : ''}`}
                                 ssn
                                 name="ssn"
                                 asterisk="true"
+                                icon={this.props.userStore.isAdmin ? {
+                                  className: this.state.ssnVisibilityStatus ? 'ns-view active' : 'ns-no-view',
+                                  link: true,
+                                  onClick: () => this.setSsnVisibilityStatus(),
+                                } : null}
                                 fielddata={owner.ssn}
                                 changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                               />

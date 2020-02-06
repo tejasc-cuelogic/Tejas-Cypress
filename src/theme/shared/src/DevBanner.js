@@ -32,6 +32,7 @@ const DevBanner = props => (
       size="mini"
       color="black"
       onClick={props.toggle}
+      className="dev-banner-close-btn"
       style={{
         padding: '0 5px',
         position: 'absolute',

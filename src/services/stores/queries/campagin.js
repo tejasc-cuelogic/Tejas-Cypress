@@ -8,6 +8,9 @@ query getOfferingList($filters: OfferingListFilterInputType){
       watchListStatus
       offeringSlug
       stage
+      updated {
+        date
+      }
       media {
         tombstoneImage {
           id
@@ -132,6 +135,7 @@ export const campaignDetailsQuery = gql`
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
     isInvestedInOffering
+    isAvailablePublicly
     watchListStatus
     stage
     offeringSlug
@@ -320,6 +324,19 @@ export const campaignDetailsQuery = gql`
         multiple
         priceCalculation
         revSharePercentage
+        supplementalAgreements {
+          documents {
+            name
+            isVisible
+            upload {
+              fileId
+              fileName
+              fileHandle {
+                boxFileId
+              }
+            }
+          }
+        }
       }
     }
     earlyBirdsCount

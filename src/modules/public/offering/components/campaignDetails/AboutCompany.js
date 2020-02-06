@@ -76,7 +76,7 @@ class AboutCompany extends Component {
       <div className={this.props.newLayout ? '' : 'campaign-content-wrapper'}>
         {campaignStatus.companyDescription ? (
         <>
-          <CompanyTopThings newLayout={this.props.newLayout} emptyStatement={emptyStatement} campaign={campaign} />
+          <CompanyTopThings isFund={campaignStatus.isFund} newLayout={this.props.newLayout} emptyStatement={emptyStatement} campaign={campaign} />
           <Divider hidden section={!isMobile} />
         </>
         ) : null}
