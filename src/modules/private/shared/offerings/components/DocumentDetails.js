@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
+import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../../theme/shared';
+import Helper from '../../../../../helper/utility';
 
-@inject('campaignStore')
+@inject('campaignStore', 'offeringsStore')
 @observer
 export default class KnowledgeBase extends Component {
   constructor(props) {
     super(props);
     this.props.campaignStore.setFieldValue('documentMeta', props.match.params.docId || props.boxFileId, 'closingBinder.selectedDoc');
-    this.props.campaignStore.getBoxLink(props.match.params.docId || props.boxFileId).then((res) => {
+    const { offer } = this.props.offeringsStore;
+    const accountType = Helper.getBoxAccountTypeByRegulation(get(offer, 'regulation'));
+    this.props.campaignStore.getBoxLink(props.match.params.docId || props.boxFileId, accountType).then((res) => {
       this.setState({ embedUrl: res });
     });
   }
