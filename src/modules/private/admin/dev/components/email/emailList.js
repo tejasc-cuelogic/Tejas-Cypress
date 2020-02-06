@@ -22,6 +22,7 @@ function EmailList(props) {
 
   useEffect(() => {
     props.emailStore.fetchAdminListEmailTypesAndIdentifier().then(() => {
+      props.emailStore.setInitiateSrch('emailType', 'DEV');
       props.emailStore.initRequest();
     });
     props.emailStore.resetForm('EMAIL_LIST_FRM');
@@ -41,7 +42,8 @@ function EmailList(props) {
 
   const setSearchParam = (e, { name, value }) => {
     setdisplyRecord(true);
-    props.emailStore.setInitiateSrch(name, value);
+    props.emailStore.reseFilterManually(name, value);
+    // props.emailStore.setInitiateSrch(name, value);
   };
 
   const paginate = params => props.emailStore.initRequest(params);

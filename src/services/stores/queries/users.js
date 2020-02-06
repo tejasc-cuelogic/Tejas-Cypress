@@ -682,7 +682,7 @@ query investorAccountDeleteProcess {
 `;
 
 export const adminFetchEmails = gql`
-query adminFetchEmails ($recipientId: String!, $emailIdentifier: String, $subject: String, $fromDate: String, $toDate: String, $limit: Int, $lek: String){
+query adminFetchEmails ($recipientId: String, $emailIdentifier: String, $subject: String, $fromDate: String, $toDate: String, $limit: Int, $lek: String){
   adminFetchEmails(
     recipientId: $recipientId
     emailIdentifier: $emailIdentifier
