@@ -63,7 +63,8 @@ export class PaymentStore extends DataModelStore {
 
     updatePayment = id => new Promise((resolve, reject) => {
       uiStore.setProgress();
-      const variables = Helper.replaceKeysDeep(toJS(Validator.evaluateFormData(this.PAYMENT_FRM.fields)), { expectedOpsDate: 'launchExpectedOpsDate', operationsDate: 'operationsDate', expectedPaymentDate: 'keyTermsAnticipatedPaymentStartDate', firstPaymentDate: 'repaymentStartDate', monthlyPayment: 'monthlyPayment' });
+      let variables = Helper.replaceKeysDeep(toJS(Validator.evaluateFormData(this.PAYMENT_FRM.fields)), { expectedOpsDate: 'launchExpectedOpsDate', operationsDate: 'operationsDate', expectedPaymentDate: 'keyTermsAnticipatedPaymentStartDate', firstPaymentDate: 'repaymentStartDate', monthlyPayment: 'monthlyPayment', payments: 'paymentsContactEmail' });
+      variables = variables.paymentsContactEmail ? { ...variables, paymentsContactEmail: (variables.paymentsContactEmail.split(',').map(p => p.trim())).join(', ') } : { ...variables };
       client
         .mutate({
           mutation: updatePaymentIssuer,

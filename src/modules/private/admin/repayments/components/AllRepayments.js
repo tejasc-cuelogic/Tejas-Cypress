@@ -64,7 +64,7 @@ const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, ha
                                   && (
                                   <Popup
                                     trigger={<span> @</span>}
-                                    content={get(record, 'offering.contact.payments')}
+                                    content={get(record, 'offering.contact.payments').split(',').map(p => (<div>{p}</div>))}
                                     hoverable
                                     position="top center"
                                   />
