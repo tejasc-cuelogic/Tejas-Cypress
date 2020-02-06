@@ -3157,3 +3157,12 @@ export const OFFERING_CLOSE_EXPORT_ENVELOPES = {
       },
     }],
 };
+
+export const OFFERING_DEFAULT = {
+  reason: {
+    value: '',
+    label: 'Request reason',
+    error: undefined,
+    rule: 'optional',
+  },
+};
