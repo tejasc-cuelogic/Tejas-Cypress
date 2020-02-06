@@ -229,7 +229,7 @@ export class CampaignStore {
   }
 
   @computed get creation() {
-    const creationList = this.creationList.slice();
+    const creationList = orderBy(this.creationList.slice(), c => get(c, 'updated.date'), ['desc']);
     return creationList.splice(0, this.creationToDisplay);
   }
 
@@ -308,7 +308,7 @@ export class CampaignStore {
     campaignStatus.maxFlagStatus = !!(money.isZero(formatedReachedMaxCompairAmountValue)
       || money.isPositive(formatedReachedMaxCompairAmountValue));
     campaignStatus.percent = (campaignStatus.collected / minMaxOffering) * 100;
-    campaignStatus.address = get(campaign, 'keyTerms.city') || get(campaign, 'keyTerms.state') ? `${get(campaign, 'keyTerms.city') || '-'}, ${get(campaign, 'keyTerms.state') || '-'}` : '--';
+    campaignStatus.address = get(campaign, 'keyTerms.city') || get(campaign, 'keyTerms.state') ? `${get(campaign, 'keyTerms.city') || ''}${get(campaign, 'keyTerms.city') && get(campaign, 'keyTerms.state') ? ',' : ''} ${get(campaign, 'keyTerms.state') || ''}` : null;
     campaignStatus.isClosed = get(campaign, 'stage') !== 'LIVE';
     campaignStatus.isCreation = get(campaign, 'stage') === 'CREATION';
     campaignStatus.earlyBird = get(campaign, 'earlyBird') || null;

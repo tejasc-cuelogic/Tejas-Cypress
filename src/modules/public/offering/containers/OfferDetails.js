@@ -218,7 +218,7 @@ class offerDetails extends Component {
       navItems = navItems.filter(n => n.to !== '#data-room');
     }
     if (campaignStatus.isFund) {
-      navItems = navItems.filter(n => n.to !== '#gallery');
+      navItems = navItems.filter(n => !['#gallery', '#comments'].includes(n.to));
       navItems = navItems.map(n => (navTitleMeta[n.to] ? { ...n, title: navTitleMeta[n.to] } : { ...n }));
     }
     if ((details && details.data && !details.data.getOfferingDetailsBySlug)
