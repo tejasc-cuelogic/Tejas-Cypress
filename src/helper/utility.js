@@ -383,6 +383,12 @@ export class Utility {
     }
     return dateDiff;
   }
+
+  getBoxAccountTypeByRegulation = (regulation) => {
+    const offeringRegulationArr = (regulation && regulation.split('_')) || '';
+    const regulationType = _.get(offeringRegulationArr, '[0]');
+    return regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
+  }
 }
 
 export default new Utility();
