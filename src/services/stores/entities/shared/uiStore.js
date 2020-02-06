@@ -1,5 +1,6 @@
 /* eslint-disable space-unary-ops */
 import { action, observable, computed } from 'mobx';
+import { pick } from 'lodash';
 import { REACT_APP_DEPLOY_ENV, NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -289,6 +290,14 @@ export class UiStore {
   setAuthRef = (url, hash = '') => {
     this.authRef = url || '';
     this.authRefHash = hash;
+  }
+
+  disableCta = (disableCtaArgs, commonPropsArray) => {
+    const disableProps = {
+      ...pick(this.props, commonPropsArray),
+      ...disableCtaArgs,
+    };
+    return Object.keys(disableProps).find(prop => Boolean(disableProps[prop]));
   }
 
   scrollIntoActiveInputFields = () => {
