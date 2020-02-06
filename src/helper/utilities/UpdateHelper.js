@@ -16,5 +16,3 @@ const UpdateHelper = {
 };
 
 export default UpdateHelper;
-
-// pratik.cuelogic+441@nextseed.com qqqqqqqq!
