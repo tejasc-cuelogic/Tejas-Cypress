@@ -29,7 +29,7 @@ export default class CampaignSideBar extends Component {
     const {
       isClosed, isCreation, isInProcessing, collected, minFlagStatus, isBonusReward,
       minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, diffForProcessing,
-      earlyBird, isEarlyBirdRewards, bonusRewards, countDown, isInvestedInOffering, dataRooms,
+      earlyBird, isEarlyBirdRewards, bonusRewards, countDown, investmentSummary, dataRooms,
     } = campaignStatus;
     const isCampaignLayout = newLayout;
     const showCounter = (!isClosed && diffForProcessing.value > 0 && !campaignStatus.isFund) || (!campaignStatus.isFund) || (earlyBird && earlyBird.available > 0
@@ -236,17 +236,22 @@ export default class CampaignSideBar extends Component {
                 && (
                   <>
                     <Button.Group vertical>
+                      {(!get(investmentSummary, 'isInvestedInOffering') || (get(investmentSummary, 'isInvestedInOffering') && (!get(investmentSummary, 'tranche') || get(investmentSummary, 'tranche') < 1)))
+                      && (
+                      <>
                       <Button
                         secondary={!isInProcessing}
                         disabled={maxFlagStatus || isInProcessing}
                         onClick={this.handleInvestNowClick}
                         fluid
                       >
-                        {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : isInvestedInOffering ? 'Change Investment' : 'Invest Now'}`}
+                        {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : get(investmentSummary, 'isInvestedInOffering') ? 'Change Investment' : 'Invest Now'}`}
                       </Button>
                       <p className="mt-10">
                         {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
-                          </p>
+                      </p>
+                      </>
+                      )}
                       {followBtn}
                     </Button.Group>
                   </>
