@@ -129,20 +129,20 @@
 
     /* changes for investor sign up flow with fullscreen white background 
     to make the contents align at top*/ 
-    &.inverted{
-        @media only screen and (min-width:@tabletBreakpoint){
-            justify-content: flex-start;
-            .multistep-modal{
-                margin-top: 69px;
-                &.dimmer-visible {
-                    margin-top: 69px;
-                }
-                .multistep.content{
-                    padding-top: 54px;
-                }
-            }
-        }
-    }
+    // &.inverted{
+    //     @media only screen and (min-width:@tabletBreakpoint){
+    //         justify-content: flex-start;
+    //         .multistep-modal{
+    //             margin-top: 69px;
+    //             &.dimmer-visible {
+    //                 margin-top: 69px;
+    //             }
+    //             .multistep.content{
+    //                 padding-top: 54px;
+    //             }
+    //         }
+    //     }
+    // }
     /* end */
 }
 //  Public pages Starts
