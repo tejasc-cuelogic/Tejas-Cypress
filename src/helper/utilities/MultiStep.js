@@ -271,6 +271,7 @@ export default class MultiStep extends React.Component {
           id="multistep-modal"
           dimmer="inverted"
           size="large"
+          centered={false}
         >
           {!this.props.hideHeader
             && (

@@ -15,7 +15,7 @@ const AccountTypes = ({
     onClose={close}
     closeOnDimmerClick={false}
     dimmer="inverted"
-    centered={!isMobile}
+    centered={false}
     className="multistep-modal"
     basic
     size="large"

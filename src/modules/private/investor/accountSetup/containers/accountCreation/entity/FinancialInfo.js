@@ -81,9 +81,9 @@ export default class AccountType extends Component {
                             <>
                               <TrustDateInput />
                               <Divider hidden />
-                              <Button primary className="relaxed" content="Continue" disabled={!TRUST_INFO_FRM.meta.isValid} onClick={this.handleSubmitAccount} />
                             </>
                           )}
+                        <Button primary className={`${!isMobile && 'mt-30'} relaxed`} content="Continue" disabled={!TRUST_INFO_FRM.meta.isValid} onClick={this.handleSubmitAccount} />
                       </>
                   )
                   }
