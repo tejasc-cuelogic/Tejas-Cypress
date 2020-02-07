@@ -58,6 +58,8 @@ export class BusinessAppReviewStore {
 
   @observable businessApplicationOffers = null;
 
+  @observable confirmModalForApplication = false;
+
   @observable confirmModal = false;
 
   @observable confirmModalName = null;
@@ -93,9 +95,14 @@ export class BusinessAppReviewStore {
 
   @action
   toggleConfirmModal = (index, formName = null) => {
-    this.confirmModal = !this.confirmModal;
-    this.confirmModalName = formName;
-    this.removeIndex = this.confirmModal ? index : null;
+    if (formName === 'APPLICATION_MAPPED_OFFERING_FORM') {
+      this.confirmModalForApplication = !this.confirmModalForApplication;
+      this.removeIndex = this.confirmModalForApplication ? index : null;
+    } else {
+      this.confirmModal = !this.confirmModal;
+      this.removeIndex = this.confirmModal ? index : null;
+      this.confirmModalName = formName;
+    }
   }
 
   @action

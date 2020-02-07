@@ -55,7 +55,8 @@ export default class BusinessApplicationMapping extends Component {
 
   toggleConfirmModal = (e, formName) => {
     e.preventDefault();
-    this.props.businessAppReviewStore.toggleConfirmModal(null, formName);
+    console.log(formName);
+    this.props.businessAppReviewStore.toggleConfirmModal(null, 'APPLICATION_MAPPED_OFFERING_FORM');
   }
 
   setSsnVisibilityStatus = () => {
@@ -72,7 +73,7 @@ export default class BusinessApplicationMapping extends Component {
       businessDetailsDateChange,
       businessDetailsChange,
       businessDetailsMaskingChange,
-      confirmModal,
+      confirmModalForApplication,
     } = this.props.businessAppReviewStore;
     let MODIFIED_REGULATION_VALUES = null;
     if (APPLICATION_MAPPED_OFFERING_FORM && APPLICATION_MAPPED_OFFERING_FORM.fields && APPLICATION_MAPPED_OFFERING_FORM.fields.regulation
@@ -341,7 +342,7 @@ export default class BusinessApplicationMapping extends Component {
           header="Confirm"
           content="This action can only be triggered once, and will be created with the values
           currently defined. Are you sure you want to create this offering at this time?"
-          open={confirmModal}
+          open={confirmModalForApplication}
           onCancel={this.toggleConfirmModal}
           onConfirm={() => this.submit()}
           size="mini"
