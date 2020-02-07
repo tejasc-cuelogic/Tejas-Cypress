@@ -19,7 +19,7 @@ const MessagesList = (props) => {
             {(showResponseNeeded(msg) || props.threadMsgCount(msg.threadComments))
               ? (
                 <Item.Extra className="offering-comment">
-                  {showResponseNeeded(msg)
+                  {showResponseNeeded(msg) && !props.disablePostComment
                     ? (
                     <Label size="mini" color="red" horizontal circular>Response Needed</Label>
                     ) : null
