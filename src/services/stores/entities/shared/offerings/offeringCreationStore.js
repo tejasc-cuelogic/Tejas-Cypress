@@ -11,13 +11,13 @@ import {
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
   ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS, CLOSING_BINDING,
-  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1, OFFERING_CLOSE_EXPORT_ENVELOPES,
+  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1, OFFERING_CLOSE_EXPORT_ENVELOPES, OFFERING_DEFAULT,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { deleteBonusReward, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, adminOfferingClose, deleteBac, upsertBonusReward,
   getBonusRewards, adminBusinessFilings, initializeClosingBinder,
-  adminCreateBusinessFiling, adminUpsertOffering } from '../../../queries/offerings/manage';
+  adminCreateBusinessFiling, adminUpsertOffering, adminSetOfferingAsDefaulted } from '../../../queries/offerings/manage';
 import { updateBusinessApplicationInformation, adminBusinessApplicationsDetails } from '../../../queries/businessApplication';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -62,6 +62,8 @@ export class OfferingCreationStore {
   @observable OFFERING_CLOSE_3 = Validator.prepareFormObject(OFFERING_CLOSE_3);
 
   @observable OFFERING_CLOSE_4 = Validator.prepareFormObject(OFFERING_CLOSE_4);
+
+  @observable OFFERING_DEFAULT_FRM = Validator.prepareFormObject(OFFERING_DEFAULT);
 
   @observable OFFERING_CLOSE_EXPORT_ENVELOPES_FRM = Validator.prepareFormObject(OFFERING_CLOSE_EXPORT_ENVELOPES);
 
@@ -1710,7 +1712,7 @@ export class OfferingCreationStore {
         variables,
         refetchQueries: [{
           query: getOfferingDetails,
-          variables: { id: getOfferingDetailsBySlug.id },
+          variables: { id: getOfferingDetailsBySlug.offeringSlug },
         },
         {
           query: getOfferingBac,
@@ -1904,7 +1906,7 @@ export class OfferingCreationStore {
         },
         refetchQueries: [{
           query: getOfferingDetails,
-          variables: { id: this.currentOfferingId },
+          variables: { id: this.currentOfferingSlug },
         },
         {
           query: getBonusRewards,
@@ -1983,7 +1985,7 @@ export class OfferingCreationStore {
         variables: payloadData,
         refetchQueries: [{
           query: getOfferingDetails,
-          variables: { id: this.currentOfferingId },
+          variables: { id: this.currentOfferingSlug },
         },
         {
           query: getBonusRewards,
@@ -2214,6 +2216,30 @@ export class OfferingCreationStore {
       reject(error);
     }));
   });
+
+  @action
+  adminSetOfferingAsDefaulted = () => new Promise((res) => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: adminSetOfferingAsDefaulted,
+        variables: {
+          offeringId: this.currentOfferingId,
+          reason: this.OFFERING_DEFAULT_FRM.fields.reason.value,
+        },
+      })
+      .then(() => {
+        offeringsStore.getOne(this.currentOfferingSlug, false);
+        Helper.toast('Offering has been set to defaulted.', 'success');
+        res();
+      })
+      .catch(action((err) => {
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  })
 }
 
 export default new OfferingCreationStore();
