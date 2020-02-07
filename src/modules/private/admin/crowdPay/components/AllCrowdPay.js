@@ -170,15 +170,11 @@ export default class AllCrowdPay extends Component {
                       {type === 'ira'
                         ? (
                           <Table.Cell>
-                            {account.legalDetails && account.legalDetails.verificationDocs
-                              && account.legalDetails.verificationDocs.addressProof
-                              && account.legalDetails.verificationDocs.addressProof.fileHandle
-                              ? (
-                                <a href={`${NEXTSEED_BOX_URL}folder/${account.legalDetails.verificationDocs.addressProof.fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank">
-                                  View Documents
-                          </a>
-                              )
-                              : <p className="intro-text">N/A</p>
+                            {get(account, 'storageDetails.Accounts.IRA.Creation.id') ? (
+                              <a href={`${NEXTSEED_BOX_URL}folder/${get(account, 'storageDetails.Accounts.IRA.Creation.id')}`} className="link" rel="noopener noreferrer" target="_blank">
+                                View Documents
+                              </a>
+                            ) : <p className="intro-text">N/A</p>
                             }
                           </Table.Cell>
                         )

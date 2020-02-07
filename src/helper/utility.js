@@ -106,6 +106,9 @@ export class Utility {
     return formattedSSNNumber;
   }
 
+  isUuid = value => value
+  .match(new RegExp(/([a-fA-F0-9]{8}-(?:[a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}){1}/)) !== null
+
   encryptNumber = (number) => {
     if (!number) return null;
     let encryptedNumber = number.replace(/.(?=.{4,}$)/g, '...');
@@ -379,6 +382,12 @@ export class Utility {
       return dateDiff < 0 ? 'EXPIRED' : 'ACTIVE';
     }
     return dateDiff;
+  }
+
+  getBoxAccountTypeByRegulation = (regulation) => {
+    const offeringRegulationArr = (regulation && regulation.split('_')) || '';
+    const regulationType = _.get(offeringRegulationArr, '[0]');
+    return regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
   }
 }
 

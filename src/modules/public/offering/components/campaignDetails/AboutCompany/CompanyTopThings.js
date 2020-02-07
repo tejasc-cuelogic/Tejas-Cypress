@@ -9,12 +9,12 @@ const isMobile = document.documentElement.clientWidth < 992;
 class CompanyTopThings extends Component {
   render() {
     const {
-      campaign, emptyStatement,
+      campaign, emptyStatement, isFund,
     } = this.props;
     return (
       <>
         <Header as="h3" className={`${(this.props.newLayout && isMobile) ? 'mt-40 mb-20' : this.props.newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
-          Company Description
+        {isFund ? 'Fund Description' : 'Company Description'}
           <span className="anchor" id="company-description" />
         </Header>
         {campaign && campaign.offering

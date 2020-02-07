@@ -11,11 +11,12 @@ import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from 
 
 const isMobile = document.documentElement.clientWidth < 992;
 
-@inject('campaignStore', 'authStore')
+@inject('campaignStore', 'authStore', 'accreditationStore')
 @withRouter
 @observer
 export default class CampaignSideBar extends Component {
   handleInvestNowClick = () => {
+    this.props.accreditationStore.setFieldVal('disabeleElement', false);
     this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
     this.props.history.push(`${this.props.match.url}/invest-now`);
   }
@@ -28,7 +29,7 @@ export default class CampaignSideBar extends Component {
     const {
       isClosed, isCreation, isInProcessing, collected, minFlagStatus, isBonusReward,
       minOffering, maxFlagStatus, maxOffering, address, percent, percentBefore, diffForProcessing,
-      earlyBird, isEarlyBirdRewards, bonusRewards, countDown, isInvestedInOffering, dataRooms,
+      earlyBird, isEarlyBirdRewards, bonusRewards, countDown, investmentSummary, dataRooms,
     } = campaignStatus;
     const isCampaignLayout = newLayout;
     const showCounter = (!isClosed && diffForProcessing.value > 0 && !campaignStatus.isFund) || (!campaignStatus.isFund) || (earlyBird && earlyBird.available > 0
@@ -40,7 +41,7 @@ export default class CampaignSideBar extends Component {
             <div className={`${newLayout && isMobile ? 'offering-intro-v2' : ''} offering-intro center-align`}>
               <Header as="h4" inverted>
                 {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
-                <Header.Subheader>{address}</Header.Subheader>
+                {!campaignStatus.isFund && address && <Header.Subheader>{address}</Header.Subheader>}
               </Header>
               <div className="video-wrapper campaign">
                 {campaign && campaign.media
@@ -66,7 +67,7 @@ export default class CampaignSideBar extends Component {
               </div>
               <Statistic inverted size="tiny" className={`${isMobile && 'mt-30'} basic mb-0`}>
                 <Statistic.Value>
-                  <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> raised
+                  <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span> {!campaignStatus.isFund ? 'raised' : 'invested'}
                 </Statistic.Value>
                 {minFlagStatus
                   && (
@@ -235,17 +236,22 @@ export default class CampaignSideBar extends Component {
                 && (
                   <>
                     <Button.Group vertical>
+                      {(!get(investmentSummary, 'isInvestedInOffering') || (get(investmentSummary, 'isInvestedInOffering') && (!get(investmentSummary, 'tranche') || get(investmentSummary, 'tranche') < 1)))
+                      && (
+                      <>
                       <Button
-                        secondary={!isInProcessing}
+                        primary={!isInProcessing}
                         disabled={maxFlagStatus || isInProcessing}
                         onClick={this.handleInvestNowClick}
                         fluid
                       >
-                        {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : isInvestedInOffering ? 'Change Investment' : 'Invest Now'}`}
+                        {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : get(investmentSummary, 'isInvestedInOffering') ? 'Change Investment' : 'Invest Now'}`}
                       </Button>
                       <p className="mt-10">
                         {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
-                          </p>
+                      </p>
+                      </>
+                      )}
                       {followBtn}
                     </Button.Group>
                   </>
@@ -257,7 +263,7 @@ export default class CampaignSideBar extends Component {
             && (
               <>
                 <Menu vertical>
-                  <NavItems sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={isBonusReward} isBonusReward={isBonusReward} />
+                  <NavItems needNavLink sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={isBonusReward} isBonusReward={isBonusReward} />
                 </Menu>
               </>
             )
