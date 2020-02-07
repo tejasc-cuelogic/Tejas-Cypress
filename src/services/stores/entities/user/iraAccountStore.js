@@ -32,6 +32,8 @@ class IraAccountStore {
 
   @observable isFormSubmitted = false;
 
+  @observable apiCall = false;
+
   @observable retry = 0;
 
   @observable stepToBeRendered = 0;
@@ -213,11 +215,16 @@ class IraAccountStore {
 
   @action
   createAccount = (currentStep, removeUploadedData = false) => new Promise((resolve) => {
-    this.validateAndSubmitStep(currentStep, removeUploadedData).then(() => {
-      resolve();
-    }).catch((e) => {
-      console.log(e);
-    });
+    if (!this.apiCall) {
+      this.setFieldValue('apiCall', true);
+      this.validateAndSubmitStep(currentStep, removeUploadedData).then(() => {
+        this.setFieldValue('apiCall', false);
+        resolve();
+      }).catch((e) => {
+        this.setFieldValue('apiCall', false);
+        console.log(e);
+      });
+    }
   })
 
   @action
