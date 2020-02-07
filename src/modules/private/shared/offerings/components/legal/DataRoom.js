@@ -9,7 +9,7 @@ import ButtonGroupType2 from '../ButtonGroupType2';
 
 let uploadFileArr = [];
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder mr-10" />);
-const SortableItem = SortableElement(({ closingBinder, offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length, showLockActivity }) => {
+const SortableItem = SortableElement(({ closingBinder, offeringClose, document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length, showLockActivity, isBusinessApplication }) => {
   return (
     <div className="row-wrap">
       <div className="balance-half simple-drag-row-title">
@@ -49,7 +49,7 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
             <Icon className={!offeringClose ? document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock' : document.accreditedOnly.value ? 'ns-view' : 'ns-no-view'} onClick={() => handleLockUnlock(docIndx)} />
           </Button>)
         }
-        <Button disabled={isReadonly || length === 1} icon circular className="link-button">
+        <Button disabled={isReadonly || length === 1 || (isBusinessApplication && document.accreditedOnly.value)} icon circular className="link-button">
           <Icon className="ns-trash" onClick={e => toggleConfirmModal(e, docIndx, formName)} />
         </Button>
       </div>
@@ -57,7 +57,7 @@ const SortableItem = SortableElement(({ closingBinder, offeringClose, document, 
   );
 });
 
-const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName, showLockActivity }) => {
+const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName, showLockActivity, isBusinessApplication }) => {
   return (
     <div>
       {docs.map((doc, index) => (
@@ -77,6 +77,7 @@ const SortableList = SortableContainer(({ closingBinder, offeringClose, docs, is
           length={docs.length}
           index={index}
           showLockActivity={showLockActivity}
+          isBusinessApplication={isBusinessApplication}
         />
       ))}
     </div>
@@ -100,6 +101,7 @@ export default class DataRoom extends Component {
     if (businessApplicationFlag) {
       let fileArr = '';
       this.props.offeringCreationStore.setFileUploadDataMulitpleVartually(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', closingBinder ? 'closingBinder' : 'documents', name, files, uploadEnum, index, true);
+      this.forceUpdate();
       fileArr = files[0];
       fileArr.currentIndex = index
       uploadFileArr.push(fileArr);
@@ -112,6 +114,7 @@ export default class DataRoom extends Component {
     const { closingBinder, referenceFrom } = this.props;
     const businessApplicationFlag = !!(referenceFrom && referenceFrom === 'BUSINESS_APPLICATION');
     this.props.offeringCreationStore.removeUploadedDataMultiple(closingBinder ? 'CLOSING_BINDER_FRM' : 'DATA_ROOM_FRM', field, index, closingBinder ? 'closingBinder' : 'documents', false, businessApplicationFlag);
+    this.forceUpdate();
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
@@ -200,6 +203,7 @@ export default class DataRoom extends Component {
               lockAxis="y"
               useDragHandle
               showLockActivity={!(businessApplicationFlag)}
+              isBusinessApplication={businessApplicationFlag}
             />
           </div>
           <Divider hidden />

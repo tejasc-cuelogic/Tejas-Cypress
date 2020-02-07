@@ -703,6 +703,7 @@ export class OfferingCreationStore {
           this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           this.isUploadingFile = false;
         });
+        this.setAccreditedOnlyField(form, index, false);
       }
     }
 
@@ -743,6 +744,7 @@ export class OfferingCreationStore {
       this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
       if (isForBusinessApplication) {
         this.removedFileData.documents = [...this.removedFileData.documents, { ...removedArr, removedFileId: { value: removeFileIds } }];
+        this.setAccreditedOnlyField(form, index, true);
       }
       this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
     }
@@ -2079,11 +2081,11 @@ export class OfferingCreationStore {
   }
 
   @action
-  setAccreditedOnlyField = (formName, index) => {
+  setAccreditedOnlyField = (formName, index, fieldValue) => {
     const arrName = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : 'documents';
     this[formName] = Validator.onArrayFieldChange(
       this[formName],
-      { name: 'accreditedOnly', value: !this[formName].fields[arrName][index].accreditedOnly.value },
+      { name: 'accreditedOnly', value: (fieldValue || fieldValue === false) ? fieldValue : !this[formName].fields[arrName][index].accreditedOnly.value },
       arrName,
       index,
     );
