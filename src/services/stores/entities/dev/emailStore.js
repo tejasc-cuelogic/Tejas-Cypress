@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
-import { startCase } from 'lodash';
+import { startCase, isEmpty } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import { adminFetchEmails, fetchAdminListEmailTypesAndIdentifier } from '../../queries/users';
 import Helper from '../../../../helper/utility';
@@ -30,14 +30,15 @@ export class EmailStore extends DataModelStore {
       this.requestState.perPage = (reqParams && reqParams.first) || this.requestState.perPage;
       let params = {
         search: keyword,
-        recipientId: emailType || 'DEV',
+        // recipientId: emailType || 'DEV',
+        recipientId: emailType,
         limit: this.requestState.perPage,
       };
       params = emailIdentifier ? { ...params, emailIdentifier } : { ...params };
       params = this.requestState.lek[`page-${this.requestState.page}`]
         ? { ...params, lek: this.requestState.lek[`page-${this.requestState.page}`] } : { ...params };
 
-      if (startDate && endDate) {
+      if (startDate || endDate) {
         params = {
           ...params,
           ...{ fromDate: startDate, toDate: endDate },
@@ -76,6 +77,7 @@ export class EmailStore extends DataModelStore {
       });
       const listEmailType = [];
       if (data.adminListEmailType && data.adminListEmailType.length) {
+        listEmailType.push({ key: 'SELECT', value: null, text: 'SELECT' });
         data.adminListEmailType.forEach((e) => {
           listEmailType.push({ key: e, value: e, text: startCase(e) });
         });
@@ -106,6 +108,18 @@ export class EmailStore extends DataModelStore {
       && toJS(this.emailLogList.adminFetchEmails.resultCount)
     ) || 0;
   }
+
+  reseFilterManually = (currentFilter, currentFilterValue) => {
+    const resetFilter = currentFilter === 'emailType' ? 'emailIdentifier' : 'emailType';
+    const filters = { ...this.requestState.search };
+    if (!isEmpty(filters)) {
+      if (resetFilter in filters === true) {
+        delete filters[resetFilter];
+      }
+    }
+    this.setFieldValue('requestState', filters, 'search');
+    this.setInitiateSrch(currentFilter, currentFilterValue, { defaultFilterType: 'emailType', defaultValue: 'DEV' });
+  }
 }
 
 decorate(EmailStore, {
@@ -119,6 +133,7 @@ decorate(EmailStore, {
   count: computed,
   emailLogList: observable,
   filters: observable,
+  reseFilterManually: action,
 });
 
 export default new EmailStore();
