@@ -80,7 +80,6 @@ export default class BusinessApplicationMapping extends Component {
       && APPLICATION_MAPPED_OFFERING_FORM.fields.regulation.value) {
       MODIFIED_REGULATION_VALUES = BD_REGULATION_VALUES;
     } else {
-      // MODIFIED_REGULATION_VALUES = REGULATION_VALUES;
       MODIFIED_REGULATION_VALUES = BD_REGULATION_VALUES;
     }
     const isReadonly = this.props.isReadOnlyFlag;
@@ -237,8 +236,6 @@ export default class BusinessApplicationMapping extends Component {
                         <Form.Group widths={2}>
                         {['fullLegalName', 'title'].map(field => (
                           <FormInput
-                            // readOnly={formReadOnlyMode}
-                            // containerclassname={formReadOnlyMode ? 'display-only' : ''}
                             key={field}
                             type="text"
                             asterisk="true"
@@ -248,8 +245,6 @@ export default class BusinessApplicationMapping extends Component {
                           />
                         ))}
                         <MaskedInput
-                          // readOnly={formReadOnlyMode}
-                          // containerclassname={formReadOnlyMode ? 'display-only' : ''}
                           number
                           type="text"
                           name="yearsOfExp"
@@ -258,8 +253,6 @@ export default class BusinessApplicationMapping extends Component {
                           changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'owners', index)}
                         />
                         <MaskedInput
-                          // readOnly={formReadOnlyMode}
-                          // containerclassname={formReadOnlyMode ? 'display-only' : ''}
                           percentage
                           type="text"
                           asterisk="true"
@@ -268,8 +261,6 @@ export default class BusinessApplicationMapping extends Component {
                           changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'owners', index)}
                         />
                         <MaskedInput
-                          // readOnly={formReadOnlyMode}
-                          // containerclassname={formReadOnlyMode ? 'display-only' : ''}
                           name="dateOfService"
                           fielddata={owner.dateOfService}
                           asterisk="true"
@@ -281,8 +272,6 @@ export default class BusinessApplicationMapping extends Component {
                         {!this.state.ssnVisibilityStatus && ssnData.value && ssnData.value.includes('X') && !this.state.isSsnDirty[index]
                           ? (
                             <FormInput
-                              // displayMode={formReadOnlyMode}
-                              // asterisk={formReadOnlyMode ? 'false' : 'true'}
                               key="ssn"
                               name="ssn"
                               fielddata={Helper.encrypSsnNumberByForm(owner).ssn}
@@ -296,7 +285,6 @@ export default class BusinessApplicationMapping extends Component {
                           )
                           : (
                             <MaskedInput
-                              // readOnly={formReadOnlyMode}
                               containerclassname={`${this.state.ssnVisibilityStatus ? 'ssn-visible' : ''}`}
                               ssn
                               name="ssn"
@@ -311,8 +299,6 @@ export default class BusinessApplicationMapping extends Component {
                             />
                           )}
                         <FormInput
-                          // readOnly={formReadOnlyMode}
-                          // containerclassname={formReadOnlyMode ? 'display-only' : ''}
                           type="text"
                           name="linkedInUrl"
                           fielddata={owner.linkedInUrl}

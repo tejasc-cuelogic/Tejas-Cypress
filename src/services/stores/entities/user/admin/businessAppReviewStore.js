@@ -1023,7 +1023,6 @@ export class BusinessAppReviewStore {
       } else if (key === 'legal') {
         const legalGeneralMaterialDetails = get(evaluatedFormData, 'legal.general.materialIndebtedness');
         forEach(legalGeneralMaterialDetails, (val, index) => {
-          // const concaatedOtherTermValue = `<p>Principal Amount: ${legalGeneralMaterialDetails[0].amount}</p><p>Existing Lien on Business: ${legalGeneralMaterialDetails[0].existingLienOnBusiness}</p>`;
           const concaatedOtherTermValue = `<p>Principal Amount: ${val.amount}</p><p>Existing Lien on Business: ${val.existingLienOnBusiness}</p>`;
           evaluatedFormData[key].general.materialIndebtedness[index].otherTerms = concaatedOtherTermValue;
           delete evaluatedFormData[key].general.materialIndebtedness[index].amount;
@@ -1035,7 +1034,7 @@ export class BusinessAppReviewStore {
         set(evaluatedFormData, 'legal.general.useOfProceeds.offeringExpenseAmountDescription', formatedUseOfProceeds);
       }
     });
-    this.confirmModal = !this.confirmModal;
+    this.confirmModalForApplication = !this.confirmModalForApplication;
     this.confirmModalName = null;
     const payload = {
       applicationId,
@@ -1046,7 +1045,6 @@ export class BusinessAppReviewStore {
       applicationId,
       applicationType: 'APPLICATION_COMPLETED',
     };
-    console.table([evaluatedFormData]);
     return new Promise((resolve, reject) => {
       client
         .mutate({
