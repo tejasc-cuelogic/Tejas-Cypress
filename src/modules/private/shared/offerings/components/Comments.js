@@ -21,7 +21,7 @@ export default class Comments extends Component {
 
   render() {
     const {
-      match, messageStore, userStore, offeringsStore
+      match, messageStore, userStore, offeringsStore,
     } = this.props;
     const {
       messages, currentMessageId, loading, error, threadUsersList, newPostComment, threadMsgCount,
