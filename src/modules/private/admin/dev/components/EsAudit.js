@@ -32,6 +32,10 @@ export default class EsAudit extends Component {
     this.props.elasticSearchStore.adminSyncEsDocument(params);
   }
 
+  handleExport = (targetIndex) => {
+    this.props.elasticSearchStore.adminExportEsIndexRecords(targetIndex);
+  }
+
   renderTitle = title => capitalize(title.replace('_', ' '));
 
   render() {
@@ -70,14 +74,16 @@ export default class EsAudit extends Component {
                 <Grid>
                   <Grid.Row columns={2}>
                     <Grid.Column>
+                      <Button loading={inProgress === `Export_${get(esAuditParaOutput, 'index_a.indexName')}`} floated="right" size="mini" type="button" primary onClick={() => this.handleExport(get(esAuditParaOutput, 'index_a.indexName'))} content="Export a" />
                       <Header as="h6">
                         {this.renderTitle(get(esAuditParaOutput, 'index_a.indexName') || '')} : (Count: {get(esAuditParaOutput, 'index_a.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_a.created.date') ? moment(get(esAuditParaOutput, 'index_a.created.date')).fromNow() : ''}</span>)
-                    </Header>
+                      </Header>
                       {!get(esAuditParaOutput, 'index_a.record') && !get(esAuditParaOutput, 'index_b.record')
                         && <InlineLoader text="No Data Found" />
                       }
                     </Grid.Column>
                     <Grid.Column>
+                      <Button loading={inProgress === `Export_${get(esAuditParaOutput, 'index_b.indexName')}`} floated="right" size="mini" type="button" primary onClick={() => this.handleExport(get(esAuditParaOutput, 'index_b.indexName'))} content="Export b" />
                       <Header as="h6">
                         {this.renderTitle(get(esAuditParaOutput, 'index_b.indexName') || '')} : (Count: {get(esAuditParaOutput, 'index_b.count') || 0} <span className="ml-10">{get(esAuditParaOutput, 'index_b.created.date') ? moment(get(esAuditParaOutput, 'index_b.created.date')).fromNow() : ''}</span>)
                     </Header>

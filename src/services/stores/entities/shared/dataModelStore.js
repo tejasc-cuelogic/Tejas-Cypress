@@ -1,5 +1,5 @@
 import { observable, action, toJS } from 'mobx';
-import { set, forEach } from 'lodash';
+import { set, forEach, isEmpty } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
@@ -263,12 +263,13 @@ export default class DataModelStore {
     this.initRequest();
   }
 
-  setInitiateSrch = (name, value) => {
+  setInitiateSrch = (name, value, setDefaultFilter = undefined) => {
     if (name === 'startDate' || name === 'endDate') {
       this.requestState.search[name] = value ? name === 'startDate' ? moment(new Date(`${value.formattedValue} 00:00:00`)).toISOString() : moment(new Date(`${value.formattedValue} 23:59:59`)).toISOString() : '';
-      if ((this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '')
-        || (this.requestState.search.startDate === '' && this.requestState.search.endDate === '')
-      ) {
+      // if ((this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '')
+      //   || (this.requestState.search.startDate === '' && this.requestState.search.endDate === '')
+      // )
+      if (this.requestState.search.startDate || this.requestState.search.endDate) {
         const srchParams = { ...this.requestState.search };
         this.initiateSearch(srchParams);
       }
@@ -281,6 +282,9 @@ export default class DataModelStore {
         srchParams[name] = value;
       } else {
         delete srchParams[name];
+      }
+      if (setDefaultFilter && isEmpty(srchParams)) {
+        srchParams[setDefaultFilter.defaultFilterType] = setDefaultFilter.defaultValue;
       }
       this.initiateSearch(srchParams);
     }
