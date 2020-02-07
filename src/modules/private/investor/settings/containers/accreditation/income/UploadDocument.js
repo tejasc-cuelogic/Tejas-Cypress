@@ -41,13 +41,13 @@ export default class UploadDocument extends Component {
     }
     return (
       <div>
-        <Header as="h3" textAlign="center">Upload documents</Header>
-        <p className={isMobile ? 'left-align' : 'center-align'}>
+        <Header as="h4">Upload documents</Header>
+        <p>
           Upload your tax returns, Form W-2s, or other IRS or foreign tax authority documents evidencing your income for the past 2 years, or a letter from your personal lawyer, CPA, investment advisor or investment broker verifying your income for such years.
         </p>
         <Divider hidden />
         <Form>
-          <Grid stackable columns={2} centered>
+          <Grid stackable columns={2}>
             {
               docsToUpload.map(field => (
                 <Grid.Column key={field}>
@@ -74,6 +74,7 @@ export default class UploadDocument extends Component {
                       currency
                       showerror
                       prefix="$"
+                      fluid
                     />
                   </Grid.Column>
                 )
@@ -83,7 +84,7 @@ export default class UploadDocument extends Component {
           <Divider hidden />
           {isFilling
             && (
-              <p className={isMobile ? 'left-align' : 'center-align'}>
+              <p>
                 <b>Note:</b> If you provide tax documents, W-2s, or other direct forms of income verification, your accredited investor status will be valid for the remainder of this calendar year. If you provide an upload of communication from a qualified advisor, your accredited investor status will be valid for 90 days from the date of your verifier`s confirmation.
           </p>
             )
@@ -103,9 +104,7 @@ export default class UploadDocument extends Component {
                 || INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.fileId === '')}
             containerclassname="ui relaxed list"
           />
-          <div className="center-align">
-            <Button fluid={isMobile} onClick={() => this.props.clicked('INCOME_UPLOAD_DOC_FORM')} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Submit</Button>
-          </div>
+          <Button fluid={isMobile} onClick={() => this.props.clicked('INCOME_UPLOAD_DOC_FORM')} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Submit</Button>
         </Form>
       </div>
     );

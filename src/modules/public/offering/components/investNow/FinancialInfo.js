@@ -87,12 +87,12 @@ class FinancialInfo extends Component {
     return (
       <>
         <Route exact path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
-        <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest?'}</Header>
+        <Header as="h3">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest?'}</Header>
         {this.props.changeInvest
           && (
             <>
-              <Header as="h4" textAlign="center" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{isOfferingPreferredEquity ? Helper.CurrencyFormat(currentInvestedAmount) : Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
-              <Divider section className="small" />
+              <Header as="h4" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{isOfferingPreferredEquity ? Helper.CurrencyFormat(currentInvestedAmount) : Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
+              <Divider section hidden />
               {!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)
                 && (<Header as="h4" className={`mb-half ${isCenterAlignedCls}`}>Enter new investment amount. </Header>)
               }
@@ -220,11 +220,7 @@ class FinancialInfo extends Component {
                 autoFocus
                 allowNegative={false}
               />
-              {isMobile
-                && (
-                  <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
-                )
-              }
+              <Button disabled={disableContinueButton} onClick={submitStep} primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" />
               </>
             )}
         </Form>
