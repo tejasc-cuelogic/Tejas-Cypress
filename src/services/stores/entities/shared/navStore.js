@@ -172,9 +172,9 @@ export class NavStore {
         } else if (userStore.isIssuer && b.stage === 'LIVE') {
           sNav = sNav.filter(s => s.title !== 'Investors' && s.title !== 'Overview');
         } else if (userStore.isIssuer && b.stage === 'IN_REPAYMENT') {
-          sNav = sNav.filter(s => s.title !== 'Overview')
+          sNav = sNav.filter(s => s.title !== 'Overview');
         } else if (userStore.isIssuer && b.stage === 'STARTUP_PERIOD') {
-          sNav = sNav.filter(s => s.title !== 'Overview')
+          sNav = sNav.filter(s => s.title !== 'Overview');
         }
         filteredNavs.splice(
           bIndex,
