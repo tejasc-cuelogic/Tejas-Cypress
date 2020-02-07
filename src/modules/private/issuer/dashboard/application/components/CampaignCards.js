@@ -77,7 +77,7 @@ const CampaignCards = (props) => {
                   )
                 }
               </dl>
-              <Button inverted color="green" as={Link} to={`/offerings/${campaign.offeringSlug}`} target="_blank">Campaign Page</Button>
+              <Button inverted color="green" as={Link} to={`/offerings/${campaign.offeringSlug}`} target="_blank">Campaign</Button>
               {['CREATION', 'STARTUP_PERIOD', 'LIVE', 'COMPLETE', 'IN_REPAYMENT'].includes(campaign.stage)
               && <Button inverted color="green" onClick={() => handleHeaderClick(campaign.offeringSlug)}>Offering Details</Button>
               }
