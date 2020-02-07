@@ -24,7 +24,7 @@ export default class CampaignHeader extends Component {
     const {
       isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
-      percentBefore, diffForProcessing, countDown, isInvestedInOffering, dataRooms,
+      percentBefore, diffForProcessing, countDown, investmentSummary, dataRooms,
     } = campaignStatus;
     const showCounter = (!isClosed && diffForProcessing.value > 0 && !campaignStatus.isFund) || (!campaignStatus.isFund) || (isClosed && get(campaign, 'closureSummary.repayment.count') > 0) || (earlyBird && earlyBird.available > 0
       && isEarlyBirdRewards && !isClosed && bonusRewards);
@@ -275,6 +275,8 @@ export default class CampaignHeader extends Component {
                       && (
                         <>
                           <Grid>
+                            {(!get(investmentSummary, 'isInvestedInOffering') || (get(investmentSummary, 'isInvestedInOffering') && (!get(investmentSummary, 'tranche') || get(investmentSummary, 'tranche') < 1)))
+                            && (
                             <Grid.Column width={followBtn ? '10' : ''} className="center-align">
                               <Button
                                 primary={!isInProcessing}
@@ -282,12 +284,13 @@ export default class CampaignHeader extends Component {
                                 onClick={this.handleInvestNowClick}
                                 fluid
                               >
-                                {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : isInvestedInOffering ? 'Change Investment' : 'Invest Now'}`}
+                                {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : get(investmentSummary, 'isInvestedInOffering') ? 'Change Investment' : 'Invest Now'}`}
                               </Button>
                               <p className="mt-10">
                                 {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                             </p>
                             </Grid.Column>
+                            )}
                             {followBtn
                               && (
                                 <Grid.Column width="6">
