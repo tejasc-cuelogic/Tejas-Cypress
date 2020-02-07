@@ -26,7 +26,7 @@ export default class CampaignSecondaryMenu extends Component {
     const { campaign, campaignStatus } = this.props.campaignStore;
     const {
       isClosed, isInProcessing, collected, maxFlagStatus,
-      countDown, diffForProcessing, isInvestedInOffering,
+      countDown, diffForProcessing, investmentSummary,
     } = campaignStatus;
     const { navStatus, subNavStatus } = this.props.navStore;
     const { newLayout } = this.props;
@@ -49,8 +49,8 @@ export default class CampaignSecondaryMenu extends Component {
                   </>
                 )
               }
-              {!isClosed
-                && <Button compact primary={!isInProcessing} content={`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : isInvestedInOffering ? 'Change Investment' : 'Invest Now'}`} disabled={maxFlagStatus || isInProcessing} onClick={this.handleInvestNowClick} />
+              {!isClosed && (!get(investmentSummary, 'isInvestedInOffering') || (get(investmentSummary, 'isInvestedInOffering') && (!get(investmentSummary, 'tranche') || get(investmentSummary, 'tranche') < 1)))
+                && <Button compact primary={!isInProcessing} content={`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : get(investmentSummary, 'isInvestedInOffering') ? 'Change Investment' : 'Invest Now'}`} disabled={maxFlagStatus || isInProcessing} onClick={this.handleInvestNowClick} />
               }
             </List>
             <List size={isMobile && 'tiny'} bulleted={!isMobile} horizontal={!isMobile}>
