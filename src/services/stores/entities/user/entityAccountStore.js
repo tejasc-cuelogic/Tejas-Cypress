@@ -125,6 +125,11 @@ class EntityAccountStore {
   }
 
   @computed
+  get isThankYouStep() {
+    return this.stepToBeRendered === 8;
+  }
+
+  @computed
   get isValidEntityForm() {
     return this.FIN_INFO_FRM.meta.isValid && this.GEN_INFO_FRM.meta.isValid
       && this.TRUST_INFO_FRM.meta.isValid

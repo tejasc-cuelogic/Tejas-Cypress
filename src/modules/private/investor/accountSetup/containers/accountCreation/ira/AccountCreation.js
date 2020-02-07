@@ -28,7 +28,8 @@ export default class AccountCreation extends React.Component {
 
   checkIfAccountIsAlreadyPresent = (accountType) => {
     const { checkIfAccountIsAlreadyPresent, getInvestorAccountsRoute } = this.props.userDetailsStore;
-    if (checkIfAccountIsAlreadyPresent(accountType)) {
+    const { isThankYouStep } = this.props.iraAccountStore;
+    if (checkIfAccountIsAlreadyPresent(accountType) && !isThankYouStep) {
       const route = getInvestorAccountsRoute(accountType);
       this.props.history.push(`/dashboard/account-details/${route}/portfolio`);
     }
