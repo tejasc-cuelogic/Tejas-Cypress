@@ -333,7 +333,7 @@ export class CampaignStore {
     campaignStatus.revenueSharingSummary = get(campaign, 'keyTerms.revShareSummary');
     campaignStatus.updates = get(campaign, 'updates') && get(campaign, 'updates').length;
     campaignStatus.investmentHighlights = true;
-    campaignStatus.isInvestedInOffering = get(campaign, 'isInvestedInOffering');
+    campaignStatus.investmentSummary = get(campaign, 'investmentSummary');
     campaignStatus.isRevenueShare = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary;
     campaignStatus.isTermNote = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
     campaignStatus.isFund = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS;

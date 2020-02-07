@@ -95,6 +95,11 @@ mutation adminSyncEsDocument($documentId: String!, $targetIndex: String!, $userI
   adminSyncEsDocument(documentId: $documentId, targetIndex: $targetIndex, userId: $userId, accountType: $accountType)
 }`;
 
+export const adminExportEsIndexRecords = gql`
+mutation adminExportEsIndexRecords($targetIndex: String!) {
+  adminExportEsIndexRecords(targetIndex: $targetIndex)
+}`;
+
 export const getPluginList = gql`
 query adminListRequestPlugins {
   adminListRequestPlugins {

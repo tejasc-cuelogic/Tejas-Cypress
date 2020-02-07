@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
 import { get } from 'lodash';
-import { FormInput, FormDropDown, MaskedInput } from '../../../../../theme/form';
+import { FormInput, FormDropDown, MaskedInput, FormTextarea } from '../../../../../theme/form';
 import { SECURITIES_VALUES } from '../../../../../services/constants/admin/offerings';
 
 @inject('paymentStore', 'uiStore')
@@ -83,14 +83,20 @@ export default class PaymentDetails extends Component {
                 name="sinkingFundBalance"
                 fielddata={PAYMENT_FRM.fields.sinkingFundBalance}
               />
-              <FormInput
+              {/* <FormInput
                 fluid
                 type="text"
                 name="paymentsContactEmail"
                 fielddata={PAYMENT_FRM.fields.paymentsContactEmail}
                 changed={(e, result) => formChange(e, result, 'PAYMENT_FRM', 'formatted')}
-              />
+              /> */}
             </Form.Group>
+            <FormTextarea
+              name="payments"
+              fielddata={PAYMENT_FRM.fields.payments}
+              changed={(e, result) => formChange(e, result, 'PAYMENT_FRM', 'formatted')}
+              containerclassname="secondary"
+            />
             <div className="center-align mt-20">
               <Button className="very relaxed red" content="Cancel" onClick={this.handleCloseModal} />
               <Button primary className="very relaxed" disabled={!PAYMENT_FRM.meta.isValid} loading={inProgress} content="Save" onClick={() => this.handleUpdatePayment(selectedOffering)} />
