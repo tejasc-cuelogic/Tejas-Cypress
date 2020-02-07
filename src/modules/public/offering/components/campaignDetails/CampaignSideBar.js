@@ -240,7 +240,7 @@ export default class CampaignSideBar extends Component {
                       && (
                       <>
                       <Button
-                        secondary={!isInProcessing}
+                        primary={!isInProcessing}
                         disabled={maxFlagStatus || isInProcessing}
                         onClick={this.handleInvestNowClick}
                         fluid
