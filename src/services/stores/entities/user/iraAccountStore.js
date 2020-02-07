@@ -468,6 +468,12 @@ class IraAccountStore {
     uiStore.setProgress(false);
   }
 
+  @computed
+  get isThankYouStep() {
+    const fundingType = this.fundingOption ? this.fundingOption.value : '';
+    return ((this.stepToBeRendered === 8 && fundingType === 0) || (this.stepToBeRendered === 6 && fundingType !== 0));
+  }
+
   @action
   setFormData = (form, accountDetails, userData) => {
     Object.keys(this[form].fields).map((f) => {
