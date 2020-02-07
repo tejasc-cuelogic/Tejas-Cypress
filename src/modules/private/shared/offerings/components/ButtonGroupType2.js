@@ -8,7 +8,7 @@ import { Button, Icon, Checkbox, Divider } from 'semantic-ui-react';
 export default class ButtonGroupType2 extends Component {
   state = { canLaunch: false };
 
-  disableCta = disableCtaArgs => this.props.uiStore.disableCta(disableCtaArgs, ['htmlEditorImageLoading', 'loading']);
+  disableCta = disableCtaArgs => this.props.uiStore.disableCta(disableCtaArgs, this.props, ['htmlEditorImageLoading', 'loading']);
 
   render() {
     const {

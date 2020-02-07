@@ -292,9 +292,9 @@ export class UiStore {
     this.authRefHash = hash;
   }
 
-  disableCta = (disableCtaArgs, commonPropsArray) => {
+  disableCta = (disableCtaArgs, props, commonPropsArray) => {
     const disableProps = {
-      ...pick(this.props, commonPropsArray),
+      ...pick(props, commonPropsArray),
       ...disableCtaArgs,
     };
     return Object.keys(disableProps).find(prop => Boolean(disableProps[prop]));

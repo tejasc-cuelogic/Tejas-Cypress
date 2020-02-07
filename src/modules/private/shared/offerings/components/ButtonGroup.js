@@ -6,7 +6,7 @@ import { Button, Icon } from 'semantic-ui-react';
 @inject('uiStore')
 @observer
 export default class ButtonGroup extends Component {
-  disableCta = disableCtaArgs => this.props.uiStore.disableCta(disableCtaArgs, ['leaderFormInvalid', 'htmlEditorImageLoading', 'loading']);
+  disableCta = disableCtaArgs => this.props.uiStore.disableCta(disableCtaArgs, this.props, ['leaderFormInvalid', 'htmlEditorImageLoading', 'loading']);
 
   render() {
     const {
