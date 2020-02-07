@@ -5,17 +5,12 @@
 .ui.active.dimmer.modals.transition {
     display: flex !important;
     display: -ms-flexbox !important;
-    // @media only screen and (max-width:@largestTabletScreen){
-    //     justify-content: center;
-    // }
     .ui.modal{
-        // margin:0 !important;
         @media only screen and (max-width:@largestSmallMonitor){
             position: relative;
         }
         &.dimmer-visible {
             max-height: 100%;
-            // height: 100%;
             overflow-y: hidden;
             @media only screen and (min-width:@largestSmallMonitor){
                 position: relative;
@@ -28,11 +23,9 @@
             }
 
         }
-        // &.finish-later{
         @media only screen and (max-width:@largestMobileScreen){
             margin: @28px;
         }        
-        // }
         &.mobile-tooltip{
             padding: @15px;
             width: 85%;
@@ -120,30 +113,11 @@
         }
     }
     @media only screen and (max-width:@largestMobileScreen){
-        // background: @white;
         padding: 0;
     }
     .ui.modal.link-bank-modal>.icon:first-child+.dimmer{
         border-radius: 0;
     }
-
-    /* changes for investor sign up flow with fullscreen white background 
-    to make the contents align at top*/ 
-    // &.inverted{
-    //     @media only screen and (min-width:@tabletBreakpoint){
-    //         justify-content: flex-start;
-    //         .multistep-modal{
-    //             margin-top: 69px;
-    //             &.dimmer-visible {
-    //                 margin-top: 69px;
-    //             }
-    //             .multistep.content{
-    //                 padding-top: 54px;
-    //             }
-    //         }
-    //     }
-    // }
-    /* end */
 }
 //  Public pages Starts
 .ui.modal{
