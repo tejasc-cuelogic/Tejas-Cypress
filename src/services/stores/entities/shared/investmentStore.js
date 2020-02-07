@@ -284,7 +284,14 @@ export class InvestmentStore {
     if (this.investmentAmount) {
       const { campaign } = campaignStore;
       const offeringSecurityType = get(campaign, 'keyTerms.securities') || '0';
-      if (this.checkLockinPeriod()) {
+      if (includes(['REAL_ESTATE'], offeringSecurityType) && this.realEstateValidation()) {
+        this.setFieldValue('isValidInvestAmtInOffering', false);
+        this.setFieldValue('disableNextbtn', false);
+        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Your investment cannot be reduced.';
+        this.INVESTMONEY_FORM.meta.isValid = false;
+        uiStore.setProgress(false);
+        resolve();
+      } else if (this.checkLockinPeriod()) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
         this.setFieldValue('disableNextbtn', false);
         this.INVESTMONEY_FORM.fields.investmentAmount.error = 'The campaign is currently within the last 48 hours of closing. Your investment cannot be reduced or canceled at this time.';
@@ -401,6 +408,16 @@ export class InvestmentStore {
         const alreadyInvestedAmount = offeringDetails.investedAmount;
         resultToReturn = money.cmp(this.investmentAmount, alreadyInvestedAmount) < 0;
       }
+    }
+    return resultToReturn;
+  }
+
+  realEstateValidation = () => {
+    let resultToReturn = false;
+    const offeringDetails = portfolioStore.getInvestorAccountById;
+    if (offeringDetails) {
+      const alreadyInvestedAmount = offeringDetails.investedAmount;
+      resultToReturn = money.cmp(this.investmentAmount, alreadyInvestedAmount) < 0;
     }
     return resultToReturn;
   }
