@@ -10,12 +10,12 @@ export const completeInvestorProfile = () => {
   cy.get('.multistep-modal > ol.progtrckr > .progtrckr-doing').invoke('text').then((text) => {
     cy.log('step value', text);
     // eslint-disable-next-line default-case
-    switch (text) {
-      case 'Overview':
-        handleOverviewStep();
-        completeInvestorProfile();
-        break;
-      case 'Employment Status':
+  switch (text) {
+    case 'Overview':
+      handleOverviewStep();
+      completeInvestorProfile();
+      break;
+    case 'Employment Status':
         clickRadioAndNext('input[name="status"]', 'SELF_EMPLOYED', 'upsertProfile');
         completeInvestorProfile();
         break;

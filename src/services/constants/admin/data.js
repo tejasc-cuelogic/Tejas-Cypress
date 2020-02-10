@@ -107,6 +107,7 @@ export const PROCESS_TRANSFER_REQ_META = {
     label: 'transferId',
     error: undefined,
     rule: 'required',
+    fieldType: 'integer',
     placeHolder: 'Enter here',
   },
 };

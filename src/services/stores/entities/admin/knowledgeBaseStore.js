@@ -257,6 +257,14 @@ export class KnowledgeBaseStore {
   }
 
   @action
+  knowledgeBaseMaskChange = (values, field) => {
+    this.KNOWLEDGE_BASE_FRM = Validator.onChange(
+      this.KNOWLEDGE_BASE_FRM,
+      { name: field, value: values.floatValue },
+    );
+  }
+
+  @action
   knowledgeBaseChange = (e, result) => {
     this.KNOWLEDGE_BASE_FRM = Validator.onChange(
       this.KNOWLEDGE_BASE_FRM,
