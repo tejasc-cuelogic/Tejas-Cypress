@@ -57,6 +57,12 @@ export default class MultiStep extends React.Component {
     }
   }
 
+  componentDidUpdate() {
+    if (this.props.setUiStorevalue && this.props.isdynamicSteps) {
+      this.props.setUiStorevalue('multiSteps', this.props.steps);
+    }
+  }
+
   static getDerivedStateFromProps(nextProps) {
     const stateObj = {};
     if (typeof nextProps.stepToBeRendered !== 'undefined' && nextProps.stepToBeRendered !== '') {
