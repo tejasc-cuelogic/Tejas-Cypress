@@ -57,6 +57,7 @@ export const KEY_TERMS = {
     label: 'Maturity',
     error: undefined,
     rule: 'optional',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   startupPeriod: {
@@ -99,6 +100,7 @@ export const KEY_TERMS = {
     label: 'Ownership % Represented by Securities',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   investmentMultiple: {
@@ -135,6 +137,7 @@ export const KEY_TERMS = {
     label: 'Interest Rate',
     error: undefined,
     rule: 'string',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   minOfferingAmountCF: {
@@ -142,6 +145,7 @@ export const KEY_TERMS = {
     label: 'Minimum Offering Amount CF',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   maxOfferingAmountCF: {
@@ -149,6 +153,7 @@ export const KEY_TERMS = {
     label: 'Maximum Offering Amount CF',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   minOfferingAmount506C: {
@@ -156,6 +161,7 @@ export const KEY_TERMS = {
     label: 'Minimum Offering Amount Reg D',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   maxOfferingAmount506C: {
@@ -163,6 +169,7 @@ export const KEY_TERMS = {
     label: 'Maximum Offering Amount Reg D',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   minOfferingAmount506: {
@@ -170,6 +177,7 @@ export const KEY_TERMS = {
     label: 'Minimum Offering Amount Reg D',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   maxOfferingAmount506: {
@@ -177,6 +185,7 @@ export const KEY_TERMS = {
     label: 'Maximum Offering Amount Reg D',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   legalBusinessType: {
@@ -191,6 +200,7 @@ export const KEY_TERMS = {
     label: 'NS Fees if Min Offering Amount is Raised',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Up to $',
   },
   nsMaxFees: {
@@ -198,6 +208,7 @@ export const KEY_TERMS = {
     label: 'NS Fees if Max Offering Amount is Raised',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Up to $',
   },
   stockType: {
@@ -240,6 +251,7 @@ export const KEY_TERMS = {
     label: 'Min Investment Amount',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   appendixATitle: {
@@ -432,6 +444,7 @@ export const KEY_TERMS = {
     label: 'Total project cost',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   raisedThroughSaleOfEquity: {
@@ -439,6 +452,7 @@ export const KEY_TERMS = {
     label: 'Raised through sale of Equity',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Up to $',
   },
   nsFeePercentage: {
@@ -467,6 +481,7 @@ export const KEY_TERMS = {
     label: 'Targeted Investment Period',
     error: undefined,
     rule: 'optional',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
 };
@@ -1176,6 +1191,7 @@ export const LEADERSHIP = {
       label: 'Phone Number',
       error: undefined,
       rule: 'numeric',
+      fieldType: 'string',
       placeHolder: '(123) 456-7890',
       objRef: 'phone',
       objRefOutput2: 'phone',
@@ -1199,6 +1215,7 @@ export const LEADERSHIP = {
       placeHolder: 'XXX-XXX-XXXX',
       error: undefined,
       rule: 'maskedSSN',
+      fieldType: 'string',
       customErrors: { maskedSSN: 'SSN is not valid' },
     },
     citizenship: {
@@ -1481,6 +1498,7 @@ export const GENERAL = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
+    fieldType: 'string',
     tooltip: 'Including owners/officers of the company',
   },
   taxedAs: {
@@ -1519,6 +1537,7 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   number: {
@@ -1526,11 +1545,11 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
     objRef: 'legal.general.businessPhone',
     objType: 'businessPhone',
     objRefOutput: 'businessPhone',
-
   },
   countryCode: {
     label: '',
@@ -1554,6 +1573,7 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   accountNumber: {
@@ -1561,6 +1581,7 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'numeric',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   businessCapitalization: {
@@ -2976,6 +2997,7 @@ export const OFFERING_CLOSE_1 = {
     objRefOutput: 'closureSummary.keyTerms',
     objRef: 'closureSummary.keyTerms',
     rule: 'optional',
+    fieldType: 'string',
     placeHolder: 'Up to $',
   },
   investorFee: {
@@ -2985,6 +3007,7 @@ export const OFFERING_CLOSE_1 = {
     objRefOutput: 'closureSummary.keyTerms',
     objRef: 'closureSummary.keyTerms',
     rule: 'optional',
+    fieldType: 'string',
     placeHolder: 'Up to $',
   },
   maturityDate: {
@@ -3021,6 +3044,7 @@ export const OFFERING_CLOSE_1 = {
     objRef: 'closureSummary.keyTerms',
     error: undefined,
     rule: 'optional',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   multiple: {
@@ -3048,6 +3072,7 @@ export const OFFERING_CLOSE_1 = {
     objRef: 'closureSummary.keyTerms',
     error: undefined,
     rule: 'optional',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   nsFee: {
@@ -3067,6 +3092,7 @@ export const OFFERING_CLOSE_1 = {
     objRef: 'linkedBank',
     rule: 'optional',
     placeHolder: 'Enter here',
+    fieldType: 'string',
   },
   routingNumber: {
     value: '',
