@@ -10,7 +10,6 @@ import Helper from '../../../../../helper/utility';
 @observer
 class TransferRequest extends Component {
   constructor(props) {
-    // eslint-disable-next-line no-debugger
     super(props);
     const {
       getTransferRequestAmount,
