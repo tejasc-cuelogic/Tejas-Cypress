@@ -157,14 +157,6 @@
                     padding-bottom:0;
                 }
             }
-            &.ssn-visible{
-                position: relative;
-                i.icon.ns-view.active{
-                    position: absolute;
-                    right: @10px;
-                    color: @primary-one;
-                }
-            }
         }
         &.secondary textarea{
             background-color:@white;
@@ -216,6 +208,17 @@
                 /* Internet Explorer 10-11 */ 
                 text-align: right; 
             }  
+        }
+        &.ssn-visible{
+            position: relative;
+            i.icon.ns-view.active{
+                position: absolute;
+                right: @10px;
+                color: @primary-one;
+            }
+            &:not(.display-only) i.icon.ns-view.active{
+                top: 33px;
+            }
         }
     }
     .otp-wrap{

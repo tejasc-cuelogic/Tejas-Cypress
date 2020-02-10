@@ -159,7 +159,7 @@ export class BankAccountStore {
 
   @action
   addFundChange = (values, field) => {
-    this[this.addFundsByAccType] = Validator.onChange(this.addFundsByAccType, { name: field, value: values.floatValue });
+    this[this.addFundsByAccType] = Validator.onChange(this.addFundsByAccType, { name: field, value: values.value });
   };
 
   @action
@@ -290,7 +290,7 @@ export class BankAccountStore {
     const { value } = this.addFundsByAccType.fields.value;
     const { isValid } = this.addFundsByAccType.meta;
     accountAttributes.initialDepositAmount = this.depositMoneyNow && isValid
-      ? value : this.depositMoneyNow ? '' : -1;
+      ? value : this.depositMoneyNow ? '' : '-1';
     return accountAttributes;
   }
 
@@ -457,8 +457,8 @@ export class BankAccountStore {
       const { key } = value;
       const fundValue = value;
       fundValue.value = parseFloat(value.value, 0) === -1 || value.value === ''
-        // eslint-disable-next-line no-restricted-globals
-        || isNaN(parseFloat(value.value, 0)) ? '' : parseFloat(value.value, 0);
+      // eslint-disable-next-line no-restricted-globals
+      || isNaN(parseFloat(value.value, 0)) ? '' : value.value;
       const { errors } = validationService.validate(value);
       Validator.setFormError(
         this.addFundsByAccType,
@@ -487,6 +487,11 @@ export class BankAccountStore {
         ).length)) || 0;
     }
     return (this.db && this.db.length) || 0;
+  }
+
+  @computed get depositAmount() {
+    const { initialDepositAmount } = this.accountAttributes;
+    return Helper.CurrencyFormat(parseFloat(initialDepositAmount) > 0 ? initialDepositAmount : 0);
   }
 
   @computed get isLinkbankInComplete() {

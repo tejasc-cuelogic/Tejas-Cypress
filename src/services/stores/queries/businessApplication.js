@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const adminBusinessApplications = gql`
-query adminBusinessApplications($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String, $lek: String){
+query adminBusinessApplications($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit: Int, $search: String, $lek: String){
   adminBusinessApplications(
     applicationType: $applicationType
     orderBy: $orderBy
@@ -387,6 +387,7 @@ mutation updateBusinessApplicationInformation(
   $signupCode: String
   $utmSource: String
   $rating: Int
+  $agreements: [AgreementsInput]
 ) {
   updateBusinessApplicationInformation(
     applicationId: $applicationId
@@ -395,6 +396,7 @@ mutation updateBusinessApplicationInformation(
     signupCode: $signupCode
     utmSource: $utmSource
     rating: $rating
+    agreements: $agreements
   ){
     applicationId
     signupCode
@@ -533,5 +535,14 @@ mutation applicationDeclinedByIssuer($applicationId: String!, $comments: [Busine
 export const adminExportAllToEmail = gql`
 mutation adminExportAllToEmail($applicationType: ApplicationTypeEnum!) {
   adminExportAllToEmail(applicationType: $applicationType)
+}
+`;
+
+export const adminCreateOffering = gql`
+mutation adminCreateOffering($issuerId: String!, $applicationId: String!, $offeringDetailsInput: OfferingInputType!) {
+  adminCreateOffering(issuerId: $issuerId, applicationId: $applicationId, offeringDetailsInput: $offeringDetailsInput)
+  {
+    id
+ }
 }
 `;

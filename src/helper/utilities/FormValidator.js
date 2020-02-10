@@ -1,9 +1,10 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-prototype-builtins */
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
 import moment from 'moment';
-import { mapValues, set, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach, get } from 'lodash';
+import { mapValues, set, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach, get, isUndefined, pickBy, identity } from 'lodash';
 import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
@@ -38,11 +39,33 @@ class FormValidator {
     value: e.newPasswd,
   });
 
+  convertValueByFieldType = (fieldType, element) => {
+    let convertedValue;
+    if (!isUndefined(element.value)) {
+      switch (fieldType) {
+        case 'string':
+          convertedValue = element.value.toString();
+          break;
+        case 'integer':
+          convertedValue = parseInt(element.value, 10);
+          break;
+        case 'float':
+          convertedValue = parseFloat(element.value.toFixed(2), 10);
+          break;
+        default:
+          convertedValue = element.value;
+          break;
+      }
+    }
+    return convertedValue;
+  }
+
   onChange = (form, element, type, isDirty = true, checked = undefined) => {
-    CustomValidations.loadCustomValidations(form);
     const currentForm = form;
+    CustomValidations.loadCustomValidations(form);
     let customErrMsg = {};
     if (element && element.name) {
+      element.value = this.convertValueByFieldType(currentForm.fields[element.name].fieldType, element);
       if (type === 'checkbox' || (Array.isArray(toJS(currentForm.fields[element.name].value)) && type !== 'dropdown')) {
         const index = currentForm.fields[element.name].value.indexOf(element.value);
         if (index === -1) {
@@ -99,6 +122,7 @@ class FormValidator {
     } else {
       const formData = this.ExtractFormValues(toJS(currentForm.fields));
       let formRules = this.ExtractFormRules(toJS(currentForm.fields));
+      formRules = pickBy(formRules, identity);
       if (isBusinessPlanRequired) {
         formRules = {
           ...formRules,
@@ -146,11 +170,12 @@ class FormValidator {
 
   onArrayFieldChange =
     (form, element, formName = null, formIndex = -1, type, checked = undefined) => {
-      CustomValidations.loadCustomValidations(form);
       const currentForm = form;
+      CustomValidations.loadCustomValidations(form);
       let currentFormRelative;
       let fieldName = element.name;
       let customErrMsg = {};
+
       if (formIndex > -1 && formName) {
         currentFormRelative = currentForm.fields[formName][formIndex];
         fieldName = `${formName}.${formIndex}.${element.name}`;
@@ -160,7 +185,9 @@ class FormValidator {
       } else {
         currentFormRelative = currentForm.fields;
       }
-      if (element.name) {
+
+      if (element && element.name) {
+        element.value = this.convertValueByFieldType(currentFormRelative[element.name].fieldType, element);
         if (type === 'checkbox' || (Array.isArray(toJS(currentFormRelative[element.name].value)) && type !== 'dropdown')) {
           const index = currentFormRelative[element.name]
             .value.indexOf(element.value);
@@ -179,7 +206,8 @@ class FormValidator {
           ? currentFormRelative[element.name].customErrors : {};
       }
       const formData = this.ExtractFormValues(toJS(currentForm.fields));
-      const formRules = this.ExtractFormRules(toJS(currentForm.fields));
+      const formRules = pickBy(this.ExtractFormRules(toJS(currentForm.fields)), identity);
+      // formRules = pickBy(formRules, identity);
       const validation = new Validator(
         formData,
         formRules,
@@ -198,12 +226,12 @@ class FormValidator {
     : f.value));
 
   ExtractFormRules = fields => reduce(mapValues(fields, (f, key) => (isArray(f) ? mapKeys(mapValues(f[0], k => k.rule), (s, v) => `${key}.*.${v}`)
-    : mapKeys(v => `${key}.${v.rule}`))), (a, b) => Object.assign(a, b));
+    : { [key]: f.rule })), (a, b) => Object.assign(a, b));
 
   resetFormData = (form, targetedFields) => {
     const currentForm = form;
     const fieldsToReset = (targetedFields && targetedFields.length && targetedFields)
-    || Object.keys(currentForm.fields);
+      || Object.keys(currentForm.fields);
     fieldsToReset.map((field) => {
       if (Array.isArray(toJS(currentForm.fields[field].value))) {
         currentForm.fields[field].value = [];
