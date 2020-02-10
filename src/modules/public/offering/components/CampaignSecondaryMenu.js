@@ -8,7 +8,7 @@ import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offerin
 
 const isMobile = document.documentElement.clientWidth < 992;
 
-@inject('campaignStore', 'navStore')
+@inject('campaignStore', 'navStore', 'accreditationStore')
 @withRouter
 @observer
 export default class CampaignSecondaryMenu extends Component {
@@ -17,6 +17,7 @@ export default class CampaignSecondaryMenu extends Component {
   }
 
   handleInvestNowClick = () => {
+    this.props.accreditationStore.setFieldVal('disabeleElement', false);
     this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
     this.props.history.push(`${this.props.match.url}/invest-now`);
   }
@@ -25,7 +26,7 @@ export default class CampaignSecondaryMenu extends Component {
     const { campaign, campaignStatus } = this.props.campaignStore;
     const {
       isClosed, isInProcessing, collected, maxFlagStatus,
-      countDown, diffForProcessing, isInvestedInOffering,
+      countDown, diffForProcessing, investmentSummary,
     } = campaignStatus;
     const { navStatus, subNavStatus } = this.props.navStore;
     const { newLayout } = this.props;
@@ -36,20 +37,20 @@ export default class CampaignSecondaryMenu extends Component {
             <List size={isMobile && 'tiny'} bulleted={!isMobile} floated="right" horizontal={!isMobile}>
               {!isMobile
                 && (
-<>
-                  <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
-                  {!isClosed && diffForProcessing.value > 0
-                    && <List.Item>{countDown.valueToShow} {' '} {countDown.labelToShow}</List.Item>
-                  }
-                  {isClosed && get(campaign, 'closureSummary.repayment.count')
-                    ? <List.Item>{get(campaign, 'closureSummary.repayment.count')} Payments made</List.Item>
-                    : (get(campaign, 'closureSummary.hardCloseDate') && get(campaign, 'closureSummary.hardCloseDate') !== 'Invalid date' && get(campaign, 'closureSummary.repayment.count') === 0) ? <List.Item><b>Funded</b></List.Item> : ''
-                  }
-                </>
+                  <>
+                    {!campaignStatus.isFund && <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>}
+                    {!isClosed && diffForProcessing.value > 0
+                      && <List.Item>{countDown.valueToShow} {' '} {countDown.labelToShow}</List.Item>
+                    }
+                    {isClosed && get(campaign, 'closureSummary.repayment.count')
+                      ? <List.Item>{get(campaign, 'closureSummary.repayment.count')} Payments made</List.Item>
+                      : (get(campaign, 'closureSummary.hardCloseDate') && get(campaign, 'closureSummary.hardCloseDate') !== 'Invalid date' && get(campaign, 'closureSummary.repayment.count') === 0) ? <List.Item><b>Funded</b></List.Item> : ''
+                    }
+                  </>
                 )
-            }
-              {!isClosed
-                && <Button compact primary={!isInProcessing} content={`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : isInvestedInOffering ? 'Change Investment' : 'Invest Now'}`} disabled={maxFlagStatus || isInProcessing} onClick={this.handleInvestNowClick} />
+              }
+              {!isClosed && (!get(investmentSummary, 'isInvestedInOffering') || (get(investmentSummary, 'isInvestedInOffering') && (!get(investmentSummary, 'tranche') || get(investmentSummary, 'tranche') < 1)))
+                && <Button compact primary={!isInProcessing} content={`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : get(investmentSummary, 'isInvestedInOffering') ? 'Change Investment' : 'Invest Now'}`} disabled={maxFlagStatus || isInProcessing} onClick={this.handleInvestNowClick} />
               }
             </List>
             <List size={isMobile && 'tiny'} bulleted={!isMobile} horizontal={!isMobile}>
@@ -62,9 +63,9 @@ export default class CampaignSecondaryMenu extends Component {
                   {!isClosed && (get(campaign, 'keyTerms.securities') === 'TERM_NOTE' || maxFlagStatus || get(campaign, 'stage') === 'LIVE' || get(campaign, 'stage') === 'PROCESSING' || get(campaign, 'stage') === 'LOCK') ? ' raised' : ' invested'}
                 </List.Header>
               </List.Item>
-              {!isMobile
-              && <List.Item>{get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE ? 'Commercial Real Estate' : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE ? `${get(campaign, 'keyTerms.valuationCap') || ''} Valuation Cap` : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? `${get(campaign, 'keyTerms.interestRate') || ''}% Interest Rate` : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ? `${get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : ''} Pre-Money Valuation` : `${get(campaign, 'keyTerms.investmentMultiple') || ''} Investment Multiple`}</List.Item>
-            }
+              {!isMobile && !campaignStatus.isFund
+                && <List.Item>{get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE ? 'Commercial Real Estate' : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE ? `${get(campaign, 'keyTerms.valuationCap') || ''} Valuation Cap` : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? `${get(campaign, 'keyTerms.interestRate') || ''}% Interest Rate` : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ? `${get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : ''} Pre-Money Valuation` : `${get(campaign, 'keyTerms.investmentMultiple') || ''} Investment Multiple`}</List.Item>
+              }
             </List>
           </Container>
         </div>

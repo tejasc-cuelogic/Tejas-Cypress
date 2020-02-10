@@ -4,7 +4,7 @@ import { get } from 'lodash';
 import { Form, Button } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../theme/form';
 
-@inject('messageStore')
+@inject('messageStore', 'offeringsStore')
 @observer
 export default class Compose extends Component {
   constructor(props) {
@@ -22,9 +22,12 @@ export default class Compose extends Component {
       MESSAGE_FRM, msgEleChange, buttonLoader, editScope, editMessageId, threadMainMessage,
       currentMessageId,
     } = messageStore;
+    const { offer } = this.props.offeringsStore;
     const scope = get(threadMainMessage && threadMainMessage.length && threadMainMessage[0], 'scope') || null;
     const isPublic = scope === 'PUBLIC' || (threadMainMessage && threadMainMessage.length === 0);
     const isPrivate = scope === 'NEXTSEED';
+    const campaignStage = get(offer, 'stage');
+    const disablePostComment = !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage);
     return (
       <div className="message-footer">
         <Form>
@@ -46,21 +49,21 @@ export default class Compose extends Component {
                 ? (
 <Button.Group compact vertical size="small">
                 {!isPrivate
-                && <Button loading={buttonLoader === 'ISSUER'} onClick={() => this.send('ISSUER', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} content="Note to NS" secondary />
+                && <Button loading={buttonLoader === 'ISSUER'} onClick={() => this.send('ISSUER', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} content="Note to NextSeed" secondary />
                 }
-                {isPublic
-                && <Button loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Submit for Review" />
+                {isPublic && !disablePostComment
+                && <Button loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Post Comment" />
                 }
               </Button.Group>
                 )
                 : (
 <Button.Group compact vertical size="small">
-                <Button loading={buttonLoader === 'NEXTSEED'} onClick={() => this.send('NEXTSEED', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} color="orange" content="Note to NS" />
+                <Button loading={buttonLoader === 'NEXTSEED'} onClick={() => this.send('NEXTSEED', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} color="orange" content="Internal Note" />
                 {!isPrivate
                 && <Button loading={buttonLoader === 'ISSUER'} onClick={() => this.send('ISSUER', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Note to Issuer" />
                 }
                 {isPublic
-                && <Button loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Publish to Public" />
+                && <Button loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', null, currentMessageId)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Publish Comment" />
                 }
               </Button.Group>
                 )

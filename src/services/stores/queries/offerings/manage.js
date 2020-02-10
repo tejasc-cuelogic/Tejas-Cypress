@@ -177,6 +177,14 @@ export const adminDeleteOffering = gql`
   }
 `;
 
+export const getofferingById = gql`
+  query getOfferingById($id: String!) {
+    getOfferingById(id: $id) {
+      offeringSlug
+    }
+  }
+`;
+
 export const getOfferingDetails = gql`
   query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug(offeringSlug: $id) {
@@ -1190,6 +1198,7 @@ export const getOfferingDetails = gql`
         }
       }
       closureSummary {
+        defaultedDate
         exportEnvelopes {
           fileSubstitution {
             upload {
@@ -1520,20 +1529,19 @@ export const setOrderForOfferings = gql`
   }
 `;
 
-export const getofferingById = gql`
-  query getOfferingById($id: String!) {
-    getOfferingById(id: $id) {
-      offeringSlug
-    }
-  }
-`;
-
-
 export const initializeClosingBinder = gql`
   mutation initializeClosingBinder($offeringId: String!){
     initializeClosingBinder(offeringId: $offeringId) {
       name
       status
+    }
+  }
+`;
+
+export const adminSetOfferingAsDefaulted = gql`
+  mutation adminSetOfferingAsDefaulted($offeringId: String!, $reason: String!){
+    adminSetOfferingAsDefaulted(offeringId: $offeringId, reason: $reason) {
+      stage
     }
   }
 `;

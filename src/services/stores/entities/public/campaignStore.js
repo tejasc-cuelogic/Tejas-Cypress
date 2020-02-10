@@ -229,7 +229,7 @@ export class CampaignStore {
   }
 
   @computed get creation() {
-    const creationList = this.creationList.slice();
+    const creationList = orderBy(this.creationList.slice(), c => get(c, 'updated.date'), ['desc']);
     return creationList.splice(0, this.creationToDisplay);
   }
 
@@ -308,7 +308,7 @@ export class CampaignStore {
     campaignStatus.maxFlagStatus = !!(money.isZero(formatedReachedMaxCompairAmountValue)
       || money.isPositive(formatedReachedMaxCompairAmountValue));
     campaignStatus.percent = (campaignStatus.collected / minMaxOffering) * 100;
-    campaignStatus.address = get(campaign, 'keyTerms.city') || get(campaign, 'keyTerms.state') ? `${get(campaign, 'keyTerms.city') || '-'}, ${get(campaign, 'keyTerms.state') || '-'}` : '--';
+    campaignStatus.address = get(campaign, 'keyTerms.city') || get(campaign, 'keyTerms.state') ? `${get(campaign, 'keyTerms.city') || ''}${get(campaign, 'keyTerms.city') && get(campaign, 'keyTerms.state') ? ',' : ''} ${get(campaign, 'keyTerms.state') || ''}` : null;
     campaignStatus.isClosed = get(campaign, 'stage') !== 'LIVE';
     campaignStatus.isCreation = get(campaign, 'stage') === 'CREATION';
     campaignStatus.earlyBird = get(campaign, 'earlyBird') || null;
@@ -333,7 +333,7 @@ export class CampaignStore {
     campaignStatus.revenueSharingSummary = get(campaign, 'keyTerms.revShareSummary');
     campaignStatus.updates = get(campaign, 'updates') && get(campaign, 'updates').length;
     campaignStatus.investmentHighlights = true;
-    campaignStatus.isInvestedInOffering = get(campaign, 'isInvestedInOffering');
+    campaignStatus.investmentSummary = get(campaign, 'investmentSummary');
     campaignStatus.isRevenueShare = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary;
     campaignStatus.isTermNote = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
     campaignStatus.isFund = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS;

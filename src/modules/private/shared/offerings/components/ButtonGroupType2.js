@@ -11,10 +11,11 @@ export default class ButtonGroupType2 extends Component {
   render() {
     const {
       isManager, approved, updateOffer,
-      submitted, launch, uiStore,
+      submitted, launch, uiStore, loading,
     } = this.props;
     const { inProgress, htmlEditorImageLoading } = this.props.uiStore;
     const { canLaunch } = this.state;
+    const disableCta = ['support_submitted', 'save', 'manager_edit', 'manager_approved', 'support_decline'].includes(inProgress);
     return (
       <>
         {launch && approved && approved.status && (
@@ -50,11 +51,11 @@ export default class ButtonGroupType2 extends Component {
           <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
             {isManager && submitted ? (
               <>
-                <Button disabled={htmlEditorImageLoading} loading={inProgress === 'support_decline'} type="button" inverted onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: 'support_decline' })} color="red" content="Decline" />
+                <Button disabled={htmlEditorImageLoading || loading || disableCta} loading={inProgress === 'support_decline'} type="button" inverted onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: 'support_decline' })} color="red" content="Decline" />
                 {(!approved || (approved && !approved.status))
-                  && <Button disabled={htmlEditorImageLoading} loading={inProgress === 'save'} primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
+                  && <Button disabled={htmlEditorImageLoading || loading || disableCta} loading={inProgress === 'save'} primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
                 }
-                <Button disabled={htmlEditorImageLoading} loading={inProgress === 'manager_edit' || inProgress === 'manager_approved'} type="button" color="green" onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: approved && approved.status ? 'manager_edit' : 'manager_approved' })} className="relaxed">{approved && approved.status ? 'Edit' : 'Approve'}</Button>
+                <Button disabled={htmlEditorImageLoading || loading || disableCta} loading={inProgress === 'manager_edit' || inProgress === 'manager_approved'} type="button" color="green" onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: approved && approved.status ? 'manager_edit' : 'manager_approved' })} className="relaxed">{approved && approved.status ? 'Edit' : 'Approve'}</Button>
                 {launch && approved && approved.status && (
                   <Button loading={inProgress} type="button" disabled={!this.state.canLaunch} onClick={launch} color="green">Launch</Button>
                 )}
@@ -62,9 +63,9 @@ export default class ButtonGroupType2 extends Component {
             ) : (!approved || (approved && !approved.status)) && (
               <>
                 {!submitted
-                  && <Button disabled={htmlEditorImageLoading} loading={inProgress === 'save'} type="button" primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
+                  && <Button disabled={htmlEditorImageLoading || loading || disableCta} loading={inProgress === 'save'} type="button" primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
                 }
-                <Button disabled={submitted || htmlEditorImageLoading} loading={inProgress === 'support_submitted'} type="button" primary={!submitted} onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: 'support_submitted' })}>{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
+                <Button disabled={submitted || htmlEditorImageLoading || loading || disableCta} loading={inProgress === 'support_submitted'} type="button" primary={!submitted} onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: 'support_submitted' })}>{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
               </>
             )}
           </Button.Group>

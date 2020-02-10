@@ -33,17 +33,17 @@ const CampaignCards = (props) => {
               <dl className="dl-horizontal">
                 <dt>Campaign status</dt>
                 <dd>{CAMPAIGN_OFFERING_STAGE[campaign.stage]}</dd>
-                {['FAILED', 'LIVE', 'COMPLETE'].includes(campaign.stage)
+                {['CREATION'].includes(campaign.stage)
                   ? (
                     <>
-                      <dt>Launch Date</dt>
-                      <dd> {get(campaign, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'closureSummary.launchDate'), true, false, false)} /> : get(campaign, 'offering.launch.targetDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'offering.launch.targetDate'), true, false, false)} /> : '--'} </dd>
+                      <dt>Started on</dt>
+                      <dd> {campaign.created ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(campaign.created.date, true, false, false)} /> : '--'} </dd>
                     </>
                   )
                   : (
                     <>
-                      <dt>Started on</dt>
-                      <dd> {campaign.created ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(campaign.created.date, true, false, false)} /> : '--'} </dd>
+                      <dt>Launched Date</dt>
+                      <dd> {get(campaign, 'closureSummary.launchDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'closureSummary.launchDate'), true, false, false)} /> : get(campaign, 'offering.launch.targetDate') ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'offering.launch.targetDate'), true, false, false)} /> : '--'} </dd>
                     </>
                   )
                 }
@@ -68,18 +68,19 @@ const CampaignCards = (props) => {
                             ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'closureSummary.processingDate'), true, false, false)} />
                             : get(campaign, 'offering.launch.terminationDate')
                               ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'offering.launch.terminationDate'), true, false, false)} />
-                              : ['FAILED', 'COMPLETE'].includes(campaign.stage) && get(campaign, 'closureSummary.hardCloseDate')
+                              : '--'
+                              : ['FAILED', 'COMPLETE', 'IN_REPAYMENT', 'STARTUP_PERIOD', 'TERMINATED', 'DEFAULTED'].includes(campaign.stage) && get(campaign, 'closureSummary.hardCloseDate')
                                 ? <DateTimeFormat isCSTFormat datetime={DataFormatter.getDateAsPerTimeZone(get(campaign, 'closureSummary.hardCloseDate'), true, false, false)} />
-                                : '--' : '--'
+                                : '--'
                         }
                       </dd>
                     </>
                   )
                 }
               </dl>
-              <Button inverted color="green" as={Link} to={`/offerings/${campaign.offeringSlug}`}>View Campaign</Button>
-              {['CREATION', 'STARTUP_PERIOD', 'LIVE', 'COMPLETE'].includes(campaign.stage)
-              && <Button inverted color="green" onClick={() => handleHeaderClick(campaign.offeringSlug)}>Manage</Button>
+              <Button inverted color="green" as={Link} to={`/offerings/${campaign.offeringSlug}`} target="_blank">Campaign</Button>
+              {['CREATION', 'STARTUP_PERIOD', 'LIVE', 'COMPLETE', 'IN_REPAYMENT'].includes(campaign.stage)
+              && <Button inverted color="green" onClick={() => handleHeaderClick(campaign.offeringSlug)}>Offering Details</Button>
               }
             </Card.Content>
           </Card>
