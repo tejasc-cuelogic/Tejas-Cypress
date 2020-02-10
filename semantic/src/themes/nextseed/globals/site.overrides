@@ -353,6 +353,9 @@ h6{
 .d-flex{
 	display: flex !important;
 }
+.overflow-visible{
+	overflow: visible !important;
+}
 //	normal link styles
 a:not(.item), a:not(.ui.button){
 	color:@link-color;

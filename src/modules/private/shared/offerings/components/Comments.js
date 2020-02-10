@@ -30,6 +30,8 @@ export default class Comments extends Component {
     const { isIssuer, isAdmin } = userStore;
     const passedProcessingDate = false;
     const currentOfferingIssuerId = get(offer, 'issuerId');
+    const campaignStage = get(offer, 'stage');
+    const disablePostComment = !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage);
     if (loading) {
       return <InlineLoader />;
     }
@@ -42,6 +44,7 @@ export default class Comments extends Component {
           ? (
             <MessagesList
               passedProcessingDate={passedProcessingDate}
+              disablePostComment={disablePostComment}
               threadMsgCount={threadMsgCount}
               newPostComment={newPostComment}
               threadUsersList={threadUsersList}
