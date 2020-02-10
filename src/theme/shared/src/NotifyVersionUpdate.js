@@ -1,15 +1,27 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { matchPath, useLocation } from 'react-router-dom';
 import { Button, Modal, Message } from 'semantic-ui-react';
-import { UpdateHelper } from '../../../helper';
 import Helper from '../../../helper/utility';
+
+const SHOW_MODAL_ROUTES = [
+  '/register',
+  '/register-investor',
+  '/confirm-email',
+  '/dashboard/setup/*',
+  '/business-application/*',
+  '/offerings/:slug/invest-now',
+  '/offerings/:slug/invest-now/*',
+  '/dashboard/account-settings/investment-limits/verify-accreditation/*',
+];
+
+const showUpdateModal = path => SHOW_MODAL_ROUTES.find(i => matchPath(path, { path: i }));
 
 const NotifyVersionUpdate = () => {
   const location = useLocation();
   const update = () => {
     window.location.reload();
   };
-  const show = UpdateHelper.showUpdateModal(location.pathname);
+  const show = showUpdateModal(location.pathname);
   if (show) {
     setTimeout(() => { Helper.modalCssUpdate('show-top', 'show-top'); }, 500);
   }
