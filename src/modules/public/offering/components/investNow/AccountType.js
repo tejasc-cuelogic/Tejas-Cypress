@@ -4,7 +4,7 @@ import { Header, Form, Button, Icon, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import cookie from 'react-cookies';
-import { FormRadioGroup, FormArrowButton } from '../../../../../theme/form';
+import { FormArrowButton } from '../../../../../theme/form';
 import { Spinner } from '../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -349,7 +349,7 @@ class AccountType extends Component {
     }
     return (
       <>
-        <Header as="h3" textAlign="center"> {headerSubheaderObj.header}</Header>
+        <Header as="h4">{headerSubheaderObj.header}</Header>
         <Form error className="account-type-tab mb-0">
           {investAccTypes.values.length && selectedAccountStatus && (userProfileFullStatus === 'FULL' || userProfileFullStatus === 'BASIC')
             ? (
@@ -357,31 +357,20 @@ class AccountType extends Component {
                 {showAccountList && investAccTypes.values.length >= 2 && !this.props.changeInvest
                   ? (
                     <>
-                      <p className="center-align">{headerSubheaderObj.subHeader}</p>
-                      {isMobile
-                        ? (
+                      <p>{headerSubheaderObj.subHeader}</p>
                         <FormArrowButton
                           fielddata={investAccTypes}
                           name="investAccountType"
                           changed={accTypeChanged}
                           action={submitStep}
                         />
-                        )
-                        : (
-                        <FormRadioGroup
-                          name="investAccountType"
-                          containerclassname="button-radio center-align"
-                          fielddata={investAccTypes}
-                          changed={accTypeChanged}
-                        />
-                        )}
                     </>
                   )
                   : (
                     <>
                       {isDocumentUpload === false
                         ? (
-                          <div className="center-align">
+                          <div>
                             <p>
                               There is a technical issue with this offering.
                               The NextSeed team has been notified and will
@@ -393,9 +382,9 @@ class AccountType extends Component {
                         )
                         : selectedAccountStatus === 'FULL'
                           ? (
-                            <div className="center-align">
+                            <div>
                               {headerSubheaderObj.subHeader
-                                ? <p className="center-align">{headerSubheaderObj.subHeader}</p> : null
+                                ? <p>{headerSubheaderObj.subHeader}</p> : null
                               }
                               {(userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' || userAccredetiationState === 'PENDING' || (userAccredetiationState === 'EXPIRED' && offeringReuglation === 'BD_CF_506C'))
                                 ? offeringReuglation && offeringReuglation === 'BD_CF_506C'
@@ -430,10 +419,6 @@ class AccountType extends Component {
                                   )
                                   : (
                                     <>
-                                      {/* <Link to={redirectURL} className="text-link">
-                                <Icon className="ns-arrow-right" color="green" />
-                                Apply for accreditation
-                              </Link> */}
                                       <div className="mt-30">
                                         <Button
                                           as={Link}
@@ -464,7 +449,7 @@ class AccountType extends Component {
                             </div>
                           )
                           : (
-                            <div className="center-align">
+                            <div>
                               {selectedAccountStatus && isAccFrozen(selectedAccountStatus)
                                 ? (
                                   <>
@@ -501,7 +486,7 @@ class AccountType extends Component {
               </>
             )
             : (
-              <div className="center-align">
+              <div>
                 {selectedAccountStatus && isAccFrozen(selectedAccountStatus)
                   ? (
                     <>
@@ -514,20 +499,6 @@ class AccountType extends Component {
                   ? (
                     <>
                       Please answer a few basic questions to complete your Investor Profile.
-                    {/* <Link to={redirectURL} className="text-link">
-                        <Icon className="ns-arrow-right" color="green" />
-                        Please finish your account setup.
-                      </Link> */}
-                      {/* <div className="mt-30">
-                    <Button
-                    as={Link}
-                      to="/"
-                      onClick={e => this.handlBackToOffering(e)}
-                        primary
-                        className="relaxed"
-                          content="Confirm Status"
-                          />
-                    </div> */}
                       <div className="mt-30"><Button as={Link} to={redirectURL} primary className="relaxed" content="Continue" /></div>
                     </>
                   )
