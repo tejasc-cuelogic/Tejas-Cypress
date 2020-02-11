@@ -414,9 +414,10 @@ export class InvestmentStore {
 
   realEstateValidation = () => {
     let resultToReturn = false;
-    const offeringDetails = portfolioStore.getInvestorAccountById;
-    if (offeringDetails) {
-      const alreadyInvestedAmount = offeringDetails.investedAmount;
+    const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
+    if (userAmountDetails && userAmountDetails.previousAmountInvested) {
+      const alreadyInvestedAmount = userAmountDetails.previousAmountInvested;
+
       resultToReturn = money.cmp(this.investmentAmount, alreadyInvestedAmount) < 0;
     }
     return resultToReturn;
