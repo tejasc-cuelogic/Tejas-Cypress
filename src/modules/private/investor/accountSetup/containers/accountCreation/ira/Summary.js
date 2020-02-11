@@ -63,7 +63,7 @@ export default class Summary extends Component {
     );
     const {
       plaidAccDetails, formLinkBankManually,
-      accountAttributes, routingNum,
+      depositAmount, routingNum,
     } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails)
       ? plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
@@ -127,19 +127,17 @@ export default class Summary extends Component {
                       {routingNum || ''}
                     </Table.Cell>
                   </Table.Row>
-                )
-              }
-              <Table.Row>
-                <Table.Cell className="grey-header">Your Initial Deposit</Table.Cell>
-                <Table.Cell>
-                  {[-1, ''].includes(accountAttributes.initialDepositAmount)
-                    ? Helper.CurrencyFormat(0)
-                    : Helper.CurrencyFormat(accountAttributes.initialDepositAmount || 0)}
-                </Table.Cell>
-              </Table.Row>
-            </Table.Body>
-          </Table>
-        </div>
+                  )
+                }
+                <Table.Row>
+                  <Table.Cell className="grey-header">Your Initial Deposit</Table.Cell>
+                  <Table.Cell>
+                    {depositAmount}
+                  </Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </div>
         {errors
           && (
             <Message error>

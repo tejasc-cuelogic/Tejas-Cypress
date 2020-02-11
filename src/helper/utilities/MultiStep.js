@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import { withRouter } from 'react-router-dom';
 import Parser from 'html-react-parser';
 import { Modal, Button, Dimmer, Loader, Progress, Grid } from 'semantic-ui-react';
 import Helper from '../utility';
@@ -24,6 +25,7 @@ const getNavStates = (indx, length, steps) => {
   }
   return { current: indx, styles };
 };
+@withRouter
 export default class MultiStep extends React.Component {
   constructor(props) {
     super(props);
@@ -264,7 +266,7 @@ export default class MultiStep extends React.Component {
           onKeyPress={event => this.props.setIsEnterPressed(event)}
           basic
           open
-          closeIcon={!this.props.disableCloseIcon}
+          closeIcon={!isMobile}
           className={`${isMobile && 'bg-white'} ${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
           closeOnDimmerClick={closeDimmerClickAction}
           onClose={() => this.props.handleMultiStepModalclose()}

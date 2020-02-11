@@ -292,7 +292,6 @@ export default class InvestNow extends React.Component {
             setStepTobeRenderedForAlert={this.handleStepChnageOnPreviousForAlert}
             stepToBeRendered={this.props.investmentStore.stepToBeRendered}
             steps={steps}
-            disableCloseIcon={disableElement}
             formTitle="Entity Account Creation"
             handleMultiStepModalclose={this.handleMultiStepModalclose}
             isStepButtonsVisible={isMultiStepButtonsVisible}
