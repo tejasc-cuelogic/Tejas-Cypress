@@ -33,8 +33,9 @@ export default class General extends Component {
     updateOffering(currentOfferingId, GENERAL_FRM.fields, 'legal', 'general', true, undefined, isApproved);
   }
 
-  editorChange =
-  (field, value, form) => this.props.offeringCreationStore.rtEditorChange(field, value, form);
+  editorChange = (field, value, form) => this.props.offeringCreationStore.rtEditorChange(field, value, form);
+
+  editorChangeForOtherTerms = (field, value, form) => this.props.offeringCreationStore.rtEditorChange(field, value, form, 'materialIndebtedness', 0);
 
   render() {
     const {
@@ -197,18 +198,18 @@ export default class General extends Component {
           <Header as="h4">
             Existing Securities
             {!isReadonly
-            && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'security')}><small>+ Add New Security</small></Link>
+              && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'security')}><small>+ Add New Security</small></Link>
             }
           </Header>
           {GENERAL_FRM.fields.security.map((security, index) => (
             <>
               <Header as="h6">{`Security ${index + 1}`}
                 {!isReadonly && GENERAL_FRM.fields.security.length > 1
-                && (
-<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'security')}>
-                  <Icon className="ns-close-circle" color="grey" />
-                </Link>
-                )
+                  && (
+                    <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'security')}>
+                      <Icon className="ns-close-circle" color="grey" />
+                    </Link>
+                  )
                 }
               </Header>
               <div className="featured-section">
@@ -238,7 +239,7 @@ export default class General extends Component {
           <Header as="h4">
             Other Exempt Offerings
             {!isReadonly
-            && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'exemptOfferings')}><small>+ Add New Other Exempt Offering</small></Link>
+              && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'exemptOfferings')}><small>+ Add New Other Exempt Offering</small></Link>
             }
           </Header>
           <p>Describe any past fund raises in the last 3 years.</p>
@@ -246,11 +247,11 @@ export default class General extends Component {
             <>
               <Header as="h6">{`Other Exempt Offering ${index + 1}`}
                 {!isReadonly && GENERAL_FRM.fields.exemptOfferings.length > 1
-                && (
-<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'exemptOfferings')}>
-                  <Icon className="ns-close-circle" color="grey" />
-                </Link>
-                )
+                  && (
+                    <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'exemptOfferings')}>
+                      <Icon className="ns-close-circle" color="grey" />
+                    </Link>
+                  )
                 }
               </Header>
               <div className="featured-section">
@@ -289,18 +290,18 @@ export default class General extends Component {
           <Header as="h4">
             Material Terms of any Indebteness
             {!isReadonly
-            && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'materialIndebtedness')}><small>+ Add New Term</small></Link>
+              && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'materialIndebtedness')}><small>+ Add New Term</small></Link>
             }
           </Header>
           {GENERAL_FRM.fields.materialIndebtedness.map((terms, index) => (
             <>
               <Header as="h6">{`Term ${index + 1}`}
                 {!isReadonly && GENERAL_FRM.fields.materialIndebtedness.length > 1
-                && (
-<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'materialIndebtedness')}>
-                  <Icon className="ns-close-circle" color="grey" />
-                </Link>
-                )
+                  && (
+                    <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'materialIndebtedness')}>
+                      <Icon className="ns-close-circle" color="grey" />
+                    </Link>
+                  )
                 }
               </Header>
               <div className="featured-section">
@@ -332,13 +333,21 @@ export default class General extends Component {
                     changed={(e, result) => formArrayChange(e, result, formName, 'materialIndebtedness', index)}
                   />
                 </Form.Group>
-                <FormTextarea
+                <HtmlEditor
+                  imageUploadPath={`offerings/${currentOfferingId}`}
+                  readOnly={isReadonly}
+                  changed={this.editorChangeForOtherTerms}
+                  name="otherTerms"
+                  form={formName}
+                  content={terms.otherTerms.value}
+                />
+                {/* <FormTextarea
                   readOnly={isReadonly}
                   name="otherTerms"
                   fielddata={terms.otherTerms}
                   changed={(e, result) => formArrayChange(e, result, formName, 'materialIndebtedness', index)}
                   containerclassname="secondary"
-                />
+                /> */}
               </div>
             </>
           ))}
@@ -346,7 +355,7 @@ export default class General extends Component {
           <Header as="h4">
             Affiliated Party Transactions
             {!isReadonly
-            && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'affiliatedTransactions')}><small>+ Add New Affiliated Party</small></Link>
+              && <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'affiliatedTransactions')}><small>+ Add New Affiliated Party</small></Link>
             }
           </Header>
           <p>In the past year (and looking forward),
@@ -357,11 +366,11 @@ export default class General extends Component {
             <>
               <Header as="h6">{`Transaction ${index + 1}`}
                 {!isReadonly && GENERAL_FRM.fields.affiliatedTransactions.length > 1
-                && (
-<Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'affiliatedTransactions')}>
-                  <Icon className="ns-close-circle" color="grey" />
-                </Link>
-                )
+                  && (
+                    <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'affiliatedTransactions')}>
+                      <Icon className="ns-close-circle" color="grey" />
+                    </Link>
+                  )
                 }
               </Header>
               <div className="featured-section">
