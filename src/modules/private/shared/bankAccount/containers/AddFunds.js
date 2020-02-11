@@ -82,7 +82,7 @@ export default class AddFunds extends Component {
         <Header as="h4">How much would you like to deposit?</Header>
         <p>We{"'"}ll transfer funds directly from the bank account you just linked.</p>
         <Form error onSubmit={this.handleSubmitForm}>
-          <div className="mt-30 left-align">
+          <div className="mt-40 left-align">
             <MaskedInput
               name="value"
               type="tel"
@@ -102,7 +102,7 @@ export default class AddFunds extends Component {
               </Message>
             )
           }
-          <Button primary size="large" fluid={isMobile} className="mt-30 relaxed" content="Confirm" disabled={isInValid || !isAccountPresent || inProgress} />
+          <Button primary fluid={isMobile} className="mt-30 relaxed" content="Confirm" disabled={isInValid || !isAccountPresent || inProgress} />
         </Form>
         <div className={isMobile && 'center-align'}>
           {!Helper.matchRegexWithUrl([/\bentity(?![-])\b/])

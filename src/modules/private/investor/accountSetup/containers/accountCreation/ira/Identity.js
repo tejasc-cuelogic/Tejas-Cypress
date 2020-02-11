@@ -1,6 +1,6 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import { Header, Form, Divider, Message, Button } from 'semantic-ui-react';
+import { Header, Form, Message, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 import { ListErrors } from '../../../../../../../theme/shared';
@@ -31,34 +31,16 @@ export default class Identity extends Component {
     return (
       <>
         <Header as="h4">Confirm your identity</Header>
-        {!isMobile && <Divider section hidden />}
         <Form className={!isMobile ? 'file-uploader-large' : ''}>
-          <div className="field">
-            <label className={`${isMobile ? 'mb-30' : ''} grey-header`}>Upload a Photo ID (Upload your Driver’s License, state-issued ID, or U.S. passport)</label>
-          </div>
-          {isMobile
-            ? (
-            <DropZone
-              name="identityDoc"
-              fielddata={IDENTITY_FRM.fields.identityDoc}
-              ondrop={this.onIdentityDocDrop}
-              onremove={this.onIdentityDocRemove}
-              uploadtitle="Choose file"
-            />
-            )
-            : (
-            <DropZone
-              name="identityDoc"
-              fielddata={IDENTITY_FRM.fields.identityDoc}
-              ondrop={this.onIdentityDocDrop}
-              onremove={this.onIdentityDocRemove}
-              additionalClass="file-uploader-large full-width"
-              containerclassname="fluid"
-              textAlign="center-align"
-              uploadtitle={<span className="highlight-text">Choose a file <span>or drag it here</span></span>}
-            />
-            )
-          }
+          <p className={`${isMobile ? 'mb-30' : ''} grey-header`}>Upload a Photo ID (Upload your Driver’s License, state-issued ID, or U.S. passport)</p>
+          <DropZone
+            name="identityDoc"
+            fielddata={IDENTITY_FRM.fields.identityDoc}
+            ondrop={this.onIdentityDocDrop}
+            onremove={this.onIdentityDocRemove}
+            uploadtitle="Choose file"
+            containerclassname="mt-40 fluid"
+          />
         </Form>
         {errors
           && (
@@ -67,8 +49,8 @@ export default class Identity extends Component {
             </Message>
           )
         }
-        <Button fluid={isMobile} primary className="relaxed mt-60" content="Continue" disabled={!IDENTITY_FRM.meta.isValid} onClick={this.handleContinueButton} />
-        <p className={`${isMobile ? 'mobile-bottom-notes' : 'mt-80'} grey-header`}>NextSeed is a regulated financial services company operating in the US. To comply with KYC/AML regulations, we need to verify your identity in order to set up your account.</p>
+        <Button fluid={isMobile} primary className="relaxed mt-40" content="Continue" disabled={!IDENTITY_FRM.meta.isValid} onClick={this.handleContinueButton} />
+        <p className={`${isMobile ? 'mobile-bottom-notes' : 'mt-40'} grey-header`}>NextSeed is a regulated financial services company operating in the US. To comply with KYC/AML regulations, we need to verify your identity in order to set up your account.</p>
       </>
     );
   }
