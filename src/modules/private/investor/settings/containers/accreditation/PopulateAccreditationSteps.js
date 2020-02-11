@@ -53,7 +53,7 @@ export default class PopulateAccreditationSteps extends React.Component {
     },
     FILLING_STATUS_FORM: {
       name: 'Evidence',
-      component: <FillingStatus />,
+      component: <FillingStatus submitStep={this.handleSubmitStep} {...this.props} />,
       formName: 'FILLING_STATUS_FORM',
       isHideLabel: true,
       isDirty: true,
@@ -162,6 +162,7 @@ export default class PopulateAccreditationSteps extends React.Component {
           setStepTobeRendered={this.handleStepChange}
           stepToBeRendered={this.props.accreditationStore.stepToBeRendered}
           formHeaderClick
+          isdynamicSteps
           setUiStorevalue={setFieldvalue}
           {...this.props}
         />
