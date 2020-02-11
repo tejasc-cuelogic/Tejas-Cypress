@@ -24,7 +24,7 @@ export default class NewOffer extends Component {
 
   change = (e, result, formName, field) => {
     this.props.offeringCreationStore.formChange(e, result, formName);
-    if (field !== 'regulation' || field !== 'template') {
+    if (field !== 'regulation' && field !== 'template') {
       this.props.offeringCreationStore.offerCreateChange(formName, field);
     }
   }
