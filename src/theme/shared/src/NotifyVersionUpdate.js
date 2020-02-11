@@ -29,7 +29,7 @@ const NotifyVersionUpdate = () => {
     setTimeout(() => { update(); }, 5000);
     return (
       <Message size="mini" floating style={{ zIndex: '9999', width: '540px', textAlign: 'center', margin: '0 auto' }}>
-        {`There${"'"}s a new version of this website available, refreshing to get the latest version.`}
+        {`We${"'"}ve made an update to the website. We${"'"}re refreshing your page now to show you the latest version.`}
       </Message>
     );
   }
