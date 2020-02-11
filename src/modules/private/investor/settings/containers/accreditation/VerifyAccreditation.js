@@ -52,7 +52,8 @@ export default class Accreditation extends React.Component {
     const {
       ACCREDITATION_FORM,
       INCOME_EVIDENCE_FORM,
-      NETWORTH_QAL_FORM, isFilingAllowed,
+      NETWORTH_QAL_FORM,
+      isFilingAllowed,
     } = this.props.accreditationStore;
     const formArray = (ACCREDITATION_FORM.fields.method.value === 'INCOME' && INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') ? [
       { key: 'ACCREDITATION_FORM' },
