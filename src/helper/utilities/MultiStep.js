@@ -60,6 +60,12 @@ export default class MultiStep extends React.Component {
     // }
   }
 
+  componentDidUpdate() {
+    if (this.props.setUiStorevalue && this.props.isdynamicSteps) {
+      this.props.setUiStorevalue('multiSteps', this.props.steps);
+    }
+  }
+
   static getDerivedStateFromProps(nextProps) {
     const stateObj = {};
     if (typeof nextProps.stepToBeRendered !== 'undefined' && nextProps.stepToBeRendered !== '') {
@@ -251,6 +257,8 @@ export default class MultiStep extends React.Component {
 
   render() {
     const currentStep = this.props.steps[this.state.compState];
+    const mountNode = Helper.customModalWrapper();
+    const useMountNode = !this.props.useDefaultMountNode;
     if (this.props.isEnterPressed
       && !currentStep.disableNextButton) {
       this.props.resetEnterPressed();
@@ -266,6 +274,7 @@ export default class MultiStep extends React.Component {
           onKeyPress={event => this.props.setIsEnterPressed(event)}
           basic
           open
+          mountNode={useMountNode ? mountNode : false}
           closeIcon={!isMobile}
           className={`${isMobile && 'bg-white'} ${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
           closeOnDimmerClick={closeDimmerClickAction}

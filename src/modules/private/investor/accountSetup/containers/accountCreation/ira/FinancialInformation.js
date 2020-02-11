@@ -33,7 +33,7 @@ export default class FinancialInformation extends React.Component {
         <p>
           Your net worth and annual income are used to determine your 12-month investment limit under Regulation Crowdfunding.
         </p>
-        <Form error>
+        <Form error className={!isMobile && 'mt-40'}>
           {
             ['netWorth', 'income'].map(field => (
               <MaskedInput
@@ -52,13 +52,12 @@ export default class FinancialInformation extends React.Component {
             ))
           }
           <Divider hidden />
-          <p className="grey-header">Your investment limit:
-            <span className="large ml-10 highlight-text">
-              {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
-            </span>
+          <p className="mb-0"><b>Your investment limit:</b></p>
+          <p className="mt-0 mb-40">
+            <b>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}</b>
           </p>
           <a target="_blank" rel="noopener noreferrer" href={`${window.location.origin}/resources/education-center/investor/investment-limit-calcuator/`} className={`${isMobile ? 'mt-20' : ''} link`}>How is this calculated?</a>
-          <div className="mt-20">
+          <div className="mt-30">
             <Button fluid={isMobile} primary className="relaxed" content="Continue" disabled={!FIN_INFO_FRM.meta.isValid} onClick={this.handleContinueButton} />
           </div>
         </Form>

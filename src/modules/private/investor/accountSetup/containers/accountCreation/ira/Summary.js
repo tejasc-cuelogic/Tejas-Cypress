@@ -71,32 +71,32 @@ export default class Summary extends Component {
     return (
       <>
         <Header as="h4">Confirm your account to start investing!</Header>
-        <div className="table-wrapper mt-30 mb-60">
+        <div className="table-wrapper mt-30 mb-30">
           <Table unstackable basic="very">
             <Table.Body>
               <Table.Row>
                 <Table.Cell className="grey-header">Type:</Table.Cell>
-                <Table.Cell>{accountType ? accountType.label : ''}</Table.Cell>
+                <Table.Cell textAlign="right">{accountType ? accountType.label : ''}</Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell className="grey-header">Funding Option:</Table.Cell>
-                <Table.Cell>{fundingOption ? fundingOption.label : ''}</Table.Cell>
+                <Table.Cell textAlign="right">{fundingOption ? fundingOption.label : ''}</Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell className="grey-header">Net Worth:</Table.Cell>
-                <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netWorth.value
+                <Table.Cell textAlign="right">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netWorth.value
                   ? FIN_INFO_FRM.fields.netWorth.value : 0)}
                 </Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell className="grey-header">Annual Income:</Table.Cell>
-                <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.income.value
+                <Table.Cell textAlign="right">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.income.value
                   ? FIN_INFO_FRM.fields.income.value : 0)}
                 </Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell className="grey-header">Identification:</Table.Cell>
-                <Table.Cell>
+                <Table.Cell textAlign="right">
                   {IDENTITY_FRM.fields.identityDoc.value
                     ? <span>Uploaded</span>
                     : <span className="negative-text">Not Uploaded</span>}
@@ -106,7 +106,7 @@ export default class Summary extends Component {
                 && (
                   <Table.Row>
                     <Table.Cell className="grey-header">Bank: </Table.Cell>
-                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                    <Table.Cell textAlign="right">{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
                 )
               }
@@ -114,7 +114,7 @@ export default class Summary extends Component {
                 && (
                   <Table.Row>
                     <Table.Cell className="grey-header">Bank Account:</Table.Cell>
-                    <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
+                    <Table.Cell textAlign="right">{bankAccountNumber || ''}</Table.Cell>
                   </Table.Row>
                 )
               }
@@ -123,7 +123,7 @@ export default class Summary extends Component {
                 && (
                   <Table.Row>
                     <Table.Cell className="grey-header">Routing Number</Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell textAlign="right">
                       {routingNum || ''}
                     </Table.Cell>
                   </Table.Row>
@@ -131,7 +131,7 @@ export default class Summary extends Component {
                 }
                 <Table.Row>
                   <Table.Cell className="grey-header">Your Initial Deposit</Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell textAlign="right">
                     {depositAmount}
                   </Table.Cell>
                 </Table.Row>
@@ -145,64 +145,38 @@ export default class Summary extends Component {
             </Message>
           )
         }
-        {isMobile && (
-          <p className="mb-30 mt-30 grey-header">
-            By continuing, I acknowledge that I have read and agree to the terms of the
-            {' '}
-              <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
-                CrowdPay Custodial Account Agreement
-            </span>
-              ,
-            {' '}
-              <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
-                NextSeed US LLC Member Agreement
-            </span>
-              ,
-            {' '}
-              <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
-                NextSeed Securities LLC Investor Agreement
-            </span>
-              , and
-            {' '}
-              <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
-                Substitute IRS Form W-9 Certification
-            </span>
-              .
-            <IframeModal
-              open={this.state.open}
-              close={this.closeModal}
-              srcUrl={embedUrl}
-              loading={docLoading}
-            />
-          </p>
-        )}
+        <p className="mb-30 mt-30 grey-header">
+          By continuing, I acknowledge that I have read and agree to the terms of the
+          {' '}
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
+              CrowdPay Custodial Account Agreement
+          </span>
+            ,
+          {' '}
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
+              NextSeed US LLC Member Agreement
+          </span>
+            ,
+          {' '}
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
+              NextSeed Securities LLC Investor Agreement
+          </span>
+            , and
+          {' '}
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
+              Substitute IRS Form W-9 Certification
+          </span>
+            .
+          <IframeModal
+            open={this.state.open}
+            close={this.closeModal}
+            srcUrl={embedUrl}
+            loading={docLoading}
+          />
+        </p>
         <div className="mt-30">
           <Button primary size="large" fluid={isMobile} className="relaxed" content="Submit for review" onClick={() => this.props.handleCreateAccount('ira')} disabled={!this.props.iraAccountStore.isValidIraForm || inProgressArray.includes('submitAccountLoader')} />
         </div>
-        {!isMobile && (
-          <p className="mt-30 grey-header">
-            By continuing, I acknowledge that I have read and agree to the terms of the
-            {' '}
-              <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
-                CrowdPay Custodial Account Agreement
-            </span>,{' '}
-              <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
-                NextSeed US LLC Member Agreement
-            </span>,{' '}
-              <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
-                NextSeed Securities LLC Investor Agreement
-            </span>, and {' '}
-              <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
-                Substitute IRS Form W-9 Certification
-            </span>.
-            <IframeModal
-              open={this.state.open}
-              close={this.closeModal}
-              srcUrl={embedUrl}
-              loading={docLoading}
-            />
-          </p>
-        )}
       </>
     );
   }
