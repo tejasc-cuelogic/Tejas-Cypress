@@ -1,6 +1,6 @@
 #!/bin/bash
 region=$1
-environment=demo
+environment=$2
 ci_commit_ref=$3
 
 settingEnv()
