@@ -3,7 +3,6 @@ import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import BusinessApplicationMapping from './applicationMapping/businessApplicationMapping';
-// import LegalDocumentUpload from './applicationMapping/legalDocumentUpload';
 import { InlineLoader } from '../../../../../../../theme/shared';
 import DataRoom from '../../../../../shared/offerings/components/legal/DataRoom';
 
