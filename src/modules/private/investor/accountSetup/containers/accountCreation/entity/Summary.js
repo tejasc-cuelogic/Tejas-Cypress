@@ -69,32 +69,32 @@ export default class Summary extends Component {
             <Table.Body>
               <Table.Row>
                 <Table.Cell className="grey-header">Entity Net Assets</Table.Cell>
-                <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netAssets.value
+                <Table.Cell textAlign="right">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netAssets.value
                   ? FIN_INFO_FRM.fields.netAssets.value : 0)}
                 </Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell className="grey-header">Other CF Investments</Table.Cell>
-                <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.annualIncome.value
+                <Table.Cell textAlign="right">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.annualIncome.value
                   ? FIN_INFO_FRM.fields.annualIncome.value : 0)}
                 </Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell className="grey-header">Entity Name</Table.Cell>
-                <Table.Cell>{name.value}</Table.Cell>
+                <Table.Cell textAlign="right">{name.value}</Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell className="grey-header">Tax ID</Table.Cell>
-                <Table.Cell>{taxId.value}</Table.Cell>
+                <Table.Cell textAlign="right">{taxId.value}</Table.Cell>
               </Table.Row>
               <Table.Row verticalAlign="top">
                 <Table.Cell className="grey-header">Entity Address</Table.Cell>
-                <Table.Cell>{`${street.value}, ${city.value}, ${state.value}, ${zipCode.value}`}
+                <Table.Cell textAlign="right">{`${street.value}, ${city.value}, ${state.value}, ${zipCode.value}`}
                 </Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell className="grey-header">Is Entity a Trust?</Table.Cell>
-                <Table.Cell>
+                <Table.Cell textAlign="right">
                   {TRUST_INFO_FRM.fields.isTrust.value
                     && 'Yes, since '
                   }
@@ -108,25 +108,25 @@ export default class Summary extends Component {
               </Table.Row>
               <Table.Row>
                 <Table.Cell className="grey-header">Title With the Entity</Table.Cell>
-                <Table.Cell>{PERSONAL_INFO_FRM.fields.title.value}</Table.Cell>
+                <Table.Cell textAlign="right">{PERSONAL_INFO_FRM.fields.title.value}</Table.Cell>
               </Table.Row>
               {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName)
                 && (
                 <Table.Row>
                   <Table.Cell className="grey-header">Bank: </Table.Cell>
-                  <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                  <Table.Cell textAlign="right">{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                 </Table.Row>
                 )
               }
               <Table.Row>
                 <Table.Cell className="grey-header">Bank Account</Table.Cell>
-                <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
+                <Table.Cell textAlign="right">{bankAccountNumber || ''}</Table.Cell>
               </Table.Row>
               {!isEmpty(routingNum)
                 && (
                 <Table.Row>
                   <Table.Cell className="grey-header">Routing Number</Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell textAlign="right">
                     { routingNum || '' }
                   </Table.Cell>
                 </Table.Row>
@@ -134,7 +134,7 @@ export default class Summary extends Component {
               }
               <Table.Row>
                 <Table.Cell className="grey-header">Your Initial Deposit</Table.Cell>
-                <Table.Cell>
+                <Table.Cell textAlign="right">
                   {depositAmount}
                 </Table.Cell>
               </Table.Row>
@@ -148,12 +148,6 @@ export default class Summary extends Component {
             </Message>
           )
         }
-        {!isMobile
-        && (
-          <div className="mt-30">
-            <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.props.handleCreateAccount('entity')} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent || inProgressArray.includes('submitAccountLoader')} />
-          </div>
-        )}
         <p className="grey-header mt-30 mb-0">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
@@ -187,6 +181,12 @@ export default class Summary extends Component {
             loading={docLoading}
           />
         </p>
+        {!isMobile
+        && (
+          <div className="mt-30">
+            <Button primary size="large" className="relaxed" content="Submit for review" onClick={() => this.props.handleCreateAccount('entity')} disabled={!this.props.entityAccountStore.isValidEntityForm || !isAccountPresent || inProgressArray.includes('submitAccountLoader')} />
+          </div>
+        )}
       </>
     );
   }

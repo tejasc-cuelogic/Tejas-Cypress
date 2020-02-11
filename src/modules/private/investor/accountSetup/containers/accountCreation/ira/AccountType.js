@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Header, Form, Divider, Button } from 'semantic-ui-react';
+import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import find from 'lodash/find';
-import { FormRadioGroup, FormArrowButton } from '../../../../../../../theme/form';
+import { FormArrowButton } from '../../../../../../../theme/form';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -27,34 +27,20 @@ export default class AccountType extends Component {
         <Header as="h4">Which type of IRA account would you like to open?</Header>
         {!isMobile && <Divider hidden />}
         <Form error>
-          {isMobile
-            ? (
-            <FormArrowButton
-              fielddata={ACC_TYPES_FRM.fields.iraAccountType}
-              name="iraAccountType"
-              changed={accTypesChange}
-              action={this.handleArrowButtonClick}
-            />
-            )
-            : (
-              <>
-                <FormRadioGroup
-                  fielddata={ACC_TYPES_FRM.fields.iraAccountType}
-                  name="iraAccountType"
-                  changed={accTypesChange}
-                  containerclassname={`${isMobile ? 'two wide' : ''} button-radio`}
-                />
-                {!isMobile && <Divider section hidden />}
-                <div className={`${isMobile ? '' : 'option-details'} grey-header`}>
-                  {this.getOptionDetails()}
-                </div>
-                {!isMobile && <Divider section hidden />}
-                <div className="mt-20">
-                  <Button fluid={isMobile} primary className="relaxed" content="Continue" disabled={!ACC_TYPES_FRM.meta.isValid} onClick={this.handleArrowButtonClick} />
-                </div>
-              </>
-            )
-          }
+          <FormArrowButton
+            fielddata={ACC_TYPES_FRM.fields.iraAccountType}
+            name="iraAccountType"
+            changed={accTypesChange}
+            action={this.handleArrowButtonClick}
+          />
+          {!isMobile && <Divider section hidden />}
+          <div className={`${isMobile ? '' : 'option-details'} grey-header`}>
+            {this.getOptionDetails()}
+          </div>
+          {!isMobile && <Divider section hidden />}
+          {/* <div className="mt-20">
+            <Button fluid={isMobile} primary className="relaxed" content="Continue" disabled={!ACC_TYPES_FRM.meta.isValid} onClick={this.handleArrowButtonClick} />
+          </div> */}
         </Form>
       </div>
     );

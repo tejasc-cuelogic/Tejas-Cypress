@@ -63,7 +63,7 @@ export default class Employment extends Component {
     return (
       <>
         <Header as="h3" className={isMobile ? 'mb-30' : ''}>What is your employment status?</Header>
-        {!isMobile && <p className="mb-40">Please indicate your current employment status</p>}
+        {/* {!isMobile && <p className="mb-40">Please indicate your current employment status</p>} */}
         <Form onSubmit={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} error className={isMobile ? 'mb-40' : ''}>
           <FormArrowButton
             fielddata={EMPLOYMENT_FORM.fields.status}

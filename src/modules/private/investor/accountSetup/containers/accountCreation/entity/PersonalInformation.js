@@ -62,7 +62,7 @@ export default class PersonalInformation extends Component {
             fielddata={PERSONAL_INFO_FRM.fields.legalDocUrl}
             ondrop={this.onLegalDocUrlDrop}
             onremove={this.handleDelLegalDocUrl}
-            uploadtitle={isMobile ? 'Choose file' : 'Choose a file or drag it here'}
+            uploadtitle="Choose file"
             containerclassname={`${isMobile ? 'mb-30' : ''} mt-30 fluid`}
           />
           {errors
