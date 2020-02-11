@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { get } from 'lodash';
+import { get, uniq } from 'lodash';
 import money from 'money-math';
 import { MultiStep } from '../../../../../helper';
 import TransferRequest from './TransferRequest';
@@ -22,6 +22,7 @@ export default class InvestNow extends React.Component {
     if (!this.props.campaignStore.isInvestBtnClicked) {
       this.props.history.push(this.props.refLink);
     }
+    this.props.accreditationStore.setFieldVal('disableElement', true);
     this.props.investmentStore.setStepToBeRendered(0);
     this.props.investmentStore.resetData();
     this.props.uiStore.setProgress(false);
@@ -221,6 +222,13 @@ export default class InvestNow extends React.Component {
       this.setState({ isInvestmentUpdate: true });
     }
     const {
+      activeAccounts,
+      inprogressAccounts,
+    } = this.props.userDetailsStore.signupStatus;
+    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0)
+      ? [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0)
+        ? activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
+    const {
       inProgress, setFieldvalue,
       isEnterPressed,
       resetIsEnterPressed,
@@ -257,6 +265,7 @@ export default class InvestNow extends React.Component {
         isValid: '',
         stepToBeRendered: 2,
         isDirty: true,
+        disablePrevButton: changeInvest || !(accountToConsider.length > 1),
       },
       {
         name: 'TransferRequest',
@@ -273,7 +282,7 @@ export default class InvestNow extends React.Component {
     ];
     const isMultiStepButtonsVisible = !!showAccountList && multipleAccountExsists;
     const closeOnDimmerClickAction = false;
-    this.props.investmentStore.setFieldValue('disablePrevButton', true);
+    // this.props.investmentStore.setFieldValue('disablePrevButton', true);
     return (
       <div className="step-progress">
         {
