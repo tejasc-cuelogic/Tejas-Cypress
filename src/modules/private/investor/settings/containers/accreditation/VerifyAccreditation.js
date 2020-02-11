@@ -37,7 +37,7 @@ export default class Accreditation extends React.Component {
       this.props.history.push(`${this.props.refLink}/falied`);
       return;
     }
-    if (!(step.formName === 'ACCREDITATION_FORM' && this.props.accreditationStore[step.formName].fields.method.value === 'ASSETS') && !(step.formName === 'NETWORTH_QAL_FORM' && this.props.accreditationStore[step.formName].fields.method.value === 'NONETWORTH') && step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM') {
+    if (!(step.formName === 'ACCREDITATION_FORM' && step.formName === 'FILLING_STATUS_FORM' && this.props.accreditationStore[step.formName].fields.method.value === 'ASSETS') && !(step.formName === 'NETWORTH_QAL_FORM' && this.props.accreditationStore[step.formName].fields.method.value === 'NONETWORTH') && step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM') {
       this.props.accreditationStore
         .updateAccreditation(step.formName, accountType.toUpperCase(), 1)
         .then(() => {
@@ -52,7 +52,7 @@ export default class Accreditation extends React.Component {
     const {
       ACCREDITATION_FORM,
       INCOME_EVIDENCE_FORM,
-      NETWORTH_QAL_FORM, isFilingAllowed,
+      NETWORTH_QAL_FORM,
     } = this.props.accreditationStore;
     const formArray = (ACCREDITATION_FORM.fields.method.value === 'INCOME' && INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') ? [
       { key: 'ACCREDITATION_FORM' },
@@ -70,6 +70,7 @@ export default class Accreditation extends React.Component {
       ? [
         { key: 'ACCREDITATION_FORM' },
         { key: 'INCOME_EVIDENCE_FORM' },
+        { key: 'FILLING_STATUS_FORM' },
         {
           key: 'VERIFICATION',
           component: <Verification
@@ -108,7 +109,7 @@ export default class Accreditation extends React.Component {
     return (
       <PopulateAccreditationSteps
         multiClickHandler={this.multiClickHandler}
-        formArray={!isFilingAllowed ? formArray.filter(i => i.key !== 'FILLING_STATUS_FORM') : formArray}
+        formArray={formArray}
         {...this.props}
       />
     );
