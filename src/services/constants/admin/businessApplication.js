@@ -2020,3 +2020,14 @@ export const APPLICATION_OFFERING_MAPPING_KEY_VALUE = {
   debts: 'materialIndebtedness',
   owners: 'leadership',
 };
+
+export const REAL_ESTATE_APPLICATION_FUND_USAGES = {
+  values: [
+    { text: 'Acquire', value: 'ACQUIRE', key: 'ACQUIRE' },
+    { text: 'Build', value: 'BUILD', key: 'BUILD' },
+    { text: 'Redevelop', value: 'REDEVELOP', key: 'REDEVELOP' },
+    { text: 'Manage', value: 'MANAGE', key: 'MANAGE' },
+    { text: 'Restructure Financing', value: 'RESTRUCTURE_FINANCING', key: 'RESTRUCTURE_FINANCING' },
+    { text: 'Other', value: 'OTHER', key: 'OTHER' },
+  ],
+};
