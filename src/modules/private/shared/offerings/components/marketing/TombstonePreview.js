@@ -37,7 +37,7 @@ export default class TombstonePreview extends Component {
                     bg
                     centered
                     srcUrl={TOMBSTONE_BASIC_FRM.fields.image.value}
-                    alt={`${offer.keyTerms.shorthandBusinessName} poster`}
+                    alt={`${get(offer, 'keyTerms.shorthandBusinessName')} poster`}
                   />
                 </div>
               </div>

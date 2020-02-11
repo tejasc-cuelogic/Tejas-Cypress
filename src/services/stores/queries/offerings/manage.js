@@ -189,6 +189,10 @@ export const getOfferingDetails = gql`
   query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug(offeringSlug: $id) {
       id
+      investmentSummary {
+        isInvestedInOffering
+        tranche
+      }
       offeringSlug
       referralCode
       previewPassword

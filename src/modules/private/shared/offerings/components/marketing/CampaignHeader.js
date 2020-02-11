@@ -45,7 +45,7 @@ class CampaignHeader extends Component {
     return (
       <div className="inner-content-spacer">
         <Form>
-          <CampaignHeaderPreview />
+          <CampaignHeaderPreview newLayout />
           <Divider hidden />
           <Divider section />
           <Grid columns="2">

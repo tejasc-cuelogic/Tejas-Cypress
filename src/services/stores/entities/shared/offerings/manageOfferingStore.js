@@ -80,7 +80,7 @@ export class ManageOfferingStore extends DataModelStore {
     campaignStatus.revenueSharingSummary = get(offer, 'keyTerms.revShareSummary');
     campaignStatus.updates = get(offer, 'updates') && get(offer, 'updates').length;
     campaignStatus.investmentHighlights = true;
-    campaignStatus.isInvestedInOffering = get(offer, 'isInvestedInOffering');
+    campaignStatus.investmentSummary = get(offer, 'investmentSummary');
     campaignStatus.isRevenueShare = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary;
     campaignStatus.isTermNote = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
     campaignStatus.isFund = get(offer, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS;

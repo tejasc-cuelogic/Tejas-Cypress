@@ -3,95 +3,99 @@ import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Popup, Statistic, Grid, Button } from 'semantic-ui-react';
-// import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
-import { Image64 } from '../../../../../../theme/shared';
-import Helper from '../../../../../../helper/utility';
+// import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
+import { Image64 } from '../../../../../theme/shared';
+import Helper from '../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 992;
-@inject('manageOfferingStore', 'offeringsStore')
+@inject('campaignStore', 'authStore', 'accreditationStore')
 @withRouter
 @observer
-export default class CampaignHeaderPreview extends Component {
+export default class CampaignHeaderV2 extends Component {
+  handleInvestNowClick = () => {
+    this.props.accreditationStore.setFieldVal('disabeleElement', false);
+    this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
+    this.props.history.push(`${this.props.match.url}/invest-now`);
+  }
+
   render() {
-    const { offeringsStore, manageOfferingStore, followBtn, newLayout } = this.props;
-    const { offer } = offeringsStore;
-    const { HEADER_BASIC_FRM, TOMBSTONE_HEADER_META_FRM, campaignStatus } = manageOfferingStore;
+    const { campaignStore, newLayout, followBtn } = this.props;
+    const { campaign, campaignStatus } = campaignStore;
     const {
       isClosed, isCreation, isEarlyBirdRewards, isInProcessing, collected, minFlagStatus,
       minOffering, maxFlagStatus, maxOffering, earlyBird, bonusRewards, address, percent,
       percentBefore, diffForProcessing, countDown, investmentSummary,
+      // dataRooms,
     } = campaignStatus;
-    const headerBasicFields = HEADER_BASIC_FRM.fields;
-    const headerMetaFields = TOMBSTONE_HEADER_META_FRM.fields;
     return (
       <>
         <div className="campaign-banner">
-          {get(headerBasicFields, 'heroBackgroundImage.preSignedUrl')
-            && <Image64 bg className="campaign-details-banner" srcUrl={get(headerBasicFields, 'heroBackgroundImage.preSignedUrl')} />
+          {get(campaign, 'header.heroBackgroundImage.url')
+            && <Image64 bg className="campaign-details-banner" srcUrl={get(campaign, 'header.heroBackgroundImage.url')} />
           }
           <section className="banner">
             <Responsive minWidth={768} as={Container}>
               <Grid relaxed stackable centered>
                 <Grid.Column width={9}>
                   <div className="video-wrapper campaign">
-                    {get(headerBasicFields, 'heroVideoURL.value')
+                    {get(campaign, 'header.heroVideoURL')
                       ? (
-                        <>
+                        <Link to={`${this.props.match.url}${newLayout ? '' : '/overview'}/herovideo`}>
                           <Image64
                             bg
-                            srcUrl={get(headerBasicFields, 'heroImage.preSignedUrl')}
+                            srcUrl={get(campaign, 'header.heroImage.url')}
                             imgType="heroImage"
                           />
                           <Icon className="ns-play play-icon" />
-                        </>
+                        </Link>
                       )
                       : (
                         <Image64
                           bg
-                          srcUrl={get(headerBasicFields, 'heroImage.preSignedUrl')}
+                          srcUrl={get(campaign, 'header.heroImage.url')}
                           imgType="heroImage"
                         />
                       )
                     }
-                    {headerBasicFields.toggleMeta.value.length
+                    {get(campaign, 'header.toggleMeta[0]')
                     ? (
                       <div className="offer-stats">
                         <Statistic.Group>
                           <>
-                          {headerBasicFields.toggleMeta.value.includes('DAYS_LEFT')
+                          {get(campaign, 'header.toggleMeta').includes('DAYS_LEFT')
                             && (
                             <Statistic size="mini" className="basic">
                               <Statistic.Value>{countDown.valueToShow}</Statistic.Value>
                               <Statistic.Label>{countDown.labelToShow}</Statistic.Label>
                             </Statistic>
                             )}
-                            {headerBasicFields.toggleMeta.value.includes('INVESTOR_COUNT')
+                            {get(campaign, 'header.toggleMeta').includes('INVESTOR_COUNT')
                             && (
                             <Statistic size="mini" className="basic">
                               <Statistic.Value>
-                                {get(offer, 'closureSummary.totalInvestorCount') || 0}
+                                {get(campaign, 'closureSummary.totalInvestorCount') || 0}
                               </Statistic.Value>
                               <Statistic.Label>Investors</Statistic.Label>
                             </Statistic>
                             )}
                           </>
-                          {headerBasicFields.toggleMeta.value.includes('REPAYMENT_COUNT') && isClosed && get(offer, 'closureSummary.repayment.count') > 0
+                          {get(campaign, 'header.toggleMeta').includes('REPAYMENT_COUNT') && isClosed && get(campaign, 'closureSummary.repayment.count') > 0
                             && (
                               <Statistic size="mini" className="basic">
                                 <Statistic.Value>
-                                  {get(offer, 'closureSummary.repayment.count') || 0}
+                                  {get(campaign, 'closureSummary.repayment.count') || 0}
                                 </Statistic.Value>
                                 <Statistic.Label>Payments made</Statistic.Label>
                               </Statistic>
                             )
                           }
-                          {headerBasicFields.toggleMeta.value.includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
+                          {get(campaign, 'header.toggleMeta').includes('EARLY_BIRD') && earlyBird && earlyBird.available > 0
                             && isEarlyBirdRewards && !isClosed
                             && bonusRewards
                             ? (
                               <Statistic size="mini" className="basic">
                                 <Statistic.Value>
-                                  {get(offer, 'earlyBird.available') || 0}
+                                  {get(campaign, 'earlyBird.available') || 0}
                                 </Statistic.Value>
                                 <Statistic.Label>Early Bird Rewards</Statistic.Label>
                               </Statistic>
@@ -102,8 +106,8 @@ export default class CampaignHeaderPreview extends Component {
                       ) : null}
                   </div>
                   <div className="clearfix social-links mt-10">
-                    {offer && get(offer, 'offering.overview.social')
-                      ? offer.offering.overview.social.map(site => (
+                    {campaign && get(campaign, 'offering.overview.social')
+                      ? campaign.offering.overview.social.map(site => (
                         <React.Fragment key={site.type}>
                           {site.url
                             && <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon name={site.type.toLowerCase()} /></a>
@@ -117,7 +121,7 @@ export default class CampaignHeaderPreview extends Component {
                 </Grid.Column>
                 <Grid.Column width={6}>
                   <Header as="h3" inverted>
-                    {offer && offer.keyTerms && offer.keyTerms.shorthandBusinessName}
+                    {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
                     <Header.Subheader>{address}</Header.Subheader>
                   </Header>
                   <Statistic inverted size="tiny" className={`${isMobile && 'mt-40'} basic mb-0`}>
@@ -169,11 +173,11 @@ export default class CampaignHeaderPreview extends Component {
                         </p>
                       </>
                     )}
-                  {headerMetaFields.meta.map(row => (
+                  {get(campaign, 'header.meta[0]') && get(campaign, 'header.meta').map(row => (
                     <>
                       {(
                         <p className="mb-0">
-                          {row.keyLabel.value && `${row.keyLabel.value} :`} {row.keyType.value === 'custom' ? row.keyValue.value : Helper.formatValue(row.keyFormat.value, get(offer, `keyTerms.${row.keyValue.value}`))}
+                          {`${row.keyLabel || ''} :`} {row.keyType === 'custom' ? row.keyValue : Helper.formatValue(row.keyFormat, get(campaign, `keyTerms.${row.keyValue}`))}
                         </p>
                       )}
                     </>
@@ -200,7 +204,7 @@ export default class CampaignHeaderPreview extends Component {
                                 {`${isInProcessing ? 'Processing' : maxFlagStatus ? 'Fully Reserved' : get(investmentSummary, 'isInvestedInOffering') ? 'Change Investment' : 'Invest Now'}`}
                               </Button>
                               <p className="mt-10">
-                                {Helper.CurrencyFormat(get(offer, 'keyTerms.minInvestAmt'), 0)} min investment
+                                {Helper.CurrencyFormat(get(campaign, 'keyTerms.minInvestAmt'), 0)} min investment
                             </p>
                             </Grid.Column>
                             )}

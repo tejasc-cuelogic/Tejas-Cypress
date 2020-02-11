@@ -1,5 +1,69 @@
 import gql from 'graphql-tag';
 
+const offeringTemplate2 = {
+  content: `content {
+    title
+    order
+    contentType
+    scope
+    customValue
+  }`,
+  misc: `misc {
+    issuerStatement
+    logo {
+      url
+      fileName
+    }
+    avatar {
+      url
+      fileName
+    }
+    social {
+      type
+      url
+      shareLink
+      blurb
+      featuredImageUpload {
+        url
+        fileName
+      }
+    }
+  }`,
+  tombstone: `tombstone {
+    image {
+      url
+      fileName
+    }
+    description
+    meta {
+      keyLabel
+      keyType
+      keyValue
+      keyFormat
+    }
+    customTag
+    toggleMeta
+  }`,
+  header: `header {
+    heroImage {
+      url
+      fileName
+    }
+    heroBackgroundImage {
+      url
+      fileName
+    }
+    heroVideoURL
+    meta {
+      keyLabel
+      keyType
+      keyValue
+      keyFormat
+    }
+    toggleMeta
+  }`,
+};
+
 export const allOfferings = gql`
 query getOfferingList($filters: OfferingListFilterInputType){
     getOfferingList(filters: $filters) {
@@ -137,6 +201,8 @@ export const campaignDetailsQuery = gql`
   query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
+    template
+    ${offeringTemplate2.header}
     investmentSummary {
       isInvestedInOffering
       tranche
