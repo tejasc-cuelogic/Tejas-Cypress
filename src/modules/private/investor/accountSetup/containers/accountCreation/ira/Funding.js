@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Form, Divider } from 'semantic-ui-react';
+import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import find from 'lodash/find';
 import { FormArrowButton } from '../../../../../../../theme/form';
@@ -25,10 +25,7 @@ export default class Funding extends Component {
     return (
       <div>
         <Header as="h4">How would you like to fund your [Traditional/Roth] IRA?</Header>
-        {!isMobile && <Divider section hidden />}
         <Form error className={isMobile ? '' : 'account-type-tab'}>
-          {/* {isMobile
-            ? ( */}
           <FormArrowButton
             fielddata={FUNDING_FRM.fields.fundingType}
             name="fundingType"
