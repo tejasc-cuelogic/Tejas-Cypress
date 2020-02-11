@@ -498,6 +498,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
+      fieldType: 'string',
     },
     minimumAmount: {
       value: '',
@@ -505,6 +506,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
+      fieldType: 'string',
     },
     maturity: {
       value: '',
@@ -533,6 +535,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
+      fieldType: 'string',
     },
     multiple: {
       value: '',
@@ -547,6 +550,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
+      fieldType: 'string',
     },
     personalGuarantee: {
       value: '',

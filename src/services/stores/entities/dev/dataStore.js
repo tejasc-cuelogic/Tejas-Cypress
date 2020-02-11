@@ -82,7 +82,7 @@ export class DataStore {
         .mutate({
           mutation: updateOfferingRepaymentsMeta,
           variables: {
-            audit: toJS(offeringData.audit).length,
+            audit: Boolean(toJS(offeringData.audit).length),
             offeringId: offeringData.offeringId,
           },
         })
