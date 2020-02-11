@@ -12,7 +12,7 @@ const TableHeader = ({ isReadonly }) => (
     <Table.Row>
       <Table.HeaderCell>Contingency</Table.HeaderCell>
       <Table.HeaderCell>Acceptance Criteria</Table.HeaderCell>
-      {!isReadonly && <Table.HeaderCell /> }
+      {!isReadonly && <Table.HeaderCell />}
     </Table.Row>
   </Table.Header>
 );
@@ -20,60 +20,60 @@ const TableHeader = ({ isReadonly }) => (
 const TableBody = ({
   match, fields, formName, arrayName, onchange, addMore, toggleConfirmModal, isReadonly,
 }) => (
-  <Table.Body>
-    {
-    fields.length
-      ? fields.map((formData, index) => (
-      <Table.Row verticalAlign="top">
-        <Table.Cell width={5}>
-          <FormInput
-            containerclassname={isReadonly ? 'display-only' : ''}
-            readOnly={isReadonly}
-            name="contingency"
-            fielddata={formData.contingency}
-            changed={(e, result) => onchange(e, result, formName, arrayName, index)}
-            size="small"
-          />
-        </Table.Cell>
-        <Table.Cell>
-          <FormInput
-            containerclassname={isReadonly ? 'display-only' : ''}
-            readOnly={isReadonly}
-            name="acceptance"
-            fielddata={formData.acceptance}
-            changed={(e, result) => onchange(e, result, formName, arrayName, index)}
-            size="small"
-          />
-        </Table.Cell>
-        {!isReadonly
+    <Table.Body>
+      {
+        fields.length
+          ? fields.map((formData, index) => (
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5}>
+                <FormInput
+                  containerclassname={isReadonly ? 'display-only' : ''}
+                  readOnly={isReadonly}
+                  name="contingency"
+                  fielddata={formData.contingency}
+                  changed={(e, result) => onchange(e, result, formName, arrayName, index)}
+                  size="small"
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <FormInput
+                  containerclassname={isReadonly ? 'display-only' : ''}
+                  readOnly={isReadonly}
+                  name="acceptance"
+                  fielddata={formData.acceptance}
+                  changed={(e, result) => onchange(e, result, formName, arrayName, index)}
+                  size="small"
+                />
+              </Table.Cell>
+              {!isReadonly
+                && (
+                  <Table.Cell collapsing>
+                    {fields.length > 1
+                      && (
+                        <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, arrayName)}>
+                          <Icon className="ns-close-circle" color="grey" />
+                        </Link>
+                      )
+                    }
+                  </Table.Cell>
+                )
+              }
+            </Table.Row>
+          )) : ''
+      }
+      {!isReadonly
         && (
-<Table.Cell collapsing>
-          {fields.length > 1
-          && (
-<Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, arrayName)}>
-            <Icon className="ns-close-circle" color="grey" />
-          </Link>
-          )
-          }
-        </Table.Cell>
+          <Table.Row>
+            <Table.Cell colSpan="3">
+              {fields.length < 5
+                && <Button size="small" color="blue" className="link-button" type="button" onClick={() => addMore(formName, arrayName)}>+ Add Contingency</Button>
+              }
+            </Table.Cell>
+          </Table.Row>
         )
-        }
-      </Table.Row>
-      )) : ''
-    }
-    {!isReadonly
-    && (
-<Table.Row>
-      <Table.Cell colSpan="3">
-        {fields.length < 5
-        && <Button size="small" color="blue" className="link-button" type="button" onClick={() => addMore(formName, arrayName)}>+ Add Contingency</Button>
-        }
-      </Table.Cell>
-    </Table.Row>
-    )
-    }
-  </Table.Body>
-);
+      }
+    </Table.Body>
+  );
 
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
@@ -116,6 +116,7 @@ export default class Contingencies extends Component {
       && review.contingencies.approved) ? review.contingencies.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
+    const isButtonGroupToDisplay = !this.props.hideButtonGroup;
     if (applicationReviewLoading) {
       return <InlineLoader />;
     }
@@ -137,16 +138,19 @@ export default class Contingencies extends Component {
             <TableHeader isReadonly={isReadonly} />
             <TableBody isReadonly={isReadonly} match={this.props.match} arrayName="close" fields={CONTINGENCY_FRM.fields.close} formName="CONTINGENCY_FRM" onchange={formChangeWithIndex} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
           </Table>
-          <ButtonGroup
-            inProgress={inProgress}
-            formName="CONTINGENCY_FRM"
-            isReadonly={isReadonly}
-            isManager={isManager}
-            submitted={submitted}
-            approved={approved}
-            formValid={CONTINGENCY_FRM.meta.isValid}
-            submitWithApproval={this.submitWithApproval}
-          />
+          {isButtonGroupToDisplay
+            && (
+              <ButtonGroup
+                inProgress={inProgress}
+                formName="CONTINGENCY_FRM"
+                isReadonly={isReadonly}
+                isManager={isManager}
+                submitted={submitted}
+                approved={approved}
+                formValid={CONTINGENCY_FRM.meta.isValid}
+                submitWithApproval={this.submitWithApproval}
+              />
+            )}
         </Form>
         <Confirm
           header="Confirm"

@@ -3,7 +3,7 @@
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
 import moment from 'moment';
-import { mapValues, set, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach, get } from 'lodash';
+import { mapValues, set, replace, map, mapKeys, isArray, toArray, reduce, includes, forEach, get, pickBy, identity } from 'lodash';
 import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
@@ -99,6 +99,7 @@ class FormValidator {
     } else {
       const formData = this.ExtractFormValues(toJS(currentForm.fields));
       let formRules = this.ExtractFormRules(toJS(currentForm.fields));
+      formRules = pickBy(formRules, identity);
       if (isBusinessPlanRequired) {
         formRules = {
           ...formRules,
@@ -179,7 +180,8 @@ class FormValidator {
           ? currentFormRelative[element.name].customErrors : {};
       }
       const formData = this.ExtractFormValues(toJS(currentForm.fields));
-      const formRules = this.ExtractFormRules(toJS(currentForm.fields));
+      const formRules = pickBy(this.ExtractFormRules(toJS(currentForm.fields)), identity);
+      // formRules = pickBy(formRules, identity);
       const validation = new Validator(
         formData,
         formRules,
@@ -198,7 +200,7 @@ class FormValidator {
     : f.value));
 
   ExtractFormRules = fields => reduce(mapValues(fields, (f, key) => (isArray(f) ? mapKeys(mapValues(f[0], k => k.rule), (s, v) => `${key}.*.${v}`)
-    : mapKeys(v => `${key}.${v.rule}`))), (a, b) => Object.assign(a, b));
+    : { [key]: f.rule })), (a, b) => Object.assign(a, b));
 
   resetFormData = (form, targetedFields) => {
     const currentForm = form;
