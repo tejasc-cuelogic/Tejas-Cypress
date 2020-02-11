@@ -21,7 +21,7 @@ const AccountTypes = ({
       basic
       size="large"
     >
-      {!isMobile && <ProgressModalHeader Modal={Modal} />}
+      {<ProgressModalHeader Modal={Modal} handleClose={close} closeCta />}
       <Modal.Content className="signup-content">
         <Grid
           centered
