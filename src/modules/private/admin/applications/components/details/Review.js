@@ -27,7 +27,6 @@ const navItems = [
       { title: 'Results', to: 'model/results', component: 'Results' },
     ],
   },
-  // { title: 'Offer', to: 'offer' },
   { title: 'Offering', to: 'offering' },
 ];
 
