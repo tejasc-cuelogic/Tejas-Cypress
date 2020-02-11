@@ -387,7 +387,7 @@ export class BusinessAppReviewStore {
 
   @action
   resetBusinessApplicationMappingForm = (form) => {
-    Validator.resetFormToEmpty(this[form]);
+    this[form] = Validator.prepareFormObject(APPLICATION_MAPPED_OFFERING);
   }
 
   @action

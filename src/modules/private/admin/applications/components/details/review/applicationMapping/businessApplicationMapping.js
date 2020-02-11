@@ -18,8 +18,11 @@ export default class BusinessApplicationMapping extends Component {
 
   constructor(props) {
     super(props);
-    this.props.businessAppReviewStore.resetBusinessApplicationMappingForm('APPLICATION_MAPPED_OFFERING_FORM');
     this.props.businessAppReviewStore.setFormData('APPLICATION_MAPPED_OFFERING_FORM');
+  }
+
+  componentWillUnmount() {
+    this.props.businessAppReviewStore.resetBusinessApplicationMappingForm('APPLICATION_MAPPED_OFFERING_FORM');
   }
 
   toggleAccordianContent = (categoryIndex = null) => {
