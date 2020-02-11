@@ -985,3 +985,8 @@
     }
 
 }
+
+// Custom Multistep Modal //
+.custom-modal-wrapper .ui.dimmer.inverted{
+    background: @white;
+}
