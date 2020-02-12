@@ -144,9 +144,10 @@ export class TransactionStore {
   }
 
   @computed get allPaymentHistoryData() {
+    const isMobile = document.documentElement.clientWidth < 768;
     return this.paymentHistoryData.data
       && this.paymentHistoryData.data.getPaymentHistory
-      ? orderBy(this.paymentHistoryData.data.getPaymentHistory, o => (o.completeDate ? moment(new Date(o.completeDate)).unix() : ''), ['desc']) : [];
+      ? orderBy(this.paymentHistoryData.data.getPaymentHistory, o => (o.completeDate ? moment(new Date(o.completeDate)).unix() : ''), [(isMobile ? 'asc' : 'desc')]) : [];
   }
 
   @computed get allPaymentHistoryAsPerYears() {
