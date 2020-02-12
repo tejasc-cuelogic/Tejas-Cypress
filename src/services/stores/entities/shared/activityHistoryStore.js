@@ -17,8 +17,6 @@ export class ActivityHistoryStore extends DataModelStore {
 
   ACTIVITY_FRM = Validator.prepareFormObject(LOG_ACTIVITY);
 
-  requestState = { filters: {} };
-
   data = [];
 
   message = {};
@@ -27,12 +25,12 @@ export class ActivityHistoryStore extends DataModelStore {
 
   initRequest = (resourceId, defaultFilter = false) => {
     if (defaultFilter && resourceId === 'ELASTIC_SEARCH') {
-      this.requestState.filters.startDate = DataFormatter.getDate(moment().subtract(2, 'day').format('MM-DD-YYYY'), true, 'startDate', true);
-      this.requestState.filters.endDate = DataFormatter.getDate(moment().format('MM-DD-YYYY'), true, 'endDate', true);
+      this.requestState.search.startDate = DataFormatter.getDate(moment().subtract(2, 'day').format('MM-DD-YYYY'), true, 'startDate', true);
+      this.requestState.search.endDate = DataFormatter.getDate(moment().format('MM-DD-YYYY'), true, 'endDate', true);
     }
     const {
       activityType, activityUserType, startDate, endDate, subType,
-    } = this.requestState.filters;
+    } = this.requestState.search;
     let filterParams = { resourceId, orderBy: { field: 'activityDate', sort: 'desc' } };
     filterParams = activityType ? { ...filterParams, activityType } : { ...filterParams };
     filterParams = subType ? { ...filterParams, subType } : { ...filterParams };
@@ -53,15 +51,15 @@ export class ActivityHistoryStore extends DataModelStore {
     });
   }
 
-  setInitiateSrch = (name, value, resourceId) => {
+  setInitiateSearch = (name, value, resourceId) => {
     if (name === 'startDate' || name === 'endDate') {
-      this.requestState.filters[name] = value && moment(value.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(value.formattedValue, true, name, true) : undefined;
-      if ((this.requestState.filters.startDate && this.requestState.filters.endDate)
-      || (!this.requestState.filters.startDate && !this.requestState.filters.endDate)) {
+      this.requestState.search[name] = value && moment(value.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(value.formattedValue, true, name, true) : undefined;
+      if ((this.requestState.search.startDate && this.requestState.search.endDate)
+      || (!this.requestState.search.startDate && !this.requestState.search.endDate)) {
         this.initRequest(resourceId);
       }
     } else {
-      const srchParams = { ...this.requestState.filters };
+      const srchParams = { ...this.requestState.search };
       if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
         srchParams[name] = value;
         if (isArray(value) && value.length > 0) {
@@ -71,7 +69,7 @@ export class ActivityHistoryStore extends DataModelStore {
       } else {
         delete srchParams[name];
       }
-      this.setFieldValue('requestState', srchParams, 'filters');
+      this.setFieldValue('requestState', srchParams, 'search');
       this.initRequest(resourceId);
     }
   }
@@ -142,12 +140,11 @@ export class ActivityHistoryStore extends DataModelStore {
 decorate(ActivityHistoryStore, {
   ...decorateDefault,
   ACTIVITY_FRM: observable,
-  requestState: observable,
   data: observable,
   message: observable,
   activityTypes: observable,
   initRequest: action,
-  setInitiateSrch: action,
+  setInitiateSearch: action,
   send: action,
   createActivityHistory: action,
   getActivityTypes: action,

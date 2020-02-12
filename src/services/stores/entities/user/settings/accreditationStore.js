@@ -860,6 +860,10 @@ export class AccreditationStore {
       // this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ASSETS_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ENTITY_ACCREDITATION_FORM', false, false);
+      const { status } = this.userDetails.accreditation;
+      if (['INVALID', 'EXPIRED'].includes(status)) {
+        this.resetForm('INCOME_UPLOAD_DOC_FORM');
+      }
     }
     this.checkFormValid(form, false, false);
     return false;

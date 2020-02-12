@@ -152,7 +152,7 @@ export const CAMPAIGN_OFFERING_STAGE = {
   FAILED: 'Failed',
   TERMINATED: 'Terminated',
   STARTUP_PERIOD: 'Startup Period',
-  IN_REPAYMENT: 'Re Payment',
+  IN_REPAYMENT: 'Repayment',
   COMPLETE: 'Completed',
   DEFAULTED: 'Default',
 };

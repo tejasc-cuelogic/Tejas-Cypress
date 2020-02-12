@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import Parser from 'html-react-parser';
+import { withRouter } from 'react-router-dom';
 import { Modal, Header, Button, Dimmer, Loader, Progress } from 'semantic-ui-react';
 import Helper from '../utility';
 
@@ -23,6 +24,7 @@ const getNavStates = (indx, length, steps) => {
   }
   return { current: indx, styles };
 };
+@withRouter
 export default class MultiStep extends React.Component {
   constructor(props) {
     super(props);
@@ -54,6 +56,12 @@ export default class MultiStep extends React.Component {
     }
     if (this.props.stepToBeRendered > -1 && _.has(this.props.steps[this.props.stepToBeRendered], 'disableNxtBtn')) {
       this.setState({ showNextBtn: !this.props.steps[this.props.stepToBeRendered].disableNxtBtn });
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.setUiStorevalue && this.props.isdynamicSteps) {
+      this.props.setUiStorevalue('multiSteps', this.props.steps);
     }
   }
 
@@ -253,6 +261,7 @@ export default class MultiStep extends React.Component {
       this.props.resetEnterPressed();
       this.next();
     }
+    const { location } = this.props;
     const closeDimmerClickAction = this.props.closeOnDimmerClick ? this.props.closeOnDimmerClick : false;
     return (
       /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -263,8 +272,8 @@ export default class MultiStep extends React.Component {
           onKeyPress={event => this.props.setIsEnterPressed(event)}
           basic
           open
-          closeIcon={!isMobile && !this.props.disableCloseIcon}
-          className={`${isMobile && 'bg-white'} ${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
+          closeIcon={!isMobile && (!(location.pathname.includes('/invest-now') || location.pathname.includes('/investment-limits')))}
+          className={`${(location.pathname.includes('/invest-now') || location.pathname.includes('/investment-limits')) && 'content-close'} ${isMobile && 'bg-white'} ${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
           closeOnDimmerClick={closeDimmerClickAction}
           onClose={() => this.props.handleMultiStepModalclose()}
           id="multistep-modal"
@@ -317,6 +326,14 @@ export default class MultiStep extends React.Component {
             </Loader>
           </Dimmer>
           <Modal.Content className="multistep">
+            {(!isMobile && ((location.pathname.includes('/invest-now') || location.pathname.includes('/investment-limits'))))
+            && (
+              <Button
+                icon={{ className: 'ns-close-light' }}
+                className="link-button close-btn"
+                onClick={this.props.handleMultiStepModalclose}
+              />
+            )}
             {currentStep.component}
             {!currentStep.disablePrevButton && !isMobile
               && (
