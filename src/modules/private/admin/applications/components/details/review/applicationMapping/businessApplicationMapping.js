@@ -21,6 +21,10 @@ export default class BusinessApplicationMapping extends Component {
     this.props.businessAppReviewStore.setFormData('APPLICATION_MAPPED_OFFERING_FORM');
   }
 
+  componentWillUnmount() {
+    this.props.businessAppReviewStore.resetBusinessApplicationMappingForm('APPLICATION_MAPPED_OFFERING_FORM');
+  }
+
   toggleAccordianContent = (categoryIndex = null) => {
     const index = categoryIndex;
     const { activeIndex } = this.state;

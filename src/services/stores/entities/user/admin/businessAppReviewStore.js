@@ -6,7 +6,7 @@ import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { Calculator } from 'amortizejs';
 import money from 'money-math';
-import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, PROMOTE_APPLICATION_STATUS_PASSWORD, PROMOTE_APPLICATION_STATUS_EMAIL, APPLICATION_MAPPED_OFFERING, APPLICATION_OFFERING_MAPPING_KEY_VALUE } from '../../../../constants/admin/businessApplication';
+import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, PROMOTE_APPLICATION_STATUS_PASSWORD, PROMOTE_APPLICATION_STATUS_EMAIL, APPLICATION_MAPPED_OFFERING, APPLICATION_OFFERING_MAPPING_KEY_VALUE, REAL_ESTATE_APPLICATION_FUND_USAGES } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -383,6 +383,11 @@ export class BusinessAppReviewStore {
   @action
   resetForm = (form) => {
     this[form] = Validator.resetFormData(this[form]);
+  }
+
+  @action
+  resetBusinessApplicationMappingForm = (form) => {
+    this[form] = Validator.prepareFormObject(APPLICATION_MAPPED_OFFERING);
   }
 
   @action
@@ -798,10 +803,14 @@ export class BusinessAppReviewStore {
 
   @action
   setFormData = (form, ref, store = 'appStore') => {
-    const { businessApplicationDetailsAdmin } = businessAppStore;
+    const { businessApplicationDetailsAdmin, currentApplicationType } = businessAppStore;
     const appData = store === 'appStore' ? businessApplicationDetailsAdmin : this.fetchBusinessApplicationOffers;
     if (!appData) {
       return false;
+    }
+    if (form === 'APPLICATION_MAPPED_OFFERING_FORM' && currentApplicationType && currentApplicationType === 'commercial-real-estate') {
+      this[form].fields.fundUsage.values = [...REAL_ESTATE_APPLICATION_FUND_USAGES.values];
+      this[form].refMetadata.fundUsage.values = [...REAL_ESTATE_APPLICATION_FUND_USAGES.values];
     }
     this.paBoxFolderId = get(appData, 'storageDetails.Application.Review.Offer.id');
     this[form] = Validator.setFormData(this[form], appData, ref);
