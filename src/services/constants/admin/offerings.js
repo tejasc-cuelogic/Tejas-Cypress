@@ -389,7 +389,7 @@ export const KEY_TERMS = {
     value: null,
     label: 'Price (copy)',
     error: undefined,
-    rule: 'numeric',
+    rule: 'optional',
     placeHolder: 'Enter here',
   },
   totalRoundSize: {
@@ -789,7 +789,7 @@ export const CLOSURE_SUMMARY = {
     value: '',
     label: 'Investment Multiple (calculation)',
     error: undefined,
-    rule: 'string',
+    rule: 'numeric',
     placeHolder: 'Enter here',
   },
   priceCalculation: {
