@@ -860,6 +860,9 @@
             color: #676a73;
         }
     }
+    &.signup-modal .multistep.content{
+        padding:@64px @50px;
+    }
 }
 .field-wrap{
     margin:@30px auto;
