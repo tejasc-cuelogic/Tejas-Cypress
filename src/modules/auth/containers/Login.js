@@ -67,6 +67,9 @@ class Login extends Component {
           } else {
             this.props.history.push(redirectUrl || '/');
           }
+          if (this.props.uiStore.authRefHash) {
+            window.location.hash = this.props.uiStore.authRefHash;
+          }
         }
       }).catch((err) => {
         console.log(err);

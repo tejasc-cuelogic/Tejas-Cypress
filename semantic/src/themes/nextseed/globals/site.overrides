@@ -219,6 +219,9 @@ h6{
 	padding-left: 0 !important;
 	padding-right: 0 !important;
 }
+.line-height-24{
+	line-height: 24px !important;
+}
 .display-block{
 	display: block !important;
 }
@@ -346,6 +349,9 @@ h6{
 }
 .d-flex{
 	display: flex !important;
+}
+.overflow-visible{
+	overflow: visible !important;
 }
 //	normal link styles
 a:not(.item), a:not(.ui.button){

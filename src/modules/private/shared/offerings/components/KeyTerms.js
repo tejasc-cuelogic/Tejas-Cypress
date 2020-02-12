@@ -57,7 +57,7 @@ export default class KeyTerms extends Component {
       confirmModal, confirmModalName, removeData, currentOfferingId,
     } = this.props.offeringCreationStore;
     const formName = 'KEY_TERMS_FRM';
-    const { offer } = this.props.offeringsStore;
+    const { offer, offerData } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
     const submitted = (offer && offer.keyTerms && offer.keyTerms.submitted)
@@ -472,6 +472,7 @@ export default class KeyTerms extends Component {
             submitted={submitted}
             isManager={isManager}
             approved={approved}
+            loading={offerData.loading}
             updateOffer={this.handleFormSubmit}
           />
         </Form>

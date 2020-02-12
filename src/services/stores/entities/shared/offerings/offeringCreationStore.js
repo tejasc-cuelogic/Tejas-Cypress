@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, arrow-body-style, max-len, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { includes, sortBy, get, has, map, startCase, set, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
+import { includes, sortBy, get, has, map, startCase, set, filter, forEach, find, orderBy, kebabCase, mergeWith, isEqual } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -11,16 +11,17 @@ import {
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, CLOSURE_SUMMARY, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
   ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS, CLOSING_BINDING,
-  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1, OFFERING_CLOSE_EXPORT_ENVELOPES,
+  OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1, OFFERING_CLOSE_EXPORT_ENVELOPES, OFFERING_DEFAULT,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { deleteBonusReward, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, adminOfferingClose, deleteBac, upsertBonusReward,
   getBonusRewards, adminBusinessFilings, initializeClosingBinder,
-  adminCreateBusinessFiling, adminUpsertOffering } from '../../../queries/offerings/manage';
+  adminCreateBusinessFiling, adminUpsertOffering, adminSetOfferingAsDefaulted } from '../../../queries/offerings/manage';
+import { updateBusinessApplicationInformation, adminBusinessApplicationsDetails } from '../../../queries/businessApplication';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore, offeringInvestorStore } from '../../../index';
+import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore, offeringInvestorStore, businessAppStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
 import { INDUSTRY_TYPES } from '../../../../../constants/offering';
@@ -61,6 +62,8 @@ export class OfferingCreationStore {
   @observable OFFERING_CLOSE_3 = Validator.prepareFormObject(OFFERING_CLOSE_3);
 
   @observable OFFERING_CLOSE_4 = Validator.prepareFormObject(OFFERING_CLOSE_4);
+
+  @observable OFFERING_DEFAULT_FRM = Validator.prepareFormObject(OFFERING_DEFAULT);
 
   @observable OFFERING_CLOSE_EXPORT_ENVELOPES_FRM = Validator.prepareFormObject(OFFERING_CLOSE_EXPORT_ENVELOPES);
 
@@ -167,6 +170,12 @@ export class OfferingCreationStore {
 
   @observable outputMsg = null;
 
+  @observable removedFileData = {
+    documents: [],
+  };
+
+  @observable oldFormDetails = {}
+
   @action
   setFieldValue = (field, value, field2 = false, objRef = false) => {
     if (objRef) {
@@ -260,6 +269,7 @@ export class OfferingCreationStore {
   @action
   resetForm = (form, targetedFields = []) => {
     Validator.resetFormData(this[form], targetedFields);
+    this.setFieldValue('oldFormDetails', {});
   }
 
   @action
@@ -476,14 +486,22 @@ export class OfferingCreationStore {
   }
 
   @action
-  removeData = (formName, subForm = 'data', isApiDelete = false) => {
+  removeData = (formName, subForm = 'data', isApiDelete = false, isForBusinessApplication = false) => {
     const subArray = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : subForm;
     if (!isApiDelete) {
       if (['OFFERING_CLOSE_EXPORT_ENVELOPES_FRM', 'CLOSING_BINDER_FRM', 'DATA_ROOM_FRM'].includes(formName)) {
         let removeFileIds = '';
+        let removedArr = [];
+        if (isForBusinessApplication) {
+          const removeListArr = this[formName].fields[subArray][this.removeIndex];
+          removedArr = removeListArr;
+        }
         const { fileId } = this[formName].fields[subArray][this.removeIndex].upload;
         removeFileIds = fileId;
         this.removeFileIdsList = removeFileIds ? [...this.removeFileIdsList, removeFileIds] : [...this.removeFileIdsList];
+        if (isForBusinessApplication) {
+          this.removedFileData.documents = [...this.removedFileData.documents, { ...removedArr, removedFileId: { value: removeFileIds } }];
+        }
       }
       this[formName].fields[subArray].splice(this.removeIndex, 1);
     }
@@ -588,7 +606,9 @@ export class OfferingCreationStore {
 
   @action
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
-    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService', 'dlExpirationDate', 'dlIssuedDate'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod'], field) ? Math.abs(values.floatValue) || '' : includes(['interestRate', 'ssn'], field) ? values.value : values.floatValue;
+    const isDateField = includes(['maturityDate', 'dob', 'dateOfService', 'dlExpirationDate', 'dlIssuedDate'], field);
+    const isAbsField = includes(['startupPeriod'], field);
+    const fieldValue = isDateField ? values.formattedValue : isAbsField ? Math.abs(values.floatValue) || '' : values.floatValue;
     if (form === 'KEY_TERMS_FRM' && includes(['minOfferingAmount506', 'maxOfferingAmount506'], field)) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
@@ -671,7 +691,27 @@ export class OfferingCreationStore {
     }
 
   @action
-  removeUploadedDataMultiple = (form, field, index = null, arrayName, fromS3 = false) => {
+  setFileUploadDataMulitpleVartually =
+    (form, arrayName, field, files, stepName, index = null, multiForm = false) => {
+      if (typeof files !== 'undefined' && files.length) {
+        forEach(files, (file) => {
+          const fileData = Helper.getFormattedFileData(file);
+          this.isUploadingFile = true;
+          this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
+          this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
+          this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
+          this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+          this.checkFormValid(form, multiForm);
+          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+          this.isUploadingFile = false;
+        });
+        this.setAccreditedOnlyField(form, index, false);
+      }
+    }
+
+
+  @action
+  removeUploadedDataMultiple = (form, field, index = null, arrayName, fromS3 = false, isForBusinessApplication = false) => {
     if (fromS3) {
       let removeFileNames = '';
       if (index !== null && arrayName) {
@@ -688,7 +728,12 @@ export class OfferingCreationStore {
       this.setFormFileArray(form, arrayName, field, 'fileName', '', index);
     } else {
       let removeFileIds = '';
+      let removedArr = [];
       if (index !== null && arrayName) {
+        if (isForBusinessApplication) {
+          const removeListArr = this[form].fields[arrayName][index];
+          removedArr = removeListArr;
+        }
         const { fileId } = this[form].fields[arrayName][index][field];
         removeFileIds = fileId;
       } else if (index !== null) {
@@ -699,6 +744,10 @@ export class OfferingCreationStore {
         removeFileIds = fileId;
       }
       this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
+      if (isForBusinessApplication) {
+        this.removedFileData.documents = [...this.removedFileData.documents, { ...removedArr, removedFileId: { value: removeFileIds } }];
+        this.setAccreditedOnlyField(form, index, true);
+      }
       this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
     }
     this.setFormFileArray(form, arrayName, field, 'fileData', '', index);
@@ -931,6 +980,19 @@ export class OfferingCreationStore {
     }
     const multiForm = this.getActionType(form, 'isMultiForm');
     this.checkFormValid(form, multiForm, false);
+    return false;
+  }
+
+  @action
+  setFormDataForBusinessUploadDocuments = (form, ref) => {
+    this.resetForm(form);
+    this.setFieldValue('removedFileData', [], 'documents');
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    const evaluatedFormData = Helper.replaceKeysDeep(businessApplicationDetailsAdmin, { agreements: 'documents' });
+    const formDetails = Validator.setFormData(this[form], evaluatedFormData, ref);
+    this[form] = formDetails;
+    this.setFieldValue('oldFormDetails', formDetails.fields);
+    this.checkFormValid(form, true, false);
     return false;
   }
 
@@ -1395,6 +1457,101 @@ export class OfferingCreationStore {
   });
 
   @action
+  updateApplication = (uploadDocumentArr = undefined, fromS3 = false) => {
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    uiStore.setProgress('save');
+    this.bulkFileUpload('DATA_ROOM_FRM', 'documents', 'upload', uploadDocumentArr, 'AGREEMENTS').then(() => {
+      const dataRoomDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
+      const removedDataRoomsDocs = Validator.evaluateFormData(this.removedFileData).documents || [];
+      const oldDataRoomDocs = Validator.evaluateFormData(this.oldFormDetails).documents;
+      const finalDataRoomDocs = [];
+      const removedDataFooms = [];
+      const payloadData = {
+        applicationId: businessApplicationDetailsAdmin.applicationId,
+        issuerId: businessApplicationDetailsAdmin.userId,
+      };
+      dataRoomDocs.map((data, index) => {
+        const isEquality = isEqual(data, oldDataRoomDocs[index]);
+        const isEqualityForUpload = oldDataRoomDocs[index] ? isEqual(data.upload, oldDataRoomDocs[index].upload) : false;
+        if (data.accreditedOnly !== undefined) {
+          delete data.accreditedOnly;
+        }
+        if (data.name !== '' || data.upload.fileId !== '') {
+          data.status = isEquality ? 'EXISTS' : isEqualityForUpload ? 'UPDATED' : 'UPLOADED';
+          finalDataRoomDocs.push(data);
+        }
+        return finalDataRoomDocs;
+      });
+
+      if (removedDataRoomsDocs.length > 0) {
+        removedDataRoomsDocs.map((data, index) => {
+          if (data.accreditedOnly !== undefined) {
+            delete data.accreditedOnly;
+          }
+          if (data.name !== '' || (data.removedFileId && data.removedFileId !== '')) {
+            data.status = 'DELETED';
+            data.upload.fileId = data.removedFileId;
+            delete data.removedFileId;
+            removedDataFooms.push(data);
+          }
+          return removedDataFooms;
+        });
+      }
+      payloadData.agreements = [...finalDataRoomDocs, ...removedDataFooms];
+      payloadData.agreements = cleanDeep(payloadData.agreements);
+      console.log('agreement payload==>', payloadData);
+      this.updateDcoumentForApplication(payloadData)
+        .then(() => {
+          this.removeUploadedFiles(fromS3);
+          Helper.toast('Document has been saved successfully.', 'success');
+          uiStore.setProgress(false);
+        });
+    }).catch(action((error) => {
+      console.log(error);
+      uiStore.setProgress(false);
+    }));
+  }
+
+  @action
+  setRemoveDocFieldValue = (field, index, objRef, value, field2 = false) => {
+    if (field2) {
+      set(this[field][field2][index], objRef, value);
+    } else {
+      set(this[field][index], objRef, value);
+    }
+  }
+
+  @action
+  updateDcoumentForApplication = (payloadObject) => {
+    uiStore.setProgress('save');
+    const reFetchPayLoad = {
+      applicationId: payloadObject.applicationId,
+      applicationType: 'APPLICATION_COMPLETED',
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateBusinessApplicationInformation,
+          variables: payloadObject,
+          refetchQueries:
+            [{ query: adminBusinessApplicationsDetails, variables: reFetchPayLoad }],
+        })
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+          this.setFieldValue('removedFileData', [], 'documents');
+        });
+    });
+  }
+
+  @action
   getOfferingBac = (offeringId, bacType) => {
     this.issuerOfferingBac = graphql({
       client,
@@ -1559,7 +1716,7 @@ export class OfferingCreationStore {
         variables,
         refetchQueries: [{
           query: getOfferingDetails,
-          variables: { id: getOfferingDetailsBySlug.id },
+          variables: { id: getOfferingDetailsBySlug.offeringSlug },
         },
         {
           query: getOfferingBac,
@@ -1573,7 +1730,7 @@ export class OfferingCreationStore {
       })
       .then(() => {
         this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
-        offeringsStore.getOne(getOfferingDetailsBySlug.id);
+        offeringsStore.getOne(this.currentOfferingSlug);
         if (bacType === 'LEADERSHIP') {
           this.initLoad.splice(this.initLoad.indexOf('LEADER_FRM'), 1);
           this.getLeadershipOfferingBac(this.currentOfferingId, 'LEADERSHIP');
@@ -1753,7 +1910,7 @@ export class OfferingCreationStore {
         },
         refetchQueries: [{
           query: getOfferingDetails,
-          variables: { id: this.currentOfferingId },
+          variables: { id: this.currentOfferingSlug },
         },
         {
           query: getBonusRewards,
@@ -1806,7 +1963,7 @@ export class OfferingCreationStore {
     const tiers = [];
     map(fields, ((field) => {
       if ((field.key)
-      && field.value.length && field.value.includes(field.key)) {
+        && field.value.length && field.value.includes(field.key)) {
         tiers.push(field.key);
       }
     }));
@@ -1832,7 +1989,7 @@ export class OfferingCreationStore {
         variables: payloadData,
         refetchQueries: [{
           query: getOfferingDetails,
-          variables: { id: this.currentOfferingId },
+          variables: { id: this.currentOfferingSlug },
         },
         {
           query: getBonusRewards,
@@ -1926,11 +2083,11 @@ export class OfferingCreationStore {
   }
 
   @action
-  setAccreditedOnlyField = (formName, index) => {
+  setAccreditedOnlyField = (formName, index, fieldValue) => {
     const arrName = formName === 'CLOSING_BINDER_FRM' ? 'closingBinder' : 'documents';
     this[formName] = Validator.onArrayFieldChange(
       this[formName],
-      { name: 'accreditedOnly', value: !this[formName].fields[arrName][index].accreditedOnly.value },
+      { name: 'accreditedOnly', value: (fieldValue || fieldValue === false) ? fieldValue : !this[formName].fields[arrName][index].accreditedOnly.value },
       arrName,
       index,
     );
@@ -2006,7 +2163,7 @@ export class OfferingCreationStore {
         },
       })
       .then(() => {
-        offeringsStore.getOne(this.currentOfferingId, false);
+        offeringsStore.getOne(this.currentOfferingSlug, false);
         Helper.toast('Closing binder initiated.', 'success');
       })
       .catch(action((err) => {
@@ -2016,6 +2173,77 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   }
+
+  bulkFileUpload = (form, arrayName, field, files, stepName) => new Promise((resolve, reject) => {
+    // resolve();
+    if (typeof files !== 'undefined' && files.length) {
+      const funcArray = [];
+      forEach(files, (file, index) => {
+        const fileData = Helper.getFormattedFileData(file);
+        this.isUploadingFile = true;
+        funcArray.push(this.uploadFiles(form, arrayName, field, file, stepName, fileData, file.currentIndex));
+      });
+      Promise.all(funcArray).then((responseArr) => {
+        console.log(responseArr);
+        this.isUploadingFile = false;
+        resolve();
+      }).catch((err) => {
+        reject(err);
+      });
+    } else {
+      resolve();
+    }
+  });
+
+  uploadFiles = (form, arrayName, field, file, stepName, fileData, index) => new Promise((resolve, reject) => {
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    const businessApplicationId = businessApplicationDetailsAdmin.applicationId;
+    const issuerId = businessApplicationDetailsAdmin.userId;
+    fileUpload.setFileUploadData(businessApplicationId, fileData, stepName, 'ADMIN', issuerId, this.currentOfferingId).then((result) => {
+      const { fileId, preSignedUrl } = result.data.createUploadEntry;
+      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file, fileType: fileData.fileType }).then(action(() => {
+        this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
+        this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
+        resolve(result);
+      })).catch(action((error) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setErrors(error.message);
+        this.isUploadingFile = false;
+        this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+        reject(error);
+      }));
+    }).catch(action((error) => {
+      Helper.toast('Something went wrong, please try again later.', 'error');
+      this.isUploadingFile = false;
+      this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+      uiStore.setErrors(error.message);
+      reject(error);
+    }));
+  });
+
+  @action
+  adminSetOfferingAsDefaulted = () => new Promise((res) => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: adminSetOfferingAsDefaulted,
+        variables: {
+          offeringId: this.currentOfferingId,
+          reason: this.OFFERING_DEFAULT_FRM.fields.reason.value,
+        },
+      })
+      .then(() => {
+        offeringsStore.getOne(this.currentOfferingSlug, false);
+        Helper.toast('Offering has been set to defaulted.', 'success');
+        res();
+      })
+      .catch(action((err) => {
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  })
 }
 
 export default new OfferingCreationStore();

@@ -7,11 +7,6 @@ import { inject, observer } from 'mobx-react';
 @inject('accreditationStore', 'uiStore')
 @observer
 export default class FillingStatus extends Component {
-  submitStep = () => { // only for mobile screens
-    this.props.accreditationStore
-    .updateAccreditation('FILLING_STATUS_FORM', this.props.match.path.split('/').pop().toUpperCase(), 1);
-  }
-
   render() {
     const { FILLING_STATUS_FORM, accreditationMethodChange } = this.props.accreditationStore;
     const { responsiveVars } = this.props.uiStore;
@@ -37,7 +32,7 @@ export default class FillingStatus extends Component {
           </Grid>
           {responsiveVars.isMobile
               && (
-                <Button disabled={!FILLING_STATUS_FORM.meta.isValid} onClick={this.submitStep} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
+                <Button disabled={!FILLING_STATUS_FORM.meta.isValid} onClick={() => this.props.submitStep()} primary size="large" fluid className="mt-40 relaxed" content="Continue" />
               )
             }
         </Form>

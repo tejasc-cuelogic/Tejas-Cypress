@@ -103,6 +103,8 @@ export class BusinessAppStore {
 
   @observable apiCall = false;
 
+  @observable fetchApplicationCall = false;
+
   @observable showUserError = false;
 
   @observable sourcesTotal = 0;
@@ -199,6 +201,8 @@ export class BusinessAppStore {
           this.setBusinessApplicationData(isPartialApp);
           uiStore.setProgress(false);
           uiStore.setAppLoader(false);
+          uiStore.setLoaderMessage(undefined);
+          this.setFieldvalue('fetchApplicationCall', true);
           resolve();
         }
       },
@@ -206,6 +210,8 @@ export class BusinessAppStore {
         Helper.toast('Something went wrong, please try again later.', 'error');
         uiStore.setProgress(false);
         uiStore.setAppLoader(false);
+        uiStore.setLoaderMessage(undefined);
+        this.setFieldvalue('fetchApplicationCall', true);
       },
     });
   });
@@ -241,7 +247,7 @@ export class BusinessAppStore {
       applicationType,
     };
     if (applicationType === 'APPLICATION_COMPLETED') {
-      payLoad = { ...payLoad, userId };
+      payLoad = { ...payLoad };
     }
     uiStore.setAppLoader(true);
     uiStore.setLoaderMessage('Getting application data');

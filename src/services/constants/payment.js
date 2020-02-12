@@ -1,6 +1,7 @@
 import { FormHelper } from '../../helper';
 
 export const PAYMENT = FormHelper.generateMeta([
+  ['payments', 'Payments Contact Emails', '', '', 'Payments Contact Emails', { props: { objRef: 'offering.contact' }, asIn: true }],
   ['shorthandBusinessName', 'Short Hand Business Name', '', 'required', 'Short Hand Business Name', { props: { objRef: 'offering.keyTerms', skipField: true }, asIn: true }],
   ['securities', 'Securities', '', 'required|string', 'Choose here', { props: { objRef: 'offering.keyTerms', skipField: true }, asIn: true }],
   ['hardCloseDate', 'Hard Close Date', '', 'date', 'Hard Close Date', { customErrors: { date: 'Target Hard Close Date is not a valid date format.' }, props: { objRef: 'offering.closureSummary', skipField: true }, asIn: true }],

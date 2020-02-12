@@ -7,6 +7,7 @@ import Filters from './filter';
 import formHOC from '../../../../../../theme/form/formHOC';
 import EmailContent from '../../../../shared/EmailContent';
 import EmailsListing from '../../../../shared/EmailsListing';
+import { InlineLoader } from '../../../../../../theme/shared';
 
 const metaInfo = {
   store: 'emailStore',
@@ -20,6 +21,10 @@ function EmailList(props) {
   const [requestDate, setRequestDate] = useState(false);
 
   useEffect(() => {
+    props.emailStore.fetchAdminListEmailTypesAndIdentifier().then(() => {
+      props.emailStore.setInitiateSrch('emailType', 'DEV');
+      props.emailStore.initRequest();
+    });
     props.emailStore.resetForm('EMAIL_LIST_FRM');
     return () => {
       props.emailStore.resetFilters();
@@ -37,7 +42,8 @@ function EmailList(props) {
 
   const setSearchParam = (e, { name, value }) => {
     setdisplyRecord(true);
-    props.emailStore.setInitiateSrch(name, value);
+    props.emailStore.reseFilterManually(name, value);
+    // props.emailStore.setInitiateSrch(name, value);
   };
 
   const paginate = params => props.emailStore.initRequest(params);
@@ -59,7 +65,7 @@ function EmailList(props) {
     EMAIL_LIST_FRM, requestState, filters, count, emailList,
   } = emailStore;
   const totalRecords = count || 0;
-  return (
+  return loadingArray.includes('adminListEmailType') ? <InlineLoader /> : (
     <>
       {showContentModal && (
         <EmailContent

@@ -8,3 +8,4 @@ export { default as ClientDb } from './utilities/ClientDb';
 export { default as MobxApollo } from './utilities/MobxApollo';
 export { default as Utilities } from './utility';
 export { default as FormHelper } from './utilities/FormHelper';
+export { default as UpdateHelper } from './utilities/UpdateHelper';

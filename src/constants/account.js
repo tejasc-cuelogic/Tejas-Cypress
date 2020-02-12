@@ -656,7 +656,7 @@ export const FINANCES = {
     error: undefined,
     showError: true,
     rule: 'required|min:1|max:2147483647',
-    year: `${Helper.getLastThreeYearsLabel().annualIncomePreviousYear}`,
+    year: Helper.getLastThreeYearsLabel().annualIncomePreviousYear,
     placeHolder: 'Enter here',
     objRefOutput: 'annualIncome',
     customErrors: {
