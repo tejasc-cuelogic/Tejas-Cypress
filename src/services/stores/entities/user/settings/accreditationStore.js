@@ -832,9 +832,11 @@ export class AccreditationStore {
     const entityAccreditation = userDetails && userDetails.roles
       && userDetails.roles.find(role => role.name === accountType);
     const appData = accountType === 'entity' ? entityAccreditation && entityAccreditation.details : userDetails;
-    if (!appData || get(userDetails, 'accreditation.status') === 'INVALID') {
+
+    if (!appData || ['INVALID', 'EXPIRED'].includes(get(userDetails, 'accreditation.status'))) {
       return false;
     }
+
     if (form === 'TRUST_ENTITY_ACCREDITATION_FRM') {
       this.setTrustEntityAccreditationData(appData.accreditation);
       this.checkFormIsValid('ACCREDITATION_FORM', false, false);
@@ -860,10 +862,6 @@ export class AccreditationStore {
       // this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ASSETS_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ENTITY_ACCREDITATION_FORM', false, false);
-      const { status } = this.userDetails.accreditation;
-      if (['INVALID', 'EXPIRED'].includes(status)) {
-        this.resetForm('INCOME_UPLOAD_DOC_FORM');
-      }
     }
     this.checkFormValid(form, false, false);
     return false;
