@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm, Popup, Table } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { isEmpty } from 'lodash';
 import { InlineLoader } from '../../../../theme/shared';
 import { FormInput, DropZoneConfirm as DropZone, MaskedInput, FormDropDown } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
@@ -55,7 +56,7 @@ export default class BusinessDetails extends Component {
     });
   }
 
-  handleSsnChange = (e, res, subForm, index) => {
+  handleSsnChange = (e, subForm, index) => {
     e.preventDefault();
     this.props.businessAppStore.businessDetailsChange(e, { name: 'ssn', value: '' }, subForm, index);
     const a = this.state.isSsnDirty.slice();
@@ -424,7 +425,7 @@ export default class BusinessDetails extends Component {
             }
             {BUSINESS_DETAILS_FRM.fields.owners.length
               && BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => {
-                const ssnData = owner.ssn.value !== null && formReadOnlyMode ? Helper.encrypSsnNumberByForm(owner).ssn : owner.ssn;
+                const ssnData = !isEmpty(owner.ssn.value) && formReadOnlyMode ? Helper.encrypSsnNumberByForm(owner).ssn : owner.ssn;
                 return (
                   <Grid>
                     <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>

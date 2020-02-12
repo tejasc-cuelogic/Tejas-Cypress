@@ -103,12 +103,12 @@ class IndividualAccountStore {
 
   createGoldstarAccount = (payLoad, resolve, reject) => {
     this.createIndividualGoldStarInvestor(payLoad.accountId).then((res) => {
-      uiStore.setProgress(false);
       if (res.data.createIndividualGoldStarInvestor) {
         this.setFieldValue('showProcessingModal', false);
-        bankAccountStore.resetStoreData();
-        this.isFormSubmitted = true;
       }
+      bankAccountStore.resetStoreData();
+      uiStore.setProgress(false);
+      this.isFormSubmitted = true;
       resolve();
     }).catch((err) => {
       if (Helper.matchRegexWithString(/\bNetwork(?![-])\b/, err.message)) {

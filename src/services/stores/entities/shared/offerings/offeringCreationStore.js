@@ -606,7 +606,9 @@ export class OfferingCreationStore {
 
   @action
   maskArrayChange = (values, form, field, subForm = '', index, index2) => {
-    const fieldValue = includes(['maturityDate', 'dob', 'dateOfService', 'dlExpirationDate', 'dlIssuedDate'], field) ? values.formattedValue : includes(['maturity', 'startupPeriod'], field) ? Math.abs(values.floatValue) || '' : includes(['interestRate', 'ssn'], field) ? values.value : values.floatValue;
+    const isDateField = includes(['maturityDate', 'dob', 'dateOfService', 'dlExpirationDate', 'dlIssuedDate'], field);
+    const isAbsField = includes(['startupPeriod'], field);
+    const fieldValue = isDateField ? values.formattedValue : isAbsField ? Math.abs(values.floatValue) || '' : values.floatValue;
     if (form === 'KEY_TERMS_FRM' && includes(['minOfferingAmount506', 'maxOfferingAmount506'], field)) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
@@ -1439,10 +1441,12 @@ export class OfferingCreationStore {
     } else if (keyName === 'contingencies') {
       ['launch', 'close'].forEach((c) => {
         forEach(payloadData.contingencies[c], (con, index) => {
+          const { status } = payloadData.contingencies[c][index].accepted;
           payloadData.contingencies[c][index].accepted = {
             ...payloadData.contingencies[c][index].accepted,
             id: userDetailsStore.userDetails.id,
             by: `${firstName} ${lastName}`,
+            status: Boolean(status.value),
             date: moment().toISOString(),
           };
         });

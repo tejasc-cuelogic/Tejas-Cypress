@@ -498,6 +498,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
+      fieldType: 'string',
     },
     minimumAmount: {
       value: '',
@@ -505,6 +506,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
+      fieldType: 'string',
     },
     maturity: {
       value: '',
@@ -533,6 +535,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
+      fieldType: 'string',
     },
     multiple: {
       value: '',
@@ -547,6 +550,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
+      fieldType: 'string',
     },
     personalGuarantee: {
       value: '',
@@ -1852,14 +1856,6 @@ export const APPLICATION_MAPPED_OFFERING = {
     error: undefined,
     rule: 'optional',
     placeHolder: 'Enter here',
-  },
-  offeringDisclaimer: {
-    label: 'Issuer Statement',
-    error: undefined,
-    rule: 'string',
-    value: 'The information contained on this campaign page (the "Campaign Information") is furnished solely by the Issuer to prospective investors in the investment opportunity described herein. All Campaign Information is intended to be a summary of the terms and information contained in the Disclosure Statement and the Note Purchase Agreement, and is fully qualified by reference to those documents. In the event any Campaign Information conflicts with the terms of the Disclosure Statement or Note Purchase Agreement, the terms of those documents will control. The Issuer has provided the Campaign Information for inclusion on the website located at <a href="https://www.nextseed.com/" target="_blank">www.nextseed.com</a>, and in no way will the Campaign Information be deemed to have been created or provided by NextSeed Securities, LLC, NextSeed Services, LLC, or their affiliates. ',
-    placeHolder: 'Enter here',
-    objRefOutput: 'keyTerms',
   },
   website: {
     label: 'Website',

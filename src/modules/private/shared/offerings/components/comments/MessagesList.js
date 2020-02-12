@@ -19,7 +19,7 @@ const MessagesList = (props) => {
             {(showResponseNeeded(msg) || props.threadMsgCount(msg.threadComments))
               ? (
                 <Item.Extra className="offering-comment">
-                  {showResponseNeeded(msg)
+                  {showResponseNeeded(msg) && !props.disablePostComment
                     ? (
                     <Label size="mini" color="red" horizontal circular>Response Needed</Label>
                     ) : null
@@ -79,7 +79,7 @@ const MessagesList = (props) => {
           </List.Item>
         ))
       }
-      {!props.passedProcessingDate && props.messages.length
+      {!props.passedProcessingDate && props.messages.length && !props.disablePostComment
         ? (
           <div className="sticky-wrap">
             <Button color="blue" size="small" className="link-button" content="Post new Comment" onClick={props.newPostComment} />
