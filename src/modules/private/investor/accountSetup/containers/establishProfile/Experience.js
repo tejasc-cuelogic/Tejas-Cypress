@@ -5,8 +5,6 @@ import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormCheckbox, FormArrowButton } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 
-const isMobile = document.documentElement.clientWidth < 768;
-
 @inject('investorProfileStore', 'userDetailsStore', 'uiStore')
 @withRouter
 @observer
@@ -132,7 +130,7 @@ export default class Experience extends Component {
               </Message>
             )
           }
-          {!isMobile ? (
+          {isExperiencedTypeSelected ? (
             <div className="mt-40">
               <Button primary className="relaxed" content="Continue to Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FORM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
               {!isInvExperienceValid && noExperience

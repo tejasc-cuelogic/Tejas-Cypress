@@ -20,59 +20,48 @@ export default class BrokerageEmployment extends Component {
   render() {
     const { BROKERAGE_EMPLOYMENT_FORM, employmentChange, updateInvestorProfileData, stepToBeRendered } = this.props.investorProfileStore;
     const { errors, multiSteps, inProgressArray } = this.props.uiStore;
-    return (
-      <>
-        <Header as="h4">Do you (or an immediate family member) work for a US-based securities brokerage firm?</Header>
-        {!isMobile && <Divider hidden />}
-        <p className="mb-40">If you do not know what this means, it likely does not apply to you.</p>
-        <Form onSubmit={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} error className={isMobile ? ' mb-30' : ''}>
-          {!inProgressArray.includes('BROKERAGE_EMPLOYMENT')
-          && (
-            <Button.Group vertical={isMobile}>
-              <Button basic className={`${isMobile ? 'mb-20 relaxed' : ''} primary-hover`} onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} content="No" />
-              <Button basic className={`${!isMobile && 'ml-10'} primary-hover`} onClick={this.handleShowFields} content="Yes" />
-            </Button.Group>
-          )
-          }
-          {inProgressArray.includes('BROKERAGE_EMPLOYMENT')
-          && (
-            <>
-              <div className={!isMobile ? 'mt-30' : ''}>
-                <Form.Group widths="equal">
-                  <FormInput
-                    key="brokerageFirmName"
-                    fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageFirmName}
-                    name="brokerageFirmName"
-                    changed={(e, result) => employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result)}
-                    showerror
-                  />
-                </Form.Group>
-              </div>
-              <Button className={`${isMobile ? 'mt-60' : 'mt-30'} relaxed`} primary size="large" fluid={isMobile} content="Continue" disabled={!BROKERAGE_EMPLOYMENT_FORM.meta.isValid} />
-              <Divider section hidden />
-              {!isMobile
+    if (inProgressArray.includes('BROKERAGE_EMPLOYMENT')) {
+      return (
+        <>
+          <Form onSubmit={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} error className={isMobile ? ' mb-30' : ''}>
+            <div className={!isMobile ? 'mt-30' : ''}>
+              <Form.Group widths="equal">
+                <FormInput
+                  key="brokerageFirmName"
+                  fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageFirmName}
+                  name="brokerageFirmName"
+                  changed={(e, result) => employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result)}
+                  showerror
+                />
+              </Form.Group>
+            </div>
+            <Button className={`${isMobile ? 'mt-60' : 'mt-30'} relaxed`} primary size="large" fluid={isMobile} content="Continue" disabled={!BROKERAGE_EMPLOYMENT_FORM.meta.isValid} />
+            <Divider section hidden />
+            {!isMobile
               && (
                 <p className="note">
                   You will not be able to make investments on NextSeed until we receive a 407 letter from your firm approving the opening of your account. Please ask your firm to send the letter to <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
                 </p>
               )}
-            </>
+          </Form>
+          {errors && (
+            <Message error className="mt-30">
+              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+            </Message>
           )
           }
-          {errors
-          && (
-<Message error className="mt-30">
-            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-          </Message>
-          )
-          }
-        </Form>
-        {inProgressArray.includes('BROKERAGE_EMPLOYMENT') && isMobile
-        && (
-          <p className="mobile-bottom-notes note">
-            You will not be able to make investments on NextSeed until we receive a 407 letter from your firm approving the opening of your account. Please ask your firm to send the letter to <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
-          </p>
-        )}
+        </>
+      );
+    }
+    return (
+      <>
+        <Header as="h4">Do you (or an immediate family member) work for a US-based securities brokerage firm?</Header>
+        {!isMobile && <Divider hidden />}
+        <p className="mb-40">If you do not know what this means, it likely does not apply to you.</p>
+        <Button.Group vertical={isMobile}>
+          <Button basic primary onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={isMobile ? 'mb-30 relaxed' : ''} content="No" />
+          <Button basic primary className={!isMobile && 'ml-10'} onClick={this.handleShowFields} content="Yes" />
+        </Button.Group>
       </>
     );
   }
