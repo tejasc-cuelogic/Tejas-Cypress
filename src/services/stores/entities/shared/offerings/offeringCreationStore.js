@@ -1441,10 +1441,12 @@ export class OfferingCreationStore {
     } else if (keyName === 'contingencies') {
       ['launch', 'close'].forEach((c) => {
         forEach(payloadData.contingencies[c], (con, index) => {
+          const { status } = payloadData.contingencies[c][index].accepted;
           payloadData.contingencies[c][index].accepted = {
             ...payloadData.contingencies[c][index].accepted,
             id: userDetailsStore.userDetails.id,
             by: `${firstName} ${lastName}`,
+            status: Boolean(status.value),
             date: moment().toISOString(),
           };
         });
