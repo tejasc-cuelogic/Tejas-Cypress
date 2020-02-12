@@ -282,7 +282,7 @@ class App extends Component {
           )
         }
         {uiStore.appUpdated
-          && <NotifyVersionUpdate setAppUpdated={uiStore.setAppUpdated} />
+          && <NotifyVersionUpdate responsiveVars={uiStore.responsiveVars} />
         }
         <MetaTagGenerator pathName={location.pathname} isTablet={isTablet} metaTagsData={metaTagsData} />
         {authStore.devPasswdProtection
