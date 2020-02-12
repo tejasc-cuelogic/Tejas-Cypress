@@ -1,17 +1,17 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { map, forEach, filter, get, ceil, times } from 'lodash';
+import { map, forEach, filter, get, ceil, times, kebabCase, set, head, last } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { Calculator } from 'amortizejs';
 import money from 'money-math';
-import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, PROMOTE_APPLICATION_STATUS_PASSWORD, PROMOTE_APPLICATION_STATUS_EMAIL } from '../../../../constants/admin/businessApplication';
+import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, PROMOTE_APPLICATION_STATUS_PASSWORD, PROMOTE_APPLICATION_STATUS_EMAIL, APPLICATION_MAPPED_OFFERING, APPLICATION_OFFERING_MAPPING_KEY_VALUE, REAL_ESTATE_APPLICATION_FUND_USAGES } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
-import { applicationDeclinedByIssuer, getBusinessApplications, adminGeneratePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, adminUpdateApplicationStatusAndReview, adminBusinessApplicationsDetails, getBusinessApplicationOffers } from '../../../queries/businessApplication';
+import { applicationDeclinedByIssuer, getBusinessApplications, adminGeneratePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, adminUpdateApplicationStatusAndReview, adminBusinessApplicationsDetails, getBusinessApplicationOffers, adminCreateOffering } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore, userStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { allOfferingsCompact } from '../../../queries/offerings/manage';
@@ -54,7 +54,11 @@ export class BusinessAppReviewStore {
 
   @observable RESULTS_FRM = Validator.prepareFormObject(MODEL_RESULTS);
 
+  @observable APPLICATION_MAPPED_OFFERING_FORM = Validator.prepareFormObject(APPLICATION_MAPPED_OFFERING);
+
   @observable businessApplicationOffers = null;
+
+  @observable confirmModalForApplication = false;
 
   @observable confirmModal = false;
 
@@ -91,9 +95,14 @@ export class BusinessAppReviewStore {
 
   @action
   toggleConfirmModal = (index, formName = null) => {
-    this.confirmModal = !this.confirmModal;
-    this.confirmModalName = formName;
-    this.removeIndex = this.confirmModal ? index : null;
+    if (formName === 'APPLICATION_MAPPED_OFFERING_FORM') {
+      this.confirmModalForApplication = !this.confirmModalForApplication;
+      this.removeIndex = this.confirmModalForApplication ? index : null;
+    } else {
+      this.confirmModal = !this.confirmModal;
+      this.removeIndex = this.confirmModal ? index : null;
+      this.confirmModalName = formName;
+    }
   }
 
   @action
@@ -134,6 +143,7 @@ export class BusinessAppReviewStore {
       DOCUMENTATION_FRM: { actionType: 'REVIEW_DOCUMENTATION', isMultiForm: false },
       OFFERS_FRM: { actionType: 'REVIEW_OFFER', isMultiForm: true },
       MANAGERS_FRM: { formData: MANAGERS, isMultiForm: false },
+      APPLICATION_MAPPED_OFFERING_FORM: { isMultiForm: true },
     };
     return metaDataMapping[formName][getField];
   }
@@ -376,6 +386,11 @@ export class BusinessAppReviewStore {
   }
 
   @action
+  resetBusinessApplicationMappingForm = (form) => {
+    this[form] = Validator.prepareFormObject(APPLICATION_MAPPED_OFFERING);
+  }
+
+  @action
   resetCommentFrm = () => {
     this.APPLICATION_STATUS_COMMENT_FRM = Validator.prepareFormObject(APPLICATION_STATUS_COMMENT);
   }
@@ -392,10 +407,10 @@ export class BusinessAppReviewStore {
     this.PROMOTE_APPLICATION_STATUS_EMAIL_FRM.fields.emailAddress.value = businessApplicationDetailsAdmin ? businessApplicationDetailsAdmin.email : '';
   }
 
- @action
+  @action
   updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag = '', comment = '', applicationStatus = '', temporaryPassword = '') => {
     const applicationSource = applStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_IN_PROGRESS ? 'APPLICATION_IN_PROGRESS' : applStatus
-    === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
+      === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     const formInputData = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
     uiStore.setProgress();
     let payload = {
@@ -415,6 +430,7 @@ export class BusinessAppReviewStore {
     let reFetchPayLoad = {
       applicationId,
       applicationType: applicationSource,
+      userId,
     };
     if (applicationSource === 'APPLICATION_COMPLETED') {
       reFetchPayLoad = { ...reFetchPayLoad };
@@ -428,7 +444,7 @@ export class BusinessAppReviewStore {
           mutation: adminUpdateApplicationStatusAndReview,
           variables: payload,
           refetchQueries:
-              [{ query: adminBusinessApplicationsDetails, variables: reFetchPayLoad }],
+            [{ query: adminBusinessApplicationsDetails, variables: reFetchPayLoad }],
         })
         .then((result) => {
           Helper.toast('Application status updated successfully.', 'success');
@@ -787,10 +803,14 @@ export class BusinessAppReviewStore {
 
   @action
   setFormData = (form, ref, store = 'appStore') => {
-    const { businessApplicationDetailsAdmin } = businessAppStore;
+    const { businessApplicationDetailsAdmin, currentApplicationType } = businessAppStore;
     const appData = store === 'appStore' ? businessApplicationDetailsAdmin : this.fetchBusinessApplicationOffers;
     if (!appData) {
       return false;
+    }
+    if (form === 'APPLICATION_MAPPED_OFFERING_FORM' && currentApplicationType && currentApplicationType === 'commercial-real-estate') {
+      this[form].fields.fundUsage.values = [...REAL_ESTATE_APPLICATION_FUND_USAGES.values];
+      this[form].refMetadata.fundUsage.values = [...REAL_ESTATE_APPLICATION_FUND_USAGES.values];
     }
     this.paBoxFolderId = get(appData, 'storageDetails.Application.Review.Offer.id');
     this[form] = Validator.setFormData(this[form], appData, ref);
@@ -814,6 +834,10 @@ export class BusinessAppReviewStore {
       if (store === 'appReviewStore') {
         this.showSingleOfferForSigned(get(appData, 'offers.offer'));
       }
+    }
+    if (form === 'APPLICATION_MAPPED_OFFERING_FORM') {
+      this.setBusinessDetailsForOfferingMap(form, businessApplicationDetailsAdmin.businessDetails);
+      this.offerCreateChange(form, 'businessName');
     }
     return false;
   }
@@ -848,5 +872,219 @@ export class BusinessAppReviewStore {
       this.OFFERS_FRM = Validator.setFormData(this.OFFERS_FRM, { offer: [offersToShow] });
     }
   }
+
+  @action
+  setBusinessDetailsForOfferingMap = (form, data) => {
+    if (data) {
+      data.debts.forEach((ele, key) => {
+        ['amount', 'interestExpenses', 'remainingPrincipal', 'maturityDate', 'termStartDate', 'creditorName', 'existingLienOnBusiness'].forEach((field) => {
+          this[form].fields.debts[key][field].value = ele[field];
+        });
+        if (key < data.debts.length - 1) {
+          this.addMoreForms(null, 'APPLICATION_MAPPED_OFFERING_FORM', 'debts');
+        }
+      });
+      data.owners.forEach((ele, key) => {
+        ['companyOwnerShip', 'fullLegalName', 'linkedInUrl', 'ssn', 'dateOfService', 'yearsOfExp', 'title'].forEach((field) => {
+          this[form].fields.owners[key][field].value = ele[field];
+        });
+        if (key < data.owners.length - 1) {
+          this.addMoreForms(null, 'APPLICATION_MAPPED_OFFERING_FORM', 'owners');
+        }
+      });
+    }
+    this[form] = Validator.validateForm(this[form], true);
+  }
+
+  @action
+  addMoreForms = (e = null, formName, subForm) => {
+    if (e) {
+      e.preventDefault();
+    }
+    this[formName] = {
+      ...this[formName],
+      fields: {
+        ...this[formName].fields,
+        [subForm]: [
+          ...this[formName].fields[subForm],
+          APPLICATION_MAPPED_OFFERING[subForm][0],
+        ],
+      },
+      meta: {
+        ...this[formName].meta,
+        isValid: false,
+      },
+    };
+  }
+
+  @action
+  formArrayChange = (e, result, form, subForm = '', index, index2, type = undefined) => {
+    if (result && (result.type === 'checkbox')) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        Validator.pullValues(e, result),
+        subForm,
+        index,
+        '',
+        { value: result.checked },
+      );
+    } else if (form === 'APPLICATION_MAPPED_OFFERING_FORM' && type && (type === 'dropdown')) {
+      Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+        type,
+      );
+    } else {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        Validator.pullValues(e, result),
+        subForm,
+        index,
+      );
+      if (form === 'LEADERSHIP_EXP_FRM') {
+        this.leadershipExperience[index2] = this[form];
+      }
+    }
+  }
+
+  @action
+  businessDetailsDateChange = (field, date, index = -1, form, subFormName = '') => {
+    this[form] = Validator.onArrayFieldChange(
+      this[form],
+      { name: field, value: date },
+      subFormName,
+      index,
+    );
+  }
+
+  @action
+  businessDetailsMaskingChange = (field, values, form, subFormName = '', index = -1) => {
+    const val = field === 'ssn' ? values.value : values.floatValue;
+    if (subFormName) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: val },
+        subFormName,
+        index,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        { name: field, value: val },
+      );
+    }
+  };
+
+  @action
+  businessDetailsChange = (e, res, form, subFormName = '', index = -1) => {
+    if (subFormName) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        Validator.pullValues(e, res),
+        subFormName,
+        index,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, res),
+      );
+    }
+  };
+
+  @action
+  offerCreateChange = (formName, field) => {
+    if (field !== 'offeringSlug') {
+      const { value } = this[formName].fields[field];
+      if (field === 'legalBusinessName' || field === 'businessName') {
+        this[formName].fields.shorthandBusinessName.value = value;
+      }
+      this[formName].fields.offeringSlug.value = kebabCase(value);
+    }
+  }
+
+  @action
+  createBusinessOffering = (formName) => {
+    uiStore.setProgress();
+    const formInputData = Validator.evaluateFormData(this[formName].fields);
+    const formInputDataForContingencies = Validator.evaluateFormData(this.CONTINGENCY_FRM.fields);
+    formInputDataForContingencies.contingencies = cleanDeep(formInputDataForContingencies.contingencies);
+    const { applicationId, userId } = businessAppStore.businessApplicationDetailsAdmin;
+    const rusultFormInputData = { ...formInputData, ...formInputDataForContingencies };
+    const evaluatedFormData = Helper.replaceKeysDeep(JSON.parse(JSON.stringify({ ...rusultFormInputData })), APPLICATION_OFFERING_MAPPING_KEY_VALUE);
+    forEach(evaluatedFormData, (value, key) => {
+      if (key === 'leadership') {
+        forEach(evaluatedFormData[key], (val, index) => {
+          evaluatedFormData[key][index].social = { linkedin: evaluatedFormData[key][index].linkedin };
+          delete evaluatedFormData[key][index].linkedin;
+          if (evaluatedFormData[key][index].objRef === undefined) {
+            delete evaluatedFormData[key][index].objRef;
+          }
+          const fullName = evaluatedFormData[key][index].fullLegalName;
+          const nameArr = fullName.trim().split(' ');
+          // eslint-disable-next-line prefer-destructuring
+          evaluatedFormData[key][index].firstName = head(nameArr);
+          // eslint-disable-next-line prefer-destructuring
+          evaluatedFormData[key][index].lastName = last(nameArr);
+          delete evaluatedFormData[key][index].fullLegalName;
+          const yearOfExpStr = `<p>Year of Experience: ${evaluatedFormData[key][index].bio}</p>`;
+          evaluatedFormData[key][index].bio = yearOfExpStr;
+        });
+      } else if (key === 'legal') {
+        const legalGeneralMaterialDetails = get(evaluatedFormData, 'legal.general.materialIndebtedness');
+        forEach(legalGeneralMaterialDetails, (val, index) => {
+          const concaatedOtherTermValue = `<p>Principal Amount: ${val.amount}</p><p>Existing Lien on Business: ${val.existingLienOnBusiness}</p>`;
+          evaluatedFormData[key].general.materialIndebtedness[index].otherTerms = concaatedOtherTermValue;
+          delete evaluatedFormData[key].general.materialIndebtedness[index].amount;
+          delete evaluatedFormData[key].general.materialIndebtedness[index].existingLienOnBusiness;
+          delete evaluatedFormData[key].general.materialIndebtedness[index].objRef;
+        });
+        const useOfProceeds = get(evaluatedFormData, 'legal.general.useOfProceeds.offeringExpenseAmountDescription');
+        const formatedUseOfProceeds = this.formatUseOfProceeds(useOfProceeds);
+        set(evaluatedFormData, 'legal.general.useOfProceeds.offeringExpenseAmountDescription', formatedUseOfProceeds);
+      }
+    });
+    this.confirmModalForApplication = !this.confirmModalForApplication;
+    this.confirmModalName = null;
+    const payload = {
+      applicationId,
+      issuerId: userId,
+      offeringDetailsInput: evaluatedFormData,
+    };
+    const reFetchPayLoad = {
+      applicationId,
+      applicationType: 'APPLICATION_COMPLETED',
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: adminCreateOffering,
+          variables: payload,
+          refetchQueries:
+            [{ query: adminBusinessApplicationsDetails, variables: reFetchPayLoad }],
+        })
+        .then((result) => {
+          Helper.toast('Offering created successfully.', 'success');
+          resolve(result);
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  formatUseOfProceeds = (useOfProceedsArray) => {
+    let concatedStr = '';
+    forEach(useOfProceedsArray, (value) => {
+      concatedStr += `<p>${value}</p>`;
+    });
+    return concatedStr;
+  }
 }
+
 export default new BusinessAppReviewStore();

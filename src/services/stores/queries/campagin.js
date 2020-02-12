@@ -8,6 +8,9 @@ query getOfferingList($filters: OfferingListFilterInputType){
       watchListStatus
       offeringSlug
       stage
+      updated {
+        date
+      }
       media {
         tombstoneImage {
           id
@@ -120,7 +123,10 @@ export const getOfferingById = gql`
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
       id
-      isInvestedInOffering
+      investmentSummary {
+        isInvestedInOffering
+        tranche
+      }
       isAvailablePublicly
       stage
     }
@@ -131,7 +137,11 @@ export const campaignDetailsQuery = gql`
   query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
-    isInvestedInOffering
+    investmentSummary {
+      isInvestedInOffering
+      tranche
+    }
+    isAvailablePublicly
     watchListStatus
     stage
     offeringSlug

@@ -7,7 +7,7 @@ import { Container, Card, Grid, Label, Icon, Button, Divider, Table } from 'sema
 // import { IonIcon } from '@ionic/react';
 // import { heart } from 'ionicons/icons';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_REGULATION_PARALLEL } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_REGULATION_PARALLEL } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 import NSImage from '../../../../shared/NSImage';
 import HtmlEditor from '../../../../shared/HtmlEditor';
@@ -121,14 +121,14 @@ export default class CampaignList extends Component {
                                 && offering.keyTerms.shorthandBusinessName ? offering.keyTerms.shorthandBusinessName : ''
                               }
                               </Card.Header>
+                              {get(offering, 'keyTerms.securities') !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS && (get(offering, 'keyTerms.city') || get(offering, 'keyTerms.state'))
+                              && (
                               <Card.Meta>
-                                {offering && offering.keyTerms && offering.keyTerms.city
-                                  ? offering.keyTerms.city : '-'
-                                },{' '}
-                                {offering && offering.keyTerms && offering.keyTerms.state
-                                  ? offering.keyTerms.state : '-'
-                                }
+                                {get(offering, 'keyTerms.city') || ''}
+                                {get(offering, 'keyTerms.city') && get(offering, 'keyTerms.state') ? ', ' : ''}
+                                {get(offering, 'keyTerms.state') || ''}
                               </Card.Meta>
+                              )}
                               <Card.Description>
                                 <HtmlEditor
                                   readOnly
@@ -181,7 +181,7 @@ export default class CampaignList extends Component {
                             </Card.Content>
                           </div>
                           <Card.Content extra className={!get(offering, 'isAvailablePublicly') ? 'disabled' : ''}>
-                            <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} from {get(offering, 'closureSummary.totalInvestorCount') || 0} investors</b></p>
+                            <p><b>{isFunded ? 'Raised' : 'Already raised'} {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0, 0)} {get(offering, 'keyTerms.securities') !== 'FUNDS' ? `from ${get(offering, 'closureSummary.totalInvestorCount') || 0} investors` : ''}</b></p>
                             {isFunded
                               && (
                                 <p><b>Funded in {DataFormatter.getDateAsPerTimeZone(get(offering, 'closureSummary.hardCloseDate'), true, false, false, 'MMMM YYYY')}</b></p>

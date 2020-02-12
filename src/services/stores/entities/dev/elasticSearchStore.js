@@ -2,7 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import { get, sortBy, includes } from 'lodash';
 import graphql from 'mobx-apollo';
 import * as elasticSearchQueries from '../../queries/elasticSearch';
-import { adminGenerateInvestorFolderStructure, storageDetailsForInvestor, adminSyncEsDocument } from '../../queries/data';
+import { adminGenerateInvestorFolderStructure, storageDetailsForInvestor, adminSyncEsDocument, adminExportEsIndexRecords } from '../../queries/data';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
@@ -136,6 +136,24 @@ export class ElasticSearchStore {
           query: elasticSearchQueries.adminGetESAudit,
           variables: getESVariable,
         }],
+      })
+      .then(() => {
+        Helper.toast('Your request is processed successfully.', 'success');
+        this.setFieldValue('inProgress', false);
+      })
+      .catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        this.setFieldValue('inProgress', false);
+      });
+  }
+
+  @action
+  adminExportEsIndexRecords = (targetIndex) => {
+    this.setFieldValue('inProgress', `Export_${targetIndex}`);
+    client
+      .mutate({
+        mutation: adminExportEsIndexRecords,
+        variables: { targetIndex },
       })
       .then(() => {
         Helper.toast('Your request is processed successfully.', 'success');

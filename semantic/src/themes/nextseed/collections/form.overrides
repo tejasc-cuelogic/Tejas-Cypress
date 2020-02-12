@@ -209,6 +209,17 @@
                 text-align: right; 
             }  
         }
+        &.ssn-visible{
+            position: relative;
+            i.icon.ns-view.active{
+                position: absolute;
+                right: @10px;
+                color: @primary-one;
+            }
+            &:not(.display-only) i.icon.ns-view.active{
+                top: 33px;
+            }
+        }
     }
     .otp-wrap{
         margin:@32px 0 @42px 0;

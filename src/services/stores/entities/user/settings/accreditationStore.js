@@ -56,7 +56,7 @@ export class AccreditationStore {
 
   @observable userData = {};
 
-  disableElement = false;
+  @observable disableElement = false;
 
   @observable accreditationData = { ira: null, individual: null, entity: null };
 
@@ -421,7 +421,7 @@ export class AccreditationStore {
       Validator.resetFormData(this[formName]);
     });
     this.setStepToBeRendered(0);
-    this.setFieldVal('disableElement', true);
+    this.setFieldVal('disableElement', false);
     this.docsToUpload = [];
     this.firstInit = '';
   }
@@ -860,6 +860,10 @@ export class AccreditationStore {
       // this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ASSETS_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ENTITY_ACCREDITATION_FORM', false, false);
+      const { status } = this.userDetails.accreditation;
+      if (['INVALID', 'EXPIRED'].includes(status)) {
+        this.resetForm('INCOME_UPLOAD_DOC_FORM');
+      }
     }
     this.checkFormValid(form, false, false);
     return false;
@@ -1110,11 +1114,11 @@ export class AccreditationStore {
             break;
         }
       }
+      if (userCurrentState !== 'NOT_ELGIBLE' && (headerSubheaderTextObj.header !== '' || headerSubheaderTextObj.subHeader !== '')) {
+        this.setFieldVal('disableElement', true);
+      }
     }
     // return headerSubheaderTextObj;
-    if (headerSubheaderTextObj.header !== '' || headerSubheaderTextObj.subHeader !== '') {
-      this.setFieldVal('disableElement', true);
-    }
     this.setHeaderAndSubHeader(headerSubheaderTextObj);
   }
 

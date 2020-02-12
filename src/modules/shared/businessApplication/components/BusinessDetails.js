@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm, Popup, Table } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { isEmpty } from 'lodash';
 import { InlineLoader } from '../../../../theme/shared';
 import { FormInput, DropZoneConfirm as DropZone, MaskedInput, FormDropDown } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
@@ -55,7 +56,7 @@ export default class BusinessDetails extends Component {
     });
   }
 
-  handleSsnChange = (e, res, subForm, index) => {
+  handleSsnChange = (e, subForm, index) => {
     e.preventDefault();
     this.props.businessAppStore.businessDetailsChange(e, { name: 'ssn', value: '' }, subForm, index);
     const a = this.state.isSsnDirty.slice();
@@ -424,7 +425,7 @@ export default class BusinessDetails extends Component {
             }
             {BUSINESS_DETAILS_FRM.fields.owners.length
               && BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => {
-                const ssnData = owner.ssn.value !== null && owner.ssn.value.length === 9 ? Helper.encrypSsnNumberByForm(owner).ssn : owner.ssn;
+                const ssnData = !isEmpty(owner.ssn.value) && formReadOnlyMode ? Helper.encrypSsnNumberByForm(owner).ssn : owner.ssn;
                 return (
                   <Grid>
                     <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
@@ -488,29 +489,34 @@ export default class BusinessDetails extends Component {
                             changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}
                             dateOfBirth
                           />
-                          {ssnData.value && ssnData.value.includes('X') && !this.state.isSsnDirty[index]
+                          {!this.state.ssnVisibilityStatus && ssnData.value && ssnData.value.includes('X') && !this.state.isSsnDirty[index]
                             ? (
                               <FormInput
                                 key="ssn"
                                 name="ssn"
-                                fielddata={this.state.ssnVisibilityStatus ? owner.ssn : Helper.encrypSsnNumberByForm(owner).ssn}
+                                fielddata={Helper.encrypSsnNumberByForm(owner).ssn}
                                 icon={this.props.userStore.isAdmin ? {
-                                  className: this.state.ssnVisibilityStatus ? 'ns-view active' : 'ns-view',
+                                  className: this.state.ssnVisibilityStatus ? 'ns-view active' : 'ns-no-view',
                                   link: true,
                                   onClick: () => this.setSsnVisibilityStatus(),
                                 } : null}
                                 displayMode={formReadOnlyMode}
-                                asterisk={formReadOnlyMode ? 'false' : 'true'}
+                                asterisk="true"
                                 onChange={(e, res) => this.handleSsnChange(e, res, 'owners', index)}
                               />
                             )
                             : (
                               <MaskedInput
                                 readOnly={formReadOnlyMode}
-                                containerclassname={formReadOnlyMode ? 'display-only' : ''}
+                                containerclassname={`${formReadOnlyMode ? 'display-only' : ''} ${this.state.ssnVisibilityStatus ? 'ssn-visible' : ''}`}
                                 ssn
                                 name="ssn"
                                 asterisk="true"
+                                icon={this.props.userStore.isAdmin ? {
+                                  className: this.state.ssnVisibilityStatus ? 'ns-view active' : 'ns-no-view',
+                                  link: true,
+                                  onClick: () => this.setSsnVisibilityStatus(),
+                                } : null}
                                 fielddata={owner.ssn}
                                 changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                               />
