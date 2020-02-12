@@ -49,6 +49,17 @@ export const TEMPLATE = {
   },
 };
 
+export const TEMPLATE_POST = {
+  postUpdate: {
+    label: 'Post Update As',
+    value: 'LOCK',
+    values: [{ label: 'Issuer', value: 'LOCK' }, { label: 'NextSeed', value: 'KEY' }],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
+
 export const OFFERING_STAGE = {
   CREATION: 'CREATION',
   LIVE: 'LIVE',

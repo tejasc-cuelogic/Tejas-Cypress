@@ -96,7 +96,7 @@ export default class NewUpdate extends Component {
   render() {
     const {
       PBUILDER_FRM, UpdateChange, FChange, maskChange, selectTemplate, newUpdateId,
-      loadingCurrentUpdate, TEMPLATE_FRM,
+      loadingCurrentUpdate, TEMPLATE_FRM, TEMPLATE_POST_UPDATE_FRM, selectPostTemplate,
     } = this.props.updateStore;
     const isNew = this.props.match.params.action === 'new' && !newUpdateId;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -307,8 +307,8 @@ export default class NewUpdate extends Component {
                                   checked={PBUILDER_FRM.fields.shouldSendInvestorNotifications.value}
                                   label="Send Email Notifications"
                                 />
-                              </Form.Field>
-                              {['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage)
+                                </Form.Field>
+                                {['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage) && (PBUILDER_FRM.fields.shouldSendInvestorNotifications.value)
                                 && (
                                     <div className="field">
                                       <Header as="label">{TEMPLATE_FRM.fields.type.label}</Header>
@@ -317,12 +317,22 @@ export default class NewUpdate extends Component {
                                         fielddata={TEMPLATE_FRM.fields.type}
                                         name="type"
                                         changed={(e, result) => selectTemplate(e, result)}
-                                        widths="equal"
                                         value={TEMPLATE_FRM.fields.type.value}
+                                        containerclassname="display-block"
                                       />
                                     </div>
                                 )
                               }
+                                <div className="field">
+                                  <Header as="label">{TEMPLATE_POST_UPDATE_FRM.fields.postUpdate.label}</Header>
+                                    <FormRadioGroup
+                                      fielddata={TEMPLATE_POST_UPDATE_FRM.fields.postUpdate}
+                                      name="postUpdate"
+                                      changed={(e, result) => selectPostTemplate(e, result)}
+                                      value={TEMPLATE_POST_UPDATE_FRM.fields.postUpdate.value}
+                                      containerclassname="display-block"
+                                    />
+                                </div>
                             </Form>
                           </Card.Content>
                         </Card>
