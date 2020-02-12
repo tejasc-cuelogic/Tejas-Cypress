@@ -1,6 +1,6 @@
 import React from 'react';
 import { matchPath, useLocation } from 'react-router-dom';
-import { Button, Modal, Message } from 'semantic-ui-react';
+import { Button, Modal, Message, Responsive } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
 
 const SHOW_MODAL_ROUTES = [
@@ -38,7 +38,7 @@ const NotifyVersionUpdate = () => {
       <Modal.Content>
         <Modal.Description style={{ textAlign: 'center', margin: '15px 0px 0px' }}>
           <h5 style={{ fontWeight: 'normal' }}>
-            There{"'"}s a new version of this website available.<br />
+            There{"'"}s a new version of this website available. <Responsive as="br" minWidth={768} />
             Please reload your browser to see the latest version.
           </h5>
           <Button positive content="Refresh" onClick={update} />
