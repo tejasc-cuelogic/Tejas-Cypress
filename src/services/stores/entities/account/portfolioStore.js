@@ -316,7 +316,7 @@ export class PortfolioStore {
     const account = isAdmin ? investorAccountDetails : userDetailsStore.currentActiveAccountDetails;
     const investorUserId = isAdmin ? investorDetails.id : null;
     let variables = {
-      agreementId,
+      agreementId: agreementId ? parseInt(agreementId, 10) : null,
     };
     if (isAdmin) {
       const cancelAgreementData = Validator.evaluateFormData(toJS(this.CANCEL_INVESTMENT_FRM.fields));
