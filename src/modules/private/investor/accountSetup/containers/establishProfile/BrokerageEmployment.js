@@ -29,8 +29,8 @@ export default class BrokerageEmployment extends Component {
           {!inProgressArray.includes('BROKERAGE_EMPLOYMENT')
           && (
             <Button.Group vertical={isMobile}>
-              <Button basic primary onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={isMobile ? 'mb-30 relaxed' : ''} content="No" />
-              <Button basic primary className={!isMobile && 'ml-10'} onClick={this.handleShowFields} content="Yes" />
+              <Button basic className={`${isMobile ? 'mb-20 relaxed' : ''} primary-hover`} onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} content="No" />
+              <Button basic className={`${!isMobile && 'ml-10'} primary-hover`} onClick={this.handleShowFields} content="Yes" />
             </Button.Group>
           )
           }

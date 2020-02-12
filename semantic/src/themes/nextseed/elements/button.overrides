@@ -8,7 +8,7 @@
         box-shadow:none;
     }
     &.basic {
-        border: 1px solid @thumbBackground;
+        border: 1px solid @thumbBackground !important;
         box-shadow: none !important;
         &.highlight-text {
             color: @primary-one !important;
@@ -26,6 +26,14 @@
             &:hover, &:active, &:focus{
                 background: @primary-two !important;
                 color: @white !important;
+            }
+        }
+        &.primary-hover{
+            &:hover, &:active, &:focus{
+                background: @primary-one !important;
+                color: @white !important;
+                box-shadow: none !important;
+                border-color: @primary-one !important;
             }
         }
     }
