@@ -2,8 +2,11 @@ import React from 'react';
 import { Modal, Grid, Header, Form, Divider } from 'semantic-ui-react';
 import { FormArrowButton } from '../../../../../../theme/form';
 import { ProgressModalHeader } from '../../../../../../theme/shared';
+import Helper from '../../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
+const mountNode = Helper.customModalWrapper();
+
 const AccountTypes = ({
   form,
   close,
@@ -20,6 +23,7 @@ const AccountTypes = ({
       className="multistep-modal"
       basic
       size="large"
+      mountNode={mountNode}
     >
       {<ProgressModalHeader Modal={Modal} handleClose={close} closeCta />}
       <Modal.Content className="signup-content">
@@ -53,8 +57,8 @@ const AccountTypes = ({
           </Grid.Column>
         </Grid>
         {isMobile && (
-        <p className="grey-header mobile-bottom-notes">
-          NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for up to $250,000 of uninvested cash in NextSeed accounts.
+          <p className="grey-header mobile-bottom-notes">
+            NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for up to $250,000 of uninvested cash in NextSeed accounts.
         </p>
         )}
       </Modal.Content>

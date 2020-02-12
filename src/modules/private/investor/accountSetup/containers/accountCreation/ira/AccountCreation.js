@@ -88,7 +88,7 @@ export default class AccountCreation extends React.Component {
     if (FUNDING_FRM.fields.fundingType.value === 0) {
       steps = [
         {
-          name: 'About Ira',
+          name: 'Account Setup',
           component: <AboutIra />,
           isHideLabel: true,
           isValid: false,
@@ -177,12 +177,11 @@ export default class AccountCreation extends React.Component {
     } else {
       steps = [
         {
-          name: 'About Ira',
+          name: 'Account Setup',
           component: <AboutIra />,
           isHideLabel: true,
           isValid: false,
           isDirty: false,
-          isHideName: true,
           form: '',
           stepToBeRendered: 1,
         },

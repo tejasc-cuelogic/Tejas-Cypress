@@ -93,17 +93,16 @@ export default class Experience extends Component {
     return (
       <>
         <Header as="h4">
-          {!isMobile ? 'Investment Experience' : isExperiencedTypeSelected ? 'Almost there!' : 'What is your investment experience?'
-          }
+          {isExperiencedTypeSelected ? 'Almost there!' : 'What is your investment experience?'}
         </Header>
-        {!isMobile && (
+        {/* {!isMobile && (
           <p className="mb-40">
             Confirm your experience and understanding of the investment risks on NextSeed.
             Select the box that best describes your investment experience to date:
           </p>
-        )}
+        )} */}
         {isExperiencedTypeSelected && (
-          <p className={`${isMobile ? 'mb-30' : ''} tertiary-text`}>
+          <p className="mb-30 tertiary-text">
             We just need to confirm your understanding of the investment risks on NextSeed
           </p>
         )

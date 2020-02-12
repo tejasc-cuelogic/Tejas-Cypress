@@ -80,7 +80,7 @@ class FinancialInfo extends Component {
     const { getInvestorAmountInvestedLoading } = this.props.investmentLimitStore;
     if (!getCurrentInvestNowHealthCheck || getInvestorAmountInvestedLoading
       || this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
-      return <Spinner loaderMessage="Loading.." />;
+      return <Spinner className="fullscreen" loaderMessage="Loading.." />;
     }
     const isCenterAlignedCls = includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) ? 'center-align' : '';
     const isOfferingPreferredEquity = !!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType);

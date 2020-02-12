@@ -860,6 +860,9 @@
             color: #676a73;
         }
     }
+    &.signup-modal .multistep.content{
+        padding:@64px @50px;
+    }
 }
 .field-wrap{
     margin:@30px auto;
@@ -984,4 +987,9 @@
         }
     }
 
+}
+
+// Custom Multistep Modal //
+.custom-modal-wrapper .ui.dimmer.inverted{
+    background: @white;
 }
