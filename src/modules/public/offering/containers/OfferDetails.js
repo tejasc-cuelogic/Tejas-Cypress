@@ -1,6 +1,6 @@
 /* eslint-disable no-lonely-if */
 import React, { Component } from 'react';
-import { get, find, has, cloneDeep } from 'lodash';
+import { get, find, has, cloneDeep, camelCase, orderBy } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Responsive, Container, Grid, Visibility, Button, Icon } from 'semantic-ui-react';
@@ -204,23 +204,28 @@ class offerDetails extends Component {
     } = campaignStore;
     const { isWatching } = this.props.watchListStore;
     let navItems = [];
-    const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
-    if (isMobile) {
-      navItems = modifySubNavs(cloneDeep(tempNavItems), newLayout);
-      navItems = this.addDataRoomSubnavs(navItems, get(campaign, 'legal.dataroom.documents'));
-      navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
-      navItems = this.removeSubNavs(navItems);
+    if (newLayout && get(campaign, 'template') === 2 && get(campaign, 'content[0]')) {
+      const content = orderBy(get(campaign, 'content'), c => c.order, ['ASC']);
+      content.forEach(c => navItems.push({ title: c.title, to: `#${camelCase(c.title)}`, useRefLink: true }));
     } else {
-      navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
-      navItems = modifySubNavs(navItems, newLayout);
-      navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
-    }
-    if (!['LIVE', 'CREATION'].includes(get(campaign, 'stage'))) {
-      navItems = navItems.filter(n => n.to !== '#data-room');
-    }
-    if (campaignStatus.isFund) {
-      navItems = navItems.filter(n => !['#gallery', '#comments'].includes(n.to));
-      navItems = navItems.map(n => (navTitleMeta[n.to] ? { ...n, title: navTitleMeta[n.to] } : { ...n }));
+      const tempNavItems = GetNavMeta(match.url, [], true).subNavigations;
+      if (isMobile) {
+        navItems = modifySubNavs(cloneDeep(tempNavItems), newLayout);
+        navItems = this.addDataRoomSubnavs(navItems, get(campaign, 'legal.dataroom.documents'));
+        navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
+        navItems = this.removeSubNavs(navItems);
+      } else {
+        navItems = this.addDataRoomSubnavs(cloneDeep(tempNavItems), get(campaign, 'legal.dataroom.documents'));
+        navItems = modifySubNavs(navItems, newLayout);
+        navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
+      }
+      if (!['LIVE', 'CREATION'].includes(get(campaign, 'stage'))) {
+        navItems = navItems.filter(n => n.to !== '#data-room');
+      }
+      if (campaignStatus.isFund) {
+        navItems = navItems.filter(n => !['#gallery', '#comments'].includes(n.to));
+        navItems = navItems.map(n => (navTitleMeta[n.to] ? { ...n, title: navTitleMeta[n.to] } : { ...n }));
+      }
     }
     if ((details && details.data && !details.data.getOfferingDetailsBySlug)
       || this.state.found === 2) {
@@ -244,13 +249,13 @@ class offerDetails extends Component {
           && <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
         {!isMobile
-          && get(campaign, 'template') === 2 ? <CampaignHeaderV2 followBtn={followBtn} {...this.props} /> : <CampaignHeader followBtn={followBtn} {...this.props} />
+          && (get(campaign, 'template') === 2 ? <CampaignHeaderV2 followBtn={followBtn} {...this.props} /> : <CampaignHeader followBtn={followBtn} {...this.props} />)
         }
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <SecondaryMenu newLayout={newLayout} {...this.props} />
           <Responsive maxWidth={991} as={React.Fragment}>
             <Visibility offset={[offsetValue, 98]} onUpdate={this.handleUpdate} continuous>
-              {mobileHeaderAndSideBar}
+              {get(campaign, 'template') === 2 ? <CampaignHeaderV2 followBtn={followBtn} {...this.props} /> : mobileHeaderAndSideBar}
               <MobileDropDownNav
                 inverted
                 refMatch={match}

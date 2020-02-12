@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get } from 'lodash';
+import { get, camelCase } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Button, Comment, Form, Segment, Header, Label, Divider, Message, Modal } from 'semantic-ui-react';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
@@ -134,8 +134,8 @@ class Comments extends Component {
           </Modal.Content>
         </Modal>
         <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
-          Comments
-          <span className="anchor" id="comments" />
+          {this.props.title || 'Comments'}
+          <span className="anchor" id={this.props.title ? camelCase(this.props.title) : 'comments'} />
         </Header>
         {!showOnlyOne
           && (

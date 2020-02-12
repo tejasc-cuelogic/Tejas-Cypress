@@ -16,9 +16,6 @@ class IssuerStatement extends Component {
     const offeirngDisclaimer = campaign && campaign.keyTerms
       && campaign.keyTerms.offeringDisclaimer
       ? campaign.keyTerms.offeringDisclaimer : null;
-    // const shorthandBusinessName = campaign && campaign.keyTerms &&
-    //   campaign.keyTerms.shorthandBusinessName ?
-    //   campaign.keyTerms.shorthandBusinessName : '';
     return (
       <>
         <Header as="h3" className={`${newLayout && isTablet ? 'mb-20 mt-40' : newLayout ? 'mt-40 mb-30' : ''} anchor-wrap`}>
@@ -27,10 +24,9 @@ class IssuerStatement extends Component {
         </Header>
         {offeirngDisclaimer
           ? (
-<p className="mb-40 copyright-info">
-            {/* <b>{`${shorthandBusinessName} Disclaimer: `}</b> */}
-            <HtmlEditor readOnly content={(offeirngDisclaimer)} />
-          </p>
+            <p className="mb-40 copyright-info">
+              <HtmlEditor readOnly content={(offeirngDisclaimer)} />
+            </p>
           )
           : <InlineLoader text="No Data Found" className="bg-offwhite" />
         }
