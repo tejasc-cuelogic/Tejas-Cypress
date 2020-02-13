@@ -27,7 +27,7 @@ class InvestmentDetails extends PureComponent {
       if (uiStore.inProgress !== 'portfolio') {
         this.props.uiStore.setProgress('portfolioDirect');
       }
-      this.props.campaignStore.getCampaignDetails(this.props.match.params.offeringSlug).then((res) => {
+      this.props.campaignStore.getCampaignDetails(this.props.match.params.offeringSlug, true).then((res) => {
         this.props.offeringCreationStore.setCurrentOfferingId(res.id);
         this.props.offeringCreationStore.setFieldValue('currentOfferingSlug', this.props.match.params.offeringSlug);
         portfolioStore.currentAccoutType(accountType);
