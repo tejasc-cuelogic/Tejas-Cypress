@@ -11,7 +11,6 @@ import { ListErrors } from '../../../../../theme/shared';
 import { DataFormatter } from '../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 768;
-const isTablet = document.documentElement.clientWidth < 992;
 
 @inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'messageStore')
 @withRouter
