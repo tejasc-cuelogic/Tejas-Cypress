@@ -33,6 +33,10 @@ export default class OfferingDetails extends Component {
       } else {
         this.props.offeringsStore.getOne(props.match.params.offeringSlug);
       }
+    } else {
+      const { offer } = this.props.offeringsStore;
+      this.props.offeringCreationStore.setCurrentOfferingId(get(offer, 'id'));
+      this.props.offeringCreationStore.setFieldValue('currentOfferingSlug', get(offer, 'offeringSlug'));
     }
     this.props.navStore.setAccessParams('specificNav', '/dashboard/offering/2/overview');
   }

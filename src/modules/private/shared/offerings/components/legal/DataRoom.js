@@ -157,7 +157,7 @@ export default class DataRoom extends Component {
     const approved = (offer && offer.legal && offer.legal.dataroom &&
       offer.legal.dataroom.approved) ? offer.legal.dataroom.approved : null;
     const businessApplicationFlag = !!(referenceFrom && referenceFrom === 'BUSINESS_APPLICATION');
-    const isReadonly = (!offeringClose && ((submitted && !isManager) || (isManager && approved && approved.status)));
+    const isReadonly = (!offeringClose && ((submitted && !isManager) || (isManager && approved && approved.status) || (!!(this.props.isReadOnlyFlag && businessApplicationFlag))));
     const {
       DATA_ROOM_FRM,
       CLOSING_BINDER_FRM,
@@ -218,7 +218,7 @@ export default class DataRoom extends Component {
               />
             )
           }
-          {referenceFrom && referenceFrom === 'BUSINESS_APPLICATION'
+          {!isReadonly && referenceFrom && referenceFrom === 'BUSINESS_APPLICATION'
             &&
             (
               <div className="right-align mt-20">
