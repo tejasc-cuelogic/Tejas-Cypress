@@ -11,7 +11,7 @@ export const options = [
   { key: 'No', value: 'NO', text: 'No' },
 ];
 
-@inject('businessAppReviewStore', 'uiStore', 'userStore')
+@inject('businessAppReviewStore', 'uiStore', 'userStore', 'businessAppStore')
 @observer
 export default class BusinessApplicationMapping extends Component {
   state = { activeIndex: [0, 1, 2, 3], isSsnDirty: [], ssnVisibilityStatus: false };
@@ -79,6 +79,7 @@ export default class BusinessApplicationMapping extends Component {
       businessDetailsMaskingChange,
       confirmModalForApplication,
     } = this.props.businessAppReviewStore;
+    // const { currentApplicationType } = this.props.businessAppStore;
     let MODIFIED_REGULATION_VALUES = null;
     if (APPLICATION_MAPPED_OFFERING_FORM && APPLICATION_MAPPED_OFFERING_FORM.fields && APPLICATION_MAPPED_OFFERING_FORM.fields.regulation
       && APPLICATION_MAPPED_OFFERING_FORM.fields.regulation.value) {
@@ -193,7 +194,8 @@ export default class BusinessApplicationMapping extends Component {
                           fielddata={debt.interestExpenses}
                           changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'debts', index)}
                         />
-                        {['termStartDate', 'maturityDate'].map(field => (
+                        { // currentApplicationType !== 'commercial-real-estate' &&
+                        ['termStartDate', 'maturityDate'].map(field => (
                           <MaskedInput
                             name={field}
                             fielddata={debt[field]}

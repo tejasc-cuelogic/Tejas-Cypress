@@ -90,7 +90,7 @@ export default class OfferingDetails extends Component {
       navItems = navItems.filter(n => (n.title !== 'Close'));
     }
     // add business application after Bonus Rewards // offer.stage === 'CREATION' &&
-    if (offer.applicationId && !['WP_MIGRATION'].includes(offer.applicationId) && offer.issuerId) {
+    if (offer.applicationId && !['WP_MIGRATION'].includes(offer.applicationId)) {
       const pos = navItems.findIndex(n => n.to === 'overview');
       navItems.splice(
         (pos + 1),
