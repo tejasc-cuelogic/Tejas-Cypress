@@ -8,8 +8,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 const successMessage = 'Check out some of the investment opportunities now available to you as a member of the NextSeed community.';
 const processingMessage = <span>While we set up your account, check out some of the investment opportunities now available to you as a member of the NextSeed community.</span>;
 
-const ConfirmModal = inject('iraAccountStore', 'entityAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore')(observer((props) => {
-  const accountType = 'ira';
+const ConfirmModal = inject('iraAccountStore', 'entityAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'accountStore')(observer((props) => {
+  const accountType = props.accountStore.investmentAccType;
   const message = props[`${accountType}AccountStore`].showProcessingModal ? processingMessage : successMessage;
   const history = useHistory();
 

@@ -96,7 +96,6 @@ export default class AccountCreation extends Component {
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
       this.props.uiStore.resetcreateAccountMessage();
       // const confirmModal = this.props[`${accountType}AccountStore`].showProcessingModal ? 'processing' : 'success';
-      this.props[`${accountType}AccountStore`].setFieldValue('showProcessingModal', false);
       // this.props.history.push(`${this.props.match.url}/${accountType}/${confirmModal}`);
       const currStep = this.props[`${accountType}AccountStore`].stepToBeRendered;
       this.props[`${accountType}AccountStore`].setStepToBeRendered(currStep + 1);
