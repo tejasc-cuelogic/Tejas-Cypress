@@ -33,6 +33,10 @@ class InvestmentDetails extends PureComponent {
         portfolioStore.currentAccoutType(accountType);
         portfolioStore.getInvestorDetails(accountType, res.id, isAdmin).then(() => this.props.uiStore.setProgress(false));
       });
+    } else {
+      const { campaign } = this.props.campaignStore;
+      this.props.offeringCreationStore.setCurrentOfferingId(get(campaign, 'id'));
+      this.props.offeringCreationStore.setFieldValue('currentOfferingSlug', get(campaign, 'offeringSlug'));
     }
   }
 
