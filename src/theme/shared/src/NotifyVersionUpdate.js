@@ -32,7 +32,7 @@ const NotifyVersionUpdate = (props) => {
       <Message
         size="mini"
         floating
-        style={{ zIndex: '9999', width: isMobile ? '100%' : 'auto', textAlign: 'center', fontSize: '12px', position: 'fixed', ...(isMobile ? { bottom: 0, margin: 0 } : { left: '50%', transform: 'translate(-50%, 0)' }) }}
+        style={{ zIndex: '9999', wordBreak: 'unset', width: isMobile ? '100%' : 'auto', textAlign: 'center', fontSize: '12px', position: 'fixed', ...(isMobile ? { bottom: 0, margin: 0 } : { left: '50%', transform: 'translate(-50%, 0)' }) }}
       >
         {`We${"'"}ve made an update to the website.`}
         {isMobile ? <br /> : ' '}
