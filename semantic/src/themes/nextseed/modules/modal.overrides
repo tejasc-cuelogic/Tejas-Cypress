@@ -860,8 +860,8 @@
             color: #676a73;
         }
     }
-    &.signup-modal .multistep.content{
-        padding:@64px @50px;
+    .signup-modal.multistep.content{
+        padding:@50px @64px !important;
     }
 }
 .field-wrap{
