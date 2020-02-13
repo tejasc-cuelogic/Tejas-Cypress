@@ -14,8 +14,8 @@ export default class AccountCreation extends React.Component {
     if (!this.props.individualAccountStore.isFormSubmitted) {
       this.props.uiStore.setProgress();
       this.props.userDetailsStore.setUserAccDetails('individual');
-      this.props.accountStore.setAccTypeChange(0);
     }
+    this.props.accountStore.setAccTypeChange(0);
   }
 
   checkIfAccountIsAlreadyPresent = (accountType) => {
