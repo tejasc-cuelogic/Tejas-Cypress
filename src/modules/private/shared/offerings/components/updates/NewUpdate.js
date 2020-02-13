@@ -339,7 +339,7 @@ export default class NewUpdate extends Component {
                       )}
                       <Card fluid>
                         <Card.Content>
-                          <Header as="h4">NextSeed Tips</Header>
+                          <Header as="h4">Update Topic Ideas</Header>
                           <List bulleted relaxed>
                             <List.Item>How is construction / build-out on your project going?</List.Item>
                             <List.Item>

@@ -43,6 +43,7 @@ export const newUpdate = gql`
       status
       scope
       content
+      postUpdateAs
     }
   }
 `;
@@ -59,6 +60,7 @@ export const getUpdate = gql`
       scope
       content
       tiers
+      postUpdateAs
       approved {
         by
         date
@@ -84,6 +86,7 @@ export const editUpdate = gql`
       content
       tiers
       updatedDate
+      postUpdateAs
       approved {
         by
         date

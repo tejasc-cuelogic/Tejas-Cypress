@@ -217,6 +217,7 @@ export class UpdateStore {
       delete data.allInvestor;
       delete data.shouldSendInvestorNotifications;
       data.status = status;
+      data.postUpdateAs = this.TEMPLATE_POST_UPDATE_FRM.fields.postUpdate.value;
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;
