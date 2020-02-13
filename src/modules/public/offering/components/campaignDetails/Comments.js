@@ -325,6 +325,7 @@ class Comments extends Component {
                                     name="comment"
                                     changed={msgEleChange}
                                     containerclassname="secondary"
+                                    placeholder="Write a reply..."
                                   />
                                   {/* <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(c.id)} disabled={buttonLoader === 'PUBLIC'}>
                                     Cancel Reply
