@@ -28,7 +28,7 @@ class Banner extends Component {
               { showButton
                 ? (
                   <Button
-                    className="relaxed"
+                    className={`${responsiveVars.isMobile && 'mb-50'} relaxed`}
                     primary
                     content="Get Started"
                     as={Link}
@@ -38,8 +38,14 @@ class Banner extends Component {
                 ) : ''
               }
             </div>
+
           {/* </Responsive> */}
         </Container>
+        <div className="banner-meta">
+          <p>
+            Bravery Chef Hall<br /><b>Raised $1,000,000 from 539  investors</b>
+          </p>
+        </div>
         {this.props.withDimmer && (
           <Dimmer active className="fullscreen">
             <Loader active>Loading..</Loader>
