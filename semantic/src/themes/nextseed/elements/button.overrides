@@ -30,8 +30,8 @@
         }
         &.primary-hover{
             &:hover, &:active, &:focus{
-                background: @primary-one !important;
-                color: @white !important;
+                // background: @primary-one !important;
+                color: @primary-one !important;
                 box-shadow: none !important;
                 border-color: @primary-one !important;
             }
