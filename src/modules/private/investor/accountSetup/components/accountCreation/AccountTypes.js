@@ -25,7 +25,7 @@ const AccountTypes = ({
       size="large"
       mountNode={mountNode}
     >
-      {<ProgressModalHeader Modal={Modal} handleClose={close} closeCta />}
+      {<ProgressModalHeader Modal={Modal} handleClose={close} closeCta name="ACCOUNT SETUP" />}
       <Modal.Content className="signup-content">
         <Grid
           centered

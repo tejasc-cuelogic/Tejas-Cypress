@@ -20,6 +20,34 @@ export default class PublicCompanyRel extends Component {
   render() {
     const { PUBLIC_COMPANY_REL_FORM, employmentChange, updateInvestorProfileData, stepToBeRendered } = this.props.investorProfileStore;
     const { errors, inProgressArray, multiSteps } = this.props.uiStore;
+    if (inProgressArray.includes('PUBLIC_COMPANY_REL')) {
+      return (
+        <>
+          <Form onSubmit={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} error className={isMobile ? ' mb-30 center-align' : ''}>
+            <div className={isMobile ? 'mt-30' : ''}>
+              <Form.Group widths="equal">
+                <FormInput
+                  key="publicCompanyTicker"
+                  fielddata={PUBLIC_COMPANY_REL_FORM.fields.publicCompanyTicker}
+                  name="publicCompanyTicker"
+                  changed={(e, result) => employmentChange(e, 'PUBLIC_COMPANY_REL_FORM', result)}
+                  showerror
+                />
+              </Form.Group>
+              <Button primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" disabled={!PUBLIC_COMPANY_REL_FORM.meta.isValid} />
+            </div>
+            {
+              errors
+              && (
+                <Message error className="mt-30">
+                  <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+                </Message>
+              )
+            }
+          </Form>
+        </>
+      );
+    }
     return (
       <>
         <Header as="h4">
@@ -28,39 +56,14 @@ export default class PublicCompanyRel extends Component {
         </Header>
         {!isMobile && <Divider hidden />}
         <p className="mb-40">If you do not know what this means, it likely does not apply to you</p>
-        <Form onSubmit={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} error className={isMobile ? ' mb-30 center-align' : ''}>
-          {!inProgressArray.includes('PUBLIC_COMPANY_REL')
+        {!inProgressArray.includes('PUBLIC_COMPANY_REL')
           && (
             <Button.Group vertical={isMobile}>
-            <Button basic onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mb-20 relaxed' : ''} primary-hover`} content="No" />
-            <Button basic className={`${!isMobile && 'ml-10'} primary-hover`} onClick={this.handleShowFields} content="Yes" />
+              <Button basic primary onC lick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={isMobile ? 'mb-30 relaxed' : ''} content="No" />
+              <Button basic primary className={!isMobile && 'ml-10'} onClick={this.handleShowFields} content="Yes" />
             </Button.Group>
           )
-          }
-          {inProgressArray.includes('PUBLIC_COMPANY_REL')
-          && (
-          <div className={isMobile ? 'mt-30' : ''}>
-            <Form.Group>
-              <FormInput
-                key="publicCompanyTicker"
-                fielddata={PUBLIC_COMPANY_REL_FORM.fields.publicCompanyTicker}
-                name="publicCompanyTicker"
-                changed={(e, result) => employmentChange(e, 'PUBLIC_COMPANY_REL_FORM', result)}
-                showerror
-              />
-            </Form.Group>
-            <Button primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" disabled={!PUBLIC_COMPANY_REL_FORM.meta.isValid} />
-          </div>
-          )
-          }
-          {errors
-          && (
-          <Message error className="mt-30">
-            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-          </Message>
-          )
-          }
-        </Form>
+        }
       </>
     );
   }

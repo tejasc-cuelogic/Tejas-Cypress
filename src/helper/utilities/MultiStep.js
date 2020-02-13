@@ -30,8 +30,7 @@ export default class MultiStep extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // showPreviousBtn: false,
-      // showNextBtn: true,
+      showPreviousBtn: false,
       compState: this.props.stepToBeRendered || 0,
       navState: getNavStates(
         (this.props.stepToBeRendered || 0), this.props.steps.length,
@@ -210,6 +209,11 @@ export default class MultiStep extends React.Component {
       this.props.setUiStorevalue('inProgressArray', []);
       return;
     }
+
+    if (this.state.compState === 0 && this.props.isAccountCreation) {
+      this.props.history.push('/dashboard/setup/account-creation');
+    }
+
     if (this.state.compState > 0) {
       if (this.props.isAccountCreation) {
         if (this.props.steps[this.state.compState].addFunds) {

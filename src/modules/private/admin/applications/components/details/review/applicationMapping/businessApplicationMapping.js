@@ -79,7 +79,7 @@ export default class BusinessApplicationMapping extends Component {
       businessDetailsMaskingChange,
       confirmModalForApplication,
     } = this.props.businessAppReviewStore;
-    // const { currentApplicationType } = this.props.businessAppStore;
+    const { currentApplicationType } = this.props.businessAppStore;
     let MODIFIED_REGULATION_VALUES = null;
     if (APPLICATION_MAPPED_OFFERING_FORM && APPLICATION_MAPPED_OFFERING_FORM.fields && APPLICATION_MAPPED_OFFERING_FORM.fields.regulation
       && APPLICATION_MAPPED_OFFERING_FORM.fields.regulation.value) {
@@ -194,8 +194,7 @@ export default class BusinessApplicationMapping extends Component {
                           fielddata={debt.interestExpenses}
                           changed={(values, field) => businessDetailsMaskingChange(field, values, formName, 'debts', index)}
                         />
-                        { // currentApplicationType !== 'commercial-real-estate' &&
-                        ['termStartDate', 'maturityDate'].map(field => (
+                        {currentApplicationType !== 'commercial-real-estate' && ['termStartDate', 'maturityDate'].map(field => (
                           <MaskedInput
                             name={field}
                             fielddata={debt[field]}

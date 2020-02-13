@@ -32,7 +32,7 @@ export default class Employment extends Component {
 
   toggleInputFields = () => {
     const { EMPLOYMENT_FORM } = this.props.investorProfileStore;
-    if (EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED' && isMobile) {
+    if (EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED') {
       this.props.uiStore.addMoreInProgressArray('EMPLOYED');
     }
   }
@@ -52,11 +52,10 @@ export default class Employment extends Component {
                 fielddata={EMPLOYMENT_FORM.fields[field]}
                 name={field}
                 changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
-                showerror
               />
             ))}
-            <Button primary size="large" fluid className="relaxed" content="Continue" disabled={!EMPLOYMENT_FORM.meta.isValid} />
           </Form.Group>
+          <Button primary fluid={isMobile} className="relaxed" content="Continue" disabled={!EMPLOYMENT_FORM.meta.isValid} />
         </Form>
       );
     }
@@ -77,26 +76,6 @@ export default class Employment extends Component {
             }
             action={this.handleUpdateInvestorProfileData}
           />
-          {
-            !isMobile && EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED'
-          && (
-          <div className={`${isMobile ? 'mt-30' : 'field-wrap plr-0'} left-align`}>
-            <Form.Group widths="equal">
-              {
-              ['employer', 'position'].map(field => (
-                <FormInput
-                  key={field}
-                  fielddata={EMPLOYMENT_FORM.fields[field]}
-                  name={field}
-                  changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
-                  showerror
-                />
-              ))}
-            </Form.Group>
-            <Button primary size="large" className="relaxed mt-30" content="Continue" disabled={!EMPLOYMENT_FORM.meta.isValid} />
-          </div>
-          )
-          }
           {errors
           && (
           <Message error className="mt-30">
