@@ -220,7 +220,7 @@ class Comments extends Component {
                           <Comment.Content>
                             <Comment.Author>
                               {(get(c, 'createdUserInfo.id') === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(c, 'createdUserInfo.roles[0].name') === 'admin' ? 'NextSeed' : get(c, 'createdUserInfo.info.firstName')}
-                              {((get(c, 'createdUserInfo.id') === issuerId) || get(c, 'createdUserInfo.roles[0].name') === 'admin') && <Label color="blue" size="mini">{(get(c, 'createdUserInfo.id') === issuerId) ? 'ISSUER' : 'ADMIN'}</Label>}
+                              {((get(c, 'createdUserInfo.id') === issuerId) || get(c, 'createdUserInfo.roles[0].name') === 'admin') && <Label color={(get(c, 'createdUserInfo.id') === issuerId) ? 'green' : 'blue'} size="mini">{(get(c, 'createdUserInfo.id') === issuerId) ? 'ISSUER' : 'ADMIN'}</Label>}
                             </Comment.Author>
                             <Comment.Metadata><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date'), true, true)}</span></Comment.Metadata>
                             {isUserLoggedIn && !disablePostComment
@@ -243,7 +243,7 @@ class Comments extends Component {
                                   <Link
                                     to="/"
                                     onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}
-                                  >{this.state.readMore !== c.id ? 'Read More' : 'Read Less'}
+                                  >{this.state.readMore !== c.id ? 'read more' : 'read less'}
                                   </Link>
                                 )}
                             </Comment.Text>
@@ -288,7 +288,7 @@ class Comments extends Component {
                                         <Comment.Content>
                                           <Comment.Author>
                                             {(get(tc, 'createdUserInfo.id') === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(tc, 'createdUserInfo.roles[0].name') === 'admin' ? 'NextSeed' : get(tc, 'createdUserInfo.info.firstName')}
-                                            {((get(tc, 'createdUserInfo.id') === issuerId) || get(tc, 'createdUserInfo.roles[0].name') === 'admin') && <Label color="blue" size="mini">{(get(tc, 'createdUserInfo.id') === issuerId) ? 'ISSUER' : 'ADMIN'}</Label>}
+                                            {((get(tc, 'createdUserInfo.id') === issuerId) || get(tc, 'createdUserInfo.roles[0].name') === 'admin') && <Label color={(get(tc, 'createdUserInfo.id') === issuerId) ? 'green' : 'blue'} size="mini">{(get(tc, 'createdUserInfo.id') === issuerId) ? 'ISSUER' : 'ADMIN'}</Label>}
                                           </Comment.Author>
                                           <Comment.Metadata><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date'), true, true)}</span></Comment.Metadata>
                                           {/* {isUserLoggedIn && !disablePostComment && !showOnlyOne
@@ -314,7 +314,7 @@ class Comments extends Component {
                                                 <Link
                                                   to="/"
                                                   onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}
-                                                >{this.state.readMoreInner !== tc.id ? 'Read More' : 'Read Less'}
+                                                >{this.state.readMoreInner !== tc.id ? 'read more' : 'read less'}
                                                 </Link>
                                               )}
                                           </Comment.Text>
