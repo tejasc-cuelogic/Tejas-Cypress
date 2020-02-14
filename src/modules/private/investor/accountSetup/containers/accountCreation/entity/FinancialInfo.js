@@ -28,24 +28,22 @@ export default class AccountType extends Component {
 
     const isTrustSelected = inProgressArray.includes('TRUST'); // only for mobile screen
     const TrustDateInput = () => (
-      <div className={isMobile ? '' : 'mt-60'}>
-        <MaskedInput
-          name="trustDate"
-          fielddata={TRUST_INFO_FRM.fields.trustDate}
-          format="##/##/####"
-          changed={values => entityInfoDateChange(values.formattedValue)}
-          dateOfBirth
-          showerror
-          placeHolder="MM/DD/YYYY"
-        />
-      </div>
+      <MaskedInput
+        name="trustDate"
+        fielddata={TRUST_INFO_FRM.fields.trustDate}
+        format="##/##/####"
+        changed={values => entityInfoDateChange(values.formattedValue)}
+        dateOfBirth
+        showerror
+        placeHolder="MM/DD/YYYY"
+      />
     );
     return (
       <div>
         {!isTrustSelected && (
         <Header as="h4">Is this entity a trust?</Header>)
         }
-        <Form error className={`${isMobile ? 'mb-30 mt-0' : ''} account-type-tab`}>
+        <Form error className={isMobile ? 'mb-30 mt-0' : ''}>
           <>
             {isTrustSelected
               ? (
