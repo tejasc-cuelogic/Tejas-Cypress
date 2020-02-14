@@ -704,6 +704,7 @@ query adminFetchEmails ($recipientId: String, $emailIdentifier: String, $subject
       emailContent
       attachments {
         content
+        name
       }
       mergeVars {
         content

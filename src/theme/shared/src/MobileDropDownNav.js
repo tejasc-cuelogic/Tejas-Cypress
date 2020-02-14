@@ -47,7 +47,7 @@ export default class MobileDropDownNav extends React.Component {
       navItems, location, className, navStore, slideUpNot, useIsActive, id, newLayout, refMatch, isPortfolio,
     } = this.props;
     const { navStatus, campaignHeaderStatus } = navStore;
-    const navItemsComponent = <NavItems newLayout={newLayout} onToggle={hash => this.setActiveHash(hash)} refMatch={refMatch} sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={this.props.navCountData} navItems={navItems} />;
+    const navItemsComponent = <NavItems needNavLink newLayout={newLayout} onToggle={hash => this.setActiveHash(hash)} refMatch={refMatch} sub refLoc="public" bonusRewards={this.props.bonusRewards} location={location} isBonusReward={this.props.isBonusReward} countData={this.props.navCountData} navItems={navItems} />;
     return (
       <Responsive maxWidth={991} as={React.Fragment}>
         <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className={location.pathname.startsWith('/dashboard/') ? `private-dropdown ${isPortfolio ? 'sticky' : ''}` : ''}>
