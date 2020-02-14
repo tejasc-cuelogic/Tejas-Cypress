@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Form, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormRadioGroup, FormArrowButton, MaskedInput } from '../../../../../../../theme/form';
+import { FormArrowButton, MaskedInput } from '../../../../../../../theme/form';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -52,42 +52,20 @@ export default class AccountType extends Component {
                 <>
                   <TrustDateInput />
                   <Divider hidden />
-                  <Button fluid primary className="relaxed" content="Continue" disabled={!TRUST_INFO_FRM.meta.isValid} onClick={this.handleSubmitAccount} />
+                  <Button fluid={isMobile} primary className="relaxed" content="Continue" disabled={!TRUST_INFO_FRM.meta.isValid} onClick={this.handleSubmitAccount} />
                 </>
               )
               : (
-                <>
-                  {(isMobile) ? (
-                    <FormArrowButton
-                      fielddata={TRUST_INFO_FRM.fields.isTrust}
-                      name="isTrust"
-                      changed={
-                        (e, result) => {
-                          trustInfoChange(e, { fielddata: { ...result }, ...result });
-                          this.handleOnClick(e, result);
-                        }
-                      }
-                    />
-                  ) : (
-                      <>
-                        <FormRadioGroup
-                          fielddata={TRUST_INFO_FRM.fields.isTrust}
-                          name="isTrust"
-                          changed={trustInfoChange}
-                          containerclassname={`${isMobile ? 'two wide' : ''} button-radio`}
-                        />
-                        {TRUST_INFO_FRM.fields.isTrust.value
-                          && (
-                            <>
-                              <TrustDateInput />
-                              <Divider hidden />
-                            </>
-                          )}
-                        <Button primary className={`${!isMobile && 'mt-30'} relaxed`} content="Continue" disabled={!TRUST_INFO_FRM.meta.isValid} onClick={this.handleSubmitAccount} />
-                      </>
-                  )
+                <FormArrowButton
+                  fielddata={TRUST_INFO_FRM.fields.isTrust}
+                  name="isTrust"
+                  changed={
+                    (e, result) => {
+                      trustInfoChange(e, { fielddata: { ...result }, ...result });
+                      this.handleOnClick(e, result);
+                    }
                   }
-                </>
+                />
               )
             }
           </>
