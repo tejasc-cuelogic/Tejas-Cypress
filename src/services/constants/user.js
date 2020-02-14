@@ -204,7 +204,7 @@ export const USER_IDENTITY = {
     key: 'ssn',
     value: '',
     label: 'Social Security Number',
-    placeHolder: '123-456-7890',
+    placeHolder: '123-45-6789',
     error: undefined,
     rule: 'required|maskedSSN',
     format: '###-##-####',
