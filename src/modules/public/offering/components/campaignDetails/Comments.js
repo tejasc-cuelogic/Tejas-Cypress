@@ -311,9 +311,9 @@ class Comments extends Component {
                             )
                           }
                           <Comment.Content>
-                            {isUserLoggedIn && !disablePostComment && !visible
+                            {isUserLoggedIn && !disablePostComment && c.id !== this.state.commentId
                               && (
-                                <Button className="mt-30" fluid={isMobile} basic primary onClick={() => this.toggleVisibility(c.id)} content="Reply" />
+                                <Button className="mt-30" disabled={visible} fluid={isMobile} inverted color="green" onClick={() => this.toggleVisibility(c.id)} content="Reply" />
                               )
                             }
                             {visible && c.id === this.state.commentId ? (
