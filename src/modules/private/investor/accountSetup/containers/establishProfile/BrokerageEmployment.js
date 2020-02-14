@@ -24,17 +24,15 @@ export default class BrokerageEmployment extends Component {
       return (
         <>
           <Form onSubmit={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} error className={isMobile ? ' mb-30' : ''}>
-            <div className={!isMobile ? 'mt-30' : ''}>
-              <Form.Group widths="equal">
-                <FormInput
-                  key="brokerageFirmName"
-                  fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageFirmName}
-                  name="brokerageFirmName"
-                  changed={(e, result) => employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result)}
-                  showerror
-                />
-              </Form.Group>
-            </div>
+            <Form.Group widths="equal">
+              <FormInput
+                key="brokerageFirmName"
+                fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageFirmName}
+                name="brokerageFirmName"
+                changed={(e, result) => employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result)}
+                showerror
+              />
+            </Form.Group>
             <Button className={`${isMobile ? 'mt-60' : 'mt-30'} relaxed`} primary size="large" fluid={isMobile} content="Continue" disabled={!BROKERAGE_EMPLOYMENT_FORM.meta.isValid} />
             <Divider section hidden />
             {!isMobile
@@ -59,8 +57,8 @@ export default class BrokerageEmployment extends Component {
         {!isMobile && <Divider hidden />}
         <p className="mb-40">If you do not know what this means, it likely does not apply to you.</p>
         <Button.Group vertical={isMobile}>
-          <Button basic primary onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={isMobile ? 'mb-30 relaxed' : ''} content="No" />
-          <Button basic primary className={!isMobile && 'ml-10'} onClick={this.handleShowFields} content="Yes" />
+          <Button basic onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mb-30 relaxed' : ''} primary-hover`} content="No" />
+          <Button basic className={`${!isMobile && 'ml-10'} primary-hover`} onClick={this.handleShowFields} content="Yes" />
         </Button.Group>
       </>
     );

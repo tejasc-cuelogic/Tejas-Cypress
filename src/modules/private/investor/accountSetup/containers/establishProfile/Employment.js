@@ -44,18 +44,16 @@ export default class Employment extends Component {
     if (inProgressArray.includes('EMPLOYED')) {
       return (
         <Form onSubmit={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} error className="mb-40">
-          <Form.Group widths="equal">
-            {
-            ['employer', 'position'].map(field => (
-              <FormInput
-                key={field}
-                fielddata={EMPLOYMENT_FORM.fields[field]}
-                name={field}
-                changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
-              />
-            ))}
-          </Form.Group>
-          <Button primary fluid={isMobile} className="relaxed" content="Continue" disabled={!EMPLOYMENT_FORM.meta.isValid} />
+          {
+          ['employer', 'position'].map(field => (
+            <FormInput
+              key={field}
+              fielddata={EMPLOYMENT_FORM.fields[field]}
+              name={field}
+              changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
+            />
+          ))}
+          <Button primary fluid={isMobile} className="mt-30 relaxed" content="Continue" disabled={!EMPLOYMENT_FORM.meta.isValid} />
         </Form>
       );
     }
