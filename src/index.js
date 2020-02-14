@@ -58,44 +58,25 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
-const setVersionRef = () => {
-  setTimeout(() => {
-    if (window.caches) {
-      window.caches.keys().then((keys) => {
-        const matching = keys.find(k => k.startsWith('webpack-offline:'));
-        if (matching) {
-          const appVersion = matching.split('webpack-offline:');
-          localStorage.setItem('swAppVersion', appVersion[1]);
-          sessionStorage.setItem('swAppVersion', appVersion[1]);
-        }
-      });
-    }
-  }, 4000);
-};
-
-// temporarily disable install for production env
-// && ['localhost', 'develop', 'dev', 'predev'].includes(REACT_APP_DEPLOY_ENV)
+// install only for production build (will not run on local dev)
 if (NODE_ENV === 'production') {
-  setVersionRef();
   OfflinePluginRuntime.install({
     onInstalled: () => {
-      console.log('[OfflinePlugin] onInstalled');
-      setVersionRef();
+      window.logger('[OfflinePlugin] onInstalled');
     },
     onUpdating: () => {
-      // console.log('[OfflinePlugin] onUpdating');
+      window.logger('[OfflinePlugin] onUpdating');
     },
     onUpdateReady: () => {
       OfflinePluginRuntime.applyUpdate();
-      console.log('[OfflinePlugin] onUpdateReady');
+      window.logger('[OfflinePlugin] onUpdateReady');
     },
     onUpdated: () => {
-      // changed
       stores.uiStore.setAppUpdated();
-      console.log('[OfflinePluginRuntime] new version is available');
+      window.logger('[OfflinePluginRuntime] new version is available');
     },
     onUpdateFailed: () => {
-      console.log('[OfflinePlugin] onUpdateFailed');
+      window.logger('[OfflinePlugin] onUpdateFailed');
     },
   });
 }
