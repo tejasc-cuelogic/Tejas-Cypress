@@ -11,16 +11,26 @@ import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering'
 import { DEV_FEATURE_ONLY } from '../../../../../constants/common';
 
 const repaymentMeta = [
-  { title: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', applicable: ['STARTUP_PERIOD', 'IN_REPAYMENT'], link: true },
+  { title: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE', 'STARTUP_PERIOD', 'IN_REPAYMENT'], link: true },
   { title: 'Securities', key: 'offering.keyTerms.securities', applicable: ['STARTUP_PERIOD', 'IN_REPAYMENT'], enum: CAMPAIGN_KEYTERMS_SECURITIES },
-  { title: 'Hard Close Date', key: 'offering.closureSummary.hardCloseDate', applicable: ['STARTUP_PERIOD'], validate: true },
+  { title: 'Hard Close Date', key: 'offering.closureSummary.hardCloseDate', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE', 'STARTUP_PERIOD'], validate: true },
   { title: 'Expected Ops', key: 'offering.offering.launch.expectedOpsDate', applicable: ['STARTUP_PERIOD'], validate: true },
   { title: 'Expected Payment', key: 'offering.closureSummary.keyTerms.expectedPaymentDate', applicable: ['STARTUP_PERIOD'], validate: true },
-  { title: 'Maturity', key: 'offering.closureSummary.keyTerms.maturityDate', applicable: ['IN_REPAYMENT'], maturity: true },
+  { title: 'Maturity', key: 'offering.closureSummary.keyTerms.maturityDate', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE', 'IN_REPAYMENT'], maturity: true },
   { title: 'Ops Date', key: 'offering.closureSummary.operationsDate', applicable: ['IN_REPAYMENT'], validate: true },
   { title: 'First Payment', key: 'offering.closureSummary.repayment.firstPaymentDate', applicable: ['IN_REPAYMENT'], validate: true },
   { title: 'Monthly Payment', key: 'offering.closureSummary.keyTerms.monthlyPayment', applicable: ['IN_REPAYMENT'], currency: true },
   { title: 'Sinking Fund Balance', key: 'sinkingFundBalance', applicable: ['IN_REPAYMENT'], currency: true },
+  { title: 'Startup Period', key: 'offering.closureSummary.startupPeriod', applicable: ['TERM_NOTE', 'REVENUE_SHARING_NOTE'], validate: true },
+  { title: 'Anticipated Opening Date', key: 'offering.closureSummary.anticipatedOpenDate', applicable: ['REVENUE_SHARING_NOTE'], validate: true },
+  { title: 'Actual Opening Date', key: 'offering.closureSummary.operationsDate', applicable: ['REVENUE_SHARING_NOTE'], validate: true },
+  { title: 'Min Payment Start Date', key: 'offering.closureSummary.startupPeriod', applicable: ['REVENUE_SHARING_NOTE'], calculation: true },
+  { title: 'Start Payment Date', key: 'offering.closureSummary.startupPeriod', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], calculation: true },
+  { title: 'Status', key: 'sinkingFundBalance', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], status: true },
+  { title: 'In Default', key: 'offering.payment.inDefault', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
+  { title: 'Notifications', key: 'offering.payment.sendNotification', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
+  { title: 'Amount Due', key: 'offering.payment.amountDue', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], currency: true },
+  { title: 'Draft Date', key: 'offering.payment.draftDate', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], validate: true },
 ];
 
 const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, handleEditPayment, validDate, getLink, sortKey, toggleVisibilityStatus, stateToggle }) => (
@@ -35,7 +45,7 @@ const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, ha
                 <Table.Row>
                   {repaymentMeta.map(h => h.applicable.includes(type) && (
                     <Table.HeaderCell
-                      key={h.key}
+                      key={`${h.title}${h.key}`}
                       sorted={sortOrder.column === h.key && sortOrder.direction === 'asc' ? 'ascending' : 'descending'}
                       onClick={() => handleSort(h.key, sortKey)}
                     >{h.title}</Table.HeaderCell>
@@ -53,7 +63,7 @@ const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, ha
                     : repayments.map(record => (
                       <Table.Row key={record.id}>
                         {repaymentMeta.map(h => h.applicable.includes(type) && (
-                          <Table.Cell key={h.key}>
+                          <Table.Cell key={`${h.title}${h.key}`}>
                             {h.link
                               ? (
                                 <>
@@ -61,14 +71,14 @@ const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, ha
                                     <b>{get(record, h.key)}</b>
                                   </Link>
                                   {get(record, 'offering.contact.payments')
-                                  && (
-                                  <Popup
-                                    trigger={<span> @</span>}
-                                    content={get(record, 'offering.contact.payments').split(',').map(p => (<div>{p}</div>))}
-                                    hoverable
-                                    position="top center"
-                                  />
-                                  )}
+                                    && (
+                                      <Popup
+                                        trigger={<span> @</span>}
+                                        content={get(record, 'offering.contact.payments').split(',').map(p => (<div>{p}</div>))}
+                                        hoverable
+                                        position="top center"
+                                      />
+                                    )}
                                 </>
                               ) : h.enum ? get(record, h.key) && CAMPAIGN_KEYTERMS_SECURITIES[get(record, h.key)]
                                 : h.validate ? validDate(record, h.key)
@@ -102,11 +112,13 @@ export default class AllRepayments extends PureComponent {
   state = {
     IN_REPAYMENT: true,
     STARTUP_PERIOD: true,
+    TERM_NOTE: true,
+    REVENUE_SHARING_NOTE: true,
   }
 
   constructor(props) {
     super(props);
-    if (this.props.match.params.paymentType === 'issuers') {
+    if (['tracker', 'issuers'].includes(this.props.match.params.paymentType)) {
       this.props.paymentStore.initRequest();
     } else {
       this.props.paymentStore.setFieldValue('data', []);
@@ -137,7 +149,7 @@ export default class AllRepayments extends PureComponent {
   validDate = (data, field) => (get(data, field) && moment(get(data, field), 'MM/DD/YYYY', true).isValid() ? moment(get(data, field)).format('M/D/YY') : '');
 
   render() {
-    const { repayments, sortOrderRP, startupPeriod, sortOrderSP } = this.props.paymentStore;
+    const { termNotes, revenueSharingNotes, sortOrderRSN, sortOrderTN, repayments, sortOrderRP, startupPeriod, sortOrderSP } = this.props.paymentStore;
     if (this.props.nsUiStore.loadingArray.includes('adminPaymentsIssuerList')) {
       return <InlineLoader />;
     }
@@ -164,32 +176,67 @@ export default class AllRepayments extends PureComponent {
             </Grid.Row>
           </Grid>
         </Form>
-        <PaymentsList
-          headerTitle="Startup Period"
-          type="STARTUP_PERIOD"
-          repayments={startupPeriod}
-          sortOrder={sortOrderSP}
-          handleSort={this.handleSort}
-          validDate={this.validDate}
-          handleEditPayment={this.handleEditPayment}
-          getLink={this.getLink}
-          sortKey="sortOrderSP"
-          toggleVisibilityStatus={this.toggleVisibilityStatus}
-          stateToggle={this.state.STARTUP_PERIOD}
-        />
-        <PaymentsList
-          headerTitle="In Repayment"
-          type="IN_REPAYMENT"
-          repayments={repayments}
-          sortOrder={sortOrderRP}
-          handleSort={this.handleSort}
-          validDate={this.validDate}
-          handleEditPayment={this.handleEditPayment}
-          getLink={this.getLink}
-          sortKey="sortOrderRP"
-          toggleVisibilityStatus={this.toggleVisibilityStatus}
-          stateToggle={this.state.IN_REPAYMENT}
-        />
+        {this.props.match.params.paymentType !== 'tracker'
+          ? (
+            <>
+              <PaymentsList
+                headerTitle="Startup Period"
+                type="STARTUP_PERIOD"
+                repayments={startupPeriod}
+                sortOrder={sortOrderSP}
+                handleSort={this.handleSort}
+                validDate={this.validDate}
+                handleEditPayment={this.handleEditPayment}
+                getLink={this.getLink}
+                sortKey="sortOrderSP"
+                toggleVisibilityStatus={this.toggleVisibilityStatus}
+                stateToggle={this.state.STARTUP_PERIOD}
+              />
+              <PaymentsList
+                headerTitle="In Repayment"
+                type="IN_REPAYMENT"
+                repayments={repayments}
+                sortOrder={sortOrderRP}
+                handleSort={this.handleSort}
+                validDate={this.validDate}
+                handleEditPayment={this.handleEditPayment}
+                getLink={this.getLink}
+                sortKey="sortOrderRP"
+                toggleVisibilityStatus={this.toggleVisibilityStatus}
+                stateToggle={this.state.IN_REPAYMENT}
+              />
+            </>
+            )
+            : (
+              <>
+              <PaymentsList
+                headerTitle="Term Note"
+                type="TERM_NOTE"
+                repayments={termNotes}
+                sortOrder={sortOrderTN}
+                handleSort={this.handleSort}
+                validDate={this.validDate}
+                handleEditPayment={this.handleEditPayment}
+                getLink={this.getLink}
+                sortKey="sortOrderTN"
+                toggleVisibilityStatus={this.toggleVisibilityStatus}
+                stateToggle={this.state.TERM_NOTE}
+              />
+              <PaymentsList
+                headerTitle="Revenue Sharing Note"
+                type="REVENUE_SHARING_NOTE"
+                repayments={revenueSharingNotes}
+                sortOrder={sortOrderRSN}
+                handleSort={this.handleSort}
+                validDate={this.validDate}
+                handleEditPayment={this.handleEditPayment}
+                getLink={this.getLink}
+                sortKey="sortOrderRSN"
+                toggleVisibilityStatus={this.toggleVisibilityStatus}
+                stateToggle={this.state.REVENUE_SHARING_NOTE}
+              />
+            </>
+          )}
       </>
     );
   }

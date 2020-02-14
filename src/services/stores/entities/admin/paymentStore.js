@@ -30,6 +30,16 @@ export class PaymentStore extends DataModelStore {
       direction: 'asc',
     }
 
+    sortOrderTN = {
+      column: null,
+      direction: 'asc',
+    }
+
+    sortOrderRSN = {
+      column: null,
+      direction: 'asc',
+    }
+
     selectedOffering = '';
 
     setSortingOrder = (column = null, direction = null, key) => {
@@ -127,6 +137,30 @@ export class PaymentStore extends DataModelStore {
       }
       return data || [];
     }
+
+    get termNotes() {
+      const data = (this.data && toJS(this.data) && toJS(this.data).filter(d => get(d, 'offering.keyTerms.securities') === 'TERM_NOTE')) || [];
+      if (this.sortOrderTN.column && this.sortOrderTN.direction && this.data && toJS(this.data)) {
+        return orderBy(
+          data,
+          [issuerList => (!['offering.keyTerms.shorthandBusinessName', 'offering.keyTerms.securities', 'offering.closureSummary.keyTerms.monthlyPayment'].includes(this.sortOrderTN.column) ? get(issuerList, this.sortOrderTN.column) && moment(get(issuerList, this.sortOrderTN.column), 'MM/DD/YYYY', true).isValid() ? moment(get(issuerList, this.sortOrderTN.column), 'MM/DD/YYYY', true).unix() : '' : get(issuerList, this.sortOrderTN.column) && get(issuerList, this.sortOrderTN.column).toString().toLowerCase())],
+          [this.sortOrderTN.direction],
+        );
+      }
+      return data || [];
+    }
+
+    get revenueSharingNotes() {
+      const data = (this.data && toJS(this.data) && toJS(this.data).filter(d => get(d, 'offering.keyTerms.securities') === 'REVENUE_SHARING_NOTE')) || [];
+      if (this.sortOrderRSN.column && this.sortOrderRSN.direction && this.data && toJS(this.data)) {
+        return orderBy(
+          data,
+          [issuerList => (!['offering.keyTerms.shorthandBusinessName', 'offering.keyTerms.securities', 'offering.closureSummary.keyTerms.monthlyPayment'].includes(this.sortOrderRSN.column) ? get(issuerList, this.sortOrderRSN.column) && moment(get(issuerList, this.sortOrderRSN.column), 'MM/DD/YYYY', true).isValid() ? moment(get(issuerList, this.sortOrderRSN.column), 'MM/DD/YYYY', true).unix() : '' : get(issuerList, this.sortOrderRSN.column) && get(issuerList, this.sortOrderRSN.column).toString().toLowerCase())],
+          [this.sortOrderRSN.direction],
+        );
+      }
+      return data || [];
+    }
 }
 
 decorate(PaymentStore, {
@@ -137,6 +171,8 @@ decorate(PaymentStore, {
   initialData: observable,
   sortOrderSP: observable,
   sortOrderRP: observable,
+  sortOrderTN: observable,
+  sortOrderRSN: observable,
   setSortingOrder: action,
   initRequest: action,
   getOfferingBySlug: action,
@@ -146,6 +182,8 @@ decorate(PaymentStore, {
   setDb: action,
   startupPeriod: computed,
   repayments: computed,
+  termNotes: computed,
+  revenueSharingNotes: computed,
 });
 
 export default new PaymentStore();
