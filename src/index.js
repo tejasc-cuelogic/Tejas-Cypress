@@ -60,9 +60,29 @@ ReactDOM.render(
 
 // install only for production build (will not run on local dev)
 if (NODE_ENV === 'production') {
+  // keep service worker version info in local and sesssion storage
+  // which will be used - on changing tab if version is updated for any tab, refesh tab
+  // as soon as it is active
+
+  const setVersionRef = () => {
+    setTimeout(() => {
+      if (window.caches) {
+        window.caches.keys().then((keys) => {
+          const matching = keys.find(k => k.startsWith('webpack-offline:'));
+          if (matching) {
+            const appVersion = matching.split('webpack-offline:');
+            localStorage.setItem('swAppVersion', appVersion[1]);
+            sessionStorage.setItem('swAppVersion', appVersion[1]);
+          }
+        });
+      }
+    }, 4000);
+  };
+  setVersionRef();
   OfflinePluginRuntime.install({
     onInstalled: () => {
       window.logger('[OfflinePlugin] onInstalled');
+      setVersionRef();
     },
     onUpdating: () => {
       window.logger('[OfflinePlugin] onUpdating');

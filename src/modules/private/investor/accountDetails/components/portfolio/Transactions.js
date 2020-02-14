@@ -116,6 +116,7 @@ export default class Transactions extends Component {
     const { offerStructure } = this.props.campaignStore;
     const finalResult = offerStructure === 'TERM_NOTE' ? termNote : revShare;
     const { responsiveVars } = this.props.uiStore;
+    const paymentHistorySortByLatestYear = Object.keys(allPaymentHistoryAsPerYears).sort((a, b) => b - a);
     if (loading) {
       return (
         <InlineLoader />
@@ -149,7 +150,7 @@ export default class Transactions extends Component {
           ? <InlineLoader text="No Payments" />
           : (
           <>
-          {Object.keys(allPaymentHistoryAsPerYears).map(year => (
+          {paymentHistorySortByLatestYear.map(year => (
             <>
             <div className="bg-offwhite transaction-year">
               {year}
