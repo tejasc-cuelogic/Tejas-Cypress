@@ -16,6 +16,8 @@ export class PaymentStore extends DataModelStore {
 
     data = [];
 
+    apiHit = false;
+
     initialData = [];
 
     PAYMENT_FRM = Validator.prepareFormObject(PAYMENT);
@@ -50,13 +52,16 @@ export class PaymentStore extends DataModelStore {
     }
 
     initRequest = () => {
-      this.executeQuery({
-        client: 'PRIVATE',
-        query: 'adminPaymentsIssuerList',
-        setLoader: 'adminPaymentsIssuerList',
-      }).then((res) => {
-        this.setDb(res.adminPaymentsIssuerList);
-      });
+      if (!this.apiHit) {
+        this.executeQuery({
+          client: 'PRIVATE',
+          query: 'adminPaymentsIssuerList',
+          setLoader: 'adminPaymentsIssuerList',
+        }).then((res) => {
+          this.setDb(res.adminPaymentsIssuerList);
+          this.setFieldValue('apiHit', true);
+        });
+      }
     };
 
     setDb = (data) => {
@@ -167,6 +172,7 @@ decorate(PaymentStore, {
   ...decorateDefault,
   data: observable,
   selectedOffering: observable,
+  apiHit: observable,
   PAYMENT_FRM: observable,
   initialData: observable,
   sortOrderSP: observable,
