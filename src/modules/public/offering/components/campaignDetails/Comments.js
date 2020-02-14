@@ -136,8 +136,9 @@ class Comments extends Component {
           Comments
           <span className="anchor" id="comments" />
         </Header>
-        {!showOnlyOne
-          && (
+        {
+          // !showOnlyOne
+          // && (
             <>
               <p>
                 Note that both NextSeed and issuers are notified of all comments immediately,
@@ -155,7 +156,8 @@ class Comments extends Component {
           email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
         </p>
             </>
-          )}
+          // )
+          }
         {!isRightToPostComment && !frozenAccounts.length
           ? (
             <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
