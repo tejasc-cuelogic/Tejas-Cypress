@@ -697,6 +697,10 @@ footer .ui.text.menu{
             &.hasLabel:after{
                 bottom: -6px;
             }
+            >.label.grey.basic{
+                color: @neutral-middark!important;
+                border-color: @neutral-darkwhite!important;
+            }
         }
     }
     &.inverted{
