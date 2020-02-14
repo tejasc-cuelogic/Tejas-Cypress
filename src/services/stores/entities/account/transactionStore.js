@@ -666,7 +666,6 @@ export class TransactionStore {
   setAgreementIds(investmentsByUser) {
     forEach(investmentsByUser, (investment) => {
       this.agreementIds.push(get(investment, 'agreement.agreementId'));
-   
     });
   }
 }
