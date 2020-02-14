@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter, Switch, Route, matchPath, Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
+import moment from 'moment';
 import { get, isEmpty } from 'lodash';
 import queryString from 'query-string';
 import IdleTimer from 'react-idle-timer';
@@ -131,6 +132,12 @@ class App extends Component {
           window.location = uiStore.authRef || '/';
         } else if (window.localStorage.getItem('jwt') && !authStore.isUserLoggedIn) {
           window.location.reload();
+        } else {
+          const swAppVersionL = localStorage.getItem('swAppVersion'); // from local storage
+          const swAppVersionS = sessionStorage.getItem('swAppVersion'); // from session storage
+          if (moment(swAppVersionL).isValid() && moment(swAppVersionS).isValid() && swAppVersionL !== swAppVersionS && uiStore.appUpdated) {
+            window.location.reload();
+          }
         }
       }
     });
