@@ -245,7 +245,7 @@ const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width
 @observer
 export class NavigationItems extends Component {
   setAuthRef = () => {
-    this.props.uiStore.setAuthRef(this.props.location.pathname);
+    this.props.uiStore.setAuthRef(this.props.location.pathname, this.props.location.hash);
   }
 
   handleDashboardBtn = () => {

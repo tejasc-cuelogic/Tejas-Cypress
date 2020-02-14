@@ -122,7 +122,7 @@ class App extends Component {
       if (!document.hidden) {
         if (authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
           authActions.forceLogout('timeout').then(() => {
-            uiStore.setAuthRef(location.pathname);
+            uiStore.setAuthRef(location.pathname, location.hash);
             if (location.pathname.includes('/dashboard/')) {
               history.push('/login');
             }
