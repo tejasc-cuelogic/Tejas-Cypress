@@ -33,11 +33,11 @@ export default class AccountType extends Component {
             changed={accTypesChange}
             action={this.handleArrowButtonClick}
           />
-          {!isMobile && <Divider section hidden />}
+          {/* {!isMobile && <Divider section hidden />}
           <div className={`${isMobile ? '' : 'option-details'} grey-header`}>
             {this.getOptionDetails()}
           </div>
-          {!isMobile && <Divider section hidden />}
+          {!isMobile && <Divider section hidden />} */}
           {/* <div className="mt-20">
             <Button fluid={isMobile} primary className="relaxed" content="Continue" disabled={!ACC_TYPES_FRM.meta.isValid} onClick={this.handleArrowButtonClick} />
           </div> */}

@@ -59,8 +59,8 @@ export default class PublicCompanyRel extends Component {
         {!inProgressArray.includes('PUBLIC_COMPANY_REL')
           && (
             <Button.Group vertical={isMobile}>
-              <Button basic primary onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={isMobile ? 'mb-30 relaxed' : ''} content="No" />
-              <Button basic primary className={!isMobile && 'ml-10'} onClick={this.handleShowFields} content="Yes" />
+              <Button basic onClick={() => updateInvestorProfileData(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mb-30 relaxed' : ''} primary-hover`} content="No" />
+              <Button basic className={`${!isMobile && 'ml-10'} primary-hover`} onClick={this.handleShowFields} content="Yes" />
             </Button.Group>
           )
         }
