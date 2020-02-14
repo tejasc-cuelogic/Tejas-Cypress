@@ -404,6 +404,7 @@ export const campaignDetailsAdditionalQuery = gql`
     }
     updates {
       id
+      postUpdateAs
       title
       content
       scope
@@ -546,6 +547,7 @@ query getOfferingById($id: String!) {
     }
     updates {
       id
+      postUpdateAs
       offeringId
       title
       content

@@ -11,6 +11,7 @@ export const allUpdates = gql`
       isVisible
       offeringId
       updatedDate
+      postUpdateAs
       updated {
         date
       }

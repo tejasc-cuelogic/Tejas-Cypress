@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Button, Icon, Item, Header, Label, Divider } from 'semantic-ui-react';
+import { orderBy } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import moment from 'moment';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { Image64, UserAvatar } from '../../../../../../theme/shared';
-
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -21,6 +21,13 @@ class LatestUpdates extends Component {
       updates, companyAvatarUrl, bussinessName, newLayout,
     } = this.props;
     const update = (updates && updates.length && updates[updates.length - 1]) || null;
+    const postUpdateObj = orderBy(updates, o => (o.updated.date ? moment(new Date(o.updated.date)).unix() : ''), ['desc'])[0];
+    console.log('postUpdate : ', postUpdateObj);
+    const isNextseedUpdated = postUpdateObj && postUpdateObj.postUpdateAs === 'NEXTSEED';
+    const userAvatarObj = { 
+      name: isNextseedUpdated ? 'NextSeed' : bussinessName || '',
+      avatarUrl: isNextseedUpdated ? 'nss-logo.svg' : ''
+    };
     return (
       <>
         <Header as="h3" className={`${newLayout && isMobile ? 'mt-40' : newLayout ? 'mt-40' : 'mt-20'} ${isMobile ? 'mb-20' : 'mb-30'} anchor-wrap`}>
@@ -35,17 +42,12 @@ class LatestUpdates extends Component {
                 <div className="ui image avatar-image">
                   {companyAvatarUrl && companyAvatarUrl.length
                     ? <Image64 srcUrl={companyAvatarUrl} circular />
-                    : <UserAvatar UserInfo={{ name: bussinessName || '', avatarUrl: '' }} />
+                    : <UserAvatar UserInfo={userAvatarObj} />
                 }
                 </div>
-                {/* {companyAvatarUrl && companyAvatarUrl.length ?
-                  <div className="avatar-image">
-                    <Image64 size="mini" srcUrl={companyAvatarUrl} />
-                  </div> : null
-                } */}
                 <div className="avatar-details">
                   <Item.Header as={(newLayout && isMobile) ? 'h6' : 'h5'} className={newLayout ? 'ui grey-header mb-0' : ''}>
-                    <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
+                    <b> {userAvatarObj.name}</b>
                   </Item.Header>
                   {update
                     && <Item.Meta>{update.updatedDate ? moment(update.updatedDate).format('LL') : '-'}</Item.Meta>

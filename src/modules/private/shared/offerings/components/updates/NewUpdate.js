@@ -308,7 +308,7 @@ export default class NewUpdate extends Component {
                                   label="Send Email Notifications"
                                 />
                                 </Form.Field>
-                                {['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage) && (PBUILDER_FRM.fields.shouldSendInvestorNotifications.value)
+                                {['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage) && PBUILDER_FRM.fields.shouldSendInvestorNotifications.value
                                 && (
                                     <div className="field">
                                       <Header as="label">{TEMPLATE_FRM.fields.type.label}</Header>
