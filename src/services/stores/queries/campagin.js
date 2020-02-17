@@ -418,6 +418,7 @@ export const campaignDetailsForInvestmentQuery = gql`
 query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
   getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
+    regulation
     offeringSlug
     isAvailablePublicly
     stage
