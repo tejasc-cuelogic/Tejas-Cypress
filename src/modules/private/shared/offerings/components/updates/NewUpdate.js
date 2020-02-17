@@ -217,7 +217,7 @@ export default class NewUpdate extends Component {
                           trigger={(
                             <Button color="green" className="link-button">
                               <Icon className="ns-view" />
-                              See the update
+                              Preview Update
                             </Button>
                           )}
                         >
