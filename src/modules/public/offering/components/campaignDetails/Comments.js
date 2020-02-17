@@ -93,6 +93,7 @@ class Comments extends Component {
 
   render() {
     const { visible, visiblePost } = this.state;
+    const { isInvestorAccreditated, userAccreditationStatus } = this.props.userDetailsStore;
     const { isUserLoggedIn } = this.props.authStore;
     const loginOrSignup = this.props.navStore.stepInRoute;
     const { currentUser } = this.props.userStore;
@@ -107,6 +108,7 @@ class Comments extends Component {
     // const passedProcessingDate = DataFormatter.diffDays(get(campaign, 'closureSummary.processingDate'), false, true) <= 0;
     const passedProcessingDate = DataFormatter.getDateDifferenceInHoursOrMinutes(get(campaign, 'closureSummary.processingDate'), true, true).value <= 0;
     const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull || frozenAccounts.length;
+    const accreditationStatus = ['REQUESTED', 'CONFIRMED', 'EXPIRED'].includes(userAccreditationStatus);
     let comments = campaign && campaign.comments;
     const campaignId = campaign && campaign.id;
     const campaignSlug = campaign && campaign.offeringSlug;
@@ -117,21 +119,9 @@ class Comments extends Component {
     const { showOnlyOne, newLayout } = this.props;
     comments = showOnlyOne ? [get(commentsMainThreadCount, '[0]')] : comments;
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
-    const { isInvestorAccreditated } = this.props.userDetailsStore;
     const offeringRegulation = get(campaign, 'keyTerms.regulation');
     return (
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
-        <Modal open={this.state.accreditationModel} closeIcon onClose={this.closeAccreditationModel}>
-          <Modal.Content>
-            <section className="no-updates center-align bg-offwhite padded">
-              <Header as="h3" className="mb-20 mt-50">
-                Post comment is only available to accredited investors.
-              </Header>
-              <p>Please confirm your accredited investor status to post comment.</p>
-              <Button as={Link} to="/dashboard/account-settings/investment-limits" primary content="Confirm Status" className="mt-20 mb-50" />
-            </section>
-          </Modal.Content>
-        </Modal>
         <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
           Comments
           <span className="anchor" id="comments" />
@@ -162,26 +152,34 @@ class Comments extends Component {
           ? (
             <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
               {loggedInAsInvestor && !accountStatusFull
-                ? <p>In order to leave comments, please create any type of account first.</p>
-                : <p>In order to leave comments, please sign up and verify your identity.</p>
+                ? (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status)
+                  ? <p>In order to leave a comment, please complete your account setup and verify your status as an accredited investor.</p>
+                  : <p>In order to leave a comment, please complete your account setup.</p>
+                : (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status)
+                  ? <p>In order to leave a comment, please sign up and verify your status as an accredited investor.</p>
+                  : <p>In order to leave comments, please sign up and verify your identity.</p>
               }
               <Form reply className="public-form clearfix">
                 {loggedInAsInvestor && !accountStatusFull
-                  ? <Link to="/dashboard/setup" className="ui button primary">Finish Account Setup</Link>
+                  ? <Link to="/dashboard/setup" className="ui button primary">Complete Account Setup</Link>
+                  // TODO :
+                  // - if logged in before, LOGIN, if not SIGN UP. 
                   : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button primary">{get(loginOrSignup, 'title')}</Link>
                 }
               </Form>
             </section>
           )
           : (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status)
-            ? (
-              <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
-                <p>In order to leave comments, please confirm your accredited investor status.</p>
-                <Form reply className="public-form clearfix">
-                  <Link to="/" onClick={e => this.handleAccreditatonModel(e, true)} className="ui button primary">Confirm Status</Link>
-                </Form>
-              </section>
-            )
+            ? (accreditationStatus === 'REQUESTED')
+                ? <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
+                    <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
+                  </section>
+                : <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
+                    <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
+                    <Form reply className="public-form clearfix">
+                      <Link to="/" onClick={e => this.handleAccreditatonModel(e, true)} className="ui button primary">Verify Status</Link>
+                    </Form>
+                  </section>
             : (!disablePostComment)
             && (
               <>
@@ -200,6 +198,7 @@ class Comments extends Component {
                 }
               </>
             )
+              
         }
         {errors
           && (
