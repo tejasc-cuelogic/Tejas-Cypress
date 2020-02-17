@@ -208,7 +208,7 @@ export default class AllRepayments extends PureComponent {
       this.props.paymentStore.initRequest();
     } else {
       this.props.paymentStore.setFieldValue('data', []);
-      this.props.paymentStore.setFieldValue('apiHit', true);
+      this.props.paymentStore.setFieldValue('apiHit', false);
     }
   }
 
