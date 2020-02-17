@@ -391,6 +391,7 @@ export const campaignDetailsAdditionalQuery = gql`
     }
     updates {
       id
+      postUpdateAs
       title
       content
       scope
@@ -534,6 +535,7 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     }
     updates {
       id
+      postUpdateAs
       offeringId
       title
       content

@@ -23,16 +23,16 @@ class UserAvatar extends Component {
     const avatarProfile = UserInfo.avatarUrl || (UserInfo.firstName && UserInfo.lastName) || UserInfo.name ? UserInfo.avatarUrl : 'leader-placeholder.jpg';
     if (avatarProfile) {
       return (
-        avatarProfile === 'leader-placeholder.jpg'
+        ['leader-placeholder.jpg', 'logo-icon.svg'].includes(avatarProfile)
           ? <NSImage path={avatarProfile} size={imgSize} avatar circular />
           : (
-<Image64
-  srcUrl={avatarProfile}
-  alt={UserInfo.firstName}
-  size={imgSize}
-  avatar
-  circular
-/>
+            <Image64
+              srcUrl={avatarProfile}
+              alt={UserInfo.firstName}
+              size={imgSize}
+              avatar
+              circular
+            />
           )
       );
     }
