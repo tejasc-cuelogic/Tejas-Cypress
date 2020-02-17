@@ -140,6 +140,14 @@ export default class DataModelStore {
     }
   }
 
+  resetLoader = (removeLoader, operation) => {
+    if (removeLoader) {
+      removeLoader.map(item => (nsUiStore.filterLoaderByOperation(item)));
+    } else {
+      nsUiStore.filterLoaderByOperation(operation);
+    }
+  }
+
   formChange = (e, result, form, type) => {
     const formName = Array.isArray(form) ? form[0] : form;
     if (Array.isArray(form)) {

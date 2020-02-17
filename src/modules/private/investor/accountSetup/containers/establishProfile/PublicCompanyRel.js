@@ -23,69 +23,48 @@ class PublicCompanyRel extends Component {
   }
 
   render() {
-    const { smartElement, investorProfileStore, uiStore } = this.props;
-    const { PUBLIC_COMPANY_REL_FRM, upsertInvestorProfile, stepToBeRendered } = investorProfileStore;
-    const { errors, inProgressArray, multiSteps } = uiStore;
-    if (inProgressArray.includes('PUBLIC_COMPANY_REL') && isMobile) {
+    const { PUBLIC_COMPANY_REL_FRM, upsertInvestorProfile, stepToBeRendered, resetFields } = this.props.investorProfileStore;
+    const { errors, inProgressArray, multiSteps } = this.props.uiStore;
+    const { smartElement } = this.props;
+    if (inProgressArray.includes('PUBLIC_COMPANY_REL')) {
       return (
-        <Form onSubmit={() => upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered])} error className="mb-30">
-          <Form.Group widths="equal">
+        <>
+          <Form onSubmit={() => upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered])} error className={isMobile ? ' mb-30 center-align' : ''}>
+            <div className={isMobile ? 'mt-30' : ''}>
+              <Form.Group widths="equal">
+                {smartElement.Input('publicCompanyTicker')}
+              </Form.Group>
+              <Button primary size="large" fluid={isMobile} className="mt-40 relaxed" content="Continue" disabled={!PUBLIC_COMPANY_REL_FRM.meta.isValid} />
+            </div>
             {
-              smartElement.Input('publicCompanyTicker')
+              errors
+              && (
+                <Message error className="mt-30">
+                  <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+                </Message>
+              )
             }
-            <Button primary size="large" fluid className={`${isMobile ? 'mt-40' : ''} relaxed`} content="Continue" disabled={!PUBLIC_COMPANY_REL_FRM.meta.isValid} />
-          </Form.Group>
-        </Form>
+          </Form>
+        </>
       );
     }
     return (
-      <div className={isMobile ? '' : 'center-align'}>
-        {/* <Header as="h3">Public Company Relations</Header> */}
-        <Header as="h3">
+      <>
+        <Header as="h4">
           Are you (or an immediate family member) a 10% shareholder,
-                    director or senior officer at a publicly traded U.S. company?
+          director or senior officer at a publicly traded U.S. company?
         </Header>
         {!isMobile && <Divider hidden />}
         <p className="mb-40">If you do not know what this means, it likely does not apply to you</p>
-        <Form error className={isMobile ? ' mb-30 center-align' : ''}>
-          {/* <FormRadioGroup
-            fielddata={PUBLIC_COMPANY_REL_FRM.fields.publicCompanyRel}
-            name="publicCompanyRel"
-            changed={(e, result) => {
-              employmentChange(e, 'PUBLIC_COMPANY_REL_FRM', result);
-              this.props.uiStore.scrollIntoActiveInputFields();
-            }}
-            containerclassname="three wide button-radio center-align"
-            showerror
-          /> */}
-          {!inProgressArray.includes('PUBLIC_COMPANY_REL')
-            && (
-              <Button.Group vertical>
-                <Button primary size="large" onClick={() => upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mb-30' : 'mb-20'} relaxed`} content="No" />
-                <Button className="link-button" onClick={this.handleShowFields} color="green" content="Yes" />
-              </Button.Group>
-            )
-          }
-          {inProgressArray.includes('PUBLIC_COMPANY_REL') && !isMobile
-            && (
-              <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
-                <Form.Group widths="equal">
-                  {
-                    smartElement.Input('publicCompanyTicker')
-                  }
-                </Form.Group>
-              </div>
-            )
-          }
-          {errors
-            && (
-              <Message error className="mt-30">
-                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-              </Message>
-            )
-          }
-        </Form>
-      </div>
+        {!inProgressArray.includes('PUBLIC_COMPANY_REL')
+          && (
+            <Button.Group vertical={isMobile}>
+              <Button basic onClick={() => { resetFields('PUBLIC_COMPANY_REL_FRM'); upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered]); }} fluid={isMobile} className={`${isMobile ? 'mb-30 relaxed' : ''} primary-hover`} content="No" />
+              <Button basic className={`${!isMobile && 'ml-10'} primary-hover`} onClick={this.handleShowFields} content="Yes" />
+            </Button.Group>
+          )
+        }
+      </>
     );
   }
 }

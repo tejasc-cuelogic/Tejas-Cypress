@@ -19,24 +19,16 @@ class Finances extends Component {
   render() {
     const { smartElement, investorProfileStore, uiStore } = this.props;
     const {
-      FINANCIAL_INFO_FRM, stepToBeRendered, formChange,
-      upsertInvestorProfile,
+      stepToBeRendered, formChange, FINANCIAL_INFO_FRM, upsertInvestorProfile,
     } = investorProfileStore;
     const { errors, multiSteps } = uiStore;
     return (
-      <div className={isMobile ? '' : 'center-align'}>
-        <Header as="h3">
-          What is your household
-            {"'"}
-          s annual income and net worth?
-        </Header>
+      <>
+        <Header as="h4">What is your household{"'"}s annual income and net worth?</Header>
         <p className={`${isMobile ? 'mb-30' : ''} tertiary-text`}>
           SEC rules and regulations require broker-dealers to collect this information
           to determine investor suitability for private offerings.
         </p>
-        {/* <p className="tertiary-text">
-          Select whether you are providing your information as an individual or as a couple.
-        </p> */}
         {!isMobile && <Divider hidden />}
         <Form error>
           {
@@ -49,13 +41,11 @@ class Finances extends Component {
             })
           }
           <Divider hidden />
-          <div className={`${isMobile ? '' : 'field-wrap'} left-align`}>
-            <Form.Group widths={2}>
-              {['netWorth', 'annualIncomeCurrentYear'].map(field => (
-                smartElement.Masked(field, { currency: true, prefix: '$ ', disableDecimal: true, maxlength: 13 })
-              ))}
-            </Form.Group>
-          </div>
+          <Form.Group widths={2} className="mt-40">
+            {['netWorth', 'annualIncomeCurrentYear'].map(field => (
+              smartElement.Input(field)
+            ))}
+          </Form.Group>
           {errors
             && (
               <Message error className="mt-30">
@@ -64,13 +54,11 @@ class Finances extends Component {
             )
           }
         </Form>
-        <p className="tertiary-text note mt-10 mb-30">
+        <p className="tertiary-text note mt-30 mb-40">
           We will never share your personal information with third parties without your consent
         </p>
-        {isMobile
-          && <Button primary size="large" onClick={() => upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className={`${isMobile ? 'mt-30' : 'mb-20'} relaxed`} disabled={!FINANCIAL_INFO_FRM.meta.isValid} content="Continue" />
-        }
-      </div>
+       <Button primary onClick={() => upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered])} fluid={isMobile} className="relaxed" disabled={!FINANCIAL_INFO_FRM.meta.isValid} content="Continue" />
+      </>
     );
   }
 }

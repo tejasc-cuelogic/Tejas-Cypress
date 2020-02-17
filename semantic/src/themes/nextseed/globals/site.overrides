@@ -330,6 +330,9 @@ h6{
 .no-wrap{
 	word-break: normal !important;
 }
+.no-flex-wrap{
+	flex-wrap: nowrap !important;
+}
 .full-width{
 	width: 100% !important;
 }

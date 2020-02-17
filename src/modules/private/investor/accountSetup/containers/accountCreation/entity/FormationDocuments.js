@@ -38,7 +38,7 @@ export default class FormationDocumemts extends Component {
     const { errors } = this.props.uiStore;
     return (
       <>
-      <Header as="h3" textAlign={isMobile ? '' : 'center'}>Upload required documentation</Header>
+      <Header as="h4">Upload required documentation</Header>
         <Divider hidden />
         <Form error className={isMobile ? 'mb-30' : ''}>
           <DropZone
@@ -47,7 +47,7 @@ export default class FormationDocumemts extends Component {
             ondrop={this.onFormationDocDrop}
             onremove={this.handleDelDoc}
             containerclassname={`${isMobile ? 'mb-30' : ''} fluid`}
-            uploadtitle={isMobile ? 'Choose file' : 'Choose a file or drag it here'}
+            uploadtitle="Choose file"
           />
           <DropZone
             name="operatingAgreementDoc"
@@ -55,7 +55,7 @@ export default class FormationDocumemts extends Component {
             ondrop={this.onOperatingAgreementDocDrop}
             onremove={this.handleDelDoc}
             containerclassname={`${isMobile ? 'mb-30' : ''} fluid`}
-            uploadtitle={isMobile ? 'Choose file' : 'Choose a file or drag it here'}
+            uploadtitle="Choose file"
           />
           <DropZone
             name="einVerificationDoc"
@@ -63,7 +63,7 @@ export default class FormationDocumemts extends Component {
             ondrop={this.onEinVerificationDocDrop}
             onremove={this.handleDelDoc}
             containerclassname={`${isMobile ? 'mb-30' : ''} fluid`}
-            uploadtitle={isMobile ? 'Choose file' : 'Choose a file or drag it here'}
+            uploadtitle="Choose file"
           />
             <Divider hidden />
           {errors
@@ -73,10 +73,7 @@ export default class FormationDocumemts extends Component {
               </Message>
             )
           }
-          {isMobile && (
-            <Button fluid primary className="relaxed" content="Continue" disabled={!FORM_DOCS_FRM.meta.isValid || errors} onClick={this.handleContinueButton} />
-          )
-          }
+          <Button fluid={isMobile} primary className="relaxed" content="Continue" disabled={!FORM_DOCS_FRM.meta.isValid || errors} onClick={this.handleContinueButton} />
         </Form>
       </>
     );

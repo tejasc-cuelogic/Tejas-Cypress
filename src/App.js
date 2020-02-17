@@ -290,8 +290,7 @@ class App extends Component {
             <Layout>
               <Switch>
                 <Redirect from="/app/*" to="/dashboard/*" />
-                <Route exact path="/dashboard/*" component={Private} />
-                <Route exact path="/dashboard" component={Private} />
+                <Route exact path={['/dashboard', '/dashboard/*']} component={Private} />
                 <Route path="/" component={Public} />
               </Switch>
             </Layout>
@@ -301,6 +300,7 @@ class App extends Component {
         {uiStore.devBanner
           && <DevBanner toggle={this.playDevBanner} />
         }
+        <div className="custom-modal-wrapper" />
       </div>
     );
   }

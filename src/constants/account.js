@@ -515,7 +515,6 @@ export const BROKERAGE_EMPLOYMENT = {
     value: '',
     label: 'Firm Name',
     error: undefined,
-    // rule: 'alphaBrokerage|required_if:brokerageEmployment,yes',
     rule: 'optional',
     placeHolder: 'Enter here',
     customErrors: {
@@ -547,8 +546,8 @@ export const PUBLIC_COMPANY_REL = {
     label: 'Ticker Symbol or Company Name',
     error: undefined,
     showError: true,
-    rule: 'alphaPublicCompanyRel|required_if:publicCompanyRel,yes',
     placeHolder: 'E.g. GOOG',
+    rule: 'optional',
     customErrors: {
       required_if: 'required',
     },
@@ -645,6 +644,7 @@ export const FINANCES = {
     showError: true,
     rule: 'required|min:1',
     placeHolder: 'Enter here',
+    fieldType: 'integer',
     customErrors: {
       required: 'required',
       min: 'Please enter a valid amount to deposit',
@@ -658,6 +658,7 @@ export const FINANCES = {
     rule: 'required|min:1|max:2147483647',
     year: Helper.getLastThreeYearsLabel().annualIncomePreviousYear,
     placeHolder: 'Enter here',
+    fieldType: 'integer',
     objRefOutput: 'annualIncome',
     customErrors: {
       required: 'required',

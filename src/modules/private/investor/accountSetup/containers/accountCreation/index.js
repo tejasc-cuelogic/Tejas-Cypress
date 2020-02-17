@@ -5,13 +5,9 @@ import AccountTypes from '../../components/accountCreation/AccountTypes';
 import IraAccCreation from './ira/AccountCreation';
 import IndividualAccCreation from './individual/AccountCreation';
 import EntityAccCreation from './entity/AccountCreation';
-import ConfirmModal from '../../components/confirmModal';
 import Helper from '../../../../../../helper/utility';
 // import AgreementsPdfLoader from '../../../settings/components/agreements/AgreementsPdfLoader';
 
-const isMobile = document.documentElement.clientWidth < 768;
-const successMessage = 'Check out some of the investment opportunities now available to you as a member of the NextSeed community.';
-const processingMessage = 'While we set up your account, check out some of the investment opportunities now available to you as a member of the NextSeed community.';
 @inject('identityStore', 'accountStore', 'bankAccountStore', 'uiStore', 'userDetailsStore', 'userStore', 'iraAccountStore', 'entityAccountStore', 'individualAccountStore')
 @withRouter
 @observer
@@ -22,9 +18,7 @@ export default class AccountCreation extends Component {
     const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
     const accType = INVESTMENT_ACC_TYPES.fields.accType.values[0];
     // eslint-disable-next-line prefer-destructuring
-    if (isMobile) {
-      this.props.accountStore.setAccTypeChange();
-    } else if (accType) {
+    if (accType) {
       this.props.accountStore.setAccTypeChange(accType.value);
     }
   }
@@ -97,24 +91,14 @@ export default class AccountCreation extends Component {
       this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
       this.props.uiStore.resetcreateAccountMessage();
-      const confirmModal = this.props[`${accountType}AccountStore`].showProcessingModal ? 'processing' : 'success';
-      this.props[`${accountType}AccountStore`].setFieldValue('showProcessingModal', false);
-      this.props.history.push(`${this.props.match.url}/${accountType}/${confirmModal}`);
+      // const confirmModal = this.props[`${accountType}AccountStore`].showProcessingModal ? 'processing' : 'success';
+      // this.props.history.push(`${this.props.match.url}/${accountType}/${confirmModal}`);
+      const currStep = this.props[`${accountType}AccountStore`].stepToBeRendered;
+      this.props[`${accountType}AccountStore`].setStepToBeRendered(currStep + 1);
     } catch (err) {
       if (Helper.matchRegexWithString(/\brequired uploads(?![-])\b/, err.message)) {
         this.props.history.push(this.props.identityStore.cipStepUrlMapping.ciphardFail.url);
       }
-    }
-  }
-
-  HandleModalCta = () => {
-    const { partialInvestNowSessionURL, setPartialInvestmenSession } = this.props.userDetailsStore;
-    if (partialInvestNowSessionURL) {
-      this.props.history.push(partialInvestNowSessionURL);
-      setPartialInvestmenSession();
-    } else {
-      this.props.history.push('/offerings');
-      this.props.uiStore.resetcreateAccountMessage();
     }
   }
 
@@ -144,10 +128,6 @@ export default class AccountCreation extends Component {
           <Route exact path={`${this.props.match.url}/individual`} render={props => <IndividualAccCreation {...props} handleCreateAccount={this.handleCreateAccount} />} />
           <Route exact path={`${this.props.match.url}/ira`} render={props => <IraAccCreation {...props} handleCreateAccount={this.handleCreateAccount} />} />
           <Route exact path={`${this.props.match.url}/entity`} render={props => <EntityAccCreation {...props} handleCreateAccount={this.handleCreateAccount} />} />
-          <Route exact path={`${this.props.match.url}/individual/success`} render={props => <ConfirmModal {...props} open content={successMessage} handleCloseModal={this.handleCloseModal} HandleModalCta={this.HandleModalCta} />} />;
-          {
-            ['individual', 'ira', 'entity'].map(accType => <Route exact path={`${this.props.match.url}/${accType}/processing`} render={props => <ConfirmModal {...props} open content={processingMessage} handleCloseModal={this.handleCloseModal} HandleModalCta={this.HandleModalCta} />} />)
-          }
         </Switch>
       </div>
     );

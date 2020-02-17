@@ -11,8 +11,6 @@ const metaInfo = {
   form: 'INVESTMENT_EXP_FRM',
 };
 
-const isMobile = document.documentElement.clientWidth < 768;
-
 @inject('investorProfileStore', 'userDetailsStore', 'uiStore')
 @withRouter
 @observer
@@ -93,18 +91,17 @@ class Experience extends Component {
     );
     return (
       <>
-        <Header as="h3" textAlign={!isMobile ? 'center' : 'mb-14'}>
-          {!isMobile ? 'Investment Experience' : isExperiencedTypeSelected ? 'Almost there!' : 'What is your investment experience?'
-          }
+        <Header as="h4">
+          {isExperiencedTypeSelected ? 'Almost there!' : 'What is your investment experience?'}
         </Header>
-        {!isMobile && (
-          <p className="center-align mb-40">
+        {/* {!isMobile && (
+          <p className="mb-40">
             Confirm your experience and understanding of the investment risks on NextSeed.
             Select the box that best describes your investment experience to date:
           </p>
-        )}
+        )} */}
         {isExperiencedTypeSelected && (
-          <p className={`${isMobile ? 'mb-30' : ''} tertiary-text`}>
+          <p className="mb-30 tertiary-text">
             We just need to confirm your understanding of the investment risks on NextSeed
           </p>
         )
@@ -114,32 +111,17 @@ class Experience extends Component {
             <CheckBoxes />
           )
             : (
-              <>
-                {isMobile
-                  ? (
-                    <FormArrowButton
-                      fielddata={INVESTMENT_EXP_FRM.fields.experienceLevel}
-                      name="experienceLevel"
-                      changed={
-                        (e, result) => {
-                          formChange(e, result, metaInfo.form);
-                          this.handleOnClick(e, result);
-                        }
-                      }
-                      ctaErrors={this.state.ctaErrors}
-                    />
-                  ) : (
-                    <>
-                      {
-                        smartElement.RadioGroup('experienceLevel', {
-                          containerclassname: 'two wide button-radio center-align mb-50',
-                        })
-                      }
-                      <CheckBoxes />
-                    </>
-                  )
+              <FormArrowButton
+                fielddata={INVESTMENT_EXP_FRM.fields.experienceLevel}
+                name="experienceLevel"
+                changed={
+                  (e, result) => {
+                    formChange(e, result, 'INVESTMENT_EXP_FRM');
+                    this.handleOnClick(e, result);
+                  }
                 }
-              </>
+                ctaErrors={this.state.ctaErrors}
+              />
             )
           }
           {(errorMessage || errors)
@@ -149,19 +131,9 @@ class Experience extends Component {
               </Message>
             )
           }
-          {!isMobile ? (
-            <div className="center-align mt-20">
-              {!isInvExperienceValid && noExperience
-                && (
-                  <>
-                    <p className="negative-text mb-40">
-                      NextSeed investments are suitable for experienced investors who are comfortable
-                      with long-term risk. Please confirm that you fit this profile in order to proceed. {RequestMsg}
-                    </p>
-                  </>
-                )
-              }
-              <Button fluid={isMobile} primary className="relaxed" content="Continue to Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FRM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
+          {isExperiencedTypeSelected ? (
+            <div className="mt-40">
+              <Button primary className="relaxed" content="Continue to Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FRM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
               {!isInvExperienceValid && noExperience
                 && (
                   <p className="negative-text mt-20">
@@ -173,8 +145,8 @@ class Experience extends Component {
           ) : (
               <>
                 {isExperiencedTypeSelected && (
-                  <div className="center-align mt-20">
-                    <Button fluid={isMobile} primary className="relaxed" content="Create Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FRM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
+                  <div className="mt-20">
+                    <Button fluid primary className="relaxed" content="Create Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FRM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
                   </div>
                 )}
                 {isExperiencedTypeSelected && !isInvExperienceValid

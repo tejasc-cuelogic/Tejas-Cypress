@@ -16,8 +16,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 @observer
 class Employment extends Component {
   componentWillMount() {
-    // const { EMPLOYMENT_FORM } = this.props.investorProfileStore;
-    // if (EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED') {
+    // const { EMPLOYMENT_STATUS_FRM } = this.props.investorProfileStore;
+    // if (EMPLOYMENT_STATUS_FRM.fields.status.value === 'EMPLOYED') {
     //   this.props.uiStore.addMoreInProgressArray('EMPLOYED');
     // }
   }
@@ -26,10 +26,10 @@ class Employment extends Component {
     this.props.uiStore.setFieldvalue('inProgressArray', []);
   }
 
-  handleUpdateInvestorProfileData = () => {
-    const { upsertInvestorProfile, stepToBeRendered, EMPLOYMENT_FORM } = this.props.investorProfileStore;
+  handleupsertInvestorProfile = () => {
+    const { upsertInvestorProfile, stepToBeRendered, EMPLOYMENT_STATUS_FRM } = this.props.investorProfileStore;
     const { multiSteps } = this.props.uiStore;
-    if (EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED' && isMobile) {
+    if (EMPLOYMENT_STATUS_FRM.fields.status.value === 'EMPLOYED' && isMobile) {
       this.props.uiStore.addMoreInProgressArray('EMPLOYED');
       return;
     }
@@ -37,8 +37,8 @@ class Employment extends Component {
   }
 
   toggleInputFields = () => {
-    const { EMPLOYMENT_FORM } = this.props.investorProfileStore;
-    if (EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED' && isMobile) {
+    const { EMPLOYMENT_STATUS_FRM } = this.props.investorProfileStore;
+    if (EMPLOYMENT_STATUS_FRM.fields.status.value === 'EMPLOYED') {
       this.props.uiStore.addMoreInProgressArray('EMPLOYED');
     }
   }
@@ -46,68 +46,45 @@ class Employment extends Component {
 
   render() {
     const { smartElement, investorProfileStore, uiStore } = this.props;
-    const { EMPLOYMENT_STATUS_FRM, formChange, upsertInvestorProfile, stepToBeRendered } = investorProfileStore;
+    const { upsertInvestorProfile, stepToBeRendered, EMPLOYMENT_STATUS_FRM, formChange } = investorProfileStore;
     const { errors, inProgressArray, multiSteps } = uiStore;
     if (inProgressArray.includes('EMPLOYED')) {
       return (
         <Form onSubmit={() => upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered])} error className="mb-40">
-          <Form.Group widths="equal">
-            {
-            ['employer', 'position'].map(field => (
-              smartElement.Input(field)
-            ))}
-            <Button primary size="large" fluid className="relaxed" content="Continue" disabled={!EMPLOYMENT_STATUS_FRM.meta.isValid} />
-          </Form.Group>
+          {
+          ['employer', 'position'].map(field => (
+            smartElement.Input(field)
+          ))}
+          <Button primary fluid={isMobile} className="mt-30 relaxed" content="Continue" disabled={!EMPLOYMENT_STATUS_FRM.meta.isValid} />
         </Form>
       );
     }
     return (
-      <div className={isMobile ? '' : 'center-align'}>
+      <>
         <Header as="h3" className={isMobile ? 'mb-30' : ''}>What is your employment status?</Header>
-        {!isMobile && <p className="mb-40">Please indicate your current employment status</p>}
-        <Form error className={isMobile ? 'mb-40' : ''}>
-          {isMobile
-            ? (
-            <FormArrowButton
-              fielddata={EMPLOYMENT_STATUS_FRM.fields.status}
-              name="status"
-              changed={
-                (e, result) => {
-                  formChange(e, result, 'EMPLOYMENT_STATUS_FRM');
-                  this.toggleInputFields();
-                  // this.props.uiStore.scrollIntoActiveInputFields();
-                }
+        {/* {!isMobile && <p className="mb-40">Please indicate your current employment status</p>} */}
+        <Form onSubmit={() => upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered])} error className={isMobile ? 'mb-40' : ''}>
+          <FormArrowButton
+            fielddata={EMPLOYMENT_STATUS_FRM.fields.status}
+            name="status"
+            changed={
+              (e, result) => {
+                formChange(e, result, 'EMPLOYMENT_STATUS_FRM');
+                this.toggleInputFields();
+                // this.props.uiStore.scrollIntoActiveInputFields();
               }
-              action={this.handleUpdateInvestorProfileData}
-            />
-            ) : (
-              smartElement.RadioGroup('status', {
-                containerclassname: 'three wide button-radio center-align',
-              })
-            )
-          }
-          {
-            !isMobile && EMPLOYMENT_STATUS_FRM.fields.status.value === 'EMPLOYED'
+            }
+            action={this.handleupsertInvestorProfile}
+          />
+          {errors
           && (
-          <div className={`${isMobile ? 'mt-30' : 'field-wrap'} left-align`}>
-            <Form.Group widths="equal">
-              {
-              ['employer', 'position'].map(field => (
-                smartElement.Input(field)
-              ))}
-            </Form.Group>
-          </div>
+          <Message error className="mt-30">
+            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+          </Message>
           )
           }
-          {errors
-            && (
-              <Message error className="mt-30">
-                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-              </Message>
-            )
-          }
         </Form>
-      </div>
+      </>
     );
   }
 }

@@ -1,5 +1,5 @@
 import { decorate, action, observable, runInAction, computed } from 'mobx';
-import { isEmpty, isUndefined, intersection } from 'lodash';
+import { isEmpty, isUndefined, intersection, pick } from 'lodash';
 import { updateInvestorProfileData } from '../../queries/account';
 import { EMPLOYMENT_STATUS, BROKERAGE_EMPLOYMENT, PUBLIC_COMPANY_REL, FINANCES, INVESTOR_PROFILE_FULL_META, INVESTMENT_EXPERIENCE } from '../../../../constants/account';
 import { FormValidator as Validator } from '../../../../helper';
@@ -36,7 +36,7 @@ export class InvestorProfileStore extends DataModelStore {
     const { fields } = this[form];
     if (intersection(['brokerageFirmName', 'publicCompanyTicker'], Object.keys(fields)).length > 0) {
       const { textField, radioField } = this.textRadioFieldData(fields);
-      if (fields[radioField].value === 'no') {
+      if (fields[radioField].value) {
         fields[textField].value = '';
       }
     }
@@ -76,10 +76,16 @@ export class InvestorProfileStore extends DataModelStore {
   formPayLoad = (fields) => {
     let payLoad = Validator.evaluateFormData(fields);
     payLoad.isPartialProfile = !!isUndefined(payLoad.isPartialProfile);
-
-    if (intersection(['brokerageFirmName', 'publicCompanyTicker'], Object.keys(fields)).length > 0) {
+    const fieldArray = Object.keys(fields);
+    if (intersection(['brokerageFirmName', 'publicCompanyTicker'], fieldArray).length > 0) {
       const { textField, radioField } = this.textRadioFieldData(fields);
-      payLoad[textField] = fields[radioField].value === 'no' ? 'false' : fields[textField].value;
+      payLoad[textField] = fields[radioField].value === 'yes' ? fields[textField].value : '';
+    }
+
+    if (intersection(['isComfortable', 'isRiskTaker'], fieldArray).length > 0) {
+      Object.keys(pick(fields, ['isComfortable', 'isRiskTaker'])).forEach((field) => {
+        payLoad[field] = fields[field].value.length > 0;
+      });
     }
 
     if (fields.annualIncomeCurrentYear) {

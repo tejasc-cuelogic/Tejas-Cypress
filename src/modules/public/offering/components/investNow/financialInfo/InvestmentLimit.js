@@ -5,7 +5,7 @@ import Helper from '../../../../../../helper/utility';
 
 const InvestmentLimit = props => (
   <>
-    <Header as={props.changeInvest ? 'h6' : 'h4'} textAlign={props.changeInvest ? '' : 'center'}>
+    <Header as={props.changeInvest ? 'h6' : 'h4'}>
       Your investment limit: {' '}
       {Helper.MoneyMathDisplayCurrency(props.getCurrentLimitForAccount || 0, false)}
       <Popup
@@ -22,7 +22,7 @@ const InvestmentLimit = props => (
         position="top center"
         hoverable
       />
-      <Link to={props.changeInvest ? 'change-investment-limit' : `${props.match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
+      <Link to={props.changeInvest ? 'change-investment-limit' : `${props.match.url}/change-investment-limit`} className="link mlr-0"><small>Update</small></Link>
     </Header>
     {props.changeInvest
       ? <p>Your investment will be {props.diffLimitAmount > 0 ? 'increased' : 'decreased'} by <span className="negative-text">{Helper.CurrencyFormat(props.diffLimitAmount || 0, 0)}</span></p>

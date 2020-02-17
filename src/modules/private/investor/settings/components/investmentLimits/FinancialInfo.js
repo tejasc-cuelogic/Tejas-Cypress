@@ -8,6 +8,7 @@ import { DataFormatter } from '../../../../../../helper';
 import { EmptyDataSet, InlineLoader } from '../../../../../../theme/shared';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../../services/constants/investmentLimit';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('investmentLimitStore', 'uiStore', 'userDetailsStore', 'accreditationStore')
 @withRouter
 @observer
@@ -97,7 +98,7 @@ export default class FinancialInfo extends Component {
                     <Grid.Row>
                       <Grid.Column computer={8} tablet={8} mobile={16}>
                         <Card.Content>
-                          <Header as="h5">Regulation Crowdfunding Limits</Header>
+                          <Header as="h5" className={isMobile ? 'plr-0' : ''}>Regulation Crowdfunding Limits</Header>
                           <p className="intro-text">
                             {account.name === 'entity' ? `The total amount you can invest in Regulation
                             Crowdfunding offerings within a 12-month period depends on the
@@ -137,7 +138,7 @@ export default class FinancialInfo extends Component {
                           && accreditationData[account.name].status
                           ? (
                             <Card.Content>
-                              <Header as="h5">
+                              <Header as="h5" className={isMobile ? 'plr-0' : ''}>
                                 Accredited Investor Status
                             {/* <Link as={Button} to="/" className="link" onClick={e =>
                              this.handleVerifyAccreditation
@@ -170,7 +171,7 @@ export default class FinancialInfo extends Component {
                           )
                           : (
                             <Card.Content>
-                              <Header as="h4">Accredited Investor Status</Header>
+                              <Header as="h4" className={isMobile ? 'plr-0' : ''}>Accredited Investor Status</Header>
                               <p className="intro-text">In order to participate in Reg D 506(c) offerings, you will need to verify your accredited investor status.</p>
                               <Link target="_blank" to="/resources/education-center/investor/what-is-an-accredited-investor" className="intro-text highlight-text">What is an accredited investor?</Link>
                               <Divider hidden />
