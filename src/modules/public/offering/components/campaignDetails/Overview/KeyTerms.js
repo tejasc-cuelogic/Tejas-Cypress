@@ -74,8 +74,9 @@ class KeyTerms extends Component {
                 <Table.Cell width={5} className="neutral-text"><b>Interest Rate{' '}</b>
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content={`Interest payment is calculated at a gross annualized interest rate of ${campaign && campaign.keyTerms && campaign.keyTerms.interestRate
-                      ? `${campaign.keyTerms.interestRate}%` : 'NA'} each month on the remaining balance of your investment from the prior month.`}
+                    content={campaign && campaign.keyTerms && campaign.keyTerms.securities === 'TERM_NOTE'
+                      ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors. <a target="_blank" href="/resources/education-center/investor/how-term-notes-work">Learn more</a></>)
+                      : campaign.keyTerms.securities === 'CONVERTIBLE_NOTES' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors.</>) : ''}
                     position="top center"
                   />
                 </Table.Cell>
@@ -127,7 +128,7 @@ class KeyTerms extends Component {
                 <Table.Cell width={5}><b>Maturity</b>{' '}
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
+                    content={<>This is the deadline by which the issuer is obligated to make payment in full to investors.</>}
                     position="top center"
                   />
                 </Table.Cell>

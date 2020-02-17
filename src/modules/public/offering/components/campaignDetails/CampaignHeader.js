@@ -151,7 +151,7 @@ export default class CampaignHeader extends Component {
                       <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                         <Popup
                           trigger={<Icon name="help circle" color="green" />}
-                          content={!minFlagStatus ? 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' : 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.'}
+                          content={!minFlagStatus ? 'This is the minimum fundraising goal. If this amount is not raised by the end of the offering period, any funds invested will be automatically returned to your NextSeed account.' : 'This is the maximum fundraising goal. The offering will remain open until the issuer raises the Offering Max or the offering period ends. As long as the raise exceeds the Offering Min, the issuer will receive the funds.'}
                           position="top center"
                         />
                       </p>
@@ -162,7 +162,7 @@ export default class CampaignHeader extends Component {
                           {Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
                           <Popup
                             trigger={<Icon name="help circle" color="green" />}
-                            content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                            content="This is the minimum fundraising goal. If this amount is not raised by the end of the offering period, any funds invested will be automatically returned to your NextSeed account."
                             position="top center"
                           />
                         </p>
@@ -170,7 +170,7 @@ export default class CampaignHeader extends Component {
                           {Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
                           <Popup
                             trigger={<Icon name="help circle" color="green" />}
-                            content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                            content="This is the maximum fundraising goal. The offering will remain open until the issuer raises the Offering Max or the offering period ends. As long as the raise exceeds the Offering Min, the issuer will receive the funds."
                             position="top center"
                           />
                         </p>

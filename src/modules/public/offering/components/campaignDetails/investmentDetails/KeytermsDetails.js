@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get, isNaN, toNumber, capitalize } from 'lodash';
+import { get, capitalize } from 'lodash';
 import { inject, observer } from 'mobx-react';
 // import money from 'money-math';
 import { Table, Divider, Grid, Popup, Icon } from 'semantic-ui-react';
@@ -37,18 +37,14 @@ class KeyTermsDetails extends Component {
       campaign, offerStructure, campaignStatus,
     } = this.props.campaignStore;
     const { keyTerms } = campaign;
-    const investmentMultiple = get(campaign, 'closureSummary.keyTerms.multiple') || 'XXX';
     const totalInvestmentAmount = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const totalInvestmentAmountCf = get(campaign, 'closureSummary.totalInvestmentAmountCf') || 0;
     const totalInvestmentAmount506C = get(campaign, 'closureSummary.totalInvestmentAmount506C') || 0;
-    const investmentMultipleTooltip = isNaN(toNumber(investmentMultiple) * 100) ? 0 : investmentMultiple;
-    const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
-    const maturityMonth = keyTerms && keyTerms.maturity ? `${keyTerms.maturity} Months` : '[XX] Months';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
     const keytermsMeta = [
-      { key: 'minOfferingAmountCF', label: 'Offering Min', popupContent: 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' },
-      { key: 'maxOfferingAmountCF', label: 'Offering Max', popupContent: 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.' },
-      { key: 'minInvestAmt', label: 'Min Individual Investment', popupContent: 'This is the minimum individual investment amount to participate in this offering.' },
+      { key: 'minOfferingAmountCF', label: 'Offering Min', popupContent: 'This is the minimum fundraising goal. If this amount is not raised by the end of the offering period, any funds invested will be automatically returned to your NextSeed account.' },
+      { key: 'maxOfferingAmountCF', label: 'Offering Max', popupContent: 'This is the maximum fundraising goal. The offering will remain open until the issuer raises the Offering Max or the offering period ends. As long as the raise exceeds the Offering Min, the issuer will receive the funds.' },
+      { key: 'minInvestAmt', label: 'Min Individual Investment', popupContent: 'This is the minimum individual investment amount required to participate in this offering. This amount is set by the Issuer.' },
     ];
     const isPreferredEquityOffering = !!(get(campaign, 'keyTerms.securities') && ['PREFERRED_EQUITY_506C'].includes(get(campaign, 'keyTerms.securities')));
     // const minOfferingAmountD = get(keyTerms, 'minOfferingAmount506') ? get(keyTerms, 'minOfferingAmount506') : get(keyTerms, 'minOfferingAmount506C');
@@ -173,11 +169,11 @@ class KeyTermsDetails extends Component {
               title="Investment Multiple"
               titleAddon={
                 isMobile
-                  ? (<PopUpModal label="Investment Multiple" content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth}. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`} />)
+                  ? (<PopUpModal label="Investment Multiple" content={<>This is the multiple of your original investment that the Issuer has agreed to pay back prior to maturity. The Issuer pays a portion of their gross revenues every month until the Investment Multiple is achieved. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>} />)
                   : (
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
-                      content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultipleTooltip * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth}. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
+                      content={<>This is the multiple of your original investment that the Issuer has agreed to pay back prior to maturity. The Issuer pays a portion of their gross revenues every month until the Investment Multiple is achieved. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>}
                       position="top center"
                     />
                   )
@@ -200,6 +196,17 @@ class KeyTermsDetails extends Component {
               data={keyTerms}
               field="revSharePercentage"
               title="Revenue Sharing Percentage"
+              titleAddon={
+                isMobile
+                  ? (<PopUpModal label="Revenue Sharing Percentage" content={<>This is the percentage of gross revenue that is dedicated to paying back investors. So long as the Issuer has revenue, payments will be made to investors monthly until the total Investment Multiple is reached. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>} />)
+                  : (
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content={<>This is the percentage of gross revenue that is dedicated to paying back investors. So long as the Issuer has revenue, payments will be made to investors monthly until the total Investment Multiple is reached. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>}
+                      position="top center"
+                    />
+                  )
+              }
               content={(
                 <>
                   <p>
@@ -219,22 +226,44 @@ class KeyTermsDetails extends Component {
               data={keyTerms}
               field="valuationCap"
               title="Valuation Cap"
+              titleAddon={
+                isMobile
+                  ? (<PopUpModal label="Valuation Cap" content={<>The Valuation Cap is themaximum valuation of the Issuer that may be used when converting your investment to equity. If a future valuation event occurs (i.e. a priced equity round or a sale of the business), and the future valuation of the business is higher than the Valuation Cap, then the investment converts to equity as if the investor invested at the lower valuation.</>} />)
+                  : (
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content={<>The Valuation Cap is themaximum valuation of the Issuer that may be used when converting your investment to equity. If a future valuation event occurs (i.e. a priced equity round or a sale of the business), and the future valuation of the business is higher than the Valuation Cap, then the investment converts to equity as if the investor invested at the lower valuation.</>}
+                      position="top center"
+                    />
+                  )
+              }
             />
             <KeyTermsFieldHoc
               data={keyTerms}
               field="discount"
               title="Discount"
+              titleAddon={
+                isMobile
+                  ? (<PopUpModal label="Discount" content={<>In certain circumstances, an investment may convert to equity at a discount to the valuation used in connection with the applicable valuation event.  If a future valuation event occurs (i.e. a priced equity round or a sale of the business), and the future valuation of the business is lower than the Valuation Cap (or when there is no Valuation Cap), then the Discount will be applied to the future valuation to determine the valuation at which your investment will convert to equity.</>} />)
+                  : (
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content={<>In certain circumstances, an investment may convert to equity at a discount to the valuation used in connection with the applicable valuation event.  If a future valuation event occurs (i.e. a priced equity round or a sale of the business), and the future valuation of the business is lower than the Valuation Cap (or when there is no Valuation Cap), then the Discount will be applied to the future valuation to determine the valuation at which your investment will convert to equity.</>}
+                      position="top center"
+                    />
+                  )
+              }
             />
             <KeyTermsFieldHoc
               data={keyTerms}
               field="interestRate"
               title="Annualized Interest Rate"
               titleAddon={isMobile
-                ? (<PopUpModal label="Interest Rate" content={`Interest payment is calculated at a gross annualized interest rate of ${get(keyTerms, 'interestRate') || ' - '}% each month on the remaining balance of your investment from the prior month.`} />)
+                ? (<PopUpModal label="Interest Rate" content={keyTerms && keyTerms.securities === 'TERM_NOTE' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors. <a target="_blank" href="/resources/education-center/investor/how-term-notes-work">Learn more</a></>) : keyTerms.securities === 'CONVERTIBLE_NOTES' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors.</>) : ''} />)
                 : (
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content={`Interest payment is calculated at a gross annualized interest rate of ${get(keyTerms, 'interestRate') || ' - '}% each month on the remaining balance of your investment from the prior month.`}
+                    content={keyTerms && keyTerms.securities === 'TERM_NOTE' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors. <a target="_blank" href="/resources/education-center/investor/how-term-notes-work">Learn more</a></>) : keyTerms.securities === 'CONVERTIBLE_NOTES' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors.</>) : ''}
                     position="top center"
                   />
                 )
@@ -255,11 +284,11 @@ class KeyTermsDetails extends Component {
                 </>
               )}
               titleAddon={isMobile
-                ? (<PopUpModal label="Maturity" content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`} />)
+                ? (<PopUpModal label="Maturity" content={<>This is the deadline by which the issuer is obligated to make payment in full to investors.</>} />)
                 : (
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
+                    content={<>This is the deadline by which the issuer is obligated to make payment in full to investors.</>}
                     position="top center"
                   />
                 )
