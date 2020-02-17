@@ -5,6 +5,7 @@ import { Card, Table, Button, Grid, Form, Icon, Header, Popup } from 'semantic-u
 import moment from 'moment';
 import { get } from 'lodash';
 import Helper from '../../../../../helper/utility';
+import { DataFormatter } from '../../../../../helper';
 import { InlineLoader } from '../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
@@ -76,21 +77,26 @@ const calculateFormula = (type, title, params) => {
             data = 'In Repayment';
           } else if (actualOpeningDate && moment(actualOpeningDate).add(59, 'days').format('MMM') === moment().format('MMM')) {
             data = 'First Payment Due';
-          } else if (moment(anticipatedOpenDate).add(1, 'month').format('MMM')) {
+          } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) > 180 && !actualOpeningDate) {
             data = 'Min Payment Due';
           } else if (actualOpeningDate && moment(actualOpeningDate).add(59, 'days').format('MMM') === moment().add(1, 'month').format('MMM')) {
             data = 'First Payment Starting Next Month';
+          } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) > 150 && !actualOpeningDate) {
+            data = 'Min Payment Starting Next Month';
+          } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) < 180 && !actualOpeningDate) {
+            data = 'No Payment Due';
           }
           break;
         case 'Start Payment Date':
-          if (startupPeriod === 0) {
-            if (hardCloseDate) {
-              data = moment(hardCloseDate).add(1, 'month').format('MM/YYYY');
-            }
-          } else if (startupPeriod !== 0) {
-            if (hardCloseDate) {
-              data = moment(hardCloseDate).add(startupPeriod, 'month').format('MM/YYYY');
-            }
+          if (actualOpeningDate && DataFormatter.diffDays(actualOpeningDate, false, true) < 0) {
+              data = moment(actualOpeningDate).add(2, 'month').format('MM/YYYY');
+          }
+          break;
+        case 'Min Payment Start Date':
+          if (anticipatedOpenDate && actualOpeningDate && DataFormatter.diffDays(actualOpeningDate, false, true) >= 0) {
+              data = moment(anticipatedOpenDate).add(6, 'month').format('MM/YYYY');
+          } else {
+            data = '-';
           }
           break;
         default:
@@ -132,7 +138,7 @@ const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, ha
                       <Table.Row key={record.id}>
                         {repaymentMeta.map(h => h.applicable.includes(type) && (
                           <Table.Cell key={`${h.title}${h.key}`}>
-                            {(h.applicable.includes('REVENUE_SHARING_NOTE') || h.applicable.includes('TERM_NOTE')) && h.calculation
+                            {(type !== 'IN_REPAYMENT' && h.calculation)
                             ? calculateFormula(
                               type,
                               h.title,

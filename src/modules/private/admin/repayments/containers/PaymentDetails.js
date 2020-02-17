@@ -83,13 +83,6 @@ export default class PaymentDetails extends Component {
                 name="sinkingFundBalance"
                 fielddata={PAYMENT_FRM.fields.sinkingFundBalance}
               />
-              {/* <FormInput
-                fluid
-                type="text"
-                name="paymentsContactEmail"
-                fielddata={PAYMENT_FRM.fields.paymentsContactEmail}
-                changed={(e, result) => formChange(e, result, 'PAYMENT_FRM', 'formatted')}
-              /> */}
             </Form.Group>
             <FormTextarea
               name="payments"

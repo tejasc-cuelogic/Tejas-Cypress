@@ -17,9 +17,17 @@ export const adminPaymentsIssuerList = gql`
           shorthandBusinessName
           securities
         }
+        payment {
+          inDefault
+          sendNotification
+          amountDue
+          draftDate
+        }
         closureSummary {
+          startupPeriod
           hardCloseDate
           operationsDate
+          anticipatedOpenDate
           keyTerms {
             maturityDate
             expectedPaymentDate: anticipatedPaymentStartDate
@@ -68,5 +76,5 @@ export const updatePaymentIssuer = gql`
         }
       }
     }
-  }  
+  }
 `;
