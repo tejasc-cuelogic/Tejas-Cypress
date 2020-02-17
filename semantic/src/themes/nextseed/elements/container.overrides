@@ -31,24 +31,24 @@ section{
                     margin-bottom: @45px;  
                 }
             }
-            .banner-meta {
-                color: @neutral;
-                font-size: @13px;
-                position: absolute;
-                right: 0;
-                bottom: 0;
-                padding: @16px @28px;
-                background-color: fade(@white, 45%);
-                text-align: right;
-                p{
-                    line-height: 20px;
-                }
-                @media only screen and (max-width: @largestMobileScreen) {
-                    background-color: fade(@white, 45%);
-                    width: 100%;
-                    padding: @relative14px;
-                    text-align: left;
-                }
+        }
+        >.banner-meta {
+            color: @neutral;
+            font-size: @13px;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            padding: @16px @28px;
+            background-color: fade(@white, 50%);
+            text-align: right;
+            p{
+                line-height: 20px;
+            }
+            @media only screen and (max-width: @largestMobileScreen) {
+                background-color: fade(@white, 50%);
+                width: 100%;
+                padding: @relative14px;
+                text-align: left;
             }
         }
         &.home-banner{
@@ -72,9 +72,10 @@ section{
             }
         }
         &.business-banner{
-            background:url(../../assets/images/banners/how-it-works-banner.jpg) top center no-repeat;
+            position: relative;
+            background:url(../../assets/images/banners/bravery_hero.jpg) top center no-repeat;
             @media only screen and (max-width : @largestMobileScreen){
-                background:url(../../assets/images/banners/how-it-works-banner-mobile.jpg) center center no-repeat;
+                background:url(../../assets/images/banners/bravery_hero_mobile.jpg) center center no-repeat;
                 background-size: cover;
             }
         }

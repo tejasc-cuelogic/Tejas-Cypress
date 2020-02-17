@@ -99,34 +99,35 @@ export default class UserInvestorDetails extends Component {
             </dd>
             {INVESTOR_PROFILE_FULL.fields.status.value === 'EMPLOYED'
               && (
-                <>
-                  <dt className="regular-text">Employer</dt>
-                  <dd>
-                    <FormInput
-                      containerclassname={this.state.displayOnly ? 'display-only' : ''}
-                      className="compact"
-                      readOnly={this.state.displayOnly}
-                      name="employer"
-                      fielddata={INVESTOR_PROFILE_FULL.fields.employer}
-                      value={INVESTOR_PROFILE_FULL.fields.employer.value}
-                      changed={(e, result) => formChange(e, result, formName)}
-                      ishidelabel
-                    />
-                  </dd>
-                  <dt className="regular-text">Position</dt>
-                  <dd>
-                    <FormInput
-                      containerclassname={this.state.displayOnly ? 'display-only' : ''}
-                      className="compact"
-                      readOnly={this.state.displayOnly}
-                      name="position"
-                      fielddata={INVESTOR_PROFILE_FULL.fields.position}
-                      value={INVESTOR_PROFILE_FULL.fields.position.value}
-                      changed={(e, result) => formChange(e, result, formName)}
-                      ishidelabel
-                    />
-                  </dd>
-                </>
+              <>
+                <dt className="regular-text">Employer</dt>
+                <dd>
+                  <FormInput
+                    containerclassname={this.state.displayOnly ? 'display-only' : ''}
+                    className="compact"
+                    readOnly={this.state.displayOnly}
+                    name="employer"
+                    fielddata={INVESTOR_PROFILE_FULL.fields.employer}
+                    value={INVESTOR_PROFILE_FULL.fields.employer.value}
+                    changed={(e, result) => formChange(e, result, formName)}
+                    ishidelabel
+                  />
+                </dd>
+                <Divider hidden className="mt-0 mb-half" />
+                <dt className="regular-text">Position</dt>
+                <dd>
+                  <FormInput
+                    containerclassname={this.state.displayOnly ? 'display-only' : ''}
+                    className="compact"
+                    readOnly={this.state.displayOnly}
+                    name="position"
+                    fielddata={INVESTOR_PROFILE_FULL.fields.position}
+                    value={INVESTOR_PROFILE_FULL.fields.position.value}
+                    changed={(e, result) => formChange(e, result, formName)}
+                    ishidelabel
+                  />
+                </dd>
+              </>
               )
             }
             <Divider hidden />
