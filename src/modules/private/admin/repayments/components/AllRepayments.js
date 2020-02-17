@@ -16,7 +16,7 @@ const repaymentMeta = [
   { title: 'Hard Close Date', key: 'offering.closureSummary.hardCloseDate', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE', 'STARTUP_PERIOD'], validate: true },
   { title: 'Expected Ops', key: 'offering.offering.launch.expectedOpsDate', applicable: ['STARTUP_PERIOD'], validate: true },
   { title: 'Expected Payment', key: 'offering.closureSummary.keyTerms.expectedPaymentDate', applicable: ['STARTUP_PERIOD'], validate: true },
-  { title: 'Maturity', key: 'offering.closureSummary.keyTerms.maturityDate', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE', 'IN_REPAYMENT'], maturity: true },
+  { title: 'Maturity', key: 'offering.closureSummary.keyTerms.maturityDate', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE', 'IN_REPAYMENT'], maturity: true, calculation: true },
   { title: 'Ops Date', key: 'offering.closureSummary.operationsDate', applicable: ['IN_REPAYMENT'], validate: true },
   { title: 'First Payment', key: 'offering.closureSummary.repayment.firstPaymentDate', applicable: ['IN_REPAYMENT'], validate: true },
   { title: 'Monthly Payment', key: 'offering.closureSummary.keyTerms.monthlyPayment', applicable: ['IN_REPAYMENT'], currency: true },
@@ -26,12 +26,80 @@ const repaymentMeta = [
   { title: 'Actual Opening Date', key: 'offering.closureSummary.operationsDate', applicable: ['REVENUE_SHARING_NOTE'], validate: true },
   { title: 'Min Payment Start Date', key: 'offering.closureSummary.startupPeriod', applicable: ['REVENUE_SHARING_NOTE'], calculation: true },
   { title: 'Start Payment Date', key: 'offering.closureSummary.startupPeriod', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], calculation: true },
-  { title: 'Status', key: 'sinkingFundBalance', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], status: true },
+  { title: 'Status', key: 'sinkingFundBalance', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], status: true, calculation: true },
   { title: 'In Default', key: 'offering.payment.inDefault', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
   { title: 'Notifications', key: 'offering.payment.sendNotification', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
   { title: 'Amount Due', key: 'offering.payment.amountDue', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], currency: true },
   { title: 'Draft Date', key: 'offering.payment.draftDate', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], validate: true },
 ];
+
+const calculateFormula = (type, title, params) => {
+  let data = '';
+  const { hardCloseDate, firstPaymentDate, startupPeriod, actualOpeningDate, anticipatedOpenDate } = params;
+  // eslint-disable-next-line default-case
+  switch (type) {
+    case 'TERM_NOTE':
+      switch (title) {
+        case 'Status':
+          if (firstPaymentDate) {
+            data = 'In Repayment';
+          } else if (hardCloseDate) {
+            const month = moment(hardCloseDate).add(59, 'days').format('MMM');
+            if (month === moment().format('MMM')) {
+              data = 'First Payment Due';
+            } else if (month === moment().add(1, 'month').format('MMM')) {
+              data = 'First Payment Starting Next Month';
+            } else {
+              data = 'No Payment Due';
+            }
+          }
+          break;
+        case 'Start Payment Date':
+          if (startupPeriod === 0) {
+            if (hardCloseDate) {
+              data = moment(hardCloseDate).add(1, 'month').format('MM/YYYY');
+            }
+          } else if (startupPeriod !== 0) {
+            if (hardCloseDate) {
+              data = moment(hardCloseDate).add(startupPeriod, 'month').format('MM/YYYY');
+            }
+          }
+          break;
+        default:
+          data = hardCloseDate;
+      }
+      break;
+    case 'REVENUE_SHARING_NOTE':
+      switch (title) {
+        case 'Status':
+          if (firstPaymentDate) {
+            data = 'In Repayment';
+          } else if (actualOpeningDate && moment(actualOpeningDate).add(59, 'days').format('MMM') === moment().format('MMM')) {
+            data = 'First Payment Due';
+          } else if (moment(anticipatedOpenDate).add(1, 'month').format('MMM')) {
+            data = 'Min Payment Due';
+          } else if (actualOpeningDate && moment(actualOpeningDate).add(59, 'days').format('MMM') === moment().add(1, 'month').format('MMM')) {
+            data = 'First Payment Starting Next Month';
+          }
+          break;
+        case 'Start Payment Date':
+          if (startupPeriod === 0) {
+            if (hardCloseDate) {
+              data = moment(hardCloseDate).add(1, 'month').format('MM/YYYY');
+            }
+          } else if (startupPeriod !== 0) {
+            if (hardCloseDate) {
+              data = moment(hardCloseDate).add(startupPeriod, 'month').format('MM/YYYY');
+            }
+          }
+          break;
+        default:
+          data = hardCloseDate;
+      }
+      break;
+  }
+  return data;
+};
 
 const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, handleEditPayment, validDate, getLink, sortKey, toggleVisibilityStatus, stateToggle }) => (
   <>
@@ -64,7 +132,19 @@ const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, ha
                       <Table.Row key={record.id}>
                         {repaymentMeta.map(h => h.applicable.includes(type) && (
                           <Table.Cell key={`${h.title}${h.key}`}>
-                            {h.link
+                            {(h.applicable.includes('REVENUE_SHARING_NOTE') || h.applicable.includes('TERM_NOTE')) && h.calculation
+                            ? calculateFormula(
+                              type,
+                              h.title,
+                              {
+                                hardCloseDate: get(record, 'offering.closureSummary.hardCloseDate'),
+                                firstPaymentDate: get(record, 'offering.closureSummary.repayment.firstPaymentDate'),
+                                startupPeriod: get(record, 'offering.closureSummary.startupPeriod'),
+                                anticipatedOpenDate: get(record, 'offering.closureSummary.anticipatedOpenDate'),
+                                actualOpeningDate: get(record, 'offering.closureSummary.operationsDate'),
+                              },
+                              )
+                            : h.link
                               ? (
                                 <>
                                   <Link to={getLink(record.offering.offeringSlug, record.offering.stage)}>
