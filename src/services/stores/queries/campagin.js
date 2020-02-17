@@ -330,19 +330,6 @@ export const campaignDetailsQuery = gql`
         multiple
         priceCalculation
         revSharePercentage
-        supplementalAgreements {
-          documents {
-            name
-            isVisible
-            upload {
-              fileId
-              fileName
-              fileHandle {
-                boxFileId
-              }
-            }
-          }
-        }
       }
     }
     earlyBirdsCount
@@ -429,9 +416,10 @@ export const campaignDetailsAdditionalQuery = gql`
 `;
 
 export const campaignDetailsForInvestmentQuery = gql`
-query getOfferingById($id: String!) {
-  getOfferingById (id: $id) {
+query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
+  getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
     id
+    regulation
     offeringSlug
     isAvailablePublicly
     stage
