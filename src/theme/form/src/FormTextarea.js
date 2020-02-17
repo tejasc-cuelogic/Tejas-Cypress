@@ -62,7 +62,6 @@ export default class FormTextarea extends Component {
           ? <p className={value ? 'commet-area' : 'not-applicable'}>{value || 'N/A'}</p>
           : (
 <TextArea
-  {...props}
   value={value === '' ? props.clear ? '' : undefined : value}
   label={label}
   placeholder={(displayMode || readOnly) ? '' : placeHolder}
@@ -72,6 +71,7 @@ export default class FormTextarea extends Component {
     this.triggerError(false);
   }}
   onBlur={() => this.triggerError(true)}
+  {...props}
 />
           )
         }

@@ -3088,6 +3088,7 @@ export const OFFERING_CLOSE_1 = {
     objRefOutput: 'linkedBank',
     objRef: 'linkedBank',
     rule: 'optional',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   bankName: {

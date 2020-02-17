@@ -399,10 +399,13 @@ footer .ui.text.menu{
         }
         >.label.circular {
             float: none;
-            height:@20px;
+            // height:@20px;
             min-height:auto;
             margin:0 0 0 @10px;
-            line-height:10px;
+            &.grey.basic{
+                color: @neutral-middark!important;
+                border-color: @neutral-darkwhite!important;
+            }
         }
         &.dropdown .menu{
             position:relative;
@@ -450,20 +453,19 @@ footer .ui.text.menu{
 .offering-layout-menu .ui.vertical.menu{
     .item{
         &:hover, &.active{
-            color: @neutral;
             &:first-child:before{
                 display: block !important;
             }
-            &:before{
-                content: '';
-                width: 3px;
-                height: 15px;
-                position: absolute;
-                left: -14px;
-                top: 50%;
-                transform: translateY(-50%);
-                background-color: @primary-one;
-            }
+            // &:before{
+            //     content: '';
+            //     width: 3px;
+            //     height: 15px;
+            //     position: absolute;
+            //     left: -14px;
+            //     top: 50%;
+            //     transform: translateY(-50%);
+            //     background-color: @primary-one;
+            // }
         }
     }
 }
@@ -694,6 +696,10 @@ footer .ui.text.menu{
             }
             &.hasLabel:after{
                 bottom: -6px;
+            }
+            >.label.grey.basic{
+                color: @neutral-middark!important;
+                border-color: @neutral-darkwhite!important;
             }
         }
     }
