@@ -9,14 +9,14 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @inject('offeringCreationStore', 'userStore', 'uiStore', 'offeringsStore')
 @observer
 export default class Leader extends Component {
-  constructor(props) {
-    super(props);
-    const {
-      getLeadershipOfferingBac,
-      currentOfferingId,
-    } = this.props.offeringCreationStore;
-    getLeadershipOfferingBac(currentOfferingId, 'LEADERSHIP');
-  }
+  // constructor(props) {
+  //   super(props);
+  //   const {
+  //     getLeadershipOfferingBac,
+  //     currentOfferingId,
+  //   } = this.props.offeringCreationStore;
+  //   getLeadershipOfferingBac(currentOfferingId, 'LEADERSHIP');
+  // }
 
   handleSubmitIssuer = (leaderId, approved, index = null, issuerNumber = null) => {
     const {
@@ -40,8 +40,8 @@ export default class Leader extends Component {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const { match, offeringsStore, bacId, leadership } = this.props;
     const { offer } = offeringsStore;
-    if (leadership) {
-      const id = bacId || '';
+    if (leadership && bacId && bacId !== '') {
+      const id = bacId;
       const bacIndex = LEADER_FRM.fields.getOfferingBac.findIndex(b => id === b.id.value);
       index = bacIndex;
     }
