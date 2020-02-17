@@ -30,7 +30,8 @@ export default class Private extends React.Component {
     }, 500);
     const { userStore, referralsStore, userDetailsStore } = this.props;
     if (!this.props.authStore.isUserLoggedIn) {
-      this.props.uiStore.setRedirectURL(this.props.history.location);
+      this.props.uiStore.setRedirectURL(this.props.location.pathname);
+      this.props.uiStore.setAuthRef(this.props.location.pathname);
       this.props.history.push('/login');
     } else if (userStore.isInvestor && get(userDetailsStore, 'signupStatus.activeAccounts') && get(userDetailsStore, 'signupStatus.activeAccounts').length) {
       referralsStore.getUserReferralDetails(false, false);
