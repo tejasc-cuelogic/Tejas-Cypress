@@ -37,6 +37,9 @@ export const UPDATES = {
   updatedDate: {
     value: '', label: 'Published Date', error: undefined, rule: 'date', placeHolder: 'MM-DD-YYYY',
   },
+  postUpdateAs: {
+    value: 'ISSUER', label: 'post', error: undefined, rule: 'required',
+  },
 };
 
 export const TEMPLATE = {
@@ -48,6 +51,17 @@ export const TEMPLATE = {
     rule: 'required',
   },
 };
+
+export const TEMPLATE_POST = {
+  postUpdate: {
+    label: 'Post Update As',
+    value: 'ISSUER',
+    values: [{ label: 'Issuer', value: 'ISSUER' }, { label: 'NextSeed', value: 'NEXTSEED' }],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
 
 export const OFFERING_STAGE = {
   CREATION: 'CREATION',

@@ -1,4 +1,4 @@
-import TAFFY from 'taffy';
+import TAFFY from 'taffydb';
 import { uniqWith, isEqual, isArray, map } from 'lodash';
 import moment from 'moment';
 
@@ -13,7 +13,7 @@ class ClientDb {
     if (addIdKey) {
       updatedData = data.map((d, i) => ({ id: i, ...d }));
     }
-    this.database = TAFFY(isUniqWith ? uniqWith(updatedData, isEqual) : updatedData);
+    this.database = TAFFY.taffy(isUniqWith ? uniqWith(updatedData, isEqual) : updatedData);
     return this.getDatabase();
   };
 
