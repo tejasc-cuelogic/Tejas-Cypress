@@ -3,4 +3,5 @@ export const INVESTOR_URLS = {
   cipHardFail: '/dashboard/setup/identity-verification/1',
   cipSoftFail: '/dashboard/setup/identity-verification/2',
   phoneVerification: '/dashboard/setup/identity-verification/3',
+  cipAddressFail: '/dashboard/setup/identity-verification/address-verification',
 };

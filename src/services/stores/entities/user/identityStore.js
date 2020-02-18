@@ -40,6 +40,8 @@ export class IdentityStore {
 
   @observable isOptConfirmed = false;
 
+  @observable isAddressFailed = false;
+
   @observable sendOtpToMigratedUser = [];
 
   @observable signUpLoading = false;
@@ -50,7 +52,8 @@ export class IdentityStore {
     ciphardFail: { steps: ['userCIPHardFail', 'userCIPFail'], url: INVESTOR_URLS.cipHardFail, status: 'HARD_FAIL' },
     cipSoftFail: { steps: ['userCIPSoftFail'], url: INVESTOR_URLS.cipSoftFail, status: 'SOFT_FAIL' },
     cipPass: { steps: ['userCIPPass', 'OFFLINE', 'phoneMfa'], url: INVESTOR_URLS.phoneVerification, status: 'PASS' },
-    cip: { steps: ['UNIQUE_SSN', 'ADDRESS_VERIFICATION', 'PHONE_VERIFICATION'], url: INVESTOR_URLS.cip },
+    cip: { steps: ['UNIQUE_SSN', 'PHONE_VERIFICATION'], url: INVESTOR_URLS.cip },
+    cipAddressFail: { steps: ['ADDRESS_VERIFICATION'], url: INVESTOR_URLS.cipAddressFail },
   }
 
   @action
@@ -243,19 +246,25 @@ export class IdentityStore {
       variables,
     };
     const { res, url } = await this.cipWrapper(payLoad);
+    let redirectUrl = url;
+    const resData = res.data.verifyCip;
 
-    if (res.data.verifyCip.questions) {
-      this.setIdentityQuestions(res.data.verifyCip.questions);
+    if (resData.questions) {
+      this.setIdentityQuestions(resData.questions);
     }
 
-    if (res.data.verifyCip.step === 'OFFLINE') {
+    if (this.isAddressFailed) {
+      redirectUrl = INVESTOR_URLS.cipHardFail;
+    }
+
+    if (resData.step === 'OFFLINE') {
       userDetailsStore.updateUserDetails('legalDetails', { status: 'OFFLINE' });
       window.sessionStorage.setItem('cipErrorMessage',
-        JSON.stringify(res.data.verifyCip.errorMessage));
+        JSON.stringify(resData.errorMessage));
     }
 
-    this.setVerifyIdentityResponse(res.data.verifyCip);
-    return { res, url };
+    this.setVerifyIdentityResponse(resData);
+    return { res, url: redirectUrl };
   }
 
   updateUserDataAndSendOtp = async () => {
@@ -279,6 +288,14 @@ export class IdentityStore {
     return { res, url };
   }
 
+  @action
+  resetAddressFields = () => {
+    ['street', 'city', 'state', 'zipCode'].forEach(
+      (field) => {
+        this.ID_VERIFICATION_FRM.fields[field].value = '';
+      },
+    );
+  }
 
   @action
   verifyCipHardFail = async () => {
@@ -316,7 +333,7 @@ export class IdentityStore {
 
       if (stepName === 'cipPass') {
         await this.updateUserDataAndSendOtp();
-      } else if (!get(res, `data.${payLoad.mutationName}.status`)
+      } else if (stepName !== 'cipAddressFail' && !get(res, `data.${payLoad.mutationName}.status`)
         && res.data[`${payLoad.mutationName}`].message) {
         url = undefined;
         uiStore.setFieldvalue('errors',
@@ -729,33 +746,35 @@ export class IdentityStore {
   @action
   setCipDetails = () => {
     const { legalDetails, phone } = this.isAdmin ? userDetailsStore.detailsOfUser.data.user : userDetailsStore.userDetails;
-    const { fields } = this.ID_VERIFICATION_FRM;
-    if (legalDetails && legalDetails.legalName) {
-      fields.salutation.value = legalDetails.legalName.salutation;
-      fields.firstLegalName.value = legalDetails.legalName.firstLegalName;
-      fields.lastLegalName.value = legalDetails.legalName.lastLegalName;
-    }
-    if (legalDetails && legalDetails.legalAddress) {
-      fields.city.value = legalDetails.legalAddress.city;
-      const state = US_STATES.find(s => s.key === legalDetails.legalAddress.state);
-      const selectedState = state ? state.key : fields.state.value;
-      if (selectedState) {
-        fields.state.value = selectedState;
+    const { fields, meta } = this.ID_VERIFICATION_FRM;
+    if (!meta.isDirty || !meta.isValid) {
+      if (legalDetails && legalDetails.legalName) {
+        fields.salutation.value = legalDetails.legalName.salutation;
+        fields.firstLegalName.value = legalDetails.legalName.firstLegalName;
+        fields.lastLegalName.value = legalDetails.legalName.lastLegalName;
       }
-      fields.street.value = legalDetails.legalAddress.street;
-      fields.streetTwo.value = legalDetails.legalAddress.streetTwo;
-      fields.zipCode.value = legalDetails.legalAddress.zipCode;
+      if (legalDetails && legalDetails.legalAddress) {
+        fields.city.value = legalDetails.legalAddress.city;
+        const state = US_STATES.find(s => s.key === legalDetails.legalAddress.state);
+        const selectedState = state ? state.key : fields.state.value;
+        if (selectedState) {
+          fields.state.value = selectedState;
+        }
+        fields.street.value = legalDetails.legalAddress.street;
+        fields.streetTwo.value = legalDetails.legalAddress.streetTwo;
+        fields.zipCode.value = legalDetails.legalAddress.zipCode;
+      }
+      if (legalDetails && legalDetails.dateOfBirth) {
+        fields.dateOfBirth.value = legalDetails.dateOfBirth;
+      }
+      if (legalDetails && legalDetails.ssn) {
+        fields.ssn.value = legalDetails.ssn;
+      }
+      if (legalDetails && phone && phone.number) {
+        fields.phoneNumber.value = get(fields, 'phoneNumber.value') && !this.isAdmin ? fields.phoneNumber.value : phone.number;
+      }
     }
-    if (legalDetails && legalDetails.dateOfBirth) {
-      fields.dateOfBirth.value = legalDetails.dateOfBirth;
-    }
-
-    if (legalDetails && legalDetails.ssn) {
-      fields.ssn.value = legalDetails.ssn;
-    }
-    if (legalDetails && phone && phone.number) {
-      fields.phoneNumber.value = get(fields, 'phoneNumber.value') && !this.isAdmin ? fields.phoneNumber.value : phone.number;
-    }
+    FormValidator.validateForm(this.ID_VERIFICATION_FRM, false, true);
   }
 
   requestOtpWrapper = (isMobile = false) => {

@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import LegalDetails from '../../components/identityVerification/LegalDetails';
 import LegalDocuments from '../../components/identityVerification/LegalDocuments';
 import LegalIdentityQuestions from '../../components/identityVerification/LegalIdentityQuestions';
+import AddressVerification from '../../components/identityVerification/AddressVerification';
 import ConfirmPhoneNumber from '../../../../../auth/containers/ConfirmPhoneNumber';
 
 
@@ -68,11 +69,12 @@ export default class IdentityVerification extends Component {
     // this.props.identityStore.setFormError();
     if (this.props.identityStore.ID_VERIFICATION_FRM.meta.isValid) {
       const { url } = await this.props.identityStore.verifyCip();
+      this.props.identityStore.setFieldValue('isAddressFailed', false);
       this.redirectTo(url);
     }
   }
 
-  handleUploadDocuments = async (e) => {
+handleUploadDocuments = async (e) => {
     e.preventDefault();
     this.props.identityStore.setSubmitVerificationDocs(true);
     this.props.identityStore.setFieldValue('signUpLoading', true);
@@ -107,6 +109,7 @@ export default class IdentityVerification extends Component {
       identityQuestionAnswerChange,
       setAddressFieldsForUserVerification,
       signUpLoading,
+      isAddressFailed,
     } = this.props.identityStore;
     const { errors, confirmBox, inProgress } = this.props.uiStore;
     const { givenName } = this.props.userStore.currentUser;
@@ -124,38 +127,54 @@ export default class IdentityVerification extends Component {
               maskChange={personalInfoMaskedChange}
               autoComplete={setAddressFieldsForUserVerification}
               onSubmit={this.handleVerifyUserIdentity}
+              isAddressFailed={isAddressFailed}
               errors={errors}
             />
           )
-          : step === '1'
+          : step === 'address-verification'
             ? (
-              <LegalDocuments
-                form={ID_VERIFICATION_DOCS_FRM}
-                confirmBox={confirmBox}
-                inProgress={inProgress || signUpLoading}
+              <AddressVerification
+                form={ID_VERIFICATION_FRM}
+                name={givenName}
+                inProgress={signUpLoading}
                 close={this.handleCloseModal}
-                onPhotoIdDrop={this.onPhotoIdDrop}
-                onProofOfResidenceDrop={this.onProofOfResidenceDrop}
-                confirmRemoveDoc={this.handleDelDoc}
-                submitVerificationsDocs={submitVerificationsDocs}
-                onSubmit={this.handleUploadDocuments}
+                change={personalInfoChange}
+                maskChange={personalInfoMaskedChange}
+                autoComplete={setAddressFieldsForUserVerification}
+                onSubmit={this.handleVerifyUserIdentity}
+                isAddressFailed={isAddressFailed}
                 errors={errors}
               />
             )
-            : step === '2'
+            : step === '1'
               ? (
-                <LegalIdentityQuestions
-                  form={ID_VERIFICATION_QUESTIONS}
+                <LegalDocuments
+                  form={ID_VERIFICATION_DOCS_FRM}
+                  confirmBox={confirmBox}
                   inProgress={inProgress || signUpLoading}
                   close={this.handleCloseModal}
-                  identityQuestionAnswerChange={identityQuestionAnswerChange}
-                  onSubmit={this.handleSubmitIdentityQuestions}
+                  onPhotoIdDrop={this.onPhotoIdDrop}
+                  onProofOfResidenceDrop={this.onProofOfResidenceDrop}
+                  confirmRemoveDoc={this.handleDelDoc}
+                  submitVerificationsDocs={submitVerificationsDocs}
+                  onSubmit={this.handleUploadDocuments}
                   errors={errors}
                 />
               )
-              : step === '3'
-                ? <ConfirmPhoneNumber />
-                : null
+              : step === '2'
+                ? (
+                  <LegalIdentityQuestions
+                    form={ID_VERIFICATION_QUESTIONS}
+                    inProgress={inProgress || signUpLoading}
+                    close={this.handleCloseModal}
+                    identityQuestionAnswerChange={identityQuestionAnswerChange}
+                    onSubmit={this.handleSubmitIdentityQuestions}
+                    errors={errors}
+                  />
+                )
+                : step === '3'
+                  ? <ConfirmPhoneNumber />
+                  : null
         }
       </div>
     );
