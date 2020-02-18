@@ -35,15 +35,16 @@ export default class Leader extends Component {
       leaderShipOfferingBacData,
     } = this.props.offeringCreationStore;
     const issuerNumber = this.props.index;
-    let index = issuerNumber || 0;
+    const index = issuerNumber || 0;
     const formName = 'LEADER_FRM';
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const { match, offeringsStore, bacId, leadership } = this.props;
     const { offer } = offeringsStore;
     if (leadership && bacId && bacId !== '') {
-      const id = bacId;
-      const bacIndex = LEADER_FRM.fields.getOfferingBac.findIndex(b => id === b.id.value);
-      index = bacIndex;
+      // const id = bacId;
+      // const bacIndex = LEADER_FRM.fields.getOfferingBac.findIndex(b => id === b.id.value);
+      // index = bacIndex;
+      console.log(bacId, leadership);
     }
     const { isIssuer } = this.props.userStore;
     const isManager = access.asManager;
