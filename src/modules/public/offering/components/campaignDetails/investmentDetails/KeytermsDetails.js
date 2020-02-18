@@ -89,7 +89,6 @@ class KeyTermsDetails extends Component {
             {keytermsMeta.map(type => (
               <React.Fragment key={type.key}>
                 <KeyTermsFieldHoc
-                  title={type.label}
                   data={keyTerms}
                   field={type.key}
                   noBgOffWhite
@@ -110,14 +109,13 @@ class KeyTermsDetails extends Component {
                             : 'NA'}
                     </p>
                   )}
-                  titleAddon={type.popupContent
-                    && isMobile
-                    ? (<PopUpModal label={type.label} content={type.popupContent} />)
-                    : (
-                      <Popup
-                        trigger={<Icon name="help circle" color="green" />}
+                  title={type.popupContent
+                    && (
+                      <PopUpModal
+                        customTrigger={<span className="popup-label">{type.label}</span>}
                         content={type.popupContent}
                         position="top center"
+                        showOnlyPopup={!isMobile}
                       />
                     )
                   }
@@ -158,26 +156,27 @@ class KeyTermsDetails extends Component {
               field="securities"
               title="Type of Securities"
               content={(
-                <p>
-                  {offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}
-                </p>
+                <PopUpModal
+                  customTrigger={<span className="popup-label">{offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}</span>}
+                  content={<>Test <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>}
+                  position="top center"
+                  showOnlyPopup={!isMobile}
+                  hoverable
+                />
               )}
             />
             <KeyTermsFieldHoc
               data={keyTerms}
               field="investmentMultiple"
-              title={
-                isMobile
-                  ? (<PopUpModal customTrigger={<span className="popup-label">Investment Multiple</span>} content={<>This is the multiple of your original investment that the Issuer has agreed to pay back prior to maturity. The Issuer pays a portion of their gross revenues every month until the Investment Multiple is achieved. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>} />)
-                  : (
-                    <Popup
-                      customTrigger={<span className="popup-label">Investment Multiple</span>}
-                      content={<>This is the multiple of your original investment that the Issuer has agreed to pay back prior to maturity. The Issuer pays a portion of their gross revenues every month until the Investment Multiple is achieved. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>}
-                      position="top center"
-                      hoverable
-                    />
-                  )
-              }
+              title={(
+                <PopUpModal
+                  customTrigger={<span className="popup-label">Investment Multiple</span>}
+                  content={<>This is the multiple of your original investment that the Issuer has agreed to pay back prior to maturity. The Issuer pays a portion of their gross revenues every month until the Investment Multiple is achieved. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>}
+                  position="top center"
+                  showOnlyPopup={!isMobile}
+                  hoverable
+                />
+              )}
               content={(
                 <>
                   <p>
@@ -195,19 +194,15 @@ class KeyTermsDetails extends Component {
             <KeyTermsFieldHoc
               data={keyTerms}
               field="revSharePercentage"
-              title="Revenue Sharing Percentage"
-              titleAddon={
-                isMobile
-                  ? (<PopUpModal label="Revenue Sharing Percentage" content={<>This is the percentage of gross revenue that is dedicated to paying back investors. So long as the Issuer has revenue, payments will be made to investors monthly until the total Investment Multiple is reached. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>} />)
-                  : (
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content={<>This is the percentage of gross revenue that is dedicated to paying back investors. So long as the Issuer has revenue, payments will be made to investors monthly until the total Investment Multiple is reached. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>}
-                      position="top center"
-                      hoverable
-                    />
-                  )
-              }
+              title={(
+                <PopUpModal
+                  customTrigger={<span className="popup-label">Revenue Sharing Percentage</span>}
+                  content={<>This is the percentage of gross revenue that is dedicated to paying back investors. So long as the Issuer has revenue, payments will be made to investors monthly until the total Investment Multiple is reached. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>}
+                  position="top center"
+                  showOnlyPopup={!isMobile}
+                  hoverable
+                />
+              )}
               content={(
                 <>
                   <p>
@@ -226,56 +221,52 @@ class KeyTermsDetails extends Component {
             <KeyTermsFieldHoc
               data={keyTerms}
               field="valuationCap"
-              title="Valuation Cap"
-              titleAddon={
-                isMobile
-                  ? (<PopUpModal label="Valuation Cap" content={<>The Valuation Cap is themaximum valuation of the Issuer that may be used when converting your investment to equity. If a future valuation event occurs (i.e. a priced equity round or a sale of the business), and the future valuation of the business is higher than the Valuation Cap, then the investment converts to equity as if the investor invested at the lower valuation.</>} />)
-                  : (
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content={<>The Valuation Cap is themaximum valuation of the Issuer that may be used when converting your investment to equity. If a future valuation event occurs (i.e. a priced equity round or a sale of the business), and the future valuation of the business is higher than the Valuation Cap, then the investment converts to equity as if the investor invested at the lower valuation.</>}
-                      position="top center"
-                    />
-                  )
-              }
+              title={(
+                <PopUpModal
+                  customTrigger={<span className="popup-label">Valuation Cap</span>}
+                  content={<>The Valuation Cap is the maximum valuation of the Issuer that may be used when converting your investment to equity. If a future valuation event occurs (i.e. a priced equity round or a sale of the business), and the future valuation of the business is higher than the Valuation Cap, then the investment converts to equity as if the investor invested at the lower valuation.</>}
+                  position="top center"
+                  showOnlyPopup={!isMobile}
+                />
+              )}
             />
             <KeyTermsFieldHoc
               data={keyTerms}
               field="discount"
-              title="Discount"
-              titleAddon={
-                isMobile
-                  ? (<PopUpModal label="Discount" content={<>In certain circumstances, an investment may convert to equity at a discount to the valuation used in connection with the applicable valuation event.  If a future valuation event occurs (i.e. a priced equity round or a sale of the business), and the future valuation of the business is lower than the Valuation Cap (or when there is no Valuation Cap), then the Discount will be applied to the future valuation to determine the valuation at which your investment will convert to equity.</>} />)
-                  : (
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content={<>In certain circumstances, an investment may convert to equity at a discount to the valuation used in connection with the applicable valuation event.  If a future valuation event occurs (i.e. a priced equity round or a sale of the business), and the future valuation of the business is lower than the Valuation Cap (or when there is no Valuation Cap), then the Discount will be applied to the future valuation to determine the valuation at which your investment will convert to equity.</>}
-                      position="top center"
-                    />
-                  )
-              }
+              title={(
+                <PopUpModal
+                  customTrigger={<span className="popup-label">Discount</span>}
+                  content={<>In certain circumstances, an investment may convert to equity at a discount to the valuation used in connection with the applicable valuation event.  If a future valuation event occurs (i.e. a priced equity round or a sale of the business), and the future valuation of the business is lower than the Valuation Cap (or when there is no Valuation Cap), then the Discount will be applied to the future valuation to determine the valuation at which your investment will convert to equity.</>}
+                  position="top center"
+                  showOnlyPopup={!isMobile}
+                />
+              )}
             />
             <KeyTermsFieldHoc
               data={keyTerms}
               field="interestRate"
-              title="Annualized Interest Rate"
-              titleAddon={isMobile
-                ? (<PopUpModal label="Annualized Interest Rate" content={keyTerms && keyTerms.securities === 'CONVERTIBLE_NOTES' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors.</>) : (<>This is the gross annualized interest rate used to calculate monthly payments to investors. <a target="_blank" href="/resources/education-center/investor/how-term-notes-work">Learn more</a></>)} />)
-                : (
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content={keyTerms && keyTerms.securities === 'TERM_NOTE' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors. <a target="_blank" href="/resources/education-center/investor/how-term-notes-work">Learn more</a></>) : keyTerms.securities === 'CONVERTIBLE_NOTES' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors.</>) : ''}
-                    position="top center"
-                    hoverable
-                  />
-                )
-              }
+              title={(
+                <PopUpModal
+                  customTrigger={<span className="popup-label">Annualized Interest Rate</span>}
+                  content={keyTerms && keyTerms.securities === 'TERM_NOTE' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors. <a target="_blank" href="/resources/education-center/investor/how-term-notes-work">Learn more</a></>) : (<>This is the gross annualized interest rate used to calculate monthly payments to investors.</>)}
+                  position="top center"
+                  showOnlyPopup={!isMobile}
+                  hoverable
+                />
+              )}
               content={keyTerms && keyTerms.interestRate ? `${keyTerms.interestRate}%` : 'NA'}
             />
             <KeyTermsFieldHoc
               data={keyTerms}
               field="maturity"
-              title="Maturity"
+              title={(
+                <PopUpModal
+                  customTrigger={<span className="popup-label">Maturity</span>}
+                  content={<>This is the deadline by which the issuer is obligated to make payment in full to investors.</>}
+                  position="top center"
+                  showOnlyPopup={!isMobile}
+                />
+              )}
               content={(
                 <>
                   {keyTerms && keyTerms.maturity ? `${keyTerms.maturity} months` : 'N/A'}
@@ -285,16 +276,6 @@ class KeyTermsDetails extends Component {
                   }
                 </>
               )}
-              titleAddon={isMobile
-                ? (<PopUpModal label="Maturity" content={<>This is the deadline by which the issuer is obligated to make payment in full to investors.</>} />)
-                : (
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content={<>This is the deadline by which the issuer is obligated to make payment in full to investors.</>}
-                    position="top center"
-                  />
-                )
-              }
             />
             <KeyTermsFieldHoc
               data={keyTerms}
@@ -304,17 +285,14 @@ class KeyTermsDetails extends Component {
             <KeyTermsFieldHoc
               data={keyTerms}
               field="totalRoundSize"
-              title="Total Round Size"
-              titleAddon={isMobile
-                ? (<PopUpModal label="Total Round Size" content={<>This is the total amount of capital being raised by the business in this round of financing.</>} />)
-                : (
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content={<>This is the total amount of capital being raised by the business in this round of financing.</>}
-                    position="top center"
-                  />
-                )
-              }
+              title={(
+                <PopUpModal
+                  customTrigger={<span className="popup-label">Total Round Size</span>}
+                  content={<>This is the total amount of capital being raised by the business in this round of financing.</>}
+                  position="top center"
+                  showOnlyPopup={!isMobile}
+                />
+              )}
               content={(
                 <p>
                   {Helper.CurrencyFormat(keyTerms.totalRoundSize, 0)}
@@ -324,17 +302,14 @@ class KeyTermsDetails extends Component {
             <KeyTermsFieldHoc
               data={keyTerms}
               field="premoneyValuation"
-              title="Pre-Money Valuation"
-              titleAddon={isMobile
-                ? (<PopUpModal label="Pre-Money Valuation" content={<>This is the valuation of the business immediately prior to this round of financing.</>} />)
-                : (
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content={<>This is the valuation of the business immediately prior to this round of financing.</>}
-                    position="top center"
-                  />
-                )
-              }
+              title={(
+                <PopUpModal
+                  customTrigger={<span className="popup-label">Pre-Money Valuation</span>}
+                  content={<>This is the valuation of the business immediately prior to this round of financing.</>}
+                  position="top center"
+                  showOnlyPopup={!isMobile}
+                />
+              )}
               content={(
                 <p>
                   {Helper.CurrencyFormat(keyTerms.premoneyValuation, 0)}
@@ -354,18 +329,15 @@ class KeyTermsDetails extends Component {
             <KeyTermsFieldHoc
               data={keyTerms}
               field="frequencyOfPayments"
-              title="Payments"
-              titleAddon={isMobile
-                ? (<PopUpModal label="Payments" content={<>This is the frequency with which payments will be made to investors. Typically, payments begin after the first full month following the close of the campaign or after a designated Startup Period. View the Disclosure Statement for details.<a target="_blank" href="/resources/education-center/investor/how-term-notes-work">View Details</a></>} />)
-                : (
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content={<>This is the frequency with which payments will be made to investors. Typically, payments begin after the first full month following the close of the campaign or after a designated Startup Period. View the Disclosure Statement for details.<a target="_blank" href="/resources/education-center/investor/how-term-notes-work">View Details</a></>}
-                    position="top center"
-                    hoverable
-                  />
-                )
-              }
+              title={(
+                <PopUpModal
+                  customTrigger={<span className="popup-label">Payments</span>}
+                  content={<>This is the frequency with which payments will be made to investors. Typically, payments begin after the first full month following the close of the campaign or after a designated Startup Period. View the Disclosure Statement for details.<a target="_blank" href="/resources/education-center/investor/how-term-notes-work">View Details</a></>}
+                  position="top center"
+                  showOnlyPopup={!isMobile}
+                  hoverable
+                />
+              )}
               content={(
                 <p>
                   {keyTerms && keyTerms.frequencyOfPayments ? keyTerms.frequencyOfPayments
@@ -376,18 +348,17 @@ class KeyTermsDetails extends Component {
             <KeyTermsFieldHoc
               data={keyTerms}
               field="securityInterest"
-              title="Security Interest"
               content={keyTerms && keyTerms.securityInterest ? keyTerms.securityInterest : ' NA'}
-              titleAddon={isMobile
-                ? (<PopUpModal label="Security Interest" content={<>The Issuer will grant a security interest in its assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities.<a target="_blank" href="/resources/education-center/investor/how-term-notes-work">View Details</a></>} />)
-                : (
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content={<>The Issuer will grant a security interest in its assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities.<a target="_blank" href="/resources/education-center/investor/how-term-notes-work">View Details</a></>}
-                    position="top center"
-                  />
-                )
-              }
+              title={(
+                <PopUpModal
+                  customTrigger={<span className="popup-label">Security Interest</span>}
+                  trigger={<Icon name="help circle" color="green" />}
+                  content={<>The Issuer will grant a security interest in its assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities.<a target="_blank" href="/resources/education-center/investor/how-term-notes-work">View Details</a></>}
+                  position="top center"
+                  showOnlyPopup={!isMobile}
+                  hoverable
+                />
+              )}
             />
             {!isPreferredEquityOffering
               && (

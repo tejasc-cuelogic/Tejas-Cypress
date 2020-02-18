@@ -172,3 +172,21 @@ export const OFFERING_AGREEMENT_REGULATIONS = {
   BD_506C: 'RegD506C',
   FP_CF: 'NSUS CF',
 };
+
+export const CAMPAIGN_REGULATION_DETAILED = {
+    SECURITIES: {
+      TERM_NOTE: 'Term Note',
+      REVENUE_SHARING_NOTE: 'Revenue Sharing Note',
+      PREFERRED_EQUITY_506C: 'Preferred Equity',
+      CONVERTIBLE_NOTES: 'Convertible Notes',
+      SAFE: 'SAFE',
+      REAL_ESTATE: 'LLC Membership Interests',
+      FUNDS: 'Funds - Limited Partnership Interests',
+    },
+    TOOLTIP: {
+      TERM_NOTE: <>With a Term Note, a business agrees to pay you a set amount of interest on your investment. Payments are fixed each month for a certain number of months. <a target="_blank" href="/resources/education-center/investor/how-term-notes-work">Learn more</a></>,
+      REVENUE_SHARING_NOTE: <>With a Revenue Sharing Note, a business agrees to pay you a percentage of their monthly revenue until you receive the total repayment amount. Payments, if any, may be different every month. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>,
+      CONVERTIBLE_NOTES: <>A Convertible Note is a hybrid security that starts as debt with a fixed interest rate and a maturity date. However, upon certain events in the future that establish a valuation for the business, such as future equity financing rounds, it can be converted into equity in the business.</>,
+      SAFE: <>SAFEs are agreements that entitle the holders to discounted equity in a business in the future based on the valuation at a future financing event, such as a subsequent priced equity round or IPO. <a target="_blank" href="/resources/education-center/investor/nextseed-safe">Learn more</a></>,
+    },
+  };
