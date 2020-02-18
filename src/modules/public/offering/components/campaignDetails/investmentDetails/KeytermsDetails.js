@@ -171,7 +171,7 @@ class KeyTermsDetails extends Component {
                   ? (<PopUpModal customTrigger={<span className="popup-label">Investment Multiple</span>} content={<>This is the multiple of your original investment that the Issuer has agreed to pay back prior to maturity. The Issuer pays a portion of their gross revenues every month until the Investment Multiple is achieved. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>} />)
                   : (
                     <Popup
-                      trigger={<Icon name="help circle" color="green" />}
+                      customTrigger={<span className="popup-label">Investment Multiple</span>}
                       content={<>This is the multiple of your original investment that the Issuer has agreed to pay back prior to maturity. The Issuer pays a portion of their gross revenues every month until the Investment Multiple is achieved. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>}
                       position="top center"
                       hoverable
