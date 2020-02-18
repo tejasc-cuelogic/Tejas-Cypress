@@ -16,6 +16,7 @@ export const adminPaymentsIssuerList = gql`
           securities
           shorthandBusinessName
           securities
+          maturity
         }
         payment {
           inDefault
@@ -51,23 +52,36 @@ export const updatePaymentIssuer = gql`
   mutation updatePaymentIssuer($offeringId: String!, $paymentIssuerDetailsInput: PaymentIssuerInput!){
     updatePaymentIssuer(offeringId: $offeringId, paymentIssuerDetailsInput: $paymentIssuerDetailsInput) {
       id
+      contact {
+        payments
+      }
       offeringStatus
+      offeringSlug
       stage
       keyTerms {
         securities
         shorthandBusinessName
         securities
+        maturity
+      }
+      payment {
+        inDefault
+        sendNotification
+        amountDue
+        draftDate
       }
       closureSummary {
+        startupPeriod
         hardCloseDate
         operationsDate
+        anticipatedOpenDate
         keyTerms {
           maturityDate
-          anticipatedPaymentStartDate
+          expectedPaymentDate: anticipatedPaymentStartDate
           monthlyPayment
         }
         repayment {
-          startDate
+          firstPaymentDate: startDate
         }
       }
       offering {

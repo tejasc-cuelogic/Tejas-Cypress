@@ -1,5 +1,6 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
 import { orderBy, get, findIndex } from 'lodash';
+import cleanDeep from 'clean-deep';
 import moment from 'moment';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -42,7 +43,7 @@ export class PaymentStore extends DataModelStore {
       direction: 'asc',
     }
 
-    selectedOffering = '';
+    selectedOffering = null;
 
     setSortingOrder = (column = null, direction = null, key) => {
       this[key] = {
@@ -71,15 +72,17 @@ export class PaymentStore extends DataModelStore {
 
     getOfferingBySlug = (id) => {
       const res = this.data.find(payment => payment.offering.offeringSlug === id);
-      this.selectedOffering = get(res, 'offering.id');
+      this.selectedOffering = res;
       this.PAYMENT_FRM = Validator.setFormData(this.PAYMENT_FRM, res);
       this.validateForm('PAYMENT_FRM');
     }
 
-    updatePayment = id => new Promise((resolve, reject) => {
+    updatePayment = () => new Promise((resolve) => {
       uiStore.setProgress();
-      let variables = Helper.replaceKeysDeep(toJS(Validator.evaluateFormData(this.PAYMENT_FRM.fields)), { expectedOpsDate: 'launchExpectedOpsDate', operationsDate: 'operationsDate', expectedPaymentDate: 'keyTermsAnticipatedPaymentStartDate', firstPaymentDate: 'repaymentStartDate', monthlyPayment: 'monthlyPayment', payments: 'paymentsContactEmail' });
+      const id = get(this.selectedOffering, 'offering.id');
+      let variables = Helper.replaceKeysDeep(toJS(Validator.evaluateFormData(this.PAYMENT_FRM.fields)), { expectedOpsDate: 'launchExpectedOpsDate', expectedPaymentDate: 'keyTermsAnticipatedPaymentStartDate', firstPaymentDate: 'repaymentStartDate', payments: 'paymentsContactEmail' });
       variables = variables.paymentsContactEmail ? { ...variables, paymentsContactEmail: (variables.paymentsContactEmail.split(',').map(p => p.trim())).join(', ') } : { ...variables };
+      variables = cleanDeep(variables);
       client
         .mutate({
           mutation: updatePaymentIssuer,
@@ -87,12 +90,11 @@ export class PaymentStore extends DataModelStore {
         })
         .then((res) => {
           Helper.toast('Payment updated successfully.', 'success');
-          this.updatePaymentList(id, res.updatePaymentIssuer);
+          this.updatePaymentList(id, get(res, 'data.updatePaymentIssuer'));
           resolve();
         })
         .catch(() => {
           Helper.toast('Error while updating payment.', 'error');
-          reject();
         })
         .finally(() => {
           uiStore.setProgress(false);
@@ -100,14 +102,15 @@ export class PaymentStore extends DataModelStore {
     });
 
     updatePaymentList = (id, res) => {
-      const data = { ...toJS(this.data) };
-      const paymentIndex = findIndex(data, d => d.id === id);
+      const data = [...toJS(this.initialData)];
+      const paymentIndex = findIndex(data, d => d.offering.id === id);
       if (paymentIndex !== -1) {
         const newData = {
-          ...res,
-          sinkingFundBalance: this.PAYMENT_FRM.fields.sinkingFundBalance.value,
+          offering: { ...res },
+          sinkingFundBalance: data.sinkingFundBalance,
         };
-        this.data[paymentIndex] = newData;
+        this.initialData[paymentIndex] = newData;
+        this.setFieldValue('data', ClientDb.initiateDb(this.initialData, true));
       }
     }
 

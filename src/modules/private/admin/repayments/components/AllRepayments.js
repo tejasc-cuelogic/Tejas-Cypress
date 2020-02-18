@@ -22,24 +22,25 @@ const repaymentMeta = [
   { title: 'First Payment', key: 'offering.closureSummary.repayment.firstPaymentDate', applicable: ['IN_REPAYMENT'], validate: true },
   { title: 'Monthly Payment', key: 'offering.closureSummary.keyTerms.monthlyPayment', applicable: ['IN_REPAYMENT'], currency: true },
   { title: 'Sinking Fund Balance', key: 'sinkingFundBalance', applicable: ['IN_REPAYMENT'], currency: true },
-  { title: 'Startup Period', key: 'offering.closureSummary.startupPeriod', applicable: ['TERM_NOTE', 'REVENUE_SHARING_NOTE'], validate: true },
+  { title: 'Startup Period', key: 'offering.closureSummary.startupPeriod', applicable: ['TERM_NOTE', 'REVENUE_SHARING_NOTE'] },
   { title: 'Anticipated Opening Date', key: 'offering.closureSummary.anticipatedOpenDate', applicable: ['REVENUE_SHARING_NOTE'], validate: true },
   { title: 'Actual Opening Date', key: 'offering.closureSummary.operationsDate', applicable: ['REVENUE_SHARING_NOTE'], validate: true },
-  { title: 'Min Payment Start Date', key: 'offering.closureSummary.startupPeriod', applicable: ['REVENUE_SHARING_NOTE'], calculation: true },
-  { title: 'Start Payment Date', key: 'offering.closureSummary.startupPeriod', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], calculation: true },
-  { title: 'Status', key: 'sinkingFundBalance', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], status: true, calculation: true },
-  { title: 'In Default', key: 'offering.payment.inDefault', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
-  { title: 'Notifications', key: 'offering.payment.sendNotification', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
+  { title: 'Min Payment Start Date', key: '', applicable: ['REVENUE_SHARING_NOTE'], calculation: true },
+  { title: 'Start Payment Date', key: '', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], calculation: true },
+  { title: 'Status', key: '', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], status: true, calculation: true },
+  { title: 'In Default', key: 'offering.payment.inDefault', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], options: true },
+  { title: 'Notifications', key: 'offering.payment.sendNotification', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], options: true },
   { title: 'Amount Due', key: 'offering.payment.amountDue', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], currency: true },
   { title: 'Draft Date', key: 'offering.payment.draftDate', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], validate: true },
 ];
 
 const calculateFormula = (type, title, params) => {
   let data = '';
-  const { hardCloseDate, firstPaymentDate, startupPeriod, actualOpeningDate, anticipatedOpenDate } = params;
+  const { hardCloseDate, firstPaymentDate, startupPeriod, actualOpeningDate, anticipatedOpenDate, term } = params;
   // eslint-disable-next-line default-case
   switch (type) {
     case 'TERM_NOTE':
+      // eslint-disable-next-line default-case
       switch (title) {
         case 'Status':
           if (firstPaymentDate) {
@@ -66,8 +67,11 @@ const calculateFormula = (type, title, params) => {
             }
           }
           break;
-        default:
-          data = hardCloseDate;
+        case 'Maturity':
+          if (hardCloseDate && term) {
+            data = moment(hardCloseDate).add((1 + parseInt(term, 10)), 'month').format('MM/YYYY');
+          }
+          break;
       }
       break;
     case 'REVENUE_SHARING_NOTE':
@@ -97,6 +101,11 @@ const calculateFormula = (type, title, params) => {
               data = moment(anticipatedOpenDate).add(6, 'month').format('MM/YYYY');
           } else {
             data = '-';
+          }
+          break;
+          case 'Maturity':
+          if (hardCloseDate && term) {
+            data = moment(hardCloseDate).add((1 + parseInt(term, 10)), 'month').format('MM/YYYY');
           }
           break;
         default:
@@ -148,6 +157,7 @@ const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, ha
                                 startupPeriod: get(record, 'offering.closureSummary.startupPeriod'),
                                 anticipatedOpenDate: get(record, 'offering.closureSummary.anticipatedOpenDate'),
                                 actualOpeningDate: get(record, 'offering.closureSummary.operationsDate'),
+                                term: get(record, 'offering.keyTerms.maturity'),
                               },
                               )
                             : h.link
@@ -166,10 +176,11 @@ const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, ha
                                       />
                                     )}
                                 </>
-                              ) : h.enum ? get(record, h.key) && CAMPAIGN_KEYTERMS_SECURITIES[get(record, h.key)]
-                                : h.validate ? validDate(record, h.key)
-                                  : h.maturity ? validDate(record, h.key) ? `${validDate(record, h.key)} (${moment(moment(get(record, h.key))).diff(moment(), 'months') >= 0 ? moment(moment(get(record, h.key))).diff(moment(), 'months') : '0'})` : ''
-                                    : h.currency ? Helper.CurrencyFormat(get(record, h.key) || 0) : 'N/A'
+                              ) : h.options ? (get(record, h.key) ? 'Y' : 'N')
+                                : h.enum ? get(record, h.key) && CAMPAIGN_KEYTERMS_SECURITIES[get(record, h.key)]
+                                  : h.validate ? validDate(record, h.key)
+                                    : h.maturity ? validDate(record, h.key) ? `${validDate(record, h.key)} (${moment(moment(get(record, h.key))).diff(moment(), 'months') >= 0 ? moment(moment(get(record, h.key))).diff(moment(), 'months') : '0'})` : ''
+                                      : h.currency ? Helper.CurrencyFormat(get(record, h.key) || 0) : (get(record, h.key) || 'N/A')
                             }
                           </Table.Cell>
                         ))}
