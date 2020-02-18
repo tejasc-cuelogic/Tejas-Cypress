@@ -87,6 +87,15 @@ export default class PaymentDetails extends Component {
                 changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM')}
                 fielddata={PAYMENT_FRM.fields.amountDue}
               />
+              {['paymentStartDateCalc', 'minPaymentStartDateCalc'].map(field => ((field === 'minPaymentStartDateCalc' && ['REVENUE_SHARING_NOTE'].includes(security)) || field !== 'minPaymentStartDateCalc') && (
+                <MaskedInput
+                  name={field}
+                  placeHolder={PAYMENT_FRM.fields[field].placeHolder}
+                  fielddata={PAYMENT_FRM.fields[field]}
+                  changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'formatted')}
+                  dateOfBirth
+                />
+              ))}
               {['inDefault', 'sendNotification'].map(field => (
               <div className="field">
                 <Header as="label">{PAYMENT_FRM.fields[field].label}</Header>

@@ -14,6 +14,8 @@ export const PAYMENT = FormHelper.generateMeta([
   ['amountDue', 'Amount Due', '', '', 'Amount Due', { props: { objRef: 'offering.payment' }, asIn: true }],
   ['anticipatedOpenDate', 'Anticipated Opening Date', '', 'date', 'Anticipated Opening Date', { customErrors: { date: 'Anticipated Opening Date is not a valid date format.' }, props: { objRef: 'offering.closureSummary' }, asIn: true }],
   ['draftDate', 'Draft Date', '', 'date', 'Draft Date', { customErrors: { date: 'Draft Date is not a valid date format.' }, props: { objRef: 'offering.payment' }, asIn: true }],
+  ['paymentStartDateCalc', 'Payment Start Date', '', 'date', 'Payment Start Date', { customErrors: { date: 'Payment Start Date is not a valid date format.' }, props: { objRef: 'offering.payment' }, asIn: true }],
+  ['minPaymentStartDateCalc', 'Min Payment Start Date', '', 'date', 'Min Payment Start Date', { customErrors: { date: 'Min Payment Start Date is not a valid date format.' }, props: { objRef: 'offering.payment' }, asIn: true }],
   ['startupPeriod', 'Startup Period', '', '', 'Startup Period', { props: { objRef: 'offering.closureSummary' }, asIn: true }],
   ['inDefault', 'In Default', '', '', 'In Default',
   { props: { values: [

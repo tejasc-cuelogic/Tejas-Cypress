@@ -23,6 +23,8 @@ export const adminPaymentsIssuerList = gql`
           sendNotification
           amountDue
           draftDate
+          paymentStartDateCalc
+          minPaymentStartDateCalc
         }
         closureSummary {
           startupPeriod
@@ -69,6 +71,8 @@ export const updatePaymentIssuer = gql`
         sendNotification
         amountDue
         draftDate
+        paymentStartDateCalc
+        minPaymentStartDateCalc
       }
       closureSummary {
         startupPeriod
