@@ -74,9 +74,10 @@ export const portPrequalDataToApplication = gql`
   }`;
 
 export const requestOtp = gql`
-  mutation requestOtp($type: MFAModeEnum, $address: String){
+  mutation requestOtp($type: MFAModeEnum, $isLinkedBankChange: Boolean, $address: String){
     requestOtp(
       type: $type
+      isLinkedBankChange: $isLinkedBankChange
       address: $address
     )
   }`;
