@@ -261,7 +261,7 @@ class KeyTermsDetails extends Component {
               field="interestRate"
               title="Annualized Interest Rate"
               titleAddon={isMobile
-                ? (<PopUpModal label="Interest Rate" content={keyTerms && keyTerms.securities === 'TERM_NOTE' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors. <a target="_blank" href="/resources/education-center/investor/how-term-notes-work">Learn more</a></>) : keyTerms.securities === 'CONVERTIBLE_NOTES' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors.</>) : ''} />)
+                ? (<PopUpModal label="Annualized Interest Rate" content={keyTerms && keyTerms.securities === 'CONVERTIBLE_NOTES' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors.</>) : (<>This is the gross annualized interest rate used to calculate monthly payments to investors. <a target="_blank" href="/resources/education-center/investor/how-term-notes-work">Learn more</a></>)} />)
                 : (
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
@@ -306,6 +306,16 @@ class KeyTermsDetails extends Component {
               data={keyTerms}
               field="totalRoundSize"
               title="Total Round Size"
+              titleAddon={isMobile
+                ? (<PopUpModal label="Total Round Size" content={<>This is the total amount of capital being raised by the business in this round of financing.</>} />)
+                : (
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content={<>This is the total amount of capital being raised by the business in this round of financing.</>}
+                    position="top center"
+                  />
+                )
+              }
               content={(
                 <p>
                   {Helper.CurrencyFormat(keyTerms.totalRoundSize, 0)}
@@ -316,6 +326,16 @@ class KeyTermsDetails extends Component {
               data={keyTerms}
               field="premoneyValuation"
               title="Pre-Money Valuation"
+              titleAddon={isMobile
+                ? (<PopUpModal label="Pre-Money Valuation" content={<>This is the valuation of the business immediately prior to this round of financing.</>} />)
+                : (
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content={<>This is the valuation of the business immediately prior to this round of financing.</>}
+                    position="top center"
+                  />
+                )
+              }
               content={(
                 <p>
                   {Helper.CurrencyFormat(keyTerms.premoneyValuation, 0)}
@@ -336,6 +356,17 @@ class KeyTermsDetails extends Component {
               data={keyTerms}
               field="frequencyOfPayments"
               title="Payments"
+              titleAddon={isMobile
+                ? (<PopUpModal label="Payments" content={<>This is the frequency with which payments will be made to investors. Typically, payments begin after the first full month following the close of the campaign or after a designated Startup Period. View the Disclosure Statement for details.<a target="_blank" href="/resources/education-center/investor/how-term-notes-work">View Details</a></>} />)
+                : (
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content={<>This is the frequency with which payments will be made to investors. Typically, payments begin after the first full month following the close of the campaign or after a designated Startup Period. View the Disclosure Statement for details.<a target="_blank" href="/resources/education-center/investor/how-term-notes-work">View Details</a></>}
+                    position="top center"
+                    hoverable
+                  />
+                )
+              }
               content={(
                 <p>
                   {keyTerms && keyTerms.frequencyOfPayments ? keyTerms.frequencyOfPayments
@@ -349,11 +380,11 @@ class KeyTermsDetails extends Component {
               title="Security Interest"
               content={keyTerms && keyTerms.securityInterest ? keyTerms.securityInterest : ' NA'}
               titleAddon={isMobile
-                ? (<PopUpModal label="Security Interest" content="The Issuer will grant a security interest in all of it's assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement." />)
+                ? (<PopUpModal label="Security Interest" content={<>The Issuer will grant a security interest in its assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities.<a target="_blank" href="/resources/education-center/investor/how-term-notes-work">View Details</a></>} />)
                 : (
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content="The Issuer will grant a security interest in all of it's assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement."
+                    content={<>The Issuer will grant a security interest in its assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities.<a target="_blank" href="/resources/education-center/investor/how-term-notes-work">View Details</a></>}
                     position="top center"
                   />
                 )
