@@ -175,6 +175,7 @@ class KeyTermsDetails extends Component {
                       trigger={<Icon name="help circle" color="green" />}
                       content={<>This is the multiple of your original investment that the Issuer has agreed to pay back prior to maturity. The Issuer pays a portion of their gross revenues every month until the Investment Multiple is achieved. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>}
                       position="top center"
+                      hoverable
                     />
                   )
               }
@@ -204,6 +205,7 @@ class KeyTermsDetails extends Component {
                       trigger={<Icon name="help circle" color="green" />}
                       content={<>This is the percentage of gross revenue that is dedicated to paying back investors. So long as the Issuer has revenue, payments will be made to investors monthly until the total Investment Multiple is reached. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>}
                       position="top center"
+                      hoverable
                     />
                   )
               }
@@ -265,6 +267,7 @@ class KeyTermsDetails extends Component {
                     trigger={<Icon name="help circle" color="green" />}
                     content={keyTerms && keyTerms.securities === 'TERM_NOTE' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors. <a target="_blank" href="/resources/education-center/investor/how-term-notes-work">Learn more</a></>) : keyTerms.securities === 'CONVERTIBLE_NOTES' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors.</>) : ''}
                     position="top center"
+                    hoverable
                   />
                 )
               }
