@@ -33,6 +33,10 @@ export default class OfferingDetails extends Component {
       } else {
         this.props.offeringsStore.getOne(props.match.params.offeringSlug);
       }
+    } else {
+      const { offer } = this.props.offeringsStore;
+      this.props.offeringCreationStore.setCurrentOfferingId(get(offer, 'id'));
+      this.props.offeringCreationStore.setFieldValue('currentOfferingSlug', get(offer, 'offeringSlug'));
     }
     this.props.navStore.setAccessParams('specificNav', '/dashboard/offering/2/overview');
   }
@@ -90,7 +94,7 @@ export default class OfferingDetails extends Component {
       navItems = navItems.filter(n => (n.title !== 'Close'));
     }
     // add business application after Bonus Rewards // offer.stage === 'CREATION' &&
-    if (offer.applicationId && !['WP_MIGRATION'].includes(offer.applicationId) && offer.issuerId) {
+    if (offer.applicationId && !['WP_MIGRATION'].includes(offer.applicationId)) {
       const pos = navItems.findIndex(n => n.to === 'overview');
       navItems.splice(
         (pos + 1),

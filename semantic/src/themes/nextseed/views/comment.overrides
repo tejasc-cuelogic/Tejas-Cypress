@@ -37,15 +37,19 @@
                 line-height: 24px;
             }
         }
-        .ui.blue.label {
-            margin: 0 0 0 @10px;
+        .ui.label {
+            margin: -@7px 0 0 @10px;
             vertical-align: middle;
             height: @20px;
             line-height: 20px;
             padding-top: 0;
+            &.black{
+                background-color: @neutral !important;
+                border-color: @neutral !important;
+            }
         }
         &.issuer-comment {
-            background: fade(@primary-two-darken, 8%);
+            background: fade(@primary-one, 8%);
             border-radius: 4px;
             border-top: 0;
             +.issuer-comment {
@@ -65,19 +69,19 @@
                 border: 0;
                 .comment {
                     background: transparent;
-                    border-top: 1px solid fade(@primary-two-darken, 8%);
+                    border-top: 1px solid fade(@primary-one, 8%);
                     &:not(.issuer-comment):last-child {
                         padding-bottom: 0;
                     }
                     &.issuer-comment {
-                        background: fade(@primary-two-darken, 8%);
+                        background: fade(@primary-one, 8%);
                         border-radius: 4px;
                         border-top: 0;
                         +.issuer-comment {
                             margin-top: @24px;
                         }
                         +.comment {
-                            border-top: 1px solid fade(@primary-two-darken, 8%);
+                            border-top: 1px solid fade(@primary-one, 8%);
                         }
                     }
                 }  

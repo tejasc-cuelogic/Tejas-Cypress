@@ -1,18 +1,15 @@
 import gql from 'graphql-tag';
 
-export const allUpdates = gql`
-  query fetchUpdatesByOfferId ($offerId: String!, $userId: String) {
-    offeringUpdatesByOfferId (
-      offerId: $offerId
-      userId: $userId
-    ) {
+const updateField = `
       id
       title
       isVisible
       offeringId
       updatedDate
+      postUpdateAs
       updated {
         date
+        by
       }
       approved {
         by
@@ -20,7 +17,15 @@ export const allUpdates = gql`
       }
       status
       scope
-      content
+      content`;
+
+export const allUpdates = gql`
+  query fetchUpdatesByOfferId ($offerId: String!, $userId: String) {
+    offeringUpdatesByOfferId (
+      offerId: $offerId
+      userId: $userId
+    ) {
+      ${updateField}
     }
   }
 `;
@@ -28,21 +33,7 @@ export const allUpdates = gql`
 export const newUpdate = gql`
   mutation createOfferingUpdates ($updatesInput: OfferingUpdatesInput! ) {
     createOfferingUpdates (updatesInput: $updatesInput) {
-      id
-      title
-      isVisible
-      offeringId
-      updatedDate
-      updated {
-        date
-      }
-      approved {
-        by
-        date
-      }
-      status
-      scope
-      content
+      ${updateField}
     }
   }
 `;
@@ -52,21 +43,7 @@ export const getUpdate = gql`
     offeringUpdatesById (
       id: $id
     ) {
-      id
-      title
-      status
-      updatedDate
-      scope
-      content
-      tiers
-      approved {
-        by
-        date
-      }
-      updated {
-        by
-        date
-      }
+      ${updateField}
     }
   }
 `;
@@ -76,23 +53,9 @@ export const editUpdate = gql`
     updateOfferingUpdatesInfo (
       id: $id,
       updatesInput: $updatesInput
-    ) {
-      id
-      title
-      status
-      scope
-      content
-      tiers
-      updatedDate
-      approved {
-        by
-        date
+      ) {
+        ${updateField}
       }
-      updated {
-        by
-        date
-      }
-    }
   }
 `;
 
