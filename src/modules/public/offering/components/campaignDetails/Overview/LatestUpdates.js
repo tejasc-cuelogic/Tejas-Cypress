@@ -39,7 +39,7 @@ class LatestUpdates extends Component {
             <Item.Content>
               <div className={`${newLayout ? 'campaign-avatar-v2' : ''} campaign-avatar`}>
                 <div className="ui image avatar-image">
-                  {companyAvatarUrl && companyAvatarUrl.length
+                  {companyAvatarUrl && companyAvatarUrl.length && !isNextseedUpdatedPost
                     ? <Image64 srcUrl={companyAvatarUrl} circular />
                     : <UserAvatar UserInfo={userAvatarObj} />
                 }

@@ -441,7 +441,7 @@ export class Auth {
     new Promise((res, rej) => {
       try {
         this.resetData(logoutType);
-        AmplifyAuth.signOut();
+        AmplifyAuth.signOut({ global: true });
         AWS.config.clear();
         res();
       } catch (err) {
