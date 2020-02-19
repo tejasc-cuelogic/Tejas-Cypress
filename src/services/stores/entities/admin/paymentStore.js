@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
-import { orderBy, get, findIndex, pick } from 'lodash';
+import { orderBy, get, findIndex, pick, forEach } from 'lodash';
 import moment from 'moment';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -85,6 +85,11 @@ export class PaymentStore extends DataModelStore {
       let pickKeyList = type === 'issuers' ? ['launchExpectedOpsDate', 'operationsDate', 'keyTermsAnticipatedPaymentStartDate', 'repaymentStartDate', 'monthlyPayment', 'paymentsContactEmail'] : ['startupPeriod', 'paymentStartDateCalc', 'amountDue', 'inDefault', 'sendNotification', 'draftDate'];
       pickKeyList = type === 'tracker' && security === 'REVENUE_SHARING_NOTE' ? [...pickKeyList, 'anticipatedOpenDate', 'operationsDate', 'minPaymentStartDateCalc'] : pickKeyList;
       variables = pick(variables, pickKeyList);
+      forEach(variables, (d, key) => {
+        if (d === '') {
+          variables[key] = null;
+        }
+      });
       client
         .mutate({
           mutation: updatePaymentIssuer,
