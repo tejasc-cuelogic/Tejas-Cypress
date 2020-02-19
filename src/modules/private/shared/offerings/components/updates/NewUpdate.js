@@ -280,8 +280,7 @@ export default class NewUpdate extends Component {
                                 fielddata={PBUILDER_FRM.fields.scope}
                                 name="scope"
                                 changed={(e, result) => UpdateChange(e, result)}
-                                containerclassname="mb-10"
-                                widths="equal"
+                                containerclassname="display-block"
                                 value={PBUILDER_FRM.fields.scope.value}
                               />
                               {PBUILDER_FRM.fields.scope.value !== 'PUBLIC'
@@ -358,7 +357,6 @@ export default class NewUpdate extends Component {
                                     changed={(values, name) => maskChange(values, 'PBUILDER_FRM', name)}
                                     dateOfBirth
                                   />
-
                                   {['LIVE', 'LOCK', 'PROCESSING'].includes(offer.stage)
                                     && (
                                       this.sendInvestorNotificationTemplate(isReadonly, isManager)
