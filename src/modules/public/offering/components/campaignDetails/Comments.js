@@ -17,7 +17,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 @observer
 class Comments extends Component {
   state = {
-    readMore: false, readMoreInner: false, visible: false, commentId: null, visiblePost: true, 
+    readMore: false, readMoreInner: false, visible: false, commentId: null, visiblePost: true,
   }
 
   constructor(props) {
@@ -163,15 +163,19 @@ class Comments extends Component {
           )
           : (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status)
             ? (accreditationStatus === 'REQUESTED')
-                ? (<section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
+                ? (
+                  <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
                     <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
-                  </section>)
-                : (<section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
+                  </section>
+                  )
+                : (
+                  <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
                     <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
                     <Form reply className="public-form clearfix">
                       <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>
                     </Form>
-                  </section>)
+                  </section>
+                  )
             : (!disablePostComment)
             && (
               <>
@@ -185,11 +189,11 @@ class Comments extends Component {
                         containerclassname="secondary"
                       />
                       <Button fluid={isMobile} loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null, campaignId)} disabled={!MESSAGE_FRM.meta.isValid || buttonLoader === 'PUBLIC'} primary content="Post Comment" />
-                    </Form>
+                  </Form>
                   ) : ''
                 }
               </>
-            )   
+            )
         }
         {errors
           && (
