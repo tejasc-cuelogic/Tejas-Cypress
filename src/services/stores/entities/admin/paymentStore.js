@@ -1,8 +1,7 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
-import { orderBy, get, findIndex } from 'lodash';
-import cleanDeep from 'clean-deep';
+import { orderBy, get, findIndex, pick } from 'lodash';
 import moment from 'moment';
-import { FormValidator as Validator, ClientDb } from '../../../../helper';
+import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { adminPaymentsIssuerList, updatePaymentIssuer } from '../../queries/Repayment';
 import { PAYMENT } from '../../../constants/payment';
@@ -77,12 +76,15 @@ export class PaymentStore extends DataModelStore {
       this.validateForm('PAYMENT_FRM');
     }
 
-    updatePayment = () => new Promise((resolve) => {
+    updatePayment = type => new Promise((resolve) => {
       uiStore.setProgress();
       const id = get(this.selectedOffering, 'offering.id');
+      const security = get(this.selectedOffering, 'offering.keyTerms.securities');
       let variables = Helper.replaceKeysDeep(toJS(Validator.evaluateFormData(this.PAYMENT_FRM.fields)), { expectedOpsDate: 'launchExpectedOpsDate', expectedPaymentDate: 'keyTermsAnticipatedPaymentStartDate', firstPaymentDate: 'repaymentStartDate', payments: 'paymentsContactEmail' });
       variables = variables.paymentsContactEmail ? { ...variables, paymentsContactEmail: (variables.paymentsContactEmail.split(',').map(p => p.trim())).join(', ') } : { ...variables };
-      variables = cleanDeep(variables);
+      let pickKeyList = type === 'issuers' ? ['launchExpectedOpsDate', 'operationsDate', 'keyTermsAnticipatedPaymentStartDate', 'repaymentStartDate', 'monthlyPayment', 'paymentsContactEmail'] : ['startupPeriod', 'paymentStartDateCalc', 'amountDue', 'inDefault', 'sendNotification', 'draftDate'];
+      pickKeyList = type === 'tracker' && security === 'REVENUE_SHARING_NOTE' ? [...pickKeyList, 'anticipatedOpenDate', 'operationsDate', 'minPaymentStartDateCalc'] : pickKeyList;
+      variables = pick(variables, pickKeyList);
       client
         .mutate({
           mutation: updatePaymentIssuer,
@@ -113,6 +115,122 @@ export class PaymentStore extends DataModelStore {
         this.setFieldValue('data', ClientDb.initiateDb(this.initialData, true));
       }
     }
+
+    calculateDraftDate = () => {
+      const draftDay = this.PAYMENT_FRM.fields.draftDay.value;
+      if (draftDay) {
+        const date = DataFormatter.addBusinessDays(moment().format('MM/01/YYYY'), draftDay);
+        console.log(date);
+        console.log(DataFormatter.diffDays(date, false, true));
+        const dateVal = DataFormatter.diffDays(date, false, true) > 0 ? moment(date).format('MM/DD/YYYY') : moment(date).add(1, 'month').subtract(1, 'day').format('MM/DD/YYYY');
+        this.setFieldValue('PAYMENT_FRM', dateVal, 'fields.draftDate.value');
+      } else {
+        this.setFieldValue('PAYMENT_FRM', null, 'fields.draftDate.value');
+      }
+    }
+
+    // eslint-disable-next-line consistent-return
+    calculateFormula = (type, title, params, forceAssign = false) => {
+      let data = '';
+      const { hardCloseDate, firstPaymentDate, startupPeriod, actualOpeningDate, anticipatedOpenDate, term } = params;
+      // eslint-disable-next-line default-case
+      switch (type) {
+        case 'TERM_NOTE':
+          // eslint-disable-next-line default-case
+          switch (title) {
+            case 'Status':
+              if (firstPaymentDate) {
+                data = 'In Repayment';
+              } else if (hardCloseDate) {
+                const month = moment(hardCloseDate).add(59, 'days').format('MMM');
+                if (month === moment().format('MMM')) {
+                  data = 'First Payment Due';
+                } else if (month === moment().add(1, 'month').format('MMM')) {
+                  data = 'First Payment Starting Next Month';
+                } else {
+                  data = 'No Payment Due';
+                }
+              }
+              break;
+            case 'Start Payment Date':
+            case 'startupPeriod':
+              if (startupPeriod !== null) {
+                if (startupPeriod === 0) {
+                  if (hardCloseDate) {
+                    data = moment(hardCloseDate).add(1, 'month').format('MM/YYYY');
+                  }
+                } else if (startupPeriod !== 0) {
+                  if (hardCloseDate) {
+                    data = moment(hardCloseDate).add(startupPeriod, 'month').format('MM/YYYY');
+                  }
+                }
+              }
+              if (forceAssign) {
+                this.setFieldValue('PAYMENT_FRM', data, 'fields.paymentStartDateCalc.value');
+              } else {
+                return data;
+              }
+              break;
+            case 'Maturity':
+              if (hardCloseDate && term) {
+                data = moment(hardCloseDate).add((1 + parseInt(term, 10)), 'month').format('MM/YYYY');
+              }
+              break;
+          }
+          break;
+        case 'REVENUE_SHARING_NOTE':
+          switch (title) {
+            case 'Status':
+              if (firstPaymentDate) {
+                data = 'In Repayment';
+              } else if (actualOpeningDate && moment(actualOpeningDate).add(59, 'days').format('MMM') === moment().format('MMM')) {
+                data = 'First Payment Due';
+              } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) > 180 && !actualOpeningDate) {
+                data = 'Min Payment Due';
+              } else if (actualOpeningDate && moment(actualOpeningDate).add(59, 'days').format('MMM') === moment().add(1, 'month').format('MMM')) {
+                data = 'First Payment Starting Next Month';
+              } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) > 150 && !actualOpeningDate) {
+                data = 'Min Payment Starting Next Month';
+              } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) < 180 && !actualOpeningDate) {
+                data = 'No Payment Due';
+              }
+              break;
+            case 'Start Payment Date':
+            case 'operationsDate':
+              if (actualOpeningDate && DataFormatter.diffDays(actualOpeningDate, false, true) < 0) {
+                  data = moment(actualOpeningDate).add(2, 'month').format('MM/YYYY');
+              }
+              if (forceAssign) {
+                this.setFieldValue('PAYMENT_FRM', data, 'fields.paymentStartDateCalc.value');
+              } else {
+                return data;
+              }
+              break;
+            case 'Min Payment Start Date':
+            case 'anticipatedOpenDate':
+              if (anticipatedOpenDate && actualOpeningDate && DataFormatter.diffDays(actualOpeningDate, false, true) >= 0) {
+                  data = moment(anticipatedOpenDate).add(6, 'month').format('MM/YYYY');
+              }
+              if (forceAssign) {
+                this.setFieldValue('PAYMENT_FRM', data, 'fields.minPaymentStartDateCalc.value');
+              } else {
+                return data;
+              }
+              break;
+              case 'Maturity':
+              if (hardCloseDate && term) {
+                data = moment(hardCloseDate).add((1 + parseInt(term, 10)), 'month').format('MM/YYYY');
+              }
+              break;
+            default:
+              data = hardCloseDate;
+          }
+          break;
+      }
+      if (!forceAssign) {
+        return data;
+      }
+    };
 
     setInitiateSrch = (keyword) => {
       this.setDb([...this.initialData]);

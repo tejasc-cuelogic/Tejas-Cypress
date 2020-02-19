@@ -235,7 +235,7 @@ export default class DataModelStore {
         form[2],
       );
     } else {
-      this[formName] = FormValidator.onChange(this[formName], { name: field, value: fieldValue });
+      this[formName] = FormValidator.onChange(this[formName], { name: field, value: fieldValue === undefined ? null : fieldValue });
     }
     this.currTime = +new Date();
   };

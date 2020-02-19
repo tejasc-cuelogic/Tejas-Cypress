@@ -5,7 +5,6 @@ import { Card, Table, Button, Grid, Form, Icon, Header, Popup } from 'semantic-u
 import moment from 'moment';
 import { get } from 'lodash';
 import Helper from '../../../../../helper/utility';
-import { DataFormatter } from '../../../../../helper';
 import { InlineLoader } from '../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
@@ -34,89 +33,7 @@ const repaymentMeta = [
   { title: 'Draft Date', key: 'offering.payment.draftDate', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'], validate: true },
 ];
 
-const calculateFormula = (type, title, params) => {
-  let data = '';
-  const { hardCloseDate, firstPaymentDate, startupPeriod, actualOpeningDate, anticipatedOpenDate, term } = params;
-  // eslint-disable-next-line default-case
-  switch (type) {
-    case 'TERM_NOTE':
-      // eslint-disable-next-line default-case
-      switch (title) {
-        case 'Status':
-          if (firstPaymentDate) {
-            data = 'In Repayment';
-          } else if (hardCloseDate) {
-            const month = moment(hardCloseDate).add(59, 'days').format('MMM');
-            if (month === moment().format('MMM')) {
-              data = 'First Payment Due';
-            } else if (month === moment().add(1, 'month').format('MMM')) {
-              data = 'First Payment Starting Next Month';
-            } else {
-              data = 'No Payment Due';
-            }
-          }
-          break;
-        case 'Start Payment Date':
-          if (startupPeriod === 0) {
-            if (hardCloseDate) {
-              data = moment(hardCloseDate).add(1, 'month').format('MM/YYYY');
-            }
-          } else if (startupPeriod !== 0) {
-            if (hardCloseDate) {
-              data = moment(hardCloseDate).add(startupPeriod, 'month').format('MM/YYYY');
-            }
-          }
-          break;
-        case 'Maturity':
-          if (hardCloseDate && term) {
-            data = moment(hardCloseDate).add((1 + parseInt(term, 10)), 'month').format('MM/YYYY');
-          }
-          break;
-      }
-      break;
-    case 'REVENUE_SHARING_NOTE':
-      switch (title) {
-        case 'Status':
-          if (firstPaymentDate) {
-            data = 'In Repayment';
-          } else if (actualOpeningDate && moment(actualOpeningDate).add(59, 'days').format('MMM') === moment().format('MMM')) {
-            data = 'First Payment Due';
-          } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) > 180 && !actualOpeningDate) {
-            data = 'Min Payment Due';
-          } else if (actualOpeningDate && moment(actualOpeningDate).add(59, 'days').format('MMM') === moment().add(1, 'month').format('MMM')) {
-            data = 'First Payment Starting Next Month';
-          } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) > 150 && !actualOpeningDate) {
-            data = 'Min Payment Starting Next Month';
-          } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) < 180 && !actualOpeningDate) {
-            data = 'No Payment Due';
-          }
-          break;
-        case 'Start Payment Date':
-          if (actualOpeningDate && DataFormatter.diffDays(actualOpeningDate, false, true) < 0) {
-              data = moment(actualOpeningDate).add(2, 'month').format('MM/YYYY');
-          }
-          break;
-        case 'Min Payment Start Date':
-          if (anticipatedOpenDate && actualOpeningDate && DataFormatter.diffDays(actualOpeningDate, false, true) >= 0) {
-              data = moment(anticipatedOpenDate).add(6, 'month').format('MM/YYYY');
-          } else {
-            data = '-';
-          }
-          break;
-          case 'Maturity':
-          if (hardCloseDate && term) {
-            data = moment(hardCloseDate).add((1 + parseInt(term, 10)), 'month').format('MM/YYYY');
-          }
-          break;
-        default:
-          data = hardCloseDate;
-      }
-      break;
-  }
-  return data;
-};
-
-const PaymentsList = ({ headerTitle, type, sortOrder, repayments, handleSort, handleEditPayment, validDate, getLink, sortKey, toggleVisibilityStatus, stateToggle }) => (
+const PaymentsList = ({ calculateFormula, headerTitle, type, sortOrder, repayments, handleSort, handleEditPayment, validDate, getLink, sortKey, toggleVisibilityStatus, stateToggle }) => (
   <>
     <Header as="h3">{`${headerTitle} (${repayments.length}) `} <Icon onClick={() => toggleVisibilityStatus(type)} className={`ns-chevron-${stateToggle === true ? 'up' : 'down'}-compact right`} color="blue" /></Header>
     {stateToggle
@@ -247,7 +164,7 @@ export default class AllRepayments extends PureComponent {
   validDate = (data, field) => (get(data, field) && moment(get(data, field), 'MM/DD/YYYY', true).isValid() ? moment(get(data, field)).format('M/D/YY') : '');
 
   render() {
-    const { termNotes, revenueSharingNotes, sortOrderRSN, sortOrderTN, repayments, sortOrderRP, startupPeriod, sortOrderSP } = this.props.paymentStore;
+    const { calculateFormula, termNotes, revenueSharingNotes, sortOrderRSN, sortOrderTN, repayments, sortOrderRP, startupPeriod, sortOrderSP } = this.props.paymentStore;
     if (this.props.nsUiStore.loadingArray.includes('adminPaymentsIssuerList')) {
       return <InlineLoader />;
     }
@@ -308,6 +225,7 @@ export default class AllRepayments extends PureComponent {
             : (
               <>
               <PaymentsList
+                calculateFormula={calculateFormula}
                 headerTitle="Term Note"
                 type="TERM_NOTE"
                 repayments={termNotes}
@@ -321,6 +239,7 @@ export default class AllRepayments extends PureComponent {
                 stateToggle={this.state.TERM_NOTE}
               />
               <PaymentsList
+                calculateFormula={calculateFormula}
                 headerTitle="Revenue Sharing Note"
                 type="REVENUE_SHARING_NOTE"
                 repayments={revenueSharingNotes}

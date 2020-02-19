@@ -72,6 +72,18 @@ class DataFormatter {
     return diff;
   }
 
+  addBusinessDays = (date, daysToAdd) => {
+    let cnt = 0;
+    let tmpDate = moment(date);
+    while (cnt < daysToAdd) {
+        tmpDate = tmpDate.add('days', 1);
+        if (tmpDate.weekday() !== moment().day('Sunday').weekday() && tmpDate.weekday() !== moment().day('Saturday').weekday()) {
+            cnt += 1;
+        }
+    }
+    return moment(tmpDate).format('MM/DD/YYYY');
+  }
+
   diffInDaysHoursMin = (timeStamp2) => {
     const d1 = moment().format('MM/DD/YYYY');
     const d2 = timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').format('MM/DD/YYYY 23:59:59') : null;

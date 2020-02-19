@@ -21,18 +21,45 @@ export default class PaymentDetails extends Component {
   }
 
   handleUpdatePayment = () => {
+    const { paymentType } = this.props.match.params;
     const { updatePayment } = this.props.paymentStore;
-    updatePayment()
+    updatePayment(paymentType)
       .then(() => {
         this.handleCloseModal();
       });
   }
 
+  calculateFormula = (type, key) => {
+    const { calculateFormula, PAYMENT_FRM } = this.props.paymentStore;
+    calculateFormula(
+      type,
+      key,
+      {
+        hardCloseDate: PAYMENT_FRM.fields.hardCloseDate.value,
+        startupPeriod: PAYMENT_FRM.fields.startupPeriod.value,
+        actualOpeningDate: PAYMENT_FRM.fields.operationsDate.value,
+        anticipatedOpenDate: PAYMENT_FRM.fields.anticipatedOpenDate.value,
+      },
+      true,
+    );
+  }
+
   render() {
-    const { PAYMENT_FRM, maskChange, formChange, selectedOffering } = this.props.paymentStore;
+    const { PAYMENT_FRM, maskChange, formChange, selectedOffering, calculateDraftDate } = this.props.paymentStore;
     const { inProgress } = this.props.uiStore;
     const { paymentType } = this.props.match.params;
     const security = get(selectedOffering, 'offering.keyTerms.securities');
+    const formMeta = ['REVENUE_SHARING_NOTE'].includes(security) ? ['anticipatedOpenDate', 'paymentStartDateCalc', 'operationsDate', 'minPaymentStartDateCalc'] : ['paymentStartDateCalc'];
+    const amountDue = (
+      <MaskedInput
+        prefix="$ "
+        currency
+        type="text"
+        name="amountDue"
+        changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM')}
+        fielddata={PAYMENT_FRM.fields.amountDue}
+      />
+    );
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -68,31 +95,19 @@ export default class PaymentDetails extends Component {
                 name="startupPeriod"
                 changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'float')}
                 fielddata={PAYMENT_FRM.fields.startupPeriod}
+                onkeyup={() => this.calculateFormula(security, 'startupPeriod')}
               />
-              {['REVENUE_SHARING_NOTE'].includes(security) && ['anticipatedOpenDate', 'operationsDate'].map(field => (
+              {['REVENUE_SHARING_NOTE'].includes(security) && amountDue}
+              {formMeta.map(field => (
                 <MaskedInput
+                  displayMode={['paymentStartDateCalc', 'minPaymentStartDateCalc'].includes(field)}
+                  format={['paymentStartDateCalc', 'minPaymentStartDateCalc'].includes(field) ? '##/####' : '##/##/####'}
                   name={field}
                   label={field === 'operationsDate' ? 'Actual Opening Date' : false}
                   placeHolder={field === 'operationsDate' ? 'Actual Opening Date' : PAYMENT_FRM.fields[field].placeHolder}
                   fielddata={PAYMENT_FRM.fields[field]}
                   changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'formatted')}
-                  dateOfBirth
-                />
-              ))}
-              <MaskedInput
-                prefix="$ "
-                currency
-                type="text"
-                name="amountDue"
-                changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM')}
-                fielddata={PAYMENT_FRM.fields.amountDue}
-              />
-              {['paymentStartDateCalc', 'minPaymentStartDateCalc'].map(field => ((field === 'minPaymentStartDateCalc' && ['REVENUE_SHARING_NOTE'].includes(security)) || field !== 'minPaymentStartDateCalc') && (
-                <MaskedInput
-                  name={field}
-                  placeHolder={PAYMENT_FRM.fields[field].placeHolder}
-                  fielddata={PAYMENT_FRM.fields[field]}
-                  changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'formatted')}
+                  onkeyup={() => this.calculateFormula(security, field)}
                   dateOfBirth
                 />
               ))}
@@ -107,12 +122,22 @@ export default class PaymentDetails extends Component {
               </div>
               ))}
               <MaskedInput
+                number
+                name="draftDay"
+                placeHolder={PAYMENT_FRM.fields.draftDay.placeHolder}
+                fielddata={PAYMENT_FRM.fields.draftDay}
+                changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'float')}
+                onkeyup={calculateDraftDate}
+              />
+              <MaskedInput
+                displayMode
                 name="draftDate"
                 placeHolder={PAYMENT_FRM.fields.draftDate.placeHolder}
                 fielddata={PAYMENT_FRM.fields.draftDate}
                 changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'formatted')}
                 dateOfBirth
               />
+              {['TERM_NOTE'].includes(security) && amountDue}
               </>
               )}
               {['issuers'].includes(paymentType)
@@ -148,8 +173,7 @@ export default class PaymentDetails extends Component {
                 fielddata={PAYMENT_FRM.fields.monthlyPayment}
               />
               <MaskedInput
-                readOnly
-                containerclassname="display-only"
+                displayMode
                 prefix="$ "
                 currency
                 type="text"
