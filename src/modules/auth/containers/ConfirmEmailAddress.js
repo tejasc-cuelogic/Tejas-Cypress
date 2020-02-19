@@ -24,8 +24,14 @@ export default class ConfirmEmailAddress extends Component {
       this.props.uiStore.setAuthRef(this.props.refLink);
     }
 
-    if (!this.props.authStore.CONFIRM_FRM.fields.email.value
-      && !this.props.authStore.isUserLoggedIn) {
+    const { email } = this.props.userDetailsStore.userDetails;
+    const currentEmail = email && email.address ? email.address : '';
+    console.log('currentEmail==>', currentEmail);
+    console.log('Form Email==>', this.props.authStore.CONFIRM_FRM.fields.email.value);
+    const sameEmailExists = !!(this.props.authStore.CONFIRM_FRM.fields.email.value === currentEmail || !this.props.authStore.CONFIRM_FRM.fields.email.value);
+    if ((!this.props.authStore.CONFIRM_FRM.fields.email.value
+      && !this.props.authStore.isUserLoggedIn) || (sameEmailExists)) {
+      sessionStorage.removeItem('changedEmail');
       this.props.history.push(this.props.refLink || '/login');
     }
     this.props.authStore.setUserCredentiansConfirmEmail();
@@ -110,6 +116,7 @@ export default class ConfirmEmailAddress extends Component {
             .catch(() => { });
         });
       }
+      sessionStorage.removeItem('changedEmail');
     }
   }
 
@@ -125,6 +132,7 @@ export default class ConfirmEmailAddress extends Component {
       this.props.history.push(this.props.uiStore.authRef || '/');
     }
     this.props.uiStore.clearErrors();
+    sessionStorage.removeItem('changedEmail');
   }
 
   handleResendCode = () => {
