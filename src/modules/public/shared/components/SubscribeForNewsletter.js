@@ -38,7 +38,7 @@ const ThanksNote = props => (
       <Header as="h3">Thank you!</Header>
       <Divider section />
       <p>
-        We&lsquo;ll keep you informed about new investment<br/>
+        We&lsquo;ll keep you informed about new investment<br />
         opportunities, updates and events.
       </p>
       <Divider hidden />
