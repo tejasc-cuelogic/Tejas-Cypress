@@ -141,7 +141,7 @@ export default class Portfolio extends PureComponent {
       );
     }
     const { getInvestorAccounts, getPieChartData, portfolioError } = portfolioStore;
-    const totalPortfolioBalance = getInvestorAccounts && getInvestorAccounts.totalBalance ? !this.props.isAdmin && money.isNegative(getInvestorAccounts.totalBalance) ? '0.00' : getInvestorAccounts.totalBalance : '0.00';
+    const totalPortfolioBalance = getInvestorAccounts && getInvestorAccounts.availableCash ? !this.props.isAdmin && money.isNegative(getInvestorAccounts.availableCash) ? '0.00' : getInvestorAccounts.availableCash : '0.00';
     const ERROR_MSG = `Sorry, this page is not loading correctly. We've notified the team.<br />
       Please check back again later, and contact us at
       <a href="mailto:support@nextseed.com">support@nextseed.com</a> with any questions.`;
@@ -179,7 +179,7 @@ export default class Portfolio extends PureComponent {
           title: 'Net Deposits', content: getInvestorAccounts && getInvestorAccounts.totalDeposit, type: 1, info: 'Deposits made from your external accounts, minus withdrawals.',
         },
         {
-          title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.netPayments, type: 1, info: 'Payments received to date from all prior investments, minus NextSeed fees.',
+          title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.lifetimePaymentsReceived, type: 1, info: 'Payments received to date from all prior investments, minus NextSeed fees.',
         },
         // {
         //   title: 'TNAR', content: tnarValue && !money.isZero(tnarValue) ? tnarValue :
