@@ -369,8 +369,7 @@ class KeyTermsDetails extends Component {
               title="Ownership % Represented by Securities"
               content={keyTerms && keyTerms.securitiesOwnershipPercentage
                 ? (
-                  <p>
-                    {keyTerms.securitiesOwnershipPercentage}% {' '}
+                  <p>{keyTerms.securitiesOwnershipPercentage}%. {' '}
                     Investors will not receive any equity interests in the Issuer or
                     any voting or management rights with respect to the Issuer as a result of
                     an investment in Securities.
