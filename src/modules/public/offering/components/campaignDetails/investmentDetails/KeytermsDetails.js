@@ -4,11 +4,11 @@ import { inject, observer } from 'mobx-react';
 // import money from 'money-math';
 import { Table, Divider, Grid, Popup, Icon } from 'semantic-ui-react';
 import {
-  CAMPAIGN_KEYTERMS_SECURITIES,
   CAMPAIGN_OFFERED_BY,
   CAMPAIGN_REGULATION_DETAILED,
   CAMPAIGN_KEYTERMS_REGULATION_PARALLEL,
   CAMPAIGN_KEYTERMS_SECURITIES_ENUM,
+  CAMPAIGN_SECURITIES_DETAILED,
 } from '../../../../../../constants/offering';
 import Helper from '../../../../../../helper/utility';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
@@ -155,15 +155,21 @@ class KeyTermsDetails extends Component {
               data={keyTerms}
               field="securities"
               title="Type of Securities"
-              content={(
+              content={
+                CAMPAIGN_SECURITIES_DETAILED.TOOLTIP[offerStructure]
+                ? (
                 <PopUpModal
-                  customTrigger={<span className="popup-label">{offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}</span>}
-                  content={<>Test <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>}
+                  customTrigger={<span className="popup-label">{offerStructure ? CAMPAIGN_SECURITIES_DETAILED.SECURITIES[offerStructure] : 'NA'}</span>}
+                  content={CAMPAIGN_SECURITIES_DETAILED.TOOLTIP[keyTerms.securities]}
                   position="top center"
                   showOnlyPopup={!isMobile}
                   hoverable
                 />
-              )}
+                )
+                : (
+                  <span>{offerStructure ? CAMPAIGN_SECURITIES_DETAILED.SECURITIES[offerStructure] : 'NA'}</span>
+                )
+              }
             />
             <KeyTermsFieldHoc
               data={keyTerms}

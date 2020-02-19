@@ -43,14 +43,14 @@ class KeyTerms extends Component {
                 { get(campaign, 'regulation')
                   && CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
                   ? (
-<Popup
-  trigger={<Icon name="help circle" color="green" />}
-  content={
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content={
                         CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
                       }
-  hoverable
-  position="top center"
-/>
+                    hoverable
+                    position="top center"
+                  />
                   ) : ''
                 }
               </Table.Cell>
@@ -124,7 +124,7 @@ class KeyTerms extends Component {
             }
             {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
               ? (
-<Table.Row verticalAlign="top">
+              <Table.Row verticalAlign="top">
                 <Table.Cell width={5}><b>Maturity</b>{' '}
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
@@ -164,7 +164,7 @@ class KeyTerms extends Component {
                 } */}
                 {get(campaign, 'keyTerms.priceCopy')
                 && (
-<Table.Row verticalAlign="top">
+                <Table.Row verticalAlign="top">
                   <Table.Cell width={5} className="neutral-text"><b>{`${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price`}{' '}</b>
                   </Table.Cell>
                   <Table.Cell>
