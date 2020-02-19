@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Button, Comment, Form, Segment, Header, Label, Divider, Message, Modal } from 'semantic-ui-react';
+import { Button, Comment, Form, Segment, Header, Label, Divider, Message } from 'semantic-ui-react';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
@@ -9,7 +9,6 @@ import { FormTextarea } from '../../../../../theme/form';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import { ListErrors } from '../../../../../theme/shared';
 import { DataFormatter } from '../../../../../helper';
-import cookie from 'react-cookies';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -37,7 +36,7 @@ class Comments extends Component {
     const { isUserLoggedIn } = this.props.authStore;
     if (!isUserLoggedIn) {
       this.props.uiStore.setRedirectURL(this.props.history.location);
-      this.props.uiStore.setAuthRef(this.props.refLink, this.props.location.hash);
+      this.props.uiStore.setAuthRef(this.props.refLink);
       this.props.history.push('/login');
     } else {
       this.props.history.push(`${this.props.match.url}/postComment/NEW`);
@@ -49,7 +48,7 @@ class Comments extends Component {
     const { isUserLoggedIn } = this.props.authStore;
     const { currentUser } = this.props.userStore;
     if (!isUserLoggedIn) {
-      this.props.uiStore.setAuthRef(`${this.props.refLink}${this.props.newLayout ? '' : '/comments'}`, this.props.location.hash);
+      this.props.uiStore.setAuthRef(`${this.props.refLink}${this.props.newLayout ? '' : '/comments'}`);
       this.props.uiStore.setRedirectURL({ pathname: `${this.props.refLink}${this.props.newLayout ? '' : '/comments'}` });
       this.props.history.push('/login');
     } else if (!(isUserLoggedIn && currentUser.roles.includes('investor'))) {
@@ -177,7 +176,7 @@ class Comments extends Component {
                 : <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
                     <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
                     <Form reply className="public-form clearfix">
-                      <Link to="/dashboard/account-settings/investment-limits/verify-accreditation" className="ui button primary">Verify Status</Link>
+                      <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>
                     </Form>
                   </section>
             : (!disablePostComment)
