@@ -121,6 +121,7 @@ export default class NewUpdate extends Component {
             label="Send Email Notifications"
           />
         </Form.Field>
+        <Divider section />
         {
           PBUILDER_FRM.fields.shouldSendInvestorNotifications.value
           && (
@@ -302,12 +303,10 @@ export default class NewUpdate extends Component {
                               </Form.Field>
                             )) : ''}
                           </Form>
-                        </Card.Content>
-                      </Card>
-                      {isManager
-                        && (
-                          <Card fluid>
-                            <Card.Content>
+                          <Divider section />
+                          {
+                            isManager
+                            && (
                               <Form>
                                 <MaskedInput
                                   readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
@@ -321,9 +320,10 @@ export default class NewUpdate extends Component {
                                 {this.sendInvestorNotificationTemplate(isReadonly, isManager)}
                                 {this.postUpdateAsTemplate()}
                               </Form>
-                            </Card.Content>
-                          </Card>
-                        )}
+                            )
+                          }
+                        </Card.Content>
+                      </Card>
                     </>
                   )
                   : (
