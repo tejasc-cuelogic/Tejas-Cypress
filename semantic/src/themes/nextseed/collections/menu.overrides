@@ -407,6 +407,16 @@ footer .ui.text.menu{
                 border-color: @neutral-darkwhite!important;
             }
         }
+        >.label.square {
+            float: none;
+            // height:@20px;
+            min-height:auto;
+            margin:0 0 0 @10px;
+            &.grey.basic{
+                color: @neutral-middark!important;
+                border-color: @neutral-darkwhite!important;
+            }
+        }
         &.dropdown .menu{
             position:relative;
             top:100%;
