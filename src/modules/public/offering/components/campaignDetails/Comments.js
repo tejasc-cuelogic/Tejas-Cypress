@@ -17,7 +17,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 @observer
 class Comments extends Component {
   state = {
-    readMore: false, readMoreInner: false, visible: false, commentId: null, visiblePost: true, accreditationModel: false,
+    readMore: false, readMoreInner: false, visible: false, commentId: null, visiblePost: true, 
   }
 
   constructor(props) {
@@ -84,15 +84,8 @@ class Comments extends Component {
 
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }
 
-  handleAccreditatonModel = (e, stateValue) => {
-    e.preventDefault();
-    this.setState({ accreditationModel: stateValue });
-  }
-
-  closeAccreditationModel = () => this.setState({ accreditationModel: false });
-
   render() {
-    //props destructuring
+    //  props destructuring
     const { visible, visiblePost } = this.state;
     const { isInvestorAccreditated, userAccreditationStatus } = this.props.userDetailsStore;
     const { isUserLoggedIn } = this.props.authStore;
@@ -103,7 +96,7 @@ class Comments extends Component {
     const { showOnlyOne, newLayout } = this.props;
     const { campaign, commentsMainThreadCount } = this.props.campaignStore;
     const { stepInRoute } = this.props.navStore;
-    //user & campaign status
+    //  user & campaign status
     const loginOrSignup = stepInRoute;
     const loggedInAsInvestor = isUserLoggedIn && currentUser.roles.includes('investor');
     const accountStatusFull = activeAccounts.length;
@@ -112,7 +105,7 @@ class Comments extends Component {
     const accreditationStatus = ['REQUESTED', 'CONFIRMED', 'EXPIRED'].includes(userAccreditationStatus.accreditation);
     const passedProcessingDate = DataFormatter.getDateDifferenceInHoursOrMinutes(get(campaign, 'closureSummary.processingDate'), true, true).value <= 0;
     const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull || frozenAccounts.length;
-    //comments & campaign data
+    //  comments & campaign data
     const campaignId = campaign && campaign.id;
     const campaignSlug = campaign && campaign.offeringSlug;
     const issuerId = campaign && campaign.issuerId;
@@ -170,15 +163,15 @@ class Comments extends Component {
           )
           : (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status)
             ? (accreditationStatus === 'REQUESTED')
-                ? <section classNّame={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
+                ? (<section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
                     <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
-                  </section>
-                : <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
+                  </section>)
+                : (<section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
                     <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
                     <Form reply className="public-form clearfix">
                       <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>
                     </Form>
-                  </section>
+                  </section>)
             : (!disablePostComment)
             && (
               <>
@@ -196,8 +189,7 @@ class Comments extends Component {
                   ) : ''
                 }
               </>
-            )
-              
+            )   
         }
         {errors
           && (
