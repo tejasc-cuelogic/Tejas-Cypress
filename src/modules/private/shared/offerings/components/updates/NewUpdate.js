@@ -272,18 +272,18 @@ export default class NewUpdate extends Component {
                               </Form>
                             )
                           }
-                          <div className="field">
-                            <Header as="label">Who’s this update for?</Header>
-                            <FormRadioGroup
-                              readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                              fielddata={PBUILDER_FRM.fields.scope}
-                              name="scope"
-                              changed={(e, result) => UpdateChange(e, result)}
-                              containerclassname="mb-10"
-                              widths="equal"
-                              value={PBUILDER_FRM.fields.scope.value}
-                            />
-                            <Form>
+                          <Form>
+                            <div className="field">
+                              <Header as="label">Who’s this update for?</Header>
+                              <FormRadioGroup
+                                readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                fielddata={PBUILDER_FRM.fields.scope}
+                                name="scope"
+                                changed={(e, result) => UpdateChange(e, result)}
+                                containerclassname="mb-10"
+                                widths="equal"
+                                value={PBUILDER_FRM.fields.scope.value}
+                              />
                               {PBUILDER_FRM.fields.scope.value !== 'PUBLIC'
                                 ? (
                                   <Form.Field>
@@ -321,9 +321,8 @@ export default class NewUpdate extends Component {
                                   />
                                 </Form.Field>
                               )) : ''}
-                            </Form>
-                          </div>
-                          <Divider section />
+                            </div>
+                          </Form>
                         </Card.Content>
                       </Card>
                       <Card fluid>
