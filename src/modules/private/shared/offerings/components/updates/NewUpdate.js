@@ -254,11 +254,6 @@ export default class NewUpdate extends Component {
                     <>
                       <Card fluid>
                         <Card.Content>
-
-                        </Card.Content>
-                      </Card>
-                      <Card fluid>
-                        <Card.Content>
                           <Header as="h4">Who’s this update for?</Header>
                           <FormRadioGroup
                             readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
