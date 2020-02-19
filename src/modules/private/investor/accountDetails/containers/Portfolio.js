@@ -6,6 +6,7 @@ import { Route, Link, Switch } from 'react-router-dom';
 import { Header, Card, Button } from 'semantic-ui-react';
 import money from 'money-math';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
+import SummaryTerms from '../components/portfolio/SummaryTerms';
 import { DataFormatter } from '../../../../../helper';
 import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
 import InvestmentList from '../components/portfolio/InvestmentList';
@@ -201,6 +202,21 @@ export default class Portfolio extends PureComponent {
     let completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     completedSorted = filter(completedSorted, o => !includes(['TERMINATED', 'FAILED', 'REJECTED'], get(o, 'offering.stage')));
     const hideNotifications = localStorage.getItem('hideNotifications');
+    // const summaryTermsDetails = {
+    //   totalAccountValue: getInvestorAccounts.totalAccountValue,
+    //   outstandingPortfolioValue: getInvestorAccounts.outstandingPortfolioValue,
+    //   pendingInvestments: getInvestorAccounts.pendingInvestments,
+    //   availableCash: getInvestorAccounts.availableCash,
+    //   rewardsBalance: getInvestorAccounts.rewardsBalance,
+    //   lifetimePaymentsReceived: getInvestorAccounts.lifetimePaymentsReceived,
+    //   lifetimeInvestments: getInvestorAccounts.lifetimeInvestments,
+    //   cashInvestments: getInvestorAccounts.cashInvestments,
+    //   reinvestedEarnings: getInvestorAccounts.reinvestedEarnings,
+    //   creditsApplied: getInvestorAccounts.creditsApplied,
+    //   tnar: getInvestorAccounts.tnar,
+    //   realizedRoiOnLifetimeInvestments: getInvestorAccounts.realizedRoiOnLifetimeInvestments,
+    //   realizedRoiOnCashInvestments: getInvestorAccounts.realizedRoiOnCashInvestments,
+    // }
     return (
       <>
         {this.props.isAdmin
@@ -219,6 +235,9 @@ export default class Portfolio extends PureComponent {
         )
         }
         <SummaryHeader refLink={refLink} isAdmin={this.props.isAdmin} details={summaryDetails} />
+        {this.props.isAdmin
+          && <SummaryTerms refLink={refLink} isAdmin={this.props.isAdmin} details={getInvestorAccounts} />
+        }
         {(getPieChartData.investmentType.length || getPieChartData.industry.length)
           ? <PortfolioAllocations isAdmin={this.props.isAdmin} pieChart={getPieChartData} /> : ''
         }
