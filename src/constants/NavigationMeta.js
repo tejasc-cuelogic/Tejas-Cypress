@@ -447,6 +447,7 @@ export const PRIVATE_NAV = [
     path: 'admin/repayments',
     accessibleTo: ['admin', 'manager', 'support'],
     subNavigations: [
+      { title: 'Tracker', to: 'tracker' },
       { title: 'Issuers', to: 'issuers' },
       { title: 'Batches', to: 'batches' },
       { title: 'Util', to: 'util' },
