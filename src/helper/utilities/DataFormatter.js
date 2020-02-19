@@ -76,7 +76,7 @@ class DataFormatter {
     let cnt = 0;
     let tmpDate = moment(date);
     while (cnt < daysToAdd) {
-        tmpDate = tmpDate.add('days', 1);
+        tmpDate = tmpDate.add(1, 'days');
         if (tmpDate.weekday() !== moment().day('Sunday').weekday() && tmpDate.weekday() !== moment().day('Saturday').weekday()) {
             cnt += 1;
         }

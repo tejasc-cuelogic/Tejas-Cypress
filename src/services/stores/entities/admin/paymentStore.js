@@ -120,8 +120,6 @@ export class PaymentStore extends DataModelStore {
       const draftDay = this.PAYMENT_FRM.fields.draftDay.value;
       if (draftDay) {
         const date = DataFormatter.addBusinessDays(moment().format('MM/01/YYYY'), draftDay);
-        console.log(date);
-        console.log(DataFormatter.diffDays(date, false, true));
         const dateVal = DataFormatter.diffDays(date, false, true) > 0 ? moment(date).format('MM/DD/YYYY') : moment(date).add(1, 'month').subtract(1, 'day').format('MM/DD/YYYY');
         this.setFieldValue('PAYMENT_FRM', dateVal, 'fields.draftDate.value');
       } else {
