@@ -272,55 +272,57 @@ export default class NewUpdate extends Component {
                               </Form>
                             )
                           }
-                          <Header as="label">Who’s this update for?</Header>
-                          <FormRadioGroup
-                            readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                            fielddata={PBUILDER_FRM.fields.scope}
-                            name="scope"
-                            changed={(e, result) => UpdateChange(e, result)}
-                            containerclassname="mb-10"
-                            widths="equal"
-                            value={PBUILDER_FRM.fields.scope.value}
-                          />
-                          <Form>
-                            {PBUILDER_FRM.fields.scope.value !== 'PUBLIC'
-                              ? (
+                          <div className="field">
+                            <Header as="label">Who’s this update for?</Header>
+                            <FormRadioGroup
+                              readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                              fielddata={PBUILDER_FRM.fields.scope}
+                              name="scope"
+                              changed={(e, result) => UpdateChange(e, result)}
+                              containerclassname="mb-10"
+                              widths="equal"
+                              value={PBUILDER_FRM.fields.scope.value}
+                            />
+                            <Form>
+                              {PBUILDER_FRM.fields.scope.value !== 'PUBLIC'
+                                ? (
+                                  <Form.Field>
+                                    <Checkbox
+                                      name="allInvestor"
+                                      readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                      onChange={(e, result) => UpdateChange(e, result)}
+                                      checked={PBUILDER_FRM.fields.allInvestor.value}
+                                      label="All Investors"
+                                    />
+                                  </Form.Field>
+                                ) : null
+                              }
+                              {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.earlyBird && offer.earlyBird.quantity > 0 ? (
                                 <Form.Field>
                                   <Checkbox
-                                    name="allInvestor"
+                                    name="tiers"
                                     readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                    value={-1}
                                     onChange={(e, result) => UpdateChange(e, result)}
-                                    checked={PBUILDER_FRM.fields.allInvestor.value}
-                                    label="All Investors"
+                                    checked={PBUILDER_FRM.fields.tiers.values.includes(-1)}
+                                    label="Early Bird"
                                   />
                                 </Form.Field>
-                              ) : null
-                            }
-                            {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.earlyBird && offer.earlyBird.quantity > 0 ? (
-                              <Form.Field>
-                                <Checkbox
-                                  name="tiers"
-                                  readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                                  value={-1}
-                                  onChange={(e, result) => UpdateChange(e, result)}
-                                  checked={PBUILDER_FRM.fields.tiers.values.includes(-1)}
-                                  label="Early Bird"
-                                />
-                              </Form.Field>
-                            ) : ''}
-                            {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
-                              <Form.Field key={rewardTier}>
-                                <Checkbox
-                                  name="tiers"
-                                  readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                                  value={rewardTier}
-                                  onChange={(e, result) => UpdateChange(e, result)}
-                                  checked={PBUILDER_FRM.fields.tiers.values.includes(rewardTier)}
-                                  label={`$${rewardTier}`}
-                                />
-                              </Form.Field>
-                            )) : ''}
-                          </Form>
+                              ) : ''}
+                              {PBUILDER_FRM.fields.scope.value !== 'PUBLIC' && offer.rewardsTiers ? offer.rewardsTiers.map(rewardTier => (
+                                <Form.Field key={rewardTier}>
+                                  <Checkbox
+                                    name="tiers"
+                                    readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                                    value={rewardTier}
+                                    onChange={(e, result) => UpdateChange(e, result)}
+                                    checked={PBUILDER_FRM.fields.tiers.values.includes(rewardTier)}
+                                    label={`$${rewardTier}`}
+                                  />
+                                </Form.Field>
+                              )) : ''}
+                            </Form>
+                          </div>
                           <Divider section />
                         </Card.Content>
                       </Card>
