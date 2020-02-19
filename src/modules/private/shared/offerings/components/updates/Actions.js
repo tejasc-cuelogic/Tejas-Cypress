@@ -45,7 +45,7 @@ const Actions = observer((props) => {
                     inverted
                     onClick={() => save('new', 'DRAFT')}
                     color="green"
-                    content="Create"
+                    content="Create Draft"
                     disabled={!meta.isValid || inProgress}
                   />
                 )
@@ -85,7 +85,7 @@ const Actions = observer((props) => {
                         inverted
                         onClick={() => save('new', 'DRAFT')}
                         color="green"
-                        content="Create"
+                        content="Create Draft"
                         disabled={!meta.isValid || inProgress}
                         loading={inProgress === 'DRAFT'}
                       />
