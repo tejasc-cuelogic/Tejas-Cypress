@@ -26,8 +26,6 @@ export default class ConfirmEmailAddress extends Component {
 
     const { email } = this.props.userDetailsStore.userDetails;
     const currentEmail = email && email.address ? email.address : '';
-    console.log('currentEmail==>', currentEmail);
-    console.log('Form Email==>', this.props.authStore.CONFIRM_FRM.fields.email.value);
     const sameEmailExists = !!(this.props.authStore.CONFIRM_FRM.fields.email.value === currentEmail || !this.props.authStore.CONFIRM_FRM.fields.email.value);
     if ((!this.props.authStore.CONFIRM_FRM.fields.email.value
       && !this.props.authStore.isUserLoggedIn) || (sameEmailExists)) {
