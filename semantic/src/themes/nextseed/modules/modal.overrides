@@ -709,6 +709,15 @@
                 border-radius: 50px;
             }
         }
+        /* For CIP new design */
+        &.bordered{
+            border-bottom: 1px solid @neutral-darkwhite;
+        }
+        &.padded{
+            @media only screen and (max-width:@largestMobileScreen){
+                padding: @14px !important;
+            }
+        }
     }
     @media only screen and (max-width:@largestMobileScreen){
         width: 100%;

@@ -5,7 +5,6 @@ import { FormInput, MaskedInput, FormDropDown } from '../../../../../theme/form'
 import { US_STATES } from '../../../../../constants/account';
 import { INVESTOR_URLS } from '../../../../../services/constants/url';
 
-
 function cipVerificationHOC(WrappedComponent) {
   // eslint-disable-next-line no-unused-expressions
   return inject('identityStore', 'accountStore', 'userDetailsStore', 'uiStore', 'userStore')(observer((class extends React.Component {
@@ -106,6 +105,9 @@ function cipVerificationHOC(WrappedComponent) {
           ListErrors={ListErrors}
           isLoading={signUpLoading || inProgress}
           errors={errors}
+          headerLogo
+          borderedHeader
+          isProgressHeaderDisable
         />
       );
     }

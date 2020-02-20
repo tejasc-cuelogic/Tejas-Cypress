@@ -43,18 +43,18 @@ class CipHardFail extends React.Component {
   }
 
   render() {
-    const { commonMethods, NsModal, isLoading, errors, ListErrors } = this.props;
+    const { commonMethods, NsModal, errors, ListErrors } = this.props;
     const { ID_VERIFICATION_DOCS_FRM } = this.props.identityStore;
     return (
       <NsModal
         onClose={() => commonMethods.closeModal()}
         backUrl="/dashboard/setup/cip"
-        isLoading={isLoading}
+        {...this.props}
       >
-        <Grid centered textAlign="left">
+        <Grid centered stackable className={isMobile ? 'full-width' : ''}>
           <Grid.Column width="8" className="pt-0">
             <Header as="h4">We were unable to verify your identity.</Header>
-            {!isMobile && headerSiblingContent}
+            {headerSiblingContent}
             <Form error onSubmit={this.handleUploadDocuments} className="file-uploader-inline">
               <Form.Field className="mb-30">
                 <p className="mb-10"><b>Upload a Photo ID (Drivers License or Passport)</b></p>
@@ -98,7 +98,9 @@ class CipHardFail extends React.Component {
               <div className="mt-30 mb-20">
                 <Button primary fluid={isMobile} content="Submit" disabled={!ID_VERIFICATION_DOCS_FRM.meta.isValid} />
               </div>
-              <Link to="/dashboard/setup">I’ll finish this later</Link>
+              <div className={isMobile && 'center-align'}>
+                <Link to="/dashboard/setup">I’ll finish this later</Link>
+              </div>
             </Form>
           </Grid.Column>
         </Grid>

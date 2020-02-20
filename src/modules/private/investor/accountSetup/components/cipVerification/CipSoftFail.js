@@ -1,27 +1,19 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Button, Form, Divider, Grid, Message } from 'semantic-ui-react';
+import { Button, Form, Divider, Grid, Message, Header } from 'semantic-ui-react';
 import { ListErrors } from '../../../../../../theme/shared';
 import cipVerificationHOC from '../../containers/cipVerificationHOC';
 import { INVESTOR_URLS } from '../../../../../../services/constants/url';
-import formHOC from '../../../../../../theme/form/formHOC';
 import { FormSelect } from '../../../../../../theme/form';
 
-const metaInfo = {
-  store: 'identityStore',
-  form: 'ID_VERIFICATION_QUESTIONS',
-};
-
+const isMobile = document.documentElement.clientWidth < 768;
 const headerSiblings = (
   <>
-    <Divider />
     <p>
-      We were unable to match your information with the
-      address you provided. (
-      <i>Note: This may happen if you recently relocated or you entered your address incorrectly
-      </i>)
+    We were unable to verify your identity with the information provided. Please answer the following questions to confirm your identity.
     </p>
+    <Divider hidden />
   </>
 );
 
@@ -51,54 +43,56 @@ class CipSoftFail extends React.Component {
     return (
       <NsModal
         onClose={() => commonMethods.closeModal()}
-        header="We need to confirm your identity"
-        headerSiblings={headerSiblings}
-        isLoading={isLoading}
         backUrl="/dashboard/setup/cip"
-        actions={(
-          <p>
-            <Link to="/dashboard/setup" onClick={() => commonMethods.closeModal()}>I’ll finish this later</Link>
-          </p>
-        )}
+        {...this.props}
       >
-        <Form error onSubmit={this.handleSubmitIdentityQuestions}>
-          <Grid>
-            {Object.keys(fields).map((field) => {
-              const fieldData = fields[field];
-              return (
-                <FormSelect
-                  fluid
-                  fielddata={fieldData}
-                  name={fieldData.key}
-                  value={fieldData.value}
-                  options={fieldData.options}
-                  changed={identityQuestionAnswerChange}
-                  containerwidth={16}
-                />
-              );
-            })}
-          </Grid>
-          {errors && errors.message
-            && (
-              <Message error className="mt-30">
-                <ListErrors errors={[errors.message]} />
-              </Message>
-            )
-          }
-          {errors && !errors.message
-            && (
-              <Message error className="mt-30">
-                <ListErrors errors={[errors]} />
-              </Message>
-            )
-          }
-          <div className="center-align mt-30">
-            <Button loading={isLoading} color="green" size="large" className="relaxed" disabled={!ID_VERIFICATION_QUESTIONS.meta.isValid || isLoading}>Verify my identity</Button>
-          </div>
-        </Form>
+        <Grid centered stackable className={isMobile ? 'full-width' : ''}>
+          <Grid.Column width="8" className="pt-0">
+            <Header as="h4">We need to confirm your identity</Header>
+            {headerSiblings}
+            <Form error onSubmit={this.handleSubmitIdentityQuestions}>
+              <Grid>
+                {Object.keys(fields).map((field) => {
+                  const fieldData = fields[field];
+                  return (
+                    <FormSelect
+                      fluid
+                      fielddata={fieldData}
+                      name={fieldData.key}
+                      value={fieldData.value}
+                      options={fieldData.options}
+                      changed={identityQuestionAnswerChange}
+                      containerwidth={16}
+                    />
+                  );
+                })}
+              </Grid>
+              {errors && errors.message
+                && (
+                  <Message error className="mt-30">
+                    <ListErrors errors={[errors.message]} />
+                  </Message>
+                )
+              }
+              {errors && !errors.message
+                && (
+                  <Message error className="mt-30">
+                    <ListErrors errors={[errors]} />
+                  </Message>
+                )
+              }
+              <div className="mt-40 mb-20">
+                <Button loading={isLoading} color="green" fluid={isMobile} disabled={!ID_VERIFICATION_QUESTIONS.meta.isValid || isLoading}>Verify my identity</Button>
+              </div>
+              <div className={isMobile && 'center-align'}>
+                <Link to="/dashboard/setup" onClick={() => commonMethods.closeModal()}>I’ll finish this later</Link>
+              </div>
+            </Form>
+          </Grid.Column>
+        </Grid>
       </NsModal>
     );
   }
 }
 
-export default cipVerificationHOC(formHOC(CipSoftFail, metaInfo), metaInfo);
+export default cipVerificationHOC(CipSoftFail);

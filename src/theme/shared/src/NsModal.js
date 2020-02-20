@@ -8,9 +8,9 @@ const isMobile = document.documentElement.clientWidth < 768;
 
 const NsModal = (props) => {
   const { iconName, closeOnDimmerClick,
-    onClose, className, disableCloseIcon,
-    isLoading, loaderMsg, actions, size,
-    modalContentClass, useMountNode, backUrl } = props;
+    onClose, className, disableCloseIcon, headerLogo,
+    isLoading, loaderMsg, actions, size, borderedHeader,
+    modalContentClass, useMountNode, backUrl, isProgressHeaderDisable } = props;
   const history = useHistory();
   const mountNode = Helper.customModalWrapper();
   return (
@@ -31,12 +31,13 @@ const NsModal = (props) => {
       closeIcon={!disableCloseIcon}
       {...props}
       basic
+      centered={false}
     >
-      {<ProgressModalHeader Modal={Modal} handleClose={onClose} closeCta />}
+      {<ProgressModalHeader Modal={Modal} handleClose={onClose} closeCta isProgressHeaderDisable={isProgressHeaderDisable} borderedHeader={borderedHeader} headerLogo={headerLogo} />}
 
-      <Modal.Content className={modalContentClass || 'multistep'}>
+      <Modal.Content className={modalContentClass || ''}>
         {
-          backUrl
+          backUrl && !isMobile
           && (
             <Button
               icon={{ className: 'ns-chevron-left' }}

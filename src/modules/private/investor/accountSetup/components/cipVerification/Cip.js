@@ -40,7 +40,7 @@ class Cip extends React.Component {
   }
 
   render() {
-    const { commonMethods, NsModal, isLoading, elements } = this.props;
+    const { commonMethods, NsModal, elements } = this.props;
     const { MaskedInput, FormInput } = elements;
     const { ID_VERIFICATION_FRM, personalInfoChange, signUpLoading, personalInfoMaskedChange, setAddressFieldsForUserVerification } = this.props.identityStore;
     const { givenName } = this.props.userStore.currentUser;
@@ -51,8 +51,7 @@ class Cip extends React.Component {
         onClose={() => commonMethods.closeModal()}
         closeOnEscape={false}
         loaderMsg={loaderMsg}
-        isLoading={isLoading}
-        actions={<Link to="/dashboard/setup" onClick={commonMethods.closeModal}>I’ll finish this later</Link>}
+        {...this.props}
       >
         <Grid stackable className={isMobile ? 'full-width' : ''}>
           <Grid.Column width="7">
@@ -138,8 +137,11 @@ class Cip extends React.Component {
                   </Message>
                 )
               }
-              <div className="mt-30">
-                <Button fluid={isMobile} primary size="large" className="very relaxed" content="Verify my identity" disabled={!ID_VERIFICATION_FRM.meta.isValid || signUpLoading} />
+              <div className="mt-30 mb-20">
+                <Button fluid={isMobile} primary content="Verify my identity" disabled={!ID_VERIFICATION_FRM.meta.isValid || signUpLoading} />
+              </div>
+              <div className={isMobile && 'center-align'}>
+                <Link to="/dashboard/setup" onClick={commonMethods.closeModal}>I’ll finish this later</Link>
               </div>
             </Form>
           </Grid.Column>
