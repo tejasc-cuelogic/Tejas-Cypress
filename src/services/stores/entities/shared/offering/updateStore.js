@@ -5,7 +5,7 @@ import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
-import { UPDATES, TEMPLATE } from '../../../../constants/offering';
+import { UPDATES, TEMPLATE, TEMPLATE_POST } from '../../../../constants/offering';
 import { offeringCreationStore, uiStore, userDetailsStore } from '../../../index';
 import {
   allUpdates, newUpdate, getUpdate, editUpdate, deleteOfferingUpdate,
@@ -36,6 +36,8 @@ export class UpdateStore {
     @observable PBUILDER_FRM = Validator.prepareFormObject(UPDATES);
 
     @observable TEMPLATE_FRM = Validator.prepareFormObject(TEMPLATE);
+
+    @observable TEMPLATE_POST_UPDATE_FRM = Validator.prepareFormObject(TEMPLATE_POST)
 
     @action
     initRequest = () => {
@@ -172,6 +174,11 @@ export class UpdateStore {
     };
 
     @action
+    selectPostTemplate = (e, result) => {
+      this.TEMPLATE_POST_UPDATE_FRM = Validator.onChange(this.TEMPLATE_POST_UPDATE_FRM, Validator.pullValues(e, result), true);
+    };
+
+    @action
     maskChange = (values, form, field) => {
       const fieldValue = values.formattedValue;
       this[form] = Validator.onChange(
@@ -210,6 +217,7 @@ export class UpdateStore {
       delete data.allInvestor;
       delete data.shouldSendInvestorNotifications;
       data.status = status;
+      data.postUpdateAs = this.TEMPLATE_POST_UPDATE_FRM.fields.postUpdate.value;
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
       data.tiers = this.PBUILDER_FRM.fields.tiers.values;

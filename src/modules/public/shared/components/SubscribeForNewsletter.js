@@ -33,19 +33,16 @@ const SubscribeFields = observer(({
 ));
 
 const ThanksNote = props => (
-  <Modal open size="mini">
+  <Modal open size="mini" closeIcon closeOnDimmerClick={false} onClose={props.closeModal}>
     <Modal.Header className="center-align signup-header">
       <Header as="h3">Thank you!</Header>
       <Divider section />
       <p>
-        You&lsquo;ve be getting updates about new offerings, updates and events soon.
+        We&lsquo;ll keep you informed about new investment<br />
+        opportunities, updates and events.
       </p>
       <Divider hidden />
     </Modal.Header>
-    <div className="center-align">
-      <Button onClick={props.closeModal} primary size="medium">Close</Button>
-    </div>
-    <Divider hidden />
   </Modal>
 );
 

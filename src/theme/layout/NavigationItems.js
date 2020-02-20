@@ -217,7 +217,7 @@ export class NavItems extends Component {
                                 {item.to === 'messages' && <Label circular color="red" size="mini" horizontal>3</Label>}
                                 {(item.title !== 'Updates' || (item.title === 'Updates' && item.to.includes('updates') && this.props.countData) || isPrivateApp) ? <span>{typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}</span> : ''}
                                 {((item.to === 'updates' || item.to === '#updates') || (item.to === 'comments' || item.to === '#comments')) && this.props.countData
-                                  ? <Label basic circular color="grey">{this.props.countData[item.to === '#updates' ? 'updates' : item.to === '#comments' ? 'comments' : item.to]}</Label> : null
+                                  ? <Label basic color="grey" className="square">{this.props.countData[item.to === '#updates' ? 'updates' : item.to === '#comments' ? 'comments' : item.to]}</Label> : null
                                 }
                               </Menu.Item>
                               {this.props.userStore.isInvestor && item.title === 'Setup' && !investorAccounts.length
@@ -245,7 +245,7 @@ const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width
 @observer
 export class NavigationItems extends Component {
   setAuthRef = () => {
-    this.props.uiStore.setAuthRef(this.props.location.pathname);
+    this.props.uiStore.setAuthRef(this.props.location.pathname, this.props.location.hash);
   }
 
   handleDashboardBtn = () => {
