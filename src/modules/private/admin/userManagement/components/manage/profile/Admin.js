@@ -39,6 +39,8 @@ export default class Admin extends Component {
     if (inProgress) {
       return (<InlineLoader />);
     }
+    const access = this.props.userStore.myAccessForModule('USERS');
+    const isFullUser = access.level === 'FULL';
     return (
       <Form>
         <Header as="h4">
@@ -46,7 +48,8 @@ export default class Admin extends Component {
         </Header>
         <Header as="h6">
           Personal info
-          {displayMode
+          {isFullUser && (
+            displayMode
             ? <Link to={`${this.props.match.url}`} className="link pull-right regular-text" onClick={() => this.toggleDisplayMode(false)}><small>Edit information</small></Link>
             : (
               <Button.Group floated="right" size="mini" compact>
@@ -59,8 +62,7 @@ export default class Admin extends Component {
                   Update
               </Button>
               </Button.Group>
-            )
-          }
+            ))}
         </Header>
         <Form.Group widths={2}>
           {
