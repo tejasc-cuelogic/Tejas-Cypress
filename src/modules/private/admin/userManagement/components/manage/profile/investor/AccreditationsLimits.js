@@ -9,7 +9,7 @@ import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../../../../services/constants/investmentLimit';
 import { NEXTSEED_BOX_URL } from '../../../../../../../../constants/common';
 
-@inject('userDetailsStore', 'userStore', 'investmentLimitStore', 'accreditationStore')
+@inject('userDetailsStore', 'investmentLimitStore', 'accreditationStore')
 @observer
 export default class AccreditationsLimits extends Component {
   constructor(props) {
@@ -24,8 +24,6 @@ export default class AccreditationsLimits extends Component {
     const { getActiveAccountList } = this.props.investmentLimitStore;
     const { getDetailsOfUser } = this.props.userDetailsStore;
     const { accreditationData } = this.props.accreditationStore;
-    const access = this.props.userStore.myAccessForModule('USERS');
-    const isFullUser = access.level === 'FULL';
     return (
       <Form>
         {getActiveAccountList && getActiveAccountList.accountList.length
@@ -44,9 +42,7 @@ export default class AccreditationsLimits extends Component {
                 </>
                   )
                 }
-                {isFullUser && (
-                  <Link to={this.props.match.url} className="link pull-right"><small><Icon className="ns-pencil" /> Edit</small></Link>
-                )}
+                <Link to={this.props.match.url} className="link pull-right"><small><Icon className="ns-pencil" /> Edit</small></Link>
               </Header>
               <Header as="h6">Investment limits</Header>
               <Form.Group widths={2}>
