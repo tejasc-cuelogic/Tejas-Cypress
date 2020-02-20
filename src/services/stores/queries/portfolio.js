@@ -8,10 +8,20 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
     includeInFlight: $InFlight,
     includeInterest: $includeInterest,
   ) {
-    totalBalance
+    totalAccountValue
+    outstandingPortfolioValue
+    pendingInvestments
+    availableCash
+    rewardsBalance
     totalDeposit
-    netPayments
+    lifetimePaymentsReceived
+    lifetimeInvestments
+    cashInvestments
+    reinvestedEarnings
+    creditsApplied
     tnar
+    realizedRoiOnLifetimeInvestments
+    realizedRoiOnCashInvestments   
     investments {
       pending {
         tranche
