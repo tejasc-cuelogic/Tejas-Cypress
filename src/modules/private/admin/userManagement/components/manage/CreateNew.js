@@ -13,6 +13,11 @@ export default class CreateNew extends Component {
   constructor(props) {
     super(props);
     this.props.userStore.userReset();
+    const access = this.props.userStore.myAccessForModule('USERS');
+    if (!access.level === 'FULL') {
+      this.props.history.push('/dashboard/users');
+    }
+
   }
 
   submit = (e) => {

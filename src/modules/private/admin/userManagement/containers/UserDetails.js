@@ -133,14 +133,14 @@ export default class AccountDetails extends Component {
                       </CopyToClipboard>
                     </Header.Subheader>
                   </Header>
-                    {isFullUser && (
-                      <Button.Group floated="right">
-                        <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} as={Link} to={`${this.props.match.url}/delete/${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'}`} content={`${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'} Delete Profile`} />
-                        <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
-                          <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
-                        </Button>
-                      </Button.Group>
-                      )}
+                  <Button.Group floated="right">
+                    {isFullUser
+                      && <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} as={Link} to={`${this.props.match.url}/delete/${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'}`} content={`${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'} Delete Profile`} />
+                    }
+                    <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
+                      <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
+                    </Button>
+                  </Button.Group>
                 </Item.Content>
               </Item>
               {this.state.errorMsg
@@ -167,7 +167,6 @@ export default class AccountDetails extends Component {
                                 {...props}
                                 adminActivity={item.title === 'Activity' ? 'adminActivity' : false}
                                 resourceId={details.id}
-                                isFullUser={isFullUser}
                                 stepName={details.roles.find(obj => obj.name === 'investor') ? 'INVESTOR_ACTIVITY_HISTORY' : ''}
                                 copied={this.state.copied}
                                 investorId={details.id}
