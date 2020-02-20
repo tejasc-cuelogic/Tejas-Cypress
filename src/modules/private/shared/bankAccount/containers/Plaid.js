@@ -94,7 +94,7 @@ export default class Plaid extends Component {
       <>
         <>
           <Header as="h4">{headerText}</Header>
-          <p className="mb-30">{subHeaderText}</p>
+          <p className="mb-20">{subHeaderText}</p>
           <Form>
             <Input
               fluid
@@ -120,7 +120,7 @@ export default class Plaid extends Component {
               <Grid>
                 {typeof bankListing !== 'undefined'
                   && bankListing.map(bankData => (
-                    <Grid.Column key={bankData.institution_id} computer={5} tablet={5} mobile={8}>
+                    <Grid.Column key={bankData.institution_id} computer={5} tablet={5} mobile={8} className={isMobile ? 'pb-half pt-half' : ''}>
                       <Link
                         as="a"
                         className="bank-link"
@@ -142,7 +142,7 @@ export default class Plaid extends Component {
                 }
                 {typeof bankListing === 'undefined'
                   && IND_BANK_LIST.map(bankData => (
-                    <Grid.Column key={bankData.institutionID} computer={5} tablet={5} mobile={8}>
+                    <Grid.Column key={bankData.institutionID} computer={5} tablet={5} mobile={8} className={isMobile ? 'pb-half pt-half' : ''}>
                       <Link
                         as="a"
                         className="bank-link"
@@ -172,12 +172,11 @@ export default class Plaid extends Component {
             <Button color="green" className="link-button" content="Link bank account manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
           </div>
         </>
-        <div className={`${isMobile && 'center-align'} mt-30`}>
-          {
-            (isAccountPresent && action !== 'change')
-            && <Button color="green" className="link-button" content="Keep existing linked bank" onClick={() => this.props.bankAccountStore.setLinkBankSummary()} />
-          }
-        </div>
+        {(isAccountPresent && action !== 'change') && (
+          <div className={`${isMobile && 'center-align'} mt-30`}>
+               <Button color="green" className="link-button" content="Keep existing linked bank" onClick={() => this.props.bankAccountStore.setLinkBankSummary()} />
+          </div>
+        )}
       </>
     );
   }

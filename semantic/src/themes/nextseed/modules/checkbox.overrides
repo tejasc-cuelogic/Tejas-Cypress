@@ -125,9 +125,28 @@
 	&.horizontal{
 		.field{
 			padding-right: @7px !important;
+			@media only screen and (max-width : @largestMobileScreen){
+				flex: 1 !important;
+				.button-radio{
+					width: 100%;
+				}
+				&:last-child{
+					padding-right: 0 !important;
+				}
+			}
 		}
-		.ui.radio.checkbox label{
-			min-width: 150px;
+		.ui.radio.checkbox {
+			label{
+				min-width: 154px;
+			}
+			@media only screen and (max-width : @largestMobileScreen){
+				width: 100%;
+				label{
+					display: flex;
+					justify-content: center;
+					min-width: auto;
+				}
+			}
 		}
 	}
 }
