@@ -9,7 +9,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 const NsModal = (props) => {
   const { iconName, closeOnDimmerClick,
     onClose, className, disableCloseIcon,
-    isLoading, loaderMsg, actions, size,
+    isLoading, loaderMsg, actions, size, isProgressHeaderDisable,
     modalContentClass, useMountNode, backUrl } = props;
   const history = useHistory();
   const mountNode = Helper.customModalWrapper();
@@ -31,7 +31,7 @@ const NsModal = (props) => {
       closeIcon={!disableCloseIcon}
       {...props}
     >
-      {<ProgressModalHeader Modal={Modal} handleClose={onClose} closeCta />}
+      {<ProgressModalHeader Modal={Modal} handleClose={onClose} closeCta isProgresDisable />}
 
       <Modal.Content className={modalContentClass || 'multistep'}>
         {

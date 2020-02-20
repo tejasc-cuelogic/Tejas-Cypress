@@ -4,7 +4,7 @@ import Logo from './Logo';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-const ProgressModalHeader = ({ Modal, name, percent, handleClose, closeCta }) => (
+const ProgressModalHeader = ({ Modal, name, percent, handleClose, closeCta, isProgressHeaderDisable }) => (
   <Modal.Header className="text-uppercase">
     {((closeCta || isMobile) && (
       <Button
@@ -28,7 +28,7 @@ const ProgressModalHeader = ({ Modal, name, percent, handleClose, closeCta }) =>
       )
         : name || ''
     }
-    <Progress className={name ? '' : 'no-header'} percent={percent} attached="bottom" color="green" />
+    {!isProgressHeaderDisable && <Progress className={name ? '' : 'no-header'} percent={percent} attached="bottom" color="green" />}
   </Modal.Header>
 );
 

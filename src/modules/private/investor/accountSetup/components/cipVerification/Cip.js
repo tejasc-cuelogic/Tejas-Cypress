@@ -51,6 +51,7 @@ class Cip extends React.Component {
         closeOnEscape={false}
         header={`Welcome ${givenName}`}
         headerSiblings={headerSiblingsContent}
+        isProgressHeaderDisable
         loaderMsg={loaderMsg}
         isLoading={isLoading}
         actions={<p><Link to="/dashboard/setup" onClick={commonMethods.closeModal}>I’ll finish this later</Link></p>}

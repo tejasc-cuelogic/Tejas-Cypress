@@ -5,13 +5,7 @@ import { Button, Form, Divider, Grid, Message } from 'semantic-ui-react';
 import { ListErrors } from '../../../../../../theme/shared';
 import cipVerificationHOC from '../../containers/cipVerificationHOC';
 import { INVESTOR_URLS } from '../../../../../../services/constants/url';
-import formHOC from '../../../../../../theme/form/formHOC';
 import { FormSelect } from '../../../../../../theme/form';
-
-const metaInfo = {
-  store: 'identityStore',
-  form: 'ID_VERIFICATION_QUESTIONS',
-};
 
 const headerSiblings = (
   <>
@@ -101,4 +95,4 @@ class CipSoftFail extends React.Component {
   }
 }
 
-export default cipVerificationHOC(formHOC(CipSoftFail, metaInfo), metaInfo);
+export default cipVerificationHOC(CipSoftFail);
