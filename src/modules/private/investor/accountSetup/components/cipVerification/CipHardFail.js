@@ -45,13 +45,13 @@ class CipHardFail extends React.Component {
 
   render() {
     const { commonMethods, NsModal, isLoading, errors, ListErrors } = this.props;
-    const { ID_VERIFICATION_DOCS_FRM } = this.props.identityStore;
+    const { ID_VERIFICATION_DOCS_FRM, cipBackUrl } = this.props.identityStore;
     return (
       <NsModal
         onClose={() => commonMethods.closeModal()}
         header="Verify your identity"
         headerSiblingContent={headerSiblingContent}
-        backUrl="/dashboard/setup/cip"
+        backUrl={cipBackUrl}
         actions={<p><Link to="/dashboard/setup">I’ll finish this later</Link></p>}
         isLoading={isLoading}
       >

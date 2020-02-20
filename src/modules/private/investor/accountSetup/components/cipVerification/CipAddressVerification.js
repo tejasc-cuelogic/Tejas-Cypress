@@ -27,6 +27,7 @@ class CipAddressVerification extends React.Component {
         onClose={() => this.handleClose()}
         closeOnEscape={false}
         isLoading={isLoading}
+        backUrl="/dashboard/setup/cip"
         actions={<p><Link to="/dashboard/setup" onClick={this.handleClose}>I’ll finish this later</Link></p>}
       >
         <Form error onSubmit={commonMethods.handleCip}>

@@ -3,6 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { NsModal, ListErrors } from '../../../../../theme/shared';
 import { FormInput, MaskedInput, FormDropDown } from '../../../../../theme/form';
 import { US_STATES } from '../../../../../constants/account';
+import { INVESTOR_URLS } from '../../../../../services/constants/url';
+
 
 function cipVerificationHOC(WrappedComponent) {
   // eslint-disable-next-line no-unused-expressions
@@ -44,6 +46,9 @@ function cipVerificationHOC(WrappedComponent) {
       if (this.props.identityStore.ID_VERIFICATION_FRM.meta.isValid) {
         const { url } = await this.props.identityStore.verifyCip();
         this.props.identityStore.setFieldValue('isAddressFailed', false);
+        const backURl = INVESTOR_URLS.cipHardFail === url && this.props.identityStore.isAddressFailed
+          ? INVESTOR_URLS.cipAddressFail : INVESTOR_URLS.cipForm;
+        this.props.identityStore.setFieldValue('cipBackUrl', backURl);
         this.redirectTo(url);
       }
     }
