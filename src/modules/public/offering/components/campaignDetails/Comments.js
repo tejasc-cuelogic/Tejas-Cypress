@@ -103,7 +103,6 @@ class Comments extends Component {
     const canPostComment = loggedInAsInvestor && accountStatusFull;
     const campaignStage = get(campaign, 'stage');
     const accreditationStatus = this.props.userDetailsStore.currentUser.data.user.accreditation.status;
-    console.log("accreditation status: ", accreditationStatus)
     const passedProcessingDate = DataFormatter.getDateDifferenceInHoursOrMinutes(get(campaign, 'closureSummary.processingDate'), true, true).value <= 0;
     const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull || frozenAccounts.length;
     //  comments & campaign data
