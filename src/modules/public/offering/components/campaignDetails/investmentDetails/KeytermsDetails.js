@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { get, capitalize } from 'lodash';
 import { inject, observer } from 'mobx-react';
 // import money from 'money-math';
-import { Table, Divider, Grid, Popup, Icon } from 'semantic-ui-react';
+import { Table, Divider, Grid, Icon } from 'semantic-ui-react';
 import {
   CAMPAIGN_OFFERED_BY,
   CAMPAIGN_REGULATION_DETAILED,
@@ -57,21 +57,17 @@ class KeyTermsDetails extends Component {
           </Grid.Column>
           <Grid.Column>
             <p>
-              <b className={newLayout ? 'neutral-text' : ''}>{campaignStatus.isFund ? 'Type of Fund' : 'Type of Offering'}</b>
               {get(campaign, 'regulation')
                 && CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
-                ? isMobile
-                  ? (<PopUpModal label="Type of Offering" content={CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]} />)
-                  : (
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content={
-                        CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]
-                      }
-                      hoverable
-                      position="top center"
-                    />
-                  ) : ''
+                ? (
+                  <PopUpModal
+                    customTrigger={<span className="popup-label"><b className={newLayout ? 'neutral-text' : ''}>{campaignStatus.isFund ? 'Type of Fund' : 'Type of Offering'}</b></span>}
+                    content={CAMPAIGN_REGULATION_DETAILED.TOOLTIP[campaign.regulation]}
+                    position="top center"
+                    showOnlyPopup={!isMobile}
+                    hoverable
+                  />
+                ) : <b className={newLayout ? 'neutral-text' : ''}>{campaignStatus.isFund ? 'Type of Fund' : 'Type of Offering'}</b>
               }
               <br />
               {get(campaign, 'regulation') ? get(campaign, 'regulation') === 'BD_CF_506C' ? CAMPAIGN_KEYTERMS_REGULATION_PARALLEL[campaign.regulation] : CAMPAIGN_REGULATION_DETAILED.REGULATION[campaign.regulation] : 'NA'}
