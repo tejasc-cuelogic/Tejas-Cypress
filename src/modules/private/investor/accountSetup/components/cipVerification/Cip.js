@@ -1,19 +1,20 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Button, Divider, Form, Message } from 'semantic-ui-react';
+import { Button, Divider, Form, Message, Grid, Header } from 'semantic-ui-react';
 import { USER_TITLE } from '../../../../../../services/constants/user';
 import { CipErrors, ListErrors } from '../../../../../../theme/shared';
 import { FormSelect, AutoComplete } from '../../../../../../theme/form';
 import cipVerificationHOC from '../../containers/cipVerificationHOC';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const headerSiblingsContent = (
   <>
-    <p>Let’s create your NextSeed investment account.</p>
-    <Divider section />
-    <p>
-      Federal regulations require us to verify your legal identity.
-      We use state-of-the-art security measures to protect your information.
+    <Header as="h3">Let’s create your NextSeed investment account.</Header>
+    {!isMobile && <Divider hidden />}
+    <p className="mt-20">
+Federal regulations require us to verify your legal{!isMobile && <br />} identity.
+      We use state-of-the-art security measures{!isMobile && <br />} to protect your information.
     </p>
   </>
 );
@@ -49,95 +50,100 @@ class Cip extends React.Component {
       <NsModal
         onClose={() => commonMethods.closeModal()}
         closeOnEscape={false}
-        header={`Welcome ${givenName}`}
-        headerSiblings={headerSiblingsContent}
         loaderMsg={loaderMsg}
         isLoading={isLoading}
-        actions={<p><Link to="/dashboard/setup" onClick={commonMethods.closeModal}>I’ll finish this later</Link></p>}
+        actions={<Link to="/dashboard/setup" onClick={commonMethods.closeModal}>I’ll finish this later</Link>}
       >
-        <Form error onSubmit={commonMethods.handleCip}>
-            <Form.Group widths="equal">
-              <FormSelect
-                containerwidth={8}
-                name="salutation"
-                placeholder="Select"
-                fielddata={ID_VERIFICATION_FRM.fields.salutation}
-                options={USER_TITLE}
-                changed={personalInfoChange}
-              />
-              {['firstLegalName', 'lastLegalName'].map(field => (
-                <FormInput
-                  key={field}
-                  type="text"
-                  name={field}
-                  fielddata={ID_VERIFICATION_FRM.fields[field]}
+        <Grid stackable className={isMobile ? 'full-width' : ''}>
+          <Grid.Column width="7">
+            <Header as="h3" className="highlight-text">Hello {givenName}!</Header>
+            {headerSiblingsContent}
+          </Grid.Column>
+          <Grid.Column width="9">
+            <Form error onSubmit={commonMethods.handleCip}>
+              <Form.Group widths="equal">
+                <FormSelect
+                  name="salutation"
+                  placeholder="Select"
+                  fielddata={ID_VERIFICATION_FRM.fields.salutation}
+                  options={USER_TITLE}
                   changed={personalInfoChange}
                 />
-              ))}
-            </Form.Group>
-            <AutoComplete
-              name="street"
-              fielddata={ID_VERIFICATION_FRM.fields.street}
-              onplaceselected={setAddressFieldsForUserVerification}
-              changed={personalInfoChange}
-              placeHolder="Street Address, City, State, Zip"
-            />
-            <FormInput
-              key="streetTwo"
-              type="text"
-              name="streetTwo"
-              fielddata={ID_VERIFICATION_FRM.fields.streetTwo}
-              changed={personalInfoChange}
-            />
-            <Form.Group widths={2}>
-              {commonMethods.addressTemplate()}
-              <MaskedInput
-                name="phoneNumber"
-                type="tel"
-                fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-                format="(###) ###-####"
-                changed={personalInfoMaskedChange}
-                phoneNumber
+                {['firstLegalName', 'lastLegalName'].map(field => (
+                  <FormInput
+                    key={field}
+                    type="text"
+                    name={field}
+                    fielddata={ID_VERIFICATION_FRM.fields[field]}
+                    changed={personalInfoChange}
+                  />
+                ))}
+              </Form.Group>
+              <AutoComplete
+                name="street"
+                fielddata={ID_VERIFICATION_FRM.fields.street}
+                onplaceselected={setAddressFieldsForUserVerification}
+                changed={personalInfoChange}
+                placeHolder="Street Address, City, State, Zip"
               />
-              <MaskedInput
-                name="dateOfBirth"
-                fielddata={ID_VERIFICATION_FRM.fields.dateOfBirth}
-                type="tel"
-                format="##/##/####"
-                changed={personalInfoMaskedChange}
-                dateOfBirth
+              <FormInput
+                key="streetTwo"
+                type="text"
+                name="streetTwo"
+                fielddata={ID_VERIFICATION_FRM.fields.streetTwo}
+                changed={personalInfoChange}
               />
-              <MaskedInput
-                name="ssn"
-                fielddata={this.handleEncryptedSsn(ID_VERIFICATION_FRM.fields.ssn)}
-                ssn
-                changed={personalInfoMaskedChange}
-              />
-            </Form.Group>
-            <p className="note center-align">
-              By selecting <b>Verify my identity</b>, you agree NextSeed may deliver verification
-              codes to you using the phone number you have provided. Codes may be sent using text
-              messages, an autodialer, or artificial or prerecorded voice messages to such phone
-              number. Your mobile carrier’s messaging and data fees may apply.
-          </p>
-            {errors
-              && (
-                <Message error className="mt-30">
-                  <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-                </Message>
-              )
-            }
-            {ID_VERIFICATION_FRM.response.qualifiers
-              && (
-                <Message error className="mt-30">
-                  <CipErrors errorsList={ID_VERIFICATION_FRM.response.qualifiers} />
-                </Message>
-              )
-            }
-            <div className="center-align mt-30">
-              <Button primary size="large" className="very relaxed" content="Verify my identity" disabled={!ID_VERIFICATION_FRM.meta.isValid || signUpLoading} />
-            </div>
-          </Form>
+              <Form.Group widths={3}>
+                {commonMethods.addressTemplate()}
+                <MaskedInput
+                  name="phoneNumber"
+                  type="tel"
+                  fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
+                  format="(###) ###-####"
+                  changed={personalInfoMaskedChange}
+                  phoneNumber
+                />
+                <MaskedInput
+                  name="dateOfBirth"
+                  fielddata={ID_VERIFICATION_FRM.fields.dateOfBirth}
+                  type="tel"
+                  format="##/##/####"
+                  changed={personalInfoMaskedChange}
+                  dateOfBirth
+                />
+                <MaskedInput
+                  name="ssn"
+                  fielddata={this.handleEncryptedSsn(ID_VERIFICATION_FRM.fields.ssn)}
+                  ssn
+                  changed={personalInfoMaskedChange}
+                />
+              </Form.Group>
+              <p className="note">
+                By selecting <b>Verify my identity</b>, you agree NextSeed may deliver verification
+                codes to you using the phone number you have provided. Codes may be sent using text
+                messages, an autodialer, or artificial or prerecorded voice messages to such phone
+                number. Your mobile carrier’s messaging and data fees may apply.
+              </p>
+              {errors
+                && (
+                  <Message error className="mt-30">
+                    <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+                  </Message>
+                )
+              }
+              {ID_VERIFICATION_FRM.response.qualifiers
+                && (
+                  <Message error className="mt-30">
+                    <CipErrors errorsList={ID_VERIFICATION_FRM.response.qualifiers} />
+                  </Message>
+                )
+              }
+              <div className="mt-30">
+                <Button fluid={isMobile} primary size="large" className="very relaxed" content="Verify my identity" disabled={!ID_VERIFICATION_FRM.meta.isValid || signUpLoading} />
+              </div>
+            </Form>
+          </Grid.Column>
+        </Grid>
       </NsModal>
     );
   }

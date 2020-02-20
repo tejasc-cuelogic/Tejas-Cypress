@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Icon, Modal, Dimmer, Loader, Grid, Button } from 'semantic-ui-react';
+import { Icon, Modal, Dimmer, Loader, Button } from 'semantic-ui-react';
 import { ProgressModalHeader } from '..';
 import Helper from '../../../helper/utility';
 
@@ -30,6 +30,7 @@ const NsModal = (props) => {
       className={`${isMobile && 'bg-white'} ${props.isLoading && 'dimmer-visible'} ${className} multistep-modal`}
       closeIcon={!disableCloseIcon}
       {...props}
+      basic
     >
       {<ProgressModalHeader Modal={Modal} handleClose={onClose} closeCta />}
 
@@ -39,7 +40,7 @@ const NsModal = (props) => {
           && (
             <Button
               icon={{ className: 'ns-chevron-left' }}
-              className="multistep__btn prev link-button"
+              className="prev link-button"
               onClick={() => history.push(backUrl)}
               content="Back"
             />
@@ -59,11 +60,7 @@ const NsModal = (props) => {
           </Header>
         }
         {headerSiblings} */}
-        <Grid centered textAlign="left">
-          <Grid.Column width="8">
-            {props.children}
-          </Grid.Column>
-        </Grid>
+        {props.children}
       </Modal.Content>
       {
         actions
