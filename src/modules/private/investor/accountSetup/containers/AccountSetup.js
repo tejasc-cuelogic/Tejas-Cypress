@@ -14,26 +14,10 @@ import {
   INVESTMENT_ACCOUNT_TYPES,
 } from '../../../../../constants/account';
 
+import { CIP_ROUTES } from '../../../../../constants/NavigationMeta';
+
 const getModule = component => lazyRetry(() => import(`../components/cipVerification/${component}`));
 
-const routeMeta = [
-  {
-    path: 'cip',
-    component: 'Cip',
-  },
-  {
-    path: 'cip/uploads',
-    component: 'CipHardFail',
-  },
-  {
-    path: 'cip/questions',
-    component: 'CipSoftFail',
-  },
-  {
-    path: 'cip/address-verification',
-    component: 'CipAddressVerification',
-  },
-];
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore', 'uiStore', 'userStore')
@@ -100,7 +84,7 @@ export default class AccountSetup extends Component {
         }
         <SuspenseBoundary>
           <Switch>
-            {routeMeta.map(item => (<Route exact path={`${match.url}/${item.path}`} component={getModule(item.component)} />))}
+            {CIP_ROUTES.map(item => (<Route exact path={`${match.url}/${item.path}`} component={getModule(item.component)} />))}
             <Route exact path={`${match.url}/verify-phone`} component={ConfirmPhoneNumber} />
             <Route path={`${match.url}/establish-profile`} component={EstablishProfile} />
             <Route path={`${match.url}/account-creation`} component={AccountCreation} />
