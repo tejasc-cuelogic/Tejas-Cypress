@@ -6,7 +6,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 
 const ProgressModalHeader = ({ Modal, name, percent, handleClose, closeCta }) => (
   <Modal.Header className="text-uppercase plr-0">
-    {((closeCta || isMobile) && (
+    {((closeCta && isMobile) && (
       <Button
         icon={{ className: 'ns-close-light' }}
         className="link-button pull-right"

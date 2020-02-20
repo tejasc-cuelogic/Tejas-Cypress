@@ -42,6 +42,8 @@ export class IdentityStore {
 
   @observable isAddressFailed = false;
 
+  @observable cipBackUrl = '';
+
   @observable sendOtpToMigratedUser = [];
 
   @observable signUpLoading = false;

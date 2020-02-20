@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button, Form, Divider, Grid, Message } from 'semantic-ui-react';
 import { ListErrors } from '../../../../../../theme/shared';
 import cipVerificationHOC from '../../containers/cipVerificationHOC';
+import { INVESTOR_URLS } from '../../../../../../services/constants/url';
 import formHOC from '../../../../../../theme/form/formHOC';
 import { FormSelect } from '../../../../../../theme/form';
 
@@ -36,6 +37,9 @@ class CipSoftFail extends React.Component {
     if ((userDetails.legalDetails.status === 'OFFLINE' || accountForWhichCipExpired)
       && this.props.identityStore.cipStepUrlMapping.ciphardFail.url !== url) {
       url = await handleCipExpiration();
+    }
+    if (INVESTOR_URLS.cipHardFail === url) {
+      this.props.identityStore.setFieldValue('cipBackUrl', INVESTOR_URLS.cipSoftFail);
     }
     redirectTo(url);
   }

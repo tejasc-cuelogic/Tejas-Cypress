@@ -10,7 +10,7 @@ const headerSiblingContent = (
   <>
     <p>
     To complete identity verification, please upload a copy of a valid photo ID and proof of residence.
-    <Divider hidden />
+    {!isMobile && <Divider hidden />}
     </p>
   </>
 );
@@ -54,7 +54,7 @@ class CipHardFail extends React.Component {
         <Grid centered textAlign="left">
           <Grid.Column width="8" className="pt-0">
             <Header as="h4">We were unable to verify your identity.</Header>
-            {headerSiblingContent}
+            {!isMobile && headerSiblingContent}
             <Form error onSubmit={this.handleUploadDocuments} className="file-uploader-inline">
               <Form.Field className="mb-30">
                 <p className="mb-10"><b>Upload a Photo ID (Drivers License or Passport)</b></p>
