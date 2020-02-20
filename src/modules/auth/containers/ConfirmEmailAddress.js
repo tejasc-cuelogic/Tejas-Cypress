@@ -149,7 +149,7 @@ export default class ConfirmEmailAddress extends Component {
     } else if (this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
       this.props.history.replace(this.props.userDetailsStore.pendingStep);
     } else {
-      this.props.history.replace('/dashboard/setup/identity-verification/0');
+      this.props.history.replace('/dashboard/setup/cip');
     }
     this.props.identityStore.setIsOptConfirmed(false);
   }

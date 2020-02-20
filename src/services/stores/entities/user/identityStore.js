@@ -253,7 +253,7 @@ export class IdentityStore {
       this.setIdentityQuestions(resData.questions);
     }
 
-    if (this.isAddressFailed) {
+    if (resData.step === 'ADDRESS_VERIFICATION' && this.isAddressFailed) {
       redirectUrl = INVESTOR_URLS.cipHardFail;
     }
 
@@ -292,7 +292,14 @@ export class IdentityStore {
   resetAddressFields = () => {
     ['street', 'city', 'state', 'zipCode'].forEach(
       (field) => {
-        this.ID_VERIFICATION_FRM.fields[field].value = '';
+        if (field !== 'state') {
+          this.ID_VERIFICATION_FRM = FormValidator.onChange(
+            this.ID_VERIFICATION_FRM,
+            { name: field, value: '' },
+          );
+        } else {
+          this.ID_VERIFICATION_FRM.fields[field].value = '';
+        }
       },
     );
   }
@@ -774,7 +781,6 @@ export class IdentityStore {
         fields.phoneNumber.value = get(fields, 'phoneNumber.value') && !this.isAdmin ? fields.phoneNumber.value : phone.number;
       }
     }
-    FormValidator.validateForm(this.ID_VERIFICATION_FRM, false, true);
   }
 
   requestOtpWrapper = (isMobile = false) => {

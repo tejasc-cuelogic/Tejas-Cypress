@@ -26,7 +26,7 @@ const ProgressModalHeader = ({ Modal, name, percent, handleClose, closeCta }) =>
           )}
         </div>
       )
-      : name || ''
+        : name || ''
     }
     <Progress className={name ? '' : 'no-header'} percent={percent} attached="bottom" color="green" />
   </Modal.Header>

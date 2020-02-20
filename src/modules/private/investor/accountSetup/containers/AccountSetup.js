@@ -4,15 +4,36 @@ import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import { Header } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
+import ConfirmPhoneNumber from '../../../../auth/containers/ConfirmPhoneNumber';
 import StickyNotification from '../components/StickyNotification';
 import ProgressCard from '../components/ProgressCard';
-import IdentityVerification from './identityVerification';
 import EstablishProfile from './establishProfile';
 import AccountCreation from './accountCreation';
-import { InlineLoader } from '../../../../../theme/shared';
+import { InlineLoader, lazyRetry, SuspenseBoundary } from '../../../../../theme/shared';
 import {
   INVESTMENT_ACCOUNT_TYPES,
 } from '../../../../../constants/account';
+
+const getModule = component => lazyRetry(() => import(`../components/cipVerification/${component}`));
+
+const routeMeta = [
+  {
+    path: 'cip',
+    component: 'Cip',
+  },
+  {
+    path: 'cip/uploads',
+    component: 'CipHardFail',
+  },
+  {
+    path: 'cip/questions',
+    component: 'CipSoftFail',
+  },
+  {
+    path: 'cip/address-verification',
+    component: 'CipAddressVerification',
+  },
+];
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore', 'uiStore', 'userStore')
@@ -77,11 +98,14 @@ export default class AccountSetup extends Component {
           ) : <InlineLoader />
 
         }
-        <Switch>
-          <Route exact path={`${match.url}/identity-verification/:step`} component={IdentityVerification} />
-          <Route path={`${match.url}/establish-profile`} component={EstablishProfile} />
-          <Route path={`${match.url}/account-creation`} component={AccountCreation} />
-        </Switch>
+        <SuspenseBoundary>
+          <Switch>
+            {routeMeta.map(item => (<Route exact path={`${match.url}/${item.path}`} component={getModule(item.component)} />))}
+            <Route exact path={`${match.url}/verify-phone`} component={ConfirmPhoneNumber} />
+            <Route path={`${match.url}/establish-profile`} component={EstablishProfile} />
+            <Route path={`${match.url}/account-creation`} component={AccountCreation} />
+          </Switch>
+        </SuspenseBoundary>
       </PrivateLayout>
     );
   }
