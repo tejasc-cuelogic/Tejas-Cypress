@@ -164,7 +164,7 @@ export default class CampaignHeader extends Component {
                         <p>
                           {Helper.CurrencyFormat(minOffering, 0)}{' '}
                           <PopUpModal
-                            customTrigger={<span className="popup-label">{'min target'}</span>}
+                            customTrigger={<span className="popup-label">min target</span>}
                             content="This is the minimum fundraising goal. If this amount is not raised by the end of the offering period, any funds invested will be automatically returned to your NextSeed account."
                             position="top center"
                             showOnlyPopup={!isMobile}
@@ -173,7 +173,7 @@ export default class CampaignHeader extends Component {
                         <p>
                           {Helper.CurrencyFormat(maxOffering, 0)}{' '}
                           <PopUpModal
-                            customTrigger={<span className="popup-label">{'max target'}</span>}
+                            customTrigger={<span className="popup-label">max target</span>}
                             content="This is the maximum fundraising goal. The offering will remain open until the issuer raises the Offering Max or the offering period ends. As long as the raise exceeds the Offering Min, the issuer will receive the funds."
                             position="top center"
                             showOnlyPopup={!isMobile}
