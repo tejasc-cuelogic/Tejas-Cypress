@@ -12,6 +12,45 @@ import { DataFormatter } from '../../../../../helper';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
+const CommentHeader = ({ newLayout, refLink }) => (
+  <>
+    <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
+      Comments
+      <span className="anchor" id="comments" />
+    </Header>
+      <p>
+        Note that both NextSeed and issuers are notified of all comments immediately,
+        but there may be a slight delay in response to questions submitted outside of
+        standard business hours (9am to 5pm CST, Monday through Friday).
+      </p>
+      <p>
+        Most questions will be answered by issuers in approximately two business days,
+        although some questions require more thorough analyses and will take additional
+        time.
+      </p>
+      <p>See our <Link to={`${refLink}/community-guidelines`}>community guidelines</Link> on posting.</p>
+      <p>
+        If you have any technical questions or questions about NextSeed, please
+        email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
+      </p>
+  </>
+);
+
+// const validationMeta = {
+//   frozenAccounts: {
+//     content: '',
+//   },
+//   atLeastOneFullAccount: {
+//     content: '',
+//   },
+//   isInvestorAccreditated: {
+//     content: '',
+//   },
+//   regDORregB: {
+//     content: '',
+//   },
+// };
+
 @inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'messageStore')
 @withRouter
 @observer
@@ -116,32 +155,7 @@ class Comments extends Component {
     const readMoreLength = 250;
     return (
       <div className={newLayout ? '' : 'campaign-content-wrapper'}>
-        <Header as="h3" className={`${(newLayout && isMobile) ? 'mt-40 mb-20' : newLayout ? 'mt-40 mb-30' : 'mt-20 mb-30'} anchor-wrap`}>
-          Comments
-          <span className="anchor" id="comments" />
-        </Header>
-        {
-          // !showOnlyOne
-          // && (
-            <>
-              <p>
-                Note that both NextSeed and issuers are notified of all comments immediately,
-                but there may be a slight delay in response to questions submitted outside of
-                standard business hours (9am to 5pm CST, Monday through Friday).
-        </p>
-              <p>
-                Most questions will be answered by issuers in approximately two business days,
-                although some questions require more thorough analyses and will take additional
-                time.
-        </p>
-              <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting.</p>
-              <p>
-                If you have any technical questions or questions about NextSeed, please
-          email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
-        </p>
-            </>
-          // )
-          }
+        <CommentHeader refLink={this.props.match.url} newLayout={newLayout} />
         {!canPostComment && !frozenAccounts.length
           ? (
             <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
@@ -163,19 +177,19 @@ class Comments extends Component {
           )
           : (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status)
             ? (accreditationStatus === 'REQUESTED')
-                ? (
-                  <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
-                    <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
-                  </section>
-                  )
-                : (
-                  <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
-                    <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
-                    <Form reply className="public-form clearfix">
-                      <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>
-                    </Form>
-                  </section>
-                  )
+              ? (
+                <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
+                  <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
+                </section>
+              )
+              : (
+                <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
+                  <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
+                  <Form reply className="public-form clearfix">
+                    <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>
+                  </Form>
+                </section>
+              )
             : (!disablePostComment)
             && (
               <>
@@ -189,7 +203,7 @@ class Comments extends Component {
                         containerclassname="secondary"
                       />
                       <Button fluid={isMobile} loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null, campaignId)} disabled={!MESSAGE_FRM.meta.isValid || buttonLoader === 'PUBLIC'} primary content="Post Comment" />
-                  </Form>
+                    </Form>
                   ) : ''
                 }
               </>
@@ -248,18 +262,6 @@ class Comments extends Component {
                                             {((get(tc, 'createdUserInfo.id') === issuerId) || get(tc, 'createdUserInfo.roles[0].name') === 'admin') && <Label color={(get(tc, 'createdUserInfo.id') === issuerId) ? 'green' : 'black'} size="mini">{(get(tc, 'createdUserInfo.id') === issuerId) ? 'ISSUER' : 'NEXTSEED'}</Label>}
                                           </Comment.Author>
                                           <Comment.Metadata><span className="time-stamp">{DataFormatter.getDateAsPerTimeZone(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date'), true, true)}</span></Comment.Metadata>
-                                          {/* {isUserLoggedIn && !disablePostComment && !showOnlyOne
-                                            && (
-                                              <Comment.Actions>
-                                                <Comment.Action
-                                                  onClick={() => this.toggleVisibility(tc.id)}
-                                                  className="grey-header"
-                                                >
-                                                  Reply
-                                                </Comment.Action>
-                                              </Comment.Actions>
-                                            )
-                                          } */}
                                           <Comment.Text className="mt-20">
                                             <HtmlEditor
                                               readOnly
