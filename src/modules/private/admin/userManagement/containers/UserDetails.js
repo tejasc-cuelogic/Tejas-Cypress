@@ -112,8 +112,6 @@ export default class AccountDetails extends Component {
     const isFullUser = access.level === 'FULL';
     return (
       <>
-        {/* <Route exact path={`${match.url}/individual/investments/investment-details/:id`}
-      render={props => <InvestmentDetails isAdmin refLink={match.url} {...props} />} /> */}
         <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
           <Modal.Content className="transaction-details">
             <Item.Group>
@@ -135,15 +133,14 @@ export default class AccountDetails extends Component {
                       </CopyToClipboard>
                     </Header.Subheader>
                   </Header>
-                  <Button.Group floated="right">
-                    {isFullUser
-                      && <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} as={Link} to={`${this.props.match.url}/delete/${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'}`} content={`${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'} Delete Profile`} />
-                    }
-                    {/* <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} onClick={() => this.handleConfirmModal(true)} content={`${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'} Delete Profile`} /> */}
-                    <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
-                      <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
-                    </Button>
-                  </Button.Group>
+                    {isFullUser && (
+                      <Button.Group floated="right">
+                        <Button inverted color="red" loading={inProgressArray.includes('deleteProfile')} as={Link} to={`${this.props.match.url}/delete/${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'}`} content={`${includes(details.status, 'DELETED') ? 'Hard' : 'Soft'} Delete Profile`} />
+                        <Button loading={inProgressArray.includes('lock')} onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
+                          <Icon className={`ns-${details.locked && details.locked.lock === 'LOCKED' ? 'unlock' : 'lock'}`} /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
+                        </Button>
+                      </Button.Group>
+                      )}
                 </Item.Content>
               </Item>
               {this.state.errorMsg
@@ -170,6 +167,7 @@ export default class AccountDetails extends Component {
                                 {...props}
                                 adminActivity={item.title === 'Activity' ? 'adminActivity' : false}
                                 resourceId={details.id}
+                                isFullUser={isFullUser}
                                 stepName={details.roles.find(obj => obj.name === 'investor') ? 'INVESTOR_ACTIVITY_HISTORY' : ''}
                                 copied={this.state.copied}
                                 investorId={details.id}

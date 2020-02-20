@@ -53,6 +53,7 @@ class Users extends Component {
     } = this.props.userListingStore;
     const access = this.props.userStore.myAccessForModule('USERS');
     const isManager = access.asManager;
+    const isFullUser = access.level === 'FULL';
     return (
       <PrivateLayout
         {...this.props}
@@ -63,7 +64,7 @@ class Users extends Component {
             requestState={requestState}
             filters={filters}
             toggleSearch={this.toggleSearch}
-            addon={isManager ? <P3 /> : null}
+            addon={isFullUser ? <P3 /> : null}
           />
         )}
         P2={(

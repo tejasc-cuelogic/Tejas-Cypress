@@ -12,7 +12,7 @@ import LockedInformation from '../LockedInformation';
 import UserInvestorDetails from '../../../../../../investor/settings/components/UserInvestorDetails';
 import { US_STATES } from '../../../../../../../../constants/account';
 
-@inject('userDetailsStore', 'uiStore', 'referralsStore', 'identityStore')
+@inject('userDetailsStore', 'uiStore', 'userStore', 'referralsStore', 'identityStore')
 @withRouter
 @observer
 export default class Basic extends Component {
@@ -75,12 +75,15 @@ export default class Basic extends Component {
     const details = toJS({ ...detailsOfUser.data.user });
     const { displayMode } = this.state;
     const tags = toJS(get(details, 'tags'));
+    const access = this.props.userStore.myAccessForModule('USERS');
+    const isFullUser = access.level === 'FULL';
     return (
       <Form loading={inProgress}>
         <Header as="h4">
           Basic Profile Info
           <Button.Group floated="right">
-            {this.state.displayMode
+            {isFullUser && (
+              this.state.displayMode
               ? <Link to={this.props.match.url} onClick={e => this.updateMode(e, true)} className="link mr-10"><small><Icon className="ns-pencil" /> Edit profile data</small></Link>
               : (
                 <>
@@ -89,8 +92,7 @@ export default class Basic extends Component {
                     && <Link to="/" className="link mr-10" onClick={e => this.updateUserData(e)}><small><Icon name="save" />Update</small></Link>
                   }
                 </>
-              )
-            }
+              ))}
             <Button loading={this.state.addressCheckLoading} compact onClick={() => this.adminSkipAddressOrPhoneValidationCheck('ADDRESS')} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
             <Button loading={this.state.phoneCheckLoading} compact onClick={() => this.adminSkipAddressOrPhoneValidationCheck('PHONE')} color={isPhoneSkip ? 'green' : 'blue'}>{isPhoneSkip ? 'Force VoIP Check' : 'Skip VoIP Check'}</Button>
           </Button.Group>
