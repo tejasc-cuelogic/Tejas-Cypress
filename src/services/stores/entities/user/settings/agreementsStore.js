@@ -50,6 +50,11 @@ export class AgreementsStore {
       title: 'Instruction 2018',
       refEnum: 'INSTRUCTIONS_1099_2018',
     },
+    {
+      key: 'instruction2019',
+      title: 'Instruction 2019',
+      refEnum: 'INSTRUCTIONS_1099_2019',
+    },
   ];
 
   @observable embedUrl = null;
