@@ -35,7 +35,7 @@ const AccountTypes = ({
               renderAccType();
             }
           }}
-          className={isMobile && 'mt-30'}
+          className={isMobile && 'mt-14'}
           stackable
         >
           <Grid.Column width="8">
@@ -50,14 +50,14 @@ const AccountTypes = ({
             </Form>
             {!isMobile && <Divider section hidden />}
             {!isMobile && (
-              <p className="grey-header mobile-bottom-notes">
+              <p className="grey-header">
                 NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for up to $250,000 of uninvested cash in NextSeed accounts.
               </p>
             )}
           </Grid.Column>
         </Grid>
         {isMobile && (
-          <p className="grey-header mobile-bottom-notes">
+          <p className="grey-header mt-20">
             NextSeed accounts are provided and held at our partner bank, Happy State Bank DBA GoldStar Trust Company ({'"'}GoldStar{'"'}), which provides FDIC insurance for up to $250,000 of uninvested cash in NextSeed accounts.
         </p>
         )}

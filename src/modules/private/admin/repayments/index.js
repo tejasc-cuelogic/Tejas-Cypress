@@ -11,7 +11,7 @@ export default class Repayments extends Component {
   constructor(props) {
     super(props);
     if (this.props.match.isExact) {
-      this.props.history.push(`${this.props.match.url}/issuers`);
+      this.props.history.push(`${this.props.match.url}/tracker`);
       this.props.paymentStore.setFieldValue('sortOrder', { column: null, direction: 'asc' });
     }
   }
