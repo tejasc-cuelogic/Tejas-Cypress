@@ -55,12 +55,6 @@ const NsModal = (props) => {
             </Dimmer>
           )
         }
-        {/* {
-          <Header as="h3" className="mb-0">
-            {header}
-          </Header>
-        }
-        {headerSiblings} */}
         {props.children}
       </Modal.Content>
       {

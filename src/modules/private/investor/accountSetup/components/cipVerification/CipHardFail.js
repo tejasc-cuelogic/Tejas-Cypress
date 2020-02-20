@@ -44,11 +44,11 @@ class CipHardFail extends React.Component {
 
   render() {
     const { commonMethods, NsModal, errors, ListErrors } = this.props;
-    const { ID_VERIFICATION_DOCS_FRM } = this.props.identityStore;
+    const { ID_VERIFICATION_DOCS_FRM, cipBackUrl } = this.props.identityStore;
     return (
       <NsModal
         onClose={() => commonMethods.closeModal()}
-        backUrl="/dashboard/setup/cip"
+        backUrl={cipBackUrl}
         {...this.props}
       >
         <Grid centered stackable className={isMobile ? 'full-width' : ''}>

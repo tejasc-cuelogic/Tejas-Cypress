@@ -42,7 +42,7 @@ export class IdentityStore {
 
   @observable isAddressFailed = false;
 
-  @observable cipBackUrl = '';
+  @observable cipBackUrl = INVESTOR_URLS.cipForm;
 
   @observable sendOtpToMigratedUser = [];
 
