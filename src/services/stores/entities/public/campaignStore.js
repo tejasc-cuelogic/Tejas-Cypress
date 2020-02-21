@@ -6,11 +6,7 @@ import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
-<<<<<<< HEAD
-import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOffering, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
-=======
-import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingIdBySlug, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
->>>>>>> 2c787f4dd9d342cb837b0186c2ded3680e996f74
+import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, getOfferingIdBySlug, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
@@ -138,7 +134,7 @@ export class CampaignStore {
           offeringCreationStore.setCurrentOfferingId(data.getOfferingDetailsBySlug.id);
           resolve(data.getOfferingDetailsBySlug);
         } else if (!this.details.loading) {
-          offeringCreationStore.setCurrentOfferingId(data.getOffering.id);
+          offeringCreationStore.setCurrentOfferingId(data.getOfferingDetailsBySlug.id);
           resolve(false);
         }
       },
@@ -207,7 +203,7 @@ export class CampaignStore {
   getIssuerIdForOffering = id => new Promise((resolve, reject) => {
     this.details = graphql({
       client: clientPublic,
-      query: getOffering,
+      query: getOfferingById,
       variables: { id },
       onFetch: (data) => {
         if (data && !this.details.loading) {
@@ -298,8 +294,8 @@ export class CampaignStore {
   @computed get campaign() {
     if (this.details.data && this.details.data.getOfferingDetailsBySlug) {
       return toJS(this.details.data.getOfferingDetailsBySlug);
-    } if (this.details.data && this.details.data.getOffering) {
-      return toJS(this.details.data.getOffering);
+    } if (this.details.data && this.details.data.getOfferingById) {
+      return toJS(this.details.data.getOfferingById);
     }
     return {};
   }

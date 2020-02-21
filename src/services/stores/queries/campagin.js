@@ -182,7 +182,7 @@ query offeringWatchList($offeringId: String){
 }
 `;
 
-export const getOffering = gql`
+export const getOfferingById = gql`
   query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
@@ -491,13 +491,8 @@ export const campaignDetailsAdditionalQuery = gql`
 `;
 
 export const campaignDetailsForInvestmentQuery = gql`
-<<<<<<< HEAD
-query getOffering($id: String!) {
-  getOffering (id: $id) {
-=======
 query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
   getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
->>>>>>> 2c787f4dd9d342cb837b0186c2ded3680e996f74
     id
     regulation
     offeringSlug
