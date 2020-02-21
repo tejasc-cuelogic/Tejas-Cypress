@@ -64,8 +64,6 @@ export default class Investor extends Component {
           <Switch>
             <Route path={`${match.url}/accreditations/:action/:userId/:accountId?/:accountType?`} render={props => <ConfirmModel refLink={`${this.props.match.url}/accreditations`} {...props} />} />
             <Route exact path={`${match.url}/accreditations`} component={AccreditationsLimits} />
-            {/* <Route exact path={`${match.url}/profile`} render={props =>
-            <UserInvestorDetails isAdmin refLink={this.props.match.url} {...props} />} /> */}
             <Route exact path={`${match.url}/basic`} component={Basic} />
             <Route exact path={`${match.url}/overview`} component={Overview} />
           </Switch>

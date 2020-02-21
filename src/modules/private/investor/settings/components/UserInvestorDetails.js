@@ -113,6 +113,7 @@ export default class UserInvestorDetails extends Component {
                     ishidelabel
                   />
                 </dd>
+                <Divider hidden className="mt-0 mb-half" />
                 <dt className="regular-text">Position</dt>
                 <dd>
                   <FormInput

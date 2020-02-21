@@ -123,7 +123,7 @@ class App extends Component {
       if (!document.hidden) {
         if (authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
           authActions.forceLogout('timeout').then(() => {
-            uiStore.setAuthRef(location.pathname);
+            uiStore.setAuthRef(location.pathname, location.hash);
             if (location.pathname.includes('/dashboard/')) {
               history.push('/login');
             }
@@ -135,7 +135,7 @@ class App extends Component {
         } else {
           const swAppVersionL = localStorage.getItem('swAppVersion'); // from local storage
           const swAppVersionS = sessionStorage.getItem('swAppVersion'); // from session storage
-          if (moment(swAppVersionL).isValid() && moment(swAppVersionS).isValid() && swAppVersionL !== swAppVersionS && uiStore.appUpdated && location.pathname !== '/login') {
+          if (moment(swAppVersionL).isValid() && moment(swAppVersionS).isValid() && swAppVersionL !== swAppVersionS && uiStore.appUpdated) {
             window.location.reload();
           }
         }
@@ -177,16 +177,16 @@ class App extends Component {
     window.removeEventListener('resize', this.handleResize);
   }
 
-  getSizes = () => ({
-    isMobile: document.documentElement.clientWidth < 768,
-    uptoTablet: document.documentElement.clientWidth < 992,
-    isTablet: document.documentElement.clientWidth >= 768
-      && document.documentElement.clientWidth < 992,
-    isTabletLand: document.documentElement.clientWidth >= 768
-    && document.documentElement.clientWidth < 1025,
-    isSmallScreen: document.documentElement.clientWidth >= 1024
-    && document.documentElement.clientWidth < 1200,
-  });
+  getSizes = () => {
+    const { clientWidth } = document.documentElement;
+    return {
+      isMobile: clientWidth < 768,
+      uptoTablet: clientWidth < 992,
+      isTablet: clientWidth >= 768 && clientWidth < 992,
+      isTabletLand: clientWidth >= 768 && clientWidth < 1025,
+      isSmallScreen: clientWidth >= 1024 && clientWidth < 1200,
+    };
+  };
 
   handleResize = () => {
     this.props.uiStore.setFieldvalue('responsiveVars', this.getSizes());
@@ -281,6 +281,9 @@ class App extends Component {
             />
           )
         }
+        {uiStore.appUpdated
+          && <NotifyVersionUpdate responsiveVars={uiStore.responsiveVars} />
+        }
         <MetaTagGenerator pathName={location.pathname} isTablet={isTablet} metaTagsData={metaTagsData} />
         {authStore.devPasswdProtection
           ? <Route exact path="/password-protected" component={DevPassProtected} /> : (
@@ -295,9 +298,6 @@ class App extends Component {
           )
         }
         <ToastContainer className="toast-message" />
-        {uiStore.appUpdated && location.pathname !== '/login'
-          && <NotifyVersionUpdate setAppUpdated={uiStore.setAppUpdated} />
-        }
         {uiStore.devBanner
           && <DevBanner toggle={this.playDevBanner} />
         }
@@ -305,7 +305,5 @@ class App extends Component {
     );
   }
 }
-
-// && UpdateHelper.showUpdateModal(location.pathname)
 
 export default App;

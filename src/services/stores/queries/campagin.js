@@ -197,6 +197,14 @@ export const getOffering = gql`
   }
 `;
 
+export const getOfferingIdBySlug = gql`
+  query getOfferingDetailsBySlug($id: String!) {
+    getOfferingDetailsBySlug (offeringSlug: $id) {
+      id
+    }
+  }
+`;
+
 export const campaignDetailsQuery = gql`
   query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
@@ -397,19 +405,6 @@ export const campaignDetailsQuery = gql`
         multiple
         priceCalculation
         revSharePercentage
-        supplementalAgreements {
-          documents {
-            name
-            isVisible
-            upload {
-              fileId
-              fileName
-              fileHandle {
-                boxFileId
-              }
-            }
-          }
-        }
       }
     }
     earlyBirdsCount
@@ -471,6 +466,7 @@ export const campaignDetailsAdditionalQuery = gql`
     }
     updates {
       id
+      postUpdateAs
       title
       content
       scope
@@ -495,9 +491,15 @@ export const campaignDetailsAdditionalQuery = gql`
 `;
 
 export const campaignDetailsForInvestmentQuery = gql`
+<<<<<<< HEAD
 query getOffering($id: String!) {
   getOffering (id: $id) {
+=======
+query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
+  getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {
+>>>>>>> 2c787f4dd9d342cb837b0186c2ded3680e996f74
     id
+    regulation
     offeringSlug
     isAvailablePublicly
     stage
@@ -613,6 +615,7 @@ query getOffering($id: String!) {
     }
     updates {
       id
+      postUpdateAs
       offeringId
       title
       content

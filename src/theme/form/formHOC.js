@@ -316,6 +316,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     render() {
+      const { currTime } = this.props[metaInfo.store];
       const smartElement = {
         Input: this.Input,
         DropDown: this.DropDown,
@@ -337,6 +338,7 @@ function formHoc(WrappedComponent, metaInfo) {
         <WrappedComponent
           {...this.props}
           smartElement={smartElement}
+          currTime={currTime}
         />
       );
     }

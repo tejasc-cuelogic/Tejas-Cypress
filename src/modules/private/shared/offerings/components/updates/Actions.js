@@ -15,7 +15,7 @@ const Actions = observer((props) => {
           color="red"
           onClick={isManager && id !== null ? () => save(id, 'DRAFT', true) : cancelUpdate}
           disabled={inProgress}
-          content={isManager && id !== null ? 'Decline' : !meta.isDirty ? 'Close' : 'Cancel'}
+          content={isManager && id !== null ? 'Decline' : 'Cancel'}
         />
         {!isManager && !isPublished
           && (
@@ -45,7 +45,7 @@ const Actions = observer((props) => {
                     inverted
                     onClick={() => save('new', 'DRAFT')}
                     color="green"
-                    content="Create"
+                    content="Create Draft"
                     disabled={!meta.isValid || inProgress}
                   />
                 )
@@ -85,7 +85,7 @@ const Actions = observer((props) => {
                         inverted
                         onClick={() => save('new', 'DRAFT')}
                         color="green"
-                        content="Create"
+                        content="Create Draft"
                         disabled={!meta.isValid || inProgress}
                         loading={inProgress === 'DRAFT'}
                       />

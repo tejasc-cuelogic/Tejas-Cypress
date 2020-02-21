@@ -47,6 +47,7 @@ export class PortfolioStore {
   resetPiechartValues = () => {
     this.pieChartDataEval = {
       investmentType: {
+        EQUITY: { name: 'Equity', value: 0 },
         TERM_NOTE: { name: 'Term Note', value: 0 },
         REVENUE_SHARING_NOTE: { name: 'Rev Share', value: 0 },
         PREFERRED_EQUITY_506C: { name: 'Preferred Equity', value: 0 },

@@ -9,15 +9,6 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @inject('offeringCreationStore', 'userStore', 'uiStore', 'offeringsStore')
 @observer
 export default class Leader extends Component {
-  constructor(props) {
-    super(props);
-    const {
-      getLeadershipOfferingBac,
-      currentOfferingId,
-    } = this.props.offeringCreationStore;
-    getLeadershipOfferingBac(currentOfferingId, 'LEADERSHIP');
-  }
-
   handleSubmitIssuer = (leaderId, approved, index = null, issuerNumber = null) => {
     const {
       createOrUpdateOfferingBac,
@@ -35,16 +26,11 @@ export default class Leader extends Component {
       leaderShipOfferingBacData,
     } = this.props.offeringCreationStore;
     const issuerNumber = this.props.index;
-    let index = issuerNumber || 0;
+    const index = issuerNumber || 0;
     const formName = 'LEADER_FRM';
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    const { match, offeringsStore, bacId, leadership } = this.props;
+    const { match, offeringsStore } = this.props;
     const { offer } = offeringsStore;
-    if (leadership) {
-      const id = bacId || '';
-      const bacIndex = LEADER_FRM.fields.getOfferingBac.findIndex(b => id === b.id.value);
-      index = bacIndex;
-    }
     const { isIssuer } = this.props.userStore;
     const isManager = access.asManager;
     const submitted = (leaderShipOfferingBacData && leaderShipOfferingBacData.length

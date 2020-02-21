@@ -515,6 +515,7 @@ export const SECURITIES_VALUES = [
   { key: 'SAFE', value: 'SAFE', text: 'SAFE' },
   { key: 'Real Estate', value: 'REAL_ESTATE', text: 'Real Estate' },
   { key: 'Funds - Limited Partner Interest', value: 'FUNDS', text: 'Funds - Limited Partner Interest' },
+  { key: 'Equity', value: 'EQUITY', text: 'Equity' },
 ];
 
 export const ROUND_TYPE_VALUES = [
@@ -3101,6 +3102,7 @@ export const OFFERING_CLOSE_1 = {
     objRefOutput: 'linkedBank',
     objRef: 'linkedBank',
     rule: 'optional',
+    fieldType: 'string',
     placeHolder: 'Enter here',
   },
   bankName: {

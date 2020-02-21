@@ -6,6 +6,7 @@ import { Route, Link, Switch } from 'react-router-dom';
 import { Header, Card, Button } from 'semantic-ui-react';
 import money from 'money-math';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
+import SummaryTerms from '../components/portfolio/SummaryTerms';
 import { DataFormatter } from '../../../../../helper';
 import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
 import InvestmentList from '../components/portfolio/InvestmentList';
@@ -94,7 +95,10 @@ export default class Portfolio extends PureComponent {
     }
   }
 
-  handleInvestNowOnChangeClick = (e, id) => {
+  handleInvestNowOnChangeClick = (e, id, offeringUUID = null) => {
+    if (offeringUUID) {
+      this.props.campaignStore.setFieldValue('offeringUUID', offeringUUID);
+    }
     const redirectURL = `${this.props.match.url}/${id}/invest-now`;
     this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
     this.props.history.push(redirectURL);
@@ -141,7 +145,7 @@ export default class Portfolio extends PureComponent {
       );
     }
     const { getInvestorAccounts, getPieChartData, portfolioError } = portfolioStore;
-    const totalPortfolioBalance = getInvestorAccounts && getInvestorAccounts.totalBalance ? !this.props.isAdmin && money.isNegative(getInvestorAccounts.totalBalance) ? '0.00' : getInvestorAccounts.totalBalance : '0.00';
+    const totalPortfolioBalance = getInvestorAccounts && getInvestorAccounts.availableCash ? !this.props.isAdmin && money.isNegative(getInvestorAccounts.availableCash) ? '0.00' : getInvestorAccounts.availableCash : '0.00';
     const ERROR_MSG = `Sorry, this page is not loading correctly. We've notified the team.<br />
       Please check back again later, and contact us at
       <a href="mailto:support@nextseed.com">support@nextseed.com</a> with any questions.`;
@@ -179,7 +183,7 @@ export default class Portfolio extends PureComponent {
           title: 'Net Deposits', content: getInvestorAccounts && getInvestorAccounts.totalDeposit, type: 1, info: 'Deposits made from your external accounts, minus withdrawals.',
         },
         {
-          title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.netPayments, type: 1, info: 'Payments received to date from all prior investments, minus NextSeed fees.',
+          title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.lifetimePaymentsReceived, type: 1, info: 'Payments received to date from all prior investments, minus NextSeed fees.',
         },
         // {
         //   title: 'TNAR', content: tnarValue && !money.isZero(tnarValue) ? tnarValue :
@@ -201,6 +205,7 @@ export default class Portfolio extends PureComponent {
     let completedSorted = getInvestorAccounts && getInvestorAccounts.investments.completed.length ? orderBy(getInvestorAccounts.investments.completed, o => get(o, 'offering.closureSummary.processingDate') && moment(new Date(o.offering.closureSummary.processingDate)).unix(), ['desc']) : [];
     completedSorted = filter(completedSorted, o => !includes(['TERMINATED', 'FAILED', 'REJECTED'], get(o, 'offering.stage')));
     const hideNotifications = localStorage.getItem('hideNotifications');
+
     return (
       <>
         {this.props.isAdmin
@@ -219,6 +224,9 @@ export default class Portfolio extends PureComponent {
         )
         }
         <SummaryHeader refLink={refLink} isAdmin={this.props.isAdmin} details={summaryDetails} />
+        {this.props.isAdmin
+          && <SummaryTerms refLink={refLink} isAdmin={this.props.isAdmin} details={getInvestorAccounts} />
+        }
         {(getPieChartData.investmentType.length || getPieChartData.industry.length)
           ? <PortfolioAllocations isAdmin={this.props.isAdmin} pieChart={getPieChartData} /> : ''
         }

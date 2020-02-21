@@ -29,7 +29,7 @@ export default class NavBarMobile extends Component {
   }
 
   setAuthRef = () => {
-    this.props.uiStore.setAuthRef(this.props.location.pathname);
+    this.props.uiStore.setAuthRef(this.props.location.pathname, this.props.location.hash);
   }
 
   render() {
