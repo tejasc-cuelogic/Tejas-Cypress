@@ -124,7 +124,7 @@ export const TOMBSTONE_HEADER_META = {
       error: undefined,
       rule: 'optional',
       options: [
-        { key: 'multiple', value: 'multiple', text: 'Multiple' },
+        { key: 'multiple', value: 'investmentMultiple', text: 'Multiple' },
         { key: 'Max Offering Amount CF', value: 'maxOfferingAmountCF', text: 'Max Offering Amount CF' },
         { key: 'Max Offering Amount 506', value: 'maxOfferingAmount506', text: 'Max Offering Amount 506' },
         { key: 'Max Offering Amount 506C', value: 'maxOfferingAmount506C', text: 'Max Offering Amount 506C' },
