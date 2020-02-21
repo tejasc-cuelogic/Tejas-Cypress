@@ -36,7 +36,7 @@ export default class TombstonePreview extends Component {
                     reRender
                     bg
                     centered
-                    srcUrl={TOMBSTONE_BASIC_FRM.fields.image.value}
+                    srcUrl={TOMBSTONE_BASIC_FRM.fields.image.preSignedUrl}
                     alt={`${get(offer, 'keyTerms.shorthandBusinessName')} poster`}
                   />
                 </div>
@@ -99,9 +99,9 @@ export default class TombstonePreview extends Component {
                   )
                 }
                 <p className="more-info">
-                  Offered by {offer && offer.regulation
-                    ? CAMPAIGN_OFFERED_BY[offer.regulation]
-                    : CAMPAIGN_OFFERED_BY[offer.keyTerms.regulation]}
+                  Offered by {get(offer, 'regulation')
+                    ? CAMPAIGN_OFFERED_BY[get(offer, 'regulation')]
+                    : get(offer, 'keyTerms.regulation') && CAMPAIGN_OFFERED_BY[get(offer, 'keyTerms.regulation')]}
                 </p>
               </Card.Content>
               {offer.stage === 'LOCK' && (

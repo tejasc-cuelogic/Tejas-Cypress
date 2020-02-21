@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { camelCase } from 'lodash';
 import { Button, Icon, Item, Header, Label, Divider } from 'semantic-ui-react';
-import { orderBy } from 'lodash';
+import { orderBy, camelCase } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import moment from 'moment';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
