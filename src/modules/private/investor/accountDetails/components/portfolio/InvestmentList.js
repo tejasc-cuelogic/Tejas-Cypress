@@ -233,7 +233,6 @@ const InvestmentList = (props) => {
                     customTrigger={<span className="popup-label">{`${props.listOf} (${props.listOfCount})`}</span>}
                     content="These are your investments in Live or Processing campaigns. Your investment has been reserved and will move to Active when the campaign has been closed."
                     position="top center"
-                    showOnlyPopup={!isMobile}
                   />
                 </Card.Header>
               ) : (
@@ -258,9 +257,10 @@ const InvestmentList = (props) => {
                   customTrigger={<span className="popup-label">{`${props.listOf} (${props.listOfCount})`}</span>}
                   content="These are your investments in Live or Processing campaigns. Your investment has been reserved and will move to Active when the campaign has been closed."
                   position="top center"
+                  showOnlyPopup={!isMobile}
                 />
               ) : (
-                <Card.Header className="text-capitalize">{`${props.listOf} (${props.listOfCount})`}</Card.Header>
+                <span>{`${props.listOf} (${props.listOfCount})`}</span>
               )
             }
             </Accordion.Title>
