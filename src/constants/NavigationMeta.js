@@ -836,4 +836,8 @@ export const CIP_ROUTES = [
     path: 'cip/address-verification',
     component: 'CipAddressVerification',
   },
+  {
+    path: 'cip/phone-verification',
+    component: 'CipPhoneVerification',
+  },
 ];

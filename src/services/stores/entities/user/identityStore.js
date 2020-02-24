@@ -54,8 +54,9 @@ export class IdentityStore {
     ciphardFail: { steps: ['userCIPHardFail', 'userCIPFail'], url: INVESTOR_URLS.cipHardFail, status: 'HARD_FAIL' },
     cipSoftFail: { steps: ['userCIPSoftFail'], url: INVESTOR_URLS.cipSoftFail, status: 'SOFT_FAIL' },
     cipPass: { steps: ['userCIPPass', 'OFFLINE', 'phoneMfa'], url: INVESTOR_URLS.phoneVerification, status: 'PASS' },
-    cip: { steps: ['UNIQUE_SSN', 'PHONE_VERIFICATION'], url: INVESTOR_URLS.cip },
+    cip: { steps: ['UNIQUE_SSN'], url: INVESTOR_URLS.cip },
     cipAddressFail: { steps: ['ADDRESS_VERIFICATION'], url: INVESTOR_URLS.cipAddressFail },
+    CipPhoneFail: { steps: ['PHONE_VERIFICATION'], url: INVESTOR_URLS.cipPhoneFail },
   }
 
   @action
@@ -342,7 +343,7 @@ export class IdentityStore {
 
       if (stepName === 'cipPass') {
         await this.updateUserDataAndSendOtp();
-      } else if (stepName !== 'cipAddressFail' && !get(res, `data.${payLoad.mutationName}.status`)
+      } else if (stepName === 'cip' && !get(res, `data.${payLoad.mutationName}.status`)
         && res.data[`${payLoad.mutationName}`].message) {
         url = undefined;
         uiStore.setFieldvalue('errors',

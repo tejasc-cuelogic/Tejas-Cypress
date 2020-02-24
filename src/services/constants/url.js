@@ -5,4 +5,5 @@ export const INVESTOR_URLS = {
   cipSoftFail: '/dashboard/setup/cip/questions',
   phoneVerification: '/dashboard/setup/verify-phone',
   cipAddressFail: '/dashboard/setup/cip/address-verification',
+  cipPhoneFail: '/dashboard/setup/cip/phone-verification',
 };
