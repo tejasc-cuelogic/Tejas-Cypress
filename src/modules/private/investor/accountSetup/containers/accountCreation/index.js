@@ -7,6 +7,7 @@ import IndividualAccCreation from './individual/AccountCreation';
 import EntityAccCreation from './entity/AccountCreation';
 import Helper from '../../../../../../helper/utility';
 // import AgreementsPdfLoader from '../../../settings/components/agreements/AgreementsPdfLoader';
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('identityStore', 'accountStore', 'bankAccountStore', 'uiStore', 'userDetailsStore', 'userStore', 'iraAccountStore', 'entityAccountStore', 'individualAccountStore')
 @withRouter
@@ -15,6 +16,15 @@ export default class AccountCreation extends Component {
   constructor(props) {
     super(props);
     this.props.bankAccountStore.setBankLinkInterface('list');
+    // const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
+    // const accType = INVESTMENT_ACC_TYPES.fields.accType.values[0];
+    // eslint-disable-next-line prefer-destructuring
+    if (isMobile) {
+      this.props.accountStore.setAccTypeChange();
+    }
+    // else if (accType) {
+    //   this.props.accountStore.setAccTypeChange(accType.value);
+    // }
   }
 
   handleCloseModal = () => {
