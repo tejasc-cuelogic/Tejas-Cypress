@@ -267,8 +267,7 @@ export default class CampaignSideBar extends Component {
                   <NavItems needNavLink sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={isBonusReward} isBonusReward={isBonusReward} />
                 </Menu>
               </>
-            )
-          }
+            )}
           <Route path={`${this.props.match.url}/share`} component={share} />
         </div>
       </>

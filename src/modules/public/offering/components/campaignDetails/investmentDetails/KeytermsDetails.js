@@ -82,7 +82,7 @@ class KeyTermsDetails extends Component {
         {!isMobile ? <Divider hidden={newLayout} /> : null}
         <Table basic="very" className="key-terms-table">
           <Table.Body>
-            {keytermsMeta.map(type => (
+            {keytermsMeta.map((type) => (
               <React.Fragment key={type.key}>
                 <KeyTermsFieldHoc
                   data={keyTerms}
@@ -416,7 +416,7 @@ class KeyTermsDetails extends Component {
               field="securitiesOwnershipPercentage"
             />
             {get(keyTerms, 'additionalKeyterms') && get(keyTerms, 'additionalKeyterms').length !== 0
-              && keyTerms.additionalKeyterms.map(item => (
+              && keyTerms.additionalKeyterms.map((item) => (
                 <Table.Row className="bg-offwhite" verticalAlign="top">
                   <Table.Cell width={7} className="neutral-text"><b>{item.label}{' '}</b>
                   </Table.Cell>
@@ -450,8 +450,7 @@ class KeyTermsDetails extends Component {
             ? (
               <RevenueSharingSummaryBlock {...this.props} />
             )
-            : null
-        }
+            : null}
       </>
     );
   }

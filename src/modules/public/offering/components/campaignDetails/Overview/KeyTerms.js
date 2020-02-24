@@ -176,8 +176,7 @@ class KeyTerms extends Component {
                 )
                 }
                 </>
-              )
-            }
+              )}
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Offered By</b></Table.Cell>
               <Table.Cell className="grey-header">
