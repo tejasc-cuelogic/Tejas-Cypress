@@ -31,7 +31,6 @@ class LatestUpdates extends Component {
       <>
         <Header as="h3" className={`${newLayout && isMobile ? 'mt-40' : newLayout ? 'mt-40' : 'mt-20'} ${isMobile ? 'mb-20' : 'mb-30'} anchor-wrap`}>
           Updates
-          <Label circular horizontal color="green">{(updates && updates.length) || 0}</Label>
           <span className="anchor" id="updates" />
         </Header>
         <Item.Group className="update-items">
