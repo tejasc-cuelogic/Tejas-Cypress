@@ -15,14 +15,13 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('portfolioStore', 'campaignStore', 'userDetailsStore', 'transactionStore', 'uiStore')
 @observer
 class Overview extends Component {
-  state = {
-    open: false,
-    embedUrl: '',
-    loadingDoc: '',
-  };
-
   constructor(props) {
     super(props);
+    this.state = {
+      open: false,
+      embedUrl: '',
+      loadingDoc: '',
+    };
     const { isAdmin } = this.props;
     const accountDetails = this.props.userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     // const investor = this.props.userDetailsStore.getDetailsOfUser;
@@ -76,7 +75,7 @@ class Overview extends Component {
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     const { agreementIds, loading } = this.props.transactionStore;
     let aggrementDocs = get(campaign, 'closureSummary.keyTerms.supplementalAgreements.documents') || [];
-    aggrementDocs = aggrementDocs.length ? aggrementDocs.filter(d => d.isVisible && get(d, 'upload.fileHandle.boxFileId')) : [];
+    aggrementDocs = aggrementDocs.length ? aggrementDocs.filter((d) => d.isVisible && get(d, 'upload.fileHandle.boxFileId')) : [];
     const { responsiveVars } = this.props.uiStore;
     if (loading) {
       return (
@@ -238,7 +237,7 @@ class Overview extends Component {
                       ? (
                         <Table.Row verticalAlign="top">
                           <Table.Cell width={5}>{' '}
-                            <PopUpModal position="top left" content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`} customTrigger={<span className="popup-label">Maturity</span>} showOnlyPopup={!isMobile} />
+                            <PopUpModal position="top left" content={<>This is the deadline by which the issuer is obligated to make payment in full to investors.</>} customTrigger={<span className="popup-label">Maturity</span>} showOnlyPopup={!isMobile} />
                           </Table.Cell>
                           <Table.Cell>
                             {maturityMonth
@@ -294,10 +293,10 @@ class Overview extends Component {
                           <Table.Cell>Investor Agreement{(agreementIds.length + aggrementDocs.length) > 1 && 's'} </Table.Cell>
                           <Table.Cell>
                             <Button.Group vertical>
-                              {agreementIds && agreementIds.length !== 0 && agreementIds.map(agreementId => (
+                              {agreementIds && agreementIds.length !== 0 && agreementIds.map((agreementId) => (
                                 <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {agreementId} </Button>
                               ))}
-                              {aggrementDocs && aggrementDocs.length !== 0 && aggrementDocs.map(doc => (
+                              {aggrementDocs && aggrementDocs.length !== 0 && aggrementDocs.map((doc) => (
                                 <Button icon loading={this.state.loadingDoc === get(doc, 'upload.fileHandle.boxFileId')} onClick={() => this.handleViewSuppAgreement(get(doc, 'upload.fileHandle.boxFileId'))} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {doc.name}</Button>
                               ))}
                             </Button.Group>
@@ -371,8 +370,7 @@ class Overview extends Component {
                 <PayOffChart chartData={chartData} />
               </div>
             </>
-          )
-        }
+          )}
         <IframeModal
           open={this.state.open}
           close={this.closeModal}
