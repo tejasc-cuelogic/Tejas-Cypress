@@ -236,7 +236,7 @@ const InvestmentList = (props) => {
                   />
                 </Card.Header>
               ) : (
-                <Card.Header className="text-capitalize">{<span>{`${props.listOf} (${props.listOfCount})`}</span>}</Card.Header>
+                <Card.Header className="text-capitalize"><span>{`${props.listOf} (${props.listOfCount})`}</span></Card.Header>
               )
             }
             <Card.Content>
