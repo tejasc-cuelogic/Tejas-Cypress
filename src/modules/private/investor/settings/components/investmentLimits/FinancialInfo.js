@@ -5,7 +5,7 @@ import { startCase, get } from 'lodash';
 import { Grid, Card, Statistic, Icon, Button, Divider, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
-import { EmptyDataSet, InlineLoader } from '../../../../../../theme/shared';
+import { EmptyDataSet, InlineLoader, PopUpModal } from '../../../../../../theme/shared';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../../services/constants/investmentLimit';
 
 @inject('investmentLimitStore', 'uiStore', 'userDetailsStore', 'accreditationStore')
