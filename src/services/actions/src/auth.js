@@ -300,6 +300,7 @@ export class Auth {
     const { email } = Validator.ExtractValues(authStore.FORGOT_PASS_FRM.fields);
     try {
       await AmplifyAuth.forgotPassword(email.toLowerCase());
+      sessionStorage.setItem('forgotPasswordEmailReference', email);
     } catch (err) {
       if (get(err, 'code') === 'UserNotFoundException') {
         return true;

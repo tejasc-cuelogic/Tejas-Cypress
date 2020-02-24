@@ -30,6 +30,7 @@ export default class NewEmailAddress extends Component {
     e.stopPropagation();
     this.props.uiStore.clearErrors();
     this.props.authStore.resetForm('CONFIRM_FRM');
+    sessionStorage.removeItem('changedEmail');
     this.props.history.push(this.props.refLink);
   }
 
