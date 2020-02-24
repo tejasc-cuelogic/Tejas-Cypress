@@ -1,8 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Form, Button, Grid, Header, Divider } from 'semantic-ui-react';
+import { Form, Button, Grid } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
-import { AutoComplete } from '../../../../../../theme/form';
 import cipVerificationHOC from '../../containers/cipVerificationHOC';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -21,8 +20,9 @@ class CipPhoneVerification extends React.Component {
   }
 
   render() {
-    const { commonMethods, isLoading, NsModal } = this.props;
-    const { ID_VERIFICATION_FRM, setAddressFieldsForUserVerification, personalInfoChange } = this.props.identityStore;
+    const { commonMethods, isLoading, NsModal, elements } = this.props;
+    const { MaskedInput } = elements;
+    const { ID_VERIFICATION_FRM, personalInfoMaskedChange } = this.props.identityStore;
     return (
       <NsModal
         onClose={() => this.handleClose()}
@@ -32,23 +32,15 @@ class CipPhoneVerification extends React.Component {
       >
         <Grid centered stackable className={isMobile ? 'full-width' : ''}>
           <Grid.Column width="8" className="pt-0">
-            <Header as="h4">Verify Residential Address</Header>
-            <p>Unfortunately, we were unable to verify your address. Please review and update your address here.</p>
-            <Divider hidden />
             <Form error onSubmit={commonMethods.handleCip}>
-              <AutoComplete
-                name="street"
-                fielddata={ID_VERIFICATION_FRM.fields.street}
-                onplaceselected={setAddressFieldsForUserVerification}
-                changed={personalInfoChange}
-                placeHolder="Address"
+              <MaskedInput
+                name="phoneNumber"
+                type="tel"
+                fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
+                format="(###) ###-####"
+                changed={personalInfoMaskedChange}
+                phoneNumber
               />
-              <Form.Group widths={3}>
-                {commonMethods.addressTemplate()}
-              </Form.Group>
-              <p className="note">
-                <b>Note:</b> This sometimes occurs if you recently moved or if the address was zoned differently (e.g. as a commercial location) in the past. If this address is correct, please proceed by selecting the {'"'}Confirm{'"'} button.
-              </p>
               <div className="mt-40 mb-20">
                 <Button primary fluid={isMobile} content="Confirm" disabled={!ID_VERIFICATION_FRM.meta.isValid || isLoading} />
               </div>
