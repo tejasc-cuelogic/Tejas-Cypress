@@ -99,6 +99,9 @@
     }
     &.summary-term-list>.item>.content{
         padding: @17px @30px;
+        @media only screen and (max-width : @largestMobileScreen){
+            padding: @15px @35px;
+        }
         font-size: @15px;
         line-height: 24px;
         .description{
@@ -106,6 +109,9 @@
         }
         >.list{
             padding: @7px 0 0 @30px;
+            @media only screen and (max-width : @largestMobileScreen){
+                padding: @7px 0;
+            }
             >.item{
                 padding: 0;
                 >.content{
