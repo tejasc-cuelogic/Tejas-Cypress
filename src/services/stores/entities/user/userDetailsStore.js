@@ -352,7 +352,7 @@ export class UserDetailsStore {
     let accreditation = get(this.currentUser, 'data.user.accreditation.status');
     accreditation = accreditation === 'CONFIRMED' ? Helper.checkAccreditationExpiryStatus(get(this.currentUser, 'data.user.accreditation.expiration')) === 'ACTIVE' ? 'CONFIRMED' : 'EXPIRED' : accreditation;
     const status = (accreditation === 'CONFIRMED' || entityAccreditation === 'CONFIRMED');
-    return { status, dataRoomStatus: (status || (accreditation === 'REQUESTED' || entityAccreditation === 'REQUESTED')) };
+    return { accreditation: accreditation || entityAccreditation, status, dataRoomStatus: (status || (accreditation === 'REQUESTED' || entityAccreditation === 'REQUESTED')) };
   }
 
   @computed

@@ -1,8 +1,10 @@
+import React from 'react';
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { pickBy, get, set, filter, orderBy, sortBy, includes, has, remove, uniqWith, isEqual, isEmpty, reduce, isArray } from 'lodash';
 import money from 'money-math';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -10,7 +12,7 @@ import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, get
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
-import { userDetailsStore, watchListStore, userStore, authStore, offeringCreationStore, portfolioStore } from '../../index';
+import { userDetailsStore, watchListStore, userStore, navStore, authStore, offeringCreationStore, portfolioStore } from '../../index';
 // import uiStore from '../shared/uiStore';
 import Helper from '../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
@@ -298,6 +300,47 @@ export class CampaignStore {
       return toJS(this.details.data.getOfferingById);
     }
     return {};
+  }
+
+  @computed get campaignCommentsMeta() {
+    const commentMeta = {
+      isValid: false,
+      content: null,
+      action: null,
+    };
+    const { campaign, campaignStatus } = this;
+    const { isInvestorAccreditated, signupStatus } = userDetailsStore;
+    const { activeAccounts, frozenAccounts } = signupStatus;
+    const { stepInRoute } = navStore;
+    const loggedInAsInvestor = authStore.isUserLoggedIn && userStore.currentUser.roles.includes('investor');
+    const passedProcessingDate = get(campaignStatus, 'diffForProcessing.value') <= 0;
+    const validCampaignStage = ['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(get(campaign, 'stage'));
+    const offeringRegulation = get(campaign, 'keyTerms.regulation');
+    if (!loggedInAsInvestor || !authStore.isUserLoggedIn) {
+      if (['BD_506C', 'BD_506B'].includes(offeringRegulation)) {
+        commentMeta.content = (<p>In order to leave a comment, please {get(stepInRoute, 'word')} and verify your status as an <br />accredited investor.</p>);
+      } else {
+        commentMeta.content = (<p>In order to leave comments, please {get(stepInRoute, 'word')} and verify your identity.</p>);
+      }
+      commentMeta.action = handleLogin => (<Link onClick={e => handleLogin(e, true)} to="/" className="ui button primary">{get(stepInRoute, 'title')}</Link>);
+    } else if (activeAccounts.length === 0) {
+      if (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status) {
+        commentMeta.content = (<p>In order to leave a comment, please complete your account setup and verify your status as an accredited investor.</p>);
+      } else {
+        commentMeta.content = (<p>In order to leave a comment, please complete your account setup.</p>);
+      }
+    commentMeta.action = () => (<Link to="/dashboard/setup" className="ui button primary">Complete Account Setup</Link>);
+    } else if (activeAccounts.length && ['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status) {
+      commentMeta.content = (<p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>);
+      commentMeta.action = () => (isInvestorAccreditated.accreditation !== 'REQUESTED' ? (
+        <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>
+      ) : true);
+    } else if (!validCampaignStage || frozenAccounts.length || passedProcessingDate) {
+      commentMeta.isValid = false;
+    } else {
+      commentMeta.isValid = true;
+    }
+    return commentMeta;
   }
 
   @computed get campaignStatus() {
