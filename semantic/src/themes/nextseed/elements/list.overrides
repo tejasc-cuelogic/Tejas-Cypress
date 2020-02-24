@@ -97,6 +97,28 @@
             }
         }
     }
+    &.summary-term-list>.item>.content{
+        padding: @17px @30px;
+        font-size: @15px;
+        line-height: 24px;
+        .description{
+            color: @neutral;
+        }
+        >.list{
+            padding: @7px 0 0 @30px;
+            >.item{
+                padding: 0;
+                >.content{
+                    padding: 0;
+                    .header, .description{
+                        line-height: 24px;
+                        font-weight: @normal;
+                        color: @neutral-middark;
+                    }
+                }
+            }
+        }
+    }
 }
 //  Public page Ends
 
