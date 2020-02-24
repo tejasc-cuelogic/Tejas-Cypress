@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, campaignDetailsAdditionalQuery, getOfferingIdBySlug, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral, checkIfEarlyBirdExist } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import { getBoxEmbedLink } from '../../queries/agreements';
@@ -63,6 +63,10 @@ export class CampaignStore {
   @observable docLoading = false;
 
   @observable hideCreationList = false;
+
+  @observable temData = null;
+
+  @observable offeringUUID = null;
 
   @observable documentMeta = {
     closingBinder: { selectedDoc: null, accordionActive: true },
@@ -176,6 +180,24 @@ export class CampaignStore {
       this.details = campaignData;
     }
   }
+
+  @action
+  getOfferingIdBySlug = id => new Promise((resolve) => {
+    this.temData = graphql({
+      client,
+      query: getOfferingIdBySlug,
+      fetchPolicy: 'no-cache',
+      variables: { id },
+      onFetch: (res) => {
+        if (!this.temData.loading) {
+          resolve(res.getOfferingDetailsBySlug.id);
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
+  });
 
   @action
   getIssuerIdForOffering = id => new Promise((resolve, reject) => {
