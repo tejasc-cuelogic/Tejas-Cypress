@@ -51,11 +51,12 @@ class AvailableCashTransfer extends Component {
             <Grid>
               <Grid.Column mobile={16} tablet={6} computer={6}>
                 <Statistic size="tiny">
-                  <Statistic.Label>Available cash
-                    <Popup
-                      trigger={<Icon className="ns-help-circle" />}
+                  <Statistic.Label>
+                    <PopUpModal
+                      customTrigger={<span className="popup-label">Available cash</span>}
                       content="Available cash includes funds that are immediately available for withdrawal. This excludes pending incoming deposits, pending investments, and investment credits."
                       position="top center"
+                      showOnlyPopup={!isMobile}
                       wide
                     />
                   </Statistic.Label>
