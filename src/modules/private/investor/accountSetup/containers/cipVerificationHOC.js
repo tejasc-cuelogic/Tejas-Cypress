@@ -11,6 +11,7 @@ function cipVerificationHOC(WrappedComponent) {
     constructor(props) {
       super(props);
       this.props.identityStore.setCipDetails();
+      this.props.identityStore.changeSsnRules();
     }
 
     handleCloseModal = () => {

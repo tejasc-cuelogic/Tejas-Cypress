@@ -42,6 +42,8 @@ export class IdentityStore {
 
   @observable isAddressFailed = false;
 
+  @observable isPhoneFailed = false;
+
   @observable cipBackUrl = INVESTOR_URLS.cipForm;
 
   @observable sendOtpToMigratedUser = [];
@@ -308,6 +310,11 @@ export class IdentityStore {
   }
 
   @action
+  changeSsnRules = (isRequired = false) => {
+    this.ID_VERIFICATION_FRM.fields.ssn.rule = this.ID_VERIFICATION_FRM.fields.ssn.value.includes('X') && !isRequired ? 'optional' : 'required';
+  }
+
+  @action
   verifyCipHardFail = async () => {
     const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
     const payLoad = {
@@ -343,8 +350,8 @@ export class IdentityStore {
 
       if (stepName === 'cipPass') {
         await this.updateUserDataAndSendOtp();
-      } else if (stepName === 'cip' && !get(res, `data.${payLoad.mutationName}.status`)
-        && res.data[`${payLoad.mutationName}`].message) {
+      } else if ((stepName === 'cip' && !get(res, `data.${payLoad.mutationName}.status`)
+        && res.data[`${payLoad.mutationName}`].message) || this.isPhoneFailed) {
         url = undefined;
         uiStore.setFieldvalue('errors',
           DataFormatter.getSimpleErr({

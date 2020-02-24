@@ -43,7 +43,7 @@ class CipSoftFail extends React.Component {
     return (
       <NsModal
         onClose={() => commonMethods.closeModal()}
-        backUrl="/dashboard/setup/cip"
+        back="/dashboard/setup/cip"
         {...this.props}
       >
         <Grid centered stackable className={isMobile ? 'full-width' : ''}>

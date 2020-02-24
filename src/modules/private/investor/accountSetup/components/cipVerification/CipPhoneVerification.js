@@ -1,7 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Form, Button, Grid } from 'semantic-ui-react';
+import { Form, Button, Grid, Message } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
+import { ListErrors } from '../../../../../../theme/shared';
 import cipVerificationHOC from '../../containers/cipVerificationHOC';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -10,24 +11,29 @@ const isMobile = document.documentElement.clientWidth < 768;
 class CipPhoneVerification extends React.Component {
   constructor(props) {
     super(props);
-    this.props.identityStore.resetAddressFields();
-    this.props.identityStore.setFieldValue('isAddressFailed', true);
+    this.props.identityStore.setFieldValue('isPhoneFailed', true);
   }
 
   handleClose = () => {
-    this.props.identityStore.setFieldValue('isAddressFailed', false);
+    this.props.identityStore.setFieldValue('isPhoneFailed', false);
     this.props.commonMethods.closeModal();
+  }
+
+  handleBack = () => {
+    this.props.identityStore.setFieldValue('isPhoneFailed', false);
+    this.props.history.push('/dashboard/setup/cip');
   }
 
   render() {
     const { commonMethods, isLoading, NsModal, elements } = this.props;
     const { MaskedInput } = elements;
+    const { errors } = this.props.uiStore;
     const { ID_VERIFICATION_FRM, personalInfoMaskedChange } = this.props.identityStore;
     return (
       <NsModal
-        onClose={() => this.handleClose()}
+        onClose={() => commonMethods.closeModal()}
         closeOnEscape={false}
-        backUrl="/dashboard/setup/cip"
+        back={this.handleBack}
         {...this.props}
       >
         <Grid centered stackable className={isMobile ? 'full-width' : ''}>
@@ -47,6 +53,13 @@ class CipPhoneVerification extends React.Component {
               <div className={isMobile && 'center-align'}>
                 <Link to="/dashboard/setup" onClick={this.handleClose}>I’ll finish this later</Link>
               </div>
+              {errors
+                && (
+                  <Message error className="mt-30">
+                    <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+                  </Message>
+                )
+              }
             </Form>
           </Grid.Column>
         </Grid>

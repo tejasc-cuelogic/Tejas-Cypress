@@ -10,7 +10,7 @@ const NsModal = (props) => {
   const { iconName, closeOnDimmerClick,
     onClose, className, disableCloseIcon, headerLogo,
     isLoading, loaderMsg, actions, size, borderedHeader,
-    modalContentClass, useMountNode, backUrl, isProgressHeaderDisable } = props;
+    modalContentClass, useMountNode, back, isProgressHeaderDisable } = props;
   const history = useHistory();
   const mountNode = Helper.customModalWrapper();
   return (
@@ -37,12 +37,12 @@ const NsModal = (props) => {
 
       <Modal.Content className={modalContentClass || ''}>
         {
-          backUrl && !isMobile
+          back && !isMobile
           && (
             <Button
               icon={{ className: 'ns-chevron-left' }}
               className="prev link-button"
-              onClick={() => history.push(backUrl)}
+              onClick={() => (back instanceof String ? history.push(back) : back())}
               content="Back"
             />
           )}

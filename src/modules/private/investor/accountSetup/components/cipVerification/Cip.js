@@ -13,7 +13,7 @@ const headerSiblingsContent = (
     <Header as="h3">Let’s create your NextSeed investment account.</Header>
     {!isMobile && <Divider hidden />}
     <p className="mt-20">
-Federal regulations require us to verify your legal{!isMobile && <br />} identity.
+      Federal regulations require us to verify your legal{!isMobile && <br />} identity.
       We use state-of-the-art security measures{!isMobile && <br />} to protect your information.
     </p>
   </>
@@ -32,6 +32,11 @@ const loaderMsg = (
 @withRouter
 @observer
 class Cip extends React.Component {
+  constructor(props) {
+    super(props);
+    this.props.identityStore.changeSsnRules(true);
+  }
+
   handleEncryptedSsn = (fielddata) => {
     if (fielddata.value && fielddata.value.includes('X')) {
       return { ...fielddata, value: '' };
