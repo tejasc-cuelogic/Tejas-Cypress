@@ -133,6 +133,14 @@ export const getOfferingById = gql`
   }
 `;
 
+export const getOfferingIdBySlug = gql`
+  query getOfferingDetailsBySlug($id: String!) {
+    getOfferingDetailsBySlug (offeringSlug: $id) {
+      id
+    }
+  }
+`;
+
 export const campaignDetailsQuery = gql`
   query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
     getOfferingDetailsBySlug (offeringSlug: $id, isValid: $isValid) {

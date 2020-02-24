@@ -37,13 +37,15 @@ export default class InvestNow extends React.Component {
     }
     if (this.props.changeInvest) {
       const { offeringId } = this.props.match.params;
+      const { offeringUUID } = this.props.campaignStore;
       const matchURL = this.props.match.url;
-      this.props.portfolioStore.setFieldValue('currentOfferingId', offeringId);
-      this.props.campaignStore.getCampaignDetails(offeringId, true, true);
-
       if (matchURL.includes('portfolio')) {
         this.setState({ isInvestmentUpdate: true });
+        this.props.portfolioStore.setFieldValue('currentOfferingId', offeringUUID);
+      } else {
+        this.props.portfolioStore.setFieldValue('currentOfferingId', offeringId);
       }
+      this.props.campaignStore.getCampaignDetails(offeringId, true, true);
     }
   }
 
@@ -66,6 +68,7 @@ export default class InvestNow extends React.Component {
         this.props.accreditationStore.setFieldVal('userAccredetiationState', null);
         this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
       }
+      this.props.campaignStore.setFieldValue('offeringUUID', null);
     }
   }
 

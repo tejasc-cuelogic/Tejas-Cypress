@@ -95,7 +95,10 @@ export default class Portfolio extends PureComponent {
     }
   }
 
-  handleInvestNowOnChangeClick = (e, id) => {
+  handleInvestNowOnChangeClick = (e, id, offeringUUID = null) => {
+    if (offeringUUID) {
+      this.props.campaignStore.setFieldValue('offeringUUID', offeringUUID);
+    }
     const redirectURL = `${this.props.match.url}/${id}/invest-now`;
     this.props.campaignStore.setFieldValue('isInvestBtnClicked', true);
     this.props.history.push(redirectURL);
