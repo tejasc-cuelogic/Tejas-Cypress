@@ -71,7 +71,7 @@ class Cip extends React.Component {
                   placeholder="Select"
                   fielddata={ID_VERIFICATION_FRM.fields.salutation}
                   options={USER_TITLE}
-                  changed={personalInfoChange}
+                  changed={(e, result) => personalInfoChange(e, result, 'ID_VERIFICATION_FRM')}
                 />
                 {['firstLegalName', 'lastLegalName'].map(field => (
                   <FormInput
@@ -79,15 +79,15 @@ class Cip extends React.Component {
                     type="text"
                     name={field}
                     fielddata={ID_VERIFICATION_FRM.fields[field]}
-                    changed={personalInfoChange}
+                    changed={(e, result) => personalInfoChange(e, result, 'ID_VERIFICATION_FRM')}
                   />
                 ))}
               </Form.Group>
               <AutoComplete
                 name="street"
                 fielddata={ID_VERIFICATION_FRM.fields.street}
-                onplaceselected={setAddressFieldsForUserVerification}
-                changed={personalInfoChange}
+                onplaceselected={place => setAddressFieldsForUserVerification(place, 'ID_VERIFICATION_FRM')}
+                changed={(e, result) => personalInfoChange(e, result, 'ID_VERIFICATION_FRM')}
                 placeHolder="Street Address, City, State, Zip"
               />
               <FormInput
@@ -95,16 +95,16 @@ class Cip extends React.Component {
                 type="text"
                 name="streetTwo"
                 fielddata={ID_VERIFICATION_FRM.fields.streetTwo}
-                changed={personalInfoChange}
+                changed={(e, result) => personalInfoChange(e, result, 'ID_VERIFICATION_FRM')}
               />
               <Form.Group widths={3}>
-                {commonMethods.addressTemplate()}
+                {commonMethods.addressTemplate('ID_VERIFICATION_FRM')}
                 <MaskedInput
                   name="phoneNumber"
                   type="tel"
                   fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
                   format="(###) ###-####"
-                  changed={personalInfoMaskedChange}
+                  changed={(values, name) => personalInfoMaskedChange(values, name, 'ID_VERIFICATION_FRM')}
                   phoneNumber
                 />
                 <MaskedInput
@@ -112,14 +112,14 @@ class Cip extends React.Component {
                   fielddata={ID_VERIFICATION_FRM.fields.dateOfBirth}
                   type="tel"
                   format="##/##/####"
-                  changed={personalInfoMaskedChange}
+                  changed={(values, name) => personalInfoMaskedChange(values, name, 'ID_VERIFICATION_FRM')}
                   dateOfBirth
                 />
                 <MaskedInput
                   name="ssn"
                   fielddata={this.handleEncryptedSsn(ID_VERIFICATION_FRM.fields.ssn)}
                   ssn
-                  changed={personalInfoMaskedChange}
+                  changed={(values, name) => personalInfoMaskedChange(values, name, 'ID_VERIFICATION_FRM')}
                 />
               </Form.Group>
               <p className="note">

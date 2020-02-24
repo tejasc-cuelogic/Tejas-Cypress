@@ -11,7 +11,9 @@ const isMobile = document.documentElement.clientWidth < 768;
 class CipAddressVerification extends React.Component {
   constructor(props) {
     super(props);
-    this.props.identityStore.resetAddressFields();
+    if (!this.props.identityStore.isPhoneFailed) {
+      this.props.identityStore.resetFormData('ID_ADDRESS_VERIFICATION');
+    }
     this.props.identityStore.setFieldValue('isAddressFailed', true);
   }
 
@@ -20,9 +22,14 @@ class CipAddressVerification extends React.Component {
     this.props.commonMethods.closeModal();
   }
 
+  handleBack = () => {
+    this.props.identityStore.setFieldValue('isAddressFailed', false);
+    this.props.history.push('/dashboard/setup/cip');
+  }
+
   render() {
     const { commonMethods, isLoading, NsModal } = this.props;
-    const { ID_VERIFICATION_FRM, setAddressFieldsForUserVerification, personalInfoChange } = this.props.identityStore;
+    const { ID_ADDRESS_VERIFICATION, setAddressFieldsForUserVerification, personalInfoChange } = this.props.identityStore;
     return (
       <NsModal
         onClose={() => this.handleClose()}
@@ -38,19 +45,19 @@ class CipAddressVerification extends React.Component {
             <Form error onSubmit={commonMethods.handleCip}>
               <AutoComplete
                 name="street"
-                fielddata={ID_VERIFICATION_FRM.fields.street}
-                onplaceselected={setAddressFieldsForUserVerification}
-                changed={personalInfoChange}
+                fielddata={ID_ADDRESS_VERIFICATION.fields.street}
+                onplaceselected={place => setAddressFieldsForUserVerification(place, 'ID_ADDRESS_VERIFICATION')}
+                changed={(e, result) => personalInfoChange(e, result, 'ID_ADDRESS_VERIFICATION')}
                 placeHolder="Address"
               />
               <Form.Group widths={3}>
-                {commonMethods.addressTemplate()}
+                {commonMethods.addressTemplate('ID_ADDRESS_VERIFICATION')}
               </Form.Group>
               <p className="note">
                 <b>Note:</b> This sometimes occurs if you recently moved or if the address was zoned differently (e.g. as a commercial location) in the past. If this address is correct, please proceed by selecting the {'"'}Confirm{'"'} button.
               </p>
               <div className="mt-40 mb-20">
-                <Button primary fluid={isMobile} content="Confirm" disabled={!ID_VERIFICATION_FRM.meta.isValid || isLoading} />
+                <Button primary fluid={isMobile} content="Confirm" disabled={!ID_ADDRESS_VERIFICATION.meta.isValid || isLoading} />
               </div>
               <div className={isMobile && 'center-align'}>
                 <Link to="/dashboard/setup" onClick={this.handleClose}>I’ll finish this later</Link>

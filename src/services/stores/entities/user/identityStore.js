@@ -3,7 +3,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import { mapValues, keyBy, find, flatMap, map, get, isEmpty, intersection } from 'lodash';
 import Validator from 'validatorjs';
-import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
+import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, USER_ADDRESS, PHONE_NUMBER, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
 import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isUniqueSSN, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
@@ -13,7 +13,7 @@ import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
 import { fileUpload } from '../../../actions';
 import { INVESTOR_URLS } from '../../../constants/url';
-import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
+import identityHelper from '../../../../modules/private/investor/accountSetup/containers/cipVerification/helper';
 import { US_STATES, FILE_UPLOAD_STEPS, US_STATES_FOR_INVESTOR } from '../../../../constants/account';
 import commonStore from '../commonStore';
 
@@ -23,6 +23,10 @@ export class IdentityStore {
   @observable ID_VERIFICATION_DOCS_FRM = FormValidator.prepareFormObject(IDENTITY_DOCUMENTS);
 
   @observable ID_VERIFICATION_QUESTIONS = FormValidator.prepareFormObject([]);
+
+  @observable ID_ADDRESS_VERIFICATION = FormValidator.prepareFormObject(USER_ADDRESS);
+
+  @observable ID_PHONE_FAIL_FRM = FormValidator.prepareFormObject(PHONE_NUMBER);
 
   @observable ID_PHONE_VERIFICATION = FormValidator.prepareFormObject(PHONE_VERIFICATION);
 
@@ -100,25 +104,25 @@ export class IdentityStore {
   }
 
   @action
-  personalInfoChange = (e, result) => {
-    this.ID_VERIFICATION_FRM = FormValidator.onChange(
-      this.ID_VERIFICATION_FRM,
+  personalInfoChange = (e, result, form) => {
+    this[form] = FormValidator.onChange(
+      this[form],
       FormValidator.pullValues(e, result),
     );
   };
 
   @action
-  personalInfoMaskedChange = (values, field) => {
+  personalInfoMaskedChange = (values, field, form) => {
     const finalValue = (field === 'dateOfBirth') ? values.formattedValue : values.value;
-    this.ID_VERIFICATION_FRM = FormValidator.onChange(
-      this.ID_VERIFICATION_FRM,
+    this[form] = FormValidator.onChange(
+      this[form],
       { name: field, value: finalValue },
     );
   }
 
   @action
   phoneNumberChange = (value) => {
-    this.ID_VERIFICATION_FRM = FormValidator.onChange(
+  this.ID_VERIFICATION_FRM = FormValidator.onChange(
       this.ID_VERIFICATION_FRM,
       { name: 'phoneNumber', value },
     );
@@ -150,17 +154,17 @@ export class IdentityStore {
   }
 
   @action
-  setAddressFieldsForUserVerification = (place) => {
+  setAddressFieldsForUserVerification = (place, form) => {
     if (this.isStreetCodeExistInAutoComplete(place)) {
-      FormValidator.setAddressFields(place, this.ID_VERIFICATION_FRM);
-      const state = US_STATES.find(s => s.text === this.ID_VERIFICATION_FRM.fields.state.value.toUpperCase());
-      this.ID_VERIFICATION_FRM.fields.state.value = state ? state.key : '';
+      FormValidator.setAddressFields(place, this[form]);
+      const state = US_STATES.find(s => s.text === this[form].fields.state.value.toUpperCase());
+      this[form].fields.state.value = state ? state.key : '';
     } else {
-      this.ID_VERIFICATION_FRM = FormValidator.onChange(
-        this.ID_VERIFICATION_FRM,
+      this[form] = FormValidator.onChange(
+        this[form],
         { name: 'street', value: Helper.gAddressClean(place).residentalStreet },
       );
-      ['city', 'state', 'zipCode'].forEach((field) => { this.ID_VERIFICATION_FRM.fields[field].value = ''; });
+      ['city', 'state', 'zipCode'].forEach((field) => { this[form].fields[field].value = ''; });
     }
   }
 
@@ -195,7 +199,15 @@ export class IdentityStore {
 
   @computed
   get formattedUserInfoForCip() {
-    const { fields } = this.ID_VERIFICATION_FRM;
+    let fields = {};
+    if (this.ID_ADDRESS_VERIFICATION.meta.isValid && this.isAddressFailed) {
+      fields = { ...this.ID_VERIFICATION_FRM.fields, ...this.ID_ADDRESS_VERIFICATION.fields };
+    } else if (this.ID_PHONE_FAIL_FRM.meta.isValid && this.isPhoneFailed) {
+      fields = { ...this.ID_VERIFICATION_FRM.fields, ...this.ID_PHONE_FAIL_FRM.fields };
+    } else {
+      // eslint-disable-next-line prefer-destructuring
+      fields = this.ID_VERIFICATION_FRM.fields;
+    }
     const user = FormValidator.evaluateFormData(fields);
     if (userDetailsStore.isLegalDocsPresent) {
       user.verificationDocs = this.verificationDocs();
@@ -260,6 +272,7 @@ export class IdentityStore {
 
     if (resData.step === 'ADDRESS_VERIFICATION' && this.isAddressFailed) {
       redirectUrl = INVESTOR_URLS.cipHardFail;
+      this.setFieldValue('cipBackUrl', INVESTOR_URLS.cipAddressFail);
     }
 
     if (resData.step === 'OFFLINE') {
@@ -291,22 +304,6 @@ export class IdentityStore {
     };
     const { res, url } = await this.cipWrapper(payLoad);
     return { res, url };
-  }
-
-  @action
-  resetAddressFields = () => {
-    ['street', 'city', 'state', 'zipCode'].forEach(
-      (field) => {
-        if (field !== 'state') {
-          this.ID_VERIFICATION_FRM = FormValidator.onChange(
-            this.ID_VERIFICATION_FRM,
-            { name: field, value: '' },
-          );
-        } else {
-          this.ID_VERIFICATION_FRM.fields[field].value = '';
-        }
-      },
-    );
   }
 
   @action
