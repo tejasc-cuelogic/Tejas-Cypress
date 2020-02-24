@@ -12,6 +12,7 @@ const COMMON = [
   { from: 'blog/:param1', live: true, to: '/insights/:param1' },
   { from: 'railway', live: true, to: '/teamrailway' },
   { from: 'edisonwedges', live: true, to: '/edison' },
+  { from: 'marketplace', live: true, to: '/?utm_source=podcast&campaign=marketplaceh&rsCode=MARKETPLACE' },
 ];
 export const PRODUCTION_REDIRECT_META = [
   ...COMMON,
