@@ -7,7 +7,7 @@ import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import Helper from '../../../../../helper/utility';
 import share from './Share';
 import { Image64, PopUpModal } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_EQUITY_CLASS } from '../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 992;
 
@@ -162,7 +162,7 @@ export default class CampaignSideBar extends Component {
               {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                 && (
                   <p className="raise-type mt-20 mb-0">
-                    {campaignStatus.isRealEstate ? 'Commercial Real Estate' : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
+                    {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{campaignStatus.isEquity && ['LLC_MEMBERSHIP_UNITS', 'PREFERRED'].includes(get(campaign, 'keyTerms.equityClass')) ? `  - ${CAMPAIGN_KEYTERMS_EQUITY_CLASS[get(campaign, 'keyTerms.equityClass')]}` : ' '}
                   </p>
                 )
               }

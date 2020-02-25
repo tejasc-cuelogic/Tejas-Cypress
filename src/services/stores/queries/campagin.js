@@ -72,6 +72,7 @@ query getOfferingList($filters: OfferingListFilterInputType){
         shorthandBusinessName
         legalBusinessName
         securities
+        equityClass
         industry
         state
         city

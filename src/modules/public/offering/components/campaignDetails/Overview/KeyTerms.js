@@ -74,9 +74,9 @@ class KeyTerms extends Component {
                 <Table.Cell width={5} className="neutral-text"><b>Interest Rate{' '}</b>
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content={campaign && campaign.keyTerms && campaign.keyTerms.securities === 'TERM_NOTE'
+                    content={campaignStatus.isTermNote
                       ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors. <a target="_blank" href="/resources/education-center/investor/how-term-notes-work">Learn more</a></>)
-                      : campaign.keyTerms.securities === 'CONVERTIBLE_NOTES' ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors.</>) : ''}
+                      : campaignStatus.isConvertibleNotes ? (<>This is the gross annualized interest rate used to calculate monthly payments to investors.</>) : ''}
                     position="top center"
                   />
                 </Table.Cell>

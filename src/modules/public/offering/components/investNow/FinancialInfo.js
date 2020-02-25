@@ -16,9 +16,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 class FinancialInfo extends Component {
   constructor(props) {
     super(props);
-    const { campaign, offeringUUID } = this.props.campaignStore;
-    const offeringSecurityType = get(campaign, 'keyTerms.securities');
-    if (includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)) {
+    const { campaignStatus, offeringUUID } = this.props.campaignStore;
+    if (campaignStatus.isPreferredEquity) {
       const { overrideMultipleValidationForInvestment } = this.props.investmentStore;
       overrideMultipleValidationForInvestment();
     }

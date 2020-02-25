@@ -10,6 +10,13 @@ export const CAMPAIGN_KEYTERMS_SECURITIES = {
   REAL_ESTATE: 'LLC Membership Interests',
   FUNDS: 'Funds - Limited Partnership Interests',
 };
+export const CAMPAIGN_KEYTERMS_EQUITY_CLASS = {
+  PREFERRED: 'Series NS Preferred Units',
+  LLC_MEMBERSHIP_UNITS: 'LLC Membership Interests',
+  CLASS_A_SHARES: 'Class A Shares',
+  CLASS_B_SHARES: 'Class B Shares',
+  PARALLEL_CLASS_SHARES: 'Class A and B Shares',
+};
 export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
   TERM_NOTE: 'TERM_NOTE',
   EQUITY: 'EQUITY',

@@ -17,15 +17,15 @@ const keyTermList = [
   { label: 'Security', forFunded: true, key: 'keyTerms.securities', type: CAMPAIGN_KEYTERMS_SECURITIES, for: ['ALL'] },
   { label: 'Offering', key: 'keyTerms.regulation', type: CAMPAIGN_KEYTERMS_REGULATION_PARALLEL, for: ['ALL'] },
   { label: 'Investment Minimum', key: 'keyTerms.minInvestAmt', type: '$', for: ['ALL'] },
-  { label: 'Offering Size', key: 'keyTerms.offeringSize', type: '$', for: ['REAL_ESTATE'] },
+  { label: 'Offering Size', key: 'keyTerms.offeringSize', type: '$', for: ['REAL_ESTATE'], equityClass: ['LLC_MEMBERSHIP_UNITS'] },
   { label: 'Multiple', forFunded: true, key: 'closureSummary.keyTerms.multiple', type: 'X', for: ['REVENUE_SHARING_NOTE'] },
   { label: 'Interest Rate', forFunded: true, key: 'closureSummary.keyTerms.interestRate', type: '%', for: ['TERM_NOTE'] },
   { label: 'Maturity', key: 'keyTerms.maturity', type: 'months', for: ['REVENUE_SHARING_NOTE', 'TERM_NOTE'] },
-  { label: 'Pre-Money Valuation', key: 'keyTerms.premoneyValuation', type: '$', for: ['PREFERRED_EQUITY_506C'] },
-  { label: 'Share Price', key: 'keyTerms.priceCopy', type: '', for: ['PREFERRED_EQUITY_506C'] },
+  { label: 'Pre-Money Valuation', key: 'keyTerms.premoneyValuation', type: '$', for: ['PREFERRED_EQUITY_506C'], equityClass: ['PREFERRED'] },
+  { label: 'Share Price', key: 'keyTerms.priceCopy', type: '', for: ['PREFERRED_EQUITY_506C'], equityClass: ['PREFERRED'] },
   { label: 'Valuation Cap', key: 'keyTerms.valuationCap', type: '', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
   { label: 'Discount', key: 'keyTerms.discount', type: '', for: ['CONVERTIBLE_NOTES', 'SAFE'] },
-  { label: 'Targeted IRR ', value: 'View in Data Room', for: ['REAL_ESTATE'] },
+  { label: 'Targeted IRR ', value: 'View in Data Room', for: ['REAL_ESTATE'], equityClass: ['LLC_MEMBERSHIP_UNITS'] },
   // { label: 'Total Payments to investors', forFunded: true, key: 'closureSummary.repayment.count', type: '', for: [''] },
   // { label: 'Total Paid to investors', forFunded: true, key: 'closureSummary.repayment.currentRepaidAmount', type: '$', for: [''] },
 ];
@@ -144,17 +144,17 @@ export default class CampaignList extends Component {
                                   <Table.Body>
                                     {(isFunded ? keyTermList.filter(i => i.forFunded) : keyTermList).map(row => (
                                       <>
-                                        {((isFunded || row.for.includes('ALL') || row.for.includes(offering.keyTerms.securities)) && ((get(offering, row.key) === 0 || get(offering, row.key)) || row.value))
+                                        {((isFunded || row.for.includes('ALL') || (row.for.includes(offering.keyTerms.securities) || (['EQUITY'].includes(offering.keyTerms.securities) && get(row, 'equityClass') && get(row, 'equityClass').includes(get(offering, 'keyTerms.equityClass'))))) && ((get(offering, row.key) === 0 || get(offering, row.key)) || row.value))
                                           && (
                                             <Table.Row verticalAlign="top">
-                                              <Table.Cell collapsing>{(row.label === 'Share Price') ? `${capitalize(get(offering, 'keyTerms.equityUnitType'))} Price` : (row.label === 'Security' && get(offering, row.key) && get(offering, row.key) === 'REAL_ESTATE') ? 'Type of Investment' : row.label}</Table.Cell>
+                                              <Table.Cell collapsing>{(row.label === 'Share Price') ? `${capitalize(get(offering, 'keyTerms.equityUnitType'))} Price` : (row.label === 'Security' && get(offering, row.key) && ((get(offering, row.key) === 'REAL_ESTATE') || (get(offering, row.key) === 'EQUITY' && get(offering, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'))) ? 'Type of Investment' : row.label}</Table.Cell>
                                               <Table.Cell collapsing className={`${!isFunded && !row.for.includes('ALL') && row.value !== 'View in Data Room' ? 'highlight-text' : ''} right-align`}>
                                                 <b>
                                                   {((get(offering, row.key) !== undefined && get(offering, row.key) !== null) || row.value)
                                                     ? (
                                                       <>
                                                         {typeof row.type === 'object' ? (
-                                                          row.type[get(offering, row.key)] && get(offering, row.key) === 'REAL_ESTATE' ? <>Commercial Real Estate</> : row.type[get(offering, row.key)] || '-'
+                                                          row.type[get(offering, row.key)] || '-'
                                                         ) : row.type === '$' ? row.key ? Helper.CurrencyFormat(get(offering, row.key), 0) : row.value
                                                             : row.type === '%' ? row.key ? `${get(offering, row.key)}%` : row.value
                                                               : row.type === 'X' ? row.key ? `${get(offering, row.key)}x` : row.value
