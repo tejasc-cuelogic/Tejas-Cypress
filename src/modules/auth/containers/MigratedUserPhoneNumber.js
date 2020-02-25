@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Modal, Header, Form, Divider, Button, Message } from 'semantic-ui-react';
+import { Header, Form, Divider, Button, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../theme/form';
-import { ListErrors } from '../../../theme/shared';
+import { ListErrors, NsModal } from '../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -40,8 +40,7 @@ export default class MigratedUserPhoneNumber extends Component {
     const { ID_VERIFICATION_FRM, personalInfoMaskedChange } = this.props.identityStore;
     const { errors } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false} closeOnDimmerClick={false}>
-        <Modal.Header className="center-align signup-header">
+      <NsModal open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false} closeOnDimmerClick={false}>
           <Header as="h3">Confirm your phone number</Header>
           <p>
             {`We're introducing Multi-Factor Authentication (MFA) to
@@ -49,8 +48,6 @@ export default class MigratedUserPhoneNumber extends Component {
           </p>
           <Divider section />
           <p>We will send you a verification code to the phone number you enter below</p>
-        </Modal.Header>
-        <Modal.Content className="signup-content center-align">
           <Form onSubmit={this.handlePhoneNumberConfirmation}>
             <MaskedInput
               hidelabel
@@ -81,8 +78,7 @@ export default class MigratedUserPhoneNumber extends Component {
               </Message>
             )
           }
-        </Modal.Content>
-      </Modal>
+      </NsModal>
     );
   }
 }
