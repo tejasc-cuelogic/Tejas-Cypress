@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, List, Icon } from 'semantic-ui-react';
+import { Card, List } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import { PopUpModal } from '../../../../../../theme/shared';
 
@@ -96,7 +96,7 @@ const SummaryTerms = props => (
                   <List.Item className="right-align">
                     <List.Content>
                       <List.Header className="left floated">
-                        <PopUpModal showOnlyPopup={!isMobile} content="" customTrigger={<span className="popup-label">Credits Applied </span>} />
+                        Credits Applied
                       </List.Header>
                       <List.Description>{Helper.CurrencyFormat(props.details.creditsApplied)}</List.Description>
                     </List.Content>
