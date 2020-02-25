@@ -23,12 +23,12 @@ class Helper {
     const details = {};
     if (key === 'id.error') {
       details.alertMsg = 'Verification failed';
-      details.route = '/dashboard/setup/identity-verification/1';
+      details.route = '/dashboard/setup/cip/uploads';
       details.msgType = 'error';
       details.key = key;
     } else if (key === 'id.failure' && questions) {
       details.alertMsg = 'Verification failed';
-      details.route = '/dashboard/setup/identity-verification/2';
+      details.route = '/dashboard/setup/cip/questions';
       details.display = false;
       details.msgType = 'error';
       details.key = key;
@@ -39,7 +39,7 @@ class Helper {
       details.key = key;
     } else {
       details.alertMsg = 'Verification failed';
-      details.route = '/dashboard/setup/identity-verification/1';
+      details.route = '/dashboard/setup/cip/uploads';
       details.msgType = 'error';
       details.key = key;
     }

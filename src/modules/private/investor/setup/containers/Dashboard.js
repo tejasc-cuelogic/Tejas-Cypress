@@ -4,18 +4,22 @@ import { Link, Route } from 'react-router-dom';
 import { Header, Card, Button } from 'semantic-ui-react';
 // import money from 'money-math';
 import { get } from 'lodash';
-import { InlineLoader } from '../../../../../theme/shared';
+import { InlineLoader, lazyRetry, SuspenseBoundary } from '../../../../../theme/shared';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import CashMovement from '../components/CashMovement';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 import AccountCreation from '../../accountSetup/containers/accountCreation';
-import IdentityVerification from '../../accountSetup/containers/identityVerification';
+import ConfirmPhoneNumber from '../../../../auth/containers/ConfirmPhoneNumber';
 import EstablishProfile from '../../accountSetup/containers/establishProfile';
 import Helper from '../../../../../helper/utility';
 import ProccessingAccountsScreen from '../components/processingAccountsScreen';
 import StickyNotification from '../components/stickyNotification';
+import { CIP_ROUTES } from '../../../../../constants/NavigationMeta';
 
 const isMobile = document.documentElement.clientWidth < 768;
+
+const getModule = component => lazyRetry(() => import(`../../accountSetup/components/cipVerification/${component}`));
+
 const summaryDetails = ({
   totalInvested, pendingInvestments, paidToDate, tnar,
 }) => {
@@ -76,9 +80,12 @@ export default class Dashboard extends Component {
     }
     return (
       <>
-        <Route path="/dashboard/setup/account-creation" component={AccountCreation} />
-        <Route exact path="/dashboard/setup/identity-verification/:step" component={IdentityVerification} />
-        <Route path="/dashboard/setup/establish-profile" component={EstablishProfile} />
+        <SuspenseBoundary>
+          <Route path="/dashboard/setup/account-creation" component={AccountCreation} />
+          {CIP_ROUTES.map(item => (<Route exact path={`${this.props.match.url}/${item.path}`} component={getModule(item.component)} />))}
+          <Route exact path={`${this.props.match.url}/verify-phone`} component={ConfirmPhoneNumber} />
+          <Route path="/dashboard/setup/establish-profile" component={EstablishProfile} />
+        </SuspenseBoundary>
         <PrivateLayout
           {...this.props}
           P4={

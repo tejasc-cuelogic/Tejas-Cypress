@@ -4,10 +4,10 @@ import { inject, observer } from 'mobx-react';
 import { isEmpty } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import { Modal, Button, Header, Form, Divider, Message, Dimmer, Loader } from 'semantic-ui-react';
+import { Grid, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
 import { MaskedInput, FormRadioGroup } from '../../../theme/form';
-import { ListErrors, SuccessScreen } from '../../../theme/shared';
+import { ListErrors, SuccessScreen, NsModal } from '../../../theme/shared';
 import MigratedUserPhoneNumber from './MigratedUserPhoneNumber';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -131,7 +131,7 @@ export default class ConfirmPhoneNumber extends Component {
       isOptConfirmed,
       signUpLoading,
     } = this.props.identityStore;
-    const { errors, editMode, responsiveVars } = this.props.uiStore;
+    const { errors, editMode, responsiveVars, inProgress } = this.props.uiStore;
     const { signupStatus } = this.props.userDetailsStore;
     const dataLoading = !reSendVerificationCode && this.props.uiStore.inProgress;
     if (signupStatus.isMigratedFullAccount && !confirmMigratedUserPhoneNumber) {
@@ -140,101 +140,102 @@ export default class ConfirmPhoneNumber extends Component {
       return <SuccessScreen successMsg="Your phone number has been confirmed." handleContinue={this.handleContinue} />;
     }
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false} closeOnDimmerClick={false}>
-        <Modal.Header className="center-align signup-header">
-          <Header as="h3" className={responsiveVars.isMobile ? 'mb-10' : ''}>Confirm your phone number</Header>
-          <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
-            We use Multi-Factor Authentication (MFA) to increase the security of your NextSeed
-            investment account.
-          </p>
-          <Divider section={!responsiveVars.isMobile} />
-          <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
-            {editMode ? 'Please update your number for MFA' : 'Please confirm the 6-digit verification code sent to your phone'
-            }
-          </p>
-        </Modal.Header>
-        <Modal.Content className="signup-content center-align">
-          {dataLoading
-            && (
-              <Dimmer active={dataLoading}>
-                <Loader active={dataLoading} />
-              </Dimmer>
-            )
-          }
-          <MaskedInput
-            hidelabel
-            value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
-            type="tel"
-            name="phoneNumber"
-            fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-            format="(###) ###-####"
-            readOnly={!editMode}
-            displayMode={!editMode}
-            changed={personalInfoMaskedChange}
-            containerclassname="display-only"
-            className="display-only"
-            phoneNumberDisplayMode
-          />
-          {!editMode
-            && (
-              <Link className={`grey-link green-hover ${this.props.uiStore.inProgress || signUpLoading ? 'disabled' : ''}`} to={this.props.refLink ? this.props.refLink : this.props.match.url} onClick={this.handleChangePhoneNumber}>
-                Change phone number
-            </Link>
-            )
-          }
-          <Form className="mb-20" error onSubmit={this.handleConfirmPhoneNumber}>
+      <NsModal
+        open
+        onClose={this.handleCloseModal}
+        closeOnRootNodeClick={false}
+        closeOnDimmerClick={false}
+        headerLogo
+        borderedHeader
+        isProgressHeaderDisable
+        isLoading={inProgress || signUpLoading}
+      >
+        <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
+          <Grid.Column width="8" className="pt-0">
+            <Header as="h3" className={responsiveVars.isMobile ? 'mb-10' : ''}>Confirm your phone number</Header>
+            <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
+              We use Multi-Factor Authentication (MFA) to increase the security of your NextSeed
+              investment account.
+            </p>
+            <Divider hidden />
+            <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
+              {editMode ? 'Please update your number for MFA' : 'Please confirm the 6-digit verification code sent to your phone'
+              }
+            </p>
+            <MaskedInput
+              hidelabel
+              value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
+              type="tel"
+              name="phoneNumber"
+              fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
+              format="(###) ###-####"
+              readOnly={!editMode}
+              displayMode={!editMode}
+              changed={personalInfoMaskedChange}
+              containerclassname="display-only  no-border"
+              className="display-only"
+              phoneNumberDisplayMode
+            />
             {!editMode
               && (
-                <Form.Field className="otp-wrap">
-                  <label>Enter verification code here:</label>
-                  <ReactCodeInput
-                    filterChars
-                    fields={6}
-                    autoFocus={!isMobile}
-                    type="number"
-                    className="otp-field"
-                    pattern="[0-9]*"
-                    inputmode="numeric"
-                    disabled={(reSendVerificationCode && this.props.uiStore.inProgress) || signUpLoading || (errors && errors.message && errors.message.includes('The number you entered is invalid'))}
-                    fielddata={ID_PHONE_VERIFICATION.fields.code}
-                    onChange={phoneVerificationChange}
-                  />
-                  <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
-                </Form.Field>
+                <Link color="green" className={`${this.props.uiStore.inProgress || signUpLoading ? 'disabled' : ''}`} to={this.props.refLink ? this.props.refLink : this.props.match.url} onClick={this.handleChangePhoneNumber}>
+                  Change phone number
+                </Link>
               )
             }
-            {editMode
-              && (
-                <div className="mt-30 mb-30">
-                  <Header as="h6">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
-                  <FormRadioGroup
-                    fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
-                    name="mfaMethod"
-                    changed={(e, result) => personalInfoChange(e, result)}
-                    containerclassname="button-radio center-align"
-                  />
-                </div>
-              )
-            }
-            {errors
-              && (
-                <Message error textAlign="left" className="mb-30">
-                  <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-                </Message>
-              )
-            }
-            {!editMode
-              ? <Button primary size="large" className="very relaxed" content="Confirm" disabled={!ID_PHONE_VERIFICATION.meta.isValid || (!!(errors && errors.message) || dataLoading)} />
-              : (
-                <Button.Group widths="2" className="inline">
-                  <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />
-                  <Button type="button" loading={reSendVerificationCode && (this.props.uiStore.inProgress || signUpLoading)} disabled={!ID_VERIFICATION_FRM.fields.phoneNumber.value || (ID_VERIFICATION_FRM.fields.phoneNumber.value && ID_VERIFICATION_FRM.fields.phoneNumber.value.length < 10)} primary content="Save" onClick={() => this.startPhoneVerification()} />
-                </Button.Group>
-              )
-            }
-          </Form>
-        </Modal.Content>
-      </Modal>
-    );
-  }
-}
+            <Form className="mb-20" error onSubmit={this.handleConfirmPhoneNumber}>
+              {!editMode
+                && (
+                  <Form.Field className="otp-wrap">
+                    <ReactCodeInput
+                      filterChars
+                      fields={6}
+                      autoFocus={!isMobile}
+                      type="number"
+                      className="otp-field"
+                      pattern="[0-9]*"
+                      inputmode="numeric"
+                      disabled={(reSendVerificationCode && this.props.uiStore.inProgress) || signUpLoading || (errors && errors.message && errors.message.includes('The number you entered is invalid'))}
+                      fielddata={ID_PHONE_VERIFICATION.fields.code}
+                      onChange={phoneVerificationChange}
+                    />
+                    <Button type="button" size="small" color="green" className="link-button  mt-20" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
+                  </Form.Field>
+                )
+              }
+              {editMode
+                && (
+                  <div className="mt-30 mb-30">
+                    <Header as="h6">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
+                    <FormRadioGroup
+                      fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
+                      name="mfaMethod"
+                      changed={(e, result) => personalInfoChange(e, result)}
+                      containerclassname="button-radio"
+                    />
+                  </div>
+                )
+              }
+              {errors
+                && (
+                  <Message error textAlign="left" className="mb-30">
+                    <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+                  </Message>
+                )
+              }
+              {!editMode
+                ? <Button primary content="Confirm" disabled={!ID_PHONE_VERIFICATION.meta.isValid || (!!(errors && errors.message) || dataLoading)} fluid={isMobile} />
+                : (
+                  <Button.Group widths={isMobile ? '1' : '2'} className="inline">
+                    <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />
+                    <Button type="button" loading={reSendVerificationCode && (this.props.uiStore.inProgress || signUpLoading)} disabled={!ID_VERIFICATION_FRM.fields.phoneNumber.value || (ID_VERIFICATION_FRM.fields.phoneNumber.value && ID_VERIFICATION_FRM.fields.phoneNumber.value.length < 10)} primary content="Save" onClick={() => this.startPhoneVerification()} />
+                  </Button.Group>
+                )
+              }
+            </Form>
+            </Grid.Column>
+        </Grid>
+      </NsModal>
+        );
+      }
+    }

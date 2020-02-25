@@ -8,8 +8,8 @@ class Helper {
         label: 'Verify Identity',
         action: false,
         successMsg: 'Complete',
-        route: 'identity-verification/0',
-        altRoute: 'identity-verification/3',
+        route: 'cip',
+        altRoute: 'verify-phone',
         emailVerificationRoute: '/confirm-email',
       },
       'cash-dollar': {
