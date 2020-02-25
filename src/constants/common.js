@@ -64,7 +64,7 @@ export const IMAGE_UPLOAD_ALLOWED_EXTENSIONS = ['jpeg', 'jpg', 'png'];
 
 export const DOCUMENT_UPLOAD_ALLOWED_EXTENSIONS = ['jpeg', 'jpg', 'png', 'pdf', 'txt', 'doc', 'docx', 'xls', 'xlsx', 'odt', 'csv'];
 
-export const DEV_FEATURE_ONLY = ['localhost', 'develop', 'dev', 'review'].includes(REACT_APP_DEPLOY_ENV);
+export const DEV_FEATURE_ONLY = ['localhost', 'dev', 'review'].includes(REACT_APP_DEPLOY_ENV);
 
 export const ELIGIBLE_TAGS = ['CJEVENT'];
 

@@ -63,7 +63,7 @@ export default class NewPhoneNumber extends Component {
               type="tel"
               fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
               format="(###) ###-####"
-              changed={personalInfoMaskedChange}
+              changed={(values, name) => personalInfoMaskedChange(values, name, 'ID_VERIFICATION_FRM')}
               phoneNumber
             />
             <div className="field center-align">

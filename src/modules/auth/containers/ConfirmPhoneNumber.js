@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { isEmpty } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import { Grid, Button, Header, Form, Divider, Message, Dimmer, Loader } from 'semantic-ui-react';
+import { Grid, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
 import { MaskedInput, FormRadioGroup } from '../../../theme/form';
 import { ListErrors, SuccessScreen, NsModal } from '../../../theme/shared';
@@ -26,7 +27,7 @@ export default class ConfirmPhoneNumber extends Component {
       identityStore.phoneTypeChange(fieldValue);
     }
 
-    if (Object.keys(this.props.identityStore.requestOtpResponse).length === 0) {
+    if (Object.keys(this.props.identityStore.requestOtpResponse).length === 0 && !isEmpty(this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value)) {
       this.props.identityStore.startPhoneVerification();
     }
   }
@@ -130,7 +131,7 @@ export default class ConfirmPhoneNumber extends Component {
       isOptConfirmed,
       signUpLoading,
     } = this.props.identityStore;
-    const { errors, editMode, responsiveVars } = this.props.uiStore;
+    const { errors, editMode, responsiveVars, inProgress } = this.props.uiStore;
     const { signupStatus } = this.props.userDetailsStore;
     const dataLoading = !reSendVerificationCode && this.props.uiStore.inProgress;
     if (signupStatus.isMigratedFullAccount && !confirmMigratedUserPhoneNumber) {
@@ -147,26 +148,20 @@ export default class ConfirmPhoneNumber extends Component {
         headerLogo
         borderedHeader
         isProgressHeaderDisable
+        isLoading={inProgress || signUpLoading}
       >
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
           <Grid.Column width="8" className="pt-0">
-              <Header as="h3" className={responsiveVars.isMobile ? 'mb-10' : ''}>Confirm your phone number</Header>
-              <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
-                We use Multi-Factor Authentication (MFA) to increase the security of your NextSeed
-                investment account.
-              </p>
-              <Divider hidden />
-              <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
-                {editMode ? 'Please update your number for MFA' : 'Please confirm the 6-digit verification code sent to your phone'
-                }
-              </p>
-            {dataLoading
-              && (
-                <Dimmer active={dataLoading}>
-                  <Loader active={dataLoading} />
-                </Dimmer>
-              )
-            }
+            <Header as="h3" className={responsiveVars.isMobile ? 'mb-10' : ''}>Confirm your phone number</Header>
+            <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
+              We use Multi-Factor Authentication (MFA) to increase the security of your NextSeed
+              investment account.
+            </p>
+            <Divider hidden />
+            <p className={responsiveVars.isMobile ? 'mb-half' : ''}>
+              {editMode ? 'Please update your number for MFA' : 'Please confirm the 6-digit verification code sent to your phone'
+              }
+            </p>
             <MaskedInput
               hidelabel
               value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
