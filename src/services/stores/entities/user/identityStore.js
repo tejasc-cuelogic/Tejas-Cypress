@@ -255,7 +255,7 @@ export class IdentityStore {
   verifyCip = async (isAdmin = false) => {
     this.setFieldValue('isAdmin', isAdmin);
     this.setCipDetails();
-    let variables = { isCipOffline: false, ...this.formattedUserInfoForCip };
+    let variables = { isCipOffline: true, ...this.formattedUserInfoForCip };
     variables = isAdmin ? { ...variables, userId: userDetailsStore.selectedUserId } : { ...variables };
     const payLoad = {
       mutation: verifyCip,
