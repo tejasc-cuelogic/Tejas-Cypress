@@ -162,12 +162,14 @@ class Comments extends Component {
             </section>
           )
           : (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status)
-            ? (<section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
+            ? (
+              <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
                 <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
                 <Form reply className="public-form clearfix">
                   <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>
                 </Form>
-            </section>)
+              </section>
+            )
             : (!disablePostComment)
             && (
               <>

@@ -25,6 +25,13 @@ if (process.env.REACT_APP_BUG_SNAG_KEY) {
     appVersion: process.env.CI_PIPELINE_ID,
     releaseStage: process.env.REACT_APP_BUG_SNAG_STAGE,
     beforeSend: (report) => {
+      // https://docs.bugsnag.com/platforms/javascript/configuration-options/#beforesend
+      // ignore report for specific cases
+      const reportStr = JSON.stringify(report);
+      const excludeList = ['nextseed-ssr'];
+      if (excludeList.find(eItem => reportStr.includes(eItem))) {
+        report.ignore();
+      }
       // Make sure FullStory object exists.
       if (window.FS && window.FS.getCurrentSessionURL) {
         report.updateMetaData('fullstory', { urlAtTime: window.FS.getCurrentSessionURL(true) });
@@ -40,7 +47,7 @@ if (process.env.REACT_APP_BUG_SNAG_KEY) {
 window.logger = Utils.logger;
 
 // For easier debugging
-if (['localhost', 'develop', 'dev', 'predev', 'review'].includes(REACT_APP_DEPLOY_ENV)) {
+if (['localhost', 'demo', 'qa', 'dev', 'predev', 'review'].includes(REACT_APP_DEPLOY_ENV)) {
   window.APP_STATE = stores;
 }
 
