@@ -135,7 +135,7 @@ export default class ConfirmEmailAddress extends Component {
     sessionStorage.removeItem('changedEmail');
   }
 
-  handleResendCode = () => {
+  handleResendCode = async () => {
     this.props.authStore.setProgress('resend');
     if (this.props.refLink) {
       this.props.authStore.requestEmailChange().then(() => {
@@ -145,7 +145,11 @@ export default class ConfirmEmailAddress extends Component {
       })
         .catch(() => { });
     } else {
-      this.props.identityStore.requestOtpWrapper(isMobile);
+      if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
+        await this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
+      } else {
+        this.props.identityStore.requestOtpWrapper(isMobile);
+      }
       this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
       this.props.uiStore.clearErrors();
     }
