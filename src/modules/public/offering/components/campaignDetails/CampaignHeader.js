@@ -184,7 +184,7 @@ export default class CampaignHeader extends Component {
                   {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                     && (
                       <p className="raise-type mb-0">
-                        {campaignStatus.isRealEstate ? 'Commercial Real Estate' : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{campaignStatus.isEquity && ['LLC_MEMBERSHIP_UNITS', 'PREFERRED'].includes(get(campaign, 'keyTerms.equityClass')) ? `  - ${CAMPAIGN_KEYTERMS_EQUITY_CLASS[get(campaign, 'keyTerms.equityClass')]}` : ' '}
+                        {!campaignStatus.isEquity && campaignStatus.isRealEstate ? 'Commercial Real Estate' : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{campaignStatus.isEquity && ['LLC_MEMBERSHIP_UNITS', 'PREFERRED'].includes(get(campaign, 'keyTerms.equityClass')) ? `  - ${CAMPAIGN_KEYTERMS_EQUITY_CLASS[get(campaign, 'keyTerms.equityClass')]}` : ' '}
                       </p>
                     )
                   }

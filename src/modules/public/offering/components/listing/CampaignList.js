@@ -154,7 +154,10 @@ export default class CampaignList extends Component {
                                                     ? (
                                                       <>
                                                         {typeof row.type === 'object' ? (
-                                                          row.type[get(offering, row.key)] && get(offering, row.key) === 'REAL_ESTATE' ? <>Commercial Real Estate</> : row.type[get(offering, row.key)] || '-'
+                                                          row.type[get(offering, row.key)]
+                                                            && (get(offering, row.key) === 'REAL_ESTATE' || (get(offering, row.key) === 'EQUITY' && get(offering, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS')) ? <>Commercial Real Estate</>
+                                                              : ((get(offering, row.key) === 'EQUITY' && get(offering, 'keyTerms.equityClass') === 'PREFERRED')) ? row.type.PREFERRED_EQUITY_506C
+                                                              : row.type[get(offering, row.key)] || '-'
                                                         ) : row.type === '$' ? row.key ? Helper.CurrencyFormat(get(offering, row.key), 0) : row.value
                                                             : row.type === '%' ? row.key ? `${get(offering, row.key)}%` : row.value
                                                               : row.type === 'X' ? row.key ? `${get(offering, row.key)}x` : row.value

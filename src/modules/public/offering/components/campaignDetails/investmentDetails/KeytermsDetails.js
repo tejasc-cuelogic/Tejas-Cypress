@@ -8,6 +8,7 @@ import {
   CAMPAIGN_REGULATION_DETAILED,
   CAMPAIGN_KEYTERMS_REGULATION_PARALLEL,
   CAMPAIGN_SECURITIES_DETAILED,
+  CAMPAIGN_KEYTERMS_EQUITY_CLASS,
 } from '../../../../../../constants/offering';
 import Helper from '../../../../../../helper/utility';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
@@ -163,6 +164,15 @@ class KeyTermsDetails extends Component {
                 )
               }
             />
+            {campaignStatus.isEquity
+            && (
+              <KeyTermsFieldHoc
+                data={keyTerms}
+                field="equityClass"
+                title="Equity Class"
+                content={get(keyTerms, 'equityClass') && CAMPAIGN_KEYTERMS_EQUITY_CLASS[get(keyTerms, 'equityClass')]}
+              />
+            )}
             <KeyTermsFieldHoc
               data={keyTerms}
               field="investmentMultiple"
@@ -274,11 +284,6 @@ class KeyTermsDetails extends Component {
                   }
                 </>
               )}
-            />
-            <KeyTermsFieldHoc
-              data={keyTerms}
-              field="equityClass"
-              title="Equity Class"
             />
             <KeyTermsFieldHoc
               data={keyTerms}

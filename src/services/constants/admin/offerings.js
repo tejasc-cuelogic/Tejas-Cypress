@@ -400,7 +400,7 @@ export const KEY_TERMS = {
     placeHolder: 'Enter here',
   },
   equityClass: {
-    value: null,
+    value: 'CLASS_A_SHARES',
     values: [
       { key: 'Series NS Preferred Units', value: 'PREFERRED', text: 'Series NS Preferred Units' },
       { key: 'LLC Membership Interests', value: 'LLC_MEMBERSHIP_UNITS', text: 'LLC Membership Interests' },
