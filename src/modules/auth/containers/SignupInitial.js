@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Button, Grid, Header, Divider, Icon } from 'semantic-ui-react';
+import { Button, Grid, Header, Divider, Icon } from 'semantic-ui-react';
+import { NsModal } from '../../../theme/shared';
 import { USER_TYPES_META } from '../../../constants/user';
 
 const GetBtn = ({ type }) => {
@@ -34,36 +35,37 @@ class signupInitial extends Component {
     const selectedType = SIGNUP_FRM.fields.role;
     const isMobile = document.documentElement.clientWidth < 768;
     return (
-      <Modal closeOnDimmerClick={false} open closeIcon onClose={this.handleCloseModal} className={`${this.props.match.params.type && 'tiny'}`}>
-        <Modal.Header className="center-align signup-header">
+      <NsModal
+        actions={<p><b>Already have an account?</b> <Link to="/login">Log in</Link></p>}
+        closeOnDimmerClick={false}
+        open
+        onClose={this.handleCloseModal}
+        className={`${this.props.match.params.type && 'tiny'}`}
+      >
+        <Header className="center-align signup-header">
           <Header as="h3">Join the NextSeed community</Header>
-        </Modal.Header>
-        <Modal.Content className="signup-content">
-          <Grid stackable textAlign="center" columns="equal">
-            {userTypes.map(type => !type.exclude.includes(this.props.match.params.type) && (
-              <Grid.Column
-                onClick={e => signupChange(e, { name: 'role', value: type.value })}
-                key={type.key}
-              >
-                <div className={`user-type ${(`${selectedType.value}-${type.subVal}` === `${type.value}-${type.subVal}` ? 'active' : '')}`}>
-                  <Icon className={type.icon} size="huge" />
-                  <div className={isMobile ? 'left-align' : ''}>
-                    <Header as="h4">{type.text}</Header>
-                    <p>{type.desc}</p>
-                  </div>
+        </Header>
+        <Grid stackable textAlign="center" columns="equal">
+          {userTypes.map(type => !type.exclude.includes(this.props.match.params.type) && (
+            <Grid.Column
+              onClick={e => signupChange(e, { name: 'role', value: type.value })}
+              key={type.key}
+            >
+              <div className={`user-type ${(`${selectedType.value}-${type.subVal}` === `${type.value}-${type.subVal}` ? 'active' : '')}`}>
+                <Icon className={type.icon} size="huge" />
+                <div className={isMobile ? 'left-align' : ''}>
+                  <Header as="h4">{type.text}</Header>
+                  <p>{type.desc}</p>
                 </div>
-              </Grid.Column>
-            ))}
-          </Grid>
-          <Divider hidden />
-          <div className="center-align">
-            <GetBtn type={selectedType.value} />
-          </div>
-        </Modal.Content>
-        <Modal.Actions className="signup-actions">
-          <p><b>Already have an account?</b> <Link to="/login">Log in</Link></p>
-        </Modal.Actions>
-      </Modal>
+              </div>
+            </Grid.Column>
+          ))}
+        </Grid>
+        <Divider hidden />
+        <div className="center-align">
+          <GetBtn type={selectedType.value} />
+        </div>
+      </NsModal>
     );
   }
 }
