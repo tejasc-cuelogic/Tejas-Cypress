@@ -61,14 +61,12 @@ class Overview extends Component {
   }
 
   render() {
-    const { campaign } = this.props.campaignStore;
+    const { campaign, campaignStatus } = this.props.campaignStore;
     const chartData = this.props.portfolioStore.getChartData();
     const { keyTerms, offering } = campaign;
     const overviewToDisplay = campaign && campaign.keyTerms && campaign.keyTerms.securities
       && campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? 'REVENUE' : 'TERM';
     const isPreviewLinkShow = campaign && campaign.isAvailablePublicly;
-    const security = get(campaign, 'keyTerms.securities');
-    const isPreferredEquityOffering = !!['PREFERRED_EQUITY_506C'].includes(security);
     const preferredEquityUnit = get(campaign, 'keyTerms.equityUnitType') ? `${capitalize(get(campaign, 'keyTerms.equityUnitType'))} Price` : 'N/A';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
     const maturityMonth = get(campaign, 'keyTerms.maturity') ? `${get(campaign, 'keyTerms.maturity')} months` : 'N/A';
@@ -179,7 +177,7 @@ class Overview extends Component {
                         </Table.Row>
                       ) : ''
                     }
-                    {isPreferredEquityOffering
+                    {campaignStatus.isPreferredEquity
                       && (
                         <>
                           <Table.Row verticalAlign="top">
