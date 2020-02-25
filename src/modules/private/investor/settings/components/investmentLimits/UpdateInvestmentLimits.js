@@ -61,6 +61,7 @@ export default class UpdateInvestmentLimits extends Component {
                     value={fields[field].value}
                     fielddata={fields[field]}
                     changed={maskingFieldChange}
+                    toolTipOnLabel
                     // onblur={investmentCalculate}
                   />
                 ))

@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
-import { Grid, Card, Button, Statistic, Icon, Popup } from 'semantic-ui-react';
+import { Grid, Card, Button, Statistic } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import AddWithdrawFund from './AddWithdrawFund';
 import FrozenAccountModal from '../../FrozenAccountModal';
 import TransferFundVerifyModal from './previewModel/TransferFundVerifyModal';
+import { PopUpModal } from '../../../../../../theme/shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 // const AvailableCashTransfer = props => (
 @withRouter

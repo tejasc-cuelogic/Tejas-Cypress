@@ -8,6 +8,8 @@ import { DataFormatter } from '../../../../../../helper';
 import { EmptyDataSet, InlineLoader, PopUpModal } from '../../../../../../theme/shared';
 import { ACCREDITATION_STATUS_LABEL } from '../../../../../../services/constants/investmentLimit';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('investmentLimitStore', 'uiStore', 'userDetailsStore', 'accreditationStore')
 @withRouter
 @observer
