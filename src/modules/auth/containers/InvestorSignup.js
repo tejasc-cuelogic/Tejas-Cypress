@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
-import { Modal, Button, Header, Icon, Form, Message } from 'semantic-ui-react';
+import { Button, Header, Icon, Form, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
-import { ListErrors } from '../../../theme/shared';
+import { ListErrors, NsModal } from '../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -62,10 +62,10 @@ class InvestorSignup extends Component {
     const customError = errors && errors.code === 'UsernameExistsException'
       ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
     return (
-      <Modal
-        size="mini"
+      <NsModal
         open
         closeOnDimmerClick={false}
+        actions={<p><b>Already have an account?</b> <Link to="/login">Log in</Link></p>}
         onClose={
           () => {
             this.props.authStore.resetForm('SIGNUP_FRM');
@@ -73,13 +73,12 @@ class InvestorSignup extends Component {
           }
         }
       >
-        <Modal.Header className="center-align signup-header">
+        <Header className="center-align signup-header">
           <Header as="h3" className="mb-0">
             Sign up as an Investor
           </Header>
           <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link>
-        </Modal.Header>
-        <Modal.Content className="signup-content">
+        </Header>
           {/* <Form>
             <Button fluid color="facebook" size="large" content="Sign up with Facebook" />
           </Form>
@@ -121,7 +120,7 @@ class InvestorSignup extends Component {
               }}
               userInputs={
                 [SIGNUP_FRM.fields.givenName.value, `${SIGNUP_FRM.fields.givenName.value}${SIGNUP_FRM.fields.familyName.value}`,
-                  SIGNUP_FRM.fields.familyName.value, SIGNUP_FRM.fields.email.value]
+                SIGNUP_FRM.fields.familyName.value, SIGNUP_FRM.fields.email.value]
               }
               changed={signupChange}
               fielddata={SIGNUP_FRM.fields.password}
@@ -145,11 +144,7 @@ class InvestorSignup extends Component {
               <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={isDisabled || inProgress} />
             </div>
           </Form>
-        </Modal.Content>
-        <Modal.Actions className="signup-actions">
-          <p><b>Already have an account?</b> <Link to="/login">Log in</Link></p>
-        </Modal.Actions>
-      </Modal>
+      </NsModal>
     );
   }
 }

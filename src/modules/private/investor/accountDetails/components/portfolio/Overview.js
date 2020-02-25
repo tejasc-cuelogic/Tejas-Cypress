@@ -75,7 +75,7 @@ class Overview extends Component {
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     const { agreementIds, loading } = this.props.transactionStore;
     let aggrementDocs = get(campaign, 'closureSummary.keyTerms.supplementalAgreements.documents') || [];
-    aggrementDocs = aggrementDocs.length ? aggrementDocs.filter((d) => d.isVisible && get(d, 'upload.fileHandle.boxFileId')) : [];
+    aggrementDocs = aggrementDocs.length ? aggrementDocs.filter(d => d.isVisible && get(d, 'upload.fileHandle.boxFileId')) : [];
     const { responsiveVars } = this.props.uiStore;
     if (loading) {
       return (
@@ -293,10 +293,10 @@ class Overview extends Component {
                           <Table.Cell>Investor Agreement{(agreementIds.length + aggrementDocs.length) > 1 && 's'} </Table.Cell>
                           <Table.Cell>
                             <Button.Group vertical>
-                              {agreementIds && agreementIds.length !== 0 && agreementIds.map((agreementId) => (
+                              {agreementIds && agreementIds.length !== 0 && agreementIds.map(agreementId => (
                                 <Button icon loading={this.setState.loadingDoc === agreementId} onClick={() => this.handleViewLoanAgreement(agreementId)} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {agreementId} </Button>
                               ))}
-                              {aggrementDocs && aggrementDocs.length !== 0 && aggrementDocs.map((doc) => (
+                              {aggrementDocs && aggrementDocs.length !== 0 && aggrementDocs.map(doc => (
                                 <Button icon loading={this.state.loadingDoc === get(doc, 'upload.fileHandle.boxFileId')} onClick={() => this.handleViewSuppAgreement(get(doc, 'upload.fileHandle.boxFileId'))} className="link-button highlight-text left-align"><Icon className="ns-pdf-file" size="large" /> {doc.name}</Button>
                               ))}
                             </Button.Group>
