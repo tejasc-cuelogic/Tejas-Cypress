@@ -4,145 +4,121 @@ import Helper from '../../../../../../helper/utility';
 import { PopUpModal } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
+const AccountSummary = summaryData => (
+  summaryData.map(summaryCard => (
+    <Card fluid className="investment-summary">
+      {summaryCard.map(summaryElement => (
+      <Card.Content className="plr-0 pt-0 pb-0">
+      <List divided className="summary-term-list">
+        <List.Item className="right-align">
+          <List.Content>
+            <List.Header className="left floated">
+              { summaryElement.tooltip ? <PopUpModal showOnlyPopup={!isMobile} content={summaryElement.tooltip} customTrigger={<span className="popup-label">{summaryElement.title}</span>} /> : summaryElement.title }
+            </List.Header>
+            <List.Description><b>{summaryElement.value}</b></List.Description>
+            {summaryElement.subitems
+              && (
+                <List.List>
+                  {summaryElement.subitems.map(summarySubElement => (
+                    <List.Item className="right-align">
+                    <List.Content>
+                      <List.Header className="left floated">
+                        { summarySubElement.tooltip ? <PopUpModal showOnlyPopup={!isMobile} content={summarySubElement.tooltip} customTrigger={<span className="popup-label">{summarySubElement.title}</span>} /> : summarySubElement.title }
+                      </List.Header>
+                      <List.Description>{summarySubElement.value}</List.Description>
+                    </List.Content>
+                    </List.Item>
+                  ))}
+                </List.List>
+              )
+            }
+          </List.Content>
+        </List.Item>
+      </List>
+    </Card.Content>
+    ))}
+    </Card>
+  )));
+
+const summaryData = props => [
+  [
+    {
+      title: 'Total Account Value',
+      value: Helper.CurrencyFormat(props.details.totalAccountValue),
+      tooltip: 'Includes your Current Portfolio Value, Pending Investments, Available Cash, and Rewards Balance.',
+      subitems: [
+        {
+          title: 'Outstanding Portfolio Value',
+          value: Helper.CurrencyFormat(props.details.outstandingPortfolioValue),
+          tooltip: 'This calculates the total unrealized value of securities in your portfolio.',
+        },
+        {
+          title: 'Pending Investments',
+          value: Helper.CurrencyFormat(props.details.pendingInvestments),
+          tooltip: 'Reservations in live offerings that have not closed or have not been processed.',
+        },
+        {
+          title: 'Available Cash',
+          value: Helper.CurrencyFormat(props.details.availableCash.replace(/\D./g, '')),
+          tooltip: 'Cash that is immediately available for investment in your account.',
+        },
+        {
+          title: 'Rewards Balance',
+          value: Helper.CurrencyFormat(props.details.rewardsBalance),
+          tooltip: 'Available investment credits that will be applied to your next investments.',
+        },
+      ],
+    },
+    {
+      title: 'Lifetime Payments Received',
+      value: Helper.CurrencyFormat(props.details.lifetimePaymentsReceived.replace(/\D./g, '')),
+      tooltip: 'Total payments received from your investments on NextSeed, net of fees.',
+    },
+  ],
+  [
+    {
+      title: 'Lifetime Investments',
+      value: Helper.CurrencyFormat(props.details.lifetimeInvestments),
+      tooltip: 'Total investments made on NextSeed.',
+      subitems: [
+        {
+          title: 'Cash Investments',
+          value: Helper.CurrencyFormat(props.details.cashInvestments),
+          tooltip: 'Investments made from net new cash deposits. Does not include investments made from payments received.',
+        },
+        {
+          title: 'Reinvested Earnings',
+          value: Helper.CurrencyFormat(props.details.reinvestedEarnings),
+          tooltip: 'Investments made using cash received from prior payments.',
+        },
+        {
+          title: 'Credits Applied',
+          value: Helper.CurrencyFormat(props.details.creditsApplied),
+        },
+      ],
+    },
+    {
+      title: 'Total Net Annulize Return',
+      value: props.details.tnar,
+      tooltip: 'TNAR calculation(new calculation accounts for all payments to date plus a balloon payment at maturity for the current remaining balance)',
+    },
+    {
+      title: 'Realized ROI on Lifetime Investments',
+      value: props.details.realizedRoiOnLifetimeInvestments,
+      tooltip: 'Lifetime Payments Received / Lifetime Investments.',
+    },
+    {
+      title: 'Realized ROI on Cash Investments',
+      value: props.details.realizedRoiOnCashInvestments,
+      tooltip: '(Lifetime Payments Received –Reinvested Cash) / New Cash Investments.',
+    },
+  ],
+];
+
 const SummaryTerms = props => (
   <>
     <Card.Group stackable itemsPerRow="2" className="application-cards">
-      <Card fluid className="investment-summary">
-        <Card.Content className="plr-0 pt-0 pb-0">
-          <List divided className="summary-term-list">
-            <List.Item className="right-align">
-              <List.Content>
-                <List.Header className="left floated">
-                  <PopUpModal showOnlyPopup={!isMobile} content="Includes your Current Portfolio Value, Pending Investments, Available Cash, and Rewards Balance." customTrigger={<span className="popup-label">Total Account Value</span>} />
-                </List.Header>
-                <List.Description><b>{Helper.CurrencyFormat(props.details.totalAccountValue)}</b></List.Description>
-                <List.List>
-                  <List.Item className="right-align">
-                    <List.Content>
-                      <List.Header className="left floated">
-                        <PopUpModal showOnlyPopup={!isMobile} content="This calculates the total unrealized value of securities in your portfolio." customTrigger={<span className="popup-label">Outstanding Portfolio Value</span>} />
-                      </List.Header>
-                      <List.Description>{Helper.CurrencyFormat(props.details.outstandingPortfolioValue)}</List.Description>
-                    </List.Content>
-                  </List.Item>
-                  <List.Item className="right-align">
-                    <List.Content>
-                      <List.Header className="left floated">
-                        <PopUpModal showOnlyPopup={!isMobile} content="Reservations in live offerings that have not closed or have not been processed." customTrigger={<span className="popup-label">Pending Investments</span>} />
-                      </List.Header>
-                      <List.Description>{Helper.CurrencyFormat(props.details.pendingInvestments)}</List.Description>
-                    </List.Content>
-                  </List.Item>
-                  <List.Item className="right-align">
-                    <List.Content>
-                      <List.Header className="left floated">
-                        <PopUpModal showOnlyPopup={!isMobile} content="Cash that is immediately available for investment in your account." customTrigger={<span className="popup-label">Available Cash</span>} />
-                      </List.Header>
-                      <List.Description>{Helper.CurrencyFormat(props.details.availableCash.replace(/\D./g, ''))}</List.Description>
-                    </List.Content>
-                  </List.Item>
-                  <List.Item className="right-align">
-                    <List.Content>
-                      <List.Header className="left floated">
-                        <PopUpModal showOnlyPopup={!isMobile} content="Available investment credits that will be applied to your next investments." customTrigger={<span className="popup-label">Rewards Balance</span>} />
-                      </List.Header>
-                      <List.Description>{Helper.CurrencyFormat(props.details.rewardsBalance)}</List.Description>
-                    </List.Content>
-                  </List.Item>
-                </List.List>
-              </List.Content>
-            </List.Item>
-          </List>
-        </Card.Content>
-        <Card.Content className="plr-0 pt-0 pb-0">
-          <List divided className="summary-term-list">
-            <List.Item className="right-align">
-              <List.Content>
-                <List.Header className="left floated">
-                  <PopUpModal showOnlyPopup={!isMobile} content="Total payments received from your investments on NextSeed, net of fees." customTrigger={<span className="popup-label">Lifetime Payments Received</span>} />
-                </List.Header>
-                <List.Description><b>{Helper.CurrencyFormat(props.details.lifetimePaymentsReceived.replace(/\D./g, ''))}</b></List.Description>
-              </List.Content>
-            </List.Item>
-          </List>
-        </Card.Content>
-      </Card>
-      <Card fluid className="investment-summary">
-        <Card.Content className="plr-0 pt-0 pb-0">
-          <List divided className="summary-term-list">
-            <List.Item className="right-align">
-              <List.Content>
-                <List.Header className="left floated">
-                  <PopUpModal showOnlyPopup={!isMobile} content="Total investments made on NextSeed." customTrigger={<span className="popup-label">Lifetime Investments</span>} />
-                </List.Header>
-                <List.Description><b>{Helper.CurrencyFormat(props.details.lifetimeInvestments)}</b></List.Description>
-                <List.List>
-                  <List.Item className="right-align">
-                    <List.Content>
-                      <List.Header className="left floated">
-                        <PopUpModal showOnlyPopup={!isMobile} content="Investments made from net new cash deposits. Does not include investments made from payments received." customTrigger={<span className="popup-label">Cash Investments</span>} />
-                      </List.Header>
-                      <List.Description>{Helper.CurrencyFormat(props.details.cashInvestments)}</List.Description>
-                    </List.Content>
-                  </List.Item>
-                  <List.Item className="right-align">
-                    <List.Content>
-                      <List.Header className="left floated">
-                        <PopUpModal showOnlyPopup={!isMobile} content="Investments made using cash received from prior payments." customTrigger={<span className="popup-label">Reinvested Earnings</span>} />
-                      </List.Header>
-                      <List.Description>{Helper.CurrencyFormat(props.details.reinvestedEarnings)}</List.Description>
-                    </List.Content>
-                  </List.Item>
-                  <List.Item className="right-align">
-                    <List.Content>
-                      <List.Header className="left floated">
-                        Credits Applied
-                      </List.Header>
-                      <List.Description>{Helper.CurrencyFormat(props.details.creditsApplied)}</List.Description>
-                    </List.Content>
-                  </List.Item>
-                </List.List>
-              </List.Content>
-            </List.Item>
-          </List>
-        </Card.Content>
-        <Card.Content className="plr-0 pt-0 pb-0">
-          <List divided className="summary-term-list">
-            <List.Item className="right-align">
-              <List.Content>
-                <List.Header className="left floated">
-                  <PopUpModal showOnlyPopup={!isMobile} content="TNAR calculation(new calculation accounts for all payments to date plus a balloon payment at maturity for the current remaining balance)" customTrigger={<span className="popup-label">Total Net Annulize Return</span>} />
-                </List.Header>
-                <List.Description><b>{props.details.tnar}</b></List.Description>
-              </List.Content>
-            </List.Item>
-          </List>
-        </Card.Content>
-        <Card.Content className="plr-0 pt-0 pb-0">
-          <List divided className="summary-term-list">
-            <List.Item className="right-align">
-              <List.Content>
-                <List.Header className="left floated">
-                  <PopUpModal showOnlyPopup={!isMobile} content="Lifetime Payments Received / Lifetime Investments." customTrigger={<span className="popup-label">Realized ROI on Lifetime Investments</span>} />
-                </List.Header>
-                <List.Description><b>{props.details.realizedRoiOnLifetimeInvestments}</b></List.Description>
-              </List.Content>
-            </List.Item>
-          </List>
-        </Card.Content>
-        <Card.Content className="plr-0 pt-0 pb-0">
-          <List divided className="summary-term-list">
-            <List.Item className="right-align">
-              <List.Content>
-                <List.Header className="left floated">
-                  <PopUpModal showOnlyPopup={!isMobile} content="(Lifetime Payments Received –Reinvested Cash) / New Cash Investments." customTrigger={<span className="popup-label">Realized ROI on Cash Investments</span>} />
-                </List.Header>
-                <List.Description><b>{props.details.realizedRoiOnCashInvestments}</b></List.Description>
-              </List.Content>
-            </List.Item>
-          </List>
-        </Card.Content>
-      </Card>
+      {AccountSummary(summaryData(props))}
     </Card.Group>
   </>
 );
