@@ -40,76 +40,76 @@ const AccountSummary = summaryData => (
     </Card>
   )));
 
-const summaryData = props => [
+const summaryData = summaryValues => [
   [
     {
       title: 'Total Account Value',
-      value: Helper.CurrencyFormat(props.details.totalAccountValue),
+      value: Helper.CurrencyFormat(summaryValues.totalAccountValue),
       tooltip: 'Includes your Current Portfolio Value, Pending Investments, Available Cash, and Rewards Balance.',
       subitems: [
         {
           title: 'Outstanding Portfolio Value',
-          value: Helper.CurrencyFormat(props.details.outstandingPortfolioValue),
+          value: Helper.CurrencyFormat(summaryValues.outstandingPortfolioValue),
           tooltip: 'This calculates the total unrealized value of securities in your portfolio.',
         },
         {
           title: 'Pending Investments',
-          value: Helper.CurrencyFormat(props.details.pendingInvestments),
+          value: Helper.CurrencyFormat(summaryValues.pendingInvestments),
           tooltip: 'Reservations in live offerings that have not closed or have not been processed.',
         },
         {
           title: 'Available Cash',
-          value: Helper.CurrencyFormat(props.details.availableCash.replace(/\D./g, '')),
+          value: Helper.CurrencyFormat(summaryValues.availableCash.replace(/\D./g, '')),
           tooltip: 'Cash that is immediately available for investment in your account.',
         },
         {
           title: 'Rewards Balance',
-          value: Helper.CurrencyFormat(props.details.rewardsBalance),
+          value: Helper.CurrencyFormat(summaryValues.rewardsBalance),
           tooltip: 'Available investment credits that will be applied to your next investments.',
         },
       ],
     },
     {
       title: 'Lifetime Payments Received',
-      value: Helper.CurrencyFormat(props.details.lifetimePaymentsReceived.replace(/\D./g, '')),
+      value: Helper.CurrencyFormat(summaryValues.lifetimePaymentsReceived.replace(/\D./g, '')),
       tooltip: 'Total payments received from your investments on NextSeed, net of fees.',
     },
   ],
   [
     {
       title: 'Lifetime Investments',
-      value: Helper.CurrencyFormat(props.details.lifetimeInvestments),
+      value: Helper.CurrencyFormat(summaryValues.lifetimeInvestments),
       tooltip: 'Total investments made on NextSeed.',
       subitems: [
         {
           title: 'Cash Investments',
-          value: Helper.CurrencyFormat(props.details.cashInvestments),
+          value: Helper.CurrencyFormat(summaryValues.cashInvestments),
           tooltip: 'Investments made from net new cash deposits. Does not include investments made from payments received.',
         },
         {
           title: 'Reinvested Earnings',
-          value: Helper.CurrencyFormat(props.details.reinvestedEarnings),
+          value: Helper.CurrencyFormat(summaryValues.reinvestedEarnings),
           tooltip: 'Investments made using cash received from prior payments.',
         },
         {
           title: 'Credits Applied',
-          value: Helper.CurrencyFormat(props.details.creditsApplied),
+          value: Helper.CurrencyFormat(summaryValues.creditsApplied),
         },
       ],
     },
     {
       title: 'Total Net Annulize Return',
-      value: props.details.tnar,
+      value: summaryValues.tnar,
       tooltip: 'TNAR calculation(new calculation accounts for all payments to date plus a balloon payment at maturity for the current remaining balance)',
     },
     {
       title: 'Realized ROI on Lifetime Investments',
-      value: props.details.realizedRoiOnLifetimeInvestments,
+      value: summaryValues.realizedRoiOnLifetimeInvestments,
       tooltip: 'Lifetime Payments Received / Lifetime Investments.',
     },
     {
       title: 'Realized ROI on Cash Investments',
-      value: props.details.realizedRoiOnCashInvestments,
+      value: summaryValues.realizedRoiOnCashInvestments,
       tooltip: '(Lifetime Payments Received –Reinvested Cash) / New Cash Investments.',
     },
   ],
@@ -118,7 +118,7 @@ const summaryData = props => [
 const SummaryTerms = props => (
   <>
     <Card.Group stackable itemsPerRow="2" className="application-cards">
-      {AccountSummary(summaryData(props))}
+      {AccountSummary(summaryData(props.details))}
     </Card.Group>
   </>
 );
