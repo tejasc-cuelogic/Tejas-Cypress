@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Divider, Form } from 'semantic-ui-react';
 import { NsModal } from '../../../theme/shared';
 import { FormArrowButton } from '../../../theme/form';
-
-// const GetBtn = ({ type }) => {
-
-//   return <Button disabled={!type} as={Link} to={type ? BtnMeta[type].to : '/register'} primary size="large" className="very relaxed" content={type ? BtnMeta[type].label : 'Open account'} />;
-// };
 
 const redirectByRole = {
   investor: { to: '/register-investor' },
@@ -41,11 +35,14 @@ class signupInitial extends Component {
     const isMobile = document.documentElement.clientWidth < 768;
     return (
       <NsModal
-        actions={<p><b>Already have an account?</b> <Link to="/login">Log in</Link></p>}
         closeOnDimmerClick={false}
         open
         onClose={this.handleCloseModal}
-        className={`${this.props.match.params.type && 'tiny'}`}
+        modalClassName={`${this.props.match.params.type && 'tiny'}`}
+        headerLogo
+        borderedHeader
+        isProgressHeaderDisable
+        modalContentClass="signup-content"
       >
         <Header className="center-align signup-header">
           <Header as="h3">Join the NextSeed community</Header>
