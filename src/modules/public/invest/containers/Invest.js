@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { get } from 'lodash';
-import queryString from 'query-string';
 import { DataFormatter } from '../../../../helper';
 import MetaTagGenerator from '../../../shared/MetaTagGenerator';
-import { REDIRECT_META } from '../../../../constants/redirect';
 import WhyNextseed from '../components/WhyNextseed';
 
 
@@ -30,25 +27,9 @@ const metaTagsData = [
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
 
-@inject('navStore', 'userStore', 'referralsStore')
+@inject('navStore', 'userStore')
 @observer
 class Invest extends Component {
-  constructor(props) {
-    super(props);
-    const urlParameter = queryString.parse(props.location.search);
-    const utmCampaign = get(urlParameter, 'utm_campaign') || null;
-    const rsCode = get(urlParameter, 'rsCode') || null;
-    if (utmCampaign === 'saasquatch' && rsCode) {
-      props.referralsStore.getReferralCreditsInformation(rsCode).then(() => {
-        window.localStorage.setItem('SAASQUATCH_REFERRAL_CODE', rsCode);
-        const redirectMeta = REDIRECT_META.find(r => r.live && r.rsCode === rsCode);
-        if (redirectMeta && redirectMeta.rsRedirect) {
-          props.history.push(redirectMeta.rsRedirect);
-        }
-      });
-    }
-  }
-
   module = name => DataFormatter.upperCamelCase(name);
 
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);

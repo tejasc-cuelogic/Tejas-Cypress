@@ -36,9 +36,9 @@ class AccountType extends Component {
     const userInfoDetails = this.props.userDetailsStore.userDetails;
     const userStatus = userInfoDetails && userInfoDetails.status;
     const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
-    const { campaign } = this.props.campaignStore;
+    const { campaign, offeringUUID } = this.props.campaignStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
-    const offeringId = campaign && campaign.id ? campaign.id : this.props.match.params.offeringId;
+    const offeringId = offeringUUID || (campaign && campaign.id ? campaign.id : this.props.match.params.offeringId);
     // campaign && campaign.regulation;
     const offeringReuglation = get(campaign, 'keyTerms.regulation') || get(getInvestorAccountById, 'offering.keyTerms.regulation');
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_506B' || offeringReuglation === 'BD_CF_506C'));

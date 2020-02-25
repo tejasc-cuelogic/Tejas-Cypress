@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Icon, Table, Accordion, Button, Card, Header, Popup } from 'semantic-ui-react';
+import { Icon, Table, Accordion, Button, Card, Header } from 'semantic-ui-react';
 import { get, includes } from 'lodash';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
@@ -52,7 +52,7 @@ const handleActions = (data) => {
         <Button className="link-button mr-10" onClick={() => viewAgreement(data.agreementId)} content="View Agreement" />
       }
       {((!get(data, 'tranche') || get(data, 'tranche') < 1) && !investmentProps.isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0))))
-        && <Button onClick={e => handleInvestNowClick(e, data.offering.id)} primary content="Change" />
+        && <Button onClick={e => handleInvestNowClick(e, data.offering.offeringSlug, data.offering.id)} primary content="Change" />
       }
       {((!get(data, 'tranche') || get(data, 'tranche') < 1) && (isAdmin || (get(data, 'offering.keyTerms.securities') !== 'REAL_ESTATE' && (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod))))))
         && <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} basic content="Cancel" />
@@ -140,7 +140,7 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
               )
             }
             {((!get(data, 'tranche') || get(data, 'tranche') < 1) && !isAccountFrozen && (!((DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).value <= 0))))
-              && <Button className="mt-20" primary fluid onClick={e => handleInvestNowClick(e, data.offering.id)} content="Change Investment Amount" />
+              && <Button className="mt-20" primary fluid onClick={e => handleInvestNowClick(e, data.offering.offeringSlug)} content="Change Investment Amount" />
             }
             {((!get(data, 'tranche') || get(data, 'tranche') < 1) && (isAdmin || (!get(data, 'offering.closureSummary.processingDate') || (!(DataFormatter.getDateDifferenceInHoursOrMinutes(get(data.offering, 'closureSummary.processingDate'), true, true).isLokinPeriod)))))
               && <Button className="mt-20 mb-30" basic fluid as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} content="Cancel" />
@@ -226,17 +226,23 @@ const InvestmentList = (props) => {
       {isMobile ? (
         <>
           <Card className="investment-summary investment-card">
-            <Card.Header className="text-capitalize">{`${props.listOf} (${props.listOfCount})`}
             {props.listOf === 'pending'
-              && (
-                <PopUpModal content="These are your investments in Live or Processing campaigns. Your investment has been reserved and will move to Active when the campaign has been closed." customTrigger={<Icon className="ns-help-circle ml-10" />} />
-              )}
-            </Card.Header>
+              ? (
+                <Card.Header className="text-capitalize">
+                  <PopUpModal
+                    customTrigger={<span className="popup-label">{`${props.listOf} (${props.listOfCount})`}</span>}
+                    content="These are your investments in Live or Processing campaigns. Your investment has been reserved and will move to Active when the campaign has been closed."
+                    position="top center"
+                  />
+                </Card.Header>
+              ) : (
+                <Card.Header className="text-capitalize"><span>{`${props.listOf} (${props.listOfCount})`}</span></Card.Header>
+              )
+            }
             <Card.Content>
               {investments.map(data => (
                 <InvestmentCard data={data} {...props} />
-              ))
-              }
+              ))}
               <p className="right-align neutral-text">Total: <b>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0)}</b></p>
             </Card.Content>
           </Card>
@@ -245,16 +251,18 @@ const InvestmentList = (props) => {
           <Accordion fluid styled className="card-style portfolio-list">
             <Accordion.Title onClick={() => props.toggleAccordion(props.listOf)} active={isActive} className="text-capitalize">
               <Icon className={`ns-chevron-${isActive ? 'up' : 'right'}`} />
-              {`${props.listOf} (${props.listOfCount})`}
               {props.listOf === 'pending'
-              && (
-                <Popup
-                  trigger={<Icon color="grey" className="ns-help-circle ml-10" />}
+              ? (
+                <PopUpModal
+                  customTrigger={<span className="popup-label">{`${props.listOf} (${props.listOfCount})`}</span>}
                   content="These are your investments in Live or Processing campaigns. Your investment has been reserved and will move to Active when the campaign has been closed."
                   position="top center"
-                  className="center-align"
+                  showOnlyPopup={!isMobile}
                 />
-              )}
+              ) : (
+                <span>{`${props.listOf} (${props.listOfCount})`}</span>
+              )
+            }
             </Accordion.Title>
             <Accordion.Content className="bg-offwhite" active={!props.inActiveItems.includes(props.listOf)}>
               {!investments || !investments.length

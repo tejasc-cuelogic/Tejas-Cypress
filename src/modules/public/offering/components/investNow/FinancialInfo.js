@@ -16,7 +16,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 class FinancialInfo extends Component {
   constructor(props) {
     super(props);
-    const { campaign } = this.props.campaignStore;
+    const { campaign, offeringUUID } = this.props.campaignStore;
     const offeringSecurityType = get(campaign, 'keyTerms.securities');
     if (includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)) {
       const { overrideMultipleValidationForInvestment } = this.props.investmentStore;
@@ -27,7 +27,7 @@ class FinancialInfo extends Component {
       && !this.props.investmentLimitStore.getCurrentInvestNowHealthCheck) {
       const { getInvestNowHealthCheck } = this.props.investmentLimitStore;
       const { match } = this.props;
-      const offeringId = match && match.params && match.params.offeringId;
+      const offeringId = offeringUUID || get(match, 'params.offeringId');
       if (this.props.investmentStore.getSelectedAccountTypeId) {
         getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId);
       }
