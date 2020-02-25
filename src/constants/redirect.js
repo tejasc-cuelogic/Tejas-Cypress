@@ -18,6 +18,7 @@ export const PRODUCTION_REDIRECT_META = [
   { from: 'rh50', live: true, to: '/investors?utm_campaign=saasquatch&rsCode=RH50', rsCode: 'RH50', rsRedirect: '/offerings/railway-heights' },
   { from: 'get20', live: true, to: '/investors?utm_source=invite&utm_medium=link&utm_campaign=saasquatch&rsCode=GET20&rsShareMedium=UNKNOWN&rsEngagementMedium=UNKNOWN' },
   { from: 'greenway', live: true, to: '/investors?utm_source=invite&utm_medium=link&utm_campaign=saasquatch&rsCode=GWAY&rsShareMedium=UNKNOWN&rsEngagementMedium=UNKNOWN' },
+  { from: 'marketplace', live: true, to: '/?utm_source=podcast&campaign=marketplace&rsCode=MARKETPLACE' },
 ];
 
 export const DEV_REDIRECT_META = [

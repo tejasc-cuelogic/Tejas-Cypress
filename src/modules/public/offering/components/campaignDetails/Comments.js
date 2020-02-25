@@ -87,7 +87,7 @@ class Comments extends Component {
   render() {
     //  props destructuring
     const { visible, visiblePost } = this.state;
-    const { isInvestorAccreditated, userAccreditationStatus } = this.props.userDetailsStore;
+    const { isInvestorAccreditated } = this.props.userDetailsStore;
     const { isUserLoggedIn } = this.props.authStore;
     const { currentUser } = this.props.userStore;
     const { errors } = this.props.uiStore;
@@ -102,7 +102,7 @@ class Comments extends Component {
     const accountStatusFull = activeAccounts.length;
     const canPostComment = loggedInAsInvestor && accountStatusFull;
     const campaignStage = get(campaign, 'stage');
-    const accreditationStatus = ['REQUESTED', 'CONFIRMED', 'EXPIRED'].includes(userAccreditationStatus.accreditation);
+    // const accreditationStatus = this.props.userDetailsStore.currentUser.data.user.accreditation.status;
     const passedProcessingDate = DataFormatter.getDateDifferenceInHoursOrMinutes(get(campaign, 'closureSummary.processingDate'), true, true).value <= 0;
     const disablePostComment = passedProcessingDate || !['CREATION', 'LIVE', 'LOCK', 'PROCESSING'].includes(campaignStage) || !accountStatusFull || frozenAccounts.length;
     //  comments & campaign data
@@ -162,20 +162,14 @@ class Comments extends Component {
             </section>
           )
           : (['BD_506C', 'BD_506B'].includes(offeringRegulation) && !isInvestorAccreditated.status)
-            ? (accreditationStatus === 'REQUESTED')
-                ? (
-                  <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
-                    <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
-                  </section>
-                  )
-                : (
-                  <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
-                    <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
-                    <Form reply className="public-form clearfix">
-                      <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>
-                    </Form>
-                  </section>
-                  )
+            ? (
+              <section className={`${newLayout && isMobile ? 'custom-segment mt-0' : newLayout ? 'custom-segment mb-0' : 'mt-30'} center-align`}>
+                <p>In order to leave a comment, please complete verification of your status as an accredited investor.</p>
+                <Form reply className="public-form clearfix">
+                  <Link to="/dashboard/account-settings/investment-limits/" className="ui button primary">Verify Status</Link>
+                </Form>
+              </section>
+            )
             : (!disablePostComment)
             && (
               <>
