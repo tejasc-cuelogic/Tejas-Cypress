@@ -426,22 +426,39 @@
                 }
             }
             .user-type{
+                min-height:210px;
                 display:flex;
                 flex-direction:column;
+                justify-content:center;
                 align-items:center;
-                min-height:80px;
-                flex-direction:row;
-                >div{
-                    flex-grow:1;
-                    text-align: left;
+                @media only screen and (max-width:@largestMobileScreen){
+                    min-height:80px;
+                    flex-direction:row;
+                    >div{
+                        flex-grow:1;
+                    }
                 }
                 > i.icon{
-                    color:lighten(@border-color, 2%);
-                    line-height: 1;
-                    &:not(.ns-chevron-right){
-                        font-size:@26px;
+                    margin:0 auto;
+                    font-size:@50px;
+                    color:@border-color;
+                    @media only screen and (max-width:@largestMobileScreen){
                         margin:0 @14px 0 0;
                     }
+                }
+                h4{
+                    margin:@14px 0;
+                }
+                p{
+                    max-height:0;
+                    overflow:hidden;
+                    transition:all .5s ease-in-out;
+                    @media only screen and (max-width:@largestMobileScreen){
+                        max-height:48px;
+                    }
+                }
+                &.active p{
+                    max-height:120px;
                 }
             }
             .scrollable {
@@ -452,20 +469,26 @@
         .user-type{
             height:100%;
             padding:@14px;
-            border-radius:4px;
-            border:@neutral-darkwhite 1px solid;
+            border-radius:@defaultBorderRadius * 1.5;
+            border:darken(@neutral-offwhite, 9%) 1px solid;
             cursor:pointer;
+            h4{
+                font-size:@18px;
+                color:@fullBlack;
+                line-height:@20px;
+                @media only screen and (max-width:@largestMobileScreen){
+                    margin:0 0 @7px 0;
+                }
+            }
             p{
-                font-size:@15px;
-                line-height:@24px;
-                color:@neutral;
-                margin-bottom: 0;
+                font-size:@13px;
+                line-height:@16px;
+                color:@neutral-middark;
             }
             &:hover, &:focus, &.active{
-                border-color:@primary-one; 
-                box-shadow: 0px 1px 2px rgba(49, 51, 61, 0.25);
+                border-color:@primary-one-darken;
                 i.icon{
-                    color:@primary-one;
+                    color:@primary-one-darken;
                 }
             }
         }

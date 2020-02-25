@@ -97,7 +97,7 @@ export default class ConfirmPhoneNumber extends Component {
       phoneVerificationChange,
       isOptConfirmed,
     } = this.props.identityStore;
-    const { errors, editMode, responsiveVars } = this.props.uiStore;
+    const { errors, editMode, responsiveVars, inProgress } = this.props.uiStore;
     if (isOptConfirmed) {
       return <SuccessScreen successMsg="Your phone number has been updated." handleContinue={this.handleContinue} />;
     }
@@ -109,6 +109,7 @@ export default class ConfirmPhoneNumber extends Component {
         headerLogo
         borderedHeader
         isProgressHeaderDisable
+        isLoading={inProgress}
       >
         <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
           <Grid.Column width="8" className="pt-0">

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Divider, Form } from 'semantic-ui-react';
+import { Header, Divider, Form, Grid } from 'semantic-ui-react';
 import { NsModal } from '../../../theme/shared';
 import { FormArrowButton } from '../../../theme/form';
 
@@ -44,17 +44,20 @@ class signupInitial extends Component {
         isProgressHeaderDisable
         modalContentClass="signup-content"
       >
-        <Header className="center-align signup-header">
-          <Header as="h3">Join the NextSeed community</Header>
-        </Header>
-        <Form error className={isMobile ? '' : 'account-type-tab'}>
-          <FormArrowButton
-            name="role"
-            fielddata={SIGNUP_FRM.fields.role}
-            changed={(e, result) => this.handleSignupChange(e, result)}
-          />
-        </Form>
-        <Divider hidden />
+        <Grid centered stackable className={isMobile ? 'full-width mt-0' : 'mt-0'}>
+          <Grid.Column width="8" className="pt-0">
+            <Header as="h3">Join the NextSeed community</Header>
+            <Form error className={isMobile ? '' : 'account-type-tab'}>
+              <FormArrowButton
+                name="role"
+                fielddata={SIGNUP_FRM.fields.role}
+                changed={(e, result) => this.handleSignupChange(e, result)}
+                classname="icon-arrow-button"
+              />
+            </Form>
+            <Divider hidden />
+          </Grid.Column>
+        </Grid>
       </NsModal>
     );
   }
