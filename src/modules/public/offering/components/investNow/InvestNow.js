@@ -213,8 +213,7 @@ export default class InvestNow extends React.Component {
     const { showAccountList, disableElement } = this.props.accreditationStore;
     const { investAccTypes, stepToBeRendered } = this.props.investmentStore;
     const multipleAccountExsists = !!(investAccTypes && investAccTypes.values.length >= 2);
-    const { campaign } = this.props.campaignStore;
-    const securityType = get(campaign, 'keyTerms.securities');
+    const { campaign, campaignStatus } = this.props.campaignStore;
     const {
       getCurrentInvestNowHealthCheck, investNowHealthCheckDetails,
     } = this.props.investmentLimitStore;
@@ -265,7 +264,7 @@ export default class InvestNow extends React.Component {
         name: 'TransferRequest',
         component: <TransferRequest
           changeInvest={changeInvest || this.state.isInvestmentUpdate}
-          offeringSecurityType={securityType}
+          isPreferredEquity={campaignStatus.isPreferredEquity}
           confirm={this.handleConfirm}
           cancel={this.handleCancel}
           refLink={this.props.refLink}
