@@ -7,7 +7,7 @@ import Helper from '../../../helper/utility';
 const isMobile = document.documentElement.clientWidth < 768;
 
 const NsModal = (props) => {
-  const { iconName, closeOnDimmerClick,
+  const { iconName, closeOnDimmerClick, modalClassName,
     onClose, className, disableCloseIcon, headerLogo,
     isLoading, loaderMsg, actions, size, borderedHeader,
     modalContentClass, useMountNode, back, isProgressHeaderDisable } = props;
@@ -27,7 +27,7 @@ const NsModal = (props) => {
         }
       }
       trigger={<Icon className={iconName || 'help circle'} color="green" />}
-      className={`${isMobile && 'bg-white'} ${props.isLoading && 'dimmer-visible'} ${className} multistep-modal`}
+      className={`${modalClassName} ${isMobile && 'bg-white'} ${props.isLoading && 'dimmer-visible'} ${className} multistep-modal`}
       closeIcon={!disableCloseIcon}
       {...props}
       basic

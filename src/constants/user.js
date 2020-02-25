@@ -8,13 +8,13 @@ export const USER_ROLES = [
 
 export const USER_TYPES_META = [
   {
-    key: 'i', icon: 'ns-investor', text: 'Investor', value: 'investor', desc: 'Open an investment account', exclude: ['applynow'],
+    key: 'i', icon: 'ns-money-circle', text: 'Investor', value: 'investor', desc: 'Open an investment account', exclude: ['applynow'],
   },
   {
-    key: 'o', icon: 'ns-business', text: 'Business', value: 'issuer-type1', desc: 'Apply for funding for your business', exclude: [],
+    key: 'o', icon: 'ns-business-circle', text: 'Business', value: 'issuer-type1', desc: 'Apply for funding for your business', exclude: [],
   },
   {
-    key: 'bo', icon: 'ns-appartment', text: 'Commercial Real Estate', value: 'issuer-type2', desc: 'Apply for real estate funding', exclude: [],
+    key: 'bo', icon: 'ns-building-circle', text: 'Commercial Real Estate', value: 'issuer-type2', desc: 'Apply for real estate funding', exclude: [],
   },
 ];
 
