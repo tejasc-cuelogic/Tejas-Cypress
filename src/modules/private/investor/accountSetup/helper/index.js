@@ -9,7 +9,7 @@ class Helper {
         action: false,
         successMsg: 'Complete',
         route: 'cip',
-        altRoute: 'verify-phone',
+        altRoute: 'phone-verification',
         emailVerificationRoute: '/confirm-email',
       },
       'cash-dollar': {

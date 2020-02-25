@@ -14,7 +14,7 @@ function cipVerificationHOC(WrappedComponent) {
     }
 
     handleCloseModal = () => {
-      this.props.uiStore.setErrors(null);
+      this.props.identityStore.setFieldValue('cipErrors', null);
       this.props.uiStore.removeOneFromProgressArray('submitAccountLoader');
       this.props.history.push('/dashboard/setup');
     }
@@ -42,11 +42,9 @@ function cipVerificationHOC(WrappedComponent) {
     }
 
     handleCip = async () => {
-      if (this.props.identityStore.ID_VERIFICATION_FRM.meta.isValid) {
-        const { url } = await this.props.identityStore.verifyCip();
-        this.props.identityStore.setFieldValue('isAddressFailed', false);
-        this.redirectTo(url);
-      }
+      const { url } = await this.props.identityStore.verifyCip();
+      this.props.identityStore.setFieldValue('isAddressFailed', false);
+      this.redirectTo(url);
     }
 
     redirectTo = (url) => {
@@ -91,8 +89,8 @@ function cipVerificationHOC(WrappedComponent) {
 
     render() {
       const commonMethods = { closeModal: this.handleCloseModal, handleCipExpiration: this.handleCipExpiration, redirectTo: this.redirectTo, handleCip: this.handleCip, addressTemplate: this.addressTemplate };
-      const { errors, inProgress } = this.props.uiStore;
-      const { signUpLoading } = this.props.identityStore;
+      const { inProgress } = this.props.uiStore;
+      const { signUpLoading, cipErrors } = this.props.identityStore;
       const elements = { FormInput, FormDropDown, MaskedInput };
       return (
         <WrappedComponent
@@ -102,7 +100,7 @@ function cipVerificationHOC(WrappedComponent) {
           elements={elements}
           ListErrors={ListErrors}
           isLoading={signUpLoading || inProgress}
-          errors={errors}
+          errors={cipErrors}
           headerLogo
           borderedHeader
           isProgressHeaderDisable

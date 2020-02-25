@@ -45,11 +45,10 @@ class Cip extends React.Component {
   }
 
   render() {
-    const { commonMethods, NsModal, elements } = this.props;
+    const { commonMethods, NsModal, elements, errors } = this.props;
     const { MaskedInput, FormInput } = elements;
     const { ID_VERIFICATION_FRM, personalInfoChange, signUpLoading, personalInfoMaskedChange, setAddressFieldsForUserVerification } = this.props.identityStore;
     const { givenName } = this.props.userStore.currentUser;
-    const { errors } = this.props.uiStore;
 
     return (
       <NsModal

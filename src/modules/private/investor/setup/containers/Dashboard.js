@@ -83,7 +83,7 @@ export default class Dashboard extends Component {
         <SuspenseBoundary>
           <Route path="/dashboard/setup/account-creation" component={AccountCreation} />
           {CIP_ROUTES.map(item => (<Route exact path={`${this.props.match.url}/${item.path}`} component={getModule(item.component)} />))}
-          <Route exact path={`${this.props.match.url}/verify-phone`} component={ConfirmPhoneNumber} />
+          <Route exact path={`${this.props.match.url}/phone-verification`} component={ConfirmPhoneNumber} />
           <Route path="/dashboard/setup/establish-profile" component={EstablishProfile} />
         </SuspenseBoundary>
         <PrivateLayout

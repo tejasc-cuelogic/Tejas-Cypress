@@ -50,6 +50,8 @@ export class IdentityStore {
 
   @observable cipBackUrl = INVESTOR_URLS.cipForm;
 
+  @observable cipErrors = undefined;
+
   @observable sendOtpToMigratedUser = [];
 
   @observable signUpLoading = false;
@@ -60,9 +62,9 @@ export class IdentityStore {
     ciphardFail: { steps: ['userCIPHardFail', 'userCIPFail'], url: INVESTOR_URLS.cipHardFail, status: 'HARD_FAIL' },
     cipSoftFail: { steps: ['userCIPSoftFail'], url: INVESTOR_URLS.cipSoftFail, status: 'SOFT_FAIL' },
     cipPass: { steps: ['userCIPPass', 'OFFLINE', 'phoneMfa'], url: INVESTOR_URLS.phoneVerification, status: 'PASS' },
-    cip: { steps: ['UNIQUE_SSN'], url: INVESTOR_URLS.cip },
+    cip: { steps: ['UNIQUE_SSN'], url: INVESTOR_URLS.cipForm },
     cipAddressFail: { steps: ['ADDRESS_VERIFICATION'], url: INVESTOR_URLS.cipAddressFail },
-    CipPhoneFail: { steps: ['PHONE_VERIFICATION'], url: INVESTOR_URLS.cipPhoneFail },
+    cipPhoneFail: { steps: ['PHONE_VERIFICATION'], url: INVESTOR_URLS.cipPhoneFail },
   }
 
   @action
@@ -280,7 +282,8 @@ export class IdentityStore {
       window.sessionStorage.setItem('cipErrorMessage',
         JSON.stringify(resData.errorMessage));
     }
-
+    this.mergeFormFields('ID_VERIFICATION_FRM', 'ID_ADDRESS_VERIFICATION');
+    this.mergeFormFields('ID_VERIFICATION_FRM', 'ID_PHONE_FAIL_FRM');
     this.setVerifyIdentityResponse(resData);
     return { res, url: redirectUrl };
   }
@@ -332,8 +335,8 @@ export class IdentityStore {
 
   cipWrapper = async (payLoad) => {
     try {
-      let url;
       this.setFieldValue('signUpLoading', true);
+      this.setFieldValue('cipErrors', null);
       const res = await client
         .mutate({
           mutation: payLoad.mutation,
@@ -343,14 +346,14 @@ export class IdentityStore {
         this.cipStepUrlMapping[key].steps.includes(get(res, `data.${payLoad.mutationName}.step`))
       )));
       // eslint-disable-next-line prefer-destructuring
-      url = get(this.cipStepUrlMapping[stepName], 'url');
+      const url = get(this.cipStepUrlMapping[stepName], 'url');
 
       if (stepName === 'cipPass') {
         await this.updateUserDataAndSendOtp();
+        this.setFieldValue('isPhoneFailed', false);
       } else if ((stepName === 'cip' && !get(res, `data.${payLoad.mutationName}.status`)
-        && res.data[`${payLoad.mutationName}`].message) || this.isPhoneFailed) {
-        url = undefined;
-        uiStore.setFieldvalue('errors',
+        && res.data[`${payLoad.mutationName}`].message) || (stepName === 'cipPhoneFail' && this.isPhoneFailed)) {
+        this.setFieldValue('cipErrors',
           DataFormatter.getSimpleErr({
             message: res.data[`${payLoad.mutationName}`].message,
           }));
@@ -374,6 +377,14 @@ export class IdentityStore {
       return Promise.reject(err);
     }
   }
+
+  @action
+  mergeFormFields = (form, mergingForm) => {
+    if (this[mergingForm].meta.isValid) {
+      this[form].fields = { ...this[form].fields, ...this[mergingForm].fields };
+    }
+  }
+
 
   @action
   setCipStatusWithUserDetails = () => {

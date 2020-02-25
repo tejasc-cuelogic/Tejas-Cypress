@@ -24,17 +24,17 @@ class CipPhoneVerification extends React.Component {
 
   handleBack = () => {
     this.props.identityStore.setFieldValue('isPhoneFailed', false);
+    this.props.identityStore.setFieldValue('cipErrors', null);
     this.props.history.push('/dashboard/setup/cip');
   }
 
   render() {
-    const { commonMethods, isLoading, NsModal, elements } = this.props;
+    const { commonMethods, isLoading, NsModal, elements, errors } = this.props;
     const { MaskedInput } = elements;
-    const { errors } = this.props.uiStore;
     const { ID_PHONE_FAIL_FRM, personalInfoMaskedChange } = this.props.identityStore;
     return (
       <NsModal
-        onClose={() => commonMethods.closeModal()}
+        onClose={this.handleClose}
         closeOnEscape={false}
         back={this.handleBack}
         {...this.props}

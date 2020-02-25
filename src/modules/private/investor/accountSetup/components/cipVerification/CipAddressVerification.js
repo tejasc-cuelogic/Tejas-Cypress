@@ -34,7 +34,7 @@ class CipAddressVerification extends React.Component {
       <NsModal
         onClose={() => this.handleClose()}
         closeOnEscape={false}
-        back="/dashboard/setup/cip"
+        back={this.handleBack}
         {...this.props}
       >
         <Grid centered stackable className={isMobile ? 'full-width' : ''}>

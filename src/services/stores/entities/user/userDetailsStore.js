@@ -636,7 +636,7 @@ export class UserDetailsStore {
         routingUrl = '/dashboard/setup/cip';
       } else if ((get(this.userDetails, 'cip.requestId'))) {
         if (this.signupStatus.phoneVerification !== 'DONE') {
-          routingUrl = '/dashboard/setup/verify-phone';
+          routingUrl = '/dashboard/setup/phone-verification';
         } else if (!this.signupStatus.investorProfileCompleted) {
           routingUrl = '/dashboard/setup/establish-profile';
         }
@@ -649,7 +649,7 @@ export class UserDetailsStore {
       && this.signupStatus.processingAccounts.length === 0) {
       routingUrl = '/dashboard/setup/cip';
     } else if (this.signupStatus.phoneVerification !== 'DONE') {
-      routingUrl = '/dashboard/setup/verify-phone';
+      routingUrl = '/dashboard/setup/phone-verification';
     } else if (!this.signupStatus.investorProfileCompleted) {
       routingUrl = '/dashboard/setup/establish-profile';
     } else if (isEmpty(investorAccountCreatedList)) {
