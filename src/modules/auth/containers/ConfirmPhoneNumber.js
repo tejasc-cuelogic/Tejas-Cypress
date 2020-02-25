@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { isEmpty } from 'lodash';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message, Dimmer, Loader } from 'semantic-ui-react';
@@ -26,7 +27,7 @@ export default class ConfirmPhoneNumber extends Component {
       identityStore.phoneTypeChange(fieldValue);
     }
 
-    if (Object.keys(this.props.identityStore.requestOtpResponse).length === 0) {
+    if (Object.keys(this.props.identityStore.requestOtpResponse).length === 0 && !isEmpty(this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value)) {
       this.props.identityStore.startPhoneVerification();
     }
   }

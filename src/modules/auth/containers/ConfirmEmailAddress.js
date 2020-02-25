@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import moment from 'moment';
 import { Link, withRouter, Route } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Message, Divider, Dimmer, Loader } from 'semantic-ui-react';
@@ -28,7 +29,7 @@ export default class ConfirmEmailAddress extends Component {
     const currentEmail = email && email.address ? email.address : '';
     const sameEmailExists = !!(this.props.authStore.CONFIRM_FRM.fields.email.value === currentEmail || !this.props.authStore.CONFIRM_FRM.fields.email.value);
     if ((!this.props.authStore.CONFIRM_FRM.fields.email.value
-      && !this.props.authStore.isUserLoggedIn) || (sameEmailExists)) {
+      && !this.props.authStore.isUserLoggedIn) || (sameEmailExists && (sessionStorage.getItem('changedEmail') !== null))) {
       sessionStorage.removeItem('changedEmail');
       this.props.history.push(this.props.refLink || '/login');
     }
@@ -76,6 +77,7 @@ export default class ConfirmEmailAddress extends Component {
       const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
       if (isMigratedUser) {
         this.props.identityStore.confirmEmailAddress().then(() => {
+          this.props.userDetailsStore.updateUserDetails('email', { verified: moment().tz('America/Chicago').toISOString() });
           this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub).then(() => {
             uiStore.setProgress(false);
             const { roles } = this.props.userStore.currentUser;
@@ -133,7 +135,7 @@ export default class ConfirmEmailAddress extends Component {
     sessionStorage.removeItem('changedEmail');
   }
 
-  handleResendCode = () => {
+  handleResendCode = async () => {
     this.props.authStore.setProgress('resend');
     if (this.props.refLink) {
       this.props.authStore.requestEmailChange().then(() => {
@@ -143,7 +145,11 @@ export default class ConfirmEmailAddress extends Component {
       })
         .catch(() => { });
     } else {
-      this.props.identityStore.requestOtpWrapper(isMobile);
+      if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
+        await this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
+      } else {
+        this.props.identityStore.requestOtpWrapper(isMobile);
+      }
       this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
       this.props.uiStore.clearErrors();
     }
