@@ -23,9 +23,10 @@ export class MultiFactorAuthStore {
   initialiseMfaMode = () => {
     const { currentUser } = userDetailsStore;
     if (currentUser && currentUser.data && currentUser.data.user) {
-      const { mfaMode, phone } = currentUser.data.user;
-      const phoneType = phone.type && phone.type === 'TEXT' ? 'TEXT' : 'CALL';
-      const communicationType = mfaMode === 'EMAIL' ? 'EMAIL' : phoneType;
+      const { mfaMode } = currentUser.data.user;
+      // const phoneType = phone.type && phone.type === 'TEXT' ? 'TEXT' : 'CALL';
+      // const communicationType = mfaMode === 'EMAIL' ? 'EMAIL' : phoneType;
+      const communicationType = mfaMode && mfaMode !== '' ? mfaMode === 'PHONE' ? 'CALL' : mfaMode : 'TEXT';
       if (communicationType) {
         this.handleMfaModeTypeChanged(null, { value: communicationType });
       }

@@ -15,14 +15,13 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('portfolioStore', 'campaignStore', 'userDetailsStore', 'transactionStore', 'uiStore')
 @observer
 class Overview extends Component {
-  state = {
-    open: false,
-    embedUrl: '',
-    loadingDoc: '',
-  };
-
   constructor(props) {
     super(props);
+    this.state = {
+      open: false,
+      embedUrl: '',
+      loadingDoc: '',
+    };
     const { isAdmin } = this.props;
     const accountDetails = this.props.userDetailsStore.currentActiveAccountDetailsOfSelectedUsers;
     // const investor = this.props.userDetailsStore.getDetailsOfUser;
@@ -238,7 +237,7 @@ class Overview extends Component {
                       ? (
                         <Table.Row verticalAlign="top">
                           <Table.Cell width={5}>{' '}
-                            <PopUpModal position="top left" content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`} customTrigger={<span className="popup-label">Maturity</span>} showOnlyPopup={!isMobile} />
+                            <PopUpModal position="top left" content={<>This is the deadline by which the issuer is obligated to make payment in full to investors.</>} customTrigger={<span className="popup-label">Maturity</span>} showOnlyPopup={!isMobile} />
                           </Table.Cell>
                           <Table.Cell>
                             {maturityMonth
@@ -371,8 +370,7 @@ class Overview extends Component {
                 <PayOffChart chartData={chartData} />
               </div>
             </>
-          )
-        }
+          )}
         <IframeModal
           open={this.state.open}
           close={this.closeModal}
