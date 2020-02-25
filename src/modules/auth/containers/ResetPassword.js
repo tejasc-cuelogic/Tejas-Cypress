@@ -15,8 +15,13 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class ResetPassword extends Component {
   constructor(props) {
     super(props);
-    const { FORGOT_PASS_FRM, RESET_PASS_FRM } = this.props.authStore;
-    RESET_PASS_FRM.fields.email.value = FORGOT_PASS_FRM.fields.email.value;
+    const { RESET_PASS_FRM } = this.props.authStore;
+    const forgotPasswordEmailReference = sessionStorage.getItem('forgotPasswordEmailReference');
+    if (forgotPasswordEmailReference) {
+      RESET_PASS_FRM.fields.email.value = forgotPasswordEmailReference;
+    } else {
+      this.props.history.push('/forgot-password');
+    }
   }
 
   componentDidMount() {
@@ -31,6 +36,7 @@ export default class ResetPassword extends Component {
   onSubmit = (e) => {
     e.preventDefault();
     authActions.setNewPassword().then(() => {
+      sessionStorage.removeItem('forgotPasswordEmailReference');
       if (this.props.uiStore.isFromBusinessApplication) {
         this.props.history.push(this.props.uiStore.authRef);
       } else {
@@ -95,13 +101,11 @@ export default class ResetPassword extends Component {
               fielddata={RESET_PASS_FRM.fields.verify}
               changed={resetPassChange}
             />
-            {errors
-              && (
-<Message error textAlign="left" className="mt-30">
+            {errors && (
+              <Message error textAlign="left" className="mt-30">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
-              )
-            }
+            )}
             <div className="mt-30 center-align">
               <Button primary size="large" className="very relaxed" content="Set new password" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid || !currentScore} />
             </div>

@@ -14,7 +14,12 @@ export default class ConfirmBankLinking extends Component {
   constructor(props) {
     super(props);
     this.props.uiStore.clearErrors();
+    const { transactionOtpRequestId } = this.props.transactionStore;
     this.props.transactionStore.resetFormData('OTP_VERIFY_META');
+    if (!transactionOtpRequestId) {
+      const redirectingUrl = this.props.refLink;
+      this.props.history.push(redirectingUrl);
+    }
   }
 
   submit = (e) => {

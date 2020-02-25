@@ -19,14 +19,15 @@ export default class AccountCreation extends Component {
   constructor(props) {
     super(props);
     this.props.bankAccountStore.setBankLinkInterface('list');
-    const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
-    const accType = INVESTMENT_ACC_TYPES.fields.accType.values[0];
+    // const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
+    // const accType = INVESTMENT_ACC_TYPES.fields.accType.values[0];
     // eslint-disable-next-line prefer-destructuring
     if (isMobile) {
       this.props.accountStore.setAccTypeChange();
-    } else if (accType) {
-      this.props.accountStore.setAccTypeChange(accType.value);
     }
+    // else if (accType) {
+    //   this.props.accountStore.setAccTypeChange(accType.value);
+    // }
   }
 
   handleCloseModal = () => {
