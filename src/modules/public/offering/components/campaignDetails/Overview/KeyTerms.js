@@ -3,7 +3,7 @@ import { get, capitalize } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Popup, Table, Header, Button } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_REGULATION_DETAILED } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_OFFERED_BY, CAMPAIGN_REGULATION_DETAILED } from '../../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -19,7 +19,7 @@ class KeyTerms extends Component {
 
   render() {
     const { campaign } = this.props;
-    const { offerStructure } = this.props.campaignStore;
+    const { offerStructure, campaignStatus } = this.props.campaignStore;
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} months` : 'N/A';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? `, including a ${campaign.keyTerms.startupPeriod}-month startup period for ramp up` : '';
     return (
@@ -67,7 +67,7 @@ class KeyTerms extends Component {
                   : '-'}
               </Table.Cell>
             </Table.Row>
-            {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
+            {campaignStatus.isTermNote
             && (
             <>
               <Table.Row verticalAlign="top">
@@ -90,7 +90,7 @@ class KeyTerms extends Component {
             </>
             )
             }
-            {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE
+            {campaignStatus.isRevenueShare
             && (
             <>
               <Table.Row verticalAlign="top">
@@ -122,7 +122,7 @@ class KeyTerms extends Component {
             </>
             )
             }
-            {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
+            {!campaignStatus.isPreferredEquity
               ? (
               <Table.Row verticalAlign="top">
                 <Table.Cell width={5}><b>Maturity</b>{' '}
@@ -142,26 +142,6 @@ class KeyTerms extends Component {
               )
               : (
                 <>
-                  {/* <Table.Row verticalAlign="top">
-                  <Table.Cell width={5} className="neutral-text"><b>Total Round Size{' '}</b>
-                  </Table.Cell>
-                  <Table.Cell>
-                    NA
-                  </Table.Cell>
-                </Table.Row> */}
-                {/* {get(campaign, 'keyTerms.premoneyValuation') &&
-                <Table.Row verticalAlign="top">
-                  <Table.Cell width={5} className="neutral-text"><b>Pre-Money Valuation{' '}</b>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <p>
-                      {get(campaign, 'keyTerms.premoneyValuation') ?
-                      Helper.CurrencyFormat(get(campaign,
-                        'keyTerms.premoneyValuation')) : ' NA'}
-                    </p>
-                  </Table.Cell>
-                </Table.Row>
-                } */}
                 {get(campaign, 'keyTerms.priceCopy')
                 && (
                 <Table.Row verticalAlign="top">

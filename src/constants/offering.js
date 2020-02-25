@@ -180,6 +180,7 @@ export const CAMPAIGN_SECURITIES_DETAILED = {
     TERM_NOTE: 'Term Note',
     REVENUE_SHARING_NOTE: 'Revenue Sharing Note',
     PREFERRED_EQUITY_506C: 'Preferred Equity',
+    EQUITY: 'Equity',
     CONVERTIBLE_NOTES: 'Convertible Notes',
     SAFE: 'SAFE',
     REAL_ESTATE: 'LLC Membership Interests',

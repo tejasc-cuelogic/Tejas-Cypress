@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { get, capitalize } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Statistic, Grid, Button } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
 import { Image64, PopUpModal } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
@@ -184,7 +184,7 @@ export default class CampaignHeader extends Component {
                   {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                     && (
                       <p className="raise-type mb-0">
-                        {['REAL_ESTATE'].includes(offerStructure) ? 'Commercial Real Estate' : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
+                        {campaignStatus.isRealEstate ? 'Commercial Real Estate' : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
                         {/* <Popup
                           hoverable
                           trigger={<Icon name="help circle" color="green" />}
@@ -196,42 +196,42 @@ export default class CampaignHeader extends Component {
                       </p>
                     )
                   }
-                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
+                  {campaignStatus.isRealEstate
                     && (
                       <p className="mb-0">
                         Asset Type: Hotel Development
                         </p>
                     )
                   }
-                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE && dataRooms > 0
+                  {campaignStatus.isRealEstate && dataRooms > 0
                     && (
                       <p className="mb-0">
                         Targeted IRR: <Link to={`${this.props.match.url}#data-room`}> View in Data Room</Link>
                       </p>
                     )
                   }
-                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
+                  {campaignStatus.isTermNote
                     && (
                       <p className="mb-0">
                         Interest Rate: {get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-'}
                       </p>
                     )
                   }
-                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE
+                  {campaignStatus.isRevenueShare
                     && (
                       <p className="mb-0">
                         Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple') ? get(campaign, 'keyTerms.investmentMultiple') : '-'}
                       </p>
                     )
                   }
-                  {(offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE || offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE)
+                  {(campaignStatus.isTermNote || campaignStatus.isRevenueShare)
                     && (
                       <p className="mb-0">
                         Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
                       </p>
                     )
                   }
-                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
+                  {campaignStatus.isPreferredEquity
                     && (
                       <>
                         <p className="mb-0">
@@ -243,7 +243,7 @@ export default class CampaignHeader extends Component {
                       </>
                     )
                   }
-                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE
+                  {campaignStatus.isSafe
                     && (
                       <>
                         {get(campaign, 'keyTerms.valuationCap') && (
@@ -259,7 +259,7 @@ export default class CampaignHeader extends Component {
                       </>
                     )
                   }
-                  {/* {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
+                  {/* {campaignStatus.isRealEstate
                     && (
                       <>
                       <p className="mb-0">

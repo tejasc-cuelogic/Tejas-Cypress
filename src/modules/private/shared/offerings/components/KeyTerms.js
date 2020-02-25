@@ -129,6 +129,18 @@ export default class KeyTerms extends Component {
                 prefix="$"
               />
             ))}
+            <FormDropDown
+              containerclassname={isReadonly ? 'display-only' : ''}
+              className={isReadonly ? 'display-only' : ''}
+              disabled={isReadonly}
+              fielddata={KEY_TERMS_FRM.fields.equityClass}
+              selection
+              value={KEY_TERMS_FRM.fields.equityClass.value}
+              name="equityClass"
+              placeholder={isReadonly ? 'N/A' : 'Choose here'}
+              options={KEY_TERMS_FRM.fields.equityClass.values}
+              onChange={(e, result) => formArrayChange(e, result, formName)}
+            />
             <MaskedInput
               displayMode={isReadonly}
               name="minOfferingAmount506"
@@ -277,7 +289,7 @@ export default class KeyTerms extends Component {
               prefix="$"
             />
             {
-              ['valuationCap', 'discount', 'equityClass'].map(field => (
+              ['valuationCap', 'discount'].map(field => (
                 <FormInput
                   displayMode={isReadonly}
                   name={field}

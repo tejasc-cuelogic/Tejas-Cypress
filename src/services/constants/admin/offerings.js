@@ -401,10 +401,16 @@ export const KEY_TERMS = {
   },
   equityClass: {
     value: null,
+    values: [
+      { key: 'Series NS Preferred Units', value: 'PREFERRED', text: 'Series NS Preferred Units' },
+      { key: 'LLC Membership Interests', value: 'LLC_MEMBERSHIP_UNITS', text: 'LLC Membership Interests' },
+      { key: 'Class A Shares', value: 'CLASS_A_SHARES', text: 'Class A Shares' },
+      { key: 'Class B Shares', value: 'CLASS_B_SHARES', text: 'Class B Shares' },
+      { key: 'Class A and B Shares', value: 'PARALLEL_CLASS_SHARES', text: 'Class A and B Shares' },
+    ],
     label: 'Equity Class',
     error: undefined,
     rule: 'optional',
-    placeHolder: 'Enter here',
   },
   equityUnitType: {
     value: 'share',

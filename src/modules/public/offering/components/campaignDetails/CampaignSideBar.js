@@ -7,7 +7,7 @@ import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import Helper from '../../../../../helper/utility';
 import share from './Share';
 import { Image64, PopUpModal } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 992;
 
@@ -162,25 +162,25 @@ export default class CampaignSideBar extends Component {
               {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                 && (
                   <p className="raise-type mt-20 mb-0">
-                    {['REAL_ESTATE'].includes(offerStructure) ? 'Commercial Real Estate' : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
+                    {campaignStatus.isRealEstate ? 'Commercial Real Estate' : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
                   </p>
                 )
               }
-              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
+              {campaignStatus.isRealEstate
                 && (
                   <p className="mb-0">
                     Asset Type: Hotel Development
                         </p>
                 )
               }
-              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE && dataRooms > 0
+              {campaignStatus.isRealEstate && dataRooms > 0
                 && (
                   <p className="mb-0">
                     Targeted IRR: <Link to={`${this.props.match.url}#data-room`}> View in Data Room</Link>
                   </p>
                 )
               }
-              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE
+              {campaignStatus.isSafe
                 && (
                   <>
                     {get(campaign, 'keyTerms.valuationCap') && (
@@ -196,27 +196,27 @@ export default class CampaignSideBar extends Component {
                   </>
                 )
               }
-              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
+              {campaignStatus.isTermNote
                 && (
                   <p className="mb-0">
                     Interest Rate: {get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-'}
                   </p>
                 )
               }
-              {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE
+              {campaignStatus.isRevenueShare
                 && (
                   <p className="mb-0">
                     Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple') ? get(campaign, 'keyTerms.investmentMultiple') : '-'}
                   </p>
                 )
               }
-              {[CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE, CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE].includes(offerStructure)
+              {(campaignStatus.isRevenueShare || campaignStatus.isTermNote)
                 ? (
                   <p className="mb-0">
                     Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
                 </p>
                 )
-                : offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ? (
+                : campaignStatus.isPreferredEquity ? (
                   <>
                     <p className="mb-0">
                       Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : '-'}

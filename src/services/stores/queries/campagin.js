@@ -472,7 +472,7 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
       frequencyOfPayments
       priceCopy
       premoneyValuation
-      equityUnitType
+      equityClass
       securities
       securityInterest
       securitiesOwnershipPercentage

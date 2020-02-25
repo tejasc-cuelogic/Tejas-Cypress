@@ -359,8 +359,9 @@ export class CampaignStore {
     campaignStatus.isRevenueShare = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary;
     campaignStatus.isTermNote = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE;
     campaignStatus.isFund = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.FUNDS;
-    campaignStatus.isRealEstate = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE;
-    campaignStatus.isPreferredEquity = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C;
+    campaignStatus.isSafe = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE;
+    campaignStatus.isRealEstate = (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE || (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(campaign, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'));
+    campaignStatus.isPreferredEquity = (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C || (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(campaign, 'keyTerms.equityClass') === 'PREFERRED'));
     campaignStatus.doneComputing = (get(this.details, 'data.getOfferingDetailsBySlug') && !isEmpty(this.details.data.getOfferingDetailsBySlug.keyTerms)) || false;
     return campaignStatus;
   }
