@@ -3,6 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { NsModal, ListErrors } from '../../../../../theme/shared';
 import { FormInput, MaskedInput, FormDropDown } from '../../../../../theme/form';
 import { US_STATES } from '../../../../../constants/account';
+import { INVESTOR_URLS } from '../../../../../services/constants/url';
+
 
 function cipVerificationHOC(WrappedComponent) {
   // eslint-disable-next-line no-unused-expressions
@@ -41,9 +43,15 @@ function cipVerificationHOC(WrappedComponent) {
       return url;
     }
 
-    handleCip = async () => {
+    handleCip = async (isAddressOrPhoneFailure = undefined) => {
+      const { setFieldValue, cipBackUrl } = this.props.identityStore;
+
       const { url } = await this.props.identityStore.verifyCip();
-      this.props.identityStore.setFieldValue('isAddressFailed', false);
+      if (isAddressOrPhoneFailure) {
+        const failObj = isAddressOrPhoneFailure === 'addressFail' ? { failKey: 'isAddressFailed', backUrl: 'cipAddressFail' } : { failKey: 'isPhoneFailed', backUrl: 'cipPhoneFail' };
+        setFieldValue(failObj.failKey, false);
+        setFieldValue('cipBackUrl', [...cipBackUrl, ...[INVESTOR_URLS[failObj.backUrl]]]);
+      }
       this.redirectTo(url);
     }
 
@@ -103,6 +111,7 @@ function cipVerificationHOC(WrappedComponent) {
           errors={cipErrors}
           headerLogo
           borderedHeader
+          investorUrls={INVESTOR_URLS}
           isProgressHeaderDisable
         />
       );

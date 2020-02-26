@@ -35,6 +35,7 @@ class Cip extends React.Component {
   constructor(props) {
     super(props);
     this.props.identityStore.changeSsnRules(true);
+    this.props.identityStore.setFieldValue('cipBackUrl', [this.props.investorUrls.cipForm]);
   }
 
   handleEncryptedSsn = (fielddata) => {
@@ -63,7 +64,7 @@ class Cip extends React.Component {
             {headerSiblingsContent}
           </Grid.Column>
           <Grid.Column width="9">
-            <Form error onSubmit={commonMethods.handleCip}>
+            <Form error onSubmit={() => commonMethods.handleCip(false)}>
               <Form.Group widths="equal">
                 <FormSelect
                   name="salutation"

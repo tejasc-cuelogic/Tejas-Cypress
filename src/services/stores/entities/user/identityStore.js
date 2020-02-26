@@ -3,7 +3,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import { mapValues, keyBy, find, flatMap, map, get, isEmpty, intersection } from 'lodash';
 import Validator from 'validatorjs';
-import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, USER_ADDRESS, PHONE_NUMBER, UPDATE_PROFILE_INFO } from '../../../constants/user';
+import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
 import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isUniqueSSN, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
@@ -23,10 +23,6 @@ export class IdentityStore {
   @observable ID_VERIFICATION_DOCS_FRM = FormValidator.prepareFormObject(IDENTITY_DOCUMENTS);
 
   @observable ID_VERIFICATION_QUESTIONS = FormValidator.prepareFormObject([]);
-
-  @observable ID_ADDRESS_VERIFICATION = FormValidator.prepareFormObject(USER_ADDRESS);
-
-  @observable ID_PHONE_FAIL_FRM = FormValidator.prepareFormObject(PHONE_NUMBER);
 
   @observable ID_PHONE_VERIFICATION = FormValidator.prepareFormObject(PHONE_VERIFICATION);
 
@@ -48,7 +44,7 @@ export class IdentityStore {
 
   @observable isPhoneFailed = false;
 
-  @observable cipBackUrl = INVESTOR_URLS.cipForm;
+  @observable cipBackUrl = [INVESTOR_URLS.cipForm];
 
   @observable cipErrors = undefined;
 
@@ -124,7 +120,7 @@ export class IdentityStore {
 
   @action
   phoneNumberChange = (value) => {
-  this.ID_VERIFICATION_FRM = FormValidator.onChange(
+    this.ID_VERIFICATION_FRM = FormValidator.onChange(
       this.ID_VERIFICATION_FRM,
       { name: 'phoneNumber', value },
     );
@@ -201,16 +197,9 @@ export class IdentityStore {
 
   @computed
   get formattedUserInfoForCip() {
-    let fields = {};
-    if (this.ID_ADDRESS_VERIFICATION.meta.isValid && this.isAddressFailed) {
-      fields = { ...this.ID_VERIFICATION_FRM.fields, ...this.ID_ADDRESS_VERIFICATION.fields };
-    } else if (this.ID_PHONE_FAIL_FRM.meta.isValid && this.isPhoneFailed) {
-      fields = { ...this.ID_VERIFICATION_FRM.fields, ...this.ID_PHONE_FAIL_FRM.fields };
-    } else {
-      // eslint-disable-next-line prefer-destructuring
-      fields = this.ID_VERIFICATION_FRM.fields;
-    }
+    const { fields } = this.ID_VERIFICATION_FRM;
     const user = FormValidator.evaluateFormData(fields);
+
     if (userDetailsStore.isLegalDocsPresent) {
       user.verificationDocs = this.verificationDocs();
     }
@@ -274,7 +263,6 @@ export class IdentityStore {
 
     if (resData.step === 'ADDRESS_VERIFICATION' && this.isAddressFailed) {
       redirectUrl = INVESTOR_URLS.cipHardFail;
-      this.setFieldValue('cipBackUrl', INVESTOR_URLS.cipAddressFail);
     }
 
     if (resData.step === 'OFFLINE') {
@@ -282,8 +270,6 @@ export class IdentityStore {
       window.sessionStorage.setItem('cipErrorMessage',
         JSON.stringify(resData.errorMessage));
     }
-    this.mergeFormFields('ID_VERIFICATION_FRM', 'ID_ADDRESS_VERIFICATION');
-    this.mergeFormFields('ID_VERIFICATION_FRM', 'ID_PHONE_FAIL_FRM');
     this.setVerifyIdentityResponse(resData);
     return { res, url: redirectUrl };
   }
@@ -347,15 +333,17 @@ export class IdentityStore {
       )));
       // eslint-disable-next-line prefer-destructuring
       const url = get(this.cipStepUrlMapping[stepName], 'url');
+      const { message } = !get(res, `data.${payLoad.mutationName}.status`) && res.data[`${payLoad.mutationName}`];
 
       if (stepName === 'cipPass') {
         await this.updateUserDataAndSendOtp();
         this.setFieldValue('isPhoneFailed', false);
-      } else if ((stepName === 'cip' && !get(res, `data.${payLoad.mutationName}.status`)
-        && res.data[`${payLoad.mutationName}`].message) || (stepName === 'cipPhoneFail' && this.isPhoneFailed)) {
+      }
+
+      if ((stepName === 'cip' && message) || (stepName === 'cipPhoneFail' && this.isPhoneFailed)) {
         this.setFieldValue('cipErrors',
           DataFormatter.getSimpleErr({
-            message: res.data[`${payLoad.mutationName}`].message,
+            message,
           }));
       }
 
@@ -377,14 +365,6 @@ export class IdentityStore {
       return Promise.reject(err);
     }
   }
-
-  @action
-  mergeFormFields = (form, mergingForm) => {
-    if (this[mergingForm].meta.isValid) {
-      this[form].fields = { ...this[form].fields, ...this[mergingForm].fields };
-    }
-  }
-
 
   @action
   setCipStatusWithUserDetails = () => {

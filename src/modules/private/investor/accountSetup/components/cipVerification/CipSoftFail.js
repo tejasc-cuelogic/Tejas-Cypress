@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { Button, Form, Divider, Grid, Message, Header } from 'semantic-ui-react';
 import { ListErrors } from '../../../../../../theme/shared';
 import cipVerificationHOC from '../../containers/cipVerificationHOC';
-import { INVESTOR_URLS } from '../../../../../../services/constants/url';
 import { FormSelect } from '../../../../../../theme/form';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -22,6 +21,7 @@ const headerSiblings = (
 class CipSoftFail extends React.Component {
   handleSubmitIdentityQuestions = async (e) => {
     e.preventDefault();
+    const { cipBackUrl, setFieldValue } = this.props.identityStore;
     const { handleCipExpiration, redirectTo } = this.props.commonMethods;
     this.props.identityStore.setFieldValue('signUpLoading', true);
     let { url } = await this.props.identityStore.verifyCipSoftFail();
@@ -30,8 +30,10 @@ class CipSoftFail extends React.Component {
       && this.props.identityStore.cipStepUrlMapping.ciphardFail.url !== url) {
       url = await handleCipExpiration();
     }
-    if (INVESTOR_URLS.cipHardFail === url) {
-      this.props.identityStore.setFieldValue('cipBackUrl', INVESTOR_URLS.cipSoftFail);
+    const { cipHardFail } = this.props.investorUrls;
+
+    if (cipHardFail === url) {
+      setFieldValue('cipBackUrl', [...cipBackUrl, ...[this.props.investorUrls.cipSoftFail]]);
     }
     redirectTo(url);
   }

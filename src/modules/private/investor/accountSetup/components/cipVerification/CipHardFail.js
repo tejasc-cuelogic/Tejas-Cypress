@@ -42,13 +42,19 @@ class CipHardFail extends React.Component {
     redirectTo(url);
   }
 
+  handleBack = () => {
+    const { setFieldValue, cipBackUrl } = this.props.identityStore;
+    setFieldValue('cipErrors', null);
+    this.props.history.push(cipBackUrl.pop());
+  }
+
   render() {
     const { commonMethods, NsModal, errors, ListErrors } = this.props;
-    const { ID_VERIFICATION_DOCS_FRM, cipBackUrl } = this.props.identityStore;
+    const { ID_VERIFICATION_DOCS_FRM } = this.props.identityStore;
     return (
       <NsModal
         onClose={() => commonMethods.closeModal()}
-        back={cipBackUrl}
+        back={this.handleBack}
         {...this.props}
       >
         <Grid centered stackable className={isMobile ? 'full-width' : ''}>
