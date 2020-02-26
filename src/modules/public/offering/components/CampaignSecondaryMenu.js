@@ -4,7 +4,6 @@ import { Container, Button, Visibility, List } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import Helper from '../../../../helper/utility';
-import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 992;
 
@@ -60,11 +59,11 @@ export default class CampaignSecondaryMenu extends Component {
               <List.Item>
                 <List.Header>
                   <span className="highlight-text">{Helper.CurrencyFormat(collected, 0)}</span>
-                  {!isClosed && (get(campaign, 'keyTerms.securities') === 'TERM_NOTE' || maxFlagStatus || get(campaign, 'stage') === 'LIVE' || get(campaign, 'stage') === 'PROCESSING' || get(campaign, 'stage') === 'LOCK') ? ' raised' : ' invested'}
+                  {!isClosed && (campaignStatus.isTermNote || maxFlagStatus || get(campaign, 'stage') === 'LIVE' || get(campaign, 'stage') === 'PROCESSING' || get(campaign, 'stage') === 'LOCK') ? ' raised' : ' invested'}
                 </List.Header>
               </List.Item>
               {!isMobile && !campaignStatus.isFund
-                && <List.Item>{get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE ? 'Commercial Real Estate' : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE ? `${get(campaign, 'keyTerms.valuationCap') || ''} Valuation Cap` : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? `${get(campaign, 'keyTerms.interestRate') || ''}% Interest Rate` : get(campaign, 'keyTerms.securities') === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ? `${get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : ''} Pre-Money Valuation` : `${get(campaign, 'keyTerms.investmentMultiple') || ''} Investment Multiple`}</List.Item>
+                && <List.Item>{campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isSafe ? `${get(campaign, 'keyTerms.valuationCap') || ''} Valuation Cap` : campaignStatus.isTermNote ? `${get(campaign, 'keyTerms.interestRate') || ''}% Interest Rate` : campaignStatus.isPreferredEquity ? `${get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation'), 0) : ''} Pre-Money Valuation` : `${get(campaign, 'keyTerms.investmentMultiple') || ''} Investment Multiple`}</List.Item>
               }
             </List>
           </Container>

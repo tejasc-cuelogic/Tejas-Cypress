@@ -7,8 +7,8 @@ import {
   CAMPAIGN_OFFERED_BY,
   CAMPAIGN_REGULATION_DETAILED,
   CAMPAIGN_KEYTERMS_REGULATION_PARALLEL,
-  CAMPAIGN_KEYTERMS_SECURITIES_ENUM,
   CAMPAIGN_SECURITIES_DETAILED,
+  CAMPAIGN_KEYTERMS_EQUITY_CLASS,
 } from '../../../../../../constants/offering';
 import Helper from '../../../../../../helper/utility';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
@@ -46,9 +46,6 @@ class KeyTermsDetails extends Component {
       { key: 'maxOfferingAmountCF', label: 'Offering Max', popupContent: 'This is the maximum fundraising goal. The offering will remain open until the issuer raises the Offering Max or the offering period ends. As long as the raise exceeds the Offering Min, the issuer will receive the funds.' },
       { key: 'minInvestAmt', label: 'Min Individual Investment', popupContent: 'This is the minimum individual investment amount required to participate in this offering. This amount is set by the Issuer.' },
     ];
-    const isPreferredEquityOffering = !!(get(campaign, 'keyTerms.securities') && ['PREFERRED_EQUITY_506C'].includes(get(campaign, 'keyTerms.securities')));
-    // const minOfferingAmountD = get(keyTerms, 'minOfferingAmount506') ? get(keyTerms, 'minOfferingAmount506') : get(keyTerms, 'minOfferingAmount506C');
-    // const maxOfferingAmountD = get(keyTerms, 'maxOfferingAmount506') ? get(keyTerms, 'maxOfferingAmount506') : get(keyTerms, 'maxOfferingAmount506C');
     return (
       <>
         <Grid columns={3} divided stackable className="key-terms vertical-gutter neutral-text">
@@ -167,6 +164,15 @@ class KeyTermsDetails extends Component {
                 )
               }
             />
+            {campaignStatus.isEquity
+            && (
+              <KeyTermsFieldHoc
+                data={keyTerms}
+                field="equityClass"
+                title="Equity Class"
+                content={get(keyTerms, 'equityClass') && CAMPAIGN_KEYTERMS_EQUITY_CLASS[get(keyTerms, 'equityClass')]}
+              />
+            )}
             <KeyTermsFieldHoc
               data={keyTerms}
               field="investmentMultiple"
@@ -281,11 +287,6 @@ class KeyTermsDetails extends Component {
             />
             <KeyTermsFieldHoc
               data={keyTerms}
-              field="equityClass"
-              title="Equity Class"
-            />
-            <KeyTermsFieldHoc
-              data={keyTerms}
               field="totalRoundSize"
               title={(
                 <PopUpModal
@@ -362,7 +363,7 @@ class KeyTermsDetails extends Component {
                 />
               )}
             />
-            {!isPreferredEquityOffering
+            {!campaignStatus.isPreferredEquity
               && (
                 <KeyTermsFieldHoc
                   data={keyTerms}
@@ -441,11 +442,11 @@ class KeyTermsDetails extends Component {
           </Table.Body>
         </Table>
         <Divider section hidden />
-        {!newLayout && offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
+        {!newLayout && campaignStatus.isTermNote
           ? (
             <TotalPaymentCalculator {...this.props} />
           )
-          : !newLayout && offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE && campaignStatus.revenueSharingSummary
+          : !newLayout && campaignStatus.isRevenueShare && campaignStatus.revenueSharingSummary
             ? (
               <RevenueSharingSummaryBlock {...this.props} />
             )
