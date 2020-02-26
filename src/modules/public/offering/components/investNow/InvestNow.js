@@ -22,6 +22,7 @@ export default class InvestNow extends React.Component {
     if (!this.props.campaignStore.isInvestBtnClicked) {
       this.props.history.push(this.props.refLink);
     }
+    this.props.campaignStore.setFieldValue('inInvestmentFlow', true);
     this.props.investmentStore.setStepToBeRendered(0);
     this.props.investmentStore.resetData();
     this.props.uiStore.setProgress(false);
@@ -54,6 +55,7 @@ export default class InvestNow extends React.Component {
 
   componentWillUnmount() {
     const { changeInvest } = this.props;
+    this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
     const isUpdateScreen = changeInvest;
     const reflectedURL = this.props.history.location.pathname;
     const matchURL = this.props.match.url;
