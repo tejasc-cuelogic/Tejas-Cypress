@@ -179,7 +179,7 @@ export default class ConfirmEmailAddress extends Component {
     if (errors && errors.code === 'NotAuthorizedException') {
       this.props.history.push('/login');
     } else if (isOptConfirmed && this.props.userStore.currentUser && this.props.userStore.currentUser.roles && this.props.userStore.currentUser.roles.includes('investor')) {
-      return <SuccessScreen successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Your e-mail address has been confirmed.'}`} handleContinue={this.handleContinue} />;
+      return <SuccessScreen successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Thank you! Your email address has been confirmed.'}`} handleContinue={this.handleContinue} />;
     }
     return (
       <NsModal
