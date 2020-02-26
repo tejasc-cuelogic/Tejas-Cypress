@@ -66,8 +66,7 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.refLink) {
       this.props.authStore.verifyAndUpdateEmail().then(() => {
         this.props.identityStore.setIsOptConfirmed(true);
-        Helper.toast('Email has been verified and updated', 'success');
-        this.props.history.push(this.props.refLink);
+        sessionStorage.removeItem('changedEmail');
       })
         .catch(() => { });
     } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === ''
@@ -183,7 +182,7 @@ export default class ConfirmEmailAddress extends Component {
       <SuccessScreen
         successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Thank  you! Your email address has been confirmed.'}`}
         handleContinue={this.handleContinue}
-        handleCloseModal={this.handleCloseModal}
+        closeLink={this.props.refLink ? '/dashboard/account-settings' : '/'}
       />
 );
     }

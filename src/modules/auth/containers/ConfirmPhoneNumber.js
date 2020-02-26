@@ -137,7 +137,7 @@ export default class ConfirmPhoneNumber extends Component {
     if (signupStatus.isMigratedFullAccount && !confirmMigratedUserPhoneNumber) {
       return <MigratedUserPhoneNumber />;
     } if (isOptConfirmed) {
-      return <SuccessScreen handleCloseModal={this.handleCloseModal} successMsg="Thank you! Your phone number has been confirmed." handleContinue={this.handleContinue} />;
+      return <SuccessScreen closeLink="/dashboard/setup" handleCloseModal={this.handleCloseModal} successMsg="Thank you! Your phone number has been confirmed." handleContinue={this.handleContinue} />;
     }
     return (
       <NsModal

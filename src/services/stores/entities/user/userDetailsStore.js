@@ -306,6 +306,13 @@ export class UserDetailsStore {
   });
 
   @action
+  setUserEmail = (newEmail) => {
+    if (newEmail) {
+      this.currentUser.data.user.email.address = newEmail;
+    }
+  }
+
+  @action
   getUser = () => new Promise((res) => {
     this.currentUser = graphql({
       client,
