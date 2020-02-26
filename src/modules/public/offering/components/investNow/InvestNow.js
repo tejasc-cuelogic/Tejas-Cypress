@@ -54,11 +54,13 @@ export default class InvestNow extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
     const { changeInvest } = this.props;
     const isUpdateScreen = changeInvest;
     const reflectedURL = this.props.history.location.pathname;
     const matchURL = this.props.match.url;
+    if (matchURL.includes('portfolio')) {
+      this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
+    }
     if (!isUpdateScreen || (isUpdateScreen && !reflectedURL.includes('invest-now'))) {
       if (!matchURL.includes('portfolio')) {
         this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
@@ -68,6 +70,7 @@ export default class InvestNow extends React.Component {
       if (!reflectedURL.includes('agreement')) {
         this.props.accreditationStore.setFieldVal('userAccredetiationState', null);
         this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
+        this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
       }
       this.props.campaignStore.setFieldValue('offeringUUID', null);
     }
