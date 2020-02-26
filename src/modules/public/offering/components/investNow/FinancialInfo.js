@@ -241,7 +241,7 @@ class FinancialInfo extends Component {
                 <PopUpModal
                   wide
                   customTrigger={<span className="popup-label">Total Investment Return</span>}
-                  content="This calculates the total amount that the issuer agrees to pay you under the note purchase agrrement, based on what you enter above. Payment is not guaranteed or ensured and investors may lose some or all of the principal invested. "
+                  content="This calculates the total amount that the issuer agrees to pay you under the note purchase agreement, based on what you enter above. Payment is not guaranteed or ensured and investors may lose some or all of the principal invested. "
                   position="top center"
                   showOnlyPopup={!isMobile}
                 />
