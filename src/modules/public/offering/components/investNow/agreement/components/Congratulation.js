@@ -11,6 +11,7 @@ import Helper from '../../../../../../../helper/utility';
 export default class Congratulation extends React.Component {
   constructor(props) {
     super(props);
+    this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
     if (this.props.changeInvestment) {
       this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
     } else {
