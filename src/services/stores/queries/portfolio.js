@@ -21,7 +21,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
     creditsApplied
     tnar
     realizedRoiOnLifetimeInvestments
-    realizedRoiOnCashInvestments   
+    realizedRoiOnCashInvestments
     investments {
       pending {
         tranche
@@ -36,6 +36,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
           keyTerms {
             shorthandBusinessName
             securities
+            equityClass
             industry
             city
             state
@@ -82,6 +83,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
           keyTerms {
             shorthandBusinessName
             securities
+            equityClass
             industry
             city
             state
@@ -127,6 +129,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
           keyTerms {
             shorthandBusinessName
             securities
+            equityClass
             industry
             city
             state
