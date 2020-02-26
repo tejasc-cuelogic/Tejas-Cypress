@@ -1,7 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Header, Button, Divider, Confirm, Icon, Popup, Grid } from 'semantic-ui-react';
+import { Form, Header, Button, Divider, Confirm, Icon, Grid } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
 import { FormInput, MaskedInput, FormTextarea, DropZoneConfirm as DropZone, AutoComplete, FormCheckbox, ImageCropper, FormDropDown } from '../../../../../../theme/form';
 import { Image64, PopUpModal } from '../../../../../../theme/shared';

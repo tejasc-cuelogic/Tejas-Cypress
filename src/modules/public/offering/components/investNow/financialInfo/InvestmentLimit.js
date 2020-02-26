@@ -9,11 +9,10 @@ const isMobile = document.documentElement.clientWidth < 768;
 const InvestmentLimit = props => (
   <>
     <Header as={props.changeInvest ? 'h6' : 'h4'} textAlign={props.changeInvest ? '' : 'center'}>
-      Your
-      {Helper.MoneyMathDisplayCurrency(props.getCurrentLimitForAccount || 0, false)}
+      Your{' '}
       <PopUpModal
         wide
-        customTrigger={<span className="popup-label">{' '}investment limit</span>}
+        customTrigger={<span className="popup-label">investment limit</span>}
         content={(
           <span>
             Under Regulation Crowdfunding, you have a limit as to how much you may invest
@@ -27,7 +26,7 @@ const InvestmentLimit = props => (
         hoverable
       />
       :{' '}
-      {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0, false)}
+      {Helper.MoneyMathDisplayCurrency(props.getCurrentLimitForAccount || 0, false)}
       <Link to={props.changeInvest ? 'change-investment-limit' : `${props.match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
     </Header>
     {props.changeInvest
