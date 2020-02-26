@@ -49,17 +49,7 @@ export default class PaymentDetails extends Component {
     const { inProgress } = this.props.uiStore;
     const { paymentType } = this.props.match.params;
     const security = get(selectedOffering, 'offering.keyTerms.securities');
-    const formMeta = ['REVENUE_SHARING_NOTE'].includes(security) ? ['anticipatedOpenDate', 'paymentStartDateCalc', 'operationsDate', 'minPaymentStartDateCalc'] : ['paymentStartDateCalc'];
-    const amountDue = (
-      <MaskedInput
-        prefix="$ "
-        currency
-        type="text"
-        name="amountDue"
-        changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM')}
-        fielddata={PAYMENT_FRM.fields.amountDue}
-      />
-    );
+    const formMeta = ['REVENUE_SHARING_NOTE'].includes(security) ? ['anticipatedOpenDate', 'minPaymentStartDateCalc', 'operationsDate', 'paymentStartDateCalc'] : ['paymentStartDateCalc'];
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -97,7 +87,7 @@ export default class PaymentDetails extends Component {
                 fielddata={PAYMENT_FRM.fields.startupPeriod}
                 onkeyup={() => this.calculateFormula(security, 'startupPeriod')}
               />
-              {['REVENUE_SHARING_NOTE'].includes(security) && amountDue}
+              {['REVENUE_SHARING_NOTE'].includes(security) && <div className="field">{}</div>}
               {formMeta.map(field => (
                 <MaskedInput
                   displayMode={['paymentStartDateCalc', 'minPaymentStartDateCalc'].includes(field)}
@@ -107,7 +97,10 @@ export default class PaymentDetails extends Component {
                   placeHolder={field === 'operationsDate' ? 'Actual Opening Date' : PAYMENT_FRM.fields[field].placeHolder}
                   fielddata={PAYMENT_FRM.fields[field]}
                   changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'formatted')}
-                  onkeyup={() => this.calculateFormula(security, field)}
+                  onkeyup={() => {
+                    this.calculateFormula(security, field);
+                    this.calculateFormula(security, field === 'anticipatedOpenDate' ? 'actualOpeningDate' : 'anticipatedOpenDate');
+                  }}
                   dateOfBirth
                 />
               ))}
@@ -137,7 +130,14 @@ export default class PaymentDetails extends Component {
                 changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'formatted')}
                 dateOfBirth
               />
-              {['TERM_NOTE'].includes(security) && amountDue}
+              <MaskedInput
+                prefix="$ "
+                currency
+                type="text"
+                name="amountDue"
+                changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM')}
+                fielddata={PAYMENT_FRM.fields.amountDue}
+              />
               </>
               )}
               {['issuers'].includes(paymentType)
