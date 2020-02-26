@@ -99,7 +99,7 @@ export default class ConfirmPhoneNumber extends Component {
     } = this.props.identityStore;
     const { errors, editMode, responsiveVars, inProgress } = this.props.uiStore;
     if (isOptConfirmed) {
-      return <SuccessScreen successMsg="Your phone number has been updated." handleContinue={this.handleContinue} />;
+      return <SuccessScreen handleCloseModal={this.handleCloseModal} successMsg="Your phone number has been updated." handleContinue={this.handleContinue} />;
     }
     return (
       <NsModal

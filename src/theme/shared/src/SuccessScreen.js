@@ -6,6 +6,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 const SuccessScreen = ({ successMsg, handleContinue }) => (
   <NsModal
     open
+    closeOnDimmerClick={false}
+    onClose={handleContinue}
     headerLogo
     borderedHeader
     isProgressHeaderDisable
