@@ -72,6 +72,7 @@ query getOfferingList($filters: OfferingListFilterInputType){
         shorthandBusinessName
         legalBusinessName
         securities
+        equityClass
         industry
         state
         city
@@ -472,7 +473,7 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
       frequencyOfPayments
       priceCopy
       premoneyValuation
-      equityUnitType
+      equityClass
       securities
       securityInterest
       securitiesOwnershipPercentage

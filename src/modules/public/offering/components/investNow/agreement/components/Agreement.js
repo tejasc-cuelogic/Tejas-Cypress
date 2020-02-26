@@ -125,7 +125,7 @@ export default class Agreement extends React.Component {
     const { uiStore, match } = this.props;
     const { inProgress } = uiStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
-    const { campaign } = this.props.campaignStore;
+    const { campaign, campaignStatus } = this.props.campaignStore;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     const offeringRegulationType = get(campaign, 'keyTerms.regulation');
     const { currentInvestmentStatus } = this.props.accreditationStore;
@@ -134,10 +134,7 @@ export default class Agreement extends React.Component {
     const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : regulationCheck === 'BD_506B' ? 'Rule 506(b) of Regulation D' : 'Regulation Crowdfunding';
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
-    const offeringSecurityType = get(campaign, 'keyTerms.securities');
-    const agreementStatement = includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) ? 'Purchase Agreement and Investor Proxy Agreement' : includes(['REAL_ESTATE'], offeringSecurityType) ? 'LLC Agreement and Subscription Agreement' : includes(['SAFE'], offeringSecurityType) ? 'SAFE' : 'Note Purchase Agreement';
-    const isOfferingPreferredEquity = !!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType);
-
+    const agreementStatement = campaignStatus.isPreferredEquity ? 'Purchase Agreement and Investor Proxy Agreement' : campaignStatus.isRealEstate ? 'LLC Agreement and Subscription Agreement' : campaignStatus.isSafe ? 'SAFE' : 'Note Purchase Agreement';
     return (
       <>
         <Modal open={this.state.open} closeOnDimmerClick={false} size="mini">
@@ -187,7 +184,7 @@ export default class Agreement extends React.Component {
             <div style={{ display: this.state.showDocuSign || this.state.showAgreementPdf ? 'none' : 'block' }}>
               <Header as="h3" className="mb-40">
                 Let&#39;s confirm your investment.<br />You are investing
-                <span className="positive-text"> {isOfferingPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
+                <span className="positive-text"> {campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
               </Header>
               <Form
                 error={(this.state.showError

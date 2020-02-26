@@ -27,7 +27,7 @@ export default class ConfirmLoginModal extends React.Component {
         <Modal size="small" open closeIcon onClose={this.handleCloseModal}>
           <Modal.Content className="relaxed center-align">
             <Header as="h3">Sorry!</Header>
-            <Header as="h4">{`You must be logged in as an Investor in order to ${isInvestNow ? 'Invest' : 'Post a comment'}`}</Header>
+            <Header as="h4">{`You must be logged in as an Investor in order to ${isInvestNow ? 'invest' : 'post a comment'}`}</Header>
             <Button primary className="mt-40" content="Login as an Investor" onClick={this.handleLogin} />
           </Modal.Content>
         </Modal>
