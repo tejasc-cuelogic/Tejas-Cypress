@@ -24,9 +24,12 @@ export default class Congratulation extends React.Component {
   }
 
   handleCloseModal = () => {
+    const { investAccTypes } = this.props.investmentStore;
+    const accountType = investAccTypes && investAccTypes.value ? investAccTypes.value : '-';
+    const accountRedirectURL = accountType && accountType !== '-' ? `/dashboard/account-details/${accountType}/portfolio` : '/dashboard/setup';
     this.props.investmentStore.resetData();
     this.props.accreditationStore.resetUserAccreditatedStatus();
-    this.props.history.push(`${this.props.refLink}`);
+    this.props.history.push(`${accountRedirectURL}`);
   }
 
   handleCloseModalWithRefferalLink = (e) => {
