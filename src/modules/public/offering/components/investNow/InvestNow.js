@@ -55,7 +55,6 @@ export default class InvestNow extends React.Component {
 
   componentWillUnmount() {
     const { changeInvest } = this.props;
-    this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
     const isUpdateScreen = changeInvest;
     const reflectedURL = this.props.history.location.pathname;
     const matchURL = this.props.match.url;
@@ -68,6 +67,7 @@ export default class InvestNow extends React.Component {
       if (!reflectedURL.includes('agreement')) {
         this.props.accreditationStore.setFieldVal('userAccredetiationState', null);
         this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
+        this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
       }
       this.props.campaignStore.setFieldValue('offeringUUID', null);
     }

@@ -44,6 +44,7 @@ export default class Agreement extends React.Component {
     const redirectURL = this.props.history.location.pathname;
     if (!redirectURL.includes('change-investment-limit') && !redirectURL.includes('agreement')) {
       this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
+      this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
     }
   }
 
