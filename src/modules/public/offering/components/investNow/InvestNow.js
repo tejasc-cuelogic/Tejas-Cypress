@@ -54,8 +54,8 @@ export default class InvestNow extends React.Component {
   }
 
   componentWillUnmount() {
-    const { changeInvest } = this.props;
     this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
+    const { changeInvest } = this.props;
     const isUpdateScreen = changeInvest;
     const reflectedURL = this.props.history.location.pathname;
     const matchURL = this.props.match.url;
@@ -71,6 +71,7 @@ export default class InvestNow extends React.Component {
       }
       this.props.campaignStore.setFieldValue('offeringUUID', null);
     }
+    window.removeEventListener('message', this.handleIframeTask);
   }
 
   handleIframeTask = (e) => {
