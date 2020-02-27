@@ -399,6 +399,13 @@ export const KEY_TERMS = {
     rule: 'numeric',
     placeHolder: 'Enter here',
   },
+  classThreshold: {
+    value: '',
+    label: 'Class Threshold',
+    error: undefined,
+    rule: 'optional|numeric',
+    placeHolder: 'Enter here',
+  },
   equityClass: {
     value: 'CLASS_A_SHARES',
     values: [

@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Table, Accordion, Button, Card, Header } from 'semantic-ui-react';
 import { get, includes } from 'lodash';
+import money from 'money-math';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
 import { STAGES } from '../../../../../../services/constants/admin/offerings';
-import { INDUSTRY_TYPES_ICONS, CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
+import { INDUSTRY_TYPES_ICONS, CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM, CAMPAIGN_KEYTERMS_EQUITY_CLASS } from '../../../../../../constants/offering';
 import { DateTimeFormat, InlineLoader, PopUpModal } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -71,12 +72,21 @@ const handleActions = (data) => {
   ));
 };
 
-const getSecurityTitle = (securities, equityClass) => {
+const getSecurityTitle = (securities, equityClass, investorInvestedAmount, classThreshold = 0) => {
   let text = CAMPAIGN_KEYTERMS_SECURITIES[securities] || 'N/A';
   if (securities === 'EQUITY' && equityClass === 'PREFERRED') {
     text = CAMPAIGN_KEYTERMS_SECURITIES.PREFERRED_EQUITY_506C;
   } else if (securities === 'EQUITY' && equityClass === 'LLC_MEMBERSHIP_UNITS') {
     text = CAMPAIGN_KEYTERMS_SECURITIES.REAL_ESTATE;
+  } else if (securities === 'EQUITY' && equityClass === 'PARALLEL_CLASS_SHARES') {
+    // check conditions
+    if (money.cmp(investorInvestedAmount, classThreshold) < 0) {
+      text = CAMPAIGN_KEYTERMS_EQUITY_CLASS.CLASS_B_SHARES;
+    } else {
+      text = CAMPAIGN_KEYTERMS_EQUITY_CLASS.CLASS_A_SHARES;
+    }
+  } else if (securities === 'EQUITY' && ['CLASS_A_SHARES', 'CLASS_B_SHARES'].includes(equityClass)) {
+    text = CAMPAIGN_KEYTERMS_EQUITY_CLASS[equityClass] || 'N/A';
   }
   return text;
 };
@@ -84,7 +94,7 @@ const getSecurityTitle = (securities, equityClass) => {
 const INVESTMENT_CARD_META = [
   { label: '', for: ['active', 'pending', 'completed'], children: data => <Icon className={`${INDUSTRY_TYPES_ICONS[get(data, 'offering.keyTerms.industry')]} offering-icon`} />, className: 'collapsing', isMobile: false, isDesktop: true, securityType: [] },
   { label: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], children: data => offeringName(data), isMobile: true, isDesktop: true, securityType: [] },
-  { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: (value, equityClass) => getSecurityTitle(value, equityClass), for: isMobile ? ['pending'] : ['pending', 'completed'], isMobile: true, isDesktop: true, securityType: [] },
+  { label: 'Investment Type', key: 'offering.keyTerms.securities', getRowValue: (value, equityClass, investorInvestedAmount, classThreshold) => getSecurityTitle(value, equityClass, investorInvestedAmount, classThreshold), for: isMobile ? ['pending'] : ['pending', 'completed'], isMobile: true, isDesktop: true, securityType: [] },
   { label: 'Investment Amount', key: 'investedAmount', for: isMobile ? ['pending'] : ['active', 'pending', 'completed'], getRowValue: value => Helper.CurrencyFormat(value), children: data => investedAmount(data), isMobile: true, isDesktop: true, className: 'text-capitalize', securityType: [] },
   { label: 'Close Date', key: 'offering.closureSummary.hardCloseDate', for: ['active', 'completed'], children: data => closeDate(data), isMobile: true, isDesktop: true, securityType: [] },
   { label: 'Investment Multiple', key: 'offering.closureSummary.keyTerms.multiple', for: ['active'], getRowValue: value => `${value}x`, isMobile: true, isDesktop: true, securityType: ['REVENUE_SHARING_NOTE'] },
@@ -122,7 +132,7 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
         <Header as="h6" className="mt-0" onClick={toggleAccordion}>
           <Icon className={`ns-chevron-${active ? 'down' : 'right'}`} color="green" />
           {get(data, 'offering.keyTerms.shorthandBusinessName') || 'N/A'}
-          <Header.Subheader>{getSecurityTitle(get(data, 'offering.keyTerms.securities'), get(data, 'offering.keyTerms.equityClass'))}</Header.Subheader>
+          <Header.Subheader>{getSecurityTitle(get(data, 'offering.keyTerms.securities'), get(data, 'offering.keyTerms.equityClass'), get(data, 'investedAmount'), get(data, 'offering.keyTerms.classThreshold'))}</Header.Subheader>
         </Header>
         {Helper.CurrencyFormat(data.investedAmount)}
       </Accordion.Title>
@@ -133,7 +143,7 @@ const InvestmentCard = ({ data, listOf, viewAgreement, isAccountFrozen, handleIn
               <Table.Row>
                 <Table.Cell collapsing>{row.label}</Table.Cell>
                 <Table.Cell className="grey-header right-align">
-                  {row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key), get(data, 'offering.keyTerms.equityClass')) : 'N/A'
+                  {row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key), get(data, 'offering.keyTerms.equityClass'), get(data, 'investedAmount'), get(data, 'offering.keyTerms.classThreshold')) : 'N/A'
                     : get(data, row.key) || 'N/A'
                   }
                 </Table.Cell>
@@ -193,7 +203,7 @@ const InvestmentList = (props) => {
                 {header.map(row => (
                   <Table.Cell verticalAlign="middle" className={row.className}>
                     {row.children ? row.children(data)
-                      : row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key), get(data, 'offering.keyTerms.equityClass')) : 'N/A'
+                      : row.getRowValue ? get(data, row.key) ? row.getRowValue(get(data, row.key), get(data, 'offering.keyTerms.equityClass'), get(data, 'investedAmount'), get(data, 'offering.keyTerms.classThreshold')) : 'N/A'
                         : get(data, row.key) || 'N/A'
                     }
                   </Table.Cell>
