@@ -80,7 +80,7 @@ const getSecurityTitle = (securities, equityClass, investorInvestedAmount, class
     text = CAMPAIGN_KEYTERMS_SECURITIES.REAL_ESTATE;
   } else if (securities === 'EQUITY' && equityClass === 'PARALLEL_CLASS_SHARES') {
     // check conditions
-    if (money.cmp(investorInvestedAmount, classThreshold) < 0) {
+    if (money.cmp(investorInvestedAmount, money.floatToAmount(classThreshold)) < 0) {
       text = CAMPAIGN_KEYTERMS_EQUITY_CLASS.CLASS_B_SHARES;
     } else {
       text = CAMPAIGN_KEYTERMS_EQUITY_CLASS.CLASS_A_SHARES;
