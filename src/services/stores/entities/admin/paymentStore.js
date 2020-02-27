@@ -69,11 +69,26 @@ export class PaymentStore extends DataModelStore {
       this.setFieldValue('data', ClientDb.initiateDb(data, true));
     }
 
-    getOfferingBySlug = (id) => {
+    getOfferingBySlug = (id, paymentType) => {
       const res = this.data.find(payment => payment.offering.offeringSlug === id);
       this.selectedOffering = res;
+      this.updatePaymentDetailsFormRules(paymentType);
       this.PAYMENT_FRM = Validator.setFormData(this.PAYMENT_FRM, res);
       this.validateForm('PAYMENT_FRM');
+    }
+
+    updatePaymentDetailsFormRules = (tab) => {
+      const securities = get(this.selectedOffering, 'offering.keyTerms.securities');
+      let ruleDateList = [];
+      if (tab === 'issuers') {
+        ruleDateList = ['expectedOpsDate', 'operationsDate', 'expectedPaymentDate', 'firstPaymentDate'];
+      } else if (tab === 'tracker' && securities === 'REVENUE_SHARING_NOTE') {
+        ruleDateList = ['anticipatedOpenDate', 'operationsDate'];
+      }
+      forEach(this.PAYMENT_FRM.fields, (f, key) => {
+        action(this.PAYMENT_FRM.fields[key].rule = key === 'shorthandBusinessName' ? 'required' : ruleDateList.includes(key) ? 'date' : 'optional');
+        return false;
+      });
     }
 
     updatePayment = type => new Promise((resolve) => {
@@ -303,6 +318,7 @@ decorate(PaymentStore, {
   sortOrderRP: observable,
   sortOrderTN: observable,
   sortOrderRSN: observable,
+  updatePaymentDetailsFormRules: action,
   setSortingOrder: action,
   initRequest: action,
   getOfferingBySlug: action,
