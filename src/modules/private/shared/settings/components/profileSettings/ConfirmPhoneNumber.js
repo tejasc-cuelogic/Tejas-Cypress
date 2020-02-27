@@ -130,7 +130,7 @@ export default class ConfirmPhoneNumber extends Component {
               format="(###) ###-####"
               readOnly={!editMode}
               displayMode={!editMode}
-              changed={personalInfoMaskedChange}
+              changed={(values, name) => personalInfoMaskedChange(values, name, 'ID_VERIFICATION_FRM')}
               containerclassname="display-only no-border"
               className="display-only"
               phoneNumberDisplayMode

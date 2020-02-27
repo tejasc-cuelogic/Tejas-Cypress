@@ -18,7 +18,7 @@ export default class MigratedUserPhoneNumber extends Component {
       ID_VERIFICATION_FRM,
     } = this.props.identityStore;
     const { value } = ID_VERIFICATION_FRM.fields.phoneNumber;
-    personalInfoMaskedChange({ value }, 'phoneNumber');
+    personalInfoMaskedChange({ value }, 'phoneNumber', 'ID_VERIFICATION_FRM');
     // validateForm('ID_VERIFICATION_FRM');
   }
 
@@ -67,7 +67,7 @@ export default class MigratedUserPhoneNumber extends Component {
                 name="phoneNumber"
                 fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
                 format="(###) ###-####"
-                changed={personalInfoMaskedChange}
+                changed={(values, name) => personalInfoMaskedChange(values, name, 'ID_VERIFICATION_FRM')}
                 className="display-only  no-border"
                 phoneNumberDisplayMode
                 showerror
