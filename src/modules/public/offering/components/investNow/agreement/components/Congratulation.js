@@ -11,6 +11,7 @@ import Helper from '../../../../../../../helper/utility';
 export default class Congratulation extends React.Component {
   constructor(props) {
     super(props);
+    this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
     if (this.props.changeInvestment) {
       this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
     } else {
@@ -21,12 +22,17 @@ export default class Congratulation extends React.Component {
   componentWillUnmount() {
     this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
+    this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
   }
 
   handleCloseModal = () => {
+    const { investAccTypes } = this.props.investmentStore;
+    const accountType = investAccTypes && investAccTypes.value ? investAccTypes.value : '-';
+    const accountRedirectURL = accountType && accountType !== '-' ? `/dashboard/account-details/${accountType}/portfolio` : '/dashboard/setup';
+    const redirectUrl = this.props.refLink || accountRedirectURL;
     this.props.investmentStore.resetData();
     this.props.accreditationStore.resetUserAccreditatedStatus();
-    this.props.history.push(`${this.props.refLink}`);
+    this.props.history.push(`${redirectUrl}`);
   }
 
   handleCloseModalWithRefferalLink = (e) => {
