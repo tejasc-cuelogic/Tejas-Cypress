@@ -124,6 +124,9 @@ export class FactoryStore extends DataModelStore {
   formChangeForPlugin = (e, res, form, subForm = false) => {
     if (subForm) {
       this[form.parentForm][form.childForm] = Validator.onChange(this[form.parentForm][form.childForm], Validator.pullValues(e, res));
+      if (form.childForm === 'REQUESTFACTORY' && this.REQUESTFACTORY_FRM.fields.plugin.value === 'GOLDSTAR_SERVICE' && res.name === 'methodName') {
+        this.setDefaultValueForPayload();
+      }
     } else if (includes(['REQUESTFACTORY_FRM', 'PROCESSFACTORY_FRM', 'FILEFACTORY_FRM'], form) && includes(['plugin', 'method'], res.name)) {
       const currentSelectedPlugin = Validator.pullValues(e, res).value;
       this[form] = Validator.onChange(this[form], Validator.pullValues(e, res));
@@ -399,6 +402,19 @@ export class FactoryStore extends DataModelStore {
         break;
     }
     return formElement;
+  }
+
+  setDefaultValueForPayload = () => {
+    const dynamicFormfields = { ...this.DYNAMCI_PAYLOAD_FRM.REQUESTFACTORY.fields };
+    const formObj = {
+      parentForm: 'DYNAMCI_PAYLOAD_FRM',
+      childForm: 'REQUESTFACTORY',
+    };
+    const currentMethod = dynamicFormfields.methodName.value;
+    const defulatValues = [...dynamicFormfields.methodPayload.defaultValues];
+    const defaultPayloadObj = find(defulatValues, o => o.key === currentMethod);
+    this.setFormData(formObj.parentForm, 'methodPayload', defaultPayloadObj.value, formObj.childForm);
+    // console.log(defaultPayloadObj);
   }
 }
 
