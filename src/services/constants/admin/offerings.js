@@ -88,6 +88,38 @@ export const KEY_TERMS = {
     rule: 'string',
     placeHolder: 'Choose here',
   },
+  classThreshold: {
+    value: '',
+    label: 'Class Threshold',
+    error: undefined,
+    rule: 'optional|numeric',
+    placeHolder: 'Enter here',
+  },
+  equityClass: {
+    value: 'CLASS_A_SHARES',
+    values: [
+      { key: 'Series NS Preferred Units', value: 'PREFERRED', text: 'Series NS Preferred Units' },
+      { key: 'LLC Membership Interests', value: 'LLC_MEMBERSHIP_UNITS', text: 'LLC Membership Interests' },
+      { key: 'Class A Shares', value: 'CLASS_A_SHARES', text: 'Class A Shares' },
+      { key: 'Class B Shares', value: 'CLASS_B_SHARES', text: 'Class B Shares' },
+      { key: 'Class A and B Shares', value: 'PARALLEL_CLASS_SHARES', text: 'Class A and B Shares' },
+    ],
+    label: 'Equity Class',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Choose here',
+  },
+  equityUnitType: {
+    value: 'share',
+    values: [
+      { key: 'share', value: 'share', text: 'Shares' },
+      { key: 'unit', value: 'unit', text: 'Units' },
+    ],
+    label: 'Equity unit type',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Choose here',
+  },
   securityInterest: {
     value: '',
     label: 'Security Interest',
@@ -398,29 +430,6 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
-  },
-  equityClass: {
-    value: 'CLASS_A_SHARES',
-    values: [
-      { key: 'Series NS Preferred Units', value: 'PREFERRED', text: 'Series NS Preferred Units' },
-      { key: 'LLC Membership Interests', value: 'LLC_MEMBERSHIP_UNITS', text: 'LLC Membership Interests' },
-      { key: 'Class A Shares', value: 'CLASS_A_SHARES', text: 'Class A Shares' },
-      { key: 'Class B Shares', value: 'CLASS_B_SHARES', text: 'Class B Shares' },
-      { key: 'Class A and B Shares', value: 'PARALLEL_CLASS_SHARES', text: 'Class A and B Shares' },
-    ],
-    label: 'Equity Class',
-    error: undefined,
-    rule: 'optional',
-  },
-  equityUnitType: {
-    value: 'share',
-    values: [
-      { key: 'share', value: 'share', text: 'Shares' },
-      { key: 'unit', value: 'unit', text: 'Units' },
-    ],
-    label: 'Equity unit type',
-    error: undefined,
-    rule: 'optional',
   },
   premoneyValuation: {
     value: null,
