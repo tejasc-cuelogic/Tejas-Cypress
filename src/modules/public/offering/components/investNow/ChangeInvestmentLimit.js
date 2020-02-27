@@ -15,6 +15,8 @@ class ChangeInvestmentLimit extends Component {
   constructor(props) {
     super(props);
     this.props.investmentStore.setInvestmentLimitData();
+    this.props.investmentStore.resetFormErrors('INVESTMONEY_FORM');
+    this.props.investmentStore.setFieldValue('disableNextbtn', true);
   }
 
   changeInvestmentLimit = () => {
