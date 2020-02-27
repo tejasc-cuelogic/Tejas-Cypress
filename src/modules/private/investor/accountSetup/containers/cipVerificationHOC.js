@@ -21,6 +21,15 @@ function cipVerificationHOC(WrappedComponent) {
       this.props.history.push('/dashboard/setup');
     }
 
+    handleBack = (isAddressOrPhoneFailure = undefined) => {
+      const { setFieldValue, cipBackUrl } = this.props.identityStore;
+      if (isAddressOrPhoneFailure) {
+        setFieldValue(isAddressOrPhoneFailure, false);
+      }
+      setFieldValue('cipErrors', null);
+      this.props.history.push(cipBackUrl.pop());
+    }
+
     handleCipExpiration = async () => {
       let url;
       const { phoneVerification } = this.props.userDetailsStore.signupStatus;
@@ -96,14 +105,14 @@ function cipVerificationHOC(WrappedComponent) {
     }
 
     render() {
-      const commonMethods = { closeModal: this.handleCloseModal, handleCipExpiration: this.handleCipExpiration, redirectTo: this.redirectTo, handleCip: this.handleCip, addressTemplate: this.addressTemplate };
+      const cipUtility = { closeModal: this.handleCloseModal, handleCipExpiration: this.handleCipExpiration, redirectTo: this.redirectTo, handleCip: this.handleCip, addressTemplate: this.addressTemplate, handleBack: this.handleBack };
       const { inProgress } = this.props.uiStore;
       const { signUpLoading, cipErrors } = this.props.identityStore;
       const elements = { FormInput, FormDropDown, MaskedInput };
       return (
         <WrappedComponent
           {...this.props}
-          commonMethods={commonMethods}
+          cipUtility={cipUtility}
           NsModal={NsModal}
           elements={elements}
           ListErrors={ListErrors}

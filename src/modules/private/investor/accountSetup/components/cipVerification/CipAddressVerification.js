@@ -16,18 +16,15 @@ class CipAddressVerification extends React.Component {
 
   handleClose = () => {
     this.props.identityStore.setFieldValue('isAddressFailed', false);
-    this.props.commonMethods.closeModal();
+    this.props.cipUtility.closeModal();
   }
 
   handleBack = () => {
-    const { setFieldValue, cipBackUrl } = this.props.identityStore;
-    setFieldValue('isAddressFailed', false);
-    setFieldValue('cipErrors', null);
-    this.props.history.push(cipBackUrl.pop());
+    this.props.cipUtility.handleBack('isAddressFailed');
   }
 
   render() {
-    const { commonMethods, isLoading, NsModal } = this.props;
+    const { cipUtility, isLoading, NsModal } = this.props;
     const { ID_VERIFICATION_FRM, setAddressFieldsForUserVerification, personalInfoChange } = this.props.identityStore;
     return (
       <NsModal
@@ -41,7 +38,7 @@ class CipAddressVerification extends React.Component {
             <Header as="h4">Verify Residential Address</Header>
             <p>Unfortunately, we were unable to verify your address. Please review and update your address here.</p>
             <Divider hidden />
-            <Form error onSubmit={() => commonMethods.handleCip('addressFail')}>
+            <Form error onSubmit={() => cipUtility.handleCip('addressFail')}>
               <AutoComplete
                 name="street"
                 fielddata={ID_VERIFICATION_FRM.fields.street}
@@ -50,7 +47,7 @@ class CipAddressVerification extends React.Component {
                 placeHolder="Address"
               />
               <Form.Group widths={3}>
-                {commonMethods.addressTemplate('ID_VERIFICATION_FRM')}
+                {cipUtility.addressTemplate('ID_VERIFICATION_FRM')}
               </Form.Group>
               <p className="note">
                 <b>Note:</b> This sometimes occurs if you recently moved or if the address was zoned differently (e.g. as a commercial location) in the past. If this address is correct, please proceed by selecting the {'"'}Confirm{'"'} button.

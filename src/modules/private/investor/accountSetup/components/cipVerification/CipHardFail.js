@@ -31,7 +31,7 @@ class CipHardFail extends React.Component {
 
   handleUploadDocuments = async (e) => {
     e.preventDefault();
-    const { handleCipExpiration, redirectTo } = this.props.commonMethods;
+    const { handleCipExpiration, redirectTo } = this.props.cipUtility;
     this.props.identityStore.setSubmitVerificationDocs(true);
     this.props.identityStore.setFieldValue('signUpLoading', true);
     let { url } = await this.props.identityStore.verifyCipHardFail();
@@ -49,11 +49,11 @@ class CipHardFail extends React.Component {
   }
 
   render() {
-    const { commonMethods, NsModal, errors, ListErrors } = this.props;
+    const { cipUtility, NsModal, errors, ListErrors } = this.props;
     const { ID_VERIFICATION_DOCS_FRM } = this.props.identityStore;
     return (
       <NsModal
-        onClose={() => commonMethods.closeModal()}
+        onClose={() => cipUtility.closeModal()}
         back={this.handleBack}
         {...this.props}
       >
