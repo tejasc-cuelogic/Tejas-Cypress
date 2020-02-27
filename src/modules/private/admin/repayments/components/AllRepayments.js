@@ -8,7 +8,6 @@ import Helper from '../../../../../helper/utility';
 import { InlineLoader } from '../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
-import { DEV_FEATURE_ONLY } from '../../../../../constants/common';
 import ActionModal from './ActionModal';
 
 const repaymentMeta = [
@@ -182,9 +181,8 @@ export default class AllRepayments extends PureComponent {
                 w={[6]}
                 placeholder="Search by keyword or phrase"
                 more="no"
-                addon={(DEV_FEATURE_ONLY
-                  && (
-                    <Grid.Column width={10} textAlign="right">
+                addon={(
+                  <Grid.Column width={10} textAlign="right">
                       <Button color="green" floated="right" onClick={() => this.toggleVisibilityStatus('showActionModal')}>
                         Generate Admin Summary
                       </Button>
@@ -195,8 +193,7 @@ export default class AllRepayments extends PureComponent {
                         Send Issuer Draft Notice
                       </Button>
                     </Grid.Column>
-                  )
-                )}
+                  )}
               />
             </Grid.Row>
           </Grid>
