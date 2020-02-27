@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
-import { get, isEmpty, forEach, find, includes, keyBy } from 'lodash';
+import { get, isEmpty, forEach, find, includes, keyBy, has, pickBy, identity } from 'lodash';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import { adminListFilePlugins, getPluginList, adminInvokeRequest, adminFetchCronLogs, adminInvokeProcessorDriver, adminFetchRequestFactoryLogs, adminFetchProcessLogs, adminGenerateFile } from '../../queries/data';
 import Helper from '../../../../helper/utility';
@@ -77,11 +77,11 @@ export class FactoryStore extends DataModelStore {
         limit: this.requestState.perPage,
         jobId: jobId || '',
       } : {
-        search: keyword,
-        plugin: plugin || 'BOX_AUDIT',
-        limit: this.requestState.perPage,
-        jobId: jobId || '',
-      };
+            search: keyword,
+            plugin: plugin || 'BOX_AUDIT',
+            limit: this.requestState.perPage,
+            jobId: jobId || '',
+          };
       params = this.requestState.lek[`page-${this.requestState.page}`]
         ? { ...params, lek: this.requestState.lek[`page-${this.requestState.page}`] } : { ...params };
 
@@ -124,8 +124,19 @@ export class FactoryStore extends DataModelStore {
   formChangeForPlugin = (e, res, form, subForm = false) => {
     if (subForm) {
       this[form.parentForm][form.childForm] = Validator.onChange(this[form.parentForm][form.childForm], Validator.pullValues(e, res));
-      if (form.childForm === 'REQUESTFACTORY' && this.REQUESTFACTORY_FRM.fields.plugin.value === 'GOLDSTAR_SERVICE' && res.name === 'methodName') {
-        this.setDefaultValueForPayload();
+      const dynamicFormFields = { ...this[form.parentForm][form.childForm].fields };
+      const mappedArr = [];
+      Object.keys(dynamicFormFields).forEach((key) => {
+        const validObj = pickBy(dynamicFormFields[key], identity);
+        const hasKey = has(validObj, 'defaultValuesMapping');
+        if (hasKey) {
+          const mappedOBj = { mappedKey: key, mappedVal: dynamicFormFields[key].defaultValuesMapping };
+          mappedArr.push(mappedOBj);
+        }
+      });
+      const defaultValueMappedObj = find(mappedArr, o => o.mappedVal === res.name);
+      if (mappedArr.length > 0 && defaultValueMappedObj && !isEmpty(defaultValueMappedObj)) {
+        this.setDefaultValueForPayload(form, defaultValueMappedObj);
       }
     } else if (includes(['REQUESTFACTORY_FRM', 'PROCESSFACTORY_FRM', 'FILEFACTORY_FRM'], form) && includes(['plugin', 'method'], res.name)) {
       const currentSelectedPlugin = Validator.pullValues(e, res).value;
@@ -404,17 +415,13 @@ export class FactoryStore extends DataModelStore {
     return formElement;
   }
 
-  setDefaultValueForPayload = () => {
-    const dynamicFormfields = { ...this.DYNAMCI_PAYLOAD_FRM.REQUESTFACTORY.fields };
-    const formObj = {
-      parentForm: 'DYNAMCI_PAYLOAD_FRM',
-      childForm: 'REQUESTFACTORY',
-    };
-    const currentMethod = dynamicFormfields.methodName.value;
-    const defulatValues = [...dynamicFormfields.methodPayload.defaultValues];
+  setDefaultValueForPayload = (formObj, defaultValueMappedObj) => {
+    const dynamicFormfields = { ...this[formObj.parentForm][formObj.childForm].fields };
+    const currentMethod = dynamicFormfields[defaultValueMappedObj.mappedVal].value;
+    // const currentMethod = dynamicFormfields.methodName.value;
+    const defulatValues = [...dynamicFormfields[defaultValueMappedObj.mappedKey].defaultValues];
     const defaultPayloadObj = find(defulatValues, o => o.key === currentMethod);
-    this.setFormData(formObj.parentForm, 'methodPayload', defaultPayloadObj.value, formObj.childForm);
-    // console.log(defaultPayloadObj);
+    this.setFormData(formObj.parentForm, defaultValueMappedObj.mappedKey, defaultPayloadObj.value, formObj.childForm);
   }
 }
 
