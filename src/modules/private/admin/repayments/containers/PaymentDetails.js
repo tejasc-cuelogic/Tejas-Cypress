@@ -12,7 +12,7 @@ import { SECURITIES_VALUES } from '../../../../../services/constants/admin/offer
 export default class PaymentDetails extends Component {
   constructor(props) {
     super(props);
-    this.props.paymentStore.getOfferingBySlug(get(this.props, 'match.params.offeringSlug'));
+    this.props.paymentStore.getOfferingBySlug(get(this.props, 'match.params.offeringSlug'), get(this.props, 'match.params.paymentType'));
   }
 
   handleCloseModal = () => {
@@ -194,7 +194,7 @@ export default class PaymentDetails extends Component {
               )}
             <div className="center-align mt-20">
               <Button className="very relaxed red" content="Cancel" onClick={this.handleCloseModal} />
-              <Button primary className="very relaxed" disabled={!PAYMENT_FRM.meta.isValid} loading={inProgress} content="Save" onClick={this.handleUpdatePayment} />
+              <Button primary className="very relaxed" disabled={!PAYMENT_FRM.meta.isValid || inProgress} loading={inProgress} content="Save" onClick={this.handleUpdatePayment} />
             </div>
           </Form>
         </Modal.Content>
