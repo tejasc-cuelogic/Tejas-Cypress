@@ -37,6 +37,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
             shorthandBusinessName
             securities
             equityClass
+            classThreshold
             industry
             city
             state
@@ -84,6 +85,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
             shorthandBusinessName
             securities
             equityClass
+            classThreshold
             industry
             city
             state
@@ -130,6 +132,7 @@ query getInvestorAccountPortfolio($userId: String, $accountId: String!, $InFligh
             shorthandBusinessName
             securities
             equityClass
+            classThreshold
             industry
             city
             state
