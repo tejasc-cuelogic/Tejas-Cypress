@@ -96,3 +96,21 @@ export const updatePaymentIssuer = gql`
     }
   }
 `;
+
+export const adminPaymentSendIssuerDraftNotice = gql`
+  mutation adminPaymentSendIssuerDraftNotice{
+    adminPaymentSendIssuerDraftNotice
+  }
+`;
+
+export const adminPaymentSendGoldStarDraftInstructions = gql`
+  mutation adminPaymentSendGoldStarDraftInstructions{
+    adminPaymentSendGoldStarDraftInstructions
+  }
+`;
+
+export const adminPaymentGenerateAdminSummary = gql`
+  mutation adminPaymentGenerateAdminSummary($date: String!){
+    adminPaymentGenerateAdminSummary(date: $date)
+  }
+`;

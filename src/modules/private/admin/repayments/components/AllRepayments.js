@@ -9,6 +9,7 @@ import { InlineLoader } from '../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
 import { DEV_FEATURE_ONLY } from '../../../../../constants/common';
+import ActionModal from './ActionModal';
 
 const repaymentMeta = [
   { title: 'Offering', key: 'offering.keyTerms.shorthandBusinessName', applicable: ['REVENUE_SHARING_NOTE', 'TERM_NOTE', 'STARTUP_PERIOD', 'IN_REPAYMENT'], link: true },
@@ -128,6 +129,7 @@ export default class AllRepayments extends PureComponent {
     STARTUP_PERIOD: true,
     TERM_NOTE: true,
     REVENUE_SHARING_NOTE: true,
+    showActionModal: false,
   }
 
   constructor(props) {
@@ -164,26 +166,34 @@ export default class AllRepayments extends PureComponent {
   validDate = (data, field) => (get(data, field) && moment(get(data, field), 'MM/DD/YYYY', true).isValid() ? moment(get(data, field)).format('M/D/YY') : '');
 
   render() {
-    const { calculateFormula, termNotes, revenueSharingNotes, sortOrderRSN, sortOrderTN, repayments, sortOrderRP, startupPeriod, sortOrderSP } = this.props.paymentStore;
-    if (this.props.nsUiStore.loadingArray.includes('adminPaymentsIssuerList')) {
+    const { paymentCtaHandlers, calculateFormula, termNotes, revenueSharingNotes, sortOrderRSN, sortOrderTN, repayments, sortOrderRP, startupPeriod, sortOrderSP } = this.props.paymentStore;
+    const { loadingArray } = this.props.nsUiStore;
+    if (loadingArray.includes('adminPaymentsIssuerList')) {
       return <InlineLoader />;
     }
     return (
       <>
+        {this.state.showActionModal && <ActionModal toggleVisibilityStatus={this.toggleVisibilityStatus} showActionModal={this.state.showActionModal} />}
         <Form>
           <Grid stackable>
             <Grid.Row>
               <ByKeyword
                 change={this.executeSearch}
-                w={[11]}
+                w={[6]}
                 placeholder="Search by keyword or phrase"
                 more="no"
                 addon={(DEV_FEATURE_ONLY
                   && (
-                    <Grid.Column width={5} textAlign="right">
-                      <Button color="green" as={Link} floated="right" to="/dashboard/payments">
-                        Add New Repayment
-                    </Button>
+                    <Grid.Column width={10} textAlign="right">
+                      <Button color="green" floated="right" onClick={() => this.toggleVisibilityStatus('showActionModal')}>
+                        Generate Admin Summary
+                      </Button>
+                      <Button color="green" floated="right" loading={loadingArray.includes('adminPaymentSendGoldStarDraftInstructions')} disabled={loadingArray.includes('adminPaymentSendGoldStarDraftInstructions')} onClick={() => paymentCtaHandlers('adminPaymentSendGoldStarDraftInstructions')}>
+                        Send GoldStar Draft Instructions
+                      </Button>
+                      <Button color="green" floated="right" loading={loadingArray.includes('adminPaymentSendIssuerDraftNotice')} disabled={loadingArray.includes('adminPaymentSendIssuerDraftNotice')} onClick={() => paymentCtaHandlers('adminPaymentSendIssuerDraftNotice')}>
+                        Send Issuer Draft Notice
+                      </Button>
                     </Grid.Column>
                   )
                 )}
