@@ -259,6 +259,7 @@ export const getOfferingDetails = gql`
         targetInvestmentPeriod
         totalRoundSize
         equityClass
+        classThreshold
         equityUnitType
         roundType
         premoneyValuation
