@@ -73,12 +73,12 @@ export default class ClosureProcessStatus extends Component {
                 {!isEmpty(closureProcess) && Object.keys(closureProcess).map(key => (
                 (key !== '__typename')
                  && (
-                  <Grid.Column className="center-align"><Header as="h5">{capitalize(key.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</Header>
+                  <Grid.Column className="center-align" key={key}><Header as="h5">{capitalize(key.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</Header>
                     <div className="table-wrapper">
                     <Table unstackable basic="very">
                         <Table.Body>
                         {closureProcess[key] ? ['Status', 'Started', 'Finished'].map(k => (
-                            <Table.Row>
+                            <Table.Row key={k}>
                             <Table.Cell>{k}</Table.Cell>
                             <Table.Cell>
                                 {k === 'Status'
