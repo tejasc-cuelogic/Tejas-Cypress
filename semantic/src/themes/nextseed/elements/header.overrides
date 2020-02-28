@@ -115,3 +115,11 @@ h6.ui.header .sub.header{
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.header-with-button{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .ui.button.labeled{
+        padding: @7px;
+    }
+}
