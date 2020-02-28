@@ -33,10 +33,11 @@ function cipVerificationHOC(WrappedComponent) {
     handleCipExpiration = async () => {
       let url;
       const { phoneVerification } = this.props.userDetailsStore.signupStatus;
+      const { accountForWhichCipExpired, isUserVerified } = this.props.userDetailsStore;
+      const expiredAccountFromLocalStorage = window.sessionStorage.getItem('AccountCipExp');
+
       if (phoneVerification === 'DONE') {
-        const { accountForWhichCipExpired, isUserVerified } = this.props.userDetailsStore;
         this.props.uiStore.setFieldvalue('inProgressArray', []);
-        const expiredAccountFromLocalStorage = window.sessionStorage.getItem('AccountCipExp');
         if (window.sessionStorage.getItem('cipErrorMessage') && !isUserVerified) {
           url = await this.props.accountStore.accountProcessingWrapper(
             accountForWhichCipExpired || expiredAccountFromLocalStorage, { url: '/dashboard/setup/account-creation/' },

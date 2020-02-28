@@ -31,7 +31,7 @@ class CipPhoneVerification extends React.Component {
       <NsModal
         onClose={this.handleClose}
         closeOnEscape={false}
-        back={this.handleBack}
+        back={window.sessionStorage.getItem('AccountCipExp') === null && this.handleBack}
         {...this.props}
       >
         <Grid centered stackable className={isMobile ? 'full-width' : ''}>

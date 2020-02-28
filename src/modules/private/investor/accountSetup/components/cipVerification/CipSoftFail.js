@@ -45,7 +45,7 @@ class CipSoftFail extends React.Component {
     return (
       <NsModal
         onClose={() => cipUtility.closeModal()}
-        back="/dashboard/setup/cip"
+        back={window.sessionStorage.getItem('AccountCipExp') === null && '/dashboard/setup/cip'}
         {...this.props}
       >
         <Grid centered stackable className={isMobile ? 'full-width' : ''}>

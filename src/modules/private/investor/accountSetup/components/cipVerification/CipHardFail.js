@@ -54,7 +54,7 @@ class CipHardFail extends React.Component {
     return (
       <NsModal
         onClose={() => cipUtility.closeModal()}
-        back={this.handleBack}
+        back={window.sessionStorage.getItem('AccountCipExp') === null && this.handleBack}
         {...this.props}
       >
         <Grid centered stackable className={isMobile ? 'full-width' : ''}>
