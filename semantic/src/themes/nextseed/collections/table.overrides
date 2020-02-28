@@ -68,6 +68,15 @@
             }
         }
     }
+    tbody{
+        background:@neutral-offwhite;
+        tr.row-highlight{
+            background:@lightBlue !important;
+            td{
+                border-top:none;
+            }
+        }
+    }
     &.user-list{
         tr.locked{
             color:@neutral-offdark;
@@ -621,6 +630,9 @@
     }
     &.striped-table:not(.thead):nth-child(odd){
         background-color:@neutral-offwhite;
+    }
+    &.row-highlight{
+       background-color:@lightBlue !important;
     }
     &.categories-table{
         background-color:@neutral-offwhite;
