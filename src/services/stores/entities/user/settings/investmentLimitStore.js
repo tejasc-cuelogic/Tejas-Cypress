@@ -1,12 +1,12 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { mapValues, filter, find } from 'lodash';
+import { mapValues, filter, find, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { uiStore, userDetailsStore, campaignStore } from '../../../index';
+import { uiStore, userDetailsStore, campaignStore, investmentStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
-import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorTotalAmountInvested } from '../../../queries/investementLimits';
+import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorTotalAmountInvested, calculateCfLimit } from '../../../queries/investementLimits';
 import Helper from '../../../../../helper/utility';
 import { userDetailsQuery } from '../../../queries/users';
 
@@ -36,6 +36,8 @@ export class InvestmentLimitStore {
   @observable investNowError = false;
 
   @observable investorTotalAmountInvested = 0;
+
+  @observable calculatedCFLimitDetails = {};
 
   @action
   setFieldValue = (field, value) => {
@@ -163,6 +165,32 @@ export class InvestmentLimitStore {
       { name: limitField, value: this.currentLimit },
     );
   }
+
+  @action
+  calculateCfLimit = (form = null) => new Promise((resolve, reject) => {
+    uiStore.setProgress();
+    const { INVESTMENT_LIMITS_FORM } = investmentStore;
+    const investmentLimitForm = form ? this[form] : INVESTMENT_LIMITS_FORM;
+    const formData = mapValues(investmentLimitForm.fields, f => parseInt(f.value, 10));
+    const variables = { income: formData.annualIncome, netWorth: formData.netWorth, otherContributions: formData.cfInvestments };
+    this.calculatedCFLimitDetails = graphql({
+      client,
+      query: calculateCfLimit,
+      variables,
+      onFetch: (data) => {
+        if (get(data, 'calculateCfLimit') && !this.calculatedCFLimitDetails.loading) {
+          uiStore.setProgress(false);
+          this.setFieldValue('currentLimit', data.calculateCfLimit);
+          resolve();
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setProgress(false);
+        reject();
+      },
+    });
+  });
 
   // @action
   // setAccountsLimits = () => {

@@ -25,6 +25,11 @@ export default class UpdateInvestmentLimits extends Component {
     });
   }
 
+  investmentCalculate = () => {
+    const { calculateCfLimit } = this.props.investmentLimitStore;
+    calculateCfLimit('INVESTEMENT_LIMIT_META');
+  }
+
   render() {
     const errors = false;
     const { inProgress } = this.props.uiStore;
@@ -61,7 +66,7 @@ export default class UpdateInvestmentLimits extends Component {
                     value={fields[field].value}
                     fielddata={fields[field]}
                     changed={maskingFieldChange}
-                    // onblur={investmentCalculate}
+                    onblur={this.investmentCalculate}
                   />
                 ))
               }
@@ -74,8 +79,8 @@ export default class UpdateInvestmentLimits extends Component {
               }
               <div className="center-align mt-30">
                 <Button.Group>
-                  <Button type="button" onClick={this.handleCloseModal}>Cancel</Button>
-                  <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTEMENT_LIMIT_META.meta.isValid} onClick={this.updateInvestmentLimit} />
+                  <Button type="button" disabled={inProgress} onClick={this.handleCloseModal}>Cancel</Button>
+                  <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTEMENT_LIMIT_META.meta.isValid || inProgress} onClick={this.updateInvestmentLimit} />
                 </Button.Group>
               </div>
             </Form>

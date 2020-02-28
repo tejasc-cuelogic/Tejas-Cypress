@@ -48,3 +48,13 @@ export const getInvestNowHealthCheck = gql`
     }
   }
 `;
+
+export const calculateCfLimit = gql`
+  query calculateCfLimit($income: Float, $netWorth: Float, $otherContributions: Float) {
+    calculateCfLimit(
+      income: $income
+      netWorth: $netWorth
+      otherContributions: $otherContributions
+    )
+  }
+`;
