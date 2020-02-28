@@ -19,7 +19,13 @@ export default class Agreement extends React.Component {
       showError: false,
       showAgreementPdf: false,
     };
+    const { campaignStore, portfolioStore } = this.props;
     this.props.campaignStore.setFieldValue('inInvestmentFlow', true);
+    const offeringIdToUpdate = campaignStore.getOfferingId
+      ? campaignStore.getOfferingId : portfolioStore.currentOfferingId;
+      if (!offeringIdToUpdate || offeringIdToUpdate === '') {
+        this.props.history.push(`${this.props.refLink}`);
+      }
   }
 
   componentDidMount() {
