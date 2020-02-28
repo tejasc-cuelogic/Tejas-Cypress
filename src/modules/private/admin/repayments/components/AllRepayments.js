@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Card, Table, Button, Grid, Form, Icon, Header, Popup } from 'semantic-ui-react';
+import { Card, Table, Button, Grid, Form, Icon, Header, Popup, Confirm } from 'semantic-ui-react';
 import moment from 'moment';
 import { get } from 'lodash';
 import Helper from '../../../../../helper/utility';
@@ -129,6 +129,7 @@ export default class AllRepayments extends PureComponent {
     TERM_NOTE: true,
     REVENUE_SHARING_NOTE: true,
     showActionModal: false,
+    showConfirmModal: false,
   }
 
   constructor(props) {
@@ -142,7 +143,11 @@ export default class AllRepayments extends PureComponent {
   }
 
   toggleVisibilityStatus = (field) => {
-    this.setState({ [field]: !this.state[field] });
+    this.updateState(field, !this.state[field]);
+  }
+
+  updateState = (field, value) => {
+    this.setState({ [field]: value });
   }
 
   handleSort = (clickedColumn, key) => {
@@ -167,12 +172,13 @@ export default class AllRepayments extends PureComponent {
   render() {
     const { paymentCtaHandlers, calculateFormula, termNotes, revenueSharingNotes, sortOrderRSN, sortOrderTN, repayments, sortOrderRP, startupPeriod, sortOrderSP } = this.props.paymentStore;
     const { loadingArray } = this.props.nsUiStore;
+    const { showConfirmModal, showActionModal, STARTUP_PERIOD, IN_REPAYMENT, TERM_NOTE, REVENUE_SHARING_NOTE } = this.state;
     if (loadingArray.includes('adminPaymentsIssuerList')) {
       return <InlineLoader />;
     }
     return (
       <>
-        {this.state.showActionModal && <ActionModal toggleVisibilityStatus={this.toggleVisibilityStatus} showActionModal={this.state.showActionModal} />}
+        {showActionModal && <ActionModal toggleVisibilityStatus={this.toggleVisibilityStatus} showActionModal={showActionModal} />}
         <Form>
           <Grid stackable>
             <Grid.Row>
@@ -186,10 +192,10 @@ export default class AllRepayments extends PureComponent {
                       <Button color="green" size="small" floated="right" onClick={() => this.toggleVisibilityStatus('showActionModal')}>
                         Generate Admin Summary
                       </Button>
-                      <Button color="green" size="small" floated="right" loading={loadingArray.includes('adminPaymentSendGoldStarDraftInstructions')} disabled={loadingArray.includes('adminPaymentSendGoldStarDraftInstructions')} onClick={() => paymentCtaHandlers('adminPaymentSendGoldStarDraftInstructions')}>
+                      <Button color="green" size="small" floated="right" loading={loadingArray.includes('adminPaymentSendGoldStarDraftInstructions')} disabled={loadingArray.includes('adminPaymentSendGoldStarDraftInstructions')} onClick={() => this.updateState('showConfirmModal', 'adminPaymentSendGoldStarDraftInstructions')}>
                         Send GoldStar Draft Instructions
                       </Button>
-                      <Button color="green" size="small" floated="right" loading={loadingArray.includes('adminPaymentSendIssuerDraftNotice')} disabled={loadingArray.includes('adminPaymentSendIssuerDraftNotice')} onClick={() => paymentCtaHandlers('adminPaymentSendIssuerDraftNotice')}>
+                      <Button color="green" size="small" floated="right" loading={loadingArray.includes('adminPaymentSendIssuerDraftNotice')} disabled={loadingArray.includes('adminPaymentSendIssuerDraftNotice')} onClick={() => this.updateState('showConfirmModal', 'adminPaymentSendIssuerDraftNotice')}>
                         Send Issuer Draft Notice
                       </Button>
                     </Grid.Column>
@@ -212,7 +218,7 @@ export default class AllRepayments extends PureComponent {
                 getLink={this.getLink}
                 sortKey="sortOrderSP"
                 toggleVisibilityStatus={this.toggleVisibilityStatus}
-                stateToggle={this.state.STARTUP_PERIOD}
+                stateToggle={STARTUP_PERIOD}
               />
               <PaymentsList
                 headerTitle="In Repayment"
@@ -225,7 +231,7 @@ export default class AllRepayments extends PureComponent {
                 getLink={this.getLink}
                 sortKey="sortOrderRP"
                 toggleVisibilityStatus={this.toggleVisibilityStatus}
-                stateToggle={this.state.IN_REPAYMENT}
+                stateToggle={IN_REPAYMENT}
               />
             </>
             )
@@ -243,7 +249,7 @@ export default class AllRepayments extends PureComponent {
                 getLink={this.getLink}
                 sortKey="sortOrderTN"
                 toggleVisibilityStatus={this.toggleVisibilityStatus}
-                stateToggle={this.state.TERM_NOTE}
+                stateToggle={TERM_NOTE}
               />
               <PaymentsList
                 calculateFormula={calculateFormula}
@@ -257,10 +263,19 @@ export default class AllRepayments extends PureComponent {
                 getLink={this.getLink}
                 sortKey="sortOrderRSN"
                 toggleVisibilityStatus={this.toggleVisibilityStatus}
-                stateToggle={this.state.REVENUE_SHARING_NOTE}
+                stateToggle={REVENUE_SHARING_NOTE}
               />
             </>
           )}
+        <Confirm
+          header="Confirm"
+          content="Are you sure to continue with selected action?"
+          open={showConfirmModal}
+          onCancel={() => this.updateState('showConfirmModal', null)}
+          onConfirm={() => { paymentCtaHandlers(showConfirmModal); this.updateState('showConfirmModal', null); }}
+          size="mini"
+          className="deletion"
+        />
       </>
     );
   }

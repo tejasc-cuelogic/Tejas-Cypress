@@ -19,7 +19,7 @@ const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr
 const SortableItem = SortableElement(({
   offering, handleAction, stage,
 }) => (
-    <div className="row-wrap striped-table">
+    <div className={(offering.isAvailablePublicly) ? 'row-wrap striped-table' : 'row-wrap row-highlight striped-table'}>
       <div className="balance first-column">
         <DragHandle />
         <Link to={`/dashboard/offering/${offering.offeringSlug}`}>
