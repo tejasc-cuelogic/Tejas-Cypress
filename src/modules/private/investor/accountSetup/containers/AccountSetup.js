@@ -9,15 +9,11 @@ import StickyNotification from '../components/StickyNotification';
 import ProgressCard from '../components/ProgressCard';
 import EstablishProfile from './establishProfile';
 import AccountCreation from './accountCreation';
-import { InlineLoader, lazyRetry, SuspenseBoundary } from '../../../../../theme/shared';
+import { InlineLoader, SuspenseBoundary } from '../../../../../theme/shared';
+import CipVerification from './cipVerification/index';
 import {
   INVESTMENT_ACCOUNT_TYPES,
 } from '../../../../../constants/account';
-
-import { CIP_ROUTES } from '../../../../../constants/NavigationMeta';
-
-const getModule = component => lazyRetry(() => import(`../components/cipVerification/${component}`));
-
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore', 'uiStore', 'userStore')
@@ -84,7 +80,7 @@ export default class AccountSetup extends Component {
         }
         <SuspenseBoundary>
           <Switch>
-            {CIP_ROUTES.map(item => (<Route exact path={`${match.url}/${item.path}`} component={getModule(item.component)} />))}
+            <Route path={`${match.url}/cip`} component={CipVerification} />
             <Route exact path={`${match.url}/phone-verification`} component={ConfirmPhoneNumber} />
             <Route path={`${match.url}/establish-profile`} component={EstablishProfile} />
             <Route path={`${match.url}/account-creation`} component={AccountCreation} />

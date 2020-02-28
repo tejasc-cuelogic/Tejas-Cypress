@@ -13,7 +13,7 @@ import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
 import { fileUpload } from '../../../actions';
 import { INVESTOR_URLS } from '../../../constants/url';
-import identityHelper from '../../../../modules/private/investor/accountSetup/containers/cipVerification/helper';
+import identityHelper from '../../../../modules/private/investor/accountSetup/containers/cipVerification/helper/index';
 import { US_STATES, FILE_UPLOAD_STEPS, US_STATES_FOR_INVESTOR } from '../../../../constants/account';
 import commonStore from '../commonStore';
 
