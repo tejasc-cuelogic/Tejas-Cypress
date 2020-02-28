@@ -266,7 +266,7 @@ class FormValidator {
         });
         currentForm.fields[field].splice(1);
       } else {
-        currentForm.fields[field].value = '';
+        currentForm.fields[field].value = currentForm.fields[field].default || '';
         if (currentForm.fields[field].objType === 'FileObjectType') {
           currentForm.fields[field].fileId = '';
           currentForm.fields[field].fileData = '';
