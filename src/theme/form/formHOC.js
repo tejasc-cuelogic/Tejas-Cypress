@@ -31,7 +31,7 @@ function formHoc(WrappedComponent, metaInfo) {
     }
 
     TextArea = (name, props) => {
-      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormTextarea
           name={name}
@@ -40,7 +40,7 @@ function formHoc(WrappedComponent, metaInfo) {
           format={get(fieldData, 'format')}
           fielddata={fieldData}
           onblur={get(props, 'handleBlur') || false}
-          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
+          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form))}
           label={get(props, 'label') || false}
           {...props}
         />
@@ -153,6 +153,7 @@ function formHoc(WrappedComponent, metaInfo) {
           name={name}
           placeholder="Select"
           fielddata={fieldData}
+          options={get(props, 'options') || fieldData.options}
           changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
           {...props}
         />
@@ -184,8 +185,25 @@ function formHoc(WrappedComponent, metaInfo) {
       );
     }
 
+    // Masked = (name, props) => {
+    //   const fieldData = get(props, 'fielddata') || this.fieldsData[name];
+    //   return (
+    //     <MaskedInput
+    //       name={name}
+    //       key={get(props, 'key')}
+    //       value={fieldData.value}
+    //       format={fieldData.format}
+    //       fielddata={fieldData}
+    //       showerror={fieldData.showError}
+    //       // eslint-disable-next-line no-shadow
+    //       changed={(values, name) => this.props[metaInfo.store].maskChange(values, name, metaInfo.form, fieldData.maskFormattedChange)}
+    //       {...props}
+    //     />
+    //   );
+    // }
+
     Masked = (name, props) => {
-      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <MaskedInput
           name={name}
@@ -195,20 +213,35 @@ function formHoc(WrappedComponent, metaInfo) {
           fielddata={fieldData}
           showerror={fieldData.showError}
           // eslint-disable-next-line no-shadow
-          changed={(values, name) => this.props[metaInfo.store].maskChange(values, name, metaInfo.form, fieldData.maskFormattedChange)}
+          changed={(values, name) => this.props[metaInfo.store].maskChange(values, name, (get(props, 'multiForm') || metaInfo.form), fieldData.maskFormattedChange)}
           {...props}
         />
       );
     }
 
+
+    // FormDropDown = (name, props) => {
+    //   const fieldData = get(props, 'fielddata') || this.fieldsData[name];
+    //   return (
+    //     <FormDropDown
+    //       name={name}
+    //       selection
+    //       fielddata={fieldData}
+    //       changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
+    //       {...props}
+    //     />
+    //   );
+    // }
+
     FormDropDown = (name, props) => {
-      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
         <FormDropDown
           name={name}
           selection
           fielddata={fieldData}
-          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
+          options={get(props, 'options') || fieldData.options}
+          onChange={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form), props.multiple ? 'dropdown' : false)}
           {...props}
         />
       );

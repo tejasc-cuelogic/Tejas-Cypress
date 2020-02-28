@@ -248,6 +248,17 @@ export default class DataModelStore {
     this[form] = FormValidator.resetFormData(this[form]);
   }
 
+  addMore = (form, key, count = 1) => {
+    this[form] = FormValidator.addMoreRecordToSubSection(this[form], key, count, true);
+  }
+
+  removeOne = (form, arrayName, index, e = undefined) => {
+    if (e) {
+      e.preventDefault();
+    }
+    this[form].fields[arrayName].splice(index, 1);
+  }
+
   resetAll = () => {
     this.client.clearStore();
   }
@@ -333,4 +344,6 @@ export const decorateDefault = {
   setInitiateSrch: action,
   setFormData: action,
   resetFilters: action,
+  addMore: action,
+  removeOne: action,
 };
