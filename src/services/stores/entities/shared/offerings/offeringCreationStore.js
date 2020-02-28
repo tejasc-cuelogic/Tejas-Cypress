@@ -17,7 +17,7 @@ import { FormValidator as Validator, DataFormatter } from '../../../../../helper
 import { deleteBonusReward, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, adminOfferingClose, deleteBac, upsertBonusReward,
   getBonusRewards, adminBusinessFilings, initializeClosingBinder,
-  adminCreateBusinessFiling, adminUpsertOffering, adminSetOfferingAsDefaulted } from '../../../queries/offerings/manage';
+  adminCreateBusinessFiling, adminUpsertOffering, adminSetOfferingAsDefaulted, getOfferingClosureProcess } from '../../../queries/offerings/manage';
 import { updateBusinessApplicationInformation, adminBusinessApplicationsDetails } from '../../../queries/businessApplication';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -2246,6 +2246,23 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   })
+
+  getOfferingClosureProcessMeta = id => new Promise((resolve) => {
+    graphql({
+        client,
+        query: getOfferingClosureProcess,
+        fetchPolicy: 'no-cache',
+        variables: { id },
+        onFetch: (res) => {
+          if (res !== undefined) {
+            resolve(res.getOfferingDetailsBySlug.closureProcess);
+          }
+        },
+        onError: () => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+        },
+      });
+  });
 }
 
 export default new OfferingCreationStore();
