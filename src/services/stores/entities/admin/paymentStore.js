@@ -84,11 +84,27 @@ export class PaymentStore extends DataModelStore {
       this.setFieldValue('data', ClientDb.initiateDb(data, true));
     }
 
-    getOfferingBySlug = (id) => {
+    getOfferingBySlug = (id, paymentType) => {
       const res = this.data.find(payment => payment.offering.offeringSlug === id);
       this.selectedOffering = res;
       this.PAYMENT_FRM = Validator.setFormData(this.PAYMENT_FRM, res);
+      this.updatePaymentDetailsFormRules(paymentType);
       this.validateForm('PAYMENT_FRM');
+    }
+
+    updatePaymentDetailsFormRules = (tab) => {
+      const securities = get(this.selectedOffering, 'offering.keyTerms.securities');
+      let ruleDateList = [];
+      if (tab === 'issuers') {
+        ruleDateList = ['expectedOpsDate', 'operationsDate', 'expectedPaymentDate', 'firstPaymentDate'];
+      } else if (tab === 'tracker' && securities === 'REVENUE_SHARING_NOTE') {
+        ruleDateList = ['anticipatedOpenDate', 'operationsDate'];
+      }
+      const formFields = this.PAYMENT_FRM;
+      forEach(formFields.fields, (f, key) => {
+        formFields.fields[key].rule = key === 'shorthandBusinessName' ? 'required' : ruleDateList.includes(key) ? 'date' : 'optional';
+      });
+      this.setFieldValue('PAYMENT_FRM', formFields);
     }
 
     updatePayment = type => new Promise((resolve) => {
@@ -168,6 +184,8 @@ export class PaymentStore extends DataModelStore {
                 } else {
                   data = 'No Payment Due';
                 }
+              } else {
+                data = 'No Payment Due';
               }
               break;
             case 'Start Payment Date':
@@ -226,8 +244,9 @@ export class PaymentStore extends DataModelStore {
               break;
             case 'Min Payment Start Date':
             case 'anticipatedOpenDate':
-              if (anticipatedOpenDate && actualOpeningDate && DataFormatter.diffDays(actualOpeningDate, false, true) >= 0) {
-                  data = moment(anticipatedOpenDate).add(6, 'month').format('MM/YYYY');
+            case 'startupPeriod':
+              if (startupPeriod !== 0 && anticipatedOpenDate && actualOpeningDate && DataFormatter.diffDays(actualOpeningDate, false, true) >= 0) {
+                  data = moment(anticipatedOpenDate).add(startupPeriod, 'month').format('MM/YYYY');
               }
               if (forceAssign) {
                 this.setFieldValue('PAYMENT_FRM', data, 'fields.minPaymentStartDateCalc.value');
@@ -319,6 +338,7 @@ decorate(PaymentStore, {
   sortOrderRP: observable,
   sortOrderTN: observable,
   sortOrderRSN: observable,
+  updatePaymentDetailsFormRules: action,
   paymentCtaHandlers: action,
   setSortingOrder: action,
   initRequest: action,
