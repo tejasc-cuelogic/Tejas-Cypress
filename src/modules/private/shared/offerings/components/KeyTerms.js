@@ -53,8 +53,8 @@ export default class KeyTerms extends Component {
     (field, value, form, index) => this.props.offeringCreationStore.rtEditorChange(field, value, form, 'additionalKeyterms', index);
 
   render() {
-    const { offer, offerData } = this.props.offeringsStore;
-    if (offerData.loading) {
+    const { offer, offerDataLoading } = this.props.offeringsStore;
+    if (offerDataLoading) {
       return <InlineLoader />;
     }
     const {
@@ -474,7 +474,7 @@ export default class KeyTerms extends Component {
             submitted={submitted}
             isManager={isManager}
             approved={approved}
-            loading={offerData.loading}
+            loading={offerDataLoading}
             updateOffer={this.handleFormSubmit}
           />
         </Form>

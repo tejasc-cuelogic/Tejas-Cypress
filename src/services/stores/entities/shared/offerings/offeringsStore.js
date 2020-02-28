@@ -284,7 +284,7 @@ export class OfferingsStore {
       fetchPolicy: 'no-cache',
       variables: { id },
       onFetch: (res) => {
-          if (!this.offerData.loading) {
+          if (!this.offerDataLoading) {
             this.currentId = id;
             this.offerLoading = false;
             this.oldOfferData = {};
@@ -310,7 +310,7 @@ export class OfferingsStore {
       fetchPolicy: 'no-cache',
       variables: { id },
       onFetch: (res) => {
-        if (!this.offerData.loading) {
+        if (!this.offerDataLoading) {
           resolve(res.getOfferingById.offeringSlug);
         }
       },
@@ -420,6 +420,10 @@ export class OfferingsStore {
 
   @computed get offer() {
     return (this.offerData.data && toJS(this.offerData.data.getOfferingDetailsBySlug)) || {};
+  }
+
+  @computed get offerDataLoading() {
+    return this.offerData.loading;
   }
 
   @computed get offerOld() {
