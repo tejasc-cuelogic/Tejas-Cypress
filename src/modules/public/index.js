@@ -71,7 +71,9 @@ export default class Public extends React.Component {
       }
       <Route path="/password-protected" component={NotFound} />
       <Route exact path="/:fromUrl/:fromUrl2?" component={isAuthLocation ? Auth : RedirectManager} />
-      <Route component={NotFound} />
+      <Route>
+        <NotFound redirect />
+      </Route>
     </Switch>
   );
 
