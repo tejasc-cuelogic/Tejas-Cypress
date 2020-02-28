@@ -113,6 +113,16 @@ query adminListRequestPlugins {
         key
         rule
         defaultValue
+        defaultValuesMapping
+        defaultValues{
+          key
+          value
+        }
+        options{
+          key
+          value
+          text
+        }
       }
     }
   }
