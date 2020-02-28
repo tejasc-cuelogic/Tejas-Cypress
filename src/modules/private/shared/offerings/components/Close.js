@@ -2,9 +2,9 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import omitDeep from 'omit-deep';
-import { filter, find, get, capitalize, isEmpty } from 'lodash';
+import { filter, find, get, isEmpty } from 'lodash';
 import beautify from 'json-beautify';
-import { Form, Card, Header, Divider, Step, Label, Button, Icon, Confirm, Modal, Grid, Table } from 'semantic-ui-react';
+import { Form, Card, Header, Divider, Step, Label, Button, Icon, Confirm, Modal } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
 // import { SCOPE_VALUES } from '../../../../../services/constants/admin/offerings';
 import { MaskedInput, FormInput, FormDropDown } from '../../../../../theme/form';
@@ -14,6 +14,7 @@ import { FieldError } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 import SupplementalAgreements from './SupplementalAgreements';
 import ClosingBinder from './close/ClosingBinder';
+import ClosureProcessStatus from './close/ClosureProcessStatus';
 import ExportEnvelopes from './close/ExportEnvelopes';
 import Default from './close/Default';
 import { OFFERING_CLOSE_SERVICE_OPTIONS, OFFERING_CLOSE_COUNCURRENCY_OPTIONS } from '../../../../../services/constants/admin/offerings';
@@ -58,7 +59,6 @@ export default class Close extends Component {
       confirmed: false,
       closureProcessObj: {},
       inProgress: false,
-      showClosureProcessStatus: false,
       showSupplimentAgg: false,
       actionLabel: '',
     };
@@ -559,90 +559,7 @@ export default class Close extends Component {
               </Card>
             ) : null
           }
-          <Header as="h4"> Closure Process Status <Icon onClick={() => this.toggleVisibilityStatus('showClosureProcessStatus')} className={`ns-chevron-${this.state.showClosureProcessStatus === true ? 'up' : 'down'}-compact right`} color="blue" /> </Header>
-          {this.state.showClosureProcessStatus
-            && (
-              <>
-                {isEmpty(closureProcess)
-                  ? (
-                    <section className="bg-midwhite center-align">
-                      <Header as="h4">No Data Found</Header>
-                    </section>
-                  )
-                  : (
-                    <Grid columns={3}>
-                      {!isEmpty(closureProcess) && Object.keys(closureProcess).map(key => (
-                        <Grid.Column className="center-align"><Header as="h5">{capitalize(key.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}</Header>
-                          <div className="table-wrapper">
-                            <Table unstackable basic="very">
-                              <Table.Body>
-                                {closureProcess[key] ? ['Status', 'Started', 'Finished'].map(k => (
-                                  <Table.Row>
-                                    <Table.Cell>{k}</Table.Cell>
-                                    <Table.Cell>
-                                      {k === 'Status'
-                                        && (
-                                          <>
-                                            {closureProcess[key].status
-                                              ? (
-                                                <>
-                                                  <b className={closureProcess[key].status === 'COMPLETE' ? 'positive-text' : closureProcess[key].status === 'PENDING' ? 'warning-text' : 'negative-text'}>{closureProcess[key].status}</b>
-                                                  {closureProcess[key].finished && closureProcess[key].started
-                                                    && (
-                                                      <span> ({DataFormatter.getDateDifference(closureProcess[key].started, closureProcess[key].finished)})</span>
-                                                    )
-                                                  }
-                                                </>
-                                              )
-                                              : <>-</>
-                                            }
-                                          </>
-                                        )
-                                      }
-                                      {k === 'Started'
-                                        && (
-                                          <>
-                                            {(closureProcess[key].started || closureProcess[key].startedCount) ? (
-                                              <>
-                                                {closureProcess[key].startedCount || '0'} - {closureProcess[key].started ? DataFormatter.getDateAsPerTimeZone(closureProcess[key].started, true, false, false, 'M/D/YYYY h:mm a') : ''}
-                                              </>
-                                            ) : <>-</>
-                                            }
-                                          </>
-                                        )
-                                      }
-                                      {k === 'Finished'
-                                        && (
-                                          <>
-                                            {
-                                              (closureProcess[key].remainingCount || closureProcess[key].finished)
-                                                ? (
-                                                  <>{closureProcess[key].remainingCount || '0'} - {closureProcess[key].finished ? DataFormatter.getDateAsPerTimeZone(closureProcess[key].finished, true, false, false, 'M/D/YYYY h:mm a') : ''}
-                                                  </>
-                                                ) : <>-</>
-                                            }
-                                          </>
-                                        )
-                                      }
-                                    </Table.Cell>
-                                  </Table.Row>
-                                )) : (
-                                    <section className="center-align">
-                                      <Header as="h6">No Data Found</Header>
-                                    </section>
-                                  )
-                                }
-                              </Table.Body>
-                            </Table>
-                          </div>
-                        </Grid.Column>
-                      ))}
-                    </Grid>
-                  )
-                }
-              </>
-            )
-          }
+          <ClosureProcessStatus closureProcess={closureProcess} />
           <Divider section />
           <Header as="h4"> Supplemental Agreement <Icon onClick={() => this.toggleVisibilityStatus('showSupplimentAgg')} className={`ns-chevron-${this.state.showSupplimentAgg === true ? 'up' : 'down'}-compact right`} color="blue" /> </Header>
           {this.state.showSupplimentAgg
