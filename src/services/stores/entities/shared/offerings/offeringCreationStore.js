@@ -1183,9 +1183,7 @@ export class OfferingCreationStore {
         } else if (notify) {
           Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
         }
-        if (keyName !== 'contingencies') {
-          offeringsStore.getOne(this.currentOfferingSlug, false);
-        }
+        offeringsStore.getOne(this.currentOfferingSlug, false);
         if (keyName === 'contingencies' && successMsg === null) {
           const activityTitle = isLaunchContingency ? 'All launch contingencies have been signed off' : 'All close contingencies have been signed off';
           this.generateActivityHistory(id, ACTIVITY_HISTORY_TYPES.OFFERING, activityTitle, isLaunchContingency ? 'LAUNCH_CONTINGENCIES' : 'CLOSE_CONTINGENCIES');
