@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { startsWith } from 'lodash';
 import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, REGULATION_VALUES, BD_REGULATION_VALUES, FP_REGULATION_VALUES, NS_FEE_PERCENTAGE } from '../../../../../services/constants/admin/offerings';
 import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
+import { InlineLoader } from '../../../../../theme/shared';
 import ButtonGroupType2 from './ButtonGroupType2';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 
@@ -52,12 +53,15 @@ export default class KeyTerms extends Component {
     (field, value, form, index) => this.props.offeringCreationStore.rtEditorChange(field, value, form, 'additionalKeyterms', index);
 
   render() {
+    const { offer, offerDataLoading } = this.props.offeringsStore;
+    if (offerDataLoading) {
+      return <InlineLoader />;
+    }
     const {
       KEY_TERMS_FRM, CLOSURE_SUMMARY_FRM, formArrayChange, maskArrayChange,
       confirmModal, confirmModalName, removeData, currentOfferingId,
     } = this.props.offeringCreationStore;
     const formName = 'KEY_TERMS_FRM';
-    const { offer, offerData } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
     const submitted = (offer && offer.keyTerms && offer.keyTerms.submitted)
@@ -470,7 +474,7 @@ export default class KeyTerms extends Component {
             submitted={submitted}
             isManager={isManager}
             approved={approved}
-            loading={offerData.loading}
+            loading={offerDataLoading}
             updateOffer={this.handleFormSubmit}
           />
         </Form>
