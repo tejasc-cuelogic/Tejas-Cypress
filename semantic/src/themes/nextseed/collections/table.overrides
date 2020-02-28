@@ -71,7 +71,7 @@
     tbody{
         background:@neutral-offwhite;
         tr.row-highlight{
-            background:@lightBlue !important;
+            background:fade(@neutral-middark, 30%) !important;
             td{
                 border-top:none;
             }
@@ -632,7 +632,7 @@
         background-color:@neutral-offwhite;
     }
     &.row-highlight{
-       background-color:@lightBlue !important;
+       background-color:fade(@neutral-middark, 30%) !important;
     }
     &.categories-table{
         background-color:@neutral-offwhite;
