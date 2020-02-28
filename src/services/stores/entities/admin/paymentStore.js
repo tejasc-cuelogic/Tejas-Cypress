@@ -3,15 +3,15 @@ import { orderBy, get, findIndex, pick, forEach } from 'lodash';
 import moment from 'moment';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { adminPaymentsIssuerList, updatePaymentIssuer } from '../../queries/Repayment';
-import { PAYMENT } from '../../../constants/payment';
+import { adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentGenerateAdminSummary } from '../../queries/Repayment';
+import { PAYMENT, ACTION } from '../../../constants/payment';
 import { uiStore } from '../../index';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import Helper from '../../../../helper/utility';
 
 export class PaymentStore extends DataModelStore {
   constructor() {
-    super({ adminPaymentsIssuerList, updatePaymentIssuer });
+    super({ adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentGenerateAdminSummary });
   }
 
     data = [];
@@ -21,6 +21,8 @@ export class PaymentStore extends DataModelStore {
     initialData = [];
 
     PAYMENT_FRM = Validator.prepareFormObject(PAYMENT);
+
+    ACTION_FRM = Validator.prepareFormObject(ACTION);
 
     sortOrderRP = {
       column: null,
@@ -54,7 +56,6 @@ export class PaymentStore extends DataModelStore {
     initRequest = () => {
       if (!this.apiHit) {
         this.executeQuery({
-          client: 'PRIVATE',
           query: 'adminPaymentsIssuerList',
           setLoader: 'adminPaymentsIssuerList',
         }).then((res) => {
@@ -64,16 +65,46 @@ export class PaymentStore extends DataModelStore {
       }
     };
 
+    paymentCtaHandlers = (mutation) => {
+      let variables = false;
+      if (mutation === 'adminPaymentGenerateAdminSummary') {
+        variables = { ...toJS(Validator.evaluateFormData(this.ACTION_FRM.fields)) };
+      }
+      this.executeMutation({
+        mutation,
+        setLoader: mutation,
+        variables,
+      }).then((res) => {
+        console.log(res);
+      });
+    };
+
     setDb = (data) => {
       this.setFieldValue('initialData', data);
       this.setFieldValue('data', ClientDb.initiateDb(data, true));
     }
 
-    getOfferingBySlug = (id) => {
+    getOfferingBySlug = (id, paymentType) => {
       const res = this.data.find(payment => payment.offering.offeringSlug === id);
       this.selectedOffering = res;
       this.PAYMENT_FRM = Validator.setFormData(this.PAYMENT_FRM, res);
+      this.updatePaymentDetailsFormRules(paymentType);
       this.validateForm('PAYMENT_FRM');
+    }
+
+    updatePaymentDetailsFormRules = (tab) => {
+      const securities = get(this.selectedOffering, 'offering.keyTerms.securities');
+      let ruleDateList = [];
+      if (tab === 'issuers') {
+        ruleDateList = ['expectedOpsDate', 'operationsDate', 'expectedPaymentDate', 'firstPaymentDate'];
+      } else if (tab === 'tracker' && securities === 'REVENUE_SHARING_NOTE') {
+        ruleDateList = ['anticipatedOpenDate', 'operationsDate'];
+      }
+      const formFields = this.PAYMENT_FRM;
+      forEach(formFields.fields, (f, key) => {
+        formFields.fields[key].rule = key === 'shorthandBusinessName' ? 'required' : ruleDateList.includes(key) ? 'date' : 'optional';
+      });
+      this.setFieldValue('PAYMENT_FRM', formFields);
     }
 
     updatePayment = type => new Promise((resolve) => {
@@ -153,6 +184,8 @@ export class PaymentStore extends DataModelStore {
                 } else {
                   data = 'No Payment Due';
                 }
+              } else {
+                data = 'No Payment Due';
               }
               break;
             case 'Start Payment Date':
@@ -211,8 +244,9 @@ export class PaymentStore extends DataModelStore {
               break;
             case 'Min Payment Start Date':
             case 'anticipatedOpenDate':
-              if (anticipatedOpenDate && actualOpeningDate && DataFormatter.diffDays(actualOpeningDate, false, true) >= 0) {
-                  data = moment(anticipatedOpenDate).add(6, 'month').format('MM/YYYY');
+            case 'startupPeriod':
+              if (startupPeriod !== 0 && anticipatedOpenDate && actualOpeningDate && DataFormatter.diffDays(actualOpeningDate, false, true) >= 0) {
+                  data = moment(anticipatedOpenDate).add(startupPeriod, 'month').format('MM/YYYY');
               }
               if (forceAssign) {
                 this.setFieldValue('PAYMENT_FRM', data, 'fields.minPaymentStartDateCalc.value');
@@ -298,11 +332,14 @@ decorate(PaymentStore, {
   selectedOffering: observable,
   apiHit: observable,
   PAYMENT_FRM: observable,
+  ACTION_FRM: observable,
   initialData: observable,
   sortOrderSP: observable,
   sortOrderRP: observable,
   sortOrderTN: observable,
   sortOrderRSN: observable,
+  updatePaymentDetailsFormRules: action,
+  paymentCtaHandlers: action,
   setSortingOrder: action,
   initRequest: action,
   getOfferingBySlug: action,
