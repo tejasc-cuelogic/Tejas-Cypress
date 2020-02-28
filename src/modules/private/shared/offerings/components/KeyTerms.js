@@ -107,17 +107,27 @@ export default class KeyTerms extends Component {
                 changed={(e, result) => formArrayChange(e, result, formName)}
               />
             ))}
-            <FormDropDown
-              containerclassname={isReadonly ? 'display-only' : ''}
-              className={isReadonly ? 'display-only' : ''}
-              disabled={isReadonly}
-              fielddata={KEY_TERMS_FRM.fields.securities}
-              selection
-              value={KEY_TERMS_FRM.fields.securities.value}
-              placeholder={isReadonly ? 'N/A' : 'Choose here'}
-              name="securities"
-              options={SECURITIES_VALUES}
-              onChange={(e, result) => formArrayChange(e, result, formName)}
+            {['securities', 'equityClass', 'equityUnitType'].map(field => (
+              <FormDropDown
+                containerclassname={isReadonly ? 'display-only' : ''}
+                className={isReadonly ? 'display-only' : ''}
+                disabled={isReadonly}
+                fielddata={KEY_TERMS_FRM.fields[field]}
+                selection
+                value={KEY_TERMS_FRM.fields[field].value}
+                name={field}
+                placeholder={isReadonly ? 'N/A' : 'Choose here'}
+                options={field === 'securities' ? SECURITIES_VALUES : KEY_TERMS_FRM.fields[field].values}
+                onChange={(e, result) => formArrayChange(e, result, formName)}
+              />
+            ))}
+            <MaskedInput
+              displayMode={isReadonly}
+              name="classThreshold"
+              fielddata={KEY_TERMS_FRM.fields.classThreshold}
+              changed={(values, name) => maskArrayChange(values, formName, name)}
+              currency
+              prefix="$"
             />
             {['minOfferingAmountCF', 'maxOfferingAmountCF'].map(field => (
               <MaskedInput
@@ -129,18 +139,6 @@ export default class KeyTerms extends Component {
                 prefix="$"
               />
             ))}
-            <FormDropDown
-              containerclassname={isReadonly ? 'display-only' : ''}
-              className={isReadonly ? 'display-only' : ''}
-              disabled={isReadonly}
-              fielddata={KEY_TERMS_FRM.fields.equityClass}
-              selection
-              value={KEY_TERMS_FRM.fields.equityClass.value}
-              name="equityClass"
-              placeholder={isReadonly ? 'N/A' : 'Choose here'}
-              options={KEY_TERMS_FRM.fields.equityClass.values}
-              onChange={(e, result) => formArrayChange(e, result, formName)}
-            />
             <MaskedInput
               displayMode={isReadonly}
               name="minOfferingAmount506"
@@ -298,18 +296,6 @@ export default class KeyTerms extends Component {
                 />
               ))
             }
-            <FormDropDown
-              containerclassname={isReadonly ? 'display-only' : ''}
-              className={isReadonly ? 'display-only' : ''}
-              disabled={isReadonly}
-              fielddata={KEY_TERMS_FRM.fields.equityUnitType}
-              selection
-              value={KEY_TERMS_FRM.fields.equityUnitType.value}
-              name="equityUnitType"
-              placeholder={isReadonly ? 'N/A' : 'Choose here'}
-              options={KEY_TERMS_FRM.fields.equityUnitType.values}
-              onChange={(e, result) => formArrayChange(e, result, formName)}
-            />
             {
               ['offeringSize', 'preferredReturn', 'targetInvestmentPeriod'].map(field => (
                 <MaskedInput

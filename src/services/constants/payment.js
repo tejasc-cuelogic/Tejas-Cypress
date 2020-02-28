@@ -36,3 +36,7 @@ export const PAYMENT = FormHelper.generateMeta([
   ],
   ['sinkingFundBalance', 'Sinking Fund Balance', 0, '', '', { props: { objRef: '', skipField: true }, asIn: true }],
 ]);
+
+export const ACTION = FormHelper.generateMeta([
+  ['date', 'Date', '', 'required|date', 'MM-DD-YYYY', { customErrors: { date: 'Date is not a valid date format.' }, asIn: true }],
+]);
