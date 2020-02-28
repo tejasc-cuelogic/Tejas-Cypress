@@ -128,4 +128,4 @@ function cipVerificationHOC(WrappedComponent) {
     }
   })));
 }
-export default (cipVerificationHOC);
+export default cipVerificationHOC;
