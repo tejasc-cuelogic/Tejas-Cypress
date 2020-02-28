@@ -282,9 +282,8 @@ export class InvestmentStore {
   validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {
     uiStore.setProgress();
     if (this.investmentAmount) {
-      const { campaign } = campaignStore;
-      const offeringSecurityType = get(campaign, 'keyTerms.securities') || '0';
-      if (includes(['REAL_ESTATE'], offeringSecurityType) && this.realEstateValidation()) {
+      const { campaignStatus } = campaignStore;
+      if (campaignStatus.isRealEstate && this.realEstateValidation()) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
         this.setFieldValue('disableNextbtn', false);
         this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Your investment cannot be reduced.';
@@ -298,7 +297,7 @@ export class InvestmentStore {
         this.INVESTMONEY_FORM.meta.isValid = false;
         uiStore.setProgress(false);
         resolve();
-      } else if (!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) && !this.isValidMultipleAmount(this.investmentAmount)) {
+      } else if (!campaignStatus.isPreferredEquity && !this.isValidMultipleAmount(this.investmentAmount)) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
         this.setFieldValue('disableNextbtn', false);
         this.setFieldValue('investmentFlowErrorMessage', 'Investments must be in increments of $100');
@@ -335,7 +334,7 @@ export class InvestmentStore {
               this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             }
 
-            if (includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)) {
+            if (campaignStatus.isPreferredEquity) {
               const errorMessage = !status ? message : null;
               this.setFieldValue('investmentFlowEquityErrorMessage', errorMessage);
             }

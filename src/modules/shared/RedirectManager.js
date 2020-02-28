@@ -105,7 +105,7 @@ export default class RedirectManager extends React.PureComponent {
     const { found } = this.state;
     return (
       <div>
-        {found === 3 ? <NotFound /> : <Banner withDimmer />}
+        {found === 3 ? <NotFound redirectToHome /> : <Banner withDimmer />}
       </div>
     );
   }
