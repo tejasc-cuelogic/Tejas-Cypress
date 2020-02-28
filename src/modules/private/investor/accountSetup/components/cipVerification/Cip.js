@@ -46,14 +46,14 @@ class Cip extends React.Component {
   }
 
   render() {
-    const { commonMethods, NsModal, elements, errors } = this.props;
+    const { cipUtility, NsModal, elements, errors } = this.props;
     const { MaskedInput, FormInput } = elements;
     const { ID_VERIFICATION_FRM, personalInfoChange, signUpLoading, personalInfoMaskedChange, setAddressFieldsForUserVerification } = this.props.identityStore;
     const { givenName } = this.props.userStore.currentUser;
 
     return (
       <NsModal
-        onClose={() => commonMethods.closeModal()}
+        onClose={() => cipUtility.closeModal()}
         closeOnEscape={false}
         loaderMsg={loaderMsg}
         {...this.props}
@@ -64,7 +64,7 @@ class Cip extends React.Component {
             {headerSiblingsContent}
           </Grid.Column>
           <Grid.Column width="9">
-            <Form error onSubmit={() => commonMethods.handleCip(false)}>
+            <Form error onSubmit={() => cipUtility.handleCip(false)}>
               <Form.Group widths="equal">
                 <FormSelect
                   name="salutation"
@@ -98,7 +98,7 @@ class Cip extends React.Component {
                 changed={(e, result) => personalInfoChange(e, result, 'ID_VERIFICATION_FRM')}
               />
               <Form.Group widths={3}>
-                {commonMethods.addressTemplate('ID_VERIFICATION_FRM')}
+                {cipUtility.addressTemplate('ID_VERIFICATION_FRM')}
                 <MaskedInput
                   name="phoneNumber"
                   type="tel"
@@ -146,7 +146,7 @@ class Cip extends React.Component {
                 <Button fluid={isMobile} primary content="Verify my identity" disabled={!ID_VERIFICATION_FRM.meta.isValid || signUpLoading} />
               </div>
               <div className={isMobile && 'center-align'}>
-                <Link to="/dashboard/setup" onClick={commonMethods.closeModal}>I’ll finish this later</Link>
+                <Link to="/dashboard/setup" onClick={cipUtility.closeModal}>I’ll finish this later</Link>
               </div>
             </Form>
           </Grid.Column>

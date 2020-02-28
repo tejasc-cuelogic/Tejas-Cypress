@@ -22,7 +22,7 @@ class CipSoftFail extends React.Component {
   handleSubmitIdentityQuestions = async (e) => {
     e.preventDefault();
     const { cipBackUrl, setFieldValue } = this.props.identityStore;
-    const { handleCipExpiration, redirectTo } = this.props.commonMethods;
+    const { handleCipExpiration, redirectTo } = this.props.cipUtility;
     this.props.identityStore.setFieldValue('signUpLoading', true);
     let { url } = await this.props.identityStore.verifyCipSoftFail();
     const { accountForWhichCipExpired, userDetails } = this.props.userDetailsStore;
@@ -39,12 +39,12 @@ class CipSoftFail extends React.Component {
   }
 
   render() {
-    const { NsModal, commonMethods, isLoading, errors } = this.props;
+    const { NsModal, cipUtility, isLoading, errors } = this.props;
     const { ID_VERIFICATION_QUESTIONS, identityQuestionAnswerChange } = this.props.identityStore;
     const { fields } = ID_VERIFICATION_QUESTIONS;
     return (
       <NsModal
-        onClose={() => commonMethods.closeModal()}
+        onClose={() => cipUtility.closeModal()}
         back="/dashboard/setup/cip"
         {...this.props}
       >
@@ -87,7 +87,7 @@ class CipSoftFail extends React.Component {
                 <Button loading={isLoading} color="green" fluid={isMobile} disabled={!ID_VERIFICATION_QUESTIONS.meta.isValid || isLoading}>Verify my identity</Button>
               </div>
               <div className={isMobile && 'center-align'}>
-                <Link to="/dashboard/setup" onClick={() => commonMethods.closeModal()}>I’ll finish this later</Link>
+                <Link to="/dashboard/setup" onClick={() => cipUtility.closeModal()}>I’ll finish this later</Link>
               </div>
             </Form>
           </Grid.Column>

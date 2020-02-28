@@ -171,7 +171,7 @@ export default class ConfirmPhoneNumber extends Component {
               format="(###) ###-####"
               readOnly={!editMode}
               displayMode={!editMode}
-              changed={personalInfoMaskedChange}
+              changed={(values, name) => personalInfoMaskedChange(values, name, 'ID_VERIFICATION_FRM')}
               containerclassname="display-only  no-border"
               className="display-only"
               phoneNumberDisplayMode
@@ -210,7 +210,7 @@ export default class ConfirmPhoneNumber extends Component {
                     <FormRadioGroup
                       fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
                       name="mfaMethod"
-                      changed={(e, result) => personalInfoChange(e, result)}
+                      changed={(e, result) => personalInfoChange(e, result, 'ID_VERIFICATION_FRM')}
                       containerclassname="button-radio"
                     />
                   </div>

@@ -16,18 +16,15 @@ class CipPhoneVerification extends React.Component {
 
   handleClose = () => {
     this.props.identityStore.setFieldValue('isPhoneFailed', false);
-    this.props.commonMethods.closeModal();
+    this.props.cipUtility.closeModal();
   }
 
   handleBack = () => {
-    const { setFieldValue, cipBackUrl } = this.props.identityStore;
-    setFieldValue('isPhoneFailed', false);
-    setFieldValue('cipErrors', null);
-    this.props.history.push(cipBackUrl.pop());
+    this.props.cipUtility.handleBack('isPhoneFailed');
   }
 
   render() {
-    const { commonMethods, isLoading, NsModal, elements, errors } = this.props;
+    const { cipUtility, isLoading, NsModal, elements, errors } = this.props;
     const { MaskedInput } = elements;
     const { ID_VERIFICATION_FRM, personalInfoMaskedChange } = this.props.identityStore;
     return (
@@ -43,7 +40,7 @@ class CipPhoneVerification extends React.Component {
             <p>
               The phone number you shared appears to be registered to a VoIP phone service. Please enter an alternative phone number.
             </p>
-            <Form error onSubmit={() => commonMethods.handleCip('phoneFail')}>
+            <Form error onSubmit={() => cipUtility.handleCip('phoneFail')}>
               <MaskedInput
                 name="phoneNumber"
                 type="tel"

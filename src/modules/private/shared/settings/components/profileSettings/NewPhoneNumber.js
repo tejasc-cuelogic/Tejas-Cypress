@@ -73,7 +73,7 @@ export default class NewPhoneNumber extends Component {
                 name="mfaMethod"
                 containerclassname="mt-30 radio-basic center-align"
                 widths="equal"
-                changed={(e, result) => personalInfoChange(e, result)}
+                changed={(e, result) => personalInfoChange(e, result, 'ID_VERIFICATION_FRM')}
               />
             </div>
             {errors
