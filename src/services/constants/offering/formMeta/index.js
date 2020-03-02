@@ -38,8 +38,10 @@ export const INVEST_NOW_TOC = {
       placeHolder: 'Enter here',
     },
     required: {
-      label: 'Custom Value',
-      value: '',
+      label: 'Required',
+      value: true,
+      defaultValue: true,
+      values: [{ label: 'Yes', value: true }, { label: 'No', value: false }],
       error: undefined,
       rule: 'optional',
       placeHolder: 'e.g. Custom Value',

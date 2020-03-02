@@ -2878,7 +2878,7 @@ const DATA_ROOM_COMMON = {
     label: '',
     value: false,
     error: undefined,
-    default: false,
+    defaultValue: false,
     rule: 'required',
   },
 };

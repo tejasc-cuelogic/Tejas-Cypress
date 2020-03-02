@@ -6,7 +6,7 @@ import { Button } from 'semantic-ui-react';
 @observer
 export default class OfferingButtonGroup extends Component {
   render() {
-    const { updateOffer, uiStore } = this.props;
+    const { updateOffer, uiStore, isDisable } = this.props;
     const { inProgress, htmlEditorImageLoading } = this.props.uiStore;
     return (
       <>
@@ -30,7 +30,7 @@ export default class OfferingButtonGroup extends Component {
             } */}
           </Button.Group>
           <Button.Group vertical={uiStore.responsiveVars.isMobile} size={uiStore.responsiveVars.isMobile ? 'mini' : ''} compact={uiStore.responsiveVars.isMobile} className={uiStore.responsiveVars.isMobile ? 'sticky-buttons' : ''}>
-            <Button disabled={htmlEditorImageLoading} loading={inProgress === 'save'} primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
+            <Button disabled={htmlEditorImageLoading || isDisable} loading={inProgress === 'save'} primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
           </Button.Group>
         </div>
       </>

@@ -2,6 +2,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { get, pick } from 'lodash';
 import ReactCodeInput from 'react-code-input';
+import { Header } from 'semantic-ui-react';
 import { FormInput, MaskedInput, FormPasswordStrength, FormSelect, DropZoneConfirm as DropZone, FormRadioGroup, FormCheckbox, FormDropDown, FormTextarea } from '.';
 import Address from './src/Address';
 
@@ -102,16 +103,18 @@ function formHoc(WrappedComponent, metaInfo) {
     )
 
     RadioGroup = (name, props) => {
-      const fieldData = get(props, 'fielddata') || this.fieldsData[name];
+      const fieldData = get(props, 'fielddata') || ((get(props, 'multiForm') ? this.fieldsData[props.multiForm[1]][props.multiForm[2]][name] : this.fieldsData[name]));
       return (
-        <FormRadioGroup
-          fielddata={fieldData}
-          name={name}
-          changed={(e, result) => this.props[metaInfo.store].formChange(e, result, metaInfo.form)}
-          containerclassname="button-radio center-align"
-          showerror={fieldData.showError}
-          {...props}
-        />
+        <div className="field">
+          <Header as="label">{get(fieldData, 'label') || props.title}</Header>
+          <FormRadioGroup
+            fielddata={fieldData}
+            name={name}
+            changed={(e, result) => this.props[metaInfo.store].formChange(e, result, (get(props, 'multiForm') || metaInfo.form))}
+            showerror={get(fieldData, 'showError')}
+            {...props}
+          />
+        </div>
       );
     }
 

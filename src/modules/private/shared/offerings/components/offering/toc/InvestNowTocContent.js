@@ -27,39 +27,46 @@ class InvestNowTocContent extends Component {
     const params = {
       keyName: 'investNow',
       forms: ['INVEST_NOW_TOC_FRM'],
+      cleanData: true,
     };
-    reOrderHandle(INVEST_NOW_TOC_FRM.fields.toc);
+    reOrderHandle(INVEST_NOW_TOC_FRM.fields.toc, 'INVEST_NOW_TOC_FRM', 'toc');
     updateOffering(params);
   }
 
   handleDeleteAction = () => {
     const { manageOfferingStore, history, index, refLink } = this.props;
     manageOfferingStore.removeOne('INVEST_NOW_TOC_FRM', 'toc', index);
-    this.handleFormSubmit();
-    history.push(refLink);
+    // this.handleFormSubmit();
+    history.push(`${refLink}/${index}`);
   }
 
   render() {
-    const { smartElement, index, manageOfferingStore } = this.props;
+    const { smartElement, index, manageOfferingStore, isReadOnly } = this.props;
     const { INVEST_NOW_TOC_FRM } = manageOfferingStore;
     return (
       <div className="inner-content-spacer">
         <Form>
-          {INVEST_NOW_TOC_FRM.fields.toc.length > 1
+          {/* <small>
+            <Link to="/" onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-view" />Preview</Link>
+          </small> */}
+          {!isReadOnly && INVEST_NOW_TOC_FRM.fields.toc.length > 1
           && (
             <small className="pull-right">
               <Link to="/" className="ml-10 negative-text" onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>
             </small>
           )}
-          {smartElement.Masked('order', { multiForm: [metaInfo.form, 'toc', index], displayMode: true })}
-          {smartElement.TextArea('label', { multiForm: [metaInfo.form, 'toc', index] })}
-          {smartElement.FormDropDown('account', { multiForm: [metaInfo.form, 'toc', index] })}
-          {smartElement.FormDropDown('regulation', { multiple: true, multiForm: [metaInfo.form, 'toc', index] })}
+          {/* {smartElement.Masked('order', { multiForm: [metaInfo.form, 'toc', index], displayMode: true })} */}
+          {smartElement.FormDropDown('account', { multiForm: [metaInfo.form, 'toc', index], displayMode: isReadOnly })}
+          {smartElement.FormDropDown('regulation', { multiple: true, multiForm: [metaInfo.form, 'toc', index], displayMode: isReadOnly })}
+          {smartElement.RadioGroup('required', { multiForm: [metaInfo.form, 'toc', index], displayMode: isReadOnly })}
+          {smartElement.TextArea('label', { multiForm: [metaInfo.form, 'toc', index], displayMode: isReadOnly })}
           <Divider hidden />
-          <OfferingButtonGroup
-            updateOffer={this.handleFormSubmit}
-          />
-          <Divider section />
+          {!isReadOnly
+          && (
+            <OfferingButtonGroup
+              updateOffer={this.handleFormSubmit}
+            />
+          )}
         </Form>
         <Confirm
           header="Confirm"

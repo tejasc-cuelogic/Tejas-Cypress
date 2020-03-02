@@ -1,5 +1,6 @@
 import { decorate, observable, action, toJS } from 'mobx';
 import { startCase, get } from 'lodash';
+import cleanDeep from 'clean-deep';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore, * as dataModelStore from '../dataModelStore';
 import { INVEST_NOW_TOC } from '../../../../constants/offering/formMeta';
@@ -14,8 +15,10 @@ export class ManageOfferingStore extends DataModelStore {
 
   onDragSaveEnable = false;
 
+  initLoad = [];
+
   updateOffering = params => new Promise((res) => {
-    const { keyName, forms } = params;
+    const { keyName, forms, cleanData } = params;
     let offeringDetails = {};
     let data;
     if (Array.isArray(forms)) {
@@ -27,6 +30,9 @@ export class ManageOfferingStore extends DataModelStore {
       data = { ...data, ...Validator.evaluateFormData(this[forms].fields) };
     } else {
       data = Validator.evaluateFormData(this[forms].fields);
+    }
+    if (cleanData) {
+      data = cleanDeep(data);
     }
     if (keyName) {
       offeringDetails[keyName] = data;
@@ -105,6 +111,7 @@ export class ManageOfferingStore extends DataModelStore {
   decorate(ManageOfferingStore, {
     ...dataModelStore.decorateDefault,
     INVEST_NOW_TOC_FRM: observable,
+    initLoad: observable,
     onDragSaveEnable: observable,
     reOrderHandle: action,
     updateOffering: action,
