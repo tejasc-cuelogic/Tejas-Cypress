@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
+import { get } from 'lodash';
 import { Form, Divider, Icon, Confirm } from 'semantic-ui-react';
 import OfferingButtonGroup from '../../OfferingButtonGroup';
 import formHOC from '../../../../../../../theme/form/formHOC';
+// import Helper from '../../../../../../../helper/utility';
 
 const metaInfo = {
   store: 'manageOfferingStore',
@@ -16,7 +18,8 @@ const metaInfo = {
 class InvestNowTocContent extends Component {
   state = {
     showConfirm: false,
-  }
+    msg: [],
+  };
 
   updateState = (val, key = 'editable') => {
     this.setState({ [key]: val });
@@ -33,11 +36,42 @@ class InvestNowTocContent extends Component {
     updateOffering(params);
   }
 
-  handleDeleteAction = () => {
+  handleDeleteAction = (e) => {
+    e.preventDefault();
     const { manageOfferingStore, history, index, refLink } = this.props;
     manageOfferingStore.removeOne('INVEST_NOW_TOC_FRM', 'toc', index);
-    // this.handleFormSubmit();
     history.push(`${refLink}/${index}`);
+  }
+
+  encodeString = (data) => {
+    let encodedString = data;
+    if (data) {
+      const content = data.split('-');
+      const identifier = get(content, '[0]');
+      const title = get(content, '[1]');
+      switch (identifier) {
+        case 'CF_MODAL':
+          encodedString = (<Link to="/" onClick={this.handleDeleteAction}>{title}</Link>);
+          break;
+        case 'DOCUSIGN_ENVELOPE':
+          encodedString = (<Link to="/" onClick={this.handleDeleteAction}>{title}</Link>);
+          break;
+        case 'AGREEMENT':
+          encodedString = (<Link to="/" onClick={this.handleDeleteAction}>{title}</Link>);
+          break;
+        default:
+          break;
+      }
+    }
+    return encodedString;
+  }
+
+  preview = (string) => {
+    let originalText = '';
+    const regex = new RegExp(/\|\|\|([^|]*)\|\|\|/g);
+    const findArray = string.split(regex);
+    originalText = findArray.map(e => this.encodeString(e));
+    this.setState({ msg: originalText });
   }
 
   render() {
@@ -46,27 +80,27 @@ class InvestNowTocContent extends Component {
     return (
       <div className="inner-content-spacer">
         <Form>
-          {/* <small>
-            <Link to="/" onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-view" />Preview</Link>
-          </small> */}
+          <>{this.state.msg && this.state.msg.length && this.state.msg.map(e => e)}</>
+          <small>
+            <Link to="/" onClick={(e) => { e.preventDefault(); this.preview(INVEST_NOW_TOC_FRM.fields.toc[index].label.value); }}><Icon className="ns-view" />Preview</Link>
+          </small>
           {!isReadOnly && INVEST_NOW_TOC_FRM.fields.toc.length > 1
-          && (
-            <small className="pull-right">
-              <Link to="/" className="ml-10 negative-text" onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>
-            </small>
-          )}
-          {/* {smartElement.Masked('order', { multiForm: [metaInfo.form, 'toc', index], displayMode: true })} */}
+            && (
+              <small className="pull-right">
+                <Link to="/" className="ml-10 negative-text" onClick={(e) => { e.preventDefault(); this.updateState(true, 'showConfirm'); }}><Icon className="ns-trash" />Delete</Link>
+              </small>
+            )}
           {smartElement.FormDropDown('account', { multiForm: [metaInfo.form, 'toc', index], displayMode: isReadOnly })}
           {smartElement.FormDropDown('regulation', { multiple: true, multiForm: [metaInfo.form, 'toc', index], displayMode: isReadOnly })}
           {smartElement.RadioGroup('required', { multiForm: [metaInfo.form, 'toc', index], displayMode: isReadOnly })}
           {smartElement.TextArea('label', { multiForm: [metaInfo.form, 'toc', index], displayMode: isReadOnly })}
           <Divider hidden />
           {!isReadOnly
-          && (
-            <OfferingButtonGroup
-              updateOffer={this.handleFormSubmit}
-            />
-          )}
+            && (
+              <OfferingButtonGroup
+                updateOffer={this.handleFormSubmit}
+              />
+            )}
         </Form>
         <Confirm
           header="Confirm"
