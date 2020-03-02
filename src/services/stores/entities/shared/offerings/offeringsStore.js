@@ -284,17 +284,17 @@ export class OfferingsStore {
       fetchPolicy: 'no-cache',
       variables: { id },
       onFetch: (res) => {
-        if (!this.offerData.loading) {
-          this.currentId = id;
-          this.offerLoading = false;
-          this.oldOfferData = {};
-          const { setFormData, setCurrentOfferingId, setFieldValue } = offeringCreationStore;
-          setFieldValue('currentOfferingSlug', id);
-          setCurrentOfferingId(res.getOfferingDetailsBySlug.id);
-          setFormData('OFFERING_DETAILS_FRM', false);
-          setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
-          setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
-        }
+          if (!this.offerDataLoading) {
+            this.currentId = id;
+            this.offerLoading = false;
+            this.oldOfferData = {};
+            const { setFormData, setCurrentOfferingId, setFieldValue } = offeringCreationStore;
+            setFieldValue('currentOfferingSlug', id);
+            setCurrentOfferingId(res.getOfferingDetailsBySlug.id);
+            setFormData('OFFERING_DETAILS_FRM', false);
+            setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
+            setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
+          }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -310,7 +310,7 @@ export class OfferingsStore {
       fetchPolicy: 'no-cache',
       variables: { id },
       onFetch: (res) => {
-        if (!this.offerData.loading) {
+        if (!this.offerDataLoading) {
           resolve(res.getOfferingById.offeringSlug);
         }
       },
@@ -420,6 +420,10 @@ export class OfferingsStore {
 
   @computed get offer() {
     return (this.offerData.data && toJS(this.offerData.data.getOfferingDetailsBySlug)) || {};
+  }
+
+  @computed get offerDataLoading() {
+    return this.offerData.loading;
   }
 
   @computed get offerOld() {
