@@ -1,9 +1,17 @@
 import React from 'react';
 import { Header, Divider } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import NSImage from './NSImage';
 
+@withRouter
 export default class NotFound extends React.Component {
+  constructor(props) {
+    super(props);
+    if (this.props.redirectToHome) {
+      this.props.history.push('/');
+    }
+  }
+
   render() {
     return (
       <div className="error-page">

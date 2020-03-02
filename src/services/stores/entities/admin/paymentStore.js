@@ -65,7 +65,7 @@ export class PaymentStore extends DataModelStore {
       }
     };
 
-    paymentCtaHandlers = (mutation) => {
+    paymentCtaHandlers = mutation => new Promise((resolve) => {
       let variables = false;
       if (mutation === 'adminPaymentGenerateAdminSummary') {
         variables = { ...toJS(Validator.evaluateFormData(this.ACTION_FRM.fields)) };
@@ -75,9 +75,9 @@ export class PaymentStore extends DataModelStore {
         setLoader: mutation,
         variables,
       }).then((res) => {
-        console.log(res);
+        resolve(res);
       });
-    };
+    });
 
     setDb = (data) => {
       this.setFieldValue('initialData', data);
