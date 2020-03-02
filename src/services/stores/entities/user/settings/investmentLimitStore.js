@@ -6,7 +6,7 @@ import { GqlClient as client } from '../../../../../api/gqlApi';
 import { uiStore, userDetailsStore, campaignStore, investmentStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
-import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorTotalAmountInvested, calculateCfLimit } from '../../../queries/investementLimits';
+import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorTotalAmountInvested } from '../../../queries/investementLimits';
 import Helper from '../../../../../helper/utility';
 import { userDetailsQuery } from '../../../queries/users';
 
@@ -174,24 +174,30 @@ export class InvestmentLimitStore {
     const formData = mapValues(investmentLimitForm.fields, f => parseInt(f.value, 10));
     const accountId = this.currentAccountId || getSelectedAccountTypeId;
     console.log(accountId);
-    const variables = { income: formData.annualIncome, netWorth: formData.netWorth, otherContributions: formData.cfInvestments };
-    this.calculatedCFLimitDetails = graphql({
-      client,
-      query: calculateCfLimit,
-      variables,
-      onFetch: (data) => {
-        if (get(data, 'calculateCfLimit') && !this.calculatedCFLimitDetails.loading) {
+    if ((formData.annualIncome || formData.annualIncome === 0) && (formData.netWorth || formData.netWorth === 0) && (formData.cfInvestments || formData.cfInvestments === 0)) {
+      const variables = { accountId, limits: { income: formData.annualIncome, netWorth: formData.netWorth, otherContributions: formData.cfInvestments } };
+      this.calculatedCFLimitDetails = graphql({
+        client,
+        query: getInvestorInvestmentLimit,
+        variables,
+        onFetch: (data) => {
+          if (get(data, 'getInvestorInvestmentLimit') && !this.calculatedCFLimitDetails.loading) {
+            uiStore.setProgress(false);
+            this.setFieldValue('currentLimit', data.getInvestorInvestmentLimit);
+            resolve();
+          }
+        },
+        onError: () => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setProgress(false);
-          this.setFieldValue('currentLimit', data.calculateCfLimit);
-          resolve();
-        }
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-        uiStore.setProgress(false);
-        reject();
-      },
-    });
+          reject();
+        },
+        fetchPolicy: 'network-only',
+      });
+    } else {
+      uiStore.setProgress(false);
+      resolve();
+    }
   });
 
   // @action
