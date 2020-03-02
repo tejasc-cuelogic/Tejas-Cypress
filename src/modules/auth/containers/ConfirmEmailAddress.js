@@ -229,6 +229,7 @@ export default class ConfirmEmailAddress extends Component {
                 className="otp-field"
                 pattern="[0-9]*"
                 inputmode="numeric"
+                autocomplete="one-time-code"
                 disabled={isEmpty(CONFIRM_FRM.fields.email.value)}
                 fielddata={CONFIRM_FRM.fields.code}
                 onChange={ConfirmChange}

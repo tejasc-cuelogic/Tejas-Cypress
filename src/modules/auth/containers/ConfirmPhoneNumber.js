@@ -195,6 +195,7 @@ export default class ConfirmPhoneNumber extends Component {
                     className="otp-field"
                     pattern="[0-9]*"
                     inputmode="numeric"
+                    autocomplete="one-time-code"
                     disabled={(reSendVerificationCode && this.props.uiStore.inProgress) || signUpLoading || (errors && errors.message && errors.message.includes('The number you entered is invalid'))}
                     fielddata={ID_PHONE_VERIFICATION.fields.code}
                     onChange={phoneVerificationChange}
