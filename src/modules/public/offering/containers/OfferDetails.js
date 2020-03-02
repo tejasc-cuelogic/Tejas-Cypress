@@ -63,6 +63,8 @@ class offerDetails extends Component {
       if (get(exception, 'code') === 'OFFERING_EXCEPTION') {
         if (['TERMINATED', 'FAILED'].includes(get(exception, 'stage')) && !isAdmin) {
           this.props.history.push('/offerings');
+        } else if (`Offering ${this.props.match.params.id} not found.` === get(exception, 'message')) {
+          this.props.history.push('/offerings');
         } else if (['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
           this.setState({ offeringSlug: get(exception, 'offeringSlug'), showPassDialog: get(exception, 'promptPassword'), preLoading: false });
         } else if (!['CREATION'].includes(get(exception, 'stage')) && get(exception, 'promptPassword')) {
@@ -71,8 +73,6 @@ class offerDetails extends Component {
           this.setState({ showPassDialog: false, preLoading: false });
           this.props.uiStore.setAuthRef(this.props.location.pathname, this.props.location.hash);
           this.props.history.push('/login');
-        } else if (`Offering ${this.props.match.params.id} not found.` === get(exception, 'message')) {
-          this.props.history.push('/offerings');
         } else {
           this.props.campaignStore.getCampaignDetails(this.props.match.params.id, false, true);
         }
