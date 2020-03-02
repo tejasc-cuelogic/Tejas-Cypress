@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
 import beautify from 'json-beautify';
 import { MaskedInput } from '../../../../../theme/form';
@@ -10,9 +10,10 @@ function ActionModal(props) {
   const [showResponse, setShowResponse] = useState(false);
   useEffect(() => {
     props.paymentStore.resetForm('ACTION_FRM');
+    props.paymentStore.validateForm('ACTION_FRM');
   }, [showResponse, response]);
   const paymentCtaHandlers = () => {
-    props.paymentStore.paymentCtaHandlers('adminPaymentGenerateAdminSummary').then((res) => { setResponse(res); setShowResponse(true); });
+    props.paymentStore.paymentCtaHandlers('adminPaymentGenerateAdminSummary').then((res) => { setResponse(get(res, 'data.adminPaymentGenerateAdminSummary')); setShowResponse(true); });
   };
   const { ACTION_FRM, maskChange } = props.paymentStore;
   const { loadingArray } = props.nsUiStore;
@@ -40,9 +41,12 @@ function ActionModal(props) {
           {showResponse
           && (response && !isEmpty(response)
             ? (
+              <>
+              <Header as="h5">Response: </Header>
               <pre className="no-updates bg-offwhite padded json-text">
                 {beautify(response, null, 2, 100)}
               </pre>
+              </>
             )
             : (
               <section className="bg-offwhite mb-20 center-align">
