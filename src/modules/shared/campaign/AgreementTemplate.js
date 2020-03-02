@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter, Link } from 'react-router-dom';
-import { get, startsWith, includes } from 'lodash';
+// Link
+import { withRouter } from 'react-router-dom';
+// import { get, startsWith, includes } from 'lodash';
+import { get } from 'lodash';
 import { Modal, Header, Button, Grid, Form, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../theme/form';
 import Helper from '../../../helper/utility';
@@ -28,7 +30,7 @@ function AgreementTemplate(props) {
             stepToBeRendered, setStepToBeRendered, investAccTypes, resetAggrementForm, setFieldValue,
         } = investmentStore;
         const {
-            getLegalDocsFileIds, alreadySet,
+            getLegalDocsFileIds, alreadySet, createAgreementTocs,
         } = agreementsStore;
         if (!alreadySet) {
             getLegalDocsFileIds().then(() => {
@@ -42,6 +44,8 @@ function AgreementTemplate(props) {
             setStepToBeRendered(0);
         }
         setFieldValue('investmentFlowErrorMessage', null);
+        const { currentInvestmentStatus } = props.accreditationStore;
+        createAgreementTocs(currentInvestmentStatus);
         // Component WillUnMount Code:
         return () => {
             campaignStore.setFieldValue('inInvestmentFlow', false);
@@ -85,7 +89,7 @@ function AgreementTemplate(props) {
     };
 
     const submit = () => {
-        if (props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid) {
+        if (props.agreementsStore.AGREEMENT_DETAILS_FORM.meta.isValid) {
             setShowError(false);
             props.investmentStore.setFieldValue('investmentFlowErrorMessage', null);
             props.investmentStore.investNowSubmit().then((investmentStatus) => {
@@ -118,27 +122,26 @@ function AgreementTemplate(props) {
     };
 
     const {
-        AGREEMENT_DETAILS_FORM,
         investmentAmount,
-        setCheckbox,
         agreementDetails,
         investmentFlowErrorMessage,
     } = props.investmentStore;
+    const { AGREEMENT_DETAILS_FORM, setCheckbox } = props.agreementsStore;
     const { getCurrentInvestNowHealthCheck } = props.investmentLimitStore;
     const previouslyInvestedAmount = get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') ? get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') : '0';
-    const { uiStore, match } = props;
+    const { uiStore } = props; // match
     const { inProgress } = uiStore;
     const { getInvestorAccountById } = props.portfolioStore;
     const { campaign, campaignStatus } = props.campaignStore;
     const { embedUrl, docLoading } = props.agreementsStore;
-    const offeringRegulationType = get(campaign, 'keyTerms.regulation');
-    const { currentInvestmentStatus } = props.accreditationStore;
-    const investmentRegulation = get(getInvestorAccountById, 'regulation');
-    const regulationCheck = currentInvestmentStatus || investmentRegulation;
-    const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : regulationCheck === 'BD_506B' ? 'Rule 506(b) of Regulation D' : 'Regulation Crowdfunding';
+    // const offeringRegulationType = get(campaign, 'keyTerms.regulation');
+    // const { currentInvestmentStatus } = props.accreditationStore;
+    // const investmentRegulation = get(getInvestorAccountById, 'regulation');
+    // const regulationCheck = currentInvestmentStatus || investmentRegulation;
+    // const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : regulationCheck === 'BD_506B' ? 'Rule 506(b) of Regulation D' : 'Regulation Crowdfunding';
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
-    const agreementStatement = campaignStatus.isPreferredEquity ? 'Purchase Agreement and Investor Proxy Agreement' : campaignStatus.isRealEstate ? 'LLC Agreement and Subscription Agreement' : campaignStatus.isSafe ? 'SAFE' : 'Note Purchase Agreement';
+    // const agreementStatement = campaignStatus.isPreferredEquity ? 'Purchase Agreement and Investor Proxy Agreement' : campaignStatus.isRealEstate ? 'LLC Agreement and Subscription Agreement' : campaignStatus.isSafe ? 'SAFE' : 'Note Purchase Agreement';
     return (
         <>
             <Modal open={open} closeOnDimmerClick={false} size="mini">
@@ -192,12 +195,23 @@ function AgreementTemplate(props) {
               </Header>
                         <Form
                           error={(showError
-                                && !props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid)
+                                && !props.agreementsStore.AGREEMENT_DETAILS_FORM.meta.isValid)
                                 || investmentFlowErrorMessage}
                         >
                             <Grid stackable>
                                 <Grid.Row>
-                                    {['checkboxesLeft', 'checkboxesRight'].map(field => (
+                                    <Grid.Column width={8}>
+                                        <FormCheckbox
+                                          defaults
+                                          fielddata={AGREEMENT_DETAILS_FORM.fields}
+                                          name="agreementCheckBox"
+                                          containerclassname={`ui very relaxed list ${showError && !props.agreementsStore.AGREEMENT_DETAILS_FORM.meta.isValid ? 'error' : ''}`}
+                                          changed={setCheckbox}
+                                          disabled={inProgress}
+                                        />
+                                    </Grid.Column>
+
+                                    {/* ['checkboxesLeft', 'checkboxesRight'].map(field => (
                                         <Grid.Column width={8}>
                                             <FormCheckbox
                                               defaults
@@ -265,7 +279,7 @@ function AgreementTemplate(props) {
                                               currentInvestmentStatus={regulationCheck}
                                             />
                                         </Grid.Column>
-                                    ))}
+                                    )) */}
                                 </Grid.Row>
                             </Grid>
                             <div className="center-align mt-30">
@@ -282,7 +296,7 @@ function AgreementTemplate(props) {
                                 )
                             }
                             {showError
-                                && !props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid
+                                && !props.agreementsStore.AGREEMENT_DETAILS_FORM.meta.isValid
                                 && <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
                             }
                         </Form>

@@ -1,9 +1,11 @@
 import { toJS, observable, computed, action } from 'mobx';
-import { forEach } from 'lodash';
+import { forEach, filter } from 'lodash';
 import graphql from 'mobx-apollo';
-import { uiStore } from '../../../index';
+import { uiStore, campaignStore, userDetailsStore } from '../../../index';
 import { GqlClient as client } from '../../../../../api/publicApi';
 import { getBoxEmbedLink, getLegalDocsFileIds, getS3DownloadLinkByFileId } from '../../../queries/agreements';
+import { AGREEMENT_TEMPLATE_DETAILS_INFO } from '../../../../constants/investment';
+import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
 export class AgreementsStore {
@@ -66,6 +68,8 @@ export class AgreementsStore {
   @observable docIdsLoading = false;
 
   @observable alreadySet = false;
+
+  @observable AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_TEMPLATE_DETAILS_INFO);
 
   @computed get getAgreementsList() {
     return toJS(this.agreements);
@@ -192,6 +196,35 @@ export class AgreementsStore {
       newItem.boxId = data[item.refEnum];
       this.legalDocsList.push(newItem);
     });
+  }
+
+  @action
+  createAgreementTocs = (currentRegulation) => {
+    const { campaignStatus } = campaignStore;
+    const { currentActiveAccount } = userDetailsStore;
+    const currentSelectedAccount = ['individual', 'ira'].includes(currentActiveAccount) ? 'INDIVIDUAL' : 'ENTITY';
+    const tocArray = campaignStatus.investNowToc;
+    // Filter as per Account Type:
+    const filterAllAccountTypeArray = filter(tocArray, o => o.account === 'ALL');
+    const filterSpecificAccountTypeArray = filter(tocArray, o => o.account !== 'ALL' && o.account === currentSelectedAccount);
+    const filterAccountTypeArray = [...filterAllAccountTypeArray, ...filterSpecificAccountTypeArray];
+    // Filter as per Regulation Type:
+    const filterDefaultValueArray = filter(filterAccountTypeArray, o => !o.regulation);
+    const filteredRegulationArray = filter(filterAccountTypeArray, o => o.regulation && o.regulation.includes(currentRegulation));
+    const resultArray = [...filteredRegulationArray, ...filterDefaultValueArray];
+    const valuesArray = [];
+    forEach(resultArray, (data) => {
+      const valueObj = {};
+      valueObj.label = data.label;
+      valueObj.value = data.order;
+      valuesArray.push(valueObj);
+    });
+    this.AGREEMENT_DETAILS_FORM.fields.values = valuesArray;
+  }
+
+  @action
+  setCheckbox = (e, res) => {
+    this.AGREEMENT_DETAILS_FORM = Validator.onChange(this.AGREEMENT_DETAILS_FORM, Validator.pullValues(e, res), 'checkbox');
   }
 }
 
