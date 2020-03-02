@@ -173,7 +173,6 @@ export class InvestmentLimitStore {
     const investmentLimitForm = form ? this[form] : INVESTMENT_LIMITS_FORM;
     const formData = mapValues(investmentLimitForm.fields, f => parseInt(f.value, 10));
     const accountId = this.currentAccountId || getSelectedAccountTypeId;
-    console.log(accountId);
     if ((formData.annualIncome || formData.annualIncome === 0) && (formData.netWorth || formData.netWorth === 0) && (formData.cfInvestments || formData.cfInvestments === 0)) {
       const variables = { accountId, limits: { income: formData.annualIncome, netWorth: formData.netWorth, otherContributions: formData.cfInvestments } };
       this.calculatedCFLimitDetails = graphql({
