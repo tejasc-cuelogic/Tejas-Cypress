@@ -11,6 +11,10 @@ function cipVerificationHOC(WrappedComponent) {
   return inject('identityStore', 'accountStore', 'userDetailsStore', 'uiStore', 'userStore')(observer((class extends React.Component {
     constructor(props) {
       super(props);
+      if (!this.props.identityStore.ID_VERIFICATION_FRM.meta.isValid
+        && window.location.pathname !== INVESTOR_URLS.cipForm) {
+        this.props.history.push(INVESTOR_URLS.cipForm);
+      }
       this.props.identityStore.setCipDetails();
       this.props.identityStore.changeSsnRules();
     }
