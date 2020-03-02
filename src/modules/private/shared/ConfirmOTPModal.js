@@ -97,9 +97,10 @@ export default class ConfirmOTPModal extends Component {
                 fields={6}
                 type="number"
                 className="otp-field"
-                autoFocus={!isMobile}
                 pattern="[0-9]*"
                 inputmode="numeric"
+                autocomplete="one-time-code"
+                autoFocus={!isMobile}
                 fielddata={OTPVerifyMeta.fields.code}
                 onChange={VerificationChange}
               />
