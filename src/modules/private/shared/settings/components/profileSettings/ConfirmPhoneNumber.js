@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
+import { isEmpty } from 'lodash';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../theme/form';
@@ -15,17 +16,22 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class ConfirmPhoneNumber extends Component {
   constructor(props) {
     super(props);
-    const { identityStore, userDetailsStore } = this.props;
-    if (identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
+    const { userDetailsStore } = this.props;
+    const { phoneNumberChange, phoneTypeChange, requestOtpResponse, ID_VERIFICATION_FRM, startPhoneVerification } = this.props.identityStore;
+    if (ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
       if (userDetailsStore.userDetails && userDetailsStore.userDetails.phone
         && userDetailsStore.userDetails.phone.number) {
         const fieldValue = Helper.maskPhoneNumber(userDetailsStore.userDetails.phone.number);
-        this.props.identityStore.phoneNumberChange(fieldValue);
+        phoneNumberChange(fieldValue);
       }
     }
     if (userDetailsStore.userDetails.phone && userDetailsStore.userDetails.phone.type) {
       const fieldValue = userDetailsStore.userDetails.phone.type;
-      identityStore.phoneTypeChange(fieldValue);
+      phoneTypeChange(fieldValue);
+    }
+
+    if (Object.keys(requestOtpResponse).length === 0 && !isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value)) {
+      startPhoneVerification();
     }
   }
 
@@ -53,7 +59,7 @@ export default class ConfirmPhoneNumber extends Component {
         Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.setDashboardWizardStep('InvestmentChooseType');
       })
-        .catch(() => {});
+        .catch(() => { });
     }
   }
 
@@ -97,7 +103,7 @@ export default class ConfirmPhoneNumber extends Component {
       phoneVerificationChange,
       isOptConfirmed,
     } = this.props.identityStore;
-    const { errors, editMode, responsiveVars } = this.props.uiStore;
+    const { errors, editMode, responsiveVars, inProgress } = this.props.uiStore;
     if (isOptConfirmed) {
       return <SuccessScreen successMsg="Your phone number has been updated." handleContinue={this.handleContinue} />;
     }
@@ -148,16 +154,16 @@ export default class ConfirmPhoneNumber extends Component {
             </Form.Field>
             {errors
               && (
-<Message error className="mb-40">
-                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-              </Message>
+                <Message error className="mb-40">
+                  <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+                </Message>
               )
             }
-            <Button primary size="large" className="very relaxed" content="Confirm" loading={!this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
+            <Button primary size="large" className="very relaxed" content="Confirm" loading={!this.props.identityStore.reSendVerificationCode && inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid || inProgress} />
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <Button type="button" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
+          <Button type="button" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={this.props.identityStore.reSendVerificationCode && inProgress} onClick={() => this.startPhoneVerification()} />
         </Modal.Actions>
       </Modal>
     );
