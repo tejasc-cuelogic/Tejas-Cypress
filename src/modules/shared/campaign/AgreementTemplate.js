@@ -176,7 +176,6 @@ function AgreementTemplate(props) {
                                       height="100%"
                                       title="agreement"
                                       src={embedUrl}
-                                    //   ref={(c) => { iframeComponent = c; }}
                                       ref={iframeComponent}
                                     />
                                 )
