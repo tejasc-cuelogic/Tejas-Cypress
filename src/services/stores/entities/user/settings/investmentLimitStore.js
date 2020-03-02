@@ -169,9 +169,11 @@ export class InvestmentLimitStore {
   @action
   calculateCfLimit = (form = null) => new Promise((resolve, reject) => {
     uiStore.setProgress();
-    const { INVESTMENT_LIMITS_FORM } = investmentStore;
+    const { INVESTMENT_LIMITS_FORM, getSelectedAccountTypeId } = investmentStore;
     const investmentLimitForm = form ? this[form] : INVESTMENT_LIMITS_FORM;
     const formData = mapValues(investmentLimitForm.fields, f => parseInt(f.value, 10));
+    const accountId = this.currentAccountId || getSelectedAccountTypeId;
+    console.log(accountId);
     const variables = { income: formData.annualIncome, netWorth: formData.netWorth, otherContributions: formData.cfInvestments };
     this.calculatedCFLimitDetails = graphql({
       client,
