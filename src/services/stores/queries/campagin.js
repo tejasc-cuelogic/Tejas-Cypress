@@ -324,6 +324,16 @@ export const campaignDetailsQuery = gql`
         }
       }
     }
+    investNow {
+      toc {
+        label
+        order
+        page
+        account
+        regulation
+        required
+      }
+    }
     closureSummary {
       processingDate
       hardCloseDate
