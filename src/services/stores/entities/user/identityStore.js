@@ -6,7 +6,7 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
-import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isUniqueSSN, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
+import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isUniqueSSN, cipLegalDocUploads, verifyCipSoftFail, verifyCip, verifyCipHardFail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
@@ -246,6 +246,7 @@ export class IdentityStore {
   verifyCip = async (isAdmin = false) => {
     this.setFieldValue('isAdmin', isAdmin);
     this.setCipDetails();
+    delete this.formattedUserInfoForCip.user.verificationDocs;
     let variables = { isCipOffline: false, ...this.formattedUserInfoForCip };
     variables = isAdmin ? { ...variables, userId: userDetailsStore.selectedUserId } : { ...variables };
     const payLoad = {
@@ -295,6 +296,27 @@ export class IdentityStore {
     return { res, url };
   }
 
+
+  @action
+  cipLegalDocUploads = async () => {
+    const payLoad = {
+      mutation: cipLegalDocUploads,
+      mutationName: 'cipLegalDocUploads',
+      variables: {
+        license: this.verificationDocs().idProof.fileId,
+        residence: this.verificationDocs().addressProof.fileId,
+      },
+    };
+    const { res: response } = await this.cipWrapper(payLoad);
+    if (response) {
+      const { res, url } = await this.verifyCip();
+      this.setFieldValue('isAddressFailed', false);
+      this.setFieldValue('cipBackUrl', [...this.cipBackUrl, ...[INVESTOR_URLS.cipForm]]);
+      return { res, url };
+    }
+    return false;
+  }
+
   @action
   changeSsnRules = (isRequired = false) => {
     this.ID_VERIFICATION_FRM.fields.ssn.rule = this.ID_VERIFICATION_FRM.fields.ssn.value.includes('X') && !isRequired ? 'optional' : 'required';
@@ -302,13 +324,12 @@ export class IdentityStore {
 
   @action
   verifyCipHardFail = async () => {
-    const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
     const payLoad = {
       mutation: verifyCipHardFail,
       mutationName: 'verifyCipHardFail',
       variables: {
-        license: photoId.fileId,
-        residence: proofOfResidence.fileId,
+        license: this.verificationDocs().idProof.fileId,
+        residence: this.verificationDocs().addressProof.fileId,
       },
       cipPassStatus: 'MANUAL_VERIFICATION_PENDING',
     };

@@ -31,15 +31,22 @@ class CipHardFail extends React.Component {
 
   handleUploadDocuments = async (e) => {
     e.preventDefault();
+    let redirectUrl = {};
     const { handleCipExpiration, redirectTo } = this.props.cipUtility;
-    this.props.identityStore.setSubmitVerificationDocs(true);
-    this.props.identityStore.setFieldValue('signUpLoading', true);
-    let { url } = await this.props.identityStore.verifyCipHardFail();
+    const { setFieldValue, verifyCipHardFail, cipLegalDocUploads } = this.props.identityStore;
+    setFieldValue('signUpLoading', true);
+    if (this.props.identityStore.isAddressFailed) {
+      redirectUrl = await cipLegalDocUploads();
+    } else {
+      this.props.identityStore.setSubmitVerificationDocs(true);
+      redirectUrl = await verifyCipHardFail();
+    }
     const { accountForWhichCipExpired, userDetails } = this.props.userDetailsStore;
     if (userDetails.legalDetails.status === 'OFFLINE' || accountForWhichCipExpired) {
-      url = await handleCipExpiration();
+      const url = await handleCipExpiration();
+      redirectUrl.url = url;
     }
-    redirectTo(url);
+    redirectTo(redirectUrl.url);
   }
 
   handleBack = () => {

@@ -11,12 +11,16 @@ function cipVerificationHOC(WrappedComponent) {
   return inject('identityStore', 'accountStore', 'userDetailsStore', 'uiStore', 'userStore')(observer((class extends React.Component {
     constructor(props) {
       super(props);
-      if (!this.props.identityStore.ID_VERIFICATION_FRM.meta.isValid
-        && window.location.pathname !== INVESTOR_URLS.cipForm) {
-        this.props.history.push(INVESTOR_URLS.cipForm);
-      }
       this.props.identityStore.setCipDetails();
       this.props.identityStore.changeSsnRules();
+      const isCipForm = window.location.pathname === INVESTOR_URLS.cipForm;
+      if (!isCipForm) {
+        this.props.identityStore.validateForm('ID_VERIFICATION_FRM');
+      }
+      if (!this.props.identityStore.ID_VERIFICATION_FRM.meta.isValid
+        && !isCipForm) {
+        this.props.history.push(INVESTOR_URLS.cipForm);
+      }
     }
 
     handleCloseModal = () => {
@@ -59,12 +63,15 @@ function cipVerificationHOC(WrappedComponent) {
 
     handleCip = async (isAddressOrPhoneFailure = undefined) => {
       const { setFieldValue, cipBackUrl } = this.props.identityStore;
-
       const { url } = await this.props.identityStore.verifyCip();
       if (isAddressOrPhoneFailure) {
-        const failObj = isAddressOrPhoneFailure === 'addressFail' ? { failKey: 'isAddressFailed', backUrl: 'cipAddressFail' } : { failKey: 'isPhoneFailed', backUrl: 'cipPhoneFail' };
-        setFieldValue(failObj.failKey, false);
-        setFieldValue('cipBackUrl', [...cipBackUrl, ...[INVESTOR_URLS[failObj.backUrl]]]);
+        const failObj = { backUrl: isAddressOrPhoneFailure === 'addressFail' ? 'cipAddressFail' : 'cipPhoneFail' };
+        if (isAddressOrPhoneFailure === 'phoneFail') {
+          setFieldValue('isPhoneFailed', false);
+        }
+        if (window.location.pathname !== url) {
+          setFieldValue('cipBackUrl', [...cipBackUrl, ...[INVESTOR_URLS[failObj.backUrl]]]);
+        }
       }
       this.redirectTo(url);
     }
@@ -89,7 +96,7 @@ function cipVerificationHOC(WrappedComponent) {
           />
           <FormDropDown
             name="state"
-            fielddata={addressForm.fields.state}
+            fielddata={{ ...addressForm.fields.state, error: undefined }}
             options={US_STATES}
             search
             selection

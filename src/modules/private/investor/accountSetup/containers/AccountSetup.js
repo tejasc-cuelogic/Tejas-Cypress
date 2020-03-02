@@ -9,7 +9,7 @@ import StickyNotification from '../components/StickyNotification';
 import ProgressCard from '../components/ProgressCard';
 import EstablishProfile from './establishProfile';
 import AccountCreation from './accountCreation';
-import { InlineLoader, SuspenseBoundary } from '../../../../../theme/shared';
+import { InlineLoader } from '../../../../../theme/shared';
 import CipVerification from './cipVerification/index';
 import {
   INVESTMENT_ACCOUNT_TYPES,
@@ -78,14 +78,12 @@ export default class AccountSetup extends Component {
           ) : <InlineLoader />
 
         }
-        <SuspenseBoundary>
           <Switch>
             <Route path={`${match.url}/cip`} component={CipVerification} />
             <Route exact path={`${match.url}/phone-verification`} component={ConfirmPhoneNumber} />
             <Route path={`${match.url}/establish-profile`} component={EstablishProfile} />
             <Route path={`${match.url}/account-creation`} component={AccountCreation} />
           </Switch>
-        </SuspenseBoundary>
       </PrivateLayout>
     );
   }
