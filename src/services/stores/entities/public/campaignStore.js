@@ -68,6 +68,8 @@ export class CampaignStore {
 
   @observable offeringUUID = null;
 
+  @observable inInvestmentFlow = false;
+
   @observable documentMeta = {
     closingBinder: { selectedDoc: null, accordionActive: true },
   };
@@ -363,7 +365,7 @@ export class CampaignStore {
     campaignStatus.isConvertibleNotes = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.CONVERTIBLE_NOTES;
     campaignStatus.isEquity = this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY;
     campaignStatus.isRealEstate = (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE || (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(campaign, 'keyTerms.equityClass') === 'LLC_MEMBERSHIP_UNITS'));
-    campaignStatus.isPreferredEquity = (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C || (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && get(campaign, 'keyTerms.equityClass') === 'PREFERRED'));
+    campaignStatus.isPreferredEquity = (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C || (this.offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.EQUITY && (get(campaign, 'keyTerms.equityClass') === 'PREFERRED' || (this.inInvestmentFlow && ['CLASS_A_SHARES', 'CLASS_B_SHARES', 'PARALLEL_CLASS_SHARES'].includes(get(campaign, 'keyTerms.equityClass'))))));
     campaignStatus.doneComputing = (get(this.details, 'data.getOfferingDetailsBySlug') && !isEmpty(this.details.data.getOfferingDetailsBySlug.keyTerms)) || false;
     return campaignStatus;
   }
@@ -599,7 +601,7 @@ export class CampaignStore {
         && launchDaysToRemainsForNewLable >= 0 && launchDaysToRemainsForNewLable <= 7) {
         resultObject.isBannerShow = true;
         resultObject.datesBanner = 'NEW';
-        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
+        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, isRealEstate);
         if (isRealEstate) {
           resultObject.realEstateBanner = 'Real Estate';
         }
@@ -611,7 +613,7 @@ export class CampaignStore {
         const labelBannerFirst = ((includes(['Minute Left', 'Minutes Left'], closeDaysToRemainsInHours.label) && closeDaysToRemainsInHours.value > 0) || closeDaysToRemainsInHours.value <= 48) ? `${closeDaysToRemainsInHours.value} ${closeDaysToRemainsInHours.label}` : closeDaysToRemains === 1 ? `${closeDaysToRemains} Day Left` : `${closeDaysToRemains} Days Left`;
         resultObject.isBannerShow = !!labelBannerFirst;
         resultObject.datesBanner = labelBannerFirst;
-        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, securities);
+        resultObject.amountsBanner = this.generateLabelBannerSecond(amountCompairResult, percentageCompairResult, percent, isRealEstate);
         if (isRealEstate) {
           resultObject.realEstateBanner = 'Real Estate';
         }

@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { get, capitalize } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Statistic, Grid, Button } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_EQUITY_CLASS } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
 import { Image64, PopUpModal } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
@@ -184,7 +184,7 @@ export default class CampaignHeader extends Component {
                   {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                     && (
                       <p className="raise-type mb-0">
-                        {!campaignStatus.isEquity && campaignStatus.isRealEstate ? 'Commercial Real Estate' : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{campaignStatus.isEquity && ['LLC_MEMBERSHIP_UNITS', 'PREFERRED'].includes(get(campaign, 'keyTerms.equityClass')) ? `  - ${CAMPAIGN_KEYTERMS_EQUITY_CLASS[get(campaign, 'keyTerms.equityClass')]}` : ' '}
+                        {campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isPreferredEquity ? CAMPAIGN_KEYTERMS_SECURITIES.PREFERRED_EQUITY_506C : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
                       </p>
                     )
                   }

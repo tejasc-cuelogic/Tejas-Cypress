@@ -22,6 +22,7 @@ export default class InvestNow extends React.Component {
     if (!this.props.campaignStore.isInvestBtnClicked) {
       this.props.history.push(this.props.refLink);
     }
+    this.props.campaignStore.setFieldValue('inInvestmentFlow', true);
     this.props.investmentStore.setStepToBeRendered(0);
     this.props.investmentStore.resetData();
     this.props.uiStore.setProgress(false);
@@ -57,6 +58,9 @@ export default class InvestNow extends React.Component {
     const isUpdateScreen = changeInvest;
     const reflectedURL = this.props.history.location.pathname;
     const matchURL = this.props.match.url;
+    if (matchURL.includes('portfolio')) {
+      this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
+    }
     if (!isUpdateScreen || (isUpdateScreen && !reflectedURL.includes('invest-now'))) {
       if (!matchURL.includes('portfolio')) {
         this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
@@ -66,9 +70,11 @@ export default class InvestNow extends React.Component {
       if (!reflectedURL.includes('agreement')) {
         this.props.accreditationStore.setFieldVal('userAccredetiationState', null);
         this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
+        this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
       }
       this.props.campaignStore.setFieldValue('offeringUUID', null);
     }
+    window.removeEventListener('message', this.handleIframeTask);
   }
 
   handleIframeTask = (e) => {

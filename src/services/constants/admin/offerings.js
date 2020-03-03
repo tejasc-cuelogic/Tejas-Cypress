@@ -88,6 +88,38 @@ export const KEY_TERMS = {
     rule: 'string',
     placeHolder: 'Choose here',
   },
+  classThreshold: {
+    value: '',
+    label: 'Class Threshold',
+    error: undefined,
+    rule: 'optional|numeric',
+    placeHolder: 'Enter here',
+  },
+  equityClass: {
+    value: 'CLASS_A_SHARES',
+    values: [
+      { key: 'Series NS Preferred Units', value: 'PREFERRED', text: 'Series NS Preferred Units' },
+      { key: 'LLC Membership Interests', value: 'LLC_MEMBERSHIP_UNITS', text: 'LLC Membership Interests' },
+      { key: 'Class A Shares', value: 'CLASS_A_SHARES', text: 'Class A Shares' },
+      { key: 'Class B Shares', value: 'CLASS_B_SHARES', text: 'Class B Shares' },
+      { key: 'Class A and B Shares', value: 'PARALLEL_CLASS_SHARES', text: 'Class A and B Shares' },
+    ],
+    label: 'Equity Class',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Choose here',
+  },
+  equityUnitType: {
+    value: 'share',
+    values: [
+      { key: 'share', value: 'share', text: 'Shares' },
+      { key: 'unit', value: 'unit', text: 'Units' },
+    ],
+    label: 'Equity unit type',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Choose here',
+  },
   securityInterest: {
     value: '',
     label: 'Security Interest',
@@ -399,29 +431,6 @@ export const KEY_TERMS = {
     rule: 'numeric',
     placeHolder: 'Enter here',
   },
-  equityClass: {
-    value: 'CLASS_A_SHARES',
-    values: [
-      { key: 'Series NS Preferred Units', value: 'PREFERRED', text: 'Series NS Preferred Units' },
-      { key: 'LLC Membership Interests', value: 'LLC_MEMBERSHIP_UNITS', text: 'LLC Membership Interests' },
-      { key: 'Class A Shares', value: 'CLASS_A_SHARES', text: 'Class A Shares' },
-      { key: 'Class B Shares', value: 'CLASS_B_SHARES', text: 'Class B Shares' },
-      { key: 'Class A and B Shares', value: 'PARALLEL_CLASS_SHARES', text: 'Class A and B Shares' },
-    ],
-    label: 'Equity Class',
-    error: undefined,
-    rule: 'optional',
-  },
-  equityUnitType: {
-    value: 'share',
-    values: [
-      { key: 'share', value: 'share', text: 'Shares' },
-      { key: 'unit', value: 'unit', text: 'Units' },
-    ],
-    label: 'Equity unit type',
-    error: undefined,
-    rule: 'optional',
-  },
   premoneyValuation: {
     value: null,
     label: 'Pre-Money Valuation',
@@ -539,23 +548,12 @@ export const BUSINESS_TYPE_VALUES = [
 ];
 
 export const REGULATION_VALUES = [
-  { key: 'Rule 147, TX', value: 'FP_TX', text: 'Rule 147, TX' },
-  { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
-  { key: 'Reg CF - Securities', value: 'BD_CF', text: 'Reg CF - Securities' },
-  { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
-  { key: 'Reg D 506(b) - Securities', value: 'BD_506B', text: 'Reg D 506(b) - Securities' },
-  { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
+  { key: 'Reg CF', value: 'BD_CF', text: 'Reg CF' },
+  { key: 'Reg D 506(c)', value: 'BD_506C', text: 'Reg D 506(c)' },
+  { key: 'Reg D 506(b)', value: 'BD_506B', text: 'Reg D 506(b)' },
+  { key: 'Reg CF + Reg D 506(c)', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c)' },
 ];
-export const BD_REGULATION_VALUES = [
-  { key: 'Reg CF - Securities', value: 'BD_CF', text: 'Reg CF - Securities' },
-  { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
-  { key: 'Reg D 506(b) - Securities', value: 'BD_506B', text: 'Reg D 506(b) - Securities' },
-  { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
-];
-export const FP_REGULATION_VALUES = [
-  { key: 'Rule 147, TX', value: 'FP_TX', text: 'Rule 147, TX' },
-  { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
-];
+
 export const NS_FEE_PERCENTAGE = [
   { key: '1', value: '1.00', text: '1%' },
   { key: '2', value: '2.00', text: '2%' },

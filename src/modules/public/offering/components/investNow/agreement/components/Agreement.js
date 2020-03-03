@@ -11,11 +11,22 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @withRouter
 @observer
 export default class Agreement extends React.Component {
-  state = {
-    showDocuSign: false,
-    open: false,
-    showError: false,
-    showAgreementPdf: false,
+  constructor(props) {
+    super(props);
+    this.state = {
+      showDocuSign: false,
+      open: false,
+      showError: false,
+      showAgreementPdf: false,
+      sometext: 'Kalim I have reviewed and agree to the terms of the',
+    };
+    const { campaignStore, portfolioStore } = this.props;
+    this.props.campaignStore.setFieldValue('inInvestmentFlow', true);
+    const offeringIdToUpdate = campaignStore.getOfferingId
+      ? campaignStore.getOfferingId : portfolioStore.currentOfferingId;
+      if (!offeringIdToUpdate || offeringIdToUpdate === '') {
+        this.props.history.push(`${this.props.refLink}`);
+      }
   }
 
   componentDidMount() {
@@ -41,6 +52,7 @@ export default class Agreement extends React.Component {
   }
 
   componentWillUnmount() {
+    this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
     const redirectURL = this.props.history.location.pathname;
     if (!redirectURL.includes('change-investment-limit') && !redirectURL.includes('agreement')) {
       this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
@@ -204,7 +216,7 @@ export default class Agreement extends React.Component {
                           disabled={inProgress}
                           customLabel={(
                             <>
-                              I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">{agreementStatement}</Link>.
+                              {this.state.sometext} <Link onClick={e => this.docuSignHandeler(e, true)} to="/">{agreementStatement}</Link>.
                             </>
                           )}
                           conditionalCustomLabel={(
