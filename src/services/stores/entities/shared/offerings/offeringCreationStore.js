@@ -1793,7 +1793,7 @@ export class OfferingCreationStore extends DataModelStore {
 
   @action
   offeringClose = (params, step, scope) => new Promise(async (res, rej) => {
-    // uiStore.setProgress(params.process);
+    uiStore.setProgress(params.process);
     this.setFieldValue('outputMsg', null);
     let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
     formData = cleanDeep(formData);
