@@ -17,12 +17,12 @@ import ClosingBinder from './close/ClosingBinder';
 import ClosureProcessStatus from './close/ClosureProcessStatus';
 import ExportEnvelopes from './close/ExportEnvelopes';
 import Default from './close/Default';
-import { OFFERING_CLOSE_SERVICE_OPTIONS, OFFERING_CLOSE_COUNCURRENCY_OPTIONS } from '../../../../../services/constants/admin/offerings';
+import { OFFERING_CLOSE_COUNCURRENCY_OPTIONS } from '../../../../../services/constants/admin/offerings';
 
 const closingActions = {
   ENUM1: { label: 'save', ref: 1, enum: 'update' },
   ENUM2: { label: 'Soft Close Notification', keyToEnable: false, ref: 2, enum: 'SOFT_CLOSE_NOTIFICATION', statusKey: 'softCloseNotification' },
-  ENUM3: { label: 'Confirm Balances', keyToEnable: 'softCloseNotification.status', ref: 2, enum: 'CHECK_BALANCE', statusKey: 'checkBalance' },
+  ENUM3: { label: 'Confirm Balances', keyToEnable: false, ref: 2, enum: 'CHECK_BALANCE', statusKey: 'checkBalance' },
   ENUM4: { label: 'Issue Credits', keyToEnable: 'checkBalance.status', ref: 2, enum: 'ISSUE_CREDITS', statusKey: 'issueCredits' },
   ENUM5: { label: 'Fund Escrow', keyToEnable: 'issueCredits.status', ref: 2, enum: 'FUND_ESCROW', statusKey: 'fundEscrow' },
   ENUM6: {
@@ -257,14 +257,14 @@ export default class Close extends Component {
     const showDefaultOfferingCTA = !['CREATION', 'COMPLETE', 'LIVE'].includes(get(offer, 'stage'));
     const ServiceDropDown = props => (
       <>
-        <FormDropDown
+        {/* <FormDropDown
           fielddata={props.form.fields.service}
           selection
           value={props.form.fields.service.value}
           name="service"
           options={OFFERING_CLOSE_SERVICE_OPTIONS}
           onChange={(e, result) => formChange(e, result, props.formName)}
-        />
+        /> */}
         <FormDropDown
           fielddata={props.form.fields.concurrency}
           selection

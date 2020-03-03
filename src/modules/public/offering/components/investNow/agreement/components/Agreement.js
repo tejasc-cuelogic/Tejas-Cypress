@@ -18,6 +18,7 @@ export default class Agreement extends React.Component {
       open: false,
       showError: false,
       showAgreementPdf: false,
+      sometext: 'Kalim I have reviewed and agree to the terms of the',
     };
     const { campaignStore, portfolioStore } = this.props;
     this.props.campaignStore.setFieldValue('inInvestmentFlow', true);
@@ -215,7 +216,7 @@ export default class Agreement extends React.Component {
                           disabled={inProgress}
                           customLabel={(
                             <>
-                              I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">{agreementStatement}</Link>.
+                              {this.state.sometext} <Link onClick={e => this.docuSignHandeler(e, true)} to="/">{agreementStatement}</Link>.
                             </>
                           )}
                           conditionalCustomLabel={(

@@ -389,6 +389,8 @@ export class Utility {
     const regulationType = _.get(offeringRegulationArr, '[0]');
     return regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
   }
+
+  cleanMsg = msg => (msg ? msg.replace('GraphQL error: ', '').replace('Error: ', '') : '');
 }
 
 export default new Utility();
