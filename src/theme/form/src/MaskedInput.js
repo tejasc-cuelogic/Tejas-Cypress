@@ -54,7 +54,7 @@ export default class MaskedInput extends Component {
       )
         : (
         <PopUpModal
-          on={props.toolTipOnLabel ? 'click' : 'hover'}
+          on="hover"
           hoverable={props.toolTipOnLabel ? false : props.hoverable}
           customTrigger={trigger}
           position={isMobile ? 'bottom center' : 'top center'}

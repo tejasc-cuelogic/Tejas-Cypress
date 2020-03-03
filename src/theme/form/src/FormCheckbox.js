@@ -4,6 +4,9 @@ import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import { includes } from 'lodash';
 import { Icon, Popup, List, Checkbox } from 'semantic-ui-react';
+import { PopUpModal } from '../../shared';
+
+const isMobile = document.documentElement.clientWidth < 768;
 
 const FormCheckbox = observer((props) => {
   const {
@@ -25,7 +28,7 @@ const FormCheckbox = observer((props) => {
                 value={c.value}
                 {...props}
                 label={(
-<label>
+                  <label>
                     {c.customLabel ? customLabel
                       : c.conditionalCustomLabel ? conditionalCustomLabel
                         : c.customUpdateLimitLabel ? customUpdateLimitLabel
@@ -36,7 +39,7 @@ const FormCheckbox = observer((props) => {
                       && <Popup trigger={<Icon className="ns-help-circle" />} content={c.tooltip} position="top center" wide />
                     }
                   </label>
-)}
+                )}
                 onChange={props.changed}
               />
             ) : (
@@ -46,17 +49,18 @@ const FormCheckbox = observer((props) => {
                   {c.icon
                   && <Icon className={c.icon} />
                     }
-                  {c.customLabel ? customLabel : c.label}
                   {tooltip
-                  && (
-<Popup
-  trigger={<Icon className="ns-help-circle" />}
-  content={tooltip}
-  position="top center"
-  className="center-align"
-  wide
-/>
+                  ? (
+                    <PopUpModal
+                      customTrigger={<span className="popup-label">{c.customLabel ? customLabel : c.label}</span>}
+                      content={tooltip}
+                      position="top center"
+                      className="center-align"
+                      wide
+                      showOnlyPopup={!isMobile}
+                    />
                   )
+                  : <span>{c.customLabel ? customLabel : c.label}</span>
                     }
                 </label>
               </>
