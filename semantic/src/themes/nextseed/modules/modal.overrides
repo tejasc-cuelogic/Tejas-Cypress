@@ -691,7 +691,7 @@
                 color: @neutral-offdark;
                 font-size: @30px;
                 line-height: 30px;
-                font-weight: @normal;
+                font-weight: 100;
             }
         }
         .ui.progress.attached {

@@ -458,7 +458,7 @@ export const ACC_TYPE = {
     values: [
       {
         label: 'Individual Account',
-        labelDescription: <>Get started with a personal<br /> investment account</>,
+        labelDescription: <>Get started with a personal investment account</>,
         value: 0,
         description: `Open a NextSeed investment account to begin investing in local businesses.
         An initial deposit can be quickly and securely completed by linking your checking account.
@@ -470,7 +470,7 @@ export const ACC_TYPE = {
       },
       {
         label: 'Self-Directed IRA',
-        labelDescription: <>Open a traditional or Roth IRA<br /> (setup & annual fees on us)</>,
+        labelDescription: <>Open a traditional or Roth IRA (setup & annual fees on us)</>,
         value: 1,
         description: `Open a self-directed NextSeed IRA to begin investing in local businesses. (Traditional and Roth IRA options available.)
         Minimum opening deposit: $5,000. Investment limits apply.
@@ -480,7 +480,7 @@ export const ACC_TYPE = {
       },
       {
         label: 'Entity Account',
-        labelDescription: <>Invest using your corporation, LLC,<br /> LP, or trust</>,
+        labelDescription: <>Invest using your corporation, LLC, LP, or trust</>,
         value: 2,
         description: `Invest in local businesses through an Entity investment account. (Note: Investment limits for Entity accounts are treated separately from Individual investment accounts)
         An initial deposit can be quickly and securely completed by linking your entity checking account. You can easily connect your account by logging in through our secure system or by manually entering your account information.

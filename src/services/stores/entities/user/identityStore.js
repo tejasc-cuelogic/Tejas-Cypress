@@ -522,7 +522,7 @@ export class IdentityStore {
             });
           } else {
             const error = {
-              message: 'Please enter correct verification code.',
+              message: 'Invalid verification code.',
             };
             uiStore.setErrors(error);
             reject();
@@ -558,7 +558,7 @@ export class IdentityStore {
             resolve();
           } else {
             const error = {
-              message: 'Please enter correct verification code.',
+              message: 'Invalid verification code.',
             };
             uiStore.setErrors(error);
             reject();
@@ -857,7 +857,7 @@ export class IdentityStore {
             resolve();
           } else {
             const error = {
-              message: 'Please enter correct verification code.',
+              message: 'Invalid verification code.',
             };
             uiStore.setErrors(error);
             uiStore.setProgress(false);
@@ -890,7 +890,7 @@ export class IdentityStore {
             resolve();
           } else {
             const error = {
-              message: 'Please enter correct verification code.',
+              message: 'Invalid verification code.',
             };
             uiStore.setProgress(false);
             uiStore.setErrors(error);
