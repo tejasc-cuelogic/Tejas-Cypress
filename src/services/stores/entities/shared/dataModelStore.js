@@ -244,8 +244,8 @@ export default class DataModelStore {
     this[formName] = FormValidator.validateForm(this[formName]);
   }
 
-  resetForm = (form) => {
-    this[form] = FormValidator.resetFormData(this[form]);
+  resetForm = (form, targetedFields = undefined) => {
+    this[form] = FormValidator.resetFormData(this[form], targetedFields);
   }
 
   resetAll = () => {

@@ -1,23 +1,23 @@
-/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
 import { Modal, Button, Header, Icon, Form, Message } from 'semantic-ui-react';
-import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
+import formHOC from '../../../theme/form/formHOC';
 
 const isMobile = document.documentElement.clientWidth < 768;
-
-@inject('authStore', 'uiStore', 'identityStore')
-@withRouter
-@observer
+const metaInfo = {
+  store: 'authStore',
+  form: 'SIGNUP_FRM',
+};
 class InvestorSignup extends Component {
   constructor(props) {
     super(props);
-    this.props.authStore.setDefaultPwdType();
+    const { setDefaultPwdType, setUserRole } = this.props.authStore;
+    setDefaultPwdType();
     const userRoleData = cookie.load('ROLE_VALUE');
-    this.props.authStore.setUserRole(userRoleData || 'investor');
+    setUserRole(userRoleData || 'investor');
   }
 
   componentWillUnmount() {
@@ -30,22 +30,23 @@ class InvestorSignup extends Component {
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    if (this.props.authStore.newPasswordRequired) {
-      this.props.history.push('/change-password');
+    const { authStore, uiStore, history, identityStore } = this.props;
+    if (authStore.newPasswordRequired) {
+    history.push('/change-password');
     } else {
-      const { email, password, givenName } = this.props.authStore.SIGNUP_FRM.fields;
-      this.props.uiStore.setProgress();
-      this.props.authStore.checkEmailExistsPresignup(email.value).then((res) => {
+      const { email, password, givenName } = authStore.SIGNUP_FRM.fields;
+      uiStore.setProgress();
+      authStore.checkEmailExistsPresignup(email.value).then((res) => {
         if (res) {
-          this.props.uiStore.setProgress(false);
-          this.props.authStore.setCredentials({
+          uiStore.setProgress(false);
+          authStore.setCredentials({
             email: email.value,
             password: password.value,
             givenName: givenName.value,
           });
-          if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
-            this.props.identityStore.requestOtpWrapper(isMobile).then(() => {
-              this.props.history.push('/confirm-email');
+          if (authStore.SIGNUP_FRM.meta.isValid) {
+              identityStore.requestOtpWrapper(isMobile).then(() => {
+              history.push('/confirm-email');
             });
           }
         }
@@ -54,10 +55,11 @@ class InvestorSignup extends Component {
   };
 
   render() {
+    const { smartElement } = this.props;
     const {
-      SIGNUP_FRM, signupChange, pwdInputType, currentScore,
+      SIGNUP_FRM, signupChange, currentScore,
     } = this.props.authStore;
-    const { errors, inProgress, responsiveVars } = this.props.uiStore;
+    const { errors, inProgress, pwdInputType, responsiveVars } = this.props.uiStore;
     const isDisabled = !([undefined, ''].includes(SIGNUP_FRM.fields.email.error)) || !SIGNUP_FRM.meta.isValid || !currentScore;
     const customError = errors && errors.code === 'UsernameExistsException'
       ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
@@ -80,60 +82,21 @@ class InvestorSignup extends Component {
           <Link to="/register" className={`back-link ${inProgress ? 'disabled' : ''}`}><Icon className="ns-arrow-left" /></Link>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {/* <Form>
-            <Button fluid color="facebook" size="large" content="Sign up with Facebook" />
-          </Form>
-          <Divider horizontal section>or</Divider> */}
           <Form error onSubmit={this.handleSubmitForm}>
             <Form.Group widths="equal">
               {
                 ['givenName', 'familyName'].map(field => (
-                  <FormInput
-                    key={field}
-                    type="text"
-                    autoFocus={!responsiveVars.isMobile && field === 'givenName'}
-                    name={field}
-                    fielddata={SIGNUP_FRM.fields[field]}
-                    changed={signupChange}
-                  />
+                  smartElement.Input(field, { autoFocus: !responsiveVars.isMobile && field === 'givenName' })
                 ))
               }
 
             </Form.Group>
-            <FormInput
-              type="email"
-              name="email"
-              fielddata={SIGNUP_FRM.fields.email}
-              changed={signupChange}
-            />
-            <FormPasswordStrength
-              key="password"
-              name="password"
-              type="password"
-              minLength={8}
-              minScore={4}
-              iconDisplay
-              tooShortWord="Weak"
-              // scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-              scoreWords={['Weak', 'Weak', 'Okay', 'Good', 'Strong']}
-              inputProps={{
-                name: 'password', autoComplete: 'off', placeholder: 'Password',
-              }}
-              userInputs={
-                [SIGNUP_FRM.fields.givenName.value, `${SIGNUP_FRM.fields.givenName.value}${SIGNUP_FRM.fields.familyName.value}`,
-                  SIGNUP_FRM.fields.familyName.value, SIGNUP_FRM.fields.email.value]
-              }
-              changed={signupChange}
-              fielddata={SIGNUP_FRM.fields.password}
-              showRequiredError
-            />
-            <FormInput
-              key="verify"
-              name="verify"
-              type={pwdInputType}
-              fielddata={SIGNUP_FRM.fields.verify}
-              changed={signupChange}
-            />
+            {smartElement.Input('email')}
+            {smartElement.FormPasswordStrength('password',
+              { changed: signupChange,
+                userInputs: [SIGNUP_FRM.fields.givenName.value, `${SIGNUP_FRM.fields.givenName.value}${SIGNUP_FRM.fields.familyName.value}`,
+                SIGNUP_FRM.fields.familyName.value, SIGNUP_FRM.fields.email.value] })}
+            {smartElement.Input('verify', { type: pwdInputType })}
             {errors
               && (
                 <Message error textAlign="left" className="mt-30">
@@ -153,5 +116,4 @@ class InvestorSignup extends Component {
     );
   }
 }
-
-export default InvestorSignup;
+export default inject('authStore', 'uiStore', 'identityStore')(withRouter(formHOC(observer(InvestorSignup), metaInfo)));

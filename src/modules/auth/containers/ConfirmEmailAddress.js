@@ -1,39 +1,39 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
 import { Link, withRouter, Route } from 'react-router-dom';
-import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Message, Divider, Dimmer, Loader } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 import { authActions } from '../../../services/actions';
-import { FormInput } from '../../../theme/form';
 import { ListErrors, SuccessScreen } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 import ConfirmCreateOrCancel from './ConfirmCreateOrCancel';
+import formHOC from '../../../theme/form/formHOC';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'identityStore', 'referralsStore', 'authStore')
-@withRouter
-@observer
-export default class ConfirmEmailAddress extends Component {
+const metaInfo = {
+  store: 'authStore',
+  form: 'CONFIRM_FRM',
+};
+
+class ConfirmEmailAddress extends Component {
   constructor(props) {
     super(props);
-    if (this.props.refLink) {
-      this.props.uiStore.setAuthRef(this.props.refLink);
+    const { userDetailsStore, authStore, uiStore, refLink, history } = this.props;
+    if (refLink) {
+      uiStore.setAuthRef(refLink);
     }
-
-    const { email } = this.props.userDetailsStore.userDetails;
-    const currentEmail = email && email.address ? email.address : '';
-    const sameEmailExists = !!(this.props.authStore.CONFIRM_FRM.fields.email.value === currentEmail || !this.props.authStore.CONFIRM_FRM.fields.email.value);
-    if ((!this.props.authStore.CONFIRM_FRM.fields.email.value
-      && !this.props.authStore.isUserLoggedIn) || (sameEmailExists && (sessionStorage.getItem('changedEmail') !== null))) {
+    const { value: formEmail } = authStore.CONFIRM_FRM.fields.email;
+    const { email } = userDetailsStore.userDetails;
+    const currentEmail = (email && email.address) || '';
+    const sameEmailExists = !!(formEmail === currentEmail || !formEmail);
+    if ((!formEmail && !authStore.isUserLoggedIn) || (sameEmailExists && sessionStorage.getItem('changedEmail') !== null)) {
       sessionStorage.removeItem('changedEmail');
-      this.props.history.push(this.props.refLink || '/login');
+      history.push(refLink || '/login');
     }
-    this.props.authStore.setUserCredentiansConfirmEmail();
+    authStore.setUserCredentiansConfirmEmail();
     this.startPhoneVerification();
   }
 
@@ -51,105 +51,89 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   startPhoneVerification = async () => {
-    if (this.props.userDetailsStore.signupStatus.isMigratedUser
-      && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
-      && !this.props.identityStore.sendOtpToMigratedUser.includes('EMAIL')) {
-      await this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
+    const { userDetailsStore, identityStore } = this.props;
+    const { isMigratedUser, isEmailConfirmed } = userDetailsStore.signupStatus;
+    if (isMigratedUser && !isEmailConfirmed
+      && !identityStore.sendOtpToMigratedUser.includes('EMAIL')) {
+      await identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
     }
   }
 
-  handleSubmitForm = (e) => {
-    e.preventDefault();
-    const { uiStore } = this.props;
-    this.props.authStore.setProgress('confirm');
-    uiStore.setProgress();
-    if (this.props.refLink) {
-      this.props.authStore.verifyAndUpdateEmail().then(() => {
-        this.props.identityStore.setIsOptConfirmed(true);
-        Helper.toast('Email has been verified and updated', 'success');
-        this.props.history.push(this.props.refLink);
-      })
-        .catch(() => { });
-    } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === ''
-      && !this.props.userStore.currentUser) {
-      this.props.history.push('/register-investor');
-    } else {
-      const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
-      if (isMigratedUser) {
-        this.props.identityStore.confirmEmailAddress().then(() => {
-          this.props.userDetailsStore.updateUserDetails('email', { verified: moment().tz('America/Chicago').toISOString() });
-          uiStore.setProgress(false);
-          const { roles } = this.props.userStore.currentUser;
-          if (roles.includes('investor')) {
-            this.props.identityStore.setIsOptConfirmed(true);
-          } else {
-            const redirectUrl = !roles ? '/login'
-              : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
-            this.props.history.replace(redirectUrl);
-          }
-        });
-      } else {
-        this.props.identityStore.verifyOTPWrapper().then(() => {
-          authActions.register(isMobile)
-            .then(() => {
-              uiStore.setProgress(false);
-              const { roles } = this.props.userStore.currentUser;
-              if (roles.includes('investor')) {
-                if (window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') && window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE') !== undefined) {
-                  const referralCode = window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE');
-                  this.props.referralsStore.userPartialFullSignupWithReferralCode(referralCode)
-                    .then((data) => {
-                      if (data) {
-                        window.localStorage.removeItem('SAASQUATCH_REFERRAL_CODE');
-                      }
-                    });
-                }
-                this.props.identityStore.setIsOptConfirmed(true);
-              } else {
-                const redirectUrl = !roles ? '/login'
-                  : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
-                this.props.history.replace(redirectUrl);
-              }
-            })
-            .catch(() => { });
-        });
+  redirectAsPerRoleAfterConfirmation = async (processSaasQuatch = false) => {
+    const { uiStore, userStore, identityStore, referralsStore, history } = this.props;
+    const { roles } = userStore.currentUser;
+    uiStore.setProgress(false);
+    if (roles.includes('investor')) {
+      const referralCode = window.localStorage.getItem('SAASQUATCH_REFERRAL_CODE');
+      if (processSaasQuatch && referralCode) {
+        const referalData = await referralsStore.userPartialFullSignupWithReferralCode(referralCode);
+        if (referalData) {
+          window.localStorage.removeItem('SAASQUATCH_REFERRAL_CODE');
+        }
       }
-      sessionStorage.removeItem('changedEmail');
+      identityStore.setIsOptConfirmed(true);
+    } else {
+      const redirectUrl = !roles ? '/login' : SIGNUP_REDIRECT_ROLEWISE.find(user => roles.includes(user.role)).path;
+      history.replace(redirectUrl);
     }
   }
+
+  confirmUser = async (isMigratedUser = false) => {
+    const { identityStore, userDetailsStore, userStore } = this.props;
+    if (isMigratedUser) {
+      await identityStore.confirmEmailAddress();
+      await userDetailsStore.getUser(userStore.currentUser.sub);
+    } else {
+      await identityStore.verifyOTPWrapper();
+      await authActions.register(isMobile);
+    }
+    this.redirectAsPerRoleAfterConfirmation(!isMigratedUser);
+  }
+
+  handleSubmitForm = async (e) => {
+    e.preventDefault();
+    const { uiStore, authStore, userStore, userDetailsStore, identityStore, history, refLink } = this.props;
+    authStore.setProgress('confirm');
+    uiStore.setProgress();
+      if (refLink) {
+        await authStore.verifyAndUpdateEmail();
+        identityStore.setIsOptConfirmed(true);
+        Helper.toast('Email has been verified and updated', 'success');
+        history.push(refLink);
+      } else if (authStore.SIGNUP_FRM.fields.givenName.value === '' && !userStore.currentUser) {
+        history.push('/register-investor');
+      } else {
+        const { isMigratedUser } = userDetailsStore.signupStatus;
+        this.confirmUser(isMigratedUser);
+        sessionStorage.removeItem('changedEmail');
+      }
+    }
 
   handleCloseModal = () => {
-    // if (!this.props.refLink && this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
-    //   this.props.history.push('/dashboard/setup');
-    // } else {
-    //   this.props.history.push(this.props.uiStore.authRef || '/');
-    // }
-    if (!this.props.refLink) {
-      this.props.history.push(`${this.props.match.url}/create-or-cancel`);
-    } else {
-      this.props.history.push(this.props.uiStore.authRef || '/');
-    }
-    this.props.uiStore.clearErrors();
+    const { refLink, history, match, uiStore } = this.props;
+    history.push(!refLink ? `${match.url}/create-or-cancel` : (uiStore.authRef || '/'));
+    uiStore.clearErrors();
     sessionStorage.removeItem('changedEmail');
   }
 
   handleResendCode = async () => {
-    this.props.authStore.setProgress('resend');
+    const { authStore, uiStore, identityStore, userDetailsStore } = this.props;
+    authStore.setProgress('resend');
     if (this.props.refLink) {
-      this.props.authStore.requestEmailChange().then(() => {
+      authStore.requestEmailChange().then(() => {
         Helper.toast('Re-sent the verification code', 'success');
-        this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
-        this.props.uiStore.clearErrors();
+        authStore.resetForm('CONFIRM_FRM', ['code']);
+        uiStore.clearErrors();
       })
         .catch(() => { });
     } else {
-      if (this.props.userDetailsStore.signupStatus.isMigratedUser) {
-        await this.props.identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
+      if (userDetailsStore.signupStatus.isMigratedUser) {
+        await identityStore.startPhoneVerification('EMAIL', undefined, isMobile);
       } else {
-        this.props.identityStore.requestOtpWrapper(isMobile);
+        identityStore.requestOtpWrapper(isMobile);
       }
-      this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
-      this.props.uiStore.clearErrors();
+      authStore.resetForm('CONFIRM_FRM', ['code']);
+      uiStore.clearErrors();
     }
   }
 
@@ -176,6 +160,7 @@ export default class ConfirmEmailAddress extends Component {
     const { errors, inProgress, responsiveVars } = this.props.uiStore;
     const { isOptConfirmed } = this.props.identityStore;
     const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
+    const { smartElement } = this.props;
     if (errors && errors.code === 'NotAuthorizedException') {
       this.props.history.push('/login');
     } else if (isOptConfirmed && this.props.userStore.currentUser && this.props.userStore.currentUser.roles && this.props.userStore.currentUser.roles.includes('investor')) {
@@ -203,36 +188,23 @@ export default class ConfirmEmailAddress extends Component {
               </Dimmer>
             )
           }
-          <FormInput
-            ishidelabel
-            type="email"
-            name="email"
-            fielddata={CONFIRM_FRM.fields.email}
-            changed={ConfirmChange}
-            readOnly
-            displayMode
-            disabled
-            title={CONFIRM_FRM.fields.email.value}
-            className={`${CONFIRM_FRM.fields.email.value.length > 38 ? 'font-16' : 'font-20'} display-only`}
-          />
+          {smartElement.Input('email',
+          { ishidelabel: true,
+            changed: ConfirmChange,
+            displayMode: true,
+            type: 'email',
+            title: CONFIRM_FRM.fields.email.value,
+            className: `${CONFIRM_FRM.fields.email.value.length > 38 ? 'font-16' : 'font-20'} display-only` })}
           {(!isMigratedUser && !isEmpty(CONFIRM_FRM.fields.email.value))
             && <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
           }
           <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
-              <ReactCodeInput
-                fields={6}
-                type="number"
-                autoFocus={!isMobile}
-                filterChars
-                className="otp-field"
-                pattern="[0-9]*"
-                inputmode="numeric"
-                disabled={isEmpty(CONFIRM_FRM.fields.email.value)}
-                fielddata={CONFIRM_FRM.fields.code}
-                onChange={ConfirmChange}
-              />
+              {smartElement.CodeInput('code',
+              { autoFocus: !isMobile,
+                disabled: isEmpty(CONFIRM_FRM.fields.email.value),
+                onChange: ConfirmChange })}
               {!isEmpty(CONFIRM_FRM.fields.email.value)
                 && <Button loading={confirmProgress === 'resend' && inProgress} type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
               }
@@ -251,3 +223,4 @@ export default class ConfirmEmailAddress extends Component {
     );
   }
 }
+export default inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'identityStore', 'referralsStore')(withRouter(formHOC(observer(ConfirmEmailAddress), metaInfo)));
