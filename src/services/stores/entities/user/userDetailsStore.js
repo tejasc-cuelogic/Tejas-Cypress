@@ -243,8 +243,9 @@ export class UserDetailsStore {
         individualAccountStore.populateData(this.userDetails);
       } else if (investmentAccType === 'entity') {
         entityAccountStore.populateData(this.userDetails);
+      } else if (investmentAccType === 'investorProfile') {
+        investorProfileStore.populateData(this.userDetails);
       }
-      investorProfileStore.populateData(this.userDetails);
     }
   }
 

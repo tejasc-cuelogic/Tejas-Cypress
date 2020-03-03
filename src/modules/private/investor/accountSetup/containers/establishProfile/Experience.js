@@ -40,7 +40,7 @@ export default class Experience extends Component {
             } else {
               this.props.history.push('/dashboard/setup');
             }
-            setTimeout(() => this.props.uiStore.setProgress(false), 2000);
+            // setTimeout(() => this.props.uiStore.setProgress(false), 2000);
           } else {
             this.props.history.push('/dashboard/setup/account-creation');
           }
