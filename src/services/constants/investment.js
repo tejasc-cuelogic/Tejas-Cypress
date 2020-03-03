@@ -76,10 +76,12 @@ export const INVEST_ACCOUNT_TYPES = {
 };
 
 export const AGREEMENT_TEMPLATE_DETAILS_INFO = {
-  value: '',
-  values: [],
-  error: undefined,
-  rule: 'required',
+  toc: {
+    value: [],
+    values: [],
+    error: undefined,
+    rule: 'required',
+  },
 };
 
 

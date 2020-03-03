@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { get } from 'lodash';
 import { Form, Divider, Icon, Confirm } from 'semantic-ui-react';
 import OfferingButtonGroup from '../../OfferingButtonGroup';
 import formHOC from '../../../../../../../theme/form/formHOC';
@@ -18,7 +17,6 @@ const metaInfo = {
 class InvestNowTocContent extends Component {
   state = {
     showConfirm: false,
-    msg: [],
   };
 
   updateState = (val, key = 'editable') => {
@@ -43,44 +41,13 @@ class InvestNowTocContent extends Component {
     history.push(`${refLink}/${index}`);
   }
 
-  encodeString = (data) => {
-    let encodedString = data;
-    if (data) {
-      const content = data.split('-');
-      const identifier = get(content, '[0]');
-      const title = get(content, '[1]');
-      switch (identifier) {
-        case 'CF_MODAL':
-          encodedString = (<Link to="/" onClick={this.handleDeleteAction}>{title}</Link>);
-          break;
-        case 'DOCUSIGN_ENVELOPE':
-          encodedString = (<Link to="/" onClick={this.handleDeleteAction}>{title}</Link>);
-          break;
-        case 'AGREEMENT':
-          encodedString = (<Link to="/" onClick={this.handleDeleteAction}>{title}</Link>);
-          break;
-        default:
-          break;
-      }
-    }
-    return encodedString;
-  }
-
-  preview = (string) => {
-    let originalText = '';
-    const regex = new RegExp(/\|\|\|([^|]*)\|\|\|/g);
-    const findArray = string.split(regex);
-    originalText = findArray.map(e => this.encodeString(e));
-    this.setState({ msg: originalText });
-  }
-
   render() {
-    const { smartElement, index, manageOfferingStore, isReadOnly } = this.props;
+    const { smartElement, index, manageOfferingStore } = this.props;
     const { INVEST_NOW_TOC_FRM } = manageOfferingStore;
+    const isReadOnly = false;
     return (
       <div className="inner-content-spacer">
         <Form>
-          <>{this.state.msg && this.state.msg.length && this.state.msg.map(e => e)}</>
           <small>
             <Link to="/" onClick={(e) => { e.preventDefault(); this.preview(INVEST_NOW_TOC_FRM.fields.toc[index].label.value); }}><Icon className="ns-view" />Preview</Link>
           </small>

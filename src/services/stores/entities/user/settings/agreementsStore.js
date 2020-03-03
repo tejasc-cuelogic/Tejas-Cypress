@@ -1,5 +1,7 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { toJS, observable, computed, action } from 'mobx';
-import { forEach, filter } from 'lodash';
+import { forEach, filter, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import { uiStore, campaignStore, userDetailsStore } from '../../../index';
 import { GqlClient as client } from '../../../../../api/publicApi';
@@ -7,6 +9,7 @@ import { getBoxEmbedLink, getLegalDocsFileIds, getS3DownloadLinkByFileId } from 
 import { AGREEMENT_TEMPLATE_DETAILS_INFO } from '../../../../constants/investment';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
+import HtmlEditor from '../../../../../modules/shared/HtmlEditor';
 
 export class AgreementsStore {
   @observable legalDocsList = [];
@@ -198,8 +201,48 @@ export class AgreementsStore {
     });
   }
 
+  encodeString = (data, { docuSignHandeler, refLink, agreementPDFLoader }) => {
+    let encodedString = data;
+    if (data) {
+      const content = data.split('-');
+      const identifier = get(content, '[0]');
+      const title = get(content, '[1]');
+      const accountType = get(content, '[3]');
+      const agreementKey = get(content, '[2]');
+      switch (identifier) {
+        case 'CF_MODAL':
+          encodedString = (<Link to={`${refLink}/change-investment-limit`}>{title}</Link>);
+          break;
+        case 'DOCUSIGN_ENVELOPE':
+          encodedString = (<Link to="/" onClick={e => docuSignHandeler(e, true)}>{title}</Link>);
+          break;
+        case 'AGREEMENT':
+          encodedString = (<Link to="/" onClick={e => agreementPDFLoader(e, true, agreementKey, accountType)}>{title}</Link>);
+          break;
+        default:
+          encodedString = (
+            <HtmlEditor
+              tag="span"
+              noDivWrap
+              readOnly
+              content={encodedString}
+            />
+          );
+          break;
+      }
+    }
+    return encodedString;
+  };
+
+  preview = (string, params) => {
+    let originalText = '';
+    const findArray = string.split(new RegExp(/\|\|\|([^|]*)\|\|\|/g));
+    originalText = findArray.map(str => this.encodeString(str, params));
+    return originalText;
+  };
+
   @action
-  createAgreementTocs = (currentRegulation) => {
+  createAgreementTocs = (currentRegulation, params) => {
     const { campaignStatus } = campaignStore;
     const { currentActiveAccount } = userDetailsStore;
     const currentSelectedAccount = ['individual', 'ira'].includes(currentActiveAccount) ? 'INDIVIDUAL' : 'ENTITY';
@@ -215,11 +258,12 @@ export class AgreementsStore {
     const valuesArray = [];
     forEach(resultArray, (data) => {
       const valueObj = {};
-      valueObj.label = data.label;
+      const label = this.preview(data.label, params);
+      valueObj.label = label;
       valueObj.value = data.order;
       valuesArray.push(valueObj);
     });
-    this.AGREEMENT_DETAILS_FORM.fields.values = valuesArray;
+    this.AGREEMENT_DETAILS_FORM.fields.toc.values = valuesArray;
   }
 
   @action
