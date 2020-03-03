@@ -43,7 +43,7 @@ export default class ConfirmVerificationCode extends Component {
     this.props.beneficiaryStore.setShareModalData(false);
     this.props.beneficiaryStore.requestOtpForManageBeneficiary().then(() => {
       this.props.beneficiaryStore.setReSendVerificationCode(false);
-      Helper.toast('The OTP is sent to your number!', 'success');
+      // Helper.toast('The OTP is sent to your number!', 'success');
     });
   }
 

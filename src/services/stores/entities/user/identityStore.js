@@ -801,7 +801,7 @@ export class IdentityStore {
     }
   }
 
-  requestOtpWrapper = (isMobile = false) => {
+  requestOtpWrapper = () => {
     uiStore.setProgress();
     const { email, givenName } = authStore.SIGNUP_FRM.fields;
     const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
@@ -820,9 +820,9 @@ export class IdentityStore {
         })
         .then((result) => {
           this.setRequestOtpResponse(result.data.requestOTPWrapper);
-          if (!isMobile) {
-            Helper.toast(`Verification code sent to ${email.value || emailInCookie}.`, 'success');
-          }
+          // if (!isMobile) {
+          //   Helper.toast(`Verification code sent to ${email.value || emailInCookie}.`, 'success');
+          // }
           commonStore.removeLocalStorage(['tags']);
           resolve();
         })

@@ -54,7 +54,7 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.identityStore.setReSendVerificationCode(false);
     if (this.props.refLink) {
       this.props.identityStore.verifyAndUpdatePhoneNumber().then(() => {
-        Helper.toast('Thank you for confirming your phone number', 'success');
+        // Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.history.replace('/dashboard/account-settings/profile-data');
         this.props.uiStore.clearErrors();
         this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');

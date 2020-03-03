@@ -48,7 +48,7 @@ export default class ConfirmPhoneNumber extends Component {
         if (setMfaMode) {
           this.props.multiFactorAuthStore.updateUserMFA();
         }
-        Helper.toast('Thank you for confirming your phone number', 'success');
+        // Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.identityStore.setIsOptConfirmed(true);
         this.props.uiStore.clearErrors();
         this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
@@ -56,7 +56,7 @@ export default class ConfirmPhoneNumber extends Component {
         .catch(() => { });
     } else {
       this.props.identityStore.confirmPhoneNumber().then(() => {
-        Helper.toast('Thank you for confirming your phone number', 'success');
+        // Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.setDashboardWizardStep('InvestmentChooseType');
       })
         .catch(() => { });

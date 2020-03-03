@@ -137,7 +137,7 @@ export default class ConfirmEmailAddress extends Component {
     this.props.authStore.setProgress('resend');
     if (this.props.refLink) {
       this.props.authStore.requestEmailChange().then(() => {
-        Helper.toast('Re-sent the verification code', 'success');
+        // Helper.toast('Re-sent the verification code', 'success');
         this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
         this.props.uiStore.clearErrors();
       })
