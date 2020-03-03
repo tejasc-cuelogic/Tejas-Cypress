@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
+import { isEmpty } from 'lodash';
 import ReactCodeInput from 'react-code-input';
 import { Button, Header, Form, Divider, Message, Grid } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../theme/form';
@@ -15,17 +16,22 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class ConfirmPhoneNumber extends Component {
   constructor(props) {
     super(props);
-    const { identityStore, userDetailsStore } = this.props;
-    if (identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
+    const { userDetailsStore } = this.props;
+    const { phoneNumberChange, phoneTypeChange, requestOtpResponse, ID_VERIFICATION_FRM, startPhoneVerification } = this.props.identityStore;
+    if (ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
       if (userDetailsStore.userDetails && userDetailsStore.userDetails.phone
         && userDetailsStore.userDetails.phone.number) {
         const fieldValue = Helper.maskPhoneNumber(userDetailsStore.userDetails.phone.number);
-        this.props.identityStore.phoneNumberChange(fieldValue);
+        phoneNumberChange(fieldValue);
       }
     }
     if (userDetailsStore.userDetails.phone && userDetailsStore.userDetails.phone.type) {
       const fieldValue = userDetailsStore.userDetails.phone.type;
-      identityStore.phoneTypeChange(fieldValue);
+      phoneTypeChange(fieldValue);
+    }
+
+    if (Object.keys(requestOtpResponse).length === 0 && !isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value)) {
+      startPhoneVerification();
     }
   }
 

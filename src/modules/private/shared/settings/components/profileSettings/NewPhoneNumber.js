@@ -49,7 +49,7 @@ export default class NewPhoneNumber extends Component {
       personalInfoMaskedChange,
       personalInfoChange,
     } = this.props.identityStore;
-    const { errors } = this.props.uiStore;
+    const { errors, inProgress } = this.props.uiStore;
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -78,13 +78,13 @@ export default class NewPhoneNumber extends Component {
             </div>
             {errors
               && (
-<Message error className="mt-20">
-                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-              </Message>
+                <Message error className="mt-20">
+                  <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+                </Message>
               )
             }
             <div className="center-align mt-30">
-              <Button primary size="large" className="very relaxed" content="Change Phone Number" loading={this.props.uiStore.inProgress} disabled={!!ID_VERIFICATION_FRM.fields.phoneNumber.error || isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value)} />
+              <Button primary size="large" className="very relaxed" content="Change Phone Number" loading={this.props.uiStore.inProgress} disabled={!!ID_VERIFICATION_FRM.fields.phoneNumber.error || isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value) || inProgress} />
             </div>
           </Form>
         </Modal.Content>
