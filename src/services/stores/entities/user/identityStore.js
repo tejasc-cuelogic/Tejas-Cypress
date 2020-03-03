@@ -358,10 +358,9 @@ export class IdentityStore {
 
       if (stepName === 'cipPass') {
         await this.updateUserDataAndSendOtp();
-        this.setFieldValue('isPhoneFailed', false);
       }
 
-      if ((stepName === 'cip' && message) || (stepName === 'cipPhoneFail' && this.isPhoneFailed)) {
+      if ((stepName === 'cip' && message) || (stepName === 'cipPhoneFail' && this.isPhoneFailed && message)) {
         this.setFieldValue('cipErrors',
           DataFormatter.getSimpleErr({
             message,
@@ -381,7 +380,7 @@ export class IdentityStore {
 
       return { res, url };
     } catch (err) {
-      uiStore.setFieldvalue('errors', DataFormatter.getSimpleErr(err));
+      this.setFieldValue('cipErrors', DataFormatter.getSimpleErr(err));
       this.setFieldValue('signUpLoading', false);
       return Promise.reject(err);
     }

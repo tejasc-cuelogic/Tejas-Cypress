@@ -63,12 +63,17 @@ function cipVerificationHOC(WrappedComponent) {
 
     handleCip = async (isAddressOrPhoneFailure = undefined) => {
       const { setFieldValue, cipBackUrl } = this.props.identityStore;
-      const { url } = await this.props.identityStore.verifyCip();
+      const { url, res } = await this.props.identityStore.verifyCip();
       if (isAddressOrPhoneFailure) {
         const failObj = { backUrl: isAddressOrPhoneFailure === 'addressFail' ? 'cipAddressFail' : 'cipPhoneFail' };
         if (isAddressOrPhoneFailure === 'phoneFail') {
           setFieldValue('isPhoneFailed', false);
         }
+
+        if (isAddressOrPhoneFailure === 'addressFail' && res.data.verifyCip.step !== 'ADDRESS_VERIFICATION') {
+          setFieldValue('isAddressFailed', false);
+        }
+
         if (window.location.pathname !== url) {
           setFieldValue('cipBackUrl', [...cipBackUrl, ...[INVESTOR_URLS[failObj.backUrl]]]);
         }
