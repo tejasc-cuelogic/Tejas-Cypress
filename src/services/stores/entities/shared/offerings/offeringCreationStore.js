@@ -14,10 +14,12 @@ import {
   OFFERING_CLOSE_4, OFFERING_CLOSE_2, OFFERING_CLOSE_3, OFFERING_CLOSE_1, OFFERING_CLOSE_EXPORT_ENVELOPES, OFFERING_DEFAULT,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
+import DataModelStore from '../dataModelStore';
 import { deleteBonusReward, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, adminOfferingClose, deleteBac, upsertBonusReward,
   getBonusRewards, adminBusinessFilings, initializeClosingBinder,
   adminCreateBusinessFiling, adminUpsertOffering, adminSetOfferingAsDefaulted, getOfferingClosureProcess } from '../../../queries/offerings/manage';
+import { adminInvokeProcessorDriver } from '../../../queries/data';
 import { updateBusinessApplicationInformation, adminBusinessApplicationsDetails } from '../../../queries/businessApplication';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -28,7 +30,7 @@ import { INDUSTRY_TYPES } from '../../../../../constants/offering';
 import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../../constants/common';
 import { US_STATES } from '../../../../../constants/account';
 
-export class OfferingCreationStore {
+export class OfferingCreationStore extends DataModelStore {
   @observable NEW_OFFER_FRM = Validator.prepareFormObject(NEW_OFFER);
 
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
@@ -175,6 +177,10 @@ export class OfferingCreationStore {
   };
 
   @observable oldFormDetails = {}
+
+  constructor() {
+    super({ adminInvokeProcessorDriver });
+  }
 
   @action
   setFieldValue = (field, value, field2 = false, objRef = false) => {
@@ -1786,8 +1792,8 @@ export class OfferingCreationStore {
   }
 
   @action
-  offeringClose = (params, step, scope) => new Promise((res, rej) => {
-    uiStore.setProgress(params.process);
+  offeringClose = (params, step, scope) => new Promise(async (res, rej) => {
+    // uiStore.setProgress(params.process);
     this.setFieldValue('outputMsg', null);
     let formData = Validator.evaluateFormData(this[`OFFERING_CLOSE_${step}`].fields);
     formData = cleanDeep(formData);
@@ -1807,21 +1813,29 @@ export class OfferingCreationStore {
     } else if (!formData.payload && scope) {
       formData.payload = { scope };
     }
-    client
-      .mutate({
-        mutation: adminOfferingClose,
-        variables: { ...params, ...formData },
-      }).then((data) => {
-        uiStore.setProgress(false);
-        this.setFieldValue('outputMsg', { type: 'success', data: get(data, 'data.offeringClose') });
-        res(get(data, 'data.offeringClose'));
-      }).catch((err) => {
-        uiStore.setProgress(false);
-        this.setFieldValue('outputMsg', { type: 'error', data: get(err, 'message') });
-        console.log(err);
-        Helper.toast('Something went wrong.', 'error');
-        rej();
-      });
+
+    let requestVariable = {
+      offeringId: params.offeringId,
+      process: params.process,
+      payload: formData.payload,
+      waitingTime: 0,
+      concurrency: formData.concurrency,
+      queueLimit: (formData.queueLimit === '') ? 0 : formData.queueLimit,
+    };
+    requestVariable = JSON.stringify(requestVariable);
+    const result = await this.executeMutation({
+      mutation: 'adminInvokeProcessorDriver',
+      variables: {
+                    method: 'OFFERING_CLOSE',
+                    payload: requestVariable,
+                 },
+      setLoader: adminInvokeProcessorDriver,
+      message: {
+                success: 'Your request is processed.',
+                error: 'Error while performing operation.',
+              },
+    });
+    uiStore.setProgress(false);
   });
 
   updateBonusRewardTier = (isDelete = false, amount = 0, earlyBirdQuantity = 0) => {
