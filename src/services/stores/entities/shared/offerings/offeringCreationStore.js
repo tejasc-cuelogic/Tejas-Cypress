@@ -16,7 +16,7 @@ import {
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import DataModelStore from '../dataModelStore';
 import { deleteBonusReward, updateOffering,
-  getOfferingDetails, getOfferingBac, createBac, updateBac, adminOfferingClose, deleteBac, upsertBonusReward,
+  getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, upsertBonusReward,
   getBonusRewards, adminBusinessFilings, initializeClosingBinder,
   adminCreateBusinessFiling, adminUpsertOffering, adminSetOfferingAsDefaulted, getOfferingClosureProcess } from '../../../queries/offerings/manage';
 import { adminInvokeProcessorDriver } from '../../../queries/data';
