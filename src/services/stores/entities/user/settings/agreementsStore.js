@@ -248,18 +248,21 @@ export class AgreementsStore {
     const { campaignStatus } = campaignStore;
     const { currentActiveAccount } = userDetailsStore;
     const currentSelectedAccount = ['individual', 'ira'].includes(currentActiveAccount) ? 'INDIVIDUAL' : 'ENTITY';
-    const tocArray = campaignStatus.investNowToc;
+    let investNowTocs = campaignStatus.investNowToc;
+    const checkAccountValidation = acc => (!acc || acc === 'ALL' || acc === currentSelectedAccount);
+    const checkRegulationValidation = reg => (!reg || !reg.length || reg.includes(currentRegulation));
+    investNowTocs = filter(investNowTocs, i => (checkAccountValidation(i.account) && checkRegulationValidation(i.regulation)));
     // Filter as per Account Type:
-    const filterAllAccountTypeArray = filter(tocArray, o => o.account === 'ALL');
-    const filterSpecificAccountTypeArray = filter(tocArray, o => o.account !== 'ALL' && o.account === currentSelectedAccount);
-    const filterAccountTypeArray = [...filterAllAccountTypeArray, ...filterSpecificAccountTypeArray];
-    // Filter as per Regulation Type:
-    const filterDefaultValueArray = filter(filterAccountTypeArray, o => !o.regulation);
-    const filteredRegulationArray = filter(filterAccountTypeArray, o => o.regulation && o.regulation.includes(currentRegulation));
-    const resultArray = [...filteredRegulationArray, ...filterDefaultValueArray];
+    // const filterAllAccountTypeArray = filter(tocArray, o => o.account === 'ALL');
+    // const filterSpecificAccountTypeArray = filter(tocArray, o => o.account !== 'ALL' && o.account === currentSelectedAccount);
+    // const filterAccountTypeArray = [...filterAllAccountTypeArray, ...filterSpecificAccountTypeArray];
+    // // Filter as per Regulation Type:
+    // const filterDefaultValueArray = filter(filterAccountTypeArray, o => !o.regulation);
+    // const filteredRegulationArray = filter(filterAccountTypeArray, o => o.regulation && o.regulation.includes(currentRegulation));
+    // const resultArray = [...filteredRegulationArray, ...filterDefaultValueArray];
     const valuesArray = [];
     const requiredArray = [];
-    forEach(resultArray, (data) => {
+    forEach(investNowTocs, (data) => {
       const valueObj = {};
       const label = this.preview(data.label, params);
       valueObj.label = label;
