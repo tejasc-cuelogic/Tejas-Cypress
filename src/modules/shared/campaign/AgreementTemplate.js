@@ -123,14 +123,13 @@ function AgreementTemplate(props) {
     agreementDetails,
     investmentFlowErrorMessage,
   } = props.investmentStore;
-  const { AGREEMENT_DETAILS_FORM, setCheckbox } = props.agreementsStore;
+  const { AGREEMENT_DETAILS_FORM, setCheckbox, isAgreementFormValid, embedUrl, docLoading } = props.agreementsStore;
   const { getCurrentInvestNowHealthCheck } = props.investmentLimitStore;
   const previouslyInvestedAmount = get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') ? get(getCurrentInvestNowHealthCheck, 'previousAmountInvested') : '0';
   const { uiStore } = props; // match
   const { inProgress } = uiStore;
   const { getInvestorAccountById } = props.portfolioStore;
   const { campaign, campaignStatus } = props.campaignStore;
-  const { embedUrl, docLoading } = props.agreementsStore;
   const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
   const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
   return (
@@ -196,7 +195,7 @@ function AgreementTemplate(props) {
                       defaults
                       fielddata={AGREEMENT_DETAILS_FORM.fields.toc}
                       name="toc"
-                      containerclassname={`ui very relaxed list ${showError && !props.agreementsStore.AGREEMENT_DETAILS_FORM.meta.isValid ? 'error' : ''}`}
+                      containerclassname={`ui very relaxed list ${showError && !AGREEMENT_DETAILS_FORM.meta.isValid ? 'error' : ''}`}
                       changed={setCheckbox}
                       disabled={inProgress}
                     />
@@ -206,7 +205,7 @@ function AgreementTemplate(props) {
               <div className="center-align mt-30">
                 <Button.Group widths="2" className="inline">
                   <Button type="button" color="gray" disabled={inProgress} content="Cancel" onClick={handleCancelAgreement} />
-                  <Button primary content="Invest" disabled={inProgress} loading={inProgress} onClick={submit} />
+                  <Button primary content="Invest" disabled={inProgress || !isAgreementFormValid} loading={inProgress} onClick={submit} />
                 </Button.Group>
               </div>
               {!showError && investmentFlowErrorMessage

@@ -72,6 +72,8 @@ export class AgreementsStore {
 
   @observable alreadySet = false;
 
+  @observable tocRequiredArray = [];
+
   @observable AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_TEMPLATE_DETAILS_INFO);
 
   @computed get getAgreementsList() {
@@ -256,14 +258,23 @@ export class AgreementsStore {
     const filteredRegulationArray = filter(filterAccountTypeArray, o => o.regulation && o.regulation.includes(currentRegulation));
     const resultArray = [...filteredRegulationArray, ...filterDefaultValueArray];
     const valuesArray = [];
+    const requiredArray = [];
     forEach(resultArray, (data) => {
       const valueObj = {};
       const label = this.preview(data.label, params);
       valueObj.label = label;
       valueObj.value = data.order;
       valuesArray.push(valueObj);
+      if (data.required) {
+        requiredArray.push(data.order);
+      }
     });
+    this.tocRequiredArray = requiredArray;
     this.AGREEMENT_DETAILS_FORM.fields.toc.values = valuesArray;
+  }
+
+  @computed get isAgreementFormValid() {
+    return toJS(this.tocRequiredArray).every(e => toJS(this.AGREEMENT_DETAILS_FORM.fields.toc.value).includes(e));
   }
 
   @action
