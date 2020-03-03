@@ -39,9 +39,9 @@ export default class AccountCreation extends Component {
       this.props.identityStore.setCipDetails();
       const { res } = await this.props.identityStore.verifyCip();
       const { cipStepUrlMapping } = this.props.identityStore;
-      const { step, status } = res.data.verifyCip;
+      const { step } = res.data.verifyCip;
       const isCipOffline = step === 'OFFLINE';
-      const isCipFail = !this.props.userDetailsStore.isUserVerified || step === 'userCIPHardFail' || !status || isCipOffline;
+      const isCipFail = !this.props.userDetailsStore.isUserVerified || step === 'userCIPHardFail' || isCipOffline;
       if (!this.props.userDetailsStore.isUserVerified && step === 'userCIPSoftFail') {
         this.props.history.push(cipStepUrlMapping.cipSoftFail.url);
       } else if (isCipFail) {

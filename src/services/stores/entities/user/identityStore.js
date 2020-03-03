@@ -308,7 +308,7 @@ export class IdentityStore {
       },
     };
     const { res: response } = await this.cipWrapper(payLoad);
-    if (response) {
+    if (response.data.cipLegalDocUploads) {
       const { res, url } = await this.verifyCip();
       this.setFieldValue('isAddressFailed', false);
       this.setFieldValue('cipBackUrl', [...this.cipBackUrl, ...[INVESTOR_URLS.cipForm]]);

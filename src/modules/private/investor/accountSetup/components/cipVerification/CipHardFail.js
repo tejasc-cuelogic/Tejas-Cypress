@@ -40,11 +40,11 @@ class CipHardFail extends React.Component {
     } else {
       this.props.identityStore.setSubmitVerificationDocs(true);
       redirectUrl = await verifyCipHardFail();
-    }
-    const { accountForWhichCipExpired, userDetails } = this.props.userDetailsStore;
-    if (userDetails.legalDetails.status === 'OFFLINE' || accountForWhichCipExpired) {
-      const url = await handleCipExpiration();
-      redirectUrl.url = url;
+      const { accountForWhichCipExpired, userDetails } = this.props.userDetailsStore;
+      if (userDetails.legalDetails.status === 'OFFLINE' || accountForWhichCipExpired) {
+        const url = await handleCipExpiration();
+        redirectUrl.url = url;
+      }
     }
     redirectTo(redirectUrl.url);
   }
