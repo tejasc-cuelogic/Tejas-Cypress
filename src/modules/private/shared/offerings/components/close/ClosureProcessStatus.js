@@ -118,7 +118,7 @@ export default class ClosureProcessStatus extends Component {
                                     {
                                         (closureProcess[key].remainingCount || closureProcess[key].finished)
                                         ? (
-                                            <>{closureProcess[key].remainingCount || '0'} - {closureProcess[key].finished ? DataFormatter.getDateAsPerTimeZone(closureProcess[key].finished, true, false, false, 'M/D/YYYY h:mm a') : ''}
+                                            <>{closureProcess[key].startedCount - closureProcess[key].remainingCount || '0'} - {closureProcess[key].finished ? DataFormatter.getDateAsPerTimeZone(closureProcess[key].finished, true, false, false, 'M/D/YYYY h:mm a') : ''}
                                             </>
                                         ) : <>-</>
                                     }
