@@ -63,7 +63,7 @@ class Employment extends Component {
       <>
         <Header as="h3" className={isMobile ? 'mb-30' : ''}>What is your employment status?</Header>
         {/* {!isMobile && <p className="mb-40">Please indicate your current employment status</p>} */}
-        <Form onSubmit={() => upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered])} error className={isMobile ? 'mb-40' : ''}>
+        <Form error className={isMobile ? 'mb-40' : ''}>
           <FormArrowButton
             fielddata={EMPLOYMENT_STATUS_FRM.fields.status}
             name="status"

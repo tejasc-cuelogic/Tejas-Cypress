@@ -9,6 +9,7 @@ import Helper from '../../../../../../helper/utility';
 // import AgreementsPdfLoader from '../../../settings/components/agreements/AgreementsPdfLoader';
 const isMobile = document.documentElement.clientWidth < 768;
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('identityStore', 'accountStore', 'bankAccountStore', 'uiStore', 'userDetailsStore', 'userStore', 'iraAccountStore', 'entityAccountStore', 'individualAccountStore')
 @withRouter
 @observer
@@ -37,19 +38,14 @@ export default class AccountCreation extends Component {
     try {
       this.props.uiStore.setProgress();
       this.props.identityStore.setCipDetails();
-      const { res, url } = await this.props.identityStore.verifyCip();
+      const { res } = await this.props.identityStore.verifyCip();
       const { cipStepUrlMapping } = this.props.identityStore;
-      const { step, status } = res.data.verifyCip;
+      const { step } = res.data.verifyCip;
       const isCipOffline = step === 'OFFLINE';
-
-      if (!this.props.userDetailsStore.isUserVerified
-        && (step === 'userCIPSoftFail' && cipStepUrlMapping.cipSoftFail.url === url)) {
+      const isCipFail = !this.props.userDetailsStore.isUserVerified || step === 'userCIPHardFail' || isCipOffline;
+      if (!this.props.userDetailsStore.isUserVerified && step === 'userCIPSoftFail') {
         this.props.history.push(cipStepUrlMapping.cipSoftFail.url);
-      } else if ((!this.props.userDetailsStore.isUserVerified
-        || (step === 'userCIPHardFail'
-        && cipStepUrlMapping.ciphardFail.url === url))
-        || !status
-        || isCipOffline) {
+      } else if (isCipFail) {
         this.props.history.push(cipStepUrlMapping.ciphardFail.url);
       } else if (this.props.userDetailsStore.isLegalDocsPresent && isCipOffline) {
         const processingUrl = await this.props.accountStore.accountProcessingWrapper(accountType, this.props.match);

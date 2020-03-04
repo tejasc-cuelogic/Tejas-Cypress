@@ -15,7 +15,10 @@ import Experience from './Experience';
 export default class AccountCreation extends React.Component {
   constructor(props) {
     super(props);
-    this.props.userDetailsStore.setUserAccDetails();
+    const { setUserAccDetails } = this.props.userDetailsStore;
+    if (!this.props.investorProfileStore.isFormSubmitted) {
+      setUserAccDetails('investorProfile');
+    }
   }
 
   handleMultiStepModalclose = () => {

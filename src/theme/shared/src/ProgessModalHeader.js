@@ -4,12 +4,14 @@ import Logo from './Logo';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-const ProgressModalHeader = ({ Modal, name, percent, handleClose, closeCta }) => (
-  <Modal.Header className="text-uppercase">
+const ProgressModalHeader = ({ Modal, name, percent, handleClose, closeCta, isProgressHeaderDisable, borderedHeader, headerLogo }) => (
+  <Modal.Header className={`${borderedHeader ? 'bordered padded' : ''} text-uppercase plr-0`}>
+    {isMobile && headerLogo
+      && <Logo dataSrc="LogoGreenGrey" size="small" />}
     {((closeCta && isMobile) && (
       <Button
         icon={{ className: 'ns-close-light' }}
-        className="link-button pull-right multistep__btn"
+        className="link-button pull-right"
         onClick={handleClose}
       />
     ))
@@ -26,9 +28,9 @@ const ProgressModalHeader = ({ Modal, name, percent, handleClose, closeCta }) =>
           )}
         </div>
       )
-      : name || ''
+        : name || ''
     }
-    <Progress className={name ? '' : 'no-header'} percent={percent} attached="bottom" color="green" />
+    {!isProgressHeaderDisable && <Progress className={name ? '' : 'no-header'} percent={percent} attached="bottom" color="green" />}
   </Modal.Header>
 );
 

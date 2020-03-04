@@ -11,6 +11,7 @@ const metaInfo = {
   form: 'INVESTMENT_EXP_FRM',
 };
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('investorProfileStore', 'userDetailsStore', 'uiStore')
 @withRouter
 @observer
@@ -45,7 +46,7 @@ class Experience extends Component {
             } else {
               this.props.history.push('/dashboard/setup');
             }
-            setTimeout(() => this.props.uiStore.setProgress(false), 2000);
+            // setTimeout(() => this.props.uiStore.setProgress(false), 2000);
           } else {
             this.props.history.push('/dashboard/setup/account-creation');
           }
@@ -133,7 +134,9 @@ class Experience extends Component {
           }
           {isExperiencedTypeSelected ? (
             <div className="mt-40">
-              <Button primary className="relaxed" content="Continue to Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FRM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
+              <div className={isMobile ? 'center-align' : ''}>
+                <Button primary className="relaxed" content="Continue to Account" disabled={!isInvExperienceValid || !INVESTMENT_EXP_FRM.meta.isValid} onClick={this.handleSubmitInvestmentExperience} />
+              </div>
               {!isInvExperienceValid && noExperience
                 && (
                   <p className="negative-text mt-20">

@@ -58,10 +58,10 @@ class PublicCompanyRel extends Component {
         <p className="mb-40">If you do not know what this means, it likely does not apply to you</p>
         {!inProgressArray.includes('PUBLIC_COMPANY_REL')
           && (
-            <Button.Group vertical={isMobile}>
+            <>
               <Button basic onClick={() => { resetFields('PUBLIC_COMPANY_REL_FRM'); upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered]); }} fluid={isMobile} className={`${isMobile ? 'mb-30 relaxed' : ''} primary-hover`} content="No" />
               <Button basic className={`${!isMobile && 'ml-10'} primary-hover`} onClick={this.handleShowFields} content="Yes" />
-            </Button.Group>
+            </>
           )
         }
       </>

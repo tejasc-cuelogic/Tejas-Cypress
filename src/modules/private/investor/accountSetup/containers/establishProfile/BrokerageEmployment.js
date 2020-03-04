@@ -56,10 +56,8 @@ class BrokerageEmployment extends Component {
         <Header as="h4">Do you (or an immediate family member) work for a US-based securities brokerage firm?</Header>
         {!isMobile && <Divider hidden />}
         <p className="mb-40">If you do not know what this means, it likely does not apply to you.</p>
-        <Button.Group vertical={isMobile}>
-          <Button basic onClick={() => { resetFields('BROKERAGE_EMPLOYMENT_FRM'); upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered]); }} fluid={isMobile} className={`${isMobile ? 'mb-30 relaxed' : ''} primary-hover`} content="No" />
+        <Button basic onClick={() => { resetFields('BROKERAGE_EMPLOYMENT_FRM'); upsertInvestorProfile(multiSteps && multiSteps[stepToBeRendered]); }} fluid={isMobile} className={`${isMobile ? 'mb-30 relaxed' : ''} primary-hover`} content="No" />
           <Button basic className={`${!isMobile && 'ml-10'} primary-hover`} onClick={this.handleShowFields} content="Yes" />
-        </Button.Group>
       </>
     );
   }

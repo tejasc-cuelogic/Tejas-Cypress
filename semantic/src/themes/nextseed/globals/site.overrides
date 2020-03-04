@@ -179,6 +179,9 @@ h6{
 .pt-0{
 	padding-top:0 !important;
 }
+.pt-half{
+	padding-top: @7px !important;
+}
 .pt-10{
 	padding-top:10px !important;
 }
@@ -193,6 +196,9 @@ h6{
 }
 .pb-0{
 	padding-bottom:0 !important;
+}
+.pb-half{
+	padding-bottom: @7px !important;
 }
 .pb-20{
 	padding-bottom: @20px !important;
@@ -345,7 +351,7 @@ h6{
 .mobile-bottom-notes{
 	position: absolute;
 	width: calc(100% - 30px);
-    top: 90%;
+    top: 79%;
 	left: 50%;
     transform: translate(-50%, 0);
 	padding-bottom: @30px;

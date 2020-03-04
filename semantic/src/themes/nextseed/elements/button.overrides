@@ -255,6 +255,27 @@
                 color: @neutral;
             }
         }
+        &.icon-arrow-button{
+            .details{
+                position: relative;
+                padding-left: @48px;
+                .ui.header i.icon{
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                    transform: translate(0, -50%);
+                    font-size: @26px;
+                    line-height: 1;
+                    color: lighten(@border-color, 2%);
+                    margin-left: 0;
+                }
+            }
+            &:focus, &:hover, &.active{
+                .details .ui.header i.icon{
+                    color: @primary-one;
+                }
+            }
+        }
     }
 }
 
