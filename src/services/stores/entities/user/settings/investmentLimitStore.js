@@ -385,6 +385,7 @@ export class InvestmentLimitStore {
         });
       }
     });
+    // test
     if (isIndAccExist && this.currentAccountType === 'ira') {
       const individualAccount = find(this.activeAccounts, acc => acc.name === 'individual');
       this.getInvestorTotalAmountInvested(
