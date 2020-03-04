@@ -183,10 +183,10 @@ function AgreementTemplate(props) {
             <Header as="h3" className="mb-40">
               Let&#39;s confirm your investment.<br />You are investing
                 <span className="positive-text"> {campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
-              {AGREEMENT_DETAILS_FORM.fields.page[index].title
+              {AGREEMENT_DETAILS_FORM.fields.page[index].title.value
               && (
               <Header.Subheader>
-                {AGREEMENT_DETAILS_FORM.fields.page[index].title}
+                {AGREEMENT_DETAILS_FORM.fields.page[index].title.value}
               </Header.Subheader>
               )}
             </Header>
@@ -197,13 +197,13 @@ function AgreementTemplate(props) {
             >
               <Grid stackable>
                 <Grid.Row>
-                  <Grid.Column width={8}>
+                  <Grid.Column width={16}>
                     <FormCheckbox
                       defaults
                       fielddata={AGREEMENT_DETAILS_FORM.fields.page[index].toc}
                       name="toc"
                       containerclassname={`ui very relaxed list ${showError && !AGREEMENT_DETAILS_FORM.meta.isValid ? 'error' : ''}`}
-                      changed={setCheckbox}
+                      changed={(e, res) => setCheckbox(e, res, 'page', index)}
                       disabled={inProgress}
                     />
                   </Grid.Column>
