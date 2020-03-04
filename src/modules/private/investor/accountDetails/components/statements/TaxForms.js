@@ -66,7 +66,7 @@ export default class TaxForms extends Component {
                 <FillTable
                   download={this.downloadhandler}
                   result={result}
-                  aRule={{ key: 'year', val: [2017, 2018] }}
+                  aRule={{ key: 'year', val: [2017, 2018, 2019] }}
                   additionalActions
                   instructions={instructions}
                 />

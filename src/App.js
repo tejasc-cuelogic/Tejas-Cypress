@@ -17,6 +17,7 @@ import { authActions, activityActions } from './services/actions';
 import MetaTagGenerator from './modules/shared/MetaTagGenerator';
 import { userIdleTime, NEXTSEED_BOX_URL } from './constants/common';
 import { DataFormatter } from './helper';
+import { REDIRECT_META } from './constants/redirect';
 /**
  * Main App
  */
@@ -43,7 +44,7 @@ const metaTagsData = [
 ];
 const isMobile = document.documentElement.clientWidth < 768;
 const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/', '/insights/category/', '/dashboard/resources/knowledge-base/', '/space/'];
-@inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
+@inject('userStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore', 'referralsStore')
 @withRouter
 @observer
 class App extends Component {
@@ -62,6 +63,17 @@ class App extends Component {
         const existingTags = JSON.parse(window.localStorage.getItem('tags'));
         tags = !isEmpty(existingTags) ? { ...existingTags, ...tags } : tags;
         window.localStorage.setItem('tags', JSON.stringify(tags));
+      }
+      const utmCampaign = get(urlParameter, 'utm_campaign') || get(urlParameter, 'campaign') || null;
+      const rsCode = get(urlParameter, 'rsCode') || null;
+      if (['marketplace', 'saasquatch'].includes(utmCampaign) && rsCode) {
+        props.referralsStore.getReferralCreditsInformation(rsCode).then(() => {
+          window.localStorage.setItem('SAASQUATCH_REFERRAL_CODE', rsCode);
+          const redirectMeta = REDIRECT_META.find(r => r.live && r.rsCode === rsCode);
+          if (redirectMeta && redirectMeta.rsRedirect) {
+            props.history.push(redirectMeta.rsRedirect);
+          }
+        });
       }
     }
   }
@@ -123,7 +135,7 @@ class App extends Component {
       if (!document.hidden) {
         if (authStore.isUserLoggedIn && !window.localStorage.getItem('jwt')) {
           authActions.forceLogout('timeout').then(() => {
-            uiStore.setAuthRef(location.pathname);
+            uiStore.setAuthRef(location.pathname, location.hash);
             if (location.pathname.includes('/dashboard/')) {
               history.push('/login');
             }

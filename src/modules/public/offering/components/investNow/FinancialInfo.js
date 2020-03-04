@@ -16,9 +16,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 class FinancialInfo extends Component {
   constructor(props) {
     super(props);
-    const { campaign } = this.props.campaignStore;
-    const offeringSecurityType = get(campaign, 'keyTerms.securities');
-    if (includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)) {
+    const { campaignStatus, offeringUUID } = this.props.campaignStore;
+    if (campaignStatus.isPreferredEquity) {
       const { overrideMultipleValidationForInvestment } = this.props.investmentStore;
       overrideMultipleValidationForInvestment();
     }
@@ -27,7 +26,7 @@ class FinancialInfo extends Component {
       && !this.props.investmentLimitStore.getCurrentInvestNowHealthCheck) {
       const { getInvestNowHealthCheck } = this.props.investmentLimitStore;
       const { match } = this.props;
-      const offeringId = match && match.params && match.params.offeringId;
+      const offeringId = offeringUUID || get(match, 'params.offeringId');
       if (this.props.investmentStore.getSelectedAccountTypeId) {
         getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId);
       }
@@ -68,11 +67,10 @@ class FinancialInfo extends Component {
     // const investmentRegulation = get(getInvestorAccountById, 'regulation');
     const offeringId = get(this.props, 'match.params.offeringId') ? get(this.props, 'match.params.offeringId') : get(getInvestorAccountById, 'offering.id') ? get(getInvestorAccountById, 'offering.id') : offeringDetails && offeringDetails.id;
     const { currentInvestmentStatus, userDetails, userAccredetiationState } = this.props.accreditationStore;
-    const { campaign } = this.props.campaignStore;
+    const { campaign, campaignStatus } = this.props.campaignStore;
     const offerName = get(campaign, 'keyTerms.shorthandBusinessName') ? get(campaign, 'keyTerms.shorthandBusinessName') : get(getInvestorAccountById, 'offering.keyTerms.shorthandBusinessName') ? get(getInvestorAccountById, 'offering.keyTerms.shorthandBusinessName') : '-';
     const campaignRegulation = get(campaign, 'keyTerms.regulation');
     const accreditationStatus = get(userDetails, 'accreditation.status');
-    const offeringSecurityType = get(campaign, 'keyTerms.securities');
     const prefferedEquityLabel = get(campaign, 'keyTerms.equityUnitType');
     const prefferedEquityAmount = get(campaign, 'closureSummary.keyTerms.priceCalculation') || '0';
     const offeringReuglation = campaignRegulation || get(getInvestorAccountById, 'offering.keyTerms.regulation');
@@ -82,8 +80,8 @@ class FinancialInfo extends Component {
       || this.props.investmentLimitStore.investNowHealthCheckDetails.loading) {
       return <Spinner className="fullscreen" loaderMessage="Loading.." />;
     }
-    const isCenterAlignedCls = includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) ? 'center-align' : '';
-    const isOfferingPreferredEquity = !!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType);
+    const isCenterAlignedCls = campaignStatus.isPreferredEquity ? 'center-align' : '';
+    const isOfferingPreferredEquity = !!campaignStatus.isPreferredEquity;
     return (
       <>
         <Route exact path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit offeringId={offeringId} refLink={match.url} {...props} />} />
@@ -91,9 +89,9 @@ class FinancialInfo extends Component {
         {this.props.changeInvest
           && (
             <>
-              <Header as="h4" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{isOfferingPreferredEquity ? Helper.CurrencyFormat(currentInvestedAmount) : Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
-              <Divider section hidden />
-              {!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)
+              <Header as="h4" textAlign="center" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{isOfferingPreferredEquity ? Helper.CurrencyFormat(currentInvestedAmount) : Helper.CurrencyFormat(currentInvestedAmount, 0)}</span></Header>
+              <Divider section className="small" />
+              {!campaignStatus.isPreferredEquity
                 && (<Header as="h4" className={`mb-half ${isCenterAlignedCls}`}>Enter new investment amount. </Header>)
               }
               {!includes(['BD_506C', 'BD_506B'], currentInvestmentStatus) && showLimitComponent
@@ -138,7 +136,7 @@ class FinancialInfo extends Component {
           )
         }
         <Form error size="huge">
-          {includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)
+          {campaignStatus.isPreferredEquity
             ? (
               <>
                 <Table unstackable basic className="mt-30" padded="very">
@@ -224,13 +222,13 @@ class FinancialInfo extends Component {
               </>
             )}
         </Form>
-        {this.props.changeInvest && !includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) && getDiffInvestmentLimitAmount
+        {this.props.changeInvest && !campaignStatus.isPreferredEquity && getDiffInvestmentLimitAmount
           && INVESTMONEY_FORM.fields.investmentAmount.value > 0 && getDiffInvestmentLimitAmount !== '0.00'
           ? <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className={`${getDiffInvestmentLimitAmount > 0 ? 'positive-text' : 'negative-text'}`}>{Helper.CurrencyFormat(Math.abs(getDiffInvestmentLimitAmount) || 0, 0)}</span></p> : ''
         }
         <Divider hidden />
         {// isValidInvestAmtInOffering &&
-          !includes(['SAFE'], offeringSecurityType) && estReturnVal && estReturnVal !== '-'
+          !campaignStatus.isSafe && estReturnVal && estReturnVal !== '-'
             && investmentAmount
             ? (
               <Header as="h4">Total Investment Return: Up to {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
@@ -246,7 +244,7 @@ class FinancialInfo extends Component {
         }
         {
           // isValidInvestAmtInOffering &&
-          !includes(['PREFERRED_EQUITY_506C'], offeringSecurityType)
+          !campaignStatus.isPreferredEquity
           && validBonusRewards && validBonusRewards.length > 0
           && validBonusRewards.map(reward => (
             <p className="grey-header">+ {reward.title}</p>

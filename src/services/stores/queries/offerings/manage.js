@@ -122,6 +122,91 @@ export const getofferingById = gql`
   }
 `;
 
+export const getOfferingClosureProcess = gql`
+  query getOfferingDetailsBySlug($id: String!) {
+    getOfferingDetailsBySlug(offeringSlug: $id) {
+      id
+      offeringSlug
+      referralCode
+      previewPassword
+      regulation
+      rootFolderId
+      closureProcess {
+        softCloseNotification {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        checkBalance {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        issueCredits {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        fundEscrow {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        verifySecurityTransaction {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        processNotes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        validateNotes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        finalizeNotes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        hardCloseNotification {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+        exportEnvelopes {
+          finished
+          remainingCount
+          started
+          startedCount
+          status
+        }
+      }
+    }
+  }
+`;
+
 export const getOfferingDetails = gql`
   query getOfferingDetailsBySlug($id: String!) {
     getOfferingDetailsBySlug(offeringSlug: $id) {
@@ -259,6 +344,7 @@ export const getOfferingDetails = gql`
         targetInvestmentPeriod
         totalRoundSize
         equityClass
+        classThreshold
         equityUnitType
         roundType
         premoneyValuation
@@ -1451,12 +1537,6 @@ query getTotalAmount{
   }
   }
   `;
-
-export const adminOfferingClose = gql`
-  mutation adminOfferingClose($process: OfferingCloseProcessEnum!, $queueLimit: Int,  $offeringId: String!, $payload: OfferingClosePayloadInputType, $service: OfferingCloseServiceEnum, $concurrency: Int) {
-    adminOfferingClose(process: $process, queueLimit: $queueLimit, offeringId: $offeringId, payload: $payload, service: $service, concurrency: $concurrency)
-  }
-`;
 
 export const setOrderForOfferings = gql`
   mutation setOrderForOfferings($offeringOrderDetails:[OfferingOrderInput]){

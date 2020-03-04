@@ -47,44 +47,60 @@ class Updates extends Component {
         </Header>
         {updates && updates.length
           ? (
-          <VerticalTimeline className="campaign-updates" layout="one-column" animate={false}>
-            {updates && updates.length
-              && updates.map((dataItem, index) => (
-                <VerticalTimelineElement
-                  position="right"
-                  className={`vertical-timeline-element--work ${(index - 1) > 0 && updates[index - 1].updatedDate !== dataItem.updatedDate ? '' : 'hide-date'}`}
-                  iconStyle={
-                    index === 0 ? {
-                      background: '#20C86D', height: 30, width: 30, marginLeft: -15,
-                    } : {}}
-                  date={(index - 1) > 0
-                    ? updates[index - 1].updatedDate !== dataItem.updatedDate
-                      ? moment(updates[index].updatedDate).format('MMMM YYYY') : null : null}
-                >
-                  <Item.Group>
-                    <Item>
-                      <div className="ui image avatar-image">
-                        {companyAvatarUrl && companyAvatarUrl.length
-                          ? <Image64 srcUrl={companyAvatarUrl} circular />
-                          : <UserAvatar UserInfo={{ name: get(campaign, 'keyTerms.shorthandBusinessName'), avatarUrl: '' }} />
-                      }
+            <VerticalTimeline className="campaign-updates" layout="one-column" animate={false}>
+              {updates && updates.length
+                && updates.map((dataItem, index) => (
+                  <VerticalTimelineElement
+                    position="right"
+                    className={`vertical-timeline-element--work ${(index - 1) > 0 && updates[index - 1].updatedDate !== dataItem.updatedDate ? '' : 'hide-date'}`}
+                    iconStyle={
+                      index === 0 ? {
+                        background: '#20C86D', height: 30, width: 30, marginLeft: -15,
+                      } : {}}
+                    date={(index - 1) > 0
+                      ? updates[index - 1].updatedDate !== dataItem.updatedDate
+                        ? moment(updates[index].updatedDate).format('MMMM YYYY') : null : null}
+                  >
+                    <Item.Group>
+                      <Item>
+                        <div className="ui image avatar-image">
+                          {companyAvatarUrl && companyAvatarUrl.length && dataItem.postUpdateAs !== 'NEXTSEED'
+                            ? <Image64 srcUrl={companyAvatarUrl} circular />
+                            : <UserAvatar UserInfo={{ name: dataItem.postUpdateAs === 'NEXTSEED' ? 'Nextseed' : get(campaign, 'keyTerms.shorthandBusinessName'), avatarUrl: dataItem.postUpdateAs === 'NEXTSEED' ? 'logo-icon.svg' : '' }} />
+                          }
+                        </div>
+                        <Item.Content verticalAlign="middle" className="grey-header">
+                          { dataItem.postUpdateAs === 'NEXTSEED' ? 'Nextseed' : get(campaign, 'keyTerms.shorthandBusinessName')}<br />
+                          <span>{dataItem.updatedDate ? moment(dataItem.updatedDate).format('LL') : '-'}</span>
+                        </Item.Content>
+                      </Item>
+                      <Header as="h4">{dataItem.title}</Header>
+                      <div
+                        style={readMoreStatus[index] ? { display: 'block' } : { display: 'none' }}
+                      >
+                        <HtmlEditor
+                          readOnly
+                          content={dataItem.content.length <= 805
+                            ? dataItem.content : dataItem.content.substring(0, 805)}
+                        />
+                        {dataItem.content.length > 805
+                          ? (
+                            <a
+                              href
+                              onClick={
+                                () => this.props.campaignStore.handleReadMoreReadLess(index)
+                              }
+                              id={index}
+                            >
+                              Read More
+                        </a>
+                          ) : ''
+                        }
                       </div>
-                      <Item.Content verticalAlign="middle" className="grey-header">
-                        {get(campaign, 'keyTerms.shorthandBusinessName') }<br />
-                        <span>{dataItem.updatedDate ? moment(dataItem.updatedDate).format('LL') : '-'}</span>
-                      </Item.Content>
-                    </Item>
-                    <Header as="h4">{dataItem.title}</Header>
-                    <div
-                      style={readMoreStatus[index] ? { display: 'block' } : { display: 'none' }}
-                    >
-                      <HtmlEditor
-                        readOnly
-                        content={dataItem.content.length <= 805
-                          ? dataItem.content : dataItem.content.substring(0, 805)}
-                      />
-                      {dataItem.content.length > 805
-                        ? (
+                      <div
+                        style={!readLessStatus[index] ? { display: 'block' } : { display: 'none' }}
+                      >
+                        <HtmlEditor readOnly content={dataItem.content || ''} />
                         <a
                           href
                           onClick={
@@ -92,30 +108,14 @@ class Updates extends Component {
                           }
                           id={index}
                         >
-                          Read More
-                        </a>
-                        ) : ''
-                      }
-                    </div>
-                    <div
-                      style={!readLessStatus[index] ? { display: 'block' } : { display: 'none' }}
-                    >
-                      <HtmlEditor readOnly content={dataItem.content || ''} />
-                      <a
-                        href
-                        onClick={
-                          () => this.props.campaignStore.handleReadMoreReadLess(index)
-                        }
-                        id={index}
-                      >
-                        Read Less
+                          Read Less
                       </a>
-                    </div>
-                  </Item.Group>
-                </VerticalTimelineElement>
-              ))
-            }
-          </VerticalTimeline>
+                      </div>
+                    </Item.Group>
+                  </VerticalTimelineElement>
+                ))
+              }
+            </VerticalTimeline>
           )
           : <InlineLoader text="No Updates" className="bg-offwhite" />
         }

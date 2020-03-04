@@ -306,7 +306,7 @@ export const PRIVATE_NAV = [
   //     },
   //     { title: 'Knowledge Base', to: 'knowledge-base', component: 'KnowledgeBase' },
   //     {
-  //       title: 'FAQ', to: 'faq', component: 'Faq', env: ['localhost', 'develop', 'dev'],
+  //       title: 'FAQ', to: 'faq', component: 'Faq', env: ['localhost', 'dev'],
   //     },
   //   ],
   // },
@@ -334,7 +334,7 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin'],
     subPanel: 0,
     subNavigations: [
-      { title: 'Overview', to: 'overview', env: ['localhost', 'develop', 'dev'] },
+      { title: 'Overview', to: 'overview', env: ['localhost', 'dev'] },
       { title: 'Creation', to: 'creation' },
       { title: 'Live', to: 'live' },
       { title: 'ᕕ( ᐛ )ᕗ', to: 'completed' },
@@ -447,6 +447,7 @@ export const PRIVATE_NAV = [
     path: 'admin/repayments',
     accessibleTo: ['admin', 'manager', 'support'],
     subNavigations: [
+      { title: 'Tracker', to: 'tracker' },
       { title: 'Issuers', to: 'issuers' },
       { title: 'Batches', to: 'batches' },
       { title: 'Util', to: 'util' },

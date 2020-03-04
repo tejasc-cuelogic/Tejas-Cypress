@@ -6,6 +6,7 @@ import { GqlClient as client } from '../../../api/gqlApi';
 import {
   USER_POOL_ID, COGNITO_CLIENT_ID, AWS_REGION, COGNITO_IDENTITY_POOL_ID,
 } from '../../../constants/aws';
+import { REACT_APP_DEPLOY_ENV } from '../../../constants/common';
 import {
   userStore,
   userDetailsStore,
@@ -300,6 +301,7 @@ export class Auth {
     const { email } = Validator.ExtractValues(authStore.FORGOT_PASS_FRM.fields);
     try {
       await AmplifyAuth.forgotPassword(email.toLowerCase());
+      sessionStorage.setItem('forgotPasswordEmailReference', email);
     } catch (err) {
       if (get(err, 'code') === 'UserNotFoundException') {
         return true;
@@ -441,11 +443,11 @@ export class Auth {
     new Promise((res, rej) => {
       try {
         this.resetData(logoutType);
-        AmplifyAuth.signOut();
+        AmplifyAuth.signOut({ global: !['localhost', 'dev', 'review'].includes(REACT_APP_DEPLOY_ENV) });
         AWS.config.clear();
         res();
       } catch (err) {
-        console.log('Error occured while logout====', err);
+        console.log('Error occured while logout', err);
         rej();
       }
     })

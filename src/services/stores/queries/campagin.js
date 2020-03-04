@@ -72,6 +72,7 @@ query getOfferingList($filters: OfferingListFilterInputType){
         shorthandBusinessName
         legalBusinessName
         securities
+        equityClass
         industry
         state
         city
@@ -129,6 +130,14 @@ export const getOfferingById = gql`
       }
       isAvailablePublicly
       stage
+    }
+  }
+`;
+
+export const getOfferingIdBySlug = gql`
+  query getOfferingDetailsBySlug($id: String!) {
+    getOfferingDetailsBySlug (offeringSlug: $id) {
+      id
     }
   }
 `;
@@ -464,7 +473,7 @@ query getOfferingDetailsBySlug($id: String!, $isValid: Boolean) {
       frequencyOfPayments
       priceCopy
       premoneyValuation
-      equityUnitType
+      equityClass
       securities
       securityInterest
       securitiesOwnershipPercentage

@@ -11,11 +11,22 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @withRouter
 @observer
 export default class Agreement extends React.Component {
-  state = {
-    showDocuSign: false,
-    open: false,
-    showError: false,
-    showAgreementPdf: false,
+  constructor(props) {
+    super(props);
+    this.state = {
+      showDocuSign: false,
+      open: false,
+      showError: false,
+      showAgreementPdf: false,
+      sometext: 'Kalim I have reviewed and agree to the terms of the',
+    };
+    const { campaignStore, portfolioStore } = this.props;
+    this.props.campaignStore.setFieldValue('inInvestmentFlow', true);
+    const offeringIdToUpdate = campaignStore.getOfferingId
+      ? campaignStore.getOfferingId : portfolioStore.currentOfferingId;
+      if (!offeringIdToUpdate || offeringIdToUpdate === '') {
+        this.props.history.push(`${this.props.refLink}`);
+      }
   }
 
   componentDidMount() {
@@ -41,6 +52,7 @@ export default class Agreement extends React.Component {
   }
 
   componentWillUnmount() {
+    this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
     const redirectURL = this.props.history.location.pathname;
     if (!redirectURL.includes('change-investment-limit') && !redirectURL.includes('agreement')) {
       this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
@@ -125,7 +137,7 @@ export default class Agreement extends React.Component {
     const { uiStore, match } = this.props;
     const { inProgress } = uiStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
-    const { campaign } = this.props.campaignStore;
+    const { campaign, campaignStatus } = this.props.campaignStore;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     const offeringRegulationType = get(campaign, 'keyTerms.regulation');
     const { currentInvestmentStatus } = this.props.accreditationStore;
@@ -134,10 +146,7 @@ export default class Agreement extends React.Component {
     const regualtionTypeStatement = regulationCheck && regulationCheck === 'BD_506C' ? 'Regulation D 506C' : regulationCheck === 'BD_506B' ? 'Rule 506(b) of Regulation D' : 'Regulation Crowdfunding';
     const offeringDetailsObj = campaign || get(getInvestorAccountById, 'offering');
     const businessName = get(offeringDetailsObj, 'keyTerms.shorthandBusinessName');
-    const offeringSecurityType = get(campaign, 'keyTerms.securities');
-    const agreementStatement = includes(['PREFERRED_EQUITY_506C'], offeringSecurityType) ? 'Purchase Agreement and Investor Proxy Agreement' : includes(['REAL_ESTATE'], offeringSecurityType) ? 'LLC Agreement and Subscription Agreement' : includes(['SAFE'], offeringSecurityType) ? 'SAFE' : 'Note Purchase Agreement';
-    const isOfferingPreferredEquity = !!includes(['PREFERRED_EQUITY_506C'], offeringSecurityType);
-
+    const agreementStatement = campaignStatus.isPreferredEquity ? 'Purchase Agreement and Investor Proxy Agreement' : campaignStatus.isRealEstate ? 'LLC Agreement and Subscription Agreement' : campaignStatus.isSafe ? 'SAFE' : 'Note Purchase Agreement';
     return (
       <>
         <Modal open={this.state.open} closeOnDimmerClick={false} size="mini">
@@ -187,7 +196,7 @@ export default class Agreement extends React.Component {
             <div style={{ display: this.state.showDocuSign || this.state.showAgreementPdf ? 'none' : 'block' }}>
               <Header as="h3" className="mb-40">
                 Let&#39;s confirm your investment.<br />You are investing
-                <span className="positive-text"> {isOfferingPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
+                <span className="positive-text"> {campaignStatus.isPreferredEquity ? Helper.CurrencyFormat(investmentAmount) : Helper.CurrencyFormat(investmentAmount, 0)}</span> in {businessName}.
               </Header>
               <Form
                 error={(this.state.showError
@@ -207,7 +216,7 @@ export default class Agreement extends React.Component {
                           disabled={inProgress}
                           customLabel={(
                             <>
-                              I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">{agreementStatement}</Link>.
+                              {this.state.sometext} <Link onClick={e => this.docuSignHandeler(e, true)} to="/">{agreementStatement}</Link>.
                             </>
                           )}
                           conditionalCustomLabel={(

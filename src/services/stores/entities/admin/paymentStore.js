@@ -1,24 +1,28 @@
 import { observable, action, computed, toJS, decorate } from 'mobx';
-import { orderBy, get, findIndex } from 'lodash';
+import { orderBy, get, findIndex, pick, forEach } from 'lodash';
 import moment from 'moment';
-import { FormValidator as Validator, ClientDb } from '../../../../helper';
+import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { adminPaymentsIssuerList, updatePaymentIssuer } from '../../queries/Repayment';
-import { PAYMENT } from '../../../constants/payment';
+import { adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentGenerateAdminSummary } from '../../queries/Repayment';
+import { PAYMENT, ACTION } from '../../../constants/payment';
 import { uiStore } from '../../index';
 import DataModelStore, { decorateDefault } from '../shared/dataModelStore';
 import Helper from '../../../../helper/utility';
 
 export class PaymentStore extends DataModelStore {
   constructor() {
-    super({ adminPaymentsIssuerList, updatePaymentIssuer });
+    super({ adminPaymentsIssuerList, updatePaymentIssuer, adminPaymentSendIssuerDraftNotice, adminPaymentSendGoldStarDraftInstructions, adminPaymentGenerateAdminSummary });
   }
 
     data = [];
 
+    apiHit = false;
+
     initialData = [];
 
     PAYMENT_FRM = Validator.prepareFormObject(PAYMENT);
+
+    ACTION_FRM = Validator.prepareFormObject(ACTION);
 
     sortOrderRP = {
       column: null,
@@ -30,7 +34,17 @@ export class PaymentStore extends DataModelStore {
       direction: 'asc',
     }
 
-    selectedOffering = '';
+    sortOrderTN = {
+      column: null,
+      direction: 'asc',
+    }
+
+    sortOrderRSN = {
+      column: null,
+      direction: 'asc',
+    }
+
+    selectedOffering = null;
 
     setSortingOrder = (column = null, direction = null, key) => {
       this[key] = {
@@ -40,31 +54,73 @@ export class PaymentStore extends DataModelStore {
     }
 
     initRequest = () => {
-      this.executeQuery({
-        client: 'PRIVATE',
-        query: 'adminPaymentsIssuerList',
-        setLoader: 'adminPaymentsIssuerList',
-      }).then((res) => {
-        this.setDb(res.adminPaymentsIssuerList);
-      });
+      if (!this.apiHit) {
+        this.executeQuery({
+          query: 'adminPaymentsIssuerList',
+          setLoader: 'adminPaymentsIssuerList',
+        }).then((res) => {
+          this.setDb(res.adminPaymentsIssuerList);
+          this.setFieldValue('apiHit', true);
+        });
+      }
     };
+
+    paymentCtaHandlers = mutation => new Promise((resolve) => {
+      let variables = false;
+      if (mutation === 'adminPaymentGenerateAdminSummary') {
+        variables = { ...toJS(Validator.evaluateFormData(this.ACTION_FRM.fields)) };
+      }
+      this.executeMutation({
+        mutation,
+        setLoader: mutation,
+        variables,
+      }).then((res) => {
+        resolve(res);
+      });
+    });
 
     setDb = (data) => {
       this.setFieldValue('initialData', data);
       this.setFieldValue('data', ClientDb.initiateDb(data, true));
     }
 
-    getOfferingBySlug = (id) => {
+    getOfferingBySlug = (id, paymentType) => {
       const res = this.data.find(payment => payment.offering.offeringSlug === id);
-      this.selectedOffering = get(res, 'offering.id');
+      this.selectedOffering = res;
       this.PAYMENT_FRM = Validator.setFormData(this.PAYMENT_FRM, res);
+      this.updatePaymentDetailsFormRules(paymentType);
       this.validateForm('PAYMENT_FRM');
     }
 
-    updatePayment = id => new Promise((resolve, reject) => {
+    updatePaymentDetailsFormRules = (tab) => {
+      const securities = get(this.selectedOffering, 'offering.keyTerms.securities');
+      let ruleDateList = [];
+      if (tab === 'issuers') {
+        ruleDateList = ['expectedOpsDate', 'operationsDate', 'expectedPaymentDate', 'firstPaymentDate'];
+      } else if (tab === 'tracker' && securities === 'REVENUE_SHARING_NOTE') {
+        ruleDateList = ['anticipatedOpenDate', 'operationsDate'];
+      }
+      const formFields = this.PAYMENT_FRM;
+      forEach(formFields.fields, (f, key) => {
+        formFields.fields[key].rule = key === 'shorthandBusinessName' ? 'required' : ruleDateList.includes(key) ? 'date' : 'optional';
+      });
+      this.setFieldValue('PAYMENT_FRM', formFields);
+    }
+
+    updatePayment = type => new Promise((resolve) => {
       uiStore.setProgress();
-      let variables = Helper.replaceKeysDeep(toJS(Validator.evaluateFormData(this.PAYMENT_FRM.fields)), { expectedOpsDate: 'launchExpectedOpsDate', operationsDate: 'operationsDate', expectedPaymentDate: 'keyTermsAnticipatedPaymentStartDate', firstPaymentDate: 'repaymentStartDate', monthlyPayment: 'monthlyPayment', payments: 'paymentsContactEmail' });
+      const id = get(this.selectedOffering, 'offering.id');
+      const security = get(this.selectedOffering, 'offering.keyTerms.securities');
+      let variables = Helper.replaceKeysDeep(toJS(Validator.evaluateFormData(this.PAYMENT_FRM.fields)), { expectedOpsDate: 'launchExpectedOpsDate', expectedPaymentDate: 'keyTermsAnticipatedPaymentStartDate', firstPaymentDate: 'repaymentStartDate', payments: 'paymentsContactEmail' });
       variables = variables.paymentsContactEmail ? { ...variables, paymentsContactEmail: (variables.paymentsContactEmail.split(',').map(p => p.trim())).join(', ') } : { ...variables };
+      let pickKeyList = type === 'issuers' ? ['launchExpectedOpsDate', 'operationsDate', 'keyTermsAnticipatedPaymentStartDate', 'repaymentStartDate', 'monthlyPayment', 'paymentsContactEmail'] : ['startupPeriod', 'paymentStartDateCalc', 'amountDue', 'inDefault', 'sendNotification', 'draftDate'];
+      pickKeyList = type === 'tracker' && security === 'REVENUE_SHARING_NOTE' ? [...pickKeyList, 'anticipatedOpenDate', 'operationsDate', 'minPaymentStartDateCalc'] : pickKeyList;
+      variables = pick(variables, pickKeyList);
+      forEach(variables, (d, key) => {
+        if (d === '') {
+          variables[key] = null;
+        }
+      });
       client
         .mutate({
           mutation: updatePaymentIssuer,
@@ -72,12 +128,11 @@ export class PaymentStore extends DataModelStore {
         })
         .then((res) => {
           Helper.toast('Payment updated successfully.', 'success');
-          this.updatePaymentList(id, res.updatePaymentIssuer);
+          this.updatePaymentList(id, get(res, 'data.updatePaymentIssuer'));
           resolve();
         })
         .catch(() => {
           Helper.toast('Error while updating payment.', 'error');
-          reject();
         })
         .finally(() => {
           uiStore.setProgress(false);
@@ -85,16 +140,134 @@ export class PaymentStore extends DataModelStore {
     });
 
     updatePaymentList = (id, res) => {
-      const data = { ...toJS(this.data) };
-      const paymentIndex = findIndex(data, d => d.id === id);
+      const data = [...toJS(this.initialData)];
+      const paymentIndex = findIndex(data, d => d.offering.id === id);
       if (paymentIndex !== -1) {
         const newData = {
-          ...res,
-          sinkingFundBalance: this.PAYMENT_FRM.fields.sinkingFundBalance.value,
+          offering: { ...res },
+          sinkingFundBalance: data.sinkingFundBalance,
         };
-        this.data[paymentIndex] = newData;
+        this.initialData[paymentIndex] = newData;
+        this.setFieldValue('data', ClientDb.initiateDb(this.initialData, true));
       }
     }
+
+    calculateDraftDate = () => {
+      const draftDay = this.PAYMENT_FRM.fields.draftDay.value;
+      if (draftDay) {
+        const date = DataFormatter.addBusinessDays(moment().format('MM/01/YYYY'), draftDay);
+        const dateVal = DataFormatter.diffDays(date, false, true) > 0 ? moment(date).format('MM/DD/YYYY') : moment(date).add(1, 'month').subtract(1, 'day').format('MM/DD/YYYY');
+        this.setFieldValue('PAYMENT_FRM', dateVal, 'fields.draftDate.value');
+      } else {
+        this.setFieldValue('PAYMENT_FRM', null, 'fields.draftDate.value');
+      }
+    }
+
+    // eslint-disable-next-line consistent-return
+    calculateFormula = (type, title, params, forceAssign = false) => {
+      let data = '';
+      const { hardCloseDate, firstPaymentDate, startupPeriod, actualOpeningDate, anticipatedOpenDate, term } = params;
+      // eslint-disable-next-line default-case
+      switch (type) {
+        case 'TERM_NOTE':
+          // eslint-disable-next-line default-case
+          switch (title) {
+            case 'Status':
+              if (firstPaymentDate) {
+                data = 'In Repayment';
+              } else if (hardCloseDate) {
+                const month = moment(hardCloseDate).add(59, 'days').format('MMM');
+                if (month === moment().format('MMM')) {
+                  data = 'First Payment Due';
+                } else if (month === moment().add(1, 'month').format('MMM')) {
+                  data = 'First Payment Starting Next Month';
+                } else {
+                  data = 'No Payment Due';
+                }
+              } else {
+                data = 'No Payment Due';
+              }
+              break;
+            case 'Start Payment Date':
+            case 'startupPeriod':
+              if (startupPeriod !== null) {
+                if (startupPeriod === 0) {
+                  if (hardCloseDate) {
+                    data = moment(hardCloseDate).add(1, 'month').format('MM/YYYY');
+                  }
+                } else if (startupPeriod !== 0) {
+                  if (hardCloseDate) {
+                    data = moment(hardCloseDate).add(startupPeriod, 'month').format('MM/YYYY');
+                  }
+                }
+              }
+              if (forceAssign) {
+                this.setFieldValue('PAYMENT_FRM', data, 'fields.paymentStartDateCalc.value');
+              } else {
+                return data;
+              }
+              break;
+            case 'Maturity':
+              if (hardCloseDate && term) {
+                data = moment(hardCloseDate).add((1 + parseInt(term, 10)), 'month').format('MM/YYYY');
+              }
+              break;
+          }
+          break;
+        case 'REVENUE_SHARING_NOTE':
+          switch (title) {
+            case 'Status':
+              if (firstPaymentDate) {
+                data = 'In Repayment';
+              } else if (actualOpeningDate && moment(actualOpeningDate).add(59, 'days').format('MMM') === moment().format('MMM')) {
+                data = 'First Payment Due';
+              } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) > 180 && !actualOpeningDate) {
+                data = 'Min Payment Due';
+              } else if (actualOpeningDate && moment(actualOpeningDate).add(59, 'days').format('MMM') === moment().add(1, 'month').format('MMM')) {
+                data = 'First Payment Starting Next Month';
+              } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) > 150 && !actualOpeningDate) {
+                data = 'Min Payment Starting Next Month';
+              } else if (anticipatedOpenDate && DataFormatter.diffDays(anticipatedOpenDate, false, true) < 180 && !actualOpeningDate) {
+                data = 'No Payment Due';
+              }
+              break;
+            case 'Start Payment Date':
+            case 'operationsDate':
+              if (actualOpeningDate && DataFormatter.diffDays(actualOpeningDate, false, true) < 0) {
+                  data = moment(actualOpeningDate).add(2, 'month').format('MM/YYYY');
+              }
+              if (forceAssign) {
+                this.setFieldValue('PAYMENT_FRM', data, 'fields.paymentStartDateCalc.value');
+              } else {
+                return data;
+              }
+              break;
+            case 'Min Payment Start Date':
+            case 'anticipatedOpenDate':
+            case 'startupPeriod':
+              if (startupPeriod !== 0 && anticipatedOpenDate && actualOpeningDate && DataFormatter.diffDays(actualOpeningDate, false, true) >= 0) {
+                  data = moment(anticipatedOpenDate).add(startupPeriod, 'month').format('MM/YYYY');
+              }
+              if (forceAssign) {
+                this.setFieldValue('PAYMENT_FRM', data, 'fields.minPaymentStartDateCalc.value');
+              } else {
+                return data;
+              }
+              break;
+              case 'Maturity':
+              if (hardCloseDate && term) {
+                data = moment(hardCloseDate).add((1 + parseInt(term, 10)), 'month').format('MM/YYYY');
+              }
+              break;
+            default:
+              data = hardCloseDate;
+          }
+          break;
+      }
+      if (!forceAssign) {
+        return data;
+      }
+    };
 
     setInitiateSrch = (keyword) => {
       this.setDb([...this.initialData]);
@@ -127,16 +300,46 @@ export class PaymentStore extends DataModelStore {
       }
       return data || [];
     }
+
+    get termNotes() {
+      const data = (this.data && toJS(this.data) && toJS(this.data).filter(d => get(d, 'offering.keyTerms.securities') === 'TERM_NOTE')) || [];
+      if (this.sortOrderTN.column && this.sortOrderTN.direction && this.data && toJS(this.data)) {
+        return orderBy(
+          data,
+          [issuerList => (!['offering.keyTerms.shorthandBusinessName', 'offering.keyTerms.securities', 'offering.closureSummary.keyTerms.monthlyPayment'].includes(this.sortOrderTN.column) ? get(issuerList, this.sortOrderTN.column) && moment(get(issuerList, this.sortOrderTN.column), 'MM/DD/YYYY', true).isValid() ? moment(get(issuerList, this.sortOrderTN.column), 'MM/DD/YYYY', true).unix() : '' : get(issuerList, this.sortOrderTN.column) && get(issuerList, this.sortOrderTN.column).toString().toLowerCase())],
+          [this.sortOrderTN.direction],
+        );
+      }
+      return data || [];
+    }
+
+    get revenueSharingNotes() {
+      const data = (this.data && toJS(this.data) && toJS(this.data).filter(d => get(d, 'offering.keyTerms.securities') === 'REVENUE_SHARING_NOTE')) || [];
+      if (this.sortOrderRSN.column && this.sortOrderRSN.direction && this.data && toJS(this.data)) {
+        return orderBy(
+          data,
+          [issuerList => (!['offering.keyTerms.shorthandBusinessName', 'offering.keyTerms.securities', 'offering.closureSummary.keyTerms.monthlyPayment'].includes(this.sortOrderRSN.column) ? get(issuerList, this.sortOrderRSN.column) && moment(get(issuerList, this.sortOrderRSN.column), 'MM/DD/YYYY', true).isValid() ? moment(get(issuerList, this.sortOrderRSN.column), 'MM/DD/YYYY', true).unix() : '' : get(issuerList, this.sortOrderRSN.column) && get(issuerList, this.sortOrderRSN.column).toString().toLowerCase())],
+          [this.sortOrderRSN.direction],
+        );
+      }
+      return data || [];
+    }
 }
 
 decorate(PaymentStore, {
   ...decorateDefault,
   data: observable,
   selectedOffering: observable,
+  apiHit: observable,
   PAYMENT_FRM: observable,
+  ACTION_FRM: observable,
   initialData: observable,
   sortOrderSP: observable,
   sortOrderRP: observable,
+  sortOrderTN: observable,
+  sortOrderRSN: observable,
+  updatePaymentDetailsFormRules: action,
+  paymentCtaHandlers: action,
   setSortingOrder: action,
   initRequest: action,
   getOfferingBySlug: action,
@@ -146,6 +349,8 @@ decorate(PaymentStore, {
   setDb: action,
   startupPeriod: computed,
   repayments: computed,
+  termNotes: computed,
+  revenueSharingNotes: computed,
 });
 
 export default new PaymentStore();

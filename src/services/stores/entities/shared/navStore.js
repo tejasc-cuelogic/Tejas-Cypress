@@ -199,8 +199,8 @@ export class NavStore {
   }
 
   @computed get stepInRoute() {
-    return this.everLogsIn ? { to: 'login', title: 'Log In' }
-      : { to: 'register', title: 'Sign Up' };
+    return this.everLogsIn ? { to: 'login', title: 'Log In', word: 'log in' }
+      : { to: 'register', title: 'Sign Up', word: 'sign up' };
   }
 
   @computed get specificNavs() {

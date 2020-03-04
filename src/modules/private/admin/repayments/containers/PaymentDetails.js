@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
 import { get } from 'lodash';
-import { FormInput, FormDropDown, MaskedInput, FormTextarea } from '../../../../../theme/form';
+import { FormInput, FormDropDown, MaskedInput, FormTextarea, FormRadioGroup } from '../../../../../theme/form';
 import { SECURITIES_VALUES } from '../../../../../services/constants/admin/offerings';
 
 @inject('paymentStore', 'uiStore')
@@ -12,24 +12,44 @@ import { SECURITIES_VALUES } from '../../../../../services/constants/admin/offer
 export default class PaymentDetails extends Component {
   constructor(props) {
     super(props);
-    this.props.paymentStore.getOfferingBySlug(get(this.props, 'match.params.offeringSlug'));
+    this.props.paymentStore.getOfferingBySlug(get(this.props, 'match.params.offeringSlug'), get(this.props, 'match.params.paymentType'));
   }
 
   handleCloseModal = () => {
-    this.props.history.push(this.props.refLink);
+    const { paymentType } = this.props.match.params;
+    this.props.history.push(paymentType ? `${this.props.refLink}/${paymentType}` : this.props.refLink);
   }
 
-  handleUpdatePayment = (id) => {
+  handleUpdatePayment = () => {
+    const { paymentType } = this.props.match.params;
     const { updatePayment } = this.props.paymentStore;
-    updatePayment(id)
+    updatePayment(paymentType)
       .then(() => {
         this.handleCloseModal();
       });
   }
 
+  calculateFormula = (type, key) => {
+    const { calculateFormula, PAYMENT_FRM } = this.props.paymentStore;
+    calculateFormula(
+      type,
+      key,
+      {
+        hardCloseDate: PAYMENT_FRM.fields.hardCloseDate.value,
+        startupPeriod: PAYMENT_FRM.fields.startupPeriod.value,
+        actualOpeningDate: PAYMENT_FRM.fields.operationsDate.value,
+        anticipatedOpenDate: PAYMENT_FRM.fields.anticipatedOpenDate.value,
+      },
+      true,
+    );
+  }
+
   render() {
-    const { PAYMENT_FRM, maskChange, selectedOffering, formChange } = this.props.paymentStore;
+    const { PAYMENT_FRM, maskChange, formChange, selectedOffering, calculateDraftDate } = this.props.paymentStore;
     const { inProgress } = this.props.uiStore;
+    const { paymentType } = this.props.match.params;
+    const security = get(selectedOffering, 'offering.keyTerms.securities');
+    const formMeta = ['REVENUE_SHARING_NOTE'].includes(security) ? ['anticipatedOpenDate', 'minPaymentStartDateCalc', 'operationsDate', 'paymentStartDateCalc'] : ['paymentStartDateCalc'];
     return (
       <Modal closeOnEscape={false} closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -45,6 +65,84 @@ export default class PaymentDetails extends Component {
                 name="shorthandBusinessName"
                 fielddata={PAYMENT_FRM.fields.shorthandBusinessName}
               />
+              {['tracker'].includes(paymentType)
+              && (
+              <>
+                {
+                ['hardCloseDate'].map(field => (
+                  <MaskedInput
+                    displayMode
+                    name={field}
+                    placeHolder={PAYMENT_FRM.fields[field].placeHolder}
+                    fielddata={PAYMENT_FRM.fields[field]}
+                    changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'formatted')}
+                    dateOfBirth
+                  />
+                ))
+                }
+              <MaskedInput
+                number
+                name="startupPeriod"
+                changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'float')}
+                fielddata={PAYMENT_FRM.fields.startupPeriod}
+                onkeyup={() => this.calculateFormula(security, 'startupPeriod')}
+              />
+              {['REVENUE_SHARING_NOTE'].includes(security) && <div className="field">{}</div>}
+              {formMeta.map(field => (
+                <MaskedInput
+                  displayMode={['paymentStartDateCalc', 'minPaymentStartDateCalc'].includes(field)}
+                  format={['paymentStartDateCalc', 'minPaymentStartDateCalc'].includes(field) ? '##/####' : '##/##/####'}
+                  name={field}
+                  label={field === 'operationsDate' ? 'Actual Opening Date' : false}
+                  placeHolder={field === 'operationsDate' ? 'Actual Opening Date' : PAYMENT_FRM.fields[field].placeHolder}
+                  fielddata={PAYMENT_FRM.fields[field]}
+                  changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'formatted')}
+                  onkeyup={() => {
+                    this.calculateFormula(security, field);
+                    this.calculateFormula(security, field === 'anticipatedOpenDate' ? 'actualOpeningDate' : 'anticipatedOpenDate');
+                  }}
+                  dateOfBirth
+                />
+              ))}
+              {['inDefault', 'sendNotification'].map(field => (
+              <div className="field">
+                <Header as="label">{PAYMENT_FRM.fields[field].label}</Header>
+                <FormRadioGroup
+                  fielddata={PAYMENT_FRM.fields[field]}
+                  name={field}
+                  changed={(e, result) => formChange(e, result, 'PAYMENT_FRM')}
+                />
+              </div>
+              ))}
+              <MaskedInput
+                number
+                name="draftDay"
+                placeHolder={PAYMENT_FRM.fields.draftDay.placeHolder}
+                fielddata={PAYMENT_FRM.fields.draftDay}
+                changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'float')}
+                onkeyup={calculateDraftDate}
+              />
+              <MaskedInput
+                displayMode
+                name="draftDate"
+                placeHolder={PAYMENT_FRM.fields.draftDate.placeHolder}
+                fielddata={PAYMENT_FRM.fields.draftDate}
+                changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM', 'formatted')}
+                dateOfBirth
+              />
+              <MaskedInput
+                prefix="$ "
+                currency
+                type="text"
+                name="amountDue"
+                changed={(values, name) => maskChange(values, name, 'PAYMENT_FRM')}
+                fielddata={PAYMENT_FRM.fields.amountDue}
+              />
+              </>
+              )}
+              {['issuers'].includes(paymentType)
+              && (
+              <>
               <FormDropDown
                 displayMode
                 fielddata={PAYMENT_FRM.fields.securities}
@@ -75,31 +173,28 @@ export default class PaymentDetails extends Component {
                 fielddata={PAYMENT_FRM.fields.monthlyPayment}
               />
               <MaskedInput
-                readOnly
-                containerclassname="display-only"
+                displayMode
                 prefix="$ "
                 currency
                 type="text"
                 name="sinkingFundBalance"
                 fielddata={PAYMENT_FRM.fields.sinkingFundBalance}
               />
-              {/* <FormInput
-                fluid
-                type="text"
-                name="paymentsContactEmail"
-                fielddata={PAYMENT_FRM.fields.paymentsContactEmail}
-                changed={(e, result) => formChange(e, result, 'PAYMENT_FRM', 'formatted')}
-              /> */}
+              </>
+            )}
             </Form.Group>
-            <FormTextarea
-              name="payments"
-              fielddata={PAYMENT_FRM.fields.payments}
-              changed={(e, result) => formChange(e, result, 'PAYMENT_FRM', 'formatted')}
-              containerclassname="secondary"
-            />
+            {['issuers'].includes(paymentType)
+              && (
+              <FormTextarea
+                name="payments"
+                fielddata={PAYMENT_FRM.fields.payments}
+                changed={(e, result) => formChange(e, result, 'PAYMENT_FRM')}
+                containerclassname="secondary"
+              />
+              )}
             <div className="center-align mt-20">
               <Button className="very relaxed red" content="Cancel" onClick={this.handleCloseModal} />
-              <Button primary className="very relaxed" disabled={!PAYMENT_FRM.meta.isValid} loading={inProgress} content="Save" onClick={() => this.handleUpdatePayment(selectedOffering)} />
+              <Button primary className="very relaxed" disabled={!PAYMENT_FRM.meta.isValid || inProgress} loading={inProgress} content="Save" onClick={this.handleUpdatePayment} />
             </div>
           </Form>
         </Modal.Content>

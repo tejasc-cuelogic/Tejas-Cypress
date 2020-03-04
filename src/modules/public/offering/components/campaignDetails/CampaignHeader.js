@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get, capitalize } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
-import { Responsive, Icon, Header, Container, Progress, Popup, Statistic, Grid, Button } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
-import { Image64 } from '../../../../../theme/shared';
+import { Responsive, Icon, Header, Container, Progress, Statistic, Grid, Button } from 'semantic-ui-react';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
+import { Image64, PopUpModal } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 992;
@@ -148,30 +148,35 @@ export default class CampaignHeader extends Component {
                     ) : null}
                   {!campaignStatus.isFund
                     ? (
-                      <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)} {minFlagStatus ? 'max target' : 'min target'} {' '}
-                        <Popup
-                          trigger={<Icon name="help circle" color="green" />}
-                          content={!minFlagStatus ? 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' : 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds.'}
-                          position="top center"
-                        />
-                      </p>
-                    )
-                    : (
                       <>
                         <p>
-                          {Helper.CurrencyFormat(minOffering, 0)} {'min target'} {' '}
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                          {Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering, 0)}{' '}
+                          <PopUpModal
+                            customTrigger={<span className="popup-label">{minFlagStatus ? 'max target' : 'min target'}</span>}
+                            content={!minFlagStatus ? 'This is the minimum fundraising goal. If this amount is not raised by the end of the offering period, any funds invested will be automatically returned to your NextSeed account.' : 'This is the maximum fundraising goal. The offering will remain open until the issuer raises the Offering Max or the offering period ends. As long as the raise exceeds the Offering Min, the issuer will receive the funds.'}
                             position="top center"
+                            showOnlyPopup={!isMobile}
+                          />
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <p>
+                          {Helper.CurrencyFormat(minOffering, 0)}{' '}
+                          <PopUpModal
+                            customTrigger={<span className="popup-label">min target</span>}
+                            content="This is the minimum fundraising goal. If this amount is not raised by the end of the offering period, any funds invested will be automatically returned to your NextSeed account."
+                            position="top center"
+                            showOnlyPopup={!isMobile}
                           />
                         </p>
                         <p>
-                          {Helper.CurrencyFormat(maxOffering, 0)} {'max target'} {' '}
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimum goal, the issuer will receive the funds."
+                          {Helper.CurrencyFormat(maxOffering, 0)}{' '}
+                          <PopUpModal
+                            customTrigger={<span className="popup-label">max target</span>}
+                            content="This is the maximum fundraising goal. The offering will remain open until the issuer raises the Offering Max or the offering period ends. As long as the raise exceeds the Offering Min, the issuer will receive the funds."
                             position="top center"
+                            showOnlyPopup={!isMobile}
                           />
                         </p>
                       </>
@@ -179,54 +184,46 @@ export default class CampaignHeader extends Component {
                   {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                     && (
                       <p className="raise-type mb-0">
-                        {['REAL_ESTATE'].includes(offerStructure) ? 'Commercial Real Estate' : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
-                        {/* <Popup
-                          hoverable
-                          trigger={<Icon name="help circle" color="green" />}
-                          content={
-                            <span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>
-                          }
-                          position="top center"
-                        /> */}
+                        {campaignStatus.isRealEstate ? 'Commercial Real Estate' : campaignStatus.isPreferredEquity ? CAMPAIGN_KEYTERMS_SECURITIES.PREFERRED_EQUITY_506C : CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}{' '}
                       </p>
                     )
                   }
-                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
+                  {campaignStatus.isRealEstate
                     && (
                       <p className="mb-0">
                         Asset Type: Hotel Development
                         </p>
                     )
                   }
-                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE && dataRooms > 0
+                  {campaignStatus.isRealEstate && dataRooms > 0
                     && (
                       <p className="mb-0">
                         Targeted IRR: <Link to={`${this.props.match.url}#data-room`}> View in Data Room</Link>
                       </p>
                     )
                   }
-                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE
+                  {campaignStatus.isTermNote
                     && (
                       <p className="mb-0">
                         Interest Rate: {get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-'}
                       </p>
                     )
                   }
-                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE
+                  {campaignStatus.isRevenueShare
                     && (
                       <p className="mb-0">
                         Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple') ? get(campaign, 'keyTerms.investmentMultiple') : '-'}
                       </p>
                     )
                   }
-                  {(offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE || offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE)
+                  {(campaignStatus.isTermNote || campaignStatus.isRevenueShare)
                     && (
                       <p className="mb-0">
                         Maturity: {get(campaign, 'keyTerms.maturity') || '-'} months
                       </p>
                     )
                   }
-                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C
+                  {campaignStatus.isPreferredEquity
                     && (
                       <>
                         <p className="mb-0">
@@ -238,7 +235,7 @@ export default class CampaignHeader extends Component {
                       </>
                     )
                   }
-                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.SAFE
+                  {campaignStatus.isSafe
                     && (
                       <>
                         {get(campaign, 'keyTerms.valuationCap') && (
@@ -254,7 +251,7 @@ export default class CampaignHeader extends Component {
                       </>
                     )
                   }
-                  {/* {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REAL_ESTATE
+                  {/* {campaignStatus.isRealEstate
                     && (
                       <>
                       <p className="mb-0">
@@ -300,8 +297,7 @@ export default class CampaignHeader extends Component {
                             }
                           </Grid>
                         </>
-                      )
-                    }
+                      )}
                   </div>
                 </Grid.Column>
               </Grid>

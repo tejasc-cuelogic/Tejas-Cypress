@@ -6,6 +6,7 @@ import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
 import { DateTimeFormat, InlineLoader, NsPagination } from '../../../../../theme/shared';
 import { STAGES, SECURITIES_VALUES } from '../../../../../services/constants/admin/offerings';
+import { CAMPAIGN_KEYTERMS_SECURITIES, OFFERING_REGULATIONS } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 
 const actions = {
@@ -77,7 +78,7 @@ export default class Listing extends Component {
     return (
       <Card fluid>
         <div className="table-wrapper">
-          <Table unstackable className="application-list clickable">
+          <Table unstackable className="application-list clickable striped">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
@@ -114,7 +115,7 @@ export default class Listing extends Component {
                 <Table.Row><Table.Cell colSpan={8} textAlign="center">No Offering to display !</Table.Cell></Table.Row>
               )
                 : offeringList.map(offering => (
-                  <Table.Row key={offering.offeringSlug} className={this.props.uiStore.inProgressArray.length && offering.offeringId === this.state.loadingOfferId ? 'disabled' : ''}>
+                  <Table.Row key={offering.offeringSlug} className={(offering.isAvailablePublicly) ? (this.props.uiStore.inProgressArray.length && offering.offeringId === this.state.loadingOfferId) ? 'disabled' : '' : 'row-highlight'}>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering)}>
                       <Link to={`/dashboard/offering/${offering.offeringSlug}`}>
                         <b>{((offering.keyTerms && offering.keyTerms.shorthandBusinessName)
@@ -122,6 +123,8 @@ export default class Listing extends Component {
                             (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
                           ))}
                         </b>
+                        <br />
+                            {OFFERING_REGULATIONS[offering.keyTerms.regulation] && `${OFFERING_REGULATIONS[offering.keyTerms.regulation]} -`} {CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities]}
                       </Link>
                     </Table.Cell>
                     <Table.Cell className="text-capitalize">

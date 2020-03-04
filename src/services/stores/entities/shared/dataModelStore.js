@@ -169,10 +169,12 @@ export default class DataModelStore {
     if (e.score !== undefined) {
       this.currentScore = e.score;
     }
+    this.currTime = +new Date();
   };
 
   eventFormChange = (e, formName) => {
     this[formName] = FormValidator.onChange(this[formName], { name: e.name, value: e.value });
+    this.currTime = +new Date();
   };
 
   setAddressFields = (place, form) => {
@@ -205,6 +207,7 @@ export default class DataModelStore {
       this.setFieldValue(form, false, `${path}.showLoader`);
       Helper.toast('Something went wrong, please try again later.', 'error');
     });
+    this.currTime = +new Date();
   }
 
   removeUploadedData = (form, field, index = null, arrayName = null) => {
@@ -236,6 +239,7 @@ export default class DataModelStore {
     this.setFieldValue(form, undefined, `${path}.error`);
     this.setFieldValue(form, false, `${path}.showLoader`);
     this.setFieldValue('removeFileIdsList', [...this.removeFileIdsList, removeFileIds]);
+    this.currTime = +new Date();
   }
 
   maskChange = (values, field, form, type) => {
@@ -249,7 +253,7 @@ export default class DataModelStore {
         form[2],
       );
     } else {
-      this[formName] = FormValidator.onChange(this[formName], { name: field, value: fieldValue });
+      this[formName] = FormValidator.onChange(this[formName], { name: field, value: fieldValue === undefined ? null : fieldValue });
     }
     this.currTime = +new Date();
   };

@@ -2,6 +2,7 @@ import React from 'react';
 
 export const CAMPAIGN_KEYTERMS_SECURITIES = {
   TERM_NOTE: 'Term Note',
+  EQUITY: 'Equity',
   REVENUE_SHARING_NOTE: 'Revenue Sharing Note',
   PREFERRED_EQUITY_506C: 'Preferred Equity',
   CONVERTIBLE_NOTES: 'Convertible Notes',
@@ -9,8 +10,16 @@ export const CAMPAIGN_KEYTERMS_SECURITIES = {
   REAL_ESTATE: 'LLC Membership Interests',
   FUNDS: 'Funds - Limited Partnership Interests',
 };
+export const CAMPAIGN_KEYTERMS_EQUITY_CLASS = {
+  PREFERRED: 'Series NS Preferred Units',
+  LLC_MEMBERSHIP_UNITS: 'LLC Membership Interests',
+  CLASS_A_SHARES: 'Class A Shares',
+  CLASS_B_SHARES: 'Class B Shares',
+  PARALLEL_CLASS_SHARES: 'Class A and B Shares',
+};
 export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
   TERM_NOTE: 'TERM_NOTE',
+  EQUITY: 'EQUITY',
   REVENUE_SHARING_NOTE: 'REVENUE_SHARING_NOTE',
   PREFERRED_EQUITY_506C: 'PREFERRED_EQUITY_506C',
   CONVERTIBLE_NOTES: 'CONVERTIBLE_NOTES',
@@ -106,12 +115,12 @@ export const CAMPAIGN_REGULATION_DETAILED = {
     BD_CF_506C: 'Parallel Offering (Reg CF & Reg D)',
   },
   TOOLTIP: {
-    FP_TX: <span>Regulation Crowdfunding offerings allow everyone to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
-    FP_CF: <span>Regulation Crowdfunding offerings allow everyone to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
-    BD_CF: <span>Regulation Crowdfunding offerings allow everyone to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
-    BD_506C: <span>Regulation D 506(C) offerings allow Accredited Investors to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
-    BD_506B: <span>Regulation B 506(B) offerings allow Accredited Investors to invest. <a target="_blank" href="/resources/education-center">Learn more</a></span>,
-    BD_CF_506C: <span>Parallel offerings are raising money under two different regulations. A portion of this raise is being conducted under <a target="_blank" href="/resources/education-center/investor/making-a-reg-d-investment">Reg D 506(C)</a> and a portion is being raised under <a target="_blank" href="/resources/education-center/investor/making-a-reg-cf-investment">Regulation Crowdfunding</a></span>,
+    FP_TX: <span>Regulation Crowdfunding allows everyone to invest in private businesses. <a target="_blank" href="/resources/education-center/investor/making-a-reg-cf-investment">Learn more</a></span>,
+    FP_CF: <span>Regulation Crowdfunding allows everyone to invest in private businesses. <a target="_blank" href="/resources/education-center/investor/making-a-reg-cf-investment">Learn more</a></span>,
+    BD_CF: <span>Regulation Crowdfunding allows everyone to invest in private businesses. <a target="_blank" href="/resources/education-center/investor/making-a-reg-cf-investment">Learn more</a></span>,
+    BD_506C: <span>Regulation D offerings are limited to accredited investors only. <a target="_blank" href="/resources/education-center/investor/making-a-reg-d-investment">Learn more</a></span>,
+    BD_506B: <span>Regulation D offerings are limited to accredited investors only. <a target="_blank" href="/resources/education-center/investor/making-a-reg-d-investment">Learn more</a></span>,
+    BD_CF_506C: <span>Parallel offerings are raising capital under two different exemptions from registration. A portion of this raise is being conducted under <a target="_blank" href="/resources/education-center/investor/making-a-reg-cf-investment">Regulation Crowdfunding</a> and a portion under Rule 506(c) of <a target="_blank" href="/resources/education-center/investor/making-a-reg-d-investment">Regulation D.</a></span>,
   },
 };
 export const CAMPAIGN_REGULATION_ABREVIATION = {
@@ -171,4 +180,23 @@ export const OFFERING_AGREEMENT_REGULATIONS = {
   BD_CF: 'NSS CF',
   BD_506C: 'RegD506C',
   FP_CF: 'NSUS CF',
+};
+
+export const CAMPAIGN_SECURITIES_DETAILED = {
+  SECURITIES: {
+    TERM_NOTE: 'Term Note',
+    REVENUE_SHARING_NOTE: 'Revenue Sharing Note',
+    PREFERRED_EQUITY_506C: 'Preferred Equity',
+    EQUITY: 'Equity',
+    CONVERTIBLE_NOTES: 'Convertible Notes',
+    SAFE: 'SAFE',
+    REAL_ESTATE: 'LLC Membership Interests',
+    FUNDS: 'Funds - Limited Partnership Interests',
+  },
+  TOOLTIP: {
+    TERM_NOTE: <>With a Term Note, a business agrees to pay you a set amount of interest on your investment. Payments are fixed each month for a certain number of months. <a target="_blank" href="/resources/education-center/investor/how-term-notes-work">Learn more</a></>,
+    REVENUE_SHARING_NOTE: <>With a Revenue Sharing Note, a business agrees to pay you a percentage of their monthly revenue until you receive the total repayment amount. Payments, if any, may be different every month. <a target="_blank" href="/resources/education-center/investor/how-revenue-sharing-notes-work">Learn more</a></>,
+    CONVERTIBLE_NOTES: <>A Convertible Note is a hybrid security that starts as debt with a fixed interest rate and a maturity date. However, upon certain events in the future that establish a valuation for the business, such as future equity financing rounds, it can be converted into equity in the business.</>,
+    SAFE: <>SAFEs are agreements that entitle the holders to discounted equity in a business in the future based on the valuation at a future financing event, such as a subsequent priced equity round or IPO. <a target="_blank" href="/resources/education-center/investor/nextseed-safe">Learn more</a></>,
+  },
 };

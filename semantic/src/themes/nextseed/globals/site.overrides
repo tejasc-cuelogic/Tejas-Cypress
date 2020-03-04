@@ -824,6 +824,23 @@ footer{
 			max-width: 100%;
 		}
 	}
+	li {
+		color: @neutral-middark;
+		font-size: @15px;
+		&.note {
+			color:@neutral-middark;
+			font-size: @12px;
+		}
+		&.early-bird-desc {
+			line-height: @24px;
+		}
+		i.icon {
+			margin-left:@7px;
+		}
+		img {
+			max-width: 100%;
+		}
+	}	
 	.embed img{
 		margin-top: 0;
 	}

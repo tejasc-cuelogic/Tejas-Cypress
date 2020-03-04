@@ -22,7 +22,7 @@ export default class InvestNow extends React.Component {
     if (!this.props.campaignStore.isInvestBtnClicked) {
       this.props.history.push(this.props.refLink);
     }
-    this.props.accreditationStore.setFieldVal('disableElement', true);
+    this.props.campaignStore.setFieldValue('inInvestmentFlow', true);
     this.props.investmentStore.setStepToBeRendered(0);
     this.props.investmentStore.resetData();
     this.props.uiStore.setProgress(false);
@@ -37,13 +37,15 @@ export default class InvestNow extends React.Component {
     }
     if (this.props.changeInvest) {
       const { offeringId } = this.props.match.params;
+      const { offeringUUID } = this.props.campaignStore;
       const matchURL = this.props.match.url;
-      this.props.portfolioStore.setFieldValue('currentOfferingId', offeringId);
-      this.props.campaignStore.getCampaignDetails(offeringId, true, true);
-
       if (matchURL.includes('portfolio')) {
         this.setState({ isInvestmentUpdate: true });
+        this.props.portfolioStore.setFieldValue('currentOfferingId', offeringUUID);
+      } else {
+        this.props.portfolioStore.setFieldValue('currentOfferingId', offeringId);
       }
+      this.props.campaignStore.getCampaignDetails(offeringId, true, true);
     }
   }
 
@@ -56,6 +58,9 @@ export default class InvestNow extends React.Component {
     const isUpdateScreen = changeInvest;
     const reflectedURL = this.props.history.location.pathname;
     const matchURL = this.props.match.url;
+    if (matchURL.includes('portfolio')) {
+      this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
+    }
     if (!isUpdateScreen || (isUpdateScreen && !reflectedURL.includes('invest-now'))) {
       if (!matchURL.includes('portfolio')) {
         this.props.campaignStore.setFieldValue('isInvestBtnClicked', false);
@@ -65,8 +70,11 @@ export default class InvestNow extends React.Component {
       if (!reflectedURL.includes('agreement')) {
         this.props.accreditationStore.setFieldVal('userAccredetiationState', null);
         this.props.investmentLimitStore.setFieldValue('investNowHealthCheckDetails', {});
+        this.props.campaignStore.setFieldValue('inInvestmentFlow', false);
       }
+      this.props.campaignStore.setFieldValue('offeringUUID', null);
     }
+    window.removeEventListener('message', this.handleIframeTask);
   }
 
   handleIframeTask = (e) => {
@@ -211,8 +219,7 @@ export default class InvestNow extends React.Component {
     const { showAccountList, disableElement } = this.props.accreditationStore;
     const { investAccTypes, stepToBeRendered } = this.props.investmentStore;
     const multipleAccountExsists = !!(investAccTypes && investAccTypes.values.length >= 2);
-    const { campaign } = this.props.campaignStore;
-    const securityType = get(campaign, 'keyTerms.securities');
+    const { campaign, campaignStatus } = this.props.campaignStore;
     const {
       getCurrentInvestNowHealthCheck, investNowHealthCheckDetails,
     } = this.props.investmentLimitStore;
@@ -271,7 +278,7 @@ export default class InvestNow extends React.Component {
         name: 'TransferRequest',
         component: <TransferRequest
           changeInvest={changeInvest || this.state.isInvestmentUpdate}
-          offeringSecurityType={securityType}
+          isPreferredEquity={campaignStatus.isPreferredEquity}
           confirm={this.handleConfirm}
           cancel={this.handleCancel}
           refLink={this.props.refLink}
