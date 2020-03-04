@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { mapValues, filter, find, get } from 'lodash';
+import { mapValues, filter, find, get, isEqual } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -11,7 +11,7 @@ import Helper from '../../../../../helper/utility';
 import { userDetailsQuery } from '../../../queries/users';
 
 export class InvestmentLimitStore {
-  @observable INVESTEMENT_LIMIT_META = Validator.prepareFormObject(INVESTEMENT_LIMIT);
+  @observable INVESTMENT_LIMIT_META = Validator.prepareFormObject(INVESTEMENT_LIMIT);
 
   @observable investmentLimit = {};
 
@@ -38,6 +38,8 @@ export class InvestmentLimitStore {
   @observable investorTotalAmountInvested = 0;
 
   @observable calculatedCFLimitDetails = {};
+
+  @observable isLimitAmountInputChange = false;
 
   @action
   setFieldValue = (field, value) => {
@@ -157,11 +159,11 @@ export class InvestmentLimitStore {
 
   @action
   investmentCalculate = () => {
-    const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
+    const data = mapValues(this.INVESTMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
     this.currentLimit = this.getInvestmentLimit(data);
     const limitField = (this.currentAccountType === 'entity') ? 'currentLimitEntity' : 'currentLimitIndividualOrIra';
-    this.INVESTEMENT_LIMIT_META = Validator.onChange(
-      this.INVESTEMENT_LIMIT_META,
+    this.INVESTMENT_LIMIT_META = Validator.onChange(
+      this.INVESTMENT_LIMIT_META,
       { name: limitField, value: this.currentLimit },
     );
   }
@@ -173,7 +175,19 @@ export class InvestmentLimitStore {
     const investmentLimitForm = form ? this[form] : INVESTMENT_LIMITS_FORM;
     const formData = mapValues(investmentLimitForm.fields, f => parseInt(f.value, 10));
     const accountId = this.currentAccountId || getSelectedAccountTypeId;
-    if ((formData.annualIncome || formData.annualIncome === 0) && (formData.netWorth || formData.netWorth === 0) && (formData.cfInvestments || formData.cfInvestments === 0)) {
+    const { limits } = userDetailsStore.userDetails;
+    const investments = {
+      netWorth: limits.netWorth,
+      annualIncome: limits.income,
+      cfInvestments: limits.otherContributions,
+    };
+    const formDataInvestments = {
+      netWorth: formData.netWorth,
+      annualIncome: formData.annualIncome,
+      cfInvestments: formData.cfInvestments,
+    };
+    const isValuesEqual = isEqual(investments, formDataInvestments);
+    if ((formData.annualIncome || formData.annualIncome === 0) && (formData.netWorth || formData.netWorth === 0) && (formData.cfInvestments || formData.cfInvestments === 0) && !isValuesEqual && this.isLimitAmountInputChange) {
       const variables = { accountId, limits: { income: formData.annualIncome, netWorth: formData.netWorth, otherContributions: formData.cfInvestments } };
       this.calculatedCFLimitDetails = graphql({
         client,
@@ -183,18 +197,26 @@ export class InvestmentLimitStore {
           if (get(data, 'getInvestorInvestmentLimit') && !this.calculatedCFLimitDetails.loading) {
             uiStore.setProgress(false);
             this.setFieldValue('currentLimit', data.getInvestorInvestmentLimit);
+            this.setFieldValue('isLimitAmountInputChange', false);
             resolve();
           }
         },
         onError: () => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setProgress(false);
+          this.setFieldValue('isLimitAmountInputChange', false);
           reject();
         },
         fetchPolicy: 'network-only',
       });
     } else {
       uiStore.setProgress(false);
+      if (isValuesEqual) {
+        const helthCheckLimit = get(this.getCurrentInvestNowHealthCheck, 'investmentLimit') || 0;
+        const currentInvestLimit = form ? this.currentAccountType === 'entity' ? this.entityCurrentLimit : this.individualIRACurrentLimit : helthCheckLimit;
+        this.setFieldValue('currentLimit', currentInvestLimit);
+      }
+      this.setFieldValue('isLimitAmountInputChange', false);
       resolve();
     }
   });
@@ -250,26 +272,27 @@ export class InvestmentLimitStore {
     fieldVal.annualIncome = (accountType === 'entity') ? accountData.details.limits.income : (userDetails && userDetails.limits && userDetails.limits.income) || 0;
     fieldVal.netWorth = (accountType === 'entity') ? accountData.details.limits.netWorth : (userDetails && userDetails.limits && userDetails.limits.netWorth) || 0;
     ['annualIncome', 'netWorth', 'cfInvestments'].forEach((field) => {
-      this.INVESTEMENT_LIMIT_META = Validator.onChange(
-        this.INVESTEMENT_LIMIT_META,
+      this.INVESTMENT_LIMIT_META = Validator.onChange(
+        this.INVESTMENT_LIMIT_META,
         { name: field, value: fieldVal[field] ? fieldVal[field] : 0 },
       );
     });
-    // const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
+    // const data = mapValues(this.INVESTMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
     // this.currentLimit = this.getInvestmentLimit(data);
     this.currentLimit = (accountType === 'entity') ? this.entityCurrentLimit : this.individualIRACurrentLimit;
-    this.INVESTEMENT_LIMIT_META = Validator.onChange(
-      this.INVESTEMENT_LIMIT_META,
+    this.INVESTMENT_LIMIT_META = Validator.onChange(
+      this.INVESTMENT_LIMIT_META,
       { name: limitField, value: this.currentLimit },
     );
   }
 
   @action
   maskingFieldChange = (values, field) => {
-    this.INVESTEMENT_LIMIT_META = Validator.onChange(
-      this.INVESTEMENT_LIMIT_META,
+    this.INVESTMENT_LIMIT_META = Validator.onChange(
+      this.INVESTMENT_LIMIT_META,
       { name: field, value: values.floatValue },
     );
+    this.setFieldValue('isLimitAmountInputChange', true);
   };
 
   /*
@@ -295,7 +318,7 @@ export class InvestmentLimitStore {
 
   @action
   updateInvestmentLimit = () => new Promise((resolve) => {
-    const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
+    const data = mapValues(this.INVESTMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
     this.updateInvestmentLimits(data, this.currentAccountId).then(() => resolve());
   })
 
