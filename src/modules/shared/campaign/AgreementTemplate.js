@@ -197,13 +197,13 @@ function AgreementTemplate(props) {
             >
               <Grid stackable>
                 <Grid.Row>
-                  <Grid.Column width={8}>
+                  <Grid.Column width={16}>
                     <FormCheckbox
                       defaults
                       fielddata={AGREEMENT_DETAILS_FORM.fields.page[index].toc}
                       name="toc"
                       containerclassname={`ui very relaxed list ${showError && !AGREEMENT_DETAILS_FORM.meta.isValid ? 'error' : ''}`}
-                      changed={setCheckbox}
+                      changed={(e, res) => setCheckbox(e, res, 'page', index)}
                       disabled={inProgress}
                     />
                   </Grid.Column>

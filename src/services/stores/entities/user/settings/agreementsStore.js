@@ -283,12 +283,13 @@ export class AgreementsStore {
   }
 
   @computed get isAgreementFormValid() {
-    return toJS(this.tocRequiredArray).every(e => toJS(this.AGREEMENT_DETAILS_FORM.fields.page[this.agreementPage].toc.value).includes(e));
+    const requiredArray = toJS(get(this.tocRequiredArray, `[${this.agreementPage}]`)) || [];
+    return requiredArray.every(e => toJS(this.AGREEMENT_DETAILS_FORM.fields.page[this.agreementPage].toc.value).includes(e));
   }
 
   @action
-  setCheckbox = (e, res) => {
-    this.AGREEMENT_DETAILS_FORM = Validator.onChange(this.AGREEMENT_DETAILS_FORM, Validator.pullValues(e, res), 'checkbox');
+  setCheckbox = (e, res, field, index) => {
+    this.AGREEMENT_DETAILS_FORM = Validator.onArrayFieldChange(this.AGREEMENT_DETAILS_FORM, Validator.pullValues(e, res), field, index, 'checkbox');
   }
 }
 
