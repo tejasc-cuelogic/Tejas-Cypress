@@ -87,11 +87,6 @@ export class InvestmentStore {
       return differenceResult;
     }
     return 0;
-    // const oldLimit = parseFloat((portfolioStore.getInvestorAccountById &&
-    //   portfolioStore.getInvestorAccountById.investedAmount) || 0, 2);
-    // const currentLimit = parseFloat(this.INVESTMONEY_FORM.fields.investmentAmount.value, 2);
-
-    // return currentLimit - oldLimit;
   }
 
   @computed get getSelectedAccountTypeId() {
