@@ -25,6 +25,11 @@ export default class UpdateInvestmentLimits extends Component {
     });
   }
 
+  investmentCalculate = () => {
+    const { calculateCfLimit } = this.props.investmentLimitStore;
+    calculateCfLimit('INVESTMENT_LIMIT_META');
+  }
+
   render() {
     const errors = false;
     const { inProgress } = this.props.uiStore;
