@@ -16,7 +16,7 @@ export default class InvestNowToc extends Component {
     super(props);
     if (props.isExact) {
       props.history.push('1');
-      props.manageOfferingStore.resetForm('INVEST_NOW_TOC_FRM');
+      // props.manageOfferingStore.resetForm('INVEST_NOW_TOC_FRM');
     }
     if (!props.manageOfferingStore.initLoad.includes('INVEST_NOW_TOC_FRM')) {
       props.manageOfferingStore.setFormData('INVEST_NOW_TOC_FRM', 'investNow');
@@ -43,7 +43,7 @@ export default class InvestNowToc extends Component {
     const { match, offeringsStore, manageOfferingStore } = this.props;
     const { offer } = offeringsStore;
     const { INVEST_NOW_TOC_FRM } = manageOfferingStore;
-    const isReadOnly = get(offer, 'stage') !== 'CREATION';
+    const isReadOnly = get(offer, 'stage') === 'CREATION';
     const navItems = [];
     INVEST_NOW_TOC_FRM.fields.toc.map((toc, index) => {
       navItems.push({ title: `TOC ${index + 1}`, to: `${index + 1}`, index });

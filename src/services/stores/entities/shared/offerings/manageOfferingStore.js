@@ -114,6 +114,7 @@ export class ManageOfferingStore extends DataModelStore {
     initLoad: observable,
     onDragSaveEnable: observable,
     reOrderHandle: action,
+    resetInitLoad: action,
     updateOffering: action,
     updateOfferingMutation: action,
     setFormData: action,

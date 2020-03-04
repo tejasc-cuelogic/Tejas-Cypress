@@ -7,7 +7,7 @@ import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
 const getModule = component => lazyRetry(() => import(`./offering/${component}`));
 
-@inject('userStore', 'uiStore', 'offeringCreationStore')
+@inject('userStore', 'uiStore', 'offeringCreationStore', 'manageOfferingStore')
 @withRouter
 @observer
 export default class Offering extends Component {
@@ -17,6 +17,7 @@ export default class Offering extends Component {
     this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
     this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
     this.props.offeringCreationStore.setFormData('OFFERING_MISC_FRM', 'offering.misc');
+    // this.props.manageOfferingStore.setFormData('INVEST_NOW_TOC_FRM', 'investNow');
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/overview`);
     }

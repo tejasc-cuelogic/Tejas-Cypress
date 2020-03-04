@@ -316,6 +316,10 @@ export default class DataModelStore {
       },
     };
   }
+
+  resetInitLoad = () => {
+    this.initLoad = [];
+  }
 }
 
 export const decorateDefault = {
@@ -324,6 +328,7 @@ export const decorateDefault = {
   currTime: observable,
   currentScore: observable,
   removeUploadedFiles: action,
+  resetInitLoad: action,
   setFieldValue: action,
   formChange: action,
   maskChange: action,
