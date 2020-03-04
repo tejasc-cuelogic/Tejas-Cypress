@@ -4,14 +4,14 @@ import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { uiStore, userDetailsStore, campaignStore, investmentStore } from '../../../index';
-import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
+import { INVESTMENT_LIMIT } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorTotalAmountInvested } from '../../../queries/investmentLimits';
 import Helper from '../../../../../helper/utility';
 import { userDetailsQuery } from '../../../queries/users';
 
 export class InvestmentLimitStore {
-  @observable INVESTMENT_LIMIT_META = Validator.prepareFormObject(INVESTEMENT_LIMIT);
+  @observable INVESTMENT_LIMIT_META = Validator.prepareFormObject(INVESTMENT_LIMIT);
 
   @observable investmentLimit = {};
 
