@@ -66,15 +66,12 @@
                     border-top:none;
                 }
             }
-        }
-    }
-    tbody{
-        background:@neutral-offwhite;
-        tr.row-highlight{
-            background:fade(@neutral-middark, 30%) !important;
-            td{
-                border-top:none;
-            }
+            tr.row-highlight{
+                background:fade(@neutral-middark, 30%) !important;
+                td{
+                    border-top:none;
+                }
+            }            
         }
     }
     &.user-list{
