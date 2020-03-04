@@ -9,7 +9,6 @@ import Helper from '../../../../../../helper/utility';
 // import AgreementsPdfLoader from '../../../settings/components/agreements/AgreementsPdfLoader';
 const isMobile = document.documentElement.clientWidth < 768;
 
-const isMobile = document.documentElement.clientWidth < 768;
 @inject('identityStore', 'accountStore', 'bankAccountStore', 'uiStore', 'userDetailsStore', 'userStore', 'iraAccountStore', 'entityAccountStore', 'individualAccountStore')
 @withRouter
 @observer

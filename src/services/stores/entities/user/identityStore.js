@@ -267,7 +267,7 @@ export class IdentityStore {
     }
 
     if (res.data.verifyCip.step === 'OFFLINE') {
-      userDetailsStore.mergeUserData('legalDetails', { status: 'OFFLINE' }, 'currentUser');
+      userDetailsStore.mergeUserData('legalDetails', { status: 'OFFLINE' });
       window.sessionStorage.setItem('cipErrorMessage',
         JSON.stringify(resData.errorMessage));
     }
@@ -279,8 +279,8 @@ export class IdentityStore {
     if (userDetailsStore.signupStatus.phoneVerification !== 'DONE') {
       await this.startPhoneVerification();
     }
-    userDetailsStore.mergeUserData('legalDetails', this.formattedUserInfoForCip.user, 'currentUser');
-    userDetailsStore.mergeUserData('phone', this.formattedUserInfoForCip.phoneDetails, 'currentUser');
+    userDetailsStore.mergeUserData('legalDetails', this.formattedUserInfoForCip.user);
+    userDetailsStore.mergeUserData('phone', this.formattedUserInfoForCip.phoneDetails);
   }
 
   @action
@@ -335,7 +335,7 @@ export class IdentityStore {
     };
     this.setFieldValue('userCipStatus', 'MANUAL_VERIFICATION_PENDING');
     const { res, url } = await this.cipWrapper(payLoad);
-    userDetailsStore.mergeUserData('legalDetails', { verificationDocs: this.verificationDocs() }, 'currentUser');
+    userDetailsStore.mergeUserData('legalDetails', { verificationDocs: this.verificationDocs() });
 
     return { res, url };
   }
@@ -370,10 +370,10 @@ export class IdentityStore {
       if (stepName !== 'cip' && get(this.cipStepUrlMapping[stepName], 'status')) {
         userDetailsStore.mergeUserData('legalDetails', {
           status: this.cipStepUrlMapping[stepName].status || payLoad.mutation.cipPassStatus,
-        }, 'currentUser');
+        });
         userDetailsStore.mergeUserData('cip', {
           expiration: Helper.getDaysfromNow(21),
-        }, 'currentUser');
+        });
       }
 
       this.setFieldValue('signUpLoading', false);
@@ -554,7 +554,7 @@ export class IdentityStore {
             userDetailsStore.mergeUserData('phone', {
               ...this.formattedUserInfoForCip.phoneDetails,
               verified: moment().tz('America/Chicago').toISOString(),
-            }, 'currentUser');
+            });
             resolve();
           } else {
             const error = {

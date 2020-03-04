@@ -74,6 +74,8 @@ export class UserDetailsStore {
 
   @observable emailListArr = [];
 
+  userPayLoad = {};
+
   @action
   setFieldValue = (field, value) => {
     this[field] = value;
@@ -250,7 +252,7 @@ export class UserDetailsStore {
   }
 
   @action
-  mergeUserData = (key, payload, objName, path) => {
+  mergeUserData = (key, payload, objName = 'currentUser', path = false) => {
     const oldData = { ...this[objName] };
     if (objName === 'currentUser') {
       oldData.data.user[key] = path ? set({ ...oldData.data.user[key], ...payload }, path, payload)

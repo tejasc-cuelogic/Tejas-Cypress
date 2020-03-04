@@ -32,16 +32,6 @@ export class InvestorProfileStore extends DataModelStore {
 
   INVESTMENT_EXP_FRM = Validator.prepareFormObject(INVESTMENT_EXPERIENCE, true);
 
-  resetFields = (form) => {
-    const { fields } = this[form];
-    if (intersection(['brokerageFirmName', 'publicCompanyTicker'], Object.keys(fields)).length > 0) {
-      const { textField, radioField } = this.textRadioFieldData(fields);
-      if (fields[radioField].value) {
-        fields[textField].value = '';
-      }
-    }
-  }
-
   @action
   upsertInvestorProfile = async (currentStep) => {
     const { fields } = this[currentStep.form];
@@ -56,9 +46,6 @@ export class InvestorProfileStore extends DataModelStore {
           Validator.setIsDirty(this[currentStep.form], false);
           userDetailsStore.setUserStatus(res.data.createInvestorProfile.status);
           userDetailsStore.mergeUserData('investorProfileData', payLoad, 'userPayLoad');
-          if (['BROKERAGE_EMPLOYMENT_FRM', 'PUBLIC_COMPANY_REL_FRM'].includes(currentStep.form)) {
-            this.resetFields(currentStep.form);
-          }
           if (currentStep.form === 'INVESTMENT_EXP_FRM') {
             userDetailsStore.mergeUserData(
               'investorProfileData',
@@ -77,10 +64,6 @@ export class InvestorProfileStore extends DataModelStore {
     let payLoad = Validator.evaluateFormData(fields);
     payLoad.isPartialProfile = !!isUndefined(payLoad.isPartialProfile);
     const fieldArray = Object.keys(fields);
-    if (intersection(['brokerageFirmName', 'publicCompanyTicker'], fieldArray).length > 0) {
-      const { textField, radioField } = this.textRadioFieldData(fields);
-      payLoad[textField] = fields[radioField].value === 'yes' ? fields[textField].value : '';
-    }
 
     if (intersection(['isComfortable', 'isRiskTaker'], fieldArray).length > 0) {
       Object.keys(pick(fields, ['isComfortable', 'isRiskTaker'])).forEach((field) => {

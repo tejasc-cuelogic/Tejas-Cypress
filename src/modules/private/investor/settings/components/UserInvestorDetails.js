@@ -10,10 +10,6 @@ import { FormInput, MaskedInput, FormDropDown, FormCheckbox } from '../../../../
 @inject('investorProfileStore', 'userDetailsStore', 'uiStore')
 @observer
 export default class UserInvestorDetails extends Component {
-  state = {
-    displayOnly: true,
-  }
-
   constructor(props) {
     super(props);
     const { investorProfileData } = this.props;
@@ -24,6 +20,18 @@ export default class UserInvestorDetails extends Component {
     } else {
       setInvestorDetailInfo(investorProfileData);
     }
+    this.state = {
+      displayOnly: true,
+    };
+  }
+
+  handleBrokerageOrPublicRelationChange = (e, result, formName, key) => {
+    e.preventDefault();
+    const { setFieldValue, formChange } = this.props.investorProfileStore;
+    if (result.value === 'no') {
+      setFieldValue(formName, '', `fields.${key}.value`);
+    }
+    formChange(e, result, formName);
   }
 
   toogleField = (e) => {
@@ -31,7 +39,6 @@ export default class UserInvestorDetails extends Component {
     const { investorProfileData } = this.props;
     const {
       setInvestorDetailInfo,
-      setIsInvestmentExperienceValidStatus,
     } = this.props.investorProfileStore;
     if (this.props.isAdmin) {
       const investorProfileDataAdmin = get(this.props.userDetailsStore, 'getDetailsOfUser.investorProfileData');
@@ -39,7 +46,6 @@ export default class UserInvestorDetails extends Component {
     } else {
       setInvestorDetailInfo(investorProfileData);
     }
-    setIsInvestmentExperienceValidStatus(true);
     this.setState({ displayOnly: !this.state.displayOnly });
   }
 
@@ -144,7 +150,7 @@ export default class UserInvestorDetails extends Component {
                 value={INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value}
                 name="brokerageEmployment"
                 options={BROKERAGE_EMPLOYMENT_LIST}
-                onChange={(e, result) => formChange(e, result, formName)}
+                onChange={(e, result) => this.handleBrokerageOrPublicRelationChange(e, result, formName, 'brokerageFirmName')}
               />
             </dd>
             {INVESTOR_PROFILE_FULL.fields.brokerageEmployment.value === 'yes'
@@ -181,7 +187,7 @@ export default class UserInvestorDetails extends Component {
                 value={INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value}
                 name="publicCompanyRel"
                 options={PUBLIC_COMPANY_REL_LIST}
-                onChange={(e, result) => formChange(e, result, formName)}
+                onChange={(e, result) => this.handleBrokerageOrPublicRelationChange(e, result, formName, 'publicCompanyTicker')}
               />
             </dd>
             {INVESTOR_PROFILE_FULL.fields.publicCompanyRel.value === 'yes'
