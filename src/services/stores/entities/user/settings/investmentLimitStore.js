@@ -6,7 +6,7 @@ import { GqlClient as client } from '../../../../../api/gqlApi';
 import { uiStore, userDetailsStore, campaignStore, investmentStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
-import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorTotalAmountInvested } from '../../../queries/investementLimits';
+import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorTotalAmountInvested } from '../../../queries/investmentLimits';
 import Helper from '../../../../../helper/utility';
 import { userDetailsQuery } from '../../../queries/users';
 
